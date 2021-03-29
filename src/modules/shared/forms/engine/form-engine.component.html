@@ -1,0 +1,43 @@
+<form [formGroup]="form" [id]="formId" method="post" [action]="action" enctype="application/json" novalidate="" *ngIf="contentReady">
+
+  <div *ngFor="let p of parameters; let i = index" class="">
+
+    <ng-container [ngSwitch]="p.dataType">
+
+      <div *ngSwitchCase="'hidden'">
+        <theme-form-input type="hidden" [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+      </div>
+
+      <div *ngSwitchCase="'number'">
+        <theme-form-input type="number" [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+      </div>
+
+      <div *ngSwitchCase="'password'">
+        <theme-form-input type="password" [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+      </div>
+
+      <div *ngSwitchCase="'radio-group'">
+        <theme-form-radio-group [formControlName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-radio-group>
+      </div>
+
+      <div *ngSwitchCase="'checkbox-group'">
+        <theme-form-checkbox-group [formGroupName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-checkbox-group>
+      </div>
+
+      <div *ngSwitchCase="'checkbox-array'">
+        <theme-form-checkbox-array [formArrayName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-checkbox-array>
+      </div>
+
+      <div *ngSwitchCase="'textarea'">
+        <theme-form-textarea [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-textarea>
+      </div>
+
+      <div *ngSwitchDefault>
+        <theme-form-input [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+      </div>
+
+    </ng-container>
+
+  </div>
+
+</form>

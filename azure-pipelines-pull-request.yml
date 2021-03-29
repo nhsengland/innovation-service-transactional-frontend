@@ -1,0 +1,59 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pr:
+- develop
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+
+- task: NodeTool@0
+  inputs:
+    versionSpec: '12.x'
+  displayName: 'Install Node.js'
+
+- task: Npm@1
+  inputs:
+    command: 'custom'
+    customCommand: 'ci'
+  displayName: 'NPM CI'
+  
+- script: |
+    npm run lint
+  displayName: 'Run Lint'
+
+- script: |
+    npm run lint
+  displayName: 'Run Lint'
+
+- task: Npm@1
+  inputs:
+    command: 'custom'
+    customCommand: 'test -- --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura'
+  continueOnError: true # Test failures should be published before failing the build
+  displayName: 'Run Tests'
+
+
+- task: PublishTestResults@2
+  displayName: 'Publish Unit Test Results'
+  inputs:
+    testResultsFiles: junit.xml
+    mergeTestResults: true
+    testRunTitle: 'Transactional Frontend Pull Request Unit Test Results'
+    failTaskOnFailedTests: true
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish Unit Test Coverage'
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: coverage/cobertura-coverage.xml
+
+- script: |
+    npm run build:ssr
+  displayName: 'Run Build'

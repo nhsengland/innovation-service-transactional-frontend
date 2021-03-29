@@ -1,0 +1,10 @@
+<ng-container *ngIf="isRunningOnBrowser">
+  <input [formControl]="fieldControl" [id]="id" type="checkbox" class="nhsuk-checkboxes__input" />
+</ng-container>
+
+<ng-container *ngIf="isRunningOnServer">
+  <input [id]="id" name="{{ formControlName }}" type="checkbox" [value]="value" [checked]="fieldControl.value === value" class="nhsuk-checkboxes__input" />
+</ng-container>
+
+<label for="{{ id }}" class="nhsuk-label nhsuk-checkboxes__label">{{ label }}</label>
+<div *ngIf="description" class="nhsuk-hint nhsuk-checkboxes__hint">{{ description }}</div>

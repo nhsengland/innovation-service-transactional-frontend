@@ -1,0 +1,90 @@
+// NHS Design System.
+@import "node_modules/govuk-frontend/govuk/base";
+
+@import "node_modules/govuk-frontend/govuk/utilities/all";
+
+@import 'node_modules/nhsuk-frontend/packages/nhsuk';
+
+@import 'styles/panel';
+@import 'styles/step-by-step-nav';
+
+// GOV.uk Design System. (Only the necessary!)
+// @import "node_modules/govuk-frontend/govuk/all";
+// @import "node_modules/govuk-frontend/govuk/core/all";
+// @import "node_modules/govuk-frontend/govuk/objects/all";
+// @import "node_modules/govuk-frontend/govuk/components/footer/index";
+// @import "node_modules/govuk-frontend/govuk/components/header/index";
+// @import "node_modules/govuk-frontend/govuk/components/skip-link/index";
+// @import "node_modules/govuk-frontend/govuk/overrides/all";
+
+
+
+// CSS variables. (https://service-manual.nhs.uk/design-system/styles/colour)
+:root {
+  --primary-color: #{$nhsuk-link-color};
+  --error-color: #{$nhsuk-error-color};
+
+  --white: #{$color_nhsuk-white};
+}
+
+
+// $color_nhsuk-blue	#005eb8
+// $color_nhsuk-green	#007f3b
+// $color_nhsuk-yellow	#ffeb3b
+// $color_nhsuk-warm-yellow	#ffb81C
+// $color_nhsuk-red	#d5281b
+// $color_nhsuk-dark-pink	#7C2855
+// $color_nhsuk-purple	#330072
+// $color_nhsuk-grey-1	#4c6272
+// $color_nhsuk-grey-2	#768692
+// $color_nhsuk-grey-3	#aeb7bd
+// $color_nhsuk-grey-4	#d8dde0
+// $color_nhsuk-grey-5	#f0f4f5
+// $color_nhsuk-white	#ffffff
+// $color_nhsuk-pale-yellow	#fff9c4
+
+
+.d-flex {
+  display: flex;
+}
+
+.flex-direction-column {
+  flex-direction: column;
+}
+
+.justify-space-between {
+  justify-content: space-between;
+}
+
+.bg-color-white {
+  background-color: var(--white);
+}
+
+
+// Components.
+.nhsuk-card {
+  .nhsuk-card__content {
+    &.x-card-bottom-link {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      /* justify-content: space-between; */
+
+      a {
+        margin-top: auto;
+      }
+    }
+  }
+
+  &.x-card-top-border {
+    border: unset;
+    background: unset;
+    border-top: 2px solid var(--primary-color);
+
+    .nhsuk-card__content {
+      padding: govuk-spacing(3) 0 0 0;
+    }
+
+  }
+
+}

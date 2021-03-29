@@ -1,0 +1,52 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@app/*": [
+        "src/app/*"
+      ],
+      "@tests/*": [
+        "src/tests/*"
+      ],
+      "@modules/*": [
+        "src/modules/*"
+      ],
+      "@shared-module/*": [
+        "src/modules/shared/*"
+      ],
+      "@stores-module/*": [
+        "src/modules/stores/*"
+      ],
+      "@innovator-feature-module/*": [
+        "src/modules/feature-modules/innovator/*"
+      ],
+      "@triage-innovator-pack-feature-module/*": [
+        "src/modules/feature-modules/triage-innovator-pack/*"
+      ]
+    },
+    "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "es2020",
+    "lib": [
+      "es2018",
+      "dom"
+    ]
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}

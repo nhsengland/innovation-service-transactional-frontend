@@ -1,0 +1,85 @@
+<div class="nhsuk-width-container">
+
+  <!-- <theme-back-link href="/triage-innovator-pack/step/{{ stepNumber - 1}}"></theme-back-link> -->
+
+  <div class="nhsuk-back-link">
+    <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('previous')" class="nhsuk-back-link__link" (click)="onSubmitStep('previous')">
+      <!-- <a routerLink="/triage-innovator-pack/step/0" class="nhsuk-back-link__link" (click)="onSubmit(stepNumber - 1); $event.stopPropagation()"> -->
+      <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
+      </svg>
+      Go back
+    </button>
+  </div>
+
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <ng-container *ngIf="isQuestionStep()">
+
+        <div class="nhsuk-hint nhsuk-u-margin-bottom-0">Question {{ currentStep.number }} of {{ totalNumberOfSteps }}</div>
+
+        <fieldset class="nhsuk-fieldset" aria-describedby="example-hint">
+
+          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">{{ currentStep.data.label }}</legend>
+
+          <div *ngIf="currentStep.data.description" class="nhsuk-hint">{{ currentStep.data.description }}</div>
+
+          <ng-container *ngIf="currentStep.data.details">
+            <details class="nhsuk-details">
+              <summary class="nhsuk-details__summary">
+                <span class="nhsuk-details__summary-text">{{ currentStep.data.details.title }}</span>
+              </summary>
+              <div class="nhsuk-details__text" [innerHTML]="currentStep.data.details.content"></div>
+            </details>
+          </ng-container>
+
+          <theme-form-engine formId="SurveyForm" [parameters]="currentStep.data.parameters" [values]="currentStep.data.defaultData"></theme-form-engine>
+
+          <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('next')" class="nhsuk-button" (click)="onSubmitStep('next')"> Continue </button>
+
+        </fieldset>
+
+      </ng-container>
+
+
+      <ng-container *ngIf="isSummaryStep()">
+
+        <h1 class="nhsuk-heading-l">Check your answers before sending your application</h1>
+
+        <div *ngIf="!summaryList.valid" class="nhsuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1">
+          <h2 class="nhsuk-error-summary__title" id="error-summary-title"> There is a problem </h2>
+          <div class="nhsuk-error-summary__body">
+            <p> Please verify what's missing with your answers </p>
+            <ul class="nhsuk-list nhsuk-error-summary__list">
+              <li *ngFor="let item of summaryList.items">
+                <a *ngIf="item.errorMessage" [routerLink]="item.url">{{ item.errorMessage | translate }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <dl class="nhsuk-summary-list">
+          <div *ngFor="let item of summaryList.items" class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+            <dd class="nhsuk-summary-list__value">{{ item.value }}</dd>
+            <dd class="nhsuk-summary-list__actions">
+              <a [routerLink]="item.url">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }}</span></a>
+            </dd>
+          </div>
+        </dl>
+
+        <ng-container *ngIf="summaryList.valid">
+          <h2 class="govuk-heading-m">Send your application</h2>
+          <p class="govuk-body">By submitting this survey you are confirming that, to the best of your knowledge, the details you are providing are correct.</p>
+          <form id="SurveyForm" method="post" enctype="application/json" novalidate=""></form>
+          <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('submit')" class="nhsuk-button" (click)="onSubmitSurvey()"> Continue </button>
+        </ng-container>
+
+      </ng-container>
+
+    </div>
+  </div>
+
+</div>
