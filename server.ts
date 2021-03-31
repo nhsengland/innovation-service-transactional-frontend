@@ -65,19 +65,6 @@ const signInOptions: IOIDCStrategyOptionWithoutRequest = {
   scope: oauthConfiguration.scope,
 };
 
-// TODO NHSAAC-134
-const signUpOptions: IOIDCStrategyOptionWithoutRequest = {
-  identityMetadata: `https://${oauthConfiguration.tenantName}.b2clogin.com/${oauthConfiguration.tenantName}.onmicrosoft.com/${oauthConfiguration.signupPolicy}/v2.0/.well-known/openid-configuration`,
-  clientID: oauthConfiguration.clientID,
-  clientSecret: oauthConfiguration.clientSecret,
-  responseType: oauthConfiguration.responseType,
-  responseMode: oauthConfiguration.responseMode,
-  redirectUrl: oauthConfiguration.signupRedirectUrl,
-  allowHttpForRedirectUrl: oauthConfiguration.allowHttpForRedirectUrl,
-  passReqToCallback: oauthConfiguration.passReqToCallback,
-  scope: oauthConfiguration.scope,
-};
-
 const API_URL = process.env.API_URL || '';
 const BASE_PATH = process.env.BASE_PATH || '';
 const VIEWS_PATH = process.env.VIEWS_PATH || '';
@@ -170,20 +157,11 @@ export function app(): express.Express {
       });
     }
   );
-  signInStrategy.name = 'signUpSignInStrategy';
-
-  const signUpStrategy: OIDCStrategy = new OIDCStrategy(signUpOptions,
-    (iss: string, sub: string, profile: IProfile, accessToken: string, refreshToken: string, done: VerifyCallback) => {
-      return done(null, null);
-    }
-  );
-  signUpStrategy.name = 'signUpStrategy';
+  signInStrategy.name = 'signInStrategy';
 
   passport.use(signInStrategy);
-  passport.use(signUpStrategy);
 
   const ensureAuthenticated = (req: any, res: { redirect: (arg0: string) => void; }, next: () => any) => {
-
     if (req.isAuthenticated()) {
       return next();
     }
@@ -225,10 +203,17 @@ export function app(): express.Express {
     res.send('PROFILE (AUTHENTICATED URL)');
   });
 
-  // Signup endpoint
-  server.use(`${BASE_PATH}/signup`,
-    passport.authenticate('signUpStrategy', { failureRedirect: `${BASE_PATH}` })
-  );
+  server.use(`${BASE_PATH}/signup`, (req, res) => {
+    const surveyId = req.query.surveyId || '';
+
+    let azSignupUri = `https://${oauthConfiguration.tenantName}.b2clogin.com/${oauthConfiguration.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&prompt=login`;
+    azSignupUri += `&p=${oauthConfiguration.signupPolicy}`; // add policy information
+    azSignupUri += `&client_id=${oauthConfiguration.clientID}`; // add client id
+    azSignupUri += `&redirect_uri=${encodeURIComponent(oauthConfiguration.signupRedirectUrl)}`; // add redirect uri
+    azSignupUri += `&survey_id=${surveyId}`; // add survey id
+
+    res.redirect(azSignupUri);
+  });
 
   // Callback Handling
   // Using MS Azure OpenId Connect strategy (passport)
@@ -239,7 +224,7 @@ export function app(): express.Express {
   // Login endpoint - AD OpenIdConnect
   server.use(`${BASE_PATH}/signin`,
     // Using MS Azure OpenId Connect strategy (passport)
-    passport.authenticate('signUpSignInStrategy', { failureRedirect: `${BASE_PATH}` })
+    passport.authenticate('signInStrategy', { failureRedirect: `${BASE_PATH}` })
   );
 
   // Callback Handling
@@ -312,13 +297,18 @@ export function app(): express.Express {
           break;
         case 'POST':
           axios.post(url, body, config)
-          .then(success)
-          .catch(fail);
+            .then(success)
+            .catch(fail);
           break;
         case 'PUT':
           axios.put(url, body, config)
-          .then(success)
-          .catch(fail);
+            .then(success)
+            .catch(fail);
+          break;
+        case 'HEAD':
+          axios.head(url, config)
+            .then(success)
+            .catch(fail);
           break;
         default:
           res.status(405).send();
