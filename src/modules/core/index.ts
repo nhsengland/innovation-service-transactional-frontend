@@ -1,8 +1,11 @@
+// Module.
+export { CoreModule } from './core.module';
+
 // Injectors.
 export { AppInjector } from './injectors/app-injector';
 
 // Guards.
-// export { AuthenticationGuard } from './guards/authentication.guard';
+export { AuthenticationGuard } from './guards/authentication.guard';
 
 // Resolvers.
 

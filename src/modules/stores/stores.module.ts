@@ -11,9 +11,9 @@ import { EnvironmentService } from './environment/environment.service';
     EnvironmentService
   ]
 })
-export class StoreModule {
+export class StoresModule {
   // Makes sure that this module is imported only by one NgModule (AppModule)!
-  constructor(@Optional() @SkipSelf() parentModule: StoreModule) {
+  constructor(@Optional() @SkipSelf() parentModule: StoresModule) {
     if (parentModule) {
       throw new Error('Store Module is already loaded. Import it only in AppModule, please!');
     }

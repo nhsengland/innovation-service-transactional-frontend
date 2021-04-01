@@ -20,9 +20,7 @@ module.exports = {
     'index.ts',
     '.interfaces.ts',
     '.mock.ts',
-    '.module.ts',
-    'modules/feature-modules/innovator/pages/first-time-signin',
-    'modules/feature-modules/innovator/pages/dashboard',
+    '.module.ts'
   ],
   coverageThreshold: {
     global: {

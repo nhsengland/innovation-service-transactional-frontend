@@ -1,5 +1,5 @@
 import { FormEngineHelper } from './form-engine.helper';
-import { ALL_PARAMETER_TYPES_EMPTY, CHOOSABLE_PARAMETER_TYPES, ALL_PARAMETERS_HIDDEN, PARAMETERS_WITH_VALIDATIONS, PARAMETERS_VALUES } from '../../tests/form-engine.mock';
+import { ALL_PARAMETER_TYPES_EMPTY, CHOOSABLE_PARAMETER_TYPES, CHOOSABLE_PARAMETER_TYPES_WITH_CONDITIONALS, ALL_PARAMETERS_HIDDEN, PARAMETERS_WITH_VALIDATIONS, PARAMETERS_VALUES } from '../../tests/form-engine.mock';
 
 
 describe('FormEngineHelper tests suite', () => {
@@ -30,6 +30,16 @@ describe('FormEngineHelper tests suite', () => {
       checkboxArrayField: []
     };
     const form = FormEngineHelper.buildForm(CHOOSABLE_PARAMETER_TYPES);
+    expect(form.valid).toBe(true);
+    expect(form.value).toEqual(expected);
+  });
+
+  it('should create a valid form with one conditional parameter', () => {
+    const expected = {
+      radioGroupField: null,
+      textField: null
+    };
+    const form = FormEngineHelper.buildForm(CHOOSABLE_PARAMETER_TYPES_WITH_CONDITIONALS);
     expect(form.valid).toBe(true);
     expect(form.value).toEqual(expected);
   });

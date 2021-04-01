@@ -1,3 +1,6 @@
+// Module.
+export { StoresModule } from './stores.module';
+
 // Stores.
 export { EnvironmentStore } from './environment/environment.store';
 
