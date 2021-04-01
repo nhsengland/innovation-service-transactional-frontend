@@ -1,44 +1,52 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
 
-import { HttpClientModule } from '@angular/common/http';
+import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoggerConfig, NGXLogger, NGXLoggerHttpService } from 'ngx-logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { of, throwError } from 'rxjs';
 
-import { CoreModule } from '@modules/core/core.module';
-import { ThemeModule } from '@modules/theme/theme.module';
+import { CoreModule, AppInjector } from '@modules/core';
+import { StoresModule } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
+import { ThemeModule } from '@modules/theme/theme.module';
 
-import { AppInjector } from '@modules/core';
-
+import { FormEngineComponent, FormEngineModel } from '@modules/shared/forms';
 import { FirstTimeSigninComponent } from './first-time-signin.component';
 
-import { InjectorMock } from '@tests/mocks/injector.mock';
 import { InnovatorService } from '../../services/innovator.service';
-import { EnvironmentStore } from '@modules/stores';
-import { EnvironmentService } from '@modules/stores/environment/environment.service';
 
-describe('FirstTimeSigninComponent tests Suite', () => {
 
-  let logger: NGXLogger;
-  let router: Router;
-  // let activatedRoute: ActivatedRoute;
+const FORM_WITH_CONDITIONALS_MOCK = [
+  new FormEngineModel({
+    label: 'Live on this country?',
+    parameters: [
+      { id: 'parameter01', dataType: 'text' }
+    ],
+    visibility: {
+      parameter: 'location',
+      values: ['yes']
+    }
+  })
+];
+
+
+describe('FeatureModules/Innovator/FirstTimeSigninComponent tests Suite', () => {
+
+  let activatedRoute: ActivatedRoute;
 
   let component: FirstTimeSigninComponent;
   let fixture: ComponentFixture<FirstTimeSigninComponent>;
 
-  let injectorSpy: jasmine.Spy;
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientModule,
-        RouterTestingModule.withRoutes([
-          { path: 'dashboard', component: FirstTimeSigninComponent }
-        ]),
-        TranslateModule.forRoot(),
+        HttpClientTestingModule,
+        RouterTestingModule,
+        LoggerTestingModule,
         CoreModule,
+        StoresModule,
         ThemeModule,
         SharedModule
       ],
@@ -46,39 +54,223 @@ describe('FirstTimeSigninComponent tests Suite', () => {
         FirstTimeSigninComponent,
       ],
       providers: [
-        { provide: NGXLoggerHttpService, useClass: class { } },
-        { provide: LoggerConfig, useClass: class { } },
-        // { provide: ActivatedRoute, useValue: { snapshot: { params: {}, queryParams: {} } } },
-        // { provide: SurveyService, useValue: { snapshot: { params: {}, queryParams: {} } } },
         InnovatorService,
-        EnvironmentStore,
-        EnvironmentService,
-        InjectorMock
       ]
     }).compileComponents();
 
-    logger = TestBed.inject(NGXLogger);
-    router = TestBed.inject(Router);
-    // activatedRoute = TestBed.inject(ActivatedRoute);
-    // surveyService = TestBed.inject(SurveyService);
+    AppInjector.setInjector(TestBed.inject(Injector));
 
-    spyOn(AppInjector, 'getInjector').and.returnValue(TestBed.inject(InjectorMock));
-    injectorSpy = spyOn(TestBed.inject(InjectorMock), 'get');
-
-    injectorSpy.and.returnValue(logger);
-    injectorSpy.and.returnValue(router);
-
-    // routerSpy = spyOn(router, 'navigate');
-    // serverRedirectSpy = { status: jasmine.createSpy('status'), setHeader: jasmine.createSpy('setHeader') };
-
+    activatedRoute = TestBed.inject(ActivatedRoute);
 
   });
 
   it('should create the component', () => {
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+
+    expect(component).toBeTruthy();
+
+  });
+
+  it('should be on step 1', () => {
+
+    activatedRoute.snapshot.params = { id: 1 }; // Simulates step 1. (Must be before component initialization).
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+
+    expect(component.isFirstStep()).toBe(true);
+
+  });
+
+  it('should be on the last step', () => {
+    activatedRoute.snapshot.params = { id: 5 }; // Simulates last step. (Must be before component initialization).
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+    component.totalNumberOfSteps = 5;
+
+    expect(component.isLastStep()).toBe(true);
+  });
+
+  it('should be a valid step', () => {
+    activatedRoute.snapshot.params = { id: 1 }; // Simulates last step. (Must be before component initialization).
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+    component.totalNumberOfSteps = 5;
+
+    expect(component.isValidStepId()).toBe(true);
+  });
+
+  it('should be a question step', () => {
+
+    activatedRoute.snapshot.params = { id: 1 };
+
     fixture = TestBed.createComponent(FirstTimeSigninComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component).toBeTruthy();
+
+    expect(component.isQuestionStep()).toBe(true);
+
+  });
+
+  it('should be summary step', () => {
+
+    activatedRoute.snapshot.params = { id: 'summary' };
+    activatedRoute.params = of({ id: 'summary' }); // Simulate activatedRoute.params subscription.
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.isSummaryStep()).toBe(true);
+
+  });
+
+  it('should be a question steps visible', () => {
+
+    activatedRoute.snapshot.params = { id: 1 };
+    activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+
+    component.stepsData = FORM_WITH_CONDITIONALS_MOCK;
+    component.currentAnswers = { location: 'yes' };
+    fixture.detectChanges();
+
+    expect(component.isVisibleStep(1)).toBe(true);
+  });
+
+  it('should be a question step NOT visible', () => {
+
+    activatedRoute.snapshot.params = { id: 1 };
+    activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+
+    component.stepsData = FORM_WITH_CONDITIONALS_MOCK;
+    component.currentAnswers = { location: 'no', parameter01: 'value' };
+    fixture.detectChanges();
+
+    expect(component.isQuestionStep()).toBe(true);
+    expect(component.isVisibleStep(1)).toBe(false);
+  });
+
+  it('should do nothing when submitting a step and form not is valid (running in browser)', () => {
+
+    activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+
+    component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
+    spyOn(component.formEngineComponent, 'getFormValues').and.returnValue({ valid: false, data: { value1: 'some value' } });
+    component.onSubmitStep('next');
+    fixture.detectChanges();
+
+    expect(component.currentAnswers).toEqual({});
+  });
+
+  it('should redirect when submitting a step (running in browser)', () => {
+
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+
+    activatedRoute.snapshot.params = { id: 1 };
+    activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+
+    component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
+    spyOn(component.formEngineComponent, 'getFormValues').and.returnValue({ valid: true });
+    component.onSubmitStep('next');
+    fixture.detectChanges();
+
+    expect(routerSpy).toHaveBeenCalledWith(['innovator/first-time-signin/2'], { queryParams: { a: 'next' } });
+
+  });
+
+  it('should submit survey and redirect', () => {
+
+    const service = TestBed.inject(InnovatorService);
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+
+    service.submitFirstTimeSigninInfo = () => of('');
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+
+    component.stepsData = FORM_WITH_CONDITIONALS_MOCK;
+    component.currentAnswers = { location: 'yes' };
+
+    component.onSubmitSurvey();
+    fixture.detectChanges();
+
+    expect(routerSpy).toHaveBeenCalledWith(['innovator/dashboard'], {});
+
+  });
+
+  it('should submit survey give an error and redirect', () => {
+
+    const service = TestBed.inject(InnovatorService);
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+
+    service.submitFirstTimeSigninInfo = () => throwError('error');
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+
+    component.stepsData = FORM_WITH_CONDITIONALS_MOCK;
+    component.currentAnswers = { location: 'yes' };
+
+    component.onSubmitSurvey();
+    fixture.detectChanges();
+
+    expect(routerSpy).toHaveBeenCalledWith(['innovator/first-time-signin/summary'], {});
+
+  });
+
+  it('should generate url for first step', () => {
+
+    activatedRoute.snapshot.params = { id: 1 };
+    activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.getNavigationUrl('previous')).toBe('innovator');
+
+  });
+
+  it('should generate url for summary step', () => {
+
+    activatedRoute.snapshot.params = { id: 'summary' };
+    activatedRoute.params = of({ id: 'summary' }); // Simulate activatedRoute.params subscription.
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.getNavigationUrl('previous')).toBe('innovator/first-time-signin/6');
+
+  });
+
+  it('should generate url for a question step', () => {
+
+    activatedRoute.snapshot.params = { id: 5 };
+    activatedRoute.params = of({ id: 5 });
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.getNavigationUrl('previous')).toBe('innovator/first-time-signin/4');
+
   });
 
 });

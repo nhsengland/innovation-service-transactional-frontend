@@ -1,30 +1,30 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
+
+import { Injector } from '@angular/core';
 import * as common from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { LoggerConfig, NGXLogger, NGXLoggerHttpService } from 'ngx-logger';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { CoreModule } from '@modules/core/core.module';
+import { CoreModule, AppInjector } from '@modules/core';
+import { StoresModule } from '@modules/stores';
 import { ThemeModule } from '@modules/theme/theme.module';
 import { SharedModule } from '@modules/shared/shared.module';
 
-import { SurveyService } from '@triage-innovator-pack-feature-module/services/survey.service';
-
-import { AppInjector } from '@modules/core';
-
+import { SurveyStepComponent } from './step.component';
 import { FormEngineComponent } from '@shared-module/forms';
 import { PageNotFoundComponent } from '@shared-module/pages/not-found.component';
 
-import { SurveyStepComponent } from './step.component';
+import { SurveyService } from '@triage-innovator-pack-feature-module/services/survey.service';
 
 import { InjectorMock } from '@tests/mocks/injector.mock';
 
+
 describe('SurveyStepComponent tests Suite', () => {
 
-  let logger: NGXLogger;
   let router: Router;
   let activatedRoute: ActivatedRoute;
   let surveyService: SurveyService;
@@ -39,13 +39,15 @@ describe('SurveyStepComponent tests Suite', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientModule,
+        HttpClientTestingModule,
         RouterTestingModule.withRoutes([
           { path: 'survey/:id', component: SurveyStepComponent },
           { path: 'not-found', component: PageNotFoundComponent }
         ]),
+        LoggerTestingModule,
         TranslateModule.forRoot(),
         CoreModule,
+        StoresModule,
         ThemeModule,
         SharedModule
       ],
@@ -53,15 +55,13 @@ describe('SurveyStepComponent tests Suite', () => {
         SurveyStepComponent,
       ],
       providers: [
-        { provide: NGXLoggerHttpService, useClass: class { } },
-        { provide: LoggerConfig, useClass: class { } },
-        { provide: ActivatedRoute, useValue: { snapshot: { params: {}, queryParams: {} } } },
-        { provide: SurveyService, useValue: { snapshot: { params: {}, queryParams: {} } } },
+        SurveyService,
         InjectorMock
       ]
     }).compileComponents();
 
-    logger = TestBed.inject(NGXLogger);
+    AppInjector.setInjector(TestBed.inject(Injector));
+
     router = TestBed.inject(Router);
     activatedRoute = TestBed.inject(ActivatedRoute);
     surveyService = TestBed.inject(SurveyService);
@@ -69,7 +69,6 @@ describe('SurveyStepComponent tests Suite', () => {
     spyOn(AppInjector, 'getInjector').and.returnValue(TestBed.inject(InjectorMock));
     injectorSpy = spyOn(TestBed.inject(InjectorMock), 'get');
 
-    injectorSpy.and.returnValue(logger);
     injectorSpy.and.returnValue(router);
 
     routerSpy = spyOn(router, 'navigate');
@@ -78,42 +77,49 @@ describe('SurveyStepComponent tests Suite', () => {
   });
 
   it('should create the component', () => {
+
     fixture = TestBed.createComponent(SurveyStepComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+
     expect(component).toBeTruthy();
+
   });
 
   it('should be on step 1', () => {
-    // Simulates step 1. (Must be before component initialization).
-    activatedRoute.snapshot.params = { id: 1 };
+
+    activatedRoute.snapshot.params = { id: 1 }; // Simulates step 1. (Must be before component initialization).
 
     fixture = TestBed.createComponent(SurveyStepComponent);
     component = fixture.componentInstance;
 
     expect(component.isFirstStep()).toBe(true);
+
   });
 
   it('should be on the last step', () => {
-    // Simulates last step. (Must be before component initialization).
-    activatedRoute.snapshot.params = { id: 5 };
+
+    activatedRoute.snapshot.params = { id: 5 }; // Simulates last step. (Must be before component initialization).
 
     fixture = TestBed.createComponent(SurveyStepComponent);
     component = fixture.componentInstance;
     component.totalNumberOfSteps = 5;
+    fixture.detectChanges();
 
     expect(component.isLastStep()).toBe(true);
+
   });
 
   it('should be a valid step', () => {
-    // Simulates last step. (Must be before component initialization).
-    activatedRoute.snapshot.params = { id: 1 };
+
+    activatedRoute.snapshot.params = { id: 1 }; // Simulates last step. (Must be before component initialization).
 
     fixture = TestBed.createComponent(SurveyStepComponent);
     component = fixture.componentInstance;
     component.totalNumberOfSteps = 5;
+    fixture.detectChanges();
 
     expect(component.isValidStepId()).toBe(true);
+
   });
 
   it('should be redirected because is not a valid step (running in browser)', fakeAsync(() => {
@@ -272,6 +278,7 @@ describe('SurveyStepComponent tests Suite', () => {
     expect(component.isDataRequest()).toBe(true);
     expect(serverRedirectSpy.status).toHaveBeenCalledWith(303);
     expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', `/transactional/triage-innovator-pack/survey/end?surveyId=${encodeURIComponent(component.encodeInfo(surveyId))}`);
+
   }));
 
   it('should redirect if a unknown action was provided (running in server)', fakeAsync(() => {
@@ -310,6 +317,7 @@ describe('SurveyStepComponent tests Suite', () => {
     fixture.detectChanges();
 
     expect(component.currentAnswers).toEqual({});
+
   }));
 
   it('should redirect when submitting a step (running in browser)', fakeAsync(() => {
@@ -331,7 +339,8 @@ describe('SurveyStepComponent tests Suite', () => {
 
   }));
 
-  it('should submit survey', fakeAsync(() => {
+  it('should submit survey and redirect', fakeAsync(() => {
+
     spyOn(common, 'isPlatformBrowser').and.returnValue(true);
     activatedRoute.snapshot.params = { id: 1 };
     activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
@@ -342,9 +351,7 @@ describe('SurveyStepComponent tests Suite', () => {
 
     component.summaryList.valid = true;
     const surveyId = 'c29tZUlk';
-    surveyService.submitSurvey = (survey: { [key: string]: any; }) => {
-      return of({ id: surveyId });
-    };
+    surveyService.submitSurvey = () => of({ id: surveyId });
     component.onSubmitSurvey();
     fixture.detectChanges();
 

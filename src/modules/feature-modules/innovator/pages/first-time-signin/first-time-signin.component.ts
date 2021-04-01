@@ -5,7 +5,6 @@ import { CoreComponent } from '@app/base/core.component';
 import { FormEngineComponent, FormEngineHelper, FormEngineModel } from '@app/base/forms';
 
 import { FIRST_TIME_SIGNIN_QUESTIONS } from '@app/config/constants.config';
-import { environment } from '@app/config/environment.config';
 
 import { InnovatorService } from '../../services/innovator.service';
 
@@ -67,99 +66,43 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
 
   ngOnInit(): void {
 
-    if (this.isRunningOnBrowser()) {
+    this.subscriptions.push(
+      this.activatedRoute.params.subscribe(params => {
 
-      this.subscriptions.push(
-        this.activatedRoute.params.subscribe(params => {
+        this.currentStep.number = Number(params.id);
 
-          this.currentStep.number = Number(params.id);
+        if (!this.isValidStepId()) {
+          this.redirectTo('not-found');
+          return;
+        }
 
-          if (!this.isValidStepId()) {
-            this.redirectTo('not-found');
+        if (this.isQuestionStep()) {
+
+          if (!this.isVisibleStep(this.currentStep.number)) {
+
+            // Remove previously anwsered questions if it is currenly invisible.
+            this.stepsData[this.currentStep.number - 1].parameters.forEach(p => {
+              delete this.currentAnswers[p.id];
+            });
+
+            this.redirectTo(this.getNavigationUrl(this.activatedRoute.snapshot.queryParams.a));
             return;
           }
 
-          if (this.isQuestionStep()) {
-
-            if (!this.isVisibleStep(this.currentStep.number)) {
-
-              // Remove previously anwsered questions if it is currenly invisible.
-              this.stepsData[this.currentStep.number - 1].parameters.forEach(p => {
-                delete this.currentAnswers[p.id];
-              });
-
-              this.redirectTo(this.getNavigationUrl(this.activatedRoute.snapshot.queryParams.a));
-              return;
-            }
-
-            this.currentStep.data = this.stepsData[this.currentStep.number - 1];
-            this.currentStep.data.defaultData = this.currentAnswers;
-          }
-
-          if (this.isSummaryStep()) {
-            this.prepareSummaryData();
-          }
-
-        })
-      );
-    }
-
-
-    if (this.isRunningOnServer()) {
-
-      if (!this.isValidStepId()) {
-        this.redirectTo('not-found');
-        return;
-      }
-
-      const urlQueryParams = this.decodeQueryParams(this.activatedRoute.snapshot.queryParams);
-      this.currentAnswers = { ...(urlQueryParams.f || {}), ...this.requestBody };
-
-      if (this.isQuestionStep()) {
-        this.currentStep.number = Number(this.activatedRoute.snapshot.params.id);
-        this.currentStep.data = FIRST_TIME_SIGNIN_QUESTIONS[this.currentStep.number - 1];
-        this.currentStep.data.defaultData = this.currentAnswers;
-      }
-
-      if (this.isSummaryStep()) {
-        this.prepareSummaryData();
-      }
-
-      if (this.isDataRequest()) { // POST request will be treated here!
-
-        switch (urlQueryParams.a) {
-          case 'previous':
-          case 'next':
-            const form = FormEngineHelper.buildForm(this.currentStep.data.parameters, this.currentStep.data.defaultData);
-            if (urlQueryParams.a === 'previous' || (urlQueryParams.a === 'next' && form.valid)) { // Apply validation only when moving forward.
-              this.redirectTo(this.getNavigationUrl(urlQueryParams.a), { f: this.currentAnswers });
-              return;
-            }
-            break;
-
-          case 'submit':
-            this.onSubmitSurvey();
-            break;
-
-          default:
-            this.redirectTo('not-found'); // Should not happen!
-            break;
+          this.currentStep.data = this.stepsData[this.currentStep.number - 1];
+          this.currentStep.data.defaultData = this.currentAnswers;
         }
 
-      }
+        if (this.isSummaryStep()) {
+          this.prepareSummaryData();
+        }
 
-
-    }
-
-  }
-
-  ngAfterViewInit(): void {
-
-    if (this.isRunningOnServer() && this.isDataRequest()) {
-      this.formEngineComponent?.getFormValues(); // This will trigger errors to show up and be rendered to client.
-    }
+      })
+    );
 
   }
+
+  ngAfterViewInit(): void { }
 
 
   onSubmitStep(action: 'previous' | 'next'): void {
@@ -183,13 +126,13 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
 
     if (this.summaryList.valid) {
       this.innovatorService.submitFirstTimeSigninInfo(this.currentAnswers).subscribe(
-        response => {
-          this.redirectTo(`${this.getBaseUrl()}/innovator/dashboard`, { surveyId: response });
+        () => {
+          this.redirectTo(`innovator/dashboard`);
           return;
         },
-        error => {
-          console.log(error);
-          this.redirectTo(`${this.getBaseUrl()}/innovator/first-time-signin/summary`);
+        () => {
+          this.redirectTo(`innovator/first-time-signin/summary`);
+          return;
         }
       );
     }
@@ -198,7 +141,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
 
   getNavigationUrl(action: 'previous' | 'next'): string {
 
-    let url = `${this.getBaseUrl()}/innovator`;
+    let url = `innovator`;
 
     switch (action) {
       case 'previous':
@@ -217,26 +160,8 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
         break;
     }
 
-    if (this.isRunningOnServer()) {
-      url = this.encodeUrlQueryParams(url, { a: action, f: this.currentAnswers });
-    }
-
     return url;
 
-  }
-
-  getDataSubmissionUrl(action: 'previous' | 'next' | 'submit'): string {
-
-    let url = `${this.getBaseUrl()}/innovator/first-time-signin/`;
-    if (this.isQuestionStep()) { url += this.currentStep.number; }
-    if (this.isSummaryStep()) { url += 'summary'; }
-
-    return this.encodeUrlQueryParams(url, { a: action, f: this.currentAnswers });
-
-  }
-
-  getBaseUrl(): string {
-    return (this.isRunningOnServer()) ? environment.BASE_URL : '';
   }
 
   prepareSummaryData(): void {

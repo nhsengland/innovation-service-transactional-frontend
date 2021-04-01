@@ -18,7 +18,7 @@ export class EnvironmentStore extends Store<EnvironmentModel> implements OnDestr
 
   private subscriptions: Subscription[] = [];
 
-  get ENV(): any { return this.state.ENV; }
+  get ENV(): EnvironmentModel['ENV'] { return this.state.ENV; }
   // get CONSTANTS() { return this.state.CONSTANTS; }
 
   constructor(
@@ -64,7 +64,7 @@ export class EnvironmentStore extends Store<EnvironmentModel> implements OnDestr
         this.setState(this.state);
       },
       () => {
-        this.state.authentication = null;
+        this.state.authentication = { user: { id: '', displayName: '' } };
         this.setState(this.state);
       }
     );
@@ -79,9 +79,9 @@ export class EnvironmentStore extends Store<EnvironmentModel> implements OnDestr
     return new Observable((observer: Observer<boolean>) => {
       this.subscriptions.push(
         this.state$.subscribe(state => {
-            observer.next(!!state.authentication?.user.id);
-            // observer.complete();
-          },
+          observer.next(!!state.authentication?.user.id);
+          // observer.complete();
+        },
           error => {
             observer.error(error.error);
             // observer.complete();

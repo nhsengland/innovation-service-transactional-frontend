@@ -6,7 +6,7 @@
     "start:dev:spa": "ng serve --host 0.0.0.0",
     "start:dev:ssr": "ng run app:serve-ssr",
     "build:spa": "ng build --prod",
-    "test": "./node_modules/.bin/jest --coverage",
+    "test": "./node_modules/.bin/jest --runInBand --coverage --silent",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "e2e": "ng e2e",
@@ -39,6 +39,7 @@
     "passport-azure-ad": "^4.3.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
+    "xhr2": "^0.2.1",
     "zone.js": "~0.11.3"
   },
   "devDependencies": {

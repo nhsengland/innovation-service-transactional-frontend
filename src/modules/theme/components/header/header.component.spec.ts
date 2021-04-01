@@ -6,11 +6,9 @@ import { NavigationEnd } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { HeaderComponent } from './header.component';
 
-import { CoreModule } from '@modules/core/core.module';
-import { StoreModule } from '@modules/stores/store.module';
-// import { EnvironmentStore } from '@modules/stores/environment/environment.store';
+import { CoreModule } from '@modules/core';
+import { StoresModule } from '@modules/stores';
 
-import { AuthenticationService } from '@modules/core/services/authentication.service';
 
 describe('HeaderComponent', () => {
 
@@ -23,14 +21,10 @@ describe('HeaderComponent', () => {
         HttpClientModule,
         TranslateModule.forRoot(),
         CoreModule,
-        StoreModule
+        StoresModule
       ],
       declarations: [
         HeaderComponent,
-      ],
-      providers: [
-        AuthenticationService
-        // { provide: EnvironmentStore, useValue: environmentStore }
       ]
     }).compileComponents();
   });

@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { EnvironmentStore } from '@modules/stores/environment/environment.store';
 
 import { UrlModel } from '@modules/core';
-import { catchError, map, take } from 'rxjs/operators';
-
-import { RandomGeneratorHelper } from '@modules/core';
+import { map, take } from 'rxjs/operators';
 
 @Injectable()
 export class InnovatorService {
@@ -26,9 +24,6 @@ export class InnovatorService {
       user: {
         displayName: data.innovatorName
       },
-      innovator: {
-        surveyId: RandomGeneratorHelper.generateRandom()
-      },
       innovation: {
         name: data.innovationName,
         description: data.innovationDescription,
@@ -39,18 +34,7 @@ export class InnovatorService {
     };
 
     const url = new UrlModel(this.apiUrl).setPath('transactional/api/innovators');
-    return this.http.post<{}>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => {
-        console.log('First Time Signin RESPONSE', response);
-        return '';
-      }),
-      catchError(err => {
-        console.log(err);
-        return throwError(err);
-      })
-    );
-
+    return this.http.post<{}>(url.buildUrl(), body).pipe(take(1), map(response => ''));
 
   }
 

@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormEngineParameterModel } from '@app/base/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { FormInputComponent } from '../components/input.component';
@@ -17,7 +18,8 @@ class HostComponent {
   @ViewChild(FormRadioGroupComponent) childComponent?: FormRadioGroupComponent;
 
   form = new FormGroup({
-    testField: new FormControl('', Validators.required)
+    testField: new FormControl('', Validators.required),
+    testFieldConditional: new FormControl('')
   });
 
   id = 'FormInputId';
@@ -25,7 +27,11 @@ class HostComponent {
   items = [
     { value: 'value 1', label: 'label 1' },
     { value: 'value 2', label: 'label 2' },
-    { value: 'value 3', label: 'label 3' }
+    {
+      value: 'value 3',
+      label: 'value 3',
+      conditional: new FormEngineParameterModel({ id: 'testFieldConditional', dataType: 'text', label: 'First part of your postcode', description: 'For example SW1', validations: { isRequired: true } })
+    },
   ];
 
 }
@@ -80,6 +86,13 @@ describe('FormRadioGroupComponent tests Suite', () => {
     hostFixture.detectChanges();
     expect(hostComponent.childComponent?.hasError).toBe(false);
     expect(hostComponent.childComponent?.errorMessage).toBe('');
+  });
+
+  it('should conditional field be visible', () => {
+    hostFixture.detectChanges();
+    hostComponent.form.get('testField')?.setValue('value 3');
+    hostFixture.detectChanges();
+    expect(hostComponent.childComponent?.isConditionalFieldVisible('testFieldConditional')).toBe(true);
   });
 
 });

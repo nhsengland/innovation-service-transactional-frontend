@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { APP_BASE_HREF } from '@angular/common';
 
 import { PageNotFoundComponent } from '@modules/shared/pages/not-found.component';
-import { StoreModule } from '@modules/stores/store.module';
+import { StoresModule } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
 
 import { StoresResolver } from '@modules/core/resolvers/stores.resolver';
@@ -27,7 +27,7 @@ describe.skip('app-routing.module', () => {
           { path: 'triage-innovator-pack', loadChildren: () => triageInnovatorPackModule.then(m => m.TriageInnovatorPackModule) }
         ]),
         AppRoutingModule,
-        StoreModule,
+        StoresModule,
         SharedModule
       ],
       providers: [

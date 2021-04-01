@@ -1,42 +1,48 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { environment } from '@app/config/environment.config';
 
 import { EnvironmentService } from './environment.service';
 
-
-describe('SurveyService tests Suite', () => {
+describe('Store/EnvironemntStore/EnvironmentService tests Suite', () => {
 
   let httpMock: HttpTestingController;
   let service: EnvironmentService;
-//   let environmentStore: EnvironmentStore;
 
   beforeEach(() => {
-    // environmentStore = new EnvironmentStore();
 
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule
       ],
       providers: [
-        EnvironmentService,
-        // { provide: EnvironmentStore, useValue: environmentStore }
+        EnvironmentService
       ]
     });
 
-    service = TestBed.inject(EnvironmentService);
     httpMock = TestBed.inject(HttpTestingController);
+    service = TestBed.inject(EnvironmentService);
+
   });
 
-  it('should submit the survey and return survey id', () => {
+  afterEach(() => {
+    httpMock.verify();
+  });
+
+
+  it('should run getUserInfo() method', () => {
+
+    const expected = { user: { id: 'id', displayName: 'John Doe' } };
 
     service.getUserInfo().subscribe(response => {
-      expect(response).toBe('mySurveyId');
+      expect(response).toBe(expected);
     });
 
     const req = httpMock.expectOne(`${environment.API_URL}/auth/user`);
-    req.flush('mySurveyId');
-    httpMock.verify();
+    req.flush(expected);
+    expect(req.request.method).toBe('GET');
+
   });
+
 });

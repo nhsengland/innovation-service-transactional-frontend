@@ -39,6 +39,18 @@ export const CHOOSABLE_PARAMETER_TYPES = [
   })
 ];
 
+export const CHOOSABLE_PARAMETER_TYPES_WITH_CONDITIONALS = [
+  new FormEngineParameterModel({
+    id: 'radioGroupField',
+    dataType: 'radio-group',
+    items: [
+      { value: 'value 1', label: 'label 1' },
+      { value: 'value 2', label: 'label 2' },
+      { value: 'value 3', label: 'label 3', conditional: new FormEngineParameterModel({ id: 'textField', dataType: 'text' }) }
+    ]
+  })
+];
+
 
 export const ALL_PARAMETERS_HIDDEN = [
   new FormEngineParameterModel({

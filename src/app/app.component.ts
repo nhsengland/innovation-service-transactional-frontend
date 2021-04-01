@@ -11,15 +11,10 @@ import { locale as enLanguage } from './config/translations/en';
 })
 export class AppComponent implements OnInit {
 
-  titleService: Title;
-  translateService: TranslateService;
-
   constructor(
-     titleService: Title,
-     translateService: TranslateService
+    private titleService: Title,
+    private translateService: TranslateService
   ) {
-    this.titleService = titleService;
-    this.translateService = translateService;
 
     this.translateService.addLangs(['en']);
     this.translateService.setTranslation(enLanguage.lang, enLanguage.data, true);
