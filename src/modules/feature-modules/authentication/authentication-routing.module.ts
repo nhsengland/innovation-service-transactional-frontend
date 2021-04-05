@@ -15,7 +15,11 @@ const routes: Routes = [
   {
     path: 'signup',
     pathMatch: 'full',
-    redirectTo: '/not-found',
+    redirectTo: '/not-found'
+  },
+
+  {
+    path: 'signup',
     children: [
       {
         path: 'confirmation',

@@ -20,18 +20,18 @@ export class Store<T> {
   getStoreId(): string { return this.storeId; }
   setStoreId(s: string): void { this.storeId = s; }
 
+  setState(nextState: T): void {
+    this.stateBS.next(nextState);
+  }
+
   // getStorageState(storeId: string): T {
   //   const ls = localStorage.getItem(storeId);
   //   return ls ? JSON.parse(ls) : null;
   // }
 
-  setState(nextState: T): void {
-    this.stateBS.next(nextState);
-  }
-
-  setStateAndSave(nextState: T): void {
-    this.stateBS.next(nextState);
-    // localStorage.setItem(this.storeId, JSON.stringify(this.state));
-  }
+  // setStateAndSave(nextState: T): void {
+  //   this.stateBS.next(nextState);
+  //   // localStorage.setItem(this.storeId, JSON.stringify(this.state));
+  // }
 
 }

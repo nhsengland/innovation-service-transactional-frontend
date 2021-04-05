@@ -1,21 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-import { EnvironmentStore } from '@modules/stores/environment/environment.store';
-
-import { UrlModel } from '@modules/core';
 import { map, take } from 'rxjs/operators';
 
+import { CoreService } from '@app/base';
+
+import { UrlModel } from '@modules/core';
+
 @Injectable()
-export class InnovatorService {
+export class InnovatorService extends CoreService {
 
-  private apiUrl = this.environmentStore.ENV.API_URL;
+  private apiUrl = this.stores.environment.ENV.API_URL;
 
-  constructor(
-    private http: HttpClient,
-    private environmentStore: EnvironmentStore
-  ) { }
+  constructor() { super(); }
 
   submitFirstTimeSigninInfo(data: { [key: string]: any }): Observable<string> {
 

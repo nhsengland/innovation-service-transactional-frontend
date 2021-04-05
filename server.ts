@@ -182,12 +182,8 @@ export function app(): express.Express {
 
     if (req.isAuthenticated() && user.oid) {
       const userInfo = { data: { id: user.oid, type: 'user', attributes: { displayName: user.displayName } } };
-      // res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-      // res.set('cache-control', 'no-store');
-      // res.set('e-tag', 'false');
       res.send(userInfo);
-    }
-    else {
+    } else {
       res.status(401).send();
     }
   });

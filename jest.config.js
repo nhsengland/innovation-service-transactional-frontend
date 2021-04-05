@@ -20,6 +20,7 @@ module.exports = {
     'index.ts',
     '.interfaces.ts',
     '.mock.ts',
+    '.models.ts',
     '.module.ts'
   ],
   coverageThreshold: {

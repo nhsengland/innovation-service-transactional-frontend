@@ -1,48 +1,106 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
+
+import { Injector } from '@angular/core';
+
+import { CoreModule, AppInjector } from '@modules/core';
+import { StoresModule, EnvironmentStore } from '@modules/stores';
 
 import { InnovatorService } from './innovator.service';
-import { EnvironmentStore } from '@modules/stores/environment/environment.store';
-import { EnvironmentService } from '@modules/stores/environment/environment.service';
 
-describe('InnovatorService tests Suite', () => {
+describe('FeatureModule/Innovator/InnovatorService tests Suite', () => {
 
   let httpMock: HttpTestingController;
-  let service: InnovatorService;
   let environmentStore: EnvironmentStore;
-  let environmentService: EnvironmentService;
+  let service: InnovatorService;
 
   beforeEach(() => {
-    environmentStore = new EnvironmentStore(environmentService);
-
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        LoggerTestingModule,
+        CoreModule,
+        StoresModule
       ],
       providers: [
-        InnovatorService,
-        { provide: EnvironmentService, useValue: EnvironmentService },
-        { provide: EnvironmentStore, useValue: environmentStore }
+        InnovatorService
       ]
     });
 
+    AppInjector.setInjector(TestBed.inject(Injector));
+
     httpMock = TestBed.inject(HttpTestingController);
+    environmentStore = TestBed.inject(EnvironmentStore);
     service = TestBed.inject(InnovatorService);
-    environmentService = TestBed.inject(EnvironmentService);
 
   });
 
-  it('should submit first time signin information', () => {
-    const survey = {
-      myQuestion: 'my answer'
-    };
-
-    service.submitFirstTimeSigninInfo(survey).subscribe(surveyId => {
-      expect(surveyId).toBe('mySurveyId');
-    });
-
-    const req = httpMock.expectOne(`${environmentStore.ENV.API_URL}/api/innovators`);
-    req.flush('mySurveyId');
+  afterEach(() => {
     httpMock.verify();
   });
+
+
+  it('should run submitFirstTimeSigninInfo(PayloadTest01) and return success', () => {
+
+    const bodyPayload = {
+      innovatorName: 'User display name',
+      innovationName: 'Innovation name',
+      innovationDescription: 'Some description',
+      locationCountryName: 'Some location',
+      // location: 'Other location',
+      // englandPostCode: 'EN05',
+      isCompanyOrOrganisation: 'yes',
+      // organisationName: 'Organisation name',
+      // organisationSize: '1 to 5 workers'
+    };
+
+    const expected = {
+      success: '',
+      error: { status: 0, statusText: '' }
+    };
+
+    service.submitFirstTimeSigninInfo(bodyPayload).subscribe(
+      response => expected.success = response,
+      error => expected.error = error
+    );
+
+    const req = httpMock.expectOne(`${environmentStore.ENV.API_URL}/transactional/api/innovators`);
+    req.flush(expected.success);
+    expect(req.request.method).toBe('POST');
+    expect(expected.success).toBe(expected.success);
+
+  });
+
+  it('should run submitFirstTimeSigninInfo(PayloadTest02) and return success', () => {
+
+    const bodyPayload = {
+      innovatorName: 'User display name',
+      innovationName: 'Innovation name',
+      innovationDescription: 'Some description',
+      // locationCountryName: 'Some location',
+      location: 'Other location',
+      // englandPostCode: 'EN05',
+      isCompanyOrOrganisation: 'no',
+      organisationName: 'Organisation name',
+      organisationSize: '1 to 5 workers'
+    };
+
+    const expected = {
+      success: '',
+      error: { status: 0, statusText: '' }
+    };
+
+    service.submitFirstTimeSigninInfo(bodyPayload).subscribe(
+      response => expected.success = response,
+      error => expected.error = error
+    );
+
+    const req = httpMock.expectOne(`${environmentStore.ENV.API_URL}/transactional/api/innovators`);
+    req.flush(expected.success);
+    expect(req.request.method).toBe('POST');
+    expect(expected.success).toBe(expected.success);
+
+  });
+
 });
