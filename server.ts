@@ -196,7 +196,7 @@ export function app(): express.Express {
     res.send('PROFILE (AUTHENTICATED URL)');
   });
 
-  server.use(`${BASE_PATH}/signup`, (req, res) => {
+  server.get(`${BASE_PATH}/signup`, (req, res) => {
     const surveyId = req.query.surveyId || '';
 
     const azSignupUri = `https://${oauthConfiguration.tenantName}.b2clogin.com/${oauthConfiguration.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&prompt=login`
@@ -210,10 +210,8 @@ export function app(): express.Express {
 
   // Callback Handling
   // Using MS Azure OpenId Connect strategy (passport)
-  server.use(`${BASE_PATH}/signup/callback`, (req, res) => {
-
-    console.log('SIGNUP', req.user);
-    res.redirect(`${BASE_PATH}/signup/confirmation`);
+  server.get(`${BASE_PATH}/signup/callback`, (req, res) => {
+    res.redirect(`${BASE_PATH}/auth/signup/confirmation`);
   });
 
   // Login endpoint - AD OpenIdConnect
