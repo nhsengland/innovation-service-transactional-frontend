@@ -11,7 +11,7 @@ import { SharedModule } from '@modules/shared/shared.module';
 
 const triageInnovatorPackModule: Promise<any> = import('@triage-innovator-pack-feature-module/triage-innovator-pack.module');
 
-describe.skip('app-routing.module', () => {
+describe('app-routing.module', () => {
 
   let router: Router;
 
