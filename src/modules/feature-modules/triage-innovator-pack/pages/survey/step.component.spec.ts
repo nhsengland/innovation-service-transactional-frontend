@@ -6,7 +6,7 @@ import { LoggerTestingModule } from 'ngx-logger/testing';
 import { Injector } from '@angular/core';
 import * as common from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { CoreModule, AppInjector } from '@modules/core';
@@ -339,7 +339,7 @@ describe('SurveyStepComponent tests Suite', () => {
 
   }));
 
-  it('should submit survey and redirect', fakeAsync(() => {
+  it('should submit survey and redirect', () => {
 
     spyOn(common, 'isPlatformBrowser').and.returnValue(true);
     activatedRoute.snapshot.params = { id: 1 };
@@ -357,7 +357,27 @@ describe('SurveyStepComponent tests Suite', () => {
 
     expect(routerSpy).toHaveBeenCalledWith(['/triage-innovator-pack/survey/end'], { queryParams: { surveyId } });
 
-  }));
+  });
+
+  it('should submit survey, give an error and redirect', () => {
+
+    spyOn(common, 'isPlatformBrowser').and.returnValue(true);
+    activatedRoute.snapshot.params = { id: 1 };
+    activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
+
+    fixture = TestBed.createComponent(SurveyStepComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.summaryList.valid = true;
+
+    surveyService.submitSurvey = () => throwError('error');
+    component.onSubmitSurvey();
+    fixture.detectChanges();
+
+    expect(routerSpy).toHaveBeenCalledWith(['/triage-innovator-pack/survey/summary'], {});
+
+  });
 
   it('should generate url for first step', () => {
     spyOn(common, 'isPlatformBrowser').and.returnValue(true);

@@ -1,13 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { InnovatorService } from './innovator.service';
 import { EnvironmentStore } from '@modules/stores/environment/environment.store';
 import { EnvironmentService } from '@modules/stores/environment/environment.service';
-
-const testVariables = {
-  surveyUri: '/api/innovators'
-};
 
 describe('InnovatorService tests Suite', () => {
 
@@ -45,7 +41,7 @@ describe('InnovatorService tests Suite', () => {
       expect(surveyId).toBe('mySurveyId');
     });
 
-    const req = httpMock.expectOne(`${environmentStore.ENV.API_URL}${testVariables.surveyUri}`);
+    const req = httpMock.expectOne(`${environmentStore.ENV.API_URL}/api/innovators`);
     req.flush('mySurveyId');
     httpMock.verify();
   });

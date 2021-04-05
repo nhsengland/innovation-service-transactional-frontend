@@ -31,6 +31,20 @@ describe('Store/EnvironemntStore/EnvironmentService tests Suite', () => {
   });
 
 
+  it('should run verifyUserSession() method', () => {
+
+    const expected = true;
+
+    service.verifyUserSession().subscribe(response => {
+      expect(response).toBe(expected);
+    });
+
+    const request = httpMock.expectOne(`${environment.API_URL}/session`);
+    request.flush(expected);
+    expect(request.request.method).toBe('HEAD');
+
+  });
+
   it('should run getUserInfo() method', () => {
 
     const expected = { user: { id: 'id', displayName: 'John Doe' } };

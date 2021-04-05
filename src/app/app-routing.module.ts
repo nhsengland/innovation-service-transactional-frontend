@@ -5,10 +5,9 @@ import { PageNotFoundComponent } from '@shared-module/pages/not-found.component'
 
 import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
 
-import { StoresResolver } from '@modules/core/resolvers/stores.resolver';
-
-const triageInnovatorPackModule: Promise<any> = import('@triage-innovator-pack-feature-module/triage-innovator-pack.module');
-const innovatorModule: Promise<any> = import('@innovator-feature-module/innovator.module');
+const authenticationModule: Promise<any> = import('@modules/feature-modules/authentication/authentication.module');
+const triageInnovatorPackModule: Promise<any> = import('@modules/feature-modules/triage-innovator-pack/triage-innovator-pack.module');
+const innovatorModule: Promise<any> = import('@modules/feature-modules/innovator/innovator.module');
 
 const routes: Routes = [
 
@@ -20,13 +19,15 @@ const routes: Routes = [
   },
 
   {
-    resolve: { storesResolver: StoresResolver },
+    path: 'auth', loadChildren: () => authenticationModule.then(m => m.AuthenticationModule)
+  },
+
+  {
     path: 'triage-innovator-pack', loadChildren: () => triageInnovatorPackModule.then(m => m.TriageInnovatorPackModule)
   },
 
   {
     canActivate: [AuthenticationGuard],
-    resolve: { storesResolver: StoresResolver },
     path: 'innovator', loadChildren: () => innovatorModule.then(m => m.InnovatorModule)
   },
 

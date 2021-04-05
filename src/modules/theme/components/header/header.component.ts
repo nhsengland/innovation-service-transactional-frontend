@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.router.events.subscribe(event => this.subscribe(event)),
 
-      this.environmentStore.isAuthenticated$().subscribe(state => {
+      this.environmentStore.isUserAuthenticated$().subscribe(state => {
         this.authenticationButton = !state ?
         { title: 'Sign in', url: '/transactional/signin' } :
         { title: 'Sign out', url: '/transactional/signout' };

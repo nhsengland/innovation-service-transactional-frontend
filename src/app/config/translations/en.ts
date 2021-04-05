@@ -27,6 +27,14 @@ export const locale = {
     // Specific translations to specific features (modules).
     features: {
 
+      shared_pages: {
+        page_not_found: {
+          title: 'It appears that something went wrong!',
+          message: 'Give us time while we investigate what happened that took you to here.',
+          action: 'Get back to the confort of home'
+        }
+      }
+
     },
 
     labels: {

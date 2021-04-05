@@ -18,15 +18,17 @@ export class SurveyService {
   ) { }
 
   submitSurvey(body: { [key: string]: any }): Observable<{ id: string }> {
+
     const url = new UrlModel(this.apiUrl).setPath('transactional/survey').buildUrl();
+
     return this.http.post<{ id: string }>(url, body).pipe(
       take(1),
       map(response => response),
       catchError(err => {
-        console.log(err);
         return throwError(err);
       })
     );
+
   }
 
 }

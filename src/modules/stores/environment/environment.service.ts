@@ -27,17 +27,25 @@ export class EnvironmentService {
   ) { }
 
 
-  getUserInfo(): Observable<{ user: { id: string, displayName: string } } | null> {
+  verifyUserSession(): Observable<boolean> {
+    const url = new UrlModel(this.apiUrl).setPath('transactional/session').buildUrl();
+    return this.http.head(url).pipe(take(1), map(() => true));
+  }
+
+  getUserInfo(): Observable<{ user: { id: string, displayName: string } }> {
 
     const url = new UrlModel(this.apiUrl).setPath('transactional/auth/user');
     return this.http.get<getUserInfoDto>(url.buildUrl()).pipe(
       take(1),
-      map(response =>
-        ({ user: { id: response.data.id, displayName: response.data.attributes.displayName } })
-      ),
-      catchError(error => throwError(error))
+      map(response => ({ user: { id: response.data.id, displayName: response.data.attributes.displayName } })),
+      catchError(() => throwError({}))
     );
 
+  }
+
+  verifyInnovator(userId: string): Observable<boolean> {
+    const url = new UrlModel(this.apiUrl).setPath('transactional/api/innovators/:userId').setPathParams({ userId });
+    return this.http.head(url.buildUrl()).pipe(take(1), map(() => true));
   }
 
 }

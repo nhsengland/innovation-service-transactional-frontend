@@ -18,7 +18,7 @@ describe('SurveyService tests Suite', () => {
   let environmentService: EnvironmentService;
 
   beforeEach(() => {
-    environmentStore = new EnvironmentStore(environmentService);
+    // environmentStore = new EnvironmentStore(environmentService);
 
     TestBed.configureTestingModule({
       imports: [
@@ -26,14 +26,14 @@ describe('SurveyService tests Suite', () => {
       ],
       providers: [
         SurveyService,
-        { provide: EnvironmentService, useValue: EnvironmentService },
-        { provide: EnvironmentStore, useValue: environmentStore }
+        // { provide: EnvironmentService, useValue: EnvironmentService },
+        // { provide: EnvironmentStore, useValue: environmentStore }
       ]
     });
 
     httpMock = TestBed.inject(HttpTestingController);
     service = TestBed.inject(SurveyService);
-    environmentService = TestBed.inject(EnvironmentService);
+    // environmentService = TestBed.inject(EnvironmentService);
 
   });
 

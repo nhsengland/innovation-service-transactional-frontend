@@ -5,6 +5,7 @@ import { CoreComponent } from '@app/base/core.component';
 import { FormEngineComponent, FormEngineHelper, FormEngineModel } from '@app/base/forms';
 
 import { FIRST_TIME_SIGNIN_QUESTIONS } from '@app/config/constants.config';
+import { concatMap } from 'rxjs/operators';
 
 import { InnovatorService } from '../../services/innovator.service';
 
@@ -125,7 +126,11 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
     this.prepareSummaryData();
 
     if (this.summaryList.valid) {
-      this.innovatorService.submitFirstTimeSigninInfo(this.currentAnswers).subscribe(
+      this.innovatorService.submitFirstTimeSigninInfo(this.currentAnswers).pipe(
+        concatMap(() => {
+          return this.stores.environment.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
+        })
+      ).subscribe(
         () => {
           this.redirectTo(`innovator/dashboard`);
           return;
@@ -151,7 +156,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
         break;
 
       case 'next':
-        if (this.currentStep.number === this.stepsData.length) { url += '/first-time-signin/summary'; }
+        if (this.isLastStep()) { url += '/first-time-signin/summary'; }
         else { url += `/first-time-signin/${this.currentStep.number + 1}`; }
         break;
 

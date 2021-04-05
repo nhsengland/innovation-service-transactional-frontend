@@ -8,16 +8,15 @@ import * as common from '@angular/common';
 import { of, throwError } from 'rxjs';
 
 import { AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { StoresModule, EnvironmentStore } from '@modules/stores';
 
 import { AuthenticationGuard } from './authentication.guard';
-import { AuthenticationService } from '../services/authentication.service';
 
 
 describe('Core/Services/AuthenticationGuard tests Suite', () => {
 
   let guard: AuthenticationGuard;
-  let authenticationService: AuthenticationService;
+  let environmentStore: EnvironmentStore;
 
   beforeEach(() => {
 
@@ -29,7 +28,6 @@ describe('Core/Services/AuthenticationGuard tests Suite', () => {
         StoresModule
       ],
       providers: [
-        AuthenticationService,
         AuthenticationGuard
       ]
     });
@@ -37,7 +35,7 @@ describe('Core/Services/AuthenticationGuard tests Suite', () => {
     AppInjector.setInjector(TestBed.inject(Injector));
 
     guard = TestBed.inject(AuthenticationGuard);
-    authenticationService = TestBed.inject(AuthenticationService);
+    environmentStore = TestBed.inject(EnvironmentStore);
 
   });
 
@@ -46,7 +44,7 @@ describe('Core/Services/AuthenticationGuard tests Suite', () => {
 
     let expected: boolean | null = null;
 
-    spyOn(authenticationService, 'verifySession').and.returnValue(of(true));
+    spyOn(environmentStore, 'initializeAuthentication$').and.returnValue(of(true));
 
     guard.canActivate().subscribe(response => { expected = response; });
     expect(expected).toBe(true);
@@ -56,7 +54,7 @@ describe('Core/Services/AuthenticationGuard tests Suite', () => {
   it('should deny access the route when running on browser', () => {
 
     spyOn(common, 'isPlatformBrowser').and.returnValue(true);
-    spyOn(authenticationService, 'verifySession').and.returnValue(throwError('error'));
+    spyOn(environmentStore, 'initializeAuthentication$').and.returnValue(throwError('error'));
 
     let expected: boolean | null = null;
 
@@ -74,7 +72,7 @@ describe('Core/Services/AuthenticationGuard tests Suite', () => {
   it('should deny access the route when running on server', () => {
 
     spyOn(common, 'isPlatformBrowser').and.returnValue(false);
-    spyOn(authenticationService, 'verifySession').and.returnValue(throwError('error'));
+    spyOn(environmentStore, 'initializeAuthentication$').and.returnValue(throwError('error'));
 
     let expected: boolean | null = null;
 
