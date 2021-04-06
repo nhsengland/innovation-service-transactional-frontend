@@ -5,7 +5,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
 
+// Guards.
+import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
+
 const routes: Routes = [
+
   {
     path: '',
     pathMatch: 'full',
@@ -13,24 +17,24 @@ const routes: Routes = [
   },
 
   {
-    path: 'dashboard',
-    pathMatch: 'full',
-    component: DashboardComponent
-  },
-
-  {
-    path: 'first-time-signin',
+    canActivateChild: [FirstTimeSigninGuard],
+    path: '',
     children: [
       {
-        path: '',
+        path: 'dashboard',
         pathMatch: 'full',
-        redirectTo: '1'
+        component: DashboardComponent
       },
-      { path: ':id', pathMatch: 'full', component: FirstTimeSigninComponent }
-
-      // { path: 'survey/end', pathMatch: 'full', component: SurveyEndComponent },
+      {
+        path: 'first-time-signin',
+        children: [
+          { path: '', pathMatch: 'full', redirectTo: '1' },
+          { path: ':id', pathMatch: 'full', component: FirstTimeSigninComponent }
+        ]
+      }
     ]
   }
+
 ];
 
 @NgModule({

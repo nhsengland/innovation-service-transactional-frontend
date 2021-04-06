@@ -5,16 +5,13 @@ import { Injector } from '@angular/core';
 import * as common from '@angular/common';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, EnvironmentStore } from '@modules/stores';
-
-import { AuthenticationService } from '../services/authentication.service';
-
+import { StoresModule, EnvironmentStore, EnvironmentService  } from '@modules/stores';
 
 describe('Core/Interceptors/ApiOutInterceptor tests Suite', () => {
 
   let httpMock: HttpTestingController;
   let environmentStore: EnvironmentStore;
-  let service: AuthenticationService;
+  let environmentService: EnvironmentService;
 
   beforeEach(() => {
 
@@ -23,9 +20,6 @@ describe('Core/Interceptors/ApiOutInterceptor tests Suite', () => {
         HttpClientTestingModule,
         CoreModule,
         StoresModule
-      ],
-      providers: [
-        AuthenticationService
       ]
     });
 
@@ -33,7 +27,7 @@ describe('Core/Interceptors/ApiOutInterceptor tests Suite', () => {
 
     httpMock = TestBed.inject(HttpTestingController);
     environmentStore = TestBed.inject(EnvironmentStore);
-    service = TestBed.inject(AuthenticationService);
+    environmentService = TestBed.inject(EnvironmentService);
 
   });
 
@@ -48,11 +42,11 @@ describe('Core/Interceptors/ApiOutInterceptor tests Suite', () => {
 
     const expected = true;
 
-    service.verifySession().subscribe(response => {
+    environmentService.verifyUserSession().subscribe(response => {
       expect(response).toBe(expected);
     });
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.ENV.API_URL}/session`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.ENV.API_URL}/transactional/session`);
     httpRequest.flush(expected);
     expect(httpRequest.request.headers.has('Cookie')).toEqual(true);
 
@@ -64,11 +58,11 @@ describe('Core/Interceptors/ApiOutInterceptor tests Suite', () => {
 
     const expected = true;
 
-    service.verifySession().subscribe(response => {
+    environmentService.verifyUserSession().subscribe(response => {
       expect(response).toBe(expected);
     });
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.ENV.API_URL}/session`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.ENV.API_URL}/transactional/session`);
     httpRequest.flush(expected);
     expect(httpRequest.request.headers.has('Cookie')).toEqual(false);
 

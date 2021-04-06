@@ -9,11 +9,9 @@ import { PageNotFoundComponent } from '@modules/shared/pages/not-found.component
 import { StoresModule } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
 
-import { StoresResolver } from '@modules/core/resolvers/stores.resolver';
-
 const triageInnovatorPackModule: Promise<any> = import('@triage-innovator-pack-feature-module/triage-innovator-pack.module');
 
-describe.skip('app-routing.module', () => {
+describe('app-routing.module', () => {
 
   let router: Router;
 
@@ -31,8 +29,7 @@ describe.skip('app-routing.module', () => {
         SharedModule
       ],
       providers: [
-        { provide: APP_BASE_HREF, useValue: '/' },
-        StoresResolver
+        { provide: APP_BASE_HREF, useValue: '/' }
       ]
     });
 

@@ -4,19 +4,11 @@ import { APP_BASE_HREF } from '@angular/common';
 
 import { LoggerModule } from 'ngx-logger';
 
-// Services.
-import { AuthenticationService } from './services/authentication.service';
-
 // Interceptors.
-// import { HttpInterceptorService } from './interceptors/http-interceptor.service';
-// import { ApiInInterceptor } from './interceptors/api-in.interceptor';
 import { ApiOutInterceptor } from './interceptors/api-out.interceptor';
 
 // Guards.
 import { AuthenticationGuard } from './guards/authentication.guard';
-
-// Resolvers.
-import { StoresResolver } from './resolvers/stores.resolver';
 
 // Environment.
 import { environment } from '../../app/config/environment.config';
@@ -33,8 +25,6 @@ import { environment } from '../../app/config/environment.config';
 
   ],
   providers: [
-    AuthenticationService,
-
     {
       // App base HREF definition.
       provide: APP_BASE_HREF,
@@ -42,16 +32,6 @@ import { environment } from '../../app/config/environment.config';
     },
 
     // Interceptors.
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: HttpInterceptorService,
-    //   multi: true
-    // },
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: ApiInInterceptor,
-    //   multi: true
-    // },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ApiOutInterceptor,
@@ -59,10 +39,7 @@ import { environment } from '../../app/config/environment.config';
     },
 
     // Guards.
-    AuthenticationGuard,
-
-    // Resolvers.
-    StoresResolver
+    AuthenticationGuard
   ]
 })
 export class CoreModule {

@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { StoresModule, EnvironmentStore } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
 import { ThemeModule } from '@modules/theme/theme.module';
 
@@ -32,7 +32,7 @@ const FORM_WITH_CONDITIONALS_MOCK = [
 ];
 
 
-describe('FeatureModules/Innovator/FirstTimeSigninComponent tests Suite', () => {
+describe('FeatureModule/Innovator/FirstTimeSigninComponent tests Suite', () => {
 
   let activatedRoute: ActivatedRoute;
 
@@ -160,7 +160,7 @@ describe('FeatureModules/Innovator/FirstTimeSigninComponent tests Suite', () => 
     expect(component.isVisibleStep(1)).toBe(false);
   });
 
-  it('should do nothing when submitting a step and form not is valid (running in browser)', () => {
+  it('should do nothing when submitting a step and form not is valid', () => {
 
     activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
 
@@ -175,7 +175,7 @@ describe('FeatureModules/Innovator/FirstTimeSigninComponent tests Suite', () => 
     expect(component.currentAnswers).toEqual({});
   });
 
-  it('should redirect when submitting a step (running in browser)', () => {
+  it('should redirect when submitting a step', () => {
 
     const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
@@ -196,9 +196,11 @@ describe('FeatureModules/Innovator/FirstTimeSigninComponent tests Suite', () => 
 
   it('should submit survey and redirect', () => {
 
+    const environmentStore = TestBed.inject(EnvironmentStore);
     const service = TestBed.inject(InnovatorService);
     const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
+    environmentStore.initializeAuthentication$ = () => of(true);
     service.submitFirstTimeSigninInfo = () => of('');
 
     fixture = TestBed.createComponent(FirstTimeSigninComponent);
@@ -247,7 +249,22 @@ describe('FeatureModules/Innovator/FirstTimeSigninComponent tests Suite', () => 
 
   });
 
-  it('should generate url for summary step', () => {
+  it('should generate url for last step', () => {
+
+    activatedRoute.snapshot.params = { id: 5 };
+    activatedRoute.params = of({ id: 5 }); // Simulate activatedRoute.params subscription.
+
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+
+    component.totalNumberOfSteps = 5;
+    fixture.detectChanges();
+
+    expect(component.getNavigationUrl('next')).toBe('innovator/first-time-signin/summary');
+
+  });
+
+  it('should generate url for summary step when pressing previous', () => {
 
     activatedRoute.snapshot.params = { id: 'summary' };
     activatedRoute.params = of({ id: 'summary' }); // Simulate activatedRoute.params subscription.

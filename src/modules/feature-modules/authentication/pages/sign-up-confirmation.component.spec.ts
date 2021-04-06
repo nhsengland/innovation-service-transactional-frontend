@@ -3,12 +3,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { ThemeModule } from '@modules/theme/theme.module';
 
-import { SurveyEndComponent } from './end.component';
+import { SignUpConfirmationComponent } from './sign-up-confirmation.component';
 
-describe('SurveyEndComponent tests Suite', () => {
+describe('FeatureModule/Authentication/SignUpConfirmationComponent tests Suite', () => {
 
-  let component: SurveyEndComponent;
-  let fixture: ComponentFixture<SurveyEndComponent>;
+  let component: SignUpConfirmationComponent;
+  let fixture: ComponentFixture<SignUpConfirmationComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -17,7 +17,7 @@ describe('SurveyEndComponent tests Suite', () => {
         ThemeModule
       ],
       declarations: [
-        SurveyEndComponent,
+        SignUpConfirmationComponent,
       ],
     }).compileComponents();
 
@@ -25,7 +25,7 @@ describe('SurveyEndComponent tests Suite', () => {
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(SurveyEndComponent);
+    fixture = TestBed.createComponent(SignUpConfirmationComponent);
     component = fixture.componentInstance;
 
     expect(component).toBeTruthy();

@@ -1,5 +1,6 @@
 import 'zone.js/dist/zone-node';
 
+import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
 import * as dotenv from 'dotenv';
@@ -8,11 +9,10 @@ import * as passport from 'passport';
 import { IOIDCStrategyOptionWithoutRequest, IProfile, OIDCStrategy, VerifyCallback } from 'passport-azure-ad';
 import * as coockieParser from 'cookie-parser';
 import * as session from 'express-session';
+import { existsSync } from 'fs';
 import axios from 'axios';
 
 import { AppServerModule } from './src/main.server';
-import { APP_BASE_HREF } from '@angular/common';
-import { existsSync } from 'fs';
 
 dotenv.config();
 
@@ -181,20 +181,9 @@ export function app(): express.Express {
     const user: IProfile = req.user || {};
 
     if (req.isAuthenticated() && user.oid) {
-      const userInfo = {
-        data: {
-          id: user.oid,
-          type: 'user',
-          attributes: { displayName: user.displayName }
-        }
-      };
-
-      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-      res.set('cache-control', 'no-store');
-      res.set('e-tag', 'false');
+      const userInfo = { data: { id: user.oid, type: 'user', attributes: { displayName: user.displayName } } };
       res.send(userInfo);
-    }
-    else {
+    } else {
       res.status(401).send();
     }
   });
@@ -203,22 +192,22 @@ export function app(): express.Express {
     res.send('PROFILE (AUTHENTICATED URL)');
   });
 
-  server.use(`${BASE_PATH}/signup`, (req, res) => {
+  server.get(`${BASE_PATH}/signup`, (req, res) => {
     const surveyId = req.query.surveyId || '';
 
-    let azSignupUri = `https://${oauthConfiguration.tenantName}.b2clogin.com/${oauthConfiguration.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&prompt=login`;
-    azSignupUri += `&p=${oauthConfiguration.signupPolicy}`; // add policy information
-    azSignupUri += `&client_id=${oauthConfiguration.clientID}`; // add client id
-    azSignupUri += `&redirect_uri=${encodeURIComponent(oauthConfiguration.signupRedirectUrl)}`; // add redirect uri
-    azSignupUri += `&survey_id=${surveyId}`; // add survey id
+    const azSignupUri = `https://${oauthConfiguration.tenantName}.b2clogin.com/${oauthConfiguration.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&prompt=login`
+      + `&p=${oauthConfiguration.signupPolicy}` // add policy information
+      + `&client_id=${oauthConfiguration.clientID}` // add client id
+      + `&redirect_uri=${encodeURIComponent(oauthConfiguration.signupRedirectUrl)}` // add redirect uri
+      + `&survey_id=${surveyId}`; // add survey id
 
     res.redirect(azSignupUri);
   });
 
   // Callback Handling
   // Using MS Azure OpenId Connect strategy (passport)
-  server.use(`${BASE_PATH}/signup/callback`, (req, res) => {
-    res.redirect(`${BASE_PATH}/triage-innovator-pack`);
+  server.get(`${BASE_PATH}/signup/callback`, (req, res) => {
+    res.redirect(`${BASE_PATH}/auth/signup/confirmation`);
   });
 
   // Login endpoint - AD OpenIdConnect
@@ -235,18 +224,22 @@ export function app(): express.Express {
 
   // Logout endpoint
   server.get(`${BASE_PATH}/signout`, (req, res) => {
+
     const user: IProfile = req.user || {};
     const oid: string = user['oid'] || '';
 
     req.session.destroy(() => {
-      let azLogoutUri = `https://${oauthConfiguration.tenantName}.b2clogin.com/${oauthConfiguration.tenantName}.onmicrosoft.com/oauth2/v2.0/logout`;
-      azLogoutUri += `?p=${oauthConfiguration.signinPolicy}`; // add policy information
-      azLogoutUri += `&post_logout_redirect_uri=${encodeURIComponent(oauthConfiguration.signoutRedirectUrl)}`; // add post logout redirect uri
+
+      const azLogoutUri = `https://${oauthConfiguration.tenantName}.b2clogin.com/${oauthConfiguration.tenantName}.onmicrosoft.com/oauth2/v2.0/logout`
+        + `?p=${oauthConfiguration.signinPolicy}` // add policy information
+        + `&post_logout_redirect_uri=${encodeURIComponent(oauthConfiguration.signoutRedirectUrl)}`; // add post logout redirect uri
 
       removeUserSessionByOid(oid);
       req.logout();
       res.redirect(azLogoutUri);
+
     });
+
   });
 
   // create survey endpoint
@@ -291,24 +284,16 @@ export function app(): express.Express {
 
       switch (method.toUpperCase()) {
         case 'GET':
-          axios.get(url, config)
-            .then(success)
-            .catch(fail);
+          axios.get(url, config).then(success).catch(fail);
           break;
         case 'POST':
-          axios.post(url, body, config)
-            .then(success)
-            .catch(fail);
+          axios.post(url, body, config).then(success).catch(fail);
           break;
         case 'PUT':
-          axios.put(url, body, config)
-            .then(success)
-            .catch(fail);
+          axios.put(url, body, config).then(success).catch(fail);
           break;
         case 'HEAD':
-          axios.head(url, config)
-            .then(success)
-            .catch(fail);
+          axios.head(url, config).then(success).catch(fail);
           break;
         default:
           res.status(405).send();

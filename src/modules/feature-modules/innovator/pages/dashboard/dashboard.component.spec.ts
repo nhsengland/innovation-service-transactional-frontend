@@ -12,7 +12,7 @@ import { StoresModule } from '@modules/stores';
 import { DashboardComponent } from './dashboard.component';
 
 
-describe('DashboardComponent tests Suite', () => {
+describe('FeatureModule/Innovator/DashboardComponent tests Suite', () => {
 
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;

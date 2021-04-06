@@ -12,6 +12,9 @@ import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-s
 // Services.
 import { InnovatorService } from './services/innovator.service';
 
+// Guards.
+import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
+
 
 @NgModule({
   imports: [
@@ -26,7 +29,10 @@ import { InnovatorService } from './services/innovator.service';
     FirstTimeSigninComponent
   ],
   providers: [
-    InnovatorService
+    InnovatorService,
+
+    // Guards.
+    FirstTimeSigninGuard
   ]
 })
 export class InnovatorModule { }

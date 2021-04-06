@@ -160,8 +160,15 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
   onSubmitSurvey(): void {
     if (this.summaryList.valid) {
       this.surveyService.submitSurvey(this.currentAnswers).subscribe(
-        response => this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/end`, { surveyId: response.id }),
-        error => this.logger.error(error)
+        response => {
+          this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/end`, { surveyId: response.id });
+          return;
+        },
+        error => {
+          this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/summary`);
+          this.logger.error(error);
+          return;
+        }
       );
     }
   }

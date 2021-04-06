@@ -1,42 +1,44 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { HttpClientModule } from '@angular/common/http';
 import { NavigationEnd } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { HeaderComponent } from './header.component';
 
 import { CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
+import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
 
-  // let environmentStore: EnvironmentStore;
+  let component: HeaderComponent;
+  let fixture: ComponentFixture<HeaderComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        HttpClientModule,
+        HttpClientTestingModule,
         TranslateModule.forRoot(),
         CoreModule,
         StoresModule
       ],
       declarations: [
-        HeaderComponent,
+        HeaderComponent
       ]
     }).compileComponents();
+
   });
 
   it('should create the Header component', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const header = fixture.componentInstance;
-    expect(header).toBeTruthy();
+    fixture = TestBed.createComponent(HeaderComponent);
+    component = fixture.componentInstance;
+    expect(component).toBeTruthy();
   });
 
   it('should render header contents', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(HeaderComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
 
@@ -44,7 +46,7 @@ describe('HeaderComponent', () => {
   });
 
   it('should render header contents', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(HeaderComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
 
@@ -52,7 +54,7 @@ describe('HeaderComponent', () => {
   });
 
   it('should render Home item link', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(HeaderComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
     expect(compiled.querySelectorAll('a.nhsuk-header__navigation-link')[0].textContent).toEqual(' Home ');
@@ -60,14 +62,14 @@ describe('HeaderComponent', () => {
 
 
   it('should render Apply for support item link', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(HeaderComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
     expect(compiled.querySelectorAll('a.nhsuk-header__navigation-link')[1].textContent).toEqual(' Starter innovation guide ');
   });
 
   it('should render Case studies item link', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(HeaderComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
 
@@ -75,7 +77,7 @@ describe('HeaderComponent', () => {
   });
 
   it('should render About the service item link', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(HeaderComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
 
@@ -83,7 +85,7 @@ describe('HeaderComponent', () => {
   });
 
   it('should render Sign in item link', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(HeaderComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
 
@@ -91,44 +93,40 @@ describe('HeaderComponent', () => {
   });
 
   it('should show hero section', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
+
+    fixture = TestBed.createComponent(HeaderComponent);
+    const navEvent = new NavigationEnd(0, '/', '/');
     fixture.detectChanges();
 
-    const navEvent = new NavigationEnd(0, '/', '/');
-
-    // act
     (fixture.componentInstance as any).subscribe(navEvent);
 
     expect(fixture.componentInstance.showHeroSection).toBe(true);
   });
 
   it('should not show hero section', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(HeaderComponent);
     fixture.detectChanges();
 
     const navEvent = new NavigationEnd(0, '/test', '/test');
 
-    // act
     (fixture.componentInstance as any).subscribe(navEvent);
 
     expect(fixture.componentInstance.showHeroSection).toBe(false);
   });
 
   it('should not show hero section when receives null event', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(HeaderComponent);
     fixture.detectChanges();
 
-    // act
     (fixture.componentInstance as any).subscribe(null);
 
     expect(fixture.componentInstance.showHeroSection).toBe(false);
   });
 
   it('should not show hero section when receives undefined event', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(HeaderComponent);
     fixture.detectChanges();
 
-    // act
     (fixture.componentInstance as any).subscribe(undefined);
 
     expect(fixture.componentInstance.showHeroSection).toBe(false);

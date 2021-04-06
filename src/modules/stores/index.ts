@@ -1,8 +1,7 @@
 // Module.
 export { StoresModule } from './stores.module';
 
-// Stores.
+// Environment Store.
 export { EnvironmentStore } from './environment/environment.store';
-
-// Models.
+export { EnvironmentService } from './environment/environment.service';
 export { EnvironmentModel } from './environment/environment.models';
