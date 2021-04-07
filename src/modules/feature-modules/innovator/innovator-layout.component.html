@@ -1,0 +1,10 @@
+<theme-header [showMenuBar]="false"></theme-header>
+<theme-header-navigation-bar [leftMenuItems]="navigationMenuBar.leftItems" [rightMenuItems]="navigationMenuBar.rightItems"></theme-header-navigation-bar>
+
+<div class="nhsuk-width-container app-width-container">
+  <main class="nhsuk-main-wrapper" id="maincontent" role="main">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<theme-footer></theme-footer>

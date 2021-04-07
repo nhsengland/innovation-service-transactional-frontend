@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { InnovatorLayoutComponent } from './innovator-layout.component';
+
 // Pages.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
@@ -19,6 +21,7 @@ const routes: Routes = [
   {
     canActivateChild: [FirstTimeSigninGuard],
     path: '',
+    component: InnovatorLayoutComponent,
     children: [
       {
         path: 'dashboard',

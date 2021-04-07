@@ -4,6 +4,7 @@ import { ThemeModule } from '@modules/theme/theme.module';
 import { SharedModule } from '@modules/shared/shared.module';
 
 import { InnovatorRoutingModule } from './innovator-routing.module';
+import { InnovatorLayoutComponent } from './innovator-layout.component';
 
 // Pages.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
@@ -24,6 +25,8 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
     InnovatorRoutingModule
   ],
   declarations: [
+    InnovatorLayoutComponent,
+
     // Pages.
     DashboardComponent,
     FirstTimeSigninComponent

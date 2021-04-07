@@ -1,0 +1,28 @@
+.nhsuk-breadcrumb {
+
+  padding: 0;
+
+  .nhsuk-breadcrumb__list {
+
+    display: unset;
+
+    .nhsuk-breadcrumb__item {
+
+      padding: 12px 15px 10px;
+      background: unset;
+
+      &.selected {
+        border-bottom: solid 3px var(--primary-color);
+      }
+
+      a {
+        text-decoration: none;
+
+
+  
+      }
+    }
+
+  }
+
+}

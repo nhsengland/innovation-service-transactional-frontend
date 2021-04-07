@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router, Event } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -6,10 +6,11 @@ import { EnvironmentStore } from '@modules/stores/environment/environment.store'
 
 @Component({
   selector: 'theme-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  templateUrl: './header.component.html'
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+
+  @Input() showMenuBar = true;
 
   private subscriptions: Subscription[] = [];
 
@@ -38,6 +39,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private subscribe(event: Event): void {
     if (event instanceof NavigationEnd) {
+      console.log(event.url);
       this.showHeroSection = event.url === '/';
     }
   }

@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Observable, Observer, of, Subscription } from 'rxjs';
+import { forkJoin, Observable, Observer, of, Subscription } from 'rxjs';
 import { catchError, concatMap, map } from 'rxjs/operators';
 
 import { Store } from '../store.class';
@@ -32,15 +32,29 @@ export class EnvironmentStore extends Store<EnvironmentModel> implements OnDestr
         }),
         concatMap(response => {
 
-          this.state.authentication = { ...response, ...{ isSignIn: true } };
+          // this.state.authentication = { ...response, ...{ user: { innovations: [] } }, ...{ isSignIn: true } };
+          this.state.authentication.user = { ...response.user, ...{ innovations: [] } };
+          this.state.authentication.isSignIn = true;
 
-          return this.environmentService.verifyInnovator(response.user.id).pipe(
-            map(() => {
-              this.state.authentication.didFirstTimeSignIn = true;
+          return forkJoin([
+            this.environmentService.verifyInnovator(response.user.id),
+            this.environmentService.getInnovations()
+          ]).pipe(
+            map(([hasInnovator, innovations]) => {
+              this.state.authentication.didFirstTimeSignIn = hasInnovator;
+              if (this.state.authentication.user) { this.state.authentication.user.innovations = innovations; }
               return true;
             }),
             catchError(() => of(true)) // Suppress error as this is only additional information.
           );
+
+          // return this.environmentService.verifyInnovator(response.user.id).pipe(
+          //   map(() => {
+          //     this.state.authentication.didFirstTimeSignIn = true;
+          //     return true;
+          //   }),
+          //   catchError(() => of(true)) // Suppress error as this is only additional information.
+          // );
 
         })
       ).subscribe(
@@ -73,8 +87,8 @@ export class EnvironmentStore extends Store<EnvironmentModel> implements OnDestr
 
   userDidFirstTimeSignIn(): boolean { return this.state.authentication.didFirstTimeSignIn || false; }
 
-  getUserInfo(): EnvironmentModel['authentication']['user'] {
-    return this.state.authentication.user || { id: '', displayName: '' };
+  getUserInfo(): Required<EnvironmentModel['authentication']>['user'] {
+    return this.state.authentication.user || { id: '', displayName: '', innovations: [] };
   }
 
 

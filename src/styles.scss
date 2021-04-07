@@ -17,49 +17,72 @@
 // @import "node_modules/govuk-frontend/govuk/components/skip-link/index";
 // @import "node_modules/govuk-frontend/govuk/overrides/all";
 
+// Variables. (https://service-manual.nhs.uk/design-system/styles)
 
+$service-manual-container-size: 1100px; // Container width variable
 
-// CSS variables. (https://service-manual.nhs.uk/design-system/styles/colour)
 :root {
   --primary-color: #{$nhsuk-link-color};
   --error-color: #{$nhsuk-error-color};
 
   --white: #{$color_nhsuk-white};
+
+  // --spacing-3: 32px;
+  // --mobile:  20em; /* 320px */
+  // --tablet:  40.0625em; /* 641px */
+  // --desktop-breakpoint: 48.0625em; /* 769px */
+  // --large-desktop: 61.875em; /* 990px */
 }
 
+.d-flex { display: flex;}
 
-// $color_nhsuk-blue	#005eb8
-// $color_nhsuk-green	#007f3b
-// $color_nhsuk-yellow	#ffeb3b
-// $color_nhsuk-warm-yellow	#ffb81C
-// $color_nhsuk-red	#d5281b
-// $color_nhsuk-dark-pink	#7C2855
-// $color_nhsuk-purple	#330072
-// $color_nhsuk-grey-1	#4c6272
-// $color_nhsuk-grey-2	#768692
-// $color_nhsuk-grey-3	#aeb7bd
-// $color_nhsuk-grey-4	#d8dde0
-// $color_nhsuk-grey-5	#f0f4f5
-// $color_nhsuk-white	#ffffff
-// $color_nhsuk-pale-yellow	#fff9c4
+.ml-auto { margin-left: auto; }
+.mr-auto { margin-right: auto; }
 
+.text-align-left { text-align: start; }
+.text-align-right { text-align: end; }
 
-.d-flex {
-  display: flex;
-}
-
-.flex-direction-column {
-  flex-direction: column;
-}
-
-.justify-space-between {
-  justify-content: space-between;
-}
 
 .bg-color-white {
   background-color: var(--white);
 }
 
+
+// Container sizes.
+.app-width-container,
+.app-breadcrumb .nhsuk-width-container {
+  max-width: $service-manual-container-size;
+
+  @media (min-width: 767px) and (max-width: 1164px) {
+    margin: 0 nhsuk-spacing(5);
+  }
+}
+
+.app-header__navigation {
+  max-width: $service-manual-container-size + nhsuk-spacing(9);
+}
+
+
+
+// .app-index-navigation {
+//   padding-top: 16px
+// }
+
+// @media (min-width: 40.0625em) {
+//   .app-index-navigation {
+//     padding-top: 24px
+//   }
+// }
+
+
+
+// Overrides.
+// // _header.scss: Header menu button spacing on mobile.
+.nhsuk-header__menu-toggle {
+  @media (max-width: 40.0525em) {
+    right: unset;
+  }
+}
 
 // Components.
 .nhsuk-card {
