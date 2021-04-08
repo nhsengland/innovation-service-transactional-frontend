@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { LoggerTestingModule } from 'ngx-logger/testing';
 
 import { Injector } from '@angular/core';
 
@@ -19,7 +18,6 @@ describe('FeatureModule/Innovator/InnovatorService tests Suite', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        LoggerTestingModule,
         CoreModule,
         StoresModule
       ],

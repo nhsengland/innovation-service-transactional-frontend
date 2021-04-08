@@ -5,6 +5,7 @@
 
 @import 'node_modules/nhsuk-frontend/packages/nhsuk';
 
+@import 'styles/left-menu-layout';
 @import 'styles/panel';
 @import 'styles/step-by-step-nav';
 
@@ -19,7 +20,7 @@
 
 // Variables. (https://service-manual.nhs.uk/design-system/styles)
 
-$service-manual-container-size: 1100px; // Container width variable
+$service-manual-container-size: 1100px; // Container width variable.
 
 :root {
   --primary-color: #{$nhsuk-link-color};
@@ -34,13 +35,15 @@ $service-manual-container-size: 1100px; // Container width variable
   // --large-desktop: 61.875em; /* 990px */
 }
 
-.d-flex { display: flex;}
+.d-flex { display: flex; }
+.align-items-center { align-items: center; }
 
 .ml-auto { margin-left: auto; }
 .mr-auto { margin-right: auto; }
 
 .text-align-left { text-align: start; }
 .text-align-right { text-align: end; }
+.text-pre-line { white-space: pre-line; }
 
 
 .bg-color-white {
@@ -61,18 +64,6 @@ $service-manual-container-size: 1100px; // Container width variable
 .app-header__navigation {
   max-width: $service-manual-container-size + nhsuk-spacing(9);
 }
-
-
-
-// .app-index-navigation {
-//   padding-top: 16px
-// }
-
-// @media (min-width: 40.0625em) {
-//   .app-index-navigation {
-//     padding-top: 24px
-//   }
-// }
 
 
 

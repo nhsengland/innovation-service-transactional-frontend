@@ -27,34 +27,23 @@ export class EnvironmentStore extends Store<EnvironmentModel> implements OnDestr
     return new Observable((observer: Observer<boolean>) => {
 
       this.environmentService.verifyUserSession().pipe(
-        concatMap(() => {
-          return this.environmentService.getUserInfo();
-        }),
+        concatMap(() => this.environmentService.getUserInfo()),
         concatMap(response => {
 
-          // this.state.authentication = { ...response, ...{ user: { innovations: [] } }, ...{ isSignIn: true } };
           this.state.authentication.user = { ...response.user, ...{ innovations: [] } };
           this.state.authentication.isSignIn = true;
 
           return forkJoin([
             this.environmentService.verifyInnovator(response.user.id),
-            this.environmentService.getInnovations()
+            this.environmentService.getInnovations(response.user.id)
           ]).pipe(
             map(([hasInnovator, innovations]) => {
-              this.state.authentication.didFirstTimeSignIn = hasInnovator;
+              this.state.authentication.didFirstTimeSignIn = true;
               if (this.state.authentication.user) { this.state.authentication.user.innovations = innovations; }
               return true;
             }),
             catchError(() => of(true)) // Suppress error as this is only additional information.
           );
-
-          // return this.environmentService.verifyInnovator(response.user.id).pipe(
-          //   map(() => {
-          //     this.state.authentication.didFirstTimeSignIn = true;
-          //     return true;
-          //   }),
-          //   catchError(() => of(true)) // Suppress error as this is only additional information.
-          // );
 
         })
       ).subscribe(
@@ -86,6 +75,8 @@ export class EnvironmentStore extends Store<EnvironmentModel> implements OnDestr
   }
 
   userDidFirstTimeSignIn(): boolean { return this.state.authentication.didFirstTimeSignIn || false; }
+
+  getUserId(): string { return this.state.authentication.user?.id || ''; }
 
   getUserInfo(): Required<EnvironmentModel['authentication']>['user'] {
     return this.state.authentication.user || { id: '', displayName: '', innovations: [] };

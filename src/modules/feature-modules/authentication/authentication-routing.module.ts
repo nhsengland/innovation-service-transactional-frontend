@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+// Base layout.
+import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
+
 // Pages.
 import { SignUpConfirmationComponent } from './pages/sign-up-confirmation.component';
 
@@ -19,15 +22,22 @@ const routes: Routes = [
   },
 
   {
-    path: 'signup',
+    path: '',
+    component: BaseLayoutComponent,
     children: [
       {
-        path: 'confirmation',
-        pathMatch: 'full',
-        component: SignUpConfirmationComponent
-      },
+        path: 'signup',
+        children: [
+          {
+            path: 'confirmation',
+            pathMatch: 'full',
+            component: SignUpConfirmationComponent
+          },
+        ]
+      }
     ]
   }
+
 ];
 
 @NgModule({

@@ -1,0 +1,47 @@
+<ul class="nhsuk-grid-row nhsuk-card-group">
+  <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+    <div class="nhsuk-card nhsuk-card--clickable">
+      <div class="nhsuk-card__content">
+        <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-1">{{ innovation.openActionsNumber }} <span class="nhsuk-u-visually-hidden">Open actions</span></p>
+        <a href="#" class="nhsuk-card__link nhsuk-u-font-weight-normal nhsuk-u-font-size-19 nhsuk-link--no-visited-state">Open actions</a>
+      </div>
+    </div>
+  </li>
+  <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+    <div class="nhsuk-card nhsuk-card--clickable">
+      <div class="nhsuk-card__content">
+        <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-1">{{ innovation.openCommentsNumber }} <span class="nhsuk-u-visually-hidden">Comments</span></p>
+        <a href="#" class="nhsuk-card__link nhsuk-u-font-weight-normal nhsuk-u-font-size-19 nhsuk-link--no-visited-state">Comments</a>
+      </div>
+    </div>
+  </li>
+  <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+    <div class="nhsuk-card nhsuk-card--clickable">
+      <div class="nhsuk-card__content">
+        <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-1">0 of 0 <span class="nhsuk-u-visually-hidden">Innovation record sections complete</span></p>
+        <a href="#" class="nhsuk-card__link nhsuk-u-font-weight-normal nhsuk-u-font-size-19 nhsuk-link--no-visited-state">Innovation record sections complete</a>
+      </div>
+    </div>
+  </li>
+</ul>
+
+<h2>Your innovation</h2>
+
+<dl class="nhsuk-summary-list">
+  <div class="nhsuk-summary-list__row">
+    <dt class="nhsuk-summary-list__key">Name</dt>
+    <dd class="nhsuk-summary-list__value">{{ innovation.name }}</dd>
+  </div>
+  <div class="nhsuk-summary-list__row">
+    <dt class="nhsuk-summary-list__key">Company</dt>
+    <dd class="nhsuk-summary-list__value">{{ innovation.company }}</dd>
+  </div>
+  <div class="nhsuk-summary-list__row">
+    <dt class="nhsuk-summary-list__key">Location</dt>
+    <dd class="nhsuk-summary-list__value">{{ innovation.location }}</dd>
+  </div>
+  <div class="nhsuk-summary-list__row">
+    <dt class="nhsuk-summary-list__key">Description</dt>
+    <dd class="nhsuk-summary-list__value text-pre-line">{{ innovation.description }}</dd>
+  </div>
+</dl>

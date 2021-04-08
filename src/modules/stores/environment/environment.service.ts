@@ -17,11 +17,8 @@ type getUserInfoDto = {
 };
 
 type getUserInnovationsDto = {
-  data: {
-    id: string,
-    name: 'innovation',
-    attributes: { name: string }
-  }[]
+  id: string;
+  name: string;
 };
 
 
@@ -53,19 +50,20 @@ export class EnvironmentService {
 
   verifyInnovator(userId: string): Observable<boolean> {
     const url = new UrlModel(this.apiUrl).setPath('transactional/api/innovators/:userId').setPathParams({ userId });
-    return this.http.head(url.buildUrl()).pipe(take(1), map(() => true));
+    return this.http.head(url.buildUrl()).pipe(
+      take(1),
+      map(() => true),
+      catchError(() => of(false))
+    );
   }
 
+  getInnovations(userId: string): Observable<getUserInnovationsDto[]> {
 
-
-  getInnovations(): Observable<{ id: string, name: string }[]> {
-
-    return of([{ id: 'abc123zxc', name: 'HealthyApp' }]);
-
-    const url = new UrlModel(this.apiUrl).setPath('transactional/api/innovations');
-    return this.http.get<getUserInnovationsDto>(url.buildUrl()).pipe(
+    const url = new UrlModel(this.apiUrl).setPath('transactional/api/innovators/:userId/innovations').setPathParams({ userId });
+    return this.http.get<getUserInnovationsDto[]>(url.buildUrl()).pipe(
       take(1),
-      map(response => response.data.map(d => ({ id: d.id, name: d.attributes.name })))
+      map(response => response),
+      catchError(() => of([])) // On error, just return no innovation at all.
     );
 
   }
