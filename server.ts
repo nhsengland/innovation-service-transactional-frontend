@@ -135,6 +135,8 @@ export function app(): express.Express {
     (iss: string, sub: string, profile: IProfile, accessToken: string, refreshToken: string, done: VerifyCallback) => {
       const oid = profile.oid || '';
 
+      console.log('accessToken', accessToken);
+
       if (!oid) {
         return done(new Error('No oid found'), null);
       }
@@ -188,10 +190,6 @@ export function app(): express.Express {
     }
   });
 
-  server.get(`${BASE_PATH}/profile`, ensureAuthenticated, (req, res) => {
-    res.send('PROFILE (AUTHENTICATED URL)');
-  });
-
   server.get(`${BASE_PATH}/signup`, (req, res) => {
     const surveyId = req.query.surveyId || '';
 
@@ -213,7 +211,7 @@ export function app(): express.Express {
   // Login endpoint - AD OpenIdConnect
   server.use(`${BASE_PATH}/signin`,
     // Using MS Azure OpenId Connect strategy (passport)
-    passport.authenticate('signInStrategy', { failureRedirect: `${BASE_PATH}` })
+    passport.authenticate('signInStrategy', { successRedirect: `${BASE_PATH}/innovator/dashboard`, failureRedirect: `${BASE_PATH}/` })
   );
 
   // Callback Handling
