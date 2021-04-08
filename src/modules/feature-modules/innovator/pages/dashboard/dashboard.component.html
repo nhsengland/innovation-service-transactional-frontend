@@ -1,10 +1,49 @@
-<div class="nhsuk-width-container">
+<h1> Hello, {{ user.displayName }}! </h1>
 
-  Dashboard here!
 
-  <br />
-  <br />
 
-  <button routerLink="/innovator/first-time-signin" class="nhsuk-button"> Go to first time signin </button>
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-one-half">
+    <ng-container *ngFor="let item of user.innovations">
+      <a routerLink="/innovator/innovation/{{ item.id }}" class="nhsuk-u-font-size-32 nhsuk-u-font-weight-bold">{{ item.name }}</a>
+    </ng-container>
+  </div>
 
+
+  <div class="nhsuk-grid-column-one-half nhsuk-u-padding-top-3 text-align-right">
+    <a routerLink="/innovator/innovation/new" class="nhsuk-u-padding-top-1">Register a new innovation</a>
+  </div>
 </div>
+
+
+<hr />
+
+
+
+<ul class="nhsuk-grid-row nhsuk-card-group">
+  <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+
+    <div class="nhsuk-card nhsuk-card--clickable">
+      <div class="nhsuk-card__content">
+        <h2 class="nhsuk-card__heading nhsuk-heading-m">
+          <a class="nhsuk-card__link" href="#">Your account</a>
+        </h2>
+        <p class="nhsuk-card__description">View and edit your personal details and notification preferences</p>
+      </div>
+    </div>
+
+  </li>
+  <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+
+    <div class="nhsuk-card nhsuk-card--clickable">
+      <div class="nhsuk-card__content">
+        <h2 class="nhsuk-card__heading nhsuk-heading-m">
+          <a class="nhsuk-card__link" href="/" target="_blank">Innovation guides (opens in new window)</a>
+        </h2>
+        <p class="nhsuk-card__description">Access our starter and advanced innovation guides</p>
+      </div>
+    </div>
+
+  </li>
+
+</ul>

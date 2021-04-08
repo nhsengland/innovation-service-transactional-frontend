@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { LoggerTestingModule } from 'ngx-logger/testing';
 
 import { Injector } from '@angular/core';
@@ -9,8 +9,7 @@ import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, EnvironmentStore } from '@modules/stores';
-import { SharedModule } from '@modules/shared/shared.module';
-import { ThemeModule } from '@modules/theme/theme.module';
+import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { FormEngineComponent, FormEngineModel } from '@modules/shared/forms';
 import { FirstTimeSigninComponent } from './first-time-signin.component';
@@ -47,14 +46,7 @@ describe('FeatureModule/Innovator/FirstTimeSigninComponent tests Suite', () => {
         LoggerTestingModule,
         CoreModule,
         StoresModule,
-        ThemeModule,
-        SharedModule
-      ],
-      declarations: [
-        FirstTimeSigninComponent,
-      ],
-      providers: [
-        InnovatorService,
+        InnovatorModule
       ]
     }).compileComponents();
 

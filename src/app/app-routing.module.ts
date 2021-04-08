@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+// Base layout.
+import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
+
+// Pages.
 import { PageNotFoundComponent } from '@shared-module/pages/not-found.component';
 
 import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
@@ -33,8 +37,8 @@ const routes: Routes = [
 
   {
     path: 'not-found',
-    pathMatch: 'full',
-    component: PageNotFoundComponent,
+    component: BaseLayoutComponent,
+    children: [{ path: '', pathMatch: 'full', component: PageNotFoundComponent }]
   },
 
   {

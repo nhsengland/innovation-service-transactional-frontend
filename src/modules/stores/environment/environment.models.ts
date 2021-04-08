@@ -9,7 +9,11 @@ export class EnvironmentModel {
 
   authentication: {
     isSignIn: boolean,
-    user?: { id: string, displayName: string },
+    user?: {
+      id: string,
+      displayName: string,
+      innovations: { id: string, name: string }[]
+    },
     didFirstTimeSignIn?: boolean
   };
 

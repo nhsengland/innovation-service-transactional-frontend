@@ -1,0 +1,17 @@
+<nav class="nhsuk-breadcrumb app-breadcrumb" aria-label="Breadcrumb">
+  <div class="nhsuk-width-container d-flex">
+      <ol class="nhsuk-breadcrumb__list mr-auto">
+        <ng-container *ngTemplateOutlet="menuItemTemplate; context: { menuItems: leftMenuItems }"></ng-container>
+      </ol>
+      <ol class="nhsuk-breadcrumb__list">
+        <ng-container *ngTemplateOutlet="menuItemTemplate; context: { menuItems: rightMenuItems }"></ng-container>
+      </ol>
+  </div>
+</nav>
+
+<ng-template #menuItemTemplate let-items="menuItems">
+  <ng-container *ngFor="let item of items">
+    <li *ngIf="!item.fullReload" class="nhsuk-breadcrumb__item" [routerLinkActive]="'selected'"><a class="nhsuk-breadcrumb__link" [routerLink]="item.link" >{{ item.title }}</a></li>
+    <li *ngIf="item.fullReload" class="nhsuk-breadcrumb__item"><a class="nhsuk-breadcrumb__link" [href]="item.link">{{ item.title }}</a></li>
+  </ng-container>
+</ng-template>

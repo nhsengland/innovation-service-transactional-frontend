@@ -46,13 +46,13 @@ describe('Store/EnvironmentStore/EnvironmentStore tests Suite', () => {
   it('should run initializeAuthentication$() and return success', () => {
 
     spyOn(environmentService, 'verifyUserSession').and.returnValue(of(true));
-    spyOn(environmentService, 'getUserInfo').and.returnValue(of({ user: { id: '010101', displayName: 'A user' } }));
+    spyOn(environmentService, 'getUserInfo').and.returnValue(of({ user: { id: '010101', displayName: 'A user', innovations: [{ id: 'abc123zxc', name: 'HealthyApp' }] } }));
     spyOn(environmentService, 'verifyInnovator').and.returnValue(of(true));
 
     const expected = {
       response: false,
       stateAuthentication: {
-        user: { id: '010101', displayName: 'A user' },
+        user: { id: '010101', displayName: 'A user', innovations: [{ id: 'abc123zxc', name: 'HealthyApp' }] },
         isSignIn: true,
         didFirstTimeSignIn: true
       },
@@ -72,13 +72,13 @@ describe('Store/EnvironmentStore/EnvironmentStore tests Suite', () => {
   it('should run initializeAuthentication$() and return success not being first time signin', () => {
 
     spyOn(environmentService, 'verifyUserSession').and.returnValue(of(true));
-    spyOn(environmentService, 'getUserInfo').and.returnValue(of({ user: { id: '010101', displayName: 'A user' } }));
+    spyOn(environmentService, 'getUserInfo').and.returnValue(of({ user: { id: '010101', displayName: 'A user', innovations: [] } }));
     spyOn(environmentService, 'verifyInnovator').and.returnValue(throwError('error'));
 
     const expected = {
       response: false,
       stateAuthentication: {
-        user: { id: '010101', displayName: 'A user' },
+        user: { id: '010101', displayName: 'A user', innovations: [] },
         isSignIn: true
       },
       error: { status: 0, statusText: '' }
@@ -151,12 +151,12 @@ describe('Store/EnvironmentStore/EnvironmentStore tests Suite', () => {
 
   it('should run getUserInfo() and return empty user', () => {
     // environmentStore.state.authentication.isSignIn = true;
-    expect(environmentStore.getUserInfo()).toEqual({ id: '', displayName: '' });
+    expect(environmentStore.getUserInfo()).toEqual({ id: '', displayName: '', innovations: [] });
   });
 
   it('should run getUserInfo() and valid user', () => {
-    environmentStore.state.authentication.user = { id: '010101', displayName: 'A user' };
-    expect(environmentStore.getUserInfo()).toEqual({ id: '010101', displayName: 'A user' });
+    environmentStore.state.authentication.user = { id: '010101', displayName: 'A user', innovations: [] };
+    expect(environmentStore.getUserInfo()).toEqual({ id: '010101', displayName: 'A user', innovations: [] });
   });
 
 });

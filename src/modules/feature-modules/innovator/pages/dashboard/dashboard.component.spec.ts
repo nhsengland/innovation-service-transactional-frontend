@@ -6,8 +6,7 @@ import { Injector } from '@angular/core';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-// import { ThemeModule } from '@modules/theme/theme.module';
-// import { SharedModule } from '@modules/shared/shared.module';
+import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { DashboardComponent } from './dashboard.component';
 
@@ -17,21 +16,14 @@ describe('FeatureModule/Innovator/DashboardComponent tests Suite', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
 
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        RouterTestingModule.withRoutes([
-          { path: 'dashboard', component: DashboardComponent }
-        ]),
+        RouterTestingModule,
         CoreModule,
         StoresModule,
-        // ThemeModule,
-        // SharedModule
-      ],
-      declarations: [
-        DashboardComponent,
+        InnovatorModule
       ]
     }).compileComponents();
 
@@ -40,10 +32,12 @@ describe('FeatureModule/Innovator/DashboardComponent tests Suite', () => {
   });
 
   it('should create the component', () => {
+
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
+
   });
 
 });
