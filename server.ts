@@ -135,8 +135,6 @@ export function app(): express.Express {
     (iss: string, sub: string, profile: IProfile, accessToken: string, refreshToken: string, done: VerifyCallback) => {
       const oid = profile.oid || '';
 
-      console.log('accessToken', accessToken);
-
       if (!oid) {
         return done(new Error('No oid found'), null);
       }
