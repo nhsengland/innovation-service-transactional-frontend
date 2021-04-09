@@ -135,15 +135,12 @@ export function app(): express.Express {
     (iss: string, sub: string, profile: IProfile, accessToken: string, refreshToken: string, done: VerifyCallback) => {
       const oid = profile.oid || '';
 
-      console.error('=================== signInStrategy ===================');
-
       if (!oid) {
         return done(new Error('No oid found'), null);
       }
 
       findUserSessionByOid(oid, (err: string, userSession: UserSession): void => {
         if (err) {
-          console.error('findUserSessionByOid', err);
           return done(err);
         }
         if (!userSession) {
@@ -191,6 +188,10 @@ export function app(): express.Express {
     }
   });
 
+  server.get(`${BASE_PATH}/profile`, ensureAuthenticated, (req, res) => {
+    res.send('PROFILE (AUTHENTICATED URL)');
+  });
+
   server.get(`${BASE_PATH}/signup`, (req, res) => {
     const surveyId = req.query.surveyId || '';
 
@@ -217,7 +218,7 @@ export function app(): express.Express {
 
   // Callback Handling
   // Using MS Azure OpenId Connect strategy (passport)
-  server.use(`${BASE_PATH}/signin/callback`, (req, res) => {
+  server.post(`${BASE_PATH}/signin/callback`, (req, res) => {
     res.redirect(`${BASE_PATH}/innovator/dashboard`);
   });
 
