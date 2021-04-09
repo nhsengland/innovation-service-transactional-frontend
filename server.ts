@@ -218,7 +218,7 @@ export function app(): express.Express {
 
   // Callback Handling
   // Using MS Azure OpenId Connect strategy (passport)
-  server.use(`${BASE_PATH}/signin/callback`, (req, res) => {
+  server.post(`${BASE_PATH}/signin/callback`, (req, res) => {
     res.redirect(`${BASE_PATH}/innovator/dashboard`);
   });
 
