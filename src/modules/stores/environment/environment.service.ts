@@ -42,7 +42,7 @@ export class EnvironmentService {
     const url = new UrlModel(this.apiUrl).setPath('transactional/auth/user');
     return this.http.get<getUserInfoDto>(url.buildUrl()).pipe(
       take(1),
-      map(response => ({ user: { id: response.data.id, displayName: response.data.attributes.displayName } })),
+      map(response => ({ user: { id: response.data.id, displayName: ['unknown'].includes(response.data.attributes.displayName) ? '' : response.data.attributes.displayName } })),
       catchError(() => throwError({}))
     );
 

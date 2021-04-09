@@ -38,7 +38,7 @@ export class EnvironmentStore extends Store<EnvironmentModel> implements OnDestr
             this.environmentService.getInnovations(response.user.id)
           ]).pipe(
             map(([hasInnovator, innovations]) => {
-              this.state.authentication.didFirstTimeSignIn = true;
+              this.state.authentication.didFirstTimeSignIn = hasInnovator;
               if (this.state.authentication.user) { this.state.authentication.user.innovations = innovations; }
               return true;
             }),
