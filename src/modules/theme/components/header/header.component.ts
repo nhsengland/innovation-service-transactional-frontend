@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { NavigationEnd, Router, Event } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { EnvironmentStore } from '@modules/stores/environment/environment.store';
 
@@ -25,26 +26,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authenticationButton = { title: '', url: '' };
 
     this.subscriptions.push(
-      this.router.events.subscribe(event => this.subscribe(event)),
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e)),
 
       this.environmentStore.isUserAuthenticated$().subscribe(state => {
         this.authenticationButton = !state ?
-        { title: 'Sign in', url: '/transactional/signin' } :
-        { title: 'Sign out', url: '/transactional/signout' };
+          { title: 'Sign in', url: '/transactional/signin' } :
+          { title: 'Sign out', url: '/transactional/signout' };
       })
 
     );
 
   }
 
-  private subscribe(event: Event): void {
-    if (event instanceof NavigationEnd) {
-      console.log(event.url);
-      this.showHeroSection = event.url === '/';
-    }
+  ngOnInit(): void { }
+
+
+  private onRouteChange(event: NavigationEnd): void {
+
+    this.showHeroSection = event.url === '/';
+
   }
 
-  ngOnInit(): void { }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());

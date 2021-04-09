@@ -1,11 +1,11 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { concatMap } from 'rxjs/operators';
 
-import { CoreComponent } from '@app/base/core.component';
+import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineHelper, FormEngineModel } from '@app/base/forms';
 
 import { FIRST_TIME_SIGNIN_QUESTIONS } from '@app/config/constants.config';
-import { concatMap } from 'rxjs/operators';
 
 import { InnovatorService } from '../../services/innovator.service';
 

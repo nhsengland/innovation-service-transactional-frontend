@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent } from '@app/base/core.component';
+import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineHelper, FormEngineModel } from '@app/base/forms';
 
 import { TRIAGE_INNOVATOR_PACK_QUESTIONS } from '@app/config/constants.config';

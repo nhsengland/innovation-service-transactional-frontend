@@ -38,9 +38,7 @@ describe('Store/EnvironmentStore/EnvironmentStore tests Suite', () => {
 
 
   it('should return static variables', () => {
-
     expect(environmentStore.ENV).toEqual(environment);
-
   });
 
   it('should run initializeAuthentication$() and return success', () => {
@@ -48,6 +46,7 @@ describe('Store/EnvironmentStore/EnvironmentStore tests Suite', () => {
     spyOn(environmentService, 'verifyUserSession').and.returnValue(of(true));
     spyOn(environmentService, 'getUserInfo').and.returnValue(of({ user: { id: '010101', displayName: 'A user', innovations: [{ id: 'abc123zxc', name: 'HealthyApp' }] } }));
     spyOn(environmentService, 'verifyInnovator').and.returnValue(of(true));
+    spyOn(environmentService, 'getInnovations').and.returnValue(of([{ id: 'abc123zxc', name: 'HealthyApp' }]));
 
     const expected = {
       response: false,
@@ -74,6 +73,7 @@ describe('Store/EnvironmentStore/EnvironmentStore tests Suite', () => {
     spyOn(environmentService, 'verifyUserSession').and.returnValue(of(true));
     spyOn(environmentService, 'getUserInfo').and.returnValue(of({ user: { id: '010101', displayName: 'A user', innovations: [] } }));
     spyOn(environmentService, 'verifyInnovator').and.returnValue(throwError('error'));
+    spyOn(environmentService, 'getInnovations').and.returnValue(throwError('error'));
 
     const expected = {
       response: false,
@@ -148,6 +148,15 @@ describe('Store/EnvironmentStore/EnvironmentStore tests Suite', () => {
     expect(environmentStore.userDidFirstTimeSignIn()).toBe(false);
   });
 
+  it('should run getUserId() and return true', () => {
+    environmentStore.state.authentication.user = { id: '010101', displayName: 'A user', innovations: [] };
+    expect(environmentStore.getUserId()).toBe('010101');
+  });
+
+  it('should run getUserId() and return false', () => {
+    // environmentStore.state.authentication.user = { id: '010101', displayName: 'A user', innovations: [] };
+    expect(environmentStore.getUserId()).toBe('');
+  });
 
   it('should run getUserInfo() and return empty user', () => {
     // environmentStore.state.authentication.isSignIn = true;

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CoreComponent } from '@app/base/core.component';
+import { CoreComponent } from '@app/base';
 
 @Component({
   selector: 'app-innovator-pages-dashboard',
@@ -14,15 +14,13 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   };
 
   constructor() {
+
     super();
 
-
-    console.log(this.stores.environment.getUserInfo());
     this.user = {
       displayName: this.stores.environment.getUserInfo().displayName,
       innovations: this.stores.environment.getUserInfo().innovations
     };
-
 
   }
 

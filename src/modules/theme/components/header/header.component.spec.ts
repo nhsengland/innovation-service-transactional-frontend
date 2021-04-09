@@ -94,42 +94,30 @@ describe('HeaderComponent', () => {
 
   it('should show hero section', () => {
 
-    fixture = TestBed.createComponent(HeaderComponent);
     const navEvent = new NavigationEnd(0, '/', '/');
+
+    fixture = TestBed.createComponent(HeaderComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
 
-    (fixture.componentInstance as any).subscribe(navEvent);
+    (component as any).onRouteChange(navEvent);
 
     expect(fixture.componentInstance.showHeroSection).toBe(true);
+
   });
 
   it('should not show hero section', () => {
-    fixture = TestBed.createComponent(HeaderComponent);
-    fixture.detectChanges();
 
     const navEvent = new NavigationEnd(0, '/test', '/test');
 
-    (fixture.componentInstance as any).subscribe(navEvent);
-
-    expect(fixture.componentInstance.showHeroSection).toBe(false);
-  });
-
-  it('should not show hero section when receives null event', () => {
     fixture = TestBed.createComponent(HeaderComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
 
-    (fixture.componentInstance as any).subscribe(null);
+    (component as any).onRouteChange(navEvent);
 
     expect(fixture.componentInstance.showHeroSection).toBe(false);
-  });
 
-  it('should not show hero section when receives undefined event', () => {
-    fixture = TestBed.createComponent(HeaderComponent);
-    fixture.detectChanges();
-
-    (fixture.componentInstance as any).subscribe(undefined);
-
-    expect(fixture.componentInstance.showHeroSection).toBe(false);
   });
 
 });
