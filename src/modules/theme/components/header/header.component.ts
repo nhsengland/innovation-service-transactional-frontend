@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       this.environmentStore.isUserAuthenticated$().subscribe(state => {
         this.authenticationButton = !state ?
-          { title: 'Sign in', url: '/transactional/signin' } :
+          { title: 'Sign in', url: '/transactional/innovator' } :
           { title: 'Sign out', url: '/transactional/signout' };
       })
 
