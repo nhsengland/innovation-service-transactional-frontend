@@ -87,7 +87,7 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
   it('should allow to access the route', () => {
 
     const routeMock: Partial<ActivatedRouteSnapshot> = {};
-    let expected = true;
+    const expected = true;
 
     spyOn(authenticationStore, 'getUserType').and.returnValue('');
 
