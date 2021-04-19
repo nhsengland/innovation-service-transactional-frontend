@@ -12,7 +12,7 @@ import { AccessorModule } from '../accessor.module';
 import { AccessorLayoutComponent } from './accessor-layout.component';
 
 
-describe('FeatureModule/Accessor/AccessorLayoutComponent tests Suite', () => {
+describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
 
   let component: AccessorLayoutComponent;
   let fixture: ComponentFixture<AccessorLayoutComponent>;

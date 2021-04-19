@@ -18,7 +18,7 @@ export class SurveyService extends CoreService {
     return this.http.post<{ id: string }>(url, body).pipe(
       take(1),
       map(response => response),
-      catchError(err => throwError(err))
+      catchError(error => throwError(error))
     );
 
   }

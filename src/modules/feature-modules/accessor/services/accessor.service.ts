@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -10,5 +10,9 @@ import { UrlModel } from '@modules/core';
 export class AccessorService extends CoreService {
 
   constructor() { super(); }
+
+  toDo(): Observable<boolean> {
+    return of(true);
+  }
 
 }

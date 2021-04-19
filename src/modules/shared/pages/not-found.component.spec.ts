@@ -3,7 +3,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { PageNotFoundComponent } from './not-found.component';
 
-describe('FormEngineComponent tests Suite', () => {
+describe('FormEngineComponent', () => {
 
   let component: PageNotFoundComponent;
   let fixture: ComponentFixture<PageNotFoundComponent>;

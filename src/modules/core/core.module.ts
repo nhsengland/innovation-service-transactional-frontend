@@ -2,6 +2,7 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoggerModule } from 'ngx-logger';
+import { TranslateModule } from '@ngx-translate/core';
 
 // Interceptors.
 import { ApiOutInterceptor } from './interceptors/api-out.interceptor';
@@ -16,7 +17,8 @@ import { EnvironmentStore } from './stores/environment.store';
 
 @NgModule({
   imports: [
-    LoggerModule.forRoot(null)
+    LoggerModule.forRoot(null),
+    TranslateModule.forRoot()
   ],
   providers: [
 

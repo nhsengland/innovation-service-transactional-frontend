@@ -26,7 +26,6 @@ export class FormCheckboxComponent extends ControlValueAccessorConnector impleme
   // @Input() items: FormFieldModel['items'] = [];
 
   hasError = false;
-  errorMessage = '';
 
   isRunningOnBrowser: boolean;
   isRunningOnServer: boolean;

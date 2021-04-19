@@ -25,7 +25,7 @@ class HostComponent {
 }
 
 
-describe('InputComponent tests Suite', () => {
+describe('InputComponent', () => {
 
   let hostComponent: HostComponent;
   let hostFixture: ComponentFixture<HostComponent>;

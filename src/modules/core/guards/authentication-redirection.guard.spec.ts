@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LoggerTestingModule } from 'ngx-logger/testing';
 
-import { EmptyComponentMock } from '@tests/app.mocks';
+import { EmptyMockComponent } from '@tests/app.mocks';
 
 import { Injector } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
@@ -26,14 +26,14 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule.withRoutes([
-          { path: 'dashboard', component: EmptyComponentMock },
-          { path: 'innovator', component: EmptyComponentMock },
-          { path: 'accessor', component: EmptyComponentMock }
+          { path: 'dashboard', component: EmptyMockComponent },
+          { path: 'innovator', component: EmptyMockComponent },
+          { path: 'accessor', component: EmptyMockComponent }
         ]),
         LoggerTestingModule
       ],
       declarations: [
-        EmptyComponentMock
+        EmptyMockComponent
       ],
       providers: [
         AuthenticationStore,
@@ -51,22 +51,33 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
   });
 
 
-  it('should allow to access the route', () => {
+  it('should deny access to the route when user type is empty', () => {
 
     const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'dashboard' } };
-    let expected = false;
-    
+    const expected = false;
+
+    spyOn(authenticationStore, 'getUserType').and.returnValue('');
+
+    expect(guard.canActivate(routeMock as any)).toBe(expected);
+
+  });
+
+  it('should deny access to the route when is a INNOVATOR', () => {
+
+    const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'dashboard' } };
+    const expected = false;
+
     spyOn(authenticationStore, 'getUserType').and.returnValue('INNOVATOR');
 
     expect(guard.canActivate(routeMock as any)).toBe(expected);
 
   });
 
-  it('should allow to access the route', () => {
+  it('should deny access to the route when is a ACCESSOR', () => {
 
     const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'dashboard' } };
-    let expected = false;
-    
+    const expected = false;
+
     spyOn(authenticationStore, 'getUserType').and.returnValue('ACCESSOR');
 
     expect(guard.canActivate(routeMock as any)).toBe(expected);
@@ -75,44 +86,13 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
 
   it('should allow to access the route', () => {
 
-    const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: '' } };
+    const routeMock: Partial<ActivatedRouteSnapshot> = {};
     let expected = true;
-    
+
     spyOn(authenticationStore, 'getUserType').and.returnValue('');
 
     expect(guard.canActivate(routeMock as any)).toBe(expected);
 
   });
-
-  // it('should deny access the route when running on browser', () => {
-
-  //   spyOn(common, 'isPlatformBrowser').and.returnValue(true);
-  //   spyOn(authenticationStore, 'initializeAuthentication$').and.returnValue(throwError('error'));
-
-  //   let expected: boolean | null = null;
-
-  //   delete (window as { location?: {} }).location;
-  //   window.location = { href: '', hostname: '', pathname: '', protocol: '', assign: jest.fn() } as unknown as Location;
-
-  //   guard.canActivate().subscribe(response => { expected = response; });
-
-  //   expect(expected).toBe(false);
-  //   expect(window.location.assign).toBeCalledWith('/transactional/signin');
-
-
-  // });
-
-  // it('should deny access the route when running on server', () => {
-
-  //   spyOn(common, 'isPlatformBrowser').and.returnValue(false);
-  //   spyOn(authenticationStore, 'initializeAuthentication$').and.returnValue(throwError('error'));
-
-  //   let expected: boolean | null = null;
-
-  //   guard.canActivate().subscribe(response => { expected = response; });
-
-  //   expect(expected).toBe(null); // Response from canActivate does not get returned, as it is redirected.
-
-  // });
 
 });

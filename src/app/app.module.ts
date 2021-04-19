@@ -2,7 +2,6 @@ import { Injector, NgModule } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { TransferHttpCacheModule } from '@nguniversal/common';
-import { TranslateModule } from '@ngx-translate/core';
 
 import { CoreModule } from '@modules/core/core.module';
 import { StoresModule } from '@modules/stores/stores.module';
@@ -20,7 +19,6 @@ import { AppComponent } from './app.component';
     BrowserTransferStateModule,
     HttpClientModule,
     TransferHttpCacheModule,
-    TranslateModule.forRoot(),
 
     CoreModule,
     StoresModule,

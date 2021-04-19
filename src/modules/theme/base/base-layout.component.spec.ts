@@ -1,9 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { TranslateModule } from '@ngx-translate/core';
-
+import { CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
 import { BaseLayoutComponent } from './base-layout.component';
@@ -13,12 +12,16 @@ import { FooterComponent } from '@modules/theme/components/footer/footer.compone
 
 
 describe('Theme/Base/BaseLayoutComponent', () => {
+
+  let component: BaseLayoutComponent;
+  let fixture: ComponentFixture<BaseLayoutComponent>;
+
   beforeEach( () => {
      TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
         HttpClientTestingModule,
-        TranslateModule.forRoot(),
+        CoreModule,
         StoresModule
       ],
       declarations: [
@@ -30,9 +33,12 @@ describe('Theme/Base/BaseLayoutComponent', () => {
   });
 
   it('should create the componnet', () => {
-    const fixture = TestBed.createComponent(BaseLayoutComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+
+    fixture = TestBed.createComponent(BaseLayoutComponent);
+    component = fixture.componentInstance;
+
+    expect(component).toBeTruthy();
+
   });
 
 });

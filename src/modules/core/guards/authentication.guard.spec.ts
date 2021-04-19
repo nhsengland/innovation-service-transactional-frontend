@@ -8,7 +8,7 @@ import * as common from '@angular/common';
 import { of, throwError } from 'rxjs';
 
 import { AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { AuthenticationStore, AuthenticationService } from '@modules/stores';
 
 import { EnvironmentStore } from '../stores/environment.store';
 import { AuthenticationGuard } from './authentication.guard';
@@ -25,10 +25,11 @@ describe('Core/Guards/AuthenticationGuard', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        LoggerTestingModule,
-        StoresModule
+        LoggerTestingModule
       ],
       providers: [
+        AuthenticationStore,
+        AuthenticationService,
         EnvironmentStore,
         AuthenticationGuard
       ]

@@ -13,7 +13,7 @@ export const ENV = {
   template: `<div></div>`,
   selector: 'empty-component',
 })
-export class EmptyComponentMock { }
+export class EmptyMockComponent { }
 
 
 export class InjectorMock extends Injector {

@@ -1,7 +1,7 @@
 import { FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { CustomValidators } from './custom-validators';
 
-describe('CustomValidators tests Suite', () => {
+describe('CustomValidators', () => {
 
   let formGroup: FormGroup;
   let formControl: FormControl;
@@ -10,7 +10,7 @@ describe('CustomValidators tests Suite', () => {
   let validator: ValidationErrors | null;
 
 
-  describe('CustomValidators.required() tests suite', () => {
+  describe('CustomValidators.required()', () => {
 
     beforeAll(() => {
       formControl = new FormControl();
@@ -38,7 +38,7 @@ describe('CustomValidators tests Suite', () => {
   });
 
 
-  describe('CustomValidators.requiredCheckboxArray() tests suite', () => {
+  describe('CustomValidators.requiredCheckboxArray()', () => {
 
     beforeAll(() => {
       formArray = new FormArray([]);
@@ -64,7 +64,7 @@ describe('CustomValidators tests Suite', () => {
   });
 
 
-  describe('CustomValidators.requiredCheckboxGroup() tests suite', () => {
+  describe('CustomValidators.requiredCheckboxGroup()', () => {
 
     beforeAll(() => {
       formGroup = new FormGroup({
@@ -88,7 +88,7 @@ describe('CustomValidators tests Suite', () => {
   });
 
 
-  describe('CustomValidators.pattern() tests suite', () => {
+  describe('CustomValidators.pattern()', () => {
 
     beforeAll(() => {
       formControl = new FormControl();
@@ -122,7 +122,7 @@ describe('CustomValidators tests Suite', () => {
   });
 
 
-  describe('CustomValidators.hexadecimalFormatValidator() tests suite', () => {
+  describe('CustomValidators.hexadecimalFormatValidator()', () => {
 
     beforeAll(() => {
       formControl = new FormControl();
@@ -156,7 +156,7 @@ describe('CustomValidators tests Suite', () => {
   });
 
 
-  describe('CustomValidators.minHexadecimalValidator() tests suite', () => {
+  describe('CustomValidators.minHexadecimalValidator()', () => {
 
     beforeAll(() => {
       formControl = new FormControl();
@@ -184,7 +184,7 @@ describe('CustomValidators tests Suite', () => {
   });
 
 
-  describe('CustomValidators.maxHexadecimalValidator() tests suite', () => {
+  describe('CustomValidators.maxHexadecimalValidator()', () => {
 
     beforeAll(() => {
       formControl = new FormControl();

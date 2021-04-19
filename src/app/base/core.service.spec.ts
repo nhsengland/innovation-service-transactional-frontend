@@ -4,7 +4,7 @@ import { LoggerTestingModule } from 'ngx-logger/testing';
 
 import { Injector } from '@angular/core';
 
-import { AppInjector } from '@modules/core';
+import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
 import { CoreService } from './core.service';
@@ -19,6 +19,7 @@ describe('App/Base/CoreService', () => {
       imports: [
         HttpClientTestingModule,
         LoggerTestingModule,
+        CoreModule,
         StoresModule
       ],
       providers: [

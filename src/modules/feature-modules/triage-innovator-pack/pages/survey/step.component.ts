@@ -166,7 +166,6 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
         },
         error => {
           this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/summary`);
-          this.logger.error(error);
           return;
         }
       );

@@ -37,7 +37,7 @@ class HostComponent {
 }
 
 
-describe('FormRadioGroupComponent tests Suite', () => {
+describe('FormRadioGroupComponent', () => {
 
   let hostComponent: HostComponent;
   let hostFixture: ComponentFixture<HostComponent>;

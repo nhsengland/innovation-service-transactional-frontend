@@ -241,7 +241,7 @@ export function app(): express.Express {
 
       const success = (response: any) => {
 
-        console.log('ORIG: ', url, response.data);
+        // console.log('ORIG: ', url, response.data);
         // if (!response.data) {
         //   res.status(response.status).send(response.data);
         // }

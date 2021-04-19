@@ -1,16 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { LoggerTestingModule } from 'ngx-logger/testing';
+
+import { ENV } from '@tests/app.mocks';
 
 import { Injector } from '@angular/core';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, EnvironmentStore } from '@modules/stores';
+import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
+import { StoresModule } from '@modules/stores';
 
 import { SurveyService } from './survey.service';
 
 
-describe('FeatureModule/TriageInnovatorPack/SurveyService tests Suite', () => {
+describe('FeatureModules/TriageInnovatorPack/SurveyService', () => {
 
   let httpMock: HttpTestingController;
   let environmentStore: EnvironmentStore;
@@ -21,12 +22,12 @@ describe('FeatureModule/TriageInnovatorPack/SurveyService tests Suite', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        LoggerTestingModule,
         CoreModule,
         StoresModule
       ],
       providers: [
-        SurveyService
+        SurveyService,
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
 
@@ -35,7 +36,6 @@ describe('FeatureModule/TriageInnovatorPack/SurveyService tests Suite', () => {
     httpMock = TestBed.inject(HttpTestingController);
     environmentStore = TestBed.inject(EnvironmentStore);
     service = TestBed.inject(SurveyService);
-
 
   });
 
@@ -46,41 +46,33 @@ describe('FeatureModule/TriageInnovatorPack/SurveyService tests Suite', () => {
 
   it('should run submitSurvey() and return success', () => {
 
-    const bodyPayload = { question: 'answer' };
-    const expected = {
-      success: { id: 'surveyId' },
-      error: { status: 0, statusText: '' }
-    };
+    const payload = { question: 'answer' };
+    const responseMock = { id: 'surveyId' };
+    const expected = { id: 'surveyId' };
+    let response: any = null;
 
-    service.submitSurvey(bodyPayload).subscribe(
-      response => expected.success = response,
-      error => expected.error = error
-    );
+    service.submitSurvey(payload).subscribe(success => response = success, error => response = error);
 
-    const req = httpMock.expectOne(`${environmentStore.ENV.API_URL}/transactional/survey`);
-    req.flush(expected.success);
-    expect(req.request.method).toBe('POST');
-    expect(expected.success).toBe(expected.success);
+    const httpRequest = httpMock.expectOne(`${environmentStore.APP_URL}/survey`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('POST');
+    expect(response).toEqual(expected);
 
   });
 
   it('should run submitSurvey() and return error', () => {
 
-    const bodyPayload = { question: 'answer' };
-    const expected = {
-      success: { id: '' },
-      error: { status: 0, statusText: '' }
-    };
+    const payload = { question: 'answer' };
+    const responseMock = '';
+    let response: any = null;
 
-    service.submitSurvey(bodyPayload).subscribe(
-      response => expected.success = response,
-      error => expected.error = error
-    );
+    service.submitSurvey(payload).subscribe(success => response = success, error => response = error);
 
-    const req = httpMock.expectOne(`${environmentStore.ENV.API_URL}/transactional/survey`);
-    req.flush(expected.success, { status: 400, statusText: 'Bad Request' });
-    expect(req.request.method).toBe('POST');
-    expect(expected.error.statusText).toBe('Bad Request');
+    const httpRequest = httpMock.expectOne(`${environmentStore.APP_URL}/survey`);
+    httpRequest.flush(responseMock, { status: 400, statusText: 'Bad Request' });
+    expect(httpRequest.request.method).toBe('POST');
+    expect(response.status).toEqual(400);
+    expect(response.statusText).toEqual('Bad Request');
 
   });
 

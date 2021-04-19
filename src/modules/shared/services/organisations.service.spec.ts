@@ -1,18 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
+import { ENV } from '@tests/app.mocks';
+
 import { Injector } from '@angular/core';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, EnvironmentStore } from '@modules/stores';
+import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
+import { StoresModule } from '@modules/stores';
 
-import { InnovationsService } from './innovations.service';
+import { OrganisationsService } from './organisations.service';
 
-describe('FeatureModule/Innovator/InnovationsService tests Suite', () => {
+describe('Shared/Services/OrganisationsService', () => {
 
   let httpMock: HttpTestingController;
   let environmentStore: EnvironmentStore;
-  let service: InnovationsService;
+  let service: OrganisationsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -22,7 +24,8 @@ describe('FeatureModule/Innovator/InnovationsService tests Suite', () => {
         StoresModule
       ],
       providers: [
-        InnovationsService
+        OrganisationsService,
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
 
@@ -30,7 +33,7 @@ describe('FeatureModule/Innovator/InnovationsService tests Suite', () => {
 
     httpMock = TestBed.inject(HttpTestingController);
     environmentStore = TestBed.inject(EnvironmentStore);
-    service = TestBed.inject(InnovationsService);
+    service = TestBed.inject(OrganisationsService);
 
   });
 
@@ -39,40 +42,18 @@ describe('FeatureModule/Innovator/InnovationsService tests Suite', () => {
   });
 
 
-  it('should run getInnovationInfo() and return success', () => {
+  it('should run getAccessorsOrganisations() and return success', () => {
 
-    const endpointResponse = {
-      id: '123abc',
-      name: 'Innovation name',
-      company: '',
-      description: 'Some description',
-      countryName: 'England',
-      postcode: '',
-      actions: [],
-      comments: []
-    };
-    const expected = {
-      success: {
-        id: '123abc',
-        name: 'Innovation name',
-        company: '',
-        location: 'England',
-        description: 'Some description',
-        openActionsNumber: 0,
-        openCommentsNumber: 0
-      },
-      error: { status: 0, statusText: '' }
-    };
+    const responseMock = [{ id: 'id1', name: 'Organisation 01' }];
+    const expected = [{ id: 'id1', name: 'Organisation 01' }];
+    let response: any = null;
 
-    service.getInnovationInfo('123abc').subscribe(
-      response => expected.success = response,
-      error => expected.error = error
-    );
+    service.getAccessorsOrganisations().subscribe(success => response = success, error => response = error);
 
-    const req = httpMock.expectOne(`${environmentStore.ENV.API_URL}/transactional/api/innovators//innovations/123abc`);
-    req.flush(endpointResponse);
+    const req = httpMock.expectOne(`${environmentStore.API_URL}/organisations?type=accessor`);
+    req.flush(responseMock);
     expect(req.request.method).toBe('GET');
-    expect(expected.success).toBe(expected.success);
+    expect(response).toEqual(expected);
 
   });
 

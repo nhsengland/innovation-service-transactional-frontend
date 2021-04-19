@@ -15,7 +15,7 @@ import { FormTextareaComponent } from '../components/textarea.component';
 
 import { ALL_PARAMETER_TYPES_EMPTY, PARAMETERS_WITH_VALIDATIONS } from '../tests/form-engine.mock';
 
-describe('FormEngineComponent tests Suite', () => {
+describe('FormEngineComponent', () => {
 
   let component: FormEngineComponent;
   let fixture: ComponentFixture<FormEngineComponent>;

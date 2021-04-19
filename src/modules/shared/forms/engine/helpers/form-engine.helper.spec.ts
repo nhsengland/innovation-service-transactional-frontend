@@ -2,7 +2,7 @@ import { FormEngineHelper } from './form-engine.helper';
 import { ALL_PARAMETER_TYPES_EMPTY, CHOOSABLE_PARAMETER_TYPES, CHOOSABLE_PARAMETER_TYPES_WITH_CONDITIONALS, ALL_PARAMETERS_HIDDEN, PARAMETERS_WITH_VALIDATIONS, PARAMETERS_VALUES } from '../../tests/form-engine.mock';
 
 
-describe('FormEngineHelper tests suite', () => {
+describe('FormEngineHelper', () => {
 
   it('should create empty and valid form', () => {
     const expected = {};

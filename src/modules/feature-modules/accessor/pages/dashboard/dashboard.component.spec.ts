@@ -6,12 +6,12 @@ import { Injector } from '@angular/core';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
+import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { DashboardComponent } from './dashboard.component';
 
 
-describe('FeatureModule/Innovator/DashboardComponent tests Suite', () => {
+describe('FeatureModules/Innovator/DashboardComponent', () => {
 
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
@@ -23,7 +23,7 @@ describe('FeatureModule/Innovator/DashboardComponent tests Suite', () => {
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        InnovatorModule
+        AccessorModule
       ]
     }).compileComponents();
 

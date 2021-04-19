@@ -1,20 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { LoggerTestingModule } from 'ngx-logger/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 
-import { AppInjector } from '@modules/core';
-import { StoresModule, EnvironmentStore } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
+import { StoresModule, AuthenticationStore } from '@modules/stores';
 
 import { FirstTimeSigninGuard } from './first-time-signin.guard';
 
-describe('FeatureModule/Innovator/FirstTimeSigninGuard tests Suite', () => {
+describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
 
   let guard: FirstTimeSigninGuard;
-  let environmentStore: EnvironmentStore;
+  let authenticationStore: AuthenticationStore;
 
   beforeEach(() => {
 
@@ -22,7 +21,7 @@ describe('FeatureModule/Innovator/FirstTimeSigninGuard tests Suite', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        LoggerTestingModule,
+        CoreModule,
         StoresModule
       ],
       providers: [
@@ -33,7 +32,7 @@ describe('FeatureModule/Innovator/FirstTimeSigninGuard tests Suite', () => {
     AppInjector.setInjector(TestBed.inject(Injector));
 
     guard = TestBed.inject(FirstTimeSigninGuard);
-    environmentStore = TestBed.inject(EnvironmentStore);
+    authenticationStore = TestBed.inject(AuthenticationStore);
 
   });
 
@@ -45,7 +44,7 @@ describe('FeatureModule/Innovator/FirstTimeSigninGuard tests Suite', () => {
       const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'first-time-signin' } };
       let expected: boolean | null = null;
 
-      spyOn(environmentStore, 'userDidFirstTimeSignIn').and.returnValue(false);
+      spyOn(authenticationStore, 'didFirstTimeSignIn').and.returnValue(false);
 
       guard.canActivateChild(routeMock as any).subscribe(response => { expected = response; });
       expect(expected).toBe(true);
@@ -58,7 +57,7 @@ describe('FeatureModule/Innovator/FirstTimeSigninGuard tests Suite', () => {
       const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
       let expected: boolean | null = null;
 
-      spyOn(environmentStore, 'userDidFirstTimeSignIn').and.returnValue(false);
+      spyOn(authenticationStore, 'didFirstTimeSignIn').and.returnValue(false);
 
       guard.canActivateChild(routeMock as any).subscribe(response => { expected = response; });
 
@@ -77,7 +76,7 @@ describe('FeatureModule/Innovator/FirstTimeSigninGuard tests Suite', () => {
       const routeMock: Partial<ActivatedRouteSnapshot> = {};
       let expected: boolean | null = null;
 
-      spyOn(environmentStore, 'userDidFirstTimeSignIn').and.returnValue(true);
+      spyOn(authenticationStore, 'didFirstTimeSignIn').and.returnValue(true);
 
       guard.canActivateChild(routeMock as any).subscribe(response => { expected = response; });
       expect(expected).toBe(true);
@@ -90,7 +89,7 @@ describe('FeatureModule/Innovator/FirstTimeSigninGuard tests Suite', () => {
       const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
       let expected: boolean | null = null;
 
-      spyOn(environmentStore, 'userDidFirstTimeSignIn').and.returnValue(true);
+      spyOn(authenticationStore, 'didFirstTimeSignIn').and.returnValue(true);
 
       guard.canActivateChild(routeMock as any).subscribe(response => { expected = response; });
 

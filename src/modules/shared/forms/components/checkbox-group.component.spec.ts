@@ -35,7 +35,7 @@ class HostComponent {
 }
 
 
-describe('FormCheckboxGroupComponent tests Suite', () => {
+describe('FormCheckboxGroupComponent', () => {
 
   let hostComponent: HostComponent;
   let hostFixture: ComponentFixture<HostComponent>;
@@ -68,7 +68,7 @@ describe('FormCheckboxGroupComponent tests Suite', () => {
     expect(hostComponent).toBeTruthy();
   });
 
-  it('should form control field be invalid and with error and field touched', () => {
+  it('should form control field be invalid and field touched', () => {
     hostFixture.detectChanges();
     hostComponent.form.get('testField')?.setValidators(CustomValidators.requiredCheckboxGroup());
     hostComponent.form.get('testField')?.updateValueAndValidity();
@@ -79,7 +79,7 @@ describe('FormCheckboxGroupComponent tests Suite', () => {
     expect(hostComponent.childComponent?.errorMessage).toBe('shared.forms_module.validations.required');
   });
 
-  it('should form control field be invalid and with error and field dirty', () => {
+  it('should form control field be invalid and field dirty', () => {
     hostFixture.detectChanges();
     hostComponent.form.get('testField')?.setValidators(CustomValidators.requiredCheckboxGroup());
     hostComponent.form.get('testField')?.updateValueAndValidity();

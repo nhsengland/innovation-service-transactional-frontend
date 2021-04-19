@@ -1,14 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
+import { ENV } from '@tests/app.mocks';
+
 import { Injector } from '@angular/core';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, EnvironmentStore } from '@modules/stores';
+import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
+import { StoresModule } from '@modules/stores';
 
 import { InnovatorService } from './innovator.service';
 
-describe('FeatureModule/Innovator/InnovatorService tests Suite', () => {
+describe('FeatureModules/Innovator/InnovatorService', () => {
 
   let httpMock: HttpTestingController;
   let environmentStore: EnvironmentStore;
@@ -22,7 +24,8 @@ describe('FeatureModule/Innovator/InnovatorService tests Suite', () => {
         StoresModule
       ],
       providers: [
-        InnovatorService
+        InnovatorService,
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
 
@@ -41,7 +44,7 @@ describe('FeatureModule/Innovator/InnovatorService tests Suite', () => {
 
   it('should run submitFirstTimeSigninInfo(PayloadTest01) and return success', () => {
 
-    const bodyPayload = {
+    const payload = {
       innovatorName: 'User display name',
       innovationName: 'Innovation name',
       innovationDescription: 'Some description',
@@ -50,29 +53,26 @@ describe('FeatureModule/Innovator/InnovatorService tests Suite', () => {
       // englandPostCode: 'EN05',
       isCompanyOrOrganisation: 'yes',
       // organisationName: 'Organisation name',
-      // organisationSize: '1 to 5 workers'
+      // organisationSize: '1 to 5 workers',
+      // organisationShares: ['Organisation 01']
     };
+    const responseMock = true;
+    const expected = '';
+    let response: any = null;
 
-    const expected = {
-      success: '',
-      error: { status: 0, statusText: '' }
-    };
 
-    service.submitFirstTimeSigninInfo(bodyPayload).subscribe(
-      response => expected.success = response,
-      error => expected.error = error
-    );
+    service.submitFirstTimeSigninInfo(payload).subscribe(success => response = success, error => response = error);
 
-    const req = httpMock.expectOne(`${environmentStore.ENV.API_URL}/transactional/api/innovators`);
-    req.flush(expected.success);
-    expect(req.request.method).toBe('POST');
-    expect(expected.success).toBe(expected.success);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('POST');
+    expect(response).toBe(expected);
 
   });
 
   it('should run submitFirstTimeSigninInfo(PayloadTest02) and return success', () => {
 
-    const bodyPayload = {
+    const payload = {
       innovatorName: 'User display name',
       innovationName: 'Innovation name',
       innovationDescription: 'Some description',
@@ -81,23 +81,20 @@ describe('FeatureModule/Innovator/InnovatorService tests Suite', () => {
       // englandPostCode: 'EN05',
       isCompanyOrOrganisation: 'no',
       organisationName: 'Organisation name',
-      organisationSize: '1 to 5 workers'
+      organisationSize: '1 to 5 workers',
+      organisationShares: ['Organisation 01']
     };
+    const responseMock = true;
+    const expected = '';
+    let response: any = null;
 
-    const expected = {
-      success: '',
-      error: { status: 0, statusText: '' }
-    };
 
-    service.submitFirstTimeSigninInfo(bodyPayload).subscribe(
-      response => expected.success = response,
-      error => expected.error = error
-    );
+    service.submitFirstTimeSigninInfo(payload).subscribe(success => response = success, error => response = error);
 
-    const req = httpMock.expectOne(`${environmentStore.ENV.API_URL}/transactional/api/innovators`);
-    req.flush(expected.success);
-    expect(req.request.method).toBe('POST');
-    expect(expected.success).toBe(expected.success);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('POST');
+    expect(response).toBe(expected);
 
   });
 

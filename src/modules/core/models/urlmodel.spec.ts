@@ -6,7 +6,7 @@ const testVariables = {
   malformedUrl: 'abcdefghijklmopqrstuvwxyz'
 };
 
-describe('UrlModel tests suite', () => {
+describe('UrlModel', () => {
 
   let component: UrlModel;
 

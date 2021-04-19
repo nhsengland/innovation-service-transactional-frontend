@@ -42,6 +42,7 @@ describe('Core/Stores/EnvironmentStore running server side', () => {
 describe('Core/Stores/EnvironmentStore runnign client side', () => {
 
   let environmentStore: EnvironmentStore;
+  let windowSpy: jest.SpyInstance;
 
   beforeEach(() => {
 
@@ -54,13 +55,14 @@ describe('Core/Stores/EnvironmentStore runnign client side', () => {
       ]
     });
 
+    windowSpy = jest.spyOn(window, 'window', 'get');
+    windowSpy.mockImplementation(() => ({ __env: ENV }));
+
     environmentStore = TestBed.inject(EnvironmentStore);
 
   });
 
   it('should set environment variables', () => {
-
-    window = { __env: ENV } as any;
 
     const expected = { BASE_URL: 'http://demo.com', BASE_PATH: '', API_URL: 'http://demo.com/api', LOG_LEVEL: 0 };
 

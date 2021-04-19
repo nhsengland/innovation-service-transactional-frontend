@@ -1,25 +1,30 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
+import { ENV } from '@tests/app.mocks';
+
 import { Injector } from '@angular/core';
 import * as common from '@angular/common';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, EnvironmentStore, EnvironmentService  } from '@modules/stores';
+import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
+import { AuthenticationService  } from '@modules/stores';
 
-describe('Core/Interceptors/ApiOutInterceptor tests Suite', () => {
+describe('Core/Interceptors/ApiOutInterceptor', () => {
 
   let httpMock: HttpTestingController;
   let environmentStore: EnvironmentStore;
-  let environmentService: EnvironmentService;
+  let authenticationService: AuthenticationService;
 
   beforeEach(() => {
 
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        CoreModule,
-        StoresModule
+        CoreModule
+      ],
+      providers: [
+        AuthenticationService,
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
 
@@ -27,7 +32,7 @@ describe('Core/Interceptors/ApiOutInterceptor tests Suite', () => {
 
     httpMock = TestBed.inject(HttpTestingController);
     environmentStore = TestBed.inject(EnvironmentStore);
-    environmentService = TestBed.inject(EnvironmentService);
+    authenticationService = TestBed.inject(AuthenticationService);
 
   });
 
@@ -38,32 +43,32 @@ describe('Core/Interceptors/ApiOutInterceptor tests Suite', () => {
 
   it('should add header', () => {
 
+    const responseMock = true;
+    let response: any = null;
+
     spyOn(common, 'isPlatformServer').and.returnValue(true);
 
-    const expected = true;
+    authenticationService.verifyUserSession().subscribe(success => response = success, error => response = error);
 
-    environmentService.verifyUserSession().subscribe(response => {
-      expect(response).toBe(expected);
-    });
-
-    const httpRequest = httpMock.expectOne(`${environmentStore.ENV.API_URL}/transactional/session`);
-    httpRequest.flush(expected);
+    const httpRequest = httpMock.expectOne(`${environmentStore.APP_URL}/session`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('HEAD');
     expect(httpRequest.request.headers.has('Cookie')).toEqual(true);
 
   });
 
   it('should not add header', () => {
 
+    const responseMock = true;
+    let response: any = null;
+
     spyOn(common, 'isPlatformServer').and.returnValue(false);
 
-    const expected = true;
+    authenticationService.verifyUserSession().subscribe(success => response = success, error => response = error);
 
-    environmentService.verifyUserSession().subscribe(response => {
-      expect(response).toBe(expected);
-    });
-
-    const httpRequest = httpMock.expectOne(`${environmentStore.ENV.API_URL}/transactional/session`);
-    httpRequest.flush(expected);
+    const httpRequest = httpMock.expectOne(`${environmentStore.APP_URL}/session`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('HEAD');
     expect(httpRequest.request.headers.has('Cookie')).toEqual(false);
 
   });
