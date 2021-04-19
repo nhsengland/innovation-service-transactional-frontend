@@ -32,7 +32,7 @@ export class AuthenticationGuard implements CanActivate {
         }
 
         this.serverResponse.status(303).setHeader('Location', redirectUrl);
-        // this.serverResponse.end();
+        this.serverResponse.end();
         return of(false);
 
       })

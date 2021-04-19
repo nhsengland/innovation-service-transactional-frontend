@@ -8,7 +8,7 @@ import { CoreComponent } from '@app/base';
 })
 export class SignUpConfirmationComponent extends CoreComponent implements OnInit {
 
-  proceedLink = `${this.stores.environment.APP_URL}/innovator/dashboard`;
+  proceedLink = `${this.stores.environment.APP_URL}/dashboard`;
 
   constructor() { super(); }
 

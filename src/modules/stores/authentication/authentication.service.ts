@@ -52,7 +52,7 @@ export class AuthenticationService {
         displayName: ['unknown'].includes(response.displayName) ? '' : response.displayName,
         type: response.type,
         // type: 'ACCESSOR' as any,
-        // type: 'QUALIFYING_ACCESSOR as any',
+        // type: 'QUALIFYING_ACCESSOR' as any,
         organisations: response.organisations
       }))
     );
