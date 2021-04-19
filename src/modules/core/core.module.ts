@@ -1,7 +1,6 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_BASE_HREF } from '@angular/common';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoggerModule } from 'ngx-logger';
 
 // Interceptors.
@@ -9,26 +8,23 @@ import { ApiOutInterceptor } from './interceptors/api-out.interceptor';
 
 // Guards.
 import { AuthenticationGuard } from './guards/authentication.guard';
+import { AuthenticationRedirectionGuard } from './guards/authentication-redirection.guard';
 
-// Environment.
-import { environment } from '../../app/config/environment.config';
+// Stores.
+import { EnvironmentStore } from './stores/environment.store';
+
 
 @NgModule({
   imports: [
-
-    LoggerModule.forRoot({
-      level: environment.LOG_LEVEL,
-      timestampFormat: 'mediumTime'
-      // serverLoggingUrl: '/api/logs',
-      // serverLogLevel: NgxLoggerLevel.ERROR
-    }),
-
+    LoggerModule.forRoot(null)
   ],
   providers: [
+
+    // App base HREF definition.
     {
-      // App base HREF definition.
       provide: APP_BASE_HREF,
-      useValue: (environment.BASE_URL.startsWith('/') ? '' : '/') + environment.BASE_URL
+      useFactory: (environmentStore: EnvironmentStore): string => environmentStore.ENV.BASE_PATH || '/',
+      deps: [EnvironmentStore]
     },
 
     // Interceptors.
@@ -39,11 +35,15 @@ import { environment } from '../../app/config/environment.config';
     },
 
     // Guards.
-    AuthenticationGuard
+    AuthenticationGuard,
+    AuthenticationRedirectionGuard,
+
+    // Stores.
+    EnvironmentStore
   ]
 })
 export class CoreModule {
-  // Makes sure that CoreModule is imported only by one NgModule (AppModule)!
+  // Makes sure that this module is imported only by one NgModule (AppModule)!
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
     if (parentModule) {
       throw new Error('Core Module is already loaded. Import it only in AppModule, please!');

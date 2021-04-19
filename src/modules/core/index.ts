@@ -7,7 +7,11 @@ export { AppInjector } from './injectors/app-injector';
 // Guards.
 export { AuthenticationGuard } from './guards/authentication.guard';
 
+// Services
+export { EnvironmentStore } from './stores/environment.store';
+
 // Resolvers.
+
 
 // Interfaces.
 export { MappedObject } from './interfaces/base.interfaces';

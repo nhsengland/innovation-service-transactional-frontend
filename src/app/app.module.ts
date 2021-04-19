@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CoreModule } from '@modules/core/core.module';
 import { StoresModule } from '@modules/stores/stores.module';
 import { ThemeModule } from '@modules/theme/theme.module';
+
 import { AppInjector } from '@modules/core';
 
 import { AppRoutingModule } from './app-routing.module';

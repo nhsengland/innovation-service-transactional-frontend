@@ -4,13 +4,14 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { NGXLogger } from 'ngx-logger';
-// import { TranslateService } from '@ngx-translate/core';
+
 import { Request, Response } from 'express';
 import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
 
 import { AppInjector } from '@modules/core';
 
-import { EnvironmentStore } from '@modules/stores/environment/environment.store';
+import { EnvironmentStore } from '@modules/core/stores/environment.store';
+import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
 import { UtilsHelper } from './helpers';
 import { MappedObject } from './models';
@@ -28,11 +29,9 @@ export class CoreComponent implements OnInit, OnDestroy {
   protected logger: NGXLogger;
 
   protected stores: {
-    environment: EnvironmentStore
+    environment: EnvironmentStore;
+    authentication: AuthenticationStore;
   };
-
-  // public translateService: TranslateService;
-  // public environment: EnvironmentModel;
 
   protected subscriptions: Subscription[] = [];
 
@@ -54,7 +53,8 @@ export class CoreComponent implements OnInit, OnDestroy {
     this.logger = injector.get(NGXLogger);
 
     this.stores = {
-      environment: injector.get(EnvironmentStore)
+      environment: injector.get(EnvironmentStore),
+      authentication: injector.get(AuthenticationStore)
     };
 
   }

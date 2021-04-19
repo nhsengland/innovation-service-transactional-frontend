@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -31,13 +31,11 @@ export type getInnovationInfoResponse = {
 @Injectable()
 export class InnovationsService extends CoreService {
 
-  private apiUrl = this.stores.environment.ENV.API_URL;
-
   constructor() { super(); }
 
   getInnovationInfo(innovationId: string): Observable<getInnovationInfoResponse> {
 
-    const url = new UrlModel(this.apiUrl).setPath('transactional/api/innovators/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.environment.getUserId(), innovationId });
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
     return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => ({

@@ -2,27 +2,33 @@ import 'zone.js/dist/zone-node';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
-import * as express from 'express';
+
 import * as dotenv from 'dotenv';
-import { join } from 'path';
-import * as passport from 'passport';
-import { IOIDCStrategyOptionWithoutRequest, IProfile, OIDCStrategy, VerifyCallback } from 'passport-azure-ad';
+import * as express from 'express';
 import * as coockieParser from 'cookie-parser';
+import * as passport from 'passport';
 import * as session from 'express-session';
-import { existsSync } from 'fs';
 import axios from 'axios';
+import { IOIDCStrategyOptionWithoutRequest, IProfile, OIDCStrategy, VerifyCallback } from 'passport-azure-ad';
+import { join } from 'path';
+import { existsSync } from 'fs';
+import { Deserializer } from 'jsonapi-serializer';
 
 import { AppServerModule } from './src/main.server';
 
 dotenv.config();
 
-type UserSession = {
-  oid: string,
-  accessToken: string
-};
+// Types definitions.
+type UserSession = { oid: string, accessToken: string };
 
-// TODO NHSAAC-134
-const oauthConfiguration: {
+// Initial variables.
+const BASE_URL = process.env.BASE_URL || '';
+const BASE_PATH = ['', '/'].includes(process.env.BASE_PATH || '') ? '' : `${process.env.BASE_PATH?.startsWith('/') ? '' : '/'}${process.env.BASE_PATH}`;
+const API_URL = process.env.API_URL || '';
+const LOG_LEVEL = process.env.LOG_LEVEL || 'ERROR';
+const VIEWS_PATH = process.env.VIEWS_PATH || '';
+const STATIC_CONTENT_PATH = process.env.STATIC_CONTENT_PATH || '';
+const OAUTH_CONFIGURATION: {
   tenantName: string;
   clientID: string;
   clientSecret: string;
@@ -54,38 +60,35 @@ const oauthConfiguration: {
 
 // TODO NHSAAC-134
 const signInOptions: IOIDCStrategyOptionWithoutRequest = {
-  identityMetadata: `https://${oauthConfiguration.tenantName}.b2clogin.com/${oauthConfiguration.tenantName}.onmicrosoft.com/${oauthConfiguration.signinPolicy}/v2.0/.well-known/openid-configuration`,
-  clientID: oauthConfiguration.clientID,
-  clientSecret: oauthConfiguration.clientSecret,
-  responseType: oauthConfiguration.responseType,
-  responseMode: oauthConfiguration.responseMode,
-  redirectUrl: oauthConfiguration.signinRedirectUrl,
-  allowHttpForRedirectUrl: oauthConfiguration.allowHttpForRedirectUrl,
-  passReqToCallback: oauthConfiguration.passReqToCallback,
-  scope: oauthConfiguration.scope,
+  identityMetadata: `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/${OAUTH_CONFIGURATION.signinPolicy}/v2.0/.well-known/openid-configuration`,
+  clientID: OAUTH_CONFIGURATION.clientID,
+  clientSecret: OAUTH_CONFIGURATION.clientSecret,
+  responseType: OAUTH_CONFIGURATION.responseType,
+  responseMode: OAUTH_CONFIGURATION.responseMode,
+  redirectUrl: OAUTH_CONFIGURATION.signinRedirectUrl,
+  allowHttpForRedirectUrl: OAUTH_CONFIGURATION.allowHttpForRedirectUrl,
+  passReqToCallback: OAUTH_CONFIGURATION.passReqToCallback,
+  scope: OAUTH_CONFIGURATION.scope
 };
 
-const API_URL = process.env.API_URL || '';
-const BASE_PATH = process.env.BASE_PATH || '';
-const VIEWS_PATH = process.env.VIEWS_PATH || '';
-const STATIC_CONTENT_PATH = process.env.STATIC_CONTENT_PATH || '';
 
 // The Express app is exported so that it can be used by serverless Functions.
-/* tslint:disable:no-string-literal */
 export function app(): express.Express {
+
   const server = express();
-  const staticContentPath = `${BASE_PATH}${STATIC_CONTENT_PATH}`;
+  const staticContentPath = join(BASE_PATH, STATIC_CONTENT_PATH);
   const distFolder = join(process.cwd(), VIEWS_PATH);
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
+  const userSessions: UserSession[] = [];
 
-  // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
-  server.engine('html', ngExpressEngine({
-    bootstrap: AppServerModule,
-  }));
+  server.engine('html', ngExpressEngine({ bootstrap: AppServerModule })); // Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
+
+  server.set('view engine', 'html');
+  server.set('views', distFolder);
+  server.use(staticContentPath, express.static(distFolder));
 
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
-
   server.use(coockieParser());
   server.use(session({
     secret: process.env.SESSION_SECRET || 'secret',
@@ -93,67 +96,53 @@ export function app(): express.Express {
     saveUninitialized: true
   }));
 
+
+  // Passport configuration.
   server.use(passport.initialize());
   server.use(passport.session());
 
-  passport.serializeUser((user, next) => {
-    next(null, user);
-  });
-
-  passport.deserializeUser((obj: any, next) => {
-    next(null, obj);
-  });
-
-  const userSessions: UserSession[] = [];
+  passport.serializeUser((user, next) => { next(null, user); });
+  passport.deserializeUser((obj: any, next) => { next(null, obj); });
 
   function findUserSessionByOid(oid: string, fn: ((...args: any[]) => void)): void {
     for (let i = 0, len = userSessions.length; i < len; i++) {
       const user = userSessions[i];
-
-      if (user.oid === oid) {
-        return fn(null, user);
-      }
+      if (user.oid === oid) { return fn(null, user); }
     }
     return fn(null, null);
   }
-
   function removeUserSessionByOid(oid: string): void {
     const userSessionIdx = userSessions.findIndex((u) => u.oid === oid);
-
-    if (userSessionIdx !== -1) {
-      userSessions.splice(userSessionIdx, 1);
-    }
+    if (userSessionIdx !== -1) { userSessions.splice(userSessionIdx, 1); }
   }
-
   function getAccessTokenByOid(oid: string): string {
     const userSessionIdx = userSessions.findIndex((u) => u.oid === oid);
-
     return (userSessionIdx !== -1) ? userSessions[userSessionIdx].accessToken : '';
   }
 
-  const signInStrategy: OIDCStrategy = new OIDCStrategy(signInOptions,
+  const signInStrategy: OIDCStrategy = new OIDCStrategy(
+    signInOptions,
     (iss: string, sub: string, profile: IProfile, accessToken: string, refreshToken: string, done: VerifyCallback) => {
+
       const oid = profile.oid || '';
 
-      if (!oid) {
-        return done(new Error('No oid found'), null);
-      }
+      if (!oid) { return done(new Error('No oid found'), null); }
+
+      // console.log('TOKEN: ', accessToken);
 
       findUserSessionByOid(oid, (err: string, userSession: UserSession): void => {
-        if (err) {
-          return done(err);
-        }
+
+        if (err) { return done(err); }
+
         if (!userSession) {
-          const newUserSession: UserSession = {
-            oid,
-            accessToken
-          };
+          const newUserSession: UserSession = { oid, accessToken };
           userSessions.push(newUserSession);
           return done(null, profile);
         }
 
         userSession.accessToken = accessToken;
         return done(null, profile);
+
       });
     }
   );
@@ -161,14 +150,8 @@ export function app(): express.Express {
 
   passport.use(signInStrategy);
 
-  const ensureAuthenticated = (req: any, res: { redirect: (arg0: string) => void; }, next: () => any) => {
-    if (req.isAuthenticated()) {
-      return next();
-    }
 
-    res.redirect(`${BASE_PATH}/signin`);
-  };
-
+  // Authentication routes.
   server.head(`${BASE_PATH}/session`, (req, res) => {
     if (req.isAuthenticated()) {
       res.send('OK');
@@ -188,51 +171,38 @@ export function app(): express.Express {
     }
   });
 
-  server.get(`${BASE_PATH}/profile`, ensureAuthenticated, (req, res) => {
-    res.send('PROFILE (AUTHENTICATED URL)');
-  });
 
+  // MS Azure OpenId Connect strategy (passport) and callbacks handling.
   server.get(`${BASE_PATH}/signup`, (req, res) => {
-    const surveyId = req.query.surveyId || '';
-
-    const azSignupUri = `https://${oauthConfiguration.tenantName}.b2clogin.com/${oauthConfiguration.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&prompt=login`
-      + `&p=${oauthConfiguration.signupPolicy}` // add policy information
-      + `&client_id=${oauthConfiguration.clientID}` // add client id
-      + `&redirect_uri=${encodeURIComponent(oauthConfiguration.signupRedirectUrl)}` // add redirect uri
-      + `&survey_id=${surveyId}`; // add survey id
-
+    const azSignupUri = `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&prompt=login`
+      + `&p=${OAUTH_CONFIGURATION.signupPolicy}` // add policy information
+      + `&client_id=${OAUTH_CONFIGURATION.clientID}` // add client id
+      + `&redirect_uri=${encodeURIComponent(OAUTH_CONFIGURATION.signupRedirectUrl)}` // add redirect uri
+      + `&survey_id=${req.query.surveyId || ''}`; // add survey id
     res.redirect(azSignupUri);
   });
-
-  // Callback Handling
-  // Using MS Azure OpenId Connect strategy (passport)
   server.get(`${BASE_PATH}/signup/callback`, (req, res) => {
     res.redirect(`${BASE_PATH}/auth/signup/confirmation`);
   });
 
   // Login endpoint - AD OpenIdConnect
   server.use(`${BASE_PATH}/signin`,
-    // Using MS Azure OpenId Connect strategy (passport)
-    passport.authenticate('signInStrategy', { successRedirect: `${BASE_PATH}/innovator/dashboard`, failureRedirect: `${BASE_PATH}/` })
+    passport.authenticate('signInStrategy', { successRedirect: `${BASE_PATH}/dashboard`, failureRedirect: `${BASE_PATH}/` })
   );
-
-  // Callback Handling
-  // Using MS Azure OpenId Connect strategy (passport)
   server.post(`${BASE_PATH}/signin/callback`, (req, res) => {
-    res.redirect(`${BASE_PATH}/innovator/dashboard`);
+    res.redirect(`${BASE_PATH}/dashboard`);
   });
 
-  // Logout endpoint
   server.get(`${BASE_PATH}/signout`, (req, res) => {
 
     const user: IProfile = req.user || {};
-    const oid: string = user['oid'] || '';
+    const oid: string = user.oid || '';
 
     req.session.destroy(() => {
 
-      const azLogoutUri = `https://${oauthConfiguration.tenantName}.b2clogin.com/${oauthConfiguration.tenantName}.onmicrosoft.com/oauth2/v2.0/logout`
-        + `?p=${oauthConfiguration.signinPolicy}` // add policy information
-        + `&post_logout_redirect_uri=${encodeURIComponent(oauthConfiguration.signoutRedirectUrl)}`; // add post logout redirect uri
+      const azLogoutUri = `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/oauth2/v2.0/logout`
+        + `?p=${OAUTH_CONFIGURATION.signinPolicy}` // add policy information
+        + `&post_logout_redirect_uri=${encodeURIComponent(OAUTH_CONFIGURATION.signoutRedirectUrl)}`; // add post logout redirect uri
 
       removeUserSessionByOid(oid);
       req.logout();
@@ -256,9 +226,10 @@ export function app(): express.Express {
       });
   });
 
+
   server.all(`${BASE_PATH}/api/*`, (req, res) => {
     const user: IProfile = req.user || {};
-    const oid: string = user['oid'] || '';
+    const oid: string = user.oid || '';
     const accessToken = getAccessTokenByOid(oid);
 
     if (req.isAuthenticated() && accessToken) {
@@ -266,12 +237,20 @@ export function app(): express.Express {
       const basePath = req.url.replace(BASE_PATH, '');
       const body = req.body;
       const url = `${API_URL}${basePath}`;
-      const config = {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      };
+      const config = { headers: { Authorization: `Bearer ${accessToken}` } };
 
       const success = (response: any) => {
+
+        console.log('ORIG: ', url, response.data);
+        // if (!response.data) {
+        //   res.status(response.status).send(response.data);
+        // }
+        // new Deserializer({}).deserialize(response).then(data => {
+        //   // response.data = data;
+        //   console.log('DATA', data);
         res.status(response.status).send(response.data);
+        // });
+
       };
 
       const fail = (error: any) => {
@@ -304,49 +283,45 @@ export function app(): express.Express {
     }
   });
 
-  server.set('view engine', 'html');
-  server.set('views', distFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
-  server.use(staticContentPath, express.static(distFolder));
-
+  // Angular routing.
+  // // Serve static files.
+  server.get('*.*', express.static(distFolder, { maxAge: '1y' }));
+  // // "Data requests". For submited POST form informations.
   server.post('/*', (req, res) => {
     res.render(indexHtml, { req, res, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
-    // res.status(404).send('data requests are not yet supported');
   });
-
-  // Serve static files from /browser
-  server.get('*.*', express.static(distFolder, {
-    maxAge: '1y'
-  }));
-
-  // TODO NHSAAC-134
-  // server.get('*/environment.js', (req, res) => {
-  //   res.send(`window.__env = {
-  //     API_URL: 'https://to-be-determined.com',
-  //     LOG_LEVEL: 'TRACE',
-  //     BASE_URL: '/transactional'
-  //   };`)
-  // });
-
-  // All regular routes use the Universal engine
+  // Serve environment variables file.
+  server.get('*/environment.js', (req, res) => {
+    res.send(`(function (window) {
+      window.__env = window.__env || {};
+      window.__env.BASE_URL = '${BASE_URL}';
+      window.__env.BASE_PATH = '${BASE_PATH}';
+      window.__env.API_URL = '${join(BASE_URL, BASE_PATH, 'api')}';
+      window.__env.LOG_LEVEL = '${LOG_LEVEL}';
+    }(this));`);
+  });
+  // // All regular routes using the Universal engine.
   server.get('*', (req, res) => {
-    // req.headers['isAuthenticated'] = (req.isAuthenticated() ? 'true' : 'false');
-    res.render(indexHtml, { req, res, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
+    res.render(indexHtml, {
+      req, res,
+      providers: [
+        { provide: APP_BASE_HREF, useValue: req.baseUrl },
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: join(BASE_URL, BASE_PATH, 'api'), LOG_LEVEL } }
+      ]
+    });
   });
 
   return server;
 }
 
 function run(): void {
+
   const port = process.env.PORT || 4000;
 
   // Start up the Node server
   const server = app();
-  server.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
-  });
+  server.listen(port, () => { console.log(`Node Express server listening on http://localhost:${port}`); });
 }
 /* tslint:enable:no-string-literal */
 // Webpack will replace 'require' with '__webpack_require__'

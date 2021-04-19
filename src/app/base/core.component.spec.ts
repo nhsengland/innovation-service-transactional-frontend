@@ -1,13 +1,60 @@
-import * as common from '@angular/common';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-import { AppInjector } from '@modules/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
+
+import { Injector } from '@angular/core';
+
+import { CoreModule, AppInjector } from '@modules/core';
+import { StoresModule } from '@modules/stores';
+
+import * as common from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { CoreComponent } from './core.component';
-import { RouterTestingModule } from '@angular/router/testing';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { InjectorMock } from '@tests/mocks/injector.mock';
+
+
+describe('App/CoreComponent running server side tests', () => {
+
+  let component: CoreComponent;
+  let fixture: ComponentFixture<CoreComponent>;
+
+  beforeEach(() => {
+
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        LoggerTestingModule,
+        CoreModule,
+        StoresModule
+      ],
+      declarations: [
+        CoreComponent
+      ],
+      providers: []
+    }).compileComponents();
+
+    AppInjector.setInjector(TestBed.inject(Injector));
+
+  });
+
+
+  it('should create the component', () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component).toBeTruthy();
+  });
+
+});
+
+
+
+
 
 describe('CoreComponent', () => {
 
@@ -73,6 +120,18 @@ describe('CoreComponent', () => {
   });
   it(`should 'isRunningOnServer' be falsy when isPlatformServer is ''`, () => {
     expect(component.isRunningOnServer()).toBeFalsy();
+  });
+
+
+  it(`should 'isDataRequest' be true when 'serverRequest.method' not defined`, () => {
+
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    console.log(component.isRunningOnBrowser());
+
+    expect(component.isDataRequest()).toBe(false);
   });
 
   it(`should 'isDataRequest' be true when 'serverRequest.method' is POST`, () => {
@@ -163,8 +222,7 @@ describe('CoreComponent', () => {
 
   });
 
-  it(`should set response headers 'status' to '303' and
-  'Location' to '/test?query=1' when 'redirecTo' is called with querystrings and running on Server`, () => {
+  it(`should set response headers 'status' to '303' and 'Location' to '/test?query=1' when 'redirecTo' is called with querystrings and running on Server`, () => {
     // Arrange
 
     const status = jasmine.createSpy('status');

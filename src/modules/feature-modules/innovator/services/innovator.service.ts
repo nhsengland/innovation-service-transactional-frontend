@@ -9,8 +9,6 @@ import { UrlModel } from '@modules/core';
 @Injectable()
 export class InnovatorService extends CoreService {
 
-  private apiUrl = this.stores.environment.ENV.API_URL;
-
   constructor() { super(); }
 
   submitFirstTimeSigninInfo(data: { [key: string]: any }): Observable<string> {
@@ -24,13 +22,14 @@ export class InnovatorService extends CoreService {
         name: data.innovationName,
         description: data.innovationDescription,
         countryName: data.locationCountryName || data.location,
-        postcode: data.englandPostCode || ''
+        postcode: data.englandPostCode || '',
+        organisationShares: data.organisationShares ? Object.entries(data.organisationShares as { [key: string]: boolean }).filter(item => item[1]).map(item => item[0]) : []
       },
       organisation: data.isCompanyOrOrganisation === 'yes' ? { name: data.organisationName, size: data.organisationSize } : undefined
     };
 
-    const url = new UrlModel(this.apiUrl).setPath('transactional/api/innovators');
-    return this.http.post<{}>(url.buildUrl(), body).pipe(take(1), map(response => ''));
+    const url = new UrlModel(this.API_URL).addPath('innovators');
+    return this.http.post<{}>(url.buildUrl(), body).pipe(take(1), map(() => ''));
 
   }
 

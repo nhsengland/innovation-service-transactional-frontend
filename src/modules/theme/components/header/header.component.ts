@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { EnvironmentStore } from '@modules/stores/environment/environment.store';
+import { EnvironmentStore } from '@modules/core/stores/environment.store';
 
 @Component({
   selector: 'theme-header',
@@ -23,17 +23,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private environmentStore: EnvironmentStore
   ) {
 
-    this.authenticationButton = { title: '', url: '' };
+    this.authenticationButton = { title: 'My dashboard', url: `${this.environmentStore.APP_URL}/dashboard` };
 
     this.subscriptions.push(
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e)),
-
-      this.environmentStore.isUserAuthenticated$().subscribe(state => {
-        this.authenticationButton = !state ?
-          { title: 'Sign in', url: '/transactional/innovator' } :
-          { title: 'Sign out', url: '/transactional/signout' };
-      })
-
     );
 
   }

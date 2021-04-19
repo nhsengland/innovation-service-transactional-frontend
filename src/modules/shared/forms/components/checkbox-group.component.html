@@ -5,7 +5,7 @@
   </ng-container>
 
   <ng-container *ngIf="description">
-    <div class="nhsuk-hint" id="{{ id }}-hint">{{ description }}</div>
+    <div class="nhsuk-hint" id="{{ id }}-hint" [innerHTML]="description"></div>
   </ng-container>
 
   <ng-container *ngIf="hasError">

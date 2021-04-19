@@ -77,6 +77,10 @@ export class UrlModel {
     this.path = this.clearStartAndEndSlashes(path);
     return this;
   }
+  addPath(path: string): UrlModel {
+    this.path = `${this.path ? this.path + '/' : ''}${this.clearStartAndEndSlashes(path)}`;
+    return this;
+  }
 
   setPathParams(params: { [key: string]: string | number }): UrlModel {
     this.pathParams = params;

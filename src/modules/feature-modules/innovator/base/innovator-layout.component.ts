@@ -42,7 +42,7 @@ export class InnovatorLayoutComponent extends CoreComponent implements OnInit {
     if (event.url.startsWith('/innovator/first-time-signin')) {
       this.navigationMenuBar = {
         leftItems: [],
-        rightItems: [{ title: 'Sign out', link: '/transactional/signout', fullReload: true }]
+        rightItems: [{ title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true }]
       };
     } else {
       this.navigationMenuBar = {
@@ -52,7 +52,7 @@ export class InnovatorLayoutComponent extends CoreComponent implements OnInit {
         rightItems: [
           { title: 'Your innovations', link: '/innovator/innovations' },
           { title: 'Your account', link: '/innovator/account' },
-          { title: 'Sign out', link: '/transactional/signout', fullReload: true }
+          { title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true }
         ]
       };
     }
@@ -60,7 +60,7 @@ export class InnovatorLayoutComponent extends CoreComponent implements OnInit {
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute.snapshot).innovationId || null;
     if (currentRouteInnovationId) {
 
-      this.innovationHeaderBar = { id: currentRouteInnovationId, name: this.stores.environment.getUserInfo().innovations.find(item => item.id === currentRouteInnovationId)?.name || null };
+      this.innovationHeaderBar = { id: currentRouteInnovationId, name: this.stores.authentication.getUserInfo().innovations.find(item => item.id === currentRouteInnovationId)?.name || null };
 
       this.leftSideBar = [
         { title: 'Overview', link: `/innovator/innovations/${currentRouteInnovationId}/overview` },

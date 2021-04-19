@@ -15,12 +15,12 @@ This project is build in JavaScript + TypeScript, with the **Angular framework**
 ### Set environment variables file
 | Name                        | Required | Default | Possibilities                             | Description                          |
 | --------------------------- | :------: | :-----: | ----------------------------------------- | ------------------------------------ |
-| BASE_HREF                   |          |    /    |                                           |                                      |
+| BASE_URL                    |   Yes    |         |                                           |                                      |
+| BASE_PATH                   |          |    /    |                                           |                                      |
 | API_URL                     |   Yes    |         |                                           |                                      |
-| BASE_PATH                   |   Yes    |         |                                           |                                      |
+| LOG_LEVEL                   |          |  ERROR  | TRACE DEBUG INFO LOG WARN ERROR FATAL OFF |                                      |
 | STATIC_CONTENT_PATH         |   Yes    |         |                                           |                                      |
 | VIEWS_PATH                  |   Yes    |         |                                           | Path to browser directory            |
-| LOG_LEVEL                   |          |  ERROR  | TRACE DEBUG INFO LOG WARN ERROR FATAL OFF |                                      |
 | OAUTH_TENANT_NAME           |   Yes    |         |                                           |                                      |
 | OAUTH_CLIENT_ID             |   Yes    |         |                                           |                                      |
 | OAUTH_CLIENT_SECRET         |   Yes    |         |                                           |                                      |
@@ -31,14 +31,10 @@ This project is build in JavaScript + TypeScript, with the **Angular framework**
 | OAUTH_REDIRECT_URL_SIGNOUT  |   Yes    |         |                                           |                                      |
 | OAUTH_SCOPE                 |   Yes    |         |                                           |                                      |
 | OAUTH_ALLOW_HTTP_REDIRECT   |   Yes    |         |                                           |                                      |
+| SESSION_SECRET              |   Yes    |         |                                           |                                      |
 
-Create a new file "environment.js" file in "src" directory with the content below. Atention: this is a JS file, not TS!
-```
-window.__env = {
-  API_URL: 'https://to-be-determined.com',
-  LOG_LEVEL: 'TRACE'
-};
-```
+Create a new file ".env" file on the root's project with the above variables
+
 
 Run the following commands:
 ```bash
@@ -57,4 +53,5 @@ npm run start:dev:ssr # Run like a Server Side Rendering
 npm run build:spa # Build like a Single Page Application (client side)
 npm run build:ssr # Build like a Server Side Rendering
 ```
+
 Output file will be on `dist` folder

@@ -1,7 +1,7 @@
 // Module.
 export { StoresModule } from './stores.module';
 
-// Environment Store.
-export { EnvironmentStore } from './environment/environment.store';
-export { EnvironmentService } from './environment/environment.service';
-export { EnvironmentModel } from './environment/environment.models';
+// Authentication Store.
+export { AuthenticationStore } from './authentication/authentication.store';
+export { AuthenticationService } from './authentication/authentication.service';
+export { AuthenticationModel } from './authentication/authentication.models';
