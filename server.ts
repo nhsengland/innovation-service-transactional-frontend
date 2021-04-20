@@ -10,11 +10,11 @@ import * as passport from 'passport';
 import * as session from 'express-session';
 import axios from 'axios';
 import { IOIDCStrategyOptionWithoutRequest, IProfile, OIDCStrategy, VerifyCallback } from 'passport-azure-ad';
-import { join } from 'path';
 import { existsSync } from 'fs';
 // import { Deserializer } from 'jsonapi-serializer';
 
 import { AppServerModule } from './src/main.server';
+import { join } from 'path';
 
 dotenv.config();
 
@@ -71,12 +71,11 @@ const signInOptions: IOIDCStrategyOptionWithoutRequest = {
   scope: OAUTH_CONFIGURATION.scope
 };
 
-
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
 
   const server = express();
-  const staticContentPath = join(BASE_PATH, STATIC_CONTENT_PATH);
+  const staticContentPath = `${BASE_PATH}${STATIC_CONTENT_PATH}`;
   const distFolder = join(process.cwd(), VIEWS_PATH);
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
   const userSessions: UserSession[] = [];
@@ -296,7 +295,7 @@ export function app(): express.Express {
       window.__env = window.__env || {};
       window.__env.BASE_URL = '${BASE_URL}';
       window.__env.BASE_PATH = '${BASE_PATH}';
-      window.__env.API_URL = '${join(BASE_URL, BASE_PATH, 'api')}';
+      window.__env.API_URL = '${BASE_URL}${BASE_PATH}/api';
       window.__env.LOG_LEVEL = '${LOG_LEVEL}';
     }(this));`);
   });
@@ -306,7 +305,7 @@ export function app(): express.Express {
       req, res,
       providers: [
         { provide: APP_BASE_HREF, useValue: req.baseUrl },
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: join(BASE_URL, BASE_PATH, 'api'), LOG_LEVEL } }
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL } }
       ]
     });
   });
