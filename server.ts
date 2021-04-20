@@ -12,7 +12,7 @@ import axios from 'axios';
 import { IOIDCStrategyOptionWithoutRequest, IProfile, OIDCStrategy, VerifyCallback } from 'passport-azure-ad';
 import { join } from 'path';
 import { existsSync } from 'fs';
-import { Deserializer } from 'jsonapi-serializer';
+// import { Deserializer } from 'jsonapi-serializer';
 
 import { AppServerModule } from './src/main.server';
 
@@ -83,10 +83,6 @@ export function app(): express.Express {
 
   server.engine('html', ngExpressEngine({ bootstrap: AppServerModule })); // Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
 
-  server.set('view engine', 'html');
-  server.set('views', distFolder);
-  server.use(staticContentPath, express.static(distFolder));
-
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
   server.use(coockieParser());
@@ -96,10 +92,13 @@ export function app(): express.Express {
     saveUninitialized: true
   }));
 
-
   // Passport configuration.
   server.use(passport.initialize());
   server.use(passport.session());
+
+  server.set('view engine', 'html');
+  server.set('views', distFolder);
+  server.use(staticContentPath, express.static(distFolder));
 
   passport.serializeUser((user, next) => { next(null, user); });
   passport.deserializeUser((obj: any, next) => { next(null, obj); });
