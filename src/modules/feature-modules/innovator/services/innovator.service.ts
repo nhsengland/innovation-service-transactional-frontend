@@ -23,7 +23,7 @@ export class InnovatorService extends CoreService {
         description: data.innovationDescription,
         countryName: data.locationCountryName || data.location,
         postcode: data.englandPostCode || '',
-        organisationShares: data.organisationShares ? Object.entries(data.organisationShares as { [key: string]: boolean }).filter(item => item[1]).map(item => item[0]) : []
+        organisationShares: data.organisationShares || []
       },
       organisation: data.isCompanyOrOrganisation === 'yes' ? { name: data.organisationName, size: data.organisationSize } : undefined
     };

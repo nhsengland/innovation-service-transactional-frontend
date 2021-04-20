@@ -71,9 +71,10 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
 
   ngOnInit(): void {
 
-    // Update next-before-last step with the organisations list.
+    // Update last step with the organisations list and pre-select all checkboxes.
     this.organisationsService.getAccessorsOrganisations().subscribe(response => {
-      this.stepsData[this.stepsData.length - 2].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
+      this.stepsData[this.stepsData.length - 1].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
+      this.currentAnswers = { organisationShares: response.map(item => item.id) };
     });
 
     this.subscriptions.push(

@@ -79,20 +79,7 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
   }),
 
   new FormEngineModel({
-    label: 'Choose your data sharing preferences',
-    description: '<a href="/" target="_blank">What does each organisation do? (opens in a new window)</a>',
-    parameters: [
-      {
-        id: 'organisationShares',
-        dataType: 'checkbox-group',
-        validations: { isRequired: true },
-        items: []
-      }
-    ]
-  }),
-
-  new FormEngineModel({
-    label: 'Finally, where are you based?',
+    label: 'Where are you based?',
     parameters: [
       {
         id: 'location',
@@ -116,6 +103,19 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
         ]
       }
     ]
-  })
+  }),
+
+  new FormEngineModel({
+    label: 'Finally, choose your data sharing preferences',
+    description: '<a href="/" target="_blank">What does each organisation do? (opens in a new window)</a>',
+    parameters: [
+      {
+        id: 'organisationShares',
+        dataType: 'checkbox-array',
+        validations: { isRequired: true },
+        items: []
+      }
+    ]
+  }),
 
 ];
