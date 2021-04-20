@@ -9,18 +9,16 @@ import { UrlModel } from '@modules/core';
 @Injectable()
 export class SurveyService extends CoreService {
 
-  private apiUrl = this.stores.environment.ENV.API_URL;
-
   constructor() { super(); }
 
   submitSurvey(body: { [key: string]: any }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.apiUrl).setPath('transactional/survey').buildUrl();
+    const url = new UrlModel(this.APP_URL).addPath('survey').buildUrl();
 
     return this.http.post<{ id: string }>(url, body).pipe(
       take(1),
       map(response => response),
-      catchError(err => throwError(err))
+      catchError(error => throwError(error))
     );
 
   }

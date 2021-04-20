@@ -25,7 +25,7 @@ class HostComponent {
 }
 
 
-describe('FormTextareaComponent tests Suite', () => {
+describe('FormTextareaComponent', () => {
 
   let hostComponent: HostComponent;
   let hostFixture: ComponentFixture<HostComponent>;

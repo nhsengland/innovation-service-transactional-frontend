@@ -2,8 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { TranslateModule } from '@ngx-translate/core';
-
+import { CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
 import { AppComponent } from './app.component';
@@ -13,12 +12,13 @@ import { FooterComponent } from '@modules/theme/components/footer/footer.compone
 
 
 describe('AppComponent', () => {
+
   beforeEach( () => {
      TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
         HttpClientTestingModule,
-        TranslateModule.forRoot(),
+        CoreModule,
         StoresModule
       ],
       declarations: [
@@ -27,12 +27,16 @@ describe('AppComponent', () => {
         HeaderComponent,
       ]
     }).compileComponents();
+
   });
 
   it('should create the app', () => {
+
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    const component = fixture.componentInstance;
+
+    expect(component).toBeTruthy();
+
   });
 
 });

@@ -8,6 +8,9 @@ import { FormsModule } from './forms/forms.module';
 // Pages.
 import { PageNotFoundComponent } from './pages/not-found.component';
 
+// Services.
+import { OrganisationsService } from './services/organisations.service';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -20,7 +23,9 @@ import { PageNotFoundComponent } from './pages/not-found.component';
     // Pages.
     PageNotFoundComponent
   ],
-  providers: [],
+  providers: [
+    OrganisationsService
+  ],
   exports: [
     CommonModule,
     TranslateModule,

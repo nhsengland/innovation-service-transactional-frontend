@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 
+import { CoreComponent } from '@app/base';
+
 @Component({
   selector: 'app-authentication-pages-sign-up-confirmation',
   templateUrl: './sign-up-confirmation.component.html',
 })
-export class SignUpConfirmationComponent implements OnInit {
+export class SignUpConfirmationComponent extends CoreComponent implements OnInit {
 
-  constructor() { }
+  proceedLink = `${this.stores.environment.APP_URL}/dashboard`;
+
+  constructor() { super(); }
 
   ngOnInit(): void { }
 

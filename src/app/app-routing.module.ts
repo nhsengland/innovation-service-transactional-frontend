@@ -7,11 +7,14 @@ import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
 // Pages.
 import { PageNotFoundComponent } from '@shared-module/pages/not-found.component';
 
+// Guards.
 import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
+import { AuthenticationRedirectionGuard } from '@modules/core/guards/authentication-redirection.guard';
 
 const authenticationModule: Promise<any> = import('@modules/feature-modules/authentication/authentication.module');
 const triageInnovatorPackModule: Promise<any> = import('@modules/feature-modules/triage-innovator-pack/triage-innovator-pack.module');
 const innovatorModule: Promise<any> = import('@modules/feature-modules/innovator/innovator.module');
+const accessorModule: Promise<any> = import('@modules/feature-modules/accessor/accessor.module');
 
 const routes: Routes = [
 
@@ -32,7 +35,24 @@ const routes: Routes = [
 
   {
     canActivate: [AuthenticationGuard],
-    path: 'innovator', loadChildren: () => innovatorModule.then(m => m.InnovatorModule)
+    path: '',
+    children: [
+      {
+        canActivate: [AuthenticationRedirectionGuard],
+        path: 'dashboard',
+        pathMatch: 'full',
+        children: []
+      },
+      {
+        canActivate: [AuthenticationRedirectionGuard],
+        path: 'innovator', loadChildren: () => innovatorModule.then(m => m.InnovatorModule)
+      },
+
+      {
+        canActivate: [AuthenticationRedirectionGuard],
+        path: 'accessor', loadChildren: () => accessorModule.then(m => m.AccessorModule)
+      },
+    ]
   },
 
   {

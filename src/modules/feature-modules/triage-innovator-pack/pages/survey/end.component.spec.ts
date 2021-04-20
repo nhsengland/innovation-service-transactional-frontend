@@ -5,7 +5,7 @@ import { ThemeModule } from '@modules/theme/theme.module';
 
 import { SurveyEndComponent } from './end.component';
 
-describe('SurveyEndComponent tests Suite', () => {
+describe('SurveyEndComponent', () => {
 
   let component: SurveyEndComponent;
   let fixture: ComponentFixture<SurveyEndComponent>;

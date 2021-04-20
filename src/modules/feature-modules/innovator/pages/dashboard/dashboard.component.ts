@@ -18,8 +18,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     super();
 
     this.user = {
-      displayName: this.stores.environment.getUserInfo().displayName,
-      innovations: this.stores.environment.getUserInfo().innovations
+      displayName: this.stores.authentication.getUserInfo().displayName,
+      innovations: this.stores.authentication.getUserInfo().innovations
     };
 
   }

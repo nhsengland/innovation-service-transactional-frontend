@@ -16,7 +16,7 @@ class HostComponent {
   @ViewChild(FormCheckboxComponent) childComponent?: FormCheckboxComponent;
 
   form = new FormGroup({
-    testField: new FormControl('some value')
+    testField: new FormControl(false)
   });
 
   id = 'FormInputId';
@@ -25,7 +25,7 @@ class HostComponent {
 }
 
 
-describe('FormCheckboxComponent tests Suite', () => {
+describe('FormCheckboxComponent', () => {
 
   let hostComponent: HostComponent;
   let hostFixture: ComponentFixture<HostComponent>;
@@ -52,30 +52,57 @@ describe('FormCheckboxComponent tests Suite', () => {
     expect(hostComponent).toBeTruthy();
   });
 
+  it('should form control field be invalid and field touched', () => {
+
+    hostFixture.detectChanges();
+    hostComponent.form.get('testField')?.setErrors({ someErrorToMakeFieldInvalid: true });
+    hostComponent.form.get('testField')?.markAsTouched();
+    hostFixture.detectChanges();
+
+    expect(hostComponent.childComponent?.hasError).toBe(true);
+
+  });
+
+  it('should form control field be invalid and field dirty', () => {
+
+    hostFixture.detectChanges();
+    hostComponent.form.get('testField')?.setErrors({ someErrorToMakeFieldInvalid: true });
+    hostComponent.form.get('testField')?.markAsDirty();
+    hostFixture.detectChanges();
+
+    expect(hostComponent.childComponent?.hasError).toBe(true);
+
+  });
 
   it('should form control field be valid', () => {
+
     hostFixture.detectChanges();
     hostComponent.form.get('testField')?.markAsTouched();
     hostFixture.detectChanges();
+
     expect(hostComponent.childComponent?.hasError).toBe(false);
-    expect(hostComponent.childComponent?.errorMessage).toBe('');
+
   });
 
   it('should form control field be valid', () => {
+
     hostFixture.detectChanges();
     hostComponent.form.get('testField')?.markAsDirty();
     hostFixture.detectChanges();
+
     expect(hostComponent.childComponent?.hasError).toBe(false);
-    expect(hostComponent.childComponent?.errorMessage).toBe('');
+
   });
 
   it('should form control field be disabled, hence valid', () => {
+
     hostFixture.detectChanges();
     hostComponent.form.get('testField')?.markAsTouched();
     hostComponent.form.get('testField')?.disable();
     hostFixture.detectChanges();
+
     expect(hostComponent.childComponent?.hasError).toBe(false);
-    expect(hostComponent.childComponent?.errorMessage).toBe('');
+
   });
 
 });

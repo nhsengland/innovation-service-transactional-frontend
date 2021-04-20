@@ -1,31 +1,25 @@
-import { UtilsHelper } from './utils.helper';
-describe(`'utils.helper' suite`, () => {
+import { ActivatedRouteSnapshot } from '@angular/router';
+
+import { RoutingHelper } from './routing.helper';
+
+describe('RoutingHelper', () => {
 
   it(`should return 'true' when object is 'empty'`, () => {
-    expect(UtilsHelper.isEmpty({})).toBe(true);
+
+    const routeMock: Partial<ActivatedRouteSnapshot> = {
+      params: { idOne: '1', idTwo: '2' },
+      children: [
+        {
+          params: { idThree: '3', idFour: '4' },
+          children: []
+        }
+      ] as any
+    };
+
+    const expected = { idOne: '1', idTwo: '2', idThree: '3', idFour: '4' };
+
+    expect(RoutingHelper.getRouteParams(routeMock as any)).toEqual(expected);
+
   });
 
-  it(`should return 'false' when object has at least 'one attribute'`, () => {
-    expect(UtilsHelper.isEmpty({prop: 1})).toBe(false);
-  });
-
-  it(`should return 'true when object is 'undefined'`, () => {
-    expect(UtilsHelper.isEmpty(undefined)).toBe(true);
-  });
-
-  it(`should return 'true' when object is null`, () => {
-    expect(UtilsHelper.isEmpty(null)).toBe(true);
-  });
-
-  it(`should return 'true' when an 'empty Array' is passed in`, () => {
-    expect(UtilsHelper.isEmpty([])).toBe(true);
-  });
-
-  it(`should return 'false' when an 'Array with empty objects' is passed in`, () => {
-    expect(UtilsHelper.isEmpty([{}])).toBe(false);
-  });
-
-  it(`should return 'false' when an 'Array with objects' is passed in`, () => {
-    expect(UtilsHelper.isEmpty([{prop: 1}])).toBe(false);
-  });
 });

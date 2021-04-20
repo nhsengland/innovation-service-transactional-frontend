@@ -4,7 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Store } from './store.class';
 
 
-describe('Stores/StoreClass tests Suite', () => {
+describe('Stores/StoreClass', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({

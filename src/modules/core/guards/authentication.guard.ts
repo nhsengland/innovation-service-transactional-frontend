@@ -7,7 +7,7 @@ import { map, catchError } from 'rxjs/operators';
 import { Response } from 'express';
 import { RESPONSE } from '@nguniversal/express-engine/tokens';
 
-import { EnvironmentStore } from '../../stores';
+import { AuthenticationStore } from '../../stores';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -15,12 +15,12 @@ export class AuthenticationGuard implements CanActivate {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     @Optional() @Inject(RESPONSE) private serverResponse: Response,
-    private environmentStore: EnvironmentStore
+    private authentication: AuthenticationStore
   ) { }
 
   canActivate(): Observable<boolean> {
 
-    return this.environmentStore.initializeAuthentication$().pipe(
+    return this.authentication.initializeAuthentication$().pipe(
       map(response => response),
       catchError(() => {
 

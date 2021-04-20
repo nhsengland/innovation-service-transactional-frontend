@@ -30,7 +30,6 @@
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
-              "src/environment.js",
               "src/favicon.ico",
               "src/assets"
             ],

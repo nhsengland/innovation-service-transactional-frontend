@@ -5,7 +5,9 @@ import { concatMap } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineHelper, FormEngineModel } from '@app/base/forms';
 
-import { FIRST_TIME_SIGNIN_QUESTIONS } from '@app/config/constants.config';
+import { OrganisationsService } from '@shared-module/services/organisations.service';
+
+import { FIRST_TIME_SIGNIN_QUESTIONS } from '../../config/constants.config';
 
 import { InnovatorService } from '../../services/innovator.service';
 
@@ -47,17 +49,19 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService
+    private innovatorService: InnovatorService,
+    private organisationsService: OrganisationsService
   ) {
 
     super();
 
     this.stepsData = FIRST_TIME_SIGNIN_QUESTIONS;
+    this.totalNumberOfSteps = this.stepsData.length;
+
     this.currentStep = {
       number: Number(this.activatedRoute.snapshot.params.id),
       data: new FormEngineModel({ parameters: [] })
     };
-    this.totalNumberOfSteps = this.stepsData.length;
 
     this.currentAnswers = {};
     this.summaryList = { items: [], valid: false };
@@ -66,6 +70,11 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
 
 
   ngOnInit(): void {
+
+    // Update next-before-last step with the organisations list.
+    this.organisationsService.getAccessorsOrganisations().subscribe(response => {
+      this.stepsData[this.stepsData.length - 2].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
+    });
 
     this.subscriptions.push(
       this.activatedRoute.params.subscribe(params => {
@@ -128,7 +137,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
     if (this.summaryList.valid) {
       this.innovatorService.submitFirstTimeSigninInfo(this.currentAnswers).pipe(
         concatMap(() => {
-          return this.stores.environment.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
+          return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
         })
       ).subscribe(
         () => {

@@ -4,9 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineHelper, FormEngineModel } from '@app/base/forms';
 
-import { TRIAGE_INNOVATOR_PACK_QUESTIONS } from '@app/config/constants.config';
-import { environment } from '@app/config/environment.config';
-import { SurveyService } from '@triage-innovator-pack-feature-module/services/survey.service';
+import { TRIAGE_INNOVATOR_PACK_QUESTIONS } from '../../config/constants.config';
+
+import { SurveyService } from '../../services/survey.service';
 
 @Component({
   selector: 'app-triage-innovator-pack-survey-step',
@@ -166,7 +166,6 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
         },
         error => {
           this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/summary`);
-          this.logger.error(error);
           return;
         }
       );
@@ -213,7 +212,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
   }
 
   getBaseUrl(): string {
-    return (this.isRunningOnServer()) ? environment.BASE_URL : '';
+    return (this.isRunningOnServer()) ? this.stores.environment.ENV.BASE_PATH : '';
   }
 
   prepareSummaryData(): void {

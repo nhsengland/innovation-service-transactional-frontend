@@ -1,14 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { LoggerTestingModule } from 'ngx-logger/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, EnvironmentStore } from '@modules/stores';
+import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { FormEngineComponent, FormEngineModel } from '@modules/shared/forms';
@@ -31,7 +30,7 @@ const FORM_WITH_CONDITIONALS_MOCK = [
 ];
 
 
-describe('FeatureModule/Innovator/FirstTimeSigninComponent tests Suite', () => {
+describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
@@ -43,7 +42,6 @@ describe('FeatureModule/Innovator/FirstTimeSigninComponent tests Suite', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        LoggerTestingModule,
         CoreModule,
         StoresModule,
         InnovatorModule
@@ -188,11 +186,11 @@ describe('FeatureModule/Innovator/FirstTimeSigninComponent tests Suite', () => {
 
   it('should submit survey and redirect', () => {
 
-    const environmentStore = TestBed.inject(EnvironmentStore);
+    const authenticationStore = TestBed.inject(AuthenticationStore);
     const service = TestBed.inject(InnovatorService);
     const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
-    environmentStore.initializeAuthentication$ = () => of(true);
+    authenticationStore.initializeAuthentication$ = () => of(true);
     service.submitFirstTimeSigninInfo = () => of('');
 
     fixture = TestBed.createComponent(FirstTimeSigninComponent);
@@ -265,7 +263,7 @@ describe('FeatureModule/Innovator/FirstTimeSigninComponent tests Suite', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    expect(component.getNavigationUrl('previous')).toBe('innovator/first-time-signin/6');
+    expect(component.getNavigationUrl('previous')).toBe('innovator/first-time-signin/7');
 
   });
 

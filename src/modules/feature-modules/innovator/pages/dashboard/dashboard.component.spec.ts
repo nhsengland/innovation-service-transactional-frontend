@@ -11,7 +11,7 @@ import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.mo
 import { DashboardComponent } from './dashboard.component';
 
 
-describe('FeatureModule/Innovator/DashboardComponent tests Suite', () => {
+describe('FeatureModules/Innovator/DashboardComponent', () => {
 
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;

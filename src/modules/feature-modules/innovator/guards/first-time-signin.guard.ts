@@ -2,19 +2,19 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateChild, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
-import { EnvironmentStore } from '@modules/stores';
+import { AuthenticationStore } from '@modules/stores';
 
 @Injectable()
 export class FirstTimeSigninGuard implements CanActivateChild {
 
   constructor(
     private router: Router,
-    private environmentStore: EnvironmentStore
+    private authenticationStore: AuthenticationStore
   ) { }
 
   canActivateChild(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<boolean> {
 
-    if (!this.environmentStore.userDidFirstTimeSignIn()) {
+    if (!this.authenticationStore.didFirstTimeSignIn()) {
 
       // It's mandatory to proceed to First Time Signin on the first time.
       if (['first-time-signin', ':id'].includes(activatedRouteSnapshot.routeConfig?.path || '')) {

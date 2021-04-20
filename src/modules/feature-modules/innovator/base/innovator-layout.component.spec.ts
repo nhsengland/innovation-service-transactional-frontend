@@ -12,7 +12,7 @@ import { InnovatorModule } from '../innovator.module';
 import { InnovatorLayoutComponent } from './innovator-layout.component';
 
 
-describe('FeatureModule/Innovator/InnovatorLayoutComponent tests Suite', () => {
+describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
 
   let component: InnovatorLayoutComponent;
   let fixture: ComponentFixture<InnovatorLayoutComponent>;

@@ -3,7 +3,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { SurveyStartComponent } from './start.component';
 
-describe('SurveyStartComponent tests Suite', () => {
+describe('SurveyStartComponent', () => {
 
   let component: SurveyStartComponent;
   let fixture: ComponentFixture<SurveyStartComponent>;
