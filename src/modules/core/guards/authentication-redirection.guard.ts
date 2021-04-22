@@ -23,9 +23,7 @@ export class AuthenticationRedirectionGuard implements CanActivate {
         return false;
 
       case 'dashboard | ACCESSOR':
-      case 'dashboard | QUALIFYING_ACCESSOR':
       case 'innovator | ACCESSOR':
-      case 'innovator | QUALIFYING_ACCESSOR':
         this.router.navigateByUrl('accessor');
         return false;
 

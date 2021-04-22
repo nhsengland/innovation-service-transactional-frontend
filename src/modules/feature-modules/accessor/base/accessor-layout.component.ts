@@ -37,7 +37,6 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
         { title: 'Home', link: '/accessor/dashboard' }
       ],
       rightItems: [
-        { title: 'Review Innovations', link: '/accessor/innovations' },
         { title: 'Your engagements', link: '/accessor/engagements' },
         { title: 'Actions', link: '/accessor/actions' },
         { title: 'Activity', link: '/accessor/activity' },
@@ -45,6 +44,10 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
         { title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true }
       ]
     };
+
+    if (this.stores.authentication.isQualifyingAccessorRole()) {
+      this.navigationMenuBar.rightItems.splice(0, 0, { title: 'Review innovations', link: '/accessor/review-innovations' });
+    }
 
   }
 

@@ -2,7 +2,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
 
   dataSource: T[];
   visibleColumns: {
-    [key: string]: { label: string, align?: string, orderable?: boolean }
+    [key: string]: { label: string, align?: 'left' | 'right' | 'center', orderable?: boolean }
   };
 
   totalRows: number;
@@ -14,7 +14,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
   orderBy: string;
   orderDir: '' | 'asc' | 'desc';
 
-  constructor(data: Omit<Partial<TableModel<T>>, 'visibleColumns'> & { visibleColumns: { [key: string]: (string | { label: string; align?: string; orderable?: boolean; }) } }) {
+  constructor(data: Omit<Partial<TableModel<T>>, 'visibleColumns'> & { visibleColumns: { [key: string]: (string | { label: string; align?: 'left' | 'right' | 'center'; orderable?: boolean; }) } }) {
 
     this.dataSource = data.dataSource || [];
 
@@ -64,22 +64,22 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
     return this.visibleColumns[key].label;
   }
 
-  getHeaderColumns(): { key: string, label: string, orderDir: 'asc' | 'desc' | 'none' }[] {
+  getHeaderColumns(): { key: string, label: string, align: string, orderable: boolean, orderDir: 'asc' | 'desc' | 'none' }[] {
+
     return Object.entries(this.visibleColumns).map(([key, item]) => ({
       key,
       label: item.label,
+      align: `text-align-${item.align || 'left'}`, // Return the CSS class.
+      orderable: item.orderable === true ? true : false,
       orderDir: (this.orderBy === key ? this.orderDir : 'none') as 'asc' | 'desc' | 'none'
     }));
+
   }
 
 
-  getRecords(): T[] {
-    return this.dataSource;
-  }
-  getTotalRowsNumber(): number {
-    return this.totalRows;
-  }
+  getRecords(): T[] { return this.dataSource; }
 
+  getTotalRowsNumber(): number { return this.totalRows; }
 
   getAPIQueryParams(): { take: number, skip: number, order?: { [key: string]: 'ASC' | 'DESC' } } {
 

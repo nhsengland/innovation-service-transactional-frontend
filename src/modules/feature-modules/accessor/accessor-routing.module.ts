@@ -5,7 +5,7 @@ import { AccessorLayoutComponent } from './base/accessor-layout.component';
 
 // Pages.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
+import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
 
 
 const routes: Routes = [
@@ -26,9 +26,9 @@ const routes: Routes = [
         component: DashboardComponent
       },
       {
-        path: 'innovations',
+        path: 'review-innovations',
         pathMatch: 'full',
-        component: InnovationsListComponent
+        component: ReviewInnovationsComponent
       }
     ]
   }

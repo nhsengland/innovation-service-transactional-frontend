@@ -6,11 +6,13 @@ export const locale = {
       title: 'NHS Innovation Service',
 
       date_formats: {
-        full: 'EEEE, MMMM d, y \'at\' h:mm:ss a',
+        full_date_time: 'EEEE, MMMM d, y \'at\' h:mm:ss a',
+        long_date: 'd MMMM y',
+        short_date: 'd mm y',
         medium_time: 'h:mm:ss a',
         short: 'M/d/yy, h:mm a',
         short_seconds: 'M/d/yy, h:mm:ss a'
-      },
+      }
 
     },
 

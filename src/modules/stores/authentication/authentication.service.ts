@@ -11,8 +11,8 @@ import { UrlModel } from '@modules/core/models/url.model';
 type getUserInfoDto = {
   id: string,
   displayName: string
-  type: 'ACCESSOR' | 'QUALIFYING_ACCESSOR' | 'INNOVATOR',
-  organisations: { id: string, name: string, role: 'OWNER' }[]
+  type: 'ACCESSOR' | 'INNOVATOR',
+  organisations: { id: string, name: string, role: 'OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR' }[]
 };
 
 type getUserInnovationsDto = {
