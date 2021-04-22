@@ -8,6 +8,7 @@ import { AccessorLayoutComponent } from './base/accessor-layout.component';
 
 // Pages.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
 
 // Services.
 import { AccessorService } from './services/accessor.service';
@@ -25,6 +26,7 @@ import { AccessorService } from './services/accessor.service';
 
     // Pages.
     DashboardComponent,
+    InnovationsListComponent
   ],
   providers: [
     AccessorService

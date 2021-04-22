@@ -1,25 +1,17 @@
-// NHS Design System.
+// GOV.uk Design System.
 @import "node_modules/govuk-frontend/govuk/base";
-
 @import "node_modules/govuk-frontend/govuk/utilities/all";
 
+// NHS Design System.
 @import 'node_modules/nhsuk-frontend/packages/nhsuk';
 
 @import 'styles/left-menu-layout';
 @import 'styles/panel';
+@import 'styles/sortable-table';
 @import 'styles/step-by-step-nav';
 
-// GOV.uk Design System. (Only the necessary!)
-// @import "node_modules/govuk-frontend/govuk/all";
-// @import "node_modules/govuk-frontend/govuk/core/all";
-// @import "node_modules/govuk-frontend/govuk/objects/all";
-// @import "node_modules/govuk-frontend/govuk/components/footer/index";
-// @import "node_modules/govuk-frontend/govuk/components/header/index";
-// @import "node_modules/govuk-frontend/govuk/components/skip-link/index";
-// @import "node_modules/govuk-frontend/govuk/overrides/all";
 
 // Variables. (https://service-manual.nhs.uk/design-system/styles)
-
 $service-manual-container-size: 1100px; // Container width variable.
 
 :root {

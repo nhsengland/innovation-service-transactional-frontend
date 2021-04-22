@@ -37,7 +37,8 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
         { title: 'Home', link: '/accessor/dashboard' }
       ],
       rightItems: [
-        { title: 'Innovations', link: '/accessor/innovations' },
+        { title: 'Review Innovations', link: '/accessor/innovations' },
+        { title: 'Your engagements', link: '/accessor/engagements' },
         { title: 'Actions', link: '/accessor/actions' },
         { title: 'Activity', link: '/accessor/activity' },
         { title: 'Account', link: '/accessor/account' },
