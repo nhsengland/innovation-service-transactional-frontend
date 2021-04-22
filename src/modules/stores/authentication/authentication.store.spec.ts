@@ -95,26 +95,30 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
 
   });
 
-  it('should run isInnovator() and return true', () => {
+  it('should run isInnovatorType() and return true', () => {
     authenticationStore.state.user = { id: 'id', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] };
-    expect(authenticationStore.isInnovator()).toBe(true);
+    expect(authenticationStore.isInnovatorType()).toBe(true);
   });
 
-  it('should run isAccessor() and return true', () => {
+  it('should run isAccessorType() and return true', () => {
     authenticationStore.state.user = { id: 'id', displayName: 'John Doe', type: 'ACCESSOR', organisations: [], innovations: [] };
-    expect(authenticationStore.isAccessor()).toBe(true);
+    expect(authenticationStore.isAccessorType()).toBe(true);
   });
 
-  it('should run isQualifyingAccessor() and return true', () => {
-    authenticationStore.state.user = { id: 'id', displayName: 'John Doe', type: 'QUALIFYING_ACCESSOR', organisations: [], innovations: [] };
-    expect(authenticationStore.isQualifyingAccessor()).toBe(true);
-  });
-
-  it('should run isInnovator() and return true', () => {
+  it('should run isInnovatorType() + isAccessorType() and return false', () => {
     // authenticationStore.state.user = { id: 'id', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] };
-    expect(authenticationStore.isInnovator()).toBe(false);
-    expect(authenticationStore.isAccessor()).toBe(false);
-    expect(authenticationStore.isQualifyingAccessor()).toBe(false);
+    expect(authenticationStore.isInnovatorType()).toBe(false);
+    expect(authenticationStore.isAccessorType()).toBe(false);
+  });
+
+  it('should run isQualifyingAccessorRole() and return true', () => {
+    authenticationStore.state.user = { id: 'id', displayName: 'John Doe', type: 'ACCESSOR', organisations: [{ id: 'id01', name: 'Organisation Name', role: 'QUALIFYING_ACCESSOR' }], innovations: [] };
+    expect(authenticationStore.isQualifyingAccessorRole()).toBe(true);
+  });
+
+  it('should run isQualifyingAccessorRole() and return false', () => {
+    // authenticationStore.state.user = { id: 'id', displayName: 'John Doe', type: 'ACCESSOR', organisations: [{ id: 'id01', name: 'Organisation Name', role: 'QUALIFYING_ACCESSOR' }], innovations: [] };
+    expect(authenticationStore.isQualifyingAccessorRole()).toBe(false);
   });
 
   it('should run didFirstTimeSignIn() and return true', () => {
@@ -135,6 +139,16 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   it('should run getUserId() and return false', () => {
     // authenticationStore.state.user = { id: '010101', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] }
     expect(authenticationStore.getUserId()).toBe('');
+  });
+
+  it('should run getUserType() and return true', () => {
+    authenticationStore.state.user = { id: '010101', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] };
+    expect(authenticationStore.getUserType()).toBe('INNOVATOR');
+  });
+
+  it('should run getUserType() and return false', () => {
+    // authenticationStore.state.user = { id: '010101', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] }
+    expect(authenticationStore.getUserType()).toBe('');
   });
 
   it('should run getUserInfo() and return empty user', () => {

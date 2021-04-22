@@ -8,13 +8,13 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
-import { InnovationsListComponent } from './innovations-list.component';
+import { ReviewInnovationsComponent } from './review-innovations.component';
 
 
 describe('FeatureModules/Accessor/Innovations/InnovationsListComponent', () => {
 
-  let component: InnovationsListComponent;
-  let fixture: ComponentFixture<InnovationsListComponent>;
+  let component: ReviewInnovationsComponent;
+  let fixture: ComponentFixture<ReviewInnovationsComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -33,7 +33,7 @@ describe('FeatureModules/Accessor/Innovations/InnovationsListComponent', () => {
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(InnovationsListComponent);
+    fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();

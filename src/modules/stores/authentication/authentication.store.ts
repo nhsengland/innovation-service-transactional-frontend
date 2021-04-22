@@ -60,9 +60,11 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
   }
 
-  isInnovator(): boolean { return this.state.user?.type === 'INNOVATOR'; }
-  isAccessor(): boolean { return this.state.user?.type === 'ACCESSOR'; }
-  isQualifyingAccessor(): boolean { return this.state.user?.type === 'QUALIFYING_ACCESSOR'; }
+
+  isInnovatorType(): boolean { return this.state.user?.type === 'INNOVATOR'; }
+  isAccessorType(): boolean { return this.state.user?.type === 'ACCESSOR'; }
+
+  isQualifyingAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'QUALIFYING_ACCESSOR'; }
 
   didFirstTimeSignIn(): boolean { return this.state.didFirstTimeSignIn || false; }
 

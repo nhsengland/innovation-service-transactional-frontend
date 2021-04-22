@@ -9,7 +9,8 @@ import { CoreComponent } from '@app/base';
 export class DashboardComponent extends CoreComponent implements OnInit {
 
   user: {
-    displayName: string
+    displayName: string;
+    organisation: string;
   };
 
   cardsList: { title: string, link: string, description: string }[];
@@ -21,6 +22,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
     this.user = {
       displayName: this.stores.authentication.getUserInfo().displayName,
+      organisation: this.stores.authentication.getUserInfo().organisations[0]?.name || ''
     };
 
     this.cardsList = [
@@ -46,7 +48,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       }
     ];
 
-    if (this.stores.authentication.isQualifyingAccessor()) {
+    if (this.stores.authentication.isQualifyingAccessorRole()) {
       this.cardsList.splice(0, 0, {
         title: 'Review innovations',
         link: '',
