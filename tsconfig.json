@@ -12,17 +12,14 @@
       "@modules/*": [
         "src/modules/*"
       ],
+      "@feature-modules/*": [
+        "src/modules/feature-modules/*"
+      ],
       "@shared-module/*": [
         "src/modules/shared/*"
       ],
       "@stores-module/*": [
         "src/modules/stores/*"
-      ],
-      "@innovator-feature-module/*": [
-        "src/modules/feature-modules/innovator/*"
-      ],
-      "@triage-innovator-pack-feature-module/*": [
-        "src/modules/feature-modules/triage-innovator-pack/*"
       ]
     },
     "outDir": "./dist/out-tsc",

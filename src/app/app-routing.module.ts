@@ -5,7 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
 
 // Pages.
-import { PageNotFoundComponent } from '@shared-module/pages/not-found.component';
+import { PageNotFoundComponent } from '@shared-module/pages/not-found/not-found.component';
 
 // Guards.
 import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';

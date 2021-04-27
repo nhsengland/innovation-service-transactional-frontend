@@ -31,7 +31,7 @@
           </td>
           <td class="nhsuk-table__cell text-align-right">
             <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('supportStatus') }} </span>
-            <strong class="nhsuk-tag" [ngClass]="innovationStates[item.supportStatus].cssClass">{{ innovationStates[item.supportStatus].label }}</strong>
+            <strong class="nhsuk-tag" [ngClass]="innovationStatus[item.supportStatus].cssClass">{{ innovationStatus[item.supportStatus].label }}</strong>
           </td>
         </tr>
       </tbody>

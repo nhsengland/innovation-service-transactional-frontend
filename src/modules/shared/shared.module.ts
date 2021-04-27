@@ -6,7 +6,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from './forms/forms.module';
 
 // Pages.
-import { PageNotFoundComponent } from './pages/not-found.component';
+import { PageInnovationRecordComponent } from './pages/innovation/innovation-record.component';
+import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 
 // Services.
 import { OrganisationsService } from './services/organisations.service';
@@ -21,6 +22,7 @@ import { OrganisationsService } from './services/organisations.service';
   ],
   declarations: [
     // Pages.
+    PageInnovationRecordComponent,
     PageNotFoundComponent
   ],
   providers: [
