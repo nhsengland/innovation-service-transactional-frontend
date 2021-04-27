@@ -9,6 +9,7 @@
 @import 'styles/panel';
 @import 'styles/sortable-table';
 @import 'styles/step-by-step-nav';
+@import 'styles/task-list';
 
 
 // Variables. (https://service-manual.nhs.uk/design-system/styles)
@@ -37,6 +38,8 @@ $service-manual-container-size: 1100px; // Container width variable.
 .text-align-right { text-align: end; }
 .text-pre-line { white-space: pre-line; }
 
+.float-l { float: left; }
+.float-r { float: right; }
 
 .bg-color-white {
   background-color: var(--white);

@@ -6,6 +6,7 @@ import { AppInjector } from '@modules/core/injectors/app-injector';
 
 import { EnvironmentStore } from '@modules/core/stores/environment.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
+import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 
 
 @Injectable()
@@ -17,6 +18,7 @@ export class CoreService {
   protected stores: {
     environment: EnvironmentStore;
     authentication: AuthenticationStore;
+    innovation: InnovationStore;
   };
 
   protected APP_URL: string;
@@ -32,7 +34,8 @@ export class CoreService {
 
     this.stores = {
       environment: injector.get(EnvironmentStore),
-      authentication: injector.get(AuthenticationStore)
+      authentication: injector.get(AuthenticationStore),
+      innovation: injector.get(InnovationStore)
     };
 
     this.APP_URL = this.stores.environment.APP_URL;

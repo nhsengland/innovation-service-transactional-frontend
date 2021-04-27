@@ -3,8 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-import { INNOVATION_STATES } from '@modules/shared';
-
 import { AccessorService, getInnovationsListEndpointDTO } from '../../services/accessor.service';
 
 @Component({
@@ -15,7 +13,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   innovationsList: TableModel<(getInnovationsListEndpointDTO['data'][0])>;
 
-  innovationStates = INNOVATION_STATES;
+  innovationStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
   constructor(
     private accessorService: AccessorService

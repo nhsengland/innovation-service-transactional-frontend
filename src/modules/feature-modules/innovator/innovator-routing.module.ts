@@ -8,6 +8,10 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
 import { InnovationOverviewComponent } from './pages/innovations/overview.component';
 
+import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/innovation-record.component';
+
+
+
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
@@ -37,7 +41,8 @@ const routes: Routes = [
           {
             path: ':innovationId',
             children: [
-              { path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent }
+              { path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent },
+              { path: 'innovation-record', pathMatch: 'full', component: PageInnovationRecordComponent }
             ]
           },
         ]

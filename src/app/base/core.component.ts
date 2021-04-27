@@ -12,6 +12,7 @@ import { AppInjector } from '@modules/core';
 
 import { EnvironmentStore } from '@modules/core/stores/environment.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
+import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 
 import { UtilsHelper } from './helpers';
 import { MappedObject } from './models';
@@ -31,6 +32,7 @@ export class CoreComponent implements OnInit, OnDestroy {
   protected stores: {
     environment: EnvironmentStore;
     authentication: AuthenticationStore;
+    innovation: InnovationStore;
   };
 
   protected subscriptions: Subscription[] = [];
@@ -54,7 +56,8 @@ export class CoreComponent implements OnInit, OnDestroy {
 
     this.stores = {
       environment: injector.get(EnvironmentStore),
-      authentication: injector.get(AuthenticationStore)
+      authentication: injector.get(AuthenticationStore),
+      innovation: injector.get(InnovationStore)
     };
 
   }
