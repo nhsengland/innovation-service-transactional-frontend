@@ -9,12 +9,12 @@ import * as coockieParser from 'cookie-parser';
 import * as passport from 'passport';
 import * as session from 'express-session';
 import axios from 'axios';
+import { join } from 'path';
 import { IOIDCStrategyOptionWithoutRequest, IProfile, OIDCStrategy, VerifyCallback } from 'passport-azure-ad';
 import { existsSync } from 'fs';
 // import { Deserializer } from 'jsonapi-serializer';
 
 import { AppServerModule } from './src/main.server';
-import { join } from 'path';
 
 dotenv.config();
 

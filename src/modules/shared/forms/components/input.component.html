@@ -16,4 +16,6 @@
 
   <input [formControl]="fieldControl" [id]="id" [name]="formControlName" [type]="type" [placeholder]="placeholder" [value]="fieldControl.value" class="nhsuk-input nhsuk-u-width-two-thirds" />
 
+  <ng-content select="[append]"></ng-content>
+
 </div>

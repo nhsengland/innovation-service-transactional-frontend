@@ -3,10 +3,11 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { Store } from '../store.class';
+import { FormEngineModel } from '@modules/shared/forms';
 
 import { InnovationService } from './innovation.service';
 
-import { InnovationModel, SectionsSummaryModel } from './innovation.models';
+import { InnovationModel, SectionsSummaryModel, InnovationSectionsIds } from './innovation.models';
 import { INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS } from './innovation.models';
 import { INNOVATION_SECTIONS } from './innovation.config';
 
@@ -28,61 +29,34 @@ export class InnovationStore extends Store<InnovationModel> {
 
   getSectionsSummary$(innovationId: string): Observable<SectionsSummaryModel[]> {
 
-       return this.innovationsService.getInnovationSections(innovationId).pipe(
-         map(response => {
-          return INNOVATION_SECTIONS.map(item => ({
+    return this.innovationsService.getInnovationSections(innovationId).pipe(
+      map(response => {
+        return INNOVATION_SECTIONS.map(item => ({
+          title: item.title,
+          sections: item.sections.map(ss => {
+            const sectionState = response.sections.find(a => a.section === ss.id) || { status: 'UNKNOWN', actionStatus: '' };
+            return { ...ss, ...{ status: sectionState.status, actionStatus: sectionState.actionStatus } };
+          })
+        }));
+      }),
+      catchError(() => {
+        // this.logger.error('Unable to fetch sections information');
+        return of(
+          INNOVATION_SECTIONS.map(item => ({
             title: item.title,
             sections: item.sections.map(ss => {
-              const sectionState = response.find(a => a.code === ss.id);
-              return { ...ss, ...{ status: sectionState?.status || 'UNKNOWN' as keyof typeof INNOVATION_SECTION_STATUS, actionStatus: sectionState?.actionStatus || '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS } };
+              return { ...ss, ...{ status: 'UNKNOWN' as keyof typeof INNOVATION_SECTION_STATUS, actionStatus: '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS } };
             })
-          }));
-        }),
-        catchError(() =>  {
-          // this.logger.error('Unable to fetch sections information');
-          return of(
-            INNOVATION_SECTIONS.map(item => ({
-              title: item.title,
-              sections: item.sections.map(ss => {
-                return { ...ss, ...{ status: 'UNKNOWN' as keyof typeof INNOVATION_SECTION_STATUS, actionStatus: '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS } };
-              })
-            }))
-          );
-         })
-      );
+          }))
+        );
+      })
+    );
+
+  }
 
 
-
-
-
-    // return new Observable((observer: Observer<SectionsSummaryModel[]>) => {
-
-    //   this.innovationsService.getInnovationSections(innovationId).subscribe(
-    //     response => {
-
-    //       const toReturn = INNOVATION_SECTIONS.map(item => ({
-    //         title: item.title,
-    //         sections: item.sections.map(ss => {
-
-    //           const sectionState = response.find(a => a.code === ss.id);
-
-    //           return { ...ss, ...{ status: sectionState?.status || 'NOT_STARTED' as keyof typeof INNOVATION_SECTION_STATUS, actionStatus: sectionState?.actionStatus || '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS } };
-    //         })
-
-    //       }));
-
-    //       observer.next(toReturn);
-    //       observer.complete();
-    //     },
-    //     () => {
-    //       // this.setState(this.state);
-    //       observer.error(false);
-    //       observer.complete();
-    //     }
-    //   );
-
-    // });
-
+  getSectionForm(sectionId: InnovationSectionsIds): FormEngineModel[] {
+    return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id = sectionId)?.data || [];
   }
 
 

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 // Modules.
@@ -14,6 +15,7 @@ import { OrganisationsService } from './services/organisations.service';
 
 @NgModule({
   imports: [
+    RouterModule,
     CommonModule,
     TranslateModule.forChild(),
 
@@ -32,6 +34,7 @@ import { OrganisationsService } from './services/organisations.service';
     CommonModule,
     TranslateModule,
 
+    // Modules.
     FormsModule
   ]
 })
