@@ -14,8 +14,8 @@ type getInnovationInfoEndpointDTO = {
   description: string;
   countryName: string;
   postcode: string;
-  actions: string[];
-  comments: string[];
+  actions: string[]; // actionsCount: number;
+  comments: string[]; // commentsCount: number
 };
 export type getInnovationInfoResponse = {
   id: string;
@@ -44,8 +44,8 @@ export class InnovationsService extends CoreService {
         company: response.company || '',
         location: `${response.countryName}${response.postcode ? ', ' + response.postcode : ''}`,
         description: response.description,
-        openActionsNumber: response.actions.length,
-        openCommentsNumber: response.comments.length
+        openActionsNumber: response.actions?.length || 0,
+        openCommentsNumber: response.comments?.length || 0
       }))
     );
 

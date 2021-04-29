@@ -7,12 +7,10 @@ import { SectionsSummaryModel } from '@stores-module/innovation/innovation.model
 
 
 @Component({
-  selector: 'shared-pages-innovation-record',
-  templateUrl: './innovation-record.component.html'
+  selector: 'app-innovator-pages-innovations-section-view',
+  templateUrl: './section-view.component.html'
 })
-export class PageInnovationRecordComponent extends CoreComponent implements OnInit {
-
-  baseUrl = '';
+export class InnovationsSectionViewComponent extends CoreComponent implements OnInit {
 
   innovationSections: SectionsSummaryModel[] = [];
 
@@ -21,13 +19,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   constructor(
     private activatedRoute: ActivatedRoute,
-  ) {
-
-    super();
-
-    this.baseUrl = `/${this.activatedRoute.snapshot.data.module}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
-
-  }
+  ) { super(); }
 
 
   ngOnInit(): void {
@@ -45,6 +37,5 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     );
 
   }
-
 
 }

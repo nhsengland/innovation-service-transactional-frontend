@@ -28,7 +28,7 @@
               </span>
             </ng-container>
 
-            <span class="app-task-list__task-name"> {{ (i + 1) + '.' + (j + 1) }} <a href="#">{{ section.title }}</a> </span>
+            <span class="app-task-list__task-name"> {{ (i + 1) + '.' + (j + 1) }} <a routerLink="{{ baseUrl }}/{{section.id}}" class="nhsuk-link">{{ section.title }}</a> </span>
 
             <strong *ngIf="section.actionStatus" class="nhsuk-tag app-task-list__tag" [ngClass]="innovationSectionActionStatus[section.actionStatus].cssClass">{{ innovationSectionActionStatus[section.actionStatus].label }}</strong>
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, Input, ChangeDetectionStrategy, ChangeDetectorRef, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 
 import { FormEngineHelper } from './helpers/form-engine.helper';
@@ -73,6 +73,20 @@ export class FormEngineComponent implements OnInit, OnChanges {
     this.cdr.detectChanges();
 
   }
+
+
+  addFieldGroupRow(parameter: FormEngineParameterModel, value?: { [key: string]: any }): void {
+    (this.form.get(parameter.id) as FormArray).push(FormEngineHelper.addFieldGroupRow(parameter, value));
+  }
+
+  removeFieldGroupRow(parameterId: string, index: number): void {
+    (this.form.get(parameterId) as FormArray).removeAt(index);
+  }
+
+  trackFieldGroupRowsChanges(index: number, item: { [key: string]: any }): number {
+    return index;
+  }
+
 
   getFormValues(): { valid: boolean, data: { [key: string]: any } } {
 
