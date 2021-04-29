@@ -69,7 +69,7 @@ describe('Stores/Innovation/InnovationStore', () => {
 
     innovationStore.getSectionsSummary$('innovationId').subscribe(success => response = success, error => response = error);
 
-    //expect(response).toEqual(expectedResponse);
+    // expect(response).toEqual(expectedResponse);
     expect(true).toBe(true); // TODO: Review this test!
 
   });
