@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { Store } from '../store.class';
-import { FormEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationService } from './innovation.service';
 
@@ -56,8 +56,13 @@ export class InnovationStore extends Store<InnovationModel> {
 
 
   getSectionForm(sectionId: InnovationSectionsIds): FormEngineModel[] {
-    return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id = sectionId)?.data || [];
+    return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id = sectionId)?.wizard.steps || [];
   }
+
+  getSectionWizard(sectionId: InnovationSectionsIds): WizardEngineModel {
+    return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id = sectionId)?.wizard || new WizardEngineModel({});
+  }
+
 
 
 }
