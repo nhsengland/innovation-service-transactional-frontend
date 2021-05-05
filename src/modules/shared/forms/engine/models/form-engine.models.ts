@@ -25,7 +25,7 @@ export class FormEngineModel {
 export class FormEngineParameterModel {
 
   id: string;
-  dataType: 'text' | 'textarea' | 'number' | 'password' | 'hidden' | 'checkbox-group' | 'checkbox-array' | 'radio-group';
+  dataType: 'text' | 'textarea' | 'number' | 'password' | 'hidden' | 'checkbox-group' | 'checkbox-array' | 'radio-group' | 'fields-group';
   label?: string;
   description?: string;
   placeholder?: string;
@@ -47,6 +47,10 @@ export class FormEngineParameterModel {
     group?: string;
     conditional?: FormEngineParameterModel
   })[];
+  fieldsGroupConfig?: {
+    fields: FormEngineParameterModel[];  // Used in "fields-group" dataType.
+    addNewLabel?: string;
+  };
 
   constructor(data: FormEngineParameterModel) {
     this.id = data.id;
@@ -59,6 +63,14 @@ export class FormEngineParameterModel {
     this.rank = data.rank || 0;
     this.validations = data.validations;
     this.items = data.items;
+
+    if (data.fieldsGroupConfig) {
+      this.fieldsGroupConfig = {
+        fields: (data.fieldsGroupConfig.fields || []).map(f => new FormEngineParameterModel(f)),
+        addNewLabel: data.fieldsGroupConfig.addNewLabel
+      };
+    }
+
   }
 
 }

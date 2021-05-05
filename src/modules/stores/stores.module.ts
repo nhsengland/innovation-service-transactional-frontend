@@ -3,11 +3,16 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { AuthenticationStore } from './authentication/authentication.store';
 import { AuthenticationService } from './authentication/authentication.service';
 
+import { InnovationStore } from './innovation/innovation.store';
+import { InnovationService } from './innovation/innovation.service';
+
 
 @NgModule({
   providers: [
     AuthenticationStore,
-    AuthenticationService
+    AuthenticationService,
+    InnovationStore,
+    InnovationService
   ]
 })
 export class StoresModule {

@@ -5,9 +5,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
 
 // Pages.
-import { SurveyStartComponent } from '@triage-innovator-pack-feature-module/pages/survey/start.component';
-import { SurveyStepComponent } from '@triage-innovator-pack-feature-module/pages/survey/step.component';
-import { SurveyEndComponent } from '@triage-innovator-pack-feature-module/pages/survey/end.component';
+import { SurveyStartComponent } from './pages/survey/start.component';
+import { SurveyStepComponent } from './pages/survey/step.component';
+import { SurveyEndComponent } from './pages/survey/end.component';
 
 const routes: Routes = [
   {

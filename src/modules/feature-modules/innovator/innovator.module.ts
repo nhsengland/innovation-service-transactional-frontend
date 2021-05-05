@@ -10,6 +10,8 @@ import { InnovatorLayoutComponent } from './base/innovator-layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
 import { InnovationOverviewComponent } from './pages/innovations/overview.component';
+import { InnovationsSectionEditComponent } from './pages/innovations/sections/section-edit.component';
+import { InnovationsSectionViewComponent } from './pages/innovations/sections/section-view.component';
 
 // Services.
 import { InnovationsService } from './services/innovations.service';
@@ -32,7 +34,9 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
     // Pages.
     DashboardComponent,
     FirstTimeSigninComponent,
-    InnovationOverviewComponent
+    InnovationOverviewComponent,
+    InnovationsSectionEditComponent,
+    InnovationsSectionViewComponent
   ],
   providers: [
     InnovationsService,

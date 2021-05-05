@@ -34,6 +34,22 @@ export class FormEngineHelper {
           });
           break;
 
+        case 'fields-group':
+          form.addControl(parameter.id, new FormArray([]));
+
+          let arrayValue: { [key: string]: any }[];
+          if (Array.isArray(parameterValue)) { arrayValue = parameterValue as { [key: string]: any }[]; }
+          else { arrayValue = []; }
+
+          if (arrayValue.length === 0) {
+            (form.get(parameter.id) as FormArray).push(FormEngineHelper.addFieldGroupRow(parameter));
+          } else {
+            arrayValue.forEach((parameterValueRow, i) => {
+              (form.get(parameter.id) as FormArray).push(FormEngineHelper.addFieldGroupRow(parameter, parameterValueRow));
+            });
+          }
+          break;
+
         default: // Creates a standard FormControl.
           form.addControl(parameter.id, FormEngineHelper.createParameterFormControl(parameter, parameterValue));
           break;
@@ -59,6 +75,23 @@ export class FormEngineHelper {
 
   }
 
+
+  static addFieldGroupRow(parameter: FormEngineParameterModel, value?: { [key: string]: any }): FormGroup {
+
+    const formGroup = new FormGroup({});
+
+    parameter.fieldsGroupConfig?.fields.forEach(field => {
+      const newField = FormEngineHelper.createParameterFormControl(field, (value || {})[field.id]);
+      newField.setValidators(FormEngineHelper.getParameterValidators(field));
+      newField.updateValueAndValidity();
+      formGroup.addControl(field.id, newField);
+    });
+
+    return formGroup;
+
+  }
+
+
   static isAnyVisibleField(parameters: FormEngineParameterModel[]): boolean {
     return parameters.some(parameter => parameter.isVisible);
   }
@@ -70,7 +103,7 @@ export class FormEngineHelper {
     Object.keys(form.getRawValue()).forEach(key => { // getRawValues is needed to return also disabled fields!
       // const parameter = parameters.find(p => p.id === key);
       // if (parameter) {
-        returnForm.data[key] = form.getRawValue()[key];
+      returnForm.data[key] = form.getRawValue()[key];
       // }
     });
 

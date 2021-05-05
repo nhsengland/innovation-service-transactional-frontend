@@ -77,16 +77,12 @@ const upload = multer({ storage });
 export function app(): express.Express {
 
   const server = express();
-  const staticContentPath = join(BASE_PATH, STATIC_CONTENT_PATH);
+  const staticContentPath = `${BASE_PATH}${STATIC_CONTENT_PATH}`;
   const distFolder = join(process.cwd(), VIEWS_PATH);
   const indexHtml = fs.existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
   const userSessions: UserSession[] = [];
 
   server.engine('html', ngExpressEngine({ bootstrap: AppServerModule })); // Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
-
-  server.set('view engine', 'html');
-  server.set('views', distFolder);
-  server.use(staticContentPath, express.static(distFolder));
 
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
@@ -97,10 +93,13 @@ export function app(): express.Express {
     saveUninitialized: true
   }));
 
-
   // Passport configuration.
   server.use(passport.initialize());
   server.use(passport.session());
+
+  server.set('view engine', 'html');
+  server.set('views', distFolder);
+  server.use(staticContentPath, express.static(distFolder));
 
   passport.serializeUser((user, next) => { next(null, user); });
   passport.deserializeUser((obj: any, next) => { next(null, obj); });
@@ -360,7 +359,7 @@ export function app(): express.Express {
       window.__env = window.__env || {};
       window.__env.BASE_URL = '${BASE_URL}';
       window.__env.BASE_PATH = '${BASE_PATH}';
-      window.__env.API_URL = '${join(BASE_URL, BASE_PATH, 'api')}';
+      window.__env.API_URL = '${BASE_URL}${BASE_PATH}/api';
       window.__env.LOG_LEVEL = '${LOG_LEVEL}';
     }(this));`);
   });
@@ -370,7 +369,7 @@ export function app(): express.Express {
       req, res,
       providers: [
         { provide: APP_BASE_HREF, useValue: req.baseUrl },
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: join(BASE_URL, BASE_PATH, 'api'), LOG_LEVEL } }
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL } }
       ]
     });
   });

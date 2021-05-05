@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { cloneDeep } from 'lodash';
+
+
 
 import { CoreService } from '@app/base';
 
-import { UrlModel } from '@modules/core';
+import { MappedObject, UrlModel } from '@modules/core';
 
 
 type getInnovationInfoEndpointDTO = {
@@ -14,8 +17,8 @@ type getInnovationInfoEndpointDTO = {
   description: string;
   countryName: string;
   postcode: string;
-  actions: string[];
-  comments: string[];
+  actions: string[]; // actionsCount: number;
+  comments: string[]; // commentsCount: number
 };
 export type getInnovationInfoResponse = {
   id: string;
@@ -44,9 +47,42 @@ export class InnovationsService extends CoreService {
         company: response.company || '',
         location: `${response.countryName}${response.postcode ? ', ' + response.postcode : ''}`,
         description: response.description,
-        openActionsNumber: response.actions.length,
-        openCommentsNumber: response.comments.length
+        openActionsNumber: response.actions?.length || 0,
+        openCommentsNumber: response.comments?.length || 0
       }))
+    );
+
+  }
+
+
+  getSectionInfo(innovationId: string, section: string): Observable<MappedObject> {
+
+    // return of({
+    //   hasSubgroups: 'yes',
+    //   subgroups: [{ id: null, name: 'Item 1', conditions: 'Item 1 conditions' }]
+    // });
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/sections').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId }).setQueryParams({ section });
+    return this.http.get<{
+      section: string;
+      data: MappedObject
+    }>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response.data)
+    );
+  }
+
+  updateSectionInfo(innovationId: string, section: string, data: MappedObject): Observable<MappedObject> {
+
+    // console.log('UPDATE', data)
+    // return of({});
+
+    const body = { section, data: cloneDeep(data) };
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/sections').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    return this.http.put<any>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
     );
 
   }
