@@ -3,6 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineModel } from '@app/base/forms';
+import { WizardEngineModel } from '@modules/shared/forms';
+import { InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
+
+import { InnovationsService } from '../../../services/innovations.service';
 
 
 @Component({
@@ -11,51 +15,48 @@ import { FormEngineComponent, FormEngineModel } from '@app/base/forms';
 })
 export class InnovationsSectionEditComponent extends CoreComponent implements OnInit {
 
-
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
-  stepsData: FormEngineModel[] = [];
-  currentStep: {
-    number: number;
-    data: FormEngineModel;
-  };
-  totalNumberOfSteps: number;
+  innovationId: string;
+  sectionId: InnovationSectionsIds;
 
+  wizard: WizardEngineModel;
+
+  currentStep: FormEngineModel;
   currentAnswers: { [key: string]: any };
-
-  isFirstStep(): boolean { return this.currentStep.number === 1; }
-  isLastStep(): boolean { return this.currentStep.number === this.totalNumberOfSteps; }
-
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private innovationsService: InnovationsService
   ) {
 
     super();
 
-    this.stepsData = this.stores.innovation.getSectionForm(this.activatedRoute.snapshot.params.sectionId);
-    this.totalNumberOfSteps = this.stepsData.length;
+    this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
-    this.currentStep = {
-      number: Number(this.activatedRoute.snapshot.params.questionId),
-      data: new FormEngineModel({ parameters: [] })
-    };
+    this.wizard = this.stores.innovation.getSectionWizard(this.sectionId);
 
+    this.currentStep = new FormEngineModel({ parameters: [] });
     this.currentAnswers = {};
-
 
   }
 
 
   ngOnInit(): void {
 
+    this.innovationsService.getSectionInfo(this.innovationId, this.sectionId).subscribe(
+      response => {
+        this.currentAnswers = this.wizard.runInboundParsing(response);
+      },
+      () => {
+        this.logger.error('Error fetching data');
+      });
+
     this.subscriptions.push(
       this.activatedRoute.params.subscribe(params => {
-
-        this.currentStep.number = Number(params.questionId);
-        this.currentStep.data = this.stepsData[this.currentStep.number - 1];
-        this.currentStep.data.defaultData = this.currentAnswers;
-
+        this.wizard.gotoStep(Number(params.questionId));
+        this.currentStep = this.wizard.currentStep();
       })
     );
 
@@ -69,17 +70,21 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
 
     const formData = this.formEngineComponent?.getFormValues();
 
-    console.log('ANSWERS', this.currentAnswers);
-    console.log('SUBMITTED', formData);
-
     if (action === 'next' && !formData?.valid) { // Apply validation only when moving forward.
       return;
     }
 
     this.currentAnswers = { ...this.currentAnswers, ...formData?.data };
 
-    if (this.isLastStep() && action === 'next') { this.onSubmitSurvey(); }
-    else { this.redirectTo(this.getNavigationUrl(action), { a: action }); }
+    this.wizard.runRules(this.currentAnswers);
+
+    if (this.wizard.isLastStep() && action === 'next') {
+      this.onSubmitSurvey();
+    }
+    else {
+      this.redirectTo(this.getNavigationUrl(action), { a: action });
+
+    }
 
   }
 
@@ -87,20 +92,18 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
 
   onSubmitSurvey(): void {
 
-    // this.innovatorService.submitFirstTimeSigninInfo(this.currentAnswers).pipe(
-    //   concatMap(() => {
-    //     return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
-    //   })
-    // ).subscribe(
-    //   () => {
-    //     this.redirectTo(`innovator/dashboard`);
-    //     return;
-    //   },
-    //   () => {
-    //     this.redirectTo(`innovator/first-time-signin/summary`);
-    //     return;
-    //   }
-    // );
+    const teste = this.wizard.runInboundParsing(this.currentAnswers);
+
+    this.innovationsService.updateSectionInfo(this.innovationId, this.sectionId, teste).subscribe(
+      () => {
+        this.redirectTo(`innovator/innovations/776227DC-C9A8-EB11-B566-0003FFD6549F/record`);
+        return;
+      },
+      () => {
+        this.redirectTo(`innovator/first-time-signin/summary`);
+        return;
+      }
+    );
 
   }
 
@@ -111,13 +114,13 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
 
     switch (action) {
       case 'previous':
-        if (this.isFirstStep()) { url += ''; }
-        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${this.currentStep.number - 1}`; }
+        if (this.wizard.isFirstStep()) { url += ''; }
+        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${this.wizard.currentStepNumber - 1}`; }
         break;
 
       case 'next':
-        if (this.isLastStep()) { url += '/first-time-signin/summary'; }
-        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${this.currentStep.number + 1}`; }
+        if (this.wizard.isLastStep()) { url += '/first-time-signin/summary'; }
+        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${this.wizard.currentStepNumber + 1}`; }
         break;
 
       default: // Should NOT happen!
@@ -128,6 +131,5 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
     return url;
 
   }
-
 
 }

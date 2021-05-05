@@ -7,10 +7,8 @@ export { FormEngineComponent } from './engine/form-engine.component';
 // Services.
 
 // Models.
-export {
-  FormEngineModel,
-  FormEngineParameterModel
-} from './engine/models/form-engine.models';
+export { FormEngineModel, FormEngineParameterModel } from './engine/models/form-engine.models';
+export { WizardEngineModel } from './engine/models/wizard-engine.models';
 
 // Enums.
 

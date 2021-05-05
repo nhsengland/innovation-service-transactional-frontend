@@ -7,30 +7,27 @@
   </a>
 </div>
 
-
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-two-thirds">
 
       <fieldset class="nhsuk-fieldset">
 
-        <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">{{ currentStep.data.label }}</legend>
+        <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">{{ currentStep.label }}</legend>
 
-        <div *ngIf="currentStep.data.description" class="nhsuk-hint" [innerHTML]="currentStep.data.description"></div>
+        <div *ngIf="currentStep.description" class="nhsuk-hint" [innerHTML]="currentStep.description"></div>
 
-        <ng-container *ngIf="currentStep.data.details">
+        <ng-container *ngIf="currentStep.details">
           <details class="nhsuk-details">
             <summary class="nhsuk-details__summary">
-              <span class="nhsuk-details__summary-text">{{ currentStep.data.details.title }}</span>
+              <span class="nhsuk-details__summary-text">{{ currentStep.details?.title }}</span>
             </summary>
-            <div class="nhsuk-details__text" [innerHTML]="currentStep.data.details.content"></div>
+            <div class="nhsuk-details__text" [innerHTML]="currentStep.details?.content"></div>
           </details>
         </ng-container>
 
-        <theme-form-engine formId="sectionForm" [parameters]="currentStep.data.parameters" [values]="currentStep.data.defaultData"></theme-form-engine>
+        <theme-form-engine formId="sectionForm" [parameters]="currentStep.parameters" [values]="currentAnswers"></theme-form-engine>
 
-        <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">
-          {{ currentStep.number === totalNumberOfSteps ? 'Continue to your account' : 'Continue' }}
-        </button>
+        <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
 
       </fieldset>
 

@@ -2,61 +2,69 @@
 
   <ng-container *ngFor="let p of parameters; let i = index">
 
-    <ng-container [ngSwitch]="p.dataType">
+    <ng-container *ngIf="p.isVisible">
 
-      <div *ngSwitchCase="'hidden'">
-        <theme-form-input type="hidden" [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
-      </div>
+      <ng-container [ngSwitch]="p.dataType">
 
-      <div *ngSwitchCase="'number'">
-        <theme-form-input type="number" [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
-      </div>
-
-      <div *ngSwitchCase="'password'">
-        <theme-form-input type="password" [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
-      </div>
-
-      <div *ngSwitchCase="'radio-group'">
-        <theme-form-radio-group [formControlName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-radio-group>
-      </div>
-
-      <div *ngSwitchCase="'checkbox-group'">
-        <theme-form-checkbox-group [formGroupName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-checkbox-group>
-      </div>
-
-      <div *ngSwitchCase="'checkbox-array'">
-        <theme-form-checkbox-array [formArrayName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-checkbox-array>
-      </div>
-
-      <div *ngSwitchCase="'textarea'">
-        <theme-form-textarea [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-textarea>
-      </div>
-
-      <div *ngSwitchCase="'fields-group'" [formArrayName]="p.id" class="nhsuk-u-margin-bottom-5">
-
-        <div *ngFor="let item of form.get(p.id)?.value; let i = index; trackBy:trackFieldGroupRowsChanges" class="nhsuk-grid-row">
-          <div *ngFor="let f of p.fieldsGroupType?.fields" [formGroupName]="i" class="nhsuk-grid-column-full">
-
-            <div [ngSwitch]="f.dataType">
-              <div *ngSwitchDefault>
-                <theme-form-input [formControlName]="f.id" label="{{ f.label }} {{ i + 1}}" [description]="f.description">
-                  <ng-container append>
-                    <button type="button" class="nhsuk-button nhsuk-button--secondary form-input-appended-button" (click)="removeFieldGroupRow(p.id, i)">Remove</button>
-                  </ng-container>
-                </theme-form-input> 
-              </div>
-            </div>
-
-          </div>
+        <div *ngSwitchCase="'hidden'">
+          <theme-form-input type="hidden" [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
         </div>
 
-        <a href="javascript:void(0)" (click)="addFieldGroupRow(p)">{{ p.fieldsGroupType?.addNewLabel || 'Add new' }}</a>
+        <div *ngSwitchCase="'number'">
+          <theme-form-input type="number" [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+        </div>
 
-      </div>
+        <div *ngSwitchCase="'password'">
+          <theme-form-input type="password" [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+        </div>
 
-      <div *ngSwitchDefault>
-        <theme-form-input [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
-      </div>
+        <div *ngSwitchCase="'radio-group'">
+          <theme-form-radio-group [formControlName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-radio-group>
+        </div>
+
+        <div *ngSwitchCase="'checkbox-group'">
+          <theme-form-checkbox-group [formGroupName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-checkbox-group>
+        </div>
+
+        <div *ngSwitchCase="'checkbox-array'">
+          <theme-form-checkbox-array [formArrayName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-checkbox-array>
+        </div>
+
+        <div *ngSwitchCase="'textarea'">
+          <theme-form-textarea [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-textarea>
+        </div>
+
+        <div *ngSwitchCase="'fields-group'" [formArrayName]="p.id" class="nhsuk-u-margin-bottom-5">
+
+          <div *ngFor="let item of form.get(p.id)?.value; let i = index; trackBy:trackFieldGroupRowsChanges" class="nhsuk-grid-row">
+            <div *ngFor="let f of p.fieldsGroupConfig?.fields" [formGroupName]="i" class="nhsuk-grid-column-full">
+
+              <ng-container *ngIf="f.isVisible">
+
+                <div [ngSwitch]="f.dataType">
+                  <div *ngSwitchDefault>
+                    <theme-form-input [formControlName]="f.id" label="{{ f.label }} {{ i + 1}}" [description]="f.description">
+                      <ng-container append>
+                        <button type="button" class="nhsuk-button nhsuk-button--secondary form-input-appended-button" (click)="removeFieldGroupRow(p.id, i)">Remove</button>
+                      </ng-container>
+                    </theme-form-input>
+                  </div>
+                </div>
+
+              </ng-container>
+
+            </div>
+          </div>
+
+          <a href="javascript:void(0)" (click)="addFieldGroupRow(p)">{{ p.fieldsGroupConfig?.addNewLabel || 'Add new' }}</a>
+
+        </div>
+
+        <div *ngSwitchDefault>
+          <theme-form-input [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+        </div>
+
+      </ng-container>
 
     </ng-container>
 

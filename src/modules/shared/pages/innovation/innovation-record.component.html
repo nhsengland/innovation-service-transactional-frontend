@@ -3,6 +3,18 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
 
+    <!-- Future progress bar
+        <ul class="progressbar">
+          <li class="active">login</li>
+          <li>choose interest</li>
+          <li>add friends</li>
+          <li>View map</li>
+  </ul>
+   -->
+
+
+
+
     <h2>All sections</h2>
 
     <ol class="app-task-list">
@@ -30,7 +42,9 @@
 
             <span class="app-task-list__task-name"> {{ (i + 1) + '.' + (j + 1) }} <a routerLink="{{ baseUrl }}/{{section.id}}" class="nhsuk-link">{{ section.title }}</a> </span>
 
-            <strong *ngIf="section.actionStatus" class="nhsuk-tag app-task-list__tag" [ngClass]="innovationSectionActionStatus[section.actionStatus].cssClass">{{ innovationSectionActionStatus[section.actionStatus].label }}</strong>
+            <strong *ngIf="section.actionStatus" class="nhsuk-tag app-task-list__tag" [ngClass]="innovationSectionActionStatus[section.actionStatus].cssClass">
+              {{ innovationSectionActionStatus[section.actionStatus].label }}
+            </strong>
 
           </li>
         </ul>
