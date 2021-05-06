@@ -61,30 +61,32 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
     this.stores.innovation.getSectionInfo$(this.innovationId, this.sectionId).subscribe(
       response => {
         this.currentAnswers = this.wizard.runInboundParsing(response.data);
+        this.wizard.runRules(this.currentAnswers);
+
+        this.subscriptions.push(
+          this.activatedRoute.params.subscribe(params => {
+
+            // if (!this.isValidStepId()) {
+            //   this.redirectTo('not-found');
+            //   return;
+            // }
+
+            if (this.isSummaryStep()) {
+              this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);
+              return;
+            }
+
+            this.wizard.gotoStep(Number(params.questionId));
+            this.currentStep = this.wizard.currentStep();
+
+          })
+        );
+
       },
       () => {
         this.logger.error('Error fetching data');
       });
 
-    this.subscriptions.push(
-      this.activatedRoute.params.subscribe(params => {
-
-        // if (!this.isValidStepId()) {
-        //   this.redirectTo('not-found');
-        //   return;
-        // }
-
-        if (this.isSummaryStep()) {
-          this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);
-          return;
-        }
-
-        this.wizard.gotoStep(Number(params.questionId));
-        this.currentStep = this.wizard.currentStep();
-
-
-      })
-    );
 
   }
 

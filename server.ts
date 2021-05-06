@@ -315,17 +315,17 @@ export function app(): express.Express {
     }
   }
 
-  server.post(`${BASE_PATH}/innovators/:innovatorId/innovations/:innovationId/upload`, upload.single('file'), async (req, res) => {
+  server.post(`${BASE_PATH}/upload`, upload.single('file'), async (req, res) => {
     const user: IProfile = req.user || {};
     const oid: string = user.oid || '';
     const accessToken = getAccessTokenByOid(oid);
 
     if (req.isAuthenticated() && accessToken) {
-      const basePath = req.url.replace(BASE_PATH, '');
+      const reqBody = req.body;
       const file = req.file;
-      const url = `${API_URL}/api${basePath}`;
+      const url = `${API_URL}/api/innovators/${reqBody.innovatorId}/innovations/${reqBody.innovationId}/upload`;
       const body = {
-        context: req.body.context,
+        context: reqBody.context,
         fileName: file.originalname
       };
 

@@ -1,25 +1,18 @@
-export class InnovationModel {
+import { WizardEngineModel } from '@modules/shared/forms';
 
-  isSignIn: boolean;
-
-  user?: {
-    id: string;
-    displayName: string;
-    type: '' | 'ACCESSOR' | 'INNOVATOR',
-    organisations: { id: string, name: string, role: 'OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR' }[]
-    innovations: { id: string, name: string }[];
-  };
-
-  didFirstTimeSignIn?: boolean;
+// Store state model.
+export class InnovationModel { constructor() { } }
 
 
-  constructor() {
-
-    this.isSignIn = false;
-
-  }
-
-}
+// Types.
+export type InnovationSectionConfigType = {
+  title: string;
+  sections: {
+    id: InnovationSectionsIds;
+    title: string;
+    wizard: WizardEngineModel;
+  }[];
+};
 
 
 export const INNOVATION_STATUS = {
