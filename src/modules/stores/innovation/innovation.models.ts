@@ -78,6 +78,43 @@ export enum InnovationSectionsIds {
 }
 
 
+
+export type sectionType = {
+  id: null | string;
+  section: InnovationSectionsIds;
+  status: keyof typeof INNOVATION_SECTION_STATUS;
+  actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
+  updatedAt: string;
+};
+
+export type getInnovationInfoEndpointDTO = {
+  id: string;
+  name: string;
+  company: string;
+  description: string;
+  countryName: string;
+  postcode: string;
+  actions: string[]; // actionsCount: number;
+  comments: string[]; // commentsCount: number
+};
+
+export type getInnovationInfoResponse = {
+  id: string;
+  name: string;
+  company: string;
+  location: string;
+  description: string;
+  openActionsNumber: number;
+  openCommentsNumber: number;
+};
+
+export type getInnovationSectionsDTO = {
+  id: string;
+  name: string;
+  sections: sectionType[];
+};
+
+
 export type SectionsSummaryModel = {
   title: string;
   sections: {
@@ -85,5 +122,6 @@ export type SectionsSummaryModel = {
     title: string;
     status: keyof typeof INNOVATION_SECTION_STATUS;
     actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
+    isCompleted: boolean;
   }[]
 };

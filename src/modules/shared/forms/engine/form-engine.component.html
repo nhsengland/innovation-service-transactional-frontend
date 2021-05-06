@@ -34,6 +34,15 @@
           <theme-form-textarea [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-textarea>
         </div>
 
+        <div *ngSwitchCase="'file-upload'">
+          <theme-form-upload [config]="p.fileUploadConfig?.fileConfig" (uploadSuccess)="onFileUploaded($event, p.id)" (uploadError)="onFileUploadError($event, p.id)"></theme-form-upload>
+           <!-- <div class="text-danger messages-section">
+            <ng-container *ngIf="parentControls[p.key].touched && parentControls[p.key].errors?.required">
+              {{ 'shared.forms_module.validations.required' | translate }}
+            </ng-container>
+          </div> -->
+        </div>
+
         <div *ngSwitchCase="'fields-group'" [formArrayName]="p.id" class="nhsuk-u-margin-bottom-5">
 
           <div *ngFor="let item of form.get(p.id)?.value; let i = index; trackBy:trackFieldGroupRowsChanges" class="nhsuk-grid-row">

@@ -10,12 +10,12 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-two-thirds">
 
+    <ng-container *ngIf="isQuestionStep()">
+
       <fieldset class="nhsuk-fieldset">
 
         <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">{{ currentStep.label }}</legend>
-
         <div *ngIf="currentStep.description" class="nhsuk-hint" [innerHTML]="currentStep.description"></div>
-
         <ng-container *ngIf="currentStep.details">
           <details class="nhsuk-details">
             <summary class="nhsuk-details__summary">
@@ -30,6 +30,29 @@
         <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
 
       </fieldset>
+
+    </ng-container>
+
+
+    <ng-container *ngIf="isSummaryStep()">
+
+      <h1 class="nhsuk-heading-l">Check your answers</h1>
+
+      <dl class="nhsuk-summary-list">
+        <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+          <dd class="nhsuk-summary-list__value">{{ item.value }}</dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a [routerLink]="gotoStep(item.stepNumber)">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }}</span></a>
+          </dd>
+        </div>
+      </dl>
+
+      <button class="nhsuk-button" (click)="onSubmitSurvey(false)"> Save as a draft </button>
+      <button class="nhsuk-button" (click)="onSubmitSurvey(true)"> Save and submit </button>
+
+    </ng-container>
+
 
   </div>
 </div>

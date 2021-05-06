@@ -1,11 +1,20 @@
-<h1> Section name here </h1>
-
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
 
-    Here, details of the section will appear!!!!
+      <h1 class="nhsuk-heading-l">{{ section.title }}</h1>
+      <h2 class="nhsuk-heading-m">Your answers</h2>
 
-    <a class="nhsuk-button" routerLink="edit">Edit section</a>
+      <dl class="nhsuk-summary-list">
+        <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+          <dd class="nhsuk-summary-list__value">{{ item.value }}</dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a routerLink="edit/{{ item.stepNumber }}">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }}</span></a>
+          </dd>
+        </div>
+      </dl>
+
+    <a class="nhsuk-button" routerLink="edit">{{ section.editButtonLabel }}</a>
 
   </div>
 </div>

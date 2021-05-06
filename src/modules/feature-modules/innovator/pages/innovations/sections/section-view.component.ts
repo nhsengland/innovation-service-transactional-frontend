@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { WizardEngineModel } from '@modules/shared/forms';
 
-import { SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
+import { InnovationSectionsIds, INNOVATION_SECTION_STATUS } from '@stores-module/innovation/innovation.models';
+
+// import { SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
 
 
 @Component({
@@ -12,30 +15,57 @@ import { SectionsSummaryModel } from '@stores-module/innovation/innovation.model
 })
 export class InnovationsSectionViewComponent extends CoreComponent implements OnInit {
 
-  innovationSections: SectionsSummaryModel[] = [];
+  innovationId: string;
+  section: {
+    id: InnovationSectionsIds;
+    title: string;
+    status: keyof typeof INNOVATION_SECTION_STATUS;
+    editButtonLabel: string;
+  };
 
-  innovationSectionStatus = this.stores.innovation.INNOVATION_SECTION_STATUS;
-  innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
+  wizard: WizardEngineModel;
+
+  summaryList: { label: string, value: string, stepNumber: number }[];
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-  ) { super(); }
+    private activatedRoute: ActivatedRoute
+  ) {
 
+    super();
 
-  ngOnInit(): void {
+    this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.section = {
+      id: this.activatedRoute.snapshot.params.sectionId,
+      title: this.stores.innovation.getSectionTitle(this.activatedRoute.snapshot.params.sectionId),
+      status: 'UNKNOWN',
+      editButtonLabel: 'Start now'
+    };
 
-    this.getInnovationSections();
+    this.wizard = this.stores.innovation.getSectionWizard(this.section.id);
+
+    this.summaryList = [];
 
   }
 
 
-  getInnovationSections(): void {
+  ngOnInit(): void {
 
-    this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe(
-      response => this.innovationSections = response,
-      error => this.logger.error(error)
-    );
+    this.stores.innovation.getSectionInfo$(this.innovationId, this.section.id).subscribe(
+      response => {
+        this.summaryList = this.wizard.runSummaryParsing(response.data);
+        this.section.status = response.section.status;
+        this.section.editButtonLabel = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status) ? 'Start now' : 'Edit section';
+        console.log(response, this.summaryList);
+      },
+      () => {
+        this.logger.error('Error fetching data');
+      });
 
+
+  }
+
+  getEditUrl(stepNumber: number): string {
+    return `edit/${stepNumber}`;
   }
 
 }

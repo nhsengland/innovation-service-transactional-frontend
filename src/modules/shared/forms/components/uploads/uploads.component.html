@@ -1,0 +1,22 @@
+<!-- <div
+  [dropzone]="dzConfig"
+  (addedFile)="onFileAdded($event)"
+  (removedFile)="onFileRemoved($event)"
+  (uploadProgress)="onUploadProgress($event)"
+  (success)="onUploadSuccess($event)"
+  (error)="onUploadError($event)"
+  class="dropzone"
+  [ngClass]="'height-' + config?.style?.heightLevel"
+>
+</div> -->
+
+<!-- Preview collection of uploaded documents -->
+<!-- <div id="{{ previewContainer }}" class="preview-container"></div> -->
+
+
+<ngx-dropzone (change)="onSelect($event)">
+	<ngx-dropzone-label>Click or drop your file here</ngx-dropzone-label>
+	<ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+		<ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+	</ngx-dropzone-preview>
+</ngx-dropzone>

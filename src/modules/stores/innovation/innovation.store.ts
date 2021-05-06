@@ -3,13 +3,14 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { Store } from '../store.class';
-import { FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
+import { WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationService } from './innovation.service';
 
-import { InnovationModel, SectionsSummaryModel, InnovationSectionsIds } from './innovation.models';
+import { InnovationModel, SectionsSummaryModel, InnovationSectionsIds, getInnovationInfoResponse, sectionType } from './innovation.models';
 import { INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS } from './innovation.models';
 import { INNOVATION_SECTIONS } from './innovation.config';
+import { MappedObject } from '@modules/core/interfaces/base.interfaces';
 
 
 @Injectable()
@@ -27,6 +28,12 @@ export class InnovationStore extends Store<InnovationModel> {
   get INNOVATION_SECTION_ACTION_STATUS(): typeof INNOVATION_SECTION_ACTION_STATUS { return INNOVATION_SECTION_ACTION_STATUS; }
 
 
+
+  getInnovationInfo$(innovationId: string): Observable<getInnovationInfoResponse> {
+    return this.innovationsService.getInnovationInfo(innovationId);
+  }
+
+
   getSectionsSummary$(innovationId: string): Observable<SectionsSummaryModel[]> {
 
     return this.innovationsService.getInnovationSections(innovationId).pipe(
@@ -35,7 +42,13 @@ export class InnovationStore extends Store<InnovationModel> {
           title: item.title,
           sections: item.sections.map(ss => {
             const sectionState = response.sections.find(a => a.section === ss.id) || { status: 'UNKNOWN', actionStatus: '' };
-            return { ...ss, ...{ status: sectionState.status, actionStatus: sectionState.actionStatus } };
+            return {
+              id: ss.id,
+              title: ss.title,
+              status: sectionState.status,
+              actionStatus: sectionState.actionStatus,
+              isCompleted: INNOVATION_SECTION_STATUS[sectionState.status]?.isCompleteState || false
+            };
           })
         }));
       }),
@@ -45,7 +58,13 @@ export class InnovationStore extends Store<InnovationModel> {
           INNOVATION_SECTIONS.map(item => ({
             title: item.title,
             sections: item.sections.map(ss => {
-              return { ...ss, ...{ status: 'UNKNOWN' as keyof typeof INNOVATION_SECTION_STATUS, actionStatus: '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS } };
+              return {
+                id: ss.id,
+                title: ss.title,
+                status: 'UNKNOWN' as keyof typeof INNOVATION_SECTION_STATUS,
+                actionStatus: '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
+                isCompleted: false
+              };
             })
           }))
         );
@@ -55,14 +74,24 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
 
-  getSectionForm(sectionId: InnovationSectionsIds): FormEngineModel[] {
-    return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id = sectionId)?.wizard.steps || [];
+  getSectionInfo$(innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
+
+    return this.innovationsService.getSectionInfo(innovationId, section);
+
+  }
+
+  updateSectionInfo$(innovationId: string, section: string, isSubmission: boolean, data: MappedObject): Observable<MappedObject> {
+
+    return this.innovationsService.updateSectionInfo(innovationId, section, isSubmission, data);
+
+  }
+
+  getSectionTitle(sectionId: InnovationSectionsIds): string {
+    return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id = sectionId)?.title || '';
   }
 
   getSectionWizard(sectionId: InnovationSectionsIds): WizardEngineModel {
-    return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id = sectionId)?.wizard || new WizardEngineModel({});
+    return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id === sectionId)?.wizard || new WizardEngineModel({});
   }
-
-
 
 }

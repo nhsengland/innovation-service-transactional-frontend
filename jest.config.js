@@ -18,6 +18,7 @@ module.exports = {
   ],
   coveragePathIgnorePatterns: [
     'index.ts',
+    '.config.ts',
     '.interfaces.ts',
     '.mock.ts',
     '.models.ts',

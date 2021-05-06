@@ -6,6 +6,8 @@ import { FormEngineHelper } from './helpers/form-engine.helper';
 
 import { FormEngineParameterModel } from './models/form-engine.models';
 
+// import { UploadsEvents } from '../components/uploads/uploads-events.enum';
+
 /**
  * @param parameters is an array of ParameterModel. For more info, check ParameterModel.
  * @param values is an object of objects to set the values of the parameters. This object follows the structure { parameterKey: { dataType, value } }.
@@ -85,6 +87,23 @@ export class FormEngineComponent implements OnInit, OnChanges {
 
   trackFieldGroupRowsChanges(index: number, item: { [key: string]: any }): number {
     return index;
+  }
+
+
+  onFileUploaded(event: Event, parameterKey: string): void {
+
+    console.log('onFileUploaded', parameterKey, event);
+    // switch (event.type) {
+    //   case UploadsEvents.FILE_UPLOAD_SUCCESS:
+    //     // this.form.get(parameterKey)?.setValue(event.response.data);
+    //     // this.formEngineEvents.emit({ type: FormEngineEvents.PARAMETER_FILE_UPLOADED_SUCCESS, data: { key: parameterKey } });
+    //     break;
+    //   default:
+    //     break;
+    // }
+  }
+
+  onFileUploadError(event: Event, parameterKey: string): void {
   }
 
 

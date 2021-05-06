@@ -42,6 +42,72 @@ describe('Stores/Innovation/InnovationService', () => {
   });
 
 
+
+  it('should run getInnovationInfo() and return success with response 01', () => {
+
+    const responseMock = {
+      id: '123abc',
+      name: 'Innovation name',
+      company: '',
+      description: 'Some description',
+      countryName: 'England',
+      postcode: 'EN60',
+      actions: [],
+      comments: []
+    };
+    const expected = {
+      id: '123abc',
+      name: 'Innovation name',
+      company: '',
+      location: 'England, EN60',
+      description: 'Some description',
+      openActionsNumber: 0,
+      openCommentsNumber: 0
+    };
+    let response: any = null;
+
+    service.getInnovationInfo('123abc').subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators//innovations/123abc`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run getInnovationInfo() and return success with response 02', () => {
+
+    const responseMock = {
+      id: '123abc',
+      name: 'Innovation name',
+      company: '',
+      description: 'Some description',
+      countryName: 'England',
+      // postcode: '',
+      actions: [],
+      comments: []
+    };
+    const expected = {
+      id: '123abc',
+      name: 'Innovation name',
+      company: '',
+      location: 'England',
+      description: 'Some description',
+      openActionsNumber: 0,
+      openCommentsNumber: 0
+    };
+    let response: any = null;
+
+    service.getInnovationInfo('123abc').subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators//innovations/123abc`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+
   it('should run getInnovationSections() and return success', () => {
 
     const responseMock = [
@@ -80,6 +146,5 @@ describe('Stores/Innovation/InnovationService', () => {
     expect(response.statusText).toEqual('Bad Request');
 
   });
-
 
 });

@@ -1,19 +1,20 @@
-<h1> Innovation record </h1>
+<h1 class="nhsuk-u-margin-bottom-3"> Innovation record </h1>
 
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
 
-    <!-- Future progress bar
-        <ul class="progressbar">
-          <li class="active">login</li>
-          <li>choose interest</li>
-          <li>add friends</li>
-          <li>View map</li>
-  </ul>
-   -->
+    <ul class="progressbar nhsuk-u-padding-bottom-5">
+      <li *ngFor="let item of progressBar.blocks" class="progressbar-item" [ngClass]="{'active': item}"></li>
+    </ul>
 
+    <p class="d-flex align-items-center nhsuk-u-margin-0">
+      <span class="progressbar-item active nhsuk-u-margin-right-2"></span> {{ progressBar.completed }}
+    </p>
 
-
+    <p class="d-flex align-items-center">
+      <span class="progressbar-item nhsuk-u-margin-right-2"></span> {{ progressBar.uncompleted }}
+    </p>
+    
 
     <h2>All sections</h2>
 

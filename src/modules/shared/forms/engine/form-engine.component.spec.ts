@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 import { FormEngineComponent } from './form-engine.component';
 import { FormCheckboxComponent } from '../components/checkbox.component';
@@ -12,6 +13,7 @@ import { FormCheckboxGroupComponent } from '../components/checkbox-group.compone
 import { FormInputComponent } from '../components/input.component';
 import { FormRadioGroupComponent } from '../components/radio-group.component';
 import { FormTextareaComponent } from '../components/textarea.component';
+import { FormUploadComponent } from '../components/uploads/uploads.component';
 
 import { ALL_PARAMETER_TYPES_EMPTY, PARAMETERS_WITH_VALIDATIONS } from '../tests/form-engine.mock';
 
@@ -26,7 +28,8 @@ describe('FormEngineComponent', () => {
         HttpClientModule,
         ReactiveFormsModule,
         LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE, timestampFormat: 'mediumTime' }),
-        TranslateModule.forRoot()
+        TranslateModule.forRoot(),
+        NgxDropzoneModule
       ],
       declarations: [
         FormEngineComponent,
@@ -35,7 +38,8 @@ describe('FormEngineComponent', () => {
         FormCheckboxGroupComponent,
         FormInputComponent,
         FormRadioGroupComponent,
-        FormTextareaComponent
+        FormTextareaComponent,
+        FormUploadComponent
       ],
     }).compileComponents();
 
