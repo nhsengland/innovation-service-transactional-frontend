@@ -5,14 +5,14 @@ import { ngExpressEngine } from '@nguniversal/express-engine';
 
 import * as dotenv from 'dotenv';
 import * as express from 'express';
+import * as multer from 'multer';
 import * as coockieParser from 'cookie-parser';
 import * as passport from 'passport';
 import * as session from 'express-session';
-import axios from 'axios';
-import { join } from 'path';
+import axios, { Method } from 'axios';
 import { IOIDCStrategyOptionWithoutRequest, IProfile, OIDCStrategy, VerifyCallback } from 'passport-azure-ad';
-import { existsSync } from 'fs';
-// import { Deserializer } from 'jsonapi-serializer';
+import { join } from 'path';
+import * as fs from 'fs';
 
 import { AppServerModule } from './src/main.server';
 
@@ -58,7 +58,6 @@ const OAUTH_CONFIGURATION: {
   passReqToCallback: false
 };
 
-// TODO NHSAAC-134
 const signInOptions: IOIDCStrategyOptionWithoutRequest = {
   identityMetadata: `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/${OAUTH_CONFIGURATION.signinPolicy}/v2.0/.well-known/openid-configuration`,
   clientID: OAUTH_CONFIGURATION.clientID,
@@ -71,13 +70,16 @@ const signInOptions: IOIDCStrategyOptionWithoutRequest = {
   scope: OAUTH_CONFIGURATION.scope
 };
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
 
   const server = express();
   const staticContentPath = `${BASE_PATH}${STATIC_CONTENT_PATH}`;
   const distFolder = join(process.cwd(), VIEWS_PATH);
-  const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
+  const indexHtml = fs.existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
   const userSessions: UserSession[] = [];
 
   server.engine('html', ngExpressEngine({ bootstrap: AppServerModule })); // Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
@@ -169,7 +171,6 @@ export function app(): express.Express {
     }
   });
 
-
   // MS Azure OpenId Connect strategy (passport) and callbacks handling.
   server.get(`${BASE_PATH}/signup`, (req, res) => {
     const azSignupUri = `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&prompt=login`
@@ -190,7 +191,6 @@ export function app(): express.Express {
   server.post(`${BASE_PATH}/signin/callback`, (req, res) => {
     res.redirect(`${BASE_PATH}/dashboard`);
   });
-
   server.get(`${BASE_PATH}/signout`, (req, res) => {
 
     const user: IProfile = req.user || {};
@@ -223,7 +223,6 @@ export function app(): express.Express {
         res.status(500).send();
       });
   });
-
 
   server.all(`${BASE_PATH}/api/*`, (req, res) => {
     const user: IProfile = req.user || {};
@@ -281,6 +280,71 @@ export function app(): express.Express {
     }
   });
 
+  // ******************************
+  // File upload area
+  // ******************************
+  async function getUploadUrl(url: string, body: any, accessToken: string): Promise<any> {
+    let res;
+    try {
+      const config = { headers: { Authorization: `Bearer ${accessToken}` } };
+      res = await axios.post(url, body, config);
+    } catch (error) {
+      throw error;
+    }
+
+    return res.data;
+  }
+
+  async function uploadFile(url: string, file: any): Promise<void> {
+    try {
+      const config = {
+        method: 'PUT' as Method,
+        params: {
+          fileName: file.originalname
+        },
+        headers: {
+          'x-ms-blob-type': 'BlockBlob',
+          'content-length': file.size
+        },
+        data: file.buffer
+      };
+
+      await axios(url, config);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  server.post(`${BASE_PATH}/innovators/:innovatorId/innovations/:innovationId/upload`, upload.single('file'), async (req, res) => {
+    const user: IProfile = req.user || {};
+    const oid: string = user.oid || '';
+    const accessToken = getAccessTokenByOid(oid);
+
+    if (req.isAuthenticated() && accessToken) {
+      const basePath = req.url.replace(BASE_PATH, '');
+      const file = req.file;
+      const url = `${API_URL}/api${basePath}`;
+      const body = {
+        context: req.body.context,
+        fileName: file.originalname
+      };
+
+      try {
+        const fileInfo = await getUploadUrl(url, body, accessToken);
+        await uploadFile(fileInfo.url, file);
+
+        const response = {
+          id: fileInfo.id
+        };
+
+        res.status(201).send(response);
+      } catch (error) {
+        res.status(500).send();
+      }
+    } else {
+      res.status(401).send();
+    }
+  });
 
   // Angular routing.
   // // Serve static files.
