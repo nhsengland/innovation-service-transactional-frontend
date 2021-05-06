@@ -1,3 +1,5 @@
+import { UploadConfigurationModel } from '../../components/uploads/uploads.models';
+
 export class FormEngineModel {
 
   label?: string;
@@ -25,7 +27,7 @@ export class FormEngineModel {
 export class FormEngineParameterModel {
 
   id: string;
-  dataType: 'text' | 'textarea' | 'number' | 'password' | 'hidden' | 'checkbox-group' | 'checkbox-array' | 'radio-group' | 'fields-group';
+  dataType: 'text' | 'textarea' | 'number' | 'password' | 'hidden' | 'checkbox-group' | 'checkbox-array' | 'radio-group' | 'fields-group' | 'file-upload';
   label?: string;
   description?: string;
   placeholder?: string;
@@ -40,6 +42,7 @@ export class FormEngineParameterModel {
     minLength?: string | number;
     maxLength?: string | number;
   };
+
   items?: ({
     value: 'SEPARATOR' | string;
     label: 'SEPARATOR' | string;
@@ -47,10 +50,17 @@ export class FormEngineParameterModel {
     group?: string;
     conditional?: FormEngineParameterModel
   })[];
+
   fieldsGroupConfig?: {
     fields: FormEngineParameterModel[];  // Used in "fields-group" dataType.
     addNewLabel?: string;
   };
+
+  fileUploadConfig?: {
+    allowedExtensions?: string[];
+    fileConfig: UploadConfigurationModel;
+  };
+
 
   constructor(data: FormEngineParameterModel) {
     this.id = data.id;
@@ -62,6 +72,7 @@ export class FormEngineParameterModel {
     this.isEditable = data.isEditable !== undefined ? data.isEditable : true;
     this.rank = data.rank || 0;
     this.validations = data.validations;
+
     this.items = data.items;
 
     if (data.fieldsGroupConfig) {
@@ -71,6 +82,19 @@ export class FormEngineParameterModel {
       };
     }
 
-  }
+    if (data.fileUploadConfig) {
+      // file config accepted files is a string instead of an array so it needs to be converted...
+      const acceptedFiles = (data.fileUploadConfig.allowedExtensions || []).map(ext => `.${ext}`).join(',');
+      this.fileUploadConfig = {
+        fileConfig: new UploadConfigurationModel({
+          // url: engineService?.getUploadConfigurationUrl(),
+          url: 'TODO!',
+          acceptedFiles,
+          maxFiles: 1,
+          style: { heightLevel: 2 }
+        })
+      };
+    }
 
+  }
 }

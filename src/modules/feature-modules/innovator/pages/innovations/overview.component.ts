@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { InnovationsService, getInnovationInfoResponse } from '../../services/innovations.service';
+import { getInnovationInfoResponse } from '@stores-module/innovation/innovation.models';
 
 @Component({
   selector: 'app-innovator-pages-innovations-overview',
@@ -14,13 +14,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovation: Partial<getInnovationInfoResponse> = {};
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private innovationsService: InnovationsService
+    private activatedRoute: ActivatedRoute
   ) { super(); }
 
   ngOnInit(): void {
 
-    this.innovationsService.getInnovationInfo(this.activatedRoute.snapshot.params.innovationId).subscribe(
+    this.stores.innovation.getInnovationInfo$(this.activatedRoute.snapshot.params.innovationId).subscribe(
       response => {
         this.innovation = response;
       },

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule as AngularFormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 // Components.
 import { FormEngineComponent } from './engine/form-engine.component';
@@ -12,13 +13,16 @@ import { FormCheckboxGroupComponent } from './components/checkbox-group.componen
 import { FormInputComponent } from './components/input.component';
 import { FormRadioGroupComponent } from './components/radio-group.component';
 import { FormTextareaComponent } from './components/textarea.component';
+import { FormUploadComponent } from './components/uploads/uploads.component';
 
 @NgModule({
   imports: [
     CommonModule,
     AngularFormsModule,
     ReactiveFormsModule,
-    TranslateModule
+    TranslateModule,
+    NgxDropzoneModule
+
   ],
   declarations: [
     FormEngineComponent,
@@ -28,7 +32,9 @@ import { FormTextareaComponent } from './components/textarea.component';
     FormCheckboxGroupComponent,
     FormInputComponent,
     FormRadioGroupComponent,
-    FormTextareaComponent
+    FormTextareaComponent,
+    FormUploadComponent
+
   ],
   exports: [
     // CommonModule,
@@ -43,7 +49,8 @@ import { FormTextareaComponent } from './components/textarea.component';
     FormCheckboxGroupComponent,
     FormInputComponent,
     FormRadioGroupComponent,
-    FormTextareaComponent
+    FormTextareaComponent,
+    FormUploadComponent
 
   ],
   providers: []

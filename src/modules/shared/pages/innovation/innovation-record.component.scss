@@ -1,0 +1,26 @@
+.progressbar {
+  padding: 0;
+  list-style-type: none;
+}
+
+.progressbar-item {
+  border-bottom: 2px solid var(--color_nhsuk-grey-3);
+  background: var(--nhsuk-border-color);
+  width: 5%;
+  height: 8px;
+  float: left;
+  margin: 0 2px;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &.active {
+    background: var(--nhsuk-button-color);
+    border-bottom: 1px solid var(--color_nhsuk-grey-3);
+  }
+}

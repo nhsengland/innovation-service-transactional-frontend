@@ -5,17 +5,18 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Injector } from '@angular/core';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { StoresModule, InnovationService } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
+
 import { InnovationOverviewComponent } from './overview.component';
-import { InnovationsService } from '../../services/innovations.service';
+
 import { of, throwError } from 'rxjs';
 
 
 describe('FeatureModules/Innovator/DashboardComponent', () => {
 
-  let innovationsService: InnovationsService;
+  let innovationService: InnovationService;
 
   let component: InnovationOverviewComponent;
   let fixture: ComponentFixture<InnovationOverviewComponent>;
@@ -33,7 +34,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
-    innovationsService = TestBed.inject(InnovationsService);
+    innovationService = TestBed.inject(InnovationService);
 
   });
 
@@ -48,7 +49,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
   it('should have a innovation loaded', () => {
 
-    spyOn(innovationsService, 'getInnovationInfo').and.returnValue(of({
+    spyOn(innovationService, 'getInnovationInfo').and.returnValue(of({
       id: 'abc123zxc',
       name: 'HealthyApp',
       company: 'Organisation 01',
@@ -80,7 +81,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
   it('should NOT have a innovation loaded', () => {
 
-    spyOn(innovationsService, 'getInnovationInfo').and.returnValue(throwError('error'));
+    spyOn(innovationService, 'getInnovationInfo').and.returnValue(throwError('error'));
 
     const expectedState = { innovation: {} };
 

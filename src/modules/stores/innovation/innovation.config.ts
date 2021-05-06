@@ -58,19 +58,33 @@ function group_2_1_inboundParsing(data: any): MappedObject {
 
 function group_2_1_outboundParsing(data: any): MappedObject {
 
-
   const parsedData = cloneDeep(data);
 
   Object.keys(parsedData).filter(key => key.startsWith('subGroupName_')).forEach((key) => {
     delete parsedData[key];
   });
 
-
-  // console.log('DATA', parsedData);
   return parsedData;
 
 }
 
+function group_2_1_summaryParsing(steps: FormEngineModel[], data: any): { label: string, value: string, stepNumber: number }[] {
+
+  const toReturn = [];
+
+  toReturn.push({
+    label: steps[0].label || '',
+    value: steps[0].parameters[0].items?.find(item => item.value === data.hasSubgroups)?.label || '',
+    stepNumber: 1
+  });
+
+  (data.subgroups as { id: string, name: string, conditions: string}[]).forEach((item, i) => {
+    toReturn.push({label: `Group ${item.name} condition`, value: item.conditions, stepNumber: i + 2});
+  });
+
+  return toReturn;
+
+}
 
 
 
@@ -137,12 +151,32 @@ export const INNOVATION_SECTIONS: {
             ],
             runtimeRules: [(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number) => group_2_1_rules(steps, currentValues, currentStep)],
             inboundParsing: (data: any) => group_2_1_inboundParsing(data),
-            outboundParsing: (data: any) => group_2_1_outboundParsing(data)
+            outboundParsing: (data: any) => group_2_1_outboundParsing(data),
+            summaryParsing: (steps: FormEngineModel[], data: any) => group_2_1_summaryParsing(steps, data)
           })
         },
 
         { id: InnovationSectionsIds.UNDERSTANDING_OF_BENEFITS, title: 'Detailed understanding of benefits', wizard: new WizardEngineModel({}) },
-        { id: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, title: 'Evidence documents', wizard: new WizardEngineModel({}) }
+        {
+          id: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS,
+          title: 'Evidence of effectiveness',
+          wizard: new WizardEngineModel({
+            steps: [
+              new FormEngineModel({
+                label: 'Please upload any documents that support this evidence ',
+                // description: 'We\'re asking this to get a better understanding of who would benefit from your innovation.',
+                parameters: [{
+                  id: 'evidenceUpload',
+                  dataType: 'file-upload',
+                  validations: { isRequired: true },
+                  // fileUploadConfig: {allowedExtensions: [''], fileConfig}
+
+                }]
+              }),
+            ]
+
+          })
+        }
       ]
     }
 

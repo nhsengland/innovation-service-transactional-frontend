@@ -6,9 +6,6 @@ import { FormEngineComponent, FormEngineModel } from '@app/base/forms';
 import { WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
 
-import { InnovationsService } from '../../../services/innovations.service';
-
-
 @Component({
   selector: 'app-innovator-pages-innovations-section-edit',
   templateUrl: './section-edit.component.html'
@@ -25,9 +22,21 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
   currentStep: FormEngineModel;
   currentAnswers: { [key: string]: any };
 
+  summaryList: { label: string, value: string, stepNumber: number }[];
+
+
+  // isValidStepId(): boolean {
+  //   const id = this.activatedRoute.snapshot.params.id;
+  //   return ((1 <= Number(id) && Number(id) <= this.stepsData.length) || id === 'summary');
+  // }
+  isQuestionStep(): boolean {
+
+    return Number.isInteger(Number(this.activatedRoute.snapshot.params.questionId));
+  }
+  isSummaryStep(): boolean { return this.activatedRoute.snapshot.params.questionId === 'summary'; }
+
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private innovationsService: InnovationsService
+    private activatedRoute: ActivatedRoute
   ) {
 
     super();
@@ -40,14 +49,18 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
     this.currentStep = new FormEngineModel({ parameters: [] });
     this.currentAnswers = {};
 
+    this.summaryList = [];
+
   }
+
+
 
 
   ngOnInit(): void {
 
-    this.innovationsService.getSectionInfo(this.innovationId, this.sectionId).subscribe(
+    this.stores.innovation.getSectionInfo$(this.innovationId, this.sectionId).subscribe(
       response => {
-        this.currentAnswers = this.wizard.runInboundParsing(response);
+        this.currentAnswers = this.wizard.runInboundParsing(response.data);
       },
       () => {
         this.logger.error('Error fetching data');
@@ -55,8 +68,21 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
 
     this.subscriptions.push(
       this.activatedRoute.params.subscribe(params => {
+
+        // if (!this.isValidStepId()) {
+        //   this.redirectTo('not-found');
+        //   return;
+        // }
+
+        if (this.isSummaryStep()) {
+          this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);
+          return;
+        }
+
         this.wizard.gotoStep(Number(params.questionId));
         this.currentStep = this.wizard.currentStep();
+
+
       })
     );
 
@@ -78,33 +104,35 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
 
     this.wizard.runRules(this.currentAnswers);
 
-    if (this.wizard.isLastStep() && action === 'next') {
-      this.onSubmitSurvey();
-    }
-    else {
-      this.redirectTo(this.getNavigationUrl(action), { a: action });
-
-    }
+    this.redirectTo(this.getNavigationUrl(action));
 
   }
 
 
 
-  onSubmitSurvey(): void {
+  onSubmitSurvey(isSubmission: boolean): void {
 
-    const teste = this.wizard.runInboundParsing(this.currentAnswers);
-
-    this.innovationsService.updateSectionInfo(this.innovationId, this.sectionId, teste).subscribe(
+    this.stores.innovation.updateSectionInfo$(
+      this.innovationId,
+      this.sectionId,
+      isSubmission,
+      this.wizard.runInboundParsing(this.currentAnswers)
+    ).subscribe(
       () => {
-        this.redirectTo(`innovator/innovations/776227DC-C9A8-EB11-B566-0003FFD6549F/record`);
+        this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`);
         return;
       },
       () => {
-        this.redirectTo(`innovator/first-time-signin/summary`);
+        this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`);
         return;
       }
     );
 
+  }
+
+  gotoStep(stepNumber: number): string {
+
+    return `/innovator/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${stepNumber}`;
   }
 
 
@@ -114,12 +142,14 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
 
     switch (action) {
       case 'previous':
-        if (this.wizard.isFirstStep()) { url += ''; }
+        if (this.wizard.isFirstStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}`; }
+        else if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${this.wizard.steps.length}`; }
         else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${this.wizard.currentStepNumber - 1}`; }
         break;
 
       case 'next':
-        if (this.wizard.isLastStep()) { url += '/first-time-signin/summary'; }
+        if (this.isSummaryStep()) { url += ``; }
+        else if (this.wizard.isLastStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/summary`; }
         else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${this.wizard.currentStepNumber + 1}`; }
         break;
 

@@ -14,7 +14,6 @@ import { InnovationsSectionEditComponent } from './pages/innovations/sections/se
 import { InnovationsSectionViewComponent } from './pages/innovations/sections/section-view.component';
 
 // Services.
-import { InnovationsService } from './services/innovations.service';
 import { InnovatorService } from './services/innovator.service';
 
 // Guards.
@@ -39,7 +38,6 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
     InnovationsSectionViewComponent
   ],
   providers: [
-    InnovationsService,
     InnovatorService,
 
     // Guards.
