@@ -86,7 +86,7 @@ export class InnovationService {
 
     const body = {
       section,
-      // isSubmission,
+      isSubmission,
       data: cloneDeep(data)
     };
 

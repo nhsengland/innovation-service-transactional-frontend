@@ -8,6 +8,7 @@ import { UploadConfigurationModel } from './uploads.models';
 
 import { catchError, map, take } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { UrlModel } from '@modules/core';
 
 const generateRandom = () => `${+new Date()}${Math.floor((Math.random() * 1000) + 1)}`;
 
@@ -64,13 +65,15 @@ export class FormUploadComponent implements OnInit {
     this.readFile(this.files[0]).then(fileContents => {
       // Put this string in a request body to upload it to an API.
 
-      console.log('1 contents', fileContents);
+      const formdata = new FormData();
+      formdata.append('file', this.files[0], 'test.txt');
+      formdata.append('context', 'BATATAS');
+      formdata.append('innovatorId', '807e7f74-f85a-42e0-ae4e-c635a792730c');
+      formdata.append('innovationId', '776227DC-C9A8-EB11-B566-0003FFD6549F');
 
-      // {id: '2653433E-F36B-1410-80E3-0032FE5B194B', url: 'https://nhsenhsaacb2cdev.blob.core.windows.net/fileupload/fileupload/2653433E-F36B-1410-80E3-003[…]ig=534D7gOe2tTjPohLLGB4A1z1tG75UeJSbT06ZmEd2nQ%3D'}
-      // const url = new UrlModel(this.API_URL).addPath('organisations').setQueryParams({ type: 'accessor' });
-      this.http.put<any>(
-        'https://nhsenhsaacb2cdev.blob.core.windows.net/fileupload/fileupload/2653433E-F36B-1410-80E3-0032FE5B194B?sv=2020-06-12&spr=https%2Chttp&st=2021-05-04T14%3A11%3A59Z&se=2021-05-05T14%3A11%3A59Z&sr=b&sp=cw&sig=534D7gOe2tTjPohLLGB4A1z1tG75UeJSbT06ZmEd2nQ%3D',
-        fileContents
+      this.http.post<any>(
+        new UrlModel('http://localhost:4200').setPath('transactional/upload').buildUrl(),
+        formdata
       ).pipe(
         take(1),
         map(response => {

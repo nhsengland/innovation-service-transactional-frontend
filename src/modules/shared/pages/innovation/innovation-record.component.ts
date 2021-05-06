@@ -66,15 +66,4 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   }
 
-
-  getSectionsArray(): SectionsSummaryModel['sections'] {
-
-    const toReturn = [...this.innovationSections].reduce((acc: SectionsSummaryModel['sections'], item) => {
-      return [...acc, ...item.sections];
-    }, []);
-
-    return sortBy(toReturn, 'isCompleted');
-
-  }
-
 }
