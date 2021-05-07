@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { cloneDeep } from 'lodash';
 
 import { Store } from '../store.class';
 import { WizardEngineModel } from '@modules/shared/forms';
@@ -26,7 +27,6 @@ export class InnovationStore extends Store<InnovationModel> {
   get INNOVATION_SUPPORT_STATUS(): typeof INNOVATION_SUPPORT_STATUS { return INNOVATION_SUPPORT_STATUS; }
   get INNOVATION_SECTION_STATUS(): typeof INNOVATION_SECTION_STATUS { return INNOVATION_SECTION_STATUS; }
   get INNOVATION_SECTION_ACTION_STATUS(): typeof INNOVATION_SECTION_ACTION_STATUS { return INNOVATION_SECTION_ACTION_STATUS; }
-
 
 
   getInnovationInfo$(innovationId: string): Observable<getInnovationInfoResponse> {
@@ -91,7 +91,9 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   getSectionWizard(sectionId: InnovationSectionsIds): WizardEngineModel {
-    return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id === sectionId)?.wizard || new WizardEngineModel({});
+    return cloneDeep(
+      INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id === sectionId)?.wizard || new WizardEngineModel({})
+    );
   }
 
 }

@@ -14,7 +14,7 @@
 <!-- <div id="{{ previewContainer }}" class="preview-container"></div> -->
 
 
-<ngx-dropzone (change)="onSelect($event)">
+<ngx-dropzone (change)="onSelect($event)" style="margin-bottom: 50px">
 	<ngx-dropzone-label>Click or drop your file here</ngx-dropzone-label>
 	<ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
 		<ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>

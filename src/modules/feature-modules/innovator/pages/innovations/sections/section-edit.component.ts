@@ -105,6 +105,7 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
     this.currentAnswers = { ...this.currentAnswers, ...formData?.data };
 
     this.wizard.runRules(this.currentAnswers);
+    this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);
 
     this.redirectTo(this.getNavigationUrl(action));
 
@@ -118,7 +119,7 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
       this.innovationId,
       this.sectionId,
       isSubmission,
-      this.wizard.runInboundParsing(this.currentAnswers)
+      this.wizard.runOutboundParsing(this.currentAnswers)
     ).subscribe(
       () => {
         this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`);

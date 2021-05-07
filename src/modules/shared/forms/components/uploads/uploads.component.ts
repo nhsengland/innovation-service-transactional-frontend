@@ -1,7 +1,8 @@
 /* istanbul ignore file */
 
-import { Component, Input, Output, OnInit, ViewChild, ViewEncapsulation, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, OnInit, ViewEncapsulation, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
 import { UploadConfigurationModel } from './uploads.models';
@@ -9,6 +10,8 @@ import { UploadConfigurationModel } from './uploads.models';
 import { catchError, map, take } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { UrlModel } from '@modules/core';
+import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
+import { EnvironmentStore } from '@modules/core/stores/environment.store';
 
 const generateRandom = () => `${+new Date()}${Math.floor((Math.random() * 1000) + 1)}`;
 
@@ -38,7 +41,10 @@ export class FormUploadComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private readonly cdr: ChangeDetectorRef,
-    private readonly t: TranslateService
+    private readonly t: TranslateService,
+    private activatedRoute: ActivatedRoute,
+    private innovationStore: AuthenticationStore,
+    private environmentStore: EnvironmentStore
   ) {
 
     this.config = { url: '' };
@@ -65,14 +71,16 @@ export class FormUploadComponent implements OnInit {
     this.readFile(this.files[0]).then(fileContents => {
       // Put this string in a request body to upload it to an API.
 
+      console.log(this.innovationStore.getUserId(), this.activatedRoute.snapshot.params.innovationId);
+
       const formdata = new FormData();
       formdata.append('file', this.files[0], 'test.txt');
       formdata.append('context', 'BATATAS');
-      formdata.append('innovatorId', '807e7f74-f85a-42e0-ae4e-c635a792730c');
-      formdata.append('innovationId', '776227DC-C9A8-EB11-B566-0003FFD6549F');
+      formdata.append('innovatorId', this.innovationStore.getUserId()); // '807e7f74-f85a-42e0-ae4e-c635a792730c');
+      formdata.append('innovationId', this.activatedRoute.snapshot.params.innovationId); // '776227DC-C9A8-EB11-B566-0003FFD6549F');
 
       this.http.post<any>(
-        new UrlModel('http://localhost:4200').setPath('transactional/upload').buildUrl(),
+        new UrlModel(this.environmentStore.APP_URL).addPath('upload').buildUrl(),
         formdata
       ).pipe(
         take(1),
