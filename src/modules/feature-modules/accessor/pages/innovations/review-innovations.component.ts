@@ -28,7 +28,8 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
         updatedAt: { label: 'Updated at', orderable: true },
         supportStatus: { label: 'Status', align: 'right' }
       },
-      orderBy: 'updatedAt', orderDir: 'desc'
+      orderBy: 'updatedAt', orderDir: 'desc',
+      pageSize: 10000
     });
 
   }
