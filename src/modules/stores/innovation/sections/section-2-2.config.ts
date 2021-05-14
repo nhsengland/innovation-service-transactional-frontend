@@ -24,10 +24,10 @@ export const SECTION_2_2: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number) => group_2_2_rules(steps, currentValues, currentStep)],
-    inboundParsing: (data: any) => group_2_2_inboundParsing(data),
-    outboundParsing: (data: any) => group_2_2_outboundParsing(data),
-    summaryParsing: (steps: FormEngineModel[], data: any) => group_2_2_summaryParsing(steps, data)
+    runtimeRules: [(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
+    inboundParsing: (data: any) => inboundParsing(data),
+    outboundParsing: (data: any) => outboundParsing(data),
+    summaryParsing: (steps: FormEngineModel[], data: any) => summaryParsing(steps, data)
   })
 };
 
@@ -43,7 +43,7 @@ export const SECTION_2_2: InnovationSectionConfigType['sections'][0] = {
 // }
 
 // Add/remove new steps for each subgroup defined on step 2.
-function group_2_2_rules(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number): void {
+function runtimeRules(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number): void {
 
   if (['no', 'notRelevant'].includes(currentValues.hasBenefits)) {
     steps.splice(1);
@@ -100,7 +100,7 @@ function group_2_2_rules(steps: FormEngineModel[], currentValues: MappedObject, 
 }
 
 
-function group_2_2_inboundParsing(data: any): MappedObject {
+function inboundParsing(data: any): MappedObject {
 
   const parsedData = cloneDeep(data);
 
@@ -114,7 +114,7 @@ function group_2_2_inboundParsing(data: any): MappedObject {
 }
 
 
-function group_2_2_outboundParsing(data: any): MappedObject {
+function outboundParsing(data: any): MappedObject {
 
   const parsedData = cloneDeep(data);
 
@@ -126,7 +126,7 @@ function group_2_2_outboundParsing(data: any): MappedObject {
 
 }
 
-function group_2_2_summaryParsing(steps: FormEngineModel[], data: any): { label: string, value: string, editStepNumber: number }[] {
+function summaryParsing(steps: FormEngineModel[], data: any): { label: string, value: string, editStepNumber: number }[] {
 
   const toReturn = [];
 

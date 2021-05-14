@@ -33,7 +33,7 @@ export const SECTION_2_EVIDENCES = new WizardEngineModel({
       }]
     })
   ],
-  runtimeRules: [(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number) => rules(steps, currentValues, currentStep)],
+  runtimeRules: [(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
   inboundParsing: (data: any) => inboundParsing(data),
   outboundParsing: (data: any) => outboundParsing(data),
   summaryParsing: (steps: FormEngineModel[], data: any) => summaryParsing(steps, data)
@@ -53,7 +53,7 @@ export const SECTION_2_EVIDENCES = new WizardEngineModel({
 
 
 // Add/remove new steps for each subgroup defined on step 2.
-function rules(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number): void {
+function runtimeRules(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number): void {
 
   steps.splice(1);
 

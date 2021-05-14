@@ -23,7 +23,7 @@ export const SECTION_2_3: InnovationSectionConfigType['sections'][0] = {
       })
     ],
     outboundParsing: (data: any) => outboundParsing(data),
-    summaryParsing: (steps: FormEngineModel[], data: any) => group_2_3_summaryParsing(steps, data)
+    summaryParsing: (steps: FormEngineModel[], data: any) => summaryParsing(steps, data)
   }),
   evidences: SECTION_2_EVIDENCES
 };
@@ -55,7 +55,7 @@ type summaryData = {
 };
 
 
-function group_2_3_summaryParsing(steps: FormEngineModel[], data: summaryData): { label: string, value: string, editStepNumber?: number, evidenceId?: string }[] {
+function summaryParsing(steps: FormEngineModel[], data: summaryData): { label: string, value: string, editStepNumber?: number, evidenceId?: string }[] {
 
   const toReturn = [];
 

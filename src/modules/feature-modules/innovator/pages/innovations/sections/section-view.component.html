@@ -16,13 +16,13 @@
         <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
         <dd class="nhsuk-summary-list__value" [innerHTML]="item.value"></dd>
         <dd class="nhsuk-summary-list__actions">
-          <a *ngIf="item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }}</span></a>
+          <a *ngIf="!section.isNotStarted && item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }}</span></a>
           <a *ngIf="item.evidenceId" routerLink="evidence/{{ item.evidenceId }}">View<span class="nhsuk-u-visually-hidden"> evidence detail</span></a>
         </dd>
       </div>
     </dl>
 
-    <button *ngIf="section.showStartNowButton" type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-right-3">Start now</button>
+    <button *ngIf="section.isNotStarted" type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-right-3">Start now</button>
     <button *ngIf="section.showSubmitButton" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-right-3"> Submit </button>
     <button *ngIf="section.hasEvidences" routerLink="evidence/new" class="nhsuk-button nhsuk-button--secondary"> Add evidence </button>
 

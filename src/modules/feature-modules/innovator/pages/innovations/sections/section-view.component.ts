@@ -18,7 +18,7 @@ export class InnovationsSectionViewComponent extends CoreComponent implements On
     id: InnovationSectionsIds;
     title: string;
     status: keyof typeof INNOVATION_SECTION_STATUS;
-    showStartNowButton: boolean;
+    isNotStarted: boolean;
     showSubmitButton: boolean;
     hasEvidences: boolean;
   };
@@ -91,7 +91,7 @@ export class InnovationsSectionViewComponent extends CoreComponent implements On
       id: this.activatedRoute.snapshot.params.sectionId,
       title: section?.title || '',
       status: 'UNKNOWN',
-      showStartNowButton: false,
+      isNotStarted: false,
       showSubmitButton: false,
       hasEvidences: !!section?.evidences?.steps.length
     };
@@ -115,7 +115,7 @@ export class InnovationsSectionViewComponent extends CoreComponent implements On
       response => {
         this.summaryList = this.wizard.runSummaryParsing(response.data);
         this.section.status = response.section.status;
-        this.section.showStartNowButton = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status);
+        this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status);
         this.section.showSubmitButton = ['DRAFT'].includes(this.section.status);
       },
       () => {

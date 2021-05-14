@@ -1,6 +1,7 @@
 import { InnovationSectionConfigType } from './innovation.models';
 
-import { SECTION_1_CONFIG } from './sections/section-1.config';
+import { SECTION_1_1 } from './sections/section-1-1.config';
+import { SECTION_1_2 } from './sections/section-1-2.config';
 
 import { SECTION_2_1 } from './sections/section-2-1.config';
 import { SECTION_2_2 } from './sections/section-2-2.config';
@@ -15,8 +16,10 @@ import { SECTION_8_CONFIG } from './sections/section-8.config';
 
 
 export const INNOVATION_SECTIONS: InnovationSectionConfigType[] = [
-  SECTION_1_CONFIG,
-
+  {
+    title: 'About your product or service',
+    sections: [SECTION_1_1, SECTION_1_2]
+  },
   {
     title: 'Needs, benefits and effectiveness',
     sections: [SECTION_2_1, SECTION_2_2, SECTION_2_3]
