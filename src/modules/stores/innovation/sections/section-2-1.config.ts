@@ -1,8 +1,21 @@
 import { cloneDeep } from 'lodash';
 
 import { MappedObject } from '@modules/core';
-import { FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+
+
+const stepsLabels = {
+  s_1_1_1: 'Do you know yet what patient population or subgroup your innovation will affect?',
+  s_1_1_2: 'What population or subgroup does this affect?'
+};
+
+const yesOrNoItems = [
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
+  { value: 'notRelevant', label: 'Not relevant' }
+];
+
 
 export const SECTION_2_1: InnovationSectionConfigType['sections'][0] = {
   id: InnovationSectionsIds.UNDERSTANDING_OF_NEEDS,
@@ -10,21 +23,17 @@ export const SECTION_2_1: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: 'Do you know yet what patient population or subgroup your innovation will affect?',
+        label: stepsLabels.s_1_1_1,
         description: 'We\'re asking this to get a better understanding of who would benefit from your innovation.',
         parameters: [{
           id: 'hasSubgroups',
           dataType: 'radio-group',
           validations: { isRequired: true },
-          items: [
-            { value: 'yes', label: 'Yes' },
-            { value: 'no', label: 'No' },
-            { value: 'notRelevant', label: 'Not relevant' }
-          ]
+          items: yesOrNoItems
         }]
       }),
       new FormEngineModel({
-        label: 'What population or subgroup does this affect?',
+        label: stepsLabels.s_1_1_2,
         description: 'We\'ll ask you further questions about each answer you provide here. If there are key distinctions between how you innovation affects different populations, be as specific as possible. If not, consider providing as few answers as possible.',
         parameters: [{
           id: 'subgroups',
@@ -136,7 +145,6 @@ function inboundParsing(data: any): MappedObject {
     parsedData[`subGroupName_${i}`] = item.conditions;
   });
 
-  // console.log('DATA', parsedData);
   return parsedData;
 
 }
@@ -154,24 +162,33 @@ function outboundParsing(data: any): MappedObject {
 
 }
 
-function summaryParsing(steps: FormEngineModel[], data: any): { label: string, value: string, editStepNumber: number }[] {
+
+
+type summaryData = {
+  id?: string;
+  hasSubgroups: 'yes' | 'no' | 'notRelevant';
+  subgroups: { id: string; name: string; conditions: string; }[];
+};
+
+function summaryParsing(steps: FormEngineModel[], data: summaryData): SummaryParsingType[] {
 
   const toReturn = [];
 
   toReturn.push({
-    label: SECTION_2_1.wizard.steps[0].label || '',
-    value: SECTION_2_1.wizard.steps[0].parameters[0].items?.find(item => item.value === data.hasSubgroups)?.label || '',
+    label: stepsLabels.s_1_1_1,
+    value: yesOrNoItems.find(item => item.value === data.hasSubgroups)?.label || '',
     editStepNumber: 1
   });
 
   if (['yes'].includes(data.hasSubgroups)) {
+
     toReturn.push({
-      label: SECTION_2_1.wizard.steps[1].label || '',
-      value: (data.subgroups as { id: string, name: string, conditions: string }[])?.map(group => group.name).join('<br />'),
+      label: stepsLabels.s_1_1_2,
+      value: data.subgroups?.map(group => group.name).join('<br />'),
       editStepNumber: 2
     });
 
-    (data.subgroups as { id: string, name: string, conditions: string }[]).forEach((item, i) => {
+    (data.subgroups).forEach((item, i) => {
       toReturn.push({ label: `Group ${item.name} condition`, value: item.conditions, editStepNumber: i + 3 });
     });
 

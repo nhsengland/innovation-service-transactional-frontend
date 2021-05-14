@@ -1,8 +1,14 @@
-import { cloneDeep } from 'lodash';
-
-import { MappedObject } from '@modules/core';
-import { FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+
+
+const stepsLabels = {
+  s_1_1_1: 'What problem does your innovation tackle?',
+  s_1_1_2: 'What are the consequences of the problem?',
+  s_1_1_3: 'What\'s the intervention?',
+  s_1_1_4: 'What\'s the impact of the intervention?'
+};
+
 
 export const SECTION_1_2: InnovationSectionConfigType['sections'][0] = {
   id: InnovationSectionsIds.VALUE_PROPOSITION,
@@ -10,176 +16,91 @@ export const SECTION_1_2: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: 'Do you know yet what patient population or subgroup your innovation will affect?',
-        description: 'We\'re asking this to get a better understanding of who would benefit from your innovation.',
-        parameters: [{
-          id: 'hasSubgroups',
-          dataType: 'radio-group',
-          validations: { isRequired: true },
-          items: [
-            { value: 'yes', label: 'Yes' },
-            { value: 'no', label: 'No' },
-            { value: 'notRelevant', label: 'Not relevant' }
-          ]
-        }]
+        label: stepsLabels.s_1_1_1,
+        description: 'Example problem description:<br />The process of checking a patient’s pulse to determine if there is atrial fibrillation using a finger and a watch is inherently inaccurate.',
+        parameters: [
+          {
+            id: 'problemsTrackled',
+            dataType: 'textarea',
+            label: 'Enter a description',
+            validations: { isRequired: true }
+          }
+        ]
       }),
       new FormEngineModel({
-        label: 'What population or subgroup does this affect?',
-        description: 'We\'ll ask you further questions about each answer you provide here. If there are key distinctions between how you innovation affects different populations, be as specific as possible. If not, consider providing as few answers as possible.',
-        parameters: [{
-          id: 'subgroups',
-          dataType: 'fields-group',
-          // validations: { isRequired: true }
-          fieldsGroupConfig: {
-            fields: [
-              { id: 'id', dataType: 'text', isVisible: false },
-              { id: 'name', dataType: 'text', label: 'Population or subgroup', validations: { isRequired: true } },
-              { id: 'conditions', dataType: 'text', isVisible: false }
-            ],
-            addNewLabel: 'Add new population or subgroup'
+        label: stepsLabels.s_1_1_2,
+        description: 'Example consequence description:<br />Using this method approximately 25% of patients are not referred to secondary care who should be (false negative) and 15% of patients who are referred are referred unnecessarily (false positive). For those patients who are not picked up at this stage, their underlying disease will progress before being correctly diagnosed.',
+        parameters: [
+          {
+            id: 'problemsConsequences',
+            dataType: 'textarea',
+            label: 'Enter a description',
+            validations: { isRequired: true }
           }
-        }]
+        ]
+      }),
+      new FormEngineModel({
+        label: stepsLabels.s_1_1_3,
+        description: 'Describe your improvement. What will happen differently? How might that lead to a reduction of the consequences of the problem?',
+        parameters: [
+          {
+            id: 'intervention',
+            dataType: 'textarea',
+            label: 'Enter a description',
+            validations: { isRequired: true }
+          }
+        ]
+      }),
+      new FormEngineModel({
+        label: stepsLabels.s_1_1_4,
+        description: 'Example impact description:<br />A 20% reduction in emergency referrals from care homes to the Emergency Department. For a mid-sized Clinical Commissioning Group covering a population of 250,000, this would equate to 150-200 referrals per year.',
+        parameters: [
+          {
+            id: 'interventionImpact',
+            dataType: 'textarea',
+            label: 'Enter a description',
+            validations: { isRequired: true }
+          }
+        ]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number) => group_2_1_rules(steps, currentValues, currentStep)],
-    inboundParsing: (data: any) => group_2_1_inboundParsing(data),
-    outboundParsing: (data: any) => group_2_1_outboundParsing(data),
-    summaryParsing: (steps: FormEngineModel[], data: any) => group_2_1_summaryParsing(steps, data)
+    summaryParsing: (steps: FormEngineModel[], data: any) => summaryParsing(steps, data)
   })
 };
 
 
 
+type summaryData = {
+  id?: string;
+  problemsTrackled: string;
+  problemsConsequences: string;
+  intervention: string;
+  interventionImpact: string;
+};
 
+function summaryParsing(steps: FormEngineModel[], data: summaryData): SummaryParsingType[] {
 
-// type toType = {
-//   id: string;
-//   hasSubgroups: 'yes' | 'no' | 'notRelevant';
-//   subgroups: {
-//     id: string;
-//     name: string;
-//     conditions: string;
-//   }[];
-// }
-
-// Add/remove new steps for each subgroup defined on step 2.
-function group_2_1_rules(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number): void {
-
-  if (['no', 'notRelevant'].includes(currentValues.hasSubgroups)) {
-    steps.splice(1);
-    currentValues.subgroups = [];
-    Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => {
-      delete currentValues[key];
-    });
-    return;
-  }
-
-  if (currentStep > 2) { // Updates subgroups.conditions value.
-
-    Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => {
-      const index = Number(key.split('_')[1]);
-      currentValues.subgroups[index].conditions = currentValues[key];
-    });
-
-    return;
-  }
-
-  // Here, we are on step 2, where most things can change.
-
-  // // Removes all steps behond step 1, and removes root parameters 'subGroupName_*' values.
-  steps.splice(1);
-  Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => {
-    delete currentValues[key];
-  });
-
-  steps.push(
-    new FormEngineModel({
-      label: 'What population or subgroup does this affect?',
-      description: 'We\'ll ask you further questions about each answer you provide here. If there are key distinctions between how you innovation affects different populations, be as specific as possible. If not, consider providing as few answers as possible.',
-      parameters: [{
-        id: 'subgroups',
-        dataType: 'fields-group',
-        // validations: { isRequired: true }
-        fieldsGroupConfig: {
-          fields: [
-            { id: 'id', dataType: 'text', isVisible: false },
-            { id: 'name', dataType: 'text', label: 'Population or subgroup', validations: { isRequired: true } },
-            { id: 'conditions', dataType: 'text', isVisible: false }
-          ],
-          addNewLabel: 'Add new population or subgroup'
-        }
-      }]
-    })
-  );
-
-
-  (currentValues.subgroups as { id: string, name: string, conditions: string }[] || []).forEach((item, i) => {
-
-    const dynamicStep = new FormEngineModel({
-      label: `What condition best categorises ${item.name}?`,
-      parameters: [{ id: `subGroupName_${i}`, dataType: 'text', validations: { isRequired: true } }]
-    });
-
-    steps.push(dynamicStep);
-    currentValues[`subGroupName_${i}`] = item.conditions;
-
-  });
-
-}
-
-
-function group_2_1_inboundParsing(data: any): MappedObject {
-
-  const parsedData = cloneDeep(data);
-
-  (parsedData.subgroups as { id: string, name: string, conditions: string }[] || []).forEach((item, i) => {
-    parsedData[`subGroupName_${i}`] = item.conditions;
-  });
-
-  // console.log('DATA', parsedData);
-  return parsedData;
-
-}
-
-
-function group_2_1_outboundParsing(data: any): MappedObject {
-
-  const parsedData = cloneDeep(data);
-
-  Object.keys(parsedData).filter(key => key.startsWith('subGroupName_')).forEach((key) => {
-    delete parsedData[key];
-  });
-
-  return parsedData;
-
-}
-
-function group_2_1_summaryParsing(steps: FormEngineModel[], data: any): { label: string, value: string, editStepNumber: number }[] {
-
-  const toReturn = [];
-
-  toReturn.push({
-    label: SECTION_1_2.wizard.steps[0].label || '',
-    value: SECTION_1_2.wizard.steps[0].parameters[0].items?.find(item => item.value === data.hasSubgroups)?.label || '',
-    editStepNumber: 1
-  });
-
-  if (['yes'].includes(data.hasSubgroups)) {
-    toReturn.push({
-      label: SECTION_1_2.wizard.steps[1].label || '',
-      value: (data.subgroups as { id: string, name: string, conditions: string }[])?.map(group => group.name).join('<br />'),
+  return [
+    {
+      label: stepsLabels.s_1_1_1,
+      value: data.problemsTrackled,
+      editStepNumber: 1
+    },
+    {
+      label: stepsLabels.s_1_1_2,
+      value: data.problemsConsequences,
       editStepNumber: 2
-    });
-
-    (data.subgroups as { id: string, name: string, conditions: string }[]).forEach((item, i) => {
-      toReturn.push({ label: `Group ${item.name} condition`, value: item.conditions, editStepNumber: i + 3 });
-    });
-
-  }
-
-  return toReturn;
+    },
+    {
+      label: stepsLabels.s_1_1_3,
+      value: data.intervention,
+      editStepNumber: 3
+    },
+    {
+      label: stepsLabels.s_1_1_4,
+      value: data.interventionImpact,
+      editStepNumber: 4
+    }
+  ];
 
 }
-
-
-

@@ -1,5 +1,6 @@
-import { FormEngineModel, FormEngineParameterModel, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+
 
 const stepsLabels = {
   s_1_1_1: 'Please provide a short description of your innovation',
@@ -157,9 +158,6 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
-    // runtimeRules: [(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number) => group_2_1_rules(steps, currentValues, currentStep)],
-    // inboundParsing: (data: any) => group_2_1_inboundParsing(data),
-    // outboundParsing: (data: any) => group_2_1_outboundParsing(data),
     summaryParsing: (steps: FormEngineModel[], data: any) => summaryParsing(steps, data)
   })
 };
@@ -178,7 +176,7 @@ type summaryData = {
   mainPurpose: string;
 };
 
-function summaryParsing(steps: FormEngineModel[], data: summaryData): { label: string, value: string, editStepNumber: number }[] {
+function summaryParsing(steps: FormEngineModel[], data: summaryData): SummaryParsingType[] {
 
   return [
     {

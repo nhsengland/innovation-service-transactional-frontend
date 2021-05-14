@@ -1,8 +1,24 @@
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
 import { FormEngineModel, FormEngineParameterModel } from '@modules/shared/forms/engine/models/form-engine.models';
-import { WizardEngineModel } from '@modules/shared/forms/engine/models/wizard-engine.models';
+import { SummaryParsingType, WizardEngineModel } from '@modules/shared/forms/engine/models/wizard-engine.models';
 import { cloneDeep } from 'lodash';
 
+
+const stepsLabels = {
+  s_1_1_1: 'What type of evidence do you want to submit?',
+  s_1_1_2: 'What type of clinical evidence?',
+  s_1_1_3: 'What type of economic evidence?',
+  s_1_1_4: 'What other type of evidence?',
+  s_1_1_5: 'Please write a short summary of the evidence',
+  s_1_1_6: 'Please upload any documents that support this evidence'
+};
+
+
+export const evidenceTypeItems = [
+  { value: 'clinical', label: 'Clinical evidence' },
+  { value: 'economic', label: 'Economic evidence' },
+  { value: 'other', label: 'Other evidence of effectiveness' }
+];
 
 export const clinicalEvidenceItems = [
   { value: 'DATA_PUBLISHED', label: 'Data published, but not in a peer reviewed journal' },
@@ -20,16 +36,12 @@ export const clinicalEvidenceItems = [
 export const SECTION_2_EVIDENCES = new WizardEngineModel({
   steps: [
     new FormEngineModel({
-      label: 'What type of evidence do you want to submit?',
+      label: stepsLabels.s_1_1_1,
       parameters: [{
         id: 'evidenceType',
         dataType: 'radio-group',
         validations: { isRequired: true },
-        items: [
-          { value: 'clinical', label: 'Clinical evidence' },
-          { value: 'economic', label: 'Economic evidence' },
-          { value: 'other', label: 'Other evidence of effectiveness' }
-        ]
+        items: evidenceTypeItems
       }]
     })
   ],
@@ -61,7 +73,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: MappedObject, cur
     case 'clinical':
       steps.push(
         new FormEngineModel({
-          label: 'What type of clinical evidence?',
+          label: stepsLabels.s_1_1_2,
           parameters: [{
             id: 'clinicalEvidenceType',
             dataType: 'radio-group',
@@ -75,7 +87,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: MappedObject, cur
     case 'economic':
       steps.push(
         new FormEngineModel({
-          label: 'What type of economic evidence?',
+          label: stepsLabels.s_1_1_3,
           visibility: { parameter: 'hasEvidence', values: ['economic'] },
           parameters: [{
             id: 'description',
@@ -92,7 +104,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: MappedObject, cur
     case 'other':
       steps.push(
         new FormEngineModel({
-          label: 'What other type of evidence?',
+          label: stepsLabels.s_1_1_4,
           visibility: { parameter: 'hasEvidence', values: ['other'] },
           parameters: [{
             id: 'description',
@@ -110,7 +122,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: MappedObject, cur
 
   steps.push(
     new FormEngineModel({
-      label: 'Please write a short summary of the evidence',
+      label: stepsLabels.s_1_1_5,
       description: 'Please provide a short summary including the scope of the study and the key findings. Accessors will read this summary to understand if any particular piece of evidence is of interest in relation to what they can help you with.',
       parameters: [{
         id: 'summary',
@@ -122,7 +134,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: MappedObject, cur
 
   steps.push(
     new FormEngineModel({
-      label: 'Please upload any documents that support this evidence ',
+      label: stepsLabels.s_1_1_6,
       description: 'The files must be CSV, XLSX, DOCX or PDF.',
       parameters: [{
         id: 'files',
@@ -201,13 +213,13 @@ type summaryData = {
   // updatedAt?: string;
 };
 
-function summaryParsing(steps: FormEngineModel[], data: summaryData): { label: string, value: string, editStepNumber: number }[] {
+function summaryParsing(steps: FormEngineModel[], data: summaryData): SummaryParsingType[] {
 
   const toReturn: any = [];
 
   toReturn.push({
-    label: 'What type of evidence do you want to submit?',
-    value: steps[0].parameters[0].items?.find(item => item.value === data.evidenceType)?.label || '',
+    label: stepsLabels.s_1_1_1,
+    value: evidenceTypeItems.find(item => item.value === data.evidenceType)?.label || '',
     editStepNumber: 1
   });
 
@@ -215,14 +227,14 @@ function summaryParsing(steps: FormEngineModel[], data: summaryData): { label: s
   switch (data.evidenceType) {
     case 'clinical':
       toReturn.push({
-        label: 'What type of evidence do you want to submit?',
+        label: stepsLabels.s_1_1_2,
         value: clinicalEvidenceItems.find(item => item.value === data.clinicalEvidenceType)?.label || '',
         editStepNumber: 2
       });
       break;
     case 'economic':
       toReturn.push({
-        label: 'What type of economic evidence?',
+        label: stepsLabels.s_1_1_3,
         value: data.description,
         editStepNumber: 2
       });
@@ -230,7 +242,7 @@ function summaryParsing(steps: FormEngineModel[], data: summaryData): { label: s
 
     case 'other':
       toReturn.push({
-        label: 'What other type of evidence?',
+        label: stepsLabels.s_1_1_4,
         value: data.description,
         editStepNumber: 2
       });
@@ -242,7 +254,7 @@ function summaryParsing(steps: FormEngineModel[], data: summaryData): { label: s
 
 
   toReturn.push({
-    label: 'Please write a short summary of the evidence',
+    label: stepsLabels.s_1_1_5,
     value: data.summary,
     editStepNumber: 3
   });

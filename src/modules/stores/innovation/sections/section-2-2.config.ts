@@ -1,8 +1,22 @@
 import { cloneDeep } from 'lodash';
 
 import { MappedObject } from '@modules/core';
-import { FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+
+
+const stepsLabels = {
+  s_1_1_1: 'Have you identified the specific benefits that your innovation would bring?',
+  s_1_1_last: 'What benefits does your innovation create for the NHS or social care?'
+};
+
+
+const yesOrNoItems = [
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
+  { value: 'notRelevant', label: 'Not relevant' }
+];
+
 
 export const SECTION_2_2: InnovationSectionConfigType['sections'][0] = {
   id: InnovationSectionsIds.UNDERSTANDING_OF_BENEFITS,
@@ -10,17 +24,13 @@ export const SECTION_2_2: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: 'Have you identified the specific benefits that your innovation would bring?',
+        label: stepsLabels.s_1_1_1,
         description: 'For example, your innovation could help reduce cost, benefit the public, improve the quality of healthcare or address a specific issue.',
         parameters: [{
           id: 'hasBenefits',
           dataType: 'radio-group',
           validations: { isRequired: true },
-          items: [
-            { value: 'yes', label: 'Yes' },
-            { value: 'no', label: 'No' },
-            { value: 'notRelevant', label: 'Not relevant' }
-          ]
+          items: yesOrNoItems
         }]
       })
     ],
@@ -92,7 +102,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: MappedObject, cur
 
 
   const lastStep = new FormEngineModel({
-    label: 'What benefits does your innovation create for the NHS or social care?',
+    label: stepsLabels. s_1_1_last,
     parameters: [{ id: 'benefits', dataType: 'textarea', validations: { isRequired: true } }]
   });
   steps.push(lastStep);
@@ -108,7 +118,6 @@ function inboundParsing(data: any): MappedObject {
     parsedData[`subGroupName_${i}`] = item.benefits;
   });
 
-  // console.log('DATA', parsedData);
   return parsedData;
 
 }
@@ -126,13 +135,22 @@ function outboundParsing(data: any): MappedObject {
 
 }
 
-function summaryParsing(steps: FormEngineModel[], data: any): { label: string, value: string, editStepNumber: number }[] {
+
+
+type summaryData = {
+  id?: string;
+  hasBenefits: 'yes' | 'no' | 'notRelevant';
+  subgroups: { id: string; name: string; benefits: string; }[];
+  benefits: string;
+};
+
+function summaryParsing(steps: FormEngineModel[], data: summaryData): SummaryParsingType[] {
 
   const toReturn = [];
 
   toReturn.push({
-    label: SECTION_2_2.wizard.steps[0].label || '',
-    value: SECTION_2_2.wizard.steps[0].parameters[0].items?.find(item => item.value === data.hasBenefits)?.label || '',
+    label: stepsLabels.s_1_1_1,
+    value: yesOrNoItems.find(item => item.value === data.hasBenefits)?.label || '',
     editStepNumber: 1
   });
 
@@ -143,7 +161,7 @@ function summaryParsing(steps: FormEngineModel[], data: any): { label: string, v
     });
 
     toReturn.push({
-      label: 'What benefits does your innovation create for the NHS or social care?',
+      label: stepsLabels. s_1_1_last,
       value: data.benefits,
       editStepNumber: toReturn.length + 1
     });
