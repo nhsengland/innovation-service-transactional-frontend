@@ -220,6 +220,7 @@ export function app(): express.Express {
         res.send(response.data);
       })
       .catch((error: any) => {
+        console.error(`Error when attempting to submit survey with url: ${API_URL}/api/survey. Error: ${error}`);
         res.status(500).send();
       });
   });
@@ -252,8 +253,10 @@ export function app(): express.Express {
 
       const fail = (error: any) => {
         if (error.response && error.response.status) {
+          console.error(`Error when attempting to connect to api with url: ${url}. Error: ${error}`);
           res.status(error.response.status).send(error.message);
         } else {
+          console.error(`Error when attempting to connect to api with url: ${url}. Error: ${error}`);
           res.status(500).send();
         }
       };
@@ -295,7 +298,7 @@ export function app(): express.Express {
       const config = { headers: { Authorization: `Bearer ${accessToken}` } };
       res = await axios.post(url, body, config);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
 
@@ -318,7 +321,7 @@ export function app(): express.Express {
 
       await axios(url, config);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
   }
@@ -347,6 +350,7 @@ export function app(): express.Express {
 
         res.status(201).send(response);
       } catch (error) {
+        console.error(`Error when attempting to upload data. Error: ${error}`);
         res.status(500).send();
       }
     } else {
