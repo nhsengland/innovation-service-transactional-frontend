@@ -10,6 +10,9 @@ export { FormEngineComponent } from './engine/form-engine.component';
 export { FormEngineModel, FormEngineParameterModel } from './engine/models/form-engine.models';
 export { WizardEngineModel } from './engine/models/wizard-engine.models';
 
+// Types.
+export { FormEngineFileUploadEvent } from './engine/types/form-engine.types';
+
 // Enums.
 
 // Helpers.

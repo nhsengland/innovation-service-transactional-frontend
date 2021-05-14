@@ -8,7 +8,7 @@ export class WizardEngineModel {
   runtimeRules: ((steps: FormEngineModel[], currentValues: { [key: string]: any }, currentStep: number) => void)[];
   inboundParsing?: (data: any) => MappedObject;
   outboundParsing?: (data: any) => MappedObject;
-  summaryParsing?: (steps: FormEngineModel[], data: any) => { label: string, value: string, stepNumber: number }[];
+  summaryParsing?: (steps: FormEngineModel[], data: any) => { label: string, value: string, editStepNumber?: number, evidenceId?: string }[];
 
 
   constructor(data: Partial<WizardEngineModel>) {
@@ -33,7 +33,7 @@ export class WizardEngineModel {
     return this.outboundParsing ? this.outboundParsing(data) : data;
   }
 
-  runSummaryParsing(data: MappedObject): { label: string, value: string, stepNumber: number }[] {
+  runSummaryParsing(data: MappedObject): { label: string, value: string, editStepNumber?: number, evidenceId?: string }[] {
     return this.summaryParsing ? this.summaryParsing(this.steps, data) : [];
   }
 

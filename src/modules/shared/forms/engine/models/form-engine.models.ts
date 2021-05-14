@@ -1,5 +1,3 @@
-import { UploadConfigurationModel } from '../../components/uploads/uploads.models';
-
 export class FormEngineModel {
 
   label?: string;
@@ -57,8 +55,12 @@ export class FormEngineParameterModel {
   };
 
   fileUploadConfig?: {
-    allowedExtensions?: string[];
-    fileConfig: UploadConfigurationModel;
+    httpUploadUrl: string;
+    httpUploadBody?: { [key: string]: any };
+    acceptedFiles?: string[]; // 'image/jpeg,image/jpg,image/png,image/gif'
+    multiple?: boolean;
+    maxFileSize?: number; // In bytes.
+    previousUploadedFiles?: {id: string, name: string }[]
   };
 
 
@@ -82,19 +84,7 @@ export class FormEngineParameterModel {
       };
     }
 
-    if (data.fileUploadConfig) {
-      // file config accepted files is a string instead of an array so it needs to be converted...
-      const acceptedFiles = (data.fileUploadConfig.allowedExtensions || []).map(ext => `.${ext}`).join(',');
-      this.fileUploadConfig = {
-        fileConfig: new UploadConfigurationModel({
-          // url: engineService?.getUploadConfigurationUrl(),
-          url: 'TODO!',
-          acceptedFiles,
-          maxFiles: 1,
-          style: { heightLevel: 2 }
-        })
-      };
-    }
+    this.fileUploadConfig = data.fileUploadConfig;
 
   }
 }

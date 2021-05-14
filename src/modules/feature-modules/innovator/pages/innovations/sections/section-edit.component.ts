@@ -22,7 +22,7 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
   currentStep: FormEngineModel;
   currentAnswers: { [key: string]: any };
 
-  summaryList: { label: string, value: string, stepNumber: number }[];
+  summaryList: { label: string, value: string, editStepNumber?: number, evidenceId?: string }[];
 
 
   // isValidStepId(): boolean {
@@ -113,27 +113,26 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
 
 
 
-  onSubmitSurvey(isSubmission: boolean): void {
+  onSubmitSurvey(): void {
 
     this.stores.innovation.updateSectionInfo$(
       this.innovationId,
       this.sectionId,
-      isSubmission,
       this.wizard.runOutboundParsing(this.currentAnswers)
     ).subscribe(
       () => {
-        this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`);
+        this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'sectionUpdateSuccess' });
         return;
       },
       () => {
-        this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`);
+        this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'sectionUpdateError' });
         return;
       }
     );
 
   }
 
-  gotoStep(stepNumber: number): string {
+  gotoStep(stepNumber: number | undefined): string {
 
     return `/innovator/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${stepNumber}`;
   }

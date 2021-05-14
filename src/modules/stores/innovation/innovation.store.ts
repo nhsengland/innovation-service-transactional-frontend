@@ -8,7 +8,7 @@ import { WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationService } from './innovation.service';
 
-import { InnovationModel, SectionsSummaryModel, InnovationSectionsIds, getInnovationInfoResponse, sectionType } from './innovation.models';
+import { InnovationModel, SectionsSummaryModel, InnovationSectionsIds, getInnovationInfoResponse, sectionType, InnovationSectionConfigType, getInnovationEvidenceDTO } from './innovation.models';
 import { INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS } from './innovation.models';
 import { INNOVATION_SECTIONS } from './innovation.config';
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
@@ -75,24 +75,42 @@ export class InnovationStore extends Store<InnovationModel> {
 
 
   getSectionInfo$(innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
-
     return this.innovationsService.getSectionInfo(innovationId, section);
-
   }
 
-  updateSectionInfo$(innovationId: string, section: string, isSubmission: boolean, data: MappedObject): Observable<MappedObject> {
-
-    return this.innovationsService.updateSectionInfo(innovationId, section, isSubmission, data);
-
+  updateSectionInfo$(innovationId: string, section: string, data: MappedObject): Observable<MappedObject> {
+    return this.innovationsService.updateSectionInfo(innovationId, section, data);
   }
+
+  submitSections$(innovationId: string, sections: string[]): Observable<MappedObject> {
+    return this.innovationsService.submitSections(innovationId, sections);
+  }
+
+  getSectionEvidence$(innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
+    return this.innovationsService.getSectionEvidenceInfo(innovationId, evidenceId);
+  }
+
+  upsertSectionEvidenceInfo$(innovationId: string, data: MappedObject, evidenceId?: string): Observable<MappedObject> {
+    return this.innovationsService.upsertSectionEvidenceInfo(innovationId, data, evidenceId);
+  }
+
+  deleteEvidence$(innovationId: string, evidenceId: string): Observable<boolean> {
+    return this.innovationsService.deleteEvidence(innovationId, evidenceId);
+  }
+
 
   getSectionTitle(sectionId: InnovationSectionsIds): string {
     return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id === sectionId)?.title || '';
   }
 
+
+  getSection(sectionId: InnovationSectionsIds): InnovationSectionConfigType['sections'][0] | undefined {
+    return cloneDeep(INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId));
+  }
+
   getSectionWizard(sectionId: InnovationSectionsIds): WizardEngineModel {
     return cloneDeep(
-      INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id === sectionId)?.wizard || new WizardEngineModel({})
+      INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId)?.wizard || new WizardEngineModel({})
     );
   }
 

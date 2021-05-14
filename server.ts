@@ -7,12 +7,12 @@ import * as dotenv from 'dotenv';
 import * as express from 'express';
 import * as multer from 'multer';
 import * as coockieParser from 'cookie-parser';
+import * as fs from 'fs';
 import * as passport from 'passport';
 import * as session from 'express-session';
 import axios, { Method } from 'axios';
 import { IOIDCStrategyOptionWithoutRequest, IProfile, OIDCStrategy, VerifyCallback } from 'passport-azure-ad';
 import { join } from 'path';
-import * as fs from 'fs';
 
 import { AppServerModule } from './src/main.server';
 
@@ -238,7 +238,7 @@ export function app(): express.Express {
 
       const success = (response: any) => {
 
-        // console.log('ORIG: ', url, response.data);
+        // console.log('ORIG: ', url, response.data, response.status);
         // if (!response.data) {
         //   res.status(response.status).send(response.data);
         // }
@@ -265,11 +265,17 @@ export function app(): express.Express {
         case 'POST':
           axios.post(url, body, config).then(success).catch(fail);
           break;
+        case 'PATCH':
+          axios.patch(url, body, config).then(success).catch(fail);
+          break;
         case 'PUT':
           axios.put(url, body, config).then(success).catch(fail);
           break;
         case 'HEAD':
           axios.head(url, config).then(success).catch(fail);
+          break;
+        case 'DELETE':
+          axios.delete(url, config).then(success).catch(fail);
           break;
         default:
           res.status(405).send();
@@ -289,6 +295,7 @@ export function app(): express.Express {
       const config = { headers: { Authorization: `Bearer ${accessToken}` } };
       res = await axios.post(url, body, config);
     } catch (error) {
+      console.log(error);
       throw error;
     }
 
@@ -311,6 +318,7 @@ export function app(): express.Express {
 
       await axios(url, config);
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }

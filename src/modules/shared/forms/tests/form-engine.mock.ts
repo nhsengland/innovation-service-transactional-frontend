@@ -5,7 +5,16 @@ export const ALL_PARAMETER_TYPES_EMPTY = [
   new FormEngineParameterModel({ id: 'textField', dataType: 'text' }),
   new FormEngineParameterModel({ id: 'radioGroupField', dataType: 'radio-group' }),
   new FormEngineParameterModel({ id: 'checkboxGroupField', dataType: 'checkbox-group' }),
-  new FormEngineParameterModel({ id: 'checkboxArrayField', dataType: 'checkbox-array' })
+  new FormEngineParameterModel({ id: 'checkboxArrayField', dataType: 'checkbox-array' }),
+  new FormEngineParameterModel({
+    id: 'fieldsGroupField',
+    dataType: 'fields-group',
+    fieldsGroupConfig: {
+      fields: [
+        new FormEngineParameterModel({ id: 'field01', dataType: 'text'}),
+        new FormEngineParameterModel({ id: 'field02', dataType: 'text'})
+      ]}
+  })
 ];
 
 

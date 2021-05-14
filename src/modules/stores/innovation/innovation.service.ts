@@ -1,19 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 
 import { EnvironmentStore } from '@modules/core/stores/environment.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
-import { INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS, InnovationSectionsIds, getInnovationInfoResponse, getInnovationInfoEndpointDTO, getInnovationSectionsDTO, sectionType } from './innovation.models';
+import { getInnovationInfoResponse, getInnovationInfoEndpointDTO, getInnovationSectionsDTO, sectionType, getInnovationEvidenceDTO } from './innovation.models';
 
 import { UrlModel } from '@modules/core/models/url.model';
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
-
-
-
 
 
 @Injectable()
@@ -26,6 +23,7 @@ export class InnovationService {
     private environmentStore: EnvironmentStore,
     private authenticationStore: AuthenticationStore
   ) { }
+
 
   getInnovationInfo(innovationId: string): Observable<getInnovationInfoResponse> {
 
@@ -65,28 +63,15 @@ export class InnovationService {
       data: MappedObject
     }>(url.buildUrl()).pipe(
       take(1),
-      map(response => response
-
-
-        //   ({
-        //   section: {
-        //     id: null, // response.section.id,
-        //     section: 'INNOVATION_DESCRIPTION', // response.section.section,
-        //     status: 'NOT_STARTED', // response.section.status,
-        //     actionStatus: '', // response.section.actionStatus,
-        //     updatedAt: '', // response.section.updateAt,
-        //   },
-        //   data: response.data
-        // })
-      )
+      map(response => response)
     );
   }
 
-  updateSectionInfo(innovationId: string, section: string, isSubmission: boolean, data: MappedObject): Observable<MappedObject> {
+
+  updateSectionInfo(innovationId: string, section: string, data: MappedObject): Observable<MappedObject> {
 
     const body = {
       section,
-      isSubmission,
       data: cloneDeep(data)
     };
 
@@ -94,6 +79,57 @@ export class InnovationService {
     return this.http.put<any>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
+    );
+
+  }
+
+
+  submitSections(innovationId: string, sections: string[]): Observable<any> {
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/sections/submit').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
+    return this.http.patch<any>(url.buildUrl(), { sections }).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
+
+  getSectionEvidenceInfo(innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/evidence/:evidenceId').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, evidenceId });
+    return this.http.get<getInnovationEvidenceDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
+
+  upsertSectionEvidenceInfo(innovationId: string, data: MappedObject, evidenceId?: string): Observable<MappedObject> {
+
+    if (evidenceId) {
+      const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/evidence/:evidenceId').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, evidenceId });
+      return this.http.put<any>(url.buildUrl(), { ...{ id: evidenceId }, ...data }).pipe(
+        take(1),
+        map(response => response)
+      );
+
+    } else {
+      const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/evidence').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
+      return this.http.post<any>(url.buildUrl(), data).pipe(
+        take(1),
+        map(response => response)
+      );
+
+    }
+
+  }
+
+
+  deleteEvidence(innovationId: string, evidenceId: string): Observable<boolean> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/evidence/:evidenceId').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, evidenceId });
+    return this.http.delete<any>(url.buildUrl()).pipe(
+      take(1),
+      map(response => !!response),
+      catchError(() => of(false))
     );
 
   }

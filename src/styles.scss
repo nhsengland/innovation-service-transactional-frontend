@@ -17,6 +17,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 :root {
   --primary-color: #{$nhsuk-link-color};
+  --warning-color: #{$color_nhsuk-warm-yellow};
   --error-color: #{$nhsuk-error-color};
 
   --white: #{$color_nhsuk-white};
@@ -49,6 +50,9 @@ $service-manual-container-size: 1100px; // Container width variable.
   background-color: var(--white);
 }
 
+.border-color-warning {
+  border-color: var(--warning-color);
+}
 
 // Container sizes.
 .app-width-container,

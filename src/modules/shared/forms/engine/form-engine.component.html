@@ -35,12 +35,7 @@
         </div>
 
         <div *ngSwitchCase="'file-upload'">
-          <theme-form-upload [config]="p.fileUploadConfig?.fileConfig" (uploadSuccess)="onFileUploaded($event, p.id)" (uploadError)="onFileUploadError($event, p.id)"></theme-form-upload>
-           <!-- <div class="text-danger messages-section">
-            <ng-container *ngIf="parentControls[p.key].touched && parentControls[p.key].errors?.required">
-              {{ 'shared.forms_module.validations.required' | translate }}
-            </ng-container>
-          </div> -->
+          <theme-form-upload [config]="p.fileUploadConfig" (fileUploadEvent)="onFileUploadEvent($event, p.id)" (filesListEvent)="onFilesListEvent($event, p.id)"></theme-form-upload>
         </div>
 
         <div *ngSwitchCase="'fields-group'" [formArrayName]="p.id" class="nhsuk-u-margin-bottom-5">
