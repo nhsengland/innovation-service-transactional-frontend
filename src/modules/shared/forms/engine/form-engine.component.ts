@@ -1,10 +1,11 @@
 import { Component, OnInit, OnChanges, Input, ChangeDetectionStrategy, ChangeDetectorRef, SimpleChanges } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 
 import { FormEngineHelper } from './helpers/form-engine.helper';
 
 import { FormEngineParameterModel } from './models/form-engine.models';
+import { FormEngineFileUploadEvent, FormEngineFilesListEvent } from './types/form-engine.types';
 
 // import { UploadsEvents } from '../components/uploads/uploads-events.enum';
 
@@ -90,20 +91,28 @@ export class FormEngineComponent implements OnInit, OnChanges {
   }
 
 
-  onFileUploaded(event: Event, parameterKey: string): void {
-
-    console.log('onFileUploaded', parameterKey, event);
-    // switch (event.type) {
-    //   case UploadsEvents.FILE_UPLOAD_SUCCESS:
-    //     // this.form.get(parameterKey)?.setValue(event.response.data);
-    //     // this.formEngineEvents.emit({ type: FormEngineEvents.PARAMETER_FILE_UPLOADED_SUCCESS, data: { key: parameterKey } });
-    //     break;
-    //   default:
-    //     break;
-    // }
+  onFilesListEvent(event: FormEngineFilesListEvent[], parameterId: string): void {
+    event.forEach(item => {
+      (this.form.get(parameterId) as FormArray)?.push(new FormGroup({ id: new FormControl(item.id), name: new FormControl(item.name) }));
+    });
   }
 
-  onFileUploadError(event: Event, parameterKey: string): void {
+  onFileUploadEvent(event: FormEngineFileUploadEvent, parameterId: string): void {
+
+    switch (event.type) {
+      case 'fileAdded':
+        (this.form.get(parameterId) as FormArray)?.push(new FormGroup({ id: new FormControl(event.data.id), name: new FormControl(event.data.name) }));
+        break;
+
+      case 'fileRemoved':
+        const arrayIndex = (this.form.get(parameterId)?.value as { id: string, name: string }[]).findIndex(item => item.id === event.data.id);
+        if (arrayIndex > -1) { (this.form.get(parameterId) as FormArray).removeAt(arrayIndex); }
+        break;
+
+      default:
+        break;
+    }
+
   }
 
 

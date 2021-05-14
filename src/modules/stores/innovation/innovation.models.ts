@@ -11,6 +11,7 @@ export type InnovationSectionConfigType = {
     id: InnovationSectionsIds;
     title: string;
     wizard: WizardEngineModel;
+    evidences?: WizardEngineModel;
   }[];
 };
 
@@ -105,6 +106,15 @@ export type getInnovationSectionsDTO = {
   id: string;
   name: string;
   sections: sectionType[];
+};
+
+
+export type getInnovationEvidenceDTO = {
+  evidenceType: 'clinical' | 'economic' | 'other',
+  clinicalEvidenceType: string,
+  description: string,
+  summary: string
+  files: { id: string; displayFileName: string; url: string }[];
 };
 
 

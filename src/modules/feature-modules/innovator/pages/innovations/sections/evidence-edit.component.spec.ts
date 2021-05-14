@@ -9,15 +9,15 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
-import { InnovationsSectionEditComponent } from './section-edit.component';
+import { InnovationsSectionEvidenceEditComponent } from './evidence-edit.component';
 
 
-describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSectionEditComponent', () => {
+describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSectionEvidenceEditComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
-  let component: InnovationsSectionEditComponent;
-  let fixture: ComponentFixture<InnovationsSectionEditComponent>;
+  let component: InnovationsSectionEvidenceEditComponent;
+  let fixture: ComponentFixture<InnovationsSectionEvidenceEditComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -38,7 +38,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(InnovationsSectionEditComponent);
+    fixture = TestBed.createComponent(InnovationsSectionEvidenceEditComponent);
     component = fixture.componentInstance;
 
     expect(component).toBeTruthy();

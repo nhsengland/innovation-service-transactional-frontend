@@ -1,20 +1,30 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
 
-      <h1 class="nhsuk-heading-l">{{ section.title }}</h1>
-      <h2 class="nhsuk-heading-m">Your answers</h2>
+    <ng-container *ngIf="summaryAlert.type">
+      <div class="nhsuk-error-summary"  [ngClass]="{'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert" tabindex="-1">
+        <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
+        <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
+      </div>
+    </ng-container>
 
-      <dl class="nhsuk-summary-list">
-        <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-          <dd class="nhsuk-summary-list__value" [innerHTML]="item.value"></dd>
-          <dd class="nhsuk-summary-list__actions">
-            <a routerLink="edit/{{ item.stepNumber }}">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }}</span></a>
-          </dd>
-        </div>
-      </dl>
+    <h1 class="nhsuk-heading-l">{{ section.title }}</h1>
+    <h2 class="nhsuk-heading-m">Your answers</h2>
 
-    <a class="nhsuk-button" routerLink="edit">{{ section.editButtonLabel }}</a>
+    <dl class="nhsuk-summary-list">
+      <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+        <dd class="nhsuk-summary-list__value" [innerHTML]="item.value"></dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a *ngIf="item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }}</span></a>
+          <a *ngIf="item.evidenceId" routerLink="evidence/{{ item.evidenceId }}">View<span class="nhsuk-u-visually-hidden"> evidence detail</span></a>
+        </dd>
+      </div>
+    </dl>
+
+    <button *ngIf="section.showStartNowButton" type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-right-3">Start now</button>
+    <button *ngIf="section.showSubmitButton" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-right-3"> Submit </button>
+    <button *ngIf="section.hasEvidences" routerLink="evidence/new" class="nhsuk-button nhsuk-button--secondary"> Add evidence </button>
 
   </div>
 </div>

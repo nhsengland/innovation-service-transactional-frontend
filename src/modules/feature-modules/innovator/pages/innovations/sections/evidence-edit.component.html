@@ -40,22 +40,17 @@
 
       <dl class="nhsuk-summary-list">
         <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
-
-          <ng-container *ngIf="item.editStepNumber">
-            <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-            <dd class="nhsuk-summary-list__value" [innerHTML]="item.value"></dd>
-            <dd class="nhsuk-summary-list__actions">
-              <a [routerLink]="gotoStep(item.editStepNumber)">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }}</span></a>
-            </dd>
-
-          </ng-container>
+          <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+          <dd class="nhsuk-summary-list__value" [innerHTML]="item.value"></dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a [routerLink]="gotoStep(item.editStepNumber)">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }}</span></a>
+          </dd>
         </div>
       </dl>
 
-      <button class="nhsuk-button nhsuk-button--secondary" (click)="onSubmitSurvey()"> Save </button>
+      <button class="nhsuk-button" (click)="onSubmitSurvey()"> Save </button>
 
     </ng-container>
-
 
   </div>
 </div>

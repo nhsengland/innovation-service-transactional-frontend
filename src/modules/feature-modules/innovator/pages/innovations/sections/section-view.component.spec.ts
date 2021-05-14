@@ -11,7 +11,7 @@ import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.mo
 import { InnovationsSectionViewComponent } from './section-view.component';
 
 
-describe('Shared/Pages/Innovation/PageInnovationRecordComponent', () => {
+describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSectionViewComponent', () => {
 
   let component: InnovationsSectionViewComponent;
   let fixture: ComponentFixture<InnovationsSectionViewComponent>;

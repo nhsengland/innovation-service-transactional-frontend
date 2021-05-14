@@ -66,7 +66,8 @@ describe('FormEngineComponent', () => {
       textField: null,
       radioGroupField: null,
       checkboxGroupField: {},
-      checkboxArrayField: []
+      checkboxArrayField: [],
+      fieldsGroupField: [{ field01: null, field02: null }]
     };
 
     expect(component.form.valid).toBe(true);
@@ -101,6 +102,30 @@ describe('FormEngineComponent', () => {
     };
 
     expect(component.getFormValues()).toEqual(expected);
+
+  });
+
+  it('should form control field be valid when parameters change', () => {
+    fixture.detectChanges();
+
+    component.parameters = ALL_PARAMETER_TYPES_EMPTY;
+    component.ngOnChanges({
+      parameters: new SimpleChange(null, ALL_PARAMETER_TYPES_EMPTY, false)
+    });
+    component.removeFieldGroupRow('fieldsGroupField', 0);
+    component.addFieldGroupRow(ALL_PARAMETER_TYPES_EMPTY.find(p => p.id === 'fieldsGroupField') as any, { field01: 'value 1', field02: 'value 2' });
+    fixture.detectChanges();
+
+    const expected = {
+      textField: null,
+      radioGroupField: null,
+      checkboxGroupField: {},
+      checkboxArrayField: [],
+      fieldsGroupField: [{ field01: 'value 1', field02: 'value 2' }]
+    };
+
+    expect(component.form.valid).toBe(true);
+    expect(component.form.value).toEqual(expected);
 
   });
 
