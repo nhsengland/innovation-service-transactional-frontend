@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { LoggerService, Severity } from '@modules/core/services/logger.service';
 import { TranslateService } from '@ngx-translate/core';
 
 import { locale as enLanguage } from './config/translations/en';
@@ -12,7 +13,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private titleService: Title,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private loggerService: LoggerService
   ) {
 
     this.translateService.addLangs(['en']);
@@ -21,7 +23,7 @@ export class AppComponent implements OnInit {
     this.translateService.use('en');
 
     this.titleService.setTitle(translateService.instant('app.title'));
-
+    this.loggerService.trackTrace('@app-component initialized', Severity.INFORMATION);
   }
 
   ngOnInit(): void { }
