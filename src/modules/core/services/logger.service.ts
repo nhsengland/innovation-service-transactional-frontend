@@ -41,6 +41,7 @@ export class LoggerService {
 
   public async trackTrace(message: string, severity: Severity, props?: any ): Promise<LoggerResponse> {
     try {
+      const requestedBy = '';
       await this.client.request({
         method: 'POST',
         url: `${this.environment.BASE_URL}/insights`,
