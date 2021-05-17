@@ -10,7 +10,6 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from '@modules/theme/components/header/header.component';
 import { FooterComponent } from '@modules/theme/components/footer/footer.component';
 import { LoggerService } from '@modules/core/services/logger.service';
-import { Injectable } from '@angular/core';
 
 describe('AppComponent', () => {
 
