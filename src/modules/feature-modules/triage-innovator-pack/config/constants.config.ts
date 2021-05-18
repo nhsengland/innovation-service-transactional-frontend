@@ -64,7 +64,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
     ]
   }),
 
-  // Question 03 DIOGO
+  // Question 03
   new FormEngineModel({
     label: 'Have you identified what problem the innovation will tackle (also known as \'value proposition\')?',
     description: 'This is a simple statement that summarises your innovation, shows how it\'s different and documents the value that it brings to the customer.',
@@ -82,7 +82,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
     },
     parameters: [
       {
-        id: 'identifiedTheProblem',
+        id: 'hasProblemTackleKnowledge',
         dataType: 'radio-group',
         validations: { isRequired: [true, 'Choose one option'] },
         items: [
