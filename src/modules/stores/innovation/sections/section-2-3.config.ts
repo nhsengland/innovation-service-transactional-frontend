@@ -4,32 +4,38 @@ import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovatio
 
 import { SECTION_2_EVIDENCES, clinicalEvidenceItems } from './section-2-3-evidences.config';
 
+
+const stepsLabels = {
+  s_1_1_1: 'Do you have evidence of effectiveness for your innovation?'
+};
+
+
+const yesOrNoItems = [
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' }
+];
+
+
 export const SECTION_2_3: InnovationSectionConfigType['sections'][0] = {
   id: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS,
   title: 'Evidence of effectiveness',
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: 'Do you have evidence of effectiveness for your innovation?',
+        label: stepsLabels.s_1_1_1,
         parameters: [{
           id: 'hasEvidence',
           dataType: 'radio-group',
           validations: { isRequired: true },
-          items: [
-            { value: 'yes', label: 'Yes' },
-            { value: 'no', label: 'No' }
-          ]
+          items: yesOrNoItems
         }]
       })
     ],
     outboundParsing: (data: any) => outboundParsing(data),
-    summaryParsing: (steps: FormEngineModel[], data: any) => group_2_3_summaryParsing(steps, data)
+    summaryParsing: (steps: FormEngineModel[], data: any) => summaryParsing(steps, data)
   }),
   evidences: SECTION_2_EVIDENCES
 };
-
-
-
 
 
 function outboundParsing(data: MappedObject): MappedObject {
@@ -39,7 +45,6 @@ function outboundParsing(data: MappedObject): MappedObject {
   };
 
 }
-
 
 
 type summaryData = {
@@ -54,14 +59,13 @@ type summaryData = {
   }[];
 };
 
-
-function group_2_3_summaryParsing(steps: FormEngineModel[], data: summaryData): { label: string, value: string, editStepNumber?: number, evidenceId?: string }[] {
+function summaryParsing(steps: FormEngineModel[], data: summaryData): { label: string, value: string, editStepNumber?: number, evidenceId?: string }[] {
 
   const toReturn = [];
 
   toReturn.push({
-    label: steps[0].label || '',
-    value: steps[0].parameters[0].items?.find(item => item.value === data.hasEvidence)?.label || '',
+    label: stepsLabels.s_1_1_1,
+    value: yesOrNoItems.find(item => item.value === data.hasEvidence)?.label || '',
     editStepNumber: 1
   });
 
