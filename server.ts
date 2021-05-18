@@ -15,6 +15,9 @@ import { IOIDCStrategyOptionWithoutRequest, IProfile, OIDCStrategy, VerifyCallba
 import { join } from 'path';
 
 import { AppServerModule } from './src/main.server';
+import { handler } from 'src/handlers/logger.handler';
+import { appLoggingMiddleware } from 'middleware/appLoggingMiddleware';
+import { exceptionLoggingMiddleware } from 'middleware/exceptionLoggingMiddleware';
 
 dotenv.config();
 
@@ -100,6 +103,9 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', distFolder);
   server.use(staticContentPath, express.static(distFolder));
+
+  server.use(appLoggingMiddleware);
+  server.use(exceptionLoggingMiddleware);
 
   passport.serializeUser((user, next) => { next(null, user); });
   passport.deserializeUser((obj: any, next) => { next(null, obj); });
@@ -362,6 +368,8 @@ export function app(): express.Express {
   // // Serve static files.
   server.get('*.*', express.static(distFolder, { maxAge: '1y' }));
   // // "Data requests". For submited POST form informations.
+
+  server.post('/insights', handler);
   server.post('/*', (req, res) => {
     res.render(indexHtml, { req, res, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
   });

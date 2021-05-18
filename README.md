@@ -55,3 +55,38 @@ npm run build:ssr # Build like a Server Side Rendering
 ```
 
 Output file will be on `dist` folder
+
+## Logging
+
+There is a custom `LoggerService` that will log traces to `AppInsights`.
+To use it, you must inject it in the component you wish to create logs on:
+
+```
+class TheComponent {
+  private loggerService: LoggerService;
+
+  constructor(loggerService: LoggerService) {
+    this.loggerService = loggerService;
+  }
+
+  ...
+
+  someMethod() {
+    this.loggerService.trackTrace('message', Severity.INFORMATION, {custom_prop: 'some value' });
+  }
+}
+```
+
+This service also exposes an `enum` with Severity levels.
+
+```
+enum Severity {
+  VERBOSE = 0,
+  INFORMATION = 1,
+  WARNING = 2,
+  ERROR = 3,
+  CRITICAL = 4
+}
+```
+
+Currently the only existing method is `trackTrace` which creates a `trace` log in `AppInsights`.

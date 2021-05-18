@@ -26,7 +26,7 @@ export class EnvironmentStore {
 
   get APP_URL(): string { return new UrlModel(this.environment.BASE_URL).setPath(this.environment.BASE_PATH).buildUrl(); }
   get API_URL(): string { return this.environment.API_URL; }
-
+  get BASE_URL(): string  { return this.environment.BASE_URL; }
 
   constructor(
     private logger: NGXLogger,

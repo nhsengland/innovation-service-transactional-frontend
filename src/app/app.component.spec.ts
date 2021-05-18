@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 
 import { HeaderComponent } from '@modules/theme/components/header/header.component';
 import { FooterComponent } from '@modules/theme/components/footer/footer.component';
-
+import { LoggerService } from '@modules/core/services/logger.service';
 
 describe('AppComponent', () => {
 
@@ -31,7 +31,7 @@ describe('AppComponent', () => {
   });
 
   it('should create the app', () => {
-
+    spyOn(LoggerService.prototype, 'trackTrace').and.returnValue(null);
     const fixture = TestBed.createComponent(AppComponent);
     const component = fixture.componentInstance;
 
