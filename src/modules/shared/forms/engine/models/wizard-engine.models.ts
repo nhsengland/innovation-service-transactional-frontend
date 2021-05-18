@@ -12,7 +12,7 @@ export class WizardEngineModel {
 
   steps: FormEngineModel[];
   currentStepNumber: number;
-  runtimeRules: ((steps: FormEngineModel[], currentValues: { [key: string]: any }, currentStep: number) => void)[];
+  runtimeRules: ((steps: FormEngineModel[], currentValues: any, currentStep: number) => void)[];
   inboundParsing?: (data: any) => MappedObject;
   outboundParsing?: (data: any) => MappedObject;
   summaryParsing?: (steps: FormEngineModel[], data: any) => SummaryParsingType[];
