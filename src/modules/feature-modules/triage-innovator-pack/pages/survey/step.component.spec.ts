@@ -236,13 +236,13 @@ describe('FeatureModules/StarterInnovatorPack/Pages/Survey/StepComponent', () =>
     component = fixture.componentInstance;
 
     spyOn(component, 'isDataRequest').and.returnValue(true);
-    spyOn(component, 'decodeQueryParams').and.returnValue({ a: 'next', f: { organisationSize: 'some answer' } });
+    spyOn(component, 'decodeQueryParams').and.returnValue({ a: 'next', f: {categories: ['PHARMACEUTICAL', 'MEDICAL_DEVICE', 'AI']} });
 
     fixture.detectChanges();
 
     expect(component.isDataRequest()).toBe(true);
     expect(serverRedirectSpy.status).toHaveBeenCalledWith(303);
-    expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', '/triage-innovator-pack/survey/2?f=eyJvcmdhbmlzYXRpb25TaXplIjoic29tZSBhbnN3ZXIifQ%3D%3D');
+    expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', '/triage-innovator-pack/survey/2?f=eyJjYXRlZ29yaWVzIjpbIlBIQVJNQUNFVVRJQ0FMIiwiTUVESUNBTF9ERVZJQ0UiLCJBSSJdfQ%3D%3D');
 
   });
 
@@ -397,7 +397,7 @@ describe('FeatureModules/StarterInnovatorPack/Pages/Survey/StepComponent', () =>
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    expect(component.getNavigationUrl('previous')).toBe('/triage-innovator-pack/survey/6');
+    expect(component.getNavigationUrl('previous')).toBe('/triage-innovator-pack/survey/11');
 
   });
 
