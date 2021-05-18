@@ -107,9 +107,6 @@ export function app(): express.Express {
   server.set('views', distFolder);
   server.use(staticContentPath, express.static(distFolder));
 
-  server.use(appLoggingMiddleware);
-  server.use(exceptionLoggingMiddleware);
-
   passport.serializeUser((user, next) => { next(null, user); });
   passport.deserializeUser((obj: any, next) => { next(null, obj); });
 
@@ -159,6 +156,8 @@ export function app(): express.Express {
 
   passport.use(signInStrategy);
 
+  server.use(appLoggingMiddleware);
+  server.use(exceptionLoggingMiddleware);
 
   // Authentication routes.
   server.head(`${BASE_PATH}/session`, (req, res) => {
