@@ -16,8 +16,9 @@ import { join } from 'path';
 
 import { AppServerModule } from './src/main.server';
 import { handler } from 'src/handlers/logger.handler';
-import { appLoggingMiddleware } from 'middleware/appLoggingMiddleware';
-import { exceptionLoggingMiddleware } from 'middleware/exceptionLoggingMiddleware';
+import { appLoggingMiddleware } from 'src/middleware/appLoggingMiddleware';
+import { exceptionLoggingMiddleware } from 'src/middleware/exceptionLoggingMiddleware';
+import { initAppInsights } from 'src/globals';
 
 dotenv.config();
 
@@ -78,6 +79,8 @@ const upload = multer({ storage });
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
+
+  initAppInsights();
 
   const server = express();
   const staticContentPath = `${BASE_PATH}${STATIC_CONTENT_PATH}`;

@@ -1,9 +1,9 @@
-import * as appinsights from 'applicationinsights';
-
+import { getAppInsightsClient } from '../globals';
 
 const methods: any = {
   trace:  ( message: string, severity: any, properties: any ) => {
-    appinsights.defaultClient.trackTrace({
+    const client = getAppInsightsClient();
+    client.trackTrace({
       message,
       severity,
       properties,
@@ -22,12 +22,6 @@ export const handler = (req: any, res: any) => {
     ...req.body.properties,
     authenticatedUser,
   };
-
-  const instrumentationKey = process.env.APPINSIGHTS_INSTRUMENTATION_KEY;
-
-  appinsights
-    .setup(instrumentationKey)
-    .start();
 
   func(message, severity, properties);
 
