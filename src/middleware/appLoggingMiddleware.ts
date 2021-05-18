@@ -3,7 +3,7 @@ import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 
 export const appLoggingMiddleware = (req: any, res: any, next: any) => {
 
-  if (req.path.contains(process.env.BASE_PATH)) {
+  if (req.path.includes(process.env.BASE_PATH)) {
 
     const client = getAppInsightsClient();
 
