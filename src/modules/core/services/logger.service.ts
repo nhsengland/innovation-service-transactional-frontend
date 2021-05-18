@@ -44,7 +44,7 @@ export class LoggerService {
       const requestedBy = '';
       await this.client.request({
         method: 'POST',
-        url: `${this.environment.BASE_URL}/insights`,
+        url: `${this.environment.APP_URL}/insights`,
         data: {
           type: 'trace',
           message,
