@@ -372,7 +372,7 @@ export function app(): express.Express {
   server.get('*.*', express.static(distFolder, { maxAge: '1y' }));
   // // "Data requests". For submited POST form informations.
 
-  server.post('/insights', handler);
+  server.post(`${BASE_PATH}/insights`, handler);
   server.post('/*', (req, res) => {
     res.render(indexHtml, { req, res, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
   });
