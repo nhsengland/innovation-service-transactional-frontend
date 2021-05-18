@@ -7,12 +7,20 @@ import { SECTION_2_1 } from './sections/section-2-1.config';
 import { SECTION_2_2 } from './sections/section-2-2.config';
 import { SECTION_2_3 } from './sections/section-2-3.config';
 
-import { SECTION_3_CONFIG } from './sections/section-3.config';
-import { SECTION_4_CONFIG } from './sections/section-4.config';
-import { SECTION_5_CONFIG } from './sections/section-5.config';
-import { SECTION_6_CONFIG } from './sections/section-6.config';
-import { SECTION_7_CONFIG } from './sections/section-7.config';
-import { SECTION_8_CONFIG } from './sections/section-8.config';
+import { SECTION_3_1 } from './sections/section-3-1.config';
+import { SECTION_3_2 } from './sections/section-3-2.config';
+
+import { SECTION_4_1 } from './sections/section-4-1.config';
+
+import { SECTION_5_1 } from './sections/section-5-1.config';
+import { SECTION_5_2 } from './sections/section-5-2.config';
+
+import { SECTION_6_1 } from './sections/section-6-1.config';
+import { SECTION_6_2 } from './sections/section-6-2.config';
+
+import { SECTION_7_1 } from './sections/section-7-1.config';
+
+import { SECTION_8_1 } from './sections/section-8-1.config';
 
 
 export const INNOVATION_SECTIONS: InnovationSectionConfigType[] = [
@@ -24,11 +32,28 @@ export const INNOVATION_SECTIONS: InnovationSectionConfigType[] = [
     title: 'Needs, benefits and effectiveness',
     sections: [SECTION_2_1, SECTION_2_2, SECTION_2_3]
   },
-
-  SECTION_3_CONFIG,
-  SECTION_4_CONFIG,
-  SECTION_5_CONFIG,
-  SECTION_6_CONFIG,
-  SECTION_7_CONFIG,
-  SECTION_8_CONFIG
+  {
+    title: 'Business opportunity',
+    sections: [SECTION_3_1, SECTION_3_2]
+  },
+  {
+    title: 'Standards and certifications',
+    sections: [SECTION_4_1]
+  },
+  {
+    title: 'Care pathway and testing with users',
+    sections: [SECTION_5_1, SECTION_5_2]
+  },
+  {
+    title: 'Cost, savings, and benefits',
+    sections: [SECTION_6_1, SECTION_6_2]
+  },
+  {
+    title: 'Revenue model',
+    sections: [SECTION_7_1]
+  },
+  {
+    title: 'Deployment',
+    sections: [SECTION_8_1]
+  }
 ];
