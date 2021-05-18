@@ -21,6 +21,7 @@
 !.vscode/extensions.json
 .history/*
 .vscode
+launch.json
 
 # Tests
 coverage
