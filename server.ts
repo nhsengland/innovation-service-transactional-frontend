@@ -16,6 +16,8 @@ import { join } from 'path';
 
 import { AppServerModule } from './src/main.server';
 import { handler } from 'src/handlers/logger.handler';
+import { appLoggingMiddleware } from 'middleware/appLoggingMiddleware';
+import { exceptionLoggingMiddleware } from 'middleware/exceptionLoggingMiddleware';
 
 dotenv.config();
 
@@ -101,6 +103,9 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', distFolder);
   server.use(staticContentPath, express.static(distFolder));
+
+  server.use(appLoggingMiddleware);
+  server.use(exceptionLoggingMiddleware);
 
   passport.serializeUser((user, next) => { next(null, user); });
   passport.deserializeUser((obj: any, next) => { next(null, obj); });
