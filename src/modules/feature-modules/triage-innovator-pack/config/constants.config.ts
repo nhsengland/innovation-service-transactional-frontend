@@ -14,19 +14,14 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
         items: [
           { value: 'MEDICAL_DEVICE', label: 'Medical device' },
           { value: 'PHARMACEUTICAL', label: 'Pharmaceutical' },
-          { value: 'DIGITAL', label: 'Digital (including apps, platforms, software)' },
+          { value: 'DIGITAL', label: 'Digital (including apps, platforms, softcware)' },
           { value: 'AI', label: 'Artificial intelligence (AI)' },
-          {
-            value: 'New ways of delivering care',
-            label: 'New ways of delivering care',
-            description: 'This includes care pathways, frameworks and service redesign'
-          },
           { value: 'EDUCATION', label: 'Education or training of workforce' },
           { value: 'PPE', label: 'Personal protective equipment (PPE)' },
           {
             value: 'OTHER',
             label: 'Other',
-            // conditionalField: new FormFieldModel({ id: 'categories-other-option' })
+            conditional: new FormEngineParameterModel({ id: 'otherCategoryDescription', dataType: 'text', validations: { isRequired: true } })
           }
         ]
       }
@@ -47,17 +42,12 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
           { value: 'PHARMACEUTICAL', label: 'Pharmaceutical' },
           { value: 'DIGITAL', label: 'Digital (including apps, platforms, software)' },
           { value: 'AI', label: 'Artificial intelligence (AI)' },
-          {
-            value: 'New ways of delivering care',
-            label: 'New ways of delivering care',
-            description: 'This includes care pathways, frameworks and service redesign'
-          },
           { value: 'EDUCATION', label: 'Education or training of workforce' },
           { value: 'PPE', label: 'Personal protective equipment (PPE)' },
           {
             value: 'OTHER',
             label: 'Other',
-            // conditionalField: new FormFieldModel({ id: 'categories-other-option' })
+            conditional: new FormEngineParameterModel({ id: 'otherMainCategoryDescription', dataType: 'text', validations: { isRequired: true } })
           }
         ]
       }
