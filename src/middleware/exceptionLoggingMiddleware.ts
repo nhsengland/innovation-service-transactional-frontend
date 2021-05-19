@@ -3,7 +3,7 @@ import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 
 export const exceptionLoggingMiddleware = (err: any, req: any, res: any, next: any) => {
 
-  const client = getAppInsightsClient();
+  const client = getAppInsightsClient(req);
 
   client.trackException({
     exception: err,

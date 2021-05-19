@@ -1,8 +1,8 @@
 import { getAppInsightsClient } from '../globals';
 
 const methods: any = {
-  trace:  ( message: string, severity: any, properties: any ) => {
-    const client = getAppInsightsClient();
+  trace:  ( message: string, severity: any, properties: any, req: any ) => {
+    const client = getAppInsightsClient(req);
     client.trackTrace({
       message,
       severity,
@@ -23,7 +23,7 @@ export const handler = (req: any, res: any) => {
     authenticatedUser,
   };
 
-  func(message, severity, properties);
+  func(message, severity, properties, req);
 
   res.send();
 };
