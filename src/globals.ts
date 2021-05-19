@@ -11,6 +11,9 @@ export const initAppInsights = () => {
   return appinsights;
 };
 
-export const getAppInsightsClient = () => {
+export const getAppInsightsClient = (req: any) => {
+  appinsights.defaultClient.context.tags[appinsights.defaultClient.context.keys.userAuthUserId] = req.user?.oid;
+  appinsights.defaultClient.context.tags[appinsights.defaultClient.context.keys.sessionId] = req.session.id;
+  appinsights.defaultClient.context.tags[appinsights.defaultClient.context.keys.userId] = req.user?.oid;
   return appinsights.defaultClient;
 };
