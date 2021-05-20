@@ -9,7 +9,7 @@ import { FormCheckboxGroupComponent } from './checkbox-group.component';
 @Component({
   template: `
   <form [formGroup]="form">
-    <theme-form-checkbox-group [id]="id" [formGroupName]="formGroupName" [items]="items"></theme-form-checkbox-group>
+    <theme-form-checkbox-group [id]="id" [groupName]="groupName" [items]="items"></theme-form-checkbox-group>
   </form>`
 })
 class HostComponent {
@@ -25,7 +25,7 @@ class HostComponent {
   });
 
   id = 'FormInputId';
-  formGroupName = 'testField';
+  groupName = 'testField';
   items = [
     { value: 'value 1', label: 'label 1' },
     { value: 'value 2', label: 'label 2' },

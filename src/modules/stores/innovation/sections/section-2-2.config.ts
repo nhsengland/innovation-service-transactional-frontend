@@ -12,9 +12,9 @@ const stepsLabels = {
 
 
 const yesOrNoItems = [
-  { value: 'yes', label: 'Yes' },
-  { value: 'no', label: 'No' },
-  { value: 'notRelevant', label: 'Not relevant' }
+  { value: 'YES', label: 'Yes' }, // ALTERADO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  { value: 'NOT_YET', label: 'Not yet' },
+  { value: 'NOT_SURE', label: 'Not sure' }
 ];
 
 
@@ -37,7 +37,7 @@ export const SECTION_2_2: InnovationSectionConfigType['sections'][0] = {
     runtimeRules: [(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: any) => inboundParsing(data),
     outboundParsing: (data: any) => outboundParsing(data),
-    summaryParsing: (steps: FormEngineModel[], data: any) => summaryParsing(steps, data)
+    summaryParsing: (data: any) => summaryParsing(data)
   })
 };
 
@@ -144,7 +144,7 @@ type summaryData = {
   benefits: string;
 };
 
-function summaryParsing(steps: FormEngineModel[], data: summaryData): SummaryParsingType[] {
+function summaryParsing(data: summaryData): SummaryParsingType[] {
 
   const toReturn = [];
 

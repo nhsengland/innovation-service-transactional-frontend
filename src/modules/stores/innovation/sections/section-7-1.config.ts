@@ -65,7 +65,7 @@ export const SECTION_7_1: InnovationSectionConfigType['sections'][0] = {
       })
     ],
     runtimeRules: [(steps: FormEngineModel[], currentValues: stepPayload, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
-    summaryParsing: (steps: FormEngineModel[], data: stepPayload) => summaryParsing(steps, data)
+    summaryParsing: (data: stepPayload) => summaryParsing(data)
   })
 };
 
@@ -133,7 +133,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: stepPayload, curr
 }
 
 
-function summaryParsing(steps: FormEngineModel[], data: stepPayload): SummaryParsingType[] {
+function summaryParsing(data: stepPayload): SummaryParsingType[] {
 
   const toReturn = [];
 

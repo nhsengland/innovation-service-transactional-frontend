@@ -48,7 +48,7 @@ export const SECTION_3_2: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
-    summaryParsing: (steps: FormEngineModel[], data: any) => summaryParsing(steps, data)
+    summaryParsing: (data: any) => summaryParsing(data)
   })
 };
 
@@ -61,7 +61,7 @@ type summaryData = {
   otherIntellectual: null
 };
 
-function summaryParsing(steps: FormEngineModel[], data: summaryData): SummaryParsingType[] {
+function summaryParsing(data: summaryData): SummaryParsingType[] {
 
   return [
     {

@@ -351,12 +351,8 @@ export function app(): express.Express {
       try {
         const fileInfo = await getUploadUrl(url, body, accessToken);
         await uploadFile(fileInfo.url, file);
-
-        const response = {
-          id: fileInfo.id
-        };
-
-        res.status(201).send(response);
+        // const response = { id: fileInfo.id };
+        res.status(201).send(fileInfo);
       } catch (error) {
         console.error(`Error when attempting to upload data. Error: ${error}`);
         res.status(500).send();

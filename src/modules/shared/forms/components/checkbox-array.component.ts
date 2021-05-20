@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { ControlContainer, FormArray, FormControl } from '@angular/forms';
+import { AbstractControl, ControlContainer, FormArray, FormControl } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core';
 
@@ -17,7 +17,7 @@ import { FormEngineParameterModel } from '../engine/models/form-engine.models';
 export class FormCheckboxArrayComponent implements OnInit, DoCheck {
 
   @Input() id?: string;
-  @Input() formArrayName?: string;
+  @Input() arrayName = '';
   @Input() label?: string;
   @Input() description?: string;
   @Input() items: FormEngineParameterModel['items'] = [];
@@ -28,9 +28,22 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   isRunningOnBrowser: boolean;
   isRunningOnServer: boolean;
 
-  // Get hold of the control being used.
-  get fieldArrayControl(): FormArray { return this.injector.get(ControlContainer)?.control as FormArray; }
+  // Return parent FormGroup (or FormArray) instance.
+  get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
+  get fieldArrayControl(): FormArray { return this.parentFieldControl?.get(this.arrayName) as FormArray; }
   get fieldArrayValues(): string[] { return this.fieldArrayControl.value as string[]; }
+
+  conditionalFormControl(f: string): FormControl { return this.parentFieldControl?.get(f) as FormControl; }
+
+  isConditionalFieldVisible(conditionalFieldId: string): boolean {
+    return (this.items || []).filter(item => this.fieldArrayValues.includes(item.value) && item.conditional?.id === conditionalFieldId).length > 0;
+  }
+
+  isConditionalFieldError(f: string): boolean {
+    const control = this.conditionalFormControl(f);
+    return (control.invalid && (control.touched || control.dirty));
+  }
+
 
   constructor(
     private injector: Injector,
@@ -62,6 +75,24 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
 
     this.hasError = (this.fieldArrayControl.invalid && (this.fieldArrayControl.touched || this.fieldArrayControl.dirty));
     this.errorMessage = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldArrayControl.errors) : '';
+
+    this.items?.filter(item => item.conditional).forEach(item => {
+
+      if (item.conditional) {
+
+        if (item.conditional.isVisible && this.isConditionalFieldVisible(item.conditional.id)) {
+          this.conditionalFormControl(item.conditional.id).setValidators(FormEngineHelper.getParameterValidators(item.conditional));
+        }
+        else {
+          this.conditionalFormControl(item.conditional.id).setValidators(null);
+          this.conditionalFormControl(item.conditional.id).reset();
+        }
+        this.conditionalFormControl(item.conditional.id).updateValueAndValidity();
+
+      }
+
+    });
+
     this.cdr.detectChanges();
 
   }

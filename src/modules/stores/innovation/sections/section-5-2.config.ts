@@ -26,7 +26,8 @@ type apiPayload = {
     kind: string;
     feedback: null | string;
   }[];
-  files: string[];
+  files: { id: string; name?: string; displayFileName?: string; url: string }[];
+  // files: string[];
 };
 
 // [key: string] is needed to support userTestFeedback_${number} properties.
@@ -70,7 +71,7 @@ export const SECTION_5_2: InnovationSectionConfigType['sections'][0] = {
     runtimeRules: [(steps: FormEngineModel[], currentValues: stepPayload, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: apiPayload) => inboundParsing(data),
     outboundParsing: (data: stepPayload) => outboundParsing(data),
-    summaryParsing: (steps: FormEngineModel[], data: stepPayload) => summaryParsing(steps, data)
+    summaryParsing: (data: stepPayload) => summaryParsing(data)
   })
 };
 
@@ -127,6 +128,18 @@ function runtimeRules(steps: FormEngineModel[], currentValues: stepPayload, curr
 
   });
 
+  steps.push(
+    new FormEngineModel({
+      label: stepsLabels.s_5_2_4,
+      description: 'The files must be CSV, XLSX, DOCX or PDF.',
+      parameters: [{
+        id: 'files',
+        dataType: 'file-upload',
+        validations: { isRequired: true }
+      }],
+    })
+  );
+
 }
 
 
@@ -137,6 +150,8 @@ function inboundParsing(data: apiPayload): MappedObject {
   (parsedData.userTests || []).forEach((item, i) => {
     parsedData[`userTestFeedback_${i}`] = item.kind;
   });
+
+  parsedData.files = (parsedData.files || []).map((item: any) => ({ id: item.id, name: item.displayFileName, url: item.url }));
 
   return parsedData;
 
@@ -151,16 +166,19 @@ function outboundParsing(data: stepPayload): MappedObject {
     parsedData.userTests = [];
   }
 
+  parsedData.files = (data.files || []).map((item: any) => item.id);
+
   Object.keys(parsedData).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => {
     delete parsedData[key];
   });
+
 
   return parsedData;
 
 }
 
 
-function summaryParsing(steps: FormEngineModel[], data: stepPayload): SummaryParsingType[] {
+function summaryParsing(data: stepPayload): SummaryParsingType[] {
 
   const toReturn = [];
 
@@ -183,6 +201,16 @@ function summaryParsing(steps: FormEngineModel[], data: stepPayload): SummaryPar
         label: `${item.kind} kind of testing`,
         value: item.feedback,
         editStepNumber: i + 2
+      });
+    });
+
+    const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
+
+    allFiles.forEach((item, i) => {
+      toReturn.push({
+        label: `Attachment ${i + 1}`,
+        value: item.name || 'Unknown',
+        editStepNumber: toReturn.length + 1
       });
     });
 

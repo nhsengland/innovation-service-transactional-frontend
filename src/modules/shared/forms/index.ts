@@ -11,9 +11,9 @@ export { FormEngineModel, FormEngineParameterModel } from './engine/models/form-
 export { WizardEngineModel, SummaryParsingType } from './engine/models/wizard-engine.models';
 
 // Types.
-export { FormEngineFileUploadEvent } from './engine/types/form-engine.types';
 
 // Enums.
+export { FileTypes } from './engine/types/form-engine.types';
 
 // Helpers.
 export { FormEngineHelper } from './engine/helpers/form-engine.helper';

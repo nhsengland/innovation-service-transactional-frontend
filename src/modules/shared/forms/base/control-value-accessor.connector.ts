@@ -9,15 +9,15 @@ export abstract class ControlValueAccessorConnector implements ControlValueAcces
   @ViewChild(FormControlDirective, { static: true }) formControlDirective?: FormControlDirective;
 
   @Input() formControl?: FormControl;
-  @Input() formControlName = '';
+  @Input() controlName = '';
 
   // Return parent FormGroup (or FormArray) instance.
   get parentFieldControl(): AbstractControl | null {
     return this.injector.get(ControlContainer).control;
   }
-  // Get hold of FormControl instance no matter formControl or formControlName is given.
+  // Return FormControl instance no matter formControl or controlName is given.
   get fieldControl(): FormControl {
-    return this.formControl || this.parentFieldControl?.get(this.formControlName) as FormControl;
+    return this.formControl || this.parentFieldControl?.get(this.controlName) as FormControl;
   }
 
   constructor(private injector: Injector) { }

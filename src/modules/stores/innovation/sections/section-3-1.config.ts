@@ -31,7 +31,7 @@ export const SECTION_3_1: InnovationSectionConfigType['sections'][0] = {
       }),
     ],
     runtimeRules: [(steps: FormEngineModel[], currentValues: any, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
-    summaryParsing: (steps: FormEngineModel[], data: any) => summaryParsing(steps, data)
+    summaryParsing: (data: any) => summaryParsing(data)
   })
 };
 
@@ -69,7 +69,7 @@ type summaryData = {
   marketResearch: string;
 };
 
-function summaryParsing(steps: FormEngineModel[], data: summaryData): SummaryParsingType[] {
+function summaryParsing(data: summaryData): SummaryParsingType[] {
 
   const toReturn = [];
 

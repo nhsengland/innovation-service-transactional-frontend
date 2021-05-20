@@ -7,35 +7,35 @@
       <ng-container [ngSwitch]="p.dataType">
 
         <div *ngSwitchCase="'hidden'">
-          <theme-form-input type="hidden" [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+          <theme-form-input type="hidden" [controlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
         </div>
 
         <div *ngSwitchCase="'number'">
-          <theme-form-input type="number" [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+          <theme-form-input type="number" [controlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
         </div>
 
         <div *ngSwitchCase="'password'">
-          <theme-form-input type="password" [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+          <theme-form-input type="password" [controlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
         </div>
 
         <div *ngSwitchCase="'radio-group'">
-          <theme-form-radio-group [formControlName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-radio-group>
+          <theme-form-radio-group [controlName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-radio-group>
         </div>
 
         <div *ngSwitchCase="'checkbox-group'">
-          <theme-form-checkbox-group [formGroupName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-checkbox-group>
+          <theme-form-checkbox-group [groupName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-checkbox-group>
         </div>
 
         <div *ngSwitchCase="'checkbox-array'">
-          <theme-form-checkbox-array [formArrayName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-checkbox-array>
+          <theme-form-checkbox-array [arrayName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-checkbox-array>
         </div>
 
         <div *ngSwitchCase="'textarea'">
-          <theme-form-textarea [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-textarea>
+          <theme-form-textarea [controlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-textarea>
         </div>
 
         <div *ngSwitchCase="'file-upload'">
-          <theme-form-upload [config]="p.fileUploadConfig" (fileUploadEvent)="onFileUploadEvent($event, p.id)" (filesListEvent)="onFilesListEvent($event, p.id)"></theme-form-upload>
+          <theme-form-file-upload [arrayName]="p.id" [config]="p.fileUploadConfig"></theme-form-file-upload>
         </div>
 
         <div *ngSwitchCase="'fields-group'" [formArrayName]="p.id" class="nhsuk-u-margin-bottom-5">
@@ -47,7 +47,7 @@
 
                 <div [ngSwitch]="f.dataType">
                   <div *ngSwitchDefault>
-                    <theme-form-input [formControlName]="f.id" label="{{ f.label }} {{ i + 1}}" [description]="f.description">
+                    <theme-form-input [controlName]="f.id" label="{{ f.label }} {{ i + 1}}" [description]="f.description">
                       <ng-container append>
                         <button type="button" class="nhsuk-button nhsuk-button--secondary form-input-appended-button" (click)="removeFieldGroupRow(p.id, i)">Remove</button>
                       </ng-container>
@@ -65,7 +65,7 @@
         </div>
 
         <div *ngSwitchDefault>
-          <theme-form-input [formControlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+          <theme-form-input [controlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
         </div>
 
       </ng-container>

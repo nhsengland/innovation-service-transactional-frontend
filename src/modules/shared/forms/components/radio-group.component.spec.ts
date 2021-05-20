@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormEngineParameterModel } from '@app/base/forms';
 import { TranslateModule } from '@ngx-translate/core';
+
+import { FormEngineParameterModel } from '@app/base/forms';
 
 import { FormInputComponent } from '../components/input.component';
 import { FormRadioGroupComponent } from './radio-group.component';
@@ -10,7 +11,7 @@ import { FormRadioGroupComponent } from './radio-group.component';
 @Component({
   template: `
   <form [formGroup]="form">
-    <theme-form-radio-group [id]="id" [formControlName]="formControlName" [items]="items"></theme-form-radio-group>
+    <theme-form-radio-group [id]="id" [controlName]="controlName" [items]="items"></theme-form-radio-group>
   </form>`
 })
 class HostComponent {
@@ -23,7 +24,7 @@ class HostComponent {
   });
 
   id = 'FormInputId';
-  formControlName = 'testField';
+  controlName = 'testField';
   items = [
     { value: 'value 1', label: 'label 1' },
     { value: 'value 2', label: 'label 2' },

@@ -8,7 +8,7 @@ import { FormCheckboxComponent } from './checkbox.component';
 @Component({
   template: `
   <form [formGroup]="form">
-    <theme-form-checkbox [id]="id" [formControlName]="formControlName"></theme-form-checkbox>
+    <theme-form-checkbox [id]="id" [controlName]="controlName"></theme-form-checkbox>
   </form>`
 })
 class HostComponent {
@@ -20,7 +20,7 @@ class HostComponent {
   });
 
   id = 'FormInputId';
-  formControlName = 'testField';
+  controlName = 'testField';
 
 }
 

@@ -3,7 +3,7 @@ import { FormEngineModel } from './form-engine.models';
 
 export type SummaryParsingType = {
   label: string;
-  value: string
+  value: null | undefined | string;
   editStepNumber?: number;
   evidenceId?: string;
 };
@@ -15,8 +15,7 @@ export class WizardEngineModel {
   runtimeRules: ((steps: FormEngineModel[], currentValues: any, currentStep: number) => void)[];
   inboundParsing?: (data: any) => MappedObject;
   outboundParsing?: (data: any) => MappedObject;
-  summaryParsing?: (steps: FormEngineModel[], data: any) => SummaryParsingType[];
-
+  summaryParsing?: (data: any) => SummaryParsingType[];
 
   constructor(data: Partial<WizardEngineModel>) {
     this.steps = data.steps || [];
@@ -41,7 +40,7 @@ export class WizardEngineModel {
   }
 
   runSummaryParsing(data: MappedObject): SummaryParsingType[] {
-    return this.summaryParsing ? this.summaryParsing(this.steps, data) : [];
+    return this.summaryParsing ? this.summaryParsing(data) : [];
   }
 
 

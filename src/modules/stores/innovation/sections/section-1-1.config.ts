@@ -2,20 +2,24 @@ import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEn
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
 
+// Labels.
 const stepsLabels = {
-  s_1_1_1: 'Please provide a short description of your innovation',
-  s_1_1_2: 'Do you have a working product, service or prototype?',
-  s_1_1_3: 'Choose all categories that can be used to describe your innovation',
-  s_1_1_4: 'Is your innovation relevant to any of the following areas?',
-  s_1_1_5: 'Which clinical areas does your innovation impact on?',
-  s_1_1_6: 'In which care settings is your innovation relevant?',
-  s_1_1_7: 'What\'s the main purpose of your innovation?'
+  l1: 'Please provide a short description of your innovation',
+  l2: 'Do you have a working product, service or prototype?',
+  l3: 'Choose all categories that can be used to describe your innovation',
+  l4: 'If you had to select one primary category to describe your innovation, which one would it be?',
+  l5: 'Is your innovation relevant to any of the following areas?',
+  l6: 'Which clinical areas does your innovation impact on?',
+  l7: 'In which care settings is your innovation relevant?',
+  l8: 'What\'s the main purpose of your innovation?',
+  l9: 'What type of support are you currently looking for?'
 };
 
 
-const yesOrNoItems = [
-  { value: 'yes', label: 'Yes' },
-  { value: 'no', label: 'No' }
+// Catalogs.
+const hasFinalProductItems = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'NO', label: 'No' }
 ];
 
 const categoriesItems = [
@@ -25,9 +29,17 @@ const categoriesItems = [
   { value: 'AI', label: 'Artificial intelligence (AI)' },
   { value: 'EDUCATION', label: 'Education or training of workforce' },
   { value: 'PPE', label: 'Personal protective equipment (PPE)' },
-  {
-    value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCategoryDescription', dataType: 'text', validations: { isRequired: true } })
-  }
+  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCategoryDescription', dataType: 'text', validations: { isRequired: true } }) }
+];
+
+const mainCategoryItems = [
+  { value: 'MEDICAL_DEVICE', label: 'Medical device' },
+  { value: 'PHARMACEUTICAL', label: 'Pharmaceutical' },
+  { value: 'DIGITAL', label: 'Digital (including apps, platforms, software)' },
+  { value: 'AI', label: 'Artificial intelligence (AI)' },
+  { value: 'EDUCATION', label: 'Education or training of workforce' },
+  { value: 'PPE', label: 'Personal protective equipment (PPE)' },
+  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherMainCategoryDescription', dataType: 'text', validations: { isRequired: true } }) }
 ];
 
 const areasItems = [
@@ -82,144 +94,146 @@ const mainPurposeItems = [
   { value: 'ENABLING_CARE', label: 'Enabling care, services or communication' }
 ];
 
+const supportTypesItems = [
+  { value: 'ASSESSMENT', label: 'Adoption and health technology assessment' },
+  { value: 'PRODUCT_MIGRATION', label: 'Bringing my product to or from the UK' },
+  { value: 'CLINICAL_TESTS', label: 'Clinical trials and testing' },
+  { value: 'COMMERCIAL', label: 'Commercial support and advice' },
+  { value: 'PROCUREMENT', label: 'Procurement' },
+  { value: 'DEVELOPMENT', label: 'Product development and regulatory advice' },
+  { value: 'EVIDENCE_EVALUATION', label: 'Real-world evidence and evaluation' },
+  { value: 'FUNDING', label: 'Understanding funding channels' },
+  { value: '', label: 'SEPARATOR' },
+  { value: 'INFORMATION', label: 'I\'m only looking for information right now' }
+];
+
+
+// Types.
+type inboundPayload = {
+  description: string;
+  hasFinalProduct: null | 'YES' | 'NO';
+  categories: ('MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER')[];
+  otherCategoryDescription: string;
+  mainCategory: null | 'MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER';
+  otherMainCategoryDescription: string;
+  areas: ('COVID_19' | 'DATA_ANALYTICS_AND_RESEARCH' | 'DIGITALISING_SYSTEM' | 'IMPROVING_SYSTEM_FLOW' | 'INDEPENDENCE_AND_PREVENTION' | 'OPERATIONAL_EXCELLENCE' | 'PATIENT_ACTIVATION_AND_SELF_CARE' | 'PATIENT_SAFETY' | 'WORKFORCE_OPTIMISATION')[];
+  clinicalAreas: ('ACUTE' | 'AGEING' | 'CANCER' | 'CARDIO_ENDOCRINE_METABOLIC' | 'CHILDREN_AND_YOUNG' | 'DISEASE_AGNOSTIC' | 'GASTRO_KDNEY_LIVER' | 'INFECTION_INFLAMATION' | 'MATERNITY_REPRODUCTIVE_HEALTH' | 'MENTAL_HEALTH' | 'NEUROLOGY' | 'POPULATION_HEALTH' | 'RESPIRATORY' | 'UROLOGY' | 'WORKFORCE_AND_EDUCATION')[];
+  careSettings: ('AMBULANCE_OR_PARAMEDIC' | 'COMMUNITY' | 'HOSPITAL_INPATIENT' | 'HOSPITAL_OUTPATIENT' | 'MENTAL_HEALTH' | 'PATIENT_HOME' | 'PHARMACY' | 'PRIMARY_CARE' | 'SOCIAL_CARE')[];
+  mainPurpose: 'PREVENT_CONDITION' | 'PREDICT_CONDITION' | 'DIAGNOSE_CONDITION' | 'MONITOR_CONDITION' | 'PROVIDE_TREATMENT' | 'MANAGE_CONDITION' | 'ENABLING_CARE';
+  supportTypes: ('ASSESSMENT' | 'PRODUCT_MIGRATION' | 'CLINICAL_TESTS' | 'COMMERCIAL' | 'PROCUREMENT' | 'DEVELOPMENT' | 'EVIDENCE_EVALUATION' | 'FUNDING' | 'INFORMATION')[];
+};
+
+type stepPayload = inboundPayload;
+
+// type outboundPayload = inboundPayload;
+
+
+
 export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
   id: InnovationSectionsIds.INNOVATION_DESCRIPTION,
   title: 'Description of innovation',
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.s_1_1_1,
-        parameters: [
-          {
-            id: 'description',
-            dataType: 'textarea',
-            label: 'Enter a description',
-            validations: { isRequired: true }
-          }
-        ]
+        label: stepsLabels.l1,
+        parameters: [{ id: 'description', dataType: 'textarea', label: 'Enter a description', validations: { isRequired: true } }]
       }),
       new FormEngineModel({
-        label: stepsLabels.s_1_1_2,
+        label: stepsLabels.l2,
         description: 'By this, we mean something that performs the same function that the final product or service would.',
-        parameters: [{
-          id: 'hasFinalProduct',
-          dataType: 'radio-group',
-          validations: { isRequired: true },
-          items: yesOrNoItems
-        }]
+        parameters: [{ id: 'hasFinalProduct', dataType: 'radio-group', validations: { isRequired: true }, items: hasFinalProductItems }]
       }),
       new FormEngineModel({
-        label: stepsLabels.s_1_1_3,
-        parameters: [{
-          id: 'categories',
-          dataType: 'checkbox-array',
-          validations: { isRequired: true },
-          items: categoriesItems
-        }]
+        label: stepsLabels.l3,
+        parameters: [{ id: 'categories', dataType: 'checkbox-array', validations: { isRequired: true }, items: categoriesItems }]
       }),
       new FormEngineModel({
-        label: stepsLabels.s_1_1_4,
+        label: stepsLabels.l4,
+        description: 'Your innovation may be a combination of various categories. Selecting the primary category will help us find the right people to support you.',
+        parameters: [{ id: 'mainCategory', dataType: 'radio-group', validations: { isRequired: [true, 'Choose the category that best describes your innovation'] }, items: mainCategoryItems }]
+      }),
+      new FormEngineModel({
+        label: stepsLabels.l5,
         description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-        parameters: [{
-          id: 'areas',
-          dataType: 'checkbox-array',
-          validations: { isRequired: true },
-          items: areasItems
-        }]
+        parameters: [{ id: 'areas', dataType: 'checkbox-array', validations: { isRequired: true }, items: areasItems }]
       }),
       new FormEngineModel({
-        label: stepsLabels.s_1_1_5,
+        label: stepsLabels.l6,
         description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-        parameters: [{
-          id: 'clinicalAreas',
-          dataType: 'checkbox-array',
-          validations: { isRequired: true },
-          items: clinicalAreasItems
-        }]
+        parameters: [{ id: 'clinicalAreas', dataType: 'checkbox-array', validations: { isRequired: true }, items: clinicalAreasItems }]
       }),
       new FormEngineModel({
-        label: stepsLabels.s_1_1_6,
+        label: stepsLabels.l7,
         description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-        parameters: [{
-          id: 'careSettings',
-          dataType: 'checkbox-array',
-          validations: { isRequired: true },
-          items: careSettingsItems
-        }]
+        parameters: [{ id: 'careSettings', dataType: 'checkbox-array', validations: { isRequired: true }, items: careSettingsItems }]
       }),
       new FormEngineModel({
-        label: stepsLabels.s_1_1_7,
+        label: stepsLabels.l8,
         description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-        parameters: [{
-          id: 'mainPurpose',
-          dataType: 'radio-group',
-          validations: { isRequired: true },
-          items: mainPurposeItems
-        }]
+        parameters: [{ id: 'mainPurpose', dataType: 'radio-group', validations: { isRequired: true }, items: mainPurposeItems }]
+      }),
+      new FormEngineModel({
+        label: stepsLabels.l9,
+        description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the innovation service.',
+        parameters: [{ id: 'supportTypes', dataType: 'checkbox-array', validations: { isRequired: [true, 'Choose at least one type of support'] }, items: supportTypesItems }]
       })
     ],
-    summaryParsing: (steps: FormEngineModel[], data: any) => summaryParsing(steps, data)
+    summaryParsing: (data: any) => summaryParsing(data)
   })
 };
 
 
 
-type summaryData = {
-  id?: string;
-  description: string;
-  hasFinalProduct: string;
-  categories: string[];
-  otherCategoryDescription: string;
-  areas: string[];
-  clinicalAreas: string[];
-  careSettings: string[];
-  mainPurpose: string;
-};
-
-function summaryParsing(steps: FormEngineModel[], data: summaryData): SummaryParsingType[] {
+function summaryParsing(data: stepPayload): SummaryParsingType[] {
 
   return [
     {
-      label: stepsLabels.s_1_1_1,
+      label: stepsLabels.l1,
       value: data.description,
       editStepNumber: 1
     },
     {
-      label: stepsLabels.s_1_1_2,
-      value: yesOrNoItems.find(item => item.value === data.hasFinalProduct)?.label || '',
+      label: stepsLabels.l2,
+      value: hasFinalProductItems.find(item => item.value === data.hasFinalProduct)?.label || '',
       editStepNumber: 2
     },
     {
-      label: stepsLabels.s_1_1_3,
-      value: data.categories.map(v => categoriesItems.find(item => item.value === v)?.label).join('<br />'),
+      label: stepsLabels.l3,
+      value: data.categories.map(v =>
+        v === 'OTHER' ? data.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label
+      ).join('<br />'),
       editStepNumber: 3
     },
     {
-      label: stepsLabels.s_1_1_4,
-      value: [
-        ...data.areas.map(v => areasItems.find(item => item.value === v)?.label),
-        ...[data.otherCategoryDescription]
-      ].filter(item => item).join('<br />'),
+      label: stepsLabels.l4,
+      value: data.otherMainCategoryDescription || mainCategoryItems.find(item => item.value === data.mainCategory)?.label || '',
       editStepNumber: 4
     },
     {
-      label: stepsLabels.s_1_1_5,
-      value: data.clinicalAreas.map(v => clinicalAreasItems.find(item => item.value === v)?.label).join('<br />'),
+      label: stepsLabels.l5,
+      value: data.areas.map(v => areasItems.find(item => item.value === v)?.label).join('<br />'),
       editStepNumber: 5
     },
     {
-      label: stepsLabels.s_1_1_6,
-      value: data.careSettings.map(v => careSettingsItems.find(item => item.value === v)?.label).join('<br />'),
+      label: stepsLabels.l6,
+      value: data.clinicalAreas.map(v => clinicalAreasItems.find(item => item.value === v)?.label).join('<br />'),
       editStepNumber: 6
     },
     {
-      label: stepsLabels.s_1_1_6,
-      value: mainPurposeItems.find(item => item.value === data.mainPurpose)?.label || '',
+      label: stepsLabels.l7,
+      value: data.careSettings.map(v => careSettingsItems.find(item => item.value === v)?.label).join('<br />'),
       editStepNumber: 7
+    },
+    {
+      label: stepsLabels.l8,
+      value: mainPurposeItems.find(item => item.value === data.mainPurpose)?.label || '',
+      editStepNumber: 8
+    },
+    {
+      label: stepsLabels.l9,
+      value: data.supportTypes.map(v => supportTypesItems.find(item => item.value === v)?.label).join('<br />'),
+      editStepNumber: 9
     }
   ];
 
 }
-
-
-
