@@ -8,7 +8,7 @@ import { FormTextareaComponent } from './textarea.component';
 @Component({
   template: `
   <form [formGroup]="form">
-    <theme-form-textarea [id]="id" [formControlName]="formControlName"></theme-form-textarea>
+    <theme-form-textarea [id]="id" [controlName]="controlName"></theme-form-textarea>
   </form>`
 })
 class HostComponent {
@@ -20,7 +20,7 @@ class HostComponent {
   });
 
   id = 'FormInputId';
-  formControlName = 'testField';
+  controlName = 'testField';
 
 }
 

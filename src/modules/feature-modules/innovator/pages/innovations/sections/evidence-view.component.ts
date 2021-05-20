@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { WizardEngineModel } from '@modules/shared/forms';
+import { SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
 
@@ -21,7 +21,7 @@ export class InnovationsSectionEvidenceViewComponent extends CoreComponent imple
 
   wizard: WizardEngineModel;
 
-  summaryList: { label: string, value: string, editStepNumber?: number, evidenceId?: string }[];
+  summaryList: SummaryParsingType[];
 
   constructor(
     private activatedRoute: ActivatedRoute
@@ -50,7 +50,7 @@ export class InnovationsSectionEvidenceViewComponent extends CoreComponent imple
     this.stores.innovation.getSectionEvidence$(this.innovationId, this.evidence.id).subscribe(
       response => {
         this.summaryList = this.wizard.runSummaryParsing(response);
-        this.evidence.title = this.summaryList[1].value;
+        this.evidence.title = this.summaryList[1].value || '';
       },
       () => {
         this.logger.error('Error fetching data');

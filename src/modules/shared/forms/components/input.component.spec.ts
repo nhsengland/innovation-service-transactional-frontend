@@ -8,7 +8,7 @@ import { FormInputComponent } from './input.component';
 @Component({
   template: `
   <form [formGroup]="form">
-    <theme-form-input [id]="id" [formControlName]="formControlName"></theme-form-input>
+    <theme-form-input [id]="id" [controlName]="controlName"></theme-form-input>
   </form>`
 })
 class HostComponent {
@@ -20,7 +20,7 @@ class HostComponent {
   });
 
   id = 'FormInputId';
-  formControlName = 'testField';
+  controlName = 'testField';
 
 }
 

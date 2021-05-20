@@ -10,10 +10,10 @@ import { FormEngineComponent } from './form-engine.component';
 import { FormCheckboxComponent } from '../components/checkbox.component';
 import { FormCheckboxArrayComponent } from '../components/checkbox-array.component';
 import { FormCheckboxGroupComponent } from '../components/checkbox-group.component';
+import { FormFileUploadComponent } from '../components/file-upload.component';
 import { FormInputComponent } from '../components/input.component';
 import { FormRadioGroupComponent } from '../components/radio-group.component';
 import { FormTextareaComponent } from '../components/textarea.component';
-import { FormUploadComponent } from '../components/uploads/uploads.component';
 
 import { ALL_PARAMETER_TYPES_EMPTY, PARAMETERS_WITH_VALIDATIONS } from '../tests/form-engine.mock';
 
@@ -36,10 +36,10 @@ describe('FormEngineComponent', () => {
         FormCheckboxComponent,
         FormCheckboxArrayComponent,
         FormCheckboxGroupComponent,
+        FormFileUploadComponent,
         FormInputComponent,
         FormRadioGroupComponent,
-        FormTextareaComponent,
-        FormUploadComponent
+        FormTextareaComponent
       ],
     }).compileComponents();
 

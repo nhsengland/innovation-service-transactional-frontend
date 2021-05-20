@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { FormEngineComponent, FormEngineModel } from '@app/base/forms';
-import { WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineComponent, FormEngineModel, FileTypes, WizardEngineModel } from '@app/base/forms';
+import { UrlModel } from '@modules/core';
+import { SummaryParsingType } from '@modules/shared/forms';
 import { InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
 
 @Component({
@@ -22,7 +23,7 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
   currentStep: FormEngineModel;
   currentAnswers: { [key: string]: any };
 
-  summaryList: { label: string, value: string, editStepNumber?: number, evidenceId?: string }[];
+  summaryList: SummaryParsingType[];
 
 
   // isValidStepId(): boolean {
@@ -78,6 +79,19 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
 
             this.wizard.gotoStep(Number(params.questionId));
             this.currentStep = this.wizard.currentStep();
+
+            if (this.currentStep.parameters[0].dataType === 'file-upload') {
+              this.currentStep.parameters[0].fileUploadConfig = {
+                httpUploadUrl: new UrlModel(this.stores.environment.APP_URL).addPath('upload').buildUrl(),
+                httpUploadBody: {
+                  context: this.sectionId,
+                  innovatorId: this.stores.authentication.getUserId(),
+                  innovationId: this.innovationId
+                },
+                maxFileSize: 2000,
+                acceptedFiles: [FileTypes.CSV, FileTypes.DOCX, FileTypes.XLSX, FileTypes.PDF]
+              };
+            }
 
           })
         );

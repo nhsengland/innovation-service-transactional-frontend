@@ -1,12 +1,17 @@
-export type FormEngineFileUploadEvent = {
-  type: 'fileAdded' | 'fileRemoved',
-  data: {
-    id: string;
-    name: string;
-  }
-};
-
-export type FormEngineFilesListEvent = {
+export type FileUploadType = {
   id: string;
   name: string;
+  url: string
 };
+
+export enum FileTypes {
+  ALL = '*',
+  JPEG = '.jpeg',
+  JPG = '.jpg',
+  PNG = '.png',
+  GIF = '.gif',
+  CSV = '.csv',
+  XLSX = '.xlsx',
+  DOCX = '.docx',
+  PDF = '.pdf'
+}

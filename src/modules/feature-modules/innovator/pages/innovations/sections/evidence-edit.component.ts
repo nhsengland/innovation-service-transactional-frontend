@@ -5,9 +5,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { FormEngineComponent, FormEngineModel } from '@app/base/forms';
+import { FormEngineComponent, FormEngineModel, FileTypes } from '@app/base/forms';
 import { UrlModel } from '@modules/core';
-import { WizardEngineModel } from '@modules/shared/forms';
+import { SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
 
 @Component({
@@ -27,7 +27,7 @@ export class InnovationsSectionEvidenceEditComponent extends CoreComponent imple
   currentStep: FormEngineModel;
   currentAnswers: { [key: string]: any };
 
-  summaryList: { label: string, value: string, editStepNumber?: number, evidenceId?: string }[];
+  summaryList: SummaryParsingType[];
 
   // TODO: Make sure is a valid step.
   // isValidStepId(): boolean {
@@ -115,9 +115,8 @@ export class InnovationsSectionEvidenceEditComponent extends CoreComponent imple
               innovatorId: this.stores.authentication.getUserId(),
               innovationId: this.innovationId
             },
-            maxFileSize: 20000,
-            previousUploadedFiles: this.currentAnswers.files
-            // acceptedFiles: [], TODO: only accepts some file types.
+            maxFileSize: 2000,
+            acceptedFiles: [FileTypes.CSV, FileTypes.DOCX, FileTypes.XLSX, FileTypes.PDF]
           };
         }
 

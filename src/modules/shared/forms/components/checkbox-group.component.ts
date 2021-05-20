@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { ControlContainer, FormGroup } from '@angular/forms';
+import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core';
 
@@ -17,7 +17,7 @@ import { FormEngineParameterModel } from '../engine/models/form-engine.models';
 export class FormCheckboxGroupComponent implements OnInit, DoCheck {
 
   @Input() id?: string;
-  @Input() formGroupName?: string;
+  @Input() groupName = '';
   @Input() label?: string;
   @Input() description?: string;
   @Input() items: FormEngineParameterModel['items'] = [];
@@ -28,8 +28,15 @@ export class FormCheckboxGroupComponent implements OnInit, DoCheck {
   isRunningOnBrowser: boolean;
   isRunningOnServer: boolean;
 
+  // Return parent FormGroup (or FormArray) instance.
+  get parentFieldControl(): AbstractControl | null {
+    return this.injector.get(ControlContainer).control;
+  }
+
   // Get hold of the control being used.
-  get fieldGroupControl(): FormGroup { return this.injector.get(ControlContainer)?.control as FormGroup; }
+  get fieldGroupControl(): FormGroup {
+    return this.parentFieldControl?.get(this.groupName) as FormGroup;
+  }
 
 
   constructor(

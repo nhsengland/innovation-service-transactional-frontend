@@ -1,3 +1,5 @@
+import { FileTypes } from '../types/form-engine.types';
+
 export class FormEngineModel {
 
   label?: string;
@@ -57,7 +59,7 @@ export class FormEngineParameterModel {
   fileUploadConfig?: {
     httpUploadUrl: string;
     httpUploadBody?: { [key: string]: any };
-    acceptedFiles?: string[]; // 'image/jpeg,image/jpg,image/png,image/gif'
+    acceptedFiles?: FileTypes[];
     multiple?: boolean;
     maxFileSize?: number; // In bytes.
     previousUploadedFiles?: {id: string, name: string }[]

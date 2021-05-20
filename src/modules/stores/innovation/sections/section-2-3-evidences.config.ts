@@ -33,6 +33,32 @@ export const clinicalEvidenceItems = [
 ];
 
 
+type apiPayload = {
+  // id: string;
+  evidenceType?: 'clinical' | 'economic' | 'other';
+  clinicalEvidenceType?: 'DATA_PUBLISHED' | 'NON_RANDOMISED_COMPARATIVE_DATA' | 'NON_RANDOMISED_NON_COMPARATIVE_DATA' | 'CONFERENCE' | 'RANDOMISED_CONTROLLED_TRIAL' | 'UNPUBLISHED_DATA' | 'OTHER';
+  description: null | string;
+  summary: string;
+  files: { id: string, displayFileName: string, url: string }[];
+  createdBy: string;
+  createdAt?: string;
+  updatedBy: string;
+  updatedAt?: string;
+};
+
+// [key: string] is needed to support userTestFeedback_${number} properties.
+type stepPayload = apiPayload & { [key: string]: null | string };
+
+type outboundParsingData = {
+  evidenceType?: 'clinical' | 'economic' | 'other';
+  clinicalEvidenceType?: string;
+  description?: string;
+  summary?: string;
+  files?: { id: string; name: string; }[];
+};
+
+
+
 export const SECTION_2_EVIDENCES = new WizardEngineModel({
   steps: [
     new FormEngineModel({
@@ -46,9 +72,9 @@ export const SECTION_2_EVIDENCES = new WizardEngineModel({
     })
   ],
   runtimeRules: [(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
-  inboundParsing: (data: any) => inboundParsing(data),
-  outboundParsing: (data: any) => outboundParsing(data),
-  summaryParsing: (steps: FormEngineModel[], data: any) => summaryParsing(steps, data)
+  inboundParsing: (data: apiPayload) => inboundParsing(data),
+  outboundParsing: (data: stepPayload) => outboundParsing(data),
+  summaryParsing: (data: any) => summaryParsing(data)
 
 });
 
@@ -148,20 +174,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: MappedObject, cur
 
 
 
-type inboundData = {
-  id: string;
-  evidenceType?: 'clinical' | 'economic' | 'other';
-  clinicalEvidenceType?: string;
-  description: null | string;
-  summary: string;
-  files: { id: string, displayFileName: string, url: string }[];
-  createdBy: string;
-  createdAt?: string;
-  updatedBy: string;
-  updatedAt?: string;
-};
 
-function inboundParsing(data: inboundData): MappedObject {
+function inboundParsing(data: apiPayload): MappedObject {
 
   const parsedData = cloneDeep(data);
 
@@ -177,15 +191,8 @@ function inboundParsing(data: inboundData): MappedObject {
 
 
 
-type outboundParsingData = {
-  evidenceType?: 'clinical' | 'economic' | 'other';
-  clinicalEvidenceType?: string;
-  description?: string;
-  summary?: string;
-  files?: { id: string; name: string; }[];
-};
 
-function outboundParsing(data: outboundParsingData): MappedObject {
+function outboundParsing(data: stepPayload): MappedObject {
 
   return {
     evidenceType: data.evidenceType,
@@ -213,7 +220,7 @@ type summaryData = {
   // updatedAt?: string;
 };
 
-function summaryParsing(steps: FormEngineModel[], data: summaryData): SummaryParsingType[] {
+function summaryParsing(data: summaryData): SummaryParsingType[] {
 
   const toReturn: any = [];
 

@@ -11,8 +11,9 @@ const stepsLabels = {
 
 
 const yesOrNoItems = [
-  { value: 'yes', label: 'Yes' },
-  { value: 'no', label: 'No' }
+  { value: 'YES', label: 'Yes' }, // ALTERADAADDDDDOOO!!!!!!!!!!!!!!!!!!!!!!!!!
+  { value: 'IN_PROGRESS', label: 'In progress' },
+  { value: 'NOT_YET', label: 'Not yet' }
 ];
 
 
@@ -32,7 +33,7 @@ export const SECTION_2_3: InnovationSectionConfigType['sections'][0] = {
       })
     ],
     outboundParsing: (data: any) => outboundParsing(data),
-    summaryParsing: (steps: FormEngineModel[], data: any) => summaryParsing(steps, data)
+    summaryParsing: (data: any) => summaryParsing(data)
   }),
   evidences: SECTION_2_EVIDENCES
 };
@@ -59,7 +60,7 @@ type summaryData = {
   }[];
 };
 
-function summaryParsing(steps: FormEngineModel[], data: summaryData): { label: string, value: string, editStepNumber?: number, evidenceId?: string }[] {
+function summaryParsing(data: summaryData): { label: string, value: string, editStepNumber?: number, evidenceId?: string }[] {
 
   const toReturn = [];
 

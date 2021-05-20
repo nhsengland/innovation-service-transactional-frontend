@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { WizardEngineModel } from '@modules/shared/forms';
+import { WizardEngineModel, SummaryParsingType } from '@modules/shared/forms';
 
 import { InnovationSectionsIds, INNOVATION_SECTION_STATUS } from '@stores-module/innovation/innovation.models';
 
@@ -26,7 +26,7 @@ export class InnovationsSectionViewComponent extends CoreComponent implements On
   wizard: WizardEngineModel;
 
   summaryAlert: { type: '' | 'error' | 'warning', title: string, message: string };
-  summaryList: { label: string, value: string, editStepNumber?: number, evidenceId?: string }[];
+  summaryList: SummaryParsingType[];
 
   constructor(
     private activatedRoute: ActivatedRoute

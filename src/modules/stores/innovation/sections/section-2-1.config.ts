@@ -53,7 +53,7 @@ export const SECTION_2_1: InnovationSectionConfigType['sections'][0] = {
     runtimeRules: [(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: any) => inboundParsing(data),
     outboundParsing: (data: any) => outboundParsing(data),
-    summaryParsing: (steps: FormEngineModel[], data: any) => summaryParsing(steps, data)
+    summaryParsing: (data: any) => summaryParsing(data)
   })
 };
 
@@ -170,7 +170,7 @@ type summaryData = {
   subgroups: { id: string; name: string; conditions: string; }[];
 };
 
-function summaryParsing(steps: FormEngineModel[], data: summaryData): SummaryParsingType[] {
+function summaryParsing(data: summaryData): SummaryParsingType[] {
 
   const toReturn = [];
 

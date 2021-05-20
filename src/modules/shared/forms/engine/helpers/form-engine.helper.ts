@@ -50,10 +50,11 @@ export class FormEngineHelper {
           }
           break;
 
-        // TODO: try to read from values...
         case 'file-upload': // Creates an FormArray and pushes defaultValues into it.
           form.addControl(parameter.id, new FormArray([]));
-          // (parameterValue as string[] || []).forEach(v => { (form.get(parameter.id) as FormArray).push(new FormControl(v)); });
+          (parameterValue as { id: string, name: string, url: string }[] || []).forEach(v => {
+            (form.get(parameter.id) as FormArray).push(new FormGroup({ id: new FormControl(v.id), name: new FormControl(v.name), url: new FormControl(v.url) }));
+          });
           break;
 
         default: // Creates a standard FormControl.
