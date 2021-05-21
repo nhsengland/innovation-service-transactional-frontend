@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { sortBy } from 'lodash';
 
 import { CoreComponent } from '@app/base';
 
@@ -15,6 +14,7 @@ import { SectionsSummaryModel } from '@stores-module/innovation/innovation.model
 export class PageInnovationRecordComponent extends CoreComponent implements OnInit {
 
   baseUrl = '';
+  documentUrl = '';
 
   innovationSections: SectionsSummaryModel[] = [];
   progressBar: {
@@ -33,6 +33,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     super();
 
     this.baseUrl = `/${this.activatedRoute.snapshot.data.module}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
+    this.documentUrl = `${this.stores.environment.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
 
     this.progressBar = { blocks: [], completed: '', uncompleted: '' };
 
