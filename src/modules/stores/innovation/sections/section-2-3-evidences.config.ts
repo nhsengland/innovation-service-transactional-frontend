@@ -1,23 +1,22 @@
-import { MappedObject } from '@modules/core/interfaces/base.interfaces';
-import { FormEngineModel, FormEngineParameterModel } from '@modules/shared/forms/engine/models/form-engine.models';
-import { SummaryParsingType, WizardEngineModel } from '@modules/shared/forms/engine/models/wizard-engine.models';
-import { cloneDeep } from 'lodash';
+import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 
 
+// Labels.
 const stepsLabels = {
-  s_1_1_1: 'What type of evidence do you want to submit?',
-  s_1_1_2: 'What type of clinical evidence?',
-  s_1_1_3: 'What type of economic evidence?',
-  s_1_1_4: 'What other type of evidence?',
-  s_1_1_5: 'Please write a short summary of the evidence',
-  s_1_1_6: 'Please upload any documents that support this evidence'
+  l1: 'What type of evidence do you want to submit?',
+  l2: 'What type of clinical evidence?',
+  l3: 'What type of economic evidence?',
+  l4: 'What other type of evidence?',
+  l5: 'Please write a short summary of the evidence',
+  l6: 'Please upload any documents that support this evidence'
 };
 
 
+// Catalogs.
 export const evidenceTypeItems = [
-  { value: 'clinical', label: 'Clinical evidence' },
-  { value: 'economic', label: 'Economic evidence' },
-  { value: 'other', label: 'Other evidence of effectiveness' }
+  { value: 'CLINICAL', label: 'Clinical evidence' },
+  { value: 'ECONOMIC', label: 'Economic evidence' },
+  { value: 'OTHER', label: 'Other evidence of effectiveness' }
 ];
 
 export const clinicalEvidenceItems = [
@@ -33,113 +32,78 @@ export const clinicalEvidenceItems = [
 ];
 
 
-type apiPayload = {
-  // id: string;
-  evidenceType?: 'clinical' | 'economic' | 'other';
-  clinicalEvidenceType?: 'DATA_PUBLISHED' | 'NON_RANDOMISED_COMPARATIVE_DATA' | 'NON_RANDOMISED_NON_COMPARATIVE_DATA' | 'CONFERENCE' | 'RANDOMISED_CONTROLLED_TRIAL' | 'UNPUBLISHED_DATA' | 'OTHER';
-  description: null | string;
+// Types.
+type InboundPayloadType = {
+  id: string;
+  evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER';
+  clinicalEvidenceType: null | 'DATA_PUBLISHED' | 'NON_RANDOMISED_COMPARATIVE_DATA' | 'NON_RANDOMISED_NON_COMPARATIVE_DATA' | 'CONFERENCE' | 'RANDOMISED_CONTROLLED_TRIAL' | 'UNPUBLISHED_DATA' | 'OTHER';
+  description: string;
   summary: string;
   files: { id: string, displayFileName: string, url: string }[];
   createdBy: string;
-  createdAt?: string;
+  createdAt: string;
   updatedBy: string;
-  updatedAt?: string;
+  updatedAt: string;
 };
 
-// [key: string] is needed to support userTestFeedback_${number} properties.
-type stepPayload = apiPayload & { [key: string]: null | string };
+type StepPayloadType = Omit<InboundPayloadType, 'id' | 'files' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'> & { files: { id: string; name: string; url: string; }[] };
 
-type outboundParsingData = {
-  evidenceType?: 'clinical' | 'economic' | 'other';
-  clinicalEvidenceType?: string;
-  description?: string;
-  summary?: string;
-  files?: { id: string; name: string; }[];
-};
+type OutboundPayloadType = Omit<StepPayloadType, 'files'> & { files: string[] };
+
+type SummaryPayloadType = Omit<StepPayloadType, 'files'> & { files: ({ id: string, displayFileName: string, url: string } | { id: string, name: string })[] };
 
 
 
 export const SECTION_2_EVIDENCES = new WizardEngineModel({
   steps: [
     new FormEngineModel({
-      label: stepsLabels.s_1_1_1,
-      parameters: [{
-        id: 'evidenceType',
-        dataType: 'radio-group',
-        validations: { isRequired: true },
-        items: evidenceTypeItems
-      }]
+      label: stepsLabels.l1,
+      parameters: [{ id: 'evidenceType', dataType: 'radio-group', validations: { isRequired: true }, items: evidenceTypeItems }]
     })
   ],
-  runtimeRules: [(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
-  inboundParsing: (data: apiPayload) => inboundParsing(data),
-  outboundParsing: (data: stepPayload) => outboundParsing(data),
-  summaryParsing: (data: any) => summaryParsing(data)
-
+  runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
+  inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+  outboundParsing: (data: StepPayloadType) => outboundParsing(data),
+  summaryParsing: (data: SummaryPayloadType) => summaryParsing(data)
 });
 
 
 
-// type toType = {
-// 'evidenceType': 'EvidenceTypeCatalogue',
-// 'clinicalEvidenceType': 'ClinicalEvidenceTypeCatalogue',
-// 'description': 'description',
-// 'summary': 'summary'
-// 'files': ['id', 'id']
-// }
-
-
-
-// Add/remove new steps for each subgroup defined on step 2.
-function runtimeRules(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number): void {
+function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number): void {
 
   steps.splice(1);
 
   switch (currentValues.evidenceType) {
-    case 'clinical':
+    case 'CLINICAL':
       steps.push(
         new FormEngineModel({
-          label: stepsLabels.s_1_1_2,
-          parameters: [{
-            id: 'clinicalEvidenceType',
-            dataType: 'radio-group',
-            validations: { isRequired: true },
-            items: clinicalEvidenceItems
-          }]
+          label: stepsLabels.l2,
+          parameters: [{ id: 'clinicalEvidenceType', dataType: 'radio-group', validations: { isRequired: true }, items: clinicalEvidenceItems }]
         })
       );
       break;
 
-    case 'economic':
+    case 'ECONOMIC':
       steps.push(
         new FormEngineModel({
-          label: stepsLabels.s_1_1_3,
-          visibility: { parameter: 'hasEvidence', values: ['economic'] },
-          parameters: [{
-            id: 'description',
-            dataType: 'text',
-            validations: { isRequired: true }
-          }]
+          label: stepsLabels.l3,
+          visibility: { parameter: 'hasEvidence', values: ['ECONOMIC'] },
+          parameters: [{ id: 'description', dataType: 'text', validations: { isRequired: true } }]
         }),
       );
-
-      delete currentValues.clinicalEvidenceType;
+      currentValues.clinicalEvidenceType = null;
       break;
 
 
-    case 'other':
+    case 'OTHER':
       steps.push(
         new FormEngineModel({
-          label: stepsLabels.s_1_1_4,
-          visibility: { parameter: 'hasEvidence', values: ['other'] },
-          parameters: [{
-            id: 'description',
-            dataType: 'text',
-            validations: { isRequired: true }
-          }]
+          label: stepsLabels.l4,
+          visibility: { parameter: 'hasEvidence', values: ['OTHER'] },
+          parameters: [{ id: 'description', dataType: 'text', validations: { isRequired: true } }]
         })
       );
-      delete currentValues.clinicalEvidenceType;
+      currentValues.clinicalEvidenceType = null;
       break;
 
     default:
@@ -148,52 +112,35 @@ function runtimeRules(steps: FormEngineModel[], currentValues: MappedObject, cur
 
   steps.push(
     new FormEngineModel({
-      label: stepsLabels.s_1_1_5,
+      label: stepsLabels.l5,
       description: 'Please provide a short summary including the scope of the study and the key findings. Accessors will read this summary to understand if any particular piece of evidence is of interest in relation to what they can help you with.',
-      parameters: [{
-        id: 'summary',
-        dataType: 'text',
-        validations: { isRequired: true }
-      }]
+      parameters: [{ id: 'summary', dataType: 'text', validations: { isRequired: true } }]
     })
   );
 
   steps.push(
     new FormEngineModel({
-      label: stepsLabels.s_1_1_6,
+      label: stepsLabels.l6,
       description: 'The files must be CSV, XLSX, DOCX or PDF.',
-      parameters: [{
-        id: 'files',
-        dataType: 'file-upload',
-        validations: { isRequired: true }
-      }],
+      parameters: [{ id: 'files', dataType: 'file-upload', validations: { isRequired: true } }],
     })
   );
 
 }
 
 
-
-
-function inboundParsing(data: apiPayload): MappedObject {
-
-  const parsedData = cloneDeep(data);
-
+function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
-    evidenceType: parsedData.evidenceType,
-    clinicalEvidenceType: parsedData.clinicalEvidenceType,
-    description: parsedData.description,
-    summary: parsedData.summary,
-    files: (parsedData.files || []).map(item => ({ id: item.id, name: item.displayFileName, url: item.url }))
+    evidenceType: data.evidenceType,
+    clinicalEvidenceType: data.clinicalEvidenceType,
+    description: data.description,
+    summary: data.summary,
+    files: (data.files || []).map(item => ({ id: item.id, name: item.displayFileName, url: item.url }))
   };
-
 }
 
 
-
-
-function outboundParsing(data: stepPayload): MappedObject {
-
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     evidenceType: data.evidenceType,
     clinicalEvidenceType: data.clinicalEvidenceType,
@@ -201,55 +148,39 @@ function outboundParsing(data: stepPayload): MappedObject {
     summary: data.summary,
     files: (data.files || []).map(item => item.id)
   };
-
 }
 
 
+function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
 
-type summaryData = {
-  evidenceType?: 'clinical' | 'economic' | 'other';
-  clinicalEvidenceType?: string;
-  description?: string;
-  summary?: string;
-  files?: ({ id: string, displayFileName: string, url: string } | { id: string, name: string })[];
-  // files: { id: string, name: string }[];
-  // previousUploadedFiles: { id: string, name: string, url: string }[];
-  // createdBy: string;
-  // createdAt?: string;
-  // updatedBy: string;
-  // updatedAt?: string;
-};
-
-function summaryParsing(data: summaryData): SummaryParsingType[] {
-
-  const toReturn: any = [];
+  const toReturn: SummaryParsingType[] = [];
 
   toReturn.push({
-    label: stepsLabels.s_1_1_1,
-    value: evidenceTypeItems.find(item => item.value === data.evidenceType)?.label || '',
+    label: stepsLabels.l1,
+    value: evidenceTypeItems.find(item => item.value === data.evidenceType)?.label,
     editStepNumber: 1
   });
 
 
   switch (data.evidenceType) {
-    case 'clinical':
+    case 'CLINICAL':
       toReturn.push({
-        label: stepsLabels.s_1_1_2,
-        value: clinicalEvidenceItems.find(item => item.value === data.clinicalEvidenceType)?.label || '',
+        label: stepsLabels.l2,
+        value: clinicalEvidenceItems.find(item => item.value === data.clinicalEvidenceType)?.label,
         editStepNumber: 2
       });
       break;
-    case 'economic':
+    case 'ECONOMIC':
       toReturn.push({
-        label: stepsLabels.s_1_1_3,
+        label: stepsLabels.l3,
         value: data.description,
         editStepNumber: 2
       });
       break;
 
-    case 'other':
+    case 'OTHER':
       toReturn.push({
-        label: stepsLabels.s_1_1_4,
+        label: stepsLabels.l4,
         value: data.description,
         editStepNumber: 2
       });
@@ -261,14 +192,13 @@ function summaryParsing(data: summaryData): SummaryParsingType[] {
 
 
   toReturn.push({
-    label: stepsLabels.s_1_1_5,
+    label: stepsLabels.l5,
     value: data.summary,
     editStepNumber: 3
   });
 
 
   const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
-
   allFiles.forEach((item, i) => {
     toReturn.push({
       label: `Attachment ${i + 1}`,

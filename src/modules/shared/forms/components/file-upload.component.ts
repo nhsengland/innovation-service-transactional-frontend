@@ -30,7 +30,7 @@ export class FormFileUploadComponent implements OnInit {
     httpUploadBody?: { [key: string]: any };
     acceptedFiles?: FileTypes[];
     multiple?: boolean;
-    maxFileSize?: number; // In bytes.
+    maxFileSize?: number; // In Mb.
   };
 
   files: { id: string, file: File }[] = [];
@@ -55,7 +55,7 @@ export class FormFileUploadComponent implements OnInit {
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
 
-    this.dzConfig = { acceptedFiles: '*', multiple: false, maxFileSize: 5000 };
+    this.dzConfig = { acceptedFiles: '*', multiple: false, maxFileSize: 1000000 };
 
   }
 
@@ -64,10 +64,10 @@ export class FormFileUploadComponent implements OnInit {
     this.dzConfig = {
       acceptedFiles: (this.config?.acceptedFiles || [FileTypes.ALL]).map(ext => ext).join(','),
       multiple: this.config?.multiple === false ? false : true,
-      maxFileSize: this.config?.maxFileSize ? this.config.maxFileSize : 5000
+      maxFileSize: this.config?.maxFileSize ? (this.config.maxFileSize * 100000) : 1000000 // 1Mb.
     };
 
-    this.previousUploadedFiles = this.fieldArrayValues;
+    this.previousUploadedFiles = [...this.fieldArrayValues]; // Need to clone here!
 
   }
 
@@ -106,7 +106,10 @@ export class FormFileUploadComponent implements OnInit {
           console.log('Upload error', error);
         }
       );
+    });
 
+    event.rejectedFiles.forEach(file => {
+      console.log('File Upload failed: ', file);
     });
 
   }

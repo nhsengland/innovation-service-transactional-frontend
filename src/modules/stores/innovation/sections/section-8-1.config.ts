@@ -1,17 +1,19 @@
-import { MappedObject } from '@modules/core/interfaces/base.interfaces';
-import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { cloneDeep } from 'lodash';
+import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
 
+// Labels.
 const stepsLabels = {
-  s_8_1_1: 'Do you have an implementation plan for deploying this innovation in the NHS or a care setting?',
-  s_8_1_2: 'Has your innovation been deployed in an NHS or care setting?',
-  s_8_1_3: 'Where have you deployed your innovation?',
-  s_8_1_6: 'Does your team have the resources for scaling up to national deployment?',
-  s_8_1_7: 'Please share any relevant implementation planning documents '
+  l1: 'Do you have an implementation plan for deploying this innovation in the NHS or a care setting?',
+  l2: 'Has your innovation been deployed in an NHS or care setting?',
+  l3: 'Where have you deployed your innovation?',
+  l6: 'Does your team have the resources for scaling up to national deployment?',
+  l7: 'Please share any relevant implementation planning documents '
 };
 
+
+// Catalogs.
 const yesOrNoItems = [
   { value: 'YES', label: 'Yes' },
   { value: 'NO', label: 'No' }
@@ -24,8 +26,8 @@ const yesOrNoOrNotSureItems = [
 ];
 
 
-type apiPayload = {
-
+// Types.
+type InboundPayloadType = {
   hasDeployPlan: null | 'YES' | 'NO';
   isDeployed: null | 'YES' | 'NO';
   deploymentPlans: {
@@ -35,18 +37,15 @@ type apiPayload = {
     orgDeploymentAffect: null | string;
   }[];
   hasResourcesToScale: null | 'YES' | 'NO' | 'NOT_SURE';
-  // hasTests: 'yes' | 'in_process' | 'not_yet';
-  // deploymentPlans: {
-  //   id: string;
-  //   kind: string;
-  //   feedback: null | string;
-  // }[];
-  files: { id: string; name?: string; displayFileName?: string; url: string }[];
-  // files: string[];
+  files: { id: string, displayFileName: string, url: string }[];
 };
 
-// [key: string] is needed to support deploymentPlansComercialBasis_${number} properties.
-type stepPayload = apiPayload & { [key: string]: null | string };
+// [key: string] is needed to support deploymentPlansComercialBasis_${number}  and deploymentPlansOrgDeploymentAffect_${number} properties.
+type StepPayloadType = Omit<InboundPayloadType, 'files'>
+  & { files: { id: string; name: string; url: string; }[] }
+  & { [key: string]: null | string };
+
+type OutboundPayloadType = Omit<InboundPayloadType, 'files'> & { files: string[] };
 
 
 
@@ -56,60 +55,34 @@ export const SECTION_8_1: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.s_8_1_1,
+        label: stepsLabels.l1,
         description: 'See [link to section in advanced guide] (opens in new window) for information about implementation plans.',
-        parameters: [{
-          id: 'hasDeployPlan',
-          dataType: 'radio-group',
-          validations: { isRequired: true },
-          items: yesOrNoItems
-        }]
+        parameters: [{ id: 'hasDeployPlan', dataType: 'radio-group', validations: { isRequired: true }, items: yesOrNoItems }]
       }),
       new FormEngineModel({
-        label: stepsLabels.s_8_1_2,
-        parameters: [{
-          id: 'isDeployed',
-          dataType: 'radio-group',
-          validations: { isRequired: true },
-          items: yesOrNoItems
-        }]
+        label: stepsLabels.l2,
+        parameters: [{ id: 'isDeployed', dataType: 'radio-group', validations: { isRequired: true }, items: yesOrNoItems }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: stepPayload, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
-    inboundParsing: (data: apiPayload) => inboundParsing(data),
-    outboundParsing: (data: stepPayload) => outboundParsing(data),
-    summaryParsing: (data: stepPayload) => summaryParsing(data)
+    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
+    inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+    outboundParsing: (data: StepPayloadType) => outboundParsing(data),
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   })
 };
 
 
 
+function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number): void {
 
-function runtimeRules(steps: FormEngineModel[], currentValues: stepPayload, currentStep: number): void {
-
-
+  steps.splice(2);
 
   if (['NO'].includes(currentValues.isDeployed || 'NO')) {
-    steps.splice(2);
     currentValues.deploymentPlans = [];
     Object.keys(currentValues).filter(key => key.startsWith('deploymentPlansComercialBasis_')).forEach((key) => { delete currentValues[key]; });
     Object.keys(currentValues).filter(key => key.startsWith('deploymentPlansOrgDeploymentAffect_')).forEach((key) => { delete currentValues[key]; });
-    // return;
   }
 
-
-  // if (currentStep > 3) { // Updates subgroups.carePathway value.
-
-  //   Object.keys(currentValues).filter(key => key.startsWith('deploymentPlansComercialBasis_')).forEach((key) => {
-  //     const index = Number(key.split('_')[1]);
-  //     currentValues.deploymentPlans[index].feedback = currentValues[key];
-  //   });
-
-  //   return;
-  // }
-
-  // // Removes all steps behond step 2, and removes root parameters 'deploymentPlansComercialBasis_*' values.
-  steps.splice(2);
   Object.keys(currentValues).filter(key => key.startsWith('deploymentPlansComercialBasis_')).forEach((key) => {
     currentValues.deploymentPlans[Number(key.split('_')[1])].commercialBasis = currentValues[key];
     delete currentValues[key];
@@ -124,7 +97,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: stepPayload, curr
 
     steps.push(
       new FormEngineModel({
-        label: stepsLabels.s_8_1_3,
+        label: stepsLabels.l3,
         description: 'Please provide the name of the organisation and department if possible.',
         parameters: [{
           id: 'deploymentPlans',
@@ -133,135 +106,103 @@ function runtimeRules(steps: FormEngineModel[], currentValues: stepPayload, curr
           fieldsGroupConfig: {
             fields: [
               { id: 'id', dataType: 'text', isVisible: false },
-              { id: 'name', dataType: 'text', label: 'Population or subgroup', validations: { isRequired: true } },
+              { id: 'name', dataType: 'text', label: 'Organisation and department', validations: { isRequired: true } },
               { id: 'commercialBasis', dataType: 'text', isVisible: false },
               { id: 'orgDeploymentAffect', dataType: 'text', isVisible: false }
             ],
-            addNewLabel: 'Add new population or subgroup'
+            addNewLabel: 'Add new organisations and department'
           }
         }]
       })
     );
 
     (currentValues.deploymentPlans || []).forEach((item, i) => {
-
       steps.push(
         new FormEngineModel({
           label: `What was the commercial basis for deployment in ${item.name}`,
           description: 'For example, did you provide your innovation for free or was it purchased?',
-          parameters: [
-            {
-              id: `deploymentPlansComercialBasis_${i}`,
-              dataType: 'textarea',
-              validations: { isRequired: true },
-            }
-          ]
-        })
-      );
-
-      steps.push(
+          parameters: [{ id: `deploymentPlansComercialBasis_${i}`, dataType: 'textarea', validations: { isRequired: true } }]
+        }),
         new FormEngineModel({
           label: `How did the deployment of your innovation in ${item.name} affect the organisation?`,
-          parameters: [
-            {
-              id: `deploymentPlansOrgDeploymentAffect_${i}`,
-              dataType: 'textarea',
-              validations: { isRequired: true },
-            }
-          ]
+          parameters: [{ id: `deploymentPlansOrgDeploymentAffect_${i}`, dataType: 'textarea', validations: { isRequired: true } }]
         })
       );
-
       currentValues[`deploymentPlansComercialBasis_${i}`] = item.commercialBasis;
       currentValues[`deploymentPlansOrgDeploymentAffect_${i}`] = item.orgDeploymentAffect;
-
     });
-
 
   }
 
   steps.push(
     new FormEngineModel({
-      label: stepsLabels.s_8_1_6,
-      parameters: [{
-        id: 'hasResourcesToScale',
-        dataType: 'radio-group',
-        validations: { isRequired: true },
-        items: yesOrNoOrNotSureItems
-      }]
-    })
-  );
-
-  steps.push(
+      label: stepsLabels.l6,
+      parameters: [{ id: 'hasResourcesToScale', dataType: 'radio-group', validations: { isRequired: true }, items: yesOrNoOrNotSureItems }]
+    }),
     new FormEngineModel({
-      label: stepsLabels.s_8_1_7,
+      label: stepsLabels.l7,
       description: 'The files must be CSV, XLSX, DOCX or PDF.',
-      parameters: [{
-        id: 'files',
-        dataType: 'file-upload',
-        validations: { isRequired: true }
-      }],
+      parameters: [{ id: 'files', dataType: 'file-upload', validations: { isRequired: true } }]
     })
   );
 
 }
 
 
-function inboundParsing(data: apiPayload): MappedObject {
+function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
-  const parsedData = cloneDeep(data) as stepPayload;
+  const parsedData = cloneDeep({ ...data, ...{ files: [] as any } } as StepPayloadType);
 
   (parsedData.deploymentPlans || []).forEach((item, i) => {
     parsedData[`deploymentPlansComercialBasis_${i}`] = item.commercialBasis;
     parsedData[`deploymentPlansOrgDeploymentAffect_${i}`] = item.orgDeploymentAffect;
   });
-
-  parsedData.files = (parsedData.files || []).map((item: any) => ({ id: item.id, name: item.displayFileName, url: item.url }));
+  parsedData.files = (data.files || []).map(item => ({ id: item.id, name: item.displayFileName, url: item.url }));
 
   return parsedData;
 
 }
 
 
+function outboundParsing(data: StepPayloadType): any {
 
-function outboundParsing(data: stepPayload): MappedObject {
-
-  const parsedData = cloneDeep(data);
+  const parsedData = cloneDeep({
+    hasDeployPlan: data.hasDeployPlan,
+    isDeployed: data.isDeployed,
+    deploymentPlans: data.deploymentPlans,
+    hasResourcesToScale: data.hasResourcesToScale,
+    files: data.files.map(item => item.id)
+  });
 
   if (['NO'].includes(data.isDeployed || 'NO')) {
     parsedData.deploymentPlans = [];
   }
 
-  parsedData.files = (data.files || []).map((item: any) => item.id);
-
-  Object.keys(parsedData).filter(key => key.startsWith('deploymentPlansComercialBasis_')).forEach((key) => { delete parsedData[key]; });
-  Object.keys(parsedData).filter(key => key.startsWith('deploymentPlansOrgDeploymentAffect_')).forEach((key) => { delete parsedData[key]; });
-
   return parsedData;
 
 }
 
 
-function summaryParsing(data: stepPayload): SummaryParsingType[] {
+function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
-  const toReturn = [];
+  const toReturn: SummaryParsingType[] = [];
 
   toReturn.push({
-    label: stepsLabels.s_8_1_1,
-    value: yesOrNoItems.find(item => item.value === data.hasDeployPlan)?.label || '',
+    label: stepsLabels.l1,
+    value: yesOrNoItems.find(item => item.value === data.hasDeployPlan)?.label,
     editStepNumber: 1
   });
 
   toReturn.push({
-    label: stepsLabels.s_8_1_2,
-    value: yesOrNoItems.find(item => item.value === data.isDeployed)?.label || '',
+    label: stepsLabels.l2,
+    value: yesOrNoItems.find(item => item.value === data.isDeployed)?.label,
     editStepNumber: 2
   });
 
   if (['YES'].includes(data.isDeployed || 'NO')) {
 
     toReturn.push({
-      label: stepsLabels.s_8_1_3,
+      label: stepsLabels.l3,
       value: data.deploymentPlans?.map(item => item.name).join('<br />'),
       editStepNumber: toReturn.length + 1
     });
@@ -274,13 +215,12 @@ function summaryParsing(data: stepPayload): SummaryParsingType[] {
   }
 
   toReturn.push({
-    label: stepsLabels.s_8_1_6,
-    value: yesOrNoOrNotSureItems.find(item => item.value === data.hasResourcesToScale)?.label || '',
+    label: stepsLabels.l6,
+    value: yesOrNoOrNotSureItems.find(item => item.value === data.hasResourcesToScale)?.label,
     editStepNumber: toReturn.length + 1
   });
 
   const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
-
   allFiles.forEach((item, i) => {
     toReturn.push({
       label: `Attachment ${i + 1}`,

@@ -1,17 +1,16 @@
 import { cloneDeep } from 'lodash';
-
-import { MappedObject } from '@modules/core/interfaces/base.interfaces';
 import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
 
-
+// Labels.
 const stepsLabels = {
-  s_6_2_1: 'Do you know what cost savings your innovation would create?',
-  s_6_2_2: 'Do you know the cost of care as it\'s currently given?'
+  l1: 'Do you know what cost savings your innovation would create?',
+  l2: 'Do you know the cost of care as it\'s currently given?'
 };
 
 
+// Catalogs.
 const hasCostKnowledgeItems = [
   { value: 'DETAILED_ESTIMATE', label: 'Yes, I have a detailed estimate' },
   { value: 'ROUGH_IDEA', label: 'Yes, I have a rough idea' },
@@ -26,8 +25,8 @@ const costComparisonItems = [
 ];
 
 
-type apiPayload = {
-  id?: string;
+// Types.
+type InboundPayloadType = {
   hasCostSavingKnowledge: null | 'DETAILED_ESTIMATE' | 'ROUGH_IDEA' | 'NO';
   hasCostCareKnowledge: null | 'DETAILED_ESTIMATE' | 'ROUGH_IDEA' | 'NO';
   subgroups: {
@@ -37,103 +36,86 @@ type apiPayload = {
   }[];
 };
 // [key: string] is needed to support subGroupName_${number} properties.
-type stepPayload = apiPayload & { [key: string]: null | string };
+type StepPayloadType = InboundPayloadType & { [key: string]: null | string };
 
 
 
 export const SECTION_6_2: InnovationSectionConfigType['sections'][0] = {
-
   id: InnovationSectionsIds.COMPARATIVE_COST_BENEFIT,
   title: 'Comparative cost benefit',
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.s_6_2_1,
+        label: stepsLabels.l1,
         description: 'See [link to section in starter/advanced guide] (opens in new window) for more information about comparative cost benefit.',
-        parameters: [{
-          id: 'hasCostSavingKnowledge',
-          dataType: 'radio-group',
-          validations: { isRequired: true },
-          items: hasCostKnowledgeItems
-        }]
+        parameters: [{ id: 'hasCostSavingKnowledge', dataType: 'radio-group', validations: { isRequired: true }, items: hasCostKnowledgeItems }]
       }),
       new FormEngineModel({
-        label: stepsLabels.s_6_2_2,
+        label: stepsLabels.l2,
         description: 'See [link to section in starter/advanced guide] (opens in new window) for more information about comparative cost benefit.',
-        parameters: [{
-          id: 'hasCostCareKnowledge',
-          dataType: 'radio-group',
-          validations: { isRequired: true },
-          items: hasCostKnowledgeItems
-        }]
+        parameters: [{ id: 'hasCostCareKnowledge', dataType: 'radio-group', validations: { isRequired: true }, items: hasCostKnowledgeItems }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: stepPayload, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
-    inboundParsing: (data: apiPayload) => inboundParsing(data),
-    outboundParsing: (data: stepPayload) => outboundParsing(data),
-    summaryParsing: (data: stepPayload) => summaryParsing(data)
+    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
+    inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+    outboundParsing: (data: StepPayloadType) => outboundParsing(data),
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   })
 };
 
 
 
+function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number): void {
 
-function runtimeRules(steps: FormEngineModel[], currentValues: stepPayload, currentStep: number): void {
+  steps.splice(2);
 
   if (['NO'].includes(currentValues.hasCostCareKnowledge || 'NO')) {
-    steps.splice(2);
     currentValues.subgroups = currentValues.subgroups.map(item => ({
       id: item.id, name: item.name, costComparison: null
     }));
-
     Object.keys(currentValues).filter(key => key.startsWith('subGroupCostComparison_')).forEach((key) => { delete currentValues[key]; });
-
     return;
   }
 
-
-  // // Removes all steps behond step 2, and removes root parameters 'subGroupName_*' values.
-  steps.splice(2);
   Object.keys(currentValues).filter(key => key.startsWith('subGroupCostComparison_')).forEach((key) => {
     currentValues.subgroups[Number(key.split('_')[1])].costComparison = currentValues[key] as any;
     delete currentValues[key];
   });
 
   (currentValues.subgroups || []).forEach((item, i) => {
-
     steps.push(
       new FormEngineModel({
         label: `What are the costs associated with use of your innovation, compared to current practice in the UK for ${item.name}?`,
         description: 'See [link to section in starter/advanced guide] (opens in new window) for more information about comparative cost benefit.',
-        parameters: [
-          { id: `subGroupCostComparison_${i}`, dataType: 'radio-group', validations: { isRequired: true }, items: costComparisonItems }
-        ]
+        parameters: [{ id: `subGroupCostComparison_${i}`, dataType: 'radio-group', validations: { isRequired: true }, items: costComparisonItems }]
       })
     );
-
     currentValues[`subGroupCostComparison_${i}`] = item.costComparison;
-
   });
 
 }
 
 
-function inboundParsing(data: apiPayload): MappedObject {
+function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
-  const parsedData = cloneDeep(data) as stepPayload;
+  const parsedData = cloneDeep(data) as StepPayloadType;
 
-  (parsedData.subgroups || []).forEach((item, i) => {
-    parsedData[`subGroupCostComparison_${i}`] = item.costComparison;
-  });
+  (parsedData.subgroups || []).forEach((item, i) => { parsedData[`subGroupCostComparison_${i}`] = item.costComparison; });
 
   return parsedData;
 
 }
 
 
-function outboundParsing(data: stepPayload): MappedObject {
+function outboundParsing(data: StepPayloadType): any {
 
   const parsedData = cloneDeep(data);
+
+  if (['NO'].includes(parsedData.hasCostCareKnowledge || 'NO')) {
+    parsedData.subgroups = parsedData.subgroups.map(item => ({
+      id: item.id, name: item.name, costComparison: null
+    }));
+  }
 
   Object.keys(parsedData).filter(key => key.startsWith('subGroupCostComparison_')).forEach((key) => { delete parsedData[key]; });
 
@@ -142,19 +124,19 @@ function outboundParsing(data: stepPayload): MappedObject {
 }
 
 
-function summaryParsing(data: stepPayload): SummaryParsingType[] {
+function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
-  const toReturn = [];
+  const toReturn: SummaryParsingType[] = [];
 
   toReturn.push({
-    label: stepsLabels.s_6_2_1,
-    value: hasCostKnowledgeItems.find(item => item.value === data.hasCostSavingKnowledge)?.label || '',
+    label: stepsLabels.l1,
+    value: hasCostKnowledgeItems.find(item => item.value === data.hasCostSavingKnowledge)?.label,
     editStepNumber: 1
   });
 
   toReturn.push({
-    label: stepsLabels.s_6_2_2,
-    value: hasCostKnowledgeItems.find(item => item.value === data.hasCostCareKnowledge)?.label || '',
+    label: stepsLabels.l2,
+    value: hasCostKnowledgeItems.find(item => item.value === data.hasCostCareKnowledge)?.label,
     editStepNumber: 2
   });
 
@@ -163,7 +145,7 @@ function summaryParsing(data: stepPayload): SummaryParsingType[] {
     data.subgroups.forEach(subgroup => {
       toReturn.push({
         label: `Group ${subgroup.name} innovation cost`,
-        value: costComparisonItems.find(item => item.value === subgroup.costComparison)?.label || '',
+        value: costComparisonItems.find(item => item.value === subgroup.costComparison)?.label,
         editStepNumber: toReturn.length + 1
       });
     });

@@ -1,37 +1,44 @@
-import { MappedObject } from '@modules/core/interfaces/base.interfaces';
-import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { cloneDeep } from 'lodash';
+import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
 
+// Labels.
 const stepsLabels = {
-  s_5_2_1: 'Have you tested your innovation with users?',
-  s_5_2_2: 'What kind of testing with users have you done?',
-  s_5_2_3: 'Please describe the testing and feedback for [testing type]',
-  s_5_2_4: 'Please upload any documents demonstrating the testing you have done with users',
+  l1: 'Have you tested your innovation with users?',
+  l2: 'What kind of testing with users have you done?',
+  l3: 'Please describe the testing and feedback for [testing type]',
+  l4: 'Please upload any documents demonstrating the testing you have done with users',
 };
 
-const yesOrNoItems = [
-  { value: 'yes', label: 'Yes' },
-  { value: 'in_process', label: 'I\'m in the process of testing with users' },
-  { value: 'not_yet', label: 'Not yet' }
+
+// Catalogs.
+const hasTestsItems = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'IN_PROCESS', label: 'I\'m in the process of testing with users' },
+  { value: 'NOT_YET', label: 'Not yet' }
 ];
 
 
-type apiPayload = {
-  id?: string;
-  hasTests: 'yes' | 'in_process' | 'not_yet';
+// Types.
+type InboundPayloadType = {
+  hasTests: null | 'YES' | 'IN_PROCESS' | 'NOT_YET';
   userTests: {
     id: string;
     kind: string;
     feedback: null | string;
   }[];
   files: { id: string; name?: string; displayFileName?: string; url: string }[];
-  // files: string[];
 };
 
 // [key: string] is needed to support userTestFeedback_${number} properties.
-type stepPayload = apiPayload & { [key: string]: null | string };
+type StepPayloadType = InboundPayloadType & { [key: string]: null | string };
+
+type OutboundPayloadType = Omit<InboundPayloadType, 'files'> & { files: string[] };
+
+type SummaryPayloadType = Omit<InboundPayloadType, 'files'>
+  & { files: ({ id: string, displayFileName: string, url: string } | { id: string, name: string })[] }
+  & { [key: string]: null | string };
 
 
 
@@ -41,158 +48,127 @@ export const SECTION_5_2: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.s_5_2_1,
+        label: stepsLabels.l1,
         description: 'Testing can mean involving patients, carers, clinicians or administrators in the design process.',
-        parameters: [{
-          id: 'hasTests',
-          dataType: 'radio-group',
-          validations: { isRequired: true },
-          items: yesOrNoItems
-        }]
-      }),
-      new FormEngineModel({
-        label: stepsLabels.s_5_2_2,
-        description: 'This can include any testing you\'ve done with people who would use your innovation, for example patients, nurses or administrative staff.',
-        parameters: [{
-          id: 'userTests',
-          dataType: 'fields-group',
-          // validations: { isRequired: true }
-          fieldsGroupConfig: {
-            fields: [
-              { id: 'id', dataType: 'text', isVisible: false },
-              { id: 'kind', dataType: 'text', label: 'Population or subgroup', validations: { isRequired: true } },
-              { id: 'feedback', dataType: 'text', isVisible: false }
-            ],
-            addNewLabel: 'Add new population or subgroup'
-          }
-        }]
+        parameters: [{ id: 'hasTests', dataType: 'radio-group', validations: { isRequired: true }, items: hasTestsItems }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: stepPayload, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
-    inboundParsing: (data: apiPayload) => inboundParsing(data),
-    outboundParsing: (data: stepPayload) => outboundParsing(data),
-    summaryParsing: (data: stepPayload) => summaryParsing(data)
+    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
+    inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+    outboundParsing: (data: StepPayloadType) => outboundParsing(data),
+    summaryParsing: (data: SummaryPayloadType) => summaryParsing(data)
   })
 };
 
 
 
-function runtimeRules(steps: FormEngineModel[], currentValues: stepPayload, currentStep: number): void {
+function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number): void {
 
-  if (['no_yet'].includes(currentValues.hasTests)) {
-    steps.splice(1);
-    currentValues.innovationPathwayKnowledge = null;
-    currentValues.userTests = currentValues.userTests.map(item => {
-      item.feedback = null;
-      return item;
-    });
-
-    Object.keys(currentValues).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => {
-      delete currentValues[key];
-    });
-    return;
-  }
-
-  if (currentStep > 3) { // Updates subgroups.carePathway value.
-
-    Object.keys(currentValues).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => {
-      const index = Number(key.split('_')[1]);
-      currentValues.userTests[index].feedback = currentValues[key];
-    });
-
-    return;
-  }
-
-  // // Removes all steps behond step 2, and removes root parameters 'userTestFeedback_*' values.
   steps.splice(1);
-  Object.keys(currentValues).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => {
-    delete currentValues[key];
-  });
 
+  if (['NOT_YET'].includes(currentValues.hasTests || 'NOT_YET')) {
+    currentValues.userTests = currentValues.userTests.map(item => ({
+      id: item.id, kind: item.kind, feedback: null
+    }));
+    Object.keys(currentValues).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => { delete currentValues[key]; });
+    return;
+  }
 
-  (currentValues.userTests || []).forEach((item, i) => {
-
-    const dynamicStep = new FormEngineModel({
-      label: `Please describe the testing and feedback for ${item.kind}`,
-      parameters: [
-        {
-          id: `userTestFeedback_${i}`,
-          dataType: 'textarea',
-          validations: { isRequired: true },
-        }
-      ]
+  if (currentStep > 2) { // Updates userTests.feedback value.
+    Object.keys(currentValues).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => {
+      currentValues.userTests[Number(key.split('_')[1])].feedback = currentValues[key];
     });
+  }
 
-    steps.push(dynamicStep);
+  Object.keys(currentValues).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => { delete currentValues[key]; });
+
+  steps.push(
+    new FormEngineModel({
+      label: stepsLabels.l2,
+      description: 'This can include any testing you\'ve done with people who would use your innovation, for example patients, nurses or administrative staff.',
+      parameters: [{
+        id: 'userTests',
+        dataType: 'fields-group',
+        // validations: { isRequired: true }
+        fieldsGroupConfig: {
+          fields: [
+            { id: 'id', dataType: 'text', isVisible: false },
+            { id: 'kind', dataType: 'text', label: 'User test', validations: { isRequired: true } },
+            { id: 'feedback', dataType: 'text', isVisible: false }
+          ],
+          addNewLabel: 'Add new user test'
+        }
+      }]
+    })
+  );
+
+  currentValues.userTests.forEach((item, i) => {
+    steps.push(
+      new FormEngineModel({
+        label: `Please describe the testing and feedback for ${item.kind}`,
+        parameters: [{ id: `userTestFeedback_${i}`, dataType: 'textarea', validations: { isRequired: true } }]
+      })
+    );
     currentValues[`userTestFeedback_${i}`] = item.feedback;
-
   });
 
   steps.push(
     new FormEngineModel({
-      label: stepsLabels.s_5_2_4,
+      label: stepsLabels.l4,
       description: 'The files must be CSV, XLSX, DOCX or PDF.',
-      parameters: [{
-        id: 'files',
-        dataType: 'file-upload',
-        validations: { isRequired: true }
-      }],
+      parameters: [{ id: 'files', dataType: 'file-upload', validations: { isRequired: true } }]
     })
   );
 
 }
 
 
-function inboundParsing(data: apiPayload): MappedObject {
+function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
-  const parsedData = cloneDeep(data) as stepPayload;
+  const parsedData = cloneDeep(data) as StepPayloadType;
 
-  (parsedData.userTests || []).forEach((item, i) => {
-    parsedData[`userTestFeedback_${i}`] = item.kind;
-  });
+  parsedData.userTests.forEach((item, i) => { parsedData[`userTestFeedback_${i}`] = item.kind; });
 
-  parsedData.files = (parsedData.files || []).map((item: any) => ({ id: item.id, name: item.displayFileName, url: item.url }));
+  parsedData.files = (data.files || []).map(item => ({ id: item.id, name: item.displayFileName, url: item.url }));
 
   return parsedData;
 
 }
 
 
-function outboundParsing(data: stepPayload): MappedObject {
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
-  const parsedData = cloneDeep(data);
+  const parsedData = cloneDeep({
+    hasTests: data.hasTests,
+    userTests: data.userTests,
+    files: data.files.map(item => item.id)
+  });
 
-  if (['not_yet'].includes(parsedData.hasTests)) {
+  if (['NOT_YET'].includes(parsedData.hasTests || 'NOT_YET')) {
     parsedData.userTests = [];
+    parsedData.files = [];
   }
 
-  parsedData.files = (data.files || []).map((item: any) => item.id);
-
-  Object.keys(parsedData).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => {
-    delete parsedData[key];
-  });
-
-
   return parsedData;
 
 }
 
 
-function summaryParsing(data: stepPayload): SummaryParsingType[] {
+function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
 
-  const toReturn = [];
+  const toReturn: SummaryParsingType[] = [];
 
   toReturn.push({
-    label: stepsLabels.s_5_2_1,
-    value: yesOrNoItems.find(item => item.value === data.hasUKPathwayKnowledge)?.label || '',
+    label: stepsLabels.l1,
+    value: hasTestsItems.find(item => item.value === data.hasTests)?.label,
     editStepNumber: 1
   });
 
-  if (['yes'].includes(data.hasTests)) {
+  if (!['NOT_YET'].includes(data.hasTests || 'NOT_YET')) {
 
     toReturn.push({
-      label: stepsLabels.s_5_2_2,
-      value: data.userTests?.map(item => item.kind).join('<br />'),
+      label: stepsLabels.l2,
+      value: data.userTests.map(item => item.kind).join('<br />'),
       editStepNumber: 2
     });
 
@@ -200,12 +176,11 @@ function summaryParsing(data: stepPayload): SummaryParsingType[] {
       toReturn.push({
         label: `${item.kind} kind of testing`,
         value: item.feedback,
-        editStepNumber: i + 2
+        editStepNumber: toReturn.length + 1
       });
     });
 
     const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
-
     allFiles.forEach((item, i) => {
       toReturn.push({
         label: `Attachment ${i + 1}`,

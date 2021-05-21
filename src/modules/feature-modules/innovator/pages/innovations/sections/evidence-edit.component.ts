@@ -115,7 +115,7 @@ export class InnovationsSectionEvidenceEditComponent extends CoreComponent imple
               innovatorId: this.stores.authentication.getUserId(),
               innovationId: this.innovationId
             },
-            maxFileSize: 2000,
+            maxFileSize: 2,
             acceptedFiles: [FileTypes.CSV, FileTypes.DOCX, FileTypes.XLSX, FileTypes.PDF]
           };
         }

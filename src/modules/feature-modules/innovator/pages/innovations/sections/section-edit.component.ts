@@ -30,10 +30,7 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
   //   const id = this.activatedRoute.snapshot.params.id;
   //   return ((1 <= Number(id) && Number(id) <= this.stepsData.length) || id === 'summary');
   // }
-  isQuestionStep(): boolean {
-
-    return Number.isInteger(Number(this.activatedRoute.snapshot.params.questionId));
-  }
+  isQuestionStep(): boolean { return Number.isInteger(Number(this.activatedRoute.snapshot.params.questionId)); }
   isSummaryStep(): boolean { return this.activatedRoute.snapshot.params.questionId === 'summary'; }
 
   constructor(
@@ -88,7 +85,7 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
                   innovatorId: this.stores.authentication.getUserId(),
                   innovationId: this.innovationId
                 },
-                maxFileSize: 2000,
+                maxFileSize: 2,
                 acceptedFiles: [FileTypes.CSV, FileTypes.DOCX, FileTypes.XLSX, FileTypes.PDF]
               };
             }

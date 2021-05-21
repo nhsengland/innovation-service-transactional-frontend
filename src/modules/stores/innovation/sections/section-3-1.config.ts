@@ -2,17 +2,29 @@ import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
 
+// Labels.
 const stepsLabels = {
-  s_3_1_1: 'Have you done market research so that you understand the need for your innovation in the UK?',
-  s_3_1_2: 'Please describe the market research you\'ve done, or are doing, within the UK market landscape',
+  l1: 'Have you done market research so that you understand the need for your innovation in the UK?',
+  l2: 'Please describe the market research you\'ve done, or are doing, within the UK market landscape',
 };
 
 
-const yesOrNoItems = [
-  { value: 'yes', label: 'Yes' },
-  { value: 'in_progress', label: 'I\'m currently doing market research' },
-  { value: 'not_yet', label: 'Not yet' }
+// Catalogs.
+const hasMarketResearchItems = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'IN_PROGRESS', label: 'I\'m currently doing market research' },
+  { value: 'NOT_YET', label: 'Not yet' }
 ];
+
+
+// Types.
+type InboundPayloadType = {
+  hasMarketResearch: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET';
+  marketResearch: null | string;
+};
+
+type StepPayloadType = InboundPayloadType;
+
 
 
 export const SECTION_3_1: InnovationSectionConfigType['sections'][0] = {
@@ -21,40 +33,29 @@ export const SECTION_3_1: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.s_3_1_1,
-        parameters: [{
-          id: 'hasMarketResearch',
-          dataType: 'radio-group',
-          validations: { isRequired: true },
-          items: yesOrNoItems
-        }]
+        label: stepsLabels.l1,
+        parameters: [{ id: 'hasMarketResearch', dataType: 'radio-group', validations: { isRequired: true }, items: hasMarketResearchItems }]
       }),
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: any, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
-    summaryParsing: (data: any) => summaryParsing(data)
+    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   })
 };
 
 
 
-type runtimeData = {
-  id?: string;
-  hasMarketResearch: 'yes' | 'in_progress' | 'not_yet';
-  marketResearch?: string;
-};
-
-function runtimeRules(steps: FormEngineModel[], currentValues: runtimeData, currentStep: number): void {
+function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number): void {
 
   steps.splice(1);
 
-  if (['not_yet'].includes(currentValues.hasMarketResearch)) {
-    delete currentValues.marketResearch;
+  if (['NOT_YET'].includes(currentValues.hasMarketResearch || 'NOT_YET')) {
+    currentValues.marketResearch = null;
     return;
   }
 
   steps.push(
     new FormEngineModel({
-      label: stepsLabels.s_3_1_2,
+      label: stepsLabels.l2,
       parameters: [{ id: 'marketResearch', dataType: 'textarea', validations: { isRequired: true } }]
     })
   );
@@ -62,26 +63,19 @@ function runtimeRules(steps: FormEngineModel[], currentValues: runtimeData, curr
 }
 
 
+function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
-type summaryData = {
-  id?: string;
-  hasMarketResearch: 'yes' | 'in_progress' | 'not_yet';
-  marketResearch: string;
-};
-
-function summaryParsing(data: summaryData): SummaryParsingType[] {
-
-  const toReturn = [];
+  const toReturn: SummaryParsingType[] = [];
 
   toReturn.push({
-    label: stepsLabels.s_3_1_1,
-    value: yesOrNoItems.find(item => item.value === data.hasMarketResearch)?.label || '',
+    label: stepsLabels.l1,
+    value: hasMarketResearchItems.find(item => item.value === data.hasMarketResearch)?.label,
     editStepNumber: 1
   });
 
-  if (['yes', 'in_progress'].includes(data.hasMarketResearch)) {
+  if (['YES', 'IN_PROGRESS'].includes(data.hasMarketResearch || 'NOT_YET')) {
     toReturn.push({
-      label: stepsLabels.s_3_1_2,
+      label: stepsLabels.l2,
       value: data.marketResearch,
       editStepNumber: 2
     });
