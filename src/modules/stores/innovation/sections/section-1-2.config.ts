@@ -21,7 +21,7 @@ const hasProblemTackleKnowledgeItems = [
 
 
 // Types.
-type inboundPayload = {
+type InboundPayloadType = {
   hasProblemTackleKnowledge: null | 'YES' | 'NOT_YET' | 'NOT_SURE';
   problemsTackled: null | string;
   problemsConsequences: null | string;
@@ -29,9 +29,7 @@ type inboundPayload = {
   interventionImpact: null | string;
 };
 
-type stepPayload = inboundPayload;
-
-// type outboundPayload = inboundPayload;
+type StepPayloadType = InboundPayloadType;
 
 
 
@@ -46,14 +44,14 @@ export const SECTION_1_2: InnovationSectionConfigType['sections'][0] = {
         parameters: [{ id: 'hasProblemTackleKnowledge', dataType: 'radio-group', validations: { isRequired: [true, 'Choose one option'] }, items: hasProblemTackleKnowledgeItems }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: stepPayload, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
-    summaryParsing: (data: stepPayload) => summaryParsing(data)
+    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   })
 };
 
 
 
-function runtimeRules(steps: FormEngineModel[], currentValues: stepPayload, currentStep: number): void {
+function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number): void {
 
   steps.splice(1);
 
@@ -90,7 +88,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: stepPayload, curr
 
 }
 
-function summaryParsing(data: stepPayload): SummaryParsingType[] {
+
+function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   const toReturn: SummaryParsingType[] = [];
 

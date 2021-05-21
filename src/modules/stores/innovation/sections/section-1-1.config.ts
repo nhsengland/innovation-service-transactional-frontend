@@ -109,7 +109,7 @@ const supportTypesItems = [
 
 
 // Types.
-type inboundPayload = {
+type InboundPayloadType = {
   description: string;
   hasFinalProduct: null | 'YES' | 'NO';
   categories: ('MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER')[];
@@ -123,9 +123,7 @@ type inboundPayload = {
   supportTypes: ('ASSESSMENT' | 'PRODUCT_MIGRATION' | 'CLINICAL_TESTS' | 'COMMERCIAL' | 'PROCUREMENT' | 'DEVELOPMENT' | 'EVIDENCE_EVALUATION' | 'FUNDING' | 'INFORMATION')[];
 };
 
-type stepPayload = inboundPayload;
-
-// type outboundPayload = inboundPayload;
+type StepPayloadType = InboundPayloadType;
 
 
 
@@ -178,13 +176,13 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
         parameters: [{ id: 'supportTypes', dataType: 'checkbox-array', validations: { isRequired: [true, 'Choose at least one type of support'] }, items: supportTypesItems }]
       })
     ],
-    summaryParsing: (data: any) => summaryParsing(data)
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   })
 };
 
 
 
-function summaryParsing(data: stepPayload): SummaryParsingType[] {
+function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   return [
     {
@@ -194,7 +192,7 @@ function summaryParsing(data: stepPayload): SummaryParsingType[] {
     },
     {
       label: stepsLabels.l2,
-      value: hasFinalProductItems.find(item => item.value === data.hasFinalProduct)?.label || '',
+      value: hasFinalProductItems.find(item => item.value === data.hasFinalProduct)?.label,
       editStepNumber: 2
     },
     {
@@ -206,7 +204,7 @@ function summaryParsing(data: stepPayload): SummaryParsingType[] {
     },
     {
       label: stepsLabels.l4,
-      value: data.otherMainCategoryDescription || mainCategoryItems.find(item => item.value === data.mainCategory)?.label || '',
+      value: data.otherMainCategoryDescription || mainCategoryItems.find(item => item.value === data.mainCategory)?.label,
       editStepNumber: 4
     },
     {
@@ -226,7 +224,7 @@ function summaryParsing(data: stepPayload): SummaryParsingType[] {
     },
     {
       label: stepsLabels.l8,
-      value: mainPurposeItems.find(item => item.value === data.mainPurpose)?.label || '',
+      value: mainPurposeItems.find(item => item.value === data.mainPurpose)?.label,
       editStepNumber: 8
     },
     {

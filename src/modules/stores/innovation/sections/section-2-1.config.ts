@@ -1,20 +1,38 @@
 import { cloneDeep } from 'lodash';
-
-import { MappedObject } from '@modules/core';
 import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
 
+// Labels.
 const stepsLabels = {
-  s_1_1_1: 'Do you know yet what patient population or subgroup your innovation will affect?',
-  s_1_1_2: 'What population or subgroup does this affect?'
+  l1: 'Do you know yet what patient population or subgroup your innovation will affect?',
+  l2: 'What population or subgroup does this affect?'
 };
 
-const yesOrNoItems = [
-  { value: 'yes', label: 'Yes' },
-  { value: 'no', label: 'No' },
-  { value: 'notRelevant', label: 'Not relevant' }
+
+// Catalogs.
+const hasSubgroupsItems = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'NO', label: 'No' },
+  { value: 'NOT_RELEVANT', label: 'Not relevant' }
 ];
+
+
+// Types.
+type InboundPayloadType = {
+  hasSubgroups: null | 'YES' | 'NO' | 'NOT_RELEVANT';
+  subgroups: {
+    id: null | string;
+    name: string;
+    conditions: null | string;
+  }[];
+};
+
+// [key: string] is needed to support subgroups_${number} properties.
+type StepPayloadType = InboundPayloadType & { [key: string]: null | string };
+
+type OutboundPayloadType = InboundPayloadType;
+
 
 
 export const SECTION_2_1: InnovationSectionConfigType['sections'][0] = {
@@ -23,87 +41,41 @@ export const SECTION_2_1: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.s_1_1_1,
+        label: stepsLabels.l1,
         description: 'We\'re asking this to get a better understanding of who would benefit from your innovation.',
-        parameters: [{
-          id: 'hasSubgroups',
-          dataType: 'radio-group',
-          validations: { isRequired: true },
-          items: yesOrNoItems
-        }]
-      }),
-      new FormEngineModel({
-        label: stepsLabels.s_1_1_2,
-        description: 'We\'ll ask you further questions about each answer you provide here. If there are key distinctions between how you innovation affects different populations, be as specific as possible. If not, consider providing as few answers as possible.',
-        parameters: [{
-          id: 'subgroups',
-          dataType: 'fields-group',
-          // validations: { isRequired: true }
-          fieldsGroupConfig: {
-            fields: [
-              { id: 'id', dataType: 'text', isVisible: false },
-              { id: 'name', dataType: 'text', label: 'Population or subgroup', validations: { isRequired: true } },
-              { id: 'conditions', dataType: 'text', isVisible: false }
-            ],
-            addNewLabel: 'Add new population or subgroup'
-          }
-        }]
+        parameters: [{ id: 'hasSubgroups', dataType: 'radio-group', validations: { isRequired: true }, items: hasSubgroupsItems }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
-    inboundParsing: (data: any) => inboundParsing(data),
-    outboundParsing: (data: any) => outboundParsing(data),
-    summaryParsing: (data: any) => summaryParsing(data)
+    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
+    inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+    outboundParsing: (data: StepPayloadType) => outboundParsing(data),
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   })
 };
 
 
 
+function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number): void {
 
+  steps.splice(1);
 
-// type toType = {
-//   id: string;
-//   hasSubgroups: 'yes' | 'no' | 'notRelevant';
-//   subgroups: {
-//     id: string;
-//     name: string;
-//     conditions: string;
-//   }[];
-// }
-
-// Add/remove new steps for each subgroup defined on step 2.
-function runtimeRules(steps: FormEngineModel[], currentValues: MappedObject, currentStep: number): void {
-
-  if (['no', 'notRelevant'].includes(currentValues.hasSubgroups)) {
-    steps.splice(1);
+  if (['NO', 'NOT_RELEVANT'].includes(currentValues.hasSubgroups || 'NO')) {
     currentValues.subgroups = [];
-    Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => {
-      delete currentValues[key];
-    });
+    Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => { delete currentValues[key]; });
     return;
   }
 
   if (currentStep > 2) { // Updates subgroups.conditions value.
-
     Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => {
-      const index = Number(key.split('_')[1]);
-      currentValues.subgroups[index].conditions = currentValues[key];
+      currentValues.subgroups[Number(key.split('_')[1])].conditions = currentValues[key];
     });
-
-    return;
   }
 
-  // Here, we are on step 2, where most things can change.
-
-  // // Removes all steps behond step 1, and removes root parameters 'subGroupName_*' values.
-  steps.splice(1);
-  Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => {
-    delete currentValues[key];
-  });
+  Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => { delete currentValues[key]; });
 
   steps.push(
     new FormEngineModel({
-      label: 'What population or subgroup does this affect?',
+      label: stepsLabels.l2,
       description: 'We\'ll ask you further questions about each answer you provide here. If there are key distinctions between how you innovation affects different populations, be as specific as possible. If not, consider providing as few answers as possible.',
       parameters: [{
         id: 'subgroups',
@@ -121,75 +93,61 @@ function runtimeRules(steps: FormEngineModel[], currentValues: MappedObject, cur
     })
   );
 
-
-  (currentValues.subgroups as { id: string, name: string, conditions: string }[] || []).forEach((item, i) => {
-
-    const dynamicStep = new FormEngineModel({
-      label: `What condition best categorises ${item.name}?`,
-      parameters: [{ id: `subGroupName_${i}`, dataType: 'text', validations: { isRequired: true } }]
-    });
-
-    steps.push(dynamicStep);
+  currentValues.subgroups.forEach((item, i) => {
+    steps.push(
+      new FormEngineModel({
+        label: `What condition best categorises ${item.name}?`,
+        parameters: [{ id: `subGroupName_${i}`, dataType: 'text', validations: { isRequired: true } }]
+      })
+    );
     currentValues[`subGroupName_${i}`] = item.conditions;
-
   });
 
 }
 
 
-function inboundParsing(data: any): MappedObject {
+function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
-  const parsedData = cloneDeep(data);
+  const parsedData = cloneDeep(data) as StepPayloadType;
 
-  (parsedData.subgroups as { id: string, name: string, conditions: string }[] || []).forEach((item, i) => {
-    parsedData[`subGroupName_${i}`] = item.conditions;
-  });
+  parsedData.subgroups.forEach((item, i) => { parsedData[`subGroupName_${i}`] = item.conditions; });
 
   return parsedData;
 
 }
 
 
-function outboundParsing(data: any): MappedObject {
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   const parsedData = cloneDeep(data);
 
-  Object.keys(parsedData).filter(key => key.startsWith('subGroupName_')).forEach((key) => {
-    delete parsedData[key];
-  });
+  Object.keys(parsedData).filter(key => key.startsWith('subGroupName_')).forEach((key) => { delete parsedData[key]; });
 
   return parsedData;
 
 }
 
 
+function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
-type summaryData = {
-  id?: string;
-  hasSubgroups: 'yes' | 'no' | 'notRelevant';
-  subgroups: { id: string; name: string; conditions: string; }[];
-};
-
-function summaryParsing(data: summaryData): SummaryParsingType[] {
-
-  const toReturn = [];
+  const toReturn: SummaryParsingType[] = [];
 
   toReturn.push({
-    label: stepsLabels.s_1_1_1,
-    value: yesOrNoItems.find(item => item.value === data.hasSubgroups)?.label || '',
+    label: stepsLabels.l1,
+    value: hasSubgroupsItems.find(item => item.value === data.hasSubgroups)?.label,
     editStepNumber: 1
   });
 
-  if (['yes'].includes(data.hasSubgroups)) {
+  if (['YES'].includes(data.hasSubgroups || 'NO')) {
 
     toReturn.push({
-      label: stepsLabels.s_1_1_2,
+      label: stepsLabels.l2,
       value: data.subgroups?.map(group => group.name).join('<br />'),
       editStepNumber: 2
     });
 
-    (data.subgroups).forEach((item, i) => {
-      toReturn.push({ label: `Group ${item.name} condition`, value: item.conditions, editStepNumber: i + 3 });
+    data.subgroups.forEach((item, i) => {
+      toReturn.push({ label: `Group ${item.name} condition`, value: item.conditions, editStepNumber: toReturn.length + 1 });
     });
 
   }
@@ -197,6 +155,3 @@ function summaryParsing(data: summaryData): SummaryParsingType[] {
   return toReturn;
 
 }
-
-
-

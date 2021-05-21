@@ -61,7 +61,7 @@ export class FormEngineParameterModel {
     httpUploadBody?: { [key: string]: any };
     acceptedFiles?: FileTypes[];
     multiple?: boolean;
-    maxFileSize?: number; // In bytes.
+    maxFileSize?: number; // In Mb.
     previousUploadedFiles?: {id: string, name: string }[]
   };
 
