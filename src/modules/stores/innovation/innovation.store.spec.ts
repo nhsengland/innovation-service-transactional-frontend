@@ -42,6 +42,7 @@ describe('Stores/Innovation/InnovationStore', () => {
     spyOn(innovationService, 'getInnovationSections').and.returnValue(of({
       id: 'innovationId',
       name: 'innovationName',
+      title: 'About your product or service',
       sections: [
         { section: InnovationSectionsIds.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
         { section: InnovationSectionsIds.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW' },
@@ -54,17 +55,13 @@ describe('Stores/Innovation/InnovationStore', () => {
       {
         title: 'About your product or service',
         sections: [
-          { id: 0, status: 'DRAFT', title: 'Description of innovation', actionStatus: 'REQUESTED' },
-          { id: 1, status: 'NOT_STARTED', title: 'Value proposition', actionStatus: 'IN_REVIEW' }
+          { id: InnovationSectionsIds.INNOVATION_DESCRIPTION, title: 'Description of innovation', status: 'DRAFT', actionStatus: 'REQUESTED', isCompleted: false },
+          { id: InnovationSectionsIds.VALUE_PROPOSITION, title: 'Value proposition', status: 'NOT_STARTED', actionStatus: 'IN_REVIEW', isCompleted: false },
+          { id: InnovationSectionsIds.UNDERSTANDING_OF_NEEDS, title: 'Detailed understanding of needs', status: 'SUBMITTED', actionStatus: '', isCompleted: true },
+          { id: InnovationSectionsIds.UNDERSTANDING_OF_BENEFITS, title: 'Detailed understanding of benefits', status: 'UNKNOWN', actionStatus: '', isCompleted: false }
         ]
-      },
-      {
-        title: 'Clinical needs and benefits',
-        sections: [
-          { id: 2, status: 'SUBMITTED', title: 'Detailed understanding of needs', actionStatus: '' },
-          { id: 3, status: 'UNKNOWN', title: 'Detailed understanding of benefits', actionStatus: '' }
-        ],
-      }];
+      }
+    ];
     let response: any = null;
 
     innovationStore.getSectionsSummary$('innovationId').subscribe(success => response = success, error => response = error);

@@ -18,7 +18,8 @@ const defaultExpected = {
   pageSize: 10,
   pageSizeOptions: [5, 10, 25],
   orderBy: '',
-  orderDir: ''
+  orderDir: '',
+  filters: {}
 };
 
 
@@ -43,6 +44,13 @@ describe('TableModel', () => {
     const expected = { ...defaultExpected, ...{ orderBy: 'c1', orderDir: 'desc' } };
     component = new TableModel<defaultDataSource>({ ...defaultInit, ...{ orderBy: 'c1' } });
     component.setOrderBy('c1');
+    expect(component).toEqual(expected);
+  });
+
+  it('should set filters', () => {
+    const expected = { ...defaultExpected, ...{ filters: { status: 'enabled' } } };
+    component = new TableModel<defaultDataSource>(defaultInit);
+    component.setFilters({ status: 'enabled' });
     expect(component).toEqual(expected);
   });
 
