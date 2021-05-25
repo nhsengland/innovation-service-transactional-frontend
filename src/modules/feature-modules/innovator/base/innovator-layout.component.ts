@@ -39,6 +39,8 @@ export class InnovatorLayoutComponent extends CoreComponent implements OnInit {
 
   private onRouteChange(event: NavigationEnd): void {
 
+    // console.log('Route data', RoutingHelper.getRouteData(this.activatedRoute.snapshot), this.activatedRoute.snapshot);
+
     if (event.url.startsWith('/innovator/first-time-signin')) {
       this.navigationMenuBar = {
         leftItems: [],

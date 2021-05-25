@@ -13,6 +13,7 @@ import { AuthenticationRedirectionGuard } from '@modules/core/guards/authenticat
 
 const authenticationModule: Promise<any> = import('@modules/feature-modules/authentication/authentication.module');
 const triageInnovatorPackModule: Promise<any> = import('@modules/feature-modules/triage-innovator-pack/triage-innovator-pack.module');
+const assessmentModule: Promise<any> = import('@modules/feature-modules/assessment/assessment.module');
 const innovatorModule: Promise<any> = import('@modules/feature-modules/innovator/innovator.module');
 const accessorModule: Promise<any> = import('@modules/feature-modules/accessor/accessor.module');
 
@@ -45,9 +46,12 @@ const routes: Routes = [
       },
       {
         canActivate: [AuthenticationRedirectionGuard],
+        path: 'assessment', loadChildren: () => assessmentModule.then(m => m.AssessmentModule)
+      },
+      {
+        canActivate: [AuthenticationRedirectionGuard],
         path: 'innovator', loadChildren: () => innovatorModule.then(m => m.InnovatorModule)
       },
-
       {
         canActivate: [AuthenticationRedirectionGuard],
         path: 'accessor', loadChildren: () => accessorModule.then(m => m.AccessorModule)

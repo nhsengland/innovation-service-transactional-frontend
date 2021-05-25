@@ -23,6 +23,8 @@ $service-manual-container-size: 1100px; // Container width variable.
   --white: #{$color_nhsuk-white};
 
   --color_nhsuk-grey-3: #{$color_nhsuk-grey-3};
+  --color_nhsuk-grey-4: #{$color_nhsuk-grey-4};
+  --color_nhsuk-grey-5: #{$color_nhsuk-grey-5};
   --nhsuk-border-color: #{$nhsuk-border-color};
   --nhsuk-button-color: #{$nhsuk-button-color};
 
@@ -64,6 +66,16 @@ $service-manual-container-size: 1100px; // Container width variable.
     margin: 0 nhsuk-spacing(5);
   }
 }
+
+.app-width-container-fluid {
+  margin: 0;
+  max-width: none
+}
+
+.app-main-wrapper--no-padding {
+  padding: 0
+}
+
 
 .app-header__navigation {
   max-width: $service-manual-container-size + nhsuk-spacing(9);
@@ -115,5 +127,43 @@ $service-manual-container-size: 1100px; // Container width variable.
     }
 
   }
+}
 
+
+.app-tabs {
+  margin-bottom: 25px;
+  border-bottom: solid 1px var(--color_nhsuk-grey-4);
+
+  .app-tabs__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .app-tabs__item {
+      @include nhsuk-font(16);
+      display: inline-block;
+      margin-bottom: 0;
+      padding: 12px 15px 10px;
+
+      &.selected {
+        border-bottom: solid 3px var(--primary-color);
+      }
+
+      a {
+        text-decoration: none;
+
+        &:visited {
+          color: $nhsuk-link-color;
+          &:hover {
+            color: $nhsuk-link-hover-color;
+          }
+        }
+        &:focus {
+          &:hover {
+            color: $nhsuk-focus-text-color;
+          }
+        }
+      }
+    }
+  }
 }

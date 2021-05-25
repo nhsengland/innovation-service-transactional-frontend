@@ -87,7 +87,7 @@ export class UrlModel {
     return this;
   }
 
-  setQueryParams(queryParams: { [key: string]: string | number }): UrlModel {
+  setQueryParams(queryParams: { [key: string]: string | number | string[] }): UrlModel {
     this.queryParams = queryParams;
     return this;
   }

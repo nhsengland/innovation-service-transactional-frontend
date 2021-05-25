@@ -9,10 +9,10 @@ import { UrlModel } from '@modules/core/models/url.model';
 
 
 type getUserInfoDto = {
-  id: string,
-  displayName: string
-  type: 'ACCESSOR' | 'INNOVATOR',
-  organisations: { id: string, name: string, role: 'OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR' }[]
+  id: string;
+  displayName: string;
+  type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
+  organisations: { id: string, name: string, role: 'OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR' }[];
 };
 
 type getUserInnovationsDto = {
@@ -51,8 +51,6 @@ export class AuthenticationService {
         id: response.id,
         displayName: ['unknown'].includes(response.displayName) ? '' : response.displayName,
         type: response.type,
-        // type: 'ACCESSOR' as any,
-        // type: 'QUALIFYING_ACCESSOR' as any,
         organisations: response.organisations
       }))
     );

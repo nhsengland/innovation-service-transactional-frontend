@@ -2,25 +2,34 @@
 
   padding: 0;
 
-  .nhsuk-breadcrumb__list {
+  .nhsuk-width-container {
+    border-bottom: solid 1px var(--color_nhsuk-grey-4);
 
-    display: unset;
+    .nhsuk-breadcrumb__list {
 
-    .nhsuk-breadcrumb__item {
+      display: unset;
 
-      padding: 12px 15px 10px;
-      background: unset;
+      .nhsuk-breadcrumb__item {
 
-      &.selected {
-        border-bottom: solid 3px var(--primary-color);
+        padding: 12px 15px 10px;
+        background: unset;
+
+        &.selected {
+          border-bottom: solid 3px var(--primary-color);
+        }
+
+        a {
+          text-decoration: none;
+        }
+
+        &.right-menu-item {
+
+          &:after {
+            content: none;
+          }
+        }
       }
 
-      a {
-        text-decoration: none;
-
-
-  
-      }
     }
 
   }

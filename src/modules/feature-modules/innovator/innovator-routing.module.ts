@@ -31,6 +31,7 @@ const routes: Routes = [
     canActivateChild: [FirstTimeSigninGuard],
     path: '',
     component: InnovatorLayoutComponent,
+    data: { module: 'innovator', layoutOptions: { type: 'full' } },
     children: [
       {
         path: 'first-time-signin',
@@ -51,11 +52,18 @@ const routes: Routes = [
           { path: ':innovationId', pathMatch: 'full', redirectTo: ':innovationId/overview' },
           {
             path: ':innovationId',
+            data: { layoutOptions: { type: 'leftMenu' } },
             children: [
-              { path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent },
-
-              { path: 'record', pathMatch: 'full', data: { module: 'innovator' }, component: PageInnovationRecordComponent },
-              { path: 'record/sections/:sectionId', pathMatch: 'full', component: InnovationsSectionViewComponent },
+              {
+                path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent
+              },
+              {
+                path: 'record', pathMatch: 'full', component: PageInnovationRecordComponent,
+              },
+              {
+                path: 'record/sections/:sectionId', pathMatch: 'full', component: InnovationsSectionViewComponent,
+                data: { layoutOptions: { type: 'goBackLeftAside', url: 'record' } },
+              },
               { path: 'record/sections/:sectionId/edit', pathMatch: 'full', redirectTo: 'record/sections/:sectionId/edit/1' },
               { path: 'record/sections/:sectionId/edit/:questionId', pathMatch: 'full', component: InnovationsSectionEditComponent },
 

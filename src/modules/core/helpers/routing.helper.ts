@@ -7,4 +7,9 @@ export class RoutingHelper {
     return { ...route.params, ...route.children.reduce((acc: ActivatedRouteSnapshot['params'], child: ActivatedRouteSnapshot) => ({ ...RoutingHelper.getRouteParams(child), ...acc }), {}) };
   }
 
+  // Returns all ActivatedRouteSnapshot data, including the ones from childrens.
+  static getRouteData(route: ActivatedRouteSnapshot): ActivatedRouteSnapshot['data'] {
+    return { ...route.data, ...route.children.reduce((acc: ActivatedRouteSnapshot['data'], child: ActivatedRouteSnapshot) => ({ ...RoutingHelper.getRouteData(child), ...acc }), {}) };
+  }
+
 }

@@ -14,15 +14,14 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
   orderBy: string;
   orderDir: '' | 'asc' | 'desc';
 
-  constructor(data: Omit<Partial<TableModel<T>>, 'visibleColumns'> & { visibleColumns: { [key: string]: (string | { label: string; align?: 'left' | 'right' | 'center'; orderable?: boolean; }) } }) {
+  filters: { [key: string]: string | number | boolean | string[] };
+
+  constructor(data: Omit<Partial<TableModel<T>>, 'visibleColumns'> & { visibleColumns?: { [key: string]: (string | { label: string; align?: 'left' | 'right' | 'center'; orderable?: boolean; }) } }) {
 
     this.dataSource = data.dataSource || [];
 
     this.visibleColumns = {};
-    for (const [key, item] of Object.entries(data.visibleColumns)) {
-      if (typeof item === 'string') { this.visibleColumns[key] = { label: item }; }
-      else { this.visibleColumns[key] = { label: item.label, align: item.align, orderable: item.orderable }; }
-    }
+    this.setVisibleColumns(data.visibleColumns || {});
 
     this.totalRows = data.totalRows || 0;
 
@@ -32,6 +31,21 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
 
     this.orderBy = data.orderBy || '';
     this.orderDir = data.orderDir || '';
+
+    this.filters = data.filters || {};
+
+  }
+
+  setVisibleColumns(visibleColumns: { [key: string]: (string | { label: string; align?: 'left' | 'right' | 'center'; orderable?: boolean; }) }): this {
+
+    this.visibleColumns = {};
+
+    for (const [key, item] of Object.entries(visibleColumns || {})) {
+      if (typeof item === 'string') { this.visibleColumns[key] = { label: item }; }
+      else { this.visibleColumns[key] = { label: item.label, align: item.align, orderable: item.orderable }; }
+    }
+
+    return this;
 
   }
 
@@ -44,6 +58,11 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
       this.orderDir = 'asc';
     }
 
+    return this;
+  }
+
+  setFilters(filters: { [key: string]: string | number | boolean | string[] }): this {
+    this.filters = filters;
     return this;
   }
 
@@ -81,12 +100,13 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
 
   getTotalRowsNumber(): number { return this.totalRows; }
 
-  getAPIQueryParams(): { take: number, skip: number, order?: { [key: string]: 'ASC' | 'DESC' } } {
+  getAPIQueryParams(): { take: number, skip: number, order?: { [key: string]: 'ASC' | 'DESC' }, filters?: any } {
 
     return {
       take: this.pageSize,
       skip: (this.page - 1) * this.pageSize,
-      order: this.orderBy ? { [this.orderBy]: (this.orderDir.toUpperCase() || 'ASC') as 'ASC' | 'DESC' } : undefined
+      order: this.orderBy ? { [this.orderBy]: (this.orderDir.toUpperCase() || 'ASC') as 'ASC' | 'DESC' } : undefined,
+      filters: Object.keys(this.filters).length > 0 ? this.filters : undefined
     };
 
   }
