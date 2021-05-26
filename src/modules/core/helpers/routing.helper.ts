@@ -1,4 +1,4 @@
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 
 export class RoutingHelper {
 
@@ -10,6 +10,19 @@ export class RoutingHelper {
   // Returns all ActivatedRouteSnapshot data, including the ones from childrens.
   static getRouteData(route: ActivatedRouteSnapshot): ActivatedRouteSnapshot['data'] {
     return { ...route.data, ...route.children.reduce((acc: ActivatedRouteSnapshot['data'], child: ActivatedRouteSnapshot) => ({ ...RoutingHelper.getRouteData(child), ...acc }), {}) };
+  }
+
+  // Returns a url with all parameters replaced.
+  static resolveUrl(url: string | undefined | null, route: ActivatedRoute): string {
+
+    if (!url) { return ''; }
+
+    for (const [key, value] of Object.entries(RoutingHelper.getRouteParams(route.snapshot))) {
+      url = url.replace(`:${key}`, value);
+    }
+
+    return url;
+
   }
 
 }
