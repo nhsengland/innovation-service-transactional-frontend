@@ -107,6 +107,7 @@ export type getInnovationInfoResponse = {
 export type getInnovationSectionsDTO = {
   id: string;
   name: string;
+  status: keyof typeof INNOVATION_STATUS;
   sections: sectionType[];
 };
 

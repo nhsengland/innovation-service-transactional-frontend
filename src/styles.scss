@@ -22,6 +22,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 
   --white: #{$color_nhsuk-white};
 
+  --color_nhsuk-grey-1: #{$color_nhsuk-grey-1};
   --color_nhsuk-grey-3: #{$color_nhsuk-grey-3};
   --color_nhsuk-grey-4: #{$color_nhsuk-grey-4};
   --color_nhsuk-grey-5: #{$color_nhsuk-grey-5};
@@ -126,6 +127,35 @@ $service-manual-container-size: 1100px; // Container width variable.
       padding: govuk-spacing(3) 0 0 0;
     }
 
+  }
+}
+
+.progressbar {
+  display: flex;
+  justify-content: space-between;
+  list-style-type: none;
+  padding: 0;
+
+  .progressbar-item {
+    border: 1px solid var(--color_nhsuk-grey-1);
+    background: var(--nhsuk-border-color);
+    width: calc(100% / 15);
+    height: 8px;
+    margin: 0 2px;
+    border-radius: 5px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &.active {
+      background: var(--nhsuk-button-color);
+      // border-bottom: 1px solid var(--color_nhsuk-grey-3);
+    }
   }
 }
 

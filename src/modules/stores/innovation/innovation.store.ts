@@ -10,8 +10,10 @@ import { WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationService } from './innovation.service';
 
-import { InnovationModel, SectionsSummaryModel, InnovationSectionsIds, getInnovationInfoResponse, sectionType, InnovationSectionConfigType, getInnovationEvidenceDTO } from './innovation.models';
-import { INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS } from './innovation.models';
+import {
+  InnovationModel, SectionsSummaryModel, InnovationSectionsIds, getInnovationInfoResponse, sectionType, InnovationSectionConfigType, getInnovationEvidenceDTO,
+  INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS
+} from './innovation.models';
 import { INNOVATION_SECTIONS } from './innovation.config';
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
 
@@ -36,11 +38,14 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
 
-  getSectionsSummary$(innovationId: string): Observable<SectionsSummaryModel[]> {
+  getSectionsSummary$(innovationId: string): Observable<{ innovation: { status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {
 
     return this.innovationsService.getInnovationSections(innovationId).pipe(
-      map(response => {
-        return INNOVATION_SECTIONS.map(item => ({
+      map(response => ({
+        innovation: {
+          status: response.status
+        },
+        sections: INNOVATION_SECTIONS.map(item => ({
           title: item.title,
           sections: item.sections.map(ss => {
             const sectionState = response.sections.find(a => a.section === ss.id) || { status: 'UNKNOWN', actionStatus: '' };
@@ -52,24 +57,23 @@ export class InnovationStore extends Store<InnovationModel> {
               isCompleted: INNOVATION_SECTION_STATUS[sectionState.status]?.isCompleteState || false
             };
           })
-        }));
-      }),
+        }))
+      })),
       catchError(() => {
         // this.logger.error('Unable to fetch sections information');
-        return of(
-          INNOVATION_SECTIONS.map(item => ({
+        return of({
+          innovation: { status: '' as any },
+          sections: INNOVATION_SECTIONS.map(item => ({
             title: item.title,
-            sections: item.sections.map(ss => {
-              return {
-                id: ss.id,
-                title: ss.title,
-                status: 'UNKNOWN' as keyof typeof INNOVATION_SECTION_STATUS,
-                actionStatus: '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
-                isCompleted: false
-              };
-            })
+            sections: item.sections.map(ss => ({
+              id: ss.id,
+              title: ss.title,
+              status: 'UNKNOWN' as keyof typeof INNOVATION_SECTION_STATUS,
+              actionStatus: '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
+              isCompleted: false
+            }))
           }))
-        );
+        });
       })
     );
 

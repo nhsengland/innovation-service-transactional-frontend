@@ -175,7 +175,7 @@ export class InnovationsSectionEvidenceEditComponent extends CoreComponent imple
 
     switch (action) {
       case 'previous':
-        if (this.wizard.isFirstStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}`; }
+        if (this.wizard.isFirstStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}${this.isCreation() ? '' : `/evidence/${this.activatedRoute.snapshot.params.evidenceId}`}`; }
         else if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${this.wizard.steps.length}`; }
         else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${this.wizard.currentStepNumber - 1}`; }
         break;

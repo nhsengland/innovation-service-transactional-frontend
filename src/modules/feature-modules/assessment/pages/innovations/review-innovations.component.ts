@@ -12,7 +12,7 @@ import { AssessmentService, getInnovationsListEndpointDTO } from '../../services
 })
 export class ReviewInnovationsComponent extends CoreComponent implements OnInit {
 
-  tabs: { title: string, description: string, link: string, queryParams: { status: ('WAITING_NEEDS_ASSESSMENT' | 'NEEDS_ASSESSMENT' | 'IN_PROGRESS')[] } }[] = [];
+  tabs: { title: string, description: string, link: string, queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' | 'NEEDS_ASSESSMENT' | 'IN_PROGRESS' } }[] = [];
   currentTab: { status: string, description: string };
 
   innovationsList: TableModel<(getInnovationsListEndpointDTO['data'][0])>;
@@ -31,19 +31,19 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
         title: 'Awaiting assessment',
         description: 'These innovations have been submitted by their owners for needs assessment. The needs assessment team must start the assessment process within 7 days.',
         link: '/assessment/review-innovations',
-        queryParams: { status: ['WAITING_NEEDS_ASSESSMENT'] }
+        queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' }
       },
       {
         title: 'In progress',
         description: 'A team member has started the needs assessment process for each of these innovations. Please aim to complete the needs assessment with 14 days of starting.',
         link: '/assessment/review-innovations',
-        queryParams: { status: ['NEEDS_ASSESSMENT'] }
+        queryParams: { status: 'NEEDS_ASSESSMENT' }
       },
       {
         title: 'Assessment complete',
         description: 'Needs assessment has been completed for these innovations. They are visible to all organisations that the innovator choose to share their data with.',
         link: '/assessment/review-innovations',
-        queryParams: { status: ['IN_PROGRESS'] }
+        queryParams: { status: 'IN_PROGRESS' }
       }
     ];
 
@@ -58,9 +58,13 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(queryParams => {
 
-        console.log('mudou QP', queryParams);
+        if (!queryParams.status) {
+          this.router.navigate(['/assessment/review-innovations'], { queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' } });
+          return;
+        }
+
         this.currentTab = {
-          status: queryParams.status || 'WAITING_NEEDS_ASSESSMENT',
+          status: queryParams.status,
           description: this.tabs.find(tab => tab.queryParams.status === queryParams.status)?.description || this.tabs[0].description
         };
 
