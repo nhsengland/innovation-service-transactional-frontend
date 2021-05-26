@@ -8,8 +8,7 @@ import { SectionsSummaryModel } from '@stores-module/innovation/innovation.model
 
 @Component({
   selector: 'shared-pages-innovation-record',
-  templateUrl: './innovation-record.component.html',
-  styleUrls: ['./innovation-record.component.scss']
+  templateUrl: './innovation-record.component.html'
 })
 export class PageInnovationRecordComponent extends CoreComponent implements OnInit {
 
@@ -52,7 +51,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe(
       response => {
 
-        this.innovationSections = response;
+        this.innovationSections = response.sections;
 
         this.progressBar.blocks = [...this.innovationSections].reduce((acc: boolean[], item) => {
           return [...acc, ...item.sections.map(section => section.isCompleted)];

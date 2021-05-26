@@ -66,9 +66,13 @@ const routes: Routes = [
               },
               { path: 'record/sections/:sectionId/edit', pathMatch: 'full', redirectTo: 'record/sections/:sectionId/edit/1' },
               { path: 'record/sections/:sectionId/edit/:questionId', pathMatch: 'full', component: InnovationsSectionEditComponent },
+
               { path: 'record/sections/:sectionId/evidence/new', pathMatch: 'full', redirectTo: 'record/sections/:sectionId/evidence/new/1' },
               { path: 'record/sections/:sectionId/evidence/new/:questionId', pathMatch: 'full', component: InnovationsSectionEvidenceEditComponent },
-              { path: 'record/sections/:sectionId/evidence/:evidenceId', pathMatch: 'full', component: InnovationsSectionEvidenceViewComponent },
+              {
+                path: 'record/sections/:sectionId/evidence/:evidenceId', pathMatch: 'full', component: InnovationsSectionEvidenceViewComponent,
+                data: { layoutOptions: { type: 'leftAsideBackLink', backLink: { url: 'innovations/:innovationId/record/sections/:sectionId', label: 'Innovation section' } } }
+              },
               { path: 'record/sections/:sectionId/evidence/:evidenceId/edit', pathMatch: 'full', redirectTo: 'record/sections/:sectionId/evidence/:evidenceId/edit/1' },
               { path: 'record/sections/:sectionId/evidence/:evidenceId/edit/:questionId', pathMatch: 'full', component: InnovationsSectionEvidenceEditComponent }
             ]

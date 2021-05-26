@@ -131,14 +131,8 @@ export class InnovationsSectionEditComponent extends CoreComponent implements On
       this.sectionId,
       this.wizard.runOutboundParsing(this.currentAnswers)
     ).subscribe(
-      () => {
-        this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'sectionUpdateSuccess' });
-        return;
-      },
-      () => {
-        this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'sectionUpdateError' });
-        return;
-      }
+      () => { this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'sectionUpdateSuccess' }); },
+      () => { this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'sectionUpdateError' }); }
     );
 
   }

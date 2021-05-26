@@ -95,7 +95,7 @@ describe('UrlModel', () => {
     expect(component.buildUrl()).toBe(expected);
   });
 
-  it('should return a valid url with a simple url as input', () => {
+  it('should return a valid url with a complex url as input', () => {
     const expected = 'https://testurl.com:8080/path1/abc/path2?a=1&b=2&c=%7Ba:1%7D&d=%7B%22a%22:1,%22b%22:%22s%22%7D';
     component = new UrlModel(testVariables.validComplexUrl).setPathParams({ id: 'abc' });
     expect(component.buildUrl()).toBe(expected);

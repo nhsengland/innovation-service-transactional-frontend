@@ -104,7 +104,17 @@ export class UrlModel {
     let queryParams = '';
     queryParams = Object.keys(this.queryParams)
       .filter(key => this.queryParams[key] !== undefined)
-      .map(key => `${key}=${typeof this.queryParams[key] === 'object' ? JSON.stringify(this.queryParams[key]) : this.queryParams[key]}`)
+      .map(key => {
+
+        let value = `${key}=`;
+
+        if (Array.isArray(this.queryParams[key])) { value += (this.queryParams[key] as any[]).join(','); }      // When queryParam is an array.
+        else if (typeof this.queryParams[key] === 'object') { value += JSON.stringify(this.queryParams[key]); } // When queryParam is an object.
+        else { value += this.queryParams[key]; }
+
+        return value;
+
+      })
       .join('&');
     queryParams = (queryParams ? '?' : '') + queryParams;
 
