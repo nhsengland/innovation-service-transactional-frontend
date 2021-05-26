@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -6,15 +8,25 @@ import { CoreComponent } from '@app/base';
 
 import { RoutingHelper } from '@modules/core';
 
+
+type RouteDataLayoutOptionsType = {
+  type?: null | 'leftAsideMenu' | 'leftAsideBackLink';
+  backLink?: null | { url?: string, label?: string };
+  showInnovationHeader?: boolean;
+};
+
+
 @Component({
   selector: 'app-innovator-layout',
   templateUrl: './innovator-layout.component.html'
 })
 export class InnovatorLayoutComponent extends CoreComponent implements OnInit {
 
+  layoutOptions: RouteDataLayoutOptionsType = {};
+
   navigationMenuBar: {
-    leftItems: { title: string, link: string, fullReload?: boolean }[],
-    rightItems: { title: string, link: string, fullReload?: boolean }[]
+    leftItems: { title: string, link: string, fullReload?: boolean }[];
+    rightItems: { title: string, link: string, fullReload?: boolean }[];
   } = { leftItems: [], rightItems: [] };
 
   innovationHeaderBar: { id: string | null, name: string | null } = { id: null, name: null };
@@ -39,7 +51,14 @@ export class InnovatorLayoutComponent extends CoreComponent implements OnInit {
 
   private onRouteChange(event: NavigationEnd): void {
 
-    // console.log('Route data', RoutingHelper.getRouteData(this.activatedRoute.snapshot), this.activatedRoute.snapshot);
+    const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute.snapshot).layoutOptions || {};
+    const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute.snapshot).innovationId || null;
+
+    this.layoutOptions = {
+      type: routeData.type || null,
+      backLink: routeData.type === 'leftAsideBackLink' ? { url: RoutingHelper.resolveUrl(routeData.backLink?.url, this.activatedRoute), label: routeData.backLink?.label } : null,
+      showInnovationHeader: routeData.showInnovationHeader || false
+    };
 
     if (event.url.startsWith('/innovator/first-time-signin')) {
       this.navigationMenuBar = {
@@ -59,11 +78,7 @@ export class InnovatorLayoutComponent extends CoreComponent implements OnInit {
       };
     }
 
-    const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute.snapshot).innovationId || null;
-    if (currentRouteInnovationId) {
-
-      this.innovationHeaderBar = { id: currentRouteInnovationId, name: this.stores.authentication.getUserInfo().innovations.find(item => item.id === currentRouteInnovationId)?.name || null };
-
+    if (this.layoutOptions.type === 'leftAsideMenu') {
       this.leftSideBar = [
         { title: 'Overview', link: `/innovator/innovations/${currentRouteInnovationId}/overview` },
         { title: 'Innovation record', link: `/innovator/innovations/${currentRouteInnovationId}/record` },
@@ -71,7 +86,12 @@ export class InnovatorLayoutComponent extends CoreComponent implements OnInit {
         { title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments` },
         { title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/data-sharing-and-support` }
       ];
+    } else {
+      this.leftSideBar = [];
+    }
 
+    if (this.layoutOptions.showInnovationHeader) {
+      this.innovationHeaderBar = { id: currentRouteInnovationId, name: this.stores.authentication.getUserInfo().innovations.find(item => item.id === currentRouteInnovationId)?.name || null };
     } else {
       this.innovationHeaderBar = { id: null, name: null };
     }

@@ -15,7 +15,6 @@ import { InnovationsSectionEvidenceViewComponent } from './pages/innovations/sec
 import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/innovation-record.component';
 
 
-
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
@@ -31,7 +30,6 @@ const routes: Routes = [
     canActivateChild: [FirstTimeSigninGuard],
     path: '',
     component: InnovatorLayoutComponent,
-    data: { module: 'innovator', layoutOptions: { type: 'full' } },
     children: [
       {
         path: 'first-time-signin',
@@ -52,27 +50,27 @@ const routes: Routes = [
           { path: ':innovationId', pathMatch: 'full', redirectTo: ':innovationId/overview' },
           {
             path: ':innovationId',
-            data: { layoutOptions: { type: 'leftMenu' } },
+            data: { module: 'innovator' },
             children: [
               {
-                path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent
+                path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent,
+                data: { layoutOptions: { type: 'leftAsideMenu', showInnovationHeader: true } }
               },
               {
                 path: 'record', pathMatch: 'full', component: PageInnovationRecordComponent,
+                data: { layoutOptions: { type: 'leftAsideMenu', showInnovationHeader: true } }
               },
               {
                 path: 'record/sections/:sectionId', pathMatch: 'full', component: InnovationsSectionViewComponent,
-                data: { layoutOptions: { type: 'goBackLeftAside', url: 'record' } },
+                data: { layoutOptions: { type: 'leftAsideBackLink', backLink: { url: 'innovations/:innovationId/record', label: 'Innovation record' } } }
               },
               { path: 'record/sections/:sectionId/edit', pathMatch: 'full', redirectTo: 'record/sections/:sectionId/edit/1' },
               { path: 'record/sections/:sectionId/edit/:questionId', pathMatch: 'full', component: InnovationsSectionEditComponent },
-
               { path: 'record/sections/:sectionId/evidence/new', pathMatch: 'full', redirectTo: 'record/sections/:sectionId/evidence/new/1' },
               { path: 'record/sections/:sectionId/evidence/new/:questionId', pathMatch: 'full', component: InnovationsSectionEvidenceEditComponent },
               { path: 'record/sections/:sectionId/evidence/:evidenceId', pathMatch: 'full', component: InnovationsSectionEvidenceViewComponent },
               { path: 'record/sections/:sectionId/evidence/:evidenceId/edit', pathMatch: 'full', redirectTo: 'record/sections/:sectionId/evidence/:evidenceId/edit/1' },
-              { path: 'record/sections/:sectionId/evidence/:evidenceId/edit/:questionId', pathMatch: 'full', component: InnovationsSectionEvidenceEditComponent },
-
+              { path: 'record/sections/:sectionId/evidence/:evidenceId/edit/:questionId', pathMatch: 'full', component: InnovationsSectionEvidenceEditComponent }
             ]
           }
         ]

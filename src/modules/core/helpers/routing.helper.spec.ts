@@ -1,4 +1,4 @@
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 
 import { RoutingHelper } from './routing.helper';
 
@@ -40,5 +40,28 @@ describe('RoutingHelper', () => {
 
   });
 
+  it(`should resolve a url to empty when it's undefined`, () => {
+
+    const routeMock: Partial<ActivatedRoute> = {
+      snapshot: { params: { idOne: '1', idTwo: '2' }, children: [] } as any
+    };
+
+    const expected = '';
+
+    expect(RoutingHelper.resolveUrl(undefined, routeMock as any)).toEqual(expected);
+
+  });
+
+  it(`should resolve a url with parameters replaced`, () => {
+
+    const routeMock: Partial<ActivatedRoute> = {
+      snapshot: { params: { idOne: '1', idTwo: '2' }, children: [] } as any
+    };
+
+    const expected = 'http://demo.com/path1/1/path2/2';
+
+    expect(RoutingHelper.resolveUrl('http://demo.com/path1/:idOne/path2/:idTwo', routeMock as any)).toEqual(expected);
+
+  });
 
 });
