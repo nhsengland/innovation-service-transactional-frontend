@@ -1,6 +1,7 @@
+<h1 class="nhsuk-heading-m">Innovation record overview</h1>
+
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
-    <h1 class="nhsuk-heading-m">Innovation record overview</h1>
     <ul class="progressbar nhsuk-u-padding-bottom-2">
       <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="{'active': item}"></li>
     </ul>
@@ -27,7 +28,7 @@
     <div class="nhsuk-card__content">
       <h3>Your next steps</h3>
       <p class="d-flex align-items-center nhsuk-u-margin-bottom-2">
-        <ng-container *ngTemplateOutlet="icon; context: { completed: sections.submitted === sections.progressBar.length }"></ng-container>
+        <ng-container *ngTemplateOutlet="icon; context: { completed: allSectionsSubmitted()}"></ng-container>
         Submit all sections of your &nbsp; <a routerLink="/innovator/innovations/{{ innovationId }}/record">innovation record </a>
       </p>
       <p class="d-flex align-items-center">

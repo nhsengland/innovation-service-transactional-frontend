@@ -3,21 +3,20 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
+import { StoresModule, InnovationService } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
-import { InnovationsSectionEvidenceEditComponent } from './evidence-edit.component';
+import { InnovationCommentsComponent } from './comments.component';
 
 
-describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSectionEvidenceEditComponent', () => {
+describe('FeatureModules/Innovator/Innovation/CommentsComponent', () => {
 
-  let activatedRoute: ActivatedRoute;
+  let innovationService: InnovationService;
 
-  let component: InnovationsSectionEvidenceEditComponent;
-  let fixture: ComponentFixture<InnovationsSectionEvidenceEditComponent>;
+  let component: InnovationCommentsComponent;
+  let fixture: ComponentFixture<InnovationCommentsComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -32,15 +31,15 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
-    activatedRoute = TestBed.inject(ActivatedRoute);
+    innovationService = TestBed.inject(InnovationService);
 
   });
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(InnovationsSectionEvidenceEditComponent);
+    fixture = TestBed.createComponent(InnovationCommentsComponent);
     component = fixture.componentInstance;
-
+    fixture.detectChanges();
     expect(component).toBeTruthy();
 
   });

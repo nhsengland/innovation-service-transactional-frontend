@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
+import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
 
 
 @Component({
@@ -15,15 +15,30 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   baseUrl = '';
   documentUrl = '';
 
+  innovationId: string;
+  innovationStatus: keyof typeof INNOVATION_STATUS | null = null;
   innovationSections: SectionsSummaryModel[] = [];
-  progressBar: {
-    blocks: boolean[];
-    completed: string;
-    uncompleted: string;
-  };
+
+  sections: {
+    progressBar: boolean[];
+    submitted: number;
+    draft: number;
+    notStarted: number;
+  } = { progressBar: [], submitted: 0, draft: 0, notStarted: 0 };
 
   innovationSectionStatus = this.stores.innovation.INNOVATION_SECTION_STATUS;
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
+
+  summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string } = { type: '', title: '', message: '' };
+
+  isInAssessmentStatus(): boolean {
+    return ['WAITING_NEEDS_ASSESSMENT', 'NEEDS_ASSESSMENT'].includes(this.innovationStatus as string);
+  }
+
+  allSectionsSubmitted(): boolean {
+    return this.sections.submitted === this.sections.progressBar.length;
+  }
+
 
   constructor(
     private activatedRoute: ActivatedRoute
@@ -33,35 +48,55 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
     this.baseUrl = `/${this.activatedRoute.snapshot.data.module}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
     this.documentUrl = `${this.stores.environment.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
-
-    this.progressBar = { blocks: [], completed: '', uncompleted: '' };
+    this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
   }
 
 
   ngOnInit(): void {
 
-    this.getInnovationSections();
+    this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe(
+      response => {
+
+        this.innovationStatus = response.innovation.status;
+        this.innovationSections = response.sections;
+
+        this.sections.progressBar = this.innovationSections.reduce((acc: boolean[], item) => {
+          return [...acc, ...item.sections.map(section => section.isCompleted)];
+        }, []).sort().reverse();
+
+        this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
+        this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
+        this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
+
+      },
+      error => this.logger.error(error)
+    );
 
   }
 
 
-  getInnovationSections(): void {
+  onSubmitInnovation(): void {
 
-    this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe(
+    this.stores.innovation.submitInnovation$(this.innovationId).subscribe(
       response => {
 
-        this.innovationSections = response.sections;
+        this.innovationStatus = response.status;
 
-        this.progressBar.blocks = [...this.innovationSections].reduce((acc: boolean[], item) => {
-          return [...acc, ...item.sections.map(section => section.isCompleted)];
-        }, []).sort().reverse();
-
-        this.progressBar.completed = `${this.progressBar.blocks.filter(s => s).length} sections submitted`;
-        this.progressBar.uncompleted = `${this.progressBar.blocks.filter(s => !s).length} sections not yet submitted`;
+        this.summaryAlert = {
+          type: 'success',
+          title: 'Your have successfully submitted your record for needs assessment',
+          message: 'You can expect the service team to get in touch within on week.'
+        };
 
       },
-      error => this.logger.error(error)
+      () => {
+        this.summaryAlert = {
+          type: 'error',
+          title: 'An error occured when submitting your innovation',
+          message: 'Please, try again or contact us for further help'
+        };
+      }
     );
 
   }

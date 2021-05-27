@@ -27,6 +27,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     return ['WAITING_NEEDS_ASSESSMENT', 'NEEDS_ASSESSMENT'].includes(this.innovationStatus as string);
   }
 
+  allSectionsSubmitted(): boolean {
+    return this.sections.submitted === this.sections.progressBar.length;
+  }
+
 
   constructor(
     private activatedRoute: ActivatedRoute
@@ -47,7 +51,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         this.sections.progressBar = this.innovationSections.reduce((acc: boolean[], item) => {
           return [...acc, ...item.sections.map(section => section.isCompleted)];
         }, []).sort().reverse();
-
 
         this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
         this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
