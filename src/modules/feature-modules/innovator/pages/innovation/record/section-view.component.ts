@@ -8,10 +8,10 @@ import { InnovationSectionsIds, INNOVATION_SECTION_STATUS } from '@stores-module
 
 
 @Component({
-  selector: 'app-innovator-pages-innovations-section-view',
+  selector: 'app-innovator-pages-innovation-section-view',
   templateUrl: './section-view.component.html'
 })
-export class InnovationsSectionViewComponent extends CoreComponent implements OnInit {
+export class InnovationSectionViewComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
   section: {

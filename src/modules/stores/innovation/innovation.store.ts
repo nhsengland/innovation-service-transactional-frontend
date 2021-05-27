@@ -37,6 +37,10 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.getInnovationInfo(innovationId);
   }
 
+  submitInnovation$(innovationId: string): Observable<{id: string, status: keyof typeof INNOVATION_STATUS}> {
+    return this.innovationsService.submitInnovation(innovationId);
+  }
+
 
   getSectionsSummary$(innovationId: string): Observable<{ innovation: { status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {
 

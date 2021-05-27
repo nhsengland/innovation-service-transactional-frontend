@@ -8,10 +8,10 @@ import { SummaryParsingType } from '@modules/shared/forms';
 import { InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
 
 @Component({
-  selector: 'app-innovator-pages-innovations-section-edit',
+  selector: 'app-innovator-pages-innovation-section-edit',
   templateUrl: './section-edit.component.html'
 })
-export class InnovationsSectionEditComponent extends CoreComponent implements OnInit {
+export class InnovationSectionEditComponent extends CoreComponent implements OnInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 

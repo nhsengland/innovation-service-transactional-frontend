@@ -7,10 +7,10 @@ import { SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
 
 @Component({
-  selector: 'app-innovator-pages-innovations-section-evidence-view',
+  selector: 'app-innovator-pages-innovation-section-evidence-view',
   templateUrl: './evidence-view.component.html'
 })
-export class InnovationsSectionEvidenceViewComponent extends CoreComponent implements OnInit {
+export class InnovationSectionEvidenceViewComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
   sectionId: InnovationSectionsIds;

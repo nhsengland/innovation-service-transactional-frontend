@@ -11,10 +11,10 @@ import { SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
 
 @Component({
-  selector: 'app-innovator-pages-innovations-section-evidence-edit',
+  selector: 'app-innovator-pages-innovation-section-evidence-edit',
   templateUrl: './evidence-edit.component.html'
 })
-export class InnovationsSectionEvidenceEditComponent extends CoreComponent implements OnInit {
+export class InnovationSectionEvidenceEditComponent extends CoreComponent implements OnInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 

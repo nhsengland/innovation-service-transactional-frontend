@@ -9,11 +9,15 @@ import { InnovatorLayoutComponent } from './base/innovator-layout.component';
 // Pages.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
-import { InnovationOverviewComponent } from './pages/innovations/overview.component';
-import { InnovationsSectionEditComponent } from './pages/innovations/sections/section-edit.component';
-import { InnovationsSectionViewComponent } from './pages/innovations/sections/section-view.component';
-import { InnovationsSectionEvidenceEditComponent } from './pages/innovations/sections/evidence-edit.component';
-import { InnovationsSectionEvidenceViewComponent } from './pages/innovations/sections/evidence-view.component';
+
+import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
+import { InnovationSectionViewComponent } from './pages/innovation/record/section-view.component';
+import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
+import { InnovationSectionEvidenceViewComponent } from './pages/innovation/record/evidence-view.component';
+import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
+import { InnovationCommentsComponent } from './pages/innovation/comments/comments.component';
+import { InnovationDataSharingComponent } from './pages/innovation/data-sharing/data-sharing.component';
 
 // Services.
 import { InnovatorService } from './services/innovator.service';
@@ -36,10 +40,13 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
     DashboardComponent,
     FirstTimeSigninComponent,
     InnovationOverviewComponent,
-    InnovationsSectionEditComponent,
-    InnovationsSectionViewComponent,
-    InnovationsSectionEvidenceEditComponent,
-    InnovationsSectionEvidenceViewComponent
+    InnovationSectionEditComponent,
+    InnovationSectionViewComponent,
+    InnovationSectionEvidenceEditComponent,
+    InnovationSectionEvidenceViewComponent,
+    InnovationActionTrackerComponent,
+    InnovationCommentsComponent,
+    InnovationDataSharingComponent
   ],
   providers: [
     InnovatorService,

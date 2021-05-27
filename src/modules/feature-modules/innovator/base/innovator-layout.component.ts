@@ -84,7 +84,7 @@ export class InnovatorLayoutComponent extends CoreComponent implements OnInit {
         { title: 'Innovation record', link: `/innovator/innovations/${currentRouteInnovationId}/record` },
         { title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker` },
         { title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments` },
-        { title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/data-sharing-and-support` }
+        { title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/data-sharing` }
       ];
     } else {
       this.leftSideBar = [];

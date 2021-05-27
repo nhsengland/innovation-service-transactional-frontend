@@ -7,7 +7,7 @@ import { cloneDeep } from 'lodash';
 import { EnvironmentStore } from '@modules/core/stores/environment.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
-import { getInnovationInfoResponse, getInnovationInfoEndpointDTO, getInnovationSectionsDTO, sectionType, getInnovationEvidenceDTO } from './innovation.models';
+import { getInnovationInfoResponse, getInnovationInfoEndpointDTO, getInnovationSectionsDTO, sectionType, getInnovationEvidenceDTO, INNOVATION_STATUS } from './innovation.models';
 
 import { UrlModel } from '@modules/core/models/url.model';
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
@@ -39,6 +39,16 @@ export class InnovationService {
         openActionsNumber: response.actions?.length || 0,
         openCommentsNumber: response.comments?.length || 0
       }))
+    );
+
+  }
+
+  submitInnovation(innovationId: string): Observable<{ id: string, status: keyof typeof INNOVATION_STATUS }> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/submit').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
+    return this.http.patch<{ id: string, status: keyof typeof INNOVATION_STATUS }>(url.buildUrl(), {}).pipe(
+      take(1),
+      map(response => response)
     );
 
   }
