@@ -18,7 +18,8 @@ import { AppServerModule } from './src/main.server';
 import { handler } from 'src/handlers/logger.handler';
 import { appLoggingMiddleware } from 'src/middleware/appLoggingMiddleware';
 import { exceptionLoggingMiddleware } from 'src/middleware/exceptionLoggingMiddleware';
-import { initAppInsights } from 'src/globals';
+import { getAppInsightsClient, initAppInsights } from 'src/globals';
+import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 
 dotenv.config();
 
@@ -161,9 +162,29 @@ export function app(): express.Express {
 
   // Authentication routes.
   server.head(`${BASE_PATH}/session`, (req, res) => {
+    const client = getAppInsightsClient(req);
+    client.trackTrace({
+      message: '/session called',
+      severity: SeverityLevel.Information,
+    });
+
     if (req.isAuthenticated()) {
+      client.trackTrace({
+        message: '/session called and user is authenticated',
+        severity: SeverityLevel.Information,
+        properties: {
+          data: req.user,
+        }
+      });
       res.send('OK');
     } else {
+      client.trackTrace({
+        message: '/session called and user is NOT authenticated',
+        severity: SeverityLevel.Information,
+        properties: {
+          data: { session: req.session, sessionId: req.sessionID, headers: req.headers, path: req.path },
+        }
+      });
       res.status(401).send();
     }
   });
