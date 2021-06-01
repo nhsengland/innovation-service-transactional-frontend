@@ -8,6 +8,7 @@ import { Response } from 'express';
 import { RESPONSE } from '@nguniversal/express-engine/tokens';
 
 import { AuthenticationStore } from '../../stores';
+import { LoggerService, Severity } from '../services/logger.service';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -15,15 +16,16 @@ export class AuthenticationGuard implements CanActivate {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     @Optional() @Inject(RESPONSE) private serverResponse: Response,
-    private authentication: AuthenticationStore
+    private authentication: AuthenticationStore,
+    private loggerService: LoggerService
   ) { }
 
   canActivate(): Observable<boolean> {
 
     return this.authentication.initializeAuthentication$().pipe(
       map(response => response),
-      catchError(() => {
-
+      catchError((e) => {
+        this.loggerService.trackTrace('[Auth Guard] Sign In Error', Severity.ERROR, { error: e});
         const redirectUrl = '/transactional/signin';
 
         if (isPlatformBrowser(this.platformId)) {
@@ -34,7 +36,6 @@ export class AuthenticationGuard implements CanActivate {
         this.serverResponse.status(303).setHeader('Location', redirectUrl);
         this.serverResponse.end();
         return of(false);
-
       })
     );
 

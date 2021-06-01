@@ -34,11 +34,12 @@ export class AuthenticationService {
 
 
   verifyUserSession(): Observable<boolean> {
-    const url = new UrlModel(this.APP_URL).addPath('session').buildUrl();
+    const url = new UrlModel(this.APP_URL).addPath('session')
+    .buildUrl();
     return this.http.head(url).pipe(
       take(1),
       map(() => true),
-      catchError(() => throwError(false))
+      catchError((e) => throwError(e))
     );
   }
 
