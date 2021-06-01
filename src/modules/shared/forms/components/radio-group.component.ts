@@ -28,6 +28,7 @@ export class FormRadioGroupComponent extends ControlValueAccessorConnector imple
   @Input() label?: string;
   @Input() description?: string;
   @Input() items?: FormEngineParameterModel['items'] = [];
+  @Input() additional?: FormEngineParameterModel[] = [];
 
   hasError = false;
   errorMessage = '';
@@ -60,6 +61,7 @@ export class FormRadioGroupComponent extends ControlValueAccessorConnector imple
     this.isRunningOnServer = isPlatformServer(injector.get(PLATFORM_ID));
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
+    this.items = Object.assign({}, this.items);
 
   }
 

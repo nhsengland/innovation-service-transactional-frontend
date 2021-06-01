@@ -1,20 +1,14 @@
 import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
+import { hasMarketResearchItems } from './catalogs.config';
+
 
 // Labels.
 const stepsLabels = {
   l1: 'Have you done market research so that you understand the need for your innovation in the UK?',
   l2: 'Please describe the market research you\'ve done, or are doing, within the UK market landscape',
 };
-
-
-// Catalogs.
-const hasMarketResearchItems = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'IN_PROGRESS', label: 'I\'m currently doing market research' },
-  { value: 'NOT_YET', label: 'Not yet' }
-];
 
 
 // Types.

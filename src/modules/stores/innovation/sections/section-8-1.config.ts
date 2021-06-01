@@ -2,6 +2,8 @@ import { cloneDeep } from 'lodash';
 import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
+import { hasDeployPlanItems, hasResourcesToScaleItems } from './catalogs.config';
+
 
 // Labels.
 const stepsLabels = {
@@ -11,19 +13,6 @@ const stepsLabels = {
   l6: 'Does your team have the resources for scaling up to national deployment?',
   l7: 'Please share any relevant implementation planning documents '
 };
-
-
-// Catalogs.
-const yesOrNoItems = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' }
-];
-
-const yesOrNoOrNotSureItems = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' },
-  { value: 'NOT_SURE', label: 'I\'m not sure' }
-];
 
 
 // Types.
@@ -57,11 +46,11 @@ export const SECTION_8_1: InnovationSectionConfigType['sections'][0] = {
       new FormEngineModel({
         label: stepsLabels.l1,
         description: 'See [link to section in advanced guide] (opens in new window) for information about implementation plans.',
-        parameters: [{ id: 'hasDeployPlan', dataType: 'radio-group', validations: { isRequired: true }, items: yesOrNoItems }]
+        parameters: [{ id: 'hasDeployPlan', dataType: 'radio-group', validations: { isRequired: true }, items: hasDeployPlanItems }]
       }),
       new FormEngineModel({
         label: stepsLabels.l2,
-        parameters: [{ id: 'isDeployed', dataType: 'radio-group', validations: { isRequired: true }, items: yesOrNoItems }]
+        parameters: [{ id: 'isDeployed', dataType: 'radio-group', validations: { isRequired: true }, items: hasDeployPlanItems }]
       })
     ],
     runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
@@ -137,7 +126,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
   steps.push(
     new FormEngineModel({
       label: stepsLabels.l6,
-      parameters: [{ id: 'hasResourcesToScale', dataType: 'radio-group', validations: { isRequired: true }, items: yesOrNoOrNotSureItems }]
+      parameters: [{ id: 'hasResourcesToScale', dataType: 'radio-group', validations: { isRequired: true }, items: hasResourcesToScaleItems }]
     }),
     new FormEngineModel({
       label: stepsLabels.l7,
@@ -189,13 +178,13 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   toReturn.push({
     label: stepsLabels.l1,
-    value: yesOrNoItems.find(item => item.value === data.hasDeployPlan)?.label,
+    value: hasDeployPlanItems.find(item => item.value === data.hasDeployPlan)?.label,
     editStepNumber: 1
   });
 
   toReturn.push({
     label: stepsLabels.l2,
-    value: yesOrNoItems.find(item => item.value === data.isDeployed)?.label,
+    value: hasDeployPlanItems.find(item => item.value === data.isDeployed)?.label,
     editStepNumber: 2
   });
 
@@ -216,7 +205,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   toReturn.push({
     label: stepsLabels.l6,
-    value: yesOrNoOrNotSureItems.find(item => item.value === data.hasResourcesToScale)?.label,
+    value: hasResourcesToScaleItems.find(item => item.value === data.hasResourcesToScale)?.label,
     editStepNumber: toReturn.length + 1
   });
 

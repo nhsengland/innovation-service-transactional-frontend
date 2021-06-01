@@ -12,7 +12,7 @@ import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovati
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-  innovationStatus: keyof typeof INNOVATION_STATUS | null = null;
+  innovationStatus: keyof typeof INNOVATION_STATUS = '';
   innovationSections: SectionsSummaryModel[] = [];
 
   sections: {
@@ -24,7 +24,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
 
   isInAssessmentStatus(): boolean {
-    return ['WAITING_NEEDS_ASSESSMENT', 'NEEDS_ASSESSMENT'].includes(this.innovationStatus as string);
+    return this.stores.innovation.isAssessmentStatus(this.innovationStatus);
   }
 
   allSectionsSubmitted(): boolean {
@@ -49,7 +49,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         this.innovationSections = response.sections;
 
         this.sections.progressBar = this.innovationSections.reduce((acc: boolean[], item) => {
-          return [...acc, ...item.sections.map(section => section.isCompleted)];
+          return [...acc, ...item.sections.map(s => s.isCompleted)];
         }, []).sort().reverse();
 
         this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);

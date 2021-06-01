@@ -10,7 +10,9 @@ import { of, throwError } from 'rxjs';
 import { AppInjector } from '@modules/core';
 import { AuthenticationStore, AuthenticationService } from '@modules/stores';
 
+import { LoggerService } from '../services/logger.service';
 import { EnvironmentStore } from '../stores/environment.store';
+
 import { AuthenticationGuard } from './authentication.guard';
 
 
@@ -31,7 +33,8 @@ describe('Core/Guards/AuthenticationGuard', () => {
         AuthenticationStore,
         AuthenticationService,
         EnvironmentStore,
-        AuthenticationGuard
+        AuthenticationGuard,
+        LoggerService
       ]
     });
 

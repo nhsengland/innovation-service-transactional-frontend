@@ -80,7 +80,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
 
 
   getColumnLabel(key: string): string {
-    return this.visibleColumns[key].label;
+    return this.visibleColumns[key]?.label || '';
   }
 
   getHeaderColumns(): { key: string, label: string, align: string, orderable: boolean, orderDir: 'asc' | 'desc' | 'none' }[] {

@@ -19,6 +19,7 @@ export class FormEngineHelper {
 
       const parameterValue = values[parameter.id];
       const conditionalFields = parameter.items?.filter(item => item.conditional?.id) || [];
+      const additionalFields = parameter.additional || [];
 
       switch (parameter.dataType) {
         case 'checkbox-array': // Creates an FormArray and pushes defaultValues into it.
@@ -68,6 +69,12 @@ export class FormEngineHelper {
           const itemValue = values[item.conditional.id] || null;
           form.addControl(item.conditional.id, FormEngineHelper.createParameterFormControl(item.conditional, itemValue));
         }
+      });
+
+      // Adds existing additional fields to the form.
+      additionalFields.forEach(item => {
+        const itemValue = values[item.id] || null;
+        form.addControl(item.id, FormEngineHelper.createParameterFormControl(item, itemValue));
       });
 
       // Apply validators only if parameter is visible!

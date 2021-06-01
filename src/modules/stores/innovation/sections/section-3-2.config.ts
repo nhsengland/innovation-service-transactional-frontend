@@ -1,5 +1,7 @@
-import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+
+import { hasOtherIntellectualItems, hasPatentsItems } from './catalogs.config';
 
 
 // Labels.
@@ -7,19 +9,6 @@ const stepsLabels = {
   l1: 'Have you done market research so that you understand the need for your innovation in the UK?',
   l2: 'Please describe the market research you\'ve done, or are doing, within the UK market landscape',
 };
-
-
-// Catalogs.
-const hasPatentsItems = [
-  { value: 'HAS_AT_LEAST_ONE', label: 'I have one or more patents' },
-  { value: 'APPLIED_AT_LEAST_ONE', label: 'I have applied for one or more patents' },
-  { value: 'HAS_NONE', label: 'I don\'t have any patents, but believe I have freedom to operate' }
-];
-
-const hasOtherIntellectualItems = [
-  { value: 'YES', label: 'Yes', conditional: new FormEngineParameterModel({ id: 'otherIntellectual', dataType: 'text', validations: { isRequired: true } }) },
-  { value: 'NO', label: 'No' }
-];
 
 
 // Types.

@@ -2,20 +2,14 @@ import { cloneDeep } from 'lodash';
 import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
+import { hasBenefitsItems } from './catalogs.config';
+
 
 // Labels.
 const stepsLabels = {
   l1: 'Have you identified the specific benefits that your innovation would bring?',
   l_last: 'What benefits does your innovation create for the NHS or social care?'
 };
-
-
-// Catalogs.
-const hasBenefitsItems = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NOT_YET', label: 'Not yet' },
-  { value: 'NOT_SURE', label: 'Not sure' }
-];
 
 
 // Types.

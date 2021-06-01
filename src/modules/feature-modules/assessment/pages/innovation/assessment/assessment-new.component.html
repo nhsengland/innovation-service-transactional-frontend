@@ -1,0 +1,31 @@
+<ng-container *ngIf="summaryAlert.type">
+  <div class="nhsuk-error-summary nhsuk-u-margin-top-4" [ngClass]="{'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert" tabindex="-1">
+    <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
+    <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
+  </div>
+</ng-container>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Starting needs assessment for</p>
+    <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ innovationName }}</h1>
+
+    <div class="nhsuk-inset-text">
+      <span class="nhsuk-u-visually-hidden">Information:</span>
+      <p>
+        You will be assigned as the needs assessor for this innovation.<br />
+        Other members of the needs assessment team can still contribute if needed.
+      </p>
+    </div>
+
+    <fieldset class="nhsuk-fieldset">
+      <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--s">Let the innovator know how you want to proceed</legend>
+      <theme-form-engine formId="sectionForm" [parameters]="formParameters" [values]="formAnswers"></theme-form-engine>
+      <button type="submit" form="sectionForm" class="nhsuk-button nhsuk-u-margin-top-5" (click)="onSubmit()">Start needs assessment and post comment</button>
+    </fieldset>
+
+    <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-back-link__link nhsuk-u-margin-bottom-5"> Cancel </a>
+
+  </div>
+</div>

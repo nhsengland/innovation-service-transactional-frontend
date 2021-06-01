@@ -25,23 +25,23 @@ export class InnovationService {
   ) { }
 
 
-  getInnovationInfo(innovationId: string): Observable<getInnovationInfoResponse> {
+  // getInnovationInfo(innovationId: string): Observable<getInnovationInfoResponse> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
-    return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => ({
-        id: response.id,
-        name: response.name,
-        company: response.company || '',
-        location: `${response.countryName}${response.postcode ? ', ' + response.postcode : ''}`,
-        description: response.description,
-        openActionsNumber: response.actions?.length || 0,
-        openCommentsNumber: response.comments?.length || 0
-      }))
-    );
+  //   const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
+  //   return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
+  //     take(1),
+  //     map(response => ({
+  //       id: response.id,
+  //       name: response.name,
+  //       company: response.company || '',
+  //       location: `${response.countryName}${response.postcode ? ', ' + response.postcode : ''}`,
+  //       description: response.description,
+  //       openActionsNumber: response.actions?.length || 0,
+  //       openCommentsNumber: response.comments?.length || 0
+  //     }))
+  //   );
 
-  }
+  // }
 
   submitInnovation(innovationId: string): Observable<{ id: string, status: keyof typeof INNOVATION_STATUS }> {
 

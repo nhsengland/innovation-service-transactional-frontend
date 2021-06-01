@@ -30,19 +30,19 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
       {
         title: 'Awaiting assessment',
         description: 'These innovations have been submitted by their owners for needs assessment. The needs assessment team must start the assessment process within 7 days.',
-        link: '/assessment/review-innovations',
+        link: '/assessment/innovations',
         queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' }
       },
       {
         title: 'In progress',
         description: 'A team member has started the needs assessment process for each of these innovations. Please aim to complete the needs assessment with 14 days of starting.',
-        link: '/assessment/review-innovations',
+        link: '/assessment/innovations',
         queryParams: { status: 'NEEDS_ASSESSMENT' }
       },
       {
         title: 'Assessment complete',
         description: 'Needs assessment has been completed for these innovations. They are visible to all organisations that the innovator choose to share their data with.',
-        link: '/assessment/review-innovations',
+        link: '/assessment/innovations',
         queryParams: { status: 'IN_PROGRESS' }
       }
     ];
@@ -59,7 +59,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
       this.activatedRoute.queryParams.subscribe(queryParams => {
 
         if (!queryParams.status) {
-          this.router.navigate(['/assessment/review-innovations'], { queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' } });
+          this.router.navigate(['/assessment/innovations'], { queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' } });
           return;
         }
 
@@ -68,7 +68,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
           description: this.tabs.find(tab => tab.queryParams.status === queryParams.status)?.description || this.tabs[0].description
         };
 
-        this.innovationsList.setFilters({ status: [this.currentTab.status] });
+        this.innovationsList.setData([]).setFilters({ status: [this.currentTab.status] });
 
         switch (this.currentTab.status) {
           case 'WAITING_NEEDS_ASSESSMENT':
@@ -98,11 +98,9 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
             }).setOrderBy('updatedAt');
             break;
 
-          default:
-            break;
         }
 
-        this.getInnovations();
+        this.getInnovationsList();
 
       })
     );
@@ -110,7 +108,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   }
 
 
-  getInnovations(): void {
+  getInnovationsList(): void {
 
     this.assessmentService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(
       response => this.innovationsList.setData(response.data, response.count),
@@ -123,7 +121,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   onTableOrder(column: string): void {
 
     this.innovationsList.setOrderBy(column);
-    this.getInnovations();
+    this.getInnovationsList();
 
   }
 

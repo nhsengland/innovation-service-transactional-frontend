@@ -1,5 +1,7 @@
-import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+
+import { areasItems, careSettingsItems, categoriesItems, clinicalAreasItems, hasFinalProductItems, mainCategoryItems, mainPurposeItems, supportTypesItems } from './catalogs.config';
 
 
 // Labels.
@@ -14,98 +16,6 @@ const stepsLabels = {
   l8: 'What\'s the main purpose of your innovation?',
   l9: 'What type of support are you currently looking for?'
 };
-
-
-// Catalogs.
-const hasFinalProductItems = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' }
-];
-
-const categoriesItems = [
-  { value: 'MEDICAL_DEVICE', label: 'Medical device' },
-  { value: 'PHARMACEUTICAL', label: 'Pharmaceutical' },
-  { value: 'DIGITAL', label: 'Digital (including apps, platforms, software)' },
-  { value: 'AI', label: 'Artificial intelligence (AI)' },
-  { value: 'EDUCATION', label: 'Education or training of workforce' },
-  { value: 'PPE', label: 'Personal protective equipment (PPE)' },
-  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCategoryDescription', dataType: 'text', validations: { isRequired: true } }) }
-];
-
-const mainCategoryItems = [
-  { value: 'MEDICAL_DEVICE', label: 'Medical device' },
-  { value: 'PHARMACEUTICAL', label: 'Pharmaceutical' },
-  { value: 'DIGITAL', label: 'Digital (including apps, platforms, software)' },
-  { value: 'AI', label: 'Artificial intelligence (AI)' },
-  { value: 'EDUCATION', label: 'Education or training of workforce' },
-  { value: 'PPE', label: 'Personal protective equipment (PPE)' },
-  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherMainCategoryDescription', dataType: 'text', validations: { isRequired: true } }) }
-];
-
-const areasItems = [
-  { value: 'COVID_19', label: 'COVID-19' },
-  { value: 'DATA_ANALYTICS_AND_RESEARCH', label: 'Data, analytics and research' },
-  { value: 'DIGITALISING_SYSTEM', label: 'Digitalising the system' },
-  { value: 'IMPROVING_SYSTEM_FLOW', label: 'Improving system flow' },
-  { value: 'INDEPENDENCE_AND_PREVENTION', label: 'Independence and prevention' },
-  { value: 'OPERATIONAL_EXCELLENCE', label: 'Operational excellence' },
-  { value: 'PATIENT_ACTIVATION_AND_SELF_CARE', label: 'Patient activation and self-care' },
-  { value: 'PATIENT_SAFETY', label: 'Patient safety and quality improvement' },
-  { value: 'WORKFORCE_OPTIMISATION', label: 'Workforce resource optimisation' }
-];
-
-const clinicalAreasItems = [
-  { value: 'ACUTE', label: 'Acute and emergency services' },
-  { value: 'AGEING', label: 'Ageing' },
-  { value: 'CANCER', label: 'Cancer' },
-  { value: 'CARDIO_ENDOCRINE_METABOLIC', label: 'Cardiovascular, endocrine & metabolic (cardiometabolic)' },
-  { value: 'CHILDREN_AND_YOUNG', label: 'Children and young people' },
-  { value: 'DISEASE_AGNOSTIC', label: 'Disease agnostic solution' },
-  { value: 'GASTRO_KDNEY_LIVER', label: 'Gastroenterology, kidney and liver' },
-  { value: 'INFECTION_INFLAMATION', label: 'Infection and inflammation' },
-  { value: 'MATERNITY_REPRODUCTIVE_HEALTH', label: 'Maternity and reproductive health' },
-  { value: 'MENTAL_HEALTH', label: 'Mental health' },
-  { value: 'NEUROLOGY', label: 'Neurology' },
-  { value: 'POPULATION_HEALTH', label: 'Population health' },
-  { value: 'RESPIRATORY', label: 'Respiratory' },
-  { value: 'UROLOGY', label: 'Urology' },
-  { value: 'WORKFORCE_AND_EDUCATION', label: 'Workforce and education' }
-];
-
-const careSettingsItems = [
-  { value: 'AMBULANCE_OR_PARAMEDIC', label: 'Ambulance or paramedic' },
-  { value: 'COMMUNITY', label: 'Community' },
-  { value: 'HOSPITAL_INPATIENT', label: 'Hospital - inpatient' },
-  { value: 'HOSPITAL_OUTPATIENT', label: 'Hospital - outpatient' },
-  { value: 'MENTAL_HEALTH', label: 'Mental health' },
-  { value: 'PATIENT_HOME', label: 'Patient\'s home' },
-  { value: 'PHARMACY', label: 'Pharmacy' },
-  { value: 'PRIMARY_CARE', label: 'Primary care' },
-  { value: 'SOCIAL_CARE', label: 'Social care' }
-];
-
-const mainPurposeItems = [
-  { value: 'PREVENT_CONDITION', label: 'Preventing a condition or symptom from happening or worsening' },
-  { value: 'PREDICT_CONDITION', label: 'Predicting the occurence of a condition or symptom' },
-  { value: 'DIAGNOSE_CONDITION', label: 'Diagnosing a condition' },
-  { value: 'MONITOR_CONDITION', label: 'Monitoring a condition, treatment or therapy' },
-  { value: 'PROVIDE_TREATMENT', label: 'Providing treatment or therapy' },
-  { value: 'MANAGE_CONDITION', label: 'Managing a condition' },
-  { value: 'ENABLING_CARE', label: 'Enabling care, services or communication' }
-];
-
-const supportTypesItems = [
-  { value: 'ASSESSMENT', label: 'Adoption and health technology assessment' },
-  { value: 'PRODUCT_MIGRATION', label: 'Bringing my product to or from the UK' },
-  { value: 'CLINICAL_TESTS', label: 'Clinical trials and testing' },
-  { value: 'COMMERCIAL', label: 'Commercial support and advice' },
-  { value: 'PROCUREMENT', label: 'Procurement' },
-  { value: 'DEVELOPMENT', label: 'Product development and regulatory advice' },
-  { value: 'EVIDENCE_EVALUATION', label: 'Real-world evidence and evaluation' },
-  { value: 'FUNDING', label: 'Understanding funding channels' },
-  { value: '', label: 'SEPARATOR' },
-  { value: 'INFORMATION', label: 'I\'m only looking for information right now' }
-];
 
 
 // Types.

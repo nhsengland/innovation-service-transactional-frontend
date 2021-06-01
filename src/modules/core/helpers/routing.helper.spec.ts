@@ -1,4 +1,4 @@
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { RoutingHelper } from './routing.helper';
 
@@ -6,11 +6,15 @@ describe('RoutingHelper', () => {
 
   it(`should return all parameter from the route`, () => {
 
-    const routeMock: Partial<ActivatedRouteSnapshot> = {
-      params: { idOne: '1', idTwo: '2' },
+    const routeMock: Partial<ActivatedRoute> = {
+      snapshot: {
+        params: { idOne: '1', idTwo: '2' },
+      } as any,
       children: [
         {
-          params: { idThree: '3', idFour: '4' },
+          snapshot: {
+            params: { idThree: '3', idFour: '4' }
+          },
           children: []
         }
       ] as any
@@ -24,11 +28,15 @@ describe('RoutingHelper', () => {
 
   it(`should return all data from the route`, () => {
 
-    const routeMock: Partial<ActivatedRouteSnapshot> = {
-      data: { idOne: '1', idTwo: '2' },
+    const routeMock: Partial<ActivatedRoute> = {
+      snapshot: {
+        data: { idOne: '1', idTwo: '2' },
+      } as any,
       children: [
         {
-          data: { idThree: '3', idFour: '4' },
+          snapshot: {
+            data: { idThree: '3', idFour: '4' }
+          },
           children: []
         }
       ] as any
@@ -55,7 +63,8 @@ describe('RoutingHelper', () => {
   it(`should resolve a url with parameters replaced`, () => {
 
     const routeMock: Partial<ActivatedRoute> = {
-      snapshot: { params: { idOne: '1', idTwo: '2' }, children: [] } as any
+      snapshot: { params: { idOne: '1', idTwo: '2' }, children: [] } as any,
+      children: []
     };
 
     const expected = 'http://demo.com/path1/1/path2/2';

@@ -1,7 +1,7 @@
-<div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': hasError}">
+<div class="nhsuk-form-group nhsuk-u-padding-top-4" [ngClass]="{'nhsuk-form-group--error': hasError}">
 
   <ng-container *ngIf="label">
-    <label class="nhsuk-label" [for]="id">{{ label }}</label>
+    <label class="nhsuk-heading-m nhsuk-u-margin-bottom-2" [for]="id">{{ label }}</label>
   </ng-container>
 
   <ng-container *ngIf="description">
@@ -28,7 +28,7 @@
 
           <div class="nhsuk-radios__item">
             <ng-container *ngIf="isRunningOnBrowser">
-              <input [formControl]="fieldControl" id="{{ id }}{{ i }}" type="radio" [value]="item.value" class="nhsuk-radios__input" />
+              <input [formControl]="fieldControl" id="{{ id }}{{ i }}" type="radio" [name]="controlName" [value]="item.value" class="nhsuk-radios__input" />
             </ng-container>
             <ng-container *ngIf="isRunningOnServer">
               <input id="{{ id }}{{ i }}" type="radio" [name]="controlName" [value]="item.value" [checked]="fieldControl.value === item.value" class="nhsuk-radios__input" />
@@ -47,6 +47,12 @@
 
       </ng-container>
 
+    </ng-container>
+
+    <ng-container *ngIf="additional">
+      <ng-container *ngFor="let addi of additional; let i = index">
+      <theme-form-input [formControl]="conditionalFormControl(addi.id)" [label]="addi.label" [description]="addi.description"></theme-form-input>
+    </ng-container>
     </ng-container>
 
   </div>

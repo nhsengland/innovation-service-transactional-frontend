@@ -33,6 +33,20 @@ describe('TableModel', () => {
     expect(component).toEqual(expected);
   });
 
+  it('should set visibleColumns to empty', () => {
+    const expected = { ...defaultExpected, ...{ visibleColumns: {} } };
+    component = new TableModel<defaultDataSource>(defaultInit);
+    component.setVisibleColumns({});
+    expect(component).toEqual(expected);
+  });
+
+  it('should set visibleColumns to new ones', () => {
+    const expected = { ...defaultExpected, ...{ visibleColumns: { c1: { label: 'C1 new label' }, c2: { label: 'C2 new label' } } } };
+    component = new TableModel<defaultDataSource>(defaultInit);
+    component.setVisibleColumns({ c1: 'C1 new label', c2: { label: 'C2 new label' } });
+    expect(component).toEqual(expected);
+  });
+
   it('should set orderBy when no ordered column is set', () => {
     const expected = { ...defaultExpected, ...{ orderBy: 'c1', orderDir: 'asc' } };
     component = new TableModel<defaultDataSource>(defaultInit);
@@ -54,13 +68,22 @@ describe('TableModel', () => {
     expect(component).toEqual(expected);
   });
 
-  it('should set data', () => {
+  it('should set data without totalRows', () => {
     const expected = { ...defaultExpected, ...{ dataSource: [{ c1: 'value', c2: 'value', c3: 'value' }], totalRows: 1 } };
     component = new TableModel<defaultDataSource>(defaultInit);
     component.setData([{ c1: 'value', c2: 'value', c3: 'value' }]);
     expect(component).toEqual(expected);
     expect(component.getRecords()).toEqual(expected.dataSource);
-    expect(component.getTotalRowsNumber()).toBe(1);
+    expect(component.getTotalRowsNumber()).toBe(expected.totalRows);
+  });
+
+  it('should set data with totalRows', () => {
+    const expected = { ...defaultExpected, ...{ dataSource: [{ c1: 'value', c2: 'value', c3: 'value' }], totalRows: 50 } };
+    component = new TableModel<defaultDataSource>(defaultInit);
+    component.setData([{ c1: 'value', c2: 'value', c3: 'value' }], 50);
+    expect(component).toEqual(expected);
+    expect(component.getRecords()).toEqual(expected.dataSource);
+    expect(component.getTotalRowsNumber()).toBe(expected.totalRows);
   });
 
   it('should clear data', () => {
@@ -71,7 +94,13 @@ describe('TableModel', () => {
     expect(component).toEqual(expected);
   });
 
-  it('should run getColumnLabel()', () => {
+  it('should run getColumnLabel() that dont exists', () => {
+    const expected = '';
+    component = new TableModel<defaultDataSource>(defaultInit);
+    expect(component.getColumnLabel('columnsThatDontExists')).toBe(expected);
+  });
+
+  it('should run getColumnLabel() that exists', () => {
     const expected = 'C1 label';
     component = new TableModel<defaultDataSource>(defaultInit);
     expect(component.getColumnLabel('c1')).toBe(expected);
@@ -101,10 +130,11 @@ describe('TableModel', () => {
     expect(component.getAPIQueryParams()).toEqual(expected);
   });
 
-  it('should run getAPIQueryParams() with orderBy and orderDir defined', () => {
-    const expected = { take: 10, skip: 0, order: { c1: 'ASC' } };
+  it('should run getAPIQueryParams() with orderBy, orderDir and filters defined', () => {
+    const expected = { take: 10, skip: 0, order: { c1: 'ASC' }, filters: { status: 'enabled'} };
     component = new TableModel<defaultDataSource>(defaultInit);
     component.setOrderBy('c1');
+    component.setFilters({ status: 'enabled' });
     expect(component.getAPIQueryParams()).toEqual(expected);
   });
 

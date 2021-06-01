@@ -11,6 +11,7 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { AppInjector } from '@modules/core';
 import { AuthenticationStore, AuthenticationService } from '@modules/stores';
 
+import { LoggerService } from '../services/logger.service';
 import { EnvironmentStore } from '../stores/environment.store';
 import { AuthenticationRedirectionGuard } from './authentication-redirection.guard';
 
@@ -27,8 +28,9 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
         HttpClientTestingModule,
         RouterTestingModule.withRoutes([
           { path: 'dashboard', component: EmptyMockComponent },
-          { path: 'innovator', component: EmptyMockComponent },
-          { path: 'accessor', component: EmptyMockComponent }
+          { path: 'assessment', component: EmptyMockComponent },
+          { path: 'accessor', component: EmptyMockComponent },
+          { path: 'innovator', component: EmptyMockComponent }
         ]),
         LoggerTestingModule
       ],
@@ -39,7 +41,8 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
         AuthenticationStore,
         AuthenticationService,
         EnvironmentStore,
-        AuthenticationRedirectionGuard
+        AuthenticationRedirectionGuard,
+        LoggerService
       ]
     });
 
@@ -62,23 +65,34 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
 
   });
 
-  it('should deny access to the route when is a INNOVATOR', () => {
+  it('should deny access to the route when user type is ASSESSMENT', () => {
 
     const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'dashboard' } };
     const expected = false;
 
-    spyOn(authenticationStore, 'getUserType').and.returnValue('INNOVATOR');
+    spyOn(authenticationStore, 'getUserType').and.returnValue('ASSESSMENT');
 
     expect(guard.canActivate(routeMock as any)).toBe(expected);
 
   });
 
-  it('should deny access to the route when is a ACCESSOR', () => {
+  it('should deny access to the route when user type is ACCESSOR', () => {
 
     const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'dashboard' } };
     const expected = false;
 
     spyOn(authenticationStore, 'getUserType').and.returnValue('ACCESSOR');
+
+    expect(guard.canActivate(routeMock as any)).toBe(expected);
+
+  });
+
+  it('should deny access to the route when user type is INNOVATOR', () => {
+
+    const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'dashboard' } };
+    const expected = false;
+
+    spyOn(authenticationStore, 'getUserType').and.returnValue('INNOVATOR');
 
     expect(guard.canActivate(routeMock as any)).toBe(expected);
 

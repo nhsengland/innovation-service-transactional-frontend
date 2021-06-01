@@ -2,6 +2,8 @@ import { cloneDeep } from 'lodash';
 import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
+import { carePathwayItems, hasUKPathwayKnowledgeItems, innovationPathwayKnowledgeItems } from './catalogs.config';
+
 
 // Labels.
 const stepsLabels = {
@@ -9,27 +11,6 @@ const stepsLabels = {
   l2: 'What is the current care pathway in relation to your innovation?',
   l3: 'Please describe the potential care pathway with your innovation in use'
 };
-
-
-// Catalogs.
-const hasUKPathwayKnowledgeItems = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' }
-];
-
-const innovationPathwayKnowledgeItems = [
-  { value: 'PATHWAY_EXISTS_AND_CHANGED', label: 'There is a pathway, and my innovation changes it' },
-  { value: 'PATHWAY_EXISTS_AND_FITS', label: 'There is a pathway, and my innovation fits in it' },
-  { value: 'NO_PATHWAY', label: 'There is no current care pathway' }
-];
-
-const carePathwayItems = [
-  { value: 'ONLY_OPTION', label: 'The only option, or first of its kind' },
-  { value: 'BETTER_OPTION', label: 'A better option to those that already exist' },
-  { value: 'EQUIVALENT_OPTION', label: 'An equivalent option to those that already exist' },
-  { value: 'FIT_LESS_COSTS', label: 'Fit for purpose and costs less' },
-  { value: 'NO_KNOWLEDGE', label: 'I don\'t know' }
-];
 
 
 // Types.

@@ -1,7 +1,7 @@
-<div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': hasError}">
+<div class="nhsuk-form-group nhsuk-u-padding-top-4" [ngClass]="{'nhsuk-form-group--error': hasError}">
 
   <ng-container *ngIf="label">
-    <label class="nhsuk-label" [for]="id">{{ label }}</label>
+    <label class="nhsuk-heading-m nhsuk-u-margin-bottom-2" [for]="id">{{ label }}</label>
   </ng-container>
 
   <ng-container *ngIf="description">
