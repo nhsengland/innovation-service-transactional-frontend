@@ -6,6 +6,7 @@ import { catchError, map, take } from 'rxjs/operators';
 import { EnvironmentStore } from '@modules/core/stores/environment.store';
 
 import { UrlModel } from '@modules/core/models/url.model';
+import { LoggerService, Severity } from '@modules/core/services/logger.service';
 
 
 type getUserInfoDto = {
@@ -29,13 +30,16 @@ export class AuthenticationService {
 
   constructor(
     private http: HttpClient,
-    private environmentStore: EnvironmentStore
+    private environmentStore: EnvironmentStore,
+    private loggerService: LoggerService,
   ) { }
 
 
   verifyUserSession(): Observable<boolean> {
+    this.loggerService.trackTrace('[Authentication Service] verifyUserSession called', Severity.INFORMATION);
     const url = new UrlModel(this.APP_URL).addPath('session')
     .buildUrl();
+    this.loggerService.trackTrace('[Authentication Service] built url', Severity.INFORMATION, { url });
     return this.http.head(url).pipe(
       take(1),
       map(() => true),
