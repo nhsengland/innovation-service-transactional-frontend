@@ -2,27 +2,14 @@ import { cloneDeep } from 'lodash';
 import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
+import { costComparisonItems, hasCostKnowledgeItems } from './catalogs.config';
+
 
 // Labels.
 const stepsLabels = {
   l1: 'Do you know what cost savings your innovation would create?',
   l2: 'Do you know the cost of care as it\'s currently given?'
 };
-
-
-// Catalogs.
-const hasCostKnowledgeItems = [
-  { value: 'DETAILED_ESTIMATE', label: 'Yes, I have a detailed estimate' },
-  { value: 'ROUGH_IDEA', label: 'Yes, I have a rough idea' },
-  { value: 'NO', label: 'No' }
-];
-
-const costComparisonItems = [
-  { value: 'CHEAPER', label: 'My innovation is cheaper to purchase' },
-  { value: 'COSTS_MORE_WITH_SAVINGS', label: 'My innovation costs more to purchase but has greater benefits that will lead to overall cost savings' },
-  { value: 'COSTS_MORE', label: 'My innovation costs more to purchase and has greater benefits but will lead to higher costs overall' },
-  { value: 'NOT_SURE', label: 'I\'m not sure' }
-];
 
 
 // Types.

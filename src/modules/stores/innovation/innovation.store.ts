@@ -11,7 +11,7 @@ import { WizardEngineModel } from '@modules/shared/forms';
 import { InnovationService } from './innovation.service';
 
 import {
-  InnovationModel, SectionsSummaryModel, InnovationSectionsIds, getInnovationInfoResponse, sectionType, InnovationSectionConfigType, getInnovationEvidenceDTO,
+  InnovationModel, SectionsSummaryModel, InnovationSectionsIds, sectionType, InnovationSectionConfigType, getInnovationEvidenceDTO,
   INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS
 } from './innovation.models';
 import { INNOVATION_SECTIONS } from './innovation.config';
@@ -32,10 +32,13 @@ export class InnovationStore extends Store<InnovationModel> {
   get INNOVATION_SECTION_STATUS(): typeof INNOVATION_SECTION_STATUS { return INNOVATION_SECTION_STATUS; }
   get INNOVATION_SECTION_ACTION_STATUS(): typeof INNOVATION_SECTION_ACTION_STATUS { return INNOVATION_SECTION_ACTION_STATUS; }
 
-
-  getInnovationInfo$(innovationId: string): Observable<getInnovationInfoResponse> {
-    return this.innovationsService.getInnovationInfo(innovationId);
+  isAssessmentStatus(status: keyof typeof INNOVATION_STATUS | string): boolean {
+    return ['WAITING_NEEDS_ASSESSMENT', 'NEEDS_ASSESSMENT'].includes(status);
   }
+
+  // getInnovationInfo$(innovationId: string): Observable<getInnovationInfoResponse> {
+  //   return this.innovationsService.getInnovationInfo(innovationId);
+  // }
 
   submitInnovation$(innovationId: string): Observable<{id: string, status: keyof typeof INNOVATION_STATUS}> {
     return this.innovationsService.submitInnovation(innovationId);

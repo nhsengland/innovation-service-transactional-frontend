@@ -16,7 +16,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   documentUrl = '';
 
   innovationId: string;
-  innovationStatus: keyof typeof INNOVATION_STATUS | null = null;
+  innovationStatus: keyof typeof INNOVATION_STATUS = '';
   innovationSections: SectionsSummaryModel[] = [];
 
   sections: {
@@ -31,8 +31,13 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string } = { type: '', title: '', message: '' };
 
+
+  isInnovationInCreatedStatus(): boolean {
+    return this.innovationStatus === 'CREATED';
+  }
+
   isInAssessmentStatus(): boolean {
-    return ['WAITING_NEEDS_ASSESSMENT', 'NEEDS_ASSESSMENT'].includes(this.innovationStatus as string);
+    return this.stores.innovation.isAssessmentStatus(this.innovationStatus);
   }
 
   allSectionsSubmitted(): boolean {

@@ -5,13 +5,16 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Injector } from '@angular/core';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { StoresModule, AuthenticationStore } from '@modules/stores';
+
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { DashboardComponent } from './dashboard.component';
 
 
-describe('FeatureModules/Innovator/DashboardComponent', () => {
+describe('FeatureModules/Accessor/Dashboard/DashboardComponent', () => {
+
+  let authenticationStore: AuthenticationStore;
 
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
@@ -25,9 +28,11 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
         StoresModule,
         AccessorModule
       ]
-    }).compileComponents();
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
+
+    authenticationStore = TestBed.inject(AuthenticationStore);
 
   });
 
@@ -40,4 +45,19 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
   });
 
+  it('should create the component', () => {
+
+    spyOn(authenticationStore, 'isQualifyingAccessorRole').and.returnValue(true);
+    spyOn(authenticationStore, 'getUserInfo').and.returnValue({ displayName: 'A user', organisations: [{ name: 'A organisation' }] });
+
+    fixture = TestBed.createComponent(DashboardComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.user).toEqual({ displayName: 'A user', organisation: 'A organisation' });
+    expect(component.cardsList[0].title).toBe('Review innovations');
+
+  });
+
 });
+

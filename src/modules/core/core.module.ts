@@ -14,6 +14,9 @@ import { AuthenticationRedirectionGuard } from './guards/authentication-redirect
 // Stores.
 import { EnvironmentStore } from './stores/environment.store';
 
+// Services.
+import { LoggerService } from './services/logger.service';
+
 
 @NgModule({
   imports: [
@@ -41,7 +44,10 @@ import { EnvironmentStore } from './stores/environment.store';
     AuthenticationRedirectionGuard,
 
     // Stores.
-    EnvironmentStore
+    EnvironmentStore,
+
+    // Services.
+    LoggerService
   ]
 })
 export class CoreModule {

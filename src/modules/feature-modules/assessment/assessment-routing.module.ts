@@ -7,6 +7,10 @@ import { AssessmentLayoutComponent } from './base/assessment-layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
 
+import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/assessment-new.component';
+import { InnovationAssessmentEditComponent } from './pages/innovation/assessment/assessment-edit.component';
+
 
 const routes: Routes = [
 
@@ -19,23 +23,55 @@ const routes: Routes = [
   {
     path: '',
     component: AssessmentLayoutComponent,
-    data: { module: 'innovator', layoutOptions: { type: 'full' } },
     children: [
       {
         path: 'dashboard',
         pathMatch: 'full',
         component: DashboardComponent
       },
+
       {
-        path: 'review-innovations',
-        pathMatch: 'full',
-        component: ReviewInnovationsComponent
+        path: 'innovations',
+        children: [
+          { path: '', pathMatch: 'full', component: ReviewInnovationsComponent },
+          { path: ':innovationId', pathMatch: 'full', redirectTo: ':innovationId/overview' },
+          {
+            path: ':innovationId',
+            children: [
+              {
+                path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent,
+                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/assessment/innovations', label: 'Innovations' } } }
+              },
+              {
+                path: 'assessments/new', pathMatch: 'full', component: InnovationAssessmentNewComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/assessment/innovations/:innovationId', label: 'Go back' } } }
+              },
+
+              {
+                path: 'assessments/:assessmentId', pathMatch: 'full', redirectTo: 'assessments/:assessmentId/edit/1' // component: InnovationAssessmentEditComponent,
+              },
+              { path: 'assessments/:assessmentId/edit', pathMatch: 'full', redirectTo: 'assessments/:assessmentId/edit/1' },
+              {
+                path: 'assessments/:assessmentId/edit/:stepId', pathMatch: 'full', component: InnovationAssessmentEditComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/assessment/innovations/:innovationId', label: 'Back to innovation' } } }
+              },
+
+              // {
+              //   path: 'record', pathMatch: 'full', component: PageInnovationRecordComponent,
+              //   data: { layoutOptions: { type: 'innovationLeftAsideMenu', showInnovationHeader: true } }
+              // },
+              // {
+              //   path: 'action-tracker', pathMatch: 'full', component: InnovationActionTrackerComponent,
+              //   data: { layoutOptions: { type: 'innovationLeftAsideMenu', showInnovationHeader: false } }
+              // },
+              // {
+              //   path: 'comments', pathMatch: 'full', component: InnovationCommentsComponent,
+              //   data: { layoutOptions: { type: 'innovationLeftAsideMenu', showInnovationHeader: false } }
+              // }
+            ]
+          }
+        ]
       }
-      // {
-      //   path: '',
-      //   outlet: 'layout-aside-left',
-      //   component: LayoutLeftMenuComponent
-      // },
     ]
   }
 

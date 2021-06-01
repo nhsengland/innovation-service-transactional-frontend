@@ -14,6 +14,8 @@ import { ActionLinkComponent } from './components/navigation/action-link.compone
 import { BackLinkComponent } from './components/navigation/back-link.component';
 import { PrintLinkComponent } from './components/navigation/print-link.component';
 
+import { SvgIconComponent } from './components/icons/svg-icon.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -30,7 +32,9 @@ import { PrintLinkComponent } from './components/navigation/print-link.component
 
     ActionLinkComponent,
     BackLinkComponent,
-    PrintLinkComponent
+    PrintLinkComponent,
+
+    SvgIconComponent
   ],
   providers: [],
   exports: [
@@ -44,7 +48,9 @@ import { PrintLinkComponent } from './components/navigation/print-link.component
 
     ActionLinkComponent,
     BackLinkComponent,
-    PrintLinkComponent
+    PrintLinkComponent,
+
+    SvgIconComponent
   ]
 })
 export class ThemeModule { }

@@ -17,10 +17,11 @@ export type InnovationSectionConfigType = {
 
 
 export const INNOVATION_STATUS = {
+  '': null,
   CREATED: { label: 'Created', cssClass: 'nhsuk-tag--wellow' },
-  WAITING_NEEDS_ASSESSMENT: { label: 'Waiting', cssClass: 'nhsuk-tag--wellow' }, // 1
-  NEEDS_ASSESSMENT: { label: 'Waiting', cssClass: 'nhsuk-tag--wellow' }, // 2
-  IN_PROGRESS: { label: 'In progress', cssClass: 'nhsuk-tag--wellow' }, // 3
+  WAITING_NEEDS_ASSESSMENT: { label: 'Waiting', cssClass: 'nhsuk-tag--wellow' },
+  NEEDS_ASSESSMENT: { label: 'Waiting', cssClass: 'nhsuk-tag--wellow' },
+  IN_PROGRESS: { label: 'In progress', cssClass: 'nhsuk-tag--wellow' },
   // NEEDS_ASSESSMENT_REVIEW: { label: 'In review', cssClass: 'nhsuk-tag--wellow' },
   ABANDONED: { label: 'Abandoned', cssClass: 'nhsuk-tag--grey' },
   COMPLETE: { label: 'Complete', cssClass: 'nhsuk-tag--green' }

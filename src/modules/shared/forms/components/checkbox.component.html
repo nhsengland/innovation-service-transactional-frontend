@@ -1,9 +1,9 @@
 <ng-container *ngIf="isRunningOnBrowser">
-  <input [formControl]="fieldControl" [id]="id" type="checkbox" class="nhsuk-checkboxes__input" />
+  <input [formControl]="fieldControl" [id]="id" type="checkbox" [name]="controlName" class="nhsuk-checkboxes__input" />
 </ng-container>
 
 <ng-container *ngIf="isRunningOnServer">
-  <input [id]="id" name="{{ controlName }}" type="checkbox" [value]="value" [checked]="fieldControl.value === value" class="nhsuk-checkboxes__input" />
+  <input [id]="id" type="checkbox" [name]="controlName" [value]="value" [checked]="fieldControl.value === value" class="nhsuk-checkboxes__input" />
 </ng-container>
 
 <label for="{{ id }}" class="nhsuk-label nhsuk-checkboxes__label">{{ label }}</label>

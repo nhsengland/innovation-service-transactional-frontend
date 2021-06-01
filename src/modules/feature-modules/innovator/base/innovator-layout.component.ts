@@ -1,6 +1,4 @@
-/* istanbul ignore file */
-
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -10,7 +8,7 @@ import { RoutingHelper } from '@modules/core';
 
 
 type RouteDataLayoutOptionsType = {
-  type?: null | 'leftAsideMenu' | 'leftAsideBackLink';
+  type: null | 'leftAsideMenu' | 'leftAsideBackLink';
   backLink?: null | { url?: string, label?: string };
   showInnovationHeader?: boolean;
 };
@@ -20,9 +18,9 @@ type RouteDataLayoutOptionsType = {
   selector: 'app-innovator-layout',
   templateUrl: './innovator-layout.component.html'
 })
-export class InnovatorLayoutComponent extends CoreComponent implements OnInit {
+export class InnovatorLayoutComponent extends CoreComponent {
 
-  layoutOptions: RouteDataLayoutOptionsType = {};
+  layoutOptions: RouteDataLayoutOptionsType = { type: null };
 
   navigationMenuBar: {
     leftItems: { title: string, link: string, fullReload?: boolean }[];
@@ -46,13 +44,11 @@ export class InnovatorLayoutComponent extends CoreComponent implements OnInit {
 
   }
 
-  ngOnInit(): void { }
-
 
   private onRouteChange(event: NavigationEnd): void {
 
-    const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute.snapshot).layoutOptions || {};
-    const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute.snapshot).innovationId || null;
+    const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
+    const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
 
     this.layoutOptions = {
       type: routeData.type || null,

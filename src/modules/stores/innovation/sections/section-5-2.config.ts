@@ -2,6 +2,8 @@ import { cloneDeep } from 'lodash';
 import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
+import { hasTestsItems } from './catalogs.config';
+
 
 // Labels.
 const stepsLabels = {
@@ -10,14 +12,6 @@ const stepsLabels = {
   l3: 'Please describe the testing and feedback for [testing type]',
   l4: 'Please upload any documents demonstrating the testing you have done with users',
 };
-
-
-// Catalogs.
-const hasTestsItems = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'IN_PROCESS', label: 'I\'m in the process of testing with users' },
-  { value: 'NOT_YET', label: 'Not yet' }
-];
 
 
 // Types.

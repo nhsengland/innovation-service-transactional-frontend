@@ -27,7 +27,7 @@ export class DashboardComponent extends CoreComponent {
     this.cardsList = [
       {
         title: 'Review innovations',
-        link: '/assessment/review-innovations',
+        link: '/assessment/innovations',
         description: 'Find, review and create a needs assessment for all incoming innovations'
       },
       {

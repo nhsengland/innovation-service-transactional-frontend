@@ -24,11 +24,15 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   initializeAuthentication$(): Observable<boolean> {
 
     return new Observable((observer: Observer<boolean>) => {
+
       this.loggerService.trackTrace('[Auth Store] initializeAuthentication called', Severity.INFORMATION);
+
       this.authenticationService.verifyUserSession().pipe(
         concatMap(() => this.authenticationService.getUserInfo()),
         concatMap(user => {
-          this.loggerService.trackTrace('[Auth Store] initializeAuthentication mapped User', Severity.INFORMATION,  { user });
+
+          this.loggerService.trackTrace('[Auth Store] initializeAuthentication mapped User', Severity.INFORMATION, { user });
+
           this.state.user = { ...user, ...{ innovations: [] } };
           this.state.isSignIn = true;
 
@@ -38,11 +42,11 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           ]).pipe(
             map(([hasInnovator, innovations]) => {
 
-              this.loggerService.trackTrace('[Auth Store] initializeAuthentication first time sign in assessment',
-                Severity.INFORMATION, { hasInnovator, innovations });
+              this.loggerService.trackTrace('[Auth Store] initializeAuthentication first time sign in assessment', Severity.INFORMATION, { hasInnovator, innovations });
 
               this.state.didFirstTimeSignIn = hasInnovator;
               if (this.state.user) { this.state.user.innovations = innovations; }
+
               return true;
             }),
             catchError(() => of(true)) // Suppress error as this is only additional information.

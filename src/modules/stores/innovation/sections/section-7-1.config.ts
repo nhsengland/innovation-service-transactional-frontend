@@ -1,6 +1,8 @@
 import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
+import { hasFundindItems, hasRevenueModelItems, revenuesItems } from './catalogs.config';
+
 
 // Labels.
 const stepsLabels = {
@@ -11,31 +13,6 @@ const stepsLabels = {
   l5: 'Have you secured funding for the next stage of development?',
   l6: 'Please describe what funding you have secured for the next stage of development'
 };
-
-
-// Catalogs.
-const hasRevenueModelItems = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' }
-];
-
-const revenuesItems = [
-  { value: 'ADVERTISING', label: 'Advertising' },
-  { value: 'DIRECT_PRODUCT_SALES', label: 'Direct product sales' },
-  { value: 'FEE_FOR_SERVICE', label: 'Fee for service' },
-  { value: 'LEASE', label: 'Lease' },
-  { value: 'SALES_OF_CONSUMABLES_OR_ACCESSORIES', label: 'Sales of consumables or accessories' },
-  { value: 'SUBSCRIPTION', label: 'Subscription' },
-  {
-    value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRevenueDescription', dataType: 'text', validations: { isRequired: true } })
-  }
-];
-
-const hasFundindItems = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' },
-  { value: 'NOT_RELEVANT', label: 'Not relevant' }
-];
 
 
 // Types.

@@ -43,6 +43,8 @@ export class FormEngineParameterModel {
     maxLength?: string | number;
   };
 
+  additional?: FormEngineParameterModel[];
+
   items?: ({
     value: 'SEPARATOR' | string;
     label: 'SEPARATOR' | string;
@@ -76,6 +78,8 @@ export class FormEngineParameterModel {
     this.isEditable = data.isEditable !== undefined ? data.isEditable : true;
     this.rank = data.rank || 0;
     this.validations = data.validations;
+
+    this.additional = data.additional;
 
     this.items = data.items;
 

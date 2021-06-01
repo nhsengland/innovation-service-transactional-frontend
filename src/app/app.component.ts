@@ -23,7 +23,8 @@ export class AppComponent implements OnInit {
     this.translateService.use('en');
 
     this.titleService.setTitle(translateService.instant('app.title'));
-    this.loggerService.trackTrace('@app-component initialized', Severity.INFORMATION);
+    this.loggerService.trackTrace('@AppComponent initialized', Severity.INFORMATION);
+
   }
 
   ngOnInit(): void { }

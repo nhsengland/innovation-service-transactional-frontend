@@ -2,27 +2,13 @@ import { cloneDeep } from 'lodash';
 import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
+import { hasCostKnowledgeItems, patientRangeItems } from './catalogs.config';
+
 
 // Labels.
 const stepsLabels = {
   l1: 'Do you know the cost of your innovation?'
 };
-
-
-// Catalogs.
-const hasCostKnowledgeItems = [
-  { value: 'DETAILED_ESTIMATE', label: 'Yes, I have a detailed estimate' },
-  { value: 'ROUGH_IDEA', label: 'Yes, I have a rough idea' },
-  { value: 'NO', label: 'No' }
-];
-
-const patientRangeItems = [
-  { value: 'UP_10000', label: 'Up to 10,000 per year' },
-  { value: 'BETWEEN_10000_500000', label: '10,000 to half a million per year' },
-  { value: 'MORE_THAN_500000', label: 'More than half a million per year' },
-  { value: 'NOT_SURE', label: 'I\'m not sure' },
-  { value: 'NOT_RELEVANT', label: 'Not relevant to my innovation' }
-];
 
 
 // Types.

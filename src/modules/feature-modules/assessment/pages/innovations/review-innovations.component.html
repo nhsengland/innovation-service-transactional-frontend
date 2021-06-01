@@ -32,7 +32,7 @@
             <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }}</span>
-                {{ item.name }}
+                <a routerLink="/assessment/innovations/{{ item.id }}">{{ item.name }}</a>
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('submittedAt')" class="nhsuk-table__cell">

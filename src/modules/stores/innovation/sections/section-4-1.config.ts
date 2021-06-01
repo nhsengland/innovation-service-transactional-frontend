@@ -1,6 +1,8 @@
 import { cloneDeep } from 'lodash';
-import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+
+import { hasRegulationKnowledgeItems, standardsHasMetItems, standardsTypeItems } from './catalogs.config';
 
 
 // Labels.
@@ -9,31 +11,6 @@ const stepsLabels = {
   l2: 'Which standards and certifications apply to your innovation?',
   l_last: 'Please upload any documents demonstrating your certifications',
 };
-
-
-// Catalogs.
-const hasRegulationKnowledgeItems = [
-  { value: 'YES_ALL', label: 'Yes, I know all of them' },
-  { value: 'YES_SOME', label: 'Yes, I know some of them' },
-  { value: 'NO', label: 'No' },
-  { value: 'NOT_RELEVANT', label: 'Not relevant' }
-];
-
-const standardsTypeItems = [
-  { value: 'CE_UKCA_NON_MEDICAL', label: 'CE/UKCA Non-medical device' },
-  { value: 'CE_UKCA_CLASS_I', label: 'CE/UKCA Class I medical device' },
-  { value: 'CE_UKCA_CLASS_II_A', label: 'CE/UKCA Class IIa medical device' },
-  { value: 'CE_UKCA_CLASS_II_B', label: 'CE/UKCA Class IIb medical device' },
-  { value: 'CE_UKCA_CLASS_III', label: 'CE/UKCA Class III medical device' },
-  { value: 'DTAC', label: 'Digital Technology Assessment Criteria (DTAC)' },
-  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRegulationDescription', dataType: 'text', validations: { isRequired: true } }) }
-];
-
-const standardsHasMetItems = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'IN_PROGRESS', label: 'I\'m in the process of gaining approval' },
-  { value: 'NOT_YET', label: 'Not yet' },
-];
 
 
 // Types.

@@ -1,6 +1,8 @@
 import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
+import { hasEvidenceItems } from './catalogs.config';
+
 import { SECTION_2_EVIDENCES, clinicalEvidenceItems } from './section-2-3-evidences.config';
 
 
@@ -8,14 +10,6 @@ import { SECTION_2_EVIDENCES, clinicalEvidenceItems } from './section-2-3-eviden
 const stepsLabels = {
   l1: 'Do you have evidence of effectiveness for your innovation?'
 };
-
-
-// Catalogs.
-const hasEvidenceItems = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'IN_PROGRESS', label: 'In progress' },
-  { value: 'NOT_YET', label: 'Not yet' }
-];
 
 
 // Types.

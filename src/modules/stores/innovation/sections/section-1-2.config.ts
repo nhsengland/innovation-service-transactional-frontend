@@ -1,6 +1,8 @@
 import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
+import { hasProblemTackleKnowledgeItems } from './catalogs.config';
+
 
 // Labels.
 const stepsLabels = {
@@ -10,14 +12,6 @@ const stepsLabels = {
   l4: 'What\'s the intervention?',
   l5: 'What\'s the impact of the intervention?'
 };
-
-
-// Catalogs.
-const hasProblemTackleKnowledgeItems = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NOT_YET', label: 'Not yet' },
-  { value: 'NOT_SURE', label: 'I\'m not sure' }
-];
 
 
 // Types.

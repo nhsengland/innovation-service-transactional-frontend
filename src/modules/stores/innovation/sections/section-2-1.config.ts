@@ -2,20 +2,14 @@ import { cloneDeep } from 'lodash';
 import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
+import { hasSubgroupsItems } from './catalogs.config';
+
 
 // Labels.
 const stepsLabels = {
   l1: 'Do you know yet what patient population or subgroup your innovation will affect?',
   l2: 'What population or subgroup does this affect?'
 };
-
-
-// Catalogs.
-const hasSubgroupsItems = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' },
-  { value: 'NOT_RELEVANT', label: 'Not relevant' }
-];
 
 
 // Types.

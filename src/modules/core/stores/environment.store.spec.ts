@@ -32,14 +32,17 @@ describe('Core/Stores/EnvironmentStore running server side', () => {
 
     expect(environmentStore.ENV).toEqual(expected);
     expect(environmentStore.APP_URL).toBe('http://demo.com');
+    expect(environmentStore.APP_ASSETS_URL).toBe('http://demo.com/static/assets');
     expect(environmentStore.API_URL).toBe('http://demo.com/api');
+    expect(environmentStore.BASE_URL).toBe('http://demo.com');
+    expect(environmentStore.BASE_PATH).toBe('');
 
   });
 
 });
 
 
-describe('Core/Stores/EnvironmentStore runnign client side', () => {
+describe('Core/Stores/EnvironmentStore running client side', () => {
 
   let environmentStore: EnvironmentStore;
   let windowSpy: jest.SpyInstance;
@@ -68,7 +71,10 @@ describe('Core/Stores/EnvironmentStore runnign client side', () => {
 
     expect(environmentStore.ENV).toEqual(expected);
     expect(environmentStore.APP_URL).toBe('http://demo.com');
+    expect(environmentStore.APP_ASSETS_URL).toBe('http://demo.com/static/assets');
     expect(environmentStore.API_URL).toBe('http://demo.com/api');
+    expect(environmentStore.BASE_URL).toBe('http://demo.com');
+    expect(environmentStore.BASE_PATH).toBe('');
 
   });
 

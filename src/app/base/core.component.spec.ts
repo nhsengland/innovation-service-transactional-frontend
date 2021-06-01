@@ -37,6 +37,7 @@ describe('App/CoreComponent running server side tests', () => {
     }).compileComponents();
 
     AppInjector.setInjector(TestBed.inject(Injector));
+
     spyOn(common, 'isPlatformServer').and.returnValue(true);
     spyOn(common, 'isPlatformBrowser').and.returnValue(false);
 
@@ -253,8 +254,7 @@ describe('App/CoreComponent running client side tests', () => {
     const expected = '/test?query_1=e3Rlc3RlXzE6IDZ9';
     spyOn(common, 'isPlatformBrowser').and.returnValue(false);
     const bufferSpy = spyOn(Buffer, 'from').and.callThrough();
-    const actual = component
-      .encodeUrlQueryParams('/test', { query_1: '{teste_1: 6}' });
+    const actual = component.encodeUrlQueryParams('/test', { query_1: '{teste_1: 6}' });
     expect(actual).toBe(expected);
     expect(bufferSpy).toHaveBeenCalled();
   });
@@ -263,8 +263,7 @@ describe('App/CoreComponent running client side tests', () => {
     const expected = { query_1: '{teste_1: 6}' };
     spyOn(common, 'isPlatformBrowser').and.returnValue(true);
     const bufferSpy = spyOn(Buffer, 'from').and.callThrough();
-    const actual = component
-      .decodeQueryParams({ query_1: 'e3Rlc3RlXzE6IDZ9' });
+    const actual = component.decodeQueryParams({ query_1: 'e3Rlc3RlXzE6IDZ9' });
     expect(actual).toEqual(expected);
     expect(bufferSpy).not.toHaveBeenCalled();
   });

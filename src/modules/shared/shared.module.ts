@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 // Modules.
+import { ThemeModule } from '@modules/theme/theme.module';
 import { FormsModule } from './forms/forms.module';
 
 // Pages.
@@ -20,6 +21,7 @@ import { OrganisationsService } from './services/organisations.service';
     TranslateModule.forChild(),
 
     // Modules.
+    ThemeModule,
     FormsModule
   ],
   declarations: [
