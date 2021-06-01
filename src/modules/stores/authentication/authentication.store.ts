@@ -49,9 +49,9 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           observer.next(true);
           observer.complete();
         },
-        () => {
+        (e) => {
           this.setState(this.state);
-          observer.error(false);
+          observer.error(e);
           observer.complete();
         }
       );

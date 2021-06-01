@@ -55,8 +55,7 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
   it('should run verifyUserSession() and return error', () => {
 
     const responseMock = '';
-    const expected = false;
-    let response: any = {};
+    let response: any = { };
 
     service.verifyUserSession().subscribe(success => response = success, error => response = error);
 
@@ -64,7 +63,7 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
     httpRequest.flush(responseMock, { status: 400, statusText: 'Bad Request' });
 
     expect(httpRequest.request.method).toBe('HEAD');
-    expect(response).toBe(expected);
+    expect(response.status).toBe(400);
 
   });
 
