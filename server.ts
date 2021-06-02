@@ -20,7 +20,8 @@ import { appLoggingMiddleware } from 'src/middleware/appLoggingMiddleware';
 import { exceptionLoggingMiddleware } from 'src/middleware/exceptionLoggingMiddleware';
 import { getAppInsightsClient, initAppInsights } from 'src/globals';
 import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
-
+import { hidePoweredBy, hsts, contentSecurityPolicy, noSniff, ieNoOpen, frameguard, xssFilter  } from 'helmet';
+import * as helmet from 'helmet';
 dotenv.config();
 
 // Types definitions.
@@ -99,6 +100,27 @@ export function app(): express.Express {
     resave: false,
     saveUninitialized: true
   }));
+
+  // Helmet configuration
+
+  server.use(
+    helmet.contentSecurityPolicy({
+      useDefaults: true,
+      directives: {
+        'script-src': ['\'self\'', '\'unsafe-inline\'', '\'unsafe-eval\'']
+      }
+    }),
+    helmet.hidePoweredBy(),
+    helmet.hsts({
+      includeSubDomains: true,
+      preload: true,
+    }),
+    // helmet.noSniff(),
+    helmet.ieNoOpen(),
+    helmet.frameguard({
+      action: 'deny',
+    }),
+  );
 
   // Passport configuration.
   server.use(passport.initialize());
