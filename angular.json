@@ -24,6 +24,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": [
+              "axios",
               "lodash"
             ],
             "outputPath": "dist/app/browser",

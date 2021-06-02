@@ -114,7 +114,7 @@ export type getInnovationSectionsDTO = {
 
 
 export type getInnovationEvidenceDTO = {
-  evidenceType: 'clinical' | 'economic' | 'other',
+  evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER',
   clinicalEvidenceType: string,
   description: string,
   summary: string

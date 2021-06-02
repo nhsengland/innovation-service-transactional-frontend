@@ -196,7 +196,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
       editStepNumber: toReturn.length + 1
     });
 
-    data.deploymentPlans.forEach((item, i) => {
+    data.deploymentPlans?.forEach(item => {
       toReturn.push({ label: `Group ${item.name} comercial basis`, value: item.commercialBasis, editStepNumber: toReturn.length + 1 });
       toReturn.push({ label: `Group ${item.name} org. deplyoment affect`, value: item.orgDeploymentAffect, editStepNumber: toReturn.length + 1 });
     });

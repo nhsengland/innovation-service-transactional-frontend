@@ -168,7 +168,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   if (!['NO'].includes(data.hasCostKnowledge || 'NO')) {
 
-    data.subgroups.forEach((subgroup, i) => {
+    data.subgroups?.forEach((subgroup, i) => {
 
       toReturn.push({
         label: `Group ${subgroup.name} innovation cost`,

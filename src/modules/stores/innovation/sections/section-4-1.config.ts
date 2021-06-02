@@ -163,11 +163,11 @@ function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
 
     toReturn.push({
       label: stepsLabels.l2,
-      value: data.standards.map(v => standardsTypeItems.find(item => item.value === v.type)?.label).join('<br />'),
+      value: data.standards?.map(v => standardsTypeItems.find(item => item.value === v.type)?.label).join('<br />'),
       editStepNumber: 2
     });
 
-    data.standards.forEach(standard => {
+    data.standards?.forEach(standard => {
       toReturn.push({
         label: `${standard.type === 'OTHER' ? data.otherRegulationDescription : standardsTypeItems.find(item => item.value === standard.type)?.label} certification`,
         value: standardsHasMetItems.find(item => item.value === standard.hasMet)?.label,

@@ -86,7 +86,7 @@ export class InnovationService {
     };
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/sections').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
-    return this.http.put<any>(url.buildUrl(), body).pipe(
+    return this.http.put<MappedObject>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
     );
@@ -116,14 +116,14 @@ export class InnovationService {
 
     if (evidenceId) {
       const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/evidence/:evidenceId').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, evidenceId });
-      return this.http.put<any>(url.buildUrl(), { ...{ id: evidenceId }, ...data }).pipe(
+      return this.http.put<MappedObject>(url.buildUrl(), { ...{ id: evidenceId }, ...data }).pipe(
         take(1),
         map(response => response)
       );
 
     } else {
       const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/evidence').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
-      return this.http.post<any>(url.buildUrl(), data).pipe(
+      return this.http.post<MappedObject>(url.buildUrl(), data).pipe(
         take(1),
         map(response => response)
       );
@@ -136,7 +136,7 @@ export class InnovationService {
   deleteEvidence(innovationId: string, evidenceId: string): Observable<boolean> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/evidence/:evidenceId').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, evidenceId });
-    return this.http.delete<any>(url.buildUrl()).pipe(
+    return this.http.delete<MappedObject>(url.buildUrl()).pipe(
       take(1),
       map(response => !!response),
       catchError(() => of(false))

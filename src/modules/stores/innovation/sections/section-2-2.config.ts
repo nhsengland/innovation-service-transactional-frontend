@@ -122,7 +122,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   if (['YES'].includes(data.hasBenefits || 'NOT_YET')) {
 
-    data.subgroups.forEach((item, i) => {
+    data.subgroups?.forEach((item, i) => {
       toReturn.push({ label: `Group ${item.name} benefit`, value: item.benefits, editStepNumber: toReturn.length + 1 });
     });
 

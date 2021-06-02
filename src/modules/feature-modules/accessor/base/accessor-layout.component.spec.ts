@@ -85,7 +85,7 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
         { title: 'Home', link: '/accessor/dashboard' }
       ],
       rightItems: [
-        { title: 'Review innovations', link: '/accessor/review-innovations' },
+        { title: 'Review innovations', link: '/accessor/innovations' },
         { title: 'Your engagements', link: '/accessor/engagements' },
         { title: 'Actions', link: '/accessor/actions' },
         { title: 'Activity', link: '/accessor/activity' },

@@ -2,25 +2,22 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { Injector, QueryList } from '@angular/core';
+import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { StoresModule, InnovationService } from '@modules/stores';
+import { StoresModule } from '@modules/stores';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
 
 import { InnovationAssessmentEditComponent } from './assessment-edit.component';
 
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
-import { FormEngineComponent } from '@modules/shared/forms';
 
 
 describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEditComponent', () => {
 
   let activatedRoute: ActivatedRoute;
-
-  // let innovationService: InnovationService;
 
   let component: InnovationAssessmentEditComponent;
   let fixture: ComponentFixture<InnovationAssessmentEditComponent>;
@@ -171,4 +168,5 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
     expect(component.summaryAlert).toEqual(expected);
 
   });
+
 });

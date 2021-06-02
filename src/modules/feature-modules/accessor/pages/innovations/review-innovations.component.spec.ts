@@ -59,7 +59,6 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     const expected = dataMock.data;
 
-
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -150,7 +150,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
       }
     );
 
-    data.subgroups.forEach((subgroup, i) => {
+    data.subgroups?.forEach((subgroup, i) => {
       toReturn.push({
         label: `Group ${subgroup.name} care pathway`,
         value: carePathwayItems.find(item => item.value === subgroup.carePathway)?.label,

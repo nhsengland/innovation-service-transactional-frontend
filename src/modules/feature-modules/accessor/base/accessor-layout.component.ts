@@ -46,7 +46,7 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
     };
 
     if (this.stores.authentication.isQualifyingAccessorRole()) {
-      this.navigationMenuBar.rightItems.splice(0, 0, { title: 'Review innovations', link: '/accessor/review-innovations' });
+      this.navigationMenuBar.rightItems.splice(0, 0, { title: 'Review innovations', link: '/accessor/innovations' });
     }
 
   }
