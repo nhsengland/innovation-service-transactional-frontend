@@ -140,7 +140,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
       editStepNumber: 2
     });
 
-    data.subgroups.forEach((item, i) => {
+    data.subgroups?.forEach((item, i) => {
       toReturn.push({ label: `Group ${item.name} condition`, value: item.conditions, editStepNumber: toReturn.length + 1 });
     });
 

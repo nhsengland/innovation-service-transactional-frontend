@@ -162,7 +162,7 @@ function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
 
     toReturn.push({
       label: stepsLabels.l2,
-      value: data.userTests.map(item => item.kind).join('<br />'),
+      value: data.userTests?.map(item => item.kind).join('<br />'),
       editStepNumber: 2
     });
 

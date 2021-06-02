@@ -51,7 +51,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     if (this.stores.authentication.isQualifyingAccessorRole()) {
       this.cardsList.splice(0, 0, {
         title: 'Review innovations',
-        link: '/accessor/review-innovations',
+        link: '/accessor/innovations',
         description: 'Find, review and assign a status to all incoming innovations for your organisation'
       });
     }

@@ -36,7 +36,6 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'sectionUpdateSuccess':
         this.summaryAlert = {

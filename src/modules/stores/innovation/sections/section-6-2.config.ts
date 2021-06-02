@@ -129,7 +129,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   if (!['NO'].includes(data.hasCostCareKnowledge || 'NO')) {
 
-    data.subgroups.forEach(subgroup => {
+    data.subgroups?.forEach(subgroup => {
       toReturn.push({
         label: `Group ${subgroup.name} innovation cost`,
         value: costComparisonItems.find(item => item.value === subgroup.costComparison)?.label,

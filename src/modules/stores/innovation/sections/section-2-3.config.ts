@@ -68,7 +68,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
     editStepNumber: 1
   });
 
-  data.evidence.forEach((item, i) => {
+  (data.evidence || []).forEach((item, i) => {
     toReturn.push({
       label: `Evidence ${i + 1}`,
       value: item.description || clinicalEvidenceItems.find(e => e.value === item.clinicalEvidenceType)?.label,

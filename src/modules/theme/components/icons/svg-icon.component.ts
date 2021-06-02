@@ -6,6 +6,6 @@ import { Component, Input } from '@angular/core';
 })
 export class SvgIconComponent {
 
-  @Input() type: '' | 'action' | 'success' | 'error' | 'edit' = '';
+  @Input() type: '' | 'action' | 'success' | 'error' | 'edit' | 'back' = '';
 
 }

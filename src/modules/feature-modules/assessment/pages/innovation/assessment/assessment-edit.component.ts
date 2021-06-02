@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineParameterModel } from '@modules/shared/forms';
-import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/feature-modules/assessment/config/constants.config';
+import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { OrganisationsService } from '@shared-module/services/organisations.service';
 
