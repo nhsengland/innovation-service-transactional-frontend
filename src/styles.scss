@@ -59,12 +59,10 @@ $service-manual-container-size: 1100px; // Container width variable.
   background-color: var(--white);
 }
 
-.border-color-success {
-  border-color: var(--success-color);
-}
-.border-color-warning {
-  border-color: var(--warning-color);
-}
+.border-bottom-0 { border-bottom: 0; }
+
+.border-color-success { border-color: var(--success-color); }
+.border-color-warning { border-color: var(--warning-color); }
 
 // Container and layout classes.
 .app-width-container,
@@ -117,6 +115,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 // Components.
 .nhsuk-card {
+
   .nhsuk-card__content {
     &.x-card-bottom-link {
       height: 100%;
@@ -127,6 +126,12 @@ $service-manual-container-size: 1100px; // Container width variable.
         margin-top: auto;
       }
     }
+  }
+
+  &.nhsuk-card.app-card--transparent {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.2);
+    color: #fff;
   }
 
   &.x-card-top-border {
@@ -140,6 +145,16 @@ $service-manual-container-size: 1100px; // Container width variable.
 
   }
 }
+
+
+.dot-error {
+  height: 15px;
+  width: 15px;
+  background-color: var(--error-color);
+  border-radius: 50%;
+  display: inline-block;
+}
+
 
 .progressbar {
   display: flex;

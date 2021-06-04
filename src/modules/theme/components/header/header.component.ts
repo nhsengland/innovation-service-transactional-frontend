@@ -7,7 +7,8 @@ import { EnvironmentStore } from '@modules/core/stores/environment.store';
 
 @Component({
   selector: 'theme-header',
-  templateUrl: './header.component.html'
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
@@ -16,6 +17,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   showHeroSection = false;
+  aacImage: string;
   authenticationButton: { title: string, url: string };
 
   constructor(
@@ -23,6 +25,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private environmentStore: EnvironmentStore
   ) {
 
+    this.aacImage = `${this.environmentStore.APP_ASSETS_URL}/images/nhs-aac-logo.png`;
     this.authenticationButton = { title: 'My dashboard', url: `${this.environmentStore.APP_URL}/dashboard` };
 
     this.subscriptions.push(

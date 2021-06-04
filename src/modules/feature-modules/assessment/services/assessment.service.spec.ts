@@ -49,12 +49,12 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
       count: 2,
       data: [
         {
-          id: '01', name: 'Innovation 01', countryName: 'England', postCode: 'SW01', mainCategory: 'Medical', submittedAt: '',
+          id: '01', name: 'Innovation 01', countryName: 'England', postCode: 'SW01', mainCategory: 'MEDICAL_DEVICE', submittedAt: '2020-01-01T00:00:00.000Z',
           assessment: { createdAt: '2021-04-16T09:23:49.396Z', assignTo: 'User Name', finishedAt: '2021-04-16T09:23:49.396' },
           organisations: ['Org. 01']
         },
         {
-          id: '02', name: 'Innovation 02', countryName: 'England', postCode: 'SW01', mainCategory: 'Medical', submittedAt: '',
+          id: '02', name: 'Innovation 02', countryName: 'England', postCode: 'SW01', mainCategory: 'MEDICAL_DEVICE', submittedAt: '2020-01-01T00:00:00.000Z',
           assessment: { createdAt: '2021-04-16T09:23:49.396Z', assignTo: 'User Name', finishedAt: '2021-04-16T09:23:49.396' },
           organisations: ['Org. 01']
         }
@@ -62,7 +62,23 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     };
     const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({ status: ['ASSESSMENT'] });
 
-    const expected = responseMock;
+    const expected = {
+      count: 2,
+      data: [
+        {
+          id: '01', name: 'Innovation 01', countryName: 'England', postCode: 'SW01', mainCategory: 'Medical device', submittedAt: '2020-01-01T00:00:00.000Z',
+          assessment: { createdAt: '2021-04-16T09:23:49.396Z', assignTo: 'User Name', finishedAt: '2021-04-16T09:23:49.396' },
+          organisations: ['Org. 01'],
+          isOverdue: true
+        },
+        {
+          id: '02', name: 'Innovation 02', countryName: 'England', postCode: 'SW01', mainCategory: 'Medical device', submittedAt: '2020-01-01T00:00:00.000Z',
+          assessment: { createdAt: '2021-04-16T09:23:49.396Z', assignTo: 'User Name', finishedAt: '2021-04-16T09:23:49.396' },
+          organisations: ['Org. 01'],
+          isOverdue: true
+        }
+      ]
+    };
     let response: any = null;
 
     service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
