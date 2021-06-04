@@ -134,18 +134,18 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       return;
     }
 
-    if (action === 'continue') {
-      this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
-      return;
-    }
-
     this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (action === 'submit'), this.currentAnswers).subscribe(
       () => {
-
-        if (action === 'submit') {
-          this.redirectTo(`/assessment/innovations/${this.innovationId}/overview`);
+        switch (action) {
+          case 'continue':
+            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
+            break;
+          case 'submit':
+            this.redirectTo(`/assessment/innovations/${this.innovationId}/overview`);
+            break;
+          default:
+            break;
         }
-
       },
       () => {
         this.summaryAlert = {

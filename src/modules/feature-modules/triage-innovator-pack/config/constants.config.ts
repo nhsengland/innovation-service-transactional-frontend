@@ -58,18 +58,6 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
   new FormEngineModel({
     label: 'Have you identified what problem the innovation will tackle (also known as \'value proposition\')?',
     description: 'This is a simple statement that summarises your innovation, shows how it\'s different and documents the value that it brings to the customer.',
-    details: {
-      title: 'What do we mean by this?',
-      content: `<p>This is an expandable explanation of what is meant by value proposition.</p>
-      <p>May have lists of items like the one below:</p>
-      <ul>
-        <li>prescriptions</li>
-        <li>test results</li>
-        <li>hospital referral letters</li>
-        <li>appointment letters</li>
-      </ul>
-      <p>TODO: review this text!.</p>`
-    },
     parameters: [
       {
         id: 'hasProblemTackleKnowledge',
@@ -159,7 +147,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
   // Question 08
   new FormEngineModel({
     label: 'Have you achieved all relevant certifications?',
-    description: 'There are different regulations for different types of innovations. For example, different types of medical devices need different levels of CE and/or UKCA certification.',
+    description: 'There are different certifications for different types of innovations. For example, different types of medical devices need different levels of CE and/or UKCA certification.',
     parameters: [
       {
         id: 'hasRelevanteCertifications',

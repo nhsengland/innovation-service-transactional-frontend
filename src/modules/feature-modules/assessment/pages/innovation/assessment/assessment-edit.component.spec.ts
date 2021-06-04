@@ -118,6 +118,8 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
     activatedRoute.snapshot.params = { innovationId: 'Inno01', assessmentId: 'Assess01', stepId: 1 };
     const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
+    assessmentService.updateInnovationNeedsAssessment = () => of({ id: 'Assess01' });
+
     fixture = TestBed.createComponent(InnovationAssessmentEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
