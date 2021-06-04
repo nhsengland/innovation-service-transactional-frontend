@@ -78,12 +78,12 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
         this.innovatorSummary = [
           {
             label: NEEDS_ASSESSMENT_QUESTIONS.innovator[0].label,
-            value: yesPartiallyNoItems.find(item => item.value === response.assessment.hasProposition)?.label || '',
+            value: maturityLevelItems.find(item => item.value === response.assessment.hasProposition)?.label || '',
             comment: response.assessment.hasPropositionComment || ''
           },
           {
             label: NEEDS_ASSESSMENT_QUESTIONS.innovator[1].label,
-            value: yesPartiallyNoItems.find(item => item.value === response.assessment.hasCompetitionKnowledge)?.label || '',
+            value: maturityLevelItems.find(item => item.value === response.assessment.hasCompetitionKnowledge)?.label || '',
             comment: response.assessment.hasCompetitionKnowledgeComment || ''
           },
           {
