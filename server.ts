@@ -41,8 +41,10 @@ const OAUTH_CONFIGURATION: {
   signinRedirectUrl: string;
   signupRedirectUrl: string;
   signoutRedirectUrl: string;
+  changePwRedirectUrl: string,
   signinPolicy: string;
   signupPolicy: string;
+  changePwPolicy: string;
   allowHttpForRedirectUrl: boolean;
   scope: string[];
   responseType: 'code' | 'code id_token' | 'id_token code' | 'id_token',
@@ -55,8 +57,10 @@ const OAUTH_CONFIGURATION: {
   signinRedirectUrl: process.env.OAUTH_REDIRECT_URL_SIGNIN || '',
   signupRedirectUrl: process.env.OAUTH_REDIRECT_URL_SIGNUP || '',
   signoutRedirectUrl: process.env.OAUTH_REDIRECT_URL_SIGNOUT || '',
+  changePwRedirectUrl: process.env.OAUTH_REDIRECT_URL_CHANGE_PW || '',
   signinPolicy: process.env.OAUTH_SIGNIN_POLICY || '',
   signupPolicy: process.env.OAUTH_SIGNUP_POLICY || '',
+  changePwPolicy: process.env.OAUTH_CHANGE_PW_POLICY || '',
   allowHttpForRedirectUrl: !!process.env.OAUTH_ALLOW_HTTP_REDIRECT,
   scope: process.env.OAUTH_SCOPE?.split(' ') || [],
   responseType: 'code id_token',
@@ -242,6 +246,7 @@ export function app(): express.Express {
   server.post(`${BASE_PATH}/signin/callback`, (req, res) => {
     res.redirect(`${BASE_PATH}/dashboard`);
   });
+
   server.get(`${BASE_PATH}/signout`, (req, res) => {
 
     const user: IProfile = req.user || {};
@@ -259,6 +264,15 @@ export function app(): express.Express {
 
     });
 
+  });
+
+  // Change password endpoint - AD OpenIdConnect
+  server.get(`${BASE_PATH}/change-password`, (req, res) => {
+    const azChangePwUri = `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&prompt=login`
+      + `&p=${OAUTH_CONFIGURATION.changePwPolicy}` // add policy information
+      + `&client_id=${OAUTH_CONFIGURATION.clientID}` // add client id
+      + `&redirect_uri=${encodeURIComponent(OAUTH_CONFIGURATION.changePwRedirectUrl)}`; // add redirect uri
+    res.redirect(azChangePwUri);
   });
 
   // create survey endpoint
