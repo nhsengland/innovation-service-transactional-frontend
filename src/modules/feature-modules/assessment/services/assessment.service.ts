@@ -4,12 +4,13 @@ import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 
-import { MappedObject, UrlModel } from '@modules/core';
+import { DatesHelper, MappedObject, UrlModel } from '@modules/core';
 
 import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 
-export type getInnovationsListEndpointDTO = {
+export type getInnovationsListEndpointInDTO = {
   count: number;
   data: {
     id: string;
@@ -17,6 +18,7 @@ export type getInnovationsListEndpointDTO = {
     countryName: string;
     postCode: string;
     mainCategory: string;
+    otherMainCategoryDescription: string;
     submittedAt: string; // "2021-04-16T09:23:49.396Z",
     assessment: {
       createdAt: string; // "2021-04-16T09:23:49.396Z",
@@ -25,6 +27,10 @@ export type getInnovationsListEndpointDTO = {
     };
     organisations: string[];
   }[];
+};
+export type getInnovationsListEndpointOutDTO = {
+  count: number;
+  data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription'> & { isOverdue: boolean })[]
 };
 
 export type getInnovationInfoEndpointDTO = {
@@ -75,7 +81,6 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
   assignToName: string;
   finishedAt: null | string;
 };
-
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
   assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'assignToName' | 'finishedAt' | 'organisations'> & { organisations: string[] }
@@ -87,14 +92,31 @@ export class AssessmentService extends CoreService {
 
   constructor() { super(); }
 
-  getInnovationsList(queryParams: { filters?: { status: string[] }, take: number, skip: number }): Observable<getInnovationsListEndpointDTO> {
+  getInnovationsList(queryParams: { filters?: { status: string[] }, take: number, skip: number }): Observable<getInnovationsListEndpointOutDTO> {
 
     const qp = { take: queryParams.take, skip: queryParams.skip, status: queryParams.filters?.status || [] };
 
     const url = new UrlModel(this.API_URL).addPath('/assessments/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);
-    return this.http.get<getInnovationsListEndpointDTO>(url.buildUrl()).pipe(
+    return this.http.get<getInnovationsListEndpointInDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => response)
+      map(response => ({
+        count: response.count,
+        data: response.data.map(item => ({
+          id: item.id,
+          name: item.name,
+          countryName: item.countryName,
+          postCode: item.postCode,
+          mainCategory: item.otherMainCategoryDescription || mainCategoryItems.find(i => i.value === item.mainCategory)?.label || '',
+          submittedAt: item.submittedAt,
+          assessment: {
+            createdAt: item.assessment.createdAt,
+            assignTo: item.assessment.assignTo,
+            finishedAt: item.assessment.finishedAt,
+          },
+          organisations: item.organisations,
+          isOverdue: DatesHelper.dateDiff(item.submittedAt, Date()) >= 7
+        }))
+      }))
     );
 
   }

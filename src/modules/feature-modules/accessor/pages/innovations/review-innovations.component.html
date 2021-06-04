@@ -19,7 +19,8 @@
         <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
           <td class="nhsuk-table__cell">
             <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }} </span>
-            <a routerLink="/accessor/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}">{{ item.name }}</a>
+            <a *ngIf="item.assessment?.id" routerLink="/accessor/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}">{{ item.name }}</a>
+            <span *ngIf="!item.assessment?.id">{{ item.name }}</span>
           </td>
           <td class="nhsuk-table__cell">
             <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('createdAt') }} </span>

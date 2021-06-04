@@ -15,7 +15,7 @@
       <fieldset class="nhsuk-fieldset">
 
         <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">{{ currentStep.label }}</legend>
-        <div *ngIf="currentStep.description" class="nhsuk-hint" [innerHTML]="currentStep.description"></div>
+        <div *ngIf="currentStep.description" class="nhsuk-hint nhsuk-u-margin-bottom-0" [innerHTML]="currentStep.description"></div>
         <ng-container *ngIf="currentStep.details">
           <details class="nhsuk-details">
             <summary class="nhsuk-details__summary">

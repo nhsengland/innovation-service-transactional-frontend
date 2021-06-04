@@ -6,7 +6,7 @@ describe(`'utils.helper' suite`, () => {
   });
 
   it(`should return 'false' when object has at least 'one attribute'`, () => {
-    expect(UtilsHelper.isEmpty({prop: 1})).toBe(false);
+    expect(UtilsHelper.isEmpty({ prop: 1 })).toBe(false);
   });
 
   it(`should return 'true when object is 'undefined'`, () => {
@@ -26,6 +26,7 @@ describe(`'utils.helper' suite`, () => {
   });
 
   it(`should return 'false' when an 'Array with objects' is passed in`, () => {
-    expect(UtilsHelper.isEmpty([{prop: 1}])).toBe(false);
+    expect(UtilsHelper.isEmpty([{ prop: 1 }])).toBe(false);
   });
+
 });

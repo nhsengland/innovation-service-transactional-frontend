@@ -46,14 +46,16 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
         this.innovation = response.innovation;
         this.assessment = response.assessment;
 
+        const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === response.assessment.maturityLevel) || 0) + 1;
+
         this.innovationSummary = [
           {
             label: NEEDS_ASSESSMENT_QUESTIONS.innovation[1].label,
-            value: `${maturityLevelItems.findIndex(item => item.value === response.assessment.maturityLevel) + 1} / ${maturityLevelItems.length}`,
+            value: `${maturityLevelIndex} / ${maturityLevelItems.length}`,
             comment: `<ul class="progressbar nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1">
-            <li class="progressbar-item active" style="width: 10%"></li>
-            <li class="progressbar-item active" style="width: 10%"></li>
-            <li class="progressbar-item" style="width: 10%"></li>
+            <li class="progressbar-item${maturityLevelIndex >= 1 ? ' active' : ''}" style="width: 10%"></li>
+            <li class="progressbar-item${maturityLevelIndex >= 2 ? ' active' : ''}" style="width: 10%"></li>
+            <li class="progressbar-item${maturityLevelIndex === 3 ? ' active' : ''}" style="width: 10%"></li>
           </ul>${maturityLevelItems.find(item => item.value === response.assessment.maturityLevel)?.label}`
           },
           {

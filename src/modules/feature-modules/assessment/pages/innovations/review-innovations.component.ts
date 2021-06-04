@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-import { AssessmentService, getInnovationsListEndpointDTO } from '../../services/assessment.service';
+import { AssessmentService, getInnovationsListEndpointOutDTO } from '../../services/assessment.service';
 
 @Component({
   selector: 'app-assessment-pages-review-innovations',
@@ -13,9 +13,9 @@ import { AssessmentService, getInnovationsListEndpointDTO } from '../../services
 export class ReviewInnovationsComponent extends CoreComponent implements OnInit {
 
   tabs: { title: string, description: string, link: string, queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' | 'NEEDS_ASSESSMENT' | 'IN_PROGRESS' } }[] = [];
-  currentTab: { status: string, description: string };
+  currentTab: { status: string, description: string, innovationsOverdue: number };
 
-  innovationsList: TableModel<(getInnovationsListEndpointDTO['data'][0])>;
+  innovationsList: TableModel<(getInnovationsListEndpointOutDTO['data'][0])>;
 
   innovationStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
@@ -47,7 +47,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
       }
     ];
 
-    this.currentTab = { status: '', description: '' };
+    this.currentTab = { status: '', description: '', innovationsOverdue: 0 };
 
     this.innovationsList = new TableModel({});
 
@@ -65,7 +65,8 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
         this.currentTab = {
           status: queryParams.status,
-          description: this.tabs.find(tab => tab.queryParams.status === queryParams.status)?.description || this.tabs[0].description
+          description: this.tabs.find(tab => tab.queryParams.status === queryParams.status)?.description || this.tabs[0].description,
+          innovationsOverdue: 0
         };
 
         this.innovationsList.setData([]).setFilters({ status: [this.currentTab.status] });
@@ -111,7 +112,10 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   getInnovationsList(): void {
 
     this.assessmentService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(
-      response => this.innovationsList.setData(response.data, response.count),
+      response => {
+        this.innovationsList.setData(response.data, response.count);
+        this.currentTab.innovationsOverdue = response.data.filter(item => item.isOverdue).length;
+      },
       error => this.logger.error(error)
     );
 

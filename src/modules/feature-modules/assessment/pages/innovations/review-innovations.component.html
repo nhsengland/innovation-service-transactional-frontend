@@ -16,7 +16,11 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
 
-        <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{innovationsList.getTotalRowsNumber() }} innovations</p>
+        <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">{{innovationsList.getTotalRowsNumber() }} innovations</p>
+        <p *ngIf="currentTab.innovationsOverdue > 0" class="nhsuk-body-s nhsuk-u-margin-bottom-2 d-flex align-items-center">
+          <span class="dot-error nhsuk-u-margin-right-2"></span>
+          <span>{{ currentTab.innovationsOverdue }} are overdue</span>
+        </p>
         <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
         <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Innovations list">
@@ -35,9 +39,10 @@
                 <a routerLink="/assessment/innovations/{{ item.id }}">{{ item.name }}</a>
               </td>
 
-              <td *ngIf="innovationsList.getColumnLabel('submittedAt')" class="nhsuk-table__cell">
+              <td *ngIf="innovationsList.getColumnLabel('submittedAt')" class="nhsuk-table__cell d-flex align-items-center">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('submittedAt') }}</span>
-                {{ item.submittedAt | date: ('app.date_formats.long_date' | translate) }}
+                <span>{{ item.submittedAt | date: ('app.date_formats.long_date' | translate) }}</span>
+                <span *ngIf="item.isOverdue" class="dot-error nhsuk-u-margin-left-2"></span>
               </td>
               <td *ngIf="innovationsList.getColumnLabel('location')" class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('location') }}</span>

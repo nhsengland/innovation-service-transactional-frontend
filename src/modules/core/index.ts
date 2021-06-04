@@ -22,3 +22,4 @@ export { UrlModel } from './models/url.model';
 // Helpers
 export { RandomGeneratorHelper } from './helpers/random-generator.helper';
 export { RoutingHelper } from './helpers/routing.helper';
+export { DatesHelper } from './helpers/dates.helper';
