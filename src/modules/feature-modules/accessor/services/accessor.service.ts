@@ -22,6 +22,29 @@ export type getInnovationsListEndpointDTO = {
   }[];
 };
 
+export type getInnovationInfoEndpointDTO = {
+  summary: {
+    id: string;
+    name: string;
+    status: keyof typeof INNOVATION_STATUS;
+    description: string;
+    company: string;
+    countryName: string;
+    postCode: string;
+    categories: string[];
+    otherCategoryDescription: string;
+  };
+  contact: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+  assessment?: {
+    id: string;
+    assignToName: string;
+  };
+};
+
 type getInnovationNeedsAssessmentEndpointInDTO = {
   id: string;
   innovation: { id: string; name: string; };
@@ -45,11 +68,13 @@ type getInnovationNeedsAssessmentEndpointInDTO = {
   organisations: { id: string; name: string; acronym: null | string; }[];
   assignToName: string;
   finishedAt: null | string;
+  support: { id: null | string; }
 };
 
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
-  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'organisations'> & { organisations: string[] }
+  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'organisations' | 'support'> & { organisations: string[] },
+  support: getInnovationNeedsAssessmentEndpointInDTO['support']
 };
 
 
@@ -68,6 +93,15 @@ export class AccessorService extends CoreService {
 
   }
 
+  getInnovationInfo(innovationId: string): Observable<getInnovationInfoEndpointDTO> {
+
+    const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
 
   getInnovationNeedsAssessment(innovationId: string, assessmentId: string): Observable<getInnovationNeedsAssessmentEndpointOutDTO> {
 
@@ -97,7 +131,8 @@ export class AccessorService extends CoreService {
           organisations: response.organisations.map(item => item.name),
           assignToName: response.assignToName,
           finishedAt: response.finishedAt,
-        }
+        },
+        support: response.support
       })
       )
     );

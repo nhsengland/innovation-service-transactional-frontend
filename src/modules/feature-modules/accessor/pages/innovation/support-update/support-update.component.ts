@@ -68,6 +68,9 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   ngOnInit(): void {
 
 
+    this.form.get('status')?.setValue('WAITING'); // <<<<<<<<---------------------------------
+
+
     if (this.supportId) {
 
       this.accessorService.getInnovationSupportInfo(this.innovationId, this.supportId).subscribe(

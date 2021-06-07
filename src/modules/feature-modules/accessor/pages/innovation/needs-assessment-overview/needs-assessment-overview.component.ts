@@ -21,6 +21,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
   innovation: getInnovationNeedsAssessmentEndpointOutDTO['innovation'] | undefined;
   assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
+  support: getInnovationNeedsAssessmentEndpointOutDTO['support'] | undefined;
 
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
@@ -45,6 +46,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
         this.innovation = response.innovation;
         this.assessment = response.assessment;
+        this.support = response.support;
 
         const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === response.assessment.maturityLevel) || 0) + 1;
 

@@ -1,9 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd } from '@angular/router';
+import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
+import { RoutingHelper } from '@modules/core';
+
+
+type RouteDataLayoutOptionsType = {
+  type: null | 'innovationLeftAsideMenu' | 'emptyLeftAside';
+  backLink?: null | { url: string, label: string };
+};
 
 @Component({
   selector: 'app-accessor-layout',
@@ -11,26 +18,21 @@ import { CoreComponent } from '@app/base';
 })
 export class AccessorLayoutComponent extends CoreComponent implements OnInit {
 
+  layoutOptions: RouteDataLayoutOptionsType = { type: null };
+
   navigationMenuBar: {
     leftItems: { title: string, link: string, fullReload?: boolean }[],
     rightItems: { title: string, link: string, fullReload?: boolean }[]
   } = { leftItems: [], rightItems: [] };
 
+  leftSideBar: { title: string, link: string }[] = [];
 
-  constructor() {
+
+  constructor(
+    private activatedRoute: ActivatedRoute
+  ) {
 
     super();
-
-    this.subscriptions.push(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
-    );
-
-  }
-
-  ngOnInit(): void { }
-
-
-  private onRouteChange(event: NavigationEnd): void {
 
     this.navigationMenuBar = {
       leftItems: [
@@ -48,6 +50,45 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
     if (this.stores.authentication.isQualifyingAccessorRole()) {
       this.navigationMenuBar.rightItems.splice(0, 0, { title: 'Review innovations', link: '/accessor/innovations' });
     }
+
+    this.subscriptions.push(
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
+    );
+
+  }
+
+  ngOnInit(): void { }
+
+
+  private onRouteChange(event: NavigationEnd): void {
+
+    const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
+    const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
+
+    this.layoutOptions = {
+      type: routeData.type || null,
+      backLink: routeData.backLink ? { url: RoutingHelper.resolveUrl(routeData.backLink.url, this.activatedRoute), label: routeData.backLink.label } : null
+    };
+
+
+    switch (this.layoutOptions.type) {
+
+      case 'innovationLeftAsideMenu':
+        this.leftSideBar = [
+          { title: 'Overview', link: `/accessor/innovations/${currentRouteInnovationId}/overview` },
+          { title: 'Innovation record', link: `/accessor/innovations/${currentRouteInnovationId}/record` },
+          { title: 'Action tracker', link: `/accessor/innovations/${currentRouteInnovationId}/action-tracker` },
+          { title: 'Comments', link: `/accessor/innovations/${currentRouteInnovationId}/comments` },
+          { title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support` }
+        ];
+        break;
+
+      case 'emptyLeftAside':
+      default:
+        this.leftSideBar = [];
+        break;
+    }
+
 
   }
 

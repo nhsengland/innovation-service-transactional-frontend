@@ -9,6 +9,7 @@ import { AccessorLayoutComponent } from './base/accessor-layout.component';
 // Pages.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
+import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
 import { InnovationSupportUpdateComponent } from './pages/innovation/support-update/support-update.component';
 
@@ -29,6 +30,7 @@ import { AccessorService } from './services/accessor.service';
     // Pages.
     DashboardComponent,
     ReviewInnovationsComponent,
+    InnovationOverviewComponent,
     InnovationNeedsAssessmentOverviewComponent,
     InnovationSupportUpdateComponent
   ],
