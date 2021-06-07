@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -100,6 +100,23 @@ export class AccessorService extends CoreService {
         }
       })
       )
+    );
+
+  }
+
+
+  getInnovationSupportInfo(innovationId: string, supportId: string): Observable<{ status: string, accessors: string[], comment: string }> {
+
+    return of({
+      status: 'UNNASSIGNED',
+      accessors: [],
+      comment: 'so para teste'
+    });
+
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/support/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
+    return this.http.get<{ status: string, accessors: string[], comment: string }>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
     );
 
   }

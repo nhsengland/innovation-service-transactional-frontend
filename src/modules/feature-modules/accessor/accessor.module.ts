@@ -10,6 +10,7 @@ import { AccessorLayoutComponent } from './base/accessor-layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
 import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
+import { InnovationSupportUpdateComponent } from './pages/innovation/support-update/support-update.component';
 
 // Services.
 import { AccessorService } from './services/accessor.service';
@@ -28,7 +29,8 @@ import { AccessorService } from './services/accessor.service';
     // Pages.
     DashboardComponent,
     ReviewInnovationsComponent,
-    InnovationNeedsAssessmentOverviewComponent
+    InnovationNeedsAssessmentOverviewComponent,
+    InnovationSupportUpdateComponent
   ],
   providers: [
     AccessorService

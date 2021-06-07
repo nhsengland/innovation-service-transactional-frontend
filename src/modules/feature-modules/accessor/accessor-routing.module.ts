@@ -7,6 +7,7 @@ import { AccessorLayoutComponent } from './base/accessor-layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
 import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
+import { InnovationSupportUpdateComponent } from './pages/innovation/support-update/support-update.component';
 
 
 const routes: Routes = [
@@ -37,6 +38,10 @@ const routes: Routes = [
             children: [
               {
                 path: 'assessments/:assessmentId', pathMatch: 'full', component: InnovationNeedsAssessmentOverviewComponent,
+                // data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Go back' } } }
+              },
+              {
+                path: 'support/:supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent,
                 // data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Go back' } } }
               }
             ]

@@ -28,14 +28,14 @@ export const INNOVATION_STATUS = {
 };
 
 export const INNOVATION_SUPPORT_STATUS = {
-  UNNASSIGNED: { label: 'Unassigned', cssClass: 'nhsuk-tag--red' },
-  FURTHER_INFO_REQUIRED: { label: 'Further info', cssClass: 'nhsuk-tag--yellow' },
-  WAITING: { label: 'Waiting', cssClass: 'nhsuk-tag--grey' },
-  NOT_YET: { label: 'Waiting', cssClass: 'nhsuk-tag--grey' },
-  ENGAGING: { label: 'Engaging', cssClass: 'nhsuk-tag--green' },
-  UNSUITABLE: { label: 'Waiting', cssClass: 'nhsuk-tag--grey' },
-  WITHDRAWN: { label: 'Waiting', cssClass: 'nhsuk-tag--grey' },
-  COMPLETE: { label: 'Waiting', cssClass: 'nhsuk-tag--grey' },
+  UNNASSIGNED: { label: 'Unassigned', cssClass: 'nhsuk-tag--red', description: '1' },
+  FURTHER_INFO_REQUIRED: { label: 'Further info', cssClass: 'nhsuk-tag--yellow', description: '2' },
+  WAITING: { label: 'Waiting', cssClass: 'nhsuk-tag--grey', description: '3' },
+  NOT_YET: { label: 'Waiting', cssClass: 'nhsuk-tag--grey', description: '4' },
+  ENGAGING: { label: 'Engaging', cssClass: 'nhsuk-tag--green', description: '5' },
+  UNSUITABLE: { label: 'Waiting', cssClass: 'nhsuk-tag--grey', description: '6' },
+  WITHDRAWN: { label: 'Waiting', cssClass: 'nhsuk-tag--grey', description: '7' },
+  COMPLETE: { label: 'Waiting', cssClass: 'nhsuk-tag--grey', description: '8' },
 };
 
 export const INNOVATION_SECTION_STATUS = {
