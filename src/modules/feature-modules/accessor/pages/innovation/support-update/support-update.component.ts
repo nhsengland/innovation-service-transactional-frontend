@@ -1,4 +1,3 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent, FormArray, FormControl, FormGroup, Validators } from '@app/base';
@@ -16,13 +15,15 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   stepNumber: number;
   accessorList: any[];
   selectedAccessors: any[];
+  organisationUnit: string | undefined;
 
   supportStatusObj = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   supportStatus = Object.entries(this.supportStatusObj).map(([key, item]) => ({
     key,
     checked: false,
     ...item
-  }));
+  })).filter(x => !x.hidden);
+
 
   currentStatus: { label: string, cssClass: string, description: string };
 
@@ -41,6 +42,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   summaryAlert: { type: '' | 'error' | 'warning', title: string, message: string };
 
   accessorsArrayName = 'accessors';
+  commentField = 'comment';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -64,6 +66,11 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     this.selectedAccessors = [];
 
     this.currentStatus = { label: '', cssClass: '', description: '' };
+    this.organisationUnit = this.stores.authentication.getUserInfo().organisations?.[0].organisationUnits?.[0].name;
+
+    /** MOCK */
+    this.organisationUnit = 'South West AHSN';
+    /*/MOCK*/
   }
 
 
@@ -75,12 +82,12 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         response => {
           this.formSupportObj = response;
           this.form.get('status')?.setValue(response.status);
-          response.accessors.map((accessor)=> {
+          response.accessors.map((accessor) => {
             ( this.form.get('accessors') as FormArray).push(
               new FormControl(accessor.id)
-            )
+            );
           });
-          
+
         },
         error => {
           this.logger.error(error);
@@ -92,7 +99,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       response => {
         this.accessorList = response;
       }
-    )
+    );
+
   }
 
 
@@ -116,7 +124,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.formSupportObj = {...this.form.value};
     console.log(this.formSupportObj);
   }

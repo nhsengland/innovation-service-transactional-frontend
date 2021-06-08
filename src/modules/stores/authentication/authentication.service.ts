@@ -12,9 +12,18 @@ import { LoggerService, Severity } from '@modules/core/services/logger.service';
 type getUserInfoDto = {
   id: string;
   displayName: string;
-  type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
-  organisations: { id: string, name: string, role: 'OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR' }[];
+  type: '' | 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
+  organisations: {
+      id: string,
+      name: string,
+      role: 'OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR',
+      organisationUnits?: {
+        id: string,
+        name: string,
+      }[],
+    }[];
 };
+
 
 type getUserInnovationsDto = {
   id: string;

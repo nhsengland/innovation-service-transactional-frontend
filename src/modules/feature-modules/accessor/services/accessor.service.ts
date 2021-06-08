@@ -183,7 +183,7 @@ export class AccessorService extends CoreService {
     return of({
       status: 'ENGAGING',
       accessors: [
-        {id: 'def', name:'Accessor 2'},
+        {id: 'def', name: 'Accessor 2'},
       ],
     });
 
@@ -206,7 +206,7 @@ export class AccessorService extends CoreService {
       { value: 'def', label: 'Accessor 2' },
       { value: 'ghi', label: 'Accessor 3' },
     ]);
-    
+
   }
 
 }
