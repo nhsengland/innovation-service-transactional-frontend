@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 
 import { CoreModule } from '@modules/core';
 import { AuthenticationStore, AuthenticationService } from '@modules/stores';
@@ -64,7 +64,7 @@ describe('Stores/Innovation/InnovationStore', () => {
     ];
     let response: any = null;
 
-    innovationStore.getSectionsSummary$('innovationId').subscribe(success => response = success, error => response = error);
+    innovationStore.getSectionsSummary$('innovator', 'innovationId').subscribe(success => response = success, error => response = error);
 
     // expect(response).toEqual(expectedResponse);
     expect(true).toBe(true); // TODO: Review this test!

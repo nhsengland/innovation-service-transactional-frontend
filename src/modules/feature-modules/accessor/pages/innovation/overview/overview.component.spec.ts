@@ -7,16 +7,16 @@ import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
+import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { InnovationOverviewComponent } from './overview.component';
 
-import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
+import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 
 
-describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () => {
+describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () => {
 
-  let assessmentService: AssessmentService;
+  let accessorService: AccessorService;
 
   let component: InnovationOverviewComponent;
   let fixture: ComponentFixture<InnovationOverviewComponent>;
@@ -28,13 +28,13 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        AssessmentModule
+        AccessorModule
       ]
-    }).compileComponents();
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
-    assessmentService = TestBed.inject(AssessmentService);
+    accessorService = TestBed.inject(AccessorService);
 
   });
 
@@ -54,9 +54,10 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
     const dataMock = {
       summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: null, categories: ['Medical'], otherCategoryDescription: '' },
       contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' }
+      assessment: { id: '01', assignToName: 'Name' },
+      support: { id: '01', status: 'WAITING', accessors: [{ id: 'IdOne', name: 'Brigid Kosgei' }, { id: 'IdTwo', name: 'Brigid Kosgei the second' }] }
     };
-    assessmentService.getInnovationInfo = () => of(dataMock as any);
+    accessorService.getInnovationInfo = () => of(dataMock as any);
     const expected = dataMock;
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
@@ -73,7 +74,7 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
       contact: { name: 'A name', email: 'email', phone: '' },
       assessment: { id: '01', assignToName: 'Name' }
     };
-    assessmentService.getInnovationInfo = () => of(dataMock as any);
+    accessorService.getInnovationInfo = () => of(dataMock as any);
     const expected = dataMock;
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
@@ -85,7 +86,7 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
 
   it('should NOT have innovation information loaded', () => {
 
-    assessmentService.getInnovationInfo = () => throwError('error');
+    accessorService.getInnovationInfo = () => throwError('error');
     const expected = [];
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);

@@ -12,6 +12,7 @@ import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovati
 })
 export class PageInnovationRecordComponent extends CoreComponent implements OnInit {
 
+  module: '' | 'innovator' | 'accessor' = '';
   baseUrl = '';
   documentUrl = '';
 
@@ -51,7 +52,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
     super();
 
-    this.baseUrl = `/${this.activatedRoute.snapshot.data.module}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
+    this.module = this.activatedRoute.snapshot.data.module;
+    this.baseUrl = `/${this.module}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
     this.documentUrl = `${this.stores.environment.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
@@ -60,7 +62,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe(
+    this.stores.innovation.getSectionsSummary$(this.module, this.activatedRoute.snapshot.params.innovationId).subscribe(
       response => {
 
         this.innovationStatus = response.innovation.status;

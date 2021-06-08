@@ -48,4 +48,52 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportInfoComponent', ()
 
   });
 
+
+  it('should have innovation information loaded with payload 01', () => {
+
+    const dataMock = {
+      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: null, categories: ['Medical'], otherCategoryDescription: '' },
+      contact: { name: 'A name', email: 'email', phone: '' },
+      assessment: { id: '01', assignToName: 'Name' },
+      support: { id: '01', status: 'WAITING', accessors: [{ id: 'IdOne', name: 'Brigid Kosgei' }] }
+    };
+    accessorService.getInnovationInfo = () => of(dataMock as any);
+    const expected = dataMock;
+
+    fixture = TestBed.createComponent(InnovationSupportInfoComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component.innovation).toEqual(expected);
+
+  });
+
+  it('should have innovation information loaded with payload 02', () => {
+
+    const dataMock = {
+      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['Medical', 'OTHER'], otherCategoryDescription: 'Other category' },
+      contact: { name: 'A name', email: 'email', phone: '' },
+      assessment: { id: '01', assignToName: 'Name' }
+    };
+    accessorService.getInnovationInfo = () => of(dataMock as any);
+    const expected = dataMock;
+
+    fixture = TestBed.createComponent(InnovationSupportInfoComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component.innovation).toEqual(expected);
+
+  });
+
+  it('should NOT have innovation information loaded', () => {
+
+    accessorService.getInnovationInfo = () => throwError('error');
+    const expected = [];
+
+    fixture = TestBed.createComponent(InnovationSupportInfoComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component.innovation).toEqual(undefined);
+
+  });
+
 });

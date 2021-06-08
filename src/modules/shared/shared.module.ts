@@ -9,6 +9,8 @@ import { FormsModule } from './forms/forms.module';
 
 // Pages.
 import { PageInnovationRecordComponent } from './pages/innovation/innovation-record.component';
+import { InnovationSectionViewComponent } from './pages/innovation/section-view.component';
+import { InnovationSectionEvidenceViewComponent } from './pages/innovation/evidence-view.component';
 import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 
 // Services.
@@ -27,6 +29,8 @@ import { OrganisationsService } from './services/organisations.service';
   declarations: [
     // Pages.
     PageInnovationRecordComponent,
+    InnovationSectionViewComponent,
+    InnovationSectionEvidenceViewComponent,
     PageNotFoundComponent
   ],
   providers: [
