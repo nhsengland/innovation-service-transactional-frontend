@@ -155,6 +155,22 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     expect(authenticationStore.getUserType()).toBe('');
   });
 
+
+  it('should run getAccessorOrganisationUnitName() and return empty name', () => {
+    const expected = '';
+    expect(authenticationStore.getAccessorOrganisationUnitName()).toEqual(expected);
+  });
+
+  it('should run getAccessorOrganisationUnitName() and return a valid name', () => {
+    authenticationStore.state.user = {
+      id: '010101', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR',
+      organisations: [{ id: 'Org01', name: 'Org name 01', role: 'OWNER', isShadow: false, organisationUnits: [{ id: 'OrgUnit01', name: 'Org. Unit 01' }] }],
+      innovations: []
+    };
+    expect(authenticationStore.getAccessorOrganisationUnitName()).toEqual('Org. Unit 01');
+  });
+
+
   it('should run getUserInfo() and return empty user', () => {
     const expected = { id: '', email: '', displayName: '', type: '', organisations: [], innovations: [] };
     expect(authenticationStore.getUserInfo()).toEqual(expected);

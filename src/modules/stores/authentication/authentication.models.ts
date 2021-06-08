@@ -12,7 +12,7 @@ export class AuthenticationModel {
       name: string;
       role: 'OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
       isShadow: boolean;
-      organisationUnits: {
+      organisationUnits?: {
         id: string;
         name: string;
       }[];
