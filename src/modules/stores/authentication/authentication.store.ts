@@ -83,6 +83,10 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     return this.state.user?.type || '';
   }
 
+  getAccessorOrganisationUnitName(): string {
+    return (this.state.user?.organisations[0]?.organisationUnits || [])[0]?.name || '';
+  }
+
   getUserInfo(): Required<AuthenticationModel>['user'] {
     return this.state.user || { id: '', email: '', displayName: '', type: '', organisations: [], innovations: [] };
   }

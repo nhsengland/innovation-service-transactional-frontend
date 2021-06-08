@@ -45,7 +45,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
         this.innovation = response;
 
         this.innovationSupport = {
-          organisationUnit: this.stores.authentication.getUserInfo().organisations[0]?.organisationUnits[0]?.name || '',
+          organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
           status: response.support?.status || 'UNNASSIGNED',
           accessors: (response.support?.accessors || []).map(item => item.name).join(', ')
         };
