@@ -66,11 +66,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     this.selectedAccessors = [];
 
     this.currentStatus = { label: '', cssClass: '', description: '' };
-    this.organisationUnit = this.stores.authentication.getUserInfo().organisations?.[0].organisationUnits?.[0].name;
-
-    /** MOCK */
-    this.organisationUnit = 'South West AHSN';
-    /*/MOCK*/
+    this.organisationUnit = this.stores.authentication.getUserInfo().organisations?.[0]?.organisationUnits?.[0]?.name;
   }
 
 
@@ -97,7 +93,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.accessorService.getAccessorsList().subscribe(
       response => {
-        this.accessorList = response;
+        this.accessorList = response.map((r) => ({value: r.id, label: r.name}));
       }
     );
 

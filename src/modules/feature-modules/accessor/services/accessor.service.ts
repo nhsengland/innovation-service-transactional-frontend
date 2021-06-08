@@ -181,30 +181,33 @@ export class AccessorService extends CoreService {
     return of({
       status: 'ENGAGING',
       accessors: [
-        {id: 'def', name: 'Accessor 2'},
+        {id: '06E12E5C-3BA8-EB11-B566-0003FFD6549F', name: 'qaccesor_1'},
       ],
     });
 
-    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/support/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
-    return this.http.get<{ status: string, accessors: string[], comment: string }>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
+    // const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/support/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
+    // return this.http.get<{ status: string, accessors: string[]}>(url.buildUrl()).pipe(
+    //   take(1),
+    //   map(response => response)
+    // );
 
   }
 
   /*
-    lista "estatica" dos acessors da unidade
-    /accessors
+    List of accessors from a given Organisation Unit
+    The organisation unit is obtained in the backend from the JWT
   */
-    getAccessorsList(): Observable<{label: string, value: string}[]> {
+  getAccessorsList(): Observable<{id: string, name: string}[]> {
 
-    return of([
-      { value: 'abc', label: 'Accessor 1' },
-      { value: 'def', label: 'Accessor 2' },
-      { value: 'ghi', label: 'Accessor 3' },
-    ]);
-
+    const url = new UrlModel(this.API_URL).addPath('accessors');
+    return this.http.get<{id: string, name: string}[]>(url.buildUrl()).pipe(
+      map(response => response)
+    );
+    // return of([
+    //   { value: 'abc', label: 'Accessor 1' },
+    //   { value: 'def', label: 'Accessor 2' },
+    //   { value: 'ghi', label: 'Accessor 3' },
+    // ]);
   }
 
 }
