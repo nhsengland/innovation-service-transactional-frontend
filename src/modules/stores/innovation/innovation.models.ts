@@ -32,7 +32,7 @@ export const INNOVATION_SUPPORT_STATUS = {
   FURTHER_INFO_REQUIRED: { label: 'Further info', cssClass: 'nhsuk-tag--yellow', description: '2' },
   WAITING: { label: 'Waiting', cssClass: 'nhsuk-tag--grey', description: '3' },
   NOT_YET: { label: 'Waiting', cssClass: 'nhsuk-tag--grey', description: '4' },
-  ENGAGING: { label: 'Engaging', cssClass: 'nhsuk-tag--green', description: '5' },
+  ENGAGING: { label: 'Engaging', cssClass: 'nhsuk-tag--green', description: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.' },
   UNSUITABLE: { label: 'Waiting', cssClass: 'nhsuk-tag--grey', description: '6' },
   WITHDRAWN: { label: 'Waiting', cssClass: 'nhsuk-tag--grey', description: '7' },
   COMPLETE: { label: 'Waiting', cssClass: 'nhsuk-tag--grey', description: '8' },

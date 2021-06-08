@@ -178,12 +178,13 @@ export class AccessorService extends CoreService {
   }
 
 
-  getInnovationSupportInfo(innovationId: string, supportId: string): Observable<{ status: string, accessors: string[], comment: string }> {
+  getInnovationSupportInfo(innovationId: string, supportId: string): Observable<{ status: string, accessors: any[] }> {
 
     return of({
-      status: 'UNNASSIGNED',
-      accessors: [],
-      comment: 'so para teste'
+      status: 'ENGAGING',
+      accessors: [
+        {id: 'def', name:'Accessor 2'},
+      ],
     });
 
     const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/support/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
@@ -192,6 +193,20 @@ export class AccessorService extends CoreService {
       map(response => response)
     );
 
+  }
+
+  /*
+    lista "estatica" dos acessors da unidade
+    /accessors
+  */
+  getAccessorsList(): Observable<{label: string, value: string}[]> {
+
+    return of([
+      { value: 'abc', label: 'Accessor 1' },
+      { value: 'def', label: 'Accessor 2' },
+      { value: 'ghi', label: 'Accessor 3' },
+    ]);
+    
   }
 
 }

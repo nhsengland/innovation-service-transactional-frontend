@@ -10,7 +10,9 @@
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full app-component-reading-width">
-
+      <h1 class="nhsuk-heading-1">
+           Update support status 
+      </h1>
       <form [formGroup]="form">
 
         <ng-container *ngIf="stepNumber === 1">
@@ -28,7 +30,44 @@
           <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmitStep()">Continue</button>
 
         </ng-container>
+        <ng-container *ngIf="stepNumber === 2">
+          
+          <h3 class="nhsuk-heading-3">
+            You selected <strong class="nhsuk-tag" [ngClass]="currentStatus.cssClass">{{ currentStatus.label }}</strong>
+          </h3>
+          <p class="nhsuk-hint nhsuk-radios__hint">
+            {{currentStatus.description}}
+          </p>
+          <h3 class="nhsuk-heading-3">
+            Assign one or more accessors from *Unit Name*
+          </h3>
+          <div class="nhsuk-form-group nhsuk-u-padding-top-4">
+           <theme-form-checkbox-array [arrayName]="accessorsArrayName" [items]="accessorList"></theme-form-checkbox-array>
+          </div>
 
+          <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmitStep()">Continue</button>
+
+        </ng-container>
+
+        <ng-container *ngIf="stepNumber === 3">
+
+          <div class="nhsuk-form-group nhsuk-u-padding-top-4">
+            <h3 class="nhsuk-heading-3">
+              You assigned
+            </h3>
+            <div *ngFor="let item of selectedAccessors; let i = index">
+              {{item.label}}
+            </div>
+            <h3 class="nhsuk-heading-3">
+              Let the innovator know what's changed
+            </h3>
+            Enter your comment
+
+          </div>
+
+          <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit()">Submit</button>
+
+        </ng-container>
       </form>
 
 
