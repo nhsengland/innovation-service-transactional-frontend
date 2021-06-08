@@ -29,7 +29,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private assessmentService: AccessorService
+    private accessorService: AccessorService
   ) {
     super();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -38,13 +38,13 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    this.assessmentService.getInnovationInfo(this.innovationId).subscribe(
+    this.accessorService.getInnovationInfo(this.innovationId).subscribe(
       response => {
 
         this.innovation = response;
 
         this.innovationSupport = {
-          organisationUnit: response.support?.organisationUnit.name || '',
+          organisationUnit: this.stores.authentication.getUserInfo().organisations[0]?.organisationUnits[0]?.name || '',
           status: response.support?.status || 'UNNASSIGNED',
           accessors: (response.support?.accessors || []).map(item => item.name).join(', ')
         };

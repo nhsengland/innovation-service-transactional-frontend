@@ -84,7 +84,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   getUserInfo(): Required<AuthenticationModel>['user'] {
-    return this.state.user || { id: '', displayName: '', type: '', organisations: [], innovations: [] };
+    return this.state.user || { id: '', email: '', displayName: '', type: '', organisations: [], innovations: [] };
   }
 
 }

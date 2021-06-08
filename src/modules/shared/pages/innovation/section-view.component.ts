@@ -13,6 +13,7 @@ import { InnovationSectionsIds, INNOVATION_SECTION_STATUS } from '@stores-module
 })
 export class InnovationSectionViewComponent extends CoreComponent implements OnInit {
 
+  module: '' | 'innovator' | 'accessor' = '';
   innovationId: string;
   section: {
     id: InnovationSectionsIds;
@@ -34,6 +35,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
     super();
 
+    this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
@@ -110,7 +112,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
 
   getSectionInfo(): void {
-    this.stores.innovation.getSectionInfo$(this.innovationId, this.section.id).subscribe(
+    this.stores.innovation.getSectionInfo$(this.module, this.innovationId, this.section.id).subscribe(
       response => {
         this.summaryList = this.wizard.runSummaryParsing(response.data);
         this.section.status = response.section.status;

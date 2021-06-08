@@ -46,7 +46,6 @@ export type getInnovationInfoEndpointDTO = {
   support?: {
     id: string;
     status: keyof typeof INNOVATION_SUPPORT_STATUS;
-    organisationUnit: { id: string; name: string };
     accessors: { id: string; name: string; }[];
   }
 };
@@ -125,7 +124,6 @@ export class AccessorService extends CoreService {
       support: {
         id: 'aaaaaa',
         status: 'WAITING',
-        organisationUnit: { id: 'someId', name: 'South West mocked AHSN' },
         accessors: [
           { id: 'IdOne', name: 'Brigid Kosgei' },
           { id: 'IdTwo', name: 'Roberto Carlos' }
@@ -199,14 +197,14 @@ export class AccessorService extends CoreService {
     lista "estatica" dos acessors da unidade
     /accessors
   */
-  getAccessorsList(): Observable<{label: string, value: string}[]> {
+    getAccessorsList(): Observable<{label: string, value: string}[]> {
 
     return of([
       { value: 'abc', label: 'Accessor 1' },
       { value: 'def', label: 'Accessor 2' },
       { value: 'ghi', label: 'Accessor 3' },
     ]);
-    
+
   }
 
 }
