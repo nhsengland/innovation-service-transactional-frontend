@@ -9,6 +9,7 @@ import { ReviewInnovationsComponent } from './pages/innovations/review-innovatio
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
 import { InnovationSupportUpdateComponent } from './pages/innovation/support-update/support-update.component';
+import { InnovationSupportInfoComponent } from './pages/innovation/support-update/support-info.component';
 
 
 const routes: Routes = [
@@ -46,8 +47,8 @@ const routes: Routes = [
                 // data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Go back' } } }
               },
               {
-                path: 'support', pathMatch: 'full', component: InnovationSupportUpdateComponent,
-                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId', label: 'Go back' } } }
+                path: 'support', pathMatch: 'full', component: InnovationSupportInfoComponent,
+                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } }
               },
               {
                 path: 'support/:supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent,

@@ -8,10 +8,11 @@
 </div>
 <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
 
+<h2 class="nhsuk-heading-xl">Support status</h2>
 
 <h3 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">{{ innovationSupport.organisationUnit }}</h3>
 <hr class="nhsuk-section-break nhsuk-section-break--visible" />
-<dl class="nhsuk-summary-list nhsuk-u-margin-bottom-3">
+<dl class="nhsuk-summary-list">
   <div class="nhsuk-summary-list__row">
     <dt class="nhsuk-summary-list__key">Support status</dt>
     <dd class="nhsuk-summary-list__value">
@@ -20,15 +21,10 @@
       </strong>
     </dd>
   </div>
-</dl>
-
-<a routerLink="/accessor/innovations/{{ innovation?.summary?.id }}/support/{{ innovation?.support?.id }}" class="nhsuk-button nhsuk-u-margin-bottom-7"> Update status </a>
-
-
-<h2 class="nhsuk-heading-m">Innovation summary</h2>
-<dl class="nhsuk-summary-list">
-  <div *ngFor="let item of innovationSummary" class="nhsuk-summary-list__row">
-    <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-    <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.value"></dd>
+  <div class="nhsuk-summary-list__row">
+    <dt class="nhsuk-summary-list__key">Assigned accessors</dt>
+    <dd class="nhsuk-summary-list__value">{{ innovationSupport.accessors }}</dd>
   </div>
 </dl>
+
+<a routerLink="/accessor/innovations/{{ innovation?.summary?.id }}/support/{{ innovation?.support?.id }}" class="nhsuk-button"> Update status </a>

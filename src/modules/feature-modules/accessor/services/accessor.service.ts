@@ -16,8 +16,8 @@ export type getInnovationsListEndpointDTO = {
     status: keyof typeof INNOVATION_STATUS;
     name: string;
     supportStatus: keyof typeof INNOVATION_SUPPORT_STATUS;
-    createdAt: string; // "2021-04-16T09:23:49.396Z",
-    updatedAt: string; // "2021-04-16T09:23:49.396Z"
+    createdAt: string; // '2021-04-16T09:23:49.396Z',
+    updatedAt: string; // '2021-04-16T09:23:49.396Z'
     assessment: { id: null | string; }
   }[];
 };
@@ -32,17 +32,23 @@ export type getInnovationInfoEndpointDTO = {
     countryName: string;
     postCode: string;
     categories: string[];
-    otherCategoryDescription: string;
+    otherCategoryDescription: null | string;
   };
   contact: {
     name: string;
     email: string;
-    phone: string;
+    phone: null | string;
   };
   assessment?: {
     id: string;
     assignToName: string;
   };
+  support?: {
+    id: string;
+    status: keyof typeof INNOVATION_SUPPORT_STATUS;
+    organisationUnit: { id: string; name: string };
+    accessors: { id: string; name: string; }[];
+  }
 };
 
 type getInnovationNeedsAssessmentEndpointInDTO = {
@@ -95,11 +101,43 @@ export class AccessorService extends CoreService {
 
   getInnovationInfo(innovationId: string): Observable<getInnovationInfoEndpointDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
+    return of({
+      summary: {
+        id: '776227DC-C9A8-EB11-B566-0003FFD6549F',
+        name: 'HealthyApp',
+        status: 'IN_PROGRESS',
+        company: 'HealthyApps, Inc',
+        countryName: 'Scotland',
+        postCode: '',
+        description: 'This innovation serves to get people in shape.',
+        categories: ['AI', 'DIGITAL'],
+        otherCategoryDescription: null
+      },
+      contact: {
+        name: 'Ricky Martin',
+        email: 'ricardo.tavares@bjss.com',
+        phone: null
+      },
+      assessment: {
+        id: '6150B099-B8BF-EB11-A7AD-0003FFD65C88',
+        assignToName: 'Assessment User'
+      },
+      support: {
+        id: 'aaaaaa',
+        status: 'WAITING',
+        organisationUnit: { id: 'someId', name: 'South West mocked AHSN' },
+        accessors: [
+          { id: 'IdOne', name: 'Brigid Kosgei' },
+          { id: 'IdTwo', name: 'Roberto Carlos' }
+        ]
+      }
+    });
+
+    // const url = new UrlModel(this.API_URL).addPath('accessor/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    // return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
+    //   take(1),
+    //   map(response => response)
+    // );
 
   }
 

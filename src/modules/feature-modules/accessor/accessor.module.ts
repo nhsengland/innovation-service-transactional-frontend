@@ -12,6 +12,7 @@ import { ReviewInnovationsComponent } from './pages/innovations/review-innovatio
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
 import { InnovationSupportUpdateComponent } from './pages/innovation/support-update/support-update.component';
+import { InnovationSupportInfoComponent } from './pages/innovation/support-update/support-info.component';
 
 // Services.
 import { AccessorService } from './services/accessor.service';
@@ -32,7 +33,8 @@ import { AccessorService } from './services/accessor.service';
     ReviewInnovationsComponent,
     InnovationOverviewComponent,
     InnovationNeedsAssessmentOverviewComponent,
-    InnovationSupportUpdateComponent
+    InnovationSupportUpdateComponent,
+    InnovationSupportInfoComponent
   ],
   providers: [
     AccessorService

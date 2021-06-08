@@ -46,7 +46,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         this.innovatorSummary = [
           { label: 'Name', value: response.contact.name },
           { label: 'Email address', value: response.contact.email },
-          { label: 'Phone number', value: response.contact.phone }
+          { label: 'Phone number', value: response.contact.phone || '' }
         ];
 
       },
