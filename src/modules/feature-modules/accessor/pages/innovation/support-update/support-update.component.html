@@ -57,11 +57,11 @@
         <ng-container *ngIf="stepNumber === 3">
 
           <div class="nhsuk-form-group">
-            <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5">
+            <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5 nhsuk-cancel-wrapper">
               You assigned
             </h3>
             <div *ngFor="let item of selectedAccessors; let i = index">
-              <theme-svg-icon  type="success"></theme-svg-icon> <strong>{{item.label}}</strong>
+              <theme-svg-icon  type="success" class="nhsuk-margin_top_0"></theme-svg-icon> <strong class="nhsuk-vertical_top nhsuk-padding_left_10">{{item.label}}</strong>
             </div>
             <br />
             <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5">
