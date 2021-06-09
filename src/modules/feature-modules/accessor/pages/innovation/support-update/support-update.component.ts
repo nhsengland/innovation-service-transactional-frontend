@@ -36,7 +36,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   form = new FormGroup({
     status: new FormControl('', Validators.required),
     accessors: new FormArray([]),
-    comment: new FormControl()
+    comment: new FormControl('', Validators.required),
   });
 
   summaryAlert: { type: '' | 'error' | 'warning', title: string, message: string };
@@ -102,6 +102,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
 
   onSubmitStep(): void {
+
+    if (!this.validateForm(this.stepNumber)) { return; }
     this.formSupportObj = { ...this.form.value };
 
     this.selectedAccessors = (this.form.get('accessors')?.value as any[]).map((a) => {
@@ -121,8 +123,44 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   }
 
   onSubmit(): void {
+    if (!this.validateForm(this.stepNumber)) { return; }
     this.formSupportObj = {...this.form.value};
-    console.log(this.formSupportObj);
   }
 
+  private validateForm(step: number): boolean {
+
+    switch (step) {
+      case 1:
+        if (!this.form.get('status')?.valid) {
+          this.summaryAlert = {
+            type: 'error',
+            title: 'An error has occured when updating Status',
+            message: 'You must select a status.'
+          };
+          return false;
+        } else {
+          this.summaryAlert.type = '';
+        }
+        break;
+      case 3:
+
+        if (!this.form.get('comment')?.valid) {
+          this.summaryAlert = {
+            type: 'error',
+            title: 'An error has occured when updating the Comment',
+            message: 'You must add a Comment.'
+          };
+          return false;
+        } else {
+          this.summaryAlert.type = '';
+        }
+
+        break;
+      default:
+        break;
+    }
+
+    return true;
+  }
 }
+
