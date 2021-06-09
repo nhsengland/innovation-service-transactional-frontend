@@ -1,34 +1,3 @@
-<style>
-  .nhsuk-radios__label_padding_5 {
-    padding: 5px 12px 4px
-  }
-
-  .nhsuk-radios__heading_margin_bottom_5 {
-    margin-bottom: 2px;
-  }
-
-  .nhsuk-cancel-wrapper {
-    padding-bottom: 20px;
-  }
-  .nhsuk-status_container {
-    width: 100%;
-    height: 50px;
-    margin: auto;
-    padding: 10px;
-    padding-left: 0;
-  }
-
-  .nhsuk-div_left {
-    height: 50px;
-    float: left;
-    padding-top: 3px;
-  }
-  .nhsuk-div_right {
-    height: 50px;
-    margin-left: 20%;
-  }
-  
-</style>
 <ng-container *ngIf="summaryAlert.type">
   <div class="nhsuk-error-summary" [ngClass]="{'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert" tabindex="-1">
     <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>

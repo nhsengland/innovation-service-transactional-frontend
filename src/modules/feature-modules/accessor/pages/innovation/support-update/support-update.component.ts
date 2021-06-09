@@ -6,7 +6,8 @@ import { AccessorService } from '../../../services/accessor.service';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-update',
-  templateUrl: './support-update.component.html'
+  templateUrl: './support-update.component.html',
+  styleUrls: ['./support-update.component.scss']
 })
 export class InnovationSupportUpdateComponent extends CoreComponent implements OnInit {
 
