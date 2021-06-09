@@ -56,7 +56,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionInfo$(this.innovationId, this.sectionId).subscribe(
+    this.stores.innovation.getSectionInfo$('innovator', this.innovationId, this.sectionId).subscribe(
       response => {
         this.currentAnswers = this.wizard.runInboundParsing(response.data);
         this.wizard.runRules(this.currentAnswers);

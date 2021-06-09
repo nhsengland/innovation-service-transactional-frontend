@@ -7,7 +7,7 @@ import { cloneDeep } from 'lodash';
 import { EnvironmentStore } from '@modules/core/stores/environment.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
-import { getInnovationInfoResponse, getInnovationInfoEndpointDTO, getInnovationSectionsDTO, sectionType, getInnovationEvidenceDTO, INNOVATION_STATUS } from './innovation.models';
+import { getInnovationSectionsDTO, sectionType, getInnovationEvidenceDTO, INNOVATION_STATUS } from './innovation.models';
 
 import { UrlModel } from '@modules/core/models/url.model';
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
@@ -54,9 +54,22 @@ export class InnovationService {
   }
 
 
-  getInnovationSections(innovationId: string): Observable<getInnovationSectionsDTO> {
+  getInnovationSections(module: '' | 'innovator' | 'accessor', innovationId: string): Observable<getInnovationSectionsDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/section-summary').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
+    let endpointModule = '';
+
+    switch (module) {
+      case 'innovator':
+        endpointModule = 'innovators';
+        break;
+      case 'accessor':
+        endpointModule = 'accessors';
+        break;
+      default:
+        break;
+    }
+
+    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/section-summary').setPathParams({ endpointModule, userId: this.authenticationStore.getUserId(), innovationId });
     return this.http.get<getInnovationSectionsDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
@@ -65,9 +78,22 @@ export class InnovationService {
   }
 
 
-  getSectionInfo(innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
+  getSectionInfo(module: '' | 'innovator' | 'accessor', innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/sections').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId }).setQueryParams({ section });
+    let endpointModule = '';
+
+    switch (module) {
+      case 'innovator':
+        endpointModule = 'innovators';
+        break;
+      case 'accessor':
+        endpointModule = 'accessors';
+        break;
+      default:
+        break;
+    }
+
+    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/sections').setPathParams({ endpointModule, userId: this.authenticationStore.getUserId(), innovationId }).setQueryParams({ section });
     return this.http.get<{
       section: sectionType;
       data: MappedObject
@@ -103,8 +129,22 @@ export class InnovationService {
   }
 
 
-  getSectionEvidenceInfo(innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/evidence/:evidenceId').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, evidenceId });
+  getSectionEvidenceInfo(module: '' | 'innovator' | 'accessor', innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
+
+    let endpointModule = '';
+
+    switch (module) {
+      case 'innovator':
+        endpointModule = 'innovators';
+        break;
+      case 'accessor':
+        endpointModule = 'accessors';
+        break;
+      default:
+        break;
+    }
+
+    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/evidence/:evidenceId').setPathParams({ endpointModule, userId: this.authenticationStore.getUserId(), innovationId, evidenceId });
     return this.http.get<getInnovationEvidenceDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)

@@ -43,7 +43,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionsSummary$(this.innovationId).subscribe(
+    this.stores.innovation.getSectionsSummary$('innovator', this.innovationId).subscribe(
       response => {
         this.innovationStatus = response.innovation.status;
         this.innovationSections = response.sections;

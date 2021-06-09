@@ -107,8 +107,41 @@ describe('Stores/Innovation/InnovationService', () => {
 
   // });
 
+  it('should run submitInnovation() and return success', () => {
 
-  it('should run getInnovationSections() and return success', () => {
+    const responseMock = { id: 'Inno01', status: 'WAITING_NEEDS_ASSESSMENT' };
+    const expected = responseMock;
+    let response: any = null;
+
+    service.submitInnovation('Inno01').subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators//innovations/Inno01/submit`);
+    httpRequest.flush(responseMock);
+
+    expect(httpRequest.request.method).toBe('PATCH');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run submitInnovation() and return error', () => {
+
+    const responseMock = '';
+    const expected = false;
+    let response: any = {};
+
+    service.submitInnovation('Inno01').subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators//innovations/Inno01/submit`);
+    httpRequest.flush(responseMock, { status: 400, statusText: 'Bad Request' });
+
+    expect(httpRequest.request.method).toBe('PATCH');
+    expect(response.status).toEqual(400);
+    expect(response.statusText).toEqual('Bad Request');
+
+  });
+
+
+  it('should run getInnovationSections() from "innovator" module and return success', () => {
 
     const responseMock = [
       { code: InnovationSectionsIds.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
@@ -120,9 +153,31 @@ describe('Stores/Innovation/InnovationService', () => {
     ];
     let response: any = null;
 
-    service.getInnovationSections('Inno01').subscribe(success => response = success, error => response = error);
+    service.getInnovationSections('innovator', 'Inno01').subscribe(success => response = success, error => response = error);
 
     const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators//innovations/Inno01/section-summary`);
+    httpRequest.flush(responseMock);
+
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run getInnovationSections() from "accessor" module and return success', () => {
+
+    const responseMock = [
+      { code: InnovationSectionsIds.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
+      { code: InnovationSectionsIds.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW' }
+    ];
+    const expected = [
+      { code: InnovationSectionsIds.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
+      { code: InnovationSectionsIds.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW' }
+    ];
+    let response: any = null;
+
+    service.getInnovationSections('accessor', 'Inno01').subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations/Inno01/section-summary`);
     httpRequest.flush(responseMock);
 
     expect(httpRequest.request.method).toBe('GET');
@@ -136,9 +191,9 @@ describe('Stores/Innovation/InnovationService', () => {
     const expected = false;
     let response: any = {};
 
-    service.getInnovationSections('Inno01').subscribe(success => response = success, error => response = error);
+    service.getInnovationSections('', 'Inno01').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators//innovations/Inno01/section-summary`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}///innovations/Inno01/section-summary`);
     httpRequest.flush(responseMock, { status: 400, statusText: 'Bad Request' });
 
     expect(httpRequest.request.method).toBe('GET');
@@ -148,15 +203,31 @@ describe('Stores/Innovation/InnovationService', () => {
   });
 
 
-  it('should run getSectionInfo() and return success', () => {
+  it('should run getSectionInfo() from "innovator" module and return success', () => {
 
     const responseMock = { answer01: 'answer 01', answer02: 'answer 0' };
     const expected = { answer01: 'answer 01', answer02: 'answer 0' };
     let response: any = null;
 
-    service.getSectionInfo('Inno01', InnovationSectionsIds.INNOVATION_DESCRIPTION).subscribe(success => response = success, error => response = error);
+    service.getSectionInfo('innovator', 'Inno01', InnovationSectionsIds.INNOVATION_DESCRIPTION).subscribe(success => response = success, error => response = error);
 
     const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators//innovations/Inno01/sections?section=${InnovationSectionsIds.INNOVATION_DESCRIPTION}`);
+    httpRequest.flush(responseMock);
+
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run getSectionInfo() from "accessor" module and return success', () => {
+
+    const responseMock = { answer01: 'answer 01', answer02: 'answer 0' };
+    const expected = { answer01: 'answer 01', answer02: 'answer 0' };
+    let response: any = null;
+
+    service.getSectionInfo('accessor', 'Inno01', InnovationSectionsIds.INNOVATION_DESCRIPTION).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations/Inno01/sections?section=${InnovationSectionsIds.INNOVATION_DESCRIPTION}`);
     httpRequest.flush(responseMock);
 
     expect(httpRequest.request.method).toBe('GET');
@@ -170,9 +241,9 @@ describe('Stores/Innovation/InnovationService', () => {
     const expected = false;
     let response: any = {};
 
-    service.getSectionInfo('Inno01', InnovationSectionsIds.INNOVATION_DESCRIPTION).subscribe(success => response = success, error => response = error);
+    service.getSectionInfo('', 'Inno01', InnovationSectionsIds.INNOVATION_DESCRIPTION).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators//innovations/Inno01/sections?section=${InnovationSectionsIds.INNOVATION_DESCRIPTION}`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}///innovations/Inno01/sections?section=${InnovationSectionsIds.INNOVATION_DESCRIPTION}`);
     httpRequest.flush(responseMock, { status: 400, statusText: 'Bad Request' });
 
     expect(httpRequest.request.method).toBe('GET');
@@ -246,6 +317,95 @@ describe('Stores/Innovation/InnovationService', () => {
     expect(httpRequest.request.method).toBe('PATCH');
     expect(response.status).toEqual(400);
     expect(response.statusText).toEqual('Bad Request');
+
+  });
+
+
+  it('should run getSectionEvidenceInfo() from "innovator" module and return success', () => {
+
+    const responseMock = {
+      evidenceType: 'CLINICAL',
+      clinicalEvidenceType: 'UNPUBLISHED_DATA',
+      description: '',
+      summary: '',
+      files: [{ id: 'file01', displayFileName: 'filename.pdf', url: 'http://some.url' }]
+    };
+    const expected = responseMock;
+    let response: any = null;
+
+    service.getSectionEvidenceInfo('innovator', 'Inno01', 'Evidence01').subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators//innovations/Inno01/evidence/Evidence01`);
+    httpRequest.flush(responseMock);
+
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run getSectionEvidenceInfo() from "accessor" module and return success', () => {
+
+    const responseMock = { answer01: 'answer 01', answer02: 'answer 0' };
+    const expected = { answer01: 'answer 01', answer02: 'answer 0' };
+    let response: any = null;
+
+    service.getSectionEvidenceInfo('accessor', 'Inno01', 'Evidence01').subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations/Inno01/evidence/Evidence01`);
+    httpRequest.flush(responseMock);
+
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run getSectionEvidenceInfo() and return error', () => {
+
+    const responseMock = '';
+    const expected = false;
+    let response: any = {};
+
+    service.getSectionEvidenceInfo('', 'Inno01', 'Evidence01').subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}///innovations/Inno01/evidence/Evidence01`);
+    httpRequest.flush(responseMock, { status: 400, statusText: 'Bad Request' });
+
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response.status).toEqual(400);
+    expect(response.statusText).toEqual('Bad Request');
+
+  });
+
+
+  it('should run upsertSectionEvidenceInfo() WITHOUT evidenceId and return success', () => {
+
+    const responseMock = { id: 'Evidence01' };
+    const expected = responseMock;
+    let response: any = null;
+
+    service.upsertSectionEvidenceInfo('Inno01', { some: 'data' }).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators//innovations/Inno01/evidence`);
+    httpRequest.flush(responseMock);
+
+    expect(httpRequest.request.method).toBe('POST');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run upsertSectionEvidenceInfo() WITH evidenceId and return success', () => {
+
+    const responseMock = { id: 'Evidence01' };
+    const expected = responseMock;
+    let response: any = {};
+
+    service.upsertSectionEvidenceInfo('Inno01', { some: 'data' }, 'Evidence01').subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators//innovations/Inno01/evidence/Evidence01`);
+    httpRequest.flush(responseMock);
+
+    expect(httpRequest.request.method).toBe('PUT');
+    expect(response).toEqual(expected);
 
   });
 

@@ -11,10 +11,21 @@ import { LoggerService, Severity } from '@modules/core/services/logger.service';
 
 type getUserInfoDto = {
   id: string;
+  email: string;
   displayName: string;
   type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
-  organisations: { id: string, name: string, role: 'OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR' }[];
+  organisations: {
+    id: string;
+    name: string;
+    role: 'OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
+    isShadow: boolean;
+    organisationUnits: {
+      id: string;
+      name: string;
+    }[];
+  }[];
 };
+
 
 type getUserInnovationsDto = {
   id: string;
@@ -38,7 +49,7 @@ export class AuthenticationService {
   verifyUserSession(): Observable<boolean> {
     this.loggerService.trackTrace('[Authentication Service] verifyUserSession called', Severity.INFORMATION);
     const url = new UrlModel(this.APP_URL).addPath('session')
-    .buildUrl();
+      .buildUrl();
     this.loggerService.trackTrace('[Authentication Service] built url', Severity.INFORMATION, { url });
     return this.http.head(url).pipe(
       take(1),
@@ -54,6 +65,7 @@ export class AuthenticationService {
       take(1),
       map(response => ({
         id: response.id,
+        email: response.email,
         displayName: ['unknown'].includes(response.displayName) ? '' : response.displayName,
         type: response.type,
         organisations: response.organisations

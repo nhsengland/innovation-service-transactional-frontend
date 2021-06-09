@@ -45,9 +45,9 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
 
-  getSectionsSummary$(innovationId: string): Observable<{ innovation: { status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {
+  getSectionsSummary$(module: '' | 'innovator' | 'accessor', innovationId: string): Observable<{ innovation: { status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {
 
-    return this.innovationsService.getInnovationSections(innovationId).pipe(
+    return this.innovationsService.getInnovationSections(module, innovationId).pipe(
       map(response => ({
         innovation: {
           status: response.status
@@ -87,8 +87,8 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
 
-  getSectionInfo$(innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
-    return this.innovationsService.getSectionInfo(innovationId, section);
+  getSectionInfo$(module: '' | 'innovator' | 'accessor', innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
+    return this.innovationsService.getSectionInfo(module, innovationId, section);
   }
 
   updateSectionInfo$(innovationId: string, section: string, data: MappedObject): Observable<MappedObject> {
@@ -99,8 +99,8 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitSections(innovationId, sections);
   }
 
-  getSectionEvidence$(innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
-    return this.innovationsService.getSectionEvidenceInfo(innovationId, evidenceId);
+  getSectionEvidence$(module: '' | 'innovator' | 'accessor', innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
+    return this.innovationsService.getSectionEvidenceInfo(module, innovationId, evidenceId);
   }
 
   upsertSectionEvidenceInfo$(innovationId: string, data: MappedObject, evidenceId?: string): Observable<MappedObject> {

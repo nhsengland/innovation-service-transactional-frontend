@@ -35,14 +35,14 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   it('should run initializeAuthentication$() and return success', () => {
 
     spyOn(authenticationService, 'verifyUserSession').and.returnValue(of(true));
-    spyOn(authenticationService, 'getUserInfo').and.returnValue(of({ id: 'id', displayName: 'John Doe', type: 'INNOVATOR', organisations: [] }));
+    spyOn(authenticationService, 'getUserInfo').and.returnValue(of({ id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', organisations: [] }));
     spyOn(authenticationService, 'verifyInnovator').and.returnValue(of(true));
     spyOn(authenticationService, 'getInnovations').and.returnValue(of([{ id: 'abc123zxc', name: 'HealthyApp' }]));
 
     const expectedResponse = true;
     const expectedState = {
       isSignIn: true,
-      user: { id: 'id', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [{ id: 'abc123zxc', name: 'HealthyApp' }] },
+      user: { id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [{ id: 'abc123zxc', name: 'HealthyApp' }] },
       didFirstTimeSignIn: true
     };
     let response: any = null;
@@ -59,14 +59,14 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   it('should run initializeAuthentication$() and return success not being first time signin', () => {
 
     spyOn(authenticationService, 'verifyUserSession').and.returnValue(of(true));
-    spyOn(authenticationService, 'getUserInfo').and.returnValue(of({ id: 'id', displayName: 'John Doe', type: 'INNOVATOR', organisations: [] }));
+    spyOn(authenticationService, 'getUserInfo').and.returnValue(of({ id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', organisations: [] }));
     spyOn(authenticationService, 'verifyInnovator').and.returnValue(throwError('error'));
     spyOn(authenticationService, 'getInnovations').and.returnValue(throwError('error'));
 
     const expectedResponse = true;
     const expectedState = {
       isSignIn: true,
-      user: { id: 'id', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] }
+      user: { id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] }
     };
     let response: any = null;
 
@@ -96,12 +96,12 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   });
 
   it('should run isInnovatorType() and return true', () => {
-    authenticationStore.state.user = { id: 'id', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] };
+    authenticationStore.state.user = { id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] };
     expect(authenticationStore.isInnovatorType()).toBe(true);
   });
 
   it('should run isAccessorType() and return true', () => {
-    authenticationStore.state.user = { id: 'id', displayName: 'John Doe', type: 'ACCESSOR', organisations: [], innovations: [] };
+    authenticationStore.state.user = { id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'ACCESSOR', organisations: [], innovations: [] };
     expect(authenticationStore.isAccessorType()).toBe(true);
   });
 
@@ -112,7 +112,11 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   });
 
   it('should run isQualifyingAccessorRole() and return true', () => {
-    authenticationStore.state.user = { id: 'id', displayName: 'John Doe', type: 'ACCESSOR', organisations: [{ id: 'id01', name: 'Organisation Name', role: 'QUALIFYING_ACCESSOR' }], innovations: [] };
+    authenticationStore.state.user = {
+      id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'ACCESSOR',
+      organisations: [{ id: 'id01', name: 'Organisation Name', role: 'QUALIFYING_ACCESSOR', isShadow: false, organisationUnits: [] }],
+      innovations: []
+    };
     expect(authenticationStore.isQualifyingAccessorRole()).toBe(true);
   });
 
@@ -132,7 +136,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   });
 
   it('should run getUserId() and return true', () => {
-    authenticationStore.state.user = { id: '010101', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] };
+    authenticationStore.state.user = { id: '010101', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] };
     expect(authenticationStore.getUserId()).toBe('010101');
   });
 
@@ -142,7 +146,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   });
 
   it('should run getUserType() and return true', () => {
-    authenticationStore.state.user = { id: '010101', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] };
+    authenticationStore.state.user = { id: '010101', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] };
     expect(authenticationStore.getUserType()).toBe('INNOVATOR');
   });
 
@@ -151,13 +155,29 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     expect(authenticationStore.getUserType()).toBe('');
   });
 
+
+  it('should run getAccessorOrganisationUnitName() and return empty name', () => {
+    const expected = '';
+    expect(authenticationStore.getAccessorOrganisationUnitName()).toEqual(expected);
+  });
+
+  it('should run getAccessorOrganisationUnitName() and return a valid name', () => {
+    authenticationStore.state.user = {
+      id: '010101', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR',
+      organisations: [{ id: 'Org01', name: 'Org name 01', role: 'OWNER', isShadow: false, organisationUnits: [{ id: 'OrgUnit01', name: 'Org. Unit 01' }] }],
+      innovations: []
+    };
+    expect(authenticationStore.getAccessorOrganisationUnitName()).toEqual('Org. Unit 01');
+  });
+
+
   it('should run getUserInfo() and return empty user', () => {
-    const expected = { id: '', displayName: '', type: '', organisations: [], innovations: [] };
+    const expected = { id: '', email: '', displayName: '', type: '', organisations: [], innovations: [] };
     expect(authenticationStore.getUserInfo()).toEqual(expected);
   });
 
   it('should run getUserInfo() and return a valid user', () => {
-    const expected = authenticationStore.state.user = { id: '010101', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] };
+    const expected = authenticationStore.state.user = { id: '010101', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] };
     expect(authenticationStore.getUserInfo()).toEqual(expected);
   });
 

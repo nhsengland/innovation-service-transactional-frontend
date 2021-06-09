@@ -43,12 +43,12 @@ export type getInnovationInfoEndpointDTO = {
     countryName: string;
     postCode: string;
     categories: string[];
-    otherCategoryDescription: string;
+    otherCategoryDescription: null | string;
   };
   contact: {
     name: string;
     email: string;
-    phone: string;
+    phone: null | string;
   };
   assessment?: {
     id: string;

@@ -12,6 +12,7 @@ import { InnovationSectionsIds } from '@stores-module/innovation/innovation.mode
 })
 export class InnovationSectionEvidenceViewComponent extends CoreComponent implements OnInit {
 
+  module: '' | 'innovator' | 'accessor' = '';
   innovationId: string;
   sectionId: InnovationSectionsIds;
   evidence: {
@@ -29,6 +30,7 @@ export class InnovationSectionEvidenceViewComponent extends CoreComponent implem
 
     super();
 
+    this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
@@ -47,7 +49,7 @@ export class InnovationSectionEvidenceViewComponent extends CoreComponent implem
 
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionEvidence$(this.innovationId, this.evidence.id).subscribe(
+    this.stores.innovation.getSectionEvidence$(this.module, this.innovationId, this.evidence.id).subscribe(
       response => {
         this.summaryList = this.wizard.runSummaryParsing(response);
         this.evidence.title = this.summaryList[1].value || '';

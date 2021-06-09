@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { categoriesItems } from '@stores-module/innovation/sections/catalogs.config';
 
-import { AssessmentService, getInnovationInfoEndpointDTO } from '../../../services/assessment.service';
+import { AccessorService, getInnovationInfoEndpointDTO } from '../../../services/accessor.service';
 
 
 @Component({
-  selector: 'app-assessment-pages-innovation-overview',
+  selector: 'app-accessor-pages-innovation-overview',
   templateUrl: './overview.component.html'
 })
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
@@ -16,13 +17,19 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationId: string;
   innovation: getInnovationInfoEndpointDTO | undefined;
 
-  innovationSummary: { label: string; value: string; }[] = [];
-  innovatorSummary: { label: string; value: string; }[] = [];
+  innovationSupport: {
+    organisationUnit: string;
+    status: keyof typeof INNOVATION_SUPPORT_STATUS;
+    accessors: string;
+  } = { organisationUnit: '', status: 'UNNASSIGNED', accessors: '' };
 
+  innovationSummary: { label: string; value: string; }[] = [];
+
+  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private assessmentService: AssessmentService
+    private accessorService: AccessorService
   ) {
     super();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -31,22 +38,23 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    this.assessmentService.getInnovationInfo(this.innovationId).subscribe(
+    this.accessorService.getInnovationInfo(this.innovationId).subscribe(
       response => {
 
         this.innovation = response;
 
+        this.innovationSupport = {
+          organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
+          status: response.support?.status || 'UNNASSIGNED',
+          accessors: (response.support?.accessors || []).map(item => item.name).join(', ')
+        };
+
         this.innovationSummary = [
-          { label: 'Company', value: response.summary.company },
+          { label: 'Innovator name', value: response.contact.name },
+          { label: 'Company name', value: response.summary.company },
           { label: 'Location', value: `${response.summary.countryName}${response.summary.postCode ? ', ' + response.summary.postCode : ''}` },
           { label: 'Description', value: response.summary.description },
           { label: 'Categories', value: response.summary.categories.map(v => v === 'OTHER' ? response.summary.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('<br />') }
-        ];
-
-        this.innovatorSummary = [
-          { label: 'Name', value: response.contact.name },
-          { label: 'Email address', value: response.contact.email },
-          { label: 'Phone number', value: response.contact.phone || '' }
         ];
 
       },

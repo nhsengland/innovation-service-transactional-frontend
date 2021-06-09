@@ -28,14 +28,22 @@ export const INNOVATION_STATUS = {
 };
 
 export const INNOVATION_SUPPORT_STATUS = {
-  UNNASSIGNED: { label: 'Unassigned', cssClass: 'nhsuk-tag--red' },
-  FURTHER_INFO_REQUIRED: { label: 'Further info', cssClass: 'nhsuk-tag--yellow' },
-  WAITING: { label: 'Waiting', cssClass: 'nhsuk-tag--grey' },
-  NOT_YET: { label: 'Waiting', cssClass: 'nhsuk-tag--grey' },
-  ENGAGING: { label: 'Engaging', cssClass: 'nhsuk-tag--green' },
-  UNSUITABLE: { label: 'Waiting', cssClass: 'nhsuk-tag--grey' },
-  WITHDRAWN: { label: 'Waiting', cssClass: 'nhsuk-tag--grey' },
-  COMPLETE: { label: 'Waiting', cssClass: 'nhsuk-tag--grey' },
+  ENGAGING: { label: 'Engaging', cssClass: 'nhsuk-tag--green',
+  description: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.', hidden: false },
+  FURTHER_INFO_REQUIRED: { label: 'Further info', cssClass: 'nhsuk-tag--white',
+  description: 'Further info is needed from the innovator to make a decision. You must provide a comment on what information is needed.', hidden: false },
+  WAITING: { label: 'Waiting', cssClass: 'nhsuk-tag--yellow',
+    description: 'Waiting for an internal decision to progress.', hidden: false },
+  NOT_YET: { label: 'Not yet', cssClass: 'nhsuk-tag--blue',
+    description: 'The innovation is not yet ready for your support offer. You must provide a comment outlining your decision.', hidden: false },
+  UNNASSIGNED: { label: 'Unassigned', cssClass: 'nhsuk-tag--red',
+    description: '1', hidden: true },
+  UNSUITABLE: { label: 'Unsuitable', cssClass: 'nhsuk-tag--red',
+    description: 'You have no suitable support offer for the innovation. You must provide a comment outlining your decision.', hidden: false },
+  WITHDRAWN: { label: 'Withdrawn', cssClass: 'nhsuk-tag--red',
+    description: '7', hidden: true },
+  COMPLETE: { label: 'Completed', cssClass: 'nhsuk-tag--dark-grey',
+    description: 'Your organisation has completed this engagement. You must provide a comment outlining your decision.', hidden: false },
 };
 
 export const INNOVATION_SECTION_STATUS = {

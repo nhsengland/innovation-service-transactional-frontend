@@ -108,12 +108,6 @@ export function app(): express.Express {
   // Helmet configuration
 
   server.use(
-    helmet.contentSecurityPolicy({
-      useDefaults: true,
-      directives: {
-        'script-src': ['\'self\'', '\'unsafe-inline\'', '\'unsafe-eval\'']
-      }
-    }),
     helmet.hidePoweredBy(),
     helmet.hsts({
       includeSubDomains: true,

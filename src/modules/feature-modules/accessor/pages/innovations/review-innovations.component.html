@@ -1,42 +1,46 @@
-<h1 class="nhsuk-heading-l"> Innovations </h1>
+<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
 
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
+  <h1 class="nhsuk-heading-l"> Innovations </h1>
 
-    <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{innovationsList.getTotalRowsNumber() }} innovations</p>
-    <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
 
-    <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Innovations list">
-      <thead class="nhsuk-table__head">
-        <tr class="">
-          <th *ngFor="let item of innovationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
-            <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-            <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
-          </th>
-        </tr>
-      </thead>
-      <tbody class="nhsuk-table__body">
-        <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
-          <td class="nhsuk-table__cell">
-            <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }} </span>
-            <a *ngIf="item.assessment?.id" routerLink="/accessor/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}">{{ item.name }}</a>
-            <span *ngIf="!item.assessment?.id">{{ item.name }}</span>
-          </td>
-          <td class="nhsuk-table__cell">
-            <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('createdAt') }} </span>
-            {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}
-          </td>
-          <td class="nhsuk-table__cell">
-            <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('updatedAt') }} </span>
-            {{ item.updatedAt | date: ('app.date_formats.long_date' | translate) }}
-          </td>
-          <td class="nhsuk-table__cell text-align-right">
-            <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('supportStatus') }} </span>
-            <strong class="nhsuk-tag" [ngClass]="innovationStatus[item.supportStatus].cssClass">{{ innovationStatus[item.supportStatus].label }}</strong>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{innovationsList.getTotalRowsNumber() }} innovations</p>
+      <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
+      <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Innovations list">
+        <thead class="nhsuk-table__head">
+          <tr class="">
+            <th *ngFor="let item of innovationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+              <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+              <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">
+              <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }} </span>
+              <a *ngIf="item.assessment?.id" routerLink="/accessor/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}">{{ item.name }}</a>
+              <span *ngIf="!item.assessment?.id">{{ item.name }}</span>
+            </td>
+            <td class="nhsuk-table__cell">
+              <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('createdAt') }} </span>
+              {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}
+            </td>
+            <td class="nhsuk-table__cell">
+              <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('updatedAt') }} </span>
+              {{ item.updatedAt | date: ('app.date_formats.long_date' | translate) }}
+            </td>
+            <td class="nhsuk-table__cell text-align-right">
+              <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('supportStatus') }} </span>
+              <strong class="nhsuk-tag" [ngClass]="innovationStatus[item.supportStatus].cssClass">{{ innovationStatus[item.supportStatus].label }}</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
   </div>
+
 </div>

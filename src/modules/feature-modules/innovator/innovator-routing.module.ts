@@ -9,18 +9,18 @@ import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-s
 
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
-import { InnovationSectionViewComponent } from './pages/innovation/record/section-view.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
-import { InnovationSectionEvidenceViewComponent } from './pages/innovation/record/evidence-view.component';
 import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
 import { InnovationCommentsComponent } from './pages/innovation/comments/comments.component';
 import { InnovationDataSharingComponent } from './pages/innovation/data-sharing/data-sharing.component';
 
 import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/innovation-record.component';
-
+import { InnovationSectionViewComponent } from '@shared-module/pages/innovation/section-view.component';
+import { InnovationSectionEvidenceViewComponent } from '@shared-module/pages/innovation/evidence-view.component';
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
+
 
 const routes: Routes = [
 
