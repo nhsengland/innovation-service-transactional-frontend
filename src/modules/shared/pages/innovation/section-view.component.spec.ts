@@ -14,7 +14,7 @@ import { InnovationSectionViewComponent } from './section-view.component';
 import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
 
 
-describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSectionViewComponent', () => {
+describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
@@ -32,7 +32,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
         StoresModule,
         InnovatorModule
       ]
-    }).compileComponents();
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 

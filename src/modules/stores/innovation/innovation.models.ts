@@ -54,14 +54,42 @@ export const INNOVATION_SECTION_STATUS = {
 };
 
 export const INNOVATION_SECTION_ACTION_STATUS = {
-  '': null,
-  REQUESTED: { label: 'Requested', cssClass: 'nhsuk-tag--blue' },
-  STARTED: { label: 'Started', cssClass: 'nhsuk-tag--green' },
-  CONTINUE: { label: 'Continue', cssClass: 'nhsuk-tag--blue' },
-  IN_REVIEW: { label: 'In review', cssClass: 'nhsuk-tag--yellow' },
-  DELETED: { label: 'Deleted', cssClass: 'nhsuk-tag--grey' },
-  DECLINED: { label: 'Declined', cssClass: 'nhsuk-tag--grey' },
-  COMPLETED: { label: 'Completed', cssClass: 'nhsuk-tag--green' }
+  '': { label: '', cssClass: '', description: '' },
+  REQUESTED: {
+    label: 'Requested',
+    cssClass: 'nhsuk-tag--blue',
+    description: 'An accessor has requested that the innovation owner submit information to a specific section of their innovation record.'
+  },
+  STARTED: {
+    label: 'Started',
+    cssClass: 'nhsuk-tag--green',
+    description: ''
+  },
+  CONTINUE: {
+    label: 'Continue',
+    cssClass: 'nhsuk-tag--blue',
+    description: ''
+  },
+  IN_REVIEW: {
+    label: 'In review',
+    cssClass: 'nhsuk-tag--yellow',
+    description: 'The innovation owner has submitted information requested by an accessor and are waiting for them to review it.'
+  },
+  DELETED: {
+    label: 'Deleted',
+    cssClass: 'nhsuk-tag--grey',
+    description: ''
+  },
+  DECLINED: {
+    label: 'Declined',
+    cssClass: 'nhsuk-tag--grey',
+    description: 'The innovation owner has declined the action requested.'
+  },
+  COMPLETED: {
+    label: 'Completed',
+    cssClass: 'nhsuk-tag--green',
+    description: 'An accessor has closed the action after reviewing the information.'
+  }
 };
 
 
