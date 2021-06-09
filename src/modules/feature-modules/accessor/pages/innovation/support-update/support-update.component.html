@@ -17,7 +17,7 @@
 
         <ng-container *ngIf="stepNumber === 1">
 
-          <div class="nhsuk-form-group nhsuk-u-padding-top-4">
+          <div class="nhsuk-form-group">
             <div class="nhsuk-radios">
               <div *ngFor="let item of supportStatus; let i = index" class="nhsuk-radios__item">
                 <input formControlName="status" id="status{{ i }}" type="radio" name="status" [value]="item.key" class="nhsuk-radios__input" />
@@ -70,7 +70,7 @@
             <br />
             <div>Enter your comment</div>
             <div class="nhsuk-form-group">
-              <theme-form-textarea [controlName]="commentField"></theme-form-textarea>
+              <theme-form-textarea [controlName]="commentField" [cssOverride]="textAreaCssOverride"></theme-form-textarea>
             </div>
           </div>
 
@@ -80,8 +80,6 @@
           <a routerLink="/accessor/innovations/{{ innovationId }}/support">Cancel</a>
         </div>
       </form>
-
-
     </div>
   </div>
 

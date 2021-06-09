@@ -25,7 +25,7 @@ export class FormTextareaComponent extends ControlValueAccessorConnector impleme
   @Input() label?: string;
   @Input() description?: string;
   @Input() placeholder?: string;
-
+  @Input() cssOverride?: string;
   hasError = false;
   errorMessage = '';
 
@@ -39,6 +39,7 @@ export class FormTextareaComponent extends ControlValueAccessorConnector impleme
     this.id = this.id || RandomGeneratorHelper.generateRandom();
     this.type = this.type || 'text';
     this.placeholder = this.placeholder || '';
+    this.cssOverride = this.cssOverride || 'nhsuk-u-padding-top-4';
 
   }
 
