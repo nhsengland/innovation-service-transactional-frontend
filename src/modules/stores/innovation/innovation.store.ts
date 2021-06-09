@@ -45,12 +45,13 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
 
-  getSectionsSummary$(module: '' | 'innovator' | 'accessor', innovationId: string): Observable<{ innovation: { status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {
+  getSectionsSummary$(module: '' | 'innovator' | 'accessor', innovationId: string): Observable<{ innovation: { name: string, status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {
 
     return this.innovationsService.getInnovationSections(module, innovationId).pipe(
       map(response => ({
         innovation: {
-          status: response.status
+          status: response.status,
+          name: response.name
         },
         sections: INNOVATION_SECTIONS.map(item => ({
           title: item.title,
@@ -69,7 +70,7 @@ export class InnovationStore extends Store<InnovationModel> {
       catchError(() => {
         // this.logger.error('Unable to fetch sections information');
         return of({
-          innovation: { status: '' as any },
+          innovation: { name: '', status: '' as any },
           sections: INNOVATION_SECTIONS.map(item => ({
             title: item.title,
             sections: item.sections.map(ss => ({

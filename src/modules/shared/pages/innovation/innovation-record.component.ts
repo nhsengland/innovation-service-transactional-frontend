@@ -17,6 +17,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   documentUrl = '';
 
   innovationId: string;
+  innovationName: string;
   innovationStatus: keyof typeof INNOVATION_STATUS = '';
   innovationSections: SectionsSummaryModel[] = [];
 
@@ -56,6 +57,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.baseUrl = `/${this.module}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
     this.documentUrl = `${this.stores.environment.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.innovationName = '';
 
   }
 
@@ -65,6 +67,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.stores.innovation.getSectionsSummary$(this.module, this.activatedRoute.snapshot.params.innovationId).subscribe(
       response => {
 
+        this.innovationName = response.innovation.name;
         this.innovationStatus = response.innovation.status;
         this.innovationSections = response.sections;
 

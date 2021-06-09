@@ -9,6 +9,7 @@ import { FormsModule } from './forms/forms.module';
 
 // Pages.
 import { PageInnovationRecordComponent } from './pages/innovation/innovation-record.component';
+import { PageActionStatusListComponent } from './pages/innovation/action-status-list.component';
 import { InnovationSectionViewComponent } from './pages/innovation/section-view.component';
 import { InnovationSectionEvidenceViewComponent } from './pages/innovation/evidence-view.component';
 import { PageNotFoundComponent } from './pages/not-found/not-found.component';
@@ -29,6 +30,7 @@ import { OrganisationsService } from './services/organisations.service';
   declarations: [
     // Pages.
     PageInnovationRecordComponent,
+    PageActionStatusListComponent,
     InnovationSectionViewComponent,
     InnovationSectionEvidenceViewComponent,
     PageNotFoundComponent

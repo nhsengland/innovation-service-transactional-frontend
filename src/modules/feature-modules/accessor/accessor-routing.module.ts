@@ -7,11 +7,16 @@ import { AccessorLayoutComponent } from './base/accessor-layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { InnovationActionTrackerListComponent } from './pages/innovation/action-tracker/action-tracker-list.component';
+import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
+import { InnovationActionTrackerNewComponent } from './pages/innovation/action-tracker/action-tracker-new.component';
+import { InnovationActionTrackerEditComponent } from './pages/innovation/action-tracker/action-tracker-edit.component';
 import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
 import { InnovationSupportUpdateComponent } from './pages/innovation/support-update/support-update.component';
 import { InnovationSupportInfoComponent } from './pages/innovation/support-update/support-info.component';
 
 import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/innovation-record.component';
+import { PageActionStatusListComponent } from '@shared-module/pages/innovation/action-status-list.component';
 import { InnovationSectionViewComponent } from '@shared-module/pages/innovation/section-view.component';
 import { InnovationSectionEvidenceViewComponent } from '@shared-module/pages/innovation/evidence-view.component';
 
@@ -58,6 +63,26 @@ const routes: Routes = [
               {
                 path: 'record/sections/:sectionId/evidence/:evidenceId', pathMatch: 'full', component: InnovationSectionEvidenceViewComponent,
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/record/sections/:sectionId', label: 'Innovation section' } } }
+              },
+              {
+                path: 'action-tracker', pathMatch: 'full', component: InnovationActionTrackerListComponent,
+                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } }
+              },
+              {
+                path: 'action-tracker/statuses', pathMatch: 'full', component: PageActionStatusListComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/action-tracker', label: 'Go back' } } }
+              },
+              {
+                path: 'action-tracker/new', pathMatch: 'full', component: InnovationActionTrackerNewComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/action-tracker', label: 'Go back' } } }
+              },
+              {
+                path: 'action-tracker/:actionId', pathMatch: 'full', component: InnovationActionTrackerInfoComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/action-tracker', label: 'Action tracker' } } }
+              },
+              {
+                path: 'action-tracker/:actionId/edit', pathMatch: 'full', component: InnovationActionTrackerEditComponent,
+                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations/:innovationId/action-tracker/:actionId', label: 'Go back' } } }
               },
 
               {
