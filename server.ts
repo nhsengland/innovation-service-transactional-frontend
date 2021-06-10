@@ -424,7 +424,7 @@ export function app(): express.Express {
   });
   // Serve environment variables file.
   server.get('*/environment.js', (req, res) => {
-    res.setHeader('Content-Type', 'application/javascript; charset=UTF-8')
+    res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
     res.send(`(function (window) {
       window.__env = window.__env || {};
       window.__env.BASE_URL = '${BASE_URL}';
