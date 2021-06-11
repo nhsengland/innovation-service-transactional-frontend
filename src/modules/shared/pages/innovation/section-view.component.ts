@@ -15,6 +15,8 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
   module: '' | 'innovator' | 'accessor' = '';
   innovationId: string;
+  sectionId: InnovationSectionsIds;
+
   section: {
     id: InnovationSectionsIds;
     title: string;
@@ -37,6 +39,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'sectionUpdateSuccess':
@@ -86,10 +89,10 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
     }
 
 
+    const section = this.stores.innovation.getSection(this.sectionId);
 
-    const section = this.stores.innovation.getSection(this.activatedRoute.snapshot.params.sectionId);
     this.section = {
-      id: this.activatedRoute.snapshot.params.sectionId,
+      id: this.sectionId,
       title: section?.title || '',
       status: 'UNKNOWN',
       isNotStarted: false,
