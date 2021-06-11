@@ -44,19 +44,19 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
     if (this.innovation.support.id) {
 
-    this.accessorService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id).subscribe(
-      response => {
+      this.accessorService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id).subscribe(
+        response => {
 
-        this.innovationSupport = {
-          organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-          accessors: (response.accessors || []).map(item => item.name).join(', ')
-        };
+          this.innovationSupport = {
+            organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
+            accessors: (response.accessors || []).map(item => item.name).join(', ')
+          };
 
-      },
-      error => {
-        this.logger.error(error);
-      }
-    );
+        },
+        error => {
+          this.logger.error(error);
+        }
+      );
 
     }
   }

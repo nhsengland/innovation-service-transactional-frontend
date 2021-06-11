@@ -126,42 +126,13 @@ export class AccessorService extends CoreService {
 
   getInnovationInfo(innovationId: string): Observable<getInnovationInfoEndpointDTO> {
 
-    return of({
-      summary: {
-        id: '776227DC-C9A8-EB11-B566-0003FFD6549F',
-        name: 'HealthyApp',
-        status: 'IN_PROGRESS',
-        company: 'HealthyApps, Inc',
-        countryName: 'Scotland',
-        postCode: '',
-        description: 'This innovation serves to get people in shape.',
-        categories: ['AI', 'DIGITAL'],
-        otherCategoryDescription: null
-      },
-      contact: {
-        name: 'Ricky Martin',
-        // email: 'ricardo.tavares@bjss.com',
-        // phone: null
-      },
-      assessment: {
-        id: '6150B099-B8BF-EB11-A7AD-0003FFD65C88',
-        // assignToName: 'Assessment User'
-      },
-      support: {
-        id: 'aaaaaa',
-        status: 'WAITING',
-        // accessors: [
-        //   { id: 'IdOne', name: 'Brigid Kosgei' },
-        //   { id: 'IdTwo', name: 'Roberto Carlos' }
-        // ]
-      }
-    });
-
-    // const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    // return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
-    //   take(1),
-    //   map(response => response)
-    // );
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => {
+        return response;
+      })
+    );
 
   }
 
@@ -282,18 +253,11 @@ export class AccessorService extends CoreService {
 
   getInnovationSupportInfo(innovationId: string, supportId: string): Observable<{ status: string, accessors: any[] }> {
 
-    return of({
-      status: 'ENGAGING',
-      accessors: [
-        { id: '06E12E5C-3BA8-EB11-B566-0003FFD6549F', name: 'qaccesor_1' },
-      ],
-    });
-
-    // const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/support/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
-    // return this.http.get<{ status: string, accessors: string[]}>(url.buildUrl()).pipe(
-    //   take(1),
-    //   map(response => response)
-    // );
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
+    return this.http.get<{ status: string, accessors: string[]}>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
 
   }
 
@@ -307,11 +271,30 @@ export class AccessorService extends CoreService {
     return this.http.get<{ id: string, name: string }[]>(url.buildUrl()).pipe(
       map(response => response)
     );
-    // return of([
-    //   { value: 'abc', label: 'Accessor 1' },
-    //   { value: 'def', label: 'Accessor 2' },
-    //   { value: 'ghi', label: 'Accessor 3' },
-    // ]);
   }
 
+  saveSupportStatus(innovationId: string, body: MappedObject, supportId?: string): Observable<{id: string}> {
+
+    if (!supportId) {
+      return this.createSupportStatus(innovationId, body);
+    }
+
+    return this.updateSupportStatus(innovationId, supportId, body);
+  }
+
+  private createSupportStatus(innovationId: string, body: MappedObject): Observable<{id: string}> {
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
+  private updateSupportStatus(innovationId: string, supportId: string, body: MappedObject): Observable<{id: string}> {
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
 }
