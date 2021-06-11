@@ -94,9 +94,13 @@ const routes: Routes = [
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } }
               },
               {
+                path: 'support/new', pathMatch: 'full', component: InnovationSupportUpdateComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId', label: 'Go back' } } }
+              },
+              {
                 path: 'support/:supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent,
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId', label: 'Go back' } } }
-              }
+              },
             ]
           }
         ]

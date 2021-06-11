@@ -27,4 +27,4 @@
   </div>
 </dl>
 
-<a routerLink="/accessor/innovations/{{ innovation?.summary?.id }}/support/{{ innovation?.support?.id }}" class="nhsuk-button"> Update status </a>
+<a routerLink="/accessor/innovations/{{ innovation?.summary?.id }}/support/{{ innovation?.support?.id || 'new'}}" class="nhsuk-button"> Update status </a>

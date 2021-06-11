@@ -43,7 +43,6 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
       response => {
 
         this.innovation = response;
-
         this.innovationSupport = {
           organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
           status: response.support?.status || 'UNNASSIGNED',
@@ -52,6 +51,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
       },
       error => {
+        console.log('ERROR', error);
         this.logger.error(error);
       }
     );
