@@ -8,6 +8,8 @@ if (environment.production) {
   enableProdMode();
 }
 
+document.body.className = (document.body.className ? document.body.className + ' js-enabled' : 'js-enabled'); 
+
 document.addEventListener('DOMContentLoaded', () => {
   platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
