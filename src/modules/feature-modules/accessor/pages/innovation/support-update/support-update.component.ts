@@ -128,6 +128,16 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   onSubmit(): void {
     if (!this.validateForm(this.stepNumber)) { return; }
     this.formSupportObj = {...this.form.value};
+
+    this.accessorService.saveSupportStatus(this.innovationId, this.form.value, this.supportId)
+      .subscribe(
+        response => {
+          this.redirectTo(`/accessor/innovations/${this.innovationId}/support`);
+        },
+        error => {
+          this.logger.error(error);
+        }
+      );
   }
 
   private validateForm(step: number): boolean {
