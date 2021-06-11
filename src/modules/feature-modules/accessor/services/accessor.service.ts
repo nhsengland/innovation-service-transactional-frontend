@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -36,17 +36,17 @@ export type getInnovationInfoEndpointDTO = {
   };
   contact: {
     name: string;
-    email: string;
-    phone: null | string;
+    // email: string;
+    // phone: null | string;
   };
   assessment?: {
     id: string;
-    assignToName: string;
+    // assignToName: string;
   };
   support?: {
     id: string;
     status: keyof typeof INNOVATION_SUPPORT_STATUS;
-    accessors: { id: string; name: string; }[];
+    // accessors: { id: string; name: string; }[];
   }
 };
 

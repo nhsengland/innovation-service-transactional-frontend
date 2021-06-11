@@ -3,10 +3,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { InnovationSupportInfoComponent } from './support-info.component';
@@ -15,6 +16,9 @@ import { AccessorService } from '@modules/feature-modules/accessor/services/acce
 
 
 describe('FeatureModules/Accessor/Innovation/InnovationSupportInfoComponent', () => {
+
+  let activatedRoute: ActivatedRoute;
+  let authenticationStore: AuthenticationStore;
 
   let accessorService: AccessorService;
 
@@ -34,7 +38,13 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportInfoComponent', ()
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
+    activatedRoute = TestBed.inject(ActivatedRoute);
+    authenticationStore = TestBed.inject(AuthenticationStore);
+
     accessorService = TestBed.inject(AccessorService);
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
 
   });
 
@@ -49,50 +59,72 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportInfoComponent', ()
   });
 
 
-  it('should have innovation information loaded with payload 01', () => {
+  it('should NOT make an API call', () => {
 
-    const dataMock = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: null, categories: ['Medical'], otherCategoryDescription: '' },
-      contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' },
-      support: { id: '01', status: 'WAITING', accessors: [{ id: 'IdOne', name: 'Brigid Kosgei' }] }
-    };
-    accessorService.getInnovationInfo = () => of(dataMock as any);
-    const expected = dataMock;
+    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { status: 'ENGAGING' }, assessment: {} } };
+
+    accessorService.getInnovationSupportInfo = () => throwError('error');
+    const expected = { organisationUnit: '', accessors: '' };
 
     fixture = TestBed.createComponent(InnovationSupportInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.innovation).toEqual(expected);
+    expect(component.innovationSupport).toEqual(expected);
+
+  });
+
+  it('should have support information loaded with payload 01', () => {
+
+    authenticationStore.getAccessorOrganisationUnitName = () => 'Organisation Name';
+
+    const dataMock = {
+      status: 'ENGAGING',
+      accessors: [{ id: '06E12E5C-3BA8-EB11-B566-0003FFD6549F', name: 'qaccesor_1' }]
+    };
+    accessorService.getInnovationSupportInfo = () => of(dataMock as any);
+    const expected = {
+      organisationUnit: 'Organisation Name',
+      accessors: 'qaccesor_1'
+    };
+
+    fixture = TestBed.createComponent(InnovationSupportInfoComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component.innovationSupport).toEqual(expected);
 
   });
 
   it('should have innovation information loaded with payload 02', () => {
 
+    authenticationStore.getAccessorOrganisationUnitName = () => 'Organisation Name';
+
     const dataMock = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['Medical', 'OTHER'], otherCategoryDescription: 'Other category' },
-      contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' }
+      status: 'ENGAGING',
+      accessors: undefined
     };
-    accessorService.getInnovationInfo = () => of(dataMock as any);
-    const expected = dataMock;
+    accessorService.getInnovationSupportInfo = () => of(dataMock as any);
+    const expected = {
+      organisationUnit: 'Organisation Name',
+      accessors: ''
+    };
 
     fixture = TestBed.createComponent(InnovationSupportInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.innovation).toEqual(expected);
+    expect(component.innovationSupport).toEqual(expected);
+
 
   });
 
-  it('should NOT have innovation information loaded', () => {
+  it('should NOT have support information loadedd due to API error', () => {
 
-    accessorService.getInnovationInfo = () => throwError('error');
-    const expected = [];
+    accessorService.getInnovationSupportInfo = () => throwError('error');
+    const expected = { organisationUnit: '', accessors: '' };
 
     fixture = TestBed.createComponent(InnovationSupportInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.innovation).toEqual(undefined);
+    expect(component.innovationSupport).toEqual(expected);
 
   });
 

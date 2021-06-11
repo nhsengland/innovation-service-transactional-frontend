@@ -81,8 +81,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         response => {
           this.formSupportObj = response;
           this.form.get('status')?.setValue(response.status);
-          response.accessors.map((accessor) => {
-            ( this.form.get('accessors') as FormArray).push(
+          response.accessors.forEach(accessor => {
+            (this.form.get('accessors') as FormArray).push(
               new FormControl(accessor.id)
             );
           });
@@ -96,7 +96,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.accessorService.getAccessorsList().subscribe(
       response => {
-        this.accessorList = response.map((r) => ({value: r.id, label: r.name}));
+        this.accessorList = response.map((r) => ({ value: r.id, label: r.name }));
       }
     );
 
@@ -127,17 +127,16 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   onSubmit(): void {
     if (!this.validateForm(this.stepNumber)) { return; }
-    this.formSupportObj = {...this.form.value};
+    this.formSupportObj = { ...this.form.value };
 
-    this.accessorService.saveSupportStatus(this.innovationId, this.form.value, this.supportId)
-      .subscribe(
-        response => {
-          this.redirectTo(`/accessor/innovations/${this.innovationId}/support`);
-        },
-        error => {
-          this.logger.error(error);
-        }
-      );
+    this.accessorService.saveSupportStatus(this.innovationId, this.form.value, this.supportId).subscribe(
+      response => {
+        this.redirectTo(`/accessor/innovations/${this.innovationId}/support`);
+      },
+      error => {
+        this.logger.error(error);
+      }
+    );
   }
 
   private validateForm(step: number): boolean {

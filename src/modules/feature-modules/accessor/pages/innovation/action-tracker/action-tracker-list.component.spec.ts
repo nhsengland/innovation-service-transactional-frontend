@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
@@ -15,6 +16,8 @@ import { AccessorService } from '@modules/feature-modules/accessor/services/acce
 
 
 describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerListComponent', () => {
+
+  let activatedRoute: ActivatedRoute;
 
   let accessorService: AccessorService;
 
@@ -34,7 +37,12 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerListComponen
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
+    activatedRoute = TestBed.inject(ActivatedRoute);
+
     accessorService = TestBed.inject(AccessorService);
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
 
   });
 
@@ -51,23 +59,17 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerListComponen
 
   it('should have initial information loaded', () => {
 
-    const getInnovationInfoDataMock = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: null, categories: ['Medical'], otherCategoryDescription: '' },
-      contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' },
-      support: { id: '01', status: 'WAITING', accessors: [{ id: 'IdOne', name: 'Brigid Kosgei' }, { id: 'IdTwo', name: 'Brigid Kosgei the second' }] }
-    };
     const getInnovationActionsListDataMock = {
       openedActions: [{ id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z' }],
       closedActions: [{ id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z' }]
     };
-    accessorService.getInnovationInfo = () => of(getInnovationInfoDataMock as any);
     accessorService.getInnovationActionsList = () => of(getInnovationActionsListDataMock as any);
+    const expected = getInnovationActionsListDataMock.openedActions;
 
     fixture = TestBed.createComponent(InnovationActionTrackerListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.innovation.name).toEqual('Innovation 01');
+    expect(component.openedActionsList.getRecords()).toEqual(expected);
 
   });
 
@@ -75,12 +77,12 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerListComponen
 
     accessorService.getInnovationInfo = () => throwError('error');
     accessorService.getInnovationActionsList = () => throwError('error');
-    const expected = [];
+    const expected = [] as any;
 
     fixture = TestBed.createComponent(InnovationActionTrackerListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.innovation).toEqual({ name: '', assessmentId: null });
+    expect(component.openedActionsList.getRecords()).toEqual(expected);
 
   });
 

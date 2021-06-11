@@ -2,8 +2,8 @@
   <div class="nhsuk-grid-column-one-half">
     <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation.name }}</h1>
   </div>
-  <div *ngIf="innovation.assessmentId" class="nhsuk-grid-column-one-half text-align-right">
-    <a routerLink="/accessor/innovations/{{ innovationId }}/assessments/{{ innovation.assessmentId }}">View needs assessment</a>
+  <div *ngIf="innovation.assessment.id" class="nhsuk-grid-column-one-half text-align-right">
+    <a routerLink="/accessor/innovations/{{ innovationId }}/assessments/{{ innovation.assessment.id }}">View needs assessment</a>
   </div>
 </div>
 <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-3" />
