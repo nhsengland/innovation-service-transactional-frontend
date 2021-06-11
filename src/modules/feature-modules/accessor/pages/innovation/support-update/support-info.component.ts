@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { RoutingHelper } from '@modules/core';
 
-import { AccessorService, getInnovationInfoEndpointDTO } from '../../../services/accessor.service';
+import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
+
+import { AccessorService } from '../../../services/accessor.service';
 
 
 @Component({
@@ -15,13 +17,12 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
   innovationId: string;
 
-  innovation: getInnovationInfoEndpointDTO | undefined;
+  innovation: InnovationDataType;
 
   innovationSupport: {
     organisationUnit: string;
-    status: keyof typeof INNOVATION_SUPPORT_STATUS;
     accessors: string;
-  } = { organisationUnit: '', status: 'UNNASSIGNED', accessors: '' };
+  } = { organisationUnit: '', accessors: '' };
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
@@ -34,20 +35,21 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
+    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+
   }
 
 
   ngOnInit(): void {
 
-    this.accessorService.getInnovationInfo(this.innovationId).subscribe(
-      response => {
+    if (this.innovation.support.id) {
 
-        this.innovation = response;
+    this.accessorService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id).subscribe(
+      response => {
 
         this.innovationSupport = {
           organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-          status: response.support?.status || 'UNNASSIGNED',
-          accessors: (response.support?.accessors || []).map(item => item.name).join(', ')
+          accessors: (response.accessors || []).map(item => item.name).join(', ')
         };
 
       },
@@ -56,6 +58,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
       }
     );
 
+    }
   }
 
 }

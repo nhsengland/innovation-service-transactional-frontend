@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
@@ -15,6 +16,8 @@ import { AccessorService } from '@modules/feature-modules/accessor/services/acce
 
 
 describe('FeatureModules/Accessor/Innovation/InnovationNeedsAssessmentOverviewComponent', () => {
+
+  let activatedRoute: ActivatedRoute;
 
   let accessorService: AccessorService;
 
@@ -34,7 +37,12 @@ describe('FeatureModules/Accessor/Innovation/InnovationNeedsAssessmentOverviewCo
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
+    activatedRoute = TestBed.inject(ActivatedRoute);
+
     accessorService = TestBed.inject(AccessorService);
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
 
   });
 
@@ -53,15 +61,15 @@ describe('FeatureModules/Accessor/Innovation/InnovationNeedsAssessmentOverviewCo
 
     const responseMock = {
       innovation: { id: '01', name: 'Innovation 01' },
-      assessment: { some: 'data' }
+      assessment: { description: 'description' }
     };
     accessorService.getInnovationNeedsAssessment = () => of(responseMock as any);
-    const expected = responseMock.innovation.name;
+    const expected = responseMock.assessment;
 
     fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.innovation?.name).toBe(expected);
+    expect(component.assessment).toBe(expected);
 
   });
 
@@ -74,7 +82,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationNeedsAssessmentOverviewCo
     fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.innovation).toBe(expected);
+    expect(component.assessment).toBe(expected);
 
   });
 

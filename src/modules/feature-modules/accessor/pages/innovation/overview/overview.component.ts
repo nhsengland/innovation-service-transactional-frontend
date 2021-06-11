@@ -20,8 +20,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationSupport: {
     organisationUnit: string;
     status: keyof typeof INNOVATION_SUPPORT_STATUS;
-    accessors: string;
-  } = { organisationUnit: '', status: 'UNNASSIGNED', accessors: '' };
+  } = { organisationUnit: '', status: 'UNNASSIGNED' };
 
   innovationSummary: { label: string; value: string; }[] = [];
 
@@ -45,8 +44,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
         this.innovationSupport = {
           organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-          status: response.support?.status || 'UNNASSIGNED',
-          accessors: (response.support?.accessors || []).map(item => item.name).join(', ')
+          status: response.support?.status || 'UNNASSIGNED'
         };
 
         this.innovationSummary = [

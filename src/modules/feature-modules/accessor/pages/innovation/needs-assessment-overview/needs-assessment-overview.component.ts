@@ -2,10 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { RoutingHelper } from '@modules/core';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { getInnovationNeedsAssessmentEndpointOutDTO } from '@modules/feature-modules/accessor/services/accessor.service';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
+
+import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -18,10 +21,9 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
   innovationId: string;
   assessmentId: string;
+  innovation: InnovationDataType;
 
-  innovation: getInnovationNeedsAssessmentEndpointOutDTO['innovation'] | undefined;
   assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
-  support: getInnovationNeedsAssessmentEndpointOutDTO['support'] | undefined;
 
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
@@ -35,6 +37,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
+    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
 
   }
 
@@ -44,9 +47,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
     this.accessorService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId).subscribe(
       response => {
 
-        this.innovation = response.innovation;
         this.assessment = response.assessment;
-        this.support = response.support;
 
         const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === response.assessment.maturityLevel) || 0) + 1;
 

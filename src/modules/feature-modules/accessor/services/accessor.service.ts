@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -36,17 +36,17 @@ export type getInnovationInfoEndpointDTO = {
   };
   contact: {
     name: string;
-    email: string;
-    phone: null | string;
+    // email: string;
+    // phone: null | string;
   };
   assessment?: {
     id: string;
-    assignToName: string;
+    // assignToName: string;
   };
   support?: {
     id: string;
     status: keyof typeof INNOVATION_SUPPORT_STATUS;
-    accessors: { id: string; name: string; }[];
+    // accessors: { id: string; name: string; }[];
   }
 };
 
@@ -140,24 +140,24 @@ export class AccessorService extends CoreService {
       },
       contact: {
         name: 'Ricky Martin',
-        email: 'ricardo.tavares@bjss.com',
-        phone: null
+        // email: 'ricardo.tavares@bjss.com',
+        // phone: null
       },
       assessment: {
         id: '6150B099-B8BF-EB11-A7AD-0003FFD65C88',
-        assignToName: 'Assessment User'
+        // assignToName: 'Assessment User'
       },
       support: {
         id: 'aaaaaa',
         status: 'WAITING',
-        accessors: [
-          { id: 'IdOne', name: 'Brigid Kosgei' },
-          { id: 'IdTwo', name: 'Roberto Carlos' }
-        ]
+        // accessors: [
+        //   { id: 'IdOne', name: 'Brigid Kosgei' },
+        //   { id: 'IdTwo', name: 'Roberto Carlos' }
+        // ]
       }
     });
 
-    // const url = new UrlModel(this.API_URL).addPath('accessor/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    // const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
     // return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
     //   take(1),
     //   map(response => response)

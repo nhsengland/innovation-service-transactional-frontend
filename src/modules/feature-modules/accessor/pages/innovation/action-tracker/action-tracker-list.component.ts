@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
 import { AccessorService, getInnovationActionsListEndpointOutDTO } from '../../../services/accessor.service';
+import { RoutingHelper } from '@modules/core';
+
+import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
 
 
 @Component({
@@ -16,11 +17,10 @@ import { AccessorService, getInnovationActionsListEndpointOutDTO } from '../../.
 export class InnovationActionTrackerListComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-  innovation: { name: string; assessmentId: null | string; };
+  innovation: InnovationDataType;
 
   openedActionsList: TableModel<(getInnovationActionsListEndpointOutDTO['openedActions'][0])>;
   closedActionsList: TableModel<(getInnovationActionsListEndpointOutDTO['closedActions'][0])>;
-
 
   innovationSummary: { label: string; value: string; }[] = [];
 
@@ -30,11 +30,12 @@ export class InnovationActionTrackerListComponent extends CoreComponent implemen
     private activatedRoute: ActivatedRoute,
     private accessorService: AccessorService
   ) {
+
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.innovation = { name: '', assessmentId: null };
+    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
 
     this.openedActionsList = new TableModel({
       visibleColumns: {
@@ -59,21 +60,11 @@ export class InnovationActionTrackerListComponent extends CoreComponent implemen
 
   ngOnInit(): void {
 
-    forkJoin([
-      this.accessorService.getInnovationInfo(this.innovationId),
-      this.accessorService.getInnovationActionsList(this.innovationId)
-    ]).pipe(
-      map(([innovation, actions]) => ({ innovation, actions }))
-    ).subscribe(
+    this.accessorService.getInnovationActionsList(this.innovationId).subscribe(
       response => {
 
-        this.innovation = {
-          name: response.innovation.summary.name,
-          assessmentId: response.innovation.assessment?.id || null
-        };
-
-        this.openedActionsList.setData(response.actions.openedActions);
-        this.closedActionsList.setData(response.actions.closedActions);
+        this.openedActionsList.setData(response.openedActions);
+        this.closedActionsList.setData(response.closedActions);
 
       },
       error => {

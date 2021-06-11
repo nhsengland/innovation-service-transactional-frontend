@@ -1,9 +1,9 @@
 <div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
   <div class="nhsuk-grid-column-one-half">
-    <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation?.summary?.name }}</h1>
+    <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation.name }}</h1>
   </div>
-  <div *ngIf="innovation?.assessment?.id" class="nhsuk-grid-column-one-half text-align-right">
-    <a routerLink="/accessor/innovations/{{ innovation?.summary?.id || '' }}/assessments/{{ innovation?.assessment?.id || '' }}">View needs assessment</a>
+  <div *ngIf="innovation.assessment.id" class="nhsuk-grid-column-one-half text-align-right">
+    <a routerLink="/accessor/innovations/{{ innovationId }}/assessments/{{ innovation.assessment.id }}">View needs assessment</a>
   </div>
 </div>
 <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
@@ -16,8 +16,8 @@
   <div class="nhsuk-summary-list__row">
     <dt class="nhsuk-summary-list__key">Support status</dt>
     <dd class="nhsuk-summary-list__value">
-      <strong class="nhsuk-tag app-task-list__tag float-l" [ngClass]="innovationSupportStatus[innovationSupport.status].cssClass">
-        {{ innovationSupportStatus[innovationSupport.status].label }}
+      <strong class="nhsuk-tag app-task-list__tag float-l" [ngClass]="innovationSupportStatus[innovation.support.status].cssClass">
+        {{ innovationSupportStatus[innovation.support.status].label }}
       </strong>
     </dd>
   </div>
@@ -27,4 +27,4 @@
   </div>
 </dl>
 
-<a routerLink="/accessor/innovations/{{ innovation?.summary?.id }}/support/{{ innovation?.support?.id }}" class="nhsuk-button"> Update status </a>
+<a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support.id || 'new' }}" class="nhsuk-button"> Update status </a>

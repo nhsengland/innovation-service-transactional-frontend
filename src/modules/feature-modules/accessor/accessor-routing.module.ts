@@ -20,6 +20,9 @@ import { PageActionStatusListComponent } from '@shared-module/pages/innovation/a
 import { InnovationSectionViewComponent } from '@shared-module/pages/innovation/section-view.component';
 import { InnovationSectionEvidenceViewComponent } from '@shared-module/pages/innovation/evidence-view.component';
 
+// Resolvers.
+import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
+
 
 const routes: Routes = [
 
@@ -47,6 +50,7 @@ const routes: Routes = [
           {
             path: ':innovationId',
             data: { module: 'accessor' },
+            resolve: { innovationData: InnovationDataResolver },
             children: [
               {
                 path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent,

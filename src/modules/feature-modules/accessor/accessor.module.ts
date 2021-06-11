@@ -21,6 +21,9 @@ import { InnovationSupportInfoComponent } from './pages/innovation/support-updat
 // Services.
 import { AccessorService } from './services/accessor.service';
 
+// Resolvers.
+import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
+
 
 @NgModule({
   imports: [
@@ -45,7 +48,11 @@ import { AccessorService } from './services/accessor.service';
     InnovationSupportInfoComponent
   ],
   providers: [
-    AccessorService
+    // Services.
+    AccessorService,
+
+    // Resolvers.
+    InnovationDataResolver
   ]
 })
 export class AccessorModule { }

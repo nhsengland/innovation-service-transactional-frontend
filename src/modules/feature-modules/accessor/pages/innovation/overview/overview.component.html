@@ -3,7 +3,7 @@
     <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation?.summary?.name }}</h1>
   </div>
   <div *ngIf="innovation?.assessment?.id" class="nhsuk-grid-column-one-half text-align-right">
-    <a routerLink="/accessor/innovations/{{ innovation?.summary?.id || '' }}/assessments/{{ innovation?.assessment?.id || '' }}">View needs assessment</a>
+    <a routerLink="/accessor/innovations/{{ innovationId || '' }}/assessments/{{ innovation?.assessment?.id || '' }}">View needs assessment</a>
   </div>
 </div>
 <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
@@ -22,7 +22,7 @@
   </div>
 </dl>
 
-<a routerLink="/accessor/innovations/{{ innovation?.summary?.id }}/support/{{ innovation?.support?.id }}" class="nhsuk-button nhsuk-u-margin-bottom-7"> Update status </a>
+<a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation?.support?.id }}" class="nhsuk-button nhsuk-u-margin-bottom-7"> Update status </a>
 
 
 <h2 class="nhsuk-heading-m">Innovation summary</h2>
