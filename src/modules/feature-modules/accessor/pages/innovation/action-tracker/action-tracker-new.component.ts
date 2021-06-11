@@ -44,6 +44,11 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
 
     this.summaryAlert = { type: '', title: '', message: '' };
 
+    // Pre-selects section if it was provided.
+    if (this.activatedRoute.snapshot.queryParams.section) {
+      this.form.get('section')?.setValue(this.activatedRoute.snapshot.queryParams.section);
+    }
+
   }
 
 

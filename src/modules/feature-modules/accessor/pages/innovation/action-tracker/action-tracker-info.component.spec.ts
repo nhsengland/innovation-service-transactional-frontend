@@ -92,7 +92,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
       status: 'REQUESTED',
       name: 'Submit section X',
       description: 'some description',
-      sectionId: InnovationSectionsIds.COST_OF_INNOVATION,
+      section: InnovationSectionsIds.COST_OF_INNOVATION,
       createdAt: '2021-04-16T09:23:49.396Z',
       createdBy: 'one guy'    };
     accessorService.getInnovationActionInfo = () => of(responseMock as any);
