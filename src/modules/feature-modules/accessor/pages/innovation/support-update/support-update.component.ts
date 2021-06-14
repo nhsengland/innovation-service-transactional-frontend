@@ -41,7 +41,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     comment: new FormControl('', Validators.required),
   });
 
-  summaryAlert: { type: '' | 'error' | 'warning', title: string, message: string };
+  summaryAlert: { type: '' | 'error' | 'warning' | 'success', title: string, message: string };
 
   accessorsArrayName = 'accessors';
   commentField = 'comment';
@@ -129,14 +129,15 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     if (!this.validateForm(this.stepNumber)) { return; }
     this.formSupportObj = { ...this.form.value };
 
-    this.accessorService.saveSupportStatus(this.innovationId, this.form.value, this.supportId).subscribe(
-      response => {
-        this.redirectTo(`/accessor/innovations/${this.innovationId}/support`);
-      },
-      error => {
-        this.logger.error(error);
-      }
-    );
+    this.accessorService.saveSupportStatus(this.innovationId, this.form.value, this.supportId)
+      .subscribe(
+        response => {
+          this.redirectTo(`/accessor/innovations/${this.innovationId}/support`, {result: 'updated'});
+        },
+        error => {
+          this.logger.error(error);
+        }
+      );
   }
 
   private validateForm(step: number): boolean {
