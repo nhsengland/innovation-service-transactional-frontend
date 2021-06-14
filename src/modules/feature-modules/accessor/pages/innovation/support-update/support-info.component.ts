@@ -26,6 +26,8 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
+  summaryAlert: { type: '' | 'error' | 'warning' | 'success', title: string, message: string };
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private accessorService: AccessorService
@@ -37,10 +39,23 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
 
+    this.summaryAlert = { type: '', title: '', message: '' };
+
   }
 
 
   ngOnInit(): void {
+
+    const queryResult = this.activatedRoute.snapshot.queryParams.result;
+
+    if (queryResult) {
+
+      this.summaryAlert = {
+        type: 'success',
+        title: 'Support status updated',
+        message: 'You\'ve updated your support status and posted a comment to the innovator.'
+      };
+    }
 
     if (this.innovation.support.id) {
 
