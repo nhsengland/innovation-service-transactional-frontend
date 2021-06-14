@@ -33,7 +33,7 @@
     </ng-container>
 
     <ng-container *ngIf="module === 'accessor'">
-      <button routerLink="actions/new" class="nhsuk-button"> Create action for this section </button>
+      <button routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" [queryParams]="{ section: sectionId }" class="nhsuk-button"> Create action for this section </button>
     </ng-container>
 
   </div>

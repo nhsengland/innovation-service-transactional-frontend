@@ -56,18 +56,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
   }
 
 
-  ngOnInit(): void {
-
-    // this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
-    //   response => {
-    //   },
-    //   error => {
-    //     this.logger.error(error);
-    //   }
-    // );
-
-  }
-
+  ngOnInit(): void { }
 
 
   onSubmitStep(): void {

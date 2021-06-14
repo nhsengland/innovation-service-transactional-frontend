@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -36,17 +36,13 @@ export type getInnovationInfoEndpointDTO = {
   };
   contact: {
     name: string;
-    email: string;
-    phone: null | string;
   };
   assessment?: {
     id: string;
-    assignToName: string;
   };
   support?: {
     id: string;
     status: keyof typeof INNOVATION_SUPPORT_STATUS;
-    accessors: { id: string; name: string; }[];
   }
 };
 
@@ -54,26 +50,25 @@ type getInnovationActionsListEndpointInDTO = {
   data: {
     id: string;
     status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-    name: string;
+    section: InnovationSectionsIds;
     createdAt: string; // '2021-04-16T09:23:49.396Z',
   }[];
 };
 export type getInnovationActionsListEndpointOutDTO = {
-  openedActions: getInnovationActionsListEndpointInDTO['data'];
-  closedActions: getInnovationActionsListEndpointInDTO['data'];
+  openedActions: (getInnovationActionsListEndpointInDTO['data'][0] & { name: string })[];
+  closedActions: (getInnovationActionsListEndpointInDTO['data'][0] & { name: string })[];
 };
 
 
 export type getInnovationActionInfoInDTO = {
   id: string;
   status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-  name: string;
   description: string;
-  sectionId: InnovationSectionsIds;
+  section: InnovationSectionsIds;
   createdAt: string; // '2021-04-16T09:23:49.396Z',
   createdBy: { id: string; name: string; };
 };
-export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { createdBy: string };
+export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
 
 
 type getInnovationNeedsAssessmentEndpointInDTO = {
@@ -129,9 +124,7 @@ export class AccessorService extends CoreService {
     const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
     return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => {
-        return response;
-      })
+      map(response => response)
     );
 
   }
@@ -140,21 +133,21 @@ export class AccessorService extends CoreService {
 
     return of({
       openedActions: [
-        { id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z' },
-        { id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z' }
+        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'REQUESTED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
+        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'STARTED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' }
       ],
       closedActions: [
-        { id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z' },
-        { id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z' }
+        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
+        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' }
       ]
     });
 
-    // const url = new UrlModel(this.API_URL).addPath('accessor/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    // const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
     // return this.http.get<getInnovationActionsListEndpointInDTO>(url.buildUrl()).pipe(
     //   take(1),
     //   map(response => ({
-    //     openedActions: response.data.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)),
-    //     closedActions: response.data.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status))
+    //     openedActions: response.data.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}` } })),
+    //     closedActions: response.data.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}` } })),
     //   }))
     // );
 
@@ -165,22 +158,22 @@ export class AccessorService extends CoreService {
     return of({
       id: 'ID01',
       status: 'REQUESTED',
-      name: 'Submit section X',
+      name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`,
       description: 'some description',
-      sectionId: InnovationSectionsIds.COST_OF_INNOVATION,
+      section: InnovationSectionsIds.COST_OF_INNOVATION,
       createdAt: '2021-04-16T09:23:49.396Z',
-      createdBy: 'one guy'
+      createdBy: 'One guy name'
     });
 
-    // const url = new UrlModel(this.API_URL).addPath('accessor/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
+    // const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
     // return this.http.get<getInnovationActionInfoInDTO>(url.buildUrl()).pipe(
     //   take(1),
     //   map(response => ({
     //     id: response.id,
     //     status: response.status,
-    //     name: response.name,
+    //     name: `Submit ${this.stores.innovation.getSectionTitle(response.section)}`,
     //     description: response.description,
-    //     sectionId: response.sectionId,
+    //     section: response.section,
     //     createdAt: response.createdAt,
     //     createdBy: response.createdBy.name
     //   }))
@@ -193,7 +186,7 @@ export class AccessorService extends CoreService {
     return of({ id: 'ID01' });
     // return throwError('error');
 
-    // const url = new UrlModel(this.API_URL).addPath('accessor/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    // const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
     // return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
     //   take(1),
     //   map(response => response)
@@ -206,11 +199,11 @@ export class AccessorService extends CoreService {
     return of({ id: 'ID01' });
     // return throwError('error');
 
-    const url = new UrlModel(this.API_URL).addPath('accessor/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
-    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response)
-    );
+    // const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
+    // return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
+    //   take(1),
+    //   map(response => response)
+    // );
 
   }
 
@@ -254,7 +247,7 @@ export class AccessorService extends CoreService {
   getInnovationSupportInfo(innovationId: string, supportId: string): Observable<{ status: string, accessors: any[] }> {
 
     const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
-    return this.http.get<{ status: string, accessors: string[]}>(url.buildUrl()).pipe(
+    return this.http.get<{ status: string, accessors: string[] }>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );
@@ -269,32 +262,32 @@ export class AccessorService extends CoreService {
 
     const url = new UrlModel(this.API_URL).addPath('accessors');
     return this.http.get<{ id: string, name: string }[]>(url.buildUrl()).pipe(
+      take(1),
       map(response => response)
     );
+
   }
 
-  saveSupportStatus(innovationId: string, body: MappedObject, supportId?: string): Observable<{id: string}> {
+  saveSupportStatus(innovationId: string, body: MappedObject, supportId?: string): Observable<{ id: string }> {
 
     if (!supportId) {
-      return this.createSupportStatus(innovationId, body);
+
+      const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+      return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
+        take(1),
+        map(response => response)
+      );
+
+    } else {
+
+      const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
+      return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
+        take(1),
+        map(response => response)
+      );
+
     }
 
-    return this.updateSupportStatus(innovationId, supportId, body);
   }
 
-  private createSupportStatus(innovationId: string, body: MappedObject): Observable<{id: string}> {
-    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response)
-    );
-  }
-
-  private updateSupportStatus(innovationId: string, supportId: string, body: MappedObject): Observable<{id: string}> {
-    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
-    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response)
-    );
-  }
 }
