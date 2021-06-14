@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent, FormArray, FormControl, FormGroup, Validators } from '@app/base';
