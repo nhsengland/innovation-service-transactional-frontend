@@ -3,7 +3,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
-import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
@@ -12,7 +11,6 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 import { InnovationSupportUpdateComponent } from './support-update.component';
 
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
-
 
 describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', () => {
 
