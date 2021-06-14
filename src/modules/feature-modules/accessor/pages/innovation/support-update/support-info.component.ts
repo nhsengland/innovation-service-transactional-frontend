@@ -5,7 +5,6 @@ import { CoreComponent } from '@app/base';
 import { RoutingHelper } from '@modules/core';
 
 import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -39,7 +38,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
-    console.log(this.innovation);
+
     this.summaryAlert = { type: '', title: '', message: '' };
 
   }
