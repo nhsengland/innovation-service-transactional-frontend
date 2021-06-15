@@ -55,7 +55,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
 
     this.summaryAlert = { type: '', title: '', message: '' };
     this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
-      response => this.actionDisplayId = response.displayId || response.id,
+      response => this.actionDisplayId = response.displayId,
       error => {
         this.logger.error(error);
       }
