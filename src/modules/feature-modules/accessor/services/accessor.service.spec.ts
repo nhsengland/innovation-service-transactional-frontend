@@ -11,6 +11,7 @@ import { TableModel } from '@app/base/models';
 
 import { AccessorService } from './accessor.service';
 import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
+import { of } from 'rxjs';
 
 describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
@@ -92,14 +93,12 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
   it('should run getInnovationActionsList() and return success', () => {
 
-    const responseMock = {
-      data: [
-        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'REQUESTED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
-        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'STARTED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
-        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
-        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' }
-      ]
-    };
+    const responseMock = [
+      { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'REQUESTED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
+      { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'STARTED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
+      { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
+      { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' }
+    ];
 
     const expected = {
       openedActions: [
@@ -116,12 +115,10 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
     service.getInnovationActionsList('Inno01').subscribe(success => response = success, error => response = error);
 
-    // const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations/Inno01/actions`);
-    // httpRequest.flush(responseMock);
-    // expect(httpRequest.request.method).toBe('GET');
-    // expect(response).toEqual(expected);
-
-    expect(response).toEqual(expected); // TODO: Remove this when unmock!
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations/Inno01/actions`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
 
   });
 
@@ -148,12 +145,11 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
     service.getInnovationActionInfo('Inno01', 'Inno01Action01').subscribe(success => response = success, error => response = error);
 
-    // const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations/Inno01/actions/Inno01Action01`);
-    // httpRequest.flush(responseMock);
-    // expect(httpRequest.request.method).toBe('GET');
-    // expect(response).toEqual(expected);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations/Inno01/actions/Inno01Action01`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
 
-    expect(response).toEqual(expected); // TODO: Remove this when unmock!
 
   });
 
@@ -165,12 +161,10 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
     service.createAction('Inno01', { some: 'data' }).subscribe(success => response = success, error => response = error);
 
-    // const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations/Inno01/actions`);
-    // httpRequest.flush(responseMock);
-    // expect(httpRequest.request.method).toBe('POST');
-    // expect(response).toEqual(expected);
-
-    expect(response).toEqual(expected); // TODO: Remove this when unmock!
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations/Inno01/actions`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('POST');
+    expect(response).toEqual(expected);
 
   });
 
@@ -182,12 +176,10 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
     service.updateAction('Inno01', 'Inno01Action01', { some: 'data' }).subscribe(success => response = success, error => response = error);
 
-    // const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations/Inno01/actions/Inno01Action01`);
-    // httpRequest.flush(responseMock);
-    // expect(httpRequest.request.method).toBe('PUT');
-    // expect(response).toEqual(expected);
-
-    expect(response).toEqual(expected); // TODO: Remove this when unmock!
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations/Inno01/actions/Inno01Action01`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('PUT');
+    expect(response).toEqual(expected);
 
   });
 

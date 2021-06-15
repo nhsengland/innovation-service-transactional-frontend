@@ -15,6 +15,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
 
   innovationId: string;
   actionId: string;
+  actionDisplayId: string;
   stepNumber: number;
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
@@ -47,11 +48,18 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
 
     super();
 
+    this.actionDisplayId = '';
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.actionId = this.activatedRoute.snapshot.params.actionId;
     this.stepNumber = 1;
 
     this.summaryAlert = { type: '', title: '', message: '' };
+    this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
+      response => this.actionDisplayId = response.displayId,
+      error => {
+        this.logger.error(error);
+      }
+    );
 
   }
 
