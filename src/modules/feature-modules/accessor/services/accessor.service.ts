@@ -48,6 +48,7 @@ export type getInnovationInfoEndpointDTO = {
 
 type getInnovationActionsListEndpointInDTO = {
   id: string;
+  displayId: string;
   status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
   section: InnovationSectionsIds;
   createdAt: string; // '2021-04-16T09:23:49.396Z',
@@ -60,6 +61,7 @@ export type getInnovationActionsListEndpointOutDTO = {
 
 export type getInnovationActionInfoInDTO = {
   id: string;
+  displayId: string;
   status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
   description: string;
   section: InnovationSectionsIds;
@@ -171,6 +173,7 @@ export class AccessorService extends CoreService {
       take(1),
       map(response => ({
         id: response.id,
+        displayId: response.displayId,
         status: response.status,
         name: `Submit ${this.stores.innovation.getSectionTitle(response.section)}`,
         description: response.description,
