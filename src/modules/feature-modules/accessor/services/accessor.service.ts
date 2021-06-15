@@ -47,16 +47,14 @@ export type getInnovationInfoEndpointDTO = {
 };
 
 type getInnovationActionsListEndpointInDTO = {
-  data: {
-    id: string;
-    status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-    section: InnovationSectionsIds;
-    createdAt: string; // '2021-04-16T09:23:49.396Z',
-  }[];
+  id: string;
+  status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
+  section: InnovationSectionsIds;
+  createdAt: string; // '2021-04-16T09:23:49.396Z',
 };
 export type getInnovationActionsListEndpointOutDTO = {
-  openedActions: (getInnovationActionsListEndpointInDTO['data'][0] & { name: string })[];
-  closedActions: (getInnovationActionsListEndpointInDTO['data'][0] & { name: string })[];
+  openedActions: (getInnovationActionsListEndpointInDTO & { name: string })[];
+  closedActions: (getInnovationActionsListEndpointInDTO & { name: string })[];
 };
 
 
@@ -131,79 +129,82 @@ export class AccessorService extends CoreService {
 
   getInnovationActionsList(innovationId: string): Observable<getInnovationActionsListEndpointOutDTO> {
 
-    return of({
-      openedActions: [
-        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'REQUESTED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
-        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'STARTED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' }
-      ],
-      closedActions: [
-        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
-        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' }
-      ]
-    });
+    // return of({
+    //   openedActions: [
+    //     { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'REQUESTED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
+    //     { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'STARTED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' }
+    //   ],
+    //   closedActions: [
+    //     { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
+    //     { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' }
+    //   ]
+    // });
 
-    // const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    // return this.http.get<getInnovationActionsListEndpointInDTO>(url.buildUrl()).pipe(
-    //   take(1),
-    //   map(response => ({
-    //     openedActions: response.data.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}` } })),
-    //     closedActions: response.data.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}` } })),
-    //   }))
-    // );
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+
+    return this.http.get<getInnovationActionsListEndpointInDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map( response => {
+        return {
+          openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}` } })),
+          closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}` } })),
+        };
+      })
+    );
 
   }
 
   getInnovationActionInfo(innovationId: string, actionId: string): Observable<getInnovationActionInfoOutDTO> {
 
-    return of({
-      id: 'ID01',
-      status: 'REQUESTED',
-      name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`,
-      description: 'some description',
-      section: InnovationSectionsIds.COST_OF_INNOVATION,
-      createdAt: '2021-04-16T09:23:49.396Z',
-      createdBy: 'One guy name'
-    });
+    // return of({
+    //   id: 'ID01',
+    //   status: 'REQUESTED',
+    //   name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`,
+    //   description: 'some description',
+    //   section: InnovationSectionsIds.COST_OF_INNOVATION,
+    //   createdAt: '2021-04-16T09:23:49.396Z',
+    //   createdBy: 'One guy name'
+    // });
 
-    // const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
-    // return this.http.get<getInnovationActionInfoInDTO>(url.buildUrl()).pipe(
-    //   take(1),
-    //   map(response => ({
-    //     id: response.id,
-    //     status: response.status,
-    //     name: `Submit ${this.stores.innovation.getSectionTitle(response.section)}`,
-    //     description: response.description,
-    //     section: response.section,
-    //     createdAt: response.createdAt,
-    //     createdBy: response.createdBy.name
-    //   }))
-    // );
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
+    return this.http.get<getInnovationActionInfoInDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => ({
+        id: response.id,
+        status: response.status,
+        name: `Submit ${this.stores.innovation.getSectionTitle(response.section)}`,
+        description: response.description,
+        section: response.section,
+        createdAt: response.createdAt,
+        createdBy: response.createdBy.name
+      }))
+    );
 
   }
 
   createAction(innovationId: string, body: MappedObject): Observable<{ id: string }> {
 
-    return of({ id: 'ID01' });
+    // return of({ id: 'ID01' });
     // return throwError('error');
 
-    // const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    // return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
-    //   take(1),
-    //   map(response => response)
-    // );
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
 
   }
 
   updateAction(innovationId: string, actionId: string, body: MappedObject): Observable<{ id: string }> {
 
-    return of({ id: 'ID01' });
+    // return of({ id: 'ID01' });
     // return throwError('error');
 
-    // const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
-    // return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
-    //   take(1),
-    //   map(response => response)
-    // );
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
 
   }
 
