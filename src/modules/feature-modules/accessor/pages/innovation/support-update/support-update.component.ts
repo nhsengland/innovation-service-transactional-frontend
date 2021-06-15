@@ -121,6 +121,11 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     }
 
     this.currentStatus = (this.supportStatusObj as any)[this.form.get('status')?.value];
+
+    if (this.currentStatus.label !== this.supportStatusObj.ENGAGING.label) {
+      this.selectedAccessors = [];
+    }
+
     this.stepNumber++;
 
   }
@@ -157,7 +162,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         break;
       case 3:
 
-        if (!this.form.get('comment')?.valid) {
+        if (!this.form.get('comment')?.valid && this.form.get('status')?.value !== 'WAITING') {
           this.summaryAlert = {
             type: 'error',
             title: 'An error has occured when updating the Comment',

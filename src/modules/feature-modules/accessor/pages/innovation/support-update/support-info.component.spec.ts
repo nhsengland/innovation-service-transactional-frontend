@@ -64,7 +64,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportInfoComponent', ()
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { status: 'ENGAGING' }, assessment: {} } };
 
     accessorService.getInnovationSupportInfo = () => throwError('error');
-    const expected = { organisationUnit: '', accessors: '' };
+    const expected = { organisationUnit: '', accessors: '', status: '' };
 
     fixture = TestBed.createComponent(InnovationSupportInfoComponent);
     component = fixture.componentInstance;
@@ -79,12 +79,21 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportInfoComponent', ()
 
     const dataMock = {
       status: 'ENGAGING',
-      accessors: [{ id: '06E12E5C-3BA8-EB11-B566-0003FFD6549F', name: 'qaccesor_1' }]
+      accessors: [{ id: '06E12E5C-3BA8-EB11-B566-0003FFD6549F', name: 'qaccesor_1' }],
     };
+    const dataMockInnovation = {
+      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: null, categories: ['Medical'], otherCategoryDescription: '' },
+      contact: { name: 'A name', email: 'email', phone: '' },
+      assessment: { id: '01', assignToName: 'Name' },
+      support: { id: '01', status: 'WAITING', accessors: [{ id: 'IdOne', name: 'Brigid Kosgei' }, { id: 'IdTwo', name: 'Brigid Kosgei the second' }] }
+    };
+    accessorService.getInnovationInfo = () => of (dataMockInnovation as any);
+
     accessorService.getInnovationSupportInfo = () => of(dataMock as any);
     const expected = {
       organisationUnit: 'Organisation Name',
-      accessors: 'qaccesor_1'
+      accessors: 'qaccesor_1',
+      status: 'ENGAGING'
     };
 
     fixture = TestBed.createComponent(InnovationSupportInfoComponent);
@@ -105,8 +114,16 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportInfoComponent', ()
     accessorService.getInnovationSupportInfo = () => of(dataMock as any);
     const expected = {
       organisationUnit: 'Organisation Name',
-      accessors: ''
+      accessors: '',
+      status: 'ENGAGING',
     };
+    const dataMockInnovation = {
+      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: null, categories: ['Medical'], otherCategoryDescription: '' },
+      contact: { name: 'A name', email: 'email', phone: '' },
+      assessment: { id: '01', assignToName: 'Name' },
+      support: { id: '01', status: 'WAITING', accessors: [{ id: 'IdOne', name: 'Brigid Kosgei' }, { id: 'IdTwo', name: 'Brigid Kosgei the second' }] }
+    };
+    accessorService.getInnovationInfo = () => of (dataMockInnovation as any);
 
     fixture = TestBed.createComponent(InnovationSupportInfoComponent);
     component = fixture.componentInstance;
@@ -119,7 +136,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportInfoComponent', ()
   it('should NOT have support information loadedd due to API error', () => {
 
     accessorService.getInnovationSupportInfo = () => throwError('error');
-    const expected = { organisationUnit: '', accessors: '' };
+    const expected = { organisationUnit: '', accessors: '', status: '' };
 
     fixture = TestBed.createComponent(InnovationSupportInfoComponent);
     component = fixture.componentInstance;

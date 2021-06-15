@@ -57,9 +57,11 @@
         <ng-container *ngIf="stepNumber === 3">
 
           <div class="nhsuk-form-group">
-            <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5 nhsuk-cancel-wrapper">
-              You assigned
-            </h3>
+            <ng-container *ngIf="selectedAccessors.length > 0">
+              <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5 nhsuk-cancel-wrapper">
+                You assigned
+              </h3>
+            </ng-container>
             <div *ngFor="let item of selectedAccessors" class="d-flex align-items-center">
               <theme-svg-icon type="success" class="nhsuk-u-padding-top-1 nhsuk-u-margin-right-1"></theme-svg-icon>
               <strong>{{ item.label }}</strong>
