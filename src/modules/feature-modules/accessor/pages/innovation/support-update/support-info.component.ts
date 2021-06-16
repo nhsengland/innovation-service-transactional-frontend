@@ -99,7 +99,6 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
           accessors: (response.accessors || []).map(item => item.name).join(', '),
           status: response.status,
         };
-        console.log('INNOVATION SUPPORT', this.innovationSupport);
       },
       error => {
         this.logger.error(error);
