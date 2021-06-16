@@ -1,7 +1,81 @@
-<h1>Action tracker</h1>
+<h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-5">Action tracker</h2>
 
-<div class="nhsuk-card">
-  <div class="nhsuk-card__content">
-    <p> You need to submit your inovation record for needs assessment to make your innovation visible to the service team. </p>
+<h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">Open actions</h2>
+<table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Open actions list">
+  <thead class="nhsuk-table__head">
+    <tr class="">
+      <th *ngFor="let item of openedActionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+        <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+        <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
+        <ng-container *ngIf="item.key === 'status'">
+          <br />
+          <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0">Status key</a>
+        </ng-container>
+      </th>
+    </tr>
+  </thead>
+  <tbody class="nhsuk-table__body">
+    <tr *ngFor="let item of openedActionsList.getRecords()" class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('id') }} </span>
+        <span>{{ item.displayId }}</span>
+      </td>
+      <td class="nhsuk-table__cell">
+        <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('name') }} </span>
+        <a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ item.id }}">{{ item.name }}</a>
+      </td>
+      <td class="nhsuk-table__cell">
+        <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('createdAt') }} </span>
+        {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}
+      </td>
+      <td class="nhsuk-table__cell text-align-right">
+        <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('status') }} </span>
+        <strong class="nhsuk-tag" [ngClass]="innovationSectionActionStatus[item.status]?.cssClass || ''">{{ innovationSectionActionStatus[item.status]?.label || '' }}</strong>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h2 class="nhsuk-heading-l nhsuk-u-padding-top-5 nhsuk-u-margin-bottom-3">Closed actions</h2>
+<details class="nhsuk-details">
+  <summary class="nhsuk-details__summary">
+    <span class="nhsuk-details__summary-text">
+      All closed actions
+    </span>
+  </summary>
+  <div class="nhsuk-details__text">
+
+    <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Open actions list">
+      <thead class="nhsuk-table__head">
+        <tr class="">
+          <th *ngFor="let item of closedActionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+            <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+            <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="nhsuk-table__body">
+        <tr *ngFor="let item of closedActionsList.getRecords()" class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">
+            <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('id') }} </span>
+            <span>{{ item.displayId }}</span>
+          </td>
+          <td class="nhsuk-table__cell">
+            <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('name') }} </span>
+            <a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ item.id }}">{{ item.name }}</a>
+          </td>
+          <td class="nhsuk-table__cell">
+            <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('createdAt') }} </span>
+            {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}
+          </td>
+          <td class="nhsuk-table__cell text-align-right">
+            <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('status') }} </span>
+            <strong class="nhsuk-tag" [ngClass]="innovationSectionActionStatus[item.status]?.cssClass || ''">{{ innovationSectionActionStatus[item.status]?.label || '' }}</strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
   </div>
-</div>
+</details>

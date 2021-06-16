@@ -148,8 +148,8 @@ export class AccessorService extends CoreService {
       take(1),
       map( response => {
         return {
-          openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}` } })),
-          closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}` } })),
+          openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(item.section)}` } })),
+          closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(item.section)}` } })),
         };
       })
     );

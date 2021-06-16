@@ -62,10 +62,8 @@ export class InnovationActionTrackerListComponent extends CoreComponent implemen
 
     this.accessorService.getInnovationActionsList(this.innovationId).subscribe(
       response => {
-
         this.openedActionsList.setData(response.openedActions);
         this.closedActionsList.setData(response.closedActions);
-
       },
       error => {
         this.logger.error(error);

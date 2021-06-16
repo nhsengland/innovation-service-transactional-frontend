@@ -21,7 +21,6 @@ import { InnovationSectionEvidenceViewComponent } from '@shared-module/pages/inn
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
-
 const routes: Routes = [
 
   {
@@ -82,7 +81,7 @@ const routes: Routes = [
 
               {
                 path: 'action-tracker', pathMatch: 'full', component: InnovationActionTrackerComponent,
-                data: { layoutOptions: { type: 'leftAsideMenu', showInnovationHeader: false } }
+                data: { layoutOptions: { type: 'leftAsideMenu', showInnovationHeader: true } }
               },
               {
                 path: 'comments', pathMatch: 'full', component: InnovationCommentsComponent,
