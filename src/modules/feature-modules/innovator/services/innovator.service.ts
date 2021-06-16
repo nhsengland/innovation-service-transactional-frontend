@@ -5,6 +5,45 @@ import { map, take } from 'rxjs/operators';
 import { CoreService } from '@app/base';
 
 import { UrlModel } from '@modules/core';
+import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+
+
+type getInnovationActionsListEndpointInDTO = {
+  id: string;
+  displayId: string;
+  status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
+  section: InnovationSectionsIds;
+  createdAt: string; // '2021-04-16T09:23:49.396Z',
+};
+
+export type getInnovationInfoEndpointDTO = {
+  summary: {
+    id: string;
+    name: string;
+    status: keyof typeof INNOVATION_STATUS;
+    description: string;
+    company: string;
+    countryName: string;
+    postCode: string;
+    categories: string[];
+    otherCategoryDescription: null | string;
+  };
+  contact: {
+    name: string;
+  };
+  assessment?: {
+    id: string;
+  };
+  support?: {
+    id: string;
+    status: keyof typeof INNOVATION_SUPPORT_STATUS;
+  }
+};
+
+export type getInnovationActionsListEndpointOutDTO = {
+  openedActions: (getInnovationActionsListEndpointInDTO & { name: string })[];
+  closedActions: (getInnovationActionsListEndpointInDTO & { name: string })[];
+};
 
 @Injectable()
 export class InnovatorService extends CoreService {
@@ -33,4 +72,19 @@ export class InnovatorService extends CoreService {
 
   }
 
+  getInnovationActionsList(innovationId: string): Observable<getInnovationActionsListEndpointOutDTO> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+
+    return this.http.get<getInnovationActionsListEndpointInDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map( response => {
+        return {
+          openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(item.section)}` } })),
+          closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(item.section)}` } })),
+        };
+      })
+    );
+
+  }
 }

@@ -23,7 +23,6 @@ import { InnovatorService } from './services/innovator.service';
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
-
 @NgModule({
   imports: [
     ThemeModule,
@@ -48,7 +47,8 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
     InnovatorService,
 
     // Guards.
-    FirstTimeSigninGuard
+    FirstTimeSigninGuard,
+
   ]
 })
 export class InnovatorModule { }
