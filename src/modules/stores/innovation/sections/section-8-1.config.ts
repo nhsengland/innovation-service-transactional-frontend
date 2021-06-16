@@ -213,7 +213,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
   allFiles.forEach((item, i) => {
     toReturn.push({
       label: `Attachment ${i + 1}`,
-      value: item.name || 'Unknown',
+      value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
       editStepNumber: toReturn.length + 1
     });
   });
