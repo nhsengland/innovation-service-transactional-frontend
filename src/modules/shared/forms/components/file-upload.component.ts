@@ -12,6 +12,7 @@ import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { RandomGeneratorHelper } from '@modules/core';
 
 import { FileUploadType, FileTypes } from '../engine/types/form-engine.types';
+import { LoggerService, Severity } from '@modules/core/services/logger.service';
 
 
 @Component({
@@ -50,13 +51,10 @@ export class FormFileUploadComponent implements OnInit {
   constructor(
     private injector: Injector,
     private cdr: ChangeDetectorRef,
-    private http: HttpClient
-  ) {
-
+    private http: HttpClient,
+    private loggerService: LoggerService) {
     this.id = this.id || RandomGeneratorHelper.generateRandom();
-
     this.dzConfig = { acceptedFiles: '*', multiple: false, maxFileSize: 1000000 };
-
   }
 
   ngOnInit(): void {
@@ -64,7 +62,7 @@ export class FormFileUploadComponent implements OnInit {
     this.dzConfig = {
       acceptedFiles: (this.config?.acceptedFiles || [FileTypes.ALL]).map(ext => ext).join(','),
       multiple: this.config?.multiple === false ? false : true,
-      maxFileSize: this.config?.maxFileSize ? (this.config.maxFileSize * 100000) : 1000000 // 1Mb.
+      maxFileSize: this.config?.maxFileSize ? (this.config.maxFileSize * 1000000) : 1000000 // 1Mb.
     };
 
     this.previousUploadedFiles = [...this.fieldArrayValues]; // Need to clone here!
@@ -85,11 +83,10 @@ export class FormFileUploadComponent implements OnInit {
       take(1),
       map(response => ({ id: response.id, name: response.displayFileName, url: response.url })),
       catchError((error) => {
-        console.log('upload error', error);
+        this.loggerService.trackTrace('upload error', Severity.ERROR, { error});
         return of({ id: '', name: '', url: '' });
       })
     );
-
   }
 
 
@@ -103,15 +100,14 @@ export class FormFileUploadComponent implements OnInit {
           this.cdr.detectChanges();
         },
         error => {
-          console.log('Upload error', error);
+          this.loggerService.trackTrace('upload error', Severity.ERROR, { error});
         }
       );
     });
 
     event.rejectedFiles.forEach(file => {
-      console.log('File Upload failed: ', file);
+      this.loggerService.trackTrace(`File Upload failed for file: ${file}`, Severity.ERROR);
     });
-
   }
 
   onRemove(id: string): void {
@@ -126,14 +122,11 @@ export class FormFileUploadComponent implements OnInit {
   }
 
   onRemovePreviousUploadedFile(id: string): void {
-
     this.previousUploadedFiles.splice(this.previousUploadedFiles.findIndex(item => item.id === id), 1);
 
     const arrayIndex = this.fieldArrayValues.findIndex(item => item.id === id);
     if (arrayIndex > -1) { this.fieldArrayControl.removeAt(arrayIndex); }
 
     this.cdr.detectChanges();
-
   }
-
 }
