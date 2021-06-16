@@ -63,7 +63,6 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
     this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
       response => {
-
         this.action = response;
 
       },
