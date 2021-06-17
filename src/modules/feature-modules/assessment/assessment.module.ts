@@ -17,6 +17,8 @@ import { InnovationAssessmentEditComponent } from './pages/innovation/assessment
 // Services.
 import { AssessmentService } from './services/assessment.service';
 
+// Resolvers.
+import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 
 @NgModule({
   imports: [
@@ -37,7 +39,11 @@ import { AssessmentService } from './services/assessment.service';
     InnovationAssessmentEditComponent
   ],
   providers: [
-    AssessmentService
+    // Services.
+    AssessmentService,
+
+    // Resolvers.
+    InnovationDataResolver
   ]
 })
 export class AssessmentModule { }
