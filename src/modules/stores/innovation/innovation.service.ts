@@ -54,7 +54,7 @@ export class InnovationService {
   }
 
 
-  getInnovationSections(module: '' | 'innovator' | 'accessor', innovationId: string): Observable<getInnovationSectionsDTO> {
+  getInnovationSections(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string): Observable<getInnovationSectionsDTO> {
 
     let endpointModule = '';
 
@@ -64,6 +64,9 @@ export class InnovationService {
         break;
       case 'accessor':
         endpointModule = 'accessors';
+        break;
+      case 'assessment':
+        endpointModule = 'assessments';
         break;
       default:
         break;
@@ -78,7 +81,7 @@ export class InnovationService {
   }
 
 
-  getSectionInfo(module: '' | 'innovator' | 'accessor', innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
+  getSectionInfo(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
 
     let endpointModule = '';
 
@@ -88,6 +91,9 @@ export class InnovationService {
         break;
       case 'accessor':
         endpointModule = 'accessors';
+        break;
+      case 'assessment':
+        endpointModule = 'assessments';
         break;
       default:
         break;
@@ -129,7 +135,7 @@ export class InnovationService {
   }
 
 
-  getSectionEvidenceInfo(module: '' | 'innovator' | 'accessor', innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
+  getSectionEvidenceInfo(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
 
     let endpointModule = '';
 
@@ -139,6 +145,9 @@ export class InnovationService {
         break;
       case 'accessor':
         endpointModule = 'accessors';
+        break;
+      case 'assessment':
+        endpointModule = 'assessments';
         break;
       default:
         break;

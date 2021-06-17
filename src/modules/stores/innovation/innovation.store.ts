@@ -44,8 +44,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitInnovation(innovationId);
   }
 
-
-  getSectionsSummary$(module: '' | 'innovator' | 'accessor', innovationId: string): Observable<{ innovation: { name: string, status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {
+  getSectionsSummary$(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string): Observable<{ innovation: { name: string, status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {
 
     return this.innovationsService.getInnovationSections(module, innovationId).pipe(
       map(response => ({
@@ -87,8 +86,7 @@ export class InnovationStore extends Store<InnovationModel> {
 
   }
 
-
-  getSectionInfo$(module: '' | 'innovator' | 'accessor', innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
+  getSectionInfo$(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
     return this.innovationsService.getSectionInfo(module, innovationId, section);
   }
 
@@ -100,7 +98,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitSections(innovationId, sections);
   }
 
-  getSectionEvidence$(module: '' | 'innovator' | 'accessor', innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
+  getSectionEvidence$(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
     return this.innovationsService.getSectionEvidenceInfo(module, innovationId, evidenceId);
   }
 
@@ -112,11 +110,9 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.deleteEvidence(innovationId, evidenceId);
   }
 
-
   getSectionTitle(sectionId: InnovationSectionsIds): string {
     return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id === sectionId)?.title || '';
   }
-
 
   getSection(sectionId: InnovationSectionsIds): InnovationSectionConfigType['sections'][0] | undefined {
     return cloneDeep(INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId));

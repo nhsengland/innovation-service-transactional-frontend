@@ -12,7 +12,7 @@ import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovati
 })
 export class PageInnovationRecordComponent extends CoreComponent implements OnInit {
 
-  module: '' | 'innovator' | 'accessor' = '';
+  module: '' | 'innovator' | 'accessor' | 'assessment' = '';
   baseUrl = '';
   documentUrl = '';
 
