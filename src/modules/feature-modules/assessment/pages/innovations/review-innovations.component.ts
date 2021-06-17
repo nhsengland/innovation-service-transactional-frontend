@@ -49,7 +49,9 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
     this.currentTab = { status: '', description: '', innovationsOverdue: 0 };
 
-    this.innovationsList = new TableModel({});
+    this.innovationsList = new TableModel({
+      pageSize: 10000
+    });
 
   }
 
