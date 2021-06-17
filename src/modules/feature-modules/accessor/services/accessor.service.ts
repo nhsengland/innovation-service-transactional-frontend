@@ -112,6 +112,7 @@ export class AccessorService extends CoreService {
   getInnovationsList(queryParams: { take: number, skip: number }): Observable<getInnovationsListEndpointDTO> {
 
     const url = new UrlModel(this.API_URL).addPath('/accessors/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(queryParams);
+
     return this.http.get<getInnovationsListEndpointDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
