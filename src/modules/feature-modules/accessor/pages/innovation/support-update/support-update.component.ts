@@ -103,7 +103,10 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   }
 
 
-
+  /*
+    TODO: REVISIT THIS METHOD. CODE IS A BIT SLOPPY.
+    works. but it's sloppy.
+  */
   onSubmitStep(): void {
 
     if (!this.validateForm(this.stepNumber)) { return; }
@@ -118,6 +121,22 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       this.currentStatus = (this.supportStatusObj as any)[this.form.get('status')?.value];
 
       this.stepNumber++;
+    }
+
+    if (this.stepNumber === 2 &&
+        this.currentStatus === this.supportStatusObj.ENGAGING ) {
+
+        if (this.selectedAccessors.length === 0) {
+          this.summaryAlert = {
+            type: 'error',
+            title: 'An error has occured when updating Status',
+            message: 'You must select at least one Accessor.'
+          };
+          return;
+        } else {
+          this.summaryAlert.type = '';
+        }
+
     }
 
     this.currentStatus = (this.supportStatusObj as any)[this.form.get('status')?.value];
