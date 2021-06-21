@@ -22,6 +22,8 @@ import { InnovatorService } from './services/innovator.service';
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
+import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
+import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 
 @NgModule({
   imports: [
@@ -41,7 +43,9 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
     InnovationSectionEvidenceEditComponent,
     InnovationActionTrackerComponent,
     InnovationCommentsComponent,
-    InnovationDataSharingComponent
+    InnovationDataSharingComponent,
+    InnovationActionTrackerInfoComponent,
+    InnovationActionTrackerDeclineComponent,
   ],
   providers: [
     InnovatorService,
