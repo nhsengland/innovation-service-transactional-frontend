@@ -21,7 +21,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
   action?: getInnovationActionInfoOutDTO;
 
 
-  summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
+  summaryAlert: { type: '' | 'success' | 'error' | 'warning' | 'neutral' , title: string, message: string };
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
@@ -41,10 +41,10 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
 
-      case 'actionUpdateSuccess':
+      case 'actionDeclined':
         this.summaryAlert = {
-          type: 'success',
-          title: `You have declined this action successfuly.'`,
+          type: 'neutral',
+          title: `You have declined this action`,
           message: 'The accessor will be notified'
         };
         break;

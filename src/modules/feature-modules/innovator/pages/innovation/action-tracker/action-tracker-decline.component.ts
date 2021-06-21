@@ -59,7 +59,12 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
       return;
     }
 
-    this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${this.actionId}`, { alert: 'actionUpdateSuccess', status });
+    this.summaryAlert =  {
+      type: 'success',
+      title: 'Action declined successfuly',
+      message: 'The action as declined successfuly. The Accessor will be notified.'
+    };
+    this.redirectTo(`/innovator/innovations/${this.innovationId}/action-tracker/${this.actionId}`, { alert: 'actionDeclined', status });
     // this.innovatorService.declineAction(this.innovationId, this.actionId, this.form.value).subscribe(
     //   response => {
     //     const status = INNOVATION_SECTION_ACTION_STATUS.DECLINED;

@@ -1,7 +1,7 @@
 <ng-container *ngIf="summaryAlert.type">
   <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
     <div class="nhsuk-grid-column-full">
-      <div class="nhsuk-error-summary" [ngClass]="{'border-color-success': summaryAlert.type === 'success', 'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert"
+      <div class="nhsuk-error-summary" [ngClass]="{'border-color-neutral': summaryAlert.type === 'neutral', 'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert"
         tabindex="-1">
         <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
         <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
