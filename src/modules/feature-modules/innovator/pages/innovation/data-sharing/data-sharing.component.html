@@ -1,7 +1,70 @@
-<h1>Data sharing and support</h1>
+<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-1">
+  <h1> Data sharing and support </h1>
+  <!-- DIV ROW START -->
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
 
-<div class="nhsuk-card">
-  <div class="nhsuk-card__content">
-    <p> You need to submit your inovation record for needs assessment to make your innovation visible to the service team. </p>
+      <!-- TABLE START -->
+      <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Innovations list">
+        <!-- HEADER START -->
+        <thead class="nhsuk-table__head">
+          <tr class="">
+            <th>
+              <div>Organisation</div>
+              <div>
+                <a routerLink="/accessor/innovations/{{ innovationId }}/support" class="app-link_normal">
+                  What does each organisation do? (opens in new window)
+                </a>
+              </div>
+            </th>
+            <th>
+              <!-- TODO: ALIGN RIGHT -->
+              <div class="cell-text-align-right">
+                Support status
+              </div>
+              <div class="cell-text-align-right">
+                <a routerLink="/accessor/innovations/{{ innovationId }}/support" class="app-link_normal">
+                 Status key
+                </a>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <!-- HEADER END -->
+        <!-- TABLE BODY START -->
+        <tbody class="nhsuk-table__body">
+          <!-- ROWS LOOP START -->
+          <tr *ngFor="let item of organisations" class="nhsuk-table__row">
+            <td class="nhsuk-table__cell app-table-cell_padding-bottom-10">
+              <span class="app-task-list__task-icon app-task-list__no-margin">
+                <ng-container *ngTemplateOutlet="icon; context: { status: item }"></ng-container>
+              </span>
+              <span class="app-task-list__task-name">{{item.name}}</span>
+            </td>
+            <td class="nhsuk-table__cell app-table-cell_padding-bottom-10">
+                <span *ngIf="item.shared" class="cell-items-align-right">
+                    <strong class="nhsuk-tag app-task-list__tag float-l " [ngClass]="statuses[item?.status || '']?.cssClass">
+                      {{ statuses[item?.status || '']?.label }}
+                    </strong>
+                </span>
+            </td>
+          </tr>
+          <!-- ROWS LOOP END -->
+        </tbody>
+        <!-- TABLE BODY END -->
+      </table>
+      <!-- TABLE END -->
+    </div>
+  </div>
+  <!-- DIV ROW END -->
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onChangePreferences()">Change preferences</button>
+    </div>
   </div>
 </div>
+
+<ng-template #icon let-status="status">
+  <theme-svg-icon *ngIf="!status.shared" type="error"></theme-svg-icon>
+  <theme-svg-icon *ngIf="status.shared" type="success"></theme-svg-icon>
+</ng-template>
