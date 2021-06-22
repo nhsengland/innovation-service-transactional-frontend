@@ -72,7 +72,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
   private declineVisible(): void {
     this.declineShow =  this.action?.status.toLocaleLowerCase()
-      !== INNOVATION_SECTION_ACTION_STATUS.COMPLETED.label.toLocaleLowerCase();
+      === INNOVATION_SECTION_ACTION_STATUS.REQUESTED.label.toLocaleLowerCase();
   }
 
 }
