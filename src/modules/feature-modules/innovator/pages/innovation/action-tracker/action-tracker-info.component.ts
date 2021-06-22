@@ -44,8 +44,8 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
       case 'actionDeclined':
         this.summaryAlert = {
           type: 'neutral',
-          title: `You have declined this action`,
-          message: 'The accessor will be notified'
+          title: `Action declined`,
+          message: 'The accessor will be notified.'
         };
         break;
       default:

@@ -120,7 +120,7 @@ export class InnovatorService extends CoreService {
 
   declineAction(innovationId: string, actionId: string, body: MappedObject): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovator/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)

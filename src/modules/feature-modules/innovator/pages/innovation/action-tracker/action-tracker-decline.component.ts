@@ -59,16 +59,22 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
       return;
     }
 
-    // this.redirectTo(`/innovator/innovations/${this.innovationId}/action-tracker/${this.actionId}`, { alert: 'actionDeclined', status });
-    this.innovatorService.declineAction(this.innovationId, this.actionId, this.form.value).subscribe(
+    const status = 'DECLINED';
+
+    this.innovatorService.declineAction(this.innovationId, this.actionId,
+      {
+        ...this.form.value,
+        status,
+      }
+      ).subscribe(
       response => {
-        const status = INNOVATION_SECTION_ACTION_STATUS.DECLINED;
-        this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionUpdateSuccess', status });
+
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionDeclined', status });
       },
       () => {
         this.summaryAlert = {
           type: 'error',
-          title: 'An error occured when creating an action',
+          title: 'An error occured when declining an action',
           message: 'Please, try again or contact us for further help'
         };
       }

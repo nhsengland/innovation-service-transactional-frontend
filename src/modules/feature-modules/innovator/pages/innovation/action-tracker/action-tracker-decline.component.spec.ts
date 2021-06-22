@@ -65,4 +65,45 @@ describe('FeatureModules/Innovator/Innovation/InnovationActionTrackerEditCompone
 
   });
 
+  it('should run onSubmit and call api with success', () => {
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+
+    const responseMock = { id: 'actionId' };
+    innovatorService.declineAction = () => of(responseMock as any);
+
+    fixture = TestBed.createComponent(InnovationActionTrackerDeclineComponent);
+    component = fixture.componentInstance;
+
+    component.form.get('comment')?.setValue('A required value');
+    component.onSubmit();
+    fixture.detectChanges();
+
+    expect(routerSpy).toHaveBeenCalledWith(['/innovator/innovations/Inno01/action-tracker/actionId'], { queryParams: { alert: 'actionDeclined', status: 'DECLINED'  } });
+
+  });
+
+  it('should run onSubmit and call api with error', () => {
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+
+    innovatorService.declineAction = () => throwError('error');
+
+    const expected = {
+      type: 'error',
+      title: 'An error occured when declining an action',
+      message: 'Please, try again or contact us for further help'
+    };
+
+    fixture = TestBed.createComponent(InnovationActionTrackerDeclineComponent);
+    component = fixture.componentInstance;
+    component.form.get('comment')?.setValue('A required value');
+    component.onSubmit();
+    fixture.detectChanges();
+
+    expect(component.summaryAlert).toEqual(expected);
+
+  });
+
 });

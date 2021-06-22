@@ -87,4 +87,18 @@ describe('FeatureModules/Innovator/Innovation/InnovationActionTrackerInfoCompone
 
   });
 
+  it('should show "actionDeclined" neutral summary', () => {
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', actionId: 'Action01' };
+    activatedRoute.snapshot.queryParams = { alert: 'actionDeclined' };
+
+    const expected = { type: 'neutral', title: 'Action declined', message: 'The accessor will be notified.' };
+
+    fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component.summaryAlert).toEqual(expected);
+
+  });
+
 });
