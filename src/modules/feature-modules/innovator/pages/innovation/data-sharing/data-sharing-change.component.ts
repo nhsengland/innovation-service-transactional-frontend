@@ -53,7 +53,18 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
   }
 
   onSubmit(): void {
-   console.log(this.form.value);
+   this.innovatorService
+    .submitOrganisationSharing(this.innovationId, this.form.value)
+    .subscribe(
+      () => {
+        this.redirectTo(`/innovator/${this.stores.authentication.getUserId()}/innovations/${this.innovationId}/data-sharing`,
+         { alert: 'sharingUpdateSuccess' });
+      },
+      (error) => {
+        this.redirectTo(`innovator/${this.stores.authentication.getUserId()}/innovations/${this.innovationId}/data-sharing`,
+          { alert: 'sharingUpdateError', error });
+      }
+    );
   }
 
 }
