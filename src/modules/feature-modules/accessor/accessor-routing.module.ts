@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AccessorLayoutComponent } from './base/accessor-layout.component';
 
 // Pages.
+import { ActionsListComponent } from './pages/actions/actions-list.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
@@ -40,6 +41,16 @@ const routes: Routes = [
         path: 'dashboard',
         pathMatch: 'full',
         component: DashboardComponent
+      },
+
+      {
+        path: 'actions',
+        pathMatch: 'full',
+        component: ActionsListComponent
+      },
+      {
+        path: 'actions/statuses', pathMatch: 'full', component: PageActionStatusListComponent,
+        data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/actions', label: 'Go back' } } }
       },
 
       {

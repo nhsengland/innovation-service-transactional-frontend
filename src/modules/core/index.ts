@@ -18,6 +18,10 @@ export { MappedObject } from './interfaces/base.interfaces';
 
 // Models
 export { UrlModel } from './models/url.model';
+export { TableModel } from './models/table.model';
+
+// Types
+export { APIQueryParamsType } from './models/table.model';
 
 // Helpers
 export { RandomGeneratorHelper } from './helpers/random-generator.helper';
