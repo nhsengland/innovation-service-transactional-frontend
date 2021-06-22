@@ -16,7 +16,7 @@ import { InnovationActionTrackerInfoComponent } from './action-tracker-info.comp
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 
-describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponent', () => {
+describe('FeatureModules/Innovator/Innovation/InnovationActionTrackerInfoComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 

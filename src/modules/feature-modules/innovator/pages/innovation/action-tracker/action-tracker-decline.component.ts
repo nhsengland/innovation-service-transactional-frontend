@@ -59,25 +59,20 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
       return;
     }
 
-    this.summaryAlert =  {
-      type: 'success',
-      title: 'Action declined successfuly',
-      message: 'The action as declined successfuly. The Accessor will be notified.'
-    };
-    this.redirectTo(`/innovator/innovations/${this.innovationId}/action-tracker/${this.actionId}`, { alert: 'actionDeclined', status });
-    // this.innovatorService.declineAction(this.innovationId, this.actionId, this.form.value).subscribe(
-    //   response => {
-    //     const status = INNOVATION_SECTION_ACTION_STATUS.DECLINED;
-    //     this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionUpdateSuccess', status });
-    //   },
-    //   () => {
-    //     this.summaryAlert = {
-    //       type: 'error',
-    //       title: 'An error occured when creating an action',
-    //       message: 'Please, try again or contact us for further help'
-    //     };
-    //   }
-    // );
+    // this.redirectTo(`/innovator/innovations/${this.innovationId}/action-tracker/${this.actionId}`, { alert: 'actionDeclined', status });
+    this.innovatorService.declineAction(this.innovationId, this.actionId, this.form.value).subscribe(
+      response => {
+        const status = INNOVATION_SECTION_ACTION_STATUS.DECLINED;
+        this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionUpdateSuccess', status });
+      },
+      () => {
+        this.summaryAlert = {
+          type: 'error',
+          title: 'An error occured when creating an action',
+          message: 'Please, try again or contact us for further help'
+        };
+      }
+    );
 
   }
 
