@@ -20,6 +20,7 @@ $service-manual-container-size: 1100px; // Container width variable.
   --success-color: #{$color_nhsuk-green};
   --warning-color: #{$color_nhsuk-warm-yellow};
   --error-color: #{$nhsuk-error-color};
+  --neutral-color: #{$color_nhsuk-blue};
 
   --white: #{$color_nhsuk-white};
 
@@ -63,6 +64,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 .border-color-success { border-color: var(--success-color); }
 .border-color-warning { border-color: var(--warning-color); }
+.border-color-neutral { border-color: var(--neutral-color); }
 
 // Container and layout classes.
 .app-width-container,

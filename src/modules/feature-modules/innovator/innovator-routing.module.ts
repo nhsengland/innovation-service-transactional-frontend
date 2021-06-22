@@ -20,6 +20,8 @@ import { InnovationSectionEvidenceViewComponent } from '@shared-module/pages/inn
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
+import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
+import {  InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 
 const routes: Routes = [
 
@@ -81,6 +83,14 @@ const routes: Routes = [
 
               {
                 path: 'action-tracker', pathMatch: 'full', component: InnovationActionTrackerComponent,
+                data: { layoutOptions: { type: 'leftAsideMenu', showInnovationHeader: true } }
+              },
+              {
+                path: 'action-tracker/:actionId', pathMatch: 'full', component: InnovationActionTrackerInfoComponent,
+                data: { layoutOptions: { type: 'leftAsideMenu', showInnovationHeader: true } }
+              },
+              {
+                path: 'action-tracker/:actionId/decline', pathMatch: 'full', component: InnovationActionTrackerDeclineComponent,
                 data: { layoutOptions: { type: 'leftAsideMenu', showInnovationHeader: true } }
               },
               {
