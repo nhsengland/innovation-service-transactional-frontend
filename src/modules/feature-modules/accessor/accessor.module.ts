@@ -7,6 +7,7 @@ import { AccessorRoutingModule } from './accessor-routing.module';
 import { AccessorLayoutComponent } from './base/accessor-layout.component';
 
 // Pages.
+import { ActionsListComponent } from './pages/actions/actions-list.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
@@ -36,6 +37,7 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     AccessorLayoutComponent,
 
     // Pages.
+    ActionsListComponent,
     DashboardComponent,
     ReviewInnovationsComponent,
     InnovationOverviewComponent,

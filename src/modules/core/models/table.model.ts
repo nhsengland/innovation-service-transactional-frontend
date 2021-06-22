@@ -1,3 +1,10 @@
+export type APIQueryParamsType = {
+  take: number;
+  skip: number;
+  order?: { [key: string]: 'ASC' | 'DESC' };
+  filters?: any;
+};
+
 export class TableModel<T = { [key: string]: string | number | boolean }> {
 
   dataSource: T[];

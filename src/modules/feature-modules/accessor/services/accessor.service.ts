@@ -3,8 +3,7 @@ import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-
-import { MappedObject, UrlModel } from '@modules/core';
+import { MappedObject, UrlModel, APIQueryParamsType } from '@modules/core';
 
 import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
@@ -69,6 +68,24 @@ export type getInnovationActionInfoInDTO = {
   createdBy: { id: string; name: string; };
 };
 export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
+
+
+export type getActionsListEndpointInDTO = {
+  count: number;
+  data: {
+    id: string;
+    displayId: string;
+    status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
+    section: InnovationSectionsIds;
+    createdAt: string; // '2021-04-16T09:23:49.396Z',
+    updatedAt: string; // '2021-04-16T09:23:49.396Z',
+    innovation: {
+      id: string;
+      name: string;
+    };
+  }[];
+};
+export type getActionsListEndpointOutDTO = { count: number, data: (getActionsListEndpointInDTO['data'][0] & { name: string })[] };
 
 
 type getInnovationNeedsAssessmentEndpointInDTO = {
@@ -147,7 +164,7 @@ export class AccessorService extends CoreService {
 
     return this.http.get<getInnovationActionsListEndpointInDTO[]>(url.buildUrl()).pipe(
       take(1),
-      map( response => {
+      map(response => {
         return {
           openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(item.section)}` } })),
           closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(item.section)}` } })),
@@ -181,6 +198,27 @@ export class AccessorService extends CoreService {
         section: response.section,
         createdAt: response.createdAt,
         createdBy: response.createdBy.name
+      }))
+    );
+
+  }
+
+
+  getActionsList(queryParams: APIQueryParamsType): Observable<getActionsListEndpointOutDTO> {
+
+    const { filters, ...qParams } = queryParams;
+
+    const qp = {
+      ...qParams,
+      openActions: (queryParams.filters?.openActions || '') as string
+    };
+
+    const url = new UrlModel(this.API_URL).addPath('/accessors/:userId/actions').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);
+    return this.http.get<getActionsListEndpointInDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => ({
+        count: response.count,
+        data: response.data.map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(item.section)}`, } }))
       }))
     );
 
