@@ -1,19 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-
 import { Injector } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
-
+import { RouterTestingModule } from '@angular/router/testing';
 import { AppInjector, CoreModule } from '@modules/core';
-import { StoresModule } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
-
-import { InnovationActionTrackerDeclineComponent } from './action-tracker-decline.component';
-
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-
+import { StoresModule } from '@modules/stores';
+import { of, throwError } from 'rxjs';
+import { InnovationActionTrackerDeclineComponent } from './action-tracker-decline.component';
 
 describe('FeatureModules/Innovator/Innovation/InnovationActionTrackerEditComponent', () => {
 
