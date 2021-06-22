@@ -7,11 +7,11 @@ import { Injector } from '@angular/core';
 
 import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
 import { StoresModule, InnovationStore } from '@modules/stores';
+import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
 import { TableModel } from '@app/base/models';
 
-import { AccessorService } from './accessor.service';
-import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
-import { of } from 'rxjs';
+import { AccessorService, getActionsListEndpointInDTO, getActionsListEndpointOutDTO } from './accessor.service';
+
 
 describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
@@ -150,6 +150,39 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
 
+
+  });
+
+  it('should run getActionsList() and return success', () => {
+
+    const responseMock: getActionsListEndpointInDTO = {
+      count: 2,
+      data: [
+        {
+          id: '01', displayId: 'dId01', status: 'REQUESTED', section: InnovationSectionsIds.INNOVATION_DESCRIPTION, createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396',
+          innovation: { id: 'Inno01', name: 'Innovation 01' }
+        },
+        {
+          id: '02', displayId: 'dId02', status: 'STARTED', section: InnovationSectionsIds.INNOVATION_DESCRIPTION, createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396',
+          innovation: { id: 'Inno02', name: 'Innovation 02' }
+        }
+      ]
+    };
+
+    const expected: getActionsListEndpointOutDTO = {
+      count: responseMock.count,
+      data: responseMock.data.map(item => ({ ...item, ...{ name: `Submit ${innovationStore.getSectionTitle(item.section)}`, } }))
+    };
+
+    const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({ openActions: 'true' });
+
+    let response: any = null;
+    service.getActionsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//actions?take=10&skip=0&openActions=true`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
 
   });
 

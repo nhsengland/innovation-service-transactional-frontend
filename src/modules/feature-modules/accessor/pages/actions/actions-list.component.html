@@ -1,0 +1,62 @@
+<section class="bg-color-white">
+  <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
+
+    <h1 class="nhsuk-heading-l"> Actions </h1>
+
+    <nav class="app-tabs" aria-label="Tabs">
+      <ol class="app-tabs__list">
+        <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
+          <a class="app-tabs__link" [routerLink]="item.link" [queryParams]="item.queryParams">{{ item.title }}</a>
+        </li>
+      </ol>
+    </nav>
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+
+        <p class="d-flex align-items-center nhsuk-u-margin-bottom-2">
+          <span class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0 mr-auto">
+            {{ currentTab.description }}
+          </span>
+          <span>
+            <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0">Status key</a>
+          </span>
+        </p>
+        <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+
+        <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Actions list">
+          <thead class="nhsuk-table__head">
+            <tr class="">
+              <th *ngFor="let item of actionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+                <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr *ngFor="let item of actionsList.getRecords()" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('section') }}</span>
+                <a routerLink="/accessor/innovations/{{ item.id }}">{{ item.name }}</a>
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('name') }}</span>
+                {{ item.innovation.name }}
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('createdAt') }}</span>
+                {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}
+              </td>
+              <td class="nhsuk-table__cell text-align-right">
+                <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('status') }}</span>
+                <strong class="nhsuk-tag" [ngClass]="innovationSectionActionStatus[item.status]?.cssClass || ''">{{ innovationSectionActionStatus[item.status]?.label || '' }}</strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+</section>

@@ -95,16 +95,12 @@ export class AssessmentService extends CoreService {
   getInnovationsList(queryParams: { filters?: { status: string[] }, take: number, skip: number }): Observable<getInnovationsListEndpointOutDTO> {
 
     const qp = {
-      ...queryParams,
       take: queryParams.take,
       skip: queryParams.skip,
       status: queryParams.filters?.status || [],
     };
 
-    delete qp.filters;
-
-    const url = new UrlModel(this.API_URL).addPath('/assessments/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp as any);
-
+    const url = new UrlModel(this.API_URL).addPath('/assessments/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);
     return this.http.get<getInnovationsListEndpointInDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => ({
