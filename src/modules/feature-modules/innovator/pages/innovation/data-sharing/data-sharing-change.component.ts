@@ -55,7 +55,7 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
   onSubmit(): void {
     const userId = this.stores.authentication.getUserId();
-    const redirectUrl = `/innovator/${userId}/innovations/${this.innovationId}/data-sharing`;
+    const redirectUrl = `/innovator/innovations/${this.innovationId}/data-sharing`;
     this.innovatorService
       .submitOrganisationSharing(this.innovationId, this.form.value)
       .subscribe(

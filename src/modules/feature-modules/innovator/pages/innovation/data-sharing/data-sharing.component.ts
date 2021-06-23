@@ -19,6 +19,8 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
   statuses: any = this.innovationSupportStatus;
   organisationInfoUrl: string;
 
+  summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private organisationsService: OrganisationsService,
@@ -29,7 +31,27 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.organisations =  [];
     this.organisationInfoUrl = `${this.stores.environment.BASE_URL}/about-the-service/who-we-are`;
+    this.summaryAlert = { type: '', title: '', message: '' };
+
+    switch (this.activatedRoute.snapshot.queryParams.alert) {
+      case 'sharingUpdateSuccess':
+        this.summaryAlert = {
+          type: 'success',
+          title: 'Data sharing preferences',
+          message: 'Your data sharing preferences were changed.'
+        };
+        break;
+      case 'sharingUpdateError':
+        this.summaryAlert = {
+          type: 'error',
+          title: 'An error occured when updating data sharing preferences',
+          message: 'Please, try again or contact us for further help'
+        };
+        break;
+
+    }
   }
+
 
   ngOnInit(): void {
 
