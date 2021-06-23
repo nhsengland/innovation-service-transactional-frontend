@@ -17,10 +17,10 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
   organisationsList: any[];
   organisationInfoUrl: string;
   form = new FormGroup({
-    organisationShares: new FormArray([]),
+    organisations: new FormArray([]),
   });
 
-  organisationShareArrayName = 'organisationShares';
+  organisationShareArrayName = 'organisations';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -43,7 +43,7 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
         this.innovatorService.getOrganisations(this.innovationId).subscribe(
           r =>  {
             r.forEach((organisation) => {
-              (this.form.get('organisationShares') as FormArray).push(
+              (this.form.get('organisations') as FormArray).push(
                 new FormControl(organisation.id)
               );
             });
