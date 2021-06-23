@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -126,6 +126,34 @@ export class InnovatorService extends CoreService {
       map(response => response)
     );
 
+  }
+
+  getOrganisations(innovationId: string): Observable<{id: string, status: string}[]> {
+
+    // return of([
+    //   {id: '73201F47-37A8-EB11-B566-0003FFD6549F', status: 'ENGAGING'},
+    //   {id: '71201F47-37A8-EB11-B566-0003FFD6549F', status: 'NOT_YET'}
+    // ]);
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/shares')
+      .setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+
+    return this.http.get<{id: string, status: string}[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
+  submitOrganisationSharing(innovationId: string, body: MappedObject): Observable<{id: string} > {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/share')
+      .setPathParams({userId: this.stores.authentication.getUserId(), innovationId});
+
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
   }
 
 

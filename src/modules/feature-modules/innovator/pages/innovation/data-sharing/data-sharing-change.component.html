@@ -1,0 +1,55 @@
+<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-1">
+  <h1> Change data sharing preferences </h1>
+  <!-- DIV ROW START -->
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <!-- FORM START -->
+      <form [formGroup]="form">
+      <!-- TABLE START -->
+        <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Innovations list">
+          <!-- HEADER START -->
+          <thead class="nhsuk-table__head">
+            <tr class="">
+              <th>
+                <div>Organisation</div>
+                <div>
+                  <!-- rel="noopener noreferrer" to prevent phishing aka tabnabbing -->
+                  <a href="{{organisationInfoUrl}}" class="app-link_normal" target="_blank" rel="noopener noreferrer">
+                    What does each organisation do? (opens in new window)
+                  </a>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <!-- HEADER END -->
+          <!-- TABLE BODY START -->
+          <tbody class="nhsuk-table__body">
+            <!-- ROWS LOOP START -->
+            <tr class="nhsuk-table__row">
+              <td class="nhsuk-table__cell app-table-cell_padding-bottom-10">
+                <theme-form-checkbox-array [arrayName]="organisationShareArrayName" [items]="organisationsList">
+
+                </theme-form-checkbox-array>
+              </td>
+            </tr>
+            <!-- ROWS LOOP END -->
+          </tbody>
+          <!-- TABLE BODY END -->
+        </table>
+        <!-- TABLE END -->
+      </form>
+      <!-- FORM END -->
+    </div>
+  </div>
+  <!-- DIV ROW END -->
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit()">Save changes</button>
+
+      <div class="nhsuk-cancel-wrapper">
+        <a routerLink="/innovator/innovations/{{ innovationId }}/data-sharing">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>

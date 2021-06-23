@@ -24,6 +24,7 @@ import { InnovatorService } from './services/innovator.service';
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
+import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
 
 @NgModule({
   imports: [
@@ -44,8 +45,10 @@ import { InnovationActionTrackerDeclineComponent } from './pages/innovation/acti
     InnovationActionTrackerComponent,
     InnovationCommentsComponent,
     InnovationDataSharingComponent,
+    InnovationDataSharingChangeComponent,
     InnovationActionTrackerInfoComponent,
     InnovationActionTrackerDeclineComponent,
+
   ],
   providers: [
     InnovatorService,
