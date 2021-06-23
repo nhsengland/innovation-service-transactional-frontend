@@ -17,6 +17,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
   organisations: {id: string, name: string, shared?: boolean, status?: string}[];
   private innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   statuses: any = this.innovationSupportStatus;
+  organisationInfoUrl: string;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -27,6 +28,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.organisations =  [];
+    this.organisationInfoUrl = `https://${this.stores.environment.BASE_URL}/about-the-service/who-we-are`;
   }
 
   ngOnInit(): void {

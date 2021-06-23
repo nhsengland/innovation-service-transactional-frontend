@@ -12,7 +12,8 @@
             <th>
               <div>Organisation</div>
               <div>
-                <a routerLink="/accessor/innovations/{{ innovationId }}/support" class="app-link_normal">
+                <!-- rel="noopener noreferrer" to prevent phishing aka tabnabbing -->
+                <a href="{{organisationInfoUrl}}" class="app-link_normal" target="_blank" rel="noopener noreferrer">
                   What does each organisation do? (opens in new window)
                 </a>
               </div>

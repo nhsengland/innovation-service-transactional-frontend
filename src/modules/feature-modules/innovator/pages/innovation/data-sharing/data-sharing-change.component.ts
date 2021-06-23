@@ -15,7 +15,7 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
   innovationId: string;
   organisationsList: any[];
-
+  organisationInfoUrl: string;
   form = new FormGroup({
     organisationShares: new FormArray([]),
   });
@@ -31,6 +31,7 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.organisationsList =  [];
+    this.organisationInfoUrl = `https://${this.stores.environment.BASE_URL}/about-the-service/who-we-are`;
   }
 
   ngOnInit(): void {
