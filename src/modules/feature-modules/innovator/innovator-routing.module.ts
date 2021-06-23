@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { InnovationSectionEvidenceViewComponent } from '@shared-module/pages/innovation/evidence-view.component';
 import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/innovation-record.component';
+import { PageInnovationSupportStatusListComponent } from '@shared-module/pages/innovation/innovation-support-status-list.component';
 import { InnovationSectionViewComponent } from '@shared-module/pages/innovation/section-view.component';
 import { InnovatorLayoutComponent } from './base/innovator-layout.component';
 // Guards.
@@ -102,7 +103,11 @@ const routes: Routes = [
               {
                 path: 'data-sharing/edit', pathMatch: 'full', component: InnovationDataSharingChangeComponent,
                 data: { layoutOptions: { type: 'leftAsideMenu', showInnovationHeader: true } }
-              }
+              },
+              {
+                path: 'data-sharing/statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
+                data: { layoutOptions: { type: 'leftAsideMenu', backLink: { url: '/innovator/innovations/:innovationId/data-sharing/edit', label: 'Go back' } } }
+              },
             ]
           }
         ]

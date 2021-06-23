@@ -58,7 +58,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
     this.organisationsService.getAccessorsOrganisations().subscribe(
       response => {
         this.organisations = response;
-        console.log(response);
+
         this.organisations = this.organisations.map(o => ({
           ...o,
           status: '',
