@@ -28,7 +28,7 @@
             <tr class="nhsuk-table__row">
               <td class="nhsuk-table__cell app-table-cell_padding-bottom-10">
                 <theme-form-checkbox-array [arrayName]="organisationShareArrayName" [items]="organisationsList">
-                  
+
                 </theme-form-checkbox-array>
               </td>
             </tr>
@@ -48,8 +48,3 @@
     </div>
   </div>
 </div>
-
-<ng-template #icon let-status="status">
-  <theme-svg-icon *ngIf="!status.shared" type="error"></theme-svg-icon>
-  <theme-svg-icon *ngIf="status.shared" type="success"></theme-svg-icon>
-</ng-template>
