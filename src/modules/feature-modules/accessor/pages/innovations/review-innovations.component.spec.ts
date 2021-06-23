@@ -52,7 +52,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
     const dataMock = {
       count: 100,
       data: [
-        { id: 'id01', status: 'CREATED', name: 'Innovation 01', supportStatus: 'UNNASSIGNED', createdAt: '2020-01-01T00:00:00.000Z', updatedAt: '2020-01-01T00:00:00.000Z' }
+        { id: 'id01', status: 'CREATED', name: 'Innovation 01', supportStatus: 'UNASSIGNED', createdAt: '2020-01-01T00:00:00.000Z', updatedAt: '2020-01-01T00:00:00.000Z' }
       ]
     };
     accessorService.getInnovationsList = () => of(dataMock as any);

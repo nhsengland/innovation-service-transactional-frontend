@@ -40,7 +40,7 @@ export class InnovationDataResolver implements Resolve<InnovationDataType> {
           assessment: { id: response.assessment?.id },
           support: {
             id: response.support?.id,
-            status: response.support?.status || 'UNNASSIGNED'
+            status: response.support?.status || 'UNASSIGNED'
           }
         }),
         catchError(error => {

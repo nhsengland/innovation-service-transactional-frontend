@@ -44,8 +44,8 @@
             </td>
             <td class="nhsuk-table__cell app-table-cell_padding-bottom-10">
                 <span *ngIf="item.shared" class="cell-items-align-right">
-                    <strong class="nhsuk-tag app-task-list__tag float-l " [ngClass]="statuses[item?.status || '']?.cssClass">
-                      {{ statuses[item?.status || '']?.label }}
+                    <strong class="nhsuk-tag app-task-list__tag float-l " [ngClass]="statuses[item?.status || 'UNNASSIGNED']?.cssClass">
+                      {{ statuses[item?.status || 'UNASSIGNED']?.label }}
                     </strong>
                 </span>
             </td>

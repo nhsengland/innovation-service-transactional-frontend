@@ -20,7 +20,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationSupport: {
     organisationUnit: string;
     status: keyof typeof INNOVATION_SUPPORT_STATUS;
-  } = { organisationUnit: '', status: 'UNNASSIGNED' };
+  } = { organisationUnit: '', status: 'UNASSIGNED' };
 
   innovationSummary: { label: string; value: string; }[] = [];
 
@@ -44,7 +44,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
         this.innovationSupport = {
           organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-          status: response.support?.status || 'UNNASSIGNED'
+          status: response.support?.status || 'UNASSIGNED'
         };
 
         this.innovationSummary = [

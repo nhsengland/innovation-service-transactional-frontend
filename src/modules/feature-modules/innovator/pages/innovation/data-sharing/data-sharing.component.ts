@@ -28,7 +28,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.organisations =  [];
-    this.organisationInfoUrl = `https://${this.stores.environment.BASE_URL}/about-the-service/who-we-are`;
+    this.organisationInfoUrl = `${this.stores.environment.BASE_URL}/about-the-service/who-we-are`;
   }
 
   ngOnInit(): void {
@@ -36,19 +36,22 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
     this.organisationsService.getAccessorsOrganisations().subscribe(
       response => {
         this.organisations = response;
+        console.log(response);
         this.organisations = this.organisations.map(o => ({
           ...o,
           status: '',
           shared: false,
         }));
+
         this.innovatorService.getOrganisations(this.innovationId).subscribe(
           r =>  {
             r.map((organisation) => {
               const index = this.organisations.findIndex( o => o.id === organisation.id);
               if (index > -1) {
                 this.organisations[index].shared = true;
-                this.organisations[index].status = organisation.status;
+                this.organisations[index].status = organisation.status || this.innovationSupportStatus.UNASSIGNED.label;
               }
+
             });
 
           }
