@@ -14,7 +14,7 @@
               <th>
                 <div>Organisation</div>
                 <div>
-                  <a routerLink="/accessor/innovations/{{ innovationId }}/support" class="app-link_normal">
+                  <a routerLink="/innovator/innovations/{{ innovationId }}/support" class="app-link_normal">
                     What does each organisation do? (opens in new window)
                   </a>
                 </div>
@@ -45,6 +45,10 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit()">Save changes</button>
+
+      <div class="nhsuk-cancel-wrapper">
+        <a routerLink="/innovator/innovations/{{ innovationId }}/data-sharing">Cancel</a>
+      </div>
     </div>
   </div>
 </div>
