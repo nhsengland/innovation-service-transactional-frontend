@@ -13,13 +13,13 @@ export class PageInnovationSupportStatusListComponent extends CoreComponent impl
 
   visibleStatus: (keyof typeof INNOVATION_SUPPORT_STATUS)[]
     = [
-      'COMPLETE',
+      'UNASSIGNED',
       'ENGAGING',
       'FURTHER_INFO_REQUIRED',
+      'WAITING',
       'NOT_YET',
       'UNSUITABLE',
-      'WAITING',
-      'UNASSIGNED',
+      'COMPLETE',
       ];
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
