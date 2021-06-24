@@ -22,6 +22,7 @@ $service-manual-container-size: 1100px; // Container width variable.
   --error-color: #{$nhsuk-error-color};
   --neutral-color: #{$color_nhsuk-blue};
 
+
   --white: #{$color_nhsuk-white};
 
   --color_nhsuk-grey-1: #{$color_nhsuk-grey-1};
@@ -30,6 +31,7 @@ $service-manual-container-size: 1100px; // Container width variable.
   --color_nhsuk-grey-5: #{$color_nhsuk-grey-5};
   --nhsuk-border-color: #{$nhsuk-border-color};
   --nhsuk-button-color: #{$nhsuk-button-color};
+
 
   // --spacing-3: 32px;
   // --mobile:  20em; /* 320px */
@@ -227,4 +229,10 @@ $service-manual-container-size: 1100px; // Container width variable.
       }
     }
   }
+}
+
+// Tags
+
+.nhsuk-tag--dark-grey {
+  background-color: var(--color_nhsuk-grey-1);
 }

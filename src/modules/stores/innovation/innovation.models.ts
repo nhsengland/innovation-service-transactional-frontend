@@ -29,21 +29,37 @@ export const INNOVATION_STATUS = {
 
 export const INNOVATION_SUPPORT_STATUS = {
   ENGAGING: { label: 'Engaging', cssClass: 'nhsuk-tag--green',
-  description: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.', hidden: false },
+  description: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.', hidden: false,
+  innovatorDescription: 'Ready to support, assess or provide guidance',
+  },
   FURTHER_INFO_REQUIRED: { label: 'Further info', cssClass: 'nhsuk-tag--white',
-  description: 'Further info is needed from the innovator to make a decision. You must provide a comment on what information is needed.', hidden: false },
+  description: 'Further info is needed from the innovator to make a decision. You must provide a comment on what information is needed.', hidden: false,
+  innovatorDescription: 'The organisation needs further information from you to make a decision.',
+  },
   WAITING: { label: 'Waiting', cssClass: 'nhsuk-tag--yellow',
-    description: 'Waiting for an internal decision to progress.', hidden: false },
+    description: 'Waiting for an internal decision to progress.', hidden: false,
+    innovatorDescription: 'The organisation is waiting for an internal decision to progress.'
+  },
   NOT_YET: { label: 'Not yet', cssClass: 'nhsuk-tag--blue',
-    description: 'The innovation is not yet ready for your support offer. You must provide a comment outlining your decision.', hidden: false },
+    description: 'The innovation is not yet ready for your support offer. You must provide a comment outlining your decision.', hidden: false,
+    innovatorDescription: 'Your innovation is not yet ready for the organisation\'s support offer.'
+  },
   UNASSIGNED: { label: 'Unassigned', cssClass: 'nhsuk-tag--red',
-    description: '1', hidden: true },
+    description: 'No status assigned yet.', hidden: true,
+    innovatorDescription: 'No status assigned yet'
+  },
   UNSUITABLE: { label: 'Unsuitable', cssClass: 'nhsuk-tag--red',
-    description: 'You have no suitable support offer for the innovation. You must provide a comment outlining your decision.', hidden: false },
+    description: 'You have no suitable support offer for the innovation. You must provide a comment outlining your decision.', hidden: false,
+    innovatorDescription: 'The organisation has no suitable support offer for your innovation.'
+  },
   WITHDRAWN: { label: 'Withdrawn', cssClass: 'nhsuk-tag--red',
-    description: '7', hidden: true },
+    description: '7', hidden: true,
+    innovatorDescription: '7'
+  },
   COMPLETE: { label: 'Completed', cssClass: 'nhsuk-tag--dark-grey',
-    description: 'Your organisation has completed this engagement. You must provide a comment outlining your decision.', hidden: false },
+    description: 'Your organisation has completed this engagement. You must provide a comment outlining your decision.', hidden: false,
+    innovatorDescription: 'The organisation has completed their engagement with your innovation.'
+  },
 };
 
 export const INNOVATION_SECTION_STATUS = {
