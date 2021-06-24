@@ -1,0 +1,30 @@
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <h1 class="nhsuk-heading-xl nhsuk-u-padding-top-4 nhsuk-u-margin-bottom-5">Support status key</h1>
+
+    <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-9" aria-describedby="Action status list">
+      <thead class="nhsuk-table__head">
+        <tr>
+          <th scope="col">Status</th>
+          <th scope="col">Definition</th>
+        </tr>
+      </thead>
+      <tbody class="nhsuk-table__body">
+        <tr *ngFor="let status of visibleStatus" class="nhsuk-table__row">
+          <td class="nhsuk-table__cell">
+            <span class="nhsuk-table-responsive__heading">Status</span>
+            <strong class="nhsuk-tag" [ngClass]="innovationSupportStatus[status].cssClass">{{ innovationSupportStatus[status].label }}</strong>
+          </td>
+          <td class="nhsuk-table__cell">
+            <span class="nhsuk-table-responsive__heading">Definition</span>
+            {{ innovationSupportStatus[status].description }}
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
