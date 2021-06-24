@@ -37,11 +37,12 @@
             <tr *ngFor="let item of actionsList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('section') }}</span>
-                <a routerLink="/accessor/innovations/{{ item.id }}">{{ item.name }}</a>
+                <a routerLink="/accessor/innovations/{{ item.innovation.id }}/action-tracker/{{ item.id }}">{{ item.name }}</a>
               </td>
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('name') }}</span>
-                {{ item.innovation.name }}
+                <a routerLink="/accessor/innovations/{{ item.innovation.id }}">{{ item.innovation.name }}</a>
+                
               </td>
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('createdAt') }}</span>

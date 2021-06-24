@@ -56,7 +56,13 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
 
   }
 
-  setOrderBy(column: string): this {
+  setOrderBy(column: string, orderDir?: 'asc' | 'desc'): this {
+
+    if (orderDir) {
+      this.orderBy = column;
+      this.orderDir = orderDir;
+      return this;
+    }
 
     if (this.orderBy === column) {
       this.orderDir = (['', 'asc'].includes(this.orderDir) ? 'desc' : 'asc');
@@ -69,7 +75,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
   }
 
   setFilters(filters: { [key: string]: string | number | boolean | string[] }): this {
-    this.filters = filters;
+    Object.entries(filters).forEach(([key, item]) => this.filters[key] = item);
     return this;
   }
 

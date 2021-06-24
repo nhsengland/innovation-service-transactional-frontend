@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 
@@ -6,14 +6,14 @@ import { CoreComponent } from '@app/base';
   selector: 'app-accessor-pages-dashboard',
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent extends CoreComponent implements OnInit {
+export class DashboardComponent extends CoreComponent {
 
   user: {
     displayName: string;
     organisation: string;
   };
 
-  cardsList: { title: string, link: string, description: string }[];
+  cardsList: { title: string, description: string, link: string, queryParams: { status?: string } }[];
 
 
   constructor() {
@@ -28,36 +28,34 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     this.cardsList = [
       {
         title: 'Your engagements',
-        link: '/accessor/engagements',
-        description: 'Find all innovations you\'re currently engaging with'
+        description: 'Find all innovations you\'re currently engaging with',
+        link: '/accessor/innovations', queryParams: { status: 'ENGAGING' }
       },
       {
         title: 'Your actions',
-        link: '/accessor/actions',
-        description: 'Check and manage all your actions'
+        description: 'Check and manage all your actions',
+        link: '/accessor/actions', queryParams: {}
       },
       {
         title: 'View activity',
-        link: '/accessor/activity',
-        description: 'See all comments related to innovations you\'re engaging with'
+        description: 'See all comments related to innovations you\'re engaging with',
+        link: '/accessor/activity', queryParams: {}
       },
       {
         title: 'Your account',
-        link: '/accessor/account',
-        description: 'Edit your details, request and manage permissions'
+        description: 'Edit your details, request and manage permissions',
+        link: '/accessor/account', queryParams: {}
       }
     ];
 
     if (this.stores.authentication.isQualifyingAccessorRole()) {
       this.cardsList.splice(0, 0, {
         title: 'Review innovations',
-        link: '/accessor/innovations',
-        description: 'Find, review and assign a status to all incoming innovations for your organisation'
+        description: 'Find, review and assign a status to all incoming innovations for your organisation',
+        link: '/accessor/innovations', queryParams: {}
       });
     }
 
   }
-
-  ngOnInit(): void { }
 
 }

@@ -10,7 +10,7 @@ import { StoresModule, InnovationStore } from '@modules/stores';
 import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
 import { TableModel } from '@app/base/models';
 
-import { AccessorService, getActionsListEndpointInDTO, getActionsListEndpointOutDTO } from './accessor.service';
+import { AccessorService, getActionsListEndpointInDTO, getActionsListEndpointOutDTO, getInnovationsListEndpointInDTO, getInnovationsListEndpointOutDTO } from './accessor.service';
 
 
 describe('FeatureModules/Accessor/Services/AccessorService', () => {
@@ -49,21 +49,49 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
   it('should run getInnovationsList() and return success', () => {
 
-    const responseMock = {
+    const responseMock: getInnovationsListEndpointInDTO = {
       count: 2,
       data: [
-        { id: '01', status: 'WAITING_NEEDS_ASSESSMENT', name: 'Innovation 01', supportStatus: 'WAITING', createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396' },
-        { id: '02', status: 'WAITING_NEEDS_ASSESSMENT', name: 'Innovation 02', supportStatus: 'WAITING', createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396' }
+        {
+          id: '01', name: 'Innovation 01', mainCategory: 'MEDICAL_DEVICE', otherMainCategoryDescription: '', countryName: 'England', postcode: '', submittedAt: '2021-04-16T09:23:49.396Z',
+          support: { id: 'S01', status: 'WAITING', createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396', accessors: [] },
+          organisations: [],
+          assessment: { id: '01' }
+        },
+        {
+          id: '02', name: 'Innovation 02', mainCategory: 'MEDICAL_DEVICE', otherMainCategoryDescription: '', countryName: 'England', postcode: '', submittedAt: '2021-04-16T09:23:49.396Z',
+          support: { id: 'S02', status: 'WAITING', createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396', accessors: [] },
+          organisations: [],
+          assessment: { id: '02' },
+        }
       ]
     };
-    const tableList = new TableModel({ visibleColumns: { name: 'Name' } });
 
-    const expected = responseMock;
+    const expected: getInnovationsListEndpointOutDTO = {
+      count: responseMock.count,
+      data: [
+        {
+          id: '01', name: 'Innovation 01', mainCategory: 'Medical device', countryName: 'England', submittedAt: '2021-04-16T09:23:49.396Z',
+          support: { id: 'S01', status: 'WAITING', createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396', accessors: [] },
+          organisationsAcronyms: ['NICE', 'DIT', 'Other'], // responseMock.data[0].organisations.map(o => o.acronym),
+          assessment: { id: '01' }
+        },
+        {
+          id: '02', name: 'Innovation 02', mainCategory: 'Medical device', countryName: 'England', submittedAt: '2021-04-16T09:23:49.396Z',
+          support: { id: 'S02', status: 'WAITING', createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396', accessors: [] },
+          organisationsAcronyms: ['NICE', 'DIT', 'Other'], // responseMock.data[1].organisations.map(o => o.acronym),
+          assessment: { id: '02' },
+        }
+      ]
+    };
+
     let response: any = null;
+
+    const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({ status: 'UNASSIGNED' });
 
     service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations?take=10&skip=0`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations?take=10&skip=0&supportStatus=UNASSIGNED&assignedToMe=false`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);

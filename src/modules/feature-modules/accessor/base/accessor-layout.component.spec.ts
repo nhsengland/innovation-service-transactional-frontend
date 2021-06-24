@@ -62,9 +62,7 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
         { title: 'Home', link: '/accessor/dashboard' }
       ],
       rightItems: [
-        { title: 'Your engagements', link: '/accessor/engagements' },
         { title: 'Actions', link: '/accessor/actions' },
-        { title: 'Activity', link: '/accessor/activity' },
         { title: 'Account', link: '/accessor/account' },
         { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
       ]
@@ -89,10 +87,8 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
         { title: 'Home', link: '/accessor/dashboard' }
       ],
       rightItems: [
-        { title: 'Review innovations', link: '/accessor/innovations' },
-        { title: 'Your engagements', link: '/accessor/engagements' },
+        { title: 'Innovations', link: '/accessor/innovations' },
         { title: 'Actions', link: '/accessor/actions' },
-        { title: 'Activity', link: '/accessor/activity' },
         { title: 'Account', link: '/accessor/account' },
         { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
       ]

@@ -19,13 +19,12 @@ import { ControlValueAccessorConnector } from '../base/control-value-accessor.co
 export class FormCheckboxComponent extends ControlValueAccessorConnector implements OnInit, DoCheck {
 
   @Input() id?: string;
-  @Input() value = '';
-  @Input() label = '';
+  @Input() label?: string;
   @Input() description?: string;
-  // @Input() label?: string;
-  // @Input() items: FormFieldModel['items'] = [];
+  @Input() size?: 'small' | 'normal';
 
   hasError = false;
+  cssClass = '';
 
   isRunningOnBrowser: boolean;
   isRunningOnServer: boolean;
@@ -41,12 +40,16 @@ export class FormCheckboxComponent extends ControlValueAccessorConnector impleme
     this.isRunningOnBrowser = isPlatformBrowser(injector.get(PLATFORM_ID));
     this.isRunningOnServer = isPlatformServer(injector.get(PLATFORM_ID));
 
-    this.id = this.id || RandomGeneratorHelper.generateRandom();
-
   }
 
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+
+    this.id = this.id || RandomGeneratorHelper.generateRandom();
+
+    this.cssClass = this.size === 'small' ? 'form-checkboxes-small' : '';
+
+   }
 
   ngDoCheck(): void {
 

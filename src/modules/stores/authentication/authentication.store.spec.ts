@@ -111,6 +111,20 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     expect(authenticationStore.isAccessorType()).toBe(false);
   });
 
+  it('should run isAccessorRole() and return true', () => {
+    authenticationStore.state.user = {
+      id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'ACCESSOR',
+      organisations: [{ id: 'id01', name: 'Organisation Name', role: 'ACCESSOR', isShadow: false, organisationUnits: [] }],
+      innovations: []
+    };
+    expect(authenticationStore.isAccessorRole()).toBe(true);
+  });
+
+  it('should run isAccessorRole() and return false', () => {
+    // authenticationStore.state.user = { id: 'id', displayName: 'John Doe', type: 'ACCESSOR', organisations: [{ id: 'id01', name: 'Organisation Name', role: 'QUALIFYING_ACCESSOR' }], innovations: [] };
+    expect(authenticationStore.isQualifyingAccessorRole()).toBe(false);
+  });
+
   it('should run isQualifyingAccessorRole() and return true', () => {
     authenticationStore.state.user = {
       id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'ACCESSOR',
