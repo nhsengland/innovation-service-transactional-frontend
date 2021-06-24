@@ -1,24 +1,38 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { MappedObject, UrlModel, APIQueryParamsType } from '@modules/core';
 
 import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 
-export type getInnovationsListEndpointDTO = {
+export type getInnovationsListEndpointInDTO = {
   count: number;
   data: {
     id: string;
-    status: keyof typeof INNOVATION_STATUS;
     name: string;
-    supportStatus: keyof typeof INNOVATION_SUPPORT_STATUS;
-    createdAt: string; // '2021-04-16T09:23:49.396Z',
-    updatedAt: string; // '2021-04-16T09:23:49.396Z'
-    assessment: { id: null | string; }
+    mainCategory: string;
+    otherMainCategoryDescription: string;
+    countryName: string;
+    postcode: string;
+    submittedAt: string; // '2021-04-16T09:23:49.396Z',
+    support: {
+      id: string;
+      status: keyof typeof INNOVATION_SUPPORT_STATUS;
+      createdAt: string; // '2021-04-16T09:23:49.396Z',
+      updatedAt: string; // '2021-04-16T09:23:49.396Z'
+      accessors: { id: string; name: string; }[];
+    };
+    organisations: { id: string; name: string; acronym: string; }[];
+    assessment: { id: null | string; };
   }[];
+};
+export type getInnovationsListEndpointOutDTO = {
+  count: number;
+  data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription' | 'postcode' | 'organisations'> & { organisationsAcronyms: string[]; })[]
 };
 
 export type getInnovationInfoEndpointDTO = {
@@ -126,13 +140,39 @@ export class AccessorService extends CoreService {
 
   constructor() { super(); }
 
-  getInnovationsList(queryParams: { take: number, skip: number }): Observable<getInnovationsListEndpointDTO> {
+  getInnovationsList(queryParams: APIQueryParamsType): Observable<getInnovationsListEndpointOutDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('/accessors/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(queryParams);
+    const { filters, ...qParams } = queryParams;
 
-    return this.http.get<getInnovationsListEndpointDTO>(url.buildUrl()).pipe(
+    const qp = {
+      ...qParams,
+      supportStatus: filters.status as string,
+      assignedToMe: filters.assignedToMe ? 'true' : 'false'
+    };
+
+    const url = new UrlModel(this.API_URL).addPath('/accessors/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);
+
+    return this.http.get<getInnovationsListEndpointInDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => response)
+      map(response => ({
+        count: response.count,
+        data: response.data.map(item => ({
+          id: item.id,
+          name: item.name,
+          mainCategory: item.otherMainCategoryDescription || mainCategoryItems.find(i => i.value === item.mainCategory)?.label || '',
+          countryName: `${item.countryName}${item.postcode ? ', ' + item.postcode : ''}`,
+          submittedAt: item.submittedAt,
+          support: {
+            id: item.support?.id,
+            status: item.support?.status,
+            createdAt: item.support?.createdAt,
+            updatedAt: item.support?.updatedAt,
+            accessors: item.support?.accessors || ['access', 'access']
+          },
+          organisationsAcronyms: ['NICE', 'DIT', 'Other'], // (item.organisations || []).map(o => o.acronym),
+          assessment: item.assessment
+        }))
+      }))
     );
 
   }
@@ -210,7 +250,7 @@ export class AccessorService extends CoreService {
 
     const qp = {
       ...qParams,
-      openActions: (queryParams.filters?.openActions || '') as string
+      openActions: filters.openActions as string || ''
     };
 
     const url = new UrlModel(this.API_URL).addPath('/accessors/:userId/actions').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);

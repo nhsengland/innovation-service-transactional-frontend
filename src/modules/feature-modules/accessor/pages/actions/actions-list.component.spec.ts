@@ -109,6 +109,10 @@ describe('FeatureModules/Accessor/Actions/ActionsListComponent', () => {
 
   it('should run onTableOrder()', () => {
 
+    const responseMock: getActionsListEndpointInDTO = { count: 0, data: [] };
+
+    accessorService.getActionsList = () => of(responseMock as any);
+
     fixture = TestBed.createComponent(ActionsListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -116,6 +116,28 @@ $service-manual-container-size: 1100px; // Container width variable.
   margin: 0;
 }
 
+.form-checkboxes-small {
+  &.nhsuk-checkboxes__item {
+    min-height: 30px;
+    padding: 0 0 0 35px;
+  }
+  .nhsuk-checkboxes__label {
+    // margin-bottom: 0;
+    padding: 0;
+  }
+  .nhsuk-checkboxes__input + .nhsuk-checkboxes__label::before {
+    height: 25px;
+    width: 25px;
+  }
+  .nhsuk-checkboxes__input + .nhsuk-checkboxes__label::after {
+    width: 15px;
+    height: 8px;
+    top: 7px;
+    left: 5px;
+    border-width: 0 0 3px 3px;
+  }
+}
+
 
 // Components.
 .nhsuk-card {

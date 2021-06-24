@@ -4,8 +4,6 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { NGXLogger } from 'ngx-logger';
 
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
-
 import { AssessmentService } from '../services/assessment.service';
 
 export type InnovationDataType = {
@@ -14,10 +12,6 @@ export type InnovationDataType = {
   assessment: {
     id: undefined | string;
   };
-  // support: {
-  //   id: undefined | string;
-  //   status: keyof typeof INNOVATION_SUPPORT_STATUS;
-  // }
 };
 
 
@@ -37,11 +31,7 @@ export class InnovationDataResolver implements Resolve<InnovationDataType> {
         response => ({
           id: response.summary.id,
           name: response.summary.name,
-          assessment: { id: response.assessment?.id },
-          // support: {
-          //   id: '', //response.support?.id,
-          //   status: 'UNNASSIGNED'//response.support?.status || 'UNNASSIGNED'
-          // }
+          assessment: { id: response.assessment?.id }
         }),
         catchError(error => {
           this.logger.error('Error fetching data innovation data', error);

@@ -47,6 +47,13 @@ describe('TableModel', () => {
     expect(component).toEqual(expected);
   });
 
+  it('should set orderBy and orderDir', () => {
+    const expected = { ...defaultExpected, ...{ orderBy: 'c1', orderDir: 'desc' } };
+    component = new TableModel<defaultDataSource>(defaultInit);
+    component.setOrderBy('c1', 'desc');
+    expect(component).toEqual(expected);
+  });
+
   it('should set orderBy when no ordered column is set', () => {
     const expected = { ...defaultExpected, ...{ orderBy: 'c1', orderDir: 'asc' } };
     component = new TableModel<defaultDataSource>(defaultInit);
@@ -60,6 +67,7 @@ describe('TableModel', () => {
     component.setOrderBy('c1');
     expect(component).toEqual(expected);
   });
+
 
   it('should set filters', () => {
     const expected = { ...defaultExpected, ...{ filters: { status: 'enabled' } } };

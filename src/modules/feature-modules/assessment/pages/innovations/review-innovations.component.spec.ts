@@ -33,7 +33,7 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
         StoresModule,
         AssessmentModule
       ]
-    }).compileComponents();
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 

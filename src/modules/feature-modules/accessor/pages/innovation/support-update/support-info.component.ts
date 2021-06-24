@@ -66,7 +66,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
     //     this.accessorService.getInnovationInfo(this.innovationId).subscribe(
     //       response => {
     //         this.innovation.support.id = response.support?.id;
-    //         this.innovation.support.status = response.support?.status || 'UNNASSIGNED';
+    //         this.innovation.support.status = response.support?.status || 'UNASSIGNED';
     //         this.loadSupportInfo(this.innovation.support.id || '');
     //       }
     //     );

@@ -39,10 +39,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
       }
     ];
 
-    this.currentTab = {
-      index: 0,
-      description: ''
-    };
+    this.currentTab = { index: 0, description: '' };
 
     this.actionsList = new TableModel({
       visibleColumns: {
@@ -52,7 +49,8 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
         status: { label: 'Status', align: 'right', orderable: true }
       },
       pageSize: 10000,
-      orderBy: 'createdAt'
+      orderBy: 'createdAt',
+      orderDir: 'desc'
     });
 
   }
