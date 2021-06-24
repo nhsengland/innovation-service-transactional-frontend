@@ -6,7 +6,8 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation
 
 @Component({
   selector: 'shared-pages-innovation-support-status-list',
-  templateUrl: './innovation-support-status-list.component.html'
+  templateUrl: './innovation-support-status-list.component.html',
+  styleUrls: ['./innovation-support-status-list.component.scss']
 })
 export class PageInnovationSupportStatusListComponent extends CoreComponent implements OnInit {
 
