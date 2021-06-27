@@ -21,6 +21,7 @@ export type getInnovationsListEndpointInDTO = {
     otherMainCategoryDescription: string;
     submittedAt: string; // "2021-04-16T09:23:49.396Z",
     assessment: {
+      id: string,
       createdAt: string; // "2021-04-16T09:23:49.396Z",
       assignTo: { name: string };
       finishedAt: string; // "2021-04-16T09:23:49.396Z",
@@ -83,7 +84,7 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
 };
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
-  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'assignToName' | 'finishedAt' | 'organisations'> & { organisations: string[] }
+  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'organisations'> & { organisations: string[] }
 };
 
 
@@ -113,6 +114,7 @@ export class AssessmentService extends CoreService {
           mainCategory: item.otherMainCategoryDescription || mainCategoryItems.find(i => i.value === item.mainCategory)?.label || '',
           submittedAt: item.submittedAt,
           assessment: {
+            id: item.assessment.id,
             createdAt: item.assessment.createdAt,
             assignTo: item.assessment.assignTo,
             finishedAt: item.assessment.finishedAt,
@@ -160,7 +162,10 @@ export class AssessmentService extends CoreService {
           hasScaleResource: response.hasScaleResource,
           hasScaleResourceComment: response.hasScaleResourceComment,
           summary: response.summary,
-          organisations: response.organisations.map(item => item.id)
+          organisations: response.organisations.map(item => item.id),
+          orgNames: response.organisations.map(item => item.name),
+          finishedAt: response.finishedAt,
+          assignToName: response.assignToName,
         }
       }))
     );

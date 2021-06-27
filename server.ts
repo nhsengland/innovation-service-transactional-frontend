@@ -155,7 +155,7 @@ export function app(): express.Express {
 
       if (!oid) { return done(new Error('No oid found'), null); }
 
-      // console.log('TOKEN: ', accessToken);
+       // console.log('TOKEN: ', accessToken);
 
       findUserSessionByOid(oid, (err: string, userSession: UserSession): void => {
 
