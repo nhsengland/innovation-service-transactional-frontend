@@ -36,7 +36,8 @@
             <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }}</span>
-                <a routerLink="/assessment/innovations/{{ item.id }}">{{ item.name }}</a>
+                <a *ngIf="currentTab.status !== 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}">{{ item.name }}</a>
+                <a *ngIf="currentTab.status === 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}/assessments/{{item.assessment.id}}/log">{{ item.name }}</a>
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('submittedAt')" class="nhsuk-table__cell d-flex align-items-center">

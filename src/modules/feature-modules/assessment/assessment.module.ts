@@ -19,6 +19,7 @@ import { AssessmentService } from './services/assessment.service';
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
+import { InnovationNeedsAssessmentOverviewComponent } from './pages/needs-assessment-overview/needs-assessment-overview.component';
 
 @NgModule({
   imports: [
@@ -36,7 +37,8 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 
     InnovationOverviewComponent,
     InnovationAssessmentNewComponent,
-    InnovationAssessmentEditComponent
+    InnovationAssessmentEditComponent,
+    InnovationNeedsAssessmentOverviewComponent
   ],
   providers: [
     // Services.

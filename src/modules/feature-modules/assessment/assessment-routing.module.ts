@@ -16,6 +16,7 @@ import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 import { InnovationSectionViewComponent } from '@modules/shared/pages/innovation/section-view.component';
 import { InnovationSectionEvidenceViewComponent } from '@modules/shared/pages/innovation/evidence-view.component';
+import { InnovationNeedsAssessmentOverviewComponent } from './pages/needs-assessment-overview/needs-assessment-overview.component';
 
 const routes: Routes = [
 
@@ -56,6 +57,10 @@ const routes: Routes = [
 
               {
                 path: 'assessments/:assessmentId', pathMatch: 'full', redirectTo: 'assessments/:assessmentId/edit/1' // component: InnovationAssessmentEditComponent,
+              },
+              {
+                path: 'assessments/:assessmentId/log', pathMatch: 'full', component: InnovationNeedsAssessmentOverviewComponent,
+                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/assessment/innovations', label: 'Innovations' } } }
               },
               { path: 'assessments/:assessmentId/edit', pathMatch: 'full', redirectTo: 'assessments/:assessmentId/edit/1' },
               {
