@@ -53,7 +53,8 @@
               <p *ngFor="let item of (assessment?.orgNames || [])" class="nhsuk-u-margin-bottom-1">{{ item }}</p>
 
               <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
-              <a routerLink="/assessment/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"> Update support status </a>
+              <!-- REMOVE THIS AFTER CONFIRMING WITH ERIK THAT ASSESSMENT USERS SHOULD NOT SEE THIS-->
+              <!-- <a routerLink="/assessment/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"> Update support status </a> -->
 
             </div>
           </div>
