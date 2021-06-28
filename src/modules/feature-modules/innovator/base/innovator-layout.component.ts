@@ -8,7 +8,7 @@ import { RoutingHelper } from '@modules/core';
 
 
 type RouteDataLayoutOptionsType = {
-  type: null | 'leftAsideMenu' | 'leftAsideBackLink';
+  type: null | 'innovationLeftAsideMenu' | 'emptyLeftAside';
   backLink?: null | { url?: string, label?: string };
   showInnovationHeader?: boolean;
 };
@@ -52,7 +52,7 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
     this.layoutOptions = {
       type: routeData.type || null,
-      backLink: routeData.type === 'leftAsideBackLink' ? { url: RoutingHelper.resolveUrl(routeData.backLink?.url, this.activatedRoute), label: routeData.backLink?.label } : null,
+      backLink: routeData.backLink ? { url: RoutingHelper.resolveUrl(routeData.backLink.url, this.activatedRoute), label: routeData.backLink.label } : null,
       showInnovationHeader: routeData.showInnovationHeader || false
     };
 
@@ -74,16 +74,23 @@ export class InnovatorLayoutComponent extends CoreComponent {
       };
     }
 
-    if (this.layoutOptions.type === 'leftAsideMenu') {
-      this.leftSideBar = [
-        { title: 'Overview', link: `/innovator/innovations/${currentRouteInnovationId}/overview` },
-        { title: 'Innovation record', link: `/innovator/innovations/${currentRouteInnovationId}/record` },
-        { title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker` },
-        { title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments` },
-        { title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/data-sharing` }
-      ];
-    } else {
-      this.leftSideBar = [];
+
+    switch (this.layoutOptions.type) {
+
+      case 'innovationLeftAsideMenu':
+        this.leftSideBar = [
+          { title: 'Overview', link: `/innovator/innovations/${currentRouteInnovationId}/overview` },
+          { title: 'Innovation record', link: `/innovator/innovations/${currentRouteInnovationId}/record` },
+          { title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker` },
+          { title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments` },
+          { title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/data-sharing` }
+        ];
+        break;
+
+      case 'emptyLeftAside':
+      default:
+        this.leftSideBar = [];
+        break;
     }
 
     if (this.layoutOptions.showInnovationHeader) {

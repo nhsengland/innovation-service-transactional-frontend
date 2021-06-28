@@ -73,13 +73,13 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
         {
           id: '01', name: 'Innovation 01', mainCategory: 'Medical device', countryName: 'England', submittedAt: '2021-04-16T09:23:49.396Z',
           support: { id: 'S01', status: 'WAITING', createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396', accessors: [] },
-          organisationsAcronyms: ['NICE', 'DIT', 'Other'], // responseMock.data[0].organisations.map(o => o.acronym),
+          organisations: responseMock.data[0].organisations,
           assessment: { id: '01' }
         },
         {
           id: '02', name: 'Innovation 02', mainCategory: 'Medical device', countryName: 'England', submittedAt: '2021-04-16T09:23:49.396Z',
           support: { id: 'S02', status: 'WAITING', createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396', accessors: [] },
-          organisationsAcronyms: ['NICE', 'DIT', 'Other'], // responseMock.data[1].organisations.map(o => o.acronym),
+          organisations: responseMock.data[0].organisations,
           assessment: { id: '02' },
         }
       ]

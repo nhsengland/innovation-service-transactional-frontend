@@ -16,10 +16,12 @@ import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/n
 import { InnovationSupportUpdateComponent } from './pages/innovation/support-update/support-update.component';
 import { InnovationSupportInfoComponent } from './pages/innovation/support-update/support-info.component';
 
+import { PageInnovationCommentsListComponent } from '@shared-module/pages/innovation/comments/comments-list.component';
+import { PageInnovationCommentsNewComponent } from '@shared-module/pages/innovation/comments/comments-new.component';
 import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/innovation-record.component';
 import { PageActionStatusListComponent } from '@shared-module/pages/innovation/action-status-list.component';
-import { InnovationSectionViewComponent } from '@shared-module/pages/innovation/section-view.component';
 import { InnovationSectionEvidenceViewComponent } from '@shared-module/pages/innovation/evidence-view.component';
+import { InnovationSectionViewComponent } from '@shared-module/pages/innovation/section-view.component';
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
@@ -99,7 +101,14 @@ const routes: Routes = [
                 path: 'action-tracker/:actionId/edit', pathMatch: 'full', component: InnovationActionTrackerEditComponent,
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations/:innovationId/action-tracker/:actionId', label: 'Go back' } } }
               },
-
+              {
+                path: 'comments', pathMatch: 'full', component: PageInnovationCommentsListComponent,
+                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } }
+              },
+              {
+                path: 'comments/new', pathMatch: 'full', component: PageInnovationCommentsNewComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId', label: 'Go back' } } }
+              },
               {
                 path: 'assessments/:assessmentId', pathMatch: 'full', component: InnovationNeedsAssessmentOverviewComponent,
                 // data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Go back' } } }

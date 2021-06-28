@@ -159,8 +159,8 @@ export type getInnovationInfoEndpointDTO = {
   description: string;
   countryName: string;
   postcode: string;
-  actions: string[]; // actionsCount: number;
-  comments: string[]; // commentsCount: number
+  actions: string[];
+  comments: string[];
 };
 
 export type getInnovationInfoResponse = {
@@ -189,6 +189,29 @@ export type getInnovationEvidenceDTO = {
   files: { id: string; displayFileName: string; url: string }[];
 };
 
+export type getInnovationCommentsDTO = {
+  id: string;
+  message: string;
+  createdAt: string;
+  user: {
+    id: string;
+    type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
+    name: string;
+    organisationUnit?: { id: string; name: string; };
+  };
+  replies: {
+    id: string;
+    message: string;
+    createdAt: string;
+    user: {
+      id: string;
+      type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
+      name: string;
+      organisationUnit?: { id: string; name: string; };
+    };
+  }[];
+};
+
 
 export type SectionsSummaryModel = {
   title: string;
@@ -199,4 +222,6 @@ export type SectionsSummaryModel = {
     actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
     isCompleted: boolean;
   }[]
+
+
 };

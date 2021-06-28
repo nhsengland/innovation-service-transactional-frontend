@@ -117,7 +117,7 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
   it('should have leftSideBar with innovation menu values', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'innovation01' };
-    activatedRoute.snapshot.data = { layoutOptions: { type: 'leftAsideMenu' } };
+    activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' } };
 
     const expected = [
       { title: 'Overview', link: `/innovator/innovations/innovation01/overview` },

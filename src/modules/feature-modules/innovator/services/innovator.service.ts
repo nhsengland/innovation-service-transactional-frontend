@@ -5,7 +5,7 @@ import { map, take } from 'rxjs/operators';
 import { CoreService } from '@app/base';
 
 import { MappedObject, UrlModel } from '@modules/core';
-import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
 type getInnovationActionsListEndpointInDTO = {
@@ -17,26 +17,18 @@ type getInnovationActionsListEndpointInDTO = {
 };
 
 export type getInnovationInfoEndpointDTO = {
-  summary: {
-    id: string;
-    name: string;
-    status: keyof typeof INNOVATION_STATUS;
-    description: string;
-    company: string;
-    countryName: string;
-    postCode: string;
-    categories: string[];
-    otherCategoryDescription: null | string;
-  };
-  contact: {
-    name: string;
-  };
+  id: string;
+  name: string;
+  status: keyof typeof INNOVATION_STATUS;
+  description: string;
+  countryName: string;
+  postcode: string;
   assessment?: {
     id: string;
   };
-  support?: {
-    id: string;
-    status: keyof typeof INNOVATION_SUPPORT_STATUS;
+  action: {
+    requestedCount: number;
+    inReviewCount: number;
   }
 };
 
@@ -83,13 +75,23 @@ export class InnovatorService extends CoreService {
 
   }
 
+  getInnovationInfo(innovationId: string): Observable<getInnovationInfoEndpointDTO> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
   getInnovationActionsList(innovationId: string): Observable<getInnovationActionsListEndpointOutDTO> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
 
     return this.http.get<getInnovationActionsListEndpointInDTO[]>(url.buildUrl()).pipe(
       take(1),
-      map( response => {
+      map(response => {
         return {
           openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(item.section)}` } })),
           closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(item.section)}` } })),
@@ -128,7 +130,7 @@ export class InnovatorService extends CoreService {
 
   }
 
-  getOrganisations(innovationId: string): Observable<{id: string, status: string}[]> {
+  getOrganisations(innovationId: string): Observable<{ id: string, status: string }[]> {
 
     // return of([
     //   {id: '73201F47-37A8-EB11-B566-0003FFD6549F', status: 'ENGAGING'},
@@ -138,17 +140,17 @@ export class InnovatorService extends CoreService {
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/shares')
       .setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
 
-    return this.http.get<{id: string, status: string}[]>(url.buildUrl()).pipe(
+    return this.http.get<{ id: string, status: string }[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );
 
   }
 
-  submitOrganisationSharing(innovationId: string, body: MappedObject): Observable<{id: string} > {
+  submitOrganisationSharing(innovationId: string, body: MappedObject): Observable<{ id: string }> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/shares')
-      .setPathParams({userId: this.stores.authentication.getUserId(), innovationId});
+      .setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
 
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),

@@ -7,6 +7,7 @@ export const locale = {
 
       date_formats: {
         full_date_time: 'EEEE, MMMM d, y \'at\' h:mm:ss a',
+        long_date_time: 'd MMMM y \'at\' h:mm a',
         long_date: 'd MMMM y',
         short_date: 'd mm y',
         medium_time: 'h:mm:ss a',

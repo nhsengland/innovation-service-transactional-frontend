@@ -17,11 +17,11 @@
     </ng-container>
 
     <ng-container [ngSwitch]="layoutOptions.type">
-      <div *ngSwitchCase="'leftAsideMenu'">
+      <div *ngSwitchCase="'emptyLeftAside'">
         <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
       </div>
-      <div *ngSwitchCase="'leftAsideBackLink'">
-        <ng-container *ngTemplateOutlet="leftAsideBackLink"></ng-container>
+      <div *ngSwitchCase="'innovationLeftAsideMenu'">
+        <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
       </div>
       <div *ngSwitchDefault>
         <router-outlet></router-outlet>
@@ -31,45 +31,28 @@
   </main>
 </div>
 
-<theme-footer></theme-footer>
-
-
 <ng-template #leftAsideMenu>
+
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full app-component-reading-width">
       <div class="app-pane">
-        <div class="app-pane__side-bar">
-          <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
-            <ul class="nhsuk-list app-side-nav__list">
-              <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
-                <a class="app-side-nav__link" [routerLink]="item.link">{{ item.title }}</a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-        <div class="app-pane__main-content">
-          <router-outlet></router-outlet>
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #leftAsideBackLink>
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full app-component-reading-width">
-      <div class="app-pane">
-        <div class="app-pane__side-bar">
+        <div class="app-pane__side-bar nhsuk-u-padding-top-3">
           <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
 
-            <div class="nhsuk-back-link app-u-hide-mobile app-side-nav__back nhsuk-u-margin-bottom-4">
+            <div *ngIf="layoutOptions.backLink" class="nhsuk-back-link app-u-hide-mobile app-side-nav__back nhsuk-u-margin-bottom-4">
               <a class="nhsuk-back-link__link" [routerLink]="layoutOptions.backLink?.url">
                 <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
                 </svg>
                 {{ layoutOptions.backLink?.label }}</a>
             </div>
-            
+
+            <ul class="nhsuk-list app-side-nav__list">
+              <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
+                <a class="app-side-nav__link" [routerLink]="item.link">{{ item.title }}</a>
+              </li>
+            </ul>
+
           </nav>
         </div>
         <div class="app-pane__main-content">
@@ -78,4 +61,7 @@
       </div>
     </div>
   </div>
+
 </ng-template>
+
+<theme-footer></theme-footer>

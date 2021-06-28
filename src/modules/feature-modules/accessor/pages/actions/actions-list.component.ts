@@ -44,7 +44,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
     this.actionsList = new TableModel({
       visibleColumns: {
         section: { label: 'Action', orderable: true },
-        name: { label: 'Innovation', orderable: true },
+        innovationName: { label: 'Innovation', orderable: true },
         createdAt: { label: 'Initiated', orderable: true },
         status: { label: 'Status', align: 'right', orderable: true }
       },

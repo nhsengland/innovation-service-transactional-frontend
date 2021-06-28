@@ -12,7 +12,7 @@ import { InnovationService } from './innovation.service';
 
 import {
   InnovationModel, SectionsSummaryModel, InnovationSectionsIds, sectionType, InnovationSectionConfigType, getInnovationEvidenceDTO,
-  INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS
+  INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS, getInnovationCommentsDTO
 } from './innovation.models';
 import { INNOVATION_SECTIONS } from './innovation.config';
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
@@ -40,7 +40,7 @@ export class InnovationStore extends Store<InnovationModel> {
   //   return this.innovationsService.getInnovationInfo(innovationId);
   // }
 
-  submitInnovation$(innovationId: string): Observable<{id: string, status: keyof typeof INNOVATION_STATUS}> {
+  submitInnovation$(innovationId: string): Observable<{ id: string, status: keyof typeof INNOVATION_STATUS }> {
     return this.innovationsService.submitInnovation(innovationId);
   }
 
@@ -122,6 +122,16 @@ export class InnovationStore extends Store<InnovationModel> {
     return cloneDeep(
       INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId)?.wizard || new WizardEngineModel({})
     );
+  }
+
+
+  // Innovation comments methods.
+  getInnovationComments$(module: '' | 'innovator' | 'accessor', innovationId: string, createdOrder: 'asc' | 'desc'): Observable<getInnovationCommentsDTO[]> {
+    return this.innovationsService.getInnovationComments(module, innovationId, createdOrder);
+  }
+
+  createInnovationComment$(module: '' | 'innovator' | 'accessor', innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
+    return this.innovationsService.createInnovationComment(module, innovationId, body);
   }
 
 }

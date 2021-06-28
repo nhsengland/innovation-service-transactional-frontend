@@ -7,7 +7,7 @@ import { cloneDeep } from 'lodash';
 import { EnvironmentStore } from '@modules/core/stores/environment.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
-import { getInnovationSectionsDTO, sectionType, getInnovationEvidenceDTO, INNOVATION_STATUS } from './innovation.models';
+import { getInnovationSectionsDTO, sectionType, getInnovationEvidenceDTO, INNOVATION_STATUS, getInnovationCommentsDTO } from './innovation.models';
 
 import { UrlModel } from '@modules/core/models/url.model';
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
@@ -23,6 +23,19 @@ export class InnovationService {
     private environmentStore: EnvironmentStore,
     private authenticationStore: AuthenticationStore
   ) { }
+
+  private endpointModule(module: '' | 'innovator' | 'accessor' | 'assessment'): string {
+    switch (module) {
+      case 'innovator':
+        return 'innovators';
+      case 'accessor':
+        return 'accessors';
+      case 'assessment':
+        return 'assessments';
+      default:
+        return '';
+    }
+  }
 
 
   // getInnovationInfo(innovationId: string): Observable<getInnovationInfoResponse> {
@@ -56,21 +69,7 @@ export class InnovationService {
 
   getInnovationSections(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string): Observable<getInnovationSectionsDTO> {
 
-    let endpointModule = '';
-
-    switch (module) {
-      case 'innovator':
-        endpointModule = 'innovators';
-        break;
-      case 'accessor':
-        endpointModule = 'accessors';
-        break;
-      case 'assessment':
-        endpointModule = 'assessments';
-        break;
-      default:
-        break;
-    }
+    const endpointModule = this.endpointModule(module);
 
     const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/section-summary').setPathParams({ endpointModule, userId: this.authenticationStore.getUserId(), innovationId });
     return this.http.get<getInnovationSectionsDTO>(url.buildUrl()).pipe(
@@ -83,21 +82,7 @@ export class InnovationService {
 
   getSectionInfo(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
 
-    let endpointModule = '';
-
-    switch (module) {
-      case 'innovator':
-        endpointModule = 'innovators';
-        break;
-      case 'accessor':
-        endpointModule = 'accessors';
-        break;
-      case 'assessment':
-        endpointModule = 'assessments';
-        break;
-      default:
-        break;
-    }
+    const endpointModule = this.endpointModule(module);
 
     const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/sections').setPathParams({ endpointModule, userId: this.authenticationStore.getUserId(), innovationId }).setQueryParams({ section });
     return this.http.get<{
@@ -137,21 +122,7 @@ export class InnovationService {
 
   getSectionEvidenceInfo(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
 
-    let endpointModule = '';
-
-    switch (module) {
-      case 'innovator':
-        endpointModule = 'innovators';
-        break;
-      case 'accessor':
-        endpointModule = 'accessors';
-        break;
-      case 'assessment':
-        endpointModule = 'assessments';
-        break;
-      default:
-        break;
-    }
+    const endpointModule = this.endpointModule(module);
 
     const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/evidence/:evidenceId').setPathParams({ endpointModule, userId: this.authenticationStore.getUserId(), innovationId, evidenceId });
     return this.http.get<getInnovationEvidenceDTO>(url.buildUrl()).pipe(
@@ -189,6 +160,32 @@ export class InnovationService {
       take(1),
       map(response => !!response),
       catchError(() => of(false))
+    );
+
+  }
+
+
+  // Innovation comments methods.
+  getInnovationComments(module: '' | 'innovator' | 'accessor', innovationId: string, createdOrder: 'asc' | 'desc'): Observable<getInnovationCommentsDTO[]> {
+
+    const endpointModule = this.endpointModule(module);
+    const order = { order: { createdAt: createdOrder.toUpperCase() } };
+
+    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/comments').setPathParams({ endpointModule, userId: this.authenticationStore.getUserId(), innovationId }).setQueryParams(order);
+    return this.http.get<getInnovationCommentsDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
+  createInnovationComment(module: '' | 'innovator' | 'accessor', innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
+
+    const endpointModule = this.endpointModule(module);
+
+    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/comments').setPathParams({ endpointModule, userId: this.authenticationStore.getUserId(), innovationId });
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
     );
 
   }
