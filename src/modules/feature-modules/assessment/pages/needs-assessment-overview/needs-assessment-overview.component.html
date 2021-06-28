@@ -53,7 +53,6 @@
               <p *ngFor="let item of (assessment?.orgNames || [])" class="nhsuk-u-margin-bottom-1">{{ item }}</p>
 
               <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
-              <!-- HIDDEN UNTIL IMPLEMENTATION POST MVS -->
               <a *ngIf="false" routerLink="/assessment/innovations/{{innovationId}}/assessments/{{ assessmentId }}/edit/1}}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"> Edit assessment </a>
 
             </div>
