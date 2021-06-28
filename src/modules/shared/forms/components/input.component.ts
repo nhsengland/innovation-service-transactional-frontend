@@ -25,9 +25,14 @@ export class FormInputComponent extends ControlValueAccessorConnector implements
   @Input() label?: string;
   @Input() description?: string;
   @Input() placeholder?: string;
+  @Input() width?: 'one-third' | 'two-thirds' | 'three-quarters' | 'full';
+  @Input() cssOverwrite?: string;
 
   hasError = false;
   errorMessage = '';
+
+  inputCssClass = '';
+  divCssOverwrite = '';
 
   constructor(
     injector: Injector,
@@ -36,13 +41,18 @@ export class FormInputComponent extends ControlValueAccessorConnector implements
 
     super(injector);
 
+  }
+
+  ngOnInit(): void {
+
     this.id = this.id || RandomGeneratorHelper.generateRandom();
     this.type = this.type || 'text';
     this.placeholder = this.placeholder || '';
 
-  }
+    this.inputCssClass = this.width ? `nhsuk-u-width-${this.width}` : 'nhsuk-u-width-two-thirds';
+    this.divCssOverwrite = this.cssOverwrite || 'nhsuk-u-padding-top-4';
 
-  ngOnInit(): void { }
+  }
 
   ngDoCheck(): void {
 

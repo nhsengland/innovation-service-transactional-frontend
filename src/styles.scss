@@ -22,7 +22,6 @@ $service-manual-container-size: 1100px; // Container width variable.
   --error-color: #{$nhsuk-error-color};
   --neutral-color: #{$color_nhsuk-blue};
 
-
   --white: #{$color_nhsuk-white};
 
   --color_nhsuk-grey-1: #{$color_nhsuk-grey-1};
@@ -31,7 +30,6 @@ $service-manual-container-size: 1100px; // Container width variable.
   --color_nhsuk-grey-5: #{$color_nhsuk-grey-5};
   --nhsuk-border-color: #{$nhsuk-border-color};
   --nhsuk-button-color: #{$nhsuk-button-color};
-
 
   // --spacing-3: 32px;
   // --mobile:  20em; /* 320px */
@@ -42,6 +40,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 .d-flex { display: flex; }
 .align-items-center { align-items: center; }
+.justify-content-space-between { justify-content: space-between; }
 
 .ml-auto { margin-left: auto; }
 .mr-auto { margin-right: auto; }
@@ -58,15 +57,18 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 .overflow-x-hidden { overflow-x: hidden; }
 
-.bg-color-white {
-  background-color: var(--white);
-}
+.bg-color-white { background-color: var(--white); }
+.bg-color-grey { background-color: var(--color_nhsuk-grey-5); }
+
+.font-color-secondary { color: $nhsuk-secondary-text-color; }
 
 .border-bottom-0 { border-bottom: 0; }
 
 .border-color-success { border-color: var(--success-color); }
 .border-color-warning { border-color: var(--warning-color); }
 .border-color-neutral { border-color: var(--neutral-color); }
+
+.right-border-separator { border-right: 2px solid var(--nhsuk-border-color); }
 
 // Container and layout classes.
 .app-width-container,
@@ -112,7 +114,7 @@ $service-manual-container-size: 1100px; // Container width variable.
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   box-shadow: none;
-  padding: 4px 16px;
+  padding: 5px 16px 4px;
   margin: 0;
 }
 

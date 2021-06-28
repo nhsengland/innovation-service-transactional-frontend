@@ -26,13 +26,13 @@ export type getInnovationsListEndpointInDTO = {
       updatedAt: string; // '2021-04-16T09:23:49.396Z'
       accessors: { id: string; name: string; }[];
     };
-    organisations: { id: string; name: string; acronym: string; }[];
+    organisations: string[];
     assessment: { id: null | string; };
   }[];
 };
 export type getInnovationsListEndpointOutDTO = {
   count: number;
-  data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription' | 'postcode' | 'organisations'> & { organisationsAcronyms: string[]; })[]
+  data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription' | 'postcode'>)[]
 };
 
 export type getInnovationInfoEndpointDTO = {
@@ -169,7 +169,7 @@ export class AccessorService extends CoreService {
             updatedAt: item.support?.updatedAt,
             accessors: item.support?.accessors || ['access', 'access']
           },
-          organisationsAcronyms: ['NICE', 'DIT', 'Other'], // (item.organisations || []).map(o => o.acronym),
+          organisations: item.organisations,
           assessment: item.assessment
         }))
       }))

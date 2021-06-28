@@ -71,12 +71,12 @@
 
               <td class="nhsuk-table__cell text-align-right">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('engagingOrganisations') }}</span>
-                <ng-container *ngFor="let acronym of item.organisationsAcronyms; let i = index">
+                <ng-container *ngFor="let acronym of item.organisations; let i = index">
                   <ng-container *ngIf="i < 2">
                     <strong class="nhsuk-tag nhsuk-tag--white nhsuk-u-margin-left-1">{{ acronym }}</strong>
                   </ng-container>
-                  <ng-container *ngIf="i === 2 && item.organisationsAcronyms.length > 2">
-                    <strong class="nhsuk-tag nhsuk-tag--grey nhsuk-u-margin-left-1">+ {{ item.organisationsAcronyms.length - 2 }}</strong>
+                  <ng-container *ngIf="i === 2 && item.organisations.length > 2">
+                    <strong class="nhsuk-tag nhsuk-tag--grey nhsuk-u-margin-left-1">+ {{ item.organisations.length - 2 }}</strong>
                   </ng-container>
                 </ng-container>
               </td>

@@ -1,4 +1,4 @@
-<div class="nhsuk-form-group nhsuk-u-padding-top-4" [ngClass]="{'nhsuk-form-group--error': hasError}">
+<div class="nhsuk-form-group {{ divCssOverwrite }}" [ngClass]="{'nhsuk-form-group--error': hasError}">
 
   <ng-container *ngIf="label">
     <label class="nhsuk-heading-m nhsuk-u-margin-bottom-2" [for]="id">{{ label }}</label>
@@ -14,7 +14,7 @@
     </span>
   </ng-container>
 
-  <input [formControl]="fieldControl" [id]="id" [name]="controlName" [type]="type" [placeholder]="placeholder" [value]="fieldControl.value" class="nhsuk-input nhsuk-u-width-two-thirds" />
+  <input [formControl]="fieldControl" [id]="id" [name]="controlName" [type]="type" [placeholder]="placeholder" [value]="fieldControl.value" class="nhsuk-input" [ngClass]="inputCssClass" />
 
   <ng-content select="[append]"></ng-content>
 
