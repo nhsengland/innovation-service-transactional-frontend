@@ -84,7 +84,7 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
 };
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
-  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'organisations'> & { organisations: string[] }
+  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'organisations' | 'orgNames'> & { organisations: string[], orgNames: string[] }
 };
 
 

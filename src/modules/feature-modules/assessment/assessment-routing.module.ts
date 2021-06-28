@@ -59,7 +59,7 @@ const routes: Routes = [
                 path: 'assessments/:assessmentId', pathMatch: 'full', redirectTo: 'assessments/:assessmentId/edit/1' // component: InnovationAssessmentEditComponent,
               },
               {
-                path: 'xixa/:assessmentId/log', pathMatch: 'full', component: InnovationNeedsAssessmentOverviewComponent,
+                path: 'assessments/:assessmentId/log', pathMatch: 'full', component: InnovationNeedsAssessmentOverviewComponent,
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/assessment/innovations', label: 'Innovations' } } }
               },
               { path: 'assessments/:assessmentId/edit', pathMatch: 'full', redirectTo: 'assessments/:assessmentId/edit/1' },
