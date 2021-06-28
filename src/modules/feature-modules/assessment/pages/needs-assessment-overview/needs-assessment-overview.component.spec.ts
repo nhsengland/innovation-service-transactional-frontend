@@ -8,18 +8,18 @@ import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
+import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
 
 import { InnovationNeedsAssessmentOverviewComponent } from './needs-assessment-overview.component';
 
-import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
+import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
 
 
-describe('FeatureModules/Accessor/Innovation/InnovationNeedsAssessmentOverviewComponent', () => {
+describe('FeatureModules/Assessment/Innovation/InnovationNeedsAssessmentOverviewComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
-  let accessorService: AccessorService;
+  let assessmentService: AssessmentService;
 
   let component: InnovationNeedsAssessmentOverviewComponent;
   let fixture: ComponentFixture<InnovationNeedsAssessmentOverviewComponent>;
@@ -31,7 +31,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationNeedsAssessmentOverviewCo
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        AccessorModule
+        AssessmentModule
       ]
     });
 
@@ -39,7 +39,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationNeedsAssessmentOverviewCo
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    accessorService = TestBed.inject(AccessorService);
+    assessmentService = TestBed.inject(AssessmentService);
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
@@ -63,7 +63,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationNeedsAssessmentOverviewCo
       innovation: { id: '01', name: 'Innovation 01' },
       assessment: { description: 'description' }
     };
-    accessorService.getInnovationNeedsAssessment = () => of(responseMock as any);
+    assessmentService.getInnovationNeedsAssessment = () => of(responseMock as any);
     const expected = responseMock.assessment;
 
     fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
@@ -75,7 +75,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationNeedsAssessmentOverviewCo
 
   it('should run getInnovationNeedsAssessment() with error', () => {
 
-    accessorService.getInnovationNeedsAssessment = () => throwError(false);
+    assessmentService.getInnovationNeedsAssessment = () => throwError(false);
 
     const expected = undefined;
 

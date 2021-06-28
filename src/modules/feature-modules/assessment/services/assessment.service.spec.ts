@@ -135,6 +135,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
       hasScaleResourceComment: 'One value',
       summary: 'One value',
       organisations: [{ id: 'org1', name: 'orgName', acronym: 'orgAcronym' }],
+      orgNames: ['orgName'],
       assignToName: 'One value',
       finishedAt: 'One value'
     };
@@ -159,7 +160,8 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
         hasScaleResource: responseMock.hasScaleResource,
         hasScaleResourceComment: responseMock.hasScaleResourceComment,
         summary: responseMock.summary,
-        organisations: ['orgName'],
+        organisations: ['org1'],
+        orgNames: ['orgName'],
         assignToName: 'One value',
         finishedAt: 'One value'
       }
