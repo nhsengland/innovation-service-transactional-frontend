@@ -20,7 +20,6 @@ import { appLoggingMiddleware } from 'src/middleware/appLoggingMiddleware';
 import { exceptionLoggingMiddleware } from 'src/middleware/exceptionLoggingMiddleware';
 import { getAppInsightsClient, initAppInsights } from 'src/globals';
 import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
-import { hidePoweredBy, hsts, contentSecurityPolicy, noSniff, ieNoOpen, frameguard, xssFilter  } from 'helmet';
 import * as helmet from 'helmet';
 dotenv.config();
 
@@ -155,7 +154,7 @@ export function app(): express.Express {
 
       if (!oid) { return done(new Error('No oid found'), null); }
 
-       // console.log('TOKEN: ', accessToken);
+      // console.log('TOKEN: ', accessToken);
 
       findUserSessionByOid(oid, (err: string, userSession: UserSession): void => {
 
@@ -311,11 +310,12 @@ export function app(): express.Express {
       };
 
       const fail = (error: any) => {
+
+        console.error(`Error when attempting to connect to api with url: ${url}. Error: ${error}`);
+
         if (error.response && error.response.status) {
-          console.error(`Error when attempting to connect to api with url: ${url}. Error: ${error}`);
-          res.status(error.response.status).send(error.message);
+          res.status(error.response.status).send(error.response.data);
         } else {
-          console.error(`Error when attempting to connect to api with url: ${url}. Error: ${error}`);
           res.status(500).send();
         }
       };
