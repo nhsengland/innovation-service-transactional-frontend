@@ -1,3 +1,4 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -18,6 +19,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationSections: SectionsSummaryModel[] = [];
   actionSummary: {requested: number, review: number} = { requested: 0, review: 0};
   supportStatus = 'AWAITING SUPPORT';
+  supportingAccessors: { id: string; name: string, unit: string }[] = [];
   submittedAt: string | undefined;
   needsAssessmentCompleted: boolean;
 
@@ -65,14 +67,25 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
     forkJoin([
       this.innovatorService.getInnovationInfo(this.innovationId),
-      this.stores.innovation.getSectionsSummary$('innovator', this.innovationId)
+      this.stores.innovation.getSectionsSummary$('innovator', this.innovationId),
+      this.innovatorService.getInnovationSupports(this.innovationId),
     ]).subscribe(
-      ([innovationInfo, sectionSummary]) => {
+      ([innovationInfo, sectionSummary, innovationSupports]) => {
         this.submittedAt = innovationInfo.submittedAt || '';
         this.needsAssessmentCompleted = !this.isInAssessmentStatus();
 
         this.parseActionSummary(innovationInfo);
         this.parseSectionSummary(sectionSummary);
+        this.supportStatus = innovationSupports.find(s => s.status === 'ENGAGING')?.status || 'AWAITING SUPPORT';
+        if (this.supportStatus === 'ENGAGING') {
+          this.supportingAccessors = innovationSupports
+          .filter(support => support.status === 'ENGAGING')
+          .flatMap(s => s.accessors
+            .map(a => ({
+            ...a,
+            unit: s.organisationUnit.name,
+          })));
+        }
       },
       (error) => {
         this.logger.error(error);

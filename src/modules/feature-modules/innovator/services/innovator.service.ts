@@ -6,6 +6,7 @@ import { CoreService } from '@app/base';
 
 import { MappedObject, UrlModel } from '@modules/core';
 import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { response } from 'express';
 
 
 type getInnovationActionsListEndpointInDTO = {
@@ -30,11 +31,7 @@ export type getInnovationInfoEndpointDTO = {
   action: {
     requestedCount: number;
     inReviewCount: number;
-  },
-  support?: {
-    id: string;
-    status: keyof typeof INNOVATION_SUPPORT_STATUS;
-  }[]
+  }
 };
 
 export type getInnovationActionInfoInDTO = {
@@ -46,6 +43,22 @@ export type getInnovationActionInfoInDTO = {
   createdAt: string; // '2021-04-16T09:23:49.396Z',
   createdBy: { id: string; name: string; };
 };
+
+export type getInnovationSupportsInDTO = {
+  id: string;
+  status: string;
+  organisation: {
+    id: string;
+    name: string;
+    acronym: string;
+  },
+  organisationUnit: {
+    id: string;
+    name: string;
+  },
+  accessors: {id: string, name: string}[],
+};
+
 export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
 
 export type getInnovationActionsListEndpointOutDTO = {
@@ -88,6 +101,80 @@ export class InnovatorService extends CoreService {
       map(response => response)
     );
 
+  }
+
+  getInnovationSupports(innovationId: string): Observable<getInnovationSupportsInDTO[]> {
+
+    return of([
+      {
+          id: 'C2B7433E-F36B-1410-8103-0032FE5B194B',
+          status: 'ENGAGING',
+          organisation: {
+              id: '43B7433E-F36B-1410-8103-0032FE5B194B',
+              name: 'Reinger Inc',
+              acronym: 'Group'
+          },
+          organisationUnit: {
+              id: '4BB7433E-F36B-1410-8103-0032FE5B194B',
+              name: 'Ratke Inc'
+          },
+          accessors: [
+              {
+                  id: '60CF433E-F36B-1410-8103-0032FE5B194B',
+                  name: 'ASHN Q. Accessor'
+              },
+              {
+                id: '60CF433E-F36B-1410-8103-0032FE5B194C',
+                name: 'ASHN Q. Accessor 2'
+              },
+          ]
+      },
+      {
+          id: '52CF433E-F36B-1410-8103-0032FE5B194B',
+          status: 'NOT_YET',
+          organisation: {
+              id: 'D1B7433E-F36B-1410-8103-0032FE5B194B',
+              name: 'Kunde and Sons',
+              acronym: 'LLC'
+          },
+          organisationUnit: {
+              id: '49CF433E-F36B-1410-8103-0032FE5B194B',
+              name: 'Unit Test'
+          },
+          accessors: [
+            {
+              id: '60CF433E-F36B-1410-8103-0032FE5B194C',
+              name: 'ASHN Q. Accessor 3'
+            },
+          ]
+      },
+      {
+          id: '59CF433E-F36B-1410-8103-0032FE5B194B',
+          status: 'ENGAGING',
+          organisation: {
+              id: '43B7433E-F36B-1410-8103-0032FE5B194B',
+              name: 'Reinger Inc',
+              acronym: 'Group'
+          },
+          organisationUnit: {
+              id: '4BCF433E-F36B-1410-8103-0032FE5B194B',
+              name: 'Second Unit'
+          },
+          accessors: []
+      }
+    ]);
+
+    // const url = new UrlModel(this.API_URL)
+    // .addPath('innovators/:userId/innovations/:innovationId/supports')
+    // .setPathParams({
+    //   userId: this.stores.authentication.getUserId(),
+    //   innovationId
+    // });
+
+    // return this.http.get<getInnovationSupportsInDTO[]>(url.buildUrl()).pipe(
+    //   take(1),
+    //   map(response => response)
+    // );
   }
 
   getInnovationActionsList(innovationId: string): Observable<getInnovationActionsListEndpointOutDTO> {

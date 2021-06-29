@@ -6,7 +6,7 @@ import { Injector } from '@angular/core';
 import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { StoresModule, InnovationStore } from '@modules/stores';
+import { StoresModule, InnovationStore, InnovationService } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { InnovationOverviewComponent } from './overview.component';
@@ -69,6 +69,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
     innovatorService.getInnovationInfo = () => of(innovationInfoMock as any);
     innovationStore.getSectionsSummary$ = () => of(responseMock as any);
+    innovatorService.getInnovationSupports = () => of([] as any);
     const expected = responseMock.innovation.status;
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
