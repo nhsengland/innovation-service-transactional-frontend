@@ -105,76 +105,17 @@ export class InnovatorService extends CoreService {
 
   getInnovationSupports(innovationId: string): Observable<getInnovationSupportsInDTO[]> {
 
-    return of([
-      {
-          id: 'C2B7433E-F36B-1410-8103-0032FE5B194B',
-          status: 'ENGAGING',
-          organisation: {
-              id: '43B7433E-F36B-1410-8103-0032FE5B194B',
-              name: 'Reinger Inc',
-              acronym: 'Group'
-          },
-          organisationUnit: {
-              id: '4BB7433E-F36B-1410-8103-0032FE5B194B',
-              name: 'Ratke Inc'
-          },
-          accessors: [
-              {
-                  id: '60CF433E-F36B-1410-8103-0032FE5B194B',
-                  name: 'ASHN Q. Accessor'
-              },
-              {
-                id: '60CF433E-F36B-1410-8103-0032FE5B194C',
-                name: 'ASHN Q. Accessor 2'
-              },
-          ]
-      },
-      {
-          id: '52CF433E-F36B-1410-8103-0032FE5B194B',
-          status: 'NOT_YET',
-          organisation: {
-              id: 'D1B7433E-F36B-1410-8103-0032FE5B194B',
-              name: 'Kunde and Sons',
-              acronym: 'LLC'
-          },
-          organisationUnit: {
-              id: '49CF433E-F36B-1410-8103-0032FE5B194B',
-              name: 'Unit Test'
-          },
-          accessors: [
-            {
-              id: '60CF433E-F36B-1410-8103-0032FE5B194C',
-              name: 'ASHN Q. Accessor 3'
-            },
-          ]
-      },
-      {
-          id: '59CF433E-F36B-1410-8103-0032FE5B194B',
-          status: 'ENGAGING',
-          organisation: {
-              id: '43B7433E-F36B-1410-8103-0032FE5B194B',
-              name: 'Reinger Inc',
-              acronym: 'Group'
-          },
-          organisationUnit: {
-              id: '4BCF433E-F36B-1410-8103-0032FE5B194B',
-              name: 'Second Unit'
-          },
-          accessors: []
-      }
-    ]);
+    const url = new UrlModel(this.API_URL)
+    .addPath('innovators/:userId/innovations/:innovationId/supports')
+    .setPathParams({
+      userId: this.stores.authentication.getUserId(),
+      innovationId
+    });
 
-    // const url = new UrlModel(this.API_URL)
-    // .addPath('innovators/:userId/innovations/:innovationId/supports')
-    // .setPathParams({
-    //   userId: this.stores.authentication.getUserId(),
-    //   innovationId
-    // });
-
-    // return this.http.get<getInnovationSupportsInDTO[]>(url.buildUrl()).pipe(
-    //   take(1),
-    //   map(response => response)
-    // );
+    return this.http.get<getInnovationSupportsInDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
   }
 
   getInnovationActionsList(innovationId: string): Observable<getInnovationActionsListEndpointOutDTO> {
