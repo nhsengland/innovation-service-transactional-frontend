@@ -5,7 +5,7 @@ import { map, take } from 'rxjs/operators';
 import { CoreService } from '@app/base';
 
 import { MappedObject, UrlModel } from '@modules/core';
-import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
 type getInnovationActionsListEndpointInDTO = {
@@ -23,13 +23,18 @@ export type getInnovationInfoEndpointDTO = {
   description: string;
   countryName: string;
   postcode: string;
+  submittedAt?: string;
   assessment?: {
     id: string;
   };
   action: {
     requestedCount: number;
     inReviewCount: number;
-  }
+  },
+  support?: {
+    id: string;
+    status: keyof typeof INNOVATION_SUPPORT_STATUS;
+  }[]
 };
 
 export type getInnovationActionInfoInDTO = {

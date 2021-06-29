@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-innovator-pages-innovations-overview',
@@ -14,6 +16,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationId: string;
   innovationStatus: keyof typeof INNOVATION_STATUS = '';
   innovationSections: SectionsSummaryModel[] = [];
+  actionSummary: {requested: number, review: number} = { requested: 0, review: 0};
+  supportStatus = 'AWAITING SUPPORT';
+  submittedAt: string | undefined;
+  needsAssessmentCompleted: boolean;
 
   sections: {
     progressBar: boolean[];
@@ -31,37 +37,67 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     return this.sections.submitted === this.sections.progressBar.length;
   }
 
+  isSubmittedForAssessment(): boolean {
+    return this.submittedAt !== undefined;
+  }
+
+  allStepsComplete(): boolean {
+    return this.allSectionsSubmitted() && this.isSubmittedForAssessment();
+  }
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private innovatorService: InnovatorService,
   ) {
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.needsAssessmentCompleted = false;
   }
 
 
+  showNeedsAssessmentCompleteCard(): boolean {
+    return !this.isInAssessmentStatus() && this.innovationStatus !== 'CREATED';
+  }
+
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionsSummary$('innovator', this.innovationId).subscribe(
-      response => {
-        this.innovationStatus = response.innovation.status;
-        this.innovationSections = response.sections;
 
-        this.sections.progressBar = this.innovationSections.reduce((acc: boolean[], item) => {
-          return [...acc, ...item.sections.map(s => s.isCompleted)];
-        }, []).sort().reverse();
+    forkJoin([
+      this.innovatorService.getInnovationInfo(this.innovationId),
+      this.stores.innovation.getSectionsSummary$('innovator', this.innovationId)
+    ]).subscribe(
+      ([innovationInfo, sectionSummary]) => {
+        this.submittedAt = innovationInfo.submittedAt || '';
+        this.needsAssessmentCompleted = !this.isInAssessmentStatus();
 
-        this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
-        this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
-        this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
-
+        this.parseActionSummary(innovationInfo);
+        this.parseSectionSummary(sectionSummary);
       },
-      error => {
+      (error) => {
         this.logger.error(error);
       }
     );
+  }
 
+  private parseActionSummary(innovationInfo: any): void {
+    this.actionSummary = {
+      requested: innovationInfo?.actions?.requestedCount || 0,
+      review: innovationInfo?.actions?.inReviewCount || 0
+    };
+  }
+
+  private parseSectionSummary(sectionSummary: any): void {
+    this.innovationStatus = sectionSummary.innovation.status;
+    this.innovationSections = sectionSummary.sections;
+
+    this.sections.progressBar = this.innovationSections.reduce((acc: boolean[], item) => {
+      return [...acc, ...item.sections.map(s => s.isCompleted)];
+    }, []).sort().reverse();
+
+    this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
+    this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
+    this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
   }
 
 }
