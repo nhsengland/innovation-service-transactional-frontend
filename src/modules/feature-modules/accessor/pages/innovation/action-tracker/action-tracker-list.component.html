@@ -10,7 +10,7 @@
 
 <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-5">Action tracker</h2>
 
-<a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" class="nhsuk-button nhsuk-u-margin-bottom-7"> Create new action </a>
+<a *ngIf="innovation.support.status === 'ENGAGING'" routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" class="nhsuk-button nhsuk-u-margin-bottom-7"> Create new action </a>
 
 
 <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">Open actions</h2>
@@ -30,19 +30,19 @@
   <tbody class="nhsuk-table__body">
     <tr *ngFor="let item of openedActionsList.getRecords()" class="nhsuk-table__row">
       <td class="nhsuk-table__cell">
-        <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('id') }} </span>
+        <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('id') }}</span>
         <span>{{ item.displayId }}</span>
       </td>
       <td class="nhsuk-table__cell">
-        <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('name') }} </span>
+        <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('name') }}</span>
         <a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ item.id }}">{{ item.name }}</a>
       </td>
       <td class="nhsuk-table__cell">
-        <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('createdAt') }} </span>
+        <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('createdAt') }}</span>
         {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}
       </td>
       <td class="nhsuk-table__cell text-align-right">
-        <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('status') }} </span>
+        <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('status') }}</span>
         <strong class="nhsuk-tag" [ngClass]="innovationSectionActionStatus[item.status]?.cssClass || ''">{{ innovationSectionActionStatus[item.status]?.label || '' }}</strong>
       </td>
     </tr>

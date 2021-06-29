@@ -107,7 +107,7 @@ const routes: Routes = [
               },
               {
                 path: 'comments/new', pathMatch: 'full', component: PageInnovationCommentsNewComponent,
-                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId', label: 'Go back' } } }
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/comments', label: 'Go back' } } }
               },
               {
                 path: 'assessments/:assessmentId', pathMatch: 'full', component: InnovationNeedsAssessmentOverviewComponent,
@@ -119,11 +119,11 @@ const routes: Routes = [
               },
               {
                 path: 'support/new', pathMatch: 'full', component: InnovationSupportUpdateComponent,
-                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId', label: 'Go back' } } }
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Go back' } } }
               },
               {
                 path: 'support/:supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent,
-                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId', label: 'Go back' } } }
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Go back' } } }
               }
             ]
           }
