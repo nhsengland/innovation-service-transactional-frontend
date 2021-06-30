@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 
 import { MappedObject, UrlModel } from '@modules/core';
-import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
-import { response } from 'express';
+import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
 type getInnovationActionsListEndpointInDTO = {
@@ -155,8 +154,8 @@ export class InnovatorService extends CoreService {
       take(1),
       map(response => {
         return {
-          openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(item.section)}` } })),
-          closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(item.section)}` } })),
+          openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'` } })),
+          closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'` } })),
         };
       })
     );
@@ -172,7 +171,7 @@ export class InnovatorService extends CoreService {
         id: response.id,
         displayId: response.displayId,
         status: response.status,
-        name: `Submit ${this.stores.innovation.getSectionTitle(response.section)}`,
+        name: `Submit '${this.stores.innovation.getSectionTitle(response.section)}'`,
         description: response.description,
         section: response.section,
         createdAt: response.createdAt,

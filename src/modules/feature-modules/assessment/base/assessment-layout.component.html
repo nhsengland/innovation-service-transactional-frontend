@@ -11,7 +11,7 @@
       <div *ngSwitchCase="'innovationLeftAsideMenu'">
         <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
       </div>
-      <div *ngSwitchDefault>
+      <div *ngSwitchCase="null">
         <router-outlet></router-outlet>
       </div>
     </ng-container>

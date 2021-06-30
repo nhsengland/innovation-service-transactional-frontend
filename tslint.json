@@ -147,7 +147,6 @@
       "element",
       "app", "theme",
       "kebab-case"
-    ],
-    "no-shadowed-variable": false
+    ]
   }
 }

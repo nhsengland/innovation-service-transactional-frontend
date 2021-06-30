@@ -66,7 +66,7 @@
 
               <td *ngIf="innovationsList.getColumnLabel('accessors')" class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('accessors') }}</span>
-                {{ item.support.accessors[0].name }} {{ item.support.accessors.length > 1 ? '+ ' + (item.support.accessors.length - 1) : '' }}
+                {{ item.support.accessors[0]?.name }} {{ item.support.accessors.length > 1 ? '+ ' + (item.support.accessors.length - 1) : '' }}
               </td>
 
               <td class="nhsuk-table__cell text-align-right">

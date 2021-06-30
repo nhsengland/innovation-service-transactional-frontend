@@ -2,6 +2,7 @@ import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { MappedObject } from '@modules/core';
 import { FormEngineComponent, FormEngineParameterModel } from '@modules/shared/forms';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
@@ -120,13 +121,19 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     (this.formEngineComponent?.toArray() || []).forEach(engine => {
 
-      const formData = engine.getFormValues();
+      let formData: MappedObject;
+
+      if (action === 'saveAsDraft') {
+        formData = engine.getFormValues(false);
+      } else {
+
+        formData = engine.getFormValues(true);
+
+        if (!formData?.valid) { isValid = false; }
+
+      }
 
       this.currentAnswers = { ...this.currentAnswers, ...formData?.data };
-
-      if (!formData?.valid) {
-        isValid = false;
-      }
 
     });
 
@@ -141,7 +148,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
             break;
           case 'submit':
-            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/log`, { alert: 'needsAssessmentSubmited'});
+            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`, { alert: 'needsAssessmentSubmited'});
             break;
           default:
             break;

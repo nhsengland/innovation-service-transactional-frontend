@@ -51,22 +51,26 @@ const routes: Routes = [
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/assessment/innovations', label: 'Innovations' } } }
               },
               {
-                path: 'assessments/new', pathMatch: 'full', component: InnovationAssessmentNewComponent,
-                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/assessment/innovations/:innovationId', label: 'Go back' } } }
+                path: 'assessments',
+                children: [
+                  {
+                    path: 'new', pathMatch: 'full', component: InnovationAssessmentNewComponent,
+                    data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/assessment/innovations/:innovationId', label: 'Go back' } } }
+                  },
+                  {
+                    path: ':assessmentId',
+                    children: [
+                      { path: '', pathMatch: 'full', component: InnovationNeedsAssessmentOverviewComponent },
+                      { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
+                      {
+                        path: 'edit/:stepId', pathMatch: 'full', component: InnovationAssessmentEditComponent,
+                        data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/assessment/innovations/:innovationId', label: 'Back to innovation' } } }
+                      }
+                    ]
+                  }
+                ]
               },
 
-              {
-                path: 'assessments/:assessmentId', pathMatch: 'full', redirectTo: 'assessments/:assessmentId/edit/1' // component: InnovationAssessmentEditComponent,
-              },
-              {
-                path: 'assessments/:assessmentId/log', pathMatch: 'full', component: InnovationNeedsAssessmentOverviewComponent,
-                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/assessment/innovations', label: 'Innovations' } } }
-              },
-              { path: 'assessments/:assessmentId/edit', pathMatch: 'full', redirectTo: 'assessments/:assessmentId/edit/1' },
-              {
-                path: 'assessments/:assessmentId/edit/:stepId', pathMatch: 'full', component: InnovationAssessmentEditComponent,
-                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/assessment/innovations/:innovationId', label: 'Back to innovation' } } }
-              },
               {
                 path: 'record', pathMatch: 'full', component: PageInnovationRecordComponent,
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/assessment/innovations', label: 'Innovations' } } }

@@ -167,7 +167,7 @@ export class AccessorService extends CoreService {
             status: item.support?.status,
             createdAt: item.support?.createdAt,
             updatedAt: item.support?.updatedAt,
-            accessors: item.support?.accessors || ['access', 'access']
+            accessors: item.support?.accessors
           },
           organisations: item.organisations,
           assessment: item.assessment
@@ -189,25 +189,14 @@ export class AccessorService extends CoreService {
 
   getInnovationActionsList(innovationId: string): Observable<getInnovationActionsListEndpointOutDTO> {
 
-    // return of({
-    //   openedActions: [
-    //     { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'REQUESTED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
-    //     { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'STARTED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' }
-    //   ],
-    //   closedActions: [
-    //     { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
-    //     { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' }
-    //   ]
-    // });
-
     const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
 
     return this.http.get<getInnovationActionsListEndpointInDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => {
         return {
-          openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(item.section)}` } })),
-          closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(item.section)}` } })),
+          openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'` } })),
+          closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'` } })),
         };
       })
     );
@@ -216,16 +205,6 @@ export class AccessorService extends CoreService {
 
   getInnovationActionInfo(innovationId: string, actionId: string): Observable<getInnovationActionInfoOutDTO> {
 
-    // return of({
-    //   id: 'ID01',
-    //   status: 'REQUESTED',
-    //   name: `Submit ${this.stores.innovation.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`,
-    //   description: 'some description',
-    //   section: InnovationSectionsIds.COST_OF_INNOVATION,
-    //   createdAt: '2021-04-16T09:23:49.396Z',
-    //   createdBy: 'One guy name'
-    // });
-
     const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
     return this.http.get<getInnovationActionInfoInDTO>(url.buildUrl()).pipe(
       take(1),
@@ -233,7 +212,7 @@ export class AccessorService extends CoreService {
         id: response.id,
         displayId: response.displayId,
         status: response.status,
-        name: `Submit ${this.stores.innovation.getSectionTitle(response.section)}`,
+        name: `Submit '${this.stores.innovation.getSectionTitle(response.section)}'`,
         description: response.description,
         section: response.section,
         createdAt: response.createdAt,
@@ -258,7 +237,7 @@ export class AccessorService extends CoreService {
       take(1),
       map(response => ({
         count: response.count,
-        data: response.data.map(item => ({ ...item, ...{ name: `Submit ${this.stores.innovation.getSectionTitle(item.section)}`, } }))
+        data: response.data.map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'`, } }))
       }))
     );
 

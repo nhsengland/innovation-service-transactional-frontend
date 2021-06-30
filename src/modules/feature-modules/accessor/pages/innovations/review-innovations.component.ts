@@ -166,7 +166,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   onRouteChange(queryParams: Params): void {
 
     const currentStatus = queryParams.status;
-    const currentTabIndex = this.tabs.findIndex(tab => tab.queryParams.status === queryParams.status) || 0;
+    const currentTabIndex = this.tabs.findIndex(tab => tab.queryParams.status === currentStatus) || 0;
 
     if (!currentStatus) {
       this.router.navigate(['/accessor/innovations'], { queryParams: { status: this.defaultStatus } });

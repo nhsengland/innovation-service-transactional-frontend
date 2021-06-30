@@ -39,15 +39,12 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
         { title: 'Home', link: '/accessor/dashboard' }
       ],
       rightItems: [
+        { title: 'Innovations', link: '/accessor/innovations' },
         { title: 'Actions', link: '/accessor/actions' },
         { title: 'Account', link: '/accessor/account' },
         { title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true }
       ]
     };
-
-    if (this.stores.authentication.isQualifyingAccessorRole()) {
-      this.navigationMenuBar.rightItems.splice(0, 0, { title: 'Innovations', link: '/accessor/innovations' });
-    }
 
     this.subscriptions.push(
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
@@ -85,6 +82,7 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
       default:
         this.leftSideBar = [];
         break;
+
     }
 
 
