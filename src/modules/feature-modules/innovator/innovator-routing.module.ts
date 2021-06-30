@@ -28,6 +28,7 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
+import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
 
 
 const routes: Routes = [
@@ -124,6 +125,10 @@ const routes: Routes = [
               {
                 path: 'data-sharing/statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/data-sharing', label: 'Go back' } } }
+              },
+              {
+                path: 'assessments/:assessmentId/log', pathMatch: 'full', component: InnovatorNeedsAssessmentOverviewComponent,
+                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/innovations/:innovationId', label: 'Go back' } } }
               }
             ]
           }
