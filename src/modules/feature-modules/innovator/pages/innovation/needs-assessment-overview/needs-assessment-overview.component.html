@@ -7,7 +7,7 @@
         <div class="app-pane__side-bar nhsuk-u-padding-top-3">
           <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
             <div class="nhsuk-back-link app-u-hide-mobile app-side-nav__back nhsuk-u-margin-bottom-4">
-              <a class="nhsuk-back-link__link" routerLink="/accessor/innovations">
+              <a class="nhsuk-back-link__link" routerLink="/innovator/innovations">
                 <theme-svg-icon type="back"></theme-svg-icon>
                 Go back
               </a>
@@ -56,8 +56,7 @@
               <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Suggested organisations</h2>
               <p *ngFor="let item of (assessment?.orgNames || [])" class="nhsuk-u-margin-bottom-1">{{ item }}</p>
 
-              <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
-              <a *ngIf="false" routerLink="/assessment/innovations/{{innovationId}}/assessments/{{ assessmentId }}/edit/1}}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"> Edit assessment </a>
+              <a routerLink="/innovator/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
 
             </div>
           </div>

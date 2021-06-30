@@ -122,20 +122,20 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
   it('should run getInnovationActionsList() and return success', () => {
 
     const responseMock = [
-      { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'REQUESTED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
-      { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'STARTED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
-      { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
-      { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' }
+      { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'REQUESTED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
+      { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'STARTED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
+      { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
+      { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' }
     ];
 
     const expected = {
       openedActions: [
-        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'REQUESTED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
-        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'STARTED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' }
+        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'REQUESTED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
+        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'STARTED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' }
       ],
       closedActions: [
-        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' },
-        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`, createdAt: '2021-04-16T09:23:49.396Z' }
+        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
+        { id: 'ID01', section: InnovationSectionsIds.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' }
       ]
     };
 
@@ -164,7 +164,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
     const expected = {
       ...responseMock,
       ...{
-        name: `Submit ${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}`,
+        name: `Submit '${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}'`,
         createdBy: 'One guy name'
       }
     };
@@ -199,7 +199,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
     const expected: getActionsListEndpointOutDTO = {
       count: responseMock.count,
-      data: responseMock.data.map(item => ({ ...item, ...{ name: `Submit ${innovationStore.getSectionTitle(item.section)}`, } }))
+      data: responseMock.data.map(item => ({ ...item, ...{ name: `Submit '${innovationStore.getSectionTitle(item.section)}'`, } }))
     };
 
     const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({ openActions: 'true' });

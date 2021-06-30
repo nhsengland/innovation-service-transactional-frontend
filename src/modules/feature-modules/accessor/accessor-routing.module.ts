@@ -59,12 +59,12 @@ const routes: Routes = [
         path: 'innovations',
         children: [
           { path: '', pathMatch: 'full', component: ReviewInnovationsComponent },
-          { path: ':innovationId', pathMatch: 'full', redirectTo: ':innovationId/overview' },
           {
             path: ':innovationId',
             data: { module: 'accessor' },
             resolve: { innovationData: InnovationDataResolver },
             children: [
+              { path: '', pathMatch: 'full', redirectTo: 'overview' },
               {
                 path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent,
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } }
@@ -110,8 +110,7 @@ const routes: Routes = [
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/comments', label: 'Go back' } } }
               },
               {
-                path: 'assessments/:assessmentId', pathMatch: 'full', component: InnovationNeedsAssessmentOverviewComponent,
-                // data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Go back' } } }
+                path: 'assessments/:assessmentId', pathMatch: 'full', component: InnovationNeedsAssessmentOverviewComponent
               },
               {
                 path: 'support', pathMatch: 'full', component: InnovationSupportInfoComponent,

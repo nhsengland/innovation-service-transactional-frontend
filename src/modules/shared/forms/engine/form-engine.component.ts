@@ -88,9 +88,11 @@ export class FormEngineComponent implements OnInit, OnChanges {
   }
 
 
-  getFormValues(): { valid: boolean, data: { [key: string]: any } } {
+  getFormValues(triggerFormChanges?: boolean): { valid: boolean, data: { [key: string]: any } } {
 
-    if (!this.form.valid) {
+    const shouldTriggerChanges = triggerFormChanges !== undefined ? triggerFormChanges : true;
+
+    if (shouldTriggerChanges && !this.form.valid) {
       this.form.markAllAsTouched();
       this.cdr.detectChanges();
     }

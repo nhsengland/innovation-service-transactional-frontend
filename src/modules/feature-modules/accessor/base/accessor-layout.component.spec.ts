@@ -62,31 +62,6 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
         { title: 'Home', link: '/accessor/dashboard' }
       ],
       rightItems: [
-        { title: 'Actions', link: '/accessor/actions' },
-        { title: 'Account', link: '/accessor/account' },
-        { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
-      ]
-    };
-
-    fixture = TestBed.createComponent(AccessorLayoutComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
-
-    expect(fixture.componentInstance.navigationMenuBar).toEqual(expected);
-
-  });
-
-  it('should have Qualifying Accessor Role values on navigationMenuBar', () => {
-
-    spyOn(authenticationStore, 'isQualifyingAccessorRole').and.returnValue(true);
-
-    const expected = {
-      leftItems: [
-        { title: 'Home', link: '/accessor/dashboard' }
-      ],
-      rightItems: [
         { title: 'Innovations', link: '/accessor/innovations' },
         { title: 'Actions', link: '/accessor/actions' },
         { title: 'Account', link: '/accessor/account' },
@@ -103,6 +78,32 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
     expect(fixture.componentInstance.navigationMenuBar).toEqual(expected);
 
   });
+
+  // it('should have Qualifying Accessor Role values on navigationMenuBar', () => {
+
+  //   spyOn(authenticationStore, 'isQualifyingAccessorRole').and.returnValue(true);
+
+  //   const expected = {
+  //     leftItems: [
+  //       { title: 'Home', link: '/accessor/dashboard' }
+  //     ],
+  //     rightItems: [
+  //       { title: 'Innovations', link: '/accessor/innovations' },
+  //       { title: 'Actions', link: '/accessor/actions' },
+  //       { title: 'Account', link: '/accessor/account' },
+  //       { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
+  //     ]
+  //   };
+
+  //   fixture = TestBed.createComponent(AccessorLayoutComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+
+  //   (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
+
+  //   expect(fixture.componentInstance.navigationMenuBar).toEqual(expected);
+
+  // });
 
 
   it('should have leftSideBar with no values', () => {
