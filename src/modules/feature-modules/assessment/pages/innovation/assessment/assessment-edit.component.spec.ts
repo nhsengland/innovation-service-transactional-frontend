@@ -144,7 +144,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
     component.onSubmit('submit');
     fixture.detectChanges();
 
-    expect(routerSpy).toHaveBeenCalledWith(['/assessment/innovations/Inno01/overview'], {});
+    expect(routerSpy).toHaveBeenCalledWith(['/assessment/innovations/Inno01/assessments/Assess01/log'], {queryParams: { alert: 'needsAssessmentSubmited' }});
 
   });
 

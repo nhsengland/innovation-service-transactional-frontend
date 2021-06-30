@@ -141,7 +141,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
             break;
           case 'submit':
-            this.redirectTo(`/assessment/innovations/${this.innovationId}/overview`);
+            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/log`, { alert: 'needsAssessmentSubmited'});
             break;
           default:
             break;
