@@ -5,7 +5,8 @@ import { map, take } from 'rxjs/operators';
 import { CoreService } from '@app/base';
 
 import { MappedObject, UrlModel } from '@modules/core';
-import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { response } from 'express';
 
 
 type getInnovationActionsListEndpointInDTO = {
@@ -23,6 +24,7 @@ export type getInnovationInfoEndpointDTO = {
   description: string;
   countryName: string;
   postcode: string;
+  submittedAt?: string;
   assessment?: {
     id: string;
   };
@@ -41,6 +43,22 @@ export type getInnovationActionInfoInDTO = {
   createdAt: string; // '2021-04-16T09:23:49.396Z',
   createdBy: { id: string; name: string; };
 };
+
+export type getInnovationSupportsInDTO = {
+  id: string;
+  status: string;
+  organisation: {
+    id: string;
+    name: string;
+    acronym: string;
+  },
+  organisationUnit: {
+    id: string;
+    name: string;
+  },
+  accessors: {id: string, name: string}[],
+};
+
 export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
 
 export type getInnovationActionsListEndpointOutDTO = {
@@ -83,6 +101,21 @@ export class InnovatorService extends CoreService {
       map(response => response)
     );
 
+  }
+
+  getInnovationSupports(innovationId: string): Observable<getInnovationSupportsInDTO[]> {
+
+    const url = new UrlModel(this.API_URL)
+    .addPath('innovators/:userId/innovations/:innovationId/supports')
+    .setPathParams({
+      userId: this.stores.authentication.getUserId(),
+      innovationId
+    });
+
+    return this.http.get<getInnovationSupportsInDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
   }
 
   getInnovationActionsList(innovationId: string): Observable<getInnovationActionsListEndpointOutDTO> {

@@ -177,6 +177,7 @@ export type getInnovationSectionsDTO = {
   id: string;
   name: string;
   status: keyof typeof INNOVATION_STATUS;
+  submittedAt: string | undefined;
   sections: sectionType[];
 };
 

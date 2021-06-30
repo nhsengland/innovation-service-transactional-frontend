@@ -6,15 +6,17 @@ import { Injector } from '@angular/core';
 import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { StoresModule, InnovationStore } from '@modules/stores';
+import { StoresModule, InnovationStore, InnovationService } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { InnovationOverviewComponent } from './overview.component';
+import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 
 describe('FeatureModules/Innovator/DashboardComponent', () => {
 
   let innovationStore: InnovationStore;
+  let innovatorService: InnovatorService;
 
   let component: InnovationOverviewComponent;
   let fixture: ComponentFixture<InnovationOverviewComponent>;
@@ -33,6 +35,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
     AppInjector.setInjector(TestBed.inject(Injector));
 
     innovationStore = TestBed.inject(InnovationStore);
+    innovatorService = TestBed.inject(InnovatorService);
 
   });
 
@@ -56,7 +59,17 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
         { status: 'SUBMITTED', isCompleted: true }
       ]
     };
+
+    const innovationInfoMock = {
+      actions: {
+        requestedCount: 1,
+        inReviewcount: 0
+      }
+    };
+
+    innovatorService.getInnovationInfo = () => of(innovationInfoMock as any);
     innovationStore.getSectionsSummary$ = () => of(responseMock as any);
+    innovatorService.getInnovationSupports = () => of([] as any);
     const expected = responseMock.innovation.status;
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
@@ -67,6 +80,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
   });
 
   it('should NOT have innovation information loaded', () => {
+
 
     innovationStore.getSectionsSummary$ = () => throwError('error');
     const expected = '';
