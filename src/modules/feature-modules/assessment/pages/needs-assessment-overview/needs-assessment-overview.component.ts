@@ -28,6 +28,8 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
 
+  summaryAlert: { type: '' | 'error' | 'success', title: string, message: string };
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private assessmentService: AssessmentService
@@ -38,11 +40,25 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    this.summaryAlert = { type: '', title: '', message: '' };
 
   }
 
 
   ngOnInit(): void {
+
+    switch (this.activatedRoute.snapshot.queryParams.alert) {
+      case 'needsAssessmentSubmited':
+        this.summaryAlert = {
+          type: 'success',
+          title: 'Needs assessment successfully completed',
+          message: ''
+        };
+        break;
+      default:
+        this.summaryAlert = { type: '', title: '', message: '' };
+        break;
+    }
 
     this.assessmentService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId).subscribe(
       response => {
