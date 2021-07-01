@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
+import { FormEngineHelper } from '@app/base/forms';
 import { RoutingHelper } from '@modules/core';
 import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
 
@@ -9,7 +10,8 @@ import { getInnovationCommentsDTO } from '@stores-module/innovation/innovation.m
 
 @Component({
   selector: 'shared-pages-innovation-comments-comments-list',
-  templateUrl: './comments-list.component.html'
+  templateUrl: './comments-list.component.html',
+  styleUrls: ['./comments-list.component.scss']
 })
 export class PageInnovationCommentsListComponent extends CoreComponent implements OnInit {
 
@@ -21,6 +23,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
   commentsList: getInnovationCommentsDTO[];
 
   form = new FormGroup({});
+  formSubmittedFields: { [key: string]: string } = {};
 
   summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
 
@@ -57,7 +60,8 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
   ngOnInit(): void {
 
     this.subscriptions.push(
-      this.activatedRoute.queryParams.subscribe(queryParams => this.onRouteChange(queryParams))
+      this.activatedRoute.queryParams.subscribe(queryParams => this.onRouteChange(queryParams)),
+      this.form.valueChanges.subscribe(() => Object.keys(this.formSubmittedFields).forEach(v => this.formSubmittedFields[v] = '')) // Clears all form input's errors.
     );
 
   }
@@ -69,6 +73,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
         this.commentsList.forEach(item => {
           this.form.addControl(`${item.id}`, new FormControl('', Validators.required));
+          this.formSubmittedFields[item.id] = '';
         });
 
       },
@@ -112,7 +117,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
   onReply(commentId: string): void {
 
     if (!this.form.get(commentId)?.valid) {
-      this.form.get(commentId)?.markAsTouched();
+      this.formSubmittedFields[commentId] = FormEngineHelper.getValidationMessage({ required: this.form.get(commentId)?.errors?.required });
       return;
     }
 
@@ -148,6 +153,5 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
       });
 
   }
-
 
 }
