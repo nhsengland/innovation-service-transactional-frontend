@@ -117,7 +117,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
   onReply(commentId: string): void {
 
     if (!this.form.get(commentId)?.valid) {
-      this.formSubmittedFields[commentId] = FormEngineHelper.getValidationMessage({ required: this.form.get(commentId)?.errors?.required })
+      this.formSubmittedFields[commentId] = FormEngineHelper.getValidationMessage({ required: this.form.get(commentId)?.errors?.required });
       return;
     }
 
