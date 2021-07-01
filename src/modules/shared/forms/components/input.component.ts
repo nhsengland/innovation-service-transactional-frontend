@@ -16,7 +16,6 @@ import { RandomGeneratorHelper } from '@modules/core';
     useExisting: forwardRef(() => FormInputComponent),
     multi: true
   }]
-
 })
 export class FormInputComponent extends ControlValueAccessorConnector implements OnInit, DoCheck {
 

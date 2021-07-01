@@ -11,16 +11,15 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation
 })
 export class PageInnovationSupportStatusListComponent extends CoreComponent implements OnInit {
 
-  visibleStatus: (keyof typeof INNOVATION_SUPPORT_STATUS)[]
-    = [
-      'UNASSIGNED',
-      'ENGAGING',
-      'FURTHER_INFO_REQUIRED',
-      'WAITING',
-      'NOT_YET',
-      'UNSUITABLE',
-      'COMPLETE',
-      ];
+  visibleStatus: (keyof typeof INNOVATION_SUPPORT_STATUS)[] = [
+    'UNASSIGNED',
+    'ENGAGING',
+    'FURTHER_INFO_REQUIRED',
+    'WAITING',
+    'NOT_YET',
+    'UNSUITABLE',
+    'COMPLETE',
+  ];
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
