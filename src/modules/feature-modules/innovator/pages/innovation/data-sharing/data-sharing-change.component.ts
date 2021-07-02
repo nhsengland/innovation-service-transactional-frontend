@@ -24,7 +24,7 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
   organisationShareArrayName = 'organisations';
   initialState: {
-    organisations: any[]
+    organisations: { id: string, status: string }[]
   };
 
   showWarning: boolean;
