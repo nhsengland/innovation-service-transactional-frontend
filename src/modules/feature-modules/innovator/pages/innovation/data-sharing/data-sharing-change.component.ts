@@ -13,6 +13,8 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 })
 export class InnovationDataSharingChangeComponent extends CoreComponent implements OnInit {
 
+  summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
+
   innovationId: string;
   organisationsList: any[];
   organisationInfoUrl: string;
@@ -21,6 +23,11 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
   });
 
   organisationShareArrayName = 'organisations';
+  initialState: {
+    organisations: { id: string, status: string }[]
+  };
+
+  showWarning: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -31,7 +38,14 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.organisationsList =  [];
+    this.initialState = {
+      organisations: []
+    };
+
     this.organisationInfoUrl = `${this.stores.environment.BASE_URL}/about-the-service/who-we-are`;
+    this.summaryAlert = { type: 'warning', title: 'Are you sure?',
+     message: 'This will remove access for one or more organisations currently engaging with your innovation. They will no longer be able to support you.' };
+    this.showWarning = false;
   }
 
   ngOnInit(): void {
@@ -42,6 +56,7 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
         this.innovatorService.getOrganisations(this.innovationId).subscribe(
           r =>  {
+            this.initialState.organisations = r;
             r.forEach((organisation) => {
               (this.form.get('organisations') as FormArray).push(
                 new FormControl(organisation.id)
@@ -51,6 +66,7 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
         );
       }
     );
+
   }
 
   onSubmit(): void {
@@ -68,6 +84,16 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
             { alert: 'sharingUpdateError', error });
         }
       );
+  }
+
+  dataSharingValidation = (event: {checked: boolean, item: string}): void  => {
+    this.showWarning = false;
+    this.initialState.organisations.forEach((o) => {
+      const index = (this.form.get('organisations')?.value as string[]).findIndex((item) => item === o.id);
+      if (index === -1) {
+        this.showWarning = true;
+      }
+    });
   }
 
 }

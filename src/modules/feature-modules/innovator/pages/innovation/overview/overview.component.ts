@@ -1,4 +1,3 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -18,12 +17,14 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationStatus: keyof typeof INNOVATION_STATUS = '';
   innovationSections: SectionsSummaryModel[] = [];
   actionSummary: {requested: number, review: number} = { requested: 0, review: 0};
-  supportStatus = 'AWAITING SUPPORT';
+  supportStatus = 'Awaiting support';
   supportingAccessors: { id: string; name: string, unit: string }[] = [];
   submittedAt: string | undefined;
   needsAssessmentCompleted: boolean;
 
   assessmentId: string | undefined;
+
+  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
   sections: {
     progressBar: boolean[];
@@ -79,10 +80,16 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
         this.parseActionSummary(innovationInfo);
         this.parseSectionSummary(sectionSummary);
-        this.supportStatus = innovationSupports.find(s => s.status === 'ENGAGING')?.status || 'AWAITING SUPPORT';
-        if (this.supportStatus === 'ENGAGING') {
+
+        this.supportStatus = innovationSupports
+          .find(s =>
+            s.status.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase())?.status ||
+             this.innovationSupportStatus.WAITING.label;
+
+        if (this.supportStatus.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase()) {
+          this.supportStatus = this.innovationSupportStatus.ENGAGING.label;
           this.supportingAccessors = innovationSupports
-          .filter(support => support.status === 'ENGAGING')
+          .filter(support => support.status.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase())
           .flatMap(s => s.accessors
             .map(a => ({
             ...a,
