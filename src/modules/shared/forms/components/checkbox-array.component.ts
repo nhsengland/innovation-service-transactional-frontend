@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector, PLATFORM_ID } from '@angular/core';
+import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector, PLATFORM_ID, Output, EventEmitter } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { AbstractControl, ControlContainer, FormArray, FormControl } from '@angular/forms';
 
@@ -21,7 +21,7 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   @Input() label?: string;
   @Input() description?: string;
   @Input() items: FormEngineParameterModel['items'] = [];
-
+  @Output() customOnChangeFunc = new EventEmitter<{ checked: boolean, item: string }>();
   hasError = false;
   errorMessage = '';
 
@@ -115,6 +115,7 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
       this.fieldArrayControl.removeAt(valueIndex);
     }
 
+    this.customOnChangeFunc.emit({checked: event.checked, item: event.value});
   }
 
 }
