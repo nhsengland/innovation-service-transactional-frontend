@@ -98,6 +98,25 @@ $service-manual-container-size: 1100px; // Container width variable.
   padding: 0.25rem 9999rem;
 }
 
+// Links and buttons.
+.button-as-link {
+  font-family: 'Frutiger W01', Arial, sans-serif;
+  border: 0;
+  color: $nhsuk-link-color;
+  cursor: pointer;
+
+  &:visited {
+    color: $nhsuk-link-color;
+    &:hover {
+      color: $nhsuk-link-hover-color;
+    }
+  }
+  &:focus {
+    &:hover {
+      color: $nhsuk-focus-text-color;
+    }
+  }
+}
 
 
 // Overrides.
@@ -256,7 +275,6 @@ $service-manual-container-size: 1100px; // Container width variable.
 }
 
 // Tags
-
 .nhsuk-tag--dark-grey {
   background-color: var(--color_nhsuk-grey-1);
 }

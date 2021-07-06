@@ -20,5 +20,7 @@ export const appLoggingMiddleware = (req: any, res: any, next: any) => {
       }
     });
   }
+
   next();
+
 };

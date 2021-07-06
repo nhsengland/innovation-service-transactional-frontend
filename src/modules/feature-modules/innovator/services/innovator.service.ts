@@ -5,7 +5,7 @@ import { map, take } from 'rxjs/operators';
 import { CoreService } from '@app/base';
 
 import { MappedObject, UrlModel } from '@modules/core';
-import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
 type getInnovationActionsListEndpointInDTO = {
@@ -55,7 +55,7 @@ export type getInnovationSupportsInDTO = {
     id: string;
     name: string;
   },
-  accessors: {id: string, name: string}[],
+  accessors: { id: string, name: string }[],
 };
 
 export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
@@ -134,11 +134,11 @@ export class InnovatorService extends CoreService {
   getInnovationSupports(innovationId: string): Observable<getInnovationSupportsInDTO[]> {
 
     const url = new UrlModel(this.API_URL)
-    .addPath('innovators/:userId/innovations/:innovationId/supports')
-    .setPathParams({
-      userId: this.stores.authentication.getUserId(),
-      innovationId
-    });
+      .addPath('innovators/:userId/innovations/:innovationId/supports')
+      .setPathParams({
+        userId: this.stores.authentication.getUserId(),
+        innovationId
+      });
 
     return this.http.get<getInnovationSupportsInDTO[]>(url.buildUrl()).pipe(
       take(1),
@@ -191,17 +191,10 @@ export class InnovatorService extends CoreService {
 
   }
 
-  getOrganisations(innovationId: string): Observable<{ id: string, status: string }[]> {
+  getOrganisations(innovationId: string): Observable<{ id: string, status: keyof typeof INNOVATION_SUPPORT_STATUS }[]> {
 
-    // return of([
-    //   {id: '73201F47-37A8-EB11-B566-0003FFD6549F', status: 'ENGAGING'},
-    //   {id: '71201F47-37A8-EB11-B566-0003FFD6549F', status: 'NOT_YET'}
-    // ]);
-
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/shares')
-      .setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-
-    return this.http.get<{ id: string, status: string }[]>(url.buildUrl()).pipe(
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/shares').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    return this.http.get<{ id: string, status: keyof typeof INNOVATION_SUPPORT_STATUS }[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );

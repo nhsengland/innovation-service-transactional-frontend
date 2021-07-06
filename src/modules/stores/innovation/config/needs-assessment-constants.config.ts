@@ -100,7 +100,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       id: 'organisations',
       dataType: 'checkbox-array',
       label: 'Suggest organisations for support',
-      description: 'Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="" target="_blank">Support offer guide (opens in a new window)',
+      description: 'Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="" target="_blank" rel="noopener noreferrer">Support offer guide (opens in a new window)',
       validations: { isRequired: true },
       items: []
     })

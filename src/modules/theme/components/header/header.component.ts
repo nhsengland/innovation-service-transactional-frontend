@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  showHeroSection = false;
+  currentUrl = '';
   aacImage: string;
   authenticationButton: { title: string, url: string };
 
@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authenticationButton = { title: 'My dashboard', url: `${this.environmentStore.APP_URL}/dashboard` };
 
     this.subscriptions.push(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e)),
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
     );
 
   }
@@ -39,7 +39,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private onRouteChange(event: NavigationEnd): void {
 
-    this.showHeroSection = event.url === '/';
+    const hashLastIndex = event.url.lastIndexOf('#');
+    this.currentUrl = `${this.environmentStore.APP_URL}${hashLastIndex > 0 ? event.url.substring(0, hashLastIndex) : event.url}#maincontent`;
 
   }
 

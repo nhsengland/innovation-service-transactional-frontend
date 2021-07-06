@@ -19,4 +19,5 @@ export const exceptionLoggingMiddleware = (err: any, req: any, res: any, next: a
   });
 
   next();
+
 };

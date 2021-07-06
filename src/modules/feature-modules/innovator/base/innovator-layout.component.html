@@ -5,13 +5,9 @@
   <main id="maincontent" role="main" class="nhsuk-main-wrapper" [ngClass]="{'nhsuk-u-padding-top-0': innovationHeaderBar.id}">
 
     <ng-container *ngIf="layoutOptions.showInnovationHeader && innovationHeaderBar.id">
-      <div class="nhsuk-grid-row nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 d-flex align-items-center">
-        <div class="nhsuk-grid-column-one-half">
-          <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovationHeaderBar.name }}</h1>
-        </div>
-        <div class="nhsuk-grid-column-one-half text-align-right">
-          <a routerLink="/innovator/innovations/new">Switch innovation</a>
-        </div>
+      <div class=" nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 d-flex align-items-center justify-content-space-between">
+        <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovationHeaderBar.name }}</h1>
+        <a routerLink="/innovator/innovations/new">Switch innovation</a>
       </div>
       <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-5" />
     </ng-container>
