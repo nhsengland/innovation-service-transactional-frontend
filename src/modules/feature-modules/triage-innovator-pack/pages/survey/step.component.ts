@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineHelper, FormEngineModel } from '@app/base/forms';
+// import { UtilsHelper } from '@app/base/helpers';
+import { MappedObject } from '@app/base/models';
 
 import { TRIAGE_INNOVATOR_PACK_QUESTIONS } from '../../config/constants.config';
 
@@ -25,7 +27,13 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
 
   currentAnswers: { [key: string]: any };
   summaryList: {
-    items: { label: string, value: string, url: string, errorMessage: string | null }[];
+    items: {
+      label: string,
+      value: string,
+      url: string,
+      // queryParams: MappedObject,
+      errorMessage: string | null
+    }[];
     valid: boolean;
   };
 
@@ -75,6 +83,8 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
             this.currentStep.number = Number(params.id);
             this.currentStep.data = TRIAGE_INNOVATOR_PACK_QUESTIONS[this.currentStep.number - 1];
             this.currentStep.data.defaultData = this.currentAnswers;
+
+            document.getElementById('pageFirstFocus')?.focus();
           }
 
           if (this.isSummaryStep()) {
@@ -129,7 +139,6 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
 
       }
 
-
     }
 
   }
@@ -162,11 +171,9 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
       this.surveyService.submitSurvey(this.currentAnswers).subscribe(
         response => {
           this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/end`, { surveyId: response.id });
-          return;
         },
         error => {
           this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/summary`);
-          return;
         }
       );
     }
@@ -226,10 +233,35 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
     this.summaryList.valid = form.valid;
     this.stepsData.forEach((step, stepIndex) => {
       step.parameters.forEach(p => {
-        this.summaryList.items.push({ label: step.label || '', value: this.currentAnswers[p.id], url: `/triage-innovator-pack/survey/${stepIndex + 1}`, errorMessage: errors[p.id] || null });
+        this.summaryList.items.push({
+          label: step.label || '',
+          value: this.currentAnswers[p.id],
+          url: `/triage-innovator-pack/survey/${stepIndex + 1}`,
+          // queryParams: this.isRunningOnServer() ? this.encodeQueryParams({ a: 'next', f: this.currentAnswers }) : {},
+          errorMessage: errors[p.id] || null
+        });
       });
     });
 
   }
+
+
+  // encodeQueryParams(queryParams: MappedObject): MappedObject {
+
+  //   const toReturn: MappedObject = {};
+
+  //   for (let [key, value] of Object.entries(queryParams || {})) {
+
+  //     if (UtilsHelper.isEmpty(value)) { break; }
+
+  //     if (typeof value === 'object') { value = JSON.stringify(value); }
+
+  //     toReturn[key] = encodeURIComponent(this.encodeInfo(value));
+
+  //   }
+
+  //   return toReturn;
+
+  // }
 
 }

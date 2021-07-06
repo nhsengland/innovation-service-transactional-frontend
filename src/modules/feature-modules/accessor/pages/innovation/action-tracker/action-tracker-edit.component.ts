@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
+import { FormEngineHelper } from '@app/base/forms';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { AccessorService } from '../../../services/accessor.service';
@@ -20,18 +21,19 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
-  statusItems = [
+  statusItems: { value: keyof typeof INNOVATION_SECTION_ACTION_STATUS, label: string, description: string }[] = [
     {
       value: 'COMPLETED',
-      label: this.innovationSectionActionStatus.COMPLETED.label,
-      description: 'The information submitted answers the action request. This option closes the action. You\'ll need to provide a comment.'
+      label: 'Done',
+      description: 'The information submitted is sufficient. This closes the action.'
     },
     {
       value: 'REQUESTED',
-      label: this.innovationSectionActionStatus.REQUESTED.label,
-      description: 'The information submitted does not fully answer the action request. This option requests that the innovator submits the same section again. You\'ll need to provide a comment outlining what needs to be clarified.'
+      label: 'Requested',
+      description: 'The information submitted is not sufficient. This reopens the action.'
     }
   ];
+  statusError = '';
 
   form = new FormGroup({
     status: new FormControl('', Validators.required),
@@ -71,6 +73,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
 
     if (!this.form.get('status')?.valid) {
       this.form.get('status')?.markAsTouched();
+      this.statusError = FormEngineHelper.getValidationMessage({ required: this.form.get('status')?.errors?.required });
       return;
     }
 
@@ -89,7 +92,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
     this.accessorService.updateAction(this.innovationId, this.actionId, this.form.value).subscribe(
       response => {
         const status: keyof typeof INNOVATION_SECTION_ACTION_STATUS = this.form.get('status')?.value || '';
-        this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionUpdateSuccess', status: this.innovationSectionActionStatus[status].label });
+        this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionUpdateSuccess', status: this.statusItems.find(item => item.value === status)?.label });
       },
       () => {
         this.summaryAlert = {

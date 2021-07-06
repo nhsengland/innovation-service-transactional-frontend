@@ -129,7 +129,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
   // Question 07
   new FormEngineModel({
     label: 'Have you tested the innovation with users?',
-    description: 'Depending on the context of your innovation, this can include device prototyping and testing, laboratory studies, clinical trials, amongst others',
+    description: 'Depending on the context of your innovation, this can include device prototyping and testing, laboratory studies, clinical trials, amongst others.',
     parameters: [
       {
         id: 'hasTests',
@@ -217,7 +217,8 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
           { value: 'DEVELOPMENT', label: 'Product development and regulatory advice' },
           { value: 'EVIDENCE_EVALUATION', label: 'Real-world evidence and evaluation' },
           { value: 'FUNDING', label: 'Understanding funding channels' },
-          { value: 'INFORMATION', label: 'OR - I\'m only looking for information right now' }
+          { value: '', label: 'SEPARATOR' },
+          { value: 'INFORMATION', label: 'I\'m only looking for information right now' }
         ]
       }
     ]

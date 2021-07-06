@@ -1,6 +1,5 @@
-<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-1">
   <h1> Data sharing and support </h1>
-  <!-- DIV ROW START -->
+
   <ng-container *ngIf="summaryAlert.type">
     <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
       <div class="nhsuk-grid-column-full">
@@ -16,68 +15,56 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <!-- TABLE START -->
-      <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Innovations list">
-        <!-- HEADER START -->
+
+      <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Data sharing and support list">
         <thead class="nhsuk-table__head">
-          <tr class="">
-            <th>
-              <div>Organisation</div>
-              <div>
-                <!-- rel="noopener noreferrer" to prevent phishing aka tabnabbing -->
-                <a href="{{organisationInfoUrl}}" class="app-link_normal" target="_blank" rel="noopener noreferrer">
-                  What does each organisation do? (opens in new window)
-                </a>
-              </div>
+          <tr>
+            <th scope="col">
+              Organisation
+              <br />
+              <a href="{{ organisationInfoUrl }}" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-normal" target="_blank" rel="noopener noreferrer">
+                What does each organisation do? (opens in new window)
+              </a>
             </th>
-            <th>
-              <!-- TODO: ALIGN RIGHT -->
-              <div class="cell-text-align-right">
-                Support status
-              </div>
-              <div class="cell-text-align-right">
-                <a routerLink="/innovator/innovations/{{innovationId}}/data-sharing/statuses" class="app-link_normal">
-                 Status key
-                </a>
-              </div>
+            <th scope="col" class="text-align-right">
+              Support status
+              <br />
+              <a routerLink="/innovator/innovations/{{innovationId}}/data-sharing/statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-normal">
+                Status key
+              </a>
             </th>
           </tr>
         </thead>
-        <!-- HEADER END -->
-        <!-- TABLE BODY START -->
         <tbody class="nhsuk-table__body">
-          <!-- ROWS LOOP START -->
           <tr *ngFor="let item of organisations" class="nhsuk-table__row">
-            <td class="nhsuk-table__cell app-table-cell_padding-bottom-10">
-              <span class="app-task-list__task-icon app-task-list__no-margin">
+            <td class="nhsuk-table__cell nhsuk-u-padding-bottom-2">
+              <span class="nhsuk-table-responsive__heading"> Organisation </span>
+              <span class="d-flex">
                 <ng-container *ngTemplateOutlet="icon; context: { status: item }"></ng-container>
+                <span> {{ item.name }} </span>
               </span>
-              <span class="app-task-list__task-name">{{item.name}}</span>
             </td>
-            <td class="nhsuk-table__cell app-table-cell_padding-bottom-10">
-                <span *ngIf="item.shared" class="cell-items-align-right">
-                    <strong class="nhsuk-tag app-task-list__tag float-l " [ngClass]="statuses[item?.status || 'UNNASSIGNED']?.cssClass">
-                      {{ statuses[item?.status || 'UNASSIGNED']?.label }}
-                    </strong>
-                </span>
+            <td class="nhsuk-table__cell text-align-right">
+              <span class="nhsuk-table-responsive__heading"> Support status </span>
+              <strong *ngIf="item.shared" class="nhsuk-tag" [ngClass]="innovationSupportStatus[item.status].cssClass">{{ innovationSupportStatus[item.status].label }}</strong>
             </td>
           </tr>
-          <!-- ROWS LOOP END -->
+
         </tbody>
-        <!-- TABLE BODY END -->
+
       </table>
-      <!-- TABLE END -->
+
     </div>
   </div>
-  <!-- DIV ROW END -->
+
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onChangePreferences()">Change preferences</button>
+      <button routerLink="/innovator/innovations/{{ innovationId }}/data-sharing/edit" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Change preferences</button>
     </div>
   </div>
-</div>
 
-<ng-template #icon let-status="status">
-  <theme-svg-icon *ngIf="!status.shared" type="error"></theme-svg-icon>
-  <theme-svg-icon *ngIf="status.shared" type="success"></theme-svg-icon>
-</ng-template>
+
+  <ng-template #icon let-status="status">
+    <theme-svg-icon *ngIf="!status.shared" type="error" class="nhsuk-u-margin-right-2"></theme-svg-icon>
+    <theme-svg-icon *ngIf="status.shared" type="success" class="nhsuk-u-margin-right-2"></theme-svg-icon>
+  </ng-template>

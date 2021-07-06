@@ -420,7 +420,13 @@ export function app(): express.Express {
 
   server.post(`${BASE_PATH}/insights`, handler);
   server.post('/*', (req, res) => {
-    res.render(indexHtml, { req, res, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
+    res.render(indexHtml, {
+      req, res,
+      providers: [
+        { provide: APP_BASE_HREF, useValue: req.baseUrl },
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL } }
+      ]
+    });
   });
   // Serve environment variables file.
   server.get('*/environment.js', (req, res) => {

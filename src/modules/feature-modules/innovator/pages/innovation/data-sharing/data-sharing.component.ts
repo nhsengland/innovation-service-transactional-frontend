@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
 import { CoreComponent } from '@app/base';
+import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-
 
 
 @Component({
@@ -14,9 +16,8 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 export class InnovationDataSharingComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-  organisations: {id: string, name: string, shared?: boolean, status?: string}[];
-  private innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
-  statuses: any = this.innovationSupportStatus;
+  organisations: { id: string, name: string, shared: boolean, status: keyof typeof INNOVATION_SUPPORT_STATUS }[];
+  innovationSupportStatus = INNOVATION_SUPPORT_STATUS;
   organisationInfoUrl: string;
 
   summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
@@ -29,7 +30,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.organisations =  [];
+    this.organisations = [];
     this.organisationInfoUrl = `${this.stores.environment.BASE_URL}/about-the-service/who-we-are`;
     this.summaryAlert = { type: '', title: '', message: '' };
 
@@ -57,33 +58,29 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
     this.organisationsService.getAccessorsOrganisations().subscribe(
       response => {
-        this.organisations = response;
 
-        this.organisations = this.organisations.map(o => ({
-          ...o,
-          status: '',
+        this.organisations = response.map(item => ({
+          id: item.id,
+          name: item.name,
+          status: 'UNASSIGNED',
           shared: false,
         }));
 
         this.innovatorService.getOrganisations(this.innovationId).subscribe(
-          r =>  {
-            r.map((organisation) => {
-              const index = this.organisations.findIndex( o => o.id === organisation.id);
+          r => {
+
+            r.forEach(organisation => {
+              const index = this.organisations.findIndex(o => o.id === organisation.id);
               if (index > -1) {
                 this.organisations[index].shared = true;
-                this.organisations[index].status = organisation.status || this.innovationSupportStatus.UNASSIGNED.label;
+                this.organisations[index].status = organisation.status;
               }
-
             });
 
           }
         );
       }
     );
-  }
-
-  onChangePreferences(): void {
-    this.redirectTo(`/innovator/innovations/${this.innovationId}/data-sharing/edit`);
   }
 
 }
