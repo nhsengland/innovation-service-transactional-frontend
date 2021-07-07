@@ -15,7 +15,7 @@ const stepsLabels = {
 
 // Types.
 type InboundPayloadType = {
-  hasUKPathwayKnowledge: null | 'YES' | 'NO';
+  hasUKPathwayKnowledge: null | 'YES' | 'NO' | 'NOT_RELEVANT';
   innovationPathwayKnowledge: null | 'PATHWAY_EXISTS_AND_CHANGED' | 'PATHWAY_EXISTS_AND_FITS' | 'NO_PATHWAY'
   potentialPathway: null | string;
   subgroups: {
@@ -56,7 +56,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
   steps.splice(1);
 
-  if (['NO'].includes(currentValues.hasUKPathwayKnowledge || 'NO')) {
+  if (['NO', 'NOT_RELEVANT'].includes(currentValues.hasUKPathwayKnowledge || 'NO')) {
     currentValues.innovationPathwayKnowledge = null;
     currentValues.potentialPathway = null;
     currentValues.subgroups = currentValues.subgroups.map(item => ({
@@ -110,7 +110,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   const parsedData = cloneDeep(data);
 
-  if (['NO'].includes(parsedData.hasUKPathwayKnowledge || 'NO')) {
+  if (['NO', 'NOT_RELEVANT'].includes(parsedData.hasUKPathwayKnowledge || 'NO')) {
     parsedData.innovationPathwayKnowledge = null;
     parsedData.potentialPathway = null;
     parsedData.subgroups = parsedData.subgroups.map(item => ({

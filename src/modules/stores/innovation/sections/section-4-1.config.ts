@@ -18,7 +18,7 @@ type InboundPayloadType = {
   hasRegulationKnowledge: null | 'YES_ALL' | 'YES_SOME' | 'NO' | 'NOT_RELEVANT';
   standards: {
     id: null | string;
-    type: null | 'CE_UKCA_NON_MEDICAL' | 'CE_UKCA_CLASS_I' | 'CE_UKCA_CLASS_II_A' | 'CE_UKCA_CLASS_II_B' | 'CE_UKCA_CLASS_III' | 'DTAC' | 'OTHER';
+    type: null | 'CE_UKCA_NON_MEDICAL' | 'CE_UKCA_CLASS_I' | 'CE_UKCA_CLASS_II_A' | 'CE_UKCA_CLASS_II_B' | 'CE_UKCA_CLASS_III' | 'IVD_GENERAL' | 'IVD_SELF_TEST' | 'IVD_ANNEX_LIST_A' | 'IVD_ANNEX_LIST_B' | 'MARKETING' | 'CQC' | 'DTAC' | 'OTHER';
     hasMet: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET';
   }[];
   otherRegulationDescription: null | string;

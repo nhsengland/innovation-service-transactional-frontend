@@ -1,29 +1,30 @@
 import { cloneDeep } from 'lodash';
 import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { innovationImpactItems } from './catalogs.config';
 
-import { hasSubgroupsItems } from './catalogs.config';
 
-
-// Labels.
 const stepsLabels = {
-  l1: 'Do you know yet what patient population or subgroup your innovation will affect?',
-  l2: 'What population or subgroup does this affect?'
+  l1: 'Who does your innovation impact?',
+  l2: 'What patient population or subgroup does this affect?',
+  l3: 'Please specify the groups of clinicians, carers or administrative staff that your innovation impacts'
 };
 
 
 // Types.
 type InboundPayloadType = {
-  hasSubgroups: null | 'YES' | 'NO' | 'NOT_RELEVANT';
+  impactPatients: boolean;
+  impactClinicians: boolean;
   subgroups: {
     id: null | string;
     name: string;
     conditions: null | string;
   }[];
+  cliniciansImpactDetails: null | string;
 };
 
 // [key: string] is needed to support subgroups_${number} properties.
-type StepPayloadType = InboundPayloadType & { [key: string]: null | string };
+type StepPayloadType = InboundPayloadType & { impacts: ('PATIENTS' | 'CLINICIANS')[] } & { [key: string]: null | string };
 
 type OutboundPayloadType = InboundPayloadType;
 
@@ -36,8 +37,8 @@ export const SECTION_2_1: InnovationSectionConfigType['sections'][0] = {
     steps: [
       new FormEngineModel({
         label: stepsLabels.l1,
-        description: 'We\'re asking this to get a better understanding of who would benefit from your innovation.',
-        parameters: [{ id: 'hasSubgroups', dataType: 'radio-group', validations: { isRequired: true }, items: hasSubgroupsItems }]
+        description: 'We\'re asking this to understand if we should ask you specific questions about patients and/or healthcare professionals. Your answer will impact which questions we ask in other sections.',
+        parameters: [{ id: 'impacts', dataType: 'checkbox-array', validations: { isRequired: true }, items: innovationImpactItems }]
       })
     ],
     runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
@@ -53,49 +54,63 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
   steps.splice(1);
 
-  if (['NO', 'NOT_RELEVANT'].includes(currentValues.hasSubgroups || 'NO')) {
+  // PATIENTS.
+  if (!currentValues.impacts.includes('PATIENTS')) { // Removes all subgroups if no PATIENTS has been selected.
+
     currentValues.subgroups = [];
     Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => { delete currentValues[key]; });
-    return;
-  }
 
-  if (currentStep > 2) { // Updates subgroups.conditions value.
-    Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => {
-      currentValues.subgroups[Number(key.split('_')[1])].conditions = currentValues[key];
-    });
-  }
+  } else {
 
-  Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => { delete currentValues[key]; });
+    if (currentStep > 2) { // Updates subgroups.conditions value.
+      Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => {
+        currentValues.subgroups[Number(key.split('_')[1])].conditions = currentValues[key];
+      });
+    }
 
-  steps.push(
-    new FormEngineModel({
-      label: stepsLabels.l2,
-      description: 'We\'ll ask you further questions about each answer you provide here. If there are key distinctions between how you innovation affects different populations, be as specific as possible. If not, consider providing as few answers as possible.',
-      parameters: [{
-        id: 'subgroups',
-        dataType: 'fields-group',
-        // validations: { isRequired: true }
-        fieldsGroupConfig: {
-          fields: [
-            { id: 'id', dataType: 'text', isVisible: false },
-            { id: 'name', dataType: 'text', label: 'Population or subgroup', validations: { isRequired: true } },
-            { id: 'conditions', dataType: 'text', isVisible: false }
-          ],
-          addNewLabel: 'Add new population or subgroup'
-        }
-      }]
-    })
-  );
+    Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => { delete currentValues[key]; });
 
-  currentValues.subgroups.forEach((item, i) => {
     steps.push(
       new FormEngineModel({
-        label: `What condition best categorises ${item.name}?`,
-        parameters: [{ id: `subGroupName_${i}`, dataType: 'text', validations: { isRequired: true } }]
+        label: stepsLabels.l2,
+        description: 'We\'ll ask you further questions about each answer you provide here. If there are key distinctions between how your innovation affects different populations, be as specific as possible. If not, consider providing as few answers as possible.',
+        parameters: [{
+          id: 'subgroups',
+          dataType: 'fields-group',
+          // validations: { isRequired: true }
+          fieldsGroupConfig: {
+            fields: [
+              { id: 'id', dataType: 'text', isVisible: false },
+              { id: 'name', dataType: 'text', label: 'Population or subgroup', validations: { isRequired: true } },
+              { id: 'conditions', dataType: 'text', isVisible: false }
+            ],
+            addNewLabel: 'Add new population or subgroup'
+          }
+        }]
       })
     );
-    currentValues[`subGroupName_${i}`] = item.conditions;
-  });
+
+    currentValues.subgroups.forEach((item, i) => {
+      steps.push(
+        new FormEngineModel({
+          label: `What condition best categorises ${item.name}?`,
+          parameters: [{ id: `subGroupName_${i}`, dataType: 'text', validations: { isRequired: true } }]
+        })
+      );
+      currentValues[`subGroupName_${i}`] = item.conditions;
+    });
+
+  }
+
+  // CLINICIANS.
+  if (currentValues.impacts.includes('CLINICIANS')) {
+    steps.push(
+      new FormEngineModel({
+        label: stepsLabels.l3,
+        parameters: [{ id: 'cliniciansImpactDetails', dataType: 'textarea', validations: { isRequired: true } }]
+      })
+    );
+  }
 
 }
 
@@ -103,6 +118,9 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   const parsedData = cloneDeep(data) as StepPayloadType;
+
+  if (parsedData.impactPatients) { parsedData.impacts.push('PATIENTS'); }
+  if (parsedData.impactClinicians) { parsedData.impacts.push('CLINICIANS'); }
 
   parsedData.subgroups.forEach((item, i) => { parsedData[`subGroupName_${i}`] = item.conditions; });
 
@@ -113,11 +131,12 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
-  const parsedData = cloneDeep(data);
-
-  Object.keys(parsedData).filter(key => key.startsWith('subGroupName_')).forEach((key) => { delete parsedData[key]; });
-
-  return parsedData;
+  return {
+    impactPatients: data.impacts.includes('PATIENTS'),
+    impactClinicians: data.impacts.includes('CLINICIANS'),
+    subgroups: data.subgroups,
+    cliniciansImpactDetails: data.cliniciansImpactDetails
+  };
 
 }
 
@@ -128,22 +147,29 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   toReturn.push({
     label: stepsLabels.l1,
-    value: hasSubgroupsItems.find(item => item.value === data.hasSubgroups)?.label,
-    editStepNumber: 1
+    value: data.impacts.map(impact => innovationImpactItems.find(item => item.value === impact)?.label).join('<br />'),
+    editStepNumber: toReturn.length + 1
   });
 
-  if (['YES'].includes(data.hasSubgroups || 'NO')) {
 
+  if (data.impacts.includes('PATIENTS')) {
     toReturn.push({
       label: stepsLabels.l2,
       value: data.subgroups?.map(group => group.name).join('<br />'),
-      editStepNumber: 2
+      editStepNumber: toReturn.length + 1
     });
-
-    data.subgroups?.forEach((item, i) => {
+    data.subgroups.forEach((item, i) => {
       toReturn.push({ label: `Group ${item.name} condition`, value: item.conditions, editStepNumber: toReturn.length + 1 });
     });
+  }
 
+
+  if (data.impacts.includes('CLINICIANS')) {
+    toReturn.push({
+      label: stepsLabels.l3,
+      value: data.cliniciansImpactDetails,
+      editStepNumber: toReturn.length + 1
+    });
   }
 
   return toReturn;
