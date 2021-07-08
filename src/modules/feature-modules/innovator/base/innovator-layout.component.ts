@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
 import { RoutingHelper } from '@modules/core';
+import { InnovatorNotificationsService } from '../services/notifications.service';
+import { Observable, Subject } from 'rxjs';
 
 
 type RouteDataLayoutOptionsType = {
@@ -18,7 +20,7 @@ type RouteDataLayoutOptionsType = {
   selector: 'app-innovator-layout',
   templateUrl: './innovator-layout.component.html'
 })
-export class InnovatorLayoutComponent extends CoreComponent {
+export class InnovatorLayoutComponent extends CoreComponent implements OnDestroy {
 
   layoutOptions: RouteDataLayoutOptionsType = { type: null };
 
@@ -29,17 +31,37 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
   innovationHeaderBar: { id: string | null, name: string | null } = { id: null, name: null };
 
-  leftSideBar: { title: string, link: string }[] = [];
+  leftSideBar: { title: string, link: string, key?: string }[] = [];
 
+  notifications: {[key: string]: number};
+
+  private ngUnsubscribe = new Subject();
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private notificationsService: InnovatorNotificationsService,
   ) {
 
     super();
 
     this.subscriptions.push(
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
+    );
+
+    this.notifications = {
+      ACTION: 0,
+      COMMENT: 0,
+      INNOVATION: 0,
+    };
+
+    notificationsService.notificationReceived$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        notification => {
+          console.log('RECEIVED NOTIFICATIONS FROM OVERVIEW COMPONENT');
+          console.log(notification);
+          this.notifications = notification;
+        }
     );
 
   }
@@ -81,8 +103,8 @@ export class InnovatorLayoutComponent extends CoreComponent {
         this.leftSideBar = [
           { title: 'Overview', link: `/innovator/innovations/${currentRouteInnovationId}/overview` },
           { title: 'Innovation record', link: `/innovator/innovations/${currentRouteInnovationId}/record` },
-          { title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker` },
-          { title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments` },
+          { title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker`, key: 'ACTION' },
+          { title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments`, key: 'COMMENT' },
           { title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/data-sharing` }
         ];
         break;
@@ -99,6 +121,11 @@ export class InnovatorLayoutComponent extends CoreComponent {
       this.innovationHeaderBar = { id: null, name: null };
     }
 
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 }

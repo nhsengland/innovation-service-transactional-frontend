@@ -62,6 +62,8 @@ export class InnovationActionTrackerComponent extends CoreComponent implements O
 
         this.openedActionsList.setData(response.openedActions);
         this.closedActionsList.setData(response.closedActions);
+
+        console.log(this.openedActionsList.getColumnLabel('notification'));
       },
       error => {
         this.logger.error(error);
