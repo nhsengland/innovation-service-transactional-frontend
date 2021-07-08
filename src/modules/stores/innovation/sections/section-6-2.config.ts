@@ -8,7 +8,8 @@ import { costComparisonItems, hasCostKnowledgeItems } from './catalogs.config';
 // Labels.
 const stepsLabels = {
   l1: 'Do you know what cost savings your innovation would create?',
-  l2: 'Do you know the cost of care as it\'s currently given?'
+  l2: 'Do you know the cost of care as it\'s currently given?',
+  l3: 'What are the costs associated with use of your innovation, compared to current practice in the UK?'
 };
 
 
@@ -16,6 +17,7 @@ const stepsLabels = {
 type InboundPayloadType = {
   hasCostSavingKnowledge: null | 'DETAILED_ESTIMATE' | 'ROUGH_IDEA' | 'NO';
   hasCostCareKnowledge: null | 'DETAILED_ESTIMATE' | 'ROUGH_IDEA' | 'NO';
+  costComparison: null | 'CHEAPER' | 'COSTS_MORE_WITH_SAVINGS' | 'COSTS_MORE' | 'NOT_SURE';
   subgroups: {
     id: string;
     name: string;
@@ -24,6 +26,8 @@ type InboundPayloadType = {
 };
 // [key: string] is needed to support subGroupName_${number} properties.
 type StepPayloadType = InboundPayloadType & { [key: string]: null | string };
+
+type OutboundPayloadType = InboundPayloadType;
 
 
 
@@ -57,9 +61,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
   steps.splice(2);
 
   if (['NO'].includes(currentValues.hasCostCareKnowledge || 'NO')) {
-    currentValues.subgroups = currentValues.subgroups.map(item => ({
-      id: item.id, name: item.name, costComparison: null
-    }));
+    currentValues.subgroups = currentValues.subgroups.map(item => ({ id: item.id, name: item.name, costComparison: null }));
+    currentValues.costComparison = null;
     Object.keys(currentValues).filter(key => key.startsWith('subGroupCostComparison_')).forEach((key) => { delete currentValues[key]; });
     return;
   }
@@ -69,16 +72,31 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
     delete currentValues[key];
   });
 
-  (currentValues.subgroups || []).forEach((item, i) => {
+
+  if (currentValues.subgroups.length === 0) {
+
     steps.push(
       new FormEngineModel({
-        label: `What are the costs associated with use of your innovation, compared to current practice in the UK for ${item.name}?`,
+        label: stepsLabels.l3,
         description: 'See [link to section in starter/advanced guide] (opens in new window) for more information about comparative cost benefit.',
-        parameters: [{ id: `subGroupCostComparison_${i}`, dataType: 'radio-group', validations: { isRequired: true }, items: costComparisonItems }]
+        parameters: [{ id: 'costComparison', dataType: 'radio-group', validations: { isRequired: true }, items: costComparisonItems }]
       })
     );
-    currentValues[`subGroupCostComparison_${i}`] = item.costComparison;
-  });
+
+  } else {
+
+    (currentValues.subgroups || []).forEach((item, i) => {
+      steps.push(
+        new FormEngineModel({
+          label: `What are the costs associated with use of your innovation, compared to current practice in the UK for ${item.name}?`,
+          description: 'See [link to section in starter/advanced guide] (opens in new window) for more information about comparative cost benefit.',
+          parameters: [{ id: `subGroupCostComparison_${i}`, dataType: 'radio-group', validations: { isRequired: true }, items: costComparisonItems }]
+        })
+      );
+      currentValues[`subGroupCostComparison_${i}`] = item.costComparison;
+    });
+
+  }
 
 }
 
@@ -94,19 +112,14 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 }
 
 
-function outboundParsing(data: StepPayloadType): any {
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
-  const parsedData = cloneDeep(data);
-
-  if (['NO'].includes(parsedData.hasCostCareKnowledge || 'NO')) {
-    parsedData.subgroups = parsedData.subgroups.map(item => ({
-      id: item.id, name: item.name, costComparison: null
-    }));
-  }
-
-  Object.keys(parsedData).filter(key => key.startsWith('subGroupCostComparison_')).forEach((key) => { delete parsedData[key]; });
-
-  return parsedData;
+  return {
+    hasCostSavingKnowledge: data.hasCostSavingKnowledge,
+    hasCostCareKnowledge: data.hasCostCareKnowledge,
+    costComparison: data.costComparison,
+    subgroups: data.subgroups
+  };
 
 }
 
@@ -129,13 +142,25 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   if (!['NO'].includes(data.hasCostCareKnowledge || 'NO')) {
 
-    data.subgroups?.forEach(subgroup => {
+    if (data.subgroups.length === 0) {
+
       toReturn.push({
-        label: `Group ${subgroup.name} innovation cost`,
-        value: costComparisonItems.find(item => item.value === subgroup.costComparison)?.label,
+        label: stepsLabels.l3,
+        value: costComparisonItems.find(item => item.value === data.costComparison)?.label,
         editStepNumber: toReturn.length + 1
       });
-    });
+
+    } else {
+
+      data.subgroups?.forEach(subgroup => {
+        toReturn.push({
+          label: `Group ${subgroup.name} innovation cost`,
+          value: costComparisonItems.find(item => item.value === subgroup.costComparison)?.label,
+          editStepNumber: toReturn.length + 1
+        });
+      });
+
+    }
   }
 
   return toReturn;

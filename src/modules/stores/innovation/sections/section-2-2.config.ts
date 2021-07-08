@@ -1,14 +1,17 @@
 import { cloneDeep } from 'lodash';
-import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
-import { hasBenefitsItems } from './catalogs.config';
+import { environmentalBenefitItems, generalBenefitItems, hasBenefitsItems, subgroupBenefitItems } from './catalogs.config';
 
 
 // Labels.
 const stepsLabels = {
   l1: 'Have you identified the specific benefits that your innovation would bring?',
-  l_last: 'What benefits does your innovation create for the NHS or social care?'
+  l3: 'What benefits does your innovation create for the NHS or social care?',
+  l4: 'What environmental sustainability benefits does your innovation create?',
+  l5: 'Please explain how you have considered accessibility and the impact of your innovation on health inequalities.',
+  l6: 'What steps have you taken to better understand and alleviate potential negative impacts of your solution on accessibility and health inequalities?'
 };
 
 
@@ -18,13 +21,19 @@ type InboundPayloadType = {
   subgroups: {
     id: string;
     name: string;
-    benefits: null | string;
+    benefits: ('REDUCE_MORTALITY' | 'REDUCE_FURTHER_TREATMENT' | 'REDUCE_ADVERSE_EVENTS' | 'ENABLE_EARLIER_DIAGNOSIS' | 'REDUCE_RISKS' | 'PREVENTS_CONDITION_OCCURRING' | 'AVOIDS_UNNECESSARY_TREATMENT' | 'ENABLES_NON_INVASIVELY_TEST' | 'INCREASES_SELF_MANAGEMENT' | 'INCREASES_LIFE_QUALITY' | 'ENABLES_SHARED_CARE' | 'OTHER')[];
+    otherBenefit: null | string;
   }[];
-  benefits: null | string;
+  generalBenefits: null | ('REDUCE_LENGTH_STAY' | 'REDUCE_CRITICAL_CARE' | 'REDUCE_EMERGENCY_ADMISSIONS' | 'CHANGES_DELIVERY_SECONDARY_TO_PRIMARY' | 'CHANGES_DELIVERY_INPATIENT_TO_DAY_CASE' | 'INCREASES_COMPLIANCE' | 'IMPROVES_COORDINATION' | 'REDUCES_REFERRALS' | 'LESS_TIME' | 'FEWER_STAFF' | 'FEWER_APPOINTMENTS' | 'COST_SAVING' | 'INCREASES_EFFICIENCY' | 'IMPROVES_PERFORMANCE' | 'OTHER')[];
+  otherGeneralBenefit: null | string;
+  environmentalBenefits: null | ('NO_SIGNIFICANT_BENEFITS' | 'LESS_ENERGY' | 'LESS_RAW_MATERIALS' | 'REDUCES_GAS_EMISSIONS' | 'REDUCES_PLASTICS_USE' | 'MINIMISES_WASTE' | 'LOWER_ENVIRONMENTAL_IMPACT' | 'OPTIMIZES_FINITE_RESOURCE_USE' | 'USES_RECYCLED_MATERIALS' | 'OTHER')[];
+  otherEnvironmentalBenefit: null | string;
+  accessibilityImpactDetails: null | string;
+  accessibilityStepsDetails: null | string;
 };
 
 // [key: string] is needed to support subgroups_${number} properties.
-type StepPayloadType = InboundPayloadType & { [key: string]: null | string };
+type StepPayloadType = InboundPayloadType & { [key: string]: null | string[] | string };
 
 type OutboundPayloadType = InboundPayloadType;
 
@@ -55,33 +64,60 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
   steps.splice(1);
 
   if (['NOT_YET', 'NOT_SURE'].includes(currentValues.hasBenefits || 'NOT_YET')) {
-    currentValues.subgroups = currentValues.subgroups.map(item => ({
-      id: item.id, name: item.name, benefits: null
-    }));
-    currentValues.benefits = null;
-    Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => { delete currentValues[key]; });
+    currentValues.subgroups = currentValues.subgroups.map(item => ({ id: item.id, name: item.name, benefits: [], otherBenefit: null }));
+    currentValues.generalBenefits = null;
+    currentValues.otherGeneralBenefit = null;
+    currentValues.environmentalBenefits = null;
+    currentValues.otherEnvironmentalBenefit = null;
+    currentValues.accessibilityImpactDetails = null;
+    currentValues.accessibilityStepsDetails = null;
+    Object.keys(currentValues).filter(key => key.startsWith('subgroupBenefits_')).forEach((key) => { delete currentValues[key]; });
+    Object.keys(currentValues).filter(key => key.startsWith('subgroupOtherBenefit_')).forEach((key) => { delete currentValues[key]; });
     return;
   }
 
-  Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => {
-    currentValues.subgroups[Number(key.split('_')[1])].benefits = currentValues[key];
+  Object.keys(currentValues).filter(key => key.startsWith('subgroupBenefits_')).forEach((key) => {
+    currentValues.subgroups[Number(key.split('_')[1])].benefits = currentValues[key] as InboundPayloadType['subgroups'][0]['benefits'];
     delete currentValues[key];
   });
+  Object.keys(currentValues).filter(key => key.startsWith('subgroupOtherBenefit_')).forEach((key) => {
+    currentValues.subgroups[Number(key.split('_')[1])].otherBenefit = currentValues[key] as string;
+    delete currentValues[key];
+  });
+
 
   currentValues.subgroups.forEach((item, i) => {
     steps.push(
       new FormEngineModel({
         label: `What benefits does your innovation create for patients or citizens of ${item.name}?`,
-        parameters: [{ id: `subGroupName_${i}`, dataType: 'textarea', validations: { isRequired: true } }]
+        parameters: [{
+          id: `subgroupBenefits_${i}`,
+          dataType: 'checkbox-array',
+          validations: { isRequired: true },
+          items: [...subgroupBenefitItems, ...[{ value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: `subgroupOtherBenefit_${i}`, dataType: 'text', validations: { isRequired: true } }) }]]
+        }]
       })
     );
-    currentValues[`subGroupName_${i}`] = item.benefits;
+    currentValues[`subgroupBenefits_${i}`] = item.benefits;
+    currentValues[`subgroupOtherBenefit_${i}`] = item.otherBenefit;
   });
 
   steps.push(
     new FormEngineModel({
-      label: stepsLabels.l_last,
-      parameters: [{ id: 'benefits', dataType: 'textarea', validations: { isRequired: true } }]
+      label: stepsLabels.l3,
+      parameters: [{ id: 'generalBenefits', dataType: 'checkbox-array', validations: { isRequired: true }, items: generalBenefitItems }]
+    }),
+    new FormEngineModel({
+      label: stepsLabels.l4,
+      parameters: [{ id: 'environmentalBenefits', dataType: 'checkbox-array', validations: { isRequired: true }, items: environmentalBenefitItems }]
+    }),
+    new FormEngineModel({
+      label: stepsLabels.l5,
+      parameters: [{ id: 'accessibilityImpactDetails', dataType: 'textarea', validations: { isRequired: true } }]
+    }),
+    new FormEngineModel({
+      label: stepsLabels.l6,
+      parameters: [{ id: 'accessibilityStepsDetails', dataType: 'textarea', validations: { isRequired: true } }]
     })
   );
 
@@ -92,7 +128,10 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   const parsedData = cloneDeep(data) as StepPayloadType;
 
-  parsedData.subgroups.forEach((item, i) => { parsedData[`subGroupName_${i}`] = item.benefits; });
+  parsedData.subgroups.forEach((item, i) => {
+    parsedData[`subgroupBenefits_${i}`] = item.benefits;
+    parsedData[`subgroupOtherBenefit_${i}`] = item.otherBenefit;
+  });
 
   return parsedData;
 
@@ -101,11 +140,16 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
-  const parsedData = cloneDeep(data);
-
-  Object.keys(parsedData).filter(key => key.startsWith('subGroupName_')).forEach((key) => { delete parsedData[key]; });
-
-  return parsedData;
+  return {
+    hasBenefits: data.hasBenefits,
+    subgroups: data.subgroups,
+    generalBenefits: data.generalBenefits,
+    otherGeneralBenefit: data.otherGeneralBenefit,
+    environmentalBenefits: data.environmentalBenefits,
+    otherEnvironmentalBenefit: data.otherEnvironmentalBenefit,
+    accessibilityImpactDetails: data.accessibilityImpactDetails,
+    accessibilityStepsDetails: data.accessibilityStepsDetails
+  };
 
 }
 
@@ -122,15 +166,36 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   if (['YES'].includes(data.hasBenefits || 'NOT_YET')) {
 
-    data.subgroups?.forEach((item, i) => {
-      toReturn.push({ label: `Group ${item.name} benefit`, value: item.benefits, editStepNumber: toReturn.length + 1 });
+    data.subgroups?.forEach((subGroup, i) => {
+      toReturn.push({
+        label: `Group ${subGroup.name} benefit`,
+        value: subGroup.benefits.map(benefit => benefit === 'OTHER' ? subGroup.otherBenefit : subgroupBenefitItems.find(item => item.value === benefit)?.label).join('<br />'),
+        editStepNumber: toReturn.length + 1
+      });
     });
 
-    toReturn.push({
-      label: stepsLabels.l_last,
-      value: data.benefits,
-      editStepNumber: toReturn.length + 1
-    });
+    toReturn.push(
+      {
+        label: stepsLabels.l3,
+        value: data.generalBenefits?.map(benefit => benefit === 'OTHER' ? data.otherGeneralBenefit : generalBenefitItems.find(item => item.value === benefit)?.label).join('<br />'),
+        editStepNumber: toReturn.length + 1
+      },
+      {
+        label: stepsLabels.l4,
+        value: data.environmentalBenefits?.map(benefit => benefit === 'OTHER' ? data.otherEnvironmentalBenefit : environmentalBenefitItems.find(item => item.value === benefit)?.label).join('<br />'),
+        editStepNumber: toReturn.length + 1
+      },
+      {
+        label: stepsLabels.l5,
+        value: data.accessibilityImpactDetails,
+        editStepNumber: toReturn.length + 1
+      },
+      {
+        label: stepsLabels.l6,
+        value: data.accessibilityStepsDetails,
+        editStepNumber: toReturn.length + 1
+      }
+    );
 
   }
 

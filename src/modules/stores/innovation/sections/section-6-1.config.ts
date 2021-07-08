@@ -7,7 +7,10 @@ import { hasCostKnowledgeItems, patientRangeItems } from './catalogs.config';
 
 // Labels.
 const stepsLabels = {
-  l1: 'Do you know the cost of your innovation?'
+  l1: 'Do you know the cost of your innovation?',
+  l2: 'What\'s the cost of your innovation?',
+  l3: 'How many units of your innovation would you expect to sell per year in the UK?',
+  l4: 'Approximately how long is each unit of your innovation intended to be in use?',
 };
 
 
@@ -23,6 +26,9 @@ type InboundPayloadType = {
     sellExpectations: null | string;
     usageExpectations: null | string;
   }[];
+  costDescription: null | string;
+  sellExpectations: null | string;
+  usageExpectations: null | string;
 };
 // [key: string] is needed to support subGroup*_${number} properties.
 type StepPayloadType = InboundPayloadType & { [key: string]: null | string };
@@ -59,6 +65,9 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
     currentValues.subgroups = currentValues.subgroups.map(item => ({
       id: item.id, name: item.name, costDescription: null, patientsRange: null, sellExpectations: null, usageExpectations: null
     }));
+    currentValues.costDescription = null;
+    currentValues.sellExpectations = null;
+    currentValues.usageExpectations = null;
     Object.keys(currentValues).filter(key => key.startsWith('subGroupCostDescription_')).forEach((key) => { delete currentValues[key]; });
     Object.keys(currentValues).filter(key => key.startsWith('subGroupPatientsRange_')).forEach((key) => { delete currentValues[key]; });
     Object.keys(currentValues).filter(key => key.startsWith('subGroupSellExpectations_')).forEach((key) => { delete currentValues[key]; });
@@ -83,45 +92,69 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
     delete currentValues[key];
   });
 
-  (currentValues.subgroups || []).forEach((item, i) => {
+
+  if (currentValues.subgroups.length === 0) {
 
     steps.push(
       new FormEngineModel({
-        label: `What's the cost of your innovation for ${item.name}?`,
+        label: stepsLabels.l2,
         description: 'For example, this could be expressed as the annual cost to an organisation in relation to the number of patients or people who would benefit from it.',
-        parameters: [{ id: `subGroupCostDescription_${i}`, dataType: 'textarea', validations: { isRequired: true } }]
+        parameters: [{ id: 'costDescription', dataType: 'textarea', validations: { isRequired: true } }]
       }),
       new FormEngineModel({
-        label: `Roughly how many patients in ${item.name} would be eligible for your innovation?`,
-        description: 'This question is important if you\'re looking to get NICE guidance.',
-        parameters: [{ id: `subGroupPatientsRange_${i}`, dataType: 'radio-group', validations: { isRequired: true }, items: patientRangeItems }]
+        label: stepsLabels.l3,
+        description: 'This question forms part of the data required for NICE guidance.',
+        parameters: [{ id: 'sellExpectations', dataType: 'textarea', validations: { isRequired: true } }]
+      }),
+      new FormEngineModel({
+        label: stepsLabels.l4,
+        description: 'This question forms part of the data required for NICE guidance.',
+        parameters: [{ id: 'usageExpectations', dataType: 'textarea', validations: { isRequired: true } }]
       })
     );
-    currentValues[`subGroupCostDescription_${i}`] = item.costDescription;
-    currentValues[`subGroupPatientsRange_${i}`] = item.patientsRange;
 
+  } else {
 
-    if (['NOT_RELEVANT'].includes(item.patientsRange as string)) {
-      item.sellExpectations = null;
-      item.usageExpectations = null;
-    } else {
+    (currentValues.subgroups || []).forEach((item, i) => {
+
       steps.push(
         new FormEngineModel({
-          label: `How many units of your innovation would you expect to sell per year in the UK for ${item.name}?`,
-          description: 'This question is important if you\'re looking to get NICE guidance.',
-          parameters: [{ id: `subGroupSellExpectations_${i}`, dataType: 'textarea', validations: { isRequired: true } }]
+          label: `What's the cost of your innovation for ${item.name}?`,
+          description: 'For example, this could be expressed as the annual cost to an organisation in relation to the number of patients or people who would benefit from it.',
+          parameters: [{ id: `subGroupCostDescription_${i}`, dataType: 'textarea', validations: { isRequired: true } }]
         }),
         new FormEngineModel({
-          label: `Approximately how long is each unit of your innovation intended to be in use for ${item.name}?`,
-          description: 'This question is important if you\'re looking to get NICE guidance.',
-          parameters: [{ id: `subGroupUsageExpectations_${i}`, dataType: 'textarea', validations: { isRequired: true } }]
+          label: `Roughly how many patients in ${item.name} would be eligible for your innovation?`,
+          description: 'This question forms part of the data required for NICE guidance.',
+          parameters: [{ id: `subGroupPatientsRange_${i}`, dataType: 'radio-group', validations: { isRequired: true }, items: patientRangeItems }]
         })
       );
-      currentValues[`subGroupSellExpectations_${i}`] = item.sellExpectations;
-      currentValues[`subGroupUsageExpectations_${i}`] = item.usageExpectations;
-    }
+      currentValues[`subGroupCostDescription_${i}`] = item.costDescription;
+      currentValues[`subGroupPatientsRange_${i}`] = item.patientsRange;
 
-  });
+
+      if (['NOT_RELEVANT'].includes(item.patientsRange as string)) {
+        item.sellExpectations = null;
+        item.usageExpectations = null;
+      } else {
+        steps.push(
+          new FormEngineModel({
+            label: `How many units of your innovation would you expect to sell per year in the UK for ${item.name}?`,
+            description: 'This question forms part of the data required for NICE guidance.',
+            parameters: [{ id: `subGroupSellExpectations_${i}`, dataType: 'textarea', validations: { isRequired: true } }]
+          }),
+          new FormEngineModel({
+            label: `Approximately how long is each unit of your innovation intended to be in use for ${item.name}?`,
+            description: 'This question forms part of the data required for NICE guidance.',
+            parameters: [{ id: `subGroupUsageExpectations_${i}`, dataType: 'textarea', validations: { isRequired: true } }]
+          })
+        );
+        currentValues[`subGroupSellExpectations_${i}`] = item.sellExpectations;
+        currentValues[`subGroupUsageExpectations_${i}`] = item.usageExpectations;
+      }
+
+    });
+  }
 
 }
 
@@ -142,16 +175,15 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 }
 
 
-function outboundParsing(data: StepPayloadType): any {
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
-  const parsedData = cloneDeep(data);
-
-  Object.keys(parsedData).filter(key => key.startsWith('subGroupCostDescription_')).forEach((key) => { delete parsedData[key]; });
-  Object.keys(parsedData).filter(key => key.startsWith('subGroupPatientsRange_')).forEach((key) => { delete parsedData[key]; });
-  Object.keys(parsedData).filter(key => key.startsWith('subGroupSellExpectations_')).forEach((key) => { delete parsedData[key]; });
-  Object.keys(parsedData).filter(key => key.startsWith('subGroupUsageExpectations_')).forEach((key) => { delete parsedData[key]; });
-
-  return parsedData;
+  return {
+    hasCostKnowledge: data.hasCostKnowledge,
+    subgroups: data.subgroups,
+    costDescription: data.costDescription,
+    sellExpectations: data.sellExpectations,
+    usageExpectations: data.usageExpectations
+  };
 
 }
 
@@ -168,33 +200,44 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   if (!['NO'].includes(data.hasCostKnowledge || 'NO')) {
 
-    data.subgroups?.forEach((subgroup, i) => {
+    if (data.subgroups.length === 0) {
 
-      toReturn.push({
-        label: `Group ${subgroup.name} innovation cost`,
-        value: subgroup.costDescription,
-        editStepNumber: toReturn.length + 1
-      });
-      toReturn.push({
-        label: `Group ${subgroup.name} eligible patients`,
-        value: patientRangeItems.find(item => item.value === subgroup.patientsRange)?.label,
-        editStepNumber: toReturn.length + 1
-      });
+      toReturn.push(
+        { label: stepsLabels.l2, value: data.costDescription, editStepNumber: toReturn.length + 1 },
+        { label: stepsLabels.l3, value: data.sellExpectations, editStepNumber: toReturn.length + 1 },
+        { label: stepsLabels.l4, value: data.usageExpectations, editStepNumber: toReturn.length + 1 }
+      );
 
-      if (!['NOT_RELEVANT'].includes(subgroup.patientsRange as string)) {
+    } else {
+
+      data.subgroups.forEach((subgroup, i) => {
+
         toReturn.push({
-          label: `Group ${subgroup.name} sell expectations`,
-          value: subgroup.sellExpectations,
+          label: `Group ${subgroup.name} innovation cost`,
+          value: subgroup.costDescription,
           editStepNumber: toReturn.length + 1
         });
         toReturn.push({
-          label: `Group ${subgroup.name} usage expectations`,
-          value: subgroup.usageExpectations,
+          label: `Group ${subgroup.name} eligible patients`,
+          value: patientRangeItems.find(item => item.value === subgroup.patientsRange)?.label,
           editStepNumber: toReturn.length + 1
         });
-      }
 
-    });
+        if (!['NOT_RELEVANT'].includes(subgroup.patientsRange as string)) {
+          toReturn.push({
+            label: `Group ${subgroup.name} sell expectations`,
+            value: subgroup.sellExpectations,
+            editStepNumber: toReturn.length + 1
+          });
+          toReturn.push({
+            label: `Group ${subgroup.name} usage expectations`,
+            value: subgroup.usageExpectations,
+            editStepNumber: toReturn.length + 1
+          });
+        }
+
+      });
+    }
   }
 
   return toReturn;

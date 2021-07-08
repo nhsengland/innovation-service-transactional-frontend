@@ -71,7 +71,7 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
 
     this.assessmentService.createInnovationNeedsAssessment(this.innovationId, this.formAnswers).subscribe(
       response => {
-        this.redirectTo(`assessment/innovations/${this.innovationId}/assessments/${response.id}`, { alert: 'needsAssessmentStarted' });
+        this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${response.id}/edit`);
       },
       () => {
         this.summaryAlert = {

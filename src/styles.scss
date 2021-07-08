@@ -159,6 +159,11 @@ $service-manual-container-size: 1100px; // Container width variable.
   }
 }
 
+.form-items-group {
+  width: unset;
+  text-align: left;
+}
+
 
 // Components.
 .nhsuk-card {

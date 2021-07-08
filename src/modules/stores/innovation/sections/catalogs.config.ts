@@ -110,10 +110,9 @@ export const hasProblemTackleKnowledgeItems = [
 
 // Section 2
 // // Section 2.1
-export const hasSubgroupsItems = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' },
-  { value: 'NOT_RELEVANT', label: 'Not relevant' }
+export const innovationImpactItems = [
+  { value: 'PATIENTS', label: 'Patients or citizens' },
+  { value: 'CLINICIANS', label: 'Clinicians, carers or administrative staff' }
 ];
 
 // // Section 2.2
@@ -121,6 +120,48 @@ export const hasBenefitsItems = [
   { value: 'YES', label: 'Yes' },
   { value: 'NOT_YET', label: 'Not yet' },
   { value: 'NOT_SURE', label: 'Not sure' }
+];
+export const subgroupBenefitItems = [
+  { value: 'REDUCE_MORTALITY', label: 'Reduces mortality' },
+  { value: 'REDUCE_FURTHER_TREATMENT', label: 'Reduces need for further treatment' },
+  { value: 'REDUCE_ADVERSE_EVENTS', label: 'Reduces adverse events' },
+  { value: 'ENABLE_EARLIER_DIAGNOSIS', label: 'Enables earlier or more accurate diagnosis' },
+  { value: 'REDUCE_RISKS', label: 'Reduces risks, side effects or complications' },
+  { value: 'PREVENTS_CONDITION_OCCURRING', label: 'Prevents a condition occurring or exacerbating' },
+  { value: 'AVOIDS_UNNECESSARY_TREATMENT', label: 'Avoids a test, procedure or unnecessary treatment' },
+  { value: 'ENABLES_NON_INVASIVELY_TEST', label: 'Enables a test, procedure or treatment to be done non-invasively' },
+  { value: 'INCREASES_SELF_MANAGEMENT', label: 'Increases self-management' },
+  { value: 'INCREASES_LIFE_QUALITY', label: 'Increases quality of life' },
+  { value: 'ENABLES_SHARED_CARE', label: 'Enables shared care' }
+];
+export const generalBenefitItems = [
+  { value: 'REDUCE_LENGTH_STAY', label: 'Reduces the length of stay or enables earlier discharge' },
+  { value: 'REDUCE_CRITICAL_CARE', label: 'Reduces need for adult or paediatric critical care' },
+  { value: 'REDUCE_EMERGENCY_ADMISSIONS', label: 'Reduces emergency admissions' },
+  { value: 'CHANGES_DELIVERY_SECONDARY_TO_PRIMARY', label: 'Changes delivery of care from secondary care (e.g. hospitals) to primary care (e.g. GP or community services)' },
+  { value: 'CHANGES_DELIVERY_INPATIENT_TO_DAY_CASE', label: 'Change in delivery of care from inpatient to day case' },
+  { value: 'INCREASES_COMPLIANCE', label: 'Increases compliance' },
+  { value: 'IMPROVES_COORDINATION', label: 'Improves patient management or coordination of care or services' },
+  { value: 'REDUCES_REFERRALS', label: 'Reduces referrals' },
+  { value: 'LESS_TIME', label: 'Takes less time' },
+  { value: 'FEWER_STAFF', label: 'Uses no staff or a lower grade of staff' },
+  { value: 'FEWER_APPOINTMENTS', label: 'Leads to fewer appointments' },
+  { value: 'COST_SAVING', label: 'Is cost saving' },
+  { value: 'INCREASES_EFFICIENCY', label: 'Increases efficiency' },
+  { value: 'IMPROVES_PERFORMANCE', label: 'Improves performance' },
+  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherGeneralBenefit', dataType: 'text', validations: { isRequired: true } }) }
+];
+export const environmentalBenefitItems = [
+  { value: 'NO_SIGNIFICANT_BENEFITS', label: 'There are no significant environmental sustainability benefits associated with my technology' },
+  { value: 'LESS_ENERGY', label: 'Less energy is used' },
+  { value: 'LESS_RAW_MATERIALS', label: 'Less raw materials are used' },
+  { value: 'REDUCES_GAS_EMISSIONS', label: 'Reduces greenhouse gas emissions (including CO2 emissions)' },
+  { value: 'REDUCES_PLASTICS_USE', label: 'Reduces the use of single use plastics' },
+  { value: 'MINIMISES_WASTE', label: 'Minimises waste' },
+  { value: 'LOWER_ENVIRONMENTAL_IMPACT', label: 'Lower environmental impact (e.g. less travel, better use of NHS resources)' },
+  { value: 'OPTIMIZES_FINITE_RESOURCE_USE', label: 'Reduces or optimizes finite resource use (e.g. water, metals)' },
+  { value: 'USES_RECYCLED_MATERIALS', label: 'Can be readily recycled or uses recycled materials' },
+  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherEnvironmentalBenefit', dataType: 'text', validations: { isRequired: true } }) }
 ];
 
 // // Section 2.3
@@ -160,11 +201,17 @@ export const hasRegulationKnowledgeItems = [
   { value: 'NOT_RELEVANT', label: 'Not relevant' }
 ];
 export const standardsTypeItems = [
-  { value: 'CE_UKCA_NON_MEDICAL', label: 'CE/UKCA Non-medical device' },
-  { value: 'CE_UKCA_CLASS_I', label: 'CE/UKCA Class I medical device' },
-  { value: 'CE_UKCA_CLASS_II_A', label: 'CE/UKCA Class IIa medical device' },
-  { value: 'CE_UKCA_CLASS_II_B', label: 'CE/UKCA Class IIb medical device' },
-  { value: 'CE_UKCA_CLASS_III', label: 'CE/UKCA Class III medical device' },
+  { value: 'CE_UKCA_NON_MEDICAL', label: 'Non-medical device', group: 'UKCA / CE' },
+  { value: 'CE_UKCA_CLASS_I', label: 'Class I medical device', group: 'UKCA / CE' },
+  { value: 'CE_UKCA_CLASS_II_A', label: 'Class IIa medical device', group: 'UKCA / CE' },
+  { value: 'CE_UKCA_CLASS_II_B', label: 'Class IIb medical device', group: 'UKCA / CE' },
+  { value: 'CE_UKCA_CLASS_III', label: 'Class III medical device', group: 'UKCA / CE' },
+  { value: 'IVD_GENERAL', label: 'IVD general', group: 'In-vitro diagnostics' },
+  { value: 'IVD_SELF_TEST', label: 'IVD self-test', group: 'In-vitro diagnostics' },
+  { value: 'IVD_ANNEX_LIST_A', label: 'IVD Annex II List A', group: 'In-vitro diagnostics' },
+  { value: 'IVD_ANNEX_LIST_B', label: 'IVD Annex II List B', group: 'In-vitro diagnostics' },
+  { value: 'MARKETING', label: 'Marketing authorisation' },
+  { value: 'CQC', label: 'Care Quality Commission (CQC) registration' },
   { value: 'DTAC', label: 'Digital Technology Assessment Criteria (DTAC)' },
   { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRegulationDescription', dataType: 'text', validations: { isRequired: true } }) }
 ];
@@ -179,7 +226,8 @@ export const standardsHasMetItems = [
 // // Section 5.1
 export const hasUKPathwayKnowledgeItems = [
   { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' }
+  { value: 'NO', label: 'No' },
+  { value: 'NOT_RELEVANT', label: 'Not relevant' }
 ];
 export const innovationPathwayKnowledgeItems = [
   { value: 'PATHWAY_EXISTS_AND_CHANGED', label: 'There is a pathway, and my innovation changes it' },
