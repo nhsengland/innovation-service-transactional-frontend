@@ -22,6 +22,7 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   @Input() description?: string;
   @Input() items: FormEngineParameterModel['items'] = [];
   @Output() customOnChangeFunc = new EventEmitter<{ checked: boolean, item: string }>();
+
   hasError = false;
   errorMessage = '';
 

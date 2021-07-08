@@ -101,7 +101,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
     component.onSubmit();
     fixture.detectChanges();
 
-    expect(routerSpy).not.toHaveBeenCalledWith(['assessment/innovations/Inno01/assessments/Assess01'], { queryParams: { alert: 'needsAssessmentStarted' } });
+    expect(routerSpy).not.toHaveBeenCalledWith(['/assessment/innovations/Inno01/assessments/Assess01/edit'], {});
 
   });
 
@@ -121,14 +121,13 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
     component.onSubmit();
     fixture.detectChanges();
 
-    expect(routerSpy).toHaveBeenCalledWith(['assessment/innovations/Inno01/assessments/Assess01'], { queryParams: { alert: 'needsAssessmentStarted' } });
+    expect(routerSpy).toHaveBeenCalledWith(['/assessment/innovations/Inno01/assessments/Assess01/edit'], {});
 
   });
 
   it('should submit survey with valid form data and api failed', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
     assessmentService.createInnovationNeedsAssessment = () => throwError('error');
 

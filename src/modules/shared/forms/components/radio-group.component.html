@@ -16,7 +16,15 @@
 
   <div class="nhsuk-radios">
 
-    <ng-container *ngFor="let item of items; let i = index">
+    <ng-container *ngFor="let item of items; let i = index; let first = first">
+
+      <ng-container *ngIf="!first && item.group !== items![i-1]?.group">
+        <div class="nhsuk-u-padding-top-2"></div>
+      </ng-container>
+
+      <ng-container *ngIf="item.group && (first || (item.group !== items![i-1]?.group))">
+        <div class="nhsuk-radios__divider" tabindex="0">{{ item.group }} <span class="nhsuk-u-visually-hidden">group items</span> </div>
+      </ng-container>
 
       <ng-container [ngSwitch]="item.label">
 
@@ -26,7 +34,7 @@
 
         <ng-container *ngSwitchDefault>
 
-          <div class="nhsuk-radios__item">
+          <div class="nhsuk-radios__item" [ngClass]="{'nhsuk-u-margin-left-4': item.group}">
             <ng-container *ngIf="isRunningOnBrowser">
               <input [formControl]="fieldControl" id="{{ id }}{{ i }}" type="radio" [name]="controlName" [value]="item.value" class="nhsuk-radios__input" />
             </ng-container>
@@ -51,8 +59,8 @@
 
     <ng-container *ngIf="additional">
       <ng-container *ngFor="let addi of additional; let i = index">
-      <theme-form-input [formControl]="conditionalFormControl(addi.id)" [label]="addi.label" [description]="addi.description"></theme-form-input>
-    </ng-container>
+        <theme-form-input [formControl]="conditionalFormControl(addi.id)" [label]="addi.label" [description]="addi.description"></theme-form-input>
+      </ng-container>
     </ng-container>
 
   </div>

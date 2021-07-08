@@ -19,12 +19,13 @@ type InboundPayloadType = {
     id: null | string;
     name: string;
     conditions: null | string;
+    otherCondition: null | string; // NOT being used for now!
   }[];
   cliniciansImpactDetails: null | string;
 };
 
 // [key: string] is needed to support subgroups_${number} properties.
-type StepPayloadType = InboundPayloadType & { impacts: ('PATIENTS' | 'CLINICIANS')[] } & { [key: string]: null | string };
+type StepPayloadType = InboundPayloadType & { impacts: null | ('PATIENTS' | 'CLINICIANS')[] } & { [key: string]: null | string };
 
 type OutboundPayloadType = InboundPayloadType;
 
@@ -55,7 +56,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
   steps.splice(1);
 
   // PATIENTS.
-  if (!currentValues.impacts.includes('PATIENTS')) { // Removes all subgroups if no PATIENTS has been selected.
+  if (!currentValues.impacts?.includes('PATIENTS')) { // Removes all subgroups if no PATIENTS has been selected.
 
     currentValues.subgroups = [];
     Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => { delete currentValues[key]; });
@@ -103,7 +104,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
   }
 
   // CLINICIANS.
-  if (currentValues.impacts.includes('CLINICIANS')) {
+  if (currentValues.impacts?.includes('CLINICIANS')) {
     steps.push(
       new FormEngineModel({
         label: stepsLabels.l3,
@@ -119,8 +120,8 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   const parsedData = cloneDeep(data) as StepPayloadType;
 
-  if (parsedData.impactPatients) { parsedData.impacts.push('PATIENTS'); }
-  if (parsedData.impactClinicians) { parsedData.impacts.push('CLINICIANS'); }
+  if (parsedData.impactPatients) { parsedData.impacts?.push('PATIENTS'); }
+  if (parsedData.impactClinicians) { parsedData.impacts?.push('CLINICIANS'); }
 
   parsedData.subgroups.forEach((item, i) => { parsedData[`subGroupName_${i}`] = item.conditions; });
 
@@ -132,8 +133,8 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
-    impactPatients: data.impacts.includes('PATIENTS'),
-    impactClinicians: data.impacts.includes('CLINICIANS'),
+    impactPatients: data.impacts?.includes('PATIENTS') || false,
+    impactClinicians: data.impacts?.includes('CLINICIANS') || false,
     subgroups: data.subgroups,
     cliniciansImpactDetails: data.cliniciansImpactDetails
   };
@@ -147,12 +148,12 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   toReturn.push({
     label: stepsLabels.l1,
-    value: data.impacts.map(impact => innovationImpactItems.find(item => item.value === impact)?.label).join('<br />'),
+    value: data.impacts?.map(impact => innovationImpactItems.find(item => item.value === impact)?.label).join('<br />'),
     editStepNumber: toReturn.length + 1
   });
 
 
-  if (data.impacts.includes('PATIENTS')) {
+  if (data.impacts?.includes('PATIENTS')) {
     toReturn.push({
       label: stepsLabels.l2,
       value: data.subgroups?.map(group => group.name).join('<br />'),
@@ -164,7 +165,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
   }
 
 
-  if (data.impacts.includes('CLINICIANS')) {
+  if (data.impacts?.includes('CLINICIANS')) {
     toReturn.push({
       label: stepsLabels.l3,
       value: data.cliniciansImpactDetails,

@@ -152,15 +152,15 @@ export const generalBenefitItems = [
   { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherGeneralBenefit', dataType: 'text', validations: { isRequired: true } }) }
 ];
 export const environmentalBenefitItems = [
-  { value: 'NO_SIGNIFICANT_BENEFITS', label: 'NO_SIGNIFICANT_BENEFITS' },
-  { value: 'LESS_ENERGY', label: 'LESS_ENERGY' },
-  { value: 'LESS_RAW_MATERIALS', label: 'LESS_RAW_MATERIALS' },
-  { value: 'REDUCES_GAS_EMISSIONS', label: 'REDUCES_GAS_EMISSIONS' },
-  { value: 'REDUCES_PLASTICS_USE', label: 'REDUCES_PLASTICS_USE' },
-  { value: 'MINIMISES_WASTE', label: 'MINIMISES_WASTE' },
-  { value: 'LOWER_ENVIRONMENTAL_IMPACT', label: 'LOWER_ENVIRONMENTAL_IMPACT' },
-  { value: 'OPTIMIZES_FINITE_RESOURCE_USE', label: 'OPTIMIZES_FINITE_RESOURCE_USE' },
-  { value: 'USES_RECYCLED_MATERIALS', label: 'USES_RECYCLED_MATERIALS' },
+  { value: 'NO_SIGNIFICANT_BENEFITS', label: 'There are no significant environmental sustainability benefits associated with my technology' },
+  { value: 'LESS_ENERGY', label: 'Less energy is used' },
+  { value: 'LESS_RAW_MATERIALS', label: 'Less raw materials are used' },
+  { value: 'REDUCES_GAS_EMISSIONS', label: 'Reduces greenhouse gas emissions (including CO2 emissions)' },
+  { value: 'REDUCES_PLASTICS_USE', label: 'Reduces the use of single use plastics' },
+  { value: 'MINIMISES_WASTE', label: 'Minimises waste' },
+  { value: 'LOWER_ENVIRONMENTAL_IMPACT', label: 'Lower environmental impact (e.g. less travel, better use of NHS resources)' },
+  { value: 'OPTIMIZES_FINITE_RESOURCE_USE', label: 'Reduces or optimizes finite resource use (e.g. water, metals)' },
+  { value: 'USES_RECYCLED_MATERIALS', label: 'Can be readily recycled or uses recycled materials' },
   { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherEnvironmentalBenefit', dataType: 'text', validations: { isRequired: true } }) }
 ];
 
@@ -201,15 +201,15 @@ export const hasRegulationKnowledgeItems = [
   { value: 'NOT_RELEVANT', label: 'Not relevant' }
 ];
 export const standardsTypeItems = [
-  { value: 'CE_UKCA_NON_MEDICAL', label: 'CE/UKCA Non-medical device', group: 'UKCA / CE' },
-  { value: 'CE_UKCA_CLASS_I', label: 'CE/UKCA Class I medical device', group: 'UKCA / CE' },
-  { value: 'CE_UKCA_CLASS_II_A', label: 'CE/UKCA Class IIa medical device', group: 'UKCA / CE' },
-  { value: 'CE_UKCA_CLASS_II_B', label: 'CE/UKCA Class IIb medical device', group: 'UKCA / CE' },
-  { value: 'CE_UKCA_CLASS_III', label: 'CE/UKCA Class III medical device', group: 'UKCA / CE' },
-  { value: 'IVD_GENERAL', label: 'In-vitro diagnostics IVD general', group: 'In-vitro diagnostics' },
-  { value: 'IVD_SELF_TEST', label: 'In-vitro diagnostics IVD self-test', group: 'In-vitro diagnostics' },
-  { value: 'IVD_ANNEX_LIST_A', label: 'In-vitro diagnostics IVD Annex II List A', group: 'In-vitro diagnostics' },
-  { value: 'IVD_ANNEX_LIST_B', label: 'In-vitro diagnostics IVD Annex II List B', group: 'In-vitro diagnostics' },
+  { value: 'CE_UKCA_NON_MEDICAL', label: 'Non-medical device', group: 'UKCA / CE' },
+  { value: 'CE_UKCA_CLASS_I', label: 'Class I medical device', group: 'UKCA / CE' },
+  { value: 'CE_UKCA_CLASS_II_A', label: 'Class IIa medical device', group: 'UKCA / CE' },
+  { value: 'CE_UKCA_CLASS_II_B', label: 'Class IIb medical device', group: 'UKCA / CE' },
+  { value: 'CE_UKCA_CLASS_III', label: 'Class III medical device', group: 'UKCA / CE' },
+  { value: 'IVD_GENERAL', label: 'IVD general', group: 'In-vitro diagnostics' },
+  { value: 'IVD_SELF_TEST', label: 'IVD self-test', group: 'In-vitro diagnostics' },
+  { value: 'IVD_ANNEX_LIST_A', label: 'IVD Annex II List A', group: 'In-vitro diagnostics' },
+  { value: 'IVD_ANNEX_LIST_B', label: 'IVD Annex II List B', group: 'In-vitro diagnostics' },
   { value: 'MARKETING', label: 'Marketing authorisation' },
   { value: 'CQC', label: 'Care Quality Commission (CQC) registration' },
   { value: 'DTAC', label: 'Digital Technology Assessment Criteria (DTAC)' },
