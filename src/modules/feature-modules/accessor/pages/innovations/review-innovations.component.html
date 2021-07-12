@@ -7,6 +7,7 @@
       <ol class="app-tabs__list">
         <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
           <a class="app-tabs__link" [routerLink]="item.link" [queryParams]="item.queryParams">{{ item.title }}</a>
+          <span *ngIf="item.notifications && item.notifications[item.key] > 0"> ({{ item.notifications[item.key] }})</span>
         </li>
       </ol>
     </nav>
@@ -42,6 +43,8 @@
                 <a *ngIf="currentTab.key !== 'ENGAGING' && item.assessment?.id" routerLink="/accessor/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}">{{ item.name }}</a>
                 <span *ngIf="currentTab.key !== 'ENGAGING' && !item.assessment?.id">{{ item.name }}</span>
                 <a *ngIf="currentTab.key === 'ENGAGING'" routerLink="/accessor/innovations/{{ item.id }}">{{ item.name }}</a>
+                <span *ngIf="item.notifications && item.notifications.count > 0 && !item.notifications.hasNew">({{item.notifications.count}})</span>
+                <span *ngIf="item.notifications && item.notifications.count > 0 && item.notifications.hasNew">(New)</span>
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('submittedAt')" class="nhsuk-table__cell">

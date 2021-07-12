@@ -1,12 +1,12 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, NavigationEnd } from '@angular/router';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
 import { RoutingHelper } from '@modules/core';
-import { InnovatorNotificationsService } from '../services/notifications.service';
 import { Observable, Subject } from 'rxjs';
+import { InnovatorService } from '../services/innovator.service';
 
 
 type RouteDataLayoutOptionsType = {
@@ -20,7 +20,7 @@ type RouteDataLayoutOptionsType = {
   selector: 'app-innovator-layout',
   templateUrl: './innovator-layout.component.html'
 })
-export class InnovatorLayoutComponent extends CoreComponent implements OnDestroy {
+export class InnovatorLayoutComponent extends CoreComponent {
 
   layoutOptions: RouteDataLayoutOptionsType = { type: null };
 
@@ -35,17 +35,17 @@ export class InnovatorLayoutComponent extends CoreComponent implements OnDestroy
 
   notifications: {[key: string]: number};
 
-  private ngUnsubscribe = new Subject();
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private notificationsService: InnovatorNotificationsService,
+    private innovatorService: InnovatorService
   ) {
 
     super();
 
+
     this.subscriptions.push(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e)),
     );
 
     this.notifications = {
@@ -54,16 +54,6 @@ export class InnovatorLayoutComponent extends CoreComponent implements OnDestroy
       INNOVATION: 0,
     };
 
-    notificationsService.notificationReceived$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        notification => {
-          console.log('RECEIVED NOTIFICATIONS FROM OVERVIEW COMPONENT');
-          console.log(notification);
-          this.notifications = notification;
-        }
-    );
-
   }
 
 
@@ -71,6 +61,16 @@ export class InnovatorLayoutComponent extends CoreComponent implements OnDestroy
 
     const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
+
+    if (currentRouteInnovationId) {
+      this.subscriptions.push(
+        this.innovatorService.getInnovationInfo(currentRouteInnovationId).subscribe(
+          response => {
+            this.notifications = response.notifications;
+          }
+        )
+      );
+    }
 
     this.layoutOptions = {
       type: routeData.type || null,
@@ -121,11 +121,6 @@ export class InnovatorLayoutComponent extends CoreComponent implements OnDestroy
       this.innovationHeaderBar = { id: null, name: null };
     }
 
-  }
-
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 
 }

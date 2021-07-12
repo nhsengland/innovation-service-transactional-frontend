@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { InnovatorNotificationsService } from '@modules/feature-modules/innovator/services/notifications.service';
 
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
 import { forkJoin } from 'rxjs';
@@ -53,7 +52,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService,
-    private notificationsService: InnovatorNotificationsService
   ) {
     super();
 
@@ -75,8 +73,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovatorService.getInnovationSupports(this.innovationId),
     ]).subscribe(
       ([innovationInfo, sectionSummary, innovationSupports]) => {
-
-        this.notificationsService.sendNotification(innovationInfo.notifications);
 
         this.submittedAt = innovationInfo.submittedAt || '';
         this.needsAssessmentCompleted = !this.isInAssessmentStatus();

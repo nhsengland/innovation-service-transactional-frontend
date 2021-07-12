@@ -200,6 +200,7 @@ export type getInnovationCommentsDTO = {
     name: string;
     organisationUnit?: { id: string; name: string; };
   };
+  notifications?: { count: number }
   replies: {
     id: string;
     message: string;
@@ -210,6 +211,7 @@ export type getInnovationCommentsDTO = {
       name: string;
       organisationUnit?: { id: string; name: string; };
     };
+    notifications?: { count: number };
   }[];
 };
 

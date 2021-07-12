@@ -19,6 +19,8 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   innovationStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
+  notifications?: {[key: string]: number};
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private assessmentService: AssessmentService
@@ -52,6 +54,8 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
     this.innovationsList = new TableModel({
       pageSize: 10000
     });
+
+    this.notifications = { };
 
   }
 
@@ -115,6 +119,8 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
     this.assessmentService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(
       response => {
+        this.notifications = response.tabInfo;
+
         this.innovationsList.setData(response.data, response.count);
         this.currentTab.innovationsOverdue = response.data.filter(item => item.isOverdue).length;
       },

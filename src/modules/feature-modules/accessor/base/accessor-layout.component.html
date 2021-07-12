@@ -39,7 +39,7 @@
 
               <ul class="nhsuk-list app-side-nav__list">
                 <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
-                  <a class="app-side-nav__link" [routerLink]="item.link">{{ item.title }}</a>
+                  <a class="app-side-nav__link" [routerLink]="item.link">{{ item.title }} {{notifications[item.key || ''] || ''}}</a>
                 </li>
               </ul>
 

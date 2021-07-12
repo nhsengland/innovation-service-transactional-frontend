@@ -130,8 +130,8 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
     const expected = [
       { title: 'Overview', link: `/accessor/innovations/innovation01/overview` },
       { title: 'Innovation record', link: `/accessor/innovations/innovation01/record` },
-      { title: 'Action tracker', link: `/accessor/innovations/innovation01/action-tracker` },
-      { title: 'Comments', link: `/accessor/innovations/innovation01/comments` },
+      { title: 'Action tracker', link: `/accessor/innovations/innovation01/action-tracker`, key: 'ACTION' },
+      { title: 'Comments', link: `/accessor/innovations/innovation01/comments`, key: 'COMMENT' },
       { title: 'Support status', link: `/accessor/innovations/innovation01/support` }
     ];
 

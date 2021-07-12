@@ -65,6 +65,7 @@
           <td class="nhsuk-table__cell">
             <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('name') }} </span>
             <a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/{{ item.id }}">{{ item.name }}</a>
+            <span *ngIf="item.notifications.count > 0"> (New) </span>
           </td>
           <td class="nhsuk-table__cell">
             <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('createdAt') }} </span>

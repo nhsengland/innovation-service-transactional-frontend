@@ -5,7 +5,7 @@ import { filter } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 
 import { RoutingHelper } from '@modules/core';
-
+import { AccessorService } from '../services/accessor.service';
 
 type RouteDataLayoutOptionsType = {
   type: null | 'innovationLeftAsideMenu' | 'emptyLeftAside';
@@ -25,11 +25,13 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
     rightItems: { title: string, link: string, fullReload?: boolean }[]
   } = { leftItems: [], rightItems: [] };
 
-  leftSideBar: { title: string, link: string }[] = [];
+  leftSideBar: { title: string, link: string, key?: string }[] = [];
 
+  notifications: {[key: string]: number};
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private accessorService: AccessorService,
   ) {
 
     super();
@@ -50,6 +52,12 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
     );
 
+    this.notifications = {
+      ACTION: 0,
+      COMMENT: 0,
+      INNOVATION: 0,
+    };
+
   }
 
   ngOnInit(): void { }
@@ -65,6 +73,16 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
       backLink: routeData.backLink ? { url: RoutingHelper.resolveUrl(routeData.backLink.url, this.activatedRoute), label: routeData.backLink.label } : null
     };
 
+    if (currentRouteInnovationId) {
+      this.subscriptions.push(
+        this.accessorService.getInnovationInfo(currentRouteInnovationId).subscribe(
+          response => {
+            console.log(response);
+            this.notifications = response.notifications;
+          }
+        )
+      );
+    }
 
     switch (this.layoutOptions.type) {
 
@@ -72,8 +90,8 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
         this.leftSideBar = [
           { title: 'Overview', link: `/accessor/innovations/${currentRouteInnovationId}/overview` },
           { title: 'Innovation record', link: `/accessor/innovations/${currentRouteInnovationId}/record` },
-          { title: 'Action tracker', link: `/accessor/innovations/${currentRouteInnovationId}/action-tracker` },
-          { title: 'Comments', link: `/accessor/innovations/${currentRouteInnovationId}/comments` },
+          { title: 'Action tracker', link: `/accessor/innovations/${currentRouteInnovationId}/action-tracker`, key: 'ACTION' },
+          { title: 'Comments', link: `/accessor/innovations/${currentRouteInnovationId}/comments`, key: 'COMMENT' },
           { title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support` }
         ];
         break;

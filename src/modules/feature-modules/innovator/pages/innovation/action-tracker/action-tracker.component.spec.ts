@@ -48,8 +48,8 @@ describe('FeatureModules/Innovator/Innovation/ActionTrackerComponent', () => {
   it('should have initial information loaded with OpenActions', () => {
 
     const getInnovationActionsListDataMock = {
-      openedActions: [{ id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z' }],
-      closedActions: [{ id: 'ID01', status: 'COMPLETED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z' }]
+      openedActions: [{ id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 1 } }],
+      closedActions: [{ id: 'ID01', status: 'COMPLETED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 1 } }]
     };
     innovatorService.getInnovationActionsList = () => of(getInnovationActionsListDataMock as any);
     const expected = getInnovationActionsListDataMock.openedActions;
@@ -64,8 +64,8 @@ describe('FeatureModules/Innovator/Innovation/ActionTrackerComponent', () => {
   it('should have initial information loaded with ClosedActions', () => {
 
     const getInnovationActionsListDataMock = {
-      openedActions: [{ id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z' }],
-      closedActions: [{ id: 'ID01', status: 'DECLINED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z' }]
+      openedActions: [{ id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 1 } }],
+      closedActions: [{ id: 'ID01', status: 'DECLINED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 0 } }]
     };
     innovatorService.getInnovationActionsList = () => of(getInnovationActionsListDataMock as any);
     const expected = getInnovationActionsListDataMock.closedActions;
