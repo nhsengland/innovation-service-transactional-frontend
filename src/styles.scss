@@ -1,0 +1,285 @@
+// GOV.uk Design System.
+@import "node_modules/govuk-frontend/govuk/base";
+@import "node_modules/govuk-frontend/govuk/utilities/all";
+
+// NHS Design System.
+@import 'node_modules/nhsuk-frontend/packages/nhsuk';
+
+@import 'styles/left-menu-layout';
+@import 'styles/panel';
+@import 'styles/sortable-table';
+@import 'styles/step-by-step-nav';
+@import 'styles/task-list';
+
+
+// Variables. (https://service-manual.nhs.uk/design-system/styles)
+$service-manual-container-size: 1100px; // Container width variable.
+
+:root {
+  --primary-color: #{$nhsuk-link-color};
+  --success-color: #{$color_nhsuk-green};
+  --warning-color: #{$color_nhsuk-warm-yellow};
+  --error-color: #{$nhsuk-error-color};
+  --neutral-color: #{$color_nhsuk-blue};
+
+  --white: #{$color_nhsuk-white};
+
+  --color_nhsuk-grey-1: #{$color_nhsuk-grey-1};
+  --color_nhsuk-grey-3: #{$color_nhsuk-grey-3};
+  --color_nhsuk-grey-4: #{$color_nhsuk-grey-4};
+  --color_nhsuk-grey-5: #{$color_nhsuk-grey-5};
+  --nhsuk-border-color: #{$nhsuk-border-color};
+  --nhsuk-button-color: #{$nhsuk-button-color};
+
+  // --spacing-3: 32px;
+  // --mobile:  20em; /* 320px */
+  // --tablet:  40.0625em; /* 641px */
+  // --desktop-breakpoint: 48.0625em; /* 769px */
+  // --large-desktop: 61.875em; /* 990px */
+}
+
+.d-flex { display: flex; }
+.align-items-center { align-items: center; }
+.justify-content-space-between { justify-content: space-between; }
+
+.ml-auto { margin-left: auto; }
+.mr-auto { margin-right: auto; }
+
+.text-align-left { text-align: start; }
+.text-align-right { text-align: end; }
+.text-pre-line { white-space: pre-line; }
+.text-pre-wrap { white-space: pre-wrap; }
+
+.float-l { float: left; }
+.float-r { float: right; }
+
+.width-auto { width: auto; }
+
+.overflow-x-hidden { overflow-x: hidden; }
+
+.bg-color-white { background-color: var(--white); }
+.bg-color-grey { background-color: var(--color_nhsuk-grey-5); }
+
+.font-color-secondary { color: $nhsuk-secondary-text-color; }
+
+.border-bottom-0 { border-bottom: 0; }
+
+.border-color-success { border-color: var(--success-color); }
+.border-color-warning { border-color: var(--warning-color); }
+.border-color-neutral { border-color: var(--neutral-color); }
+
+.right-border-separator { border-right: 2px solid var(--nhsuk-border-color); }
+
+// Container and layout classes.
+.app-width-container,
+.app-breadcrumb .nhsuk-width-container {
+  max-width: $service-manual-container-size;
+
+  @media (min-width: 767px) and (max-width: 1164px) {
+    margin: 0 nhsuk-spacing(5);
+  }
+}
+
+.app-width-container-fluid {
+  margin: 0;
+  max-width: none;
+}
+
+.app-main-wrapper--no-padding {
+  padding: 0;
+}
+
+.app-header__navigation {
+  max-width: $service-manual-container-size + nhsuk-spacing(9);
+}
+
+.full-width-section {
+  margin: 0 -9999rem;
+  padding: 0.25rem 9999rem;
+}
+
+// Links and buttons.
+.button-as-link {
+  font-family: 'Frutiger W01', Arial, sans-serif;
+  border: 0;
+  color: $nhsuk-link-color;
+  cursor: pointer;
+
+  &:visited {
+    color: $nhsuk-link-color;
+    &:hover {
+      color: $nhsuk-link-hover-color;
+    }
+  }
+  &:focus {
+    &:hover {
+      color: $nhsuk-focus-text-color;
+    }
+  }
+}
+
+
+// Overrides.
+// // _header.scss: Header menu button spacing on mobile.
+.nhsuk-header__menu-toggle {
+  @media (max-width: 40.0525em) {
+    right: unset;
+  }
+}
+
+
+// Forms.
+.form-input-appended-button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  box-shadow: none;
+  padding: 5px 16px 4px;
+  margin: 0;
+}
+
+.form-checkboxes-small {
+  &.nhsuk-checkboxes__item {
+    min-height: 30px;
+    padding: 0 0 0 35px;
+  }
+  .nhsuk-checkboxes__label {
+    // margin-bottom: 0;
+    padding: 0;
+  }
+  .nhsuk-checkboxes__input + .nhsuk-checkboxes__label::before {
+    height: 25px;
+    width: 25px;
+  }
+  .nhsuk-checkboxes__input + .nhsuk-checkboxes__label::after {
+    width: 15px;
+    height: 8px;
+    top: 7px;
+    left: 5px;
+    border-width: 0 0 3px 3px;
+  }
+}
+
+.form-items-group {
+  width: unset;
+  text-align: left;
+}
+
+
+// Components.
+.nhsuk-card {
+
+  .nhsuk-card__content {
+    &.x-card-bottom-link {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      a {
+        margin-top: auto;
+      }
+    }
+  }
+
+  &.nhsuk-card.app-card--transparent {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.2);
+    color: #fff;
+  }
+
+  &.x-card-top-border {
+    border: unset;
+    background: unset;
+    border-top: 2px solid var(--primary-color);
+
+    .nhsuk-card__content {
+      padding: govuk-spacing(3) 0 0 0;
+    }
+
+  }
+}
+
+
+.dot-error {
+  height: 15px;
+  width: 15px;
+  background-color: var(--error-color);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+
+.progressbar {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+
+  &.progressbar-justified {
+    justify-content: space-between;
+  }
+
+  .progressbar-item {
+    border: 1px solid var(--color_nhsuk-grey-1);
+    background: var(--nhsuk-border-color);
+    width: calc(100% / 15);
+    height: 8px;
+    margin: 0 2px;
+    border-radius: 5px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &.active {
+      background: var(--nhsuk-button-color);
+      // border-bottom: 1px solid var(--color_nhsuk-grey-3);
+    }
+  }
+}
+
+
+.app-tabs {
+  margin-bottom: 25px;
+  border-bottom: solid 1px var(--color_nhsuk-grey-4);
+
+  .app-tabs__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .app-tabs__item {
+      @include nhsuk-font(16);
+      display: inline-block;
+      margin-bottom: 0;
+      padding: 12px 15px 10px;
+
+      &.selected {
+        border-bottom: solid 3px var(--primary-color);
+      }
+
+      a {
+        text-decoration: none;
+
+        &:visited {
+          color: $nhsuk-link-color;
+          &:hover {
+            color: $nhsuk-link-hover-color;
+          }
+        }
+        &:focus {
+          &:hover {
+            color: $nhsuk-focus-text-color;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Tags
+.nhsuk-tag--dark-grey {
+  background-color: var(--color_nhsuk-grey-1);
+}

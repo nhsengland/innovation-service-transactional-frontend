@@ -1,0 +1,21 @@
+.app-hero-section-logo {
+
+  padding-bottom: 56px;
+  padding-top: 56px;
+
+  a {
+    text-decoration: none;
+  }
+
+  img {
+    max-width: 300px;
+  }
+
+}
+
+@media (max-width: 48.0525em) {
+  .app-hero-section-logo {
+    padding-bottom: 56px;
+    padding-top: 0;
+  }
+}

@@ -1,0 +1,77 @@
+<form [formGroup]="form" [id]="formId" method="post" [action]="action" enctype="application/json" novalidate="" *ngIf="contentReady">
+
+  <ng-container *ngFor="let p of parameters; let i = index">
+
+    <ng-container *ngIf="p.isVisible">
+
+      <ng-container [ngSwitch]="p.dataType">
+
+        <div *ngSwitchCase="'hidden'">
+          <theme-form-input type="hidden" [controlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+        </div>
+
+        <div *ngSwitchCase="'number'">
+          <theme-form-input type="number" [controlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+        </div>
+
+        <div *ngSwitchCase="'password'">
+          <theme-form-input type="password" [controlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+        </div>
+
+        <div *ngSwitchCase="'radio-group'">
+          <theme-form-radio-group [controlName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items" [additional]="p.additional"></theme-form-radio-group>
+        </div>
+
+        <div *ngSwitchCase="'checkbox-group'">
+          <theme-form-checkbox-group [groupName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-checkbox-group>
+        </div>
+
+        <div *ngSwitchCase="'checkbox-array'">
+          <theme-form-checkbox-array [arrayName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-checkbox-array>
+        </div>
+
+        <div *ngSwitchCase="'textarea'">
+          <theme-form-textarea [controlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-textarea>
+        </div>
+
+        <div *ngSwitchCase="'file-upload'">
+          <theme-form-file-upload [arrayName]="p.id" [config]="p.fileUploadConfig"></theme-form-file-upload>
+        </div>
+
+        <div *ngSwitchCase="'fields-group'" [formArrayName]="p.id" class="nhsuk-u-margin-bottom-5">
+
+          <div *ngFor="let item of form.get(p.id)?.value; let i = index; trackBy:trackFieldGroupRowsChanges" class="nhsuk-grid-row">
+            <div *ngFor="let f of p.fieldsGroupConfig?.fields" [formGroupName]="i" class="nhsuk-grid-column-full">
+
+              <ng-container *ngIf="f.isVisible">
+
+                <div [ngSwitch]="f.dataType">
+                  <div *ngSwitchDefault>
+                    <theme-form-input [controlName]="f.id" label="{{ f.label }} {{ i + 1}}" [description]="f.description">
+                      <ng-container append>
+                        <button type="button" class="nhsuk-button nhsuk-button--secondary form-input-appended-button" (click)="removeFieldGroupRow(p.id, i)">Remove</button>
+                      </ng-container>
+                    </theme-form-input>
+                  </div>
+                </div>
+
+              </ng-container>
+
+            </div>
+          </div>
+
+          <a href="javascript:void(0)" (click)="addFieldGroupRow(p)">{{ p.fieldsGroupConfig?.addNewLabel || 'Add new' }}</a>
+
+        </div>
+
+        <div *ngSwitchDefault>
+          <theme-form-input [controlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-input>
+        </div>
+
+      </ng-container>
+
+    </ng-container>
+
+  </ng-container>
+
+</form>

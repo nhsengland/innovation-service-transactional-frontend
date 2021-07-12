@@ -1,0 +1,27 @@
+<ng-container *ngIf="previousUploadedFiles.length > 0">
+
+  <h2 class="nhsuk-heading-s nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-0">Previously added files</h2>
+
+  <dl class="nhsuk-summary-list">
+    <div *ngFor="let item of previousUploadedFiles" class="nhsuk-summary-list__row">
+      <dt class="nhsuk-summary-list__value"><a href="{{item.url}}">{{ item.name }}</a></dt>
+      <dd class="nhsuk-summary-list__actions">
+        <a href="javascript:void(0)" (click)="onRemovePreviousUploadedFile(item.id)">Delete<span class="nhsuk-u-visually-hidden"> {{ item.name }}</span></a>
+      </dd>
+    </div>
+  </dl>
+
+</ng-container>
+
+<ngx-dropzone
+  id="{{ id }}"
+  [multiple]="dzConfig.multiple"
+  [accept]="dzConfig.acceptedFiles"
+  [maxFileSize]="dzConfig.maxFileSize"
+  (change)="onChange($event)"
+  style="margin-bottom: 50px">
+  <ngx-dropzone-label>Click or drop your file here</ngx-dropzone-label>
+  <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f.id)">
+    <ngx-dropzone-label>{{ f.file.name }} ({{ f.file.type }})</ngx-dropzone-label>
+  </ngx-dropzone-preview>
+</ngx-dropzone>

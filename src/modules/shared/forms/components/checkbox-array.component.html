@@ -1,0 +1,62 @@
+<div class="nhsuk-form-group nhsuk-u-padding-top-4" [ngClass]="{'nhsuk-form-group--error': hasError}">
+
+  <ng-container *ngIf="label">
+    <label class="nhsuk-heading-m nhsuk-u-margin-bottom-2" [for]="id">{{ label }}</label>
+  </ng-container>
+
+  <ng-container *ngIf="description">
+    <div class="nhsuk-hint" id="{{ id }}-hint" [innerHTML]="description"></div>
+  </ng-container>
+
+  <ng-container *ngIf="hasError">
+    <span class="nhsuk-error-message">
+      <span class="nhsuk-u-visually-hidden">Error:</span> {{ errorMessage | translate }}
+    </span>
+  </ng-container>
+
+  <div class="nhsuk-checkboxes nhsuk-checkboxes--conditional">
+
+    <ng-container *ngFor="let item of items; let i = index; let first = first">
+
+      <ng-container *ngIf="!first && item.group !== items![i-1]?.group">
+        <div class="nhsuk-u-padding-top-2"></div>
+      </ng-container>
+
+      <ng-container *ngIf="item.group && (first || (item.group !== items![i-1]?.group))">
+        <div class="nhsuk-radios__divider form-items-group" tabindex="0">{{ item.group }} <span class="nhsuk-u-visually-hidden">group items</span> </div>
+      </ng-container>
+
+      <ng-container [ngSwitch]="item.label">
+
+        <ng-container *ngSwitchCase="'SEPARATOR'">
+          <div class="nhsuk-radios__divider">or</div>
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>
+
+          <div class="nhsuk-checkboxes__item" [ngClass]="{'nhsuk-u-margin-left-4': item.group}">
+            <ng-container *ngIf="isRunningOnBrowser">
+              <input id="{{ id }}{{ i }}" type="checkbox" name="{{ arrayName }}[]" [value]="item.value" [checked]="isChecked(item.value)" (change)="onChanged($event)" class="nhsuk-checkboxes__input" />
+            </ng-container>
+            <ng-container *ngIf="isRunningOnServer">
+              <input id="{{ id }}{{ i }}" type="checkbox" name="{{ arrayName }}[]" [value]="item.value" [checked]="isChecked(item.value)" class="nhsuk-checkboxes__input" />
+            </ng-container>
+            <label for="{{ id }}{{ i }}" class="nhsuk-label nhsuk-checkboxes__label">{{ item.label }}</label>
+            <div *ngIf="description" class="nhsuk-hint nhsuk-checkboxes__hint">{{ item.description }}</div>
+          </div>
+
+          <ng-container *ngIf="item.conditional">
+            <div class="nhsuk-checkboxes__conditional" [ngClass]="{'nhsuk-checkboxes__conditional--hidden': !isConditionalFieldVisible(item.conditional.id), 'error': isConditionalFieldError(item.conditional.id)}">
+              <theme-form-input [formControl]="conditionalFormControl(item.conditional.id)" [label]="item.conditional.label" [description]="item.conditional.description"></theme-form-input>
+            </div>
+          </ng-container>
+
+        </ng-container>
+
+      </ng-container>
+
+    </ng-container>
+
+  </div>
+
+</div>

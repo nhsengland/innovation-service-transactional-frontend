@@ -1,0 +1,20 @@
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-heading-l">{{ evidence.title }}</h1>
+      <h2 class="nhsuk-heading-m">{{ module === 'innovator' ? 'Submitted' : 'Your' }} answers</h2>
+
+      <dl class="nhsuk-summary-list">
+        <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+          <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.value"></dd>
+          <dd *ngIf="module === 'innovator'" class="nhsuk-summary-list__actions">
+            <a routerLink="edit/{{ item.editStepNumber }}">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }}</span></a>
+          </dd>
+        </div>
+      </dl>
+
+    <button *ngIf="module === 'innovator'" class="nhsuk-button nhsuk-button--secondary" (click)="onDeleteEvidence()"> Delete this entry </button>
+
+  </div>
+</div>

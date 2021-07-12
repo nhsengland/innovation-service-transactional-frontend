@@ -1,0 +1,66 @@
+<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-3">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full app-component-reading-width">
+      <div class="app-pane">
+
+        <div class="app-pane__side-bar nhsuk-u-padding-top-3">
+          <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
+            <div class="nhsuk-back-link app-u-hide-mobile app-side-nav__back nhsuk-u-margin-bottom-4">
+              <a class="nhsuk-back-link__link" routerLink="/accessor/innovations">
+                <theme-svg-icon type="back"></theme-svg-icon>
+                Go back
+              </a>
+            </div>
+          </nav>
+          <div class="nhsuk-u-padding-top-8">
+            <h3 class="nhsuk-heading-xs">{{ assessment?.finishedAt | date: ('app.date_formats.long_date' | translate) }}</h3>
+            <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.assignToName }}</p>
+            <p class="nhsuk-hint">Needs assessment team</p>
+          </div>
+        </div>
+
+        <div class="app-pane__main-content">
+          <div class="nhsuk-grid-row">
+            <div class="nhsuk-grid-column-full">
+
+              <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Needs assessment</p>
+              <h1 class="">{{ innovation.name }}</h1>
+
+              <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">The innovation</h2>
+              <p>{{ assessment?.description }}</p>
+              <dl class="nhsuk-summary-list">
+                <div *ngFor="let item of innovationSummary" class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key nhsuk-u-font-weight-normal">{{ item.label }}</dt>
+                  <dd class="nhsuk-summary-list__key width-auto" [innerHTML]="item.value"></dd>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.comment"></dd>
+                </div>
+              </dl>
+
+              <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">The innovator</h2>
+              <dl class="nhsuk-summary-list">
+                <div *ngFor="let item of innovatorSummary" class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key nhsuk-u-font-weight-normal">{{ item.label }}</dt>
+                  <dd class="nhsuk-summary-list__key width-auto" [innerHTML]="item.value"></dd>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.comment"></dd>
+                </div>
+              </dl>
+
+              <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Support need summary</h2>
+              <p class="">{{ assessment?.summary }}</p>
+
+              <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Suggested organisations</h2>
+              <p *ngFor="let item of (assessment?.organisations || [])" class="nhsuk-u-margin-bottom-1">{{ item }}</p>
+
+              <a routerLink="/accessor/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
+              <a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"> Update support status </a>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,20 @@
+.reply-container {
+
+  display: flex;
+  flex-wrap: wrap;
+
+  .nhsuk-error-message {
+    flex: 0 0 100%;
+    margin-bottom: 0;
+  }
+
+  input {
+    flex: 1;
+  }
+
+  button {
+    margin: 0;
+    padding: 5px 16px 4px;
+  }
+
+}

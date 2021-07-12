@@ -1,0 +1,21 @@
+<div class="nhsuk-form-group {{ divCssOverwrite }}" [ngClass]="{'nhsuk-form-group--error': hasError}">
+
+  <ng-container *ngIf="label">
+    <label class="nhsuk-heading-m nhsuk-u-margin-bottom-2" [for]="id">{{ label }}</label>
+  </ng-container>
+
+  <ng-container *ngIf="description">
+    <div class="nhsuk-hint" id="{{ id }}-hint" [innerHTML]="description"></div>
+  </ng-container>
+
+  <ng-container *ngIf="hasError">
+    <span class="nhsuk-error-message">
+      <span class="nhsuk-u-visually-hidden">Error:</span> {{ errorMessage | translate }}
+    </span>
+  </ng-container>
+
+  <input [formControl]="fieldControl" [id]="id" [name]="controlName" [type]="type" [placeholder]="placeholder" [value]="fieldControl.value" class="nhsuk-input" [ngClass]="inputCssClass" />
+
+  <ng-content select="[append]"></ng-content>
+
+</div>
