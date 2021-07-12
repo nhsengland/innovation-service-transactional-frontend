@@ -5,6 +5,9 @@
 
 trigger:
 - develop
+- master
+
+name: InnovationServiceTransactionalFrontend_$(SourceBranchName)_1.0.0_$(Date:yyyyMMdd)_$(Rev:.r)
 
 pr: none
 
