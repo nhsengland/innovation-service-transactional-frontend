@@ -1,3 +1,26 @@
+<ng-container *ngIf="showCookiesBanner">
+  <div class="bg-color-white nhsuk-u-padding-top-4">
+    <div class="nhsuk-width-container app-width-container">
+      <h2>Cookies on the NHS website</h2>
+      <p>We've put some small files called cookies on your device to make our site work.</p>
+      <p>We'd also like to use analytics cookies. These send information about how our site is used to services called Adobe Analytics, Hotjar and Google Analytics. We use this information to improve our site.</p>
+      <p>Let us know if this is OK. We'll use a cookie to save your choice. You can <a routerLink="/policies/cookies-policy">read more about our cookies</a> before you choose.</p>
+      <div class="d-flex">
+        <button class="nhsuk-button nhsuk-u-margin-right-4" (click)="onSaveCookies(true)">I'm OK with analytics cookies</button>
+        <button class="nhsuk-button" (click)="onSaveCookies(false)">Do not use analytics cookies</button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="showCookiesSaveSuccess">
+  <div class="cookie-success-banner">
+    <div class="nhsuk-width-container app-width-container">
+      <p class="nhsuk-u-margin-0">You can change your cookie settings at any time using our <a routerLink="/policies/cookies-policy">cookies page</a>.</p>
+    </div>
+  </div>
+</ng-container>
+
 <a class="nhsuk-skip-link" [href]="currentUrl">Skip to main content</a>
 
 <header class="nhsuk-header" role="banner">
@@ -8,7 +31,9 @@
       <a class="nhsuk-header__link nhsuk-header__link--service" href="/" aria-label="NHS homepage">
         <svg class="nhsuk-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 16">
           <path class="nhsuk-logo__background" d="M0 0h40v16H0z"></path>
-          <path class="nhsuk-logo__text" d="M3.9 1.5h4.4l2.6 9h.1l1.8-9h3.3l-2.8 13H9l-2.7-9h-.1l-1.8 9H1.1M17.3 1.5h3.6l-1 4.9h4L25 1.5h3.5l-2.7 13h-3.5l1.1-5.6h-4.1l-1.2 5.6h-3.4M37.7 4.4c-.7-.3-1.6-.6-2.9-.6-1.4 0-2.5.2-2.5 1.3 0 1.8 5.1 1.2 5.1 5.1 0 3.6-3.3 4.5-6.4 4.5-1.3 0-2.9-.3-4-.7l.8-2.7c.7.4 2.1.7 3.2.7s2.8-.2 2.8-1.5c0-2.1-5.1-1.3-5.1-5 0-3.4 2.9-4.4 5.8-4.4 1.6 0 3.1.2 4 .6"></path>
+          <path class="nhsuk-logo__text"
+            d="M3.9 1.5h4.4l2.6 9h.1l1.8-9h3.3l-2.8 13H9l-2.7-9h-.1l-1.8 9H1.1M17.3 1.5h3.6l-1 4.9h4L25 1.5h3.5l-2.7 13h-3.5l1.1-5.6h-4.1l-1.2 5.6h-3.4M37.7 4.4c-.7-.3-1.6-.6-2.9-.6-1.4 0-2.5.2-2.5 1.3 0 1.8 5.1 1.2 5.1 5.1 0 3.6-3.3 4.5-6.4 4.5-1.3 0-2.9-.3-4-.7l.8-2.7c.7.4 2.1.7 3.2.7s2.8-.2 2.8-1.5c0-2.1-5.1-1.3-5.1-5 0-3.4 2.9-4.4 5.8-4.4 1.6 0 3.1.2 4 .6">
+          </path>
         </svg>
         <span class="nhsuk-header__service-name"> Innovation service </span>
       </a>
@@ -36,17 +61,17 @@
         </p>
 
         <ul class="nhsuk-header__navigation-list">
-          <li class="nhsuk-header__navigation-item nhsuk-header__navigation-item--for-mobile">
-            <a class="nhsuk-header__navigation-link" href="/">
-              Home
+          <li class="nhsuk-header__navigation-item">
+            <a class="nhsuk-header__navigation-link" routerLink="/triage-innovator-pack">
+              Find support
               <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
               </svg>
             </a>
           </li>
           <li class="nhsuk-header__navigation-item">
-            <a class="nhsuk-header__navigation-link" href="/innovation-guides/starter-innovation-guide">
-              Starter innovation guide
+            <a class="nhsuk-header__navigation-link" href="/innovation-guides">
+              Innovation guides
               <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
               </svg>
@@ -68,8 +93,7 @@
               </svg>
             </a>
           </li>
-
-          <li class="nhsuk-header__navigation-item">
+          <li class="nhsuk-header__navigation-item ml-auto">
             <a class="nhsuk-header__navigation-link" href="{{ authenticationButton.url }}">
               {{ authenticationButton.title }}
               <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
@@ -77,8 +101,8 @@
               </svg>
             </a>
           </li>
-
         </ul>
+
       </div>
     </nav>
   </ng-container>

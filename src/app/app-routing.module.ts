@@ -16,6 +16,7 @@ const triageInnovatorPackModule: Promise<any> = import('@modules/feature-modules
 const assessmentModule: Promise<any> = import('@modules/feature-modules/assessment/assessment.module');
 const innovatorModule: Promise<any> = import('@modules/feature-modules/innovator/innovator.module');
 const accessorModule: Promise<any> = import('@modules/feature-modules/accessor/accessor.module');
+const policiesModule: Promise<any> = import('@modules/feature-modules/policies/policies.module');
 
 const routes: Routes = [
 
@@ -32,6 +33,10 @@ const routes: Routes = [
 
   {
     path: 'triage-innovator-pack', loadChildren: () => triageInnovatorPackModule.then(m => m.TriageInnovatorPackModule)
+  },
+
+  {
+    path: 'policies', loadChildren: () => policiesModule.then(m => m.PoliciesModule)
   },
 
   {

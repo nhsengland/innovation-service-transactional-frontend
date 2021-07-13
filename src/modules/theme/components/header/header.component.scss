@@ -1,21 +1,10 @@
-.app-hero-section-logo {
+.cookie-success-banner {
+  background-color: var(--success-color);
+  color: #fff;
+  padding: 8px 0 8px 0;
 
-  padding-bottom: 56px;
-  padding-top: 56px;
-
-  a {
-    text-decoration: none;
-  }
-
-  img {
-    max-width: 300px;
-  }
-
-}
-
-@media (max-width: 48.0525em) {
-  .app-hero-section-logo {
-    padding-bottom: 56px;
-    padding-top: 0;
+  a,
+  a:visited {
+    color: #fff;
   }
 }
