@@ -1,0 +1,10 @@
+<ng-container *ngIf="type !== 'circle'">
+  <div class="app-round-corners" [ngClass]="{'app-plus-99': count && count > 99, 'app-new': isNew === true}">
+  {{label}}
+  </div>
+</ng-container>
+<ng-container *ngIf="type === 'circle'">
+  <svg height="18" width="10">
+    <circle cx="5" cy="5" r="5" fill="#d4351c" />
+  </svg>
+</ng-container>

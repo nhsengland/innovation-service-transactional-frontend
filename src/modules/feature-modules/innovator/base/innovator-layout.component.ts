@@ -18,7 +18,7 @@ type RouteDataLayoutOptionsType = {
 
 @Component({
   selector: 'app-innovator-layout',
-  templateUrl: './innovator-layout.component.html'
+  templateUrl: './innovator-layout.component.html',
 })
 export class InnovatorLayoutComponent extends CoreComponent {
 

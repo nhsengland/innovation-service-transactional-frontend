@@ -47,9 +47,15 @@
 
             <div class="d-flex justify-content-space-between nhsuk-u-margin-bottom-2">
               <div class="nhsuk-u-margin-bottom-0">
-                <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0"> {{ comment.user.name }}{{ comment.user.organisationUnit ? ', ' + comment.user.organisationUnit.name  : '' }} </p>
-                <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0"> {{ getTeamTitle(comment.user.type) }} </p>
-                <span *ngIf="comment.notifications && comment.notifications.count > 0"> (New) </span>
+                <div class="side-menu-flex">
+                  <div>
+                    <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0"> {{ comment.user.name }}{{ comment.user.organisationUnit ? ', ' + comment.user.organisationUnit.name  : '' }} </p>
+                    <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0"> {{ getTeamTitle(comment.user.type) }} </p>
+                  </div>
+                  <div>
+                    <notification-tag *ngIf="comment.notifications && comment.notifications.count > 0" type="circle"></notification-tag>
+                  </div>
+                </div>
               </div>
               <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ comment.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </p>
             </div>
@@ -58,9 +64,17 @@
 
             <div *ngFor="let reply of comment.replies" class="bg-color-grey nhsuk-u-margin-left-4 nhsuk-u-margin-bottom-3 nhsuk-u-padding-3">
               <div class="d-flex justify-content-space-between nhsuk-u-margin-bottom-2">
-                <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0"> {{ reply.user.name }}{{ reply.user.organisationUnit ? ', ' + reply.user.organisationUnit.name  : '' }}</p>
-                <span *ngIf="reply.notifications && reply.notifications.count > 0"> (New) </span>
-                <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ reply.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </p>
+                <div class="side-menu-flex">
+                  <div>
+                    <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0"> {{ reply.user.name }}{{ reply.user.organisationUnit ? ', ' + reply.user.organisationUnit.name  : '' }}</p>
+                  </div>
+                  <div>
+                    <notification-tag *ngIf="reply.notifications && reply.notifications.count > 0" type="circle"></notification-tag>
+                  </div>
+                  <div>
+                    <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ reply.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </p>
+                  </div>
+                </div>
               </div>
               <p class="nhsuk-card__description">{{ reply.message }}</p>
             </div>

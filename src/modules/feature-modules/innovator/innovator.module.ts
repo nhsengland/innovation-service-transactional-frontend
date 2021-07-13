@@ -29,7 +29,6 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
 
 
-
 @NgModule({
   imports: [
     ThemeModule,
@@ -51,7 +50,8 @@ import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/ne
     InnovationOverviewComponent,
     InnovationSectionEvidenceEditComponent,
     InnovationSectionEditComponent,
-    InnovatorNeedsAssessmentOverviewComponent
+    InnovatorNeedsAssessmentOverviewComponent,
+
   ],
   providers: [
     // Services.

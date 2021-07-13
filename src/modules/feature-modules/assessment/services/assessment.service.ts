@@ -29,6 +29,7 @@ export type getInnovationsListEndpointInDTO = {
     organisations: string[];
     notifications: {
       count: number;
+      isNew: boolean;
     };
   }[];
   tabInfo?: {[key: string]: number};
