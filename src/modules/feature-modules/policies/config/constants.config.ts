@@ -4,7 +4,11 @@ export const COOKIES_USED: {
 } = {
 
   necessary: [
-    { name: 'nhsuk-cookie-consent', purpose: 'Remembers if you used our cookies banner', expires: 'When you close the browser (if you do not use the banner) or 1 year (if you use the banner)' }
+    { name: 'nhsuk-cookie-consent', purpose: 'Remembers if you used our cookies banner', expires: 'When you close the browser (if you do not use the banner) or 1 year (if you use the banner).' },
+    { name: 'grav-site', purpose: 'A cookie set when you enter a password to get into a private area of the site. It allows the site to remember that you have already entered the password.', expires: '30 minutes' },
+    { name: 'connect.sid', purpose: 'Innovation Service session cookie. This is set when you log in to the service. It makes temporary use of your personal information previously collected by us, only holding information for the duration of your session. It is required by various features in the site and is deleted when your session ends.', expires: 'Session' },
+    { name: 'ApplicationGatewayAffinity', purpose: 'This cookie is provided by the load balancer and used to ensure functionality of the service.', expires: 'Session' },
+    { name: 'ApplicationGatewayAffinityCORS', purpose: 'This cookie is provided by the load balancer and used to ensure functionality of the service, even for cross-origin requests.', expires: 'Session' }
   ],
 
   analytics: [
@@ -28,5 +32,4 @@ export const COOKIES_USED: {
     { name: '_hjViewportId', purpose: 'This stores information about the user viewport such as size and dimensions.', expires: 'Session' },
     { name: '_hjRecordingEnabled', purpose: 'This is added when a Recording starts and is read when the recording module is initialized to see if the user is already in a recording in a particular session.', expires: 'Session' }
   ]
-
 };
