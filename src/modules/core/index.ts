@@ -8,6 +8,7 @@ export { AppInjector } from './injectors/app-injector';
 export { AuthenticationGuard } from './guards/authentication.guard';
 
 // Services
+export { CookiesService } from './services/cookies.service';
 export { EnvironmentStore } from './stores/environment.store';
 
 // Resolvers.

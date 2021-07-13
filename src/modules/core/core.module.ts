@@ -1,6 +1,7 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { APP_BASE_HREF } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
 import { LoggerModule } from 'ngx-logger';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -15,6 +16,7 @@ import { AuthenticationRedirectionGuard } from './guards/authentication-redirect
 import { EnvironmentStore } from './stores/environment.store';
 
 // Services.
+import { CookiesService } from './services/cookies.service';
 import { LoggerService } from './services/logger.service';
 
 
@@ -24,6 +26,7 @@ import { LoggerService } from './services/logger.service';
     TranslateModule.forRoot()
   ],
   providers: [
+    CookieService,
 
     // App base HREF definition.
     {
@@ -47,6 +50,7 @@ import { LoggerService } from './services/logger.service';
     EnvironmentStore,
 
     // Services.
+    CookiesService,
     LoggerService
   ]
 })

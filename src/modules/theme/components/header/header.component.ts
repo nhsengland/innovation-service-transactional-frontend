@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { CookiesService } from '@modules/core';
 
 import { EnvironmentStore } from '@modules/core/stores/environment.store';
 
@@ -16,12 +17,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
+  showCookiesBanner = false;
+  showCookiesSaveSuccess = false;
+
   currentUrl = '';
   aacImage: string;
   authenticationButton: { title: string, url: string };
 
   constructor(
     private router: Router,
+    private coockiesService: CookiesService,
     private environmentStore: EnvironmentStore
   ) {
 
@@ -41,6 +46,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     const hashLastIndex = event.url.lastIndexOf('#');
     this.currentUrl = `${this.environmentStore.APP_URL}${hashLastIndex > 0 ? event.url.substring(0, hashLastIndex) : event.url}#maincontent`;
+
+    // Only show cookies banner if NOT on policies pages.
+    this.showCookiesBanner = (this.coockiesService.shouldAskForCookies() && !event.url.startsWith('/policies'));
+
+  }
+
+
+  onSaveCookies(useCookies: boolean): void {
+
+    this.coockiesService.setConsentCookie(useCookies);
+    this.showCookiesBanner = false;
+    this.showCookiesSaveSuccess = true;
 
   }
 

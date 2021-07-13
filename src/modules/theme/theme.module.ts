@@ -7,6 +7,7 @@ import { BaseLayoutComponent } from './base/base-layout.component';
 
 // Components.
 import { HeaderComponent } from './components/header/header.component';
+import { HeaderBreadcrumbsBarComponent } from './components/header/breadcrumbs-bar.component';
 import { HeaderNavigationBarComponent } from './components/header/navigation-bar.component';
 import { FooterComponent } from './components/footer/footer.component';
 
@@ -27,6 +28,7 @@ import { SvgIconComponent } from './components/icons/svg-icon.component';
 
     // Components.
     HeaderComponent,
+    HeaderBreadcrumbsBarComponent,
     HeaderNavigationBarComponent,
     FooterComponent,
 
@@ -43,6 +45,7 @@ import { SvgIconComponent } from './components/icons/svg-icon.component';
 
     // Components.
     HeaderComponent,
+    HeaderBreadcrumbsBarComponent,
     HeaderNavigationBarComponent,
     FooterComponent,
 
