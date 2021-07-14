@@ -39,7 +39,14 @@
 
               <ul class="nhsuk-list app-side-nav__list">
                 <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
-                  <a class="app-side-nav__link" [routerLink]="item.link">{{ item.title }}</a>
+                  <div class="side-menu-flex">
+                    <div>
+                      <a class="app-side-nav__link" [routerLink]="item.link">{{ item.title }}</a>
+                    </div>
+                    <div>
+                      <notification-tag *ngIf="notifications[item.key || ''] > 0" [count]="notifications[item.key || '']"></notification-tag>
+                    </div>
+                  </div>
                 </li>
               </ul>
 

@@ -60,8 +60,8 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerListComponen
   it('should have initial information loaded', () => {
 
     const getInnovationActionsListDataMock = {
-      openedActions: [{ id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z' }],
-      closedActions: [{ id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z' }]
+      openedActions: [{ id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 1 } }],
+      closedActions: [{ id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 0 }}]
     };
     accessorService.getInnovationActionsList = () => of(getInnovationActionsListDataMock as any);
     const expected = getInnovationActionsListDataMock.openedActions;

@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
 import { RoutingHelper } from '@modules/core';
+import { Observable, Subject } from 'rxjs';
+import { InnovatorService } from '../services/innovator.service';
 
 
 type RouteDataLayoutOptionsType = {
@@ -16,7 +18,7 @@ type RouteDataLayoutOptionsType = {
 
 @Component({
   selector: 'app-innovator-layout',
-  templateUrl: './innovator-layout.component.html'
+  templateUrl: './innovator-layout.component.html',
 })
 export class InnovatorLayoutComponent extends CoreComponent {
 
@@ -29,18 +31,28 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
   innovationHeaderBar: { id: string | null, name: string | null } = { id: null, name: null };
 
-  leftSideBar: { title: string, link: string }[] = [];
+  leftSideBar: { title: string, link: string, key?: string }[] = [];
+
+  notifications: {[key: string]: number};
 
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private innovatorService: InnovatorService
   ) {
 
     super();
 
+
     this.subscriptions.push(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e)),
     );
+
+    this.notifications = {
+      ACTION: 0,
+      COMMENT: 0,
+      INNOVATION: 0,
+    };
 
   }
 
@@ -49,6 +61,16 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
     const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
+
+    if (currentRouteInnovationId) {
+      this.subscriptions.push(
+        this.innovatorService.getInnovationInfo(currentRouteInnovationId).subscribe(
+          response => {
+            this.notifications = response.notifications;
+          }
+        )
+      );
+    }
 
     this.layoutOptions = {
       type: routeData.type || null,
@@ -81,8 +103,8 @@ export class InnovatorLayoutComponent extends CoreComponent {
         this.leftSideBar = [
           { title: 'Overview', link: `/innovator/innovations/${currentRouteInnovationId}/overview` },
           { title: 'Innovation record', link: `/innovator/innovations/${currentRouteInnovationId}/record` },
-          { title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker` },
-          { title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments` },
+          { title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker`, key: 'ACTION' },
+          { title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments`, key: 'COMMENT' },
           { title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/data-sharing` }
         ];
         break;

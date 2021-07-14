@@ -70,7 +70,6 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
     this.stores.innovation.getInnovationComments$(this.module, this.innovationId, this.currentCreatedOrder).subscribe(
       response => {
         this.commentsList = response;
-
         this.commentsList.forEach(item => {
           this.form.addControl(`${item.id}`, new FormControl('', Validators.required));
           this.formSubmittedFields[item.id] = '';

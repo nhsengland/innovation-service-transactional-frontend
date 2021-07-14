@@ -12,7 +12,7 @@ import { AssessmentService, getInnovationsListEndpointOutDTO } from '../../servi
 })
 export class ReviewInnovationsComponent extends CoreComponent implements OnInit {
 
-  tabs: { title: string, description: string, link: string, queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' | 'NEEDS_ASSESSMENT' | 'IN_PROGRESS' } }[] = [];
+  tabs: { key: string, title: string, description: string, link: string, notifications?: number, queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' | 'NEEDS_ASSESSMENT' | 'IN_PROGRESS' } }[] = [];
   currentTab: { status: string, description: string, innovationsOverdue: number };
 
   innovationsList: TableModel<(getInnovationsListEndpointOutDTO['data'][0])>;
@@ -28,18 +28,21 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
     this.tabs = [
       {
+        key: 'WAITING_NEEDS_ASSESSMENT',
         title: 'Awaiting assessment',
         description: 'These innovations have been submitted by their owners for needs assessment. The needs assessment team must start the assessment process within 7 days.',
         link: '/assessment/innovations',
         queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' }
       },
       {
+        key: 'NEEDS_ASSESSMENT',
         title: 'In progress',
         description: 'A team member has started the needs assessment process for each of these innovations. Please aim to complete the needs assessment with 14 days of starting.',
         link: '/assessment/innovations',
         queryParams: { status: 'NEEDS_ASSESSMENT' }
       },
       {
+        key: 'IN_PROGRESS',
         title: 'Assessment complete',
         description: 'Needs assessment has been completed for these innovations. They are visible to all organisations that the innovator choose to share their data with.',
         link: '/assessment/innovations',
@@ -117,6 +120,11 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
       response => {
         this.innovationsList.setData(response.data, response.count);
         this.currentTab.innovationsOverdue = response.data.filter(item => item.isOverdue).length;
+
+        for (const t of this.tabs) {
+          t.notifications = response.tabInfo ? response.tabInfo[t.key] : 0;
+        }
+
       },
       error => this.logger.error(error)
     );

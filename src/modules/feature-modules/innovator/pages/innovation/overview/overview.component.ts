@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -32,7 +32,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     draft: number;
     notStarted: number;
   } = { progressBar: [], submitted: 0, draft: 0, notStarted: 0 };
-
 
   isInAssessmentStatus(): boolean {
     return this.stores.innovation.isAssessmentStatus(this.innovationStatus);
@@ -74,6 +73,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovatorService.getInnovationSupports(this.innovationId),
     ]).subscribe(
       ([innovationInfo, sectionSummary, innovationSupports]) => {
+
         this.submittedAt = innovationInfo.submittedAt || '';
         this.needsAssessmentCompleted = !this.isInAssessmentStatus();
         this.assessmentId = innovationInfo.assessment?.id;
