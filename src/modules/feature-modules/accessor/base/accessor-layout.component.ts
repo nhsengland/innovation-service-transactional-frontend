@@ -77,7 +77,6 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
       this.subscriptions.push(
         this.accessorService.getInnovationInfo(currentRouteInnovationId).subscribe(
           response => {
-            console.log(response);
             this.notifications = response.notifications;
           }
         )

@@ -156,7 +156,6 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
     this.accessorService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(
       response => {
-        console.log(response.tabInfo);
         const key = this.innovationsList.getAPIQueryParams().filters?.status || '';
         this.innovationsList.setData(response.data, response.count);
         this.currentTab.numberDescription = `${response.count} ${this.currentTab.numberDescription}`;
