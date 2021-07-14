@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class NotificationTagComponent implements OnInit {
   @Input() count?: number | undefined;
   @Input() isNew: boolean;
-  @Input() type: string;
+  @Input() type: 'circle' | string;
 
   label: string;
   constructor() {
