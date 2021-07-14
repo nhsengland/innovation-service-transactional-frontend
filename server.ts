@@ -1,26 +1,26 @@
-import 'zone.js/dist/zone-node';
-
 import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
-
+import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
+import axios, { Method } from 'axios';
+import * as coockieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import * as express from 'express';
-import * as multer from 'multer';
-import * as coockieParser from 'cookie-parser';
-import * as fs from 'fs';
-import * as passport from 'passport';
 import * as session from 'express-session';
-import axios, { Method } from 'axios';
+import * as fs from 'fs';
+import * as helmet from 'helmet';
+import * as multer from 'multer';
+import * as passport from 'passport';
 import { IOIDCStrategyOptionWithoutRequest, IProfile, OIDCStrategy, VerifyCallback } from 'passport-azure-ad';
 import { join } from 'path';
-
-import { AppServerModule } from './src/main.server';
+import { getAppInsightsClient, initAppInsights } from 'src/globals';
 import { handler } from 'src/handlers/logger.handler';
 import { appLoggingMiddleware } from 'src/middleware/appLoggingMiddleware';
 import { exceptionLoggingMiddleware } from 'src/middleware/exceptionLoggingMiddleware';
-import { getAppInsightsClient, initAppInsights } from 'src/globals';
-import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
-import * as helmet from 'helmet';
+import 'zone.js/dist/zone-node';
+import { AppServerModule } from './src/main.server';
+
+
+
 dotenv.config();
 
 // Types definitions.
@@ -411,6 +411,15 @@ export function app(): express.Express {
     } else {
       res.status(401).send();
     }
+  });
+
+  // PING Endpoint
+  server.get(`${BASE_PATH}/ping`, (req, res) => {
+    const response = {
+      state: 'Running'
+    };
+
+    res.status(200).send(response);
   });
 
   // Angular routing.
