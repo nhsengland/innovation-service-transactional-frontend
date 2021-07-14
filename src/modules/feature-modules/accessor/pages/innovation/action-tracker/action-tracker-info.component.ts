@@ -4,8 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
-import { take } from 'rxjs/operators';
-
 import { AccessorService, getInnovationActionInfoOutDTO } from '../../../services/accessor.service';
 
 
