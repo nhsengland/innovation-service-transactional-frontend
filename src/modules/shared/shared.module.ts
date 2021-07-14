@@ -20,6 +20,7 @@ import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 // Services.
 import { OrganisationsService } from './services/organisations.service';
 import { NotificationTagComponent } from './components/notification-tag.component';
+import { NotificationService } from './services/notification.service';
 
 @NgModule({
   imports: [
@@ -45,7 +46,8 @@ import { NotificationTagComponent } from './components/notification-tag.componen
     NotificationTagComponent,
   ],
   providers: [
-    OrganisationsService
+    OrganisationsService,
+    NotificationService,
   ],
   exports: [
     CommonModule,
