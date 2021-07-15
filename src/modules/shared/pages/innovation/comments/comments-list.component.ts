@@ -82,7 +82,6 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
         const repliesToDismiss = replies.filter(r => r.notifications && r.notifications?.count > 0).map(r => r.id);
 
         const toDismiss = [...commentsToDismiss, ...repliesToDismiss];
-        console.log(toDismiss);
         for (const comment of toDismiss) {
           this.notificationService.dismissNotification(comment, NotificationContextType.COMMENT).subscribe();
         }

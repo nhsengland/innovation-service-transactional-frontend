@@ -6,6 +6,7 @@ import { CoreComponent } from '@app/base';
 
 import { RoutingHelper } from '@modules/core';
 import { AccessorService } from '../services/accessor.service';
+import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 
 type RouteDataLayoutOptionsType = {
   type: null | 'innovationLeftAsideMenu' | 'emptyLeftAside';
@@ -22,16 +23,18 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
 
   navigationMenuBar: {
     leftItems: { title: string, link: string, fullReload?: boolean }[],
-    rightItems: { title: string, link: string, fullReload?: boolean }[]
+    rightItems: { title: string, link: string, fullReload?: boolean, key: keyof typeof NotificationContextType | '' }[]
   } = { leftItems: [], rightItems: [] };
 
   leftSideBar: { title: string, link: string, key?: string }[] = [];
 
   notifications: {[key: string]: number};
+  mainMenuNotifications: {[key: string]: number};
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private accessorService: AccessorService,
+    private notificationService: NotificationService,
   ) {
 
     super();
@@ -41,10 +44,10 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
         { title: 'Home', link: '/accessor/dashboard' }
       ],
       rightItems: [
-        { title: 'Innovations', link: '/accessor/innovations' },
-        { title: 'Actions', link: '/accessor/actions' },
-        { title: 'Account', link: '/accessor/account' },
-        { title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true }
+        { title: 'Innovations', link: '/accessor/innovations', key: NotificationContextType.INNOVATION },
+        { title: 'Actions', link: '/accessor/actions', key: NotificationContextType.ACTION },
+        { title: 'Account', link: '/accessor/account', key: '' },
+        { title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true, key: '' }
       ]
     };
 
@@ -57,6 +60,8 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
       COMMENT: 0,
       INNOVATION: 0,
     };
+
+    this.mainMenuNotifications = { };
 
   }
 
@@ -72,6 +77,12 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
       type: routeData.type || null,
       backLink: routeData.backLink ? { url: RoutingHelper.resolveUrl(routeData.backLink.url, this.activatedRoute), label: routeData.backLink.label } : null
     };
+
+    this.notificationService.getAllUnreadNotifications().subscribe(
+      response => {
+        this.mainMenuNotifications = response;
+      }
+    );
 
     if (currentRouteInnovationId) {
       this.subscriptions.push(
@@ -89,8 +100,8 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
         this.leftSideBar = [
           { title: 'Overview', link: `/accessor/innovations/${currentRouteInnovationId}/overview` },
           { title: 'Innovation record', link: `/accessor/innovations/${currentRouteInnovationId}/record` },
-          { title: 'Action tracker', link: `/accessor/innovations/${currentRouteInnovationId}/action-tracker`, key: 'ACTION' },
-          { title: 'Comments', link: `/accessor/innovations/${currentRouteInnovationId}/comments`, key: 'COMMENT' },
+          { title: 'Action tracker', link: `/accessor/innovations/${currentRouteInnovationId}/action-tracker`, key: NotificationContextType.ACTION },
+          { title: 'Comments', link: `/accessor/innovations/${currentRouteInnovationId}/comments`, key: NotificationContextType.COMMENT },
           { title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support` }
         ];
         break;

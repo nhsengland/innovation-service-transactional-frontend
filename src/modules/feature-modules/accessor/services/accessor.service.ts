@@ -108,6 +108,9 @@ export type getActionsListEndpointInDTO = {
       id: string;
       name: string;
     };
+    notifications?: {
+      count: number;
+    }
   }[];
 };
 export type getActionsListEndpointOutDTO = { count: number, data: (getActionsListEndpointInDTO['data'][0] & { name: string })[] };

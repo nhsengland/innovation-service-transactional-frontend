@@ -16,6 +16,7 @@ import { BackLinkComponent } from './components/navigation/back-link.component';
 import { PrintLinkComponent } from './components/navigation/print-link.component';
 
 import { SvgIconComponent } from './components/icons/svg-icon.component';
+import { NotificationTagComponent } from './components/header/notification-tag.component';
 
 @NgModule({
   imports: [
@@ -36,7 +37,9 @@ import { SvgIconComponent } from './components/icons/svg-icon.component';
     BackLinkComponent,
     PrintLinkComponent,
 
-    SvgIconComponent
+    SvgIconComponent,
+
+    NotificationTagComponent,
   ],
   providers: [],
   exports: [

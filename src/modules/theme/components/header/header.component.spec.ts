@@ -8,6 +8,7 @@ import { CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
 import { HeaderComponent } from './header.component';
+import { NotificationTagComponent } from './notification-tag.component';
 
 describe('HeaderComponent', () => {
 
@@ -23,7 +24,8 @@ describe('HeaderComponent', () => {
         StoresModule
       ],
       declarations: [
-        HeaderComponent
+        HeaderComponent,
+        NotificationTagComponent,
       ]
     }).compileComponents();
 
