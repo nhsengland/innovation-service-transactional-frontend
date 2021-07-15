@@ -31,7 +31,7 @@ export class CookiesService {
   ) { }
 
 
-  shouldAskForCookies(): boolean { return Object.keys(this.getConsentCookie()).length === 0; }
+  shouldAskForCookies(): boolean { return (isPlatformBrowser(this.platformId) && Object.keys(this.getConsentCookie()).length === 0); }
 
   getConsentCookie(): Partial<CookiesConsentType> {
     try {
