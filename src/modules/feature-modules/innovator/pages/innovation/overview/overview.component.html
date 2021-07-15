@@ -1,89 +1,90 @@
 <h1 class="nhsuk-heading-m">Innovation record overview</h1>
 
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
-    <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
-      <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="{'active': item}"></li>
-    </ul>
+<ng-container *ngIf="contentReady">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
+        <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="{'active': item}"></li>
+      </ul>
+    </div>
   </div>
-</div>
 
-<div class="nhsuk-grid-row">
-  <div *ngIf="sections.submitted > 0" class="nhsuk-grid-column-one-third">
-    <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.submitted }} <span class="nhsuk-u-visually-hidden">sections submitted</span></h2>
-    <p>sections submitted</p>
+  <div class="nhsuk-grid-row">
+    <div *ngIf="sections.submitted > 0" class="nhsuk-grid-column-one-third">
+      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.submitted }} <span class="nhsuk-u-visually-hidden">sections submitted</span></h2>
+      <p>sections submitted</p>
+    </div>
+    <div *ngIf="sections.draft > 0" class="nhsuk-grid-column-one-third">
+      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.draft }} <span class="nhsuk-u-visually-hidden">sections in draft</span></h2>
+      <p>sections in draft</p>
+    </div>
+    <div *ngIf="sections.notStarted > 0" class="nhsuk-grid-column-one-third">
+      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.notStarted }} <span class="nhsuk-u-visually-hidden">sections not started</span></h2>
+      <p>sections not started</p>
+    </div>
   </div>
-  <div *ngIf="sections.draft > 0" class="nhsuk-grid-column-one-third">
-    <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.draft }} <span class="nhsuk-u-visually-hidden">sections in draft</span></h2>
-    <p>sections in draft</p>
+  <div class="nhsuk-grid-row" *ngIf="!isInAssessmentStatus()">
+    <div class="nhsuk-grid-column-one-third">
+      See your <a routerLink="/innovator/innovations/{{ innovationId }}/record">innovation record</a>.
+    </div>
   </div>
-  <div *ngIf="sections.notStarted > 0" class="nhsuk-grid-column-one-third">
-    <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.notStarted }} <span class="nhsuk-u-visually-hidden">sections not started</span></h2>
-    <p>sections not started</p>
-  </div>
-</div>
-<div class="nhsuk-grid-row" *ngIf="!isInAssessmentStatus()">
-  <div class="nhsuk-grid-column-one-third">
-    See your <a routerLink="/innovator/innovations/{{ innovationId }}/record">innovation record</a>.
-  </div>
-</div>
 
-<ng-container *ngIf="!isSubmittedForAssessment()">
-  <div class="nhsuk-card nhsuk-u-margin-top-2">
-    <div class="nhsuk-card__content">
-      <h3>Your next steps</h3>
-      <p class="d-flex nhsuk-u-margin-bottom-2">
-        <ng-container *ngTemplateOutlet="icon; context: { completed: allSectionsSubmitted()}"></ng-container>
-        <span class="nhsuk-u-margin-right-2"></span>
-        Submit all sections of your&nbsp;<a routerLink="/innovator/innovations/{{ innovationId }}/record">innovation record </a>
-      </p>
-      <p class="d-flex">
-        <ng-container *ngTemplateOutlet="icon; context: { completed: false }"></ng-container>
-        <span class="nhsuk-u-margin-right-2"></span>
-        Submit the record for the needs assessment
-      </p>
+  <ng-container *ngIf="!isSubmittedForAssessment()">
+    <div class="nhsuk-card nhsuk-u-margin-top-2">
+      <div class="nhsuk-card__content">
+        <h3>Your next steps</h3>
+        <p class="d-flex nhsuk-u-margin-bottom-2">
+          <ng-container *ngTemplateOutlet="icon; context: { completed: allSectionsSubmitted()}"></ng-container>
+          <span class="nhsuk-u-margin-right-2"></span>
+          Submit all sections of your&nbsp;<a routerLink="/innovator/innovations/{{ innovationId }}/record">innovation record </a>
+        </p>
+        <p class="d-flex">
+          <ng-container *ngTemplateOutlet="icon; context: { completed: false }"></ng-container>
+          <span class="nhsuk-u-margin-right-2"></span>
+          Submit the record for the needs assessment
+        </p>
+      </div>
+    </div>
+  </ng-container>
+  <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <h3>Actions overview</h3>
+    </div>
+    <div class="nhsuk-grid-column-two-thirds">
+      <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.requested }}</p>
+      <p class="">actions requested of you</p>
+      See your <strong><a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker">action tracker</a></strong>
+
+    </div>
+    <div class="nhsuk-grid-column-one-third">
+      <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.review }}</p>
+      <p>actions awaiting review from an accessor</p>
+    </div>
+  </div>
+  <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <h3>Support status</h3>
+    </div>
+    <div class="nhsuk-grid-column-two-thirds">
+      <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{supportStatus}}</p>
+      <ng-container *ngIf="supportingAccessors.length > 0">
+        <ul class="nhsuk-list">
+          <li *ngFor="let item of supportingAccessors">
+            {{item.unit}}, {{item.name}}
+          </li>
+        </ul>
+      </ng-container>
+
+      See <strong><a routerLink="/innovator/innovations/{{ innovationId }}/data-sharing">data sharing and support</a></strong>
+    </div>
+    <div class="nhsuk-grid-column-one-third" *ngIf="showNeedsAssessmentCompleteCard()">
+      <strong><a routerLink="/innovator/innovations/{{ innovationId }}/assessments/{{ assessmentId }}">Needs assessment completed</a></strong>
+      <p>Your innovation is visible to all organisations you've selected.</p>
     </div>
   </div>
 </ng-container>
-<hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
-    <h3>Actions overview</h3>
-  </div>
-  <div class="nhsuk-grid-column-two-thirds">
-    <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.requested }}</p>
-    <p class="">actions requested of you</p>
-    See your <strong><a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker">action tracker</a></strong>
-
-  </div>
-  <div class="nhsuk-grid-column-one-third">
-    <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.review }}</p>
-    <p>actions awaiting review from an accessor</p>
-  </div>
-</div>
-<hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
-    <h3>Support status</h3>
-  </div>
-  <div class="nhsuk-grid-column-two-thirds">
-    <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{supportStatus}}</p>
-    <ng-container *ngIf="supportingAccessors.length > 0">
-      <ul class="nhsuk-list">
-        <li *ngFor="let item of supportingAccessors">
-          {{item.unit}}, {{item.name}}
-        </li>
-      </ul>
-    </ng-container>
-
-    See <strong><a routerLink="/innovator/innovations/{{ innovationId }}/data-sharing">data sharing and support</a></strong>
-  </div>
-  <div class="nhsuk-grid-column-one-third" *ngIf="showNeedsAssessmentCompleteCard()">
-    <strong><a routerLink="/innovator/innovations/{{ innovationId }}/assessments/{{ assessmentId }}">Needs assessment completed</a></strong>
-    <p>Your innovation is visible to all organisations you've selected.</p>
-  </div>
-</div>
-
 
 <ng-template #icon let-completed="completed">
   <theme-svg-icon *ngIf="!completed" type="error"></theme-svg-icon>
