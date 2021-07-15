@@ -19,6 +19,12 @@ export type NotificationDismissResultDTO = {
   error?: any;
 };
 
+
+export type getUnreadNotificationsEndpointDTO =  {
+  [key: string]: number;
+};
+
+
 @Injectable()
 export class NotificationService extends CoreService {
 
@@ -28,6 +34,16 @@ export class NotificationService extends CoreService {
 
     const url = new UrlModel(this.API_URL).addPath('notifications');
     return this.http.patch<NotificationDismissResultDTO>(url.buildUrl(), {contextId, contextType}).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
+  getAllUnreadNotifications(): Observable<getUnreadNotificationsEndpointDTO> {
+
+    const url = new UrlModel(this.API_URL).addPath('notifications');
+    return this.http.get<getUnreadNotificationsEndpointDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );
