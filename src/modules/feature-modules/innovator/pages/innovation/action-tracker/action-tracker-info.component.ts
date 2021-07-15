@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { InnovatorService, getInnovationActionInfoOutDTO } from '../../../services/innovator.service';
@@ -28,7 +29,8 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
   declineShow: boolean;
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService
+    private innovatorService: InnovatorService,
+    private notificationService: NotificationService
   ) {
 
     super();
@@ -67,6 +69,8 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
         this.logger.error(error);
       }
     );
+
+    this.notificationService.dismissNotification(this.actionId, NotificationContextType.ACTION).subscribe();
 
   }
 
