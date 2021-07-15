@@ -1,11 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
-import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-innovator-pages-innovations-overview',
@@ -13,10 +13,12 @@ import { forkJoin } from 'rxjs';
 })
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
 
+  contentReady = false;
+
   innovationId: string;
   innovationStatus: keyof typeof INNOVATION_STATUS = '';
   innovationSections: SectionsSummaryModel[] = [];
-  actionSummary: {requested: number, review: number} = { requested: 0, review: 0};
+  actionSummary: { requested: number, review: number } = { requested: 0, review: 0 };
   supportStatus = 'Awaiting support';
   supportingAccessors: { id: string; name: string, unit: string }[] = [];
   submittedAt: string | undefined;
@@ -66,37 +68,33 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-
     forkJoin([
       this.innovatorService.getInnovationInfo(this.innovationId),
       this.stores.innovation.getSectionsSummary$('innovator', this.innovationId),
       this.innovatorService.getInnovationSupports(this.innovationId),
-    ]).subscribe(
-      ([innovationInfo, sectionSummary, innovationSupports]) => {
+    ]).subscribe(([innovationInfo, sectionSummary, innovationSupports]) => {
 
-        this.submittedAt = innovationInfo.submittedAt || '';
-        this.needsAssessmentCompleted = !this.isInAssessmentStatus();
-        this.assessmentId = innovationInfo.assessment?.id;
+      this.submittedAt = innovationInfo.submittedAt || '';
+      this.needsAssessmentCompleted = !this.isInAssessmentStatus();
+      this.assessmentId = innovationInfo.assessment?.id;
 
-        this.parseActionSummary(innovationInfo);
-        this.parseSectionSummary(sectionSummary);
+      this.parseActionSummary(innovationInfo);
+      this.parseSectionSummary(sectionSummary);
 
-        this.supportStatus = innovationSupports
-          .find(s =>
-            s.status.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase())?.status ||
-             this.innovationSupportStatus.WAITING.label;
+      this.supportStatus = innovationSupports.find(s => s.status.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase())?.status || this.innovationSupportStatus.WAITING.label;
 
-        if (this.supportStatus.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase()) {
-          this.supportStatus = this.innovationSupportStatus.ENGAGING.label;
-          this.supportingAccessors = innovationSupports
+      if (this.supportStatus.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase()) {
+        this.supportStatus = this.innovationSupportStatus.ENGAGING.label;
+        this.supportingAccessors = innovationSupports
           .filter(support => support.status.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase())
           .flatMap(s => s.accessors
-            .map(a => ({
-            ...a,
-            unit: s.organisationUnit.name,
-          })));
-        }
-      },
+            .map(a => ({ ...a, unit: s.organisationUnit.name }))
+          );
+      }
+
+      this.contentReady = true;
+
+    },
       (error) => {
         this.logger.error(error);
       }

@@ -1,5 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
+
+import { EnvironmentStore } from '../stores/environment.store';
 
 
 type CookiesConsentType = {
@@ -7,8 +10,6 @@ type CookiesConsentType = {
   necessary: boolean;
   analytics: boolean;
 };
-
-
 
 
 @Injectable()
@@ -24,7 +25,9 @@ export class CookiesService {
 
 
   constructor(
-    private coockieService: CookieService
+    @Inject(PLATFORM_ID) private platformId: object,
+    private coockieService: CookieService,
+    private environment: EnvironmentStore
   ) { }
 
 
@@ -40,15 +43,27 @@ export class CookiesService {
   }
 
   setConsentCookie(agreed: boolean): void {
+
     this.coockieService.set('cookies-consent', JSON.stringify({ consented: true, necessary: true, analytics: agreed }), this.cookiesOptions);
 
-    if (!agreed) { this.deleteAnalyticsCookies(); }
+    if (agreed) { this.setAnalyticsScripts(); }
+    else {
+      this.deleteAnalyticsCookies();
+      this.removeAnalyticsScripts();
+    }
+
   }
 
   updateConsentCookie(analytics: boolean): void {
+
     this.coockieService.set('cookies-consent', JSON.stringify({ consented: true, necessary: true, analytics }), this.cookiesOptions);
 
-    if (!analytics) { this.deleteAnalyticsCookies(); }
+    if (analytics) { this.setAnalyticsScripts(); }
+    else {
+      this.deleteAnalyticsCookies();
+      this.removeAnalyticsScripts();
+    }
+
   }
 
 
@@ -57,8 +72,38 @@ export class CookiesService {
     const cookies = this.coockieService.getAll();
 
     Object.entries(cookies).forEach(([key, value]) => {
-      if (key.startsWith('_hj')) { this.coockieService.delete(key); }
+      if (key.startsWith('_hj') || key.startsWith('_ga')) { this.coockieService.delete(key); }
     });
+
+  }
+
+
+  setAnalyticsScripts(): void { // Add analytics scripts to header.
+
+    if (isPlatformBrowser(this.platformId) && this.getConsentCookie().analytics) {
+      const node = document.createElement('script');
+      node.id = 'hj-analytics';
+      node.src = `${this.environment.APP_ASSETS_URL}/js/analytics.js`;
+      node.type = 'text/javascript';
+      node.async = true;
+      document.getElementsByTagName('head')[0].appendChild(node);
+    }
+
+  }
+
+  removeAnalyticsScripts(): void { // Add analytics scripts to header.
+
+    if (isPlatformBrowser(this.platformId)) {
+
+      let element: HTMLElement | null;
+
+      element = document.getElementById('hj-analytics');
+      element?.parentNode?.removeChild(element);
+
+      element = document.getElementById('ga-analytics');
+      element?.parentNode?.removeChild(element);
+
+    }
 
   }
 

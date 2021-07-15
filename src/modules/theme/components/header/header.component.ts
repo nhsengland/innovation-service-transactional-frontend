@@ -39,7 +39,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+
+    this.coockiesService.setAnalyticsScripts();
+
+   }
 
 
   private onRouteChange(event: NavigationEnd): void {
