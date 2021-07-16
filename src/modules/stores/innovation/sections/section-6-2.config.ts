@@ -38,12 +38,12 @@ export const SECTION_6_2: InnovationSectionConfigType['sections'][0] = {
     steps: [
       new FormEngineModel({
         label: stepsLabels.l1,
-        description: 'See [link to section in starter/advanced guide] (opens in new window) for more information about comparative cost benefit.',
+        description: 'LINK_TO_ADVANCED_GUIDE_COMPARATIVE_COST_BENEFIT',
         parameters: [{ id: 'hasCostSavingKnowledge', dataType: 'radio-group', validations: { isRequired: true }, items: hasCostKnowledgeItems }]
       }),
       new FormEngineModel({
         label: stepsLabels.l2,
-        description: 'See [link to section in starter/advanced guide] (opens in new window) for more information about comparative cost benefit.',
+        description: 'LINK_TO_ADVANCED_GUIDE_COMPARATIVE_COST_BENEFIT',
         parameters: [{ id: 'hasCostCareKnowledge', dataType: 'radio-group', validations: { isRequired: true }, items: hasCostKnowledgeItems }]
       })
     ],
@@ -78,7 +78,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
     steps.push(
       new FormEngineModel({
         label: stepsLabels.l3,
-        description: 'See [link to section in starter/advanced guide] (opens in new window) for more information about comparative cost benefit.',
+        description: 'LINK_TO_ADVANCED_GUIDE_COMPARATIVE_COST_BENEFIT',
         parameters: [{ id: 'costComparison', dataType: 'radio-group', validations: { isRequired: true }, items: costComparisonItems }]
       })
     );
@@ -89,7 +89,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
       steps.push(
         new FormEngineModel({
           label: `What are the costs associated with use of your innovation, compared to current practice in the UK for ${item.name}?`,
-          description: 'See [link to section in starter/advanced guide] (opens in new window) for more information about comparative cost benefit.',
+          description: 'LINK_TO_ADVANCED_GUIDE_COMPARATIVE_COST_BENEFIT',
           parameters: [{ id: `subGroupCostComparison_${i}`, dataType: 'radio-group', validations: { isRequired: true }, items: costComparisonItems }]
         })
       );

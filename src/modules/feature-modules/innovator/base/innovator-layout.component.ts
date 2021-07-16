@@ -90,7 +90,7 @@ export class InnovatorLayoutComponent extends CoreComponent {
         ],
         rightItems: [
           { title: 'Your innovations', link: '/innovator/innovations' },
-          { title: 'Your account', link: '/innovator/account' },
+          // { title: 'Your account', link: '/innovator/account' },
           { title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true }
         ]
       };

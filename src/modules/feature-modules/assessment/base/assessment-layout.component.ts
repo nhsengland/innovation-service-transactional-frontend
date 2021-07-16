@@ -40,7 +40,7 @@ export class AssessmentLayoutComponent extends CoreComponent {
       ],
       rightItems: [
         { title: 'Innovations', link: '/assessment/innovations' },
-        { title: 'Account', link: '/assessment/account' },
+        // { title: 'Account', link: '/assessment/account' },
         { title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true }
       ]
     };
@@ -69,8 +69,8 @@ export class AssessmentLayoutComponent extends CoreComponent {
         this.leftSideBar = [
           { title: 'Overview', link: `/assessment/innovations/${currentRouteInnovationId}/overview` },
           { title: 'Innovation record', link: `/assessment/innovations/${currentRouteInnovationId}/record` },
-          { title: 'Action tracker', link: `/assessment/innovations/${currentRouteInnovationId}/action-tracker` },
-          { title: 'Comments', link: `/assessment/innovations/${currentRouteInnovationId}/comments` }
+          // { title: 'Action tracker', link: `/assessment/innovations/${currentRouteInnovationId}/action-tracker` },
+          // { title: 'Comments', link: `/assessment/innovations/${currentRouteInnovationId}/comments` }
         ];
         break;
 

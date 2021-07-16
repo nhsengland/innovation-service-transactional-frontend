@@ -29,12 +29,12 @@ export const SECTION_3_2: InnovationSectionConfigType['sections'][0] = {
     steps: [
       new FormEngineModel({
         label: stepsLabels.l1,
-        description: 'See [link to section in advanced guide] (opens in new window) for more information about intellectual property.',
+        description: 'LINK_TO_ADVANCED_GUIDE_INTELLECTUAL_PROPERTY',
         parameters: [{ id: 'hasPatents', dataType: 'radio-group', validations: { isRequired: true }, items: hasPatentsItems }]
       }),
       new FormEngineModel({
         label: stepsLabels.l2,
-        description: 'See [link to section in advanced guide] (opens in new window) for more information about intellectual property.',
+        description: 'LINK_TO_ADVANCED_GUIDE_INTELLECTUAL_PROPERTY',
         parameters: [{ id: 'hasOtherIntellectual', dataType: 'radio-group', validations: { isRequired: true }, items: hasOtherIntellectualItems }]
       })
     ],

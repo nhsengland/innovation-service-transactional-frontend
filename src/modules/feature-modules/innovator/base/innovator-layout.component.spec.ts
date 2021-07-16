@@ -65,7 +65,7 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
       ],
       rightItems: [
         { title: 'Your innovations', link: '/innovator/innovations' },
-        { title: 'Your account', link: '/innovator/account' },
+        // { title: 'Your account', link: '/innovator/account' },
         { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
       ]
     };

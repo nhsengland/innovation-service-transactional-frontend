@@ -60,7 +60,7 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
       ],
       rightItems: [
         { title: 'Innovations', link: '/assessment/innovations' },
-        { title: 'Account', link: '/assessment/account' },
+        // { title: 'Account', link: '/assessment/account' },
         { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
       ]
     };
@@ -98,8 +98,8 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
     const expected = [
       { title: 'Overview', link: `/assessment/innovations/innovation01/overview` },
       { title: 'Innovation record', link: `/assessment/innovations/innovation01/record` },
-      { title: 'Action tracker', link: `/assessment/innovations/innovation01/action-tracker` },
-      { title: 'Comments', link: `/assessment/innovations/innovation01/comments` }
+      // { title: 'Action tracker', link: `/assessment/innovations/innovation01/action-tracker` },
+      // { title: 'Comments', link: `/assessment/innovations/innovation01/comments` }
     ];
 
     fixture = TestBed.createComponent(AssessmentLayoutComponent);

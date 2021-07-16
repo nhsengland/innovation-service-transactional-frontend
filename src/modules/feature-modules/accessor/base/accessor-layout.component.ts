@@ -46,7 +46,7 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
       rightItems: [
         { title: 'Innovations', link: '/accessor/innovations', key: NotificationContextType.INNOVATION },
         { title: 'Actions', link: '/accessor/actions', key: NotificationContextType.ACTION },
-        { title: 'Account', link: '/accessor/account', key: '' },
+        // { title: 'Account', link: '/accessor/account', key: '' },
         { title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true, key: '' }
       ]
     };

@@ -30,11 +30,11 @@ export class DashboardComponent extends CoreComponent {
         link: '/assessment/innovations',
         description: 'Find, review and create a needs assessment for all incoming innovations'
       },
-      {
-        title: 'Your account',
-        link: '/assessment/account',
-        description: 'View and edit your details, manage email notifications'
-      }
+      // {
+      //   title: 'Your account',
+      //   link: '/assessment/account',
+      //   description: 'View and edit your details, manage email notifications'
+      // }
     ];
 
   }
