@@ -13,6 +13,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     innovations: { id: string, name: string }[]
   };
 
+  innovationGuidesUrl = `${this.stores.environment.BASE_URL}/innovation-guides`;
+
   constructor() {
 
     super();

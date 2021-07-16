@@ -64,7 +64,7 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
       rightItems: [
         { title: 'Innovations', link: '/accessor/innovations', key: 'INNOVATION' },
         { title: 'Actions', link: '/accessor/actions', key: 'ACTION' },
-        { title: 'Account', link: '/accessor/account', key: '' },
+        // { title: 'Account', link: '/accessor/account', key: '' },
         { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true, key: '' }
       ]
     };

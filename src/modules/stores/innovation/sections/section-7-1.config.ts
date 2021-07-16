@@ -37,7 +37,7 @@ export const SECTION_7_1: InnovationSectionConfigType['sections'][0] = {
     steps: [
       new FormEngineModel({
         label: stepsLabels.l1,
-        description: 'See [link to section in advanced guide] (opens in new window) for more information about creating a revenue model.',
+        description: 'LINK_TO_ADVANCED_GUIDE_CREATING_REVENUE_MODEL',
         parameters: [{ id: 'hasRevenueModel', dataType: 'radio-group', validations: { isRequired: true }, items: hasRevenueModelItems }]
       })
     ],

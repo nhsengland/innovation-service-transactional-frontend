@@ -45,7 +45,7 @@ export const SECTION_8_1: InnovationSectionConfigType['sections'][0] = {
     steps: [
       new FormEngineModel({
         label: stepsLabels.l1,
-        description: 'See [link to section in advanced guide] (opens in new window) for information about implementation plans.',
+        description: 'LINK_TO_ADVANCED_GUIDE_IMPLEMENTATION_PLANS',
         parameters: [{ id: 'hasDeployPlan', dataType: 'radio-group', validations: { isRequired: true }, items: hasDeployPlanItems }]
       }),
       new FormEngineModel({

@@ -233,9 +233,24 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
     this.summaryList.valid = form.valid;
     this.stepsData.forEach((step, stepIndex) => {
       step.parameters.forEach(p => {
+
+        let value: string;
+
+        switch (p.dataType) {
+          case 'checkbox-array':
+            value = ((this.currentAnswers[p.id] || []) as string[]).map(v => (p.items || []).find(i => i.value === v)?.label).join('<br />');
+            break;
+          case 'radio-group':
+            value = (p.items || []).find(i => i.value === this.currentAnswers[p.id])?.label || this.currentAnswers[p.id];
+            break;
+          default:
+            value = this.currentAnswers[p.id];
+            break;
+        }
+
         this.summaryList.items.push({
           label: step.label || '',
-          value: this.currentAnswers[p.id],
+          value,
           url: `/triage-innovator-pack/survey/${stepIndex + 1}`,
           // queryParams: this.isRunningOnServer() ? this.encodeQueryParams({ a: 'next', f: this.currentAnswers }) : {},
           errorMessage: errors[p.id] || null
@@ -247,21 +262,13 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
 
 
   // encodeQueryParams(queryParams: MappedObject): MappedObject {
-
   //   const toReturn: MappedObject = {};
-
   //   for (let [key, value] of Object.entries(queryParams || {})) {
-
   //     if (UtilsHelper.isEmpty(value)) { break; }
-
   //     if (typeof value === 'object') { value = JSON.stringify(value); }
-
   //     toReturn[key] = encodeURIComponent(this.encodeInfo(value));
-
   //   }
-
   //   return toReturn;
-
   // }
 
 }

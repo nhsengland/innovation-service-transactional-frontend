@@ -44,7 +44,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   }
 
   isSubmittedForAssessment(): boolean {
-    return this.submittedAt !== undefined;
+    return !this.submittedAt;
   }
 
   allStepsComplete(): boolean {

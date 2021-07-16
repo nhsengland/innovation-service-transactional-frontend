@@ -11,8 +11,8 @@ import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { SharedModule } from '@modules/shared/shared.module';
-import { ThemeModule } from '@modules/theme/theme.module';
+import { TriageInnovatorPackModule } from '@modules/feature-modules/triage-innovator-pack/triage-innovator-pack.module';
+
 import { FormEngineComponent } from '@shared-module/forms';
 
 import { SurveyStepComponent } from './step.component';
@@ -39,18 +39,13 @@ describe('FeatureModules/StarterInnovatorPack/Pages/Survey/StepComponent', () =>
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        SharedModule,
-        ThemeModule,
-      ],
-      declarations: [
-        SurveyStepComponent,
+        TriageInnovatorPackModule
       ],
       providers: [
-        SurveyService,
         InjectorMock,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
-    }).compileComponents();
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
