@@ -5,6 +5,7 @@ import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
 import { FormEngineHelper } from '@app/base/forms';
 import { RoutingHelper } from '@modules/core';
 import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
+import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 
 import { getInnovationCommentsDTO } from '@stores-module/innovation/innovation.models';
 
@@ -29,7 +30,8 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private notificationService: NotificationService,
   ) {
 
     super();
@@ -70,11 +72,19 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
     this.stores.innovation.getInnovationComments$(this.module, this.innovationId, this.currentCreatedOrder).subscribe(
       response => {
         this.commentsList = response;
-
         this.commentsList.forEach(item => {
           this.form.addControl(`${item.id}`, new FormControl('', Validators.required));
           this.formSubmittedFields[item.id] = '';
         });
+
+        const commentsToDismiss = this.commentsList.filter(c => c.notifications && c.notifications?.count > 0).map(c => c.id);
+        const replies = this.commentsList.flatMap(c => c.replies);
+        const repliesToDismiss = replies.filter(r => r.notifications && r.notifications?.count > 0).map(r => r.id);
+
+        const toDismiss = [...commentsToDismiss, ...repliesToDismiss];
+        for (const comment of toDismiss) {
+          this.notificationService.dismissNotification(comment, NotificationContextType.COMMENT).subscribe();
+        }
 
       },
       () => {

@@ -6,7 +6,17 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="/transactional/static/assets/favicon/favicon-192x192.png" />
   <script src="./environment.js"></script>
+  <script src="/transactional/static/assets/js/cookies-helper.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4XB9VSJZ0G"></script>
+  <script>
+    if (!getConsentCookie().analytics) { window['ga-disable-G-4XB9VSJZ0G'] = true; }
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4XB9VSJZ0G');
+  </script>
 </head>
 <body>
   <app-root></app-root>

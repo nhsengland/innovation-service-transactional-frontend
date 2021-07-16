@@ -1,11 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { ThemeModule } from '@modules/theme/theme.module';
+import { Injector } from '@angular/core';
+
+import { CoreModule, AppInjector } from '@modules/core';
+import { StoresModule } from '@modules/stores';
+import { TriageInnovatorPackModule } from '@modules/feature-modules/triage-innovator-pack/triage-innovator-pack.module';
 
 import { SurveyEndComponent } from './end.component';
 
-describe('SurveyEndComponent', () => {
+
+describe('FeatureModules/StarterInnovatorPack/Pages/Survey/SurveyEndComponent', () => {
 
   let component: SurveyEndComponent;
   let fixture: ComponentFixture<SurveyEndComponent>;
@@ -13,13 +19,15 @@ describe('SurveyEndComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
+        HttpClientTestingModule,
         RouterTestingModule,
-        ThemeModule
-      ],
-      declarations: [
-        SurveyEndComponent,
-      ],
-    }).compileComponents();
+        CoreModule,
+        StoresModule,
+        TriageInnovatorPackModule
+      ]
+    });
+
+    AppInjector.setInjector(TestBed.inject(Injector));
 
   });
 

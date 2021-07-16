@@ -47,7 +47,7 @@ export const SECTION_4_1: InnovationSectionConfigType['sections'][0] = {
     steps: [
       new FormEngineModel({
         label: stepsLabels.l1,
-        description: 'See [link to section in advanced guide] (opens in new window) for more information about regulations and standards.',
+        description: 'LINK_TO_ADVANCED_GUIDE_REGULATIONS_STANDARDS',
         parameters: [{ id: 'hasRegulationKnowledge', dataType: 'radio-group', validations: { isRequired: true }, items: hasRegulationKnowledgeItems }]
       })
     ],

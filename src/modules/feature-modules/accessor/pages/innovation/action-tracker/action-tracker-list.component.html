@@ -34,8 +34,16 @@
         <span>{{ item.displayId }}</span>
       </td>
       <td class="nhsuk-table__cell">
-        <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('name') }}</span>
-        <a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ item.id }}">{{ item.name }}</a>
+        <div class="side-menu-flex">
+          <div>
+            <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('name') }}</span>
+            <a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ item.id }}">{{ item.name }}</a>
+          </div>
+          <div>
+            <notification-tag *ngIf="item.notifications.count > 0" type="circle"></notification-tag>
+          </div>
+        </div>
+
       </td>
       <td class="nhsuk-table__cell">
         <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('createdAt') }}</span>
@@ -75,8 +83,16 @@
             <span>{{ item.displayId }}</span>
           </td>
           <td class="nhsuk-table__cell">
-            <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('name') }} </span>
-            <a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ item.id }}">{{ item.name }}</a>
+            <div class="side-menu-flex">
+              <div>
+                <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('name') }} </span>
+                <a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ item.id }}">{{ item.name }}</a>
+              </div>
+              <div>
+                <notification-tag *ngIf="item.notifications && item.notifications.count > 0" type="circle"></notification-tag>
+              </div>
+            </div>
+
           </td>
           <td class="nhsuk-table__cell">
             <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('createdAt') }} </span>

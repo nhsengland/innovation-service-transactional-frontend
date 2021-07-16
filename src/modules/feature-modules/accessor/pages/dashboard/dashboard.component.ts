@@ -41,11 +41,11 @@ export class DashboardComponent extends CoreComponent {
         description: 'See all comments related to innovations you\'re engaging with',
         link: '/accessor/activity', queryParams: {}
       },
-      {
-        title: 'Your account',
-        description: 'Edit your details, request and manage permissions',
-        link: '/accessor/account', queryParams: {}
-      }
+      // {
+      //   title: 'Your account',
+      //   description: 'Edit your details, request and manage permissions',
+      //   link: '/accessor/account', queryParams: {}
+      // }
     ];
 
     if (this.stores.authentication.isQualifyingAccessorRole()) {

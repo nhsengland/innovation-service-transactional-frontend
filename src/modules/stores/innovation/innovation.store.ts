@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 
 import { Store } from '../store.class';
+import { EnvironmentStore } from '@modules/core/stores/environment.store';
 import { WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationService } from './innovation.service';
@@ -22,6 +23,7 @@ import { MappedObject } from '@modules/core/interfaces/base.interfaces';
 export class InnovationStore extends Store<InnovationModel> {
 
   constructor(
+    private environmentStore: EnvironmentStore,
     private innovationsService: InnovationService
   ) {
     super('store::innovations', new InnovationModel());
@@ -119,9 +121,39 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   getSectionWizard(sectionId: InnovationSectionsIds): WizardEngineModel {
-    return cloneDeep(
+
+    const section = cloneDeep(
       INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId)?.wizard || new WizardEngineModel({})
     );
+
+    section.steps = section.steps.map(s => { // Transform needed information.
+
+      switch (s.description) {
+        case 'LINK_TO_ADVANCED_GUIDE_INTELLECTUAL_PROPERTY':
+          s.description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about intellectual property.`;
+          break;
+        case 'LINK_TO_ADVANCED_GUIDE_REGULATIONS_STANDARDS':
+          s.description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about regulations and standards.`;
+          break;
+        case 'LINK_TO_ADVANCED_GUIDE_COMPARATIVE_COST_BENEFIT':
+          s.description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about comparative cost benefit.`;
+          break;
+        case 'LINK_TO_ADVANCED_GUIDE_CREATING_REVENUE_MODEL':
+          s.description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about creating a revenue model.`;
+          break;
+        case 'LINK_TO_ADVANCED_GUIDE_IMPLEMENTATION_PLANS':
+          s.description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about implementation plans.`;
+          break;
+        default:
+          break;
+      }
+
+      return s;
+
+    });
+
+    return section;
+
   }
 
 

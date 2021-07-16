@@ -65,7 +65,7 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
       ],
       rightItems: [
         { title: 'Your innovations', link: '/innovator/innovations' },
-        { title: 'Your account', link: '/innovator/account' },
+        // { title: 'Your account', link: '/innovator/account' },
         { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
       ]
     };
@@ -122,8 +122,8 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
     const expected = [
       { title: 'Overview', link: `/innovator/innovations/innovation01/overview` },
       { title: 'Innovation record', link: `/innovator/innovations/innovation01/record` },
-      { title: 'Action tracker', link: `/innovator/innovations/innovation01/action-tracker` },
-      { title: 'Comments', link: `/innovator/innovations/innovation01/comments` },
+      { title: 'Action tracker', link: `/innovator/innovations/innovation01/action-tracker`, key: 'ACTION' },
+      { title: 'Comments', link: `/innovator/innovations/innovation01/comments`, key: 'COMMENT' },
       { title: 'Data sharing and support', link: `/innovator/innovations/innovation01/data-sharing` }
     ];
 

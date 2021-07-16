@@ -50,7 +50,8 @@ import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/ne
     InnovationOverviewComponent,
     InnovationSectionEvidenceEditComponent,
     InnovationSectionEditComponent,
-    InnovatorNeedsAssessmentOverviewComponent
+    InnovatorNeedsAssessmentOverviewComponent,
+
   ],
   providers: [
     // Services.
@@ -60,7 +61,8 @@ import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/ne
     FirstTimeSigninGuard,
 
     // Resolvers.
-    InnovationDataResolver
+    InnovationDataResolver,
+
   ]
 })
 export class InnovatorModule { }

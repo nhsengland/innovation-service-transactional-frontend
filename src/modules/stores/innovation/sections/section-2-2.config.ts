@@ -174,28 +174,29 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
       });
     });
 
-    toReturn.push(
-      {
-        label: stepsLabels.l3,
-        value: data.generalBenefits?.map(benefit => benefit === 'OTHER' ? data.otherGeneralBenefit : generalBenefitItems.find(item => item.value === benefit)?.label).join('<br />'),
-        editStepNumber: toReturn.length + 1
-      },
-      {
-        label: stepsLabels.l4,
-        value: data.environmentalBenefits?.map(benefit => benefit === 'OTHER' ? data.otherEnvironmentalBenefit : environmentalBenefitItems.find(item => item.value === benefit)?.label).join('<br />'),
-        editStepNumber: toReturn.length + 1
-      },
-      {
-        label: stepsLabels.l5,
-        value: data.accessibilityImpactDetails,
-        editStepNumber: toReturn.length + 1
-      },
-      {
-        label: stepsLabels.l6,
-        value: data.accessibilityStepsDetails,
-        editStepNumber: toReturn.length + 1
-      }
-    );
+    toReturn.push({
+      label: stepsLabels.l3,
+      value: data.generalBenefits?.map(benefit => benefit === 'OTHER' ? data.otherGeneralBenefit : generalBenefitItems.find(item => item.value === benefit)?.label).join('<br />'),
+      editStepNumber: toReturn.length + 1
+    });
+
+    toReturn.push({
+      label: stepsLabels.l4,
+      value: data.environmentalBenefits?.map(benefit => benefit === 'OTHER' ? data.otherEnvironmentalBenefit : environmentalBenefitItems.find(item => item.value === benefit)?.label).join('<br />'),
+      editStepNumber: toReturn.length + 1
+    });
+
+    toReturn.push({
+      label: stepsLabels.l5,
+      value: data.accessibilityImpactDetails,
+      editStepNumber: toReturn.length + 1
+    });
+
+    toReturn.push({
+      label: stepsLabels.l6,
+      value: data.accessibilityStepsDetails,
+      editStepNumber: toReturn.length + 1
+    });
 
   }
 

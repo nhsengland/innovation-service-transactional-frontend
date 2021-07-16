@@ -28,7 +28,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
         StoresModule,
         InnovatorModule
       ]
-    }).compileComponents();
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 

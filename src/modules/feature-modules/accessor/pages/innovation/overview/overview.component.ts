@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { categoriesItems } from '@stores-module/innovation/sections/catalogs.config';
 
@@ -28,7 +29,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService
+    private accessorService: AccessorService,
+    private notificationService: NotificationService,
   ) {
     super();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -61,6 +63,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }
     );
 
+    this.notificationService.dismissNotification(this.innovationId, NotificationContextType.INNOVATION).subscribe();
   }
 
 }

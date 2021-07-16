@@ -8,6 +8,7 @@ import { CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
 import { HeaderComponent } from './header.component';
+import { NotificationTagComponent } from './notification-tag.component';
 
 describe('HeaderComponent', () => {
 
@@ -23,7 +24,8 @@ describe('HeaderComponent', () => {
         StoresModule
       ],
       declarations: [
-        HeaderComponent
+        HeaderComponent,
+        NotificationTagComponent,
       ]
     }).compileComponents();
 
@@ -64,7 +66,7 @@ describe('HeaderComponent', () => {
     fixture.detectChanges();
     const element = fixture.nativeElement;
 
-    expect(element.querySelectorAll('a.nhsuk-header__navigation-link')[0].textContent).toEqual(' Home ');
+    expect(element.querySelectorAll('a.nhsuk-header__navigation-link')[0].textContent).toEqual(' Find support ');
 
   });
 
@@ -74,7 +76,7 @@ describe('HeaderComponent', () => {
     fixture = TestBed.createComponent(HeaderComponent);
     fixture.detectChanges();
     const element = fixture.nativeElement;
-    expect(element.querySelectorAll('a.nhsuk-header__navigation-link')[1].textContent).toEqual(' Starter innovation guide ');
+    expect(element.querySelectorAll('a.nhsuk-header__navigation-link')[1].textContent).toEqual(' Innovation guides ');
 
   });
 

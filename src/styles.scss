@@ -38,6 +38,20 @@ $service-manual-container-size: 1100px; // Container width variable.
   // --large-desktop: 61.875em; /* 990px */
 }
 
+.side-menu-flex {
+  display: flex;
+}
+.side-menu-flex :first-child {
+  width: max-content;
+}
+
+.side-menu-flex > * {
+  flex: 0 0 auto;
+  padding-left: 8px;
+}
+
+
+
 .d-flex { display: flex; }
 .align-items-center { align-items: center; }
 .justify-content-space-between { justify-content: space-between; }

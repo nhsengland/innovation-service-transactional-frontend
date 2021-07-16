@@ -28,11 +28,17 @@ export type getInnovationsListEndpointInDTO = {
     };
     organisations: string[];
     assessment: { id: null | string; };
+    notifications?: {
+      count: number;
+      hasNew: boolean;
+    }
   }[];
+  tabInfo?: {[key: string]: number};
 };
 export type getInnovationsListEndpointOutDTO = {
   count: number;
-  data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription' | 'postcode'>)[]
+  data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription' | 'postcode'>)[],
+  tabInfo?: {[key: string]: number},
 };
 
 export type getInnovationInfoEndpointDTO = {
@@ -56,7 +62,8 @@ export type getInnovationInfoEndpointDTO = {
   support?: {
     id: string;
     status: keyof typeof INNOVATION_SUPPORT_STATUS;
-  }
+  },
+  notifications: {[key: string]: number},
 };
 
 type getInnovationActionsListEndpointInDTO = {
@@ -65,6 +72,10 @@ type getInnovationActionsListEndpointInDTO = {
   status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
   section: InnovationSectionsIds;
   createdAt: string; // '2021-04-16T09:23:49.396Z',
+  notifications: {
+    count: number,
+    hasNew: boolean;
+  },
 };
 export type getInnovationActionsListEndpointOutDTO = {
   openedActions: (getInnovationActionsListEndpointInDTO & { name: string })[];
@@ -97,6 +108,9 @@ export type getActionsListEndpointInDTO = {
       id: string;
       name: string;
     };
+    notifications?: {
+      count: number;
+    }
   }[];
 };
 export type getActionsListEndpointOutDTO = { count: number, data: (getActionsListEndpointInDTO['data'][0] & { name: string })[] };
@@ -155,6 +169,7 @@ export class AccessorService extends CoreService {
     return this.http.get<getInnovationsListEndpointInDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => ({
+        tabInfo: response.tabInfo,
         count: response.count,
         data: response.data.map(item => ({
           id: item.id,
@@ -170,7 +185,8 @@ export class AccessorService extends CoreService {
             accessors: item.support?.accessors
           },
           organisations: item.organisations,
-          assessment: item.assessment
+          assessment: item.assessment,
+          notifications: item.notifications,
         }))
       }))
     );

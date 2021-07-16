@@ -128,12 +128,14 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
         {
           id: '01', name: 'Innovation 01', countryName: 'England', postCode: 'SW01', mainCategory: 'Medical', submittedAt: '',
           assessment: { createdAt: '2021-04-16T09:23:49.396Z', assignTo: 'User Name', finishedAt: '2021-04-16T09:23:49.396' },
-          organisations: ['Org. 01']
+          organisations: ['Org. 01'],
+          notifications: { count: 1, isNew: true},
         },
         {
           id: '02', name: 'Innovation 02', countryName: 'England', postCode: 'SW01', mainCategory: 'Medical', submittedAt: '',
           assessment: { createdAt: '2021-04-16T09:23:49.396Z', assignTo: 'User Name', finishedAt: '2021-04-16T09:23:49.396' },
-          organisations: ['Org. 01']
+          organisations: ['Org. 01'],
+          notifications: { count: 1, isNew: true},
         }
       ]
     };

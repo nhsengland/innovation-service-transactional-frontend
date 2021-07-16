@@ -1,10 +1,9 @@
-  <h1> Data sharing and support </h1>
+  <h1 class="nhsuk-u-margin-bottom"> Data sharing and support </h1>
 
   <ng-container *ngIf="summaryAlert.type">
     <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
       <div class="nhsuk-grid-column-full">
-        <div class="nhsuk-error-summary" [ngClass]="{'border-color-success': summaryAlert.type === 'success', 'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert"
-          tabindex="-1">
+        <div class="nhsuk-error-summary" [ngClass]="{'border-color-success': summaryAlert.type === 'success', 'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert" tabindex="-1">
           <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
           <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
         </div>
@@ -15,6 +14,11 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
+      <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
+        <span class="nhsuk-u-visually-hidden">Information:</span>
+        <p>Sharing your data with an organisation means that they can view your innovation and initiate contact. It doesn't guarantee a response.
+        </p>
+      </div>
 
       <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Data sharing and support list">
         <thead class="nhsuk-table__head">
@@ -49,9 +53,7 @@
               <strong *ngIf="item.shared" class="nhsuk-tag" [ngClass]="innovationSupportStatus[item.status].cssClass">{{ innovationSupportStatus[item.status].label }}</strong>
             </td>
           </tr>
-
         </tbody>
-
       </table>
 
     </div>

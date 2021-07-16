@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
-import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-innovator-pages-innovations-overview',
@@ -13,10 +13,12 @@ import { forkJoin } from 'rxjs';
 })
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
 
+  contentReady = false;
+
   innovationId: string;
   innovationStatus: keyof typeof INNOVATION_STATUS = '';
   innovationSections: SectionsSummaryModel[] = [];
-  actionSummary: {requested: number, review: number} = { requested: 0, review: 0};
+  actionSummary: { requested: number, review: number } = { requested: 0, review: 0 };
   supportStatus = 'Awaiting support';
   supportingAccessors: { id: string; name: string, unit: string }[] = [];
   submittedAt: string | undefined;
@@ -33,7 +35,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     notStarted: number;
   } = { progressBar: [], submitted: 0, draft: 0, notStarted: 0 };
 
-
   isInAssessmentStatus(): boolean {
     return this.stores.innovation.isAssessmentStatus(this.innovationStatus);
   }
@@ -43,7 +44,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   }
 
   isSubmittedForAssessment(): boolean {
-    return this.submittedAt !== undefined;
+    return !this.submittedAt;
   }
 
   allStepsComplete(): boolean {
@@ -67,36 +68,33 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-
     forkJoin([
       this.innovatorService.getInnovationInfo(this.innovationId),
       this.stores.innovation.getSectionsSummary$('innovator', this.innovationId),
       this.innovatorService.getInnovationSupports(this.innovationId),
-    ]).subscribe(
-      ([innovationInfo, sectionSummary, innovationSupports]) => {
-        this.submittedAt = innovationInfo.submittedAt || '';
-        this.needsAssessmentCompleted = !this.isInAssessmentStatus();
-        this.assessmentId = innovationInfo.assessment?.id;
+    ]).subscribe(([innovationInfo, sectionSummary, innovationSupports]) => {
 
-        this.parseActionSummary(innovationInfo);
-        this.parseSectionSummary(sectionSummary);
+      this.submittedAt = innovationInfo.submittedAt || '';
+      this.needsAssessmentCompleted = !this.isInAssessmentStatus();
+      this.assessmentId = innovationInfo.assessment?.id;
 
-        this.supportStatus = innovationSupports
-          .find(s =>
-            s.status.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase())?.status ||
-             this.innovationSupportStatus.WAITING.label;
+      this.parseActionSummary(innovationInfo);
+      this.parseSectionSummary(sectionSummary);
 
-        if (this.supportStatus.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase()) {
-          this.supportStatus = this.innovationSupportStatus.ENGAGING.label;
-          this.supportingAccessors = innovationSupports
+      this.supportStatus = innovationSupports.find(s => s.status.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase())?.status || this.innovationSupportStatus.WAITING.label;
+
+      if (this.supportStatus.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase()) {
+        this.supportStatus = this.innovationSupportStatus.ENGAGING.label;
+        this.supportingAccessors = innovationSupports
           .filter(support => support.status.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase())
           .flatMap(s => s.accessors
-            .map(a => ({
-            ...a,
-            unit: s.organisationUnit.name,
-          })));
-        }
-      },
+            .map(a => ({ ...a, unit: s.organisationUnit.name }))
+          );
+      }
+
+      this.contentReady = true;
+
+    },
       (error) => {
         this.logger.error(error);
       }

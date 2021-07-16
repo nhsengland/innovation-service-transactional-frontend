@@ -27,7 +27,7 @@ describe('FooterComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
 
-    expect(compiled.querySelectorAll('a.nhsuk-footer__list-item-link').length).toEqual(3);
+    expect(compiled.querySelectorAll('a.nhsuk-footer__list-item-link').length).toEqual(4);
   });
 
   it('should render Home item link', () => {

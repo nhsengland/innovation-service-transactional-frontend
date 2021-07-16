@@ -17,6 +17,7 @@ type TabType = {
   showAssignedToMe: boolean;
   link: string;
   queryParams: { status: keyof typeof INNOVATION_SUPPORT_STATUS; };
+  notifications?: number | undefined;
 };
 
 
@@ -157,6 +158,11 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
       response => {
         this.innovationsList.setData(response.data, response.count);
         this.currentTab.numberDescription = `${response.count} ${this.currentTab.numberDescription}`;
+
+        for (const t of this.tabs) {
+          t.notifications = response.tabInfo ? response.tabInfo[t.key] : 0;
+        }
+
       },
       error => this.logger.error(error)
     );

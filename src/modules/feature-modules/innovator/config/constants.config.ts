@@ -107,7 +107,6 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
 
   new FormEngineModel({
     label: 'Finally, choose your data sharing preferences',
-    description: '<a href="/" target="_blank" rel="noopener noreferrer">What does each organisation do? (opens in a new window)</a>',
     parameters: [
       {
         id: 'organisationShares',

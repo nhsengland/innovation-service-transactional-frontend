@@ -62,10 +62,10 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
         { title: 'Home', link: '/accessor/dashboard' }
       ],
       rightItems: [
-        { title: 'Innovations', link: '/accessor/innovations' },
-        { title: 'Actions', link: '/accessor/actions' },
-        { title: 'Account', link: '/accessor/account' },
-        { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
+        { title: 'Innovations', link: '/accessor/innovations', key: 'INNOVATION' },
+        { title: 'Actions', link: '/accessor/actions', key: 'ACTION' },
+        // { title: 'Account', link: '/accessor/account', key: '' },
+        { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true, key: '' }
       ]
     };
 
@@ -79,31 +79,6 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
 
   });
 
-  // it('should have Qualifying Accessor Role values on navigationMenuBar', () => {
-
-  //   spyOn(authenticationStore, 'isQualifyingAccessorRole').and.returnValue(true);
-
-  //   const expected = {
-  //     leftItems: [
-  //       { title: 'Home', link: '/accessor/dashboard' }
-  //     ],
-  //     rightItems: [
-  //       { title: 'Innovations', link: '/accessor/innovations' },
-  //       { title: 'Actions', link: '/accessor/actions' },
-  //       { title: 'Account', link: '/accessor/account' },
-  //       { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
-  //     ]
-  //   };
-
-  //   fixture = TestBed.createComponent(AccessorLayoutComponent);
-  //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
-
-  //   (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
-
-  //   expect(fixture.componentInstance.navigationMenuBar).toEqual(expected);
-
-  // });
 
 
   it('should have leftSideBar with no values', () => {
@@ -130,8 +105,8 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
     const expected = [
       { title: 'Overview', link: `/accessor/innovations/innovation01/overview` },
       { title: 'Innovation record', link: `/accessor/innovations/innovation01/record` },
-      { title: 'Action tracker', link: `/accessor/innovations/innovation01/action-tracker` },
-      { title: 'Comments', link: `/accessor/innovations/innovation01/comments` },
+      { title: 'Action tracker', link: `/accessor/innovations/innovation01/action-tracker`, key: 'ACTION' },
+      { title: 'Comments', link: `/accessor/innovations/innovation01/comments`, key: 'COMMENT' },
       { title: 'Support status', link: `/accessor/innovations/innovation01/support` }
     ];
 

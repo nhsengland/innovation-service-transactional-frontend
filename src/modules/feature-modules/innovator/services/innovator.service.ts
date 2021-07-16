@@ -14,6 +14,9 @@ type getInnovationActionsListEndpointInDTO = {
   status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
   section: InnovationSectionsIds;
   createdAt: string; // '2021-04-16T09:23:49.396Z',
+  notifications: {
+    count: number
+  },
 };
 
 export type getInnovationInfoEndpointDTO = {
@@ -30,7 +33,8 @@ export type getInnovationInfoEndpointDTO = {
   action: {
     requestedCount: number;
     inReviewCount: number;
-  }
+  },
+  notifications: {[key: string]: number}
 };
 
 export type getInnovationActionInfoInDTO = {
@@ -56,6 +60,7 @@ export type getInnovationSupportsInDTO = {
     name: string;
   },
   accessors: { id: string, name: string }[],
+  notifications?: {[key: string]: number}
 };
 
 export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
@@ -154,8 +159,8 @@ export class InnovatorService extends CoreService {
       take(1),
       map(response => {
         return {
-          openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'` } })),
-          closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'` } })),
+          openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'`}})),
+          closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'`} })),
         };
       })
     );

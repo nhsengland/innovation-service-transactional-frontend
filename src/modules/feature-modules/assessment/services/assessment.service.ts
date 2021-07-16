@@ -27,11 +27,17 @@ export type getInnovationsListEndpointInDTO = {
       finishedAt: string; // "2021-04-16T09:23:49.396Z",
     };
     organisations: string[];
+    notifications: {
+      count: number;
+      isNew: boolean;
+    };
   }[];
+  tabInfo?: {[key: string]: number};
 };
 export type getInnovationsListEndpointOutDTO = {
   count: number;
   data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription'> & { isOverdue: boolean })[]
+  tabInfo?: {[key: string]: number};
 };
 
 export type getInnovationInfoEndpointDTO = {
@@ -120,8 +126,10 @@ export class AssessmentService extends CoreService {
             finishedAt: item.assessment.finishedAt,
           },
           organisations: item.organisations,
-          isOverdue: DatesHelper.dateDiff(item.submittedAt, Date()) >= 7
-        }))
+          isOverdue: DatesHelper.dateDiff(item.submittedAt, Date()) >= 7,
+          notifications: item.notifications,
+        })),
+        tabInfo: response.tabInfo,
       }))
     );
 
