@@ -11,15 +11,18 @@
 
   <div class="nhsuk-grid-row">
     <div *ngIf="sections.submitted > 0" class="nhsuk-grid-column-one-third">
-      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.submitted }} <span class="nhsuk-u-visually-hidden">sections submitted</span></h2>
+      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.submitted }} <span
+          class="nhsuk-u-visually-hidden">sections submitted</span></h2>
       <p>sections submitted</p>
     </div>
     <div *ngIf="sections.draft > 0" class="nhsuk-grid-column-one-third">
-      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.draft }} <span class="nhsuk-u-visually-hidden">sections in draft</span></h2>
+      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.draft }} <span
+          class="nhsuk-u-visually-hidden">sections in draft</span></h2>
       <p>sections in draft</p>
     </div>
     <div *ngIf="sections.notStarted > 0" class="nhsuk-grid-column-one-third">
-      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.notStarted }} <span class="nhsuk-u-visually-hidden">sections not started</span></h2>
+      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.notStarted }} <span
+          class="nhsuk-u-visually-hidden">sections not started</span></h2>
       <p>sections not started</p>
     </div>
   </div>
@@ -28,7 +31,7 @@
       See your <a routerLink="/innovator/innovations/{{ innovationId }}/record">innovation record</a>.
     </div>
   </div>
-
+  <!-- CREATION CARD -->
   <ng-container *ngIf="!isSubmittedForAssessment()">
     <div class="nhsuk-card nhsuk-u-margin-top-2">
       <div class="nhsuk-card__content">
@@ -36,7 +39,8 @@
         <p class="d-flex nhsuk-u-margin-bottom-2">
           <ng-container *ngTemplateOutlet="icon; context: { completed: allSectionsSubmitted()}"></ng-container>
           <span class="nhsuk-u-margin-right-2"></span>
-          Submit all sections of your&nbsp;<a routerLink="/innovator/innovations/{{ innovationId }}/record">innovation record </a>
+          Submit all sections of your&nbsp;<a routerLink="/innovator/innovations/{{ innovationId }}/record">innovation
+            record </a>
         </p>
         <p class="d-flex">
           <ng-container *ngTemplateOutlet="icon; context: { completed: false }"></ng-container>
@@ -46,44 +50,68 @@
       </div>
     </div>
   </ng-container>
-  <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-      <h3>Actions overview</h3>
+
+  <ng-container *ngIf="isInAssessmentStatus()">
+    <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <h3>Support status</h3>
+      </div>
     </div>
     <div class="nhsuk-grid-column-two-thirds">
-      <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.requested }}</p>
-      <p class="">actions requested of you</p>
-      See your <strong><a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker">action tracker</a></strong>
-
-    </div>
-    <div class="nhsuk-grid-column-one-third">
-      <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.review }}</p>
-      <p>actions awaiting review from an accessor</p>
-    </div>
-  </div>
-  <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-      <h3>Support status</h3>
+      <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ innovationStatusObj[innovationStatus]?.label || '' }}</p>
     </div>
     <div class="nhsuk-grid-column-two-thirds">
-      <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{supportStatus}}</p>
-      <ng-container *ngIf="supportingAccessors.length > 0">
-        <ul class="nhsuk-list">
-          <li *ngFor="let item of supportingAccessors">
-            {{item.unit}}, {{item.name}}
-          </li>
-        </ul>
-      </ng-container>
+      <p>You can expect the service team to get in touch within one week of submitting your record for assessment.</p>
+    </div>
+  </ng-container>
 
-      See <strong><a routerLink="/innovator/innovations/{{ innovationId }}/data-sharing">data sharing and support</a></strong>
+  <!-- ACTIONS AREA -->
+  <ng-container *ngIf="isSubmittedForAssessment() && !isInAssessmentStatus()">
+    <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <h3>Actions overview</h3>
+      </div>
+      <div class="nhsuk-grid-column-two-thirds">
+        <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.requested }}</p>
+        <p class="">actions requested of you</p>
+        See your <strong><a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker">action
+            tracker</a></strong>
+
+      </div>
+      <div class="nhsuk-grid-column-one-third">
+        <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.review }}</p>
+        <p>actions awaiting review from an accessor</p>
+      </div>
     </div>
-    <div class="nhsuk-grid-column-one-third" *ngIf="showNeedsAssessmentCompleteCard()">
-      <strong><a routerLink="/innovator/innovations/{{ innovationId }}/assessments/{{ assessmentId }}">Needs assessment completed</a></strong>
-      <p>Your innovation is visible to all organisations you've selected.</p>
+
+    <!-- SUPPORT AREA -->
+    <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <h3>Support status</h3>
+      </div>
+      <div class="nhsuk-grid-column-two-thirds">
+        <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{supportStatus}}</p>
+        <ng-container *ngIf="supportingAccessors.length > 0">
+          <ul class="nhsuk-list">
+            <li *ngFor="let item of supportingAccessors">
+              {{item.unit}}, {{item.name}}
+            </li>
+          </ul>
+        </ng-container>
+
+        See <strong><a routerLink="/innovator/innovations/{{ innovationId }}/data-sharing">data sharing and
+            support</a></strong>
+      </div>
+      <div class="nhsuk-grid-column-one-third" *ngIf="showNeedsAssessmentCompleteCard()">
+        <strong><a routerLink="/innovator/innovations/{{ innovationId }}/assessments/{{ assessmentId }}">Needs
+            assessment completed</a></strong>
+        <p>Your innovation is visible to all organisations you've selected.</p>
+      </div>
     </div>
-  </div>
+  </ng-container>
 </ng-container>
 
 <ng-template #icon let-completed="completed">
