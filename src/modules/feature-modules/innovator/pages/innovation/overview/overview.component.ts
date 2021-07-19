@@ -27,6 +27,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   assessmentId: string | undefined;
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+  innovationStatusObj = this.stores.innovation.INNOVATION_STATUS;
 
   sections: {
     progressBar: boolean[];
@@ -44,7 +45,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   }
 
   isSubmittedForAssessment(): boolean {
-    return !this.submittedAt;
+    return this.submittedAt !== '';
   }
 
   allStepsComplete(): boolean {
