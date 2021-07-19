@@ -12,6 +12,10 @@ export const COOKIES_USED: {
   ],
 
   analytics: [
+    { name: '_ga', purpose: 'Used to distinguish users.', expires: '2 years' },
+    { name: '_gid', purpose: 'Used to distinguish users.', expires: '24 hours' },
+    { name: 'ga', purpose: 'Used to persist session state.', expires: '2 years' },
+    { name: '_gac_gb_', purpose: 'Contains campaign related information. If you have linked your Google Analytics and Google Ads accounts, Google Ads website conversion tags will read this cookie unless you opt-out.', expires: '90 days' },
     { name: '_hjClosedSurveyInvites', purpose: 'Hotjar cookie that is set once a user interacts with an External Link Survey invitation modal. It is used to ensure that the same invite does not reappear if it has already been shown.', expires: '365 days' },
     { name: '_hjDonePolls', purpose: 'Hotjar cookie that is set once a user completes a survey using the On-site Survey widget. It is used to ensure that the same survey does not reappear if it has already been filled in.', expires: '365 days' },
     { name: '_hjMinimizedPolls', purpose: 'Hotjar cookie that is set once a user minimizes an On-site Survey widget. It is used to ensure that the widget stays minimized when the user navigates through your site.', expires: '365 days' },
