@@ -11,7 +11,7 @@ import { TriageInnovatorPackModule } from '@modules/feature-modules/triage-innov
 import { SurveyEndComponent } from './end.component';
 
 
-describe('FeatureModules/StarterInnovatorPack/Pages/Survey/SurveyEndComponent', () => {
+describe('FeatureModules/TriageInnovatorPack/Pages/Survey/SurveyEndComponent', () => {
 
   let component: SurveyEndComponent;
   let fixture: ComponentFixture<SurveyEndComponent>;
