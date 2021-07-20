@@ -20,7 +20,7 @@ import { SurveyStepComponent } from './step.component';
 import { SurveyService } from '../../services/survey.service';
 
 
-describe('FeatureModules/StarterInnovatorPack/Pages/Survey/StepComponent', () => {
+describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent', () => {
 
   let activatedRoute: ActivatedRoute;
   let environmentStore: EnvironmentStore;
