@@ -101,7 +101,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
         this.innovatorSummary = [
           {
             label: NEEDS_ASSESSMENT_QUESTIONS.innovator[0].label,
-            value: maturityLevelItems.find(item => item.value === response.assessment.hasProposition)?.label || '',
+            value: yesPartiallyNoItems.find(item => item.value === response.assessment.hasProposition)?.label || '',
             comment: response.assessment.hasPropositionComment || ''
           },
           {
