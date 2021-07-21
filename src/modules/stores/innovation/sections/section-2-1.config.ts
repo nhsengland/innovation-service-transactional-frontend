@@ -145,8 +145,6 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   const toReturn: SummaryParsingType[] = [];
 
-  parseImpacts(data);
-
   if (data.impacts === undefined) {
     data.impacts = [];
     if (data.impactPatients) { data.impacts?.push('PATIENTS'); }
@@ -182,10 +180,4 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   return toReturn;
 
-}
-
-function parseImpacts(data: StepPayloadType): void {
-  data.impacts = [];
-  if (data.impactPatients) { data.impacts?.push('PATIENTS'); }
-  if (data.impactClinicians) { data.impacts?.push('CLINICIANS'); }
 }
