@@ -5,14 +5,13 @@
   </div>
 </ng-container>
 
-
 <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-3">
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full app-component-reading-width">
-      <h1 class="nhsuk-heading-1">
-           Update support status 
-      </h1>
+
+      <h1 class="nhsuk-heading-1"> Update support status </h1>
+
       <form [formGroup]="form">
 
         <ng-container *ngIf="stepNumber === 1">
@@ -30,8 +29,10 @@
           <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep()">Continue</button>
 
         </ng-container>
+
+
         <ng-container *ngIf="stepNumber === 2">
-          
+
           <h3 class="nhsuk-heading-3">
             <section class="nhsuk-status_container">
               <div class="nhsuk-div_left">You selected </div>
@@ -40,36 +41,29 @@
               </div>
             </section>
           </h3>
-          <p class="nhsuk-hint">
-            {{currentStatus.description}}
-          </p>
-          <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5">
-            Assign one or more accessors from {{ organisationUnit }}
-          </h3>
+          <p class="nhsuk-hint"> {{currentStatus.description}} </p>
+          <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5"> Assign one or more accessors from {{ organisationUnit }} </h3>
           <div class="nhsuk-form-group">
-           <theme-form-checkbox-array [arrayName]="accessorsArrayName" [items]="accessorList"></theme-form-checkbox-array>
+            <theme-form-checkbox-array [arrayName]="accessorsArrayName" [items]="accessorList"></theme-form-checkbox-array>
           </div>
 
           <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep()">Continue</button>
 
         </ng-container>
 
+
         <ng-container *ngIf="stepNumber === 3">
 
           <div class="nhsuk-form-group">
             <ng-container *ngIf="selectedAccessors.length > 0">
-              <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5 nhsuk-cancel-wrapper">
-                You assigned
-              </h3>
+              <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5 nhsuk-cancel-wrapper"> You assigned </h3>
             </ng-container>
             <div *ngFor="let item of selectedAccessors" class="d-flex align-items-center">
               <theme-svg-icon type="success" class="nhsuk-u-padding-top-1 nhsuk-u-margin-right-1"></theme-svg-icon>
               <strong>{{ item.label }}</strong>
             </div>
             <br />
-            <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5">
-              Let the innovator know what's changed
-            </h3>
+            <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5"> Let the innovator know what's changed </h3>
             <br />
             <div>Enter your comment</div>
             <div class="nhsuk-form-group">
@@ -78,11 +72,15 @@
           </div>
 
           <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Save and post comment</button>
+
         </ng-container>
+
         <div class="nhsuk-cancel-wrapper">
           <a routerLink="/accessor/innovations/{{ innovationId }}/support">Cancel</a>
         </div>
+
       </form>
+
     </div>
   </div>
 

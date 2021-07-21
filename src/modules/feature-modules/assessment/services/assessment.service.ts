@@ -32,12 +32,12 @@ export type getInnovationsListEndpointInDTO = {
       isNew: boolean;
     };
   }[];
-  tabInfo?: {[key: string]: number};
+  tabInfo?: { [key: string]: number };
 };
 export type getInnovationsListEndpointOutDTO = {
   count: number;
   data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription'> & { isOverdue: boolean })[]
-  tabInfo?: {[key: string]: number};
+  tabInfo?: { [key: string]: number };
 };
 
 export type getInnovationInfoEndpointDTO = {
@@ -84,13 +84,13 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
   hasScaleResource: null | string;
   hasScaleResourceComment: null | string;
   summary: null | string;
-  organisations: { id: string; name: string; acronym: null | string; }[];
+  organisations: { id: string; name: string; acronym: null | string, organisationUnits: { id: string; name: string; acronym: string; }[] }[];
   assignToName: string;
   finishedAt: null | string;
 };
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
-  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'organisations' | 'orgNames'> & { organisations: string[], orgNames: string[] }
+  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation'>
 };
 
 
@@ -170,8 +170,7 @@ export class AssessmentService extends CoreService {
           hasScaleResource: response.hasScaleResource,
           hasScaleResourceComment: response.hasScaleResourceComment,
           summary: response.summary,
-          organisations: response.organisations.map(item => item.id),
-          orgNames: response.organisations.map(item => item.name),
+          organisations: response.organisations,
           finishedAt: response.finishedAt,
           assignToName: response.assignToName,
         }
@@ -190,7 +189,7 @@ export class AssessmentService extends CoreService {
 
   }
 
-  updateInnovationNeedsAssessment(innovationId: string, assessmentId: string, isSubmission: boolean, data: MappedObject): Observable<any> {
+  updateInnovationNeedsAssessment(innovationId: string, assessmentId: string, isSubmission: boolean, data: MappedObject): Observable<{ id: string }> {
 
     const body = Object.assign({}, data);
 
@@ -199,7 +198,7 @@ export class AssessmentService extends CoreService {
     }
 
     const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId/assessments/:assessmentId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, assessmentId });
-    return this.http.put<any>(url.buildUrl(), body).pipe(
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
     );

@@ -6,22 +6,27 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./notification-tag.component.scss'],
 })
 export class NotificationTagComponent implements OnInit {
-  @Input() count?: number | undefined;
+
+  @Input() count?: number;
   @Input() isNew: boolean;
   @Input() type: 'circle' | string;
 
   label: string;
+
   constructor() {
     this.count = this.count || 0;
     this.label = '';
     this.isNew = false;
     this.type = '';
   }
+
   ngOnInit(): void {
+
     if (!this.isNew) {
       this.label = this.count && this.count < 99 ? this.count.toString() : '99+';
     } else {
       this.label = 'New';
     }
+
   }
 }

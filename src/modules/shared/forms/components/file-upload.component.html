@@ -22,6 +22,6 @@
   style="margin-bottom: 50px">
   <ngx-dropzone-label>Click or drop your file here</ngx-dropzone-label>
   <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f.id)">
-    <ngx-dropzone-label>{{ f.file.name }} ({{ f.file.type }})</ngx-dropzone-label>
+    <ngx-dropzone-label style="word-break: break-word">{{ f.file.name.length > 50 ? (f.file.name | slice:0:50) + '...' : f.file.name }} ({{ f.file.type }})</ngx-dropzone-label>
   </ngx-dropzone-preview>
 </ngx-dropzone>

@@ -19,7 +19,6 @@ import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 
 // Services.
 import { OrganisationsService } from './services/organisations.service';
-import { NotificationTagComponent } from './components/notification-tag.component';
 import { NotificationService } from './services/notification.service';
 
 @NgModule({
@@ -42,8 +41,7 @@ import { NotificationService } from './services/notification.service';
     PageInnovationCommentsNewComponent,
     PageInnovationSupportStatusListComponent,
     PageNotFoundComponent,
-    // Components
-    NotificationTagComponent,
+
   ],
   providers: [
     OrganisationsService,
@@ -54,10 +52,7 @@ import { NotificationService } from './services/notification.service';
     TranslateModule,
 
     // Modules.
-    FormsModule,
-
-    // Components
-    NotificationTagComponent,
+    FormsModule
   ]
 })
 export class SharedModule { }

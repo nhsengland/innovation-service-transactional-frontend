@@ -36,11 +36,11 @@ export class DashboardComponent extends CoreComponent {
         description: 'Check and manage all your actions',
         link: '/accessor/actions', queryParams: {}
       },
-      {
-        title: 'View activity',
-        description: 'See all comments related to innovations you\'re engaging with',
-        link: '/accessor/activity', queryParams: {}
-      },
+      // {
+      //   title: 'View activity',
+      //   description: 'See all comments related to innovations you\'re engaging with',
+      //   link: '/accessor/activity', queryParams: {}
+      // },
       // {
       //   title: 'Your account',
       //   description: 'Edit your details, request and manage permissions',

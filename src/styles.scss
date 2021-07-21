@@ -82,7 +82,10 @@ $service-manual-container-size: 1100px; // Container width variable.
 .border-color-warning { border-color: var(--warning-color); }
 .border-color-neutral { border-color: var(--neutral-color); }
 
+.border-left-inset-neutral { border-left: 4px solid var(--color_nhsuk-grey-4); }
+
 .right-border-separator { border-right: 2px solid var(--nhsuk-border-color); }
+.bottom-border-separator { border-bottom: 1px solid var(--nhsuk-border-color); }
 
 // Container and layout classes.
 .app-width-container,
@@ -172,6 +175,19 @@ $service-manual-container-size: 1100px; // Container width variable.
     border-width: 0 0 3px 3px;
   }
 }
+
+
+.nhsuk-checkboxes__input { // Undertermined checkboxes.
+  + .undertermined-checkbox::after {
+    height: unset !important;
+    left: 10px !important;
+    top: 18px !important;
+    width: 22px !important;
+    transform: unset !important;
+    opacity: 1 !important;
+  }
+}
+
 
 .form-items-group {
   width: unset;
