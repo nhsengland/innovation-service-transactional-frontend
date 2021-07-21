@@ -6,8 +6,8 @@ import { hasOtherIntellectualItems, hasPatentsItems } from './catalogs.config';
 
 // Labels.
 const stepsLabels = {
-  l1: 'Have you done market research so that you understand the need for your innovation in the UK?',
-  l2: 'Please describe the market research you\'ve done, or are doing, within the UK market landscape',
+  l1: 'Do you have any patents for your innovation?',
+  l2: 'Do you have any other intellectual property for your innovation?',
 };
 
 

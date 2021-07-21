@@ -58,22 +58,22 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
       new FormEngineModel({
         label: stepsLabels.l4,
         description: 'Your innovation may be a combination of various categories. Selecting the primary category will help us find the right people to support you.',
-        parameters: [{ id: 'mainCategory', dataType: 'radio-group', validations: { isRequired: [true, 'Choose the category that best describes your innovation'] }, items: mainCategoryItems }]
+        parameters: [{ id: 'mainCategory', dataType: 'radio-group', items: mainCategoryItems }]
       }),
       new FormEngineModel({
         label: stepsLabels.l5,
         description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-        parameters: [{ id: 'areas', dataType: 'checkbox-array', validations: { isRequired: true }, items: areasItems }]
+        parameters: [{ id: 'areas', dataType: 'checkbox-array', items: areasItems }]
       }),
       new FormEngineModel({
         label: stepsLabels.l6,
         description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-        parameters: [{ id: 'clinicalAreas', dataType: 'checkbox-array', validations: { isRequired: true }, items: clinicalAreasItems }]
+        parameters: [{ id: 'clinicalAreas', dataType: 'checkbox-array', items: clinicalAreasItems }]
       }),
       new FormEngineModel({
         label: stepsLabels.l7,
         description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-        parameters: [{ id: 'careSettings', dataType: 'checkbox-array', validations: { isRequired: true }, items: careSettingsItems }]
+        parameters: [{ id: 'careSettings', dataType: 'checkbox-array', items: careSettingsItems }]
       }),
       new FormEngineModel({
         label: stepsLabels.l8,
