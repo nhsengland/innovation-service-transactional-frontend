@@ -116,7 +116,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
-  let parsedData = cloneDeep(data) as StepPayloadType;
+  const parsedData = cloneDeep(data) as StepPayloadType;
 
   parsedData.impacts = [];
   if (parsedData.impactPatients) { parsedData.impacts.push('PATIENTS'); }
@@ -180,4 +180,10 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   return toReturn;
 
+}
+
+function parseImpacts(data: StepPayloadType): void {
+  data.impacts = [];
+  if (data.impactPatients) { data.impacts?.push('PATIENTS'); }
+  if (data.impactClinicians) { data.impacts?.push('CLINICIANS'); }
 }
