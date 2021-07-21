@@ -29,7 +29,6 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       validations: { isRequired: true },
       items: yesPartiallyNoItems,
       additional: [new FormEngineParameterModel({ id: 'hasRegulatoryApprovalsComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
-
     }),
     new FormEngineParameterModel({
       id: 'hasEvidence',
@@ -56,7 +55,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       label: 'Do they have a well-defined value proposition?',
       description: 'This should be founded on a understanding of the value of the product to NHS patients, staff, services and organisations, gained through detailed market research',
       validations: { isRequired: true },
-      items: maturityLevelItems,
+      items: yesPartiallyNoItems,
       additional: [new FormEngineParameterModel({ id: 'hasPropositionComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
     }),
     new FormEngineParameterModel({
