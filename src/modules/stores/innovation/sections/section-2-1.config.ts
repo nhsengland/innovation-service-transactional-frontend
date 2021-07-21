@@ -181,12 +181,3 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
   return toReturn;
 
 }
-<<<<<<< HEAD
-
-function parseImpacts(data: StepPayloadType) {
-  data.impacts = [];
-  if (data.impactPatients) { data.impacts?.push('PATIENTS'); }
-  if (data.impactClinicians) { data.impacts?.push('CLINICIANS'); }
-}
-=======
->>>>>>> 323ab2d... Section 2.1 Fix
