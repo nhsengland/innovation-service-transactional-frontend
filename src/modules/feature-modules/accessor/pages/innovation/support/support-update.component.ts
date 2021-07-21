@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
 import { CoreComponent, FormArray, FormControl, FormGroup, Validators } from '@app/base';
+
 import { AccessorService } from '../../../services/accessor.service';
 
 
@@ -123,19 +125,18 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       this.stepNumber++;
     }
 
-    if (this.stepNumber === 2 &&
-        this.currentStatus === this.supportStatusObj.ENGAGING ) {
+    if (this.stepNumber === 2 && this.currentStatus === this.supportStatusObj.ENGAGING) {
 
-        if (this.selectedAccessors.length === 0) {
-          this.summaryAlert = {
-            type: 'error',
-            title: 'An error has occured when updating Status',
-            message: 'You must select at least one Accessor.'
-          };
-          return;
-        } else {
-          this.summaryAlert.type = '';
-        }
+      if (this.selectedAccessors.length === 0) {
+        this.summaryAlert = {
+          type: 'error',
+          title: 'An error has occured when updating Status',
+          message: 'You must select at least one Accessor.'
+        };
+        return;
+      } else {
+        this.summaryAlert.type = '';
+      }
 
     }
 
@@ -156,7 +157,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     this.accessorService.saveSupportStatus(this.innovationId, this.form.value, this.supportId)
       .subscribe(
         response => {
-          this.redirectTo(`/accessor/innovations/${this.innovationId}/support`, {result: 'updated'});
+          this.redirectTo(`/accessor/innovations/${this.innovationId}/support`, { result: 'updated' });
         },
         error => {
           this.logger.error(error);

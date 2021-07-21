@@ -1,0 +1,122 @@
+<div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
+  <div class="nhsuk-grid-column-two-thirds">
+    <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation.name }}</h1>
+  </div>
+  <div *ngIf="innovation.assessment.id" class="nhsuk-grid-column-one-third text-align-right">
+    <a routerLink="/accessor/innovations/{{ innovationId }}/assessments/{{ innovation.assessment.id }}">View needs assessment</a>
+  </div>
+</div>
+<hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-3" />
+
+<h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-5">Support status</h2>
+
+<a href="/" class=""> Support offer guide (opens in a new window) </a>
+<a routerLink="/accessor/innovations/{{ innovationId }}/support/statuses" class=""> Support status key </a>
+
+
+
+
+<!-- <ol class="app-task-list">
+  <li *ngFor="let organisation of organisations">
+
+    <h2 class="app-task-list__section">
+      <span class="app-task-list__section-number">{{ i + 1 }}. </span> {{ sectionGroup.title }}
+      <span *ngIf="i === 0" class="nhsuk-heading-xs nhsuk-u-margin-bottom-0 float-r">Open actions</span>
+    </h2>
+
+    <ul class="app-task-list__items">
+      <li *ngFor="let section of sectionGroup.sections; let j = index" class="app-task-list__item">
+
+        <ng-container *ngIf="section.status !== 'UNKNOWN'">
+          <span class="app-task-list__task-icon">
+            <ng-container *ngTemplateOutlet="icon; context: { status: section.status }"></ng-container>
+          </span>
+        </ng-container>
+
+        <span class="app-task-list__task-name"> {{ (i + 1) + '.' + (j + 1) }} <a routerLink="{{ baseUrl }}/{{section.id}}" class="nhsuk-link">{{ section.title }}</a> </span>
+
+        <strong *ngIf="section.actionStatus" class="nhsuk-tag app-task-list__tag" [ngClass]="innovationSectionActionStatus[section.actionStatus].cssClass">
+          {{ innovationSectionActionStatus[section.actionStatus].label }}
+        </strong>
+
+      </li>
+    </ul>
+
+  </li>
+</ol> -->
+
+
+
+
+
+
+
+
+<ng-container *ngFor="let organisation of organisations">
+
+  <div class="d-flex nhsuk-body-m nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
+    <div>{{ organisation.info.name }}</div>
+    <a href="javascript:void(0)" (click)="onShowHideClicked(organisation.info.id)" class="ml-auto"> {{ organisation.showHideText }} </a>
+  </div>
+
+  <ng-container *ngIf="organisation.showHideStatus === 'opened'">
+    <ng-container *ngFor="let organisationUnit of organisation.info.organisationUnits">
+
+      <div class="d-flex nhsuk-body-m nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 nhsuk-u-padding-left-3 nhsuk-u-margin-0 border-left-inset-neutral">
+        <div class="bottom-border-separator nhsuk-u-margin-left-3">{{ organisationUnit.name }}</div>
+        <strong class="nhsuk-tag ml-auto bottom-border-separator" [ngClass]="innovationSupportStatus[organisationUnit.status].cssClass">{{ innovationSupportStatus[organisationUnit.status].label }}</strong>
+      </div>
+
+    </ng-container>
+  </ng-container>
+
+</ng-container>
+
+
+
+
+<table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Open actions list">
+  <thead class="nhsuk-table__head">
+    <tr>
+      <th scope="col">Organisation</th>
+      <th scope="col" class="text-align-right">Support status</th>
+    </tr>
+  </thead>
+  <tbody class="nhsuk-table__body">
+
+    <ng-container *ngFor="let organisation of organisations">
+
+      <tr class="nhsuk-table__row">
+        <td class="nhsuk-table__cell">
+          <span class="nhsuk-table-responsive__heading">Organisation</span>
+          <span>{{ organisation.info.name }}</span>
+        </td>
+        <td class="nhsuk-table__cell text-align-right">
+          <span class="nhsuk-table-responsive__heading">Support status</span>
+          <a href="javascript:void(0)" (click)="onShowHideClicked(organisation.info.id)" class="ml-auto"> {{ organisation.showHideText }} </a>
+          <!-- <strong class="nhsuk-tag" [ngClass]="innovationSupportStatus[organisation.info.status].cssClass">{{ innovationSupportStatus[organisation.info.status].label }}</strong> -->
+        </td>
+      </tr>
+
+      <ng-container *ngIf="organisation.showHideStatus === 'opened'">
+        <ng-container *ngFor="let organisationUnit of organisation.info.organisationUnits">
+
+          <tr class="nhsuk-table__row">
+            <td class="nhsuk-table__cell border-left-inset-neutral">
+              <span class="nhsuk-table-responsive__heading">Unit</span>
+              <span>{{ organisationUnit.name }}</span>
+            </td>
+            <td class="nhsuk-table__cell text-align-right">
+              <span class="nhsuk-table-responsive__heading">Support status</span>
+              <strong class="nhsuk-tag" [ngClass]="innovationSupportStatus[organisationUnit.status].cssClass">{{ innovationSupportStatus[organisationUnit.status].label }}</strong>
+            </td>
+          </tr>
+
+        </ng-container>
+      </ng-container>
+
+
+    </ng-container>
+
+  </tbody>
+</table>

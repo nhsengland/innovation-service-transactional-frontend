@@ -22,6 +22,7 @@ export class FormEngineHelper {
       const additionalFields = parameter.additional || [];
 
       switch (parameter.dataType) {
+        case 'grouped-checkbox-array': // Creates an FormArray and pushes defaultValues into it.
         case 'checkbox-array': // Creates an FormArray and pushes defaultValues into it.
           form.addControl(parameter.id, new FormArray([]));
           (parameterValue as string[] || []).forEach(v => { (form.get(parameter.id) as FormArray).push(new FormControl(v)); });

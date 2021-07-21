@@ -11,12 +11,13 @@ import { HeaderBreadcrumbsBarComponent } from './components/header/breadcrumbs-b
 import { HeaderNavigationBarComponent } from './components/header/navigation-bar.component';
 import { FooterComponent } from './components/footer/footer.component';
 
+import { SvgIconComponent } from './components/icons/svg-icon.component';
+
 import { ActionLinkComponent } from './components/navigation/action-link.component';
 import { BackLinkComponent } from './components/navigation/back-link.component';
 import { PrintLinkComponent } from './components/navigation/print-link.component';
 
-import { SvgIconComponent } from './components/icons/svg-icon.component';
-import { NotificationTagComponent } from './components/header/notification-tag.component';
+import { NotificationTagComponent } from './components/tag/notification-tag.component';
 
 @NgModule({
   imports: [
@@ -33,13 +34,13 @@ import { NotificationTagComponent } from './components/header/notification-tag.c
     HeaderNavigationBarComponent,
     FooterComponent,
 
+    SvgIconComponent,
+
     ActionLinkComponent,
     BackLinkComponent,
     PrintLinkComponent,
 
-    SvgIconComponent,
-
-    NotificationTagComponent,
+    NotificationTagComponent
   ],
   providers: [],
   exports: [
@@ -52,11 +53,13 @@ import { NotificationTagComponent } from './components/header/notification-tag.c
     HeaderNavigationBarComponent,
     FooterComponent,
 
+    SvgIconComponent,
+
     ActionLinkComponent,
     BackLinkComponent,
     PrintLinkComponent,
 
-    SvgIconComponent
+    NotificationTagComponent
   ]
 })
 export class ThemeModule { }

@@ -16,8 +16,11 @@ import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-
 import { InnovationActionTrackerNewComponent } from './pages/innovation/action-tracker/action-tracker-new.component';
 import { InnovationActionTrackerEditComponent } from './pages/innovation/action-tracker/action-tracker-edit.component';
 import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
-import { InnovationSupportUpdateComponent } from './pages/innovation/support-update/support-update.component';
-import { InnovationSupportInfoComponent } from './pages/innovation/support-update/support-info.component';
+
+import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './pages/innovation/support/organisations-support-status-info.component';
+import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './pages/innovation/support/organisations-support-status-suggest.component';
+import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
+import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
 
 // Services.
 import { AccessorService } from './services/accessor.service';
@@ -46,6 +49,9 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovationActionTrackerNewComponent,
     InnovationActionTrackerEditComponent,
     InnovationNeedsAssessmentOverviewComponent,
+
+    InnovationSupportOrganisationsSupportStatusInfoComponent,
+    InnovationSupportOrganisationsSupportStatusSuggestComponent,
     InnovationSupportUpdateComponent,
     InnovationSupportInfoComponent,
   ],

@@ -67,15 +67,19 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   ngOnInit(): void {
 
-    // Update last step with the organisations list and pre-select all checkboxes.
-    this.organisationsService.getAccessorsOrganisations().subscribe(response => {
-      NEEDS_ASSESSMENT_QUESTIONS.organisations[0].items = response.map(item => ({ value: item.id, label: item.name }));
+    // Update last step with the organisations list with description and pre-select all checkboxes.
+    this.organisationsService.getAccessorsOrganisationUnits().subscribe(response => {
+      NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="${this.stores.environment.BASE_URL}/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer">Support offer guide (opens in a new window)`;
+      NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].groupedItems = response.map(item => ({ value: item.id, label: item.name, items: item.organisationUnits.map(i => ({ value: i.id, label: i.name })) }));
     });
 
     this.assessmentService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId).subscribe(
       response => {
         this.innovationName = response.innovation.name;
-        this.form.data = response.assessment;
+        this.form.data = {
+          ...response.assessment,
+          organisationUnits: response.assessment.organisations.reduce((unitsAcc: string[], o) => [...unitsAcc, ...o.organisationUnits.map(u => u.id)], [])
+        };
       },
       error => {
         this.logger.error(error);
@@ -102,7 +106,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
           case 2:
             this.form.sections = [
               { title: 'Support need summary', parameters: NEEDS_ASSESSMENT_QUESTIONS.summary },
-              { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.organisations }
+              { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.organisationUnits }
             ];
             break;
         }
@@ -137,6 +141,9 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     });
 
+    console.log(this.currentAnswers);
+
+
     if (!isValid) {
       return;
     }
@@ -148,7 +155,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
             break;
           case 'submit':
-            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`, { alert: 'needsAssessmentSubmited'});
+            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`, { alert: 'needsAssessmentSubmited' });
             break;
           default:
             break;

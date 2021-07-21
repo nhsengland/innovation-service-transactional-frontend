@@ -54,7 +54,7 @@
               <p class="">{{ assessment?.summary }}</p>
 
               <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Suggested organisations</h2>
-              <p *ngFor="let item of (assessment?.orgNames || [])" class="nhsuk-u-margin-bottom-1">{{ item }}</p>
+              <p *ngFor="let item of assessment?.organisationsNames" class="nhsuk-u-margin-bottom-1">{{ item }}</p>
 
               <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
               <a *ngIf="false" routerLink="/assessment/innovations/{{innovationId}}/assessments/{{ assessmentId }}/edit/1}}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"> Edit assessment </a>

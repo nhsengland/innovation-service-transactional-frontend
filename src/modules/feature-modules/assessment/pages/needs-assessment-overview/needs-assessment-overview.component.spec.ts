@@ -61,15 +61,15 @@ describe('FeatureModules/Assessment/Innovation/InnovationNeedsAssessmentOverview
 
     const responseMock = {
       innovation: { id: '01', name: 'Innovation 01' },
-      assessment: { description: 'description' }
+      assessment: { description: 'description', organisations: [] }
     };
     assessmentService.getInnovationNeedsAssessment = () => of(responseMock as any);
-    const expected = responseMock.assessment;
+    const expected = { ...responseMock.assessment, organisationsNames: [] };
 
     fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.assessment).toBe(expected);
+    expect(component.assessment).toEqual(expected);
 
   });
 
