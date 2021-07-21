@@ -118,7 +118,9 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   let parsedData = cloneDeep(data) as StepPayloadType;
 
-  parseImpacts(parsedData);
+  parsedData.impacts = [];
+  if (parsedData.impactPatients) { parsedData.impacts.push('PATIENTS'); }
+  if (parsedData.impactClinicians) { parsedData.impacts.push('CLINICIANS'); }
 
   parsedData.subgroups.forEach((item, i) => { parsedData[`subGroupName_${i}`] = item.conditions; });
 
@@ -144,6 +146,12 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
   const toReturn: SummaryParsingType[] = [];
   
   parseImpacts(data);
+
+  if (data.impacts === undefined) {
+    data.impacts = [];
+    if (data.impactPatients) { data.impacts?.push('PATIENTS'); }
+    if (data.impactClinicians) { data.impacts?.push('CLINICIANS'); }
+  }
 
   toReturn.push({
     label: stepsLabels.l1,
