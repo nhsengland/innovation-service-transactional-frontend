@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { RoutingHelper } from '@modules/core';
+import { DatesHelper, RoutingHelper } from '@modules/core';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { getInnovationNeedsAssessmentEndpointOutDTO } from '@modules/feature-modules/assessment/services/assessment.service';
@@ -10,14 +10,14 @@ import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovat
 
 import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
 
-import { AssessmentService } from '../../services/assessment.service';
+import { AssessmentService } from '../../../services/assessment.service';
 
 
 @Component({
-  selector: 'app-assessment-pages-innovation-needs-assessment-overview',
-  templateUrl: './needs-assessment-overview.component.html'
+  selector: 'app-assessment-pages-innovation-assessment-overview',
+  templateUrl: './assessment-overview.component.html'
 })
-export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent implements OnInit {
+export class InnovationAssessmentOverviewComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
   assessmentId: string;
@@ -29,6 +29,8 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
 
   summaryAlert: { type: '' | 'error' | 'success', title: string, message: string };
+
+  shouldShowUpdatedAt = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -64,6 +66,8 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
       response => {
 
         this.assessment = { ...response.assessment, organisationsNames: response.assessment.organisations.map(item => item.name) };
+
+        this.shouldShowUpdatedAt = DatesHelper.dateDiff(this.assessment?.finishedAt || '', this.assessment?.updatedAt || '') > 0;
 
         const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === response.assessment.maturityLevel) || 0) + 1;
 

@@ -87,10 +87,14 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
   organisations: { id: string; name: string; acronym: null | string, organisationUnits: { id: string; name: string; acronym: string; }[] }[];
   assignToName: string;
   finishedAt: null | string;
+  createdAt: string;
+  createdBy: string;
+  updatedAt: null | string;
+  updatedBy: null | string;
 };
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
-  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation'>
+  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation'> & { hasBeenSubmitted: boolean}
 };
 
 
@@ -171,8 +175,13 @@ export class AssessmentService extends CoreService {
           hasScaleResourceComment: response.hasScaleResourceComment,
           summary: response.summary,
           organisations: response.organisations,
-          finishedAt: response.finishedAt,
           assignToName: response.assignToName,
+          finishedAt: response.finishedAt,
+          createdAt: response.createdAt,
+          createdBy: response.createdBy,
+          updatedAt: response.updatedAt,
+          updatedBy: response.updatedBy,
+          hasBeenSubmitted: !!response.finishedAt
         }
       }))
     );

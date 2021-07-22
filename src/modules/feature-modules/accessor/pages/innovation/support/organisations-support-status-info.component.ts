@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { RoutingHelper } from '@modules/core';
 import { OrganisationsService, getOrganisationUnitsSupportStatusDTO } from '@shared-module/services/organisations.service';
 
-import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
+import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
 @Component({
@@ -15,12 +14,11 @@ import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/
 export class InnovationSupportOrganisationsSupportStatusInfoComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-  innovation: InnovationDataType;
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
   organisations: {
-    info: getOrganisationUnitsSupportStatusDTO;
+    info: getOrganisationUnitsSupportStatusDTO & { status?: keyof typeof INNOVATION_SUPPORT_STATUS; }
     showHideStatus: 'hidden' | 'opened' | 'closed';
     showHideText: null | string;
   }[] = [];
@@ -34,7 +32,6 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
 
   }
 
@@ -43,11 +40,17 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
 
     this.organisationsService.getOrganisationUnitsSupportStatus(this.innovationId).subscribe(
       response => {
-        this.organisations = response.map(item => ({
-          info: item,
-          showHideStatus: 'closed',
-          showHideText: `Show ${item.organisationUnits.length} units`
-        }));
+
+        this.organisations = response.map(item => {
+
+          if (item.organisationUnits.length === 1) {
+            return { info: { ...item.organisationUnits[0], organisationUnits: [] }, showHideStatus: 'hidden', showHideText: null };
+          } else {
+            return { info: item, showHideStatus: 'closed', showHideText: `Show ${item.organisationUnits.length} units` };
+          }
+
+        });
+
       },
       error => {
         this.logger.error(error);

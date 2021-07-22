@@ -27,7 +27,8 @@
     </div>
 
     <button *ngIf="stepId === 1" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('continue')">Continue</button>
-    <button *ngIf="stepId === 2" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">Submit needs assessment</button>
+    <button *ngIf="stepId === 2 && assessmentHasBeenSubmitted" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('update')">Update needs assessment</button>
+    <button *ngIf="stepId === 2 && !assessmentHasBeenSubmitted" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">Submit needs assessment</button>
     <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5" (click)="onSubmit('saveAsDraft')">Save as draft</button>
 
   </div>

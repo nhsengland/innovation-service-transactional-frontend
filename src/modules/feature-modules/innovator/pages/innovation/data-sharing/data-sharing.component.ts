@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
-import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { getInnovationSupportsInDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { getOrganisationUnitsSupportStatusDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 @Component({
@@ -16,8 +17,19 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 export class InnovationDataSharingComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
+
+  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+
+
+  // organisationsNew: {
+  //   info: getInnovationSupportsInDTO & { status?: keyof typeof INNOVATION_SUPPORT_STATUS; }
+  //   showHideStatus: 'hidden' | 'opened' | 'closed';
+  //   showHideText: null | string;
+  // }[] = [];
+
+
+
   organisations: { id: string, name: string, shared: boolean, status: keyof typeof INNOVATION_SUPPORT_STATUS }[];
-  innovationSupportStatus = INNOVATION_SUPPORT_STATUS;
   organisationInfoUrl: string;
 
   summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
@@ -56,6 +68,18 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
+
+
+
+    // forkJoin([
+    //   this.organisationsService.getAccessorsOrganisations(),
+    //   this.innovatorService.getInnovationShares(this.innovationId),
+    //   this.innovatorService.getInnovationSupports(this.innovationId, false),
+    // ]).subscribe(([innovationInfo, sectionSummary, innovationSupports]) => {
+
+    // });
+
+
     this.organisationsService.getAccessorsOrganisations().subscribe(
       response => {
 
@@ -66,7 +90,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
           shared: false,
         }));
 
-        this.innovatorService.getOrganisations(this.innovationId).subscribe(
+        this.innovatorService.getInnovationShares(this.innovationId).subscribe(
           r => {
 
             r.forEach(organisation => {
@@ -81,6 +105,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
         );
       }
     );
+
   }
 
 }
