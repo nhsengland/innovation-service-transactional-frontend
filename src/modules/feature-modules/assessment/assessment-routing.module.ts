@@ -8,6 +8,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
 
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { InnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/assessment-new.component';
 import { InnovationAssessmentEditComponent } from './pages/innovation/assessment/assessment-edit.component';
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/innovation-record.component';
@@ -16,7 +17,6 @@ import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 import { InnovationSectionViewComponent } from '@modules/shared/pages/innovation/section-view.component';
 import { InnovationSectionEvidenceViewComponent } from '@modules/shared/pages/innovation/evidence-view.component';
-import { InnovationNeedsAssessmentOverviewComponent } from './pages/needs-assessment-overview/needs-assessment-overview.component';
 
 const routes: Routes = [
 
@@ -60,7 +60,7 @@ const routes: Routes = [
                   {
                     path: ':assessmentId',
                     children: [
-                      { path: '', pathMatch: 'full', component: InnovationNeedsAssessmentOverviewComponent },
+                      { path: '', pathMatch: 'full', component: InnovationAssessmentOverviewComponent },
                       { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
                       {
                         path: 'edit/:stepId', pathMatch: 'full', component: InnovationAssessmentEditComponent,

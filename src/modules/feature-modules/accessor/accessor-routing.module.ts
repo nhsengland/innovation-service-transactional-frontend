@@ -122,7 +122,7 @@ const routes: Routes = [
               },
               {
                 path: 'support/statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
-                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'accessor/innovations/:innovationId/support', label: 'Go back' } } }
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Go back' } } }
               },
               {
                 path: 'support/new', pathMatch: 'full', component: InnovationSupportUpdateComponent,

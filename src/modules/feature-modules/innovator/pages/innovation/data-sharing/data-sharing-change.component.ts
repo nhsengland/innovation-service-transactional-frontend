@@ -54,7 +54,7 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
       response => {
         this.organisationsList = response.map( o => ({ value: o.id, label: o.name }));
 
-        this.innovatorService.getOrganisations(this.innovationId).subscribe(
+        this.innovatorService.getInnovationShares(this.innovationId).subscribe(
           r =>  {
             this.initialState.organisations = r;
             r.forEach((organisation) => {

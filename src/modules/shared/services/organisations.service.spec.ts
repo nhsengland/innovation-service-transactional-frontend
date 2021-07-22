@@ -50,7 +50,7 @@ describe('Shared/Services/OrganisationsService', () => {
 
     service.getAccessorsOrganisations().subscribe(success => response = success, error => response = error);
 
-    const req = httpMock.expectOne(`${environmentStore.API_URL}/organisations?type=accessor`);
+    const req = httpMock.expectOne(`${environmentStore.API_URL}/organisations?type=ACCESSOR`);
     req.flush(responseMock);
     expect(req.request.method).toBe('GET');
     expect(response).toEqual(expected);

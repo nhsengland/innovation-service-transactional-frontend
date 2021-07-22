@@ -32,6 +32,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     data: { [key: string]: any };
   };
 
+  assessmentHasBeenSubmitted: null | boolean;
+
   currentAnswers: { [key: string]: any };
 
   summaryAlert: { type: '' | 'error' | 'warning', title: string, message: string };
@@ -58,6 +60,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     this.form = { sections: [], data: {} };
 
+    this.assessmentHasBeenSubmitted = null;
+
     this.currentAnswers = {};
 
     this.summaryAlert = { type: '', title: '', message: '' };
@@ -68,7 +72,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   ngOnInit(): void {
 
     // Update last step with the organisations list with description and pre-select all checkboxes.
-    this.organisationsService.getAccessorsOrganisationUnits().subscribe(response => {
+    this.organisationsService.getOrganisationUnits().subscribe(response => {
       NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="${this.stores.environment.BASE_URL}/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer">Support offer guide (opens in a new window)`;
       NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].groupedItems = response.map(item => ({ value: item.id, label: item.name, items: item.organisationUnits.map(i => ({ value: i.id, label: i.name })) }));
     });
@@ -80,6 +84,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
           ...response.assessment,
           organisationUnits: response.assessment.organisations.reduce((unitsAcc: string[], o) => [...unitsAcc, ...o.organisationUnits.map(u => u.id)], [])
         };
+        this.assessmentHasBeenSubmitted = response.assessment.hasBeenSubmitted;
       },
       error => {
         this.logger.error(error);
@@ -117,7 +122,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   }
 
 
-  onSubmit(action: 'continue' | 'saveAsDraft' | 'submit'): void {
+  onSubmit(action: 'continue' | 'update' | 'saveAsDraft' | 'submit'): void {
 
     this.summaryAlert = { type: '', title: '', message: '' };
 
@@ -141,9 +146,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     });
 
-    console.log(this.currentAnswers);
-
-
     if (!isValid) {
       return;
     }
@@ -154,6 +156,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
           case 'continue':
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
             break;
+          case 'update':
           case 'submit':
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`, { alert: 'needsAssessmentSubmited' });
             break;
