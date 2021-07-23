@@ -154,15 +154,14 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     if (!this.validateForm(this.stepNumber)) { return; }
     this.formSupportObj = { ...this.form.value };
 
-    this.accessorService.saveSupportStatus(this.innovationId, this.form.value, this.supportId)
-      .subscribe(
-        response => {
-          this.redirectTo(`/accessor/innovations/${this.innovationId}/support`, { result: 'updated' });
-        },
-        error => {
-          this.logger.error(error);
-        }
-      );
+    this.accessorService.saveSupportStatus(this.innovationId, this.form.value, this.supportId).subscribe(
+      response => {
+        this.redirectTo(`/accessor/innovations/${this.innovationId}/support`, { alert: 'supportUpdateSuccess' });
+      },
+      error => {
+        this.logger.error(error);
+      }
+    );
   }
 
   private validateForm(step: number): boolean {

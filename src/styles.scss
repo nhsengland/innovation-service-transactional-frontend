@@ -75,6 +75,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 .bg-color-grey { background-color: var(--color_nhsuk-grey-5); }
 
 .font-color-secondary { color: $nhsuk-secondary-text-color; }
+.font-color-error { color: var(--error-color); }
 
 .border-bottom-0 { border-bottom: 0; }
 
@@ -143,6 +144,10 @@ $service-manual-container-size: 1100px; // Container width variable.
   @media (max-width: 40.0525em) {
     right: unset;
   }
+}
+
+.nhsuk-tag {
+  height: fit-content;
 }
 
 

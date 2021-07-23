@@ -49,7 +49,7 @@ export type getInnovationActionInfoInDTO = {
 
 export type getInnovationSupportsInDTO = {
   id: string;
-  status: string;
+  status: keyof typeof INNOVATION_SUPPORT_STATUS;
   organisationUnit: {
     id: string;
     name: string;

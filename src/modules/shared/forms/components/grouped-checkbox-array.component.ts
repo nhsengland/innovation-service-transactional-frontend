@@ -57,15 +57,6 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
       }
     });
 
-    // This will filter any value not available on the items variable.
-    // const itemsValues = (this.groupedItems || []).map(item => item.value);
-    // this.fieldArrayValues.forEach((item) => {
-    //   if (!itemsValues.includes(item)) {
-    //     const index = (this.fieldArrayControl.value as string[]).indexOf(item);
-    //     this.fieldArrayControl.removeAt(index);
-    //   }
-    // });
-
   }
 
   ngDoCheck(): void {

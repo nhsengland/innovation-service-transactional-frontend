@@ -24,7 +24,7 @@
           <div> {{ fgi.gItem.label }}</div>
           <a href="javascript:void(0)" (click)="onShowHideClicked(fgi.gItem.value)" class="ml-auto">{{ fgi.showHideText }} </a>
         </label>
-        <div *ngIf="description" class="nhsuk-hint nhsuk-checkboxes__hint">{{ fgi.gItem.description }}</div>
+        <div *ngIf="fgi.gItem.description" class="nhsuk-hint nhsuk-checkboxes__hint">{{ fgi.gItem.description }}</div>
       </div>
 
       <div class="nhsuk-u-margin-left-3 nhsuk-u-padding-left-4 border-left-inset-neutral" [ngClass]="{'nhsuk-u-visually-hidden': fgi.showHideStatus !== 'opened'}">
@@ -32,7 +32,7 @@
           <div class="nhsuk-checkboxes__item">
             <input id="{{ id }}{{ item.value }}" type="checkbox" [value]="item.value" [checked]="isChecked(item.value)" (change)="onChanged($event)" class="nhsuk-checkboxes__input" />
             <label for="{{ id }}{{ item.value }}" class="nhsuk-label nhsuk-checkboxes__label">{{ item.label }}</label>
-            <div *ngIf="description" class="nhsuk-hint nhsuk-checkboxes__hint">{{ item.description }}</div>
+            <div *ngIf="item.description" class="nhsuk-hint nhsuk-checkboxes__hint">{{ item.description }}</div>
           </div>
         </ng-container>
       </div>
