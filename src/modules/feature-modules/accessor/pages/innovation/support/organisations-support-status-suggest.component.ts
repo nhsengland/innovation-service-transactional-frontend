@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent } from '@app/base';
-import { RoutingHelper } from '@modules/core';
+import { CoreComponent, FormArray, FormControl, FormGroup, Validators } from '@app/base';
 
-import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
+import { FormEngineParameterModel } from '@modules/shared/forms';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -16,18 +15,26 @@ import { AccessorService } from '../../../services/accessor.service';
 export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
+  stepId: number;
 
-  innovation: InnovationDataType;
+  form = new FormGroup({
+    organisationUnits: new FormArray([], Validators.required),
+    comment: new FormControl('', Validators.required),
+    confirm: new FormControl(false)
+  });
+  formSubmitted = false;
 
-  innovationSupport: {
-    organisationUnit: string;
-    accessors: string;
-    status: string;
-  } = { organisationUnit: '', accessors: '' , status: '' };
+  groupedItems: FormEngineParameterModel['groupedItems'] = [];
 
-  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+  chosenUnits: { organisation: string, units: string[] }[] = [];
 
   summaryAlert: { type: '' | 'error' | 'warning' | 'success', title: string, message: string };
+
+
+  isValidStepId(): boolean {
+    const id = this.activatedRoute.snapshot.params.stepId;
+    return (1 <= Number(id) && Number(id) <= 2);
+  }
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -37,8 +44,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-
-    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    this.stepId = this.activatedRoute.snapshot.params.stepId;
 
     this.summaryAlert = { type: '', title: '', message: '' };
 
@@ -47,62 +53,81 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
   ngOnInit(): void {
 
-    const queryResult = this.activatedRoute.snapshot.queryParams.result;
+    this.accessorService.getOrganisationUnitsToSuggest(this.innovationId).subscribe(
+      response => {
 
-    // Is this a redirect from the update innovation support status?
-    if (queryResult && queryResult === 'updated') {
+        this.groupedItems = response.map(item => ({
+          value: item.id,
+          label: item.name,
+          description: item.description,
+          items: item.organisationUnits.map(i => ({ value: i.id, label: i.name, description: i.description }))
+        }));
+      }
+    );
 
-      // Yes. It is.
-      // Update the summary
-      this.summaryAlert = {
-        type: 'success',
-        title: 'Support status updated',
-        message: 'You\'ve updated your support status and posted a comment to the innovator.'
-      };
+    this.subscriptions.push(
+      this.activatedRoute.params.subscribe(params => {
+
+        this.stepId = Number(params.stepId);
+
+        if (!this.isValidStepId()) {
+          this.redirectTo('not-found');
+        }
+
+      })
+    );
+  }
+
+
+  onSubmitStep(): void {
+
+    if (!this.form.get('organisationUnits')?.valid) {
+      this.form.get('organisationUnits')?.markAsTouched();
+      return;
     }
-    //   // Refetch the Innovation now with a new support entry
-    //   // and update the support.id and support.status information.
-    //   //if (!this.innovation.support.id) {
-    //     this.accessorService.getInnovationInfo(this.innovationId).subscribe(
-    //       response => {
-    //         this.innovation.support.id = response.support?.id;
-    //         this.innovation.support.status = response.support?.status || 'UNASSIGNED';
-    //         this.loadSupportInfo(this.innovation.support.id || '');
-    //       }
-    //     );
-    //   //}
-    // }
 
-    // // When a first time support is created, the support.id is undefined.
-    // // This only runs on innovations with a support.id
-    // if (this.innovation.support.id) {
-    //   this.loadSupportInfo(this.innovation.support.id);
-    // }
+    this.chosenUnits = (this.groupedItems || []).map(item => {
 
+      const units = item.items.filter(i => (this.form.get('organisationUnits')?.value as string[]).includes(i.value)).map(c => c.label);
 
-    this.accessorService.getInnovationInfo(this.innovationId).subscribe(
-      response => {
-        this.innovation.support.id = response.support?.id;
-        this.innovation.support.status = response.support?.status || 'UNASSIGNED';
-        this.loadSupportInfo(this.innovation.support.id || '');
-      }
-    );
+      if (units.length === 0) { return { organisation: '', units: [] }; }
+
+      if (item.items.length === 1) { return { organisation: item.items[0].label, units: [] }; }
+      else { return { organisation: item.label, units }; }
+
+    }).filter(o => o.organisation);
+
+    this.redirectTo(`/accessor/innovations/${this.innovationId}/support/organisations/suggest/2`);
+
   }
 
-  loadSupportInfo(supportId: string): void {
+  onSubmit(): void {
 
-    this.accessorService.getInnovationSupportInfo(this.innovationId, supportId).subscribe(
-      response => {
+    this.formSubmitted = true;
 
-        this.innovationSupport = {
-          organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-          accessors: (response.accessors || []).map(item => item.name).join(', '),
-          status: response.status,
-        };
+    if (!this.form.valid || !this.form.get('confirm')?.value) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const body = {
+      organisationUnits: this.form.get('organisationUnits')?.value as string[],
+      comment: this.form.get('comment')?.value as string
+    };
+
+    this.accessorService.suggestNewOrganisations(this.innovationId, body).subscribe(
+      () => {
+        this.redirectTo(`/accessor/innovations/${this.innovationId}/support`, { alert: 'supportOrganisationSuggestSuccess' });
       },
-      error => {
-        this.logger.error(error);
+      () => {
+        this.summaryAlert = {
+          type: 'error',
+          title: 'An error occured when creating an action',
+          message: 'Please, try again or contact us for further help'
+        };
       }
     );
+
   }
+
 }

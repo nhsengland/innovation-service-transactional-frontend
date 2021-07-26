@@ -47,38 +47,26 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    const queryResult = this.activatedRoute.snapshot.queryParams.result;
 
-    // Is this a redirect from the update innovation support status?
-    if (queryResult && queryResult === 'updated') {
-
-      // Yes. It is.
-      // Update the summary
-      this.summaryAlert = {
-        type: 'success',
-        title: 'Support status updated',
-        message: 'You\'ve updated your support status and posted a comment to the innovator.'
-      };
+    switch (this.activatedRoute.snapshot.queryParams.alert) {
+      case 'supportUpdateSuccess':
+        this.summaryAlert = {
+          type: 'success',
+          title: 'Support status updated',
+          message: 'You\'ve updated your support status and posted a comment to the innovator.'
+        };
+        break;
+        case 'supportOrganisationSuggestSuccess':
+          this.summaryAlert = {
+            type: 'success',
+            title: 'Organisation suggestions sent',
+            message: 'You\'ve suggestions were saved and notifications sent.'
+          };
+          break;
+      default:
+        this.summaryAlert = { type: '', title: '', message: '' };
+        break;
     }
-    //   // Refetch the Innovation now with a new support entry
-    //   // and update the support.id and support.status information.
-    //   //if (!this.innovation.support.id) {
-    //     this.accessorService.getInnovationInfo(this.innovationId).subscribe(
-    //       response => {
-    //         this.innovation.support.id = response.support?.id;
-    //         this.innovation.support.status = response.support?.status || 'UNASSIGNED';
-    //         this.loadSupportInfo(this.innovation.support.id || '');
-    //       }
-    //     );
-    //   //}
-    // }
-
-    // // When a first time support is created, the support.id is undefined.
-    // // This only runs on innovations with a support.id
-    // if (this.innovation.support.id) {
-    //   this.loadSupportInfo(this.innovation.support.id);
-    // }
-
 
     this.accessorService.getInnovationInfo(this.innovationId).subscribe(
       response => {

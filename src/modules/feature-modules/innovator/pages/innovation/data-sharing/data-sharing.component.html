@@ -13,48 +13,50 @@
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-
       <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information:</span>
         <p>Sharing your data with an organisation means that they can view your innovation and initiate contact. It doesn't guarantee a response.
         </p>
       </div>
+    </div>
+  </div>
 
-      <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Data sharing and support list">
-        <thead class="nhsuk-table__head">
-          <tr>
-            <th scope="col">
-              Organisation
-              <br />
-              <a href="{{ organisationInfoUrl }}" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-normal" target="_blank" rel="noopener noreferrer">
-                What does each organisation do? (opens in new window)
-              </a>
-            </th>
-            <th scope="col" class="text-align-right">
-              Support status
-              <br />
-              <a routerLink="/innovator/innovations/{{innovationId}}/data-sharing/statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-normal">
-                Status key
-              </a>
-            </th>
-          </tr>
-        </thead>
-        <tbody class="nhsuk-table__body">
-          <tr *ngFor="let item of organisations" class="nhsuk-table__row">
-            <td class="nhsuk-table__cell nhsuk-u-padding-bottom-2">
-              <span class="nhsuk-table-responsive__heading"> Organisation </span>
-              <span class="d-flex">
-                <ng-container *ngTemplateOutlet="icon; context: { status: item }"></ng-container>
-                <span> {{ item.name }} </span>
-              </span>
-            </td>
-            <td class="nhsuk-table__cell text-align-right">
-              <span class="nhsuk-table-responsive__heading"> Support status </span>
-              <strong *ngIf="item.shared" class="nhsuk-tag" [ngClass]="innovationSupportStatus[item.status].cssClass">{{ innovationSupportStatus[item.status].label }}</strong>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <p class="nhsuk-u-margin-0"><a [href]="organisationInfoUrl" target="_blank" rel="noopener noreferrer">What does each organisation do? (opens in a new window) </a></p>
+      <p><a routerLink="/innovator/innovations/{{ innovationId }}/data-sharing/statuses"> Support status key </a></p>
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
+    <div class="nhsuk-grid-column-full">
+
+      <div class="d-flex nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
+        <div>Organisation</div>
+        <div class="ml-auto">Support status</div>
+      </div>
+
+      <ng-container *ngFor="let organisation of organisations">
+
+        <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'bottom-border-separator': organisation.showHideStatus !== 'opened'}">
+          <ng-container *ngTemplateOutlet="icon; context: { shared: organisation.shared }"></ng-container>
+          <div>{{ organisation.info.name }}</div>
+          <div *ngIf="!organisation.shared" class="ml-auto">Not shared</div>
+          <a *ngIf="organisation.shared && !organisation.info.status" href="javascript:void(0)" (click)="onShowHideClicked(organisation.info.id)" class="ml-auto"> {{ organisation.showHideText }} </a>
+          <strong *ngIf="organisation.shared && organisation.info.status" class="nhsuk-tag ml-auto"
+            [ngClass]="innovationSupportStatus[organisation.info.status].cssClass">{{ innovationSupportStatus[organisation.info.status].label }}</strong>
+        </div>
+
+        <ng-container *ngIf="organisation.showHideStatus === 'opened'">
+          <div *ngFor="let organisationUnit of organisation.info.organisationUnits; let i = index;" class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
+            <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'top-border-separator': i === 0}">
+              <div class="">{{ organisationUnit.name }}</div>
+              <strong class="nhsuk-tag ml-auto" [ngClass]="innovationSupportStatus[organisationUnit.status].cssClass">{{ innovationSupportStatus[organisationUnit.status].label }}</strong>
+            </div>
+          </div>
+        </ng-container>
+
+      </ng-container>
 
     </div>
   </div>
@@ -66,7 +68,7 @@
   </div>
 
 
-  <ng-template #icon let-status="status">
-    <theme-svg-icon *ngIf="!status.shared" type="error" class="nhsuk-u-margin-right-2"></theme-svg-icon>
-    <theme-svg-icon *ngIf="status.shared" type="success" class="nhsuk-u-margin-right-2"></theme-svg-icon>
+  <ng-template #icon let-shared="shared">
+    <theme-svg-icon *ngIf="!shared" type="error" class="nhsuk-u-margin-right-2" style="height: 25px"></theme-svg-icon>
+    <theme-svg-icon *ngIf="shared" type="success" class="nhsuk-u-margin-right-2" style="height: 25px"></theme-svg-icon>
   </ng-template>
