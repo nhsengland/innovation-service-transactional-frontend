@@ -5,7 +5,7 @@ import { CoreComponent, FormArray, FormControl, FormGroup, Validators } from '@a
 
 import { FormEngineParameterModel } from '@modules/shared/forms';
 
-import { AccessorService } from '../../../services/accessor.service';
+import { AccessorService, SupportLogType } from '../../../services/accessor.service';
 
 
 @Component({
@@ -112,7 +112,8 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
     const body = {
       organisationUnits: this.form.get('organisationUnits')?.value as string[],
-      comment: this.form.get('comment')?.value as string
+      description: this.form.get('comment')?.value as string,
+      type: SupportLogType.ACCESSOR_SUGGESTION,
     };
 
     this.accessorService.suggestNewOrganisations(this.innovationId, body).subscribe(

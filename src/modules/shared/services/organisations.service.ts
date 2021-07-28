@@ -67,7 +67,6 @@ export class OrganisationsService extends CoreService {
 
   getOrganisationUnitsSupportStatus(innovationId: string): Observable<getOrganisationUnitsSupportStatusDTO[]> {
 
-    // TODO: SPRINT 13. DONE
     const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
     return this.http.get<getOrganisationUnitsSupportStatusDTO[]>(url.buildUrl()).pipe(
       take(1),
