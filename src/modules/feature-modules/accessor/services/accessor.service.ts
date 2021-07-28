@@ -8,6 +8,11 @@ import { MappedObject, UrlModel, APIQueryParamsType } from '@modules/core';
 import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 
+export enum SupportLogType {
+  ACCESSOR_SUGGESTION = 'ACCESSOR_SUGESTION',
+  STATUS_UPDATE = 'STATUS_UPDATE',
+}
+
 
 export type getInnovationsListEndpointInDTO = {
   count: number;
@@ -375,44 +380,22 @@ export class AccessorService extends CoreService {
 
   getOrganisationUnitsToSuggest(innovationId: string): Observable<getOrganisationUnitsToSuggestDTO[]> {
 
-    // TODO: SPRINT 13.
-    // Unmock this. This is used for the accessors to suggest new units
-
-    return of([
-      {
-        id: 'Org01', name: 'The Academic HEalthd coiso', acronym: 'sdfa', description: 'a description',
-        organisationUnits: [
-          { id: '152D89C7-5DC8-EB11-A7AD-281878026472', name: 'East Midlands', acronym: 'sdfa' },
-          { id: 'unit02', name: 'Eastern', acronym: 'sdfa', description: 'other description' }
-        ]
-      },
-      {
-        id: 'Org02', name: 'Department for TRade', acronym: 'sdfa',
-        organisationUnits: [{ id: 'unit03', name: 'This should appear as  department for trade', acronym: 'sdfa' }]
-      }
-    ]);
-
-    // const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports/suggestions???').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    // return this.http.get<getOrganisationUnitsToSuggestDTO[]>(url.buildUrl()).pipe(
-    //   take(1),
-    //   map(response => response)
-    // );
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/support-logs').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    return this.http.get<getOrganisationUnitsToSuggestDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
 
   }
 
 
-  suggestNewOrganisations(innovationId: string, body: { organisationUnits: string[], comment: string }): Observable<{}> {
+  suggestNewOrganisations(innovationId: string, body: { organisationUnits: string[], type: SupportLogType, description: string }): Observable<{}> {
 
-    // TODO: SPRINT 13.
-    // Unmock this. This is for saving the new units suggestions.
-
-    return of({});
-
-    // const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports/suggestions???').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    // return this.http.put<{}>(url.buildUrl(), body).pipe(
-    //   take(1),
-    //   map(response => response)
-    // );
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/support-logs').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    return this.http.post<{}>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
 
   }
 
