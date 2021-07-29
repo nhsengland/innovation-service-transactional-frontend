@@ -55,7 +55,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
     this.accessorService.getOrganisationUnitsToSuggest(this.innovationId).subscribe(
       response => {
-
+        console.log(response);
         this.groupedItems = response.map(item => ({
           value: item.id,
           label: item.name,

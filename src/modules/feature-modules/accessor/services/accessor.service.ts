@@ -9,7 +9,7 @@ import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STA
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 export enum SupportLogType {
-  ACCESSOR_SUGGESTION = 'ACCESSOR_SUGESTION',
+  ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
   STATUS_UPDATE = 'STATUS_UPDATE',
 }
 
@@ -380,10 +380,29 @@ export class AccessorService extends CoreService {
 
   getOrganisationUnitsToSuggest(innovationId: string): Observable<getOrganisationUnitsToSuggestDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/support-logs').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    // return of([
+    //   {
+    //     id: 'Org01', name: 'The Academic HEalthd coiso', acronym: 'sdfa', description: 'a description',
+    //     organisationUnits: [
+    //       { id: '152D89C7-5DC8-EB11-A7AD-281878026472', name: 'East Midlands', acronym: 'sdfa' },
+    //       { id: 'unit02', name: 'Eastern', acronym: 'sdfa', description: 'other description' }
+    //     ]
+    //   },
+    //   {
+    //     id: 'Org02', name: 'Department for TRade', acronym: 'sdfa',
+    //     organisationUnits: [{ id: 'unit03', name: 'This should appear as  department for trade', acronym: 'sdfa' }]
+    //   }
+    // ]);
+
+    //const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/support-logs').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    const url = new UrlModel(this.API_URL).addPath('organisation-units');
+
     return this.http.get<getOrganisationUnitsToSuggestDTO[]>(url.buildUrl()).pipe(
       take(1),
-      map(response => response)
+      map(response => {
+        console.log(response);
+        return response;
+      })
     );
 
   }
