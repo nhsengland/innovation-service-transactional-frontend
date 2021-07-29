@@ -63,7 +63,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       dataType: 'radio-group',
       label: 'Do they have a good insight into competitors, alternatives, and the market landscape?',
       validations: { isRequired: true },
-      items: maturityLevelItems,
+      items: yesPartiallyNoItems,
       additional: [new FormEngineParameterModel({ id: 'hasCompetitionKnowledgeComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
     }),
     new FormEngineParameterModel({
