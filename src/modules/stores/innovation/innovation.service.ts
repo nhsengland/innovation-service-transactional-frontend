@@ -204,10 +204,7 @@ export class InnovationService {
 
     return this.http.get<OrganisationSuggestion>(url.buildUrl()).pipe(
       take(1),
-      map(response => {
-        console.log(response);
-        return response;
-      })
+      map(response => response)
     );
   }
 
