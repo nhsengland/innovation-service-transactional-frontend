@@ -25,11 +25,9 @@ type InboundPayloadType = {
 };
 
 // [key: string] is needed to support subgroups_${number} properties.
-type StepPayloadType = InboundPayloadType & { impacts: null | ('PATIENTS' | 'CLINICIANS')[] } & { [key: string]: null | string };
+type StepPayloadType = InboundPayloadType & { impacts?: null | ('PATIENTS' | 'CLINICIANS')[] } & { [key: string]: null | string };
 
 type OutboundPayloadType = InboundPayloadType;
-
-
 
 export const SECTION_2_1: InnovationSectionConfigType['sections'][0] = {
   id: InnovationSectionsIds.UNDERSTANDING_OF_NEEDS,
@@ -120,8 +118,9 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   const parsedData = cloneDeep(data) as StepPayloadType;
 
-  if (parsedData.impactPatients) { parsedData.impacts?.push('PATIENTS'); }
-  if (parsedData.impactClinicians) { parsedData.impacts?.push('CLINICIANS'); }
+  parsedData.impacts = [];
+  if (parsedData.impactPatients) { parsedData.impacts.push('PATIENTS'); }
+  if (parsedData.impactClinicians) { parsedData.impacts.push('CLINICIANS'); }
 
   parsedData.subgroups.forEach((item, i) => { parsedData[`subGroupName_${i}`] = item.conditions; });
 
@@ -146,6 +145,12 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   const toReturn: SummaryParsingType[] = [];
 
+  if (data.impacts === undefined) {
+    data.impacts = [];
+    if (data.impactPatients) { data.impacts?.push('PATIENTS'); }
+    if (data.impactClinicians) { data.impacts?.push('CLINICIANS'); }
+  }
+
   toReturn.push({
     label: stepsLabels.l1,
     value: data.impacts?.map(impact => innovationImpactItems.find(item => item.value === impact)?.label).join('<br />'),
@@ -153,7 +158,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
   });
 
 
-  if (data.impacts?.includes('PATIENTS')) {
+  if (data.impacts?.includes('PATIENTS') || data.impactPatients) {
     toReturn.push({
       label: stepsLabels.l2,
       value: data.subgroups?.map(group => group.name).join('<br />'),
@@ -165,7 +170,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
   }
 
 
-  if (data.impacts?.includes('CLINICIANS')) {
+  if (data.impacts?.includes('CLINICIANS') || data.impactClinicians) {
     toReturn.push({
       label: stepsLabels.l3,
       value: data.cliniciansImpactDetails,
