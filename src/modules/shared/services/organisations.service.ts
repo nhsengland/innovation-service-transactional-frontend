@@ -7,6 +7,7 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation
 import { CoreService } from '@app/base';
 
 import { UrlModel } from '@modules/core';
+import { getInnovationSupportsInDTO } from '@modules/feature-modules/innovator/services/innovator.service';
 
 
 export type getAccessorsOrganisationsDTO = {
@@ -73,6 +74,15 @@ export class OrganisationsService extends CoreService {
       map(response => response)
     );
 
+  }
+
+  getInnovationSupports(innovationId: string, returnAccessorsInfo: boolean): Observable<getInnovationSupportsInDTO[]> {
+
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId }).setQueryParams({ full: returnAccessorsInfo });
+    return this.http.get<getInnovationSupportsInDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
   }
 
 }

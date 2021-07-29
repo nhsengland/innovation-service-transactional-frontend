@@ -380,7 +380,7 @@ export class AccessorService extends CoreService {
 
   getOrganisationUnitsToSuggest(innovationId: string): Observable<getOrganisationUnitsToSuggestDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/support-logs').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    const url = new UrlModel(this.API_URL).addPath('organisation-units');
     return this.http.get<getOrganisationUnitsToSuggestDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
