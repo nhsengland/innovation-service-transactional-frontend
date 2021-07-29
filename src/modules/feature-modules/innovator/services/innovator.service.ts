@@ -93,6 +93,10 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
   organisations: { id: string; name: string; acronym: null | string; }[];
   assignToName: string;
   finishedAt: null | string;
+  updatedBy: null | string;
+  updatedAt: null | string;
+  createdAt: null | string;
+  createdBy: null | string;
 };
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
@@ -240,6 +244,10 @@ export class InnovatorService extends CoreService {
           orgNames: response.organisations.map(item => item.name),
           finishedAt: response.finishedAt,
           assignToName: response.assignToName,
+          updatedAt: response.updatedAt,
+          updatedBy: response.updatedBy,
+          createdAt: response.createdAt,
+          createdBy: response.createdBy,
         }
       }))
     );
