@@ -80,9 +80,6 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
       this.organisationSuggestions = organisationSuggestions;
       this.shares = innovationShares;
 
-      console.log('PAGE', organisationSuggestions);
-      console.log('PAGE SHARES', innovationShares);
-
       this.organisations = organisationUnits.map(organisation => {
 
         if (organisation.organisationUnits.length === 1) {

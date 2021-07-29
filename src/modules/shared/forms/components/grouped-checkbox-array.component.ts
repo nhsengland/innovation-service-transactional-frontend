@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector } from '@angular/core';
+import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector, OnChanges } from '@angular/core';
 import { AbstractControl, ControlContainer, FormArray, FormControl } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core';
@@ -13,7 +13,7 @@ import { FormEngineParameterModel } from '../engine/models/form-engine.models';
   templateUrl: './grouped-checkbox-array.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
+export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck, OnChanges {
 
   @Input() id?: string;
   @Input() arrayName = '';
@@ -47,8 +47,12 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
   ngOnInit(): void {
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
+  }
+
+  ngOnChanges(): void {
 
     // If Group Item has only one child item, then show the child only.
+
     this.filteredGI = (this.groupedItems || []).map(groupItem => {
       if (groupItem.items.length === 1) {
         return { gItem: { ...groupItem.items[0], ...{ items: [] } }, showHideStatus: 'hidden', showHideText: null, selectedChildren: 0 };

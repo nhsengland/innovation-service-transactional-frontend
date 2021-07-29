@@ -125,7 +125,9 @@
     "component-class-suffix": true,
     "contextual-lifecycle": true,
     "directive-class-suffix": true,
-    "no-conflicting-lifecycle": true,
+    "no-conflicting-lifecycle": {
+      "severity": "warning"
+    },
     "no-host-metadata-property": true,
     "no-input-rename": true,
     "no-inputs-metadata-property": true,

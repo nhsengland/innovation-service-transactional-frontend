@@ -58,13 +58,9 @@ export class OrganisationsService extends CoreService {
   getOrganisationUnits(): Observable<getAccessorsOrganisationUnitsDTO[]> {
 
     const url = new UrlModel(this.API_URL).addPath('organisation-units');
-    console.log(url);
     return this.http.get<getAccessorsOrganisationUnitsDTO[]>(url.buildUrl()).pipe(
       take(1),
-      map(response => {
-        console.log('UNITS', response)
-        return response;
-      })
+      map(response => response)
     );
 
   }
