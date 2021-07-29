@@ -236,9 +236,54 @@ export function app(): express.Express {
   });
 
   // Login endpoint - AD OpenIdConnect
-  server.use(`${BASE_PATH}/signin`,
-    passport.authenticate('signInStrategy', { successRedirect: `${BASE_PATH}/dashboard`, failureRedirect: `${BASE_PATH}/` })
-  );
+  server.use(`${BASE_PATH}/signin`, (req, res, next) => {
+    const client = getAppInsightsClient(req);
+
+    passport.authenticate('signInStrategy', (err, user, info) => {
+      if (err) {
+        client.trackTrace({
+          message: '/signin - autenticate error',
+          severity: SeverityLevel.Error,
+          properties: {
+            data: { session: req.session, sessionId: req.sessionID, headers: req.headers, path: req.path },
+          }
+        });
+
+        // will generate a 500 error
+        return next(err);
+      }
+
+      if (!user) {
+        client.trackTrace({
+          message: '/signin - user profile undefined',
+          severity: SeverityLevel.Information,
+          properties: {
+            data: { session: req.session, sessionId: req.sessionID, headers: req.headers, path: req.path },
+          }
+        });
+
+        return res.redirect(`${BASE_PATH}/signin`);
+      }
+
+      req.login(user, (err) => {
+        if (err) {
+          client.trackTrace({
+            message: '/signin - login error',
+            severity: SeverityLevel.Error,
+            properties: {
+              data: { session: req.session, sessionId: req.sessionID, headers: req.headers, path: req.path },
+            }
+          });
+
+          // will generate a 500 error
+          return next(err);
+        }
+
+        return res.redirect(`${BASE_PATH}/dashboard`);
+      });
+    })(req, res, next);
+  });
+
   server.post(`${BASE_PATH}/signin/callback`, (req, res) => {
     res.redirect(`${BASE_PATH}/dashboard`);
   });

@@ -5,6 +5,7 @@ import { CoreComponent } from '@app/base';
 import { OrganisationsService, getOrganisationUnitsSupportStatusDTO } from '@shared-module/services/organisations.service';
 
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -38,25 +39,43 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
 
   ngOnInit(): void {
 
-    this.organisationsService.getOrganisationUnitsSupportStatus(this.innovationId).subscribe(
-      response => {
+    forkJoin([
+      this.organisationsService.getOrganisationUnits(),
+      this.organisationsService.getInnovationSupports(this.innovationId, false),
+    ]).subscribe(([organisationUnits, organisationUnitsSupportStatus]) => {
 
-        this.organisations = response.map(item => {
+      this.organisations = organisationUnits.map(organisation => {
 
-          if (item.organisationUnits.length === 1) {
-            return { info: { ...item.organisationUnits[0], organisationUnits: [] }, showHideStatus: 'hidden', showHideText: null };
-          } else {
-            return { info: item, showHideStatus: 'closed', showHideText: `Show ${item.organisationUnits.length} units` };
-          }
+        if (organisation.organisationUnits.length === 1) {
+          return {
+            info: {
+              id: organisation.id,
+              name: organisation.name,
+              acronym: organisation.acronym,
+              organisationUnits: [],
+              status: organisationUnitsSupportStatus.find(o => o.organisationUnit.id === organisation.id)?.status || 'UNASSIGNED'
+            },
+            showHideStatus: 'hidden',
+            showHideText: null
+          };
+        } else {
+          return {
+            info: {
+              id: organisation.id,
+              name: organisation.name,
+              acronym: organisation.acronym,
+              organisationUnits: organisation.organisationUnits.map(org => ({
+                ...org,
+                status: organisationUnitsSupportStatus.find(o => o.organisationUnit.id === org.id)?.status || 'UNASSIGNED'
+              }))
+            },
+            showHideStatus: 'closed',
+            showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`
+          };
+        }
 
-        });
-
-      },
-      error => {
-        this.logger.error(error);
-      }
-    );
-
+      });
+    });
   }
 
 
