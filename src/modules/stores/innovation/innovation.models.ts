@@ -226,5 +226,37 @@ export type SectionsSummaryModel = {
     isCompleted: boolean;
   }[]
 
+};
 
+export type OrganisationModel = {
+  id: string;
+  name: string;
+  acronym: string;
+  organisationUnits?: OrganisationUnitModel[];
+};
+
+export type OrganisationUnitModel = {
+  id: string;
+  name: string;
+  acronym: string;
+};
+
+export type AssessmentSuggestionModel = {
+  id: string;
+  suggestedOrganisations: OrganisationModel[];
+};
+
+export type AccessorSuggestionModel = {
+  organisationUnit: {
+    id: string;
+    name: string;
+    acronym: string;
+    organisation: OrganisationModel,
+  };
+  suggestedOrganisations: OrganisationModel[];
+};
+
+export type OrganisationSuggestion = {
+  assessment: AssessmentSuggestionModel;
+  accessors: AccessorSuggestionModel[];
 };

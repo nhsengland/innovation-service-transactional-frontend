@@ -3,10 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { INNOVATION_SUPPORT_STATUS, OrganisationSuggestion } from '@modules/stores/innovation/innovation.models';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { getOrganisationUnitsSupportStatusDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
+import { InnovationService } from '@modules/stores';
 
 
 @Component({
@@ -31,16 +32,21 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
   summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
 
+  organisationSuggestions: OrganisationSuggestion | undefined;
+  shares: {id: string, status: string}[] | [];
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private organisationsService: OrganisationsService,
     private innovatorService: InnovatorService,
+    private innovationService: InnovationService,
   ) {
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.organisationInfoUrl = `${this.stores.environment.BASE_URL}/about-the-service/who-we-are`;
     this.summaryAlert = { type: '', title: '', message: '' };
+    this.shares = [];
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'sharingUpdateSuccess':
@@ -60,7 +66,6 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
     }
   }
 
-
   ngOnInit(): void {
 
     // TODO: SPRINT 13.
@@ -69,7 +74,14 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
       this.organisationsService.getOrganisationUnits(),
       this.innovatorService.getInnovationShares(this.innovationId),
       this.innovatorService.getInnovationSupports(this.innovationId, false),
-    ]).subscribe(([organisationUnits, innovationShares, organisationUnitsSupportStatus]) => {
+      this.innovationService.getInnovationOrganisationSuggestions('innovator', this.innovationId),
+    ]).subscribe(([organisationUnits, innovationShares, organisationUnitsSupportStatus, organisationSuggestions]) => {
+
+      this.organisationSuggestions = organisationSuggestions;
+      this.shares = innovationShares;
+
+      console.log('PAGE', organisationSuggestions);
+      console.log('PAGE SHARES', innovationShares);
 
       this.organisations = organisationUnits.map(organisation => {
 

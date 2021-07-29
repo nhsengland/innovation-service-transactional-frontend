@@ -27,6 +27,8 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
+import { InnovationService } from '@modules/stores';
+import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
 
 
 @NgModule({
@@ -52,10 +54,15 @@ import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/ne
     InnovationSectionEditComponent,
     InnovatorNeedsAssessmentOverviewComponent,
 
+    // Components.
+
+    OrganisationSuggestionsCardComponent,
+
   ],
   providers: [
     // Services.
     InnovatorService,
+    InnovationService,
 
     // Guards.
     FirstTimeSigninGuard,
