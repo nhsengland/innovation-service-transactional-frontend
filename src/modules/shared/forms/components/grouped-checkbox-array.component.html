@@ -19,7 +19,7 @@
     <ng-container *ngFor="let fgi of filteredGI; let i = index;">
 
       <div class="nhsuk-checkboxes__item">
-        <input id="{{ id }}{{ fgi.gItem.value }}" type="checkbox" [value]="fgi.gItem.value" [checked]="isChecked(fgi.gItem.value)" (change)="onChanged($event)" class="nhsuk-checkboxes__input" />
+        <input id="{{ id }}{{ fgi.gItem.value }}" type="checkbox" [value]="fgi.gItem.value" [checked]="isChecked(fgi.gItem.value) || fgi.selectedChildren > 0" (change)="onChanged($event)" class="nhsuk-checkboxes__input" />
         <label for="{{ id }}{{ fgi.gItem.value }}" class="nhsuk-label nhsuk-checkboxes__label d-flex" [ngClass]="{'undertermined-checkbox': fgi.selectedChildren > 0 && fgi.selectedChildren < fgi.gItem.items.length }">
           <div> {{ fgi.gItem.label }}</div>
           <a href="javascript:void(0)" (click)="onShowHideClicked(fgi.gItem.value)" class="ml-auto">{{ fgi.showHideText }} </a>
