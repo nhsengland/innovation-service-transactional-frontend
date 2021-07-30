@@ -45,7 +45,7 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
     <div class="nhsuk-action-link nhsuk-u-padding-top-5">
-      <a class="nhsuk-action-link__link" routerLink="/accessor/innovations/{{ innovationId }}/support/organisations/suggest">
+      <a class="nhsuk-action-link__link" routerLink="/accessor/innovations/{{ innovationId }}/support/organisations/suggest" *ngIf="isQualifyingAccessorRole">
         <theme-svg-icon type="action"></theme-svg-icon>
         <span class="nhsuk-action-link__text">Suggest organisations for support</span>
       </a>

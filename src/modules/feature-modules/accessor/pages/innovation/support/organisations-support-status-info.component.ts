@@ -24,6 +24,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
     showHideText: null | string;
   }[] = [];
 
+  isQualifyingAccessorRole = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -34,6 +35,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
   }
 
 
