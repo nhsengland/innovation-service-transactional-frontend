@@ -4,7 +4,7 @@ import { FooterComponent } from '@modules/theme/components/footer/footer.compone
 import { TranslateModule } from '@ngx-translate/core';
 
 
-fdescribe('FooterComponent', () => {
+describe('FooterComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
