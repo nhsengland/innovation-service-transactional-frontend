@@ -43,13 +43,18 @@
           <p>{{ organisation.organisation }}</p>
           <ul class="nhsuk-list">
             <li *ngFor="let unit of organisation.units">
-              {{ unit }}
+              <span class="app-task-list__task-icon">
+                <theme-svg-icon type="success"></theme-svg-icon>
+              </span>
+              <span class="app-task-list__task-name">
+                {{ unit }}
+              </span>
             </li>
           </ul>
         </div>
 
         <theme-form-textarea controlName="comment" label="Describe briefly why you selected these organisations"></theme-form-textarea>
-        <theme-form-checkbox controlName="confirm" label="Only show innovations assigned to me" size="small"></theme-form-checkbox>
+        <theme-form-checkbox controlName="confirm" label="I confirm that I understand the support offers of the selected organisations" size="small"></theme-form-checkbox>
         <p *ngIf="formSubmitted" class="font-color-error">You need to confirm to proceed</p>
         <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Confirm and notify organisations</button>
         <div>
