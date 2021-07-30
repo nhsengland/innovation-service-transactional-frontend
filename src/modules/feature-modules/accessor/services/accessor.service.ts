@@ -9,7 +9,7 @@ import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STA
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 export enum SupportLogType {
-  ACCESSOR_SUGGESTION = 'ACCESSOR_SUGESTION',
+  ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
   STATUS_UPDATE = 'STATUS_UPDATE',
 }
 

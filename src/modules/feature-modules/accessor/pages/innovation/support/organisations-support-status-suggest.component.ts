@@ -10,7 +10,8 @@ import { AccessorService, SupportLogType } from '../../../services/accessor.serv
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-organisations-support-status-suggest',
-  templateUrl: './organisations-support-status-suggest.component.html'
+  templateUrl: './organisations-support-status-suggest.component.html',
+  styleUrls: ['./organisations-support-status-suggest.component.scss'],
 })
 export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends CoreComponent implements OnInit {
 
@@ -55,13 +56,14 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
     this.accessorService.getOrganisationUnitsToSuggest(this.innovationId).subscribe(
       response => {
-
-        this.groupedItems = response.map(item => ({
+        const result = response.map(item => ({
           value: item.id,
           label: item.name,
           description: item.description,
           items: item.organisationUnits.map(i => ({ value: i.id, label: i.name, description: i.description }))
         }));
+
+        this.groupedItems = result;
       }
     );
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector } from '@angular/core';
+import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector, OnChanges } from '@angular/core';
 import { AbstractControl, ControlContainer, FormArray, FormControl } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core';
@@ -7,13 +7,40 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
 import { FormEngineParameterModel } from '../engine/models/form-engine.models';
 
+/*
+ In before any rant about implementing both DoCheck and OnChanges:
+
+ The linter is incorrect.
+
+ The documentation _used_ to state that DoCheck would override OnChanges, hence not recommended to implement
+ both.
+
+ This is not correct and the Angular docs have been updated to reflect this:
+
+ https://github.com/angular/angular/commit/3a62023260e59dafcb57ec12c3be1e3643639347
+
+ So, making it perfectly viable and normal to implement both DoCheck and OnChanges. On extends the other.
+ The latter is required to check for changes on the bound inputs.
+ This is needed on this component because `groupedItems` are asyncronously fed by the parent component.
+ Before, the logic on this input was being done on ngOnInit. This led to a race condition. If the parent resolved
+ the groupedItems first, then all would be fine. However, if ngOnInit on this component was executed before the inputs
+ were resolved, then nothing would be rendered. This forced the user to hit F5 on the browser. When F5 is hit, the resolved
+ promise is cached, so when ngOnInit on this component is executed, the groupedItems are available and everything works as expected.
+
+ I have changed this logic to the ngOnChanges hook so that when the groupedItems are _resolved_ on the parent,
+ the changes are reflected on this component.
+
+ It would be a good idea to go through this solution and assess if other similar cases exist.
+
+ Thanks, <3
+*/
 
 @Component({
   selector: 'theme-form-grouped-checkbox-array',
   templateUrl: './grouped-checkbox-array.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
+export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck, OnChanges {
 
   @Input() id?: string;
   @Input() arrayName = '';
@@ -47,8 +74,12 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
   ngOnInit(): void {
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
+  }
+
+  ngOnChanges(): void {
 
     // If Group Item has only one child item, then show the child only.
+
     this.filteredGI = (this.groupedItems || []).map(groupItem => {
       if (groupItem.items.length === 1) {
         return { gItem: { ...groupItem.items[0], ...{ items: [] } }, showHideStatus: 'hidden', showHideText: null, selectedChildren: 0 };
