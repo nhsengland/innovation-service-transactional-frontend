@@ -29,6 +29,8 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
   summaryAlert: { type: '' | 'error' | 'warning' | 'success', title: string, message: string };
 
+  isQualifyingAccessorRole = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private accessorService: AccessorService
@@ -42,6 +44,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
     this.summaryAlert = { type: '', title: '', message: '' };
 
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
   }
 
 
