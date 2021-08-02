@@ -19,8 +19,8 @@
             <p class="nhsuk-hint">Needs assessment team</p>
           </div>
           <div class="nhsuk-u-padding-top-8">
-            <h3 class="nhsuk-heading-xs">Created: {{ assessment?.createdAt | date: ('app.date_formats.long_date' | translate) }}</h3>
-            <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.createdBy }}</p>
+            <h3 class="nhsuk-heading-xs">Created: {{ assessment?.finishedAt | date: ('app.date_formats.long_date' | translate) }}</h3>
+            <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.assignToName }}</p>
             <p class="nhsuk-hint">Needs assessment team</p>
           </div>
         </div>
