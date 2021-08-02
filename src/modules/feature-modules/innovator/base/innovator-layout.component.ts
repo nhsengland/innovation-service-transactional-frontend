@@ -67,7 +67,7 @@ export class InnovatorLayoutComponent extends CoreComponent {
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
 
     this.subscriptions.push(
-      this.notificationService.getAllUnreadNotifications().subscribe(
+      this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
         response => {
           this.mainMenuNotifications = response;
         }
@@ -76,7 +76,7 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
     if (currentRouteInnovationId) {
       this.subscriptions.push(
-        this.notificationService.getAllUnreadNotifications(currentRouteInnovationId).subscribe(
+        this.notificationService.getAllUnreadNotificationsGroupedByContext(currentRouteInnovationId).subscribe(
           response => {
             this.notifications = response;
           }

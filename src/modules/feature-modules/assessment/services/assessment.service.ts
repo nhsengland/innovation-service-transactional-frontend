@@ -32,12 +32,10 @@ export type getInnovationsListEndpointInDTO = {
       isNew: boolean;
     };
   }[];
-  tabInfo?: { [key: string]: number };
 };
 export type getInnovationsListEndpointOutDTO = {
   count: number;
   data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription'> & { isOverdue: boolean })[]
-  tabInfo?: { [key: string]: number };
 };
 
 export type getInnovationInfoEndpointDTO = {
@@ -133,7 +131,6 @@ export class AssessmentService extends CoreService {
           isOverdue: DatesHelper.dateDiff(item.submittedAt, Date()) >= 7,
           notifications: item.notifications,
         })),
-        tabInfo: response.tabInfo,
       }))
     );
 

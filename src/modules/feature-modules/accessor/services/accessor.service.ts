@@ -38,12 +38,10 @@ export type getInnovationsListEndpointInDTO = {
       hasNew: boolean;
     }
   }[];
-  tabInfo?: { [key: string]: number };
 };
 export type getInnovationsListEndpointOutDTO = {
   count: number;
   data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription' | 'postcode'>)[],
-  tabInfo?: { [key: string]: number },
 };
 
 export type getInnovationInfoEndpointDTO = {
@@ -187,7 +185,6 @@ export class AccessorService extends CoreService {
     return this.http.get<getInnovationsListEndpointInDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => ({
-        tabInfo: response.tabInfo,
         count: response.count,
         data: response.data.map(item => ({
           id: item.id,

@@ -13,6 +13,7 @@ import { StoresModule } from '@modules/stores';
 import { AssessmentModule } from '../assessment.module';
 
 import { AssessmentLayoutComponent } from './assessment-layout.component';
+import { NotificationContextType } from '@modules/shared/services/notification.service';
 
 
 describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
@@ -59,7 +60,7 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
         { title: 'Home', link: '/assessment/dashboard' }
       ],
       rightItems: [
-        { title: 'Innovations', link: '/assessment/innovations' },
+        { title: 'Innovations', link: '/assessment/innovations', key: NotificationContextType.INNOVATION },
         // { title: 'Account', link: '/assessment/account' },
         { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
       ]

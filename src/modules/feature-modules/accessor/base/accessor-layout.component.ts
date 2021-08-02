@@ -81,7 +81,7 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
     };
 
     this.subscriptions.push(
-      this.notificationService.getAllUnreadNotifications().subscribe(
+      this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
         response => {
           this.mainMenuNotifications = response;
         }
@@ -90,7 +90,7 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
 
     if (currentRouteInnovationId) {
       this.subscriptions.push(
-        this.notificationService.getAllUnreadNotifications(currentRouteInnovationId).subscribe(
+        this.notificationService.getAllUnreadNotificationsGroupedByContext(currentRouteInnovationId).subscribe(
           response => {
             this.notifications = response;
           }

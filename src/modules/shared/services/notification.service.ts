@@ -44,13 +44,27 @@ export class NotificationService extends CoreService {
 
   }
 
-  getAllUnreadNotifications(innovationId?: string): Observable<getUnreadNotificationsEndpointDTO> {
+  getAllUnreadNotificationsGroupedByContext(innovationId?: string): Observable<getUnreadNotificationsEndpointDTO> {
 
-    let url = new UrlModel(this.API_URL).addPath('notifications');
+    let url = new UrlModel(this.API_URL).addPath('notifications/context');
 
     if (innovationId) {
       url = url.setQueryParams({innovationId});
     }
+
+    return this.http.get<getUnreadNotificationsEndpointDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response =>  {
+        this.notifications = response;
+        return response;
+      })
+    );
+
+  }
+
+  getAllUnreadNotificationsGroupedByStatus(scope: string): Observable<getUnreadNotificationsEndpointDTO> {
+
+    const url = new UrlModel(this.API_URL).addPath('notifications/status').setQueryParams({ scope });
 
     return this.http.get<getUnreadNotificationsEndpointDTO>(url.buildUrl()).pipe(
       take(1),
