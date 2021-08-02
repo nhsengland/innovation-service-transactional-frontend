@@ -8,6 +8,7 @@ import { INNOVATION_SUPPORT_STATUS, OrganisationSuggestion } from '@modules/stor
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { getOrganisationUnitsSupportStatusDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationService } from '@modules/stores';
+import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
     private organisationsService: OrganisationsService,
     private innovatorService: InnovatorService,
     private innovationService: InnovationService,
+    private notificationService: NotificationService,
   ) {
     super();
 
@@ -75,6 +77,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
       this.innovatorService.getInnovationShares(this.innovationId),
       this.innovatorService.getInnovationSupports(this.innovationId, false),
       this.innovationService.getInnovationOrganisationSuggestions('innovator', this.innovationId),
+      this.notificationService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING)
     ]).subscribe(([organisationUnits, innovationShares, organisationUnitsSupportStatus, organisationSuggestions]) => {
 
       this.organisationSuggestions = organisationSuggestions;

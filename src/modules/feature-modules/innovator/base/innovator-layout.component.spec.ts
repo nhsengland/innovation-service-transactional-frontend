@@ -124,7 +124,7 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
       { title: 'Innovation record', link: `/innovator/innovations/innovation01/record` },
       { title: 'Action tracker', link: `/innovator/innovations/innovation01/action-tracker`, key: 'ACTION' },
       { title: 'Comments', link: `/innovator/innovations/innovation01/comments`, key: 'COMMENT' },
-      { title: 'Data sharing and support', link: `/innovator/innovations/innovation01/data-sharing` }
+      { title: 'Data sharing and support', link: `/innovator/innovations/innovation01/data-sharing`, key: 'DATA_SHARING' }
     ];
 
     fixture = TestBed.createComponent(InnovatorLayoutComponent);

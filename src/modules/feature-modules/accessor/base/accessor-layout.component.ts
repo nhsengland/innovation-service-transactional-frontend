@@ -59,6 +59,8 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
       ACTION: 0,
       COMMENT: 0,
       INNOVATION: 0,
+      SUPPORT: 0,
+      DATA_SHARING: 0,
     };
 
     this.mainMenuNotifications = { };
@@ -78,17 +80,19 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
       backLink: routeData.backLink ? { url: RoutingHelper.resolveUrl(routeData.backLink.url, this.activatedRoute), label: routeData.backLink.label } : null
     };
 
-    this.notificationService.getAllUnreadNotifications().subscribe(
-      response => {
-        this.mainMenuNotifications = response;
-      }
+    this.subscriptions.push(
+      this.notificationService.getAllUnreadNotifications().subscribe(
+        response => {
+          this.mainMenuNotifications = response;
+        }
+      )
     );
 
     if (currentRouteInnovationId) {
       this.subscriptions.push(
-        this.accessorService.getInnovationInfo(currentRouteInnovationId).subscribe(
+        this.notificationService.getAllUnreadNotifications(currentRouteInnovationId).subscribe(
           response => {
-            this.notifications = response.notifications;
+            this.notifications = response;
           }
         )
       );
@@ -102,7 +106,7 @@ export class AccessorLayoutComponent extends CoreComponent implements OnInit {
           { title: 'Innovation record', link: `/accessor/innovations/${currentRouteInnovationId}/record` },
           { title: 'Action tracker', link: `/accessor/innovations/${currentRouteInnovationId}/action-tracker`, key: NotificationContextType.ACTION },
           { title: 'Comments', link: `/accessor/innovations/${currentRouteInnovationId}/comments`, key: NotificationContextType.COMMENT },
-          { title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support` }
+          { title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support`, key: NotificationContextType.SUPPORT }
         ];
         break;
 

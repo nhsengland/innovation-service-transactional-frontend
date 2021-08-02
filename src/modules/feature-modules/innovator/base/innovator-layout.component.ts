@@ -7,6 +7,7 @@ import { CoreComponent } from '@app/base';
 import { RoutingHelper } from '@modules/core';
 import { Observable, Subject } from 'rxjs';
 import { InnovatorService } from '../services/innovator.service';
+import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 
 
 type RouteDataLayoutOptionsType = {
@@ -34,11 +35,11 @@ export class InnovatorLayoutComponent extends CoreComponent {
   leftSideBar: { title: string, link: string, key?: string }[] = [];
 
   notifications: {[key: string]: number};
-
+  mainMenuNotifications: {[key: string]: number};
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService
+    private notificationService: NotificationService,
   ) {
 
     super();
@@ -52,8 +53,11 @@ export class InnovatorLayoutComponent extends CoreComponent {
       ACTION: 0,
       COMMENT: 0,
       INNOVATION: 0,
+      SUPPORT: 0,
+      DATA_SHARING: 0,
     };
 
+    this.mainMenuNotifications = { };
   }
 
 
@@ -62,11 +66,19 @@ export class InnovatorLayoutComponent extends CoreComponent {
     const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
 
+    this.subscriptions.push(
+      this.notificationService.getAllUnreadNotifications().subscribe(
+        response => {
+          this.mainMenuNotifications = response;
+        }
+      )
+    );
+
     if (currentRouteInnovationId) {
       this.subscriptions.push(
-        this.innovatorService.getInnovationInfo(currentRouteInnovationId).subscribe(
+        this.notificationService.getAllUnreadNotifications(currentRouteInnovationId).subscribe(
           response => {
-            this.notifications = response.notifications;
+            this.notifications = response;
           }
         )
       );
@@ -103,9 +115,9 @@ export class InnovatorLayoutComponent extends CoreComponent {
         this.leftSideBar = [
           { title: 'Overview', link: `/innovator/innovations/${currentRouteInnovationId}/overview` },
           { title: 'Innovation record', link: `/innovator/innovations/${currentRouteInnovationId}/record` },
-          { title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker`, key: 'ACTION' },
-          { title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments`, key: 'COMMENT' },
-          { title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/data-sharing` }
+          { title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker`, key: NotificationContextType.ACTION },
+          { title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments`, key: NotificationContextType.COMMENT },
+          { title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/data-sharing`, key: NotificationContextType.DATA_SHARING }
         ];
         break;
 
