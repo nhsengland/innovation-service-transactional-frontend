@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
+import { RoutingHelper } from '@modules/core';
 
 import { AccessorService, getInnovationActionsListEndpointOutDTO } from '../../../services/accessor.service';
-import { RoutingHelper } from '@modules/core';
 
 import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
 

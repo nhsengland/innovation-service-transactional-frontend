@@ -138,7 +138,7 @@ const routes: Routes = [
                   { path: '', pathMatch: 'full', redirectTo: '1' },
                   {
                     path: ':stepId', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent,
-                    data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/assessment/innovations/:innovationId', label: 'Back to innovation' } } }
+                    data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Back to innovation' } } }
                   }
                 ]
               },

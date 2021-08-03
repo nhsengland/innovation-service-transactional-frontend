@@ -149,21 +149,25 @@ type getInnovationNeedsAssessmentEndpointInDTO = {
 
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
-  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'organisations' | 'support'> & { organisations: string[] },
+  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'support'>,
   support: getInnovationNeedsAssessmentEndpointInDTO['support']
 };
 
-export type getOrganisationUnitsToSuggestDTO = {
+
+export type getInnovationSupportsDTO = {
   id: string;
-  name: string;
-  acronym: string;
-  description?: string;
-  organisationUnits: {
+  status: keyof typeof INNOVATION_SUPPORT_STATUS;
+  organisationUnit: {
     id: string;
     name: string;
-    acronym: string;
-    description?: string;
-  }[];
+    organisation: {
+      id: string;
+      name: string;
+      acronym: string;
+    };
+  };
+  accessors?: { id: string, name: string }[];
+  notifications?: { [key: string]: number };
 };
 
 
@@ -322,7 +326,7 @@ export class AccessorService extends CoreService {
           hasScaleResource: response.hasScaleResource,
           hasScaleResourceComment: response.hasScaleResourceComment,
           summary: response.summary,
-          organisations: response.organisations.map(item => item.name),
+          organisations: response.organisations,
           assignToName: response.assignToName,
           finishedAt: response.finishedAt,
         },
@@ -355,6 +359,15 @@ export class AccessorService extends CoreService {
 
   }
 
+  getInnovationSupports(innovationId: string, returnAccessorsInfo: boolean): Observable<getInnovationSupportsDTO[]> {
+
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId }).setQueryParams({ full: returnAccessorsInfo });
+    return this.http.get<getInnovationSupportsDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
   saveSupportStatus(innovationId: string, body: MappedObject, supportId?: string): Observable<{ id: string }> {
 
     if (!supportId) {
@@ -374,17 +387,6 @@ export class AccessorService extends CoreService {
       );
 
     }
-
-  }
-
-
-  getOrganisationUnitsToSuggest(innovationId: string): Observable<getOrganisationUnitsToSuggestDTO[]> {
-
-    const url = new UrlModel(this.API_URL).addPath('organisation-units');
-    return this.http.get<getOrganisationUnitsToSuggestDTO[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
 
   }
 
