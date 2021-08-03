@@ -1,21 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent, FormArray, FormControl, FormGroup, Validators } from '@app/base';
+import { RoutingHelper } from '@modules/core';
 
 import { FormEngineParameterModel } from '@modules/shared/forms';
 
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { AccessorService, SupportLogType } from '../../../services/accessor.service';
+
+import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
 
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-organisations-support-status-suggest',
-  templateUrl: './organisations-support-status-suggest.component.html',
-  styleUrls: ['./organisations-support-status-suggest.component.scss'],
+  templateUrl: './organisations-support-status-suggest.component.html'
 })
 export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
+  innovation: InnovationDataType;
   stepId: number;
 
   form = new FormGroup({
@@ -39,13 +44,16 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService
+    private accessorService: AccessorService,
+    private organisationsService: OrganisationsService
   ) {
 
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.stepId = this.activatedRoute.snapshot.params.stepId;
+
+    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
 
     this.summaryAlert = { type: '', title: '', message: '' };
 
@@ -54,16 +62,36 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
   ngOnInit(): void {
 
-    this.accessorService.getOrganisationUnitsToSuggest(this.innovationId).subscribe(
-      response => {
-        const result = response.map(item => ({
+    forkJoin([
+      this.organisationsService.getOrganisationUnits(),
+      this.accessorService.getInnovationNeedsAssessment(this.innovationId, this.innovation.assessment.id || ''),
+      this.accessorService.getInnovationSupports(this.innovationId, false)
+    ]).subscribe(
+      ([response, needsAssessmentInfo, supportsInfo]) => {
+
+        const needsAssessmentSuggestedOrganisations = needsAssessmentInfo.assessment.organisations.map(item => item.name);
+
+        this.groupedItems = response.map(item => ({
           value: item.id,
           label: item.name,
-          description: item.description,
-          items: item.organisationUnits.map(i => ({ value: i.id, label: i.name, description: i.description }))
+          description: needsAssessmentSuggestedOrganisations.includes(item.id) ? 'Suggested by needs assessment' : undefined,
+          items: item.organisationUnits.map(i => ({ value: i.id, label: i.name, description: '', isEditable: true })),
         }));
 
-        this.groupedItems = result;
+        supportsInfo.filter(s => s.status === 'ENGAGING').forEach(s => {
+
+          (this.form.get('organisationUnits') as FormArray).push(new FormControl({ value: s.organisationUnit.id, disabled: false }));
+
+          this.groupedItems?.forEach(o => {
+            const ou = o.items.find(i => i.value === s.organisationUnit.id);
+            if (ou) {
+              ou.isEditable = false;
+              ou.label += ` (currently engaging)`;
+            }
+          });
+
+        });
+
       }
     );
 
@@ -90,7 +118,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
     this.chosenUnits = (this.groupedItems || []).map(item => {
 
-      const units = item.items.filter(i => (this.form.get('organisationUnits')?.value as string[]).includes(i.value)).map(c => c.label);
+      const units = item.items.filter(i => (i.isEditable && (this.form.get('organisationUnits')?.value as string[]).includes(i.value))).map(c => c.label);
 
       if (units.length === 0) { return { organisation: '', units: [] }; }
 

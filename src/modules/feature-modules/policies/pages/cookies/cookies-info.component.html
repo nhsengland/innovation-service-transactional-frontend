@@ -14,14 +14,17 @@
     <p></p>
 
     <h2>How we use cookies</h2>
-    <p>We use cookies to:</p>
+    <p>We only use cookies to:</p>
     <ul>
-      <li>make our website work, for example by keeping it secure</li>
-      <li>remember which pop-ups you've seen</li>
-      <li>measure how you use our website, such as which links you click on (analytics cookies)</li>
-      <li>help show you relevant health campaigns on social media</li>
+      <li>make our website work</li>
+      <li>measure how you use our website, such as which links you click on (analytics cookies), if you give us permission</li>
     </ul>
 
+    <p>We do not use any other cookies, for example, cookies that remember your settings or cookies that help with health campaigns.</p>
+    <p>We sometimes use tools on other organisations' websites to collect data or to ask for feedback. These tools set their own cookies.</p>
+
+    <h2>Cookies that make our website work</h2>
+    <p>We use cookies to keep our website secure and fast.</p>
     <details class="nhsuk-details">
       <summary class="nhsuk-details__summary">
         <span class="nhsuk-details__summary-text">List of cookies that make our website work</span>
@@ -38,7 +41,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let c of cookiesUsed">
+              <tr *ngFor="let c of cookiesUsed.necessary">
                 <td>{{ c.name }}</td>
                 <td>{{ c.purpose }}</td>
                 <td>{{ c.expires }}</td>
@@ -48,6 +51,39 @@
         </div>
       </div>
     </details>
+
+
+    <h2>Cookies that measure website use</h2>
+    <p>We also like to use analytics cookies. These cookies store anonymous information about how you use our website, such as which pages you visit or what you click on.</p>
+
+    <details class="nhsuk-details">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">List of cookies that measure website use</span>
+      </summary>
+      <div class="nhsuk-details__text">
+        <div class="nhsuk-table-container">
+          <table>
+            <caption class="nhsuk-u-visually-hidden">List of cookies that measure website use</caption>
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Purpose</th>
+                <th scope="col">Expires</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let c of cookiesUsed.analytics">
+                <td>{{ c.name }}</td>
+                <td>{{ c.purpose }}</td>
+                <td>{{ c.expires }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+
+    <p>We'll only use these cookies if you say it's OK. We'll use a cookie to save your settings.</p>
 
     <h2>Change your cookie settings</h2>
     <p>Some cookies, like those used to measure how you use our website, are not needed for our website to work.</p>
@@ -64,7 +100,7 @@
     <p></p>
 
     <h2>How we use the information we collect</h2>
-    <p>To find out how we collect, store and use information about you or your visit, see the <a href="/our-policies/privacy-policy/">NHS website privacy policy</a>.</p>
+    <p>To find out how we collect, store and use information about you or your visit, see the <a href="https://www.england.nhs.uk/contact-us/privacy-notice">NHS website privacy policy</a>.</p>
 
   </div>
 </div>

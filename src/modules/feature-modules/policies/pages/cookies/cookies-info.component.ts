@@ -9,7 +9,7 @@ import { COOKIES_USED } from '@feature-modules/policies/config/constants.config'
 })
 export class CookiesInfoComponent implements OnInit {
 
-  cookiesUsed = COOKIES_USED.necessary;
+  cookiesUsed = COOKIES_USED;
 
   constructor() { }
 

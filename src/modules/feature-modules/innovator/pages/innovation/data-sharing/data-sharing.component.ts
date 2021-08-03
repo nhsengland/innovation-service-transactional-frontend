@@ -3,12 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
+import { InnovationService } from '@modules/stores';
 import { INNOVATION_SUPPORT_STATUS, OrganisationSuggestion } from '@modules/stores/innovation/innovation.models';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { getOrganisationUnitsSupportStatusDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
-import { InnovationService } from '@modules/stores';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
+
 
 
 @Component({
@@ -23,7 +24,18 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
   organisations: {
-    info: getOrganisationUnitsSupportStatusDTO & { status?: keyof typeof INNOVATION_SUPPORT_STATUS; };
+    info: {
+      id: string;
+      name: string;
+      acronym: string;
+      status?: keyof typeof INNOVATION_SUPPORT_STATUS;
+      organisationUnits: {
+        id: string;
+        name: string;
+        acronym: string;
+        status: keyof typeof INNOVATION_SUPPORT_STATUS;
+      }[];
+    };
     shared: boolean;
     showHideStatus: 'hidden' | 'opened' | 'closed';
     showHideText: null | string;

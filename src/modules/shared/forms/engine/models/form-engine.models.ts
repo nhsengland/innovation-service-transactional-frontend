@@ -49,10 +49,12 @@ export class FormEngineParameterModel {
     value: string;
     label: string;
     description?: string;
+    isEditable?: boolean;
     items: {
       value: string;
       label: string;
       description?: string;
+      isEditable?: boolean;
     }[];
   }[];
 
