@@ -70,7 +70,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    this.notificationService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING);
+    this.notificationService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING).subscribe();
 
     forkJoin([
       this.organisationsService.getOrganisationUnits(),
