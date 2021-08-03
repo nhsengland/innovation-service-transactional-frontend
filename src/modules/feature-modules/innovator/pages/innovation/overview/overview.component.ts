@@ -71,7 +71,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    this.notificationService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING);
+    this.notificationService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING).subscribe();
 
     forkJoin([
       this.innovatorService.getInnovationInfo(this.innovationId),
