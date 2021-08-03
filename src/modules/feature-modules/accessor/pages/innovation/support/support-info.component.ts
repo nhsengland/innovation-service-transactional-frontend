@@ -63,7 +63,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
           this.summaryAlert = {
             type: 'success',
             title: 'Organisation suggestions sent',
-            message: 'You\'ve suggestions were saved and notifications sent.'
+            message: 'Your suggestions were saved and notifications sent.'
           };
           break;
       default:

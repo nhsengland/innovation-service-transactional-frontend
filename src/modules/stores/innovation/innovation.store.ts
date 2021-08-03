@@ -126,6 +126,15 @@ export class InnovationStore extends Store<InnovationModel> {
       INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId)?.wizard || new WizardEngineModel({})
     );
 
+    this.updateSectionWizardDynamicInfo(section);
+
+    return section;
+
+  }
+
+
+  updateSectionWizardDynamicInfo(section: WizardEngineModel): void {
+
     section.steps = section.steps.map(s => { // Transform needed information.
 
       switch (s.description) {
@@ -151,8 +160,6 @@ export class InnovationStore extends Store<InnovationModel> {
       return s;
 
     });
-
-    return section;
 
   }
 
