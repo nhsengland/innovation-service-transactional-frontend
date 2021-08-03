@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { OrganisationsService, getOrganisationUnitsSupportStatusDTO } from '@shared-module/services/organisations.service';
+import { OrganisationsService, getOrganisationUnitsDTO } from '@shared-module/services/organisations.service';
 
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { forkJoin } from 'rxjs';
+import { AccessorService } from '../../../services/accessor.service';
 
 
 @Component({
@@ -19,7 +20,18 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
   organisations: {
-    info: getOrganisationUnitsSupportStatusDTO & { status?: keyof typeof INNOVATION_SUPPORT_STATUS; }
+    info: {
+      id: string;
+      name: string;
+      acronym: string;
+      status?: keyof typeof INNOVATION_SUPPORT_STATUS;
+      organisationUnits: {
+        id: string;
+        name: string;
+        acronym: string;
+        status: keyof typeof INNOVATION_SUPPORT_STATUS;
+      }[];
+    };
     showHideStatus: 'hidden' | 'opened' | 'closed';
     showHideText: null | string;
   }[] = [];
@@ -28,6 +40,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private accessorService: AccessorService,
     private organisationsService: OrganisationsService
   ) {
 
@@ -43,7 +56,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
 
     forkJoin([
       this.organisationsService.getOrganisationUnits(),
-      this.organisationsService.getInnovationSupports(this.innovationId, false),
+      this.accessorService.getInnovationSupports(this.innovationId, false),
     ]).subscribe(([organisationUnits, organisationUnitsSupportStatus]) => {
 
       this.organisations = organisationUnits.map(organisation => {
