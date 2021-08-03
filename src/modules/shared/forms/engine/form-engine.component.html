@@ -30,6 +30,10 @@
           <theme-form-checkbox-array [arrayName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items"></theme-form-checkbox-array>
         </div>
 
+        <div *ngSwitchCase="'grouped-checkbox-array'">
+          <theme-form-grouped-checkbox-array [arrayName]="p.id" [label]="p.label" [description]="p.description" [groupedItems]="p.groupedItems"></theme-form-grouped-checkbox-array>
+        </div>
+
         <div *ngSwitchCase="'textarea'">
           <theme-form-textarea [controlName]="p.id" [label]="p.label" [description]="p.description"></theme-form-textarea>
         </div>

@@ -7,10 +7,11 @@ import { cloneDeep } from 'lodash';
 import { EnvironmentStore } from '@modules/core/stores/environment.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
-import { getInnovationSectionsDTO, sectionType, getInnovationEvidenceDTO, INNOVATION_STATUS, getInnovationCommentsDTO } from './innovation.models';
+import { getInnovationSectionsDTO, sectionType, getInnovationEvidenceDTO, INNOVATION_STATUS, getInnovationCommentsDTO, OrganisationSuggestion } from './innovation.models';
 
 import { UrlModel } from '@modules/core/models/url.model';
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
+import { response } from 'express';
 
 
 @Injectable()
@@ -188,6 +189,23 @@ export class InnovationService {
       map(response => response)
     );
 
+  }
+
+  getInnovationOrganisationSuggestions(module: '' | 'innovator' | 'accessor', innovationId: string): Observable<OrganisationSuggestion> {
+
+    const endpointModule = this.endpointModule(module);
+    const url = new UrlModel(this.API_URL)
+      .addPath(':endpointModule/:userId/innovations/:innovationId/suggestions')
+      .setPathParams({
+        endpointModule,
+        userId: this.authenticationStore.getUserId(),
+        innovationId,
+      });
+
+    return this.http.get<OrganisationSuggestion>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
   }
 
 }

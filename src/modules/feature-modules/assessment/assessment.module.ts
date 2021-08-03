@@ -11,6 +11,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
 
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { InnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/assessment-new.component';
 import { InnovationAssessmentEditComponent } from './pages/innovation/assessment/assessment-edit.component';
 
@@ -19,7 +20,6 @@ import { AssessmentService } from './services/assessment.service';
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
-import { InnovationNeedsAssessmentOverviewComponent } from './pages/needs-assessment-overview/needs-assessment-overview.component';
 
 @NgModule({
   imports: [
@@ -36,9 +36,9 @@ import { InnovationNeedsAssessmentOverviewComponent } from './pages/needs-assess
     ReviewInnovationsComponent,
 
     InnovationOverviewComponent,
+    InnovationAssessmentOverviewComponent,
     InnovationAssessmentNewComponent,
-    InnovationAssessmentEditComponent,
-    InnovationNeedsAssessmentOverviewComponent
+    InnovationAssessmentEditComponent
   ],
   providers: [
     // Services.

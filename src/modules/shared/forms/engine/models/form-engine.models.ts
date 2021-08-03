@@ -27,7 +27,7 @@ export class FormEngineModel {
 export class FormEngineParameterModel {
 
   id: string;
-  dataType: 'text' | 'textarea' | 'number' | 'password' | 'hidden' | 'checkbox-group' | 'checkbox-array' | 'radio-group' | 'fields-group' | 'file-upload';
+  dataType: 'text' | 'textarea' | 'number' | 'password' | 'hidden' | 'checkbox-group' | 'checkbox-array' | 'grouped-checkbox-array' | 'radio-group' | 'fields-group' | 'file-upload';
   label?: string;
   description?: string;
   placeholder?: string;
@@ -45,13 +45,26 @@ export class FormEngineParameterModel {
 
   additional?: FormEngineParameterModel[];
 
-  items?: ({
+  groupedItems?: { // Used in "grouped-checkbox-array" dataType.
+    value: string;
+    label: string;
+    description?: string;
+    isEditable?: boolean;
+    items: {
+      value: string;
+      label: string;
+      description?: string;
+      isEditable?: boolean;
+    }[];
+  }[];
+
+  items?: {
     value: 'SEPARATOR' | string;
     label: 'SEPARATOR' | string;
     description?: string;
     group?: string;
     conditional?: FormEngineParameterModel
-  })[];
+  }[];
 
   fieldsGroupConfig?: {
     fields: FormEngineParameterModel[];  // Used in "fields-group" dataType.
@@ -64,7 +77,7 @@ export class FormEngineParameterModel {
     acceptedFiles?: FileTypes[];
     multiple?: boolean;
     maxFileSize?: number; // In Mb.
-    previousUploadedFiles?: {id: string, name: string }[]
+    previousUploadedFiles?: { id: string, name: string }[]
   };
 
 
@@ -81,6 +94,7 @@ export class FormEngineParameterModel {
 
     this.additional = data.additional;
 
+    this.groupedItems = data.groupedItems;
     this.items = data.items;
 
     if (data.fieldsGroupConfig) {

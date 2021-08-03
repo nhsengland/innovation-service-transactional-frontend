@@ -11,6 +11,7 @@ import { FormCheckboxComponent } from './components/checkbox.component';
 import { FormCheckboxArrayComponent } from './components/checkbox-array.component';
 import { FormCheckboxGroupComponent } from './components/checkbox-group.component';
 import { FormFileUploadComponent } from './components/file-upload.component';
+import { FormGroupedCheckboxArrayComponent } from './components/grouped-checkbox-array.component';
 import { FormInputComponent } from './components/input.component';
 import { FormRadioGroupComponent } from './components/radio-group.component';
 import { FormTextareaComponent } from './components/textarea.component';
@@ -31,6 +32,7 @@ import { FormTextareaComponent } from './components/textarea.component';
     FormCheckboxArrayComponent,
     FormCheckboxGroupComponent,
     FormFileUploadComponent,
+    FormGroupedCheckboxArrayComponent,
     FormInputComponent,
     FormRadioGroupComponent,
     FormTextareaComponent
@@ -48,6 +50,7 @@ import { FormTextareaComponent } from './components/textarea.component';
     FormCheckboxArrayComponent,
     FormCheckboxGroupComponent,
     FormFileUploadComponent,
+    FormGroupedCheckboxArrayComponent,
     FormInputComponent,
     FormRadioGroupComponent,
     FormTextareaComponent

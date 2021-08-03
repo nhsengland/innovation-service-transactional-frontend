@@ -34,7 +34,7 @@ export type getInnovationInfoEndpointDTO = {
     requestedCount: number;
     inReviewCount: number;
   },
-  notifications: {[key: string]: number}
+  notifications: { [key: string]: number }
 };
 
 export type getInnovationActionInfoInDTO = {
@@ -49,18 +49,18 @@ export type getInnovationActionInfoInDTO = {
 
 export type getInnovationSupportsInDTO = {
   id: string;
-  status: string;
-  organisation: {
-    id: string;
-    name: string;
-    acronym: string;
-  },
+  status: keyof typeof INNOVATION_SUPPORT_STATUS;
   organisationUnit: {
     id: string;
     name: string;
-  },
-  accessors: { id: string, name: string }[],
-  notifications?: {[key: string]: number}
+    organisation: {
+      id: string;
+      name: string;
+      acronym: string;
+    };
+  };
+  accessors?: { id: string, name: string }[];
+  notifications?: { [key: string]: number };
 };
 
 export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
@@ -93,6 +93,10 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
   organisations: { id: string; name: string; acronym: null | string; }[];
   assignToName: string;
   finishedAt: null | string;
+  updatedBy: null | string;
+  updatedAt: null | string;
+  createdAt: null | string;
+  createdBy: null | string;
 };
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
@@ -136,15 +140,9 @@ export class InnovatorService extends CoreService {
 
   }
 
-  getInnovationSupports(innovationId: string): Observable<getInnovationSupportsInDTO[]> {
+  getInnovationSupports(innovationId: string, returnAccessorsInfo: boolean): Observable<getInnovationSupportsInDTO[]> {
 
-    const url = new UrlModel(this.API_URL)
-      .addPath('innovators/:userId/innovations/:innovationId/supports')
-      .setPathParams({
-        userId: this.stores.authentication.getUserId(),
-        innovationId
-      });
-
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId }).setQueryParams({ full: returnAccessorsInfo });
     return this.http.get<getInnovationSupportsInDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
@@ -159,8 +157,8 @@ export class InnovatorService extends CoreService {
       take(1),
       map(response => {
         return {
-          openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'`}})),
-          closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'`} })),
+          openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'` } })),
+          closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'` } })),
         };
       })
     );
@@ -196,7 +194,7 @@ export class InnovatorService extends CoreService {
 
   }
 
-  getOrganisations(innovationId: string): Observable<{ id: string, status: keyof typeof INNOVATION_SUPPORT_STATUS }[]> {
+  getInnovationShares(innovationId: string): Observable<{ id: string, status: keyof typeof INNOVATION_SUPPORT_STATUS }[]> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/shares').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
     return this.http.get<{ id: string, status: keyof typeof INNOVATION_SUPPORT_STATUS }[]>(url.buildUrl()).pipe(
@@ -246,6 +244,10 @@ export class InnovatorService extends CoreService {
           orgNames: response.organisations.map(item => item.name),
           finishedAt: response.finishedAt,
           assignToName: response.assignToName,
+          updatedAt: response.updatedAt,
+          updatedBy: response.updatedBy,
+          createdAt: response.createdAt,
+          createdBy: response.createdBy,
         }
       }))
     );

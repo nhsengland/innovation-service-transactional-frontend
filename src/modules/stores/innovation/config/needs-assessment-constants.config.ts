@@ -5,7 +5,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
   innovation: FormEngineParameterModel[],
   innovator: FormEngineParameterModel[],
   summary: FormEngineParameterModel[],
-  organisations: FormEngineParameterModel[]
+  organisationUnits: FormEngineParameterModel[]
 } = {
   innovation: [
     new FormEngineParameterModel({
@@ -63,7 +63,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       dataType: 'radio-group',
       label: 'Do they have a good insight into competitors, alternatives, and the market landscape?',
       validations: { isRequired: true },
-      items: maturityLevelItems,
+      items: yesPartiallyNoItems,
       additional: [new FormEngineParameterModel({ id: 'hasCompetitionKnowledgeComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
     }),
     new FormEngineParameterModel({
@@ -94,14 +94,13 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
     })
   ],
 
-  organisations: [
+  organisationUnits: [
     new FormEngineParameterModel({
-      id: 'organisations',
-      dataType: 'checkbox-array',
+      id: 'organisationUnits',
+      dataType: 'grouped-checkbox-array',
       label: 'Suggest organisations for support',
-      description: 'Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="" target="_blank" rel="noopener noreferrer">Support offer guide (opens in a new window)',
       validations: { isRequired: true },
-      items: []
+      groupedItems: []
     })
   ]
 

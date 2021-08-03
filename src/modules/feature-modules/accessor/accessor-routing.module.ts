@@ -13,13 +13,17 @@ import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-
 import { InnovationActionTrackerNewComponent } from './pages/innovation/action-tracker/action-tracker-new.component';
 import { InnovationActionTrackerEditComponent } from './pages/innovation/action-tracker/action-tracker-edit.component';
 import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
-import { InnovationSupportUpdateComponent } from './pages/innovation/support-update/support-update.component';
-import { InnovationSupportInfoComponent } from './pages/innovation/support-update/support-info.component';
+
+import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './pages/innovation/support/organisations-support-status-info.component';
+import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './pages/innovation/support/organisations-support-status-suggest.component';
+import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
+import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
 
 import { PageInnovationCommentsListComponent } from '@shared-module/pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from '@shared-module/pages/innovation/comments/comments-new.component';
 import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/innovation-record.component';
 import { PageActionStatusListComponent } from '@shared-module/pages/innovation/action-status-list.component';
+import { PageInnovationSupportStatusListComponent } from '@shared-module/pages/innovation/innovation-support-status-list.component';
 import { InnovationSectionEvidenceViewComponent } from '@shared-module/pages/innovation/evidence-view.component';
 import { InnovationSectionViewComponent } from '@shared-module/pages/innovation/section-view.component';
 
@@ -117,8 +121,26 @@ const routes: Routes = [
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } }
               },
               {
+                path: 'support/statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Go back' } } }
+              },
+              {
                 path: 'support/new', pathMatch: 'full', component: InnovationSupportUpdateComponent,
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Go back' } } }
+              },
+              {
+                path: 'support/organisations', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusInfoComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Go back' } } }
+              },
+              {
+                path: 'support/organisations/suggest',
+                children: [
+                  { path: '', pathMatch: 'full', redirectTo: '1' },
+                  {
+                    path: ':stepId', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent,
+                    data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Back to innovation' } } }
+                  }
+                ]
               },
               {
                 path: 'support/:supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent,

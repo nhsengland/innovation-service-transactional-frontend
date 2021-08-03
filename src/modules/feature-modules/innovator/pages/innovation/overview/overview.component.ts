@@ -72,7 +72,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     forkJoin([
       this.innovatorService.getInnovationInfo(this.innovationId),
       this.stores.innovation.getSectionsSummary$('innovator', this.innovationId),
-      this.innovatorService.getInnovationSupports(this.innovationId),
+      this.innovatorService.getInnovationSupports(this.innovationId, true),
     ]).subscribe(([innovationInfo, sectionSummary, innovationSupports]) => {
 
       this.submittedAt = innovationInfo.submittedAt || '';
@@ -88,9 +88,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         this.supportStatus = this.innovationSupportStatus.ENGAGING.label;
         this.supportingAccessors = innovationSupports
           .filter(support => support.status.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase())
-          .flatMap(s => s.accessors
-            .map(a => ({ ...a, unit: s.organisationUnit.name }))
-          );
+          .flatMap(s => (s.accessors || []).map(a => ({ ...a, unit: s.organisationUnit.name })));
       }
 
       this.contentReady = true;

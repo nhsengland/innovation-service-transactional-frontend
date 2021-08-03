@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { HeaderNavigationBarComponent } from './navigation-bar.component';
-import { NotificationTagComponent } from './notification-tag.component';
+import { NotificationTagComponent } from '../tag/notification-tag.component';
 
 describe('Theme/Components/Header/NavigationBarComponent', () => {
 
@@ -20,7 +20,7 @@ describe('Theme/Components/Header/NavigationBarComponent', () => {
         HeaderNavigationBarComponent,
         NotificationTagComponent,
       ]
-    }).compileComponents();
+    });
 
   });
 

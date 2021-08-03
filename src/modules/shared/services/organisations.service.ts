@@ -12,6 +12,17 @@ export type getAccessorsOrganisationsDTO = {
   name: string;
 };
 
+export type getOrganisationUnitsDTO = {
+  id: string;
+  name: string;
+  acronym: string;
+  organisationUnits: {
+    id: string;
+    name: string;
+    acronym: string;
+  }[];
+};
+
 
 @Injectable()
 export class OrganisationsService extends CoreService {
@@ -20,8 +31,18 @@ export class OrganisationsService extends CoreService {
 
   getAccessorsOrganisations(): Observable<getAccessorsOrganisationsDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('organisations').setQueryParams({ type: 'accessor' });
+    const url = new UrlModel(this.API_URL).addPath('organisations').setQueryParams({ type: 'ACCESSOR' });
     return this.http.get<getAccessorsOrganisationsDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
+  getOrganisationUnits(): Observable<getOrganisationUnitsDTO[]> {
+
+    const url = new UrlModel(this.API_URL).addPath('organisation-units');
+    return this.http.get<getOrganisationUnitsDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );

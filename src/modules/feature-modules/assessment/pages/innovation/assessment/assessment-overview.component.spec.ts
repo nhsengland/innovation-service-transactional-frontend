@@ -10,19 +10,19 @@ import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
 
-import { InnovationNeedsAssessmentOverviewComponent } from './needs-assessment-overview.component';
+import { InnovationAssessmentOverviewComponent } from './assessment-overview.component';
 
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
 
 
-describe('FeatureModules/Assessment/Innovation/InnovationNeedsAssessmentOverviewComponent', () => {
+describe('FeatureModules/Assessment/Innovation/InnovationAssessmentOverviewComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
   let assessmentService: AssessmentService;
 
-  let component: InnovationNeedsAssessmentOverviewComponent;
-  let fixture: ComponentFixture<InnovationNeedsAssessmentOverviewComponent>;
+  let component: InnovationAssessmentOverviewComponent;
+  let fixture: ComponentFixture<InnovationAssessmentOverviewComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -49,7 +49,7 @@ describe('FeatureModules/Assessment/Innovation/InnovationNeedsAssessmentOverview
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
+    fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
@@ -61,15 +61,15 @@ describe('FeatureModules/Assessment/Innovation/InnovationNeedsAssessmentOverview
 
     const responseMock = {
       innovation: { id: '01', name: 'Innovation 01' },
-      assessment: { description: 'description' }
+      assessment: { description: 'description', organisations: [] }
     };
     assessmentService.getInnovationNeedsAssessment = () => of(responseMock as any);
-    const expected = responseMock.assessment;
+    const expected = { ...responseMock.assessment, organisationsNames: [] };
 
-    fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
+    fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.assessment).toBe(expected);
+    expect(component.assessment).toEqual(expected);
 
   });
 
@@ -79,7 +79,7 @@ describe('FeatureModules/Assessment/Innovation/InnovationNeedsAssessmentOverview
 
     const expected = undefined;
 
-    fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
+    fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component.assessment).toBe(expected);

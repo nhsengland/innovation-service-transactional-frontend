@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -7,6 +7,11 @@ import { MappedObject, UrlModel, APIQueryParamsType } from '@modules/core';
 
 import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
+
+export enum SupportLogType {
+  ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
+  STATUS_UPDATE = 'STATUS_UPDATE',
+}
 
 
 export type getInnovationsListEndpointInDTO = {
@@ -33,12 +38,12 @@ export type getInnovationsListEndpointInDTO = {
       hasNew: boolean;
     }
   }[];
-  tabInfo?: {[key: string]: number};
+  tabInfo?: { [key: string]: number };
 };
 export type getInnovationsListEndpointOutDTO = {
   count: number;
   data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription' | 'postcode'>)[],
-  tabInfo?: {[key: string]: number},
+  tabInfo?: { [key: string]: number },
 };
 
 export type getInnovationInfoEndpointDTO = {
@@ -63,7 +68,7 @@ export type getInnovationInfoEndpointDTO = {
     id: string;
     status: keyof typeof INNOVATION_SUPPORT_STATUS;
   },
-  notifications: {[key: string]: number},
+  notifications: { [key: string]: number },
 };
 
 type getInnovationActionsListEndpointInDTO = {
@@ -144,8 +149,25 @@ type getInnovationNeedsAssessmentEndpointInDTO = {
 
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
-  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'organisations' | 'support'> & { organisations: string[] },
+  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'support'>,
   support: getInnovationNeedsAssessmentEndpointInDTO['support']
+};
+
+
+export type getInnovationSupportsDTO = {
+  id: string;
+  status: keyof typeof INNOVATION_SUPPORT_STATUS;
+  organisationUnit: {
+    id: string;
+    name: string;
+    organisation: {
+      id: string;
+      name: string;
+      acronym: string;
+    };
+  };
+  accessors?: { id: string, name: string }[];
+  notifications?: { [key: string]: number };
 };
 
 
@@ -261,9 +283,6 @@ export class AccessorService extends CoreService {
 
   createAction(innovationId: string, body: MappedObject): Observable<{ id: string }> {
 
-    // return of({ id: 'ID01' });
-    // return throwError('error');
-
     const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
@@ -273,9 +292,6 @@ export class AccessorService extends CoreService {
   }
 
   updateAction(innovationId: string, actionId: string, body: MappedObject): Observable<{ id: string }> {
-
-    // return of({ id: 'ID01' });
-    // return throwError('error');
 
     const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
@@ -310,7 +326,7 @@ export class AccessorService extends CoreService {
           hasScaleResource: response.hasScaleResource,
           hasScaleResourceComment: response.hasScaleResourceComment,
           summary: response.summary,
-          organisations: response.organisations.map(item => item.name),
+          organisations: response.organisations,
           assignToName: response.assignToName,
           finishedAt: response.finishedAt,
         },
@@ -332,10 +348,7 @@ export class AccessorService extends CoreService {
 
   }
 
-  /*
-    List of accessors from a given Organisation Unit
-    The organisation unit is obtained in the backend from the JWT
-  */
+
   getAccessorsList(): Observable<{ id: string, name: string }[]> {
 
     const url = new UrlModel(this.API_URL).addPath('accessors');
@@ -344,6 +357,15 @@ export class AccessorService extends CoreService {
       map(response => response)
     );
 
+  }
+
+  getInnovationSupports(innovationId: string, returnAccessorsInfo: boolean): Observable<getInnovationSupportsDTO[]> {
+
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId }).setQueryParams({ full: returnAccessorsInfo });
+    return this.http.get<getInnovationSupportsDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
   }
 
   saveSupportStatus(innovationId: string, body: MappedObject, supportId?: string): Observable<{ id: string }> {
@@ -367,5 +389,17 @@ export class AccessorService extends CoreService {
     }
 
   }
+
+
+  suggestNewOrganisations(innovationId: string, body: { organisationUnits: string[], type: SupportLogType, description: string }): Observable<{}> {
+
+    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/support-logs').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    return this.http.post<{}>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
 
 }

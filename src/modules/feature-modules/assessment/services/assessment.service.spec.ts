@@ -134,10 +134,15 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
       hasScaleResource: 'One value',
       hasScaleResourceComment: 'One value',
       summary: 'One value',
-      organisations: [{ id: 'org1', name: 'orgName', acronym: 'orgAcronym' }],
-      orgNames: ['orgName'],
+      organisations: [
+        { id: 'org1', name: 'orgName', acronym: 'orgAcronym', units: [{ id: 'unit1', name: 'orgUnitName' }] }
+      ],
       assignToName: 'One value',
-      finishedAt: 'One value'
+      finishedAt: 'One value',
+      createdAt: '2020-01-01T00:00:00.000Z',
+      createdBy: ' A user',
+      updatedAt: null,
+      updatedBy: null
     };
 
     const expected = {
@@ -160,10 +165,14 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
         hasScaleResource: responseMock.hasScaleResource,
         hasScaleResourceComment: responseMock.hasScaleResourceComment,
         summary: responseMock.summary,
-        organisations: ['org1'],
-        orgNames: ['orgName'],
-        assignToName: 'One value',
-        finishedAt: 'One value'
+        organisations: responseMock.organisations,
+        assignToName: responseMock.assignToName,
+        finishedAt: responseMock.finishedAt,
+        createdAt: responseMock.createdAt,
+        createdBy: responseMock.createdBy,
+        updatedAt: responseMock.updatedAt,
+        updatedBy: responseMock.updatedBy,
+        hasBeenSubmitted: !!responseMock.finishedAt
       }
     };
 
