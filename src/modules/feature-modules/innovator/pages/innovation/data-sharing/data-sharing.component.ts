@@ -8,6 +8,8 @@ import { INNOVATION_SUPPORT_STATUS, OrganisationSuggestion } from '@modules/stor
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
+
 
 
 @Component({
@@ -51,6 +53,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
     private organisationsService: OrganisationsService,
     private innovatorService: InnovatorService,
     private innovationService: InnovationService,
+    private notificationService: NotificationService,
   ) {
     super();
 
@@ -79,8 +82,8 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    // TODO: SPRINT 13.
-    // Add here the calls necessary to draw the cards! That's what missing!
+    this.notificationService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING).subscribe();
+
     forkJoin([
       this.organisationsService.getOrganisationUnits(),
       this.innovatorService.getInnovationShares(this.innovationId),

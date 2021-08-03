@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
+import { NotificationService } from '@modules/shared/services/notification.service';
 
 import { AssessmentService, getInnovationsListEndpointOutDTO } from '../../services/assessment.service';
 
@@ -21,7 +22,8 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private assessmentService: AssessmentService
+    private assessmentService: AssessmentService,
+    private notificationService: NotificationService,
   ) {
 
     super();
@@ -107,6 +109,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
         }
 
         this.getInnovationsList();
+        this.getNotificationsGroupedByStatus();
 
       })
     );
@@ -120,17 +123,21 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
       response => {
         this.innovationsList.setData(response.data, response.count);
         this.currentTab.innovationsOverdue = response.data.filter(item => item.isOverdue).length;
-
-        for (const t of this.tabs) {
-          t.notifications = response.tabInfo ? response.tabInfo[t.key] : 0;
-        }
-
       },
       error => this.logger.error(error)
     );
 
   }
 
+  getNotificationsGroupedByStatus(): void{
+    this.notificationService.getAllUnreadNotificationsGroupedByStatus('INNOVATION_STATUS').subscribe(
+      response => {
+        for (const t of this.tabs) {
+          t.notifications = response ? response[t.key] : 0;
+        }
+      }
+    );
+  }
 
   onTableOrder(column: string): void {
 

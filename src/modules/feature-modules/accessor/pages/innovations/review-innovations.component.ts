@@ -3,7 +3,9 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { TableModel } from '@app/base/models';
+import { NotificationService } from '@modules/shared/services/notification.service';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { response } from 'express';
 
 import { AccessorService, getInnovationsListEndpointOutDTO } from '../../services/accessor.service';
 
@@ -42,7 +44,8 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService
+    private accessorService: AccessorService,
+    private notificationService: NotificationService,
   ) {
 
     super();
@@ -158,15 +161,20 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
       response => {
         this.innovationsList.setData(response.data, response.count);
         this.currentTab.numberDescription = `${response.count} ${this.currentTab.numberDescription}`;
-
-        for (const t of this.tabs) {
-          t.notifications = response.tabInfo ? response.tabInfo[t.key] : 0;
-        }
-
       },
       error => this.logger.error(error)
     );
 
+  }
+
+  getNotificationsGroupedByStatus(): void{
+    this.notificationService.getAllUnreadNotificationsGroupedByStatus('SUPPORT_STATUS').subscribe(
+      response => {
+        for (const t of this.tabs) {
+          t.notifications = response ? response[t.key] : 0;
+        }
+      }
+    );
   }
 
   onRouteChange(queryParams: Params): void {
@@ -224,6 +232,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
     }
 
     this.getInnovationsList();
+    this.getNotificationsGroupedByStatus();
 
   }
 
@@ -239,7 +248,6 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
     this.innovationsList.setOrderBy(column);
     this.getInnovationsList();
-
   }
 
 }

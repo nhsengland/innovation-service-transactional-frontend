@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
+import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 import { AccessorSuggestionModel, AssessmentSuggestionModel, OrganisationSuggestion } from '@modules/stores/innovation/innovation.models';
 
 @Component({
@@ -24,7 +25,11 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
   showAssessmentsCard: boolean;
   showAccessorsCard: boolean;
 
-  constructor() {
+  hasNewSuggestions = false;
+
+  constructor(
+    private notificationService: NotificationService,
+  ) {
     this.showAccessorsCard = false;
     this.showAssessmentsCard = false;
 
@@ -52,6 +57,8 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
         this.showAccessorsCard = true;
       }
     }
+
+    this.hasNewSuggestions = this.notificationService.notifications[NotificationContextType.DATA_SHARING] ? true : false;
   }
 
   private parseAccessors(accessorsSuggestions: AccessorSuggestionModel[]): { suggestors: string, organisations: string[]} {
