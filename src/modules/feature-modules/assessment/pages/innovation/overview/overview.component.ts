@@ -34,8 +34,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    this.notificationService.dismissNotification(this.innovationId, NotificationContextType.INNOVATION).subscribe();
-
     this.assessmentService.getInnovationInfo(this.innovationId).subscribe(
       response => {
 

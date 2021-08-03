@@ -107,7 +107,7 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
       { title: 'Innovation record', link: `/accessor/innovations/innovation01/record` },
       { title: 'Action tracker', link: `/accessor/innovations/innovation01/action-tracker`, key: 'ACTION' },
       { title: 'Comments', link: `/accessor/innovations/innovation01/comments`, key: 'COMMENT' },
-      { title: 'Support status', link: `/accessor/innovations/innovation01/support` }
+      { title: 'Support status', link: `/accessor/innovations/innovation01/support`, key: 'SUPPORT' }
     ];
 
     fixture = TestBed.createComponent(AccessorLayoutComponent);

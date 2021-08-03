@@ -11,6 +11,8 @@ export enum NotificationContextType {
   INNOVATION = 'INNOVATION',
   ACTION = 'ACTION',
   COMMENT = 'COMMENT',
+  SUPPORT = 'SUPPORT',
+  DATA_SHARING = 'DATA_SHARING',
 }
 
 export type NotificationDismissResultDTO = {
@@ -28,6 +30,8 @@ export type getUnreadNotificationsEndpointDTO =  {
 @Injectable()
 export class NotificationService extends CoreService {
 
+  notifications: {[key: string]: number} =  {};
+
   constructor() { super(); }
 
   dismissNotification(contextId: string, contextType: string): Observable<NotificationDismissResultDTO> {
@@ -40,12 +44,34 @@ export class NotificationService extends CoreService {
 
   }
 
-  getAllUnreadNotifications(): Observable<getUnreadNotificationsEndpointDTO> {
+  getAllUnreadNotificationsGroupedByContext(innovationId?: string): Observable<getUnreadNotificationsEndpointDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('notifications');
+    let url = new UrlModel(this.API_URL).addPath('notifications/context');
+
+    if (innovationId) {
+      url = url.setQueryParams({innovationId});
+    }
+
     return this.http.get<getUnreadNotificationsEndpointDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => response)
+      map(response =>  {
+        this.notifications = response;
+        return response;
+      })
+    );
+
+  }
+
+  getAllUnreadNotificationsGroupedByStatus(scope: string): Observable<getUnreadNotificationsEndpointDTO> {
+
+    const url = new UrlModel(this.API_URL).addPath('notifications/status').setQueryParams({ scope });
+
+    return this.http.get<getUnreadNotificationsEndpointDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response =>  {
+        this.notifications = response;
+        return response;
+      })
     );
 
   }

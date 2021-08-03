@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 
 import { RoutingHelper } from '@modules/core';
+import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 
 
 type RouteDataLayoutOptionsType = {
@@ -22,14 +23,15 @@ export class AssessmentLayoutComponent extends CoreComponent {
 
   navigationMenuBar: {
     leftItems: { title: string, link: string, fullReload?: boolean }[],
-    rightItems: { title: string, link: string, fullReload?: boolean }[]
+    rightItems: { title: string, link: string, key?: string, fullReload?: boolean }[]
   } = { leftItems: [], rightItems: [] };
 
   leftSideBar: { title: string, link: string }[] = [];
-
+  mainMenuNotifications: {[key: string]: number};
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private notificationService: NotificationService,
   ) {
 
     super();
@@ -39,7 +41,7 @@ export class AssessmentLayoutComponent extends CoreComponent {
         { title: 'Home', link: '/assessment/dashboard' }
       ],
       rightItems: [
-        { title: 'Innovations', link: '/assessment/innovations' },
+        { title: 'Innovations', link: '/assessment/innovations', key: NotificationContextType.INNOVATION },
         // { title: 'Account', link: '/assessment/account' },
         { title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true }
       ]
@@ -49,6 +51,7 @@ export class AssessmentLayoutComponent extends CoreComponent {
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
     );
 
+    this.mainMenuNotifications = { };
   }
 
 
@@ -62,6 +65,13 @@ export class AssessmentLayoutComponent extends CoreComponent {
       backLink: routeData.backLink ? { url: RoutingHelper.resolveUrl(routeData.backLink.url, this.activatedRoute), label: routeData.backLink.label } : null
     };
 
+    this.subscriptions.push(
+      this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
+        response => {
+          this.mainMenuNotifications = response;
+        }
+      )
+    );
 
     switch (this.layoutOptions.type) {
 

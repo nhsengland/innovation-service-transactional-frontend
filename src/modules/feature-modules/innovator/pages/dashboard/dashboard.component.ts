@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
+import { NotificationService } from '@modules/shared/services/notification.service';
 
 @Component({
   selector: 'app-innovator-pages-dashboard',
@@ -15,7 +16,9 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   innovationGuidesUrl = `${this.stores.environment.BASE_URL}/innovation-guides`;
 
-  constructor() {
+  constructor(
+    private notificationService: NotificationService
+  ) {
 
     super();
 
@@ -27,5 +30,16 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   }
 
   ngOnInit(): void { }
+
+  notificationsCount(): number {
+    let count = 0;
+    const notifications = this.notificationService.notifications;
+    const names = Object.keys(this.notificationService.notifications);
+    for (const name of names) {
+      count += notifications[name];
+    }
+
+    return count;
+  }
 
 }

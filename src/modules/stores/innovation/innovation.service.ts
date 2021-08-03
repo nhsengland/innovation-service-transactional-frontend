@@ -11,7 +11,6 @@ import { getInnovationSectionsDTO, sectionType, getInnovationEvidenceDTO, INNOVA
 
 import { UrlModel } from '@modules/core/models/url.model';
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
-import { response } from 'express';
 
 
 @Injectable()
