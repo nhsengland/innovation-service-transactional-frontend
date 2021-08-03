@@ -70,14 +70,13 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    // TODO: SPRINT 13.
-    // Add here the calls necessary to draw the cards! That's what missing!
+    this.notificationService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING);
+
     forkJoin([
       this.organisationsService.getOrganisationUnits(),
       this.innovatorService.getInnovationShares(this.innovationId),
       this.innovatorService.getInnovationSupports(this.innovationId, false),
       this.innovationService.getInnovationOrganisationSuggestions('innovator', this.innovationId),
-      this.notificationService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING)
     ]).subscribe(([organisationUnits, innovationShares, organisationUnitsSupportStatus, organisationSuggestions]) => {
 
       this.organisationSuggestions = organisationSuggestions;

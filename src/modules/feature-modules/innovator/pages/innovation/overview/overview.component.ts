@@ -6,6 +6,7 @@ import { CoreComponent } from '@app/base';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
+import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 
 @Component({
   selector: 'app-innovator-pages-innovations-overview',
@@ -55,6 +56,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService,
+    private notificationService: NotificationService,
   ) {
     super();
 
@@ -68,6 +70,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   }
 
   ngOnInit(): void {
+
+    this.notificationService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING);
 
     forkJoin([
       this.innovatorService.getInnovationInfo(this.innovationId),
