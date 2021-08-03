@@ -116,6 +116,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.currentAnswers = { ...this.currentAnswers, ...formData?.data };
 
     this.wizard.runRules(this.currentAnswers);
+    this.stores.innovation.updateSectionWizardDynamicInfo(this.wizard);
     this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);
 
     this.redirectTo(this.getNavigationUrl(action));
