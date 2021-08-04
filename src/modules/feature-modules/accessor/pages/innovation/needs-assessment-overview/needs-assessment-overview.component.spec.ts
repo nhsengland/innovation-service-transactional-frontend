@@ -61,7 +61,11 @@ describe('FeatureModules/Accessor/Innovation/InnovationNeedsAssessmentOverviewCo
 
     const responseMock = {
       innovation: { id: '01', name: 'Innovation 01' },
-      assessment: { description: 'description' }
+      assessment: {
+        description: 'description',
+        maturityLevel: 'DISCOVERY',
+        organisations: []
+      }
     };
     accessorService.getInnovationNeedsAssessment = () => of(responseMock as any);
     const expected = responseMock.assessment;
