@@ -80,7 +80,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
           key: 'UNASSIGNED',
           title: 'Unassigned',
           mainDescription: 'Innovations awaiting status assignment from your organisation.',
-          secondaryDescription: 'You must assign a status within 30 days of submission',
+          secondaryDescription: 'If your organisation has been suggested to support an innovation, you must assign a status within 30 days of submission.',
           numberDescription: 'unassigned innovations',
           showAssignedToMe: false,
           link: '/accessor/innovations', queryParams: { status: 'UNASSIGNED' }
