@@ -12,10 +12,10 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 
 import { InnovationNeedsAssessmentOverviewComponent } from './needs-assessment-overview.component';
 
-import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
+import { AccessorService, getSupportLogInDTO, getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/accessor/services/accessor.service';
 
 
-describe('FeatureModules/Accessor/Innovation/InnovationNeedsAssessmentOverviewComponent', () => {
+describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
@@ -61,7 +61,11 @@ describe('FeatureModules/Accessor/Innovation/InnovationNeedsAssessmentOverviewCo
 
     const responseMock = {
       innovation: { id: '01', name: 'Innovation 01' },
-      assessment: { description: 'description' }
+      assessment: {
+        description: 'description',
+        maturityLevel: 'DISCOVERY',
+        organisations: []
+      }
     };
     accessorService.getInnovationNeedsAssessment = () => of(responseMock as any);
     const expected = responseMock.assessment;
@@ -69,7 +73,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationNeedsAssessmentOverviewCo
     fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.assessment).toBe(expected);
+    expect(component.assessment).toEqual(expected);
 
   });
 
@@ -83,6 +87,51 @@ describe('FeatureModules/Accessor/Innovation/InnovationNeedsAssessmentOverviewCo
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component.assessment).toBe(expected);
+
+  });
+
+
+  it('should run getSupportLog() with success', () => {
+
+    const responseMock: getSupportLogInDTO[] = [
+      {
+        id: 'support01',
+        type: SupportLogType.STATUS_UPDATE,
+        description: 'description',
+        createdBy: 'A user',
+        createdAt: '2020-01-01T00:00:00.000Z',
+        innovationSupportStatus: 'ENGAGING',
+        organisationUnit: {
+          id: 'unit01', name: 'Unit 01', acronym: 'UN',
+          organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
+        }
+      }
+    ];
+    const expected: getSupportLogOutDTO[] = responseMock.map(item => ({
+      ...item,
+      logTitle: 'Updated support status',
+      suggestedOrganisationUnitsNames: ['Unit 01']
+    }));
+
+    accessorService.getSupportLog = () => of(responseMock as any);
+
+    fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component.logHistory[0].id).toBe(expected[0].id);
+
+  });
+
+  it('should run getSupportLog() with error', () => {
+
+    accessorService.getSupportLog = () => throwError(false);
+
+    const expected: any = [];
+
+    fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component.logHistory).toEqual(expected);
 
   });
 

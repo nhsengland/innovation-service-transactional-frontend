@@ -8,10 +8,10 @@
         <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
           <div class="side-menu-flex">
             <div><a class="app-tabs__link" [routerLink]="item.link" [queryParams]="item.queryParams">{{ item.title }}</a></div>
-            <div><notification-tag *ngIf="item.notifications && item.notifications > 0" [count]="item.notifications"></notification-tag></div>
+            <div>
+              <notification-tag *ngIf="item.notifications && item.notifications > 0" [count]="item.notifications"></notification-tag>
+            </div>
           </div>
-
-
         </li>
       </ol>
     </nav>

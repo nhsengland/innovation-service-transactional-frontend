@@ -39,7 +39,7 @@
 
         <h2>Selected organisations</h2>
 
-        <div *ngFor="let organisation of chosenUnits">
+        <div *ngFor="let organisation of chosenUnits.list">
           <p class="nhsuk-u-margin-bottom-1"> {{ organisation.organisation }} </p>
           <ul class="nhsuk-list nhsuk-u-margin-0 nhsuk-u-padding-left-5">
             <li *ngFor="let unit of organisation.units" class="d-flex nhsuk-u-margin-0 nhsuk-u-padding-left-3">

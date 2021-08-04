@@ -8,7 +8,7 @@
 <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-3">
 
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full app-component-reading-width">
+    <div class="nhsuk-grid-column-full">
 
       <h1 class="nhsuk-heading-1"> Update support status </h1>
 
@@ -34,14 +34,12 @@
         <ng-container *ngIf="stepNumber === 2">
 
           <h3 class="nhsuk-heading-3">
-            <section class="nhsuk-status_container">
-              <div class="nhsuk-div_left">You selected </div>
-              <div class="nhsuk-div_right">
-                <strong class="nhsuk-tag" [ngClass]="currentStatus.cssClass">{{ currentStatus.label }}</strong>
-              </div>
+            <section class="d-flex align-items-center">
+              <div> You selected </div>
+              <strong class="nhsuk-tag nhsuk-u-margin-left-3" [ngClass]="currentStatus.cssClass">{{ currentStatus.label }}</strong>
             </section>
           </h3>
-          <p class="nhsuk-hint"> {{currentStatus.description}} </p>
+          <p class="nhsuk-hint"> {{ currentStatus.description }} </p>
           <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5"> Assign one or more accessors from {{ organisationUnit }} </h3>
           <div class="nhsuk-form-group">
             <theme-form-checkbox-array [arrayName]="accessorsArrayName" [items]="accessorList"></theme-form-checkbox-array>

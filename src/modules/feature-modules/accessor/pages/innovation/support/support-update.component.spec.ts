@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
+import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
@@ -12,7 +13,6 @@ import { InnovationSupportUpdateComponent } from './support-update.component';
 
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 import { ActivatedRoute } from '@angular/router';
-import { of, throwError } from 'rxjs';
 
 describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', () => {
 
@@ -125,8 +125,9 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
   it('should have support with ENGAGING status and accessors assigned', () => {
 
     accessorService.getInnovationSupportInfo = () => of({
+      id: 'support01',
       status: 'ENGAGING',
-      accessors: [{id: 'accessor_1', name: 'accessor 1'}]
+      accessors: [{ id: 'accessor_1', name: 'accessor 1' }]
     });
 
     const expected = 1;
@@ -144,8 +145,9 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
   it('should move to step 2 when status is ENGAGING', () => {
 
     accessorService.getInnovationSupportInfo = () => of({
+      id: 'support01',
       status: 'ENGAGING',
-      accessors: [{id: 'accessor_1', name: 'accessor 1'}]
+      accessors: [{ id: 'accessor_1', name: 'accessor 1' }]
     });
 
     const expected = 2;
@@ -165,6 +167,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
   it('should move to step 3 when status is NOT ENGAGING', () => {
 
     accessorService.getInnovationSupportInfo = () => of({
+      id: 'support01',
       status: 'NOT_YET',
       accessors: []
     });
@@ -186,6 +189,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
   it('should Submit when form is valid', () => {
 
     accessorService.getInnovationSupportInfo = () => of({
+      id: 'support01',
       status: 'NOT_YET',
       accessors: []
     });
@@ -208,6 +212,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
   it('should NOT Submit when form is invalid', () => {
 
     accessorService.getInnovationSupportInfo = () => of({
+      id: 'support01',
       status: 'NOT_YET',
       accessors: []
     });
@@ -226,4 +231,5 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
     expect(component.form.valid).toEqual(expected);
 
   });
+
 });

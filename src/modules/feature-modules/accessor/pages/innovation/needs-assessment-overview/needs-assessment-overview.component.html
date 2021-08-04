@@ -1,7 +1,7 @@
 <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-3">
 
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full app-component-reading-width">
+    <div class="nhsuk-grid-column-full">
       <div class="app-pane">
 
         <div class="app-pane__side-bar nhsuk-u-padding-top-3">
@@ -50,7 +50,7 @@
               <p class="">{{ assessment?.summary }}</p>
 
               <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Suggested organisations</h2>
-              <p *ngFor="let item of (assessment?.organisations || [])" class="nhsuk-u-margin-bottom-1">{{ item }}</p>
+              <p *ngFor="let item of suggestedOrganisations" class="nhsuk-u-margin-bottom-1">{{ item }}</p>
 
               <a routerLink="/accessor/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
               <a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"> Update support status </a>
@@ -63,4 +63,53 @@
     </div>
   </div>
 
+</div>
+
+
+<div class="nhsuk-width-container app-width-container nhsuk-u-margin-top-5">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <div class="full-width-section bg-color-white">
+
+        <div class="nhsuk-grid-row nhsuk-u-padding-top-5">
+          <div class="nhsuk-grid-column-one-quarter"> &nbsp; </div>
+          <div class="nhsuk-grid-column-three-quarters">
+            <h2 class="nhsuk-heading-l">Support history</h2>
+          </div>
+        </div>
+        <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-3" />
+
+        <div *ngFor="let item of logHistory" class="nhsuk-grid-row">
+
+          <div class="nhsuk-grid-column-one-quarter">
+            <h3 class="nhsuk-heading-xs nhsuk-u-margin-bottom-0"> {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }} </h3>
+            <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"> {{ item.createdBy }} </p>
+            <p class="nhsuk-hint"> {{ item.organisationUnit.name }} </p>
+          </div>
+
+          <div class="nhsuk-grid-column-three-quarters">
+            <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0"> {{ item.logTitle }} </p>
+            <ng-container [ngSwitch]="item.type">
+              <div *ngSwitchCase="supportLogType.ACCESSOR_SUGGESTION">
+                <p *ngFor="let organisationUnit of item.suggestedOrganisationUnitsNames" class="nhsuk-u-margin-bottom-0"> {{ organisationUnit }} </p>
+              </div>
+              <div *ngSwitchCase="supportLogType.STATUS_UPDATE">
+                <strong class="nhsuk-tag" [ngClass]="innovationSupportStatus[item.innovationSupportStatus].cssClass">{{ innovationSupportStatus[item.innovationSupportStatus].label }}</strong>
+              </div>
+            </ng-container>
+            <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-4">Comment</p>
+            <p> {{ item.description }} </p>
+          </div>
+
+          <div class="nhsuk-grid-column-full">
+            <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-3" />
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
 </div>
