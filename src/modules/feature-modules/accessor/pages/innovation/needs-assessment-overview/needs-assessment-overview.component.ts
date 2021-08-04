@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { RoutingHelper } from '@modules/core';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
-import { getInnovationNeedsAssessmentEndpointOutDTO } from '@modules/feature-modules/accessor/services/accessor.service';
+import { getInnovationNeedsAssessmentEndpointOutDTO, getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/accessor/services/accessor.service';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
@@ -24,9 +24,14 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   innovation: InnovationDataType;
 
   assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
+  suggestedOrganisations: string[] = [];
+  logHistory: getSupportLogOutDTO[] = [];
 
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
+
+  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+  supportLogType = SupportLogType;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -48,6 +53,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
       response => {
 
         this.assessment = response.assessment;
+        this.suggestedOrganisations = this.assessment.organisations.map(item => item.name);
 
         const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === response.assessment.maturityLevel) || 0) + 1;
 
@@ -101,6 +107,15 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
           }
         ];
 
+      },
+      error => {
+        this.logger.error(error);
+      }
+    );
+
+    this.accessorService.getSupportLog(this.innovationId).subscribe(
+      response => {
+        this.logHistory = response;
       },
       error => {
         this.logger.error(error);

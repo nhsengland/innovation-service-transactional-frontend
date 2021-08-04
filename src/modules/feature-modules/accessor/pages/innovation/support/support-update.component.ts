@@ -31,12 +31,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   currentStatus: { label: string, cssClass: string, description: string };
 
-  formSupportObj: {
-    status: string;
-    accessors: string[];
-  };
-
-
   form = new FormGroup({
     status: new FormControl('', Validators.required),
     accessors: new FormArray([]),
@@ -60,11 +54,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.stepNumber = 1;
 
-    this.formSupportObj = {
-      status: '',
-      accessors: [],
-    };
-
     this.summaryAlert = { type: '', title: '', message: '' };
     this.accessorList = [];
     this.selectedAccessors = [];
@@ -81,7 +70,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
       this.accessorService.getInnovationSupportInfo(this.innovationId, this.supportId).subscribe(
         response => {
-          this.formSupportObj = response;
+
           this.form.get('status')?.setValue(response.status);
           response.accessors.forEach(accessor => {
             (this.form.get('accessors') as FormArray).push(
@@ -112,7 +101,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   onSubmitStep(): void {
 
     if (!this.validateForm(this.stepNumber)) { return; }
-    this.formSupportObj = { ...this.form.value };
 
     this.selectedAccessors = (this.form.get('accessors')?.value as any[]).map((a) => {
       return this.accessorList.find(acc => acc.value === a);
@@ -152,7 +140,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   onSubmit(): void {
     if (!this.validateForm(this.stepNumber)) { return; }
-    this.formSupportObj = { ...this.form.value };
 
     this.accessorService.saveSupportStatus(this.innovationId, this.form.value, this.supportId).subscribe(
       response => {

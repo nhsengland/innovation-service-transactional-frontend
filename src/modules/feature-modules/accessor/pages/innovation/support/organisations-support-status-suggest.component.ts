@@ -32,7 +32,10 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
   groupedItems: FormEngineParameterModel['groupedItems'] = [];
 
-  chosenUnits: { organisation: string, units: string[] }[] = [];
+  chosenUnits: {
+    list: { organisation: string, units: string[] }[];
+    values: string[];
+  } = { list: [], values: [] };
 
   summaryAlert: { type: '' | 'error' | 'warning' | 'success', title: string, message: string };
 
@@ -80,7 +83,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
         supportsInfo.filter(s => s.status === 'ENGAGING').forEach(s => {
 
-          (this.form.get('organisationUnits') as FormArray).push(new FormControl({ value: s.organisationUnit.id, disabled: false }));
+          (this.form.get('organisationUnits') as FormArray).push(new FormControl(s.organisationUnit.id));
 
           this.groupedItems?.forEach(o => {
             const ou = o.items.find(i => i.value === s.organisationUnit.id);
@@ -116,16 +119,26 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       return;
     }
 
-    this.chosenUnits = (this.groupedItems || []).map(item => {
+    let chosenUnitsValues: string[] = [];
+    const chosenUnitsList = (this.groupedItems || []).map(item => {
 
-      const units = item.items.filter(i => (i.isEditable && (this.form.get('organisationUnits')?.value as string[]).includes(i.value))).map(c => c.label);
+      const units = item.items.filter(i => (i.isEditable && (this.form.get('organisationUnits')?.value as string[]).includes(i.value)));
 
       if (units.length === 0) { return { organisation: '', units: [] }; }
 
-      if (item.items.length === 1) { return { organisation: item.items[0].label, units: [] }; }
-      else { return { organisation: item.label, units }; }
+      if (item.items.length === 1) {
+        chosenUnitsValues.push(item.items[0].value);
+        return { organisation: item.items[0].label, units: [] };
+      }
+      else {
+        chosenUnitsValues = [...chosenUnitsValues, ...units.map(u => u.value)];
+        return { organisation: item.label, units: units.map(u => u.label) };
+      }
 
     }).filter(o => o.organisation);
+
+
+    this.chosenUnits = { list: chosenUnitsList, values: chosenUnitsValues };
 
     this.redirectTo(`/accessor/innovations/${this.innovationId}/support/organisations/suggest/2`);
 
@@ -141,7 +154,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     }
 
     const body = {
-      organisationUnits: this.form.get('organisationUnits')?.value as string[],
+      organisationUnits: this.chosenUnits.values,
       description: this.form.get('comment')?.value as string,
       type: SupportLogType.ACCESSOR_SUGGESTION,
     };
