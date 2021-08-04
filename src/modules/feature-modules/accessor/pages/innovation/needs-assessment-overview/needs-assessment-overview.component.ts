@@ -24,6 +24,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   innovation: InnovationDataType;
 
   assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
+  suggestedOrganisations: string[] = [];
 
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
@@ -48,6 +49,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
       response => {
 
         this.assessment = response.assessment;
+        this.suggestedOrganisations = this.assessment.organisations.map(item => item.name);
 
         const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === response.assessment.maturityLevel) || 0) + 1;
 
