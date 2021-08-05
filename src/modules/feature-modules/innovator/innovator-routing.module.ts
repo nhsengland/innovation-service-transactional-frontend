@@ -15,6 +15,9 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 
+import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/account/manage-details-info.component';
+import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details-edit.component';
+
 import { PageInnovationCommentsListComponent } from '@shared-module/pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from '@shared-module/pages/innovation/comments/comments-new.component';
 import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/innovation-record.component';
@@ -43,7 +46,9 @@ const routes: Routes = [
     canActivateChild: [FirstTimeSigninGuard],
     path: '',
     component: InnovatorLayoutComponent,
+    data: { module: 'innovator' },
     children: [
+
       {
         path: 'first-time-signin',
         children: [
@@ -51,11 +56,26 @@ const routes: Routes = [
           { path: ':id', pathMatch: 'full', component: FirstTimeSigninComponent }
         ]
       },
+
       {
         path: 'dashboard',
         pathMatch: 'full',
         component: DashboardComponent
       },
+
+      {
+        path: 'account',
+        children: [
+          { path: '', pathMatch: 'full', redirectTo: 'manage-details' },
+          {
+            path: 'manage-details', pathMatch: 'full', component: PageAccountManageDetailsInfoComponent,
+            data: { layoutOptions: { type: 'userAccountMenu' } }
+          },
+          { path: 'manage-details/edit', pathMatch: 'full', redirectTo: 'manage-details/edit/1' },
+          { path: 'manage-details/edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent }
+        ]
+      },
+
       {
         path: 'innovations',
         children: [
@@ -134,6 +154,7 @@ const routes: Routes = [
           }
         ]
       }
+
     ]
   }
 

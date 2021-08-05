@@ -114,7 +114,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   it('should run isAccessorRole() and return true', () => {
     authenticationStore.state.user = {
       id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'ACCESSOR',
-      organisations: [{ id: 'id01', name: 'Organisation Name', role: 'ACCESSOR', isShadow: false, organisationUnits: [] }],
+      organisations: [{ id: 'id01', name: 'Organisation Name', size: '1 to 5 employees', role: 'ACCESSOR', isShadow: false, organisationUnits: [] }],
       innovations: []
     };
     expect(authenticationStore.isAccessorRole()).toBe(true);
@@ -128,7 +128,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   it('should run isQualifyingAccessorRole() and return true', () => {
     authenticationStore.state.user = {
       id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'ACCESSOR',
-      organisations: [{ id: 'id01', name: 'Organisation Name', role: 'QUALIFYING_ACCESSOR', isShadow: false, organisationUnits: [] }],
+      organisations: [{ id: 'id01', name: 'Organisation Name', size: '1 to 5 employees', role: 'QUALIFYING_ACCESSOR', isShadow: false, organisationUnits: [] }],
       innovations: []
     };
     expect(authenticationStore.isQualifyingAccessorRole()).toBe(true);
@@ -178,7 +178,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   it('should run getAccessorOrganisationUnitName() and return a valid name', () => {
     authenticationStore.state.user = {
       id: '010101', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR',
-      organisations: [{ id: 'Org01', name: 'Org name 01', role: 'OWNER', isShadow: false, organisationUnits: [{ id: 'OrgUnit01', name: 'Org. Unit 01' }] }],
+      organisations: [{ id: 'Org01', name: 'Org name 01', size: '1 to 5 employees', role: 'OWNER', isShadow: false, organisationUnits: [{ id: 'OrgUnit01', name: 'Org. Unit 01' }] }],
       innovations: []
     };
     expect(authenticationStore.getAccessorOrganisationUnitName()).toEqual('Org. Unit 01');

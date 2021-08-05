@@ -1,31 +1,35 @@
-<h1> Hello{{ user.displayName ? ', ' + user.displayName : '' }}! </h1>
+<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
 
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-one-half">
-    <ng-container *ngFor="let item of user.innovations">
-      <div class="side-menu-flex">
-        <div>
-          <a routerLink="/innovator/innovations/{{ item.id }}" class="nhsuk-u-font-size-32 nhsuk-u-font-weight-bold">{{ item.name }}</a>
+  <h1> Hello{{ user.displayName ? ', ' + user.displayName : '' }}! </h1>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-one-half">
+      <ng-container *ngFor="let item of user.innovations">
+        <div class="side-menu-flex">
+          <div>
+            <a routerLink="/innovator/innovations/{{ item.id }}" class="nhsuk-u-font-size-32 nhsuk-u-font-weight-bold">{{ item.name }}</a>
+          </div>
+          <div>
+            <notification-tag *ngIf="notificationsCount() > 0" [count]="notificationsCount()"></notification-tag>
+          </div>
         </div>
-        <div>
-          <notification-tag *ngIf="notificationsCount() > 0" [count]="notificationsCount()"></notification-tag>
-        </div>
-      </div>
-    </ng-container>
-  </div>
-</div>
-
-<hr />
-
-<ul class="nhsuk-grid-row nhsuk-card-group">
-  <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
-    <div class="nhsuk-card nhsuk-card--clickable">
-      <div class="nhsuk-card__content">
-        <h2 class="nhsuk-card__heading nhsuk-heading-m">
-          <a [href]="innovationGuidesUrl" target="_blank" rel="noopener noreferrer" class="nhsuk-card__link">Innovation guides (opens in new window)</a>
-        </h2>
-        <p class="nhsuk-card__description">Access our starter and advanced innovation guides</p>
-      </div>
+      </ng-container>
     </div>
-  </li>
-</ul>
+  </div>
+
+  <hr />
+
+  <ul class="nhsuk-grid-row nhsuk-card-group">
+    <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+      <div class="nhsuk-card nhsuk-card--clickable">
+        <div class="nhsuk-card__content">
+          <h2 class="nhsuk-card__heading nhsuk-heading-m">
+            <a [href]="innovationGuidesUrl" target="_blank" rel="noopener noreferrer" class="nhsuk-card__link">Innovation guides (opens in new window)</a>
+          </h2>
+          <p class="nhsuk-card__description">Access our starter and advanced innovation guides</p>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+</div>

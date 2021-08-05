@@ -17,6 +17,7 @@ type getUserInfoDto = {
   organisations: {
     id: string;
     name: string;
+    size: string;
     role: 'OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
     isShadow: boolean;
     organisationUnits: {
@@ -30,6 +31,12 @@ type getUserInfoDto = {
 type getUserInnovationsDto = {
   id: string;
   name: string;
+};
+
+export type saveUserInfoDTO = {
+  displayName: string;
+  mobilePhone?: string;
+  organisation?: { id: string; name: string; isShadow: boolean; size: null | string; }
 };
 
 
@@ -47,15 +54,14 @@ export class AuthenticationService {
 
 
   verifyUserSession(): Observable<boolean> {
-    this.loggerService.trackTrace('[Authentication Service] verifyUserSession called', Severity.INFORMATION);
-    const url = new UrlModel(this.APP_URL).addPath('session')
-      .buildUrl();
-    this.loggerService.trackTrace('[Authentication Service] built url', Severity.INFORMATION, { url });
+
+    const url = new UrlModel(this.APP_URL).addPath('session').buildUrl();
     return this.http.head(url).pipe(
       take(1),
       map(() => true),
       catchError((e) => throwError(e))
     );
+
   }
 
   getUserInfo(): Observable<getUserInfoDto> {
@@ -70,6 +76,16 @@ export class AuthenticationService {
         type: response.type,
         organisations: response.organisations
       }))
+    );
+
+  }
+
+  saveUserInfo(body: saveUserInfoDTO): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_URL).addPath('me');
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
     );
 
   }

@@ -1,15 +1,17 @@
 <theme-header [showMenuBar]="false"></theme-header>
 <theme-header-navigation-bar [leftMenuItems]="navigationMenuBar.leftItems" [rightMenuItems]="navigationMenuBar.rightItems" [notifications]="mainMenuNotifications"></theme-header-navigation-bar>
 
-<div class="nhsuk-width-container app-width-container">
-  <main id="maincontent" role="main" class="nhsuk-main-wrapper" [ngClass]="{'nhsuk-u-padding-top-0': innovationHeaderBar.id}">
+<div class="nhsuk-width-container-fluid app-width-container-fluid overflow-x-hidden">
+  <main id="maincontent" role="main" class="nhsuk-main-wrapper app-main-wrapper--no-padding">
 
     <ng-container *ngIf="layoutOptions.showInnovationHeader && innovationHeaderBar.id">
-      <div class=" nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 d-flex align-items-center justify-content-space-between">
-        <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovationHeaderBar.name }}</h1>
-        <a routerLink="/innovator/innovations/new">Switch innovation</a>
+      <div class="nhsuk-width-container app-width-container">
+        <div class="nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 d-flex align-items-center justify-content-space-between">
+          <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovationHeaderBar.name }}</h1>
+          <a routerLink="/innovator/innovations/new">Switch innovation</a>
+        </div>
+        <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-5" />
       </div>
-      <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-5" />
     </ng-container>
 
     <ng-container [ngSwitch]="layoutOptions.type">
@@ -17,6 +19,9 @@
         <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
       </div>
       <div *ngSwitchCase="'innovationLeftAsideMenu'">
+        <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
+      </div>
+      <div *ngSwitchCase="'userAccountMenu'">
         <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
       </div>
       <div *ngSwitchCase="null">
@@ -27,44 +32,50 @@
   </main>
 </div>
 
+<theme-footer></theme-footer>
+
+
 <ng-template #leftAsideMenu>
+  <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-3">
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-      <div class="app-pane">
-        <div class="app-pane__side-bar nhsuk-u-padding-top-3">
-          <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <div class="app-pane">
 
-            <div *ngIf="layoutOptions.backLink" class="nhsuk-back-link app-u-hide-mobile app-side-nav__back nhsuk-u-margin-bottom-4">
-              <a class="nhsuk-back-link__link" [routerLink]="layoutOptions.backLink?.url">
-                <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
-                </svg>
-                {{ layoutOptions.backLink?.label }}</a>
-            </div>
+          <div class="app-pane__side-bar nhsuk-u-padding-top-3">
+            <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
 
-            <ul class="nhsuk-list app-side-nav__list">
-              <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
-                <div class="side-menu-flex">
-                  <div>
-                    <a class="app-side-nav__link" [routerLink]="item.link">{{ item.title }}</a>
+              <div *ngIf="layoutOptions.backLink" class="nhsuk-back-link app-u-hide-mobile app-side-nav__back nhsuk-u-margin-bottom-4">
+                <a class="nhsuk-back-link__link" [routerLink]="layoutOptions.backLink?.url">
+                  <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
+                  </svg>
+                  {{ layoutOptions.backLink?.label }}</a>
+              </div>
+
+              <ul class="nhsuk-list app-side-nav__list">
+                <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
+                  <div class="side-menu-flex">
+                    <div>
+                      <a class="app-side-nav__link" [routerLink]="item.link">{{ item.title }}</a>
+                    </div>
+                    <div>
+                      <notification-tag *ngIf="notifications[item.key || ''] > 0" [count]="notifications[item.key || '']"></notification-tag>
+                    </div>
                   </div>
-                  <div>
-                    <notification-tag *ngIf="notifications[item.key || ''] > 0" [count]="notifications[item.key || '']"></notification-tag>
-                  </div>
-                </div>
-              </li>
-            </ul>
+                </li>
+              </ul>
 
-          </nav>
-        </div>
-        <div class="app-pane__main-content">
-          <router-outlet></router-outlet>
+            </nav>
+          </div>
+
+          <div class="app-pane__main-content">
+            <router-outlet></router-outlet>
+          </div>
+
         </div>
       </div>
     </div>
+
   </div>
-
 </ng-template>
-
-<theme-footer></theme-footer>

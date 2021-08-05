@@ -10,6 +10,7 @@ export class AuthenticationModel {
     organisations: {
       id: string;
       name: string;
+      size: string;
       role: 'OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
       isShadow: boolean;
       organisationUnits?: {
