@@ -16,18 +16,18 @@
 
         <fieldset class="nhsuk-fieldset">
 
-          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">{{ currentStep.label }}</legend>
-          <div *ngIf="currentStep.description" class="nhsuk-hint nhsuk-u-margin-bottom-0" [innerHTML]="currentStep.description"></div>
-          <ng-container *ngIf="currentStep.details">
+          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">{{ wizard.currentStep().label }}</legend>
+          <div *ngIf="wizard.currentStep().description" class="nhsuk-hint nhsuk-u-margin-bottom-0" [innerHTML]="wizard.currentStep().description"></div>
+          <ng-container *ngIf="wizard.currentStep().details">
             <details class="nhsuk-details">
               <summary class="nhsuk-details__summary">
-                <span class="nhsuk-details__summary-text">{{ currentStep.details?.title }}</span>
+                <span class="nhsuk-details__summary-text">{{ wizard.currentStep().details?.title }}</span>
               </summary>
-              <div class="nhsuk-details__text" [innerHTML]="currentStep.details?.content"></div>
+              <div class="nhsuk-details__text" [innerHTML]="wizard.currentStep().details?.content"></div>
             </details>
           </ng-container>
 
-          <theme-form-engine formId="sectionForm" [parameters]="currentStep.parameters" [values]="currentAnswers"></theme-form-engine>
+          <theme-form-engine formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
 
           <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
 
@@ -42,15 +42,19 @@
 
         <dl class="nhsuk-summary-list">
           <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
-            <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-            <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.value"></dd>
-            <dd class="nhsuk-summary-list__actions">
-              <a [routerLink]="gotoStep(item.editStepNumber)">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }}</span></a>
-            </dd>
+
+            <ng-container *ngIf="item.editStepNumber">
+              <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+              <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.value"></dd>
+              <dd class="nhsuk-summary-list__actions">
+                <a [routerLink]="getStepUrl(item.editStepNumber)">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }}</span></a>
+              </dd>
+
+            </ng-container>
           </div>
         </dl>
 
-        <button class="nhsuk-button" (click)="onSubmitSurvey()"> Save </button>
+        <button class="nhsuk-button" (click)="onSubmitWizard()"> Save </button>
 
       </ng-container>
 

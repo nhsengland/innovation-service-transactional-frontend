@@ -81,25 +81,19 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
 
     accessorService.getInnovationSupportInfo = () => throwError('error');
     authenticationStore.getUserInfo = () => ({
+      id: '_id',
+      displayName: 'Test qualifying Accessor',
+      email: 'tqa@example.com',
+      type: 'ACCESSOR',
       organisations: [
         {
-          id: 'org_id',
-          isShadow: false,
-          name: 'organisation_1',
-          role: 'QUALIFYING_ACCESSOR',
+          id: 'org_id', isShadow: false, name: 'organisation_1', size: '', role: 'QUALIFYING_ACCESSOR',
           organisationUnits: [
-            {
-              id: '_unit_id',
-              name: 'ORG_UNIT',
-            }
+            { id: '_unit_id', name: 'ORG_UNIT' }
           ]
         }
       ],
-      displayName: 'Test qualifying Accessor',
-      email: 'tqa@example.com',
-      id: '_id',
-      innovations: [],
-      type: 'ACCESSOR',
+      innovations: []
     });
     const expected = 'ORG_UNIT';
 

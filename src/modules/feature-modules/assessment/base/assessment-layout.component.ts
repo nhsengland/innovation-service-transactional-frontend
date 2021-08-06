@@ -9,7 +9,7 @@ import { NotificationContextType, NotificationService } from '@modules/shared/se
 
 
 type RouteDataLayoutOptionsType = {
-  type: null | 'innovationLeftAsideMenu' | 'emptyLeftAside';
+  type: null | 'userAccountMenu' | 'innovationLeftAsideMenu' | 'emptyLeftAside';
   backLink?: null | { url: string, label: string };
 };
 
@@ -27,7 +27,7 @@ export class AssessmentLayoutComponent extends CoreComponent {
   } = { leftItems: [], rightItems: [] };
 
   leftSideBar: { title: string, link: string }[] = [];
-  mainMenuNotifications: {[key: string]: number};
+  mainMenuNotifications: { [key: string]: number } = {};
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -42,7 +42,7 @@ export class AssessmentLayoutComponent extends CoreComponent {
       ],
       rightItems: [
         { title: 'Innovations', link: '/assessment/innovations', key: NotificationContextType.INNOVATION },
-        // { title: 'Account', link: '/assessment/account' },
+        { title: 'Account', link: '/assessment/account' },
         { title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true }
       ]
     };
@@ -51,7 +51,6 @@ export class AssessmentLayoutComponent extends CoreComponent {
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
     );
 
-    this.mainMenuNotifications = { };
   }
 
 
@@ -60,20 +59,24 @@ export class AssessmentLayoutComponent extends CoreComponent {
     const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
 
+    this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
+      response => {
+        this.mainMenuNotifications = response;
+      }
+    );
+
     this.layoutOptions = {
       type: routeData.type || null,
       backLink: routeData.backLink ? { url: RoutingHelper.resolveUrl(routeData.backLink.url, this.activatedRoute), label: routeData.backLink.label } : null
     };
 
-    this.subscriptions.push(
-      this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
-        response => {
-          this.mainMenuNotifications = response;
-        }
-      )
-    );
-
     switch (this.layoutOptions.type) {
+
+      case 'userAccountMenu':
+        this.leftSideBar = [
+          { title: 'Your details', link: `/assessment/account/manage-details` }
+        ];
+        break;
 
       case 'innovationLeftAsideMenu':
         this.leftSideBar = [
@@ -88,6 +91,7 @@ export class AssessmentLayoutComponent extends CoreComponent {
       default:
         this.leftSideBar = [];
         break;
+
     }
 
   }
