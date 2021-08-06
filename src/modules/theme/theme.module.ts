@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { BaseLayoutComponent } from './base/base-layout.component';
 
 // Components.
+import { ActivityTimeoutComponent } from './components/activity-timeout/activity-timeout.component';
 import { HeaderComponent } from './components/header/header.component';
 import { HeaderBreadcrumbsBarComponent } from './components/header/breadcrumbs-bar.component';
 import { HeaderNavigationBarComponent } from './components/header/navigation-bar.component';
@@ -29,6 +30,7 @@ import { NotificationTagComponent } from './components/tag/notification-tag.comp
     BaseLayoutComponent,
 
     // Components.
+    ActivityTimeoutComponent,
     HeaderComponent,
     HeaderBreadcrumbsBarComponent,
     HeaderNavigationBarComponent,
@@ -48,6 +50,7 @@ import { NotificationTagComponent } from './components/tag/notification-tag.comp
     BaseLayoutComponent,
 
     // Components.
+    ActivityTimeoutComponent,
     HeaderComponent,
     HeaderBreadcrumbsBarComponent,
     HeaderNavigationBarComponent,

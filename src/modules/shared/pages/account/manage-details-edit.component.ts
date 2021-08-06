@@ -85,7 +85,7 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
 
     this.wizard.addAnswers(formData?.data || {}).runRules();
 
-    this.redirectTo(this.getNavigationUrl(action), { a: action });
+    this.redirectTo(this.getNavigationUrl(action));
 
   }
 

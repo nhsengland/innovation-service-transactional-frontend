@@ -20,7 +20,7 @@ export class AppComponent {
     @Inject(PLATFORM_ID) private platformId: object,
     private titleService: Title,
     public router: Router,
-    private translateService: TranslateService,
+    private translateService: TranslateService
   ) {
 
     this.translateService.addLangs(['en']);
@@ -31,11 +31,13 @@ export class AppComponent {
     this.titleService.setTitle(translateService.instant('app.title'));
 
     if (isPlatformBrowser(this.platformId)) {
+
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
         gtag('config', 'G-4XB9VSJZ0G', {
           page_path: e.urlAfterRedirects
         });
       });
+
     }
 
   }
