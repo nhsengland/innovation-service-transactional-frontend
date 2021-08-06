@@ -72,7 +72,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     ]).subscribe(
       ([response, needsAssessmentInfo, supportsInfo]) => {
 
-        const needsAssessmentSuggestedOrganisations = needsAssessmentInfo.assessment.organisations.map(item => item.name);
+        const needsAssessmentSuggestedOrganisations = needsAssessmentInfo.assessment.organisations.map(item => item.id);
 
         this.groupedItems = response.map(item => ({
           value: item.id,
