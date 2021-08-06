@@ -9,6 +9,7 @@ import { BaseLayoutComponent } from './base-layout.component';
 
 import { HeaderComponent } from '@modules/theme/components/header/header.component';
 import { FooterComponent } from '@modules/theme/components/footer/footer.component';
+import { ActivityTimeoutComponent } from '@modules/theme/components/activity-timeout/activity-timeout.component';
 
 
 describe('Theme/Base/BaseLayoutComponent', () => {
@@ -28,8 +29,9 @@ describe('Theme/Base/BaseLayoutComponent', () => {
         BaseLayoutComponent,
         FooterComponent,
         HeaderComponent,
+        ActivityTimeoutComponent
       ]
-    }).compileComponents();
+    });
   });
 
   it('should create the componnet', () => {

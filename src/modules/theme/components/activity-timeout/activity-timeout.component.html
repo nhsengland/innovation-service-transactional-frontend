@@ -1,0 +1,19 @@
+<ng-container *ngIf="state === 'WARNING'">
+
+  <div class="timeout-overlay"></div>
+
+  <div id="timeout-dialog" tabindex="-1" role="dialog" class="timeout-dialog" aria-labelledby="timeout-heading timeout-message">
+    <div>
+      <h1 id="timeout-heading" class="nhsuk-heading-m"> You’re about to be signed out </h1>
+      <p class="nhsuk-body-m" aria-live="assertive">
+        For your security, we will sign you out in <span class="nhsuk-u-font-weight-bold">{{ warningCounter }} seconds</span>.
+      </p>
+
+      <div class="d-flex align-items-center">
+        <button type="button" class="nhsuk-button nhsuk-u-margin-bottom-0" (click)="keepSignedIn()"> Stay signed in </button>
+        <a id="timeout-dialog-sign-out-link" href="javascript:void(0)" class="nhsuk-u-margin-5" (click)="signOut()"> Sign out </a>
+      </div>
+    </div>
+  </div>
+
+</ng-container>

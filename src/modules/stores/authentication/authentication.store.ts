@@ -3,7 +3,6 @@ import { forkJoin, Observable, Observer, of } from 'rxjs';
 import { catchError, concatMap, map } from 'rxjs/operators';
 
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
-import { LoggerService, Severity } from '@modules/core/services/logger.service';
 
 import { Store } from '../store.class';
 import { AuthenticationService, saveUserInfoDTO } from './authentication.service';
@@ -15,8 +14,7 @@ import { AuthenticationModel } from './authentication.models';
 export class AuthenticationStore extends Store<AuthenticationModel> {
 
   constructor(
-    private authenticationService: AuthenticationService,
-    private loggerService: LoggerService,
+    private authenticationService: AuthenticationService
   ) {
     super('store::authentication', new AuthenticationModel());
   }
@@ -26,13 +24,9 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
     return new Observable((observer: Observer<boolean>) => {
 
-      // this.loggerService.trackTrace('[Auth Store] initializeAuthentication called', Severity.INFORMATION);
-
       this.authenticationService.verifyUserSession().pipe(
         concatMap(() => this.authenticationService.getUserInfo()),
         concatMap(user => {
-
-          // this.loggerService.trackTrace('[Auth Store] initializeAuthentication mapped User', Severity.INFORMATION, { user });
 
           this.state.user = { ...user, ...{ innovations: [] } };
           this.state.isSignIn = true;
@@ -42,8 +36,6 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
             this.authenticationService.getInnovations(user.id)
           ]).pipe(
             map(([hasInnovator, innovations]) => {
-
-              // this.loggerService.trackTrace('[Auth Store] initializeAuthentication first time sign in assessment', Severity.INFORMATION, { hasInnovator, innovations });
 
               this.state.didFirstTimeSignIn = hasInnovator;
               if (this.state.user) { this.state.user.innovations = innovations; }
@@ -71,6 +63,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
   }
 
+  isSignIn(): boolean { return this.state.isSignIn; }
 
   isInnovatorType(): boolean { return this.state.user?.type === 'INNOVATOR'; }
   isAccessorType(): boolean { return this.state.user?.type === 'ACCESSOR'; }
