@@ -7,6 +7,7 @@ import { BaseLayoutComponent } from './base/base-layout.component';
 
 // Components.
 import { ActivityTimeoutComponent } from './components/activity-timeout/activity-timeout.component';
+import { AlertComponent } from './components/alert/alert.component';
 import { HeaderComponent } from './components/header/header.component';
 import { HeaderBreadcrumbsBarComponent } from './components/header/breadcrumbs-bar.component';
 import { HeaderNavigationBarComponent } from './components/header/navigation-bar.component';
@@ -31,6 +32,7 @@ import { NotificationTagComponent } from './components/tag/notification-tag.comp
 
     // Components.
     ActivityTimeoutComponent,
+    AlertComponent,
     HeaderComponent,
     HeaderBreadcrumbsBarComponent,
     HeaderNavigationBarComponent,
@@ -51,6 +53,7 @@ import { NotificationTagComponent } from './components/tag/notification-tag.comp
 
     // Components.
     ActivityTimeoutComponent,
+    AlertComponent,
     HeaderComponent,
     HeaderBreadcrumbsBarComponent,
     HeaderNavigationBarComponent,

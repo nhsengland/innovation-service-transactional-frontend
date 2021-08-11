@@ -137,7 +137,10 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
   hasScaleResource: null | string;
   hasScaleResourceComment: null | string;
   summary: null | string;
-  organisations: { id: string; name: string; acronym: null | string; }[];
+  organisations: {
+    id: string; name: string; acronym: null | string;
+    organisationUnits: { id: string; name: string; acronym: null | string; }[];
+  }[];
   assignToName: string;
   finishedAt: null | string;
   support: { id: null | string; }

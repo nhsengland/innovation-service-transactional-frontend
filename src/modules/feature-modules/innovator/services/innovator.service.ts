@@ -103,6 +103,13 @@ export type getInnovationNeedsAssessmentEndpointOutDTO = {
   assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'organisations' | 'orgNames'> & { organisations: string[], orgNames: string[] }
 };
 
+export type getInnovationTransfersDTO = {
+  id: string;
+  email: string;
+  name?: string;
+  innovation: { id: string, name: string, owner?: string };
+};
+
 @Injectable()
 export class InnovatorService extends CoreService {
 
@@ -152,7 +159,6 @@ export class InnovatorService extends CoreService {
   getInnovationActionsList(innovationId: string): Observable<getInnovationActionsListEndpointOutDTO> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-
     return this.http.get<getInnovationActionsListEndpointInDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => {
@@ -206,9 +212,7 @@ export class InnovatorService extends CoreService {
 
   submitOrganisationSharing(innovationId: string, body: MappedObject): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/shares')
-      .setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/shares').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
@@ -254,5 +258,37 @@ export class InnovatorService extends CoreService {
 
   }
 
+
+  getInnovationTransfers(assignToMe = false): Observable<getInnovationTransfersDTO[]> {
+
+    const qp: { assignedToMe?: boolean } = assignToMe ? { assignedToMe: true } : {};
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/innovation-transfers').setQueryParams(qp);
+    return this.http.get<getInnovationTransfersDTO[]>(url.buildUrl()).pipe(take(1), map(response => response));
+
+  }
+
+  // getInnovationTransfer(id: string): Observable<getInnovationTransfersDTO> {
+
+  //   const url = new UrlModel(this.API_URL).addPath('innovators/innovation-transfers/:id').setPathParams({ id });
+  //   return this.http.get<getInnovationTransfersDTO>(url.buildUrl()).pipe(
+  //     take(1),
+  //     map(response => response)
+  //   );
+  // }
+
+  transferInnovation(body: { innovationId: string, email: string }): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/innovation-transfers');
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
+
+  }
+
+  updateTransferInnovation(transferId: string, status: 'CANCELED' | 'DECLINED' | 'COMPLETED'): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/innovation-transfers/:transferId').setPathParams({ transferId });
+    return this.http.patch<{ id: string }>(url.buildUrl(), { status }).pipe(take(1), map(response => response));
+
+  }
 
 }

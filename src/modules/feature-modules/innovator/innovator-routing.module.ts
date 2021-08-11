@@ -4,6 +4,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { InnovatorLayoutComponent } from './base/innovator-layout.component';
 
 // Pages.
+import { PageAccountManageInnovationsInfoComponent } from './pages/account/manage-innovations/manage-innovations-info.component';
+import { PageAccountManageInnovationsTransferComponent } from './pages/account/manage-innovations/manage-innovations-transfer.component';
+
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
@@ -15,8 +18,8 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 
-import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/account/manage-details-info.component';
-import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details-edit.component';
+import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/account/manage-details/manage-details-info.component';
+import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details/manage-details-edit.component';
 
 import { PageInnovationCommentsListComponent } from '@shared-module/pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from '@shared-module/pages/innovation/comments/comments-new.component';
@@ -68,11 +71,29 @@ const routes: Routes = [
         children: [
           { path: '', pathMatch: 'full', redirectTo: 'manage-details' },
           {
-            path: 'manage-details', pathMatch: 'full', component: PageAccountManageDetailsInfoComponent,
-            data: { layoutOptions: { type: 'userAccountMenu' } }
+            path: 'manage-details',
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAccountManageDetailsInfoComponent,
+                data: { layoutOptions: { type: 'userAccountMenu' } }
+              },
+              { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
+              { path: 'edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent }
+            ]
           },
-          { path: 'manage-details/edit', pathMatch: 'full', redirectTo: 'manage-details/edit/1' },
-          { path: 'manage-details/edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent }
+          {
+            path: 'manage-innovations',
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAccountManageInnovationsInfoComponent,
+                data: { layoutOptions: { type: 'userAccountMenu' } }
+              },
+              {
+                path: 'transfer', pathMatch: 'full', component: PageAccountManageInnovationsTransferComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'account/manage-innovations', label: 'Manage innovations' } } }
+              }
+            ]
+          }
         ]
       },
 

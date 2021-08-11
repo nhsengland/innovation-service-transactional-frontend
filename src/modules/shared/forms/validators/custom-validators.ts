@@ -18,6 +18,10 @@ export class CustomValidators {
     return (control: AbstractControl): ValidationErrors | null => new RegExp(pattern).test(control.value) ? null : { pattern: (message ? { message } : true) };
   }
 
+  static equalTo(value: string, message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => control.value === value ? null : { equalTo: (message ? { message } : true) };
+  }
+
   static hexadecimalFormatValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) { return null; }

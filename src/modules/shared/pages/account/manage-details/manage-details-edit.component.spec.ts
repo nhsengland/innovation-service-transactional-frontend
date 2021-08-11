@@ -16,7 +16,7 @@ import { PageAccountManageDetailsEditComponent } from './manage-details-edit.com
 import { ACCOUNT_DETAILS_INNOVATOR } from './manage-details-edit-innovator.config';
 import { ACCOUNT_DETAILS_ACCESSOR } from './manage-details-edit-accessor.config';
 
-describe('Shared/Pages/Account/PageAccountManageDetailsEditComponent', () => {
+describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditComponent', () => {
 
   let activatedRoute: ActivatedRoute;
   let authenticationStore: AuthenticationStore;
