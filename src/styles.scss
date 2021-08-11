@@ -320,3 +320,37 @@ $service-manual-container-size: 1100px; // Container width variable.
 .nhsuk-tag--dark-grey {
   background-color: var(--color_nhsuk-grey-1);
 }
+
+.app-index-navigation {
+  padding-top: 16px;
+}
+
+@media (min-width: 40.0625em) {
+  .app-index-navigation {
+    padding-top: 24px
+  }
+}
+
+/* Content visibility. */
+@media (max-width: 48.0525em) {
+  .app-u-hide-mobile {
+    display: none
+  }
+}
+@media (min-width: 48.0625em) {
+  .app-u-hide-desktop {
+    display: none
+  }
+}
+@media print {
+  .app-u-hide-print {
+    display: none;
+  }
+  a:after {
+    content: none;
+  }
+  div.page-break {
+    break-before: always;
+    break-inside: avoid;
+  }
+}
