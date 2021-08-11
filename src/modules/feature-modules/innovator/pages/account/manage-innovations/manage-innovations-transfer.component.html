@@ -1,0 +1,52 @@
+<div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+  <div class="nhsuk-grid-column-full">
+
+    <theme-alert [type]="alert.type" [title]="alert.title" [message]="alert.message"></theme-alert>
+
+    <h1 class="nhsuk-heading-xl"> Transfer ownership of an innovation </h1>
+
+  </div>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+      <h3 class="nhsuk-warning-callout__label">
+        <span role="text">
+          <span class="nhsuk-u-visually-hidden">Important: </span>
+          Warning
+        </span>
+      </h3>
+      <p> You will lose all access to an innovation when you transfer it to someone else. Your access is removed when the new owner accepts your transfer request. </p>
+    </div>
+  </div>
+</div>
+
+
+<form [formGroup]="form">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <ng-container *ngIf="stepNumber === 1">
+        <theme-form-radio-group controlName="innovation" label="Choose which innovation to transfer" [items]="formInnovationsItems"></theme-form-radio-group>
+        <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
+      </ng-container>
+
+      <ng-container *ngIf="stepNumber === 2">
+        <theme-form-input controlName="email" label="Enter the email of the new owner"></theme-form-input>
+        <theme-form-input controlName="confirmation" label="Are you sure that you want to transfer?" description="To confirm, please type the following: transfer my innovation"></theme-form-input>
+        <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3" (click)="onSubmitForm()"> Request transfer of ownership </button>
+      </ng-container>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <a routerLink="manage-innovations" class="nhsuk-back-link__link nhsuk-u-padding-left-0 nhsuk-u-margin-bottom-5"> Cancel </a>
+    </div>
+  </div>
+
+
+</form>

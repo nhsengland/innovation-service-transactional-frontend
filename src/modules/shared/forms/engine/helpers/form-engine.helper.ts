@@ -155,6 +155,7 @@ export class FormEngineHelper {
 
     // Native validations.
     if ('required' in error) { return error.required.message || 'shared.forms_module.validations.required'; }
+    if ('equalTo' in error) { return error.equalTo.message || 'shared.forms_module.validations.equal_to'; }
     if ('email' in error) { return 'shared.forms_module.validations.invalid_email'; }
     if ('min' in error) { return 'shared.forms_module.validations.min' + ` (${error.min.min})`; }
     if ('max' in error) { return 'shared.forms_module.validations.max' + ` (${error.max.max})`; }

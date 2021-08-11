@@ -6,16 +6,16 @@ import { Injector } from '@angular/core';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
-import { SharedModule } from '@modules/shared/shared.module';
+import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
-import { PageAccountManageDetailsInfoComponent } from './manage-details-info.component';
+import { PageAccountManageInnovationsInfoComponent } from './manage-innovations-info.component';
 
-describe('Shared/Pages/Account/PageAccountManageDetailsInfoComponent', () => {
+describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsInfoComponent', () => {
 
   let authenticationStore: AuthenticationStore;
 
-  let component: PageAccountManageDetailsInfoComponent;
-  let fixture: ComponentFixture<PageAccountManageDetailsInfoComponent>;
+  let component: PageAccountManageInnovationsInfoComponent;
+  let fixture: ComponentFixture<PageAccountManageInnovationsInfoComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,7 +24,7 @@ describe('Shared/Pages/Account/PageAccountManageDetailsInfoComponent', () => {
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        SharedModule
+        InnovatorModule
       ]
     });
 
@@ -37,7 +37,7 @@ describe('Shared/Pages/Account/PageAccountManageDetailsInfoComponent', () => {
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(PageAccountManageDetailsInfoComponent);
+    fixture = TestBed.createComponent(PageAccountManageInnovationsInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();

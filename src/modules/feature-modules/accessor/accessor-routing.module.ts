@@ -19,8 +19,8 @@ import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './p
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
 
-import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/account/manage-details-info.component';
-import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details-edit.component';
+import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/account/manage-details/manage-details-info.component';
+import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details/manage-details-edit.component';
 
 import { PageInnovationCommentsListComponent } from '@shared-module/pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from '@shared-module/pages/innovation/comments/comments-new.component';
@@ -69,11 +69,16 @@ const routes: Routes = [
         children: [
           { path: '', pathMatch: 'full', redirectTo: 'manage-details' },
           {
-            path: 'manage-details', pathMatch: 'full', component: PageAccountManageDetailsInfoComponent,
-            data: { layoutOptions: { type: 'userAccountMenu' } }
-          },
-          { path: 'manage-details/edit', pathMatch: 'full', redirectTo: 'manage-details/edit/1' },
-          { path: 'manage-details/edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent }
+            path: 'manage-details',
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAccountManageDetailsInfoComponent,
+                data: { layoutOptions: { type: 'userAccountMenu' } }
+              },
+              { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
+              { path: 'edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent }
+            ]
+          }
         ]
       },
 

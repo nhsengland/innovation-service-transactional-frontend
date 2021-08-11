@@ -59,6 +59,8 @@ $service-manual-container-size: 1100px; // Container width variable.
 .ml-auto { margin-left: auto; }
 .mr-auto { margin-right: auto; }
 
+.font-style-italic { font-style: italic; }
+
 .text-align-left { text-align: start; }
 .text-align-right { text-align: end; }
 .text-pre-line { white-space: pre-line; }
@@ -80,8 +82,10 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 .border-bottom-0 { border-bottom: 0; }
 
+.border-color-primary { border-color: var(--primary-color); }
 .border-color-success { border-color: var(--success-color); }
 .border-color-warning { border-color: var(--warning-color); }
+.border-color-error { border-color: var(--error-color); }
 .border-color-neutral { border-color: var(--neutral-color); }
 
 .border-left-inset-neutral { border-left: 4px solid var(--color_nhsuk-grey-4); }

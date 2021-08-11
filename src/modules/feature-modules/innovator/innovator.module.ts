@@ -7,6 +7,9 @@ import { InnovatorRoutingModule } from './innovator-routing.module';
 import { InnovatorLayoutComponent } from './base/innovator-layout.component';
 
 // Pages.
+import { PageAccountManageInnovationsInfoComponent } from './pages/account/manage-innovations/manage-innovations-info.component';
+import { PageAccountManageInnovationsTransferComponent } from './pages/account/manage-innovations/manage-innovations-transfer.component';
+
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
@@ -42,6 +45,9 @@ import { OrganisationSuggestionsCardComponent } from './components/organisation-
     InnovatorLayoutComponent,
 
     // Pages.
+    PageAccountManageInnovationsInfoComponent,
+    PageAccountManageInnovationsTransferComponent,
+
     DashboardComponent,
     FirstTimeSigninComponent,
     InnovationActionTrackerDeclineComponent,

@@ -12,8 +12,8 @@ import { InnovationAssessmentOverviewComponent } from './pages/innovation/assess
 import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/assessment-new.component';
 import { InnovationAssessmentEditComponent } from './pages/innovation/assessment/assessment-edit.component';
 
-import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/account/manage-details-info.component';
-import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details-edit.component';
+import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/account/manage-details/manage-details-info.component';
+import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details/manage-details-edit.component';
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/innovation-record.component';
 
 // Resolvers.
@@ -46,11 +46,16 @@ const routes: Routes = [
         children: [
           { path: '', pathMatch: 'full', redirectTo: 'manage-details' },
           {
-            path: 'manage-details', pathMatch: 'full', component: PageAccountManageDetailsInfoComponent,
-            data: { layoutOptions: { type: 'userAccountMenu' } }
-          },
-          { path: 'manage-details/edit', pathMatch: 'full', redirectTo: 'manage-details/edit/1' },
-          { path: 'manage-details/edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent }
+            path: 'manage-details',
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAccountManageDetailsInfoComponent,
+                data: { layoutOptions: { type: 'userAccountMenu' } }
+              },
+              { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
+              { path: 'edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent }
+            ]
+          }
         ]
       },
 

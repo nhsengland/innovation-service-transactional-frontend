@@ -10,6 +10,7 @@ import { PageNotFoundComponent } from '@shared-module/pages/not-found/not-found.
 // Guards.
 import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
 import { AuthenticationRedirectionGuard } from '@modules/core/guards/authentication-redirection.guard';
+import { InnovationTransferRedirectionGuard } from '@modules/core/guards/innovation-transfer-redirection.guard';
 
 const authenticationModule: Promise<any> = import('@modules/feature-modules/authentication/authentication.module');
 const triageInnovatorPackModule: Promise<any> = import('@modules/feature-modules/triage-innovator-pack/triage-innovator-pack.module');
@@ -29,6 +30,13 @@ const routes: Routes = [
 
   {
     path: 'auth', loadChildren: () => authenticationModule.then(m => m.AuthenticationModule)
+  },
+
+  {
+    canActivate: [InnovationTransferRedirectionGuard],
+    path: 'transfers/:id',
+    pathMatch: 'full',
+    children: []
   },
 
   {

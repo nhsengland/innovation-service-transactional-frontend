@@ -29,8 +29,8 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
       case 'accountDetailsUpdateSuccess':
         this.summaryAlert = {
           type: 'warning',
-          title: 'Your section has been saved',
-          message: 'You need to submit this section for review to notify your supporting accessor(s)'
+          title: 'Your information has been saved',
+          message: ''
         };
         break;
       case 'accountDetailsUpdateError':

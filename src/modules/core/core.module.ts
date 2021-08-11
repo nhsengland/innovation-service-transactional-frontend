@@ -11,12 +11,14 @@ import { ApiOutInterceptor } from './interceptors/api-out.interceptor';
 // Guards.
 import { AuthenticationGuard } from './guards/authentication.guard';
 import { AuthenticationRedirectionGuard } from './guards/authentication-redirection.guard';
+import { InnovationTransferRedirectionGuard } from './guards/innovation-transfer-redirection.guard';
 
 // Stores.
 import { EnvironmentStore } from './stores/environment.store';
 
 // Services.
 import { CookiesService } from './services/cookies.service';
+import { InnovationService } from './services/innovation.service';
 import { LoggerService } from './services/logger.service';
 
 
@@ -45,12 +47,14 @@ import { LoggerService } from './services/logger.service';
     // Guards.
     AuthenticationGuard,
     AuthenticationRedirectionGuard,
+    InnovationTransferRedirectionGuard,
 
     // Stores.
     EnvironmentStore,
 
     // Services.
     CookiesService,
+    InnovationService,
     LoggerService
   ]
 })

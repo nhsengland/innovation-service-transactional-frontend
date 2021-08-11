@@ -70,16 +70,22 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       this.accessorService.getInnovationNeedsAssessment(this.innovationId, this.innovation.assessment.id || ''),
       this.accessorService.getInnovationSupports(this.innovationId, false)
     ]).subscribe(
-      ([response, needsAssessmentInfo, supportsInfo]) => {
+      ([organisations, needsAssessmentInfo, supportsInfo]) => {
 
         const needsAssessmentSuggestedOrganisations = needsAssessmentInfo.assessment.organisations.map(item => item.id);
 
-        this.groupedItems = response.map(item => ({
-          value: item.id,
-          label: item.name,
-          description: needsAssessmentSuggestedOrganisations.includes(item.id) ? 'Suggested by needs assessment' : undefined,
-          items: item.organisationUnits.map(i => ({ value: i.id, label: i.name, description: '', isEditable: true })),
-        }));
+        this.groupedItems = organisations.map(item => {
+
+          const description = needsAssessmentSuggestedOrganisations.includes(item.id) ? 'Suggested by needs assessment' : undefined;
+
+          return {
+            value: item.id,
+            label: item.name,
+            description,
+            items: item.organisationUnits.map(i => ({ value: i.id, label: i.name, description, isEditable: true })),
+          };
+
+        });
 
         supportsInfo.filter(s => s.status === 'ENGAGING').forEach(s => {
 

@@ -55,6 +55,7 @@ export const locale = {
     shared: {
       forms_module: {
         validations: {
+          equal_to: 'Value does not match',
           invalid_email: 'Invalid email',
           invalid_format: 'Invalid format.',
           invalid_hexadecimal_format: 'Invalid hexadecimal format',
