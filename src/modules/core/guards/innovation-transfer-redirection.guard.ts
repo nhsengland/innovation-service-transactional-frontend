@@ -4,53 +4,62 @@ import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-// import { Response } from 'express';
-// import { RESPONSE } from '@nguniversal/express-engine/tokens';
+import { Response } from 'express';
+import { RESPONSE } from '@nguniversal/express-engine/tokens';
 
-// import { AuthenticationStore } from '../../stores';
 import { LoggerService, Severity } from '../services/logger.service';
 import { InnovationService } from '../services/innovation.service';
+
 
 @Injectable()
 export class InnovationTransferRedirectionGuard implements CanActivate {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    // @Optional() @Inject(RESPONSE) private serverResponse: Response,
-    // private authentication: AuthenticationStore,
-    private innovationService: InnovationService,
-    private loggerService: LoggerService
+    @Optional() @Inject(RESPONSE) private serverResponse: Response,
+    private loggerService: LoggerService,
+    private innovationService: InnovationService
   ) { }
 
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<boolean> {
 
-    return of(true);
+    const transferId = activatedRouteSnapshot.params.id;
 
-    // const transferId = activatedRouteSnapshot.params.id;
+    return this.innovationService.getInnovationTransfer(transferId).pipe(
+      map(response => {
 
-    // return this.innovationService.getInnovationTransfer(transferId).pipe(
-    //   map(response => {
+        let redirectUrl = '';
 
-    //     // se user exists.
-    //     localStorage.setItem(`transfer-${transferId}`, response.userExists.toString());
+        if (response.userExists) { redirectUrl = '/transactional/signin'; }
+        else { redirectUrl = '/transactional/signup'; }
 
-    //     return false;
+        if (isPlatformBrowser(this.platformId)) {
+          window.location.assign(redirectUrl); // Full reload is needed to hit SSR.
+        } else {
+          this.serverResponse.status(303).setHeader('Location', redirectUrl);
+          this.serverResponse.end();
+        }
 
-    //   }),
-    //   catchError(() => {
+        return false;
 
-    //     // AQUI já não é valido.
-    //     const redirectUrl = '/transactional/signin';
+      }),
+      catchError((e) => { // Request no longer valid, redirect to error.
 
-    //     if (isPlatformBrowser(this.platformId)) {
-    //       window.location.assign(redirectUrl); // Full reload is needed to hit SSR.
-    //       // return of(false);
-    //     }
+        this.loggerService.trackTrace('[InnovationTransferRedirectionGuard] error', Severity.ERROR, { error: e });
 
-    //     return of(false);
+        const redirectUrl = '/transactional/error';
 
-    //   })
-    // );
+        if (isPlatformBrowser(this.platformId)) {
+          window.location.assign(redirectUrl); // Full reload is needed to hit SSR.
+        } else {
+          this.serverResponse.status(303).setHeader('Location', redirectUrl);
+          this.serverResponse.end();
+        }
+
+        return of(false);
+
+      })
+    );
 
   }
 

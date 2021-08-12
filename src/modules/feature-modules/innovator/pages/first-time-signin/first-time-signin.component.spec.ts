@@ -191,7 +191,7 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
     const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
     authenticationStore.initializeAuthentication$ = () => of(true);
-    service.submitFirstTimeSigninInfo = () => of('');
+    service.submitFirstTimeSigninInfo = () => of({ id: 'id' });
 
     fixture = TestBed.createComponent(FirstTimeSigninComponent);
     component = fixture.componentInstance;

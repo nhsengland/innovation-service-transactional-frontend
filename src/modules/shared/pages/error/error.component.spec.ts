@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { PageNotFoundComponent } from './not-found.component';
+import { PageErrorComponent } from './error.component';
 
-describe('Shared/Pages/NotFound/PageNotFoundComponent', () => {
+describe('Shared/Pages/Error/PageErrorComponent', () => {
 
-  let component: PageNotFoundComponent;
-  let fixture: ComponentFixture<PageNotFoundComponent>;
+  let component: PageErrorComponent;
+  let fixture: ComponentFixture<PageErrorComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -14,11 +14,11 @@ describe('Shared/Pages/NotFound/PageNotFoundComponent', () => {
         TranslateModule.forRoot()
       ],
       declarations: [
-        PageNotFoundComponent,
+        PageErrorComponent,
       ],
     });
 
-    fixture = TestBed.createComponent(PageNotFoundComponent);
+    fixture = TestBed.createComponent(PageErrorComponent);
     component = fixture.componentInstance;
 
   });

@@ -42,8 +42,8 @@
 <p class="nhsuk-u-margin-0"><a routerLink="/accessor/innovations/{{ innovationId }}/support/organisations"> View support status for all organisations </a></p>
 
 <div class="nhsuk-action-link nhsuk-u-padding-top-5">
-  <a class="nhsuk-action-link__link" routerLink="/accessor/innovations/{{ innovationId }}/support/organisations/suggest" *ngIf="isQualifyingAccessorRole">
+  <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/organisations/suggest" class="nhsuk-action-link__link">
     <theme-svg-icon type="action"></theme-svg-icon>
-    <span class="nhsuk-action-link__text">Suggest organisations for support</span>
+    <span class="nhsuk-action-link__text"> Suggest organisations for support </span>
   </a>
 </div>

@@ -18,6 +18,8 @@ import { PageActionStatusListComponent } from './pages/innovation/action-status-
 import { PageInnovationCommentsListComponent } from './pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from './pages/innovation/comments/comments-new.component';
 import { PageInnovationSupportStatusListComponent } from './pages/innovation/innovation-support-status-list.component';
+
+import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 
 // Services.
@@ -46,6 +48,8 @@ import { NotificationService } from './services/notification.service';
     PageInnovationCommentsListComponent,
     PageInnovationCommentsNewComponent,
     PageInnovationSupportStatusListComponent,
+
+    PageErrorComponent,
     PageNotFoundComponent,
 
   ],

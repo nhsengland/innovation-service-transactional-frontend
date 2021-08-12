@@ -72,18 +72,22 @@ export class AccessorLayoutComponent extends CoreComponent {
     const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
 
-    this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
-      response => {
-        this.mainMenuNotifications = response;
-      }
-    );
+    if (this.stores.authentication.isValidUser()) {
 
-    if (currentRouteInnovationId) {
-      this.notificationService.getAllUnreadNotificationsGroupedByContext(currentRouteInnovationId).subscribe(
+      this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
         response => {
-          this.notifications = response;
+          this.mainMenuNotifications = response;
         }
       );
+
+      if (currentRouteInnovationId) {
+        this.notificationService.getAllUnreadNotificationsGroupedByContext(currentRouteInnovationId).subscribe(
+          response => {
+            this.notifications = response;
+          }
+        );
+      }
+
     }
 
     this.layoutOptions = {

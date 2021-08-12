@@ -31,6 +31,11 @@ export const locale = {
     features: {
 
       shared_pages: {
+        page_error: {
+          title: 'It appears that something went wrong!',
+          message: 'The operation you are trying to do is no longer available.',
+          action: 'Go back to home'
+        },
         page_not_found: {
           title: 'It appears that something went wrong!',
           message: 'Give us time while we investigate what happened that took you to here.',

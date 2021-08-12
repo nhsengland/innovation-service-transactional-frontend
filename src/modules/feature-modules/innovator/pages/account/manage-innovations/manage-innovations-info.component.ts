@@ -4,6 +4,8 @@ import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 
 import { getInnovationTransfersDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { of } from 'rxjs';
+import { concatMap } from 'rxjs/operators';
 
 
 @Component({
@@ -25,6 +27,12 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
 
   ngOnInit(): void {
 
+    this.getInnovationsTransfers();
+
+  }
+
+  getInnovationsTransfers(): void {
+
     this.innovatorService.getInnovationTransfers().subscribe(
       response => {
 
@@ -45,13 +53,18 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
         };
       }
     );
-
   }
 
 
   cancelInnovationTransfer(transferId: string, innovation: { id: string, name: string }): void {
 
-    this.innovatorService.updateTransferInnovation(transferId, 'CANCELED').subscribe(
+    this.innovatorService.updateTransferInnovation(transferId, 'CANCELED').pipe(
+      // concatMap(() => this.stores.authentication.initializeAuthentication$()), // Initialize authentication in order to update First Time SignIn information.
+      concatMap(() => {
+        this.getInnovationsTransfers();
+        return of(true);
+      })
+    ).subscribe(
       () => {
         this.alert = {
           type: 'INFORMATION',

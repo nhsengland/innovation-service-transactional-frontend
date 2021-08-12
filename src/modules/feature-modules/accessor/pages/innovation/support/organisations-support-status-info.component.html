@@ -7,8 +7,8 @@
 
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
-    <!-- <p class="nhsuk-u-margin-0"><a href="/">Support offer guide (opens in a new window) </a></p> -->
-    <p><a routerLink="/accessor/innovations/{{ innovationId }}/support/statuses"> Support status key </a></p>
+    <!-- <p class="nhsuk-u-margin-0"><a href="/"> Support offer guide (opens in a new window) </a></p> -->
+    <p><a routerLink="/accessor/innovations/{{ innovationId }}/support/statuses" arial-label="View support status keys information"> Support status key </a></p>
   </div>
 </div>
 
@@ -23,8 +23,10 @@
     <ng-container *ngFor="let organisation of organisations">
 
       <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'bottom-border-separator': organisation.showHideStatus !== 'opened'}">
-        <div>{{ organisation.info.name }}</div>
-        <a *ngIf="!organisation.info.status" href="javascript:void(0)" (click)="onShowHideClicked(organisation.info.id)" class="ml-auto"> {{ organisation.showHideText }} </a>
+        <div> {{ organisation.info.name }} </div>
+        <a *ngIf="!organisation.info.status" href="javascript:void(0)" (click)="onShowHideClicked(organisation.info.id)" class="ml-auto">
+          {{ organisation.showHideText }} <span class="nhsuk-u-visually-hidden"> {{ organisation.showHideDescription }} </span>
+        </a>
         <strong *ngIf="organisation.info.status" class="nhsuk-tag ml-auto" [ngClass]="innovationSupportStatus[organisation.info.status].cssClass">{{ innovationSupportStatus[organisation.info.status].label }}</strong>
       </div>
 
@@ -47,7 +49,7 @@
     <div class="nhsuk-action-link nhsuk-u-padding-top-5">
       <a class="nhsuk-action-link__link" routerLink="/accessor/innovations/{{ innovationId }}/support/organisations/suggest" *ngIf="isQualifyingAccessorRole">
         <theme-svg-icon type="action"></theme-svg-icon>
-        <span class="nhsuk-action-link__text">Suggest organisations for support</span>
+        <span class="nhsuk-action-link__text"> Suggest organisations for support </span>
       </a>
     </div>
   </div>

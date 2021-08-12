@@ -68,8 +68,14 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   onSubmitTransferResponse(transferId: string, accept: boolean): void {
 
     this.innovatorService.updateTransferInnovation(transferId, (accept ? 'COMPLETED' : 'DECLINED')).pipe(
+      concatMap(() => this.stores.authentication.initializeAuthentication$()), // Initialize authentication in order to update First Time SignIn information.
       concatMap(() => {
         this.getInnovationsTransfers();
+        const user = this.stores.authentication.getUserInfo();
+        this.user = {
+          displayName: user.displayName,
+          innovations: user.innovations
+        };
         return of(true);
       })
     ).subscribe(

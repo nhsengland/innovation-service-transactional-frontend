@@ -14,7 +14,7 @@
 
       <ng-container *ngIf="isQuestionStep()">
 
-        <fieldset class="nhsuk-fieldset" aria-describedby="example-hint">
+        <fieldset class="nhsuk-fieldset">
 
           <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">{{ currentStep.data.label }}</legend>
 
@@ -55,7 +55,7 @@
             <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
             <dd class="nhsuk-summary-list__value">{{ item.value }}</dd>
             <dd class="nhsuk-summary-list__actions">
-              <a [routerLink]="item.url">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }}</span></a>
+              <a [routerLink]="item.url"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
             </dd>
           </div>
         </dl>

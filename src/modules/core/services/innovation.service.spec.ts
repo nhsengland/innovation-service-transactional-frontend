@@ -50,7 +50,7 @@ describe('Core/Services/InnovationService', () => {
 
     service.getInnovationTransfer('id01').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/innovation-transfers/id01/check`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.APP_URL}/innovators/innovation-transfers/id01/check`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toBe(expected);

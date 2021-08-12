@@ -316,7 +316,7 @@ export function app(): express.Express {
     res.redirect(azChangePwUri);
   });
 
-  // create survey endpoint
+  // Unauthenticated endpoint: Survey endpoint.
   server.post(`${BASE_PATH}/survey`, (req, res) => {
     const body = req.body;
 
@@ -329,6 +329,20 @@ export function app(): express.Express {
         console.error(`Error when attempting to submit survey with url: ${API_URL}/api/survey. Error: ${error}`);
         res.status(500).send();
       });
+  });
+
+  // Unauthenticated endpoint: Innovation transfer check endpoint.
+  server.get(`${BASE_PATH}/innovators/innovation-transfers/:id/check`, (req, res) => {
+
+    axios.get(`${API_URL}/api/innovators/innovation-transfers/${req.params.id}/check`)
+      .then((response) => {
+        res.status(response.status).send(response.data);
+      })
+      .catch((error: any) => {
+        console.error(`Error: ${API_URL}/api/innovators/innovation-transfers/:id/check : ${error}`);
+        res.status(500).send();
+      });
+
   });
 
   server.all(`${BASE_PATH}/api/*`, (req, res) => {

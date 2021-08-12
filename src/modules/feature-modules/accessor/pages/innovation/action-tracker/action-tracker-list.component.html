@@ -3,7 +3,7 @@
     <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation.name }}</h1>
   </div>
   <div *ngIf="innovation.assessment.id" class="nhsuk-grid-column-one-third text-align-right">
-    <a routerLink="/accessor/innovations/{{ innovationId }}/assessments/{{ innovation.assessment.id }}">View needs assessment</a>
+    <a routerLink="/accessor/innovations/{{ innovationId }}/assessments/{{ innovation.assessment.id }}"> View needs assessment </a>
   </div>
 </div>
 <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-3" />
@@ -22,7 +22,7 @@
         <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
         <ng-container *ngIf="item.key === 'status'">
           <br />
-          <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0">Status key</a>
+          <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0" arial-label="View status keys information"> Status key </a>
         </ng-container>
       </th>
     </tr>
@@ -37,7 +37,7 @@
         <div class="side-menu-flex">
           <div>
             <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('name') }}</span>
-            <a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ item.id }}">{{ item.name }}</a>
+            <a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ item.id }}"> {{ item.name }} </a>
           </div>
           <div>
             <notification-tag *ngIf="item.notifications.count > 0" type="circle"></notification-tag>
@@ -86,7 +86,7 @@
             <div class="side-menu-flex">
               <div>
                 <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('name') }} </span>
-                <a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ item.id }}">{{ item.name }}</a>
+                <a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ item.id }}"> {{ item.name }} </a>
               </div>
               <div>
                 <notification-tag *ngIf="item.notifications && item.notifications.count > 0" type="circle"></notification-tag>

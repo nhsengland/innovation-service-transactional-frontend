@@ -3,12 +3,12 @@
 
     <h1 class="nhsuk-heading-l"> Innovations </h1>
 
-    <nav class="app-tabs" aria-label="Tabs">
+    <nav class="app-tabs" role="tablist" aria-label="Tabs">
       <ol class="app-tabs__list">
         <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
           <div class="side-menu-flex">
             <div>
-              <a class="app-tabs__link" [routerLink]="item.link" [queryParams]="item.queryParams">{{ item.title }}</a>
+              <a class="app-tabs__link" [routerLink]="item.link" [queryParams]="item.queryParams"> {{ item.title }} </a>
             </div>
             <div>
               <notification-tag *ngIf="item.notifications && item.notifications > 0" [count]="item.notifications"></notification-tag>
@@ -45,8 +45,8 @@
                 <div class="side-menu-flex">
                   <div>
                     <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }}</span>
-                    <a *ngIf="currentTab.status !== 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}">{{ item.name }}</a>
-                    <a *ngIf="currentTab.status === 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}/assessments/{{item.assessment.id}}">{{ item.name }}</a>
+                    <a *ngIf="currentTab.status !== 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}"> {{ item.name }} </a>
+                    <a *ngIf="currentTab.status === 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}/assessments/{{item.assessment.id}}"> {{ item.name }} </a>
                   </div>
                   <div>
                     <ng-container *ngIf="item.notifications.isNew !== true">

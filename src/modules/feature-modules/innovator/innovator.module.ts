@@ -9,7 +9,6 @@ import { InnovatorLayoutComponent } from './base/innovator-layout.component';
 // Pages.
 import { PageAccountManageInnovationsInfoComponent } from './pages/account/manage-innovations/manage-innovations-info.component';
 import { PageAccountManageInnovationsTransferComponent } from './pages/account/manage-innovations/manage-innovations-transfer.component';
-
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
@@ -17,9 +16,14 @@ import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-
 import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
 import { InnovationDataSharingComponent } from './pages/innovation/data-sharing/data-sharing.component';
+import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
+import { InnovationTransferAcceptanceComponent } from './pages/innovation-transfer-acceptance/innovation-transfer-acceptance.component';
+
+// Components.
+import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
 
 // Services.
 import { InnovatorService } from './services/innovator.service';
@@ -29,9 +33,6 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
-import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
-import { InnovationService } from '@modules/stores';
-import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
 
 
 @NgModule({
@@ -47,7 +48,6 @@ import { OrganisationSuggestionsCardComponent } from './components/organisation-
     // Pages.
     PageAccountManageInnovationsInfoComponent,
     PageAccountManageInnovationsTransferComponent,
-
     DashboardComponent,
     FirstTimeSigninComponent,
     InnovationActionTrackerDeclineComponent,
@@ -55,10 +55,11 @@ import { OrganisationSuggestionsCardComponent } from './components/organisation-
     InnovationActionTrackerComponent,
     InnovationDataSharingChangeComponent,
     InnovationDataSharingComponent,
+    InnovatorNeedsAssessmentOverviewComponent,
     InnovationOverviewComponent,
     InnovationSectionEvidenceEditComponent,
     InnovationSectionEditComponent,
-    InnovatorNeedsAssessmentOverviewComponent,
+    InnovationTransferAcceptanceComponent,
 
     // Components.
 
@@ -68,13 +69,12 @@ import { OrganisationSuggestionsCardComponent } from './components/organisation-
   providers: [
     // Services.
     InnovatorService,
-    InnovationService,
 
     // Guards.
     FirstTimeSigninGuard,
 
     // Resolvers.
-    InnovationDataResolver,
+    InnovationDataResolver
 
   ]
 })

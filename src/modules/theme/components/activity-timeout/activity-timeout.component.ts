@@ -58,7 +58,7 @@ export class ActivityTimeoutComponent implements OnInit, OnDestroy {
 
     }
 
-    console.log('TIMEOUT STARTED', this.minutesToLogout);
+    console.log('TO started', this.minutesToLogout);
 
   }
 

@@ -73,7 +73,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
 
     // Update last step with the organisations list with description and pre-select all checkboxes.
     this.organisationsService.getAccessorsOrganisations().subscribe(response => {
-      this.stepsData[this.stepsData.length - 1].description = `<a href="${this.stores.environment.BASE_URL}/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer">What does each organisation do? (opens in a new window)</a>`;
+      this.stepsData[this.stepsData.length - 1].description = `<a href="${this.stores.environment.BASE_URL}/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> What does each organisation do? (opens in a new window) </a>`;
       this.stepsData[this.stepsData.length - 1].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
       this.currentAnswers = { organisationShares: response.map(item => item.id) };
     });
@@ -137,19 +137,13 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
     this.prepareSummaryData();
 
     if (this.summaryList.valid) {
-      this.innovatorService.submitFirstTimeSigninInfo(this.currentAnswers).pipe(
+      this.innovatorService.submitFirstTimeSigninInfo('FIRST_TIME_SIGNIN', this.currentAnswers).pipe(
         concatMap(() => {
           return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
         })
       ).subscribe(
-        () => {
-          this.redirectTo(`innovator/dashboard`);
-          return;
-        },
-        () => {
-          this.redirectTo(`innovator/first-time-signin/summary`);
-          return;
-        }
+        () => this.redirectTo(`innovator/dashboard`),
+        () => this.redirectTo(`innovator/first-time-signin/summary`)
       );
     }
 

@@ -55,7 +55,7 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
   it('should run verifyUserSession() and return error', () => {
 
     const responseMock = '';
-    let response: any = { };
+    let response: any = {};
 
     service.verifyUserSession().subscribe(success => response = success, error => response = error);
 
@@ -85,31 +85,31 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
 
   it('should run verifyInnovator() and return success', () => {
 
-    const responseMock = true;
-    const expected = true;
+    const responseMock = { userExists: true, hasInvites: false };
+    const expected = { userExists: true, hasInvites: false };
     let response: any = null;
 
     service.verifyInnovator('010101').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/010101`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/check`);
     httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('HEAD');
-    expect(response).toBe(expected);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
 
   });
 
   it('should run verifyInnovator() and return error', () => {
 
     const responseMock = '';
-    const expected = false;
+    const expected = { userExists: false, hasInvites: false };
     let response: any = null;
 
     service.verifyInnovator('010101').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/010101`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/check`);
     httpRequest.flush(responseMock, { status: 404, statusText: 'Not found' });
-    expect(httpRequest.request.method).toBe('HEAD');
-    expect(response).toBe(expected);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
 
   });
 

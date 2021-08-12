@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -115,25 +115,43 @@ export class InnovatorService extends CoreService {
 
   constructor() { super(); }
 
-  submitFirstTimeSigninInfo(data: { [key: string]: any }): Observable<string> {
+  submitFirstTimeSigninInfo(type: 'FIRST_TIME_SIGNIN' | 'TRANSFER', data: { [key: string]: any }): Observable<{ id: string }> {
 
-    const body = {
-      actionType: 'first_time_signin',
-      user: {
-        displayName: data.innovatorName
-      },
-      innovation: {
-        name: data.innovationName,
-        description: data.innovationDescription,
-        countryName: data.locationCountryName || data.location,
-        postcode: data.englandPostCode || '',
-        organisationShares: data.organisationShares || []
-      },
-      organisation: data.isCompanyOrOrganisation === 'yes' ? { name: data.organisationName, size: data.organisationSize } : undefined
+    const body: {
+      actionType: '' | 'first_time_signin' | 'transfer',
+      user: { displayName: string },
+      transferId?: string,
+      innovation?: { name: string, description: string, countryName: string, postcode: string, organisationShares: string[] },
+      organisation?: { name: string, size: string }
+    } = {
+      actionType: '',
+      user: { displayName: data.innovatorName },
+      organisation: data.isCompanyOrOrganisation.toUpperCase() === 'YES' ? { name: data.organisationName, size: data.organisationSize } : undefined
     };
 
+    switch (type) {
+      case 'FIRST_TIME_SIGNIN':
+        body.actionType = 'first_time_signin';
+        body.innovation = {
+          name: data.innovationName,
+          description: data.innovationDescription,
+          countryName: data.locationCountryName || data.location,
+          postcode: data.englandPostCode || '',
+          organisationShares: data.organisationShares || []
+        };
+        break;
+
+      case 'TRANSFER':
+        body.actionType = 'transfer';
+        body.transferId = data.transferId;
+        break;
+
+      default:
+        break;
+    }
+
     const url = new UrlModel(this.API_URL).addPath('innovators');
-    return this.http.post<{}>(url.buildUrl(), body).pipe(take(1), map(() => ''));
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
 
@@ -270,11 +288,19 @@ export class InnovatorService extends CoreService {
 
   // getInnovationTransfer(id: string): Observable<getInnovationTransfersDTO> {
 
+  //   return of({
+  //     id: 'someId',
+  //     email: 'some@email.com',
+  //     name: 'Guy that sent!',
+  //     innovation: { id: 'innoID', name: 'innovation Name', owner: 'Inno owner' }
+  //   });
+
   //   const url = new UrlModel(this.API_URL).addPath('innovators/innovation-transfers/:id').setPathParams({ id });
   //   return this.http.get<getInnovationTransfersDTO>(url.buildUrl()).pipe(
   //     take(1),
   //     map(response => response)
   //   );
+
   // }
 
   transferInnovation(body: { innovationId: string, email: string }): Observable<{ id: string }> {

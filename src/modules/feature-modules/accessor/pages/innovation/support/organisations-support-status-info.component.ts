@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { OrganisationsService, getOrganisationUnitsDTO } from '@shared-module/services/organisations.service';
+import { OrganisationsService } from '@shared-module/services/organisations.service';
 
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
-import { forkJoin } from 'rxjs';
 import { AccessorService } from '../../../services/accessor.service';
 
+import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-organisations-support-status-info',
@@ -34,6 +34,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
     };
     showHideStatus: 'hidden' | 'opened' | 'closed';
     showHideText: null | string;
+    showHideDescription: null | string;
   }[] = [];
 
   isQualifyingAccessorRole = false;
@@ -71,7 +72,8 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
               status: organisationUnitsSupportStatus.find(o => o.organisationUnit.id === organisation.id)?.status || 'UNASSIGNED'
             },
             showHideStatus: 'hidden',
-            showHideText: null
+            showHideText: null,
+            showHideDescription: null
           };
         } else {
           return {
@@ -85,7 +87,8 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
               }))
             },
             showHideStatus: 'closed',
-            showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`
+            showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
+            showHideDescription: `This will show ${organisation.organisationUnits.length} units that belong to the ${organisation.name}`
           };
         }
 
@@ -102,10 +105,12 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
       case 'opened':
         organisation.showHideStatus = 'closed';
         organisation.showHideText = `Show ${organisation.info.organisationUnits.length} units`;
+        organisation.showHideDescription = `This will show ${organisation.info.organisationUnits.length} units that belong to the ${organisation.info.name}`;
         break;
       case 'closed':
         organisation.showHideStatus = 'opened';
         organisation.showHideText = `Hide ${organisation.info.organisationUnits.length} units`;
+        organisation.showHideDescription = `This will hide ${organisation.info.organisationUnits.length} units that belong to the ${organisation.info.name}`;
         break;
       default:
         break;

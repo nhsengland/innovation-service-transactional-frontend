@@ -90,13 +90,15 @@ export class AuthenticationService {
 
   }
 
-  verifyInnovator(userId: string): Observable<boolean> {
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId').setPathParams({ userId });
-    return this.http.head(url.buildUrl()).pipe(
+  verifyInnovator(userId: string): Observable<{ userExists: boolean, hasInvites: boolean }> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/check');
+    return this.http.get<{ userExists: boolean, hasInvites: boolean }>(url.buildUrl()).pipe(
       take(1),
-      map(() => true),
-      catchError(() => of(false))
+      map(response => response),
+      catchError(() => of({ userExists: false, hasInvites: false }))
     );
+
   }
 
   getInnovations(userId: string): Observable<getUserInnovationsDto[]> {

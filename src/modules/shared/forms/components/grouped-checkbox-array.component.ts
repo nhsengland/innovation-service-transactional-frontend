@@ -24,9 +24,21 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
     // If Group Item has only one child item, then show the child only.
     this.filteredGI = (value || []).map(groupItem => {
       if (groupItem.items.length === 1) {
-        return { gItem: { ...groupItem.items[0], ...{ items: [] } }, showHideStatus: 'hidden', showHideText: null, selectedChildren: 0 };
+        return {
+          gItem: { ...groupItem.items[0], ...{ items: [] } },
+          showHideStatus: 'hidden',
+          showHideText: null,
+          showHideDescription: null,
+          selectedChildren: 0
+        };
       } else {
-        return { gItem: groupItem, showHideStatus: 'closed', showHideText: `Show ${groupItem.items.length} units`, selectedChildren: groupItem.items.filter(a => this.fieldArrayValues.includes(a.value)).length };
+        return {
+          gItem: groupItem,
+          showHideStatus: 'closed',
+          showHideText: `Show ${groupItem.items.length} units`,
+          showHideDescription: `This will show ${groupItem.items.length} units that belong to the ${groupItem.label}`,
+          selectedChildren: groupItem.items.filter(a => this.fieldArrayValues.includes(a.value)).length
+        };
       }
     });
 
@@ -41,6 +53,7 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
     selectedChildren: number;
     showHideStatus: 'hidden' | 'opened' | 'closed';
     showHideText: null | string;
+    showHideDescription: null | string;
   }[] = [];
 
 
@@ -99,10 +112,12 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
       case 'opened':
         filteredGI.showHideStatus = 'closed';
         filteredGI.showHideText = `Show ${filteredGI.gItem.items.length} units`;
+        filteredGI.showHideDescription = `This will show ${filteredGI.gItem.items.length} units that belong to the ${filteredGI.gItem.label}`;
         break;
       case 'closed':
         filteredGI.showHideStatus = 'opened';
         filteredGI.showHideText = `Hide ${filteredGI.gItem.items.length} units`;
+        filteredGI.showHideDescription = `This will hide ${filteredGI.gItem.items.length} units that belong to the ${filteredGI.gItem.label}`;
         break;
       default:
         break;
