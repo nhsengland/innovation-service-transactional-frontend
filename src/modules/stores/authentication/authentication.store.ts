@@ -35,9 +35,10 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
             this.authenticationService.verifyInnovator(user.id),
             this.authenticationService.getInnovations(user.id)
           ]).pipe(
-            map(([hasInnovator, innovations]) => {
+            map(([innovatorInfo, innovations]) => {
 
-              this.state.didFirstTimeSignIn = hasInnovator;
+              this.state.isValidUser = innovatorInfo.userExists;
+              this.state.hasInnovationTransfers = innovatorInfo.hasInvites;
               if (this.state.user) { this.state.user.innovations = innovations; }
 
               return true;
@@ -64,6 +65,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   isSignIn(): boolean { return this.state.isSignIn; }
+  isValidUser(): boolean { return this.state.isValidUser || false; }
+  hasInnovationTransfers(): boolean { return this.state.hasInnovationTransfers || false; }
 
   isInnovatorType(): boolean { return this.state.user?.type === 'INNOVATOR'; }
   isAccessorType(): boolean { return this.state.user?.type === 'ACCESSOR'; }
@@ -71,8 +74,6 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
   isAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'ACCESSOR'; }
   isQualifyingAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'QUALIFYING_ACCESSOR'; }
-
-  didFirstTimeSignIn(): boolean { return this.state.didFirstTimeSignIn || false; }
 
   getUserId(): string { return this.state.user?.id || ''; }
   getUserType(): Required<AuthenticationModel>['user']['type'] {

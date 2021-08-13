@@ -4,9 +4,9 @@
 
   <dl class="nhsuk-summary-list">
     <div *ngFor="let item of previousUploadedFiles" class="nhsuk-summary-list__row">
-      <dt class="nhsuk-summary-list__value"><a href="{{item.url}}">{{ item.name }}</a></dt>
+      <dt class="nhsuk-summary-list__value"><a href="{{ item.url }}"> {{ item.name }} </a></dt>
       <dd class="nhsuk-summary-list__actions">
-        <a href="javascript:void(0)" (click)="onRemovePreviousUploadedFile(item.id)">Delete<span class="nhsuk-u-visually-hidden"> {{ item.name }}</span></a>
+        <a href="javascript:void(0)" (click)="onRemovePreviousUploadedFile(item.id)"> Delete <span class="nhsuk-u-visually-hidden"> {{ item.name }} </span></a>
       </dd>
     </div>
   </dl>

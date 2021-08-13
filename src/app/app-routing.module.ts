@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
 
 // Pages.
+import { PageErrorComponent } from '@shared-module/pages/error/error.component';
 import { PageNotFoundComponent } from '@shared-module/pages/not-found/not-found.component';
 
 // Guards.
@@ -70,6 +71,12 @@ const routes: Routes = [
         path: 'accessor', loadChildren: () => accessorModule.then(m => m.AccessorModule)
       },
     ]
+  },
+
+  {
+    path: 'error',
+    component: BaseLayoutComponent,
+    children: [{ path: '', pathMatch: 'full', component: PageErrorComponent }]
   },
 
   {

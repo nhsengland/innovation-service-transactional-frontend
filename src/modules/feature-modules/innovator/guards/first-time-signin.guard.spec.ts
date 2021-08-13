@@ -37,46 +37,14 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
   });
 
 
-  describe('User did NOT First Time SignIn tests', () => {
-
-    it('should allow to access the route', () => {
-
-      const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'first-time-signin' } };
-      let expected: boolean | null = null;
-
-      spyOn(authenticationStore, 'didFirstTimeSignIn').and.returnValue(false);
-
-      guard.canActivateChild(routeMock as any).subscribe(response => { expected = response; });
-      expect(expected).toBe(true);
-
-    });
-
-    it('should redirect to the First Time SignIn page', () => {
-
-      const routeMock: Partial<ActivatedRouteSnapshot> = {};
-      const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
-      let expected: boolean | null = null;
-
-      spyOn(authenticationStore, 'didFirstTimeSignIn').and.returnValue(false);
-
-      guard.canActivateChild(routeMock as any).subscribe(response => { expected = response; });
-
-      expect(expected).toBe(false);
-      expect(routerSpy).toHaveBeenCalledWith(['/innovator/first-time-signin']);
-
-    });
-
-  });
-
-
-  describe('User did First Time SignIn tests', () => {
+  describe('User is valid tests', () => {
 
     it('should allow to access the route', () => {
 
       const routeMock: Partial<ActivatedRouteSnapshot> = {};
       let expected: boolean | null = null;
 
-      spyOn(authenticationStore, 'didFirstTimeSignIn').and.returnValue(true);
+      authenticationStore.isValidUser = () => true;
 
       guard.canActivateChild(routeMock as any).subscribe(response => { expected = response; });
       expect(expected).toBe(true);
@@ -89,7 +57,7 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
       const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
       let expected: boolean | null = null;
 
-      spyOn(authenticationStore, 'didFirstTimeSignIn').and.returnValue(true);
+      authenticationStore.isValidUser = () => true;
 
       guard.canActivateChild(routeMock as any).subscribe(response => { expected = response; });
 
@@ -99,5 +67,71 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
     });
 
   });
+
+
+  describe('User is NOT valid tests', () => {
+
+    it('should allow to access the route WITH innovations transfer pending', () => {
+
+      const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovation-transfer-acceptance' } };
+      let expected: boolean | null = null;
+
+      authenticationStore.isValidUser = () => false;
+      authenticationStore.hasInnovationTransfers = () => true;
+
+      guard.canActivateChild(routeMock as any).subscribe(response => { expected = response; });
+      expect(expected).toBe(true);
+
+    });
+
+    it('should redirect to the Innovation Transfer Acceptance WITH innovations transfer pending', () => {
+
+      const routeMock: Partial<ActivatedRouteSnapshot> = {};
+      const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+      let expected: boolean | null = null;
+
+      authenticationStore.isValidUser = () => false;
+      authenticationStore.hasInnovationTransfers = () => true;
+
+      guard.canActivateChild(routeMock as any).subscribe(response => { expected = response; });
+
+      expect(expected).toBe(false);
+      expect(routerSpy).toHaveBeenCalledWith(['/innovator/innovation-transfer-acceptance']);
+
+    });
+
+    it('should allow to access the route WITHOUT any innovations transfer pending', () => {
+
+      const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'first-time-signin' } };
+      let expected: boolean | null = null;
+
+      authenticationStore.isValidUser = () => false;
+      authenticationStore.hasInnovationTransfers = () => false;
+
+      guard.canActivateChild(routeMock as any).subscribe(response => { expected = response; });
+      expect(expected).toBe(true);
+
+    });
+
+    it('should redirect to the First Time SignIn WITHOUT any innovations transfer pending', () => {
+
+      const routeMock: Partial<ActivatedRouteSnapshot> = {};
+      const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+      let expected: boolean | null = null;
+
+      authenticationStore.isValidUser = () => false;
+      authenticationStore.hasInnovationTransfers = () => false;
+
+      guard.canActivateChild(routeMock as any).subscribe(response => { expected = response; });
+
+      expect(expected).toBe(false);
+      expect(routerSpy).toHaveBeenCalledWith(['/innovator/first-time-signin']);
+
+    });
+
+  });
+
+
+
 
 });

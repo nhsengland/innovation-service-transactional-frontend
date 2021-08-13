@@ -4,7 +4,7 @@
       <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovationName }}</h1>
     </div>
     <!-- <div *ngIf="innovation?.assessment?.id" class="nhsuk-grid-column-one-third text-align-right">
-      <a routerLink="/accessor/innovations/{{ innovation?.summary?.id || '' }}/assessments/{{ innovation?.assessment?.id || '' }}">View needs assessment</a>
+      <a routerLink="/accessor/innovations/{{ innovation?.summary?.id || '' }}/assessments/{{ innovation?.assessment?.id || '' }}"> View needs assessment </a>
     </div> -->
   </div>
   <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
@@ -68,7 +68,7 @@
               </span>
             </ng-container>
 
-            <span class="app-task-list__task-name"> {{ (i + 1) + '.' + (j + 1) }} <a routerLink="{{ baseUrl }}/{{section.id}}" class="nhsuk-link">{{ section.title }}</a> </span>
+            <span class="app-task-list__task-name"> {{ (i + 1) + '.' + (j + 1) }} <a routerLink="{{ baseUrl }}/{{section.id}}"><span class="nhsuk-u-visually-hidden"> Go to </span> {{ section.title }} </a> </span>
 
             <strong *ngIf="section.actionStatus" class="nhsuk-tag app-task-list__tag" [ngClass]="innovationSectionActionStatus[section.actionStatus].cssClass">
               {{ innovationSectionActionStatus[section.actionStatus].label }}

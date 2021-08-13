@@ -14,7 +14,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
         items: [
           { value: 'MEDICAL_DEVICE', label: 'Medical device' },
           { value: 'PHARMACEUTICAL', label: 'Pharmaceutical' },
-          { value: 'DIGITAL', label: 'Digital (including apps, platforms, softcware)' },
+          { value: 'DIGITAL', label: 'Digital (including apps, platforms, software)' },
           { value: 'AI', label: 'Artificial intelligence (AI)' },
           { value: 'EDUCATION', label: 'Education or training of workforce' },
           { value: 'PPE', label: 'Personal protective equipment (PPE)' },

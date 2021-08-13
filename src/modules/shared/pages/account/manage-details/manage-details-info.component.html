@@ -21,7 +21,7 @@
         <dt class="nhsuk-summary-list__key"> {{ item.label }} </dt>
         <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.value"></dd>
         <dd class="nhsuk-summary-list__actions">
-          <a *ngIf="item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }}</span> </a>
+          <a *ngIf="item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
         </dd>
       </div>
     </dl>

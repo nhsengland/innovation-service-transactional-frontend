@@ -59,11 +59,15 @@ export class AssessmentLayoutComponent extends CoreComponent {
     const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
 
-    this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
-      response => {
-        this.mainMenuNotifications = response;
-      }
-    );
+    if (this.stores.authentication.isValidUser()) {
+
+      this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
+        response => {
+          this.mainMenuNotifications = response;
+        }
+      );
+
+    }
 
     this.layoutOptions = {
       type: routeData.type || null,

@@ -202,7 +202,7 @@ function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
   allFiles.forEach((item, i) => {
     toReturn.push({
       label: `Attachment ${i + 1}`,
-      value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
+      value: `<a href='${item.url}'> ${item.name} </a>` || 'Unknown',
       editStepNumber: 4
     });
   });

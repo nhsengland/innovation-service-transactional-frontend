@@ -9,7 +9,7 @@
         <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
         <ng-container *ngIf="item.key === 'status'">
           <br />
-          <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0">Status key</a>
+          <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0" arial-label="View status keys information"> Status key </a>
         </ng-container>
       </th>
     </tr>
@@ -24,7 +24,7 @@
         <div class="side-menu-flex">
           <div>
             <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('name') }} </span>
-            <a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/{{ item.id }}">{{ item.name }}</a>
+            <a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/{{ item.id }}"> {{ item.name }} </a>
           </div>
           <div>
             <notification-tag *ngIf="item.notifications.count > 0" type="circle"></notification-tag>
@@ -72,7 +72,7 @@
             <div class="side-menu-flex">
               <div>
                 <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('name') }} </span>
-                <a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/{{ item.id }}">{{ item.name }}</a>
+                <a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/{{ item.id }}"> {{ item.name }} </a>
               </div>
               <div>
                 <notification-tag *ngIf="item.notifications.count > 0" type="circle"></notification-tag>

@@ -7,8 +7,8 @@
     <ng-container *ngIf="layoutOptions.showInnovationHeader && innovationHeaderBar.id">
       <div class="nhsuk-width-container app-width-container">
         <div class="nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 d-flex align-items-center justify-content-space-between">
-          <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovationHeaderBar.name }}</h1>
-          <a routerLink="/innovator/innovations/new">Switch innovation</a>
+          <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0"> {{ innovationHeaderBar.name }} </h1>
+          <a routerLink="/innovator/innovations/new"> Switch innovation </a>
         </div>
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-5" />
       </div>
@@ -57,7 +57,7 @@
                 <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
                   <div class="side-menu-flex">
                     <div>
-                      <a class="app-side-nav__link" [routerLink]="item.link">{{ item.title }}</a>
+                      <a class="app-side-nav__link" [routerLink]="item.link"> {{ item.title }} </a>
                     </div>
                     <div>
                       <notification-tag *ngIf="notifications[item.key || ''] > 0" [count]="notifications[item.key || '']"></notification-tag>
@@ -70,16 +70,17 @@
           </div>
 
           <div class="app-pane__main-content">
+
             <router-outlet></router-outlet>
 
             <div class="app-index-navigation app-u-hide-desktop">
               <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
-  
+
                 <ul class="nhsuk-list app-side-nav__list">
                   <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
                     <div class="side-menu-flex">
                       <div>
-                        <a class="app-side-nav__link" [routerLink]="item.link">{{ item.title }}</a>
+                        <a class="app-side-nav__link" [routerLink]="item.link"> {{ item.title }} </a>
                       </div>
                       <div>
                         <notification-tag *ngIf="notifications[item.key || ''] > 0" [count]="notifications[item.key || '']"></notification-tag>
@@ -87,7 +88,7 @@
                     </div>
                   </li>
                 </ul>
-  
+
               </nav>
             </div>
 

@@ -3,10 +3,10 @@
 
     <h1 class="nhsuk-heading-l"> Actions </h1>
 
-    <nav class="app-tabs" aria-label="Tabs">
+    <nav class="app-tabs" role="tablist" aria-label="Tabs">
       <ol class="app-tabs__list">
         <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
-          <a class="app-tabs__link" [routerLink]="item.link" [queryParams]="item.queryParams">{{ item.title }}</a>
+          <a class="app-tabs__link" [routerLink]="item.link" [queryParams]="item.queryParams"> {{ item.title }} </a>
         </li>
       </ol>
     </nav>
@@ -15,12 +15,8 @@
       <div class="nhsuk-grid-column-full">
 
         <p class="d-flex align-items-center nhsuk-u-margin-bottom-2">
-          <span class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0 mr-auto">
-            {{ currentTab.description }}
-          </span>
-          <span>
-            <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0">Status key</a>
-          </span>
+          <span class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0 mr-auto"> {{ currentTab.description }} </span>
+          <span> <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0" arial-label="View status keys information"> Status key </a> </span>
         </p>
         <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
@@ -39,7 +35,7 @@
                 <div class="side-menu-flex">
                   <div>
                     <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('section') }}</span>
-                    <a routerLink="/accessor/innovations/{{ item.innovation.id }}/action-tracker/{{ item.id }}">{{ item.name }}</a>
+                    <a routerLink="/accessor/innovations/{{ item.innovation.id }}/action-tracker/{{ item.id }}"> {{ item.name }} </a>
                   </div>
                   <div>
                     <notification-tag *ngIf="item.notifications && item.notifications.count > 0" type="circle"></notification-tag>
@@ -49,7 +45,7 @@
               </td>
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('innovationName') }}</span>
-                <a routerLink="/accessor/innovations/{{ item.innovation.id }}">{{ item.innovation.name }}</a>
+                <a routerLink="/accessor/innovations/{{ item.innovation.id }}"> {{ item.innovation.name }} </a>
 
               </td>
               <td class="nhsuk-table__cell">

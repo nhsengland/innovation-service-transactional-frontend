@@ -3,11 +3,11 @@
 
     <h1 class="nhsuk-heading-l"> Innovations </h1>
 
-    <nav class="app-tabs" aria-label="Tabs">
+    <nav class="app-tabs" role="tablist" aria-label="Tabs">
       <ol class="app-tabs__list">
         <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
           <div class="side-menu-flex">
-            <div><a class="app-tabs__link" [routerLink]="item.link" [queryParams]="item.queryParams">{{ item.title }}</a></div>
+            <div><a class="app-tabs__link" [routerLink]="item.link" [queryParams]="item.queryParams"> {{ item.title }} </a></div>
             <div>
               <notification-tag *ngIf="item.notifications && item.notifications > 0" [count]="item.notifications"></notification-tag>
             </div>
@@ -46,9 +46,9 @@
                 <div class="side-menu-flex">
                   <div>
                     <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }} </span>
-                    <a *ngIf="currentTab.key !== 'ENGAGING' && item.assessment?.id" routerLink="/accessor/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}">{{ item.name }}</a>
-                    <span *ngIf="currentTab.key !== 'ENGAGING' && !item.assessment?.id">{{ item.name }}</span>
-                    <a *ngIf="currentTab.key === 'ENGAGING'" routerLink="/accessor/innovations/{{ item.id }}">{{ item.name }}</a>
+                    <a *ngIf="currentTab.key !== 'ENGAGING' && item.assessment?.id" routerLink="/accessor/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}"> {{ item.name }} </a>
+                    <span *ngIf="currentTab.key !== 'ENGAGING' && !item.assessment?.id"> {{ item.name }} </span>
+                    <a *ngIf="currentTab.key === 'ENGAGING'" routerLink="/accessor/innovations/{{ item.id }}"> {{ item.name }} </a>
                   </div>
                   <div>
                     <notification-tag *ngIf="item.notifications && item.notifications.count > 0 && !item.notifications.hasNew" [count]="item.notifications.count"></notification-tag>

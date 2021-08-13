@@ -34,10 +34,10 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
 
   it('should run initializeAuthentication$() and return success', () => {
 
-    spyOn(authenticationService, 'verifyUserSession').and.returnValue(of(true));
-    spyOn(authenticationService, 'getUserInfo').and.returnValue(of({ id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', organisations: [] }));
-    spyOn(authenticationService, 'verifyInnovator').and.returnValue(of(true));
-    spyOn(authenticationService, 'getInnovations').and.returnValue(of([{ id: 'abc123zxc', name: 'HealthyApp' }]));
+    authenticationService.verifyUserSession = () => of(true);
+    authenticationService.getUserInfo = () => of({ id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', organisations: [] });
+    authenticationService.verifyInnovator = () => of({ userExists: true, hasInvites: false });
+    authenticationService.getInnovations = () => of([{ id: 'abc123zxc', name: 'HealthyApp' }]);
 
     const expectedResponse = true;
     const expectedState = {
@@ -52,16 +52,16 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     expect(response).toBe(expectedResponse);
     expect(authenticationStore.state.isSignIn).toEqual(expectedState.isSignIn);
     expect(authenticationStore.state.user).toEqual(expectedState.user);
-    expect(authenticationStore.state.didFirstTimeSignIn).toEqual(expectedState.didFirstTimeSignIn);
+    expect(authenticationStore.state.isValidUser).toEqual(expectedState.didFirstTimeSignIn);
 
   });
 
   it('should run initializeAuthentication$() and return success not being first time signin', () => {
 
-    spyOn(authenticationService, 'verifyUserSession').and.returnValue(of(true));
-    spyOn(authenticationService, 'getUserInfo').and.returnValue(of({ id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', organisations: [] }));
-    spyOn(authenticationService, 'verifyInnovator').and.returnValue(throwError('error'));
-    spyOn(authenticationService, 'getInnovations').and.returnValue(throwError('error'));
+    authenticationService.verifyUserSession = () => of(true);
+    authenticationService.getUserInfo = () => of({ id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', organisations: [] });
+    authenticationService.verifyInnovator = () => throwError('error');
+    authenticationService.getInnovations = () => throwError('error');
 
     const expectedResponse = true;
     const expectedState = {
@@ -94,6 +94,18 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     expect(authenticationStore.state.isSignIn).toEqual(expectedState.isSignIn);
 
   });
+
+
+  it('should run isValidUser() and return true', () => {
+    authenticationStore.state.isValidUser = true;
+    expect(authenticationStore.isValidUser()).toBe(true);
+  });
+
+  it('should run isValidUser() and return false', () => {
+    // authenticationStore.state.didFirstTimeSignIn = false;
+    expect(authenticationStore.isValidUser()).toBe(false);
+  });
+
 
   it('should run isInnovatorType() and return true', () => {
     authenticationStore.state.user = { id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', organisations: [], innovations: [] };
@@ -137,16 +149,6 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   it('should run isQualifyingAccessorRole() and return false', () => {
     // authenticationStore.state.user = { id: 'id', displayName: 'John Doe', type: 'ACCESSOR', organisations: [{ id: 'id01', name: 'Organisation Name', role: 'QUALIFYING_ACCESSOR' }], innovations: [] };
     expect(authenticationStore.isQualifyingAccessorRole()).toBe(false);
-  });
-
-  it('should run didFirstTimeSignIn() and return true', () => {
-    authenticationStore.state.didFirstTimeSignIn = true;
-    expect(authenticationStore.didFirstTimeSignIn()).toBe(true);
-  });
-
-  it('should run didFirstTimeSignIn() and return false', () => {
-    // authenticationStore.state.didFirstTimeSignIn = false;
-    expect(authenticationStore.didFirstTimeSignIn()).toBe(false);
   });
 
   it('should run getUserId() and return true', () => {

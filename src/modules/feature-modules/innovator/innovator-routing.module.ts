@@ -14,9 +14,11 @@ import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-
 import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
 import { InnovationDataSharingComponent } from './pages/innovation/data-sharing/data-sharing.component';
+import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
+import { InnovationTransferAcceptanceComponent } from './pages/innovation-transfer-acceptance/innovation-transfer-acceptance.component';
 
 import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details/manage-details-edit.component';
@@ -34,7 +36,6 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
-import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
 
 
 const routes: Routes = [
@@ -57,6 +58,14 @@ const routes: Routes = [
         children: [
           { path: '', pathMatch: 'full', redirectTo: '1' },
           { path: ':id', pathMatch: 'full', component: FirstTimeSigninComponent }
+        ]
+      },
+
+      {
+        path: 'innovation-transfer-acceptance',
+        children: [
+          { path: '', pathMatch: 'full', redirectTo: '1' },
+          { path: ':stepId', pathMatch: 'full', component: InnovationTransferAcceptanceComponent }
         ]
       },
 
