@@ -1,17 +1,17 @@
-
 <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-1">
-  <h1> Change data sharing preferences </h1>
-  <!-- DIV ROW START -->
+
+  <h1> {{ pageTitle }} </h1>
+
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <!-- FORM START -->
+
       <form [formGroup]="form">
-      <!-- TABLE START -->
+
         <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Innovations list">
-          <!-- HEADER START -->
+
           <thead class="nhsuk-table__head">
             <tr class="">
-              <th>
+              <th scope="col">
                 <div>Organisation</div>
                 <div>
                   <a href="{{organisationInfoUrl}}" class="app-link_normal" target="_blank" rel="noopener noreferrer">
@@ -21,49 +21,41 @@
               </th>
             </tr>
           </thead>
-          <!-- HEADER END -->
-          <!-- TABLE BODY START -->
+
           <tbody class="nhsuk-table__body">
-            <!-- ROWS LOOP START -->
+
             <tr class="nhsuk-table__row">
               <td class="nhsuk-table__cell app-table-cell_padding-bottom-10">
-                <theme-form-checkbox-array [arrayName]="organisationShareArrayName" [items]="organisationsList" (customOnChangeFunc)="dataSharingValidation($event)">
-
-                </theme-form-checkbox-array>
+                <theme-form-checkbox-array [arrayName]="organisationShareArrayName" [items]="organisationsList" (customOnChangeFunc)="dataSharingValidation($event)"></theme-form-checkbox-array>
               </td>
             </tr>
-            <!-- ROWS LOOP END -->
+
           </tbody>
-          <!-- TABLE BODY END -->
+
         </table>
-        <!-- TABLE END -->
+
       </form>
-      <!-- FORM END -->
-    </div>
-  </div>
-  <!-- DIV ROW END -->
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+
       <ng-container *ngIf="showWarning">
         <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
           <div class="nhsuk-grid-column-full">
             <div class="nhsuk-warning-callout">
-              <h3 class="nhsuk-warning-callout__label">
-                <span role="text">
-                  <span class="nhsuk-u-visually-hidden">Important: </span>
-                  {{ summaryAlert.title }}
-                </span>
-              </h3>
+              <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+                <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> {{ summaryAlert.title }} </span>
+              </div>
               <p>{{ summaryAlert.message }}</p>
             </div>
           </div>
         </div>
       </ng-container>
+
       <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Save changes</button>
 
       <div class="nhsuk-cancel-wrapper">
         <a routerLink="/innovator/innovations/{{ innovationId }}/data-sharing"> Cancel </a>
       </div>
+
     </div>
+
   </div>
 </div>

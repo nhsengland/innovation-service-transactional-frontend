@@ -26,7 +26,9 @@ export class CookiesEditComponent extends CoreComponent implements OnInit {
   constructor(
     private cookiesService: CookiesService
   ) {
+
     super();
+    this.setPageTitle('Choose which cookies we use');
 
     this.form.get('analytics')?.setValue(this.cookiesService.getConsentCookie().analytics  ? 'true' : 'false');
   }

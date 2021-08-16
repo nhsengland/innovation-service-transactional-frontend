@@ -1,14 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { CoreComponent } from '@app/base';
 
 @Component({
   selector: 'app-triage-innovator-pack-survey-start',
   templateUrl: './start.component.html'
 })
-export class SurveyStartComponent implements OnInit {
+export class SurveyStartComponent extends CoreComponent {
 
-  constructor() { }
+  constructor() {
 
-  ngOnInit(): void { }
+    super();
 
+    this.setPageTitle('Find innovation support');
+
+  }
 
 }

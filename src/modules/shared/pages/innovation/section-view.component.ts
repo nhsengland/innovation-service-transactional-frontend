@@ -36,6 +36,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
   ) {
 
     super();
+    this.setPageTitle('Section details');
 
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;

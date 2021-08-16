@@ -33,6 +33,7 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
   ) {
 
     super();
+    this.setPageTitle('Decline action');
 
     this.actionDisplayId = '';
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;

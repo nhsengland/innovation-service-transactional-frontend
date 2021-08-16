@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
-import { categoriesItems } from '@stores-module/innovation/sections/catalogs.config';
-import { forkJoin } from 'rxjs';
 
 import { AssessmentService, getInnovationInfoEndpointDTO } from '../../../services/assessment.service';
+
+import { categoriesItems } from '@stores-module/innovation/sections/catalogs.config';
 
 
 @Component({
@@ -24,11 +23,14 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private assessmentService: AssessmentService,
-    private notificationService: NotificationService,
+    private assessmentService: AssessmentService
   ) {
+
     super();
+    this.setPageTitle('Overview');
+
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+
   }
 
 

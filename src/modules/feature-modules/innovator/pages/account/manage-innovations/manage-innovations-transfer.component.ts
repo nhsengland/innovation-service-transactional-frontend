@@ -30,8 +30,7 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
   ) {
 
     super();
-
-
+    this.setPageTitle('Transfer ownership of an innovation');
 
   }
 

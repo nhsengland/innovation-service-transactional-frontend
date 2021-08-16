@@ -1,20 +1,18 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
-    <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-5">Suggest organisations for support</h1>
-  </div>
-</div>
 
-<ng-container *ngIf="summaryAlert.type">
-  <div class="nhsuk-error-summary" [ngClass]="{'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert" tabindex="-1">
-    <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
-    <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
-  </div>
-</ng-container>
+    <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-5"> {{ pageTitle }} </h1>
 
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
+    <ng-container *ngIf="summaryAlert.type">
+      <div class="nhsuk-error-summary" [ngClass]="{'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert" tabindex="-1">
+        <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
+        <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
+      </div>
+    </ng-container>
+
     <p>Select the organisations you think would be right to offer support. These organisations will be notified.</p>
     <!-- <p class="nhsuk-u-margin-0"><a href="/"> Support offer guide (opens in a new window) </a></p> -->
+
   </div>
 </div>
 

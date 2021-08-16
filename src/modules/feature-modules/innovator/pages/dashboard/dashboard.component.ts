@@ -32,6 +32,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   ) {
 
     super();
+    this.setPageTitle('Hello');
 
     const user = this.stores.authentication.getUserInfo();
     this.user = {

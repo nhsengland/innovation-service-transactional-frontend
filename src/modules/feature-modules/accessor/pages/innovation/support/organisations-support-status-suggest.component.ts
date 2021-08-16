@@ -52,6 +52,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   ) {
 
     super();
+    this.setPageTitle('Suggest organisations for support');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.stepId = this.activatedRoute.snapshot.params.stepId;

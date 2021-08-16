@@ -22,7 +22,12 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
 
   constructor(
     private innovatorService: InnovatorService
-  ) { super(); }
+  ) {
+
+    super();
+    this.setPageTitle('Manage innovations');
+
+  }
 
 
   ngOnInit(): void {

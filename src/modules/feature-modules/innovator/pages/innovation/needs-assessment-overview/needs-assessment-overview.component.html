@@ -14,12 +14,12 @@
             </div>
           </nav>
           <div class="nhsuk-u-padding-top-8">
-            <h3 class="nhsuk-heading-xs">Updated: {{ assessment?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</h3>
+            <p class="nhsuk-heading-xs">Updated: {{ assessment?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</p>
             <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.updatedBy }}</p>
             <p class="nhsuk-hint">Needs assessment team</p>
           </div>
           <div class="nhsuk-u-padding-top-8">
-            <h3 class="nhsuk-heading-xs">Created: {{ assessment?.finishedAt | date: ('app.date_formats.long_date' | translate) }}</h3>
+            <p class="nhsuk-heading-xs">Created: {{ assessment?.finishedAt | date: ('app.date_formats.long_date' | translate) }}</p>
             <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.assignToName }}</p>
             <p class="nhsuk-hint">Needs assessment team</p>
           </div>
@@ -28,13 +28,15 @@
         <div class="app-pane__main-content">
           <div class="nhsuk-grid-row">
             <div class="nhsuk-grid-column-full">
+
+              <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Needs assessment</p>
+              <h1 class="">{{ innovation.name }}</h1>
+
               <ng-container *ngIf="summaryAlert.type">
                 <div class="nhsuk-error-summary" [ngClass]="{'border-color-success': summaryAlert.type === 'success'}" aria-labelledby="alert-summary-title" role="alert" tabindex="-1">
                   <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
                 </div>
               </ng-container>
-              <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Needs assessment</p>
-              <h1 class="">{{ innovation.name }}</h1>
 
               <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">The innovation</h2>
               <p>{{ assessment?.description }}</p>

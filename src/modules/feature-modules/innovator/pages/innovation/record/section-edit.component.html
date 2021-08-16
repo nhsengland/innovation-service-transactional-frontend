@@ -16,8 +16,12 @@
 
         <fieldset class="nhsuk-fieldset">
 
-          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">{{ currentStep.label }}</legend>
+          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+            <h1 class="nhsuk-heading-l nhsuk-u-margin-0"> {{ currentStep.label }} </h1>
+          </legend>
+
           <div *ngIf="currentStep.description" class="nhsuk-hint nhsuk-u-margin-bottom-0" [innerHTML]="currentStep.description"></div>
+
           <ng-container *ngIf="currentStep.details">
             <details class="nhsuk-details">
               <summary class="nhsuk-details__summary">
@@ -38,7 +42,7 @@
 
       <ng-container *ngIf="isSummaryStep()">
 
-        <h1 class="nhsuk-heading-l">Check your answers</h1>
+        <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
 
         <dl class="nhsuk-summary-list">
           <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
