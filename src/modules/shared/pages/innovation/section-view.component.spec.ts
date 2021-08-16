@@ -56,7 +56,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'sectionUpdateSuccess' };
 
-    const expected = { type: 'warning', title: 'Your section has been saved', message: 'You need to submit this section for review to notify your supporting accessor(s)' };
+    const expected = { type: 'warning', title: 'Your section has been saved', message: 'You need to submit this section before you can submit your Innovation Record for needs assessment.' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;

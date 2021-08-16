@@ -122,9 +122,8 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
 
     fixture = TestBed.createComponent(InnovationAssessmentEditComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
 
-    component.onSubmit('continue');
+    component.onSubmit('submit');
     fixture.detectChanges();
 
     expect(routerSpy).toHaveBeenCalledWith(['/assessment/innovations/Inno01/assessments/Assess01/edit/2'], {});
@@ -133,7 +132,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
 
   it('should submit and call api with success', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', assessmentId: 'Assess01', stepId: 1 };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', assessmentId: 'Assess01', stepId: 2 };
     const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
     assessmentService.updateInnovationNeedsAssessment = () => of({ id: 'Assess01' });

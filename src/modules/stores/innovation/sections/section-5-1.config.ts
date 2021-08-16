@@ -85,7 +85,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
   (currentValues.subgroups || []).forEach((item, i) => {
     steps.push(
       new FormEngineModel({
-        label: `Thinking about the current care pathway in the UK ${item.name}, which option best describes your innovation?`,
+        label: `Thinking about the current care pathway in the UK for ${item.name}, which option best describes your innovation?`,
         parameters: [{ id: `subGroupName_${i}`, dataType: 'radio-group', validations: { isRequired: true }, items: carePathwayItems }]
       })
     );
