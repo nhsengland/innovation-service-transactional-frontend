@@ -22,6 +22,7 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
   ) {
 
     super();
+    this.setPageTitle('Your details');
 
     this.module = this.activatedRoute.snapshot.data.module;
 

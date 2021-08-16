@@ -70,12 +70,15 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
             // }
 
             if (this.isSummaryStep()) {
+              this.setPageTitle('Check your answers');
               this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);
               return;
             }
 
             this.wizard.gotoStep(Number(params.questionId));
             this.currentStep = this.wizard.currentStep();
+
+            this.setPageTitle(this.currentStep.label || '');
 
             if (this.currentStep.parameters[0].dataType === 'file-upload') {
               this.currentStep.parameters[0].fileUploadConfig = {

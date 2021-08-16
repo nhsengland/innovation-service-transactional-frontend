@@ -46,6 +46,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
   ) {
 
     super();
+    this.setPageTitle('Support status');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 

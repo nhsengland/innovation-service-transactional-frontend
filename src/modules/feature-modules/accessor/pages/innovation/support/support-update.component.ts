@@ -48,6 +48,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   ) {
 
     super();
+    this.setPageTitle('Update support status ');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.supportId = this.activatedRoute.snapshot.params.supportId;

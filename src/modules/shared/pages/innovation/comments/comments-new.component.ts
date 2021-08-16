@@ -24,6 +24,7 @@ export class PageInnovationCommentsNewComponent extends CoreComponent {
   ) {
 
     super();
+    this.setPageTitle('New comment');
 
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;

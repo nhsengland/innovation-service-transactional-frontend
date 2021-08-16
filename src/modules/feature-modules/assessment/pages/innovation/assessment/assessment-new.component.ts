@@ -30,6 +30,7 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
   ) {
 
     super();
+    this.setPageTitle('Starting needs assessment');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovationName = '';
