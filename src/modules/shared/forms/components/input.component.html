@@ -1,7 +1,12 @@
-<div class="nhsuk-form-group {{ divCssOverwrite }}" [ngClass]="{'nhsuk-form-group--error': hasError}">
-
-  <ng-container *ngIf="label">
-    <label class="nhsuk-heading-m nhsuk-u-margin-bottom-2" [for]="id">{{ label }}</label>
+<div class="nhsuk-form-group {{ divCssOverride }}" [ngClass]="{'nhsuk-form-group--error': hasError}">
+  
+  <ng-container *ngIf="label && pageUniqueField">
+    <h1 class="nhsuk-label-wrapper">
+      <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id"> {{ label }} </label>
+    </h1>
+  </ng-container>
+  <ng-container *ngIf="label && !pageUniqueField">
+    <label class="nhsuk-label" [for]="id"> {{ label }} </label>
   </ng-container>
 
   <ng-container *ngIf="description">

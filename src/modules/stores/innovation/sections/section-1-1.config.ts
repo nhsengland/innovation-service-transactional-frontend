@@ -43,47 +43,75 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.l1,
-        parameters: [{ id: 'description', dataType: 'textarea', label: 'Enter a description', validations: { isRequired: true } }]
+        parameters: [{ id: 'description', dataType: 'textarea', label: stepsLabels.l1, validations: { isRequired: true } }]
       }),
       new FormEngineModel({
-        label: stepsLabels.l2,
-        description: 'By this, we mean something that performs the same function that the final product or service would.',
-        parameters: [{ id: 'hasFinalProduct', dataType: 'radio-group', validations: { isRequired: true }, items: hasFinalProductItems }]
+        parameters: [{
+          id: 'hasFinalProduct',
+          dataType: 'radio-group',
+          label: stepsLabels.l2,
+          description: 'By this, we mean something that performs the same function that the final product or service would.',
+          validations: { isRequired: true }, items: hasFinalProductItems
+        }]
       }),
       new FormEngineModel({
-        label: stepsLabels.l3,
-        parameters: [{ id: 'categories', dataType: 'checkbox-array', validations: { isRequired: true }, items: categoriesItems }]
+        parameters: [{ id: 'categories', dataType: 'checkbox-array', label: stepsLabels.l3, validations: { isRequired: true }, items: categoriesItems }]
       }),
       new FormEngineModel({
-        label: stepsLabels.l4,
-        description: 'Your innovation may be a combination of various categories. Selecting the primary category will help us find the right people to support you.',
-        parameters: [{ id: 'mainCategory', dataType: 'radio-group', items: mainCategoryItems }]
+        parameters: [{
+          id: 'mainCategory',
+          dataType: 'radio-group',
+          label: stepsLabels.l4,
+          description: 'Your innovation may be a combination of various categories. Selecting the primary category will help us find the right people to support you.',
+          items: mainCategoryItems
+        }]
       }),
       new FormEngineModel({
-        label: stepsLabels.l5,
-        description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-        parameters: [{ id: 'areas', dataType: 'checkbox-array', items: areasItems }]
+        parameters: [{
+          id: 'areas',
+          dataType: 'checkbox-array',
+          label: stepsLabels.l5,
+          description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
+          items: areasItems
+        }]
       }),
       new FormEngineModel({
-        label: stepsLabels.l6,
-        description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-        parameters: [{ id: 'clinicalAreas', dataType: 'checkbox-array', items: clinicalAreasItems }]
+        parameters: [{
+          id: 'clinicalAreas',
+          dataType: 'checkbox-array',
+          label: stepsLabels.l6,
+          description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
+          items: clinicalAreasItems
+        }]
       }),
       new FormEngineModel({
-        label: stepsLabels.l7,
-        description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-        parameters: [{ id: 'careSettings', dataType: 'checkbox-array', items: careSettingsItems }]
+        parameters: [{
+          id: 'careSettings',
+          dataType: 'checkbox-array',
+          label: stepsLabels.l7,
+          description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
+          items: careSettingsItems
+        }]
       }),
       new FormEngineModel({
-        label: stepsLabels.l8,
-        description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-        parameters: [{ id: 'mainPurpose', dataType: 'radio-group', validations: { isRequired: true }, items: mainPurposeItems }]
+        parameters: [{
+          id: 'mainPurpose',
+          dataType: 'radio-group',
+          label: stepsLabels.l8,
+          description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
+          validations: { isRequired: true },
+          items: mainPurposeItems
+        }]
       }),
       new FormEngineModel({
-        label: stepsLabels.l9,
-        description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the innovation service.',
-        parameters: [{ id: 'supportTypes', dataType: 'checkbox-array', validations: { isRequired: [true, 'Choose at least one type of support'] }, items: supportTypesItems }]
+        parameters: [{
+          id: 'supportTypes',
+          dataType: 'checkbox-array',
+          label: stepsLabels.l9,
+          description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the innovation service.',
+          validations: { isRequired: [true, 'Choose at least one type of support'] },
+          items: supportTypesItems
+        }]
       })
     ],
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
@@ -107,9 +135,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
     },
     {
       label: stepsLabels.l3,
-      value: data.categories?.map(v =>
-        v === 'OTHER' ? data.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label
-      ).join('<br />'),
+      value: data.categories?.map(v => v === 'OTHER' ? data.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('<br />'),
       editStepNumber: 3
     },
     {

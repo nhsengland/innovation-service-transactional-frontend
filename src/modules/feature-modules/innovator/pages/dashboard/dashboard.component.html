@@ -3,7 +3,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <h1> Hello{{ user.displayName ? ', ' + user.displayName : '' }}! </h1>
+      <h1 class="nhsuk-u-margin-bottom-3"> Hello{{ user.displayName ? ', ' + user.displayName : '' }}! </h1>
 
       <theme-alert [type]="alert.type" [title]="alert.title" [message]="alert.message"></theme-alert>
 
@@ -20,7 +20,7 @@
         </li>
       </ul>
 
-      <ul class="nhsuk-u-padding-left-0">
+      <ul class="nhsuk-u-padding-left-0 nhsuk-u-margin-0">
         <li *ngFor="let item of user.innovations" class="d-flex nhsuk-u-padding-bottom-3">
           <a routerLink="/innovator/innovations/{{ item.id }}" class="nhsuk-u-font-size-32 nhsuk-u-font-weight-bold">
             {{ item.name }} <span class="nhsuk-u-visually-hidden"> Access {{ item.name }} innovation </span>

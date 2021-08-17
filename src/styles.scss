@@ -214,7 +214,6 @@ $service-manual-container-size: 1100px; // Container width variable.
   }
 }
 
-
 .nhsuk-checkboxes__input { // Undertermined checkboxes.
   + .undertermined-checkbox::after {
     height: unset !important;
@@ -223,6 +222,14 @@ $service-manual-container-size: 1100px; // Container width variable.
     width: 22px !important;
     transform: unset !important;
     opacity: 1 !important;
+  }
+}
+
+.nhsuk-checkboxes__conditional, .nhsuk-radios__conditional { // Conditional inputs labels smaller.
+  label.nhsuk-heading-m {
+    font-size: 1.1875rem;
+    font-weight: normal;
+    line-height: 1.47368;
   }
 }
 

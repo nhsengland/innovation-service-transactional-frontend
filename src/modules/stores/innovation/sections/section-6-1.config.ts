@@ -43,9 +43,14 @@ export const SECTION_6_1: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.l1,
-        description: 'By cost, we mean the cost to the NHS or any care organisation that would implement your innovation.',
-        parameters: [{ id: 'hasCostKnowledge', dataType: 'radio-group', validations: { isRequired: true }, items: hasCostKnowledgeItems }]
+        parameters: [{
+          id: 'hasCostKnowledge',
+          dataType: 'radio-group',
+          label: stepsLabels.l1,
+          description: 'By cost, we mean the cost to the NHS or any care organisation that would implement your innovation.',
+          validations: { isRequired: true },
+          items: hasCostKnowledgeItems
+        }]
       })
     ],
     runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
@@ -97,19 +102,31 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
     steps.push(
       new FormEngineModel({
-        label: stepsLabels.l2,
-        description: 'For example, this could be expressed as the annual cost to an organisation in relation to the number of patients or people who would benefit from it.',
-        parameters: [{ id: 'costDescription', dataType: 'textarea', validations: { isRequired: true } }]
+        parameters: [{
+          id: 'costDescription',
+          dataType: 'textarea',
+          label: stepsLabels.l2,
+          description: 'For example, this could be expressed as the annual cost to an organisation in relation to the number of patients or people who would benefit from it.',
+          validations: { isRequired: true }
+        }]
       }),
       new FormEngineModel({
-        label: stepsLabels.l3,
-        description: 'This question forms part of the data required for NICE guidance.',
-        parameters: [{ id: 'sellExpectations', dataType: 'textarea', validations: { isRequired: true } }]
+        parameters: [{
+          id: 'sellExpectations',
+          dataType: 'textarea',
+          label: stepsLabels.l3,
+          description: 'This question forms part of the data required for NICE guidance.',
+          validations: { isRequired: true }
+        }]
       }),
       new FormEngineModel({
-        label: stepsLabels.l4,
-        description: 'This question forms part of the data required for NICE guidance.',
-        parameters: [{ id: 'usageExpectations', dataType: 'textarea', validations: { isRequired: true } }]
+        parameters: [{
+          id: 'usageExpectations',
+          dataType: 'textarea',
+          label: stepsLabels.l4,
+          description: 'This question forms part of the data required for NICE guidance.',
+          validations: { isRequired: true }
+        }]
       })
     );
 
@@ -119,14 +136,23 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
       steps.push(
         new FormEngineModel({
-          label: `What's the cost of your innovation for ${item.name}?`,
-          description: 'For example, this could be expressed as the annual cost to an organisation in relation to the number of patients or people who would benefit from it.',
-          parameters: [{ id: `subGroupCostDescription_${i}`, dataType: 'textarea', validations: { isRequired: true } }]
+          parameters: [{
+            id: `subGroupCostDescription_${i}`,
+            dataType: 'textarea',
+            label: `What's the cost of your innovation for ${item.name}?`,
+            description: 'For example, this could be expressed as the annual cost to an organisation in relation to the number of patients or people who would benefit from it.',
+            validations: { isRequired: true }
+          }]
         }),
         new FormEngineModel({
-          label: `Roughly how many patients in ${item.name} would be eligible for your innovation?`,
-          description: 'This question forms part of the data required for NICE guidance.',
-          parameters: [{ id: `subGroupPatientsRange_${i}`, dataType: 'radio-group', validations: { isRequired: true }, items: patientRangeItems }]
+          parameters: [{
+            id: `subGroupPatientsRange_${i}`,
+            dataType: 'radio-group',
+            label: `Roughly how many patients in ${item.name} would be eligible for your innovation?`,
+            description: 'This question forms part of the data required for NICE guidance.',
+            validations: { isRequired: true },
+            items: patientRangeItems
+          }]
         })
       );
       currentValues[`subGroupCostDescription_${i}`] = item.costDescription;
@@ -139,14 +165,22 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
       } else {
         steps.push(
           new FormEngineModel({
-            label: `How many units of your innovation would you expect to sell per year in the UK for ${item.name}?`,
-            description: 'This question forms part of the data required for NICE guidance.',
-            parameters: [{ id: `subGroupSellExpectations_${i}`, dataType: 'textarea', validations: { isRequired: true } }]
+            parameters: [{
+              id: `subGroupSellExpectations_${i}`,
+              dataType: 'textarea',
+              label: `How many units of your innovation would you expect to sell per year in the UK for ${item.name}?`,
+              description: 'This question forms part of the data required for NICE guidance.',
+              validations: { isRequired: true }
+            }]
           }),
           new FormEngineModel({
-            label: `Approximately how long is each unit of your innovation intended to be in use for ${item.name}?`,
-            description: 'This question forms part of the data required for NICE guidance.',
-            parameters: [{ id: `subGroupUsageExpectations_${i}`, dataType: 'textarea', validations: { isRequired: true } }]
+            parameters: [{
+              id: `subGroupUsageExpectations_${i}`,
+              dataType: 'textarea',
+              label: `Approximately how long is each unit of your innovation intended to be in use for ${item.name}?`,
+              description: 'This question forms part of the data required for NICE guidance.',
+              validations: { isRequired: true }
+            }]
           })
         );
         currentValues[`subGroupSellExpectations_${i}`] = item.sellExpectations;

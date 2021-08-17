@@ -80,7 +80,7 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
               return;
             }
 
-            this.setPageTitle(this.wizard.currentStep().details?.title || '');
+            this.setPageTitle(this.wizard.currentStep().label || this.wizard.currentStep().parameters[0].label || '');
             this.wizard.gotoStep(Number(params.stepId));
 
           })
@@ -122,7 +122,7 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
       })
     ).subscribe(
       () => this.redirectTo(`innovator/dashboard`),
-      () => this.redirectTo(`innovator/first-time-signin/summary`)
+      () => this.redirectTo(`innovator/innovation-transfer-acceptance/summary`)
     );
 
   }

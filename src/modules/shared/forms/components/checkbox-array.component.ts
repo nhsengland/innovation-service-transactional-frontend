@@ -21,6 +21,7 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   @Input() label?: string;
   @Input() description?: string;
   @Input() items: FormEngineParameterModel['items'] = [];
+  @Input() pageUniqueField = true;
   @Output() customOnChangeFunc = new EventEmitter<{ checked: boolean, item: string }>();
 
   hasError = false;
@@ -54,12 +55,12 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
     this.isRunningOnBrowser = isPlatformBrowser(injector.get(PLATFORM_ID));
     this.isRunningOnServer = isPlatformServer(injector.get(PLATFORM_ID));
 
-    this.id = this.id || RandomGeneratorHelper.generateRandom();
-
   }
 
 
   ngOnInit(): void {
+
+    this.id = this.id || RandomGeneratorHelper.generateRandom();
 
     // This will filter any value not available on the items variable.
     const itemsValues = (this.items || []).map(item => item.value);

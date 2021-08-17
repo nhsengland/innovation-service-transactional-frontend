@@ -19,7 +19,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   accessorList: any[];
   selectedAccessors: any[];
   organisationUnit: string | undefined;
-  textAreaCssOverride: string;
 
   supportStatusObj = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   supportStatus = Object.entries(this.supportStatusObj).map(([key, item]) => ({
@@ -61,7 +60,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.currentStatus = { label: '', cssClass: '', description: '' };
     this.organisationUnit = this.stores.authentication.getUserInfo().organisations?.[0]?.organisationUnits?.[0]?.name;
-    this.textAreaCssOverride = 'nhsuk-u-padding-top-0';
+
   }
 
 

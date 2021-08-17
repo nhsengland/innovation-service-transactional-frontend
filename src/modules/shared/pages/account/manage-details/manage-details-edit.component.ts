@@ -66,7 +66,7 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
           return;
         }
 
-        this.setPageTitle(this.wizard.currentStep().label || '');
+        this.setPageTitle(this.wizard.currentStep().parameters[0].label || ''); // 1 question per page approach.
         this.wizard.gotoStep(Number(params.stepId));
 
       })

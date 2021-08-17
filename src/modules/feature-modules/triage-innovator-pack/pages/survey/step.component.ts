@@ -82,7 +82,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
             this.currentStep.data = TRIAGE_INNOVATOR_PACK_QUESTIONS[this.currentStep.number - 1];
             this.currentStep.data.defaultData = this.currentAnswers;
 
-            this.setPageTitle(this.currentStep.data.label || '');
+            this.setPageTitle(this.currentStep.data.parameters[0].label || ''); // Only 1 question per page.
 
             setTimeout(() => {
               document.getElementById('pageFirstFocus')?.focus();
@@ -254,7 +254,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
         }
 
         this.summaryList.items.push({
-          label: step.label || '',
+          label: step.parameters[0].label || '',
           value,
           url: `/triage-innovator-pack/survey/${stepIndex + 1}`,
           // queryParams: this.isRunningOnServer() ? this.encodeQueryParams({ a: 'next', f: this.currentAnswers }) : {},

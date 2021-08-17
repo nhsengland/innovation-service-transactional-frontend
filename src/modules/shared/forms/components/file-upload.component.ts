@@ -25,6 +25,9 @@ export class FormFileUploadComponent implements OnInit {
 
   @Input() id?: string;
   @Input() arrayName = '';
+  @Input() label?: string;
+  @Input() description?: string;
+  @Input() pageUniqueField = true;
 
   @Input() config?: {
     httpUploadUrl: string;
@@ -52,12 +55,16 @@ export class FormFileUploadComponent implements OnInit {
     private injector: Injector,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
-    private loggerService: LoggerService) {
-    this.id = this.id || RandomGeneratorHelper.generateRandom();
+    private loggerService: LoggerService
+  ) {
+
     this.dzConfig = { acceptedFiles: '*', multiple: false, maxFileSize: 1000000 };
+
   }
 
   ngOnInit(): void {
+
+    this.id = this.id || RandomGeneratorHelper.generateRandom();
 
     this.dzConfig = {
       acceptedFiles: (this.config?.acceptedFiles || [FileTypes.ALL]).map(ext => ext).join(','),
@@ -83,7 +90,7 @@ export class FormFileUploadComponent implements OnInit {
       take(1),
       map(response => ({ id: response.id, name: response.displayFileName, url: response.url })),
       catchError((error) => {
-        this.loggerService.trackTrace('upload error', Severity.ERROR, { error});
+        this.loggerService.trackTrace('upload error', Severity.ERROR, { error });
         return of({ id: '', name: '', url: '' });
       })
     );
@@ -100,7 +107,7 @@ export class FormFileUploadComponent implements OnInit {
           this.cdr.detectChanges();
         },
         error => {
-          this.loggerService.trackTrace('upload error', Severity.ERROR, { error});
+          this.loggerService.trackTrace('upload error', Severity.ERROR, { error });
         }
       );
     });

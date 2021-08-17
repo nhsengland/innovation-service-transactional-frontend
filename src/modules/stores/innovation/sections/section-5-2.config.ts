@@ -42,9 +42,14 @@ export const SECTION_5_2: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.l1,
-        description: 'Testing can mean involving patients, carers, clinicians or administrators in the design process.',
-        parameters: [{ id: 'hasTests', dataType: 'radio-group', validations: { isRequired: true }, items: hasTestsItems }]
+        parameters: [{
+          id: 'hasTests',
+          dataType: 'radio-group',
+          label: stepsLabels.l1,
+          description: 'Testing can mean involving patients, carers, clinicians or administrators in the design process.',
+          validations: { isRequired: true },
+          items: hasTestsItems
+        }]
       })
     ],
     runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
@@ -78,11 +83,11 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
   steps.push(
     new FormEngineModel({
-      label: stepsLabels.l2,
-      description: 'This can include any testing you\'ve done with people who would use your innovation, for example patients, nurses or administrative staff.',
       parameters: [{
         id: 'userTests',
         dataType: 'fields-group',
+        label: stepsLabels.l2,
+        description: 'This can include any testing you\'ve done with people who would use your innovation, for example patients, nurses or administrative staff.',
         // validations: { isRequired: true }
         fieldsGroupConfig: {
           fields: [
@@ -99,8 +104,12 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
   currentValues.userTests.forEach((item, i) => {
     steps.push(
       new FormEngineModel({
-        label: `Please describe the testing and feedback for ${item.kind}`,
-        parameters: [{ id: `userTestFeedback_${i}`, dataType: 'textarea', validations: { isRequired: true } }]
+        parameters: [{
+          id: `userTestFeedback_${i}`,
+          dataType: 'textarea',
+          label: `Please describe the testing and feedback for ${item.kind}`,
+          validations: { isRequired: true }
+        }]
       })
     );
     currentValues[`userTestFeedback_${i}`] = item.feedback;
@@ -108,9 +117,13 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
   steps.push(
     new FormEngineModel({
-      label: stepsLabels.l4,
-      description: 'The files must be CSV, XLSX, DOCX or PDF.',
-      parameters: [{ id: 'files', dataType: 'file-upload', validations: { isRequired: true } }]
+      parameters: [{
+        id: 'files',
+        dataType: 'file-upload',
+        label: stepsLabels.l4,
+        description: 'The files must be CSV, XLSX, DOCX or PDF.',
+        validations: { isRequired: true }
+      }]
     })
   );
 
@@ -178,7 +191,7 @@ function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
     allFiles.forEach((item, i) => {
       toReturn.push({
         label: `Attachment ${i + 1}`,
-        value: `<a href='${item.url}'> ${item.name} </a>` || 'Unknown',
+        value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
         editStepNumber: toReturn.length + 1
       });
     });

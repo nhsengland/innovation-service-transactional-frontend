@@ -19,13 +19,12 @@
       </p>
     </div>
 
-    <fieldset class="nhsuk-fieldset">
-      <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--s">Let the innovator know how you want to proceed</legend>
-      <theme-form-engine formId="sectionForm" [parameters]="formParameters" [values]="formAnswers"></theme-form-engine>
-      <button type="submit" form="sectionForm" class="nhsuk-button nhsuk-u-margin-top-5" (click)="onSubmit()">Start needs assessment and post comment</button>
-    </fieldset>
+    <theme-form-engine formId="sectionForm" [parameters]="formParameters" [values]="formAnswers"></theme-form-engine>
+    <button type="submit" form="sectionForm" class="nhsuk-button nhsuk-u-margin-top-5" (click)="onSubmit()">Start needs assessment and post comment</button>
 
-    <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-back-link__link nhsuk-u-margin-bottom-5"> Cancel </a>
+    <div class="nhsuk-u-padding-bottom-5">
+      <a routerLink="/assessment/innovations/{{ innovationId }}"> Cancel </a>
+    </div>
 
   </div>
 </div>

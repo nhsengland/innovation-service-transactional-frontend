@@ -2,48 +2,45 @@ import { FormEngineModel, FormEngineParameterModel } from '@shared-module/forms'
 
 export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
   new FormEngineModel({
-    label: 'Welcome to the NHS innovation service!',
-    description: 'What\'s your name?',
     parameters: [
       {
         id: 'innovatorName',
         dataType: 'text',
-        label: 'Full name',
+        label: 'Welcome to the NHS innovation service!',
+        description: 'What\'s your name?',
         validations: { isRequired: true }
       }
     ]
   }),
 
   new FormEngineModel({
-    label: 'What should we call your innovation?',
     parameters: [
       {
         id: 'innovationName',
         dataType: 'text',
-        label: 'Innovation name',
+        label: 'What should we call your innovation?',
         validations: { isRequired: true }
       }
     ]
   }),
 
   new FormEngineModel({
-    label: 'Please provide a short description of your innovation',
     parameters: [
       {
         id: 'innovationDescription',
         dataType: 'textarea',
-        label: 'Enter a description',
+        label: 'Please provide a short description of your innovation',
         validations: { isRequired: true }
       }
     ]
   }),
 
   new FormEngineModel({
-    label: 'Are you creating this innovation as part of a company or organisation?',
     parameters: [
       {
         id: 'isCompanyOrOrganisation',
         dataType: 'radio-group',
+        label: 'Are you creating this innovation as part of a company or organisation?',
         validations: { isRequired: true },
         items: [
           {
@@ -58,11 +55,11 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
   }),
 
   new FormEngineModel({
-    label: 'What\'s the size of your company or organisation?',
     parameters: [
       {
         id: 'organisationSize',
         dataType: 'radio-group',
+        label: 'What\'s the size of your company or organisation?',
         validations: { isRequired: [true, 'Organisation size is required'] },
         items: [
           { value: '1 to 5 employees', label: '1 to 5 employees' },
@@ -79,11 +76,11 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
   }),
 
   new FormEngineModel({
-    label: 'Where are you based?',
     parameters: [
       {
         id: 'location',
         dataType: 'radio-group',
+        label: 'Where are you based?',
         validations: { isRequired: true },
         items: [
           {
@@ -106,11 +103,11 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
   }),
 
   new FormEngineModel({
-    label: 'Finally, choose your data sharing preferences',
     parameters: [
       {
         id: 'organisationShares',
         dataType: 'checkbox-array',
+        label: 'Finally, choose your data sharing preferences',
         validations: { isRequired: true },
         items: []
       }

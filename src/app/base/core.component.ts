@@ -91,9 +91,9 @@ export class CoreComponent implements OnInit, OnDestroy {
   }
 
 
-  setPageTitle(s: string): void {
-    this.pageTitleHolder = s;
-    this.titleService.setTitle(`${this.translateService.instant(s)} | ${this.translateService.instant('app.title')}`);
+  setPageTitle(s: undefined | string): void {
+    this.pageTitleHolder = s || '';
+    this.titleService.setTitle(`${this.translateService.instant(s || '')} | ${this.translateService.instant('app.title')}`);
   }
 
 
