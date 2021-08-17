@@ -52,6 +52,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   ) {
 
     super();
+    this.setPageTitle('Innovation record');
 
     this.module = this.activatedRoute.snapshot.data.module;
     this.baseUrl = `/${this.module}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;

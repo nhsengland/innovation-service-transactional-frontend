@@ -35,6 +35,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
   ) {
 
     super();
+    this.setPageTitle('Comments');
 
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;

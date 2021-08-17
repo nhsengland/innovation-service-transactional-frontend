@@ -103,9 +103,12 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
 
           this.currentStep.data = this.stepsData[this.currentStep.number - 1];
           this.currentStep.data.defaultData = this.currentAnswers;
+
+          this.setPageTitle(this.currentStep.data.label || '');
         }
 
         if (this.isSummaryStep()) {
+          this.setPageTitle('First Time Signin failed');
           this.prepareSummaryData();
         }
 

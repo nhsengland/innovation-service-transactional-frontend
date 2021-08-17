@@ -3,20 +3,16 @@
 
     <h1 class="nhsuk-heading-l"> Innovations </h1>
 
-    <nav class="app-tabs" role="tablist" aria-label="Tabs">
-      <ol class="app-tabs__list">
+    <div class="app-tabs">
+      <ul class="app-tabs__list" role="tablist" aria-label="Tabs">
         <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
           <div class="side-menu-flex">
-            <div>
-              <a class="app-tabs__link" [routerLink]="item.link" [queryParams]="item.queryParams"> {{ item.title }} </a>
-            </div>
-            <div>
-              <notification-tag *ngIf="item.notifications && item.notifications > 0" [count]="item.notifications"></notification-tag>
-            </div>
+            <div><a class="app-tabs__link" [routerLink]="item.link" [queryParams]="item.queryParams"> {{ item.title }} </a></div>
+            <div><notification-tag *ngIf="item.notifications && item.notifications > 0" [count]="item.notifications"></notification-tag></div>
           </div>
         </li>
-      </ol>
-    </nav>
+      </ul>
+    </div>
 
     <p>{{ currentTab.description }}</p>
 
@@ -45,8 +41,8 @@
                 <div class="side-menu-flex">
                   <div>
                     <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }}</span>
-                    <a *ngIf="currentTab.status !== 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}"> {{ item.name }} </a>
-                    <a *ngIf="currentTab.status === 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}/assessments/{{item.assessment.id}}"> {{ item.name }} </a>
+                    <a *ngIf="currentTab.status !== 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation"> {{ item.name }} </a>
+                    <a *ngIf="currentTab.status === 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}/assessments/{{item.assessment.id}}" attr.aria-label="View {{ item.name }} innovation assessment details"> {{ item.name }} </a>
                   </div>
                   <div>
                     <ng-container *ngIf="item.notifications.isNew !== true">
@@ -57,7 +53,6 @@
                     </ng-container>
                   </div>
                 </div>
-
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('submittedAt')" class="nhsuk-table__cell d-flex align-items-center">
@@ -65,6 +60,7 @@
                 <span>{{ item.submittedAt | date: ('app.date_formats.long_date' | translate) }}</span>
                 <span *ngIf="item.isOverdue" class="dot-error nhsuk-u-margin-left-2"></span>
               </td>
+
               <td *ngIf="innovationsList.getColumnLabel('location')" class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('location') }}</span>
                 {{ item.countryName }} {{ item.postCode ? ', ' + item.postCode : ''}}
@@ -98,7 +94,6 @@
 
       </div>
     </div>
-
 
   </div>
 </section>

@@ -75,10 +75,12 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
             }
 
             if (this.isSummaryStep()) {
+              this.setPageTitle('Check your answers');
               this.summaryList = this.wizard.runSummaryParsing();
               return;
             }
 
+            this.setPageTitle(this.wizard.currentStep().details?.title || '');
             this.wizard.gotoStep(Number(params.stepId));
 
           })

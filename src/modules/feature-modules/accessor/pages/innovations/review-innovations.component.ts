@@ -49,6 +49,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   ) {
 
     super();
+    this.setPageTitle('Innovations');
 
     if (this.stores.authentication.isAccessorRole()) {
 
@@ -202,7 +203,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
           mainCategory: { label: 'Main category', orderable: true },
           countryName: { label: 'Location', orderable: true },
           engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
-        }).setOrderBy('submittedAt', 'desc');
+        }).setOrderBy('submittedAt', 'descending');
         break;
 
       case 'ENGAGING':
@@ -212,7 +213,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
           mainCategory: { label: 'Main category', orderable: true },
           accessors: { label: 'Accessor', orderable: false },
           engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
-        }).setOrderBy('updatedAt', 'desc');
+        }).setOrderBy('updatedAt', 'descending');
         break;
 
       case 'FURTHER_INFO_REQUIRED':
@@ -226,7 +227,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
           mainCategory: { label: 'Main category', orderable: true },
           countryName: { label: 'Location', orderable: true },
           engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
-        }).setOrderBy('updatedAt', 'desc');
+        }).setOrderBy('updatedAt', 'descending');
         break;
 
     }

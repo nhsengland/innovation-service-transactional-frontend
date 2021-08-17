@@ -25,6 +25,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
   ) {
 
     super();
+    this.setPageTitle('Actions');
 
     this.tabs = [
       {
@@ -50,7 +51,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
       },
       pageSize: 10000,
       orderBy: 'createdAt',
-      orderDir: 'desc'
+      orderDir: 'descending'
     });
 
   }

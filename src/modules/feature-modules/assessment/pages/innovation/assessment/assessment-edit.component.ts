@@ -52,6 +52,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   ) {
 
     super();
+    this.setPageTitle('Needs assessment');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovationName = '';

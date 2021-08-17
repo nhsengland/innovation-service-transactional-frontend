@@ -50,6 +50,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
   ) {
 
     super();
+    this.setPageTitle('Update action status');
 
     this.actionDisplayId = '';
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;

@@ -33,7 +33,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     private accessorService: AccessorService,
     private notificationService: NotificationService,
   ) {
+
     super();
+    this.setPageTitle('Overview');
+
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
   }

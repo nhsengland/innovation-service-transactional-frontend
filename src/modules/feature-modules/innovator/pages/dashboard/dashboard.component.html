@@ -1,9 +1,9 @@
 <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
-
-  <h1> Hello{{ user.displayName ? ', ' + user.displayName : '' }}! </h1>
-
+  
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
+
+      <h1> Hello{{ user.displayName ? ', ' + user.displayName : '' }}! </h1>
 
       <theme-alert [type]="alert.type" [title]="alert.title" [message]="alert.message"></theme-alert>
 
@@ -20,11 +20,6 @@
         </li>
       </ul>
 
-    </div>
-  </div>
-
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
       <ul class="nhsuk-u-padding-left-0">
         <li *ngFor="let item of user.innovations" class="d-flex nhsuk-u-padding-bottom-3">
           <a routerLink="/innovator/innovations/{{ item.id }}" class="nhsuk-u-font-size-32 nhsuk-u-font-weight-bold">

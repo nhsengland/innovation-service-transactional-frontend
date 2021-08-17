@@ -30,6 +30,7 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
   ) {
 
     super();
+    this.setPageTitle('Request new action');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 

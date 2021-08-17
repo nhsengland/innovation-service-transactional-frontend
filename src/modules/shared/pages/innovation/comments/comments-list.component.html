@@ -1,7 +1,7 @@
 <ng-container *ngIf="module === 'accessor'">
   <div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
     <div class="nhsuk-grid-column-two-thirds">
-      <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation.name }}</h1>
+      <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0"> {{ innovation.name }} </p>
     </div>
     <div *ngIf="innovation.assessment.id" class="nhsuk-grid-column-one-third text-align-right">
       <a routerLink="/{{ module }}/innovations/{{ innovationId }}/assessments/{{ innovation.assessment.id }}"> View needs assessment </a>
@@ -10,22 +10,19 @@
   <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-3" />
 </ng-container>
 
-<ng-container *ngIf="summaryAlert.type">
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
+
+    <ng-container *ngIf="summaryAlert.type">
       <div class="nhsuk-error-summary" [ngClass]="{'border-color-success': summaryAlert.type === 'success', 'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert"
         tabindex="-1">
         <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
         <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
       </div>
-    </div>
-  </div>
-</ng-container>
+    </ng-container>
 
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
-
-    <h1 class="nhsuk-heading-xl"> Comments </h1>
     <button class="nhsuk-button" routerLink="/{{ module }}/innovations/{{ innovationId }}/comments/new"> Add new comment </button>
 
     <div class="d-flex align-items-center justify-content-space-between nhsuk-u-margin-bottom-2">
@@ -36,14 +33,14 @@
           Newest first
         </a>
         <span *ngIf="currentCreatedOrder === 'desc'" class="nhsuk-body-s nhsuk-u-margin-bottom-0 right-border-separator nhsuk-u-padding-right-3">
-          <span class="nshuk-u-visually-hidden"> Comments are sorted by </span> Newest first
+          <span class="nhsuk-u-visually-hidden"> Comments are sorted by </span> Newest first
         </span>
         <a *ngIf="currentCreatedOrder === 'desc'" routerLink="/{{ module }}/innovations/{{ innovationId }}/comments" [queryParams]="{ createdOrder: 'asc' }"
           class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-padding-left-3" aria-label="Sort comments by oldest first">
           Oldest first
         </a>
         <span *ngIf="currentCreatedOrder === 'asc'" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-padding-left-3">
-          <span class="nshuk-u-visually-hidden"> Comments are sorted by </span> Oldest first
+          <span class="nhsuk-u-visually-hidden"> Comments are sorted by </span> Oldest first
         </span>
       </div>
     </div>

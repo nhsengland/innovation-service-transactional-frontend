@@ -32,6 +32,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
   ) {
 
     super();
+    this.setPageTitle('Action details');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.actionId = this.activatedRoute.snapshot.params.actionId;

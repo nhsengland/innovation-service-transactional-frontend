@@ -34,7 +34,9 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
     private organisationsService: OrganisationsService,
     private innovatorService: InnovatorService,
   ) {
+
     super();
+    this.setPageTitle('Change data sharing preferences');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.organisationsList =  [];
