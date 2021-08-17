@@ -21,13 +21,16 @@ type OutboundPayloadType = {
 export const ACCOUNT_DETAILS_ACCESSOR: WizardEngineModel = new WizardEngineModel({
   steps: [
     new FormEngineModel({
-      label: 'What\'s your name?',
-      parameters: [{ id: 'displayName', dataType: 'text', label: 'Full name', validations: { isRequired: true } }]
+      parameters: [{
+        id: 'displayName',
+        dataType: 'text',
+        label: 'What\'s your full name?',
+        validations: { isRequired: true }
+      }]
     }),
 
     // new FormEngineModel({
-    //   label: 'Phone number',
-    //   parameters: [{ id: 'mobilePhone', dataType: 'text' }]
+    //   parameters: [{ id: 'mobilePhone', dataType: 'text', label: 'Phone number' }]
     // }),
 
   ],

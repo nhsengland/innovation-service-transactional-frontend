@@ -17,14 +17,6 @@
 
       <div id="pageFirstFocus" class="nhsuk-hint nhsuk-u-margin-bottom-0" tabIndex="-1">Question {{ currentStep.number }} of {{ totalNumberOfSteps }}</div>
 
-      <fieldset class="nhsuk-fieldset">
-
-        <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
-          <h1 class="nhsuk-heading-l nhsuk-u-margin-0"> {{ currentStep.data.label }} </h1>
-        </legend>
-
-        <div *ngIf="currentStep.data.description" class="nhsuk-hint"> {{ currentStep.data.description }} </div>
-
         <ng-container *ngIf="currentStep.data.details">
           <details class="nhsuk-details">
             <summary class="nhsuk-details__summary">
@@ -37,8 +29,6 @@
         <theme-form-engine formId="SurveyForm" [parameters]="currentStep.data.parameters" [values]="currentStep.data.defaultData"></theme-form-engine>
 
         <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('next')" class="nhsuk-button" (click)="onSubmitStep('next')"> Continue </button>
-
-      </fieldset>
 
     </ng-container>
 

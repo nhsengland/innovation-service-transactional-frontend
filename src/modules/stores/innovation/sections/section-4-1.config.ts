@@ -46,9 +46,14 @@ export const SECTION_4_1: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.l1,
-        description: 'LINK_TO_ADVANCED_GUIDE_REGULATIONS_STANDARDS',
-        parameters: [{ id: 'hasRegulationKnowledge', dataType: 'radio-group', validations: { isRequired: true }, items: hasRegulationKnowledgeItems }]
+        parameters: [{
+          id: 'hasRegulationKnowledge',
+          dataType: 'radio-group',
+          label: stepsLabels.l1,
+          description: 'LINK_TO_ADVANCED_GUIDE_REGULATIONS_STANDARDS',
+          validations: { isRequired: true },
+          items: hasRegulationKnowledgeItems
+        }]
       })
     ],
     runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
@@ -84,8 +89,13 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
   steps.push(
     new FormEngineModel({
-      label: stepsLabels.l2,
-      parameters: [{ id: 'standardsType', dataType: 'checkbox-array', validations: { isRequired: true }, items: standardsTypeItems }]
+      parameters: [{
+        id: 'standardsType',
+        dataType: 'checkbox-array',
+        label: stepsLabels.l2,
+        validations: { isRequired: true },
+        items: standardsTypeItems
+      }]
     })
   );
 
@@ -96,8 +106,13 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
   (currentValues.standards || []).forEach((standard, i) => {
     steps.push(
       new FormEngineModel({
-        label: `Have you achieved certification for ${standard.type === 'OTHER' ? currentValues.otherRegulationDescription : standardsTypeItems.find(item => item.value === standard.type)?.label}`,
-        parameters: [{ id: `standardHasMet_${i}`, dataType: 'radio-group', validations: { isRequired: true }, items: standardsHasMetItems }]
+        parameters: [{
+          id: `standardHasMet_${i}`,
+          dataType: 'radio-group',
+          label: `Have you achieved certification for ${standard.type === 'OTHER' ? currentValues.otherRegulationDescription : standardsTypeItems.find(item => item.value === standard.type)?.label}`,
+          validations: { isRequired: true },
+          items: standardsHasMetItems
+        }]
       })
     );
     currentValues[`standardHasMet_${i}`] = standard.hasMet;
@@ -105,9 +120,13 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
   steps.push(
     new FormEngineModel({
-      label: stepsLabels.l_last,
-      description: 'The files must be CSV, XLSX, DOCX or PDF.',
-      parameters: [{ id: 'files', dataType: 'file-upload', validations: { isRequired: true } }],
+      parameters: [{
+        id: 'files',
+        dataType: 'file-upload',
+        label: stepsLabels.l_last,
+        description: 'The files must be CSV, XLSX, DOCX or PDF.',
+        validations: { isRequired: true }
+      }],
     })
   );
 
@@ -179,7 +198,7 @@ function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
     allFiles.forEach((item, i) => {
       toReturn.push({
         label: `Attachment ${i + 1}`,
-        value: `<a href='${item.url}'> ${item.name} </a>` || 'Unknown',
+        value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
         editStepNumber: toReturn.length + 1
       });
     });

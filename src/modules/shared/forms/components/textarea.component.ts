@@ -25,9 +25,13 @@ export class FormTextareaComponent extends ControlValueAccessorConnector impleme
   @Input() label?: string;
   @Input() description?: string;
   @Input() placeholder?: string;
+  @Input() pageUniqueField = true;
   @Input() cssOverride?: string;
+
   hasError = false;
   errorMessage = '';
+
+  divCssOverride = '';
 
   constructor(
     injector: Injector,
@@ -36,14 +40,18 @@ export class FormTextareaComponent extends ControlValueAccessorConnector impleme
 
     super(injector);
 
+  }
+
+  ngOnInit(): void {
+
     this.id = this.id || RandomGeneratorHelper.generateRandom();
     this.type = this.type || 'text';
     this.placeholder = this.placeholder || '';
-    this.cssOverride = this.cssOverride || 'nhsuk-u-padding-top-4';
+    // this.cssOverride = this.cssOverride || 'nhsuk-u-padding-top-4';
 
+
+    this.divCssOverride = this.cssOverride || ''; // nhsuk-u-padding-top-4
   }
-
-  ngOnInit(): void { }
 
   ngDoCheck(): void {
 

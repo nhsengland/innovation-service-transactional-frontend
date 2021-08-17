@@ -26,7 +26,8 @@
         </p>
         <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
-        <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Innovations list">
+        <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-margin-top-3">
+          <caption class="nhsuk-table__caption"> Innovations list </caption>
           <thead class="nhsuk-table__head">
             <tr class="">
               <th *ngFor="let item of innovationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">

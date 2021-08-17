@@ -36,7 +36,12 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
     this.innovationName = '';
 
     this.formParameters = [
-      new FormEngineParameterModel({ id: 'comment', dataType: 'textarea', label: 'Enter your comment', validations: { isRequired: true } })
+      new FormEngineParameterModel({
+        id: 'comment',
+        dataType: 'textarea',
+        label: 'Let the innovator know how you want to proceed',
+        validations: { isRequired: true }
+      })
     ];
     this.formAnswers = {};
 

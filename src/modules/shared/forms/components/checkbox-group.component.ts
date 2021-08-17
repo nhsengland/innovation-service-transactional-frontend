@@ -21,6 +21,7 @@ export class FormCheckboxGroupComponent implements OnInit, DoCheck {
   @Input() label?: string;
   @Input() description?: string;
   @Input() items: FormEngineParameterModel['items'] = [];
+  @Input() pageUniqueField = true;
 
   hasError = false;
   errorMessage = '';

@@ -38,9 +38,14 @@ export const SECTION_5_1: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.l1,
-        description: 'For example, your innovation could help reduce cost, benefit the public, improve the quality of healthcare or address a specific issue.',
-        parameters: [{ id: 'hasUKPathwayKnowledge', dataType: 'radio-group', validations: { isRequired: true }, items: hasUKPathwayKnowledgeItems }]
+        parameters: [{
+          id: 'hasUKPathwayKnowledge',
+          dataType: 'radio-group',
+          label: stepsLabels.l1,
+          description: 'For example, your innovation could help reduce cost, benefit the public, improve the quality of healthcare or address a specific issue.',
+          validations: { isRequired: true },
+          items: hasUKPathwayKnowledgeItems
+        }]
       })
     ],
     runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
@@ -73,20 +78,35 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
   steps.push(
     new FormEngineModel({
-      label: stepsLabels.l2,
-      parameters: [{ id: 'innovationPathwayKnowledge', dataType: 'radio-group', validations: { isRequired: true }, items: innovationPathwayKnowledgeItems }]
+      parameters: [{
+        id: 'innovationPathwayKnowledge',
+        dataType: 'radio-group',
+        label: stepsLabels.l2,
+        validations: { isRequired: true },
+        items: innovationPathwayKnowledgeItems
+      }]
     }),
     new FormEngineModel({
-      label: stepsLabels.l3,
-      parameters: [{ id: 'potentialPathway', dataType: 'textarea', validations: { isRequired: true }, items: innovationPathwayKnowledgeItems }]
+      parameters: [{
+        id: 'potentialPathway',
+        dataType: 'textarea',
+        label: stepsLabels.l3,
+        validations: { isRequired: true },
+        items: innovationPathwayKnowledgeItems
+      }]
     })
   );
 
   (currentValues.subgroups || []).forEach((item, i) => {
     steps.push(
       new FormEngineModel({
-        label: `Thinking about the current care pathway in the UK for ${item.name}, which option best describes your innovation?`,
-        parameters: [{ id: `subGroupName_${i}`, dataType: 'radio-group', validations: { isRequired: true }, items: carePathwayItems }]
+        parameters: [{
+          id: `subGroupName_${i}`,
+          dataType: 'radio-group',
+          label: `Thinking about the current care pathway in the UK for ${item.name}, which option best describes your innovation?`,
+          validations: { isRequired: true },
+          items: carePathwayItems
+        }]
       })
     );
     currentValues[`subGroupName_${i}`] = item.carePathway;

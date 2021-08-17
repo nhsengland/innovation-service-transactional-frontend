@@ -24,14 +24,15 @@ export class FormInputComponent extends ControlValueAccessorConnector implements
   @Input() label?: string;
   @Input() description?: string;
   @Input() placeholder?: string;
+  @Input() pageUniqueField = true;
   @Input() width?: 'one-third' | 'two-thirds' | 'three-quarters' | 'full';
-  @Input() cssOverwrite?: string;
+  @Input() cssOverride?: string;
 
   hasError = false;
   errorMessage = '';
 
   inputCssClass = '';
-  divCssOverwrite = '';
+  divCssOverride = '';
 
   constructor(
     injector: Injector,
@@ -49,7 +50,7 @@ export class FormInputComponent extends ControlValueAccessorConnector implements
     this.placeholder = this.placeholder || '';
 
     this.inputCssClass = this.width ? `nhsuk-u-width-${this.width}` : 'nhsuk-u-width-two-thirds';
-    this.divCssOverwrite = this.cssOverwrite || 'nhsuk-u-padding-top-4';
+    this.divCssOverride = this.cssOverride || ''; // nhsuk-u-padding-top-4
 
   }
 

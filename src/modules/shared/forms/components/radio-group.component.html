@@ -1,8 +1,13 @@
-<div class="nhsuk-form-group  {{ divCssOverwrite }" [ngClass]="{'nhsuk-form-group--error': hasError}">
+<div class="nhsuk-form-group {{ divCssOverride }" [ngClass]="{'nhsuk-form-group--error': hasError}">
 
-  <ng-container *ngIf="label">
-    <label class="nhsuk-heading-m nhsuk-u-margin-bottom-2" [for]="id">{{ label }}</label>
-  </ng-container>
+  <fieldset class="nhsuk-fieldset" attr.aria-describedby="{{ id }}-hint">
+
+  <legend  *ngIf="label" class="nhsuk-fieldset__legend" [ngClass]="{ 'nhsuk-fieldset__legend--l': pageUniqueField }">
+    <ng-container *ngIf="pageUniqueField">
+      <h1 class="nhsuk-fieldset__heading"> {{ label }} </h1>
+    </ng-container>
+    <ng-container *ngIf="!pageUniqueField"> {{ label }} </ng-container>
+  </legend>
 
   <ng-container *ngIf="description">
     <div class="nhsuk-hint" id="{{ id }}-hint" [innerHTML]="description"></div>
@@ -47,7 +52,7 @@
 
           <ng-container *ngIf="item.conditional">
             <div class="nhsuk-radios__conditional" [ngClass]="{'nhsuk-radios__conditional--hidden': !isConditionalFieldVisible(item.conditional.id), 'error': isConditionalFieldError(item.conditional.id)}">
-              <theme-form-input [formControl]="conditionalFormControl(item.conditional.id)" [label]="item.conditional.label" [description]="item.conditional.description"></theme-form-input>
+              <theme-form-input [formControl]="conditionalFormControl(item.conditional.id)" [label]="item.conditional.label" [description]="item.conditional.description" [pageUniqueField]="false"></theme-form-input>
             </div>
           </ng-container>
 
@@ -59,10 +64,12 @@
 
     <ng-container *ngIf="additional">
       <ng-container *ngFor="let addi of additional; let i = index">
-        <theme-form-input [formControl]="conditionalFormControl(addi.id)" [label]="addi.label" [description]="addi.description"></theme-form-input>
+        <theme-form-input [formControl]="conditionalFormControl(addi.id)" [label]="addi.label" [description]="addi.description" [pageUniqueField]="false"></theme-form-input>
       </ng-container>
     </ng-container>
 
   </div>
+
+  </fieldset>
 
 </div>

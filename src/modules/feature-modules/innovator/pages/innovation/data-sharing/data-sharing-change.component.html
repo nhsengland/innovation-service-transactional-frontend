@@ -7,10 +7,11 @@
 
       <form [formGroup]="form">
 
-        <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Innovations list">
+        <table class="nhsuk-table-responsive app-sortable-table">
+          <caption class="nhsuk-table__caption"> Organisations list </caption>
 
           <thead class="nhsuk-table__head">
-            <tr class="">
+            <tr>
               <th scope="col">
                 <div>Organisation</div>
                 <div>
@@ -51,7 +52,7 @@
 
       <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Save changes</button>
 
-      <div class="nhsuk-cancel-wrapper">
+      <div>
         <a routerLink="/innovator/innovations/{{ innovationId }}/data-sharing"> Cancel </a>
       </div>
 

@@ -31,9 +31,11 @@ export class FormEngineComponent implements OnInit, OnChanges {
 
   private loggerContext = 'Catalog::FormsModule::EngineComponent::';
 
-  public form: FormGroup = new FormGroup({});
+  form: FormGroup = new FormGroup({});
 
-  public contentReady = false;
+  contentReady = false;
+
+  onlyOneField = true;
 
   constructor(
     private readonly logger: NGXLogger,
@@ -69,6 +71,8 @@ export class FormEngineComponent implements OnInit, OnChanges {
     this.form = new FormGroup({}); // This will ensure that previous information is cleared!
 
     this.form = FormEngineHelper.buildForm(this.parameters, this.values);
+
+    this.onlyOneField = this.parameters.length === 1;
 
     this.cdr.detectChanges();
 

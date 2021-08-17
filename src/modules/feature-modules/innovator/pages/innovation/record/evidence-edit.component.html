@@ -13,32 +13,9 @@
     <div class="nhsuk-grid-column-two-thirds">
 
       <ng-container *ngIf="isQuestionStep()">
-
-        <fieldset class="nhsuk-fieldset">
-
-          <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
-            <h1 class="nhsuk-heading-l nhsuk-u-margin-0"> {{ currentStep.label }} </h1>
-          </legend>
-
-          <div *ngIf="currentStep.description" class="nhsuk-hint nhsuk-u-margin-bottom-0" [innerHTML]="currentStep.description"></div>
-
-          <ng-container *ngIf="currentStep.details">
-            <details class="nhsuk-details">
-              <summary class="nhsuk-details__summary">
-                <span class="nhsuk-details__summary-text">{{ currentStep.details?.title }}</span>
-              </summary>
-              <div class="nhsuk-details__text" [innerHTML]="currentStep.details?.content"></div>
-            </details>
-          </ng-container>
-
-          <theme-form-engine formId="sectionForm" [parameters]="currentStep.parameters" [values]="currentAnswers"></theme-form-engine>
-
-          <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
-
-        </fieldset>
-
+        <theme-form-engine formId="sectionForm" [parameters]="currentStep.parameters" [values]="currentAnswers"></theme-form-engine>
+        <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
       </ng-container>
-
 
       <ng-container *ngIf="isSummaryStep()">
 

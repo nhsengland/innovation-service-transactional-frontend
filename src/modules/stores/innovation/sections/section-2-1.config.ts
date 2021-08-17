@@ -35,9 +35,14 @@ export const SECTION_2_1: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.l1,
-        description: 'We\'re asking this to understand if we should ask you specific questions about patients and/or healthcare professionals. Your answer will impact which questions we ask in other sections.',
-        parameters: [{ id: 'impacts', dataType: 'checkbox-array', validations: { isRequired: true }, items: innovationImpactItems }]
+        parameters: [{
+          id: 'impacts',
+          dataType: 'checkbox-array',
+          label: stepsLabels.l1,
+          description: 'We\'re asking this to understand if we should ask you specific questions about patients and/or healthcare professionals. Your answer will impact which questions we ask in other sections.',
+          validations: { isRequired: true },
+          items: innovationImpactItems
+        }]
       })
     ],
     runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
@@ -71,11 +76,11 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
     steps.push(
       new FormEngineModel({
-        label: stepsLabels.l2,
-        description: 'We\'ll ask you further questions about each answer you provide here. If there are key distinctions between how your innovation affects different populations, be as specific as possible. If not, consider providing as few answers as possible.',
         parameters: [{
           id: 'subgroups',
           dataType: 'fields-group',
+          label: stepsLabels.l2,
+          description: 'We\'ll ask you further questions about each answer you provide here. If there are key distinctions between how your innovation affects different populations, be as specific as possible. If not, consider providing as few answers as possible.',
           // validations: { isRequired: true }
           fieldsGroupConfig: {
             fields: [
@@ -92,8 +97,12 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
     currentValues.subgroups.forEach((item, i) => {
       steps.push(
         new FormEngineModel({
-          label: `What condition best categorises ${item.name}?`,
-          parameters: [{ id: `subGroupName_${i}`, dataType: 'text', validations: { isRequired: true } }]
+          parameters: [{
+            id: `subGroupName_${i}`,
+            dataType: 'text',
+            label: `What condition best categorises ${item.name}?`,
+            validations: { isRequired: true }
+          }]
         })
       );
       currentValues[`subGroupName_${i}`] = item.conditions;
@@ -105,8 +114,12 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
   if (currentValues.impacts?.includes('CLINICIANS')) {
     steps.push(
       new FormEngineModel({
-        label: stepsLabels.l3,
-        parameters: [{ id: 'cliniciansImpactDetails', dataType: 'textarea', validations: { isRequired: true } }]
+        parameters: [{
+          id: 'cliniciansImpactDetails',
+          dataType: 'textarea',
+          label: stepsLabels.l3,
+          validations: { isRequired: true }
+        }]
       })
     );
   }

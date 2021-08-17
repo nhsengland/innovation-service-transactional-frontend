@@ -12,8 +12,9 @@
 
 <a *ngIf="innovation.support.status === 'ENGAGING'" routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" class="nhsuk-button nhsuk-u-margin-bottom-7"> Create new action </a>
 
-<h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">Open actions</h2>
-<table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Open actions list">
+
+<table class="nhsuk-table-responsive app-sortable-table">
+  <caption class="nhsuk-table__caption"> Open actions list </caption>
   <thead class="nhsuk-table__head">
     <tr class="">
       <th *ngFor="let item of openedActionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
@@ -56,16 +57,15 @@
 </table>
 
 
-<h2 class="nhsuk-heading-l nhsuk-u-padding-top-5 nhsuk-u-margin-bottom-3">Closed actions</h2>
-<details class="nhsuk-details">
+<details class="nhsuk-details nhsuk-u-padding-top-5">
   <summary class="nhsuk-details__summary">
     <span class="nhsuk-details__summary-text">
       All closed actions
     </span>
   </summary>
   <div class="nhsuk-details__text">
-
-    <table class="nhsuk-table-responsive app-sortable-table" aria-describedby="Open actions list">
+    <table class="nhsuk-table-responsive app-sortable-table">
+      <caption class="nhsuk-table__caption"> Closed actions list </caption>
       <thead class="nhsuk-table__head">
         <tr class="">
           <th *ngFor="let item of closedActionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">

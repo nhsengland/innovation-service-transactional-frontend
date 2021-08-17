@@ -13,7 +13,7 @@ const stepsLabels = {
 
 // Types.
 type InboundPayloadType = {
-  hasPatents: null | 'HAS_AT_LEAST_ONE' |   'APPLIED_AT_LEAST_ONE' |   'HAS_NONE';
+  hasPatents: null | 'HAS_AT_LEAST_ONE' | 'APPLIED_AT_LEAST_ONE' | 'HAS_NONE';
   hasOtherIntellectual: null | 'YES' | 'NO';
   otherIntellectual: null | string;
 };
@@ -28,14 +28,24 @@ export const SECTION_3_2: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.l1,
-        description: 'LINK_TO_ADVANCED_GUIDE_INTELLECTUAL_PROPERTY',
-        parameters: [{ id: 'hasPatents', dataType: 'radio-group', validations: { isRequired: true }, items: hasPatentsItems }]
+        parameters: [{
+          id: 'hasPatents',
+          dataType: 'radio-group',
+          label: stepsLabels.l1,
+          description: 'LINK_TO_ADVANCED_GUIDE_INTELLECTUAL_PROPERTY',
+          validations: { isRequired: true },
+          items: hasPatentsItems
+        }]
       }),
       new FormEngineModel({
-        label: stepsLabels.l2,
-        description: 'LINK_TO_ADVANCED_GUIDE_INTELLECTUAL_PROPERTY',
-        parameters: [{ id: 'hasOtherIntellectual', dataType: 'radio-group', validations: { isRequired: true }, items: hasOtherIntellectualItems }]
+        parameters: [{
+          id: 'hasOtherIntellectual',
+          dataType: 'radio-group',
+          label: stepsLabels.l2,
+          description: 'LINK_TO_ADVANCED_GUIDE_INTELLECTUAL_PROPERTY',
+          validations: { isRequired: true },
+          items: hasOtherIntellectualItems
+        }]
       })
     ],
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)

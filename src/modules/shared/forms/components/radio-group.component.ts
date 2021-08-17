@@ -28,13 +28,14 @@ export class FormRadioGroupComponent extends ControlValueAccessorConnector imple
   @Input() label?: string;
   @Input() description?: string;
   @Input() items?: FormEngineParameterModel['items'] = [];
-  @Input() cssOverwrite?: string;
+  @Input() pageUniqueField = true;
+  @Input() cssOverride?: string;
   @Input() additional?: FormEngineParameterModel[] = [];
 
   hasError = false;
   errorMessage = '';
 
-  divCssOverwrite = '';
+  divCssOverride = '';
 
   isRunningOnBrowser: boolean;
   isRunningOnServer: boolean;
@@ -71,7 +72,7 @@ export class FormRadioGroupComponent extends ControlValueAccessorConnector imple
   ngOnInit(): void {
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
-    this.divCssOverwrite = this.cssOverwrite || 'nhsuk-u-padding-top-4';
+    this.divCssOverride = this.cssOverride || 'nhsuk-u-padding-top-4';
 
    }
 
