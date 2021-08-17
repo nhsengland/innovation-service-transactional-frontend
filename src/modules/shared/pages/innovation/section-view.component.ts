@@ -47,7 +47,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
         this.summaryAlert = {
           type: 'warning',
           title: 'Your section has been saved',
-          message: 'You need to submit this section for review to notify your supporting accessor(s)'
+          message: 'You need to submit this section before you can submit your Innovation Record for needs assessment.'
         };
         break;
 

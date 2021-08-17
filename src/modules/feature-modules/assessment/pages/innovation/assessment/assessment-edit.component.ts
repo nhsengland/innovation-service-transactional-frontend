@@ -123,7 +123,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   }
 
 
-  onSubmit(action: 'continue' | 'update' | 'saveAsDraft' | 'submit'): void {
+  onSubmit(action: 'update' | 'saveAsDraft' | 'submit'): void {
 
     this.summaryAlert = { type: '', title: '', message: '' };
 
@@ -151,15 +151,19 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       return;
     }
 
-    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (action === 'submit'), this.currentAnswers).subscribe(
+    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit'), this.currentAnswers).subscribe(
       () => {
         switch (action) {
-          case 'continue':
-            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
-            break;
           case 'update':
           case 'submit':
-            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`, { alert: 'needsAssessmentSubmited' });
+            switch (this.stepId) {
+              case 1:
+                this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
+                break;
+              case 2:
+                this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`, { alert: 'needsAssessmentSubmited' });
+                break;
+            }
             break;
           default:
             break;
