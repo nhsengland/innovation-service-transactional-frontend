@@ -27,7 +27,7 @@
 
             <tr class="nhsuk-table__row">
               <td class="nhsuk-table__cell app-table-cell_padding-bottom-10">
-                <theme-form-checkbox-array [arrayName]="organisationShareArrayName" [items]="organisationsList" (customOnChangeFunc)="dataSharingValidation($event)"></theme-form-checkbox-array>
+                <theme-form-checkbox-array [arrayName]="organisationShareArrayName" [items]="organisationsList" [pageUniqueField]="false" (customOnChangeFunc)="dataSharingValidation($event)"></theme-form-checkbox-array>
               </td>
             </tr>
 
