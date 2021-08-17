@@ -50,7 +50,7 @@ export const SECTION_2_2: InnovationSectionConfigType['sections'][0] = {
           dataType: 'radio-group',
           label: stepsLabels.l1,
           description: 'For example, your innovation could help reduce cost, benefit the public, improve the quality of healthcare or address a specific issue.',
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: hasBenefitsItems
         }]
       })
@@ -98,8 +98,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           id: `subgroupBenefits_${i}`,
           dataType: 'checkbox-array',
           label: `What benefits does your innovation create for patients or citizens of ${item.name}?`,
-          validations: { isRequired: true },
-          items: [...subgroupBenefitItems, ...[{ value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: `subgroupOtherBenefit_${i}`, dataType: 'text', label: 'Other benefits for patients or citizens', validations: { isRequired: true } }) }]]
+          validations: { isRequired: [true, 'Choose at least one benefit'] },
+          items: [...subgroupBenefitItems, ...[{ value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: `subgroupOtherBenefit_${i}`, dataType: 'text', label: 'Other benefits for patients or citizens', validations: { isRequired: [true, 'Other description is required'] } }) }]]
         }]
       })
     );
@@ -113,7 +113,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'generalBenefits',
         dataType: 'checkbox-array',
         label: stepsLabels.l3,
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose at least one benefit'] },
         items: generalBenefitItems
       }]
     }),
@@ -123,7 +123,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'environmentalBenefits',
         dataType: 'checkbox-array',
         label: stepsLabels.l4,
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose at least one environmental benefit'] },
         items: environmentalBenefitItems
       }]
     }),
@@ -132,7 +132,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'accessibilityImpactDetails',
         dataType: 'textarea',
         label: stepsLabels.l5,
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Accessibility impact details are required'] }
       }]
     }),
     new FormEngineModel({
@@ -140,7 +140,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'accessibilityStepsDetails',
         dataType: 'textarea',
         label: stepsLabels.l6,
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Accessibility steps details are required'] }
       }]
     })
   );

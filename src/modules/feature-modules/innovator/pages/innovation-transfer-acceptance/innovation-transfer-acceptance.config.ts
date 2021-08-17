@@ -29,7 +29,7 @@ export const INNOVATION_TRANSFER: WizardEngineModel = new WizardEngineModel({
         id: 'innovatorName',
         dataType: 'text',
         label: 'What\'s your full name',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Name is required'] }
       }]
     }),
 
@@ -42,12 +42,12 @@ export const INNOVATION_TRANSFER: WizardEngineModel = new WizardEngineModel({
         id: 'isCompanyOrOrganisation',
         dataType: 'radio-group',
         label: 'Are you creating this innovation as part of a company or organisation?',
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose one option'] },
         items: [
           {
             value: 'YES',
             label: 'Yes',
-            conditional: new FormEngineParameterModel({ id: 'organisationName', dataType: 'text', label: 'Company or organisation name', validations: { isRequired: true } })
+            conditional: new FormEngineParameterModel({ id: 'organisationName', dataType: 'text', label: 'Company or organisation name', validations: { isRequired: [true, 'Company or organisation name is required'] } })
           },
           { value: 'NO', label: 'No' }
         ]

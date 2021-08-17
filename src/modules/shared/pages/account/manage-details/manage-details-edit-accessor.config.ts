@@ -25,7 +25,7 @@ export const ACCOUNT_DETAILS_ACCESSOR: WizardEngineModel = new WizardEngineModel
         id: 'displayName',
         dataType: 'text',
         label: 'What\'s your full name?',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Name is required'] }
       }]
     }),
 

@@ -39,7 +39,7 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
         id: 'displayName',
         dataType: 'text',
         label: 'What\'s your full name?',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Name is required'] }
       }]
     }),
 
@@ -53,7 +53,7 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
         id: 'isCompanyOrOrganisation',
         dataType: 'radio-group',
         label: 'Are you creating this innovation as part of a company or organisation?',
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose one option'] },
         items: [
           {
             value: 'YES',

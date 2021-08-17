@@ -41,7 +41,7 @@ export const SECTION_7_1: InnovationSectionConfigType['sections'][0] = {
           dataType: 'radio-group',
           label: stepsLabels.l1,
           description: 'LINK_TO_ADVANCED_GUIDE_CREATING_REVENUE_MODEL',
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: hasRevenueModelItems
         }]
       })
@@ -73,7 +73,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: InboundPayloadTyp
         id: 'revenues',
         dataType: 'checkbox-array',
         label: stepsLabels.l2,
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose at least one revenue model'] },
         items: revenuesItems
       }]
     }),
@@ -83,7 +83,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: InboundPayloadTyp
         dataType: 'textarea',
         label: stepsLabels.l3,
         description: 'The more specific you can be with your answer, the better.',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Description is required'] }
       }]
     }),
     new FormEngineModel({
@@ -92,7 +92,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: InboundPayloadTyp
         dataType: 'textarea',
         label: stepsLabels.l4,
         description: 'The more specific you can be with your answer, the better.',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Description is required'] }
       }]
     }),
     new FormEngineModel({
@@ -100,7 +100,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: InboundPayloadTyp
         id: 'hasFunding',
         dataType: 'radio-group',
         label: stepsLabels.l5,
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose one option'] },
         items: hasFundindItems
       }]
     })
@@ -115,7 +115,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: InboundPayloadTyp
           id: 'fundingDescription',
           dataType: 'textarea',
           label: stepsLabels.l6,
-          validations: { isRequired: true }
+          validations: { isRequired: [true, 'Description is required'] }
         }]
       })
     );

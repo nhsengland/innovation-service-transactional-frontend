@@ -43,7 +43,7 @@ export const SECTION_5_1: InnovationSectionConfigType['sections'][0] = {
           dataType: 'radio-group',
           label: stepsLabels.l1,
           description: 'For example, your innovation could help reduce cost, benefit the public, improve the quality of healthcare or address a specific issue.',
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: hasUKPathwayKnowledgeItems
         }]
       })
@@ -82,7 +82,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'innovationPathwayKnowledge',
         dataType: 'radio-group',
         label: stepsLabels.l2,
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose one option'] },
         items: innovationPathwayKnowledgeItems
       }]
     }),
@@ -91,7 +91,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'potentialPathway',
         dataType: 'textarea',
         label: stepsLabels.l3,
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Description is required'] },
         items: innovationPathwayKnowledgeItems
       }]
     })
@@ -104,7 +104,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           id: `subGroupName_${i}`,
           dataType: 'radio-group',
           label: `Thinking about the current care pathway in the UK for ${item.name}, which option best describes your innovation?`,
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: carePathwayItems
         }]
       })

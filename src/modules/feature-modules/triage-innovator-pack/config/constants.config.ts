@@ -22,7 +22,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
           {
             value: 'OTHER',
             label: 'Other',
-            conditional: new FormEngineParameterModel({ id: 'otherCategoryDescription', dataType: 'text', label: 'Other category', validations: { isRequired: true } })
+            conditional: new FormEngineParameterModel({ id: 'otherCategoryDescription', dataType: 'text', label: 'Other category', validations: { isRequired: [true, 'Other description is required'] } })
           }
         ]
       }
@@ -48,7 +48,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
           {
             value: 'OTHER',
             label: 'Other',
-            conditional: new FormEngineParameterModel({ id: 'otherMainCategoryDescription', dataType: 'text', label: 'Other main category', validations: { isRequired: true } })
+            conditional: new FormEngineParameterModel({ id: 'otherMainCategoryDescription', dataType: 'text', label: 'Other main category', validations: { isRequired: [true, 'Other description is required'] } })
           }
         ]
       }
@@ -81,7 +81,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
         dataType: 'radio-group',
         label: 'Have you done market research so that you understand the need for your innovation in the UK?',
         description: 'For example, information and insight on your customers and competitors gathered from interviews, focus groups, pricing research or competitive analysis.',
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose one option'] },
         items: [
           { value: 'YES', label: 'Yes' },
           { value: 'IN_PROGRESS', label: 'I\'m currently doing market research' },
@@ -99,7 +99,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
         dataType: 'radio-group',
         label: 'Have you identified who would benefit from your innovation?',
         description: 'This can include specific patient groups, clinicians, nurses, administrative staff and wider organisations.',
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose one option'] },
         items: [
           { value: 'YES', label: 'Yes' },
           { value: 'NOT_YET', label: 'Not yet' },
@@ -117,7 +117,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
         dataType: 'radio-group',
         label: 'Have you identified the specific benefits that your innovation would bring?',
         description: 'For example, your innovation could help reduce cost, benefit the public, improve the quality of healthcare or address a specific issue.',
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose one option'] },
         items: [
           { value: 'YES', label: 'Yes' },
           { value: 'NOT_YET', label: 'Not yet' },
@@ -135,7 +135,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
         dataType: 'radio-group',
         label: 'Have you tested the innovation with users?',
         description: 'Depending on the context of your innovation, this can include device prototyping and testing, laboratory studies, clinical trials, amongst others.',
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose one option'] },
         items: [
           { value: 'YES', label: 'Yes' },
           { value: 'IN_PROCESS', label: 'I\'m in the process of testing with users' },
@@ -153,7 +153,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
         dataType: 'radio-group',
         label: 'Have you achieved all relevant certifications?',
         description: 'There are different certifications for different types of innovations. For example, different types of medical devices need different levels of CE and/or UKCA certification.',
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose one option'] },
         items: [
           { value: 'YES', label: 'Yes' },
           { value: 'NOT_YET', label: 'Not yet' },
@@ -172,7 +172,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
         dataType: 'radio-group',
         label: 'Do you have evidence to show that your innovation is safe to use and effective?',
         description: 'For example, data from clinical trials published in a peer reviewed journal.',
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose one option'] },
         items: [
           { value: 'YES', label: 'Yes' },
           { value: 'IN_PROGRESS', label: 'I\'m in the process of gathering this evidence' },
@@ -190,7 +190,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
         dataType: 'radio-group',
         label: 'Do you have evidence on the costs and benefits of your innovation when used in practice?',
         description: 'For example, an Economic Value Analysis by an external health economics consultant?',
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose one option'] },
         items: [
           { value: 'YES', label: 'Yes' },
           { value: 'IN_PROGRESS', label: 'I\'m in the process of gathering this evidence' },

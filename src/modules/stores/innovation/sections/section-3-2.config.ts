@@ -33,7 +33,7 @@ export const SECTION_3_2: InnovationSectionConfigType['sections'][0] = {
           dataType: 'radio-group',
           label: stepsLabels.l1,
           description: 'LINK_TO_ADVANCED_GUIDE_INTELLECTUAL_PROPERTY',
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: hasPatentsItems
         }]
       }),
@@ -43,7 +43,7 @@ export const SECTION_3_2: InnovationSectionConfigType['sections'][0] = {
           dataType: 'radio-group',
           label: stepsLabels.l2,
           description: 'LINK_TO_ADVANCED_GUIDE_INTELLECTUAL_PROPERTY',
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: hasOtherIntellectualItems
         }]
       })

@@ -49,7 +49,7 @@ export const SECTION_8_1: InnovationSectionConfigType['sections'][0] = {
           dataType: 'radio-group',
           label: stepsLabels.l1,
           description: 'LINK_TO_ADVANCED_GUIDE_IMPLEMENTATION_PLANS',
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: hasDeployPlanItems
         }]
       }),
@@ -58,7 +58,7 @@ export const SECTION_8_1: InnovationSectionConfigType['sections'][0] = {
           id: 'isDeployed',
           dataType: 'radio-group',
           label: stepsLabels.l2,
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: hasDeployPlanItems
         }]
       })
@@ -105,7 +105,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           fieldsGroupConfig: {
             fields: [
               { id: 'id', dataType: 'text', isVisible: false },
-              { id: 'name', dataType: 'text', label: 'Organisation and department', validations: { isRequired: true } },
+              { id: 'name', dataType: 'text', label: 'Organisation and department', validations: { isRequired: [true, 'Organisation and department are required'] } },
               { id: 'commercialBasis', dataType: 'text', isVisible: false },
               { id: 'orgDeploymentAffect', dataType: 'text', isVisible: false }
             ],
@@ -123,7 +123,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
             dataType: 'textarea',
             label: `What was the commercial basis for deployment in ${item.name}`,
             description: 'For example, did you provide your innovation for free or was it purchased?',
-            validations: { isRequired: true }
+            validations: { isRequired: [true, 'A description of what was the commercial basis for deployment is required'] }
           }]
         }),
         new FormEngineModel({
@@ -131,7 +131,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
             id: `deploymentPlansOrgDeploymentAffect_${i}`,
             dataType: 'textarea',
             label: `How did the deployment of your innovation in ${item.name} affect the organisation?`,
-            validations: { isRequired: true }
+            validations: { isRequired: [true, 'A description of how affect the organisation is required'] }
           }]
         })
       );
@@ -147,7 +147,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'hasResourcesToScale',
         dataType: 'radio-group',
         label: stepsLabels.l6,
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose one option'] },
         items: hasResourcesToScaleItems
       }]
     }),
@@ -157,7 +157,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         dataType: 'file-upload',
         label: stepsLabels.l7,
         description: 'The files must be CSV, XLSX, DOCX or PDF.',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Upload at least one file'] }
       }]
     })
   );

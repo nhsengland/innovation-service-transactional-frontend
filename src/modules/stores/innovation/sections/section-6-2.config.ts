@@ -42,7 +42,7 @@ export const SECTION_6_2: InnovationSectionConfigType['sections'][0] = {
           dataType: 'radio-group',
           label: stepsLabels.l1,
           description: 'LINK_TO_ADVANCED_GUIDE_COMPARATIVE_COST_BENEFIT',
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: hasCostKnowledgeItems
         }]
       }),
@@ -52,7 +52,7 @@ export const SECTION_6_2: InnovationSectionConfigType['sections'][0] = {
           dataType: 'radio-group',
           label: stepsLabels.l2,
           description: 'LINK_TO_ADVANCED_GUIDE_COMPARATIVE_COST_BENEFIT',
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: hasCostKnowledgeItems
         }]
       })
@@ -92,7 +92,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           dataType: 'radio-group',
           label: stepsLabels.l3,
           description: 'LINK_TO_ADVANCED_GUIDE_COMPARATIVE_COST_BENEFIT',
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: costComparisonItems
         }]
       })
@@ -108,7 +108,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
             dataType: 'radio-group',
             label: `What are the costs associated with use of your innovation, compared to current practice in the UK for ${item.name}?`,
             description: 'LINK_TO_ADVANCED_GUIDE_COMPARATIVE_COST_BENEFIT',
-            validations: { isRequired: true },
+            validations: { isRequired: [true, 'Choose one option'] },
             items: costComparisonItems
           }]
         })

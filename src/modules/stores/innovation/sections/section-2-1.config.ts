@@ -40,7 +40,7 @@ export const SECTION_2_1: InnovationSectionConfigType['sections'][0] = {
           dataType: 'checkbox-array',
           label: stepsLabels.l1,
           description: 'We\'re asking this to understand if we should ask you specific questions about patients and/or healthcare professionals. Your answer will impact which questions we ask in other sections.',
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose at least one option'] },
           items: innovationImpactItems
         }]
       })
@@ -101,7 +101,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
             id: `subGroupName_${i}`,
             dataType: 'text',
             label: `What condition best categorises ${item.name}?`,
-            validations: { isRequired: true }
+            validations: { isRequired: [true, 'Condition is required'] }
           }]
         })
       );
@@ -118,7 +118,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           id: 'cliniciansImpactDetails',
           dataType: 'textarea',
           label: stepsLabels.l3,
-          validations: { isRequired: true }
+          validations: { isRequired: [true, 'Specification is required'] }
         }]
       })
     );

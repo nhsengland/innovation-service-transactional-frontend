@@ -69,7 +69,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         dataType: 'textarea',
         label: stepsLabels.l2,
         description: 'Example problem description:<br />The process of checking a patient’s pulse to determine if there is atrial fibrillation using a finger and a watch is inherently inaccurate.',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'A description of problems tackled is required'] }
       }]
     }),
     new FormEngineModel({
@@ -78,7 +78,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         dataType: 'textarea',
         label: stepsLabels.l3,
         description: 'Example consequence description:<br />Using this method approximately 25% of patients are not referred to secondary care who should be (false negative) and 15% of patients who are referred are referred unnecessarily (false positive). For those patients who are not picked up at this stage, their underlying disease will progress before being correctly diagnosed.',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'A description of what are the consequences of the problem is required'] }
       }]
     }),
     new FormEngineModel({
@@ -88,7 +88,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         label: stepsLabels.l4,
         description: 'Describe your improvement. What will happen differently? How might that lead to a reduction of the consequences of the problem?',
 
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Improvement description is required'] }
       }]
     }),
     new FormEngineModel({
@@ -97,7 +97,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         dataType: 'textarea',
         label: stepsLabels.l5,
         description: 'Example impact description:<br />A 20% reduction in emergency referrals from care homes to the Emergency Department. For a mid-sized Clinical Commissioning Group covering a population of 250,000, this would equate to 150-200 referrals per year.',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'A description of the impact of the intervention is required'] }
       }]
     })
   );
