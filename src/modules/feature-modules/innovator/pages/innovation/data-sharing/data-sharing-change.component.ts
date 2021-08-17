@@ -9,8 +9,7 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
 
 @Component({
   selector: 'app-innovator-pages-innovation-data-sharing-change',
-  templateUrl: './data-sharing-change.component.html',
-  // styleUrls: ['./data-sharing.component.scss'],
+  templateUrl: './data-sharing-change.component.html'
 })
 export class InnovationDataSharingChangeComponent extends CoreComponent implements OnInit {
 

@@ -55,7 +55,13 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
         }]
       }),
       new FormEngineModel({
-        parameters: [{ id: 'categories', dataType: 'checkbox-array', label: stepsLabels.l3, validations: { isRequired: [true, 'Choose at least one category'] }, items: categoriesItems }]
+        parameters: [{
+          id: 'categories',
+          dataType: 'checkbox-array',
+          label: stepsLabels.l3,
+          validations: { isRequired: [true, 'Choose at least one category'] },
+          items: categoriesItems
+        }]
       }),
       new FormEngineModel({
         parameters: [{

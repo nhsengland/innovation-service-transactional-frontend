@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
+import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CustomValidators } from '@app/base/forms';
 
 
 @Component({
@@ -14,7 +15,7 @@ export class PageInnovationCommentsNewComponent extends CoreComponent {
   innovationId: string;
 
   form = new FormGroup({
-    comment: new FormControl('', Validators.required)
+    comment: new FormControl('', CustomValidators.required('A comment is required'))
   });
 
   summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };

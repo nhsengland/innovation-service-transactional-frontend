@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormArray, FormControl, FormGroup, Validators } from '@app/base';
+import { CustomValidators } from '@app/base/forms';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -33,13 +34,10 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   form = new FormGroup({
     status: new FormControl('', Validators.required),
     accessors: new FormArray([]),
-    comment: new FormControl('', Validators.required),
+    comment: new FormControl('', CustomValidators.required('A comment is required')),
   });
 
   summaryAlert: { type: '' | 'error' | 'warning' | 'success', title: string, message: string };
-
-  accessorsArrayName = 'accessors';
-  commentField = 'comment';
 
   constructor(
     private activatedRoute: ActivatedRoute,
