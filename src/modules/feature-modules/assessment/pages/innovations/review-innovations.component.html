@@ -1,14 +1,15 @@
 <section class="bg-color-white">
   <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
 
-    <h1 class="nhsuk-heading-l"> Innovations </h1>
+    <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
 
     <div class="app-tabs">
       <ul class="app-tabs__list" role="tablist" aria-label="Tabs">
         <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
-          <div class="side-menu-flex">
-            <div><a class="app-tabs__link" [routerLink]="item.link" [queryParams]="item.queryParams"> {{ item.title }} </a></div>
-            <div><notification-tag *ngIf="item.notifications && item.notifications > 0" [count]="item.notifications"></notification-tag></div>
+          <div class="d-flex">
+            <a id="tab-{{ item.key }}" [routerLink]="item.link" [queryParams]="item.queryParams" role="tab" class="nhsuk-u-padding-right-1" attr.aria-controls="content-{{ item.key }}"
+              attr.aria-selected="{{ currentTab.key === item.key ? 'true' : 'false' }}"> {{ item.title }} </a>
+            <notification-tag *ngIf="item.notifications && item.notifications > 0" [count]="item.notifications"></notification-tag>
           </div>
         </li>
       </ul>
@@ -17,7 +18,7 @@
     <p>{{ currentTab.description }}</p>
 
     <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
+      <div id="content-{{ currentTab.key }}" role="tabpanel" tabindex="0" attr.aria-labelledby="tab-{{ currentTab.key }}" class="nhsuk-grid-column-full">
 
         <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">{{innovationsList.getTotalRowsNumber() }} innovations</p>
         <p *ngIf="currentTab.innovationsOverdue > 0" class="nhsuk-body-s nhsuk-u-margin-bottom-2 d-flex align-items-center">

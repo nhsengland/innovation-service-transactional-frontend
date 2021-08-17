@@ -12,8 +12,8 @@ import { AccessorService, getActionsListEndpointOutDTO } from '../../services/ac
 })
 export class ActionsListComponent extends CoreComponent implements OnInit {
 
-  tabs: { title: string, link: string, queryParams: { openActions: 'true' | 'false' } }[] = [];
-  currentTab: { index: number, description: string };
+  tabs: { key: string, title: string, link: string, queryParams: { openActions: 'true' | 'false' } }[] = [];
+  currentTab: { index: number, key: string, description: string };
 
   actionsList: TableModel<getActionsListEndpointOutDTO['data'][0]>;
 
@@ -29,18 +29,20 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
     this.tabs = [
       {
+        key: 'openActions',
         title: 'Open actions',
         link: '/accessor/actions',
         queryParams: { openActions: 'true' }
       },
       {
+        key: 'closedActions',
         title: 'Closed actions',
         link: '/accessor/actions',
         queryParams: { openActions: 'false' }
       }
     ];
 
-    this.currentTab = { index: 0, description: '' };
+    this.currentTab = { index: 0, key: '', description: '' };
 
     this.actionsList = new TableModel({
       visibleColumns: {
@@ -67,6 +69,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
         }
 
         this.currentTab.index = this.tabs.findIndex(tab => tab.queryParams.openActions === queryParams.openActions);
+        this.currentTab.key = this.tabs[this.currentTab.index].key;
 
         this.actionsList.setData([]).setFilters({ openActions: queryParams.openActions });
 

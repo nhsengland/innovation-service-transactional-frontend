@@ -81,17 +81,10 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
             this.currentStep.number = Number(params.id);
             this.currentStep.data = TRIAGE_INNOVATOR_PACK_QUESTIONS[this.currentStep.number - 1];
             this.currentStep.data.defaultData = this.currentAnswers;
-
             this.setPageTitle(this.currentStep.data.parameters[0].label || ''); // Only 1 question per page.
-
-            setTimeout(() => {
-              document.getElementById('pageFirstFocus')?.focus();
-            });
-
           }
 
           if (this.isSummaryStep()) {
-
             this.setPageTitle('Check your answers before completing');
             this.prepareSummaryData();
           }

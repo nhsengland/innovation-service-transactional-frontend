@@ -6,13 +6,14 @@
     <div class="app-tabs">
       <ul class="app-tabs__list" role="tablist" aria-label="Tabs">
         <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
-          <a class="app-tabs__link" [routerLink]="item.link" [queryParams]="item.queryParams"> {{ item.title }} </a>
+          <a id="tab-{{ item.key }}" [routerLink]="item.link" [queryParams]="item.queryParams" role="tab" attr.aria-controls="content-{{ item.key }}"
+            attr.aria-selected="{{ currentTab.key === item.key ? 'true' : 'false' }}"> {{ item.title }} </a>
         </li>
       </ul>
     </div>
 
     <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
+      <div id="content-{{ currentTab.key }}" role="tabpanel" tabindex="0" attr.aria-labelledby="tab-{{ currentTab.key }}" class="nhsuk-grid-column-full">
 
         <p class="d-flex align-items-center nhsuk-u-margin-bottom-2">
           <span class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0 mr-auto"> {{ currentTab.description }} </span>
@@ -37,8 +38,8 @@
                   <div>
                     <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('section') }}</span>
                     <a routerLink="/accessor/innovations/{{ item.innovation.id }}/action-tracker/{{ item.id }}" attr.aria-label="View action named {{ item.name }} for innovation {{ item.innovation.name }}">
-                    {{ item.name }}
-                  </a>
+                      {{ item.name }}
+                    </a>
                   </div>
                   <div>
                     <notification-tag *ngIf="item.notifications && item.notifications.count > 0" type="circle"></notification-tag>
