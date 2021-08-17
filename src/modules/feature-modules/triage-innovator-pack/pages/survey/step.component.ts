@@ -82,10 +82,17 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
             this.currentStep.data = TRIAGE_INNOVATOR_PACK_QUESTIONS[this.currentStep.number - 1];
             this.currentStep.data.defaultData = this.currentAnswers;
 
-            document.getElementById('pageFirstFocus')?.focus();
+            this.setPageTitle(this.currentStep.data.label || '');
+
+            setTimeout(() => {
+              document.getElementById('pageFirstFocus')?.focus();
+            });
+
           }
 
           if (this.isSummaryStep()) {
+
+            this.setPageTitle('Check your answers before completing');
             this.prepareSummaryData();
           }
 

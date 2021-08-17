@@ -1,14 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { CoreComponent } from '@app/base';
+
 
 @Component({
   selector: 'app-policies-cookies-edit-confirmation',
   templateUrl: './cookies-edit-confirmation.component.html',
 })
-export class CookiesEditConfirmationComponent implements OnInit {
+export class CookiesEditConfirmationComponent extends CoreComponent {
 
-  constructor() { }
+  constructor() {
 
-  ngOnInit(): void { }
+    super();
 
+    this.setPageTitle('Your cookie settings have been saved');
+
+  }
 
 }

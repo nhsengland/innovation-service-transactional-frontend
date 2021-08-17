@@ -1,15 +1,15 @@
-<ng-container *ngIf="summaryAlert.type">
-  <div class="nhsuk-error-summary nhsuk-u-margin-top-4" [ngClass]="{'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert" tabindex="-1">
-    <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
-    <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
-  </div>
-</ng-container>
-
 <div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-two-thirds">
+  <div class="nhsuk-grid-column-full">
 
     <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Starting needs assessment for</p>
     <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ innovationName }}</h1>
+
+    <ng-container *ngIf="summaryAlert.type">
+      <div class="nhsuk-error-summary nhsuk-u-margin-top-4" [ngClass]="{'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert" tabindex="-1">
+        <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
+        <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
+      </div>
+    </ng-container>
 
     <div class="nhsuk-inset-text">
       <span class="nhsuk-u-visually-hidden">Information:</span>

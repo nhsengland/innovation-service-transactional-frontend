@@ -56,7 +56,9 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
     private innovationService: InnovationService,
     private notificationService: NotificationService,
   ) {
+
     super();
+    this.setPageTitle('Data sharing and support');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.organisationInfoUrl = `${this.stores.environment.BASE_URL}/about-the-service/who-we-are`;

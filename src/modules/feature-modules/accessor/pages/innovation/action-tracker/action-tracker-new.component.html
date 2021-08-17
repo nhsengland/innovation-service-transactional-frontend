@@ -1,20 +1,23 @@
 <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-3">
 
-  <ng-container *ngIf="summaryAlert.type">
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <div class="nhsuk-error-summary" [ngClass]="{'border-color-success': summaryAlert.type === 'success', 'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert" tabindex="-1">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <h1 class="nhsuk-u-margin-bottom-3"> {{ pageTitle }} </h1>
+
+      <ng-container *ngIf="summaryAlert.type">
+        <div class="nhsuk-error-summary" [ngClass]="{'border-color-success': summaryAlert.type === 'success', 'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert"
+          tabindex="-1">
           <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
           <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
         </div>
-      </div>
+      </ng-container>
+
     </div>
-  </ng-container>
+  </div>
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
-      <h1 class="nhsuk-heading-x1 nhsuk-u-margin-bottom-3">Request new action</h1>
 
       <form [formGroup]="form">
         <theme-form-radio-group controlName="section" label="Which section of the innovation record is this action for?" [items]="sectionItems"></theme-form-radio-group>

@@ -1,4 +1,4 @@
-<h1 class="nhsuk-heading-m">Innovation record overview</h1>
+<h1 class="nhsuk-heading-m"> {{ pageTitle }} </h1>
 
 <ng-container *ngIf="contentReady">
   <div class="nhsuk-grid-row">
@@ -28,11 +28,11 @@
       See your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a>
     </div>
   </div>
-  <!-- CREATION CARD -->
+
   <ng-container *ngIf="!isSubmittedForAssessment()">
     <div class="nhsuk-card nhsuk-u-margin-top-2">
       <div class="nhsuk-card__content">
-        <h3>Your next steps</h3>
+        <h2 class="nhsuk-heading-m">Your next steps</h2>
         <p class="d-flex nhsuk-u-margin-bottom-2">
           <ng-container *ngTemplateOutlet="icon; context: { completed: allSectionsSubmitted()}"></ng-container>
           <span class="nhsuk-u-margin-right-2"></span>
@@ -51,7 +51,7 @@
     <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <h3>Support status</h3>
+        <h2 class="nhsuk-heading-m">Support status</h2>
       </div>
     </div>
     <div class="nhsuk-grid-column-two-thirds">
@@ -67,7 +67,7 @@
     <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <h3>Actions overview</h3>
+        <h2 class="nhsuk-heading-m">Actions overview</h2>
       </div>
       <div class="nhsuk-grid-column-two-thirds">
         <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.requested }}</p>
@@ -84,7 +84,7 @@
     <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <h3>Support status</h3>
+        <h2 class="nhsuk-heading-m">Support status</h2>
       </div>
       <div class="nhsuk-grid-column-two-thirds">
         <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{supportStatus}}</p>

@@ -37,6 +37,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
   ) {
 
     super();
+    this.setPageTitle('Support status');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 

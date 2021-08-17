@@ -36,6 +36,7 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
   ) {
 
     super();
+    this.setPageTitle('Innovation needs assessment overview');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;

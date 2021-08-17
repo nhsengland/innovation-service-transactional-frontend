@@ -61,10 +61,12 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
         }
 
         if (this.isSummaryStep()) {
+          this.setPageTitle('Check your answers');
           this.summaryList = this.wizard.runSummaryParsing();
           return;
         }
 
+        this.setPageTitle(this.wizard.currentStep().label || '');
         this.wizard.gotoStep(Number(params.stepId));
 
       })

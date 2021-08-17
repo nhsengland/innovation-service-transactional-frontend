@@ -15,9 +15,6 @@ export class FirstTimeSigninGuard implements CanActivateChild {
 
   canActivateChild(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<boolean> {
 
-
-    console.log('validuser', this.authenticationStore.isValidUser());
-
     if (this.authenticationStore.isValidUser()) {
 
       // Don't allow to access First Time Signin, if already has been done.
@@ -29,8 +26,6 @@ export class FirstTimeSigninGuard implements CanActivateChild {
       return of(false);
 
     } else {
-
-      console.log('innovationtransfers', this.authenticationStore.hasInnovationTransfers());
 
       // User has pending innovation transfers and a localStorage item that states that he pressed an email?
       if (this.authenticationStore.hasInnovationTransfers()) {
