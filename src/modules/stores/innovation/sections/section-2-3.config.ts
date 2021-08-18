@@ -42,7 +42,7 @@ export const SECTION_2_3: InnovationSectionConfigType['sections'][0] = {
           id: 'hasEvidence',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: hasEvidenceItems
         }]
       })

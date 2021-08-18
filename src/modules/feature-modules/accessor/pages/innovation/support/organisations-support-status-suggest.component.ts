@@ -3,9 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent, FormArray, FormControl, FormGroup, Validators } from '@app/base';
+import { CustomValidators, FormEngineParameterModel } from '@modules/shared/forms';
 import { RoutingHelper } from '@modules/core';
-
-import { FormEngineParameterModel } from '@modules/shared/forms';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { AccessorService, SupportLogType } from '../../../services/accessor.service';
@@ -25,7 +24,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
   form = new FormGroup({
     organisationUnits: new FormArray([], Validators.required),
-    comment: new FormControl('', Validators.required),
+    comment: new FormControl('', CustomValidators.required('A comment is required')),
     confirm: new FormControl(false)
   });
   formSubmitted = false;

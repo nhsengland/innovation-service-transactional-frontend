@@ -47,7 +47,7 @@ export const SECTION_5_2: InnovationSectionConfigType['sections'][0] = {
           dataType: 'radio-group',
           label: stepsLabels.l1,
           description: 'Testing can mean involving patients, carers, clinicians or administrators in the design process.',
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: hasTestsItems
         }]
       })
@@ -108,7 +108,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           id: `userTestFeedback_${i}`,
           dataType: 'textarea',
           label: `Please describe the testing and feedback for ${item.kind}`,
-          validations: { isRequired: true }
+          validations: { isRequired: [true, 'Description is required'] }
         }]
       })
     );
@@ -122,7 +122,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         dataType: 'file-upload',
         label: stepsLabels.l4,
         description: 'The files must be CSV, XLSX, DOCX or PDF.',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Upload at least one file'] }
       }]
     })
   );

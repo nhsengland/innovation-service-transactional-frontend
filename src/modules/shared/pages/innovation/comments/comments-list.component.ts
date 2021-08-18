@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
-import { FormEngineHelper } from '@app/base/forms';
+import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CustomValidators, FormEngineHelper } from '@app/base/forms';
 import { RoutingHelper } from '@modules/core';
 import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
 import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
@@ -74,7 +74,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
       response => {
         this.commentsList = response;
         this.commentsList.forEach(item => {
-          this.form.addControl(`${item.id}`, new FormControl('', Validators.required));
+          this.form.addControl(`${item.id}`, new FormControl('', CustomValidators.required('A reply is required')));
           this.formSubmittedFields[item.id] = '';
         });
 

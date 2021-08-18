@@ -8,7 +8,7 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
         dataType: 'text',
         label: 'Welcome to the NHS innovation service!',
         description: 'What\'s your name?',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Name is required'] }
       }
     ]
   }),
@@ -19,7 +19,7 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
         id: 'innovationName',
         dataType: 'text',
         label: 'What should we call your innovation?',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Innovation name is required'] }
       }
     ]
   }),
@@ -30,7 +30,7 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
         id: 'innovationDescription',
         dataType: 'textarea',
         label: 'Please provide a short description of your innovation',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Innovation short description is required'] }
       }
     ]
   }),
@@ -41,12 +41,12 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
         id: 'isCompanyOrOrganisation',
         dataType: 'radio-group',
         label: 'Are you creating this innovation as part of a company or organisation?',
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose one option'] },
         items: [
           {
             value: 'yes',
             label: 'Yes',
-            conditional: new FormEngineParameterModel({ id: 'organisationName', dataType: 'text', label: 'Company or organisation name', validations: { isRequired: true } })
+            conditional: new FormEngineParameterModel({ id: 'organisationName', dataType: 'text', label: 'Company or organisation name', validations: { isRequired: [true, 'Other description is required'] } })
           },
           { value: 'no', label: 'No' }
         ]
@@ -81,7 +81,7 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
         id: 'location',
         dataType: 'radio-group',
         label: 'Where are you based?',
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Location is required'] },
         items: [
           {
             value: 'England',
@@ -108,7 +108,7 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
         id: 'organisationShares',
         dataType: 'checkbox-array',
         label: 'Finally, choose your data sharing preferences',
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose at least one organisation'] },
         items: []
       }
     ]

@@ -59,7 +59,7 @@
           <span *ngIf="i === 0" class="nhsuk-heading-xs nhsuk-u-margin-bottom-0 float-r">Open actions</span>
         </h2>
 
-        <ul class="app-task-list__items">
+        <ol class="app-task-list__items">
           <li *ngFor="let section of sectionGroup.sections; let j = index" class="app-task-list__item">
 
             <ng-container *ngIf="section.status !== 'UNKNOWN'">
@@ -75,7 +75,7 @@
             </strong>
 
           </li>
-        </ul>
+        </ol>
 
       </li>
     </ol>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
-import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CustomValidators } from '@app/base/forms';
 
 import { InnovatorService } from '../../../services/innovator.service';
 
@@ -21,7 +21,7 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
 
 
   form = new FormGroup({
-    comment: new FormControl('', Validators.required)
+    comment: new FormControl('', CustomValidators.required('A comment is required'))
   });
 
   summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
@@ -62,14 +62,8 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
 
     const status = 'DECLINED';
 
-    this.innovatorService.declineAction(this.innovationId, this.actionId,
-      {
-        ...this.form.value,
-        status,
-      }
-      ).subscribe(
+    this.innovatorService.declineAction(this.innovationId, this.actionId, { ...this.form.value, status }).subscribe(
       response => {
-
         this.redirectTo(`/innovator/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionDeclined', status });
       },
       () => {

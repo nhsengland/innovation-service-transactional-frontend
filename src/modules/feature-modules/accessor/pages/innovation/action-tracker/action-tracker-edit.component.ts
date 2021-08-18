@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
-import { FormEngineHelper } from '@app/base/forms';
+import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CustomValidators, FormEngineHelper } from '@app/base/forms';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { AccessorService } from '../../../services/accessor.service';
@@ -36,8 +36,8 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
   statusError = '';
 
   form = new FormGroup({
-    status: new FormControl('', Validators.required),
-    comment: new FormControl('', Validators.required)
+    status: new FormControl('', CustomValidators.required('Please, choose a status')),
+    comment: new FormControl('', CustomValidators.required('A comment is required'))
   });
 
   summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };

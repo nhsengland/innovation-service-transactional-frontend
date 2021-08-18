@@ -27,7 +27,7 @@ export const clinicalEvidenceItems = [
   { value: 'RANDOMISED_CONTROLLED_TRIAL', label: 'Randomised controlled trial published in a peer reviewed journal' },
   { value: 'UNPUBLISHED_DATA', label: 'Unpublished data' },
   {
-    value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'description', dataType: 'text', label: 'Other clinical evidence', validations: { isRequired: true } })
+    value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'description', dataType: 'text', label: 'Other clinical evidence', validations: { isRequired: [true, 'Other description is required'] } })
   }
 ];
 
@@ -62,7 +62,7 @@ export const SECTION_2_EVIDENCES = new WizardEngineModel({
         id: 'evidenceType',
         dataType: 'radio-group',
         label: stepsLabels.l1,
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose one option'] },
         items: evidenceTypeItems
       }]
     })
@@ -87,7 +87,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
             id: 'clinicalEvidenceType',
             dataType: 'radio-group',
             label: stepsLabels.l2,
-            validations: { isRequired: true },
+            validations: { isRequired: [true, 'Choose one option'] },
             items: clinicalEvidenceItems
           }]
         })
@@ -101,7 +101,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
             id: 'description',
             dataType: 'text',
             label: stepsLabels.l3,
-            validations: { isRequired: true }
+            validations: { isRequired: [true, 'Description is required'] }
           }]
         }),
       );
@@ -115,7 +115,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
             id: 'description',
             dataType: 'text',
             label: stepsLabels.l4,
-            validations: { isRequired: true }
+            validations: { isRequired: [true, 'Other description is required'] }
           }]
         })
       );
@@ -133,7 +133,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         dataType: 'text',
         label: stepsLabels.l5,
         description: 'Please provide a short summary including the scope of the study and the key findings. Accessors will read this summary to understand if any particular piece of evidence is of interest in relation to what they can help you with.',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Summary is required'] }
       }]
     })
   );
@@ -145,7 +145,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         dataType: 'file-upload',
         label: stepsLabels.l6,
         description: 'The files must be CSV, XLSX, DOCX or PDF.',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Upload at least one file'] }
       }],
     })
   );

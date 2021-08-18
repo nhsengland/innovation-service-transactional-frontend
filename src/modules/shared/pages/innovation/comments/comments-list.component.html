@@ -39,7 +39,7 @@
           class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-padding-left-3" aria-label="Sort comments by oldest first">
           Oldest first
         </a>
-        <span *ngIf="currentCreatedOrder === 'asc'" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-padding-left-3">
+        <span *ngIf="currentCreatedOrder === 'asc'" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-left-3">
           <span class="nhsuk-u-visually-hidden"> Comments are sorted by </span> Oldest first
         </span>
       </div>
@@ -54,17 +54,15 @@
 
             <div class="d-flex justify-content-space-between nhsuk-u-margin-bottom-2">
               <div class="nhsuk-u-margin-bottom-0">
-                <div class="side-menu-flex">
-                  <div>
+                <div class="d-flex">
+                  <div class="nhsuk-u-padding-right-1">
                     <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0"> {{ comment.user.name }}{{ comment.user.organisationUnit ? ', ' + comment.user.organisationUnit.name  : '' }} </p>
                     <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0"> {{ getTeamTitle(comment.user.type) }} </p>
                   </div>
-                  <div>
-                    <notification-tag *ngIf="comment.notifications && comment.notifications.count > 0" type="circle"></notification-tag>
-                  </div>
+                  <notification-tag *ngIf="comment.notifications && comment.notifications.count > 0" type="circle"></notification-tag>
                 </div>
               </div>
-              <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ comment.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </p>
+              <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0"> {{ comment.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </p>
             </div>
 
             <p class="nhsuk-card__description">{{ comment.message }}</p>
@@ -86,18 +84,18 @@
               <p class="nhsuk-card__description">{{ reply.message }}</p>
             </div>
 
-            <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0 nhsuk-u-margin-left-4">Write a reply</p>
-            <div class="nhsuk-u-margin-left-4">
-
+            <p id="comment-reply-label-{{ comment.id }}" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0 nhsuk-u-margin-left-3">
+              Write a reply <span class="nhsuk-u-visually-hidden"> for comment made by {{ comment.user.name }} on {{ comment.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </span>
+            </p>
+            <div class="nhsuk-u-margin-left-3">
               <div class="nhsuk-form-group reply-container" [ngClass]="{'nhsuk-form-group--error': formSubmittedFields[comment.id]}">
                 <ng-container *ngIf="formSubmittedFields[comment.id]">
                   <span class="nhsuk-error-message nhsuk-u-font-size-14">
                     <span class="nhsuk-u-visually-hidden">Error:</span> {{ formSubmittedFields[comment.id] | translate }}</span>
                 </ng-container>
-                <input formControlName="{{ comment.id }}" [name]="comment.id" type="text" class="nhsuk-input" aria-label="Reply to comment input" />
+                <input formControlName="{{ comment.id }}" [name]="comment.id" type="text" class="nhsuk-input" attr.aria-labelledby="comment-reply-label-{{ comment.id }" />
                 <button class="nhsuk-button nhsuk-u-font-size-14 nhsuk-u-margin-left-2" (click)="onReply(comment.id)">Reply</button>
               </div>
-
             </div>
 
           </div>

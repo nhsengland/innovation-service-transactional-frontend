@@ -15,7 +15,7 @@
 
     <ng-container *ngIf="isQuestionStep()">
 
-      <div id="pageFirstFocus" class="nhsuk-hint nhsuk-u-margin-bottom-0" tabIndex="-1">Question {{ currentStep.number }} of {{ totalNumberOfSteps }}</div>
+      <div class="nhsuk-hint nhsuk-u-margin-bottom-0">Question {{ currentStep.number }} of {{ totalNumberOfSteps }}</div>
 
         <ng-container *ngIf="currentStep.data.details">
           <details class="nhsuk-details">

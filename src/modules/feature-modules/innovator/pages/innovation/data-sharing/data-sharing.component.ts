@@ -14,8 +14,7 @@ import { NotificationContextType, NotificationService } from '@modules/shared/se
 
 @Component({
   selector: 'app-innovator-pages-innovation-data-sharing',
-  templateUrl: './data-sharing.component.html',
-  styleUrls: ['./data-sharing.component.scss'],
+  templateUrl: './data-sharing.component.html'
 })
 export class InnovationDataSharingComponent extends CoreComponent implements OnInit {
 

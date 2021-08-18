@@ -43,7 +43,7 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        parameters: [{ id: 'description', dataType: 'textarea', label: stepsLabels.l1, validations: { isRequired: true } }]
+        parameters: [{ id: 'description', dataType: 'textarea', label: stepsLabels.l1, validations: { isRequired: [true, 'Description is required'] } }]
       }),
       new FormEngineModel({
         parameters: [{
@@ -51,11 +51,17 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
           dataType: 'radio-group',
           label: stepsLabels.l2,
           description: 'By this, we mean something that performs the same function that the final product or service would.',
-          validations: { isRequired: true }, items: hasFinalProductItems
+          validations: { isRequired: [true, 'Choose one option'] }, items: hasFinalProductItems
         }]
       }),
       new FormEngineModel({
-        parameters: [{ id: 'categories', dataType: 'checkbox-array', label: stepsLabels.l3, validations: { isRequired: true }, items: categoriesItems }]
+        parameters: [{
+          id: 'categories',
+          dataType: 'checkbox-array',
+          label: stepsLabels.l3,
+          validations: { isRequired: [true, 'Choose at least one category'] },
+          items: categoriesItems
+        }]
       }),
       new FormEngineModel({
         parameters: [{
@@ -99,7 +105,7 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
           dataType: 'radio-group',
           label: stepsLabels.l8,
           description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: mainPurposeItems
         }]
       }),

@@ -51,7 +51,7 @@ export const SECTION_4_1: InnovationSectionConfigType['sections'][0] = {
           dataType: 'radio-group',
           label: stepsLabels.l1,
           description: 'LINK_TO_ADVANCED_GUIDE_REGULATIONS_STANDARDS',
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: hasRegulationKnowledgeItems
         }]
       })
@@ -93,7 +93,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'standardsType',
         dataType: 'checkbox-array',
         label: stepsLabels.l2,
-        validations: { isRequired: true },
+        validations: { isRequired: [true, 'Choose at least one certification/standard'] },
         items: standardsTypeItems
       }]
     })
@@ -110,7 +110,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           id: `standardHasMet_${i}`,
           dataType: 'radio-group',
           label: `Have you achieved certification for ${standard.type === 'OTHER' ? currentValues.otherRegulationDescription : standardsTypeItems.find(item => item.value === standard.type)?.label}`,
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: standardsHasMetItems
         }]
       })
@@ -125,7 +125,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         dataType: 'file-upload',
         label: stepsLabels.l_last,
         description: 'The files must be CSV, XLSX, DOCX or PDF.',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Upload at least one file'] }
       }],
     })
   );

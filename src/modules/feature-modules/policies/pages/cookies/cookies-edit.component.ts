@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CookiesService } from '@modules/core';
-import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
+import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CustomValidators } from '@app/base/forms';
 
 import { COOKIES_USED } from '../../config/constants.config';
 
@@ -15,7 +16,7 @@ export class CookiesEditComponent extends CoreComponent implements OnInit {
   analyticsCookies = COOKIES_USED.analytics;
 
   form = new FormGroup({
-    analytics: new FormControl('', Validators.required)
+    analytics: new FormControl('', CustomValidators.required('Choose one option'))
   });
 
   analyticsItems = [

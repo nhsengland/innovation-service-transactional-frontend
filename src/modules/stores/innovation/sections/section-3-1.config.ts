@@ -31,7 +31,7 @@ export const SECTION_3_1: InnovationSectionConfigType['sections'][0] = {
           id: 'hasMarketResearch',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: hasMarketResearchItems
         }]
       }),
@@ -58,7 +58,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'marketResearch',
         dataType: 'textarea',
         label: stepsLabels.l2,
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'A description of the market research is required'] }
       }]
     })
   );

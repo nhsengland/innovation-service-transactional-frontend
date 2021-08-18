@@ -40,7 +40,7 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
         id: 'comment',
         dataType: 'textarea',
         label: 'Let the innovator know how you want to proceed',
-        validations: { isRequired: true }
+        validations: { isRequired: [true, 'Comment is required'] },
       })
     ];
     this.formAnswers = {};

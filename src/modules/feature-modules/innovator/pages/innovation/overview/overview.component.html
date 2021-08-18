@@ -32,17 +32,21 @@
   <ng-container *ngIf="!isSubmittedForAssessment()">
     <div class="nhsuk-card nhsuk-u-margin-top-2">
       <div class="nhsuk-card__content">
-        <h2 class="nhsuk-heading-m">Your next steps</h2>
-        <p class="d-flex nhsuk-u-margin-bottom-2">
-          <ng-container *ngTemplateOutlet="icon; context: { completed: allSectionsSubmitted()}"></ng-container>
-          <span class="nhsuk-u-margin-right-2"></span>
-          Submit all sections of your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a>
-        </p>
-        <p class="d-flex">
-          <ng-container *ngTemplateOutlet="icon; context: { completed: false }"></ng-container>
-          <span class="nhsuk-u-margin-right-2"></span>
-          Submit the record for the needs assessment
-        </p>
+        <h2 class="nhsuk-heading-m"> Your next steps </h2>
+        <ol class="nhsuk-list nhsuk-u-padding-0">
+          <li class="d-flex">
+            <ng-container *ngTemplateOutlet="icon; context: { completed: allSectionsSubmitted()}"></ng-container>
+            <div class="nhsuk-u-margin-left-2">
+              Submit all sections of your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a>
+            </div>
+          </li>
+          <li class="d-flex">
+            <ng-container *ngTemplateOutlet="icon; context: { completed: false }"></ng-container>
+            <div class="nhsuk-u-margin-left-2">
+              Submit the record for the needs assessment
+            </div>
+          </li>
+        </ol>
       </div>
     </div>
   </ng-container>

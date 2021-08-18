@@ -41,7 +41,8 @@
 
           <div class="nhsuk-radios__item" [ngClass]="{'nhsuk-u-margin-left-4': item.group}">
             <ng-container *ngIf="isRunningOnBrowser">
-              <input [formControl]="fieldControl" id="{{ id }}{{ i }}" type="radio" [name]="controlName" [value]="item.value" class="nhsuk-radios__input" />
+              <input *ngIf="!item.conditional" [formControl]="fieldControl" id="{{ id }}{{ i }}" type="radio" [name]="controlName" [value]="item.value" class="nhsuk-radios__input" />
+              <input *ngIf="item.conditional" [formControl]="fieldControl" id="{{ id }}{{ i }}" type="radio" [name]="controlName" [value]="item.value" class="nhsuk-radios__input" attr.aria-controls="conditional-{{ id }}{{ i }}" attr.aria-expanded="{{ isConditionalFieldVisible(item.conditional.id) ? 'true' : 'false' }}" />
             </ng-container>
             <ng-container *ngIf="isRunningOnServer">
               <input id="{{ id }}{{ i }}" type="radio" [name]="controlName" [value]="item.value" [checked]="fieldControl.value === item.value" class="nhsuk-radios__input" />
@@ -51,7 +52,7 @@
           </div>
 
           <ng-container *ngIf="item.conditional">
-            <div class="nhsuk-radios__conditional" [ngClass]="{'nhsuk-radios__conditional--hidden': !isConditionalFieldVisible(item.conditional.id), 'error': isConditionalFieldError(item.conditional.id)}">
+            <div id="conditional-{{ id }}{{ i }}" class="nhsuk-radios__conditional" [ngClass]="{'nhsuk-radios__conditional--hidden': !isConditionalFieldVisible(item.conditional.id), 'error': isConditionalFieldError(item.conditional.id)}">
               <theme-form-input [formControl]="conditionalFormControl(item.conditional.id)" [label]="item.conditional.label" [description]="item.conditional.description" [pageUniqueField]="false"></theme-form-input>
             </div>
           </ng-container>
