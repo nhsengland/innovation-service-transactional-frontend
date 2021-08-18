@@ -26,7 +26,9 @@ export class CoreComponent implements OnInit, OnDestroy {
   private platformId: object;
   private serverRequest: Request | null;
   private serverResponse: Response | null;
+
   private pageTitleHolder = '';
+  private pageStatusHolder: 'WAITING' | 'READY' | 'ERROR' = 'WAITING';
 
   protected titleService: Title;
   protected router: Router;
@@ -75,6 +77,9 @@ export class CoreComponent implements OnInit, OnDestroy {
   get requestBody(): MappedObject { return this.serverRequest?.body || {}; }
   /* istanbul ignore next */
   get pageTitle(): string { return this.pageTitleHolder || ''; }
+  /* istanbul ignore next */
+  get pageStatus(): string { return this.pageStatusHolder; }
+
 
   ngOnInit(): void { }
 
@@ -92,8 +97,12 @@ export class CoreComponent implements OnInit, OnDestroy {
 
 
   setPageTitle(s: undefined | string): void {
-    this.pageTitleHolder = s || '';
+    this.pageTitleHolder = this.translateService.instant(s || '');
     this.titleService.setTitle(`${this.translateService.instant(s || '')} | ${this.translateService.instant('app.title')}`);
+  }
+
+  setPageStatus(s: 'WAITING' | 'READY' | 'ERROR'): void {
+    this.pageStatusHolder = s;
   }
 
 

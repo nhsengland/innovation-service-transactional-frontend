@@ -94,7 +94,9 @@
                     <span class="nhsuk-u-visually-hidden">Error:</span> {{ formSubmittedFields[comment.id] | translate }}</span>
                 </ng-container>
                 <input formControlName="{{ comment.id }}" [name]="comment.id" type="text" class="nhsuk-input" attr.aria-labelledby="comment-reply-label-{{ comment.id }" />
-                <button class="nhsuk-button nhsuk-u-font-size-14 nhsuk-u-margin-left-2" (click)="onReply(comment.id)">Reply</button>
+                <button class="nhsuk-button nhsuk-u-font-size-14 nhsuk-u-margin-left-2" (click)="onReply(comment.id)">
+                  Reply <span class="nhsuk-u-visually-hidden"> for comment made by {{ comment.user.name }} on {{ comment.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </span>
+                </button>
               </div>
             </div>
 
