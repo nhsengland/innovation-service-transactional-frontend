@@ -17,6 +17,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
   actionId: string;
   actionName: string;
   actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
+  isQualifyingAccessorRole = false;
 
   action?: getInnovationActionInfoOutDTO;
 
@@ -37,6 +38,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
     this.actionId = this.activatedRoute.snapshot.params.actionId;
     this.actionName = '';
     this.actionStatus = '';
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'actionCreationSuccess':

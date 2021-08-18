@@ -22,7 +22,7 @@
   </div>
 </dl>
 
-<a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation?.support?.id ? innovation?.support?.id : 'new' }}" class="nhsuk-button nhsuk-u-margin-bottom-7"> Update status </a>
+<a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation?.support?.id ? innovation?.support?.id : 'new' }}" class="nhsuk-button nhsuk-u-margin-bottom-7"> Update status </a>
 
 <h2 class="nhsuk-heading-m">Innovation summary</h2>
 <dl class="nhsuk-summary-list">

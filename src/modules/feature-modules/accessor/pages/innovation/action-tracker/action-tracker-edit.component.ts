@@ -18,6 +18,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
   actionId: string;
   actionDisplayId: string;
   stepNumber: number;
+  isQualifyingAccessorRole = false;
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
@@ -55,6 +56,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.actionId = this.activatedRoute.snapshot.params.actionId;
     this.stepNumber = 1;
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
     this.summaryAlert = { type: '', title: '', message: '' };
     this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(

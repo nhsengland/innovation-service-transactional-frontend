@@ -17,6 +17,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   innovationId: string;
   innovation: getInnovationInfoEndpointDTO | undefined;
+  isQualifyingAccessorRole = false;
 
   innovationSupport: {
     organisationUnit: string;
@@ -37,7 +38,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.setPageTitle('Overview');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
   }
 
 
