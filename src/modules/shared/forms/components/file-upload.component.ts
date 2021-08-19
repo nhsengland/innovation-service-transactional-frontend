@@ -1,18 +1,18 @@
 /* istanbul ignore file */
 // TODO: create tests for this!!!!!
 
-import { Component, Input, OnInit, ChangeDetectionStrategy, Injector, ChangeDetectorRef } from '@angular/core';
-import { AbstractControl, ControlContainer, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, Input, OnInit } from '@angular/core';
+import { AbstractControl, ControlContainer, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { RandomGeneratorHelper } from '@modules/core';
+import { LoggerService, Severity } from '@modules/core/services/logger.service';
+import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { Observable, of } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
+import { FileTypes, FileUploadType } from '../engine/types/form-engine.types';
 
-import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 
-import { RandomGeneratorHelper } from '@modules/core';
 
-import { FileUploadType, FileTypes } from '../engine/types/form-engine.types';
-import { LoggerService, Severity } from '@modules/core/services/logger.service';
 
 
 @Component({
@@ -104,6 +104,7 @@ export class FormFileUploadComponent implements OnInit {
           this.files.push({ id: response.id, file });
           this.fieldArrayControl.push(new FormGroup({ id: new FormControl(response.id), name: new FormControl(response.name), url: new FormControl(response.url) }));
           this.evaluateDropZoneTabIndex();
+          this.setAuxMessageAndFocus(`${file.name} added.`);
           this.cdr.detectChanges();
         },
         error => {
@@ -121,9 +122,13 @@ export class FormFileUploadComponent implements OnInit {
     this.files.splice(this.files.findIndex(item => item.id === id), 1);
 
     const arrayIndex = this.fieldArrayValues.findIndex(item => item.id === id);
-    if (arrayIndex > -1) { this.fieldArrayControl.removeAt(arrayIndex); }
+    if (arrayIndex > -1) {
+      const file = this.fieldArrayValues[arrayIndex];
+      this.fieldArrayControl.removeAt(arrayIndex);
+      this.evaluateDropZoneTabIndex();
+      this.setAuxMessageAndFocus(`${file.name} removed.`);
+    }
 
-    this.evaluateDropZoneTabIndex();
     this.cdr.detectChanges();
   }
 
@@ -136,8 +141,23 @@ export class FormFileUploadComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+  setAuxMessageAndFocus(text: string): void {
+    const auxUploadMsgElem: any = document.getElementById('aux-upload-message');
+
+    auxUploadMsgElem.textContent = text;
+
+    setTimeout(() => { // Await for the html injection if needed.
+      auxUploadMsgElem.setAttribute('tabIndex', '-1');
+      auxUploadMsgElem.focus();
+      auxUploadMsgElem.addEventListener('blur', (e: any) => {
+        e.preventDefault();
+        auxUploadMsgElem.removeAttribute('tabIndex');
+      });
+    });
+  }
+
   evaluateDropZoneTabIndex(): void {
-    const dropZoneElem: any = document.getElementsByTagName('ngx-dropzone')[0];
+    const dropZoneElem: any = document.getElementsByTagName('ngx-dropzone')[0] as HTMLInputElement;
 
     if (this.files.length === 0) {
       dropZoneElem.firstElementChild.setAttribute('tabIndex', '0');

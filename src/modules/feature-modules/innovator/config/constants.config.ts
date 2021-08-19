@@ -86,7 +86,7 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
           {
             value: 'England',
             label: 'England',
-            conditional: new FormEngineParameterModel({ id: 'englandPostCode', dataType: 'text', label: 'First part of your postcode', description: 'For example SW1', validations: { isRequired: true } })
+            conditional: new FormEngineParameterModel({ id: 'englandPostCode', dataType: 'text', label: 'First part of your postcode', description: 'For example SW1', validations: { isRequired: [true, 'First part of your postcode is required'] } })
           },
           { value: 'Scotland', label: 'Scotland' },
           { value: 'Wales', label: 'Wales' },
@@ -95,7 +95,7 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
           {
             value: 'Based outside UK',
             label: 'I\'m based outside of the UK',
-            conditional: new FormEngineParameterModel({ id: 'locationCountryName', dataType: 'text', label: 'Country', validations: { isRequired: true } })
+            conditional: new FormEngineParameterModel({ id: 'locationCountryName', dataType: 'text', label: 'Country', validations: { isRequired: [true, 'Country is required'] } })
           },
         ]
       }

@@ -23,8 +23,10 @@
   </dl>
 </ng-container>
 
+<span class="nhsuk-u-visually-hidden" id="aux-upload-message"></span>
+
 <ng-container *ngIf="files.length > 0">
-  <a id="openAddFileDialogBtn" href="javascript:void(0)" (click)="openAddFileDialog()"> Add new file </a>
+  <a id="open-add-file-dialog-btn" href="javascript:void(0)" (click)="openAddFileDialog()"> Add new file </a>
 </ng-container>
 
 <ngx-dropzone
