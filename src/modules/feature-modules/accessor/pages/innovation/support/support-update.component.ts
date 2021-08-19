@@ -48,7 +48,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   ) {
 
     super();
-    this.setPageTitle('Update support status ');
+    this.setPageTitle('Update support status - status');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.supportId = this.activatedRoute.snapshot.params.supportId;
@@ -60,7 +60,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.currentStatus = { label: '', cssClass: '', description: '' };
     this.organisationUnit = this.stores.authentication.getUserInfo().organisations?.[0]?.organisationUnits?.[0]?.name;
-
+    this.setStepTitle();
   }
 
 
@@ -136,7 +136,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     }
 
     this.stepNumber++;
-
+    this.setStepTitle();
   }
 
   onSubmit(): void {
@@ -190,4 +190,19 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     return true;
   }
 
+  private setStepTitle(): void {
+    switch (this.stepNumber) {
+      case 1:
+        this.setPageTitle('Update support status - status');
+        break;
+      case 2:
+        this.setPageTitle('Update support status - accessors');
+        break;
+      case 3:
+        this.setPageTitle('Update support status');
+        break;
+      default:
+        break;
+    }
+  }
 }
