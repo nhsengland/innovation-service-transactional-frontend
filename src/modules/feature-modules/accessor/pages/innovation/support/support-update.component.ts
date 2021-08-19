@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormArray, FormControl, FormGroup, Validators } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
+import { AlertType } from '@app/base/models';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -17,6 +18,9 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   innovationId: string;
   supportId: string;
   stepNumber: number;
+
+  alert: AlertType = { type: null };
+
   accessorList: any[];
   selectedAccessors: any[];
   organisationUnit: string | undefined;
@@ -37,7 +41,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     comment: new FormControl('', CustomValidators.required('A comment is required')),
   });
 
-  summaryAlert: { type: '' | 'error' | 'warning' | 'success', title: string, message: string };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -52,7 +55,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.stepNumber = 1;
 
-    this.summaryAlert = { type: '', title: '', message: '' };
     this.accessorList = [];
     this.selectedAccessors = [];
 
@@ -114,14 +116,15 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     if (this.stepNumber === 2 && this.currentStatus === this.supportStatusObj.ENGAGING) {
 
       if (this.selectedAccessors.length === 0) {
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error has occured when updating Status',
-          message: 'You must select at least one Accessor.'
+          message: 'You must select at least one Accessor.',
+          setFocus: true
         };
         return;
       } else {
-        this.summaryAlert.type = '';
+        this.alert = { type: null, setFocus: false };
       }
 
     }
@@ -154,27 +157,29 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     switch (step) {
       case 1:
         if (!this.form.get('status')?.valid) {
-          this.summaryAlert = {
-            type: 'error',
+          this.alert = {
+            type: 'ERROR',
             title: 'An error has occured when updating Status',
-            message: 'You must select a status.'
+            message: 'You must select a status.',
+            setFocus: true
           };
           return false;
         } else {
-          this.summaryAlert.type = '';
+          this.alert = { type: null, setFocus: false };
         }
         break;
       case 3:
 
         if (!this.form.get('comment')?.valid && this.form.get('status')?.value !== 'WAITING') {
-          this.summaryAlert = {
-            type: 'error',
+          this.alert = {
+            type: 'ERROR',
             title: 'An error has occured when updating the Comment',
-            message: 'You must add a Comment.'
+            message: 'You must add a Comment.',
+            setFocus: true
           };
           return false;
         } else {
-          this.summaryAlert.type = '';
+          this.alert = { type: null, setFocus: false };
         }
 
         break;
@@ -184,5 +189,5 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     return true;
   }
-}
 
+}

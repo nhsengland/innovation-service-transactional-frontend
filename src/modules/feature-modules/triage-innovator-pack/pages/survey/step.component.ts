@@ -35,7 +35,6 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
       // queryParams: MappedObject,
       errorMessage: string | null
     }[];
-    valid: boolean;
   };
 
   isFirstStep(): boolean { return this.currentStep.number === 1; }
@@ -63,7 +62,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
     this.totalNumberOfSteps = this.stepsData.length;
 
     this.currentAnswers = {};
-    this.summaryList = { items: [], valid: false };
+    this.summaryList = { items: [] };
 
   }
 
@@ -168,7 +167,9 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
   }
 
   onSubmitSurvey(): void {
-    if (this.summaryList.valid) {
+
+    if (this.summaryList.items.length === 0) { // If no errors.
+
       this.surveyService.submitSurvey(this.currentAnswers).subscribe(
         response => {
           this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/end`, { surveyId: response.id });
@@ -177,7 +178,9 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
           this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/summary`);
         }
       );
+
     }
+
   }
 
   getNavigationUrl(action: 'previous' | 'next'): string {
@@ -225,16 +228,14 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
 
   prepareSummaryData(): void {
 
-    this.summaryList = { items: [], valid: true };
+    this.summaryList = { items: [] };
 
     const parameters = this.stepsData.map(fd => fd.parameters).reduce((a, p) => [...a, ...p], []);
     const form = FormEngineHelper.buildForm(parameters, this.currentAnswers);
     const errors = FormEngineHelper.getErrors(form);
 
-    this.summaryList.valid = form.valid;
-
-    if (!this.summaryList.valid) {
-      this.alert = { type: 'ERROR', title: 'Unable to fetch innovations transfers' };
+    if (!form.valid) {
+      this.alert = { type: 'ERROR', title: 'Unable to fetch innovations transfers', setFocus: true };
     }
 
     this.stepsData.forEach((step, stepIndex) => {

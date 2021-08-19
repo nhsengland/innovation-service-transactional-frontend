@@ -13,8 +13,6 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
 })
 export class InnovationDataSharingChangeComponent extends CoreComponent implements OnInit {
 
-  summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
-
   innovationId: string;
   organisationsList: { value: string, label: string }[];
   organisationInfoUrl: string;
@@ -46,10 +44,6 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
     };
 
     this.organisationInfoUrl = `${this.stores.environment.BASE_URL}/about-the-service/who-we-are`;
-    this.summaryAlert = {
-      type: 'warning', title: 'Are you sure?',
-      message: 'This will remove access for one or more organisations currently engaging with your innovation. They will no longer be able to support you.'
-    };
     this.showWarning = false;
   }
 

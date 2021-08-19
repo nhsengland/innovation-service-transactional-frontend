@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent, FormArray, FormControl, FormGroup, Validators } from '@app/base';
+import { AlertType } from '@app/base/models';
 import { CustomValidators, FormEngineParameterModel } from '@modules/shared/forms';
 import { RoutingHelper } from '@modules/core';
 
@@ -22,6 +23,8 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   innovation: InnovationDataType;
   stepId: number;
 
+  alert: AlertType = { type: null };
+
   form = new FormGroup({
     organisationUnits: new FormArray([], Validators.required),
     comment: new FormControl('', CustomValidators.required('A comment is required')),
@@ -36,13 +39,12 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     values: string[];
   } = { list: [], values: [] };
 
-  summaryAlert: { type: '' | 'error' | 'warning' | 'success', title: string, message: string };
-
 
   isValidStepId(): boolean {
     const id = this.activatedRoute.snapshot.params.stepId;
     return (1 <= Number(id) && Number(id) <= 2);
   }
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -57,8 +59,6 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     this.stepId = this.activatedRoute.snapshot.params.stepId;
 
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
-
-    this.summaryAlert = { type: '', title: '', message: '' };
 
   }
 
@@ -175,10 +175,11 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
         this.redirectTo(`/accessor/innovations/${this.innovationId}/support`, { alert: 'supportOrganisationSuggestSuccess' });
       },
       () => {
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when creating an action',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help',
+          setFocus: true
         };
       }
     );

@@ -35,29 +35,16 @@
 
     <ng-container *ngIf="isSummaryStep()">
 
-      <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
-
-
-      <!-- <theme-alert [type]="alert.type" [title]="alert.title">
+      <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
         <p> Please verify what's missing with your answers </p>
         <ul class="nhsuk-list nhsuk-error-summary__list">
           <li *ngFor="let item of summaryList.items">
             <a *ngIf="item.errorMessage" [routerLink]="item.url"> {{ item.errorMessage | translate }} </a>
           </li>
         </ul>
-      </theme-alert> -->
+      </theme-alert>
 
-      <div *ngIf="!summaryList.valid" class="nhsuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1">
-        <h2 id="error-summary-title" class="nhsuk-error-summary__title"> There is a problem </h2>
-        <div class="nhsuk-error-summary__body">
-          <p> Please verify what's missing with your answers </p>
-          <ul class="nhsuk-list nhsuk-error-summary__list">
-            <li *ngFor="let item of summaryList.items">
-              <a *ngIf="item.errorMessage" [routerLink]="item.url"> {{ item.errorMessage | translate }} </a>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
 
       <dl class="nhsuk-summary-list">
         <div *ngFor="let item of summaryList.items" class="nhsuk-summary-list__row">
@@ -69,7 +56,7 @@
         </div>
       </dl>
 
-      <ng-container *ngIf="summaryList.valid">
+      <ng-container *ngIf="summaryList.items.length === 0">
         <h2 class="govuk-heading-m"> Complete this questionnaire </h2>
         <p class="govuk-body"> Your answers will help us guide you towards the most relevant information. You will be able to create an account after completing this questionnaire. </p>
         <form id="SurveyForm" method="post" enctype="application/json" novalidate=""></form>

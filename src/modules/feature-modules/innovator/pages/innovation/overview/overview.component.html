@@ -11,15 +11,15 @@
 
   <div class="nhsuk-grid-row">
     <div *ngIf="sections.submitted > 0" class="nhsuk-grid-column-one-third">
-      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.submitted }} <span class="nhsuk-u-visually-hidden"> sections submitted </span></h2>
+      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.submitted }} <span class="nhsuk-u-visually-hidden"> sections submitted </span></div>
       <p>sections submitted</p>
     </div>
     <div *ngIf="sections.draft > 0" class="nhsuk-grid-column-one-third">
-      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.draft }} <span class="nhsuk-u-visually-hidden"> sections in draft </span></h2>
+      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.draft }} <span class="nhsuk-u-visually-hidden"> sections in draft </span></div>
       <p>sections in draft</p>
     </div>
     <div *ngIf="sections.notStarted > 0" class="nhsuk-grid-column-one-third">
-      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.notStarted }} <span class="nhsuk-u-visually-hidden"> sections not started </span></h2>
+      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.notStarted }} <span class="nhsuk-u-visually-hidden"> sections not started </span></div>
       <p>sections not started</p>
     </div>
   </div>

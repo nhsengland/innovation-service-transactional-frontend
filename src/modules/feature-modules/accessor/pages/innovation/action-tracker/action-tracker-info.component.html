@@ -1,16 +1,12 @@
 <div class="nhsuk-grid-column-full">
   <div class="nhsuk-grid-row">
 
+    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+      <p> {{ alert.message }} </p>
+    </theme-alert>
+
     <p class="nhsuk-hint nhsuk-u-padding-top-3 nhsuk-u-margin-bottom-0">{{ action?.displayId }}</p>
     <h1 class="nhsuk-heading-xl">{{ action?.name }}</h1>
-
-    <ng-container *ngIf="summaryAlert.type">
-      <div class="nhsuk-error-summary" [ngClass]="{'border-color-success': summaryAlert.type === 'success', 'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert"
-        tabindex="-1">
-        <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
-        <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
-      </div>
-    </ng-container>
 
     <dl class="nhsuk-summary-list">
       <div class="nhsuk-summary-list__row">
