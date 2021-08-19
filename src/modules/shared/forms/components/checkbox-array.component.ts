@@ -30,10 +30,18 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   isRunningOnBrowser: boolean;
   isRunningOnServer: boolean;
 
-  // Return parent FormGroup (or FormArray) instance.
+  // Form controls.
   get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
   get fieldArrayControl(): FormArray { return this.parentFieldControl?.get(this.arrayName) as FormArray; }
   get fieldArrayValues(): string[] { return this.fieldArrayControl.value as string[]; }
+
+  // Accessibility.
+  get ariaDescribedBy(): null | string {
+    let s = '';
+    if (this.description) { s += `hint-${this.id}`; }
+    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    return s || null;
+  }
 
   conditionalFormControl(f: string): FormControl { return this.parentFieldControl?.get(f) as FormControl; }
 
@@ -117,7 +125,7 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
       this.fieldArrayControl.removeAt(valueIndex);
     }
 
-    this.customOnChangeFunc.emit({checked: event.checked, item: event.value});
+    this.customOnChangeFunc.emit({ checked: event.checked, item: event.value });
   }
 
 }

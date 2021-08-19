@@ -68,7 +68,14 @@
               </span>
             </ng-container>
 
-            <span class="app-task-list__task-name"> {{ (i + 1) + '.' + (j + 1) }} <a routerLink="{{ baseUrl }}/{{section.id}}"><span class="nhsuk-u-visually-hidden"> Go to </span> {{ section.title }} </a> </span>
+            <span class="app-task-list__task-name"> {{ (i + 1) + '.' + (j + 1) }} 
+              <a routerLink="{{ baseUrl }}/{{section.id}}"><span class="nhsuk-u-visually-hidden"> Go to </span> 
+                {{ section.title }} 
+                <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'NOT_STARTED'">Section not started</span>
+                <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'DRAFT'">Section in draft</span>
+                <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'SUBMITTED'">Section submitted</span>
+              </a> 
+            </span>
 
             <strong *ngIf="section.actionStatus" class="nhsuk-tag app-task-list__tag" [ngClass]="innovationSectionActionStatus[section.actionStatus].cssClass">
               {{ innovationSectionActionStatus[section.actionStatus].label }}

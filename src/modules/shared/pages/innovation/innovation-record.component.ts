@@ -96,7 +96,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
         this.summaryAlert = {
           type: 'success',
-          title: 'Your have successfully submitted your record for needs assessment',
+          title: 'You have successfully submitted your record for needs assessment',
           message: 'You can expect the service team to get in touch within one week.'
         };
 

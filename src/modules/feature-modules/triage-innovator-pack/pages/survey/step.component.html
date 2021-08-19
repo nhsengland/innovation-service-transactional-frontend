@@ -17,18 +17,18 @@
 
       <div class="nhsuk-hint nhsuk-u-margin-bottom-0">Question {{ currentStep.number }} of {{ totalNumberOfSteps }}</div>
 
-        <ng-container *ngIf="currentStep.data.details">
-          <details class="nhsuk-details">
-            <summary class="nhsuk-details__summary">
-              <span class="nhsuk-details__summary-text">{{ currentStep.data.details.title }}</span>
-            </summary>
-            <div class="nhsuk-details__text" [innerHTML]="currentStep.data.details.content"></div>
-          </details>
-        </ng-container>
+      <ng-container *ngIf="currentStep.data.details">
+        <details class="nhsuk-details">
+          <summary class="nhsuk-details__summary">
+            <span class="nhsuk-details__summary-text">{{ currentStep.data.details.title }}</span>
+          </summary>
+          <div class="nhsuk-details__text" [innerHTML]="currentStep.data.details.content"></div>
+        </details>
+      </ng-container>
 
-        <theme-form-engine formId="SurveyForm" [parameters]="currentStep.data.parameters" [values]="currentStep.data.defaultData"></theme-form-engine>
+      <theme-form-engine formId="SurveyForm" [parameters]="currentStep.data.parameters" [values]="currentStep.data.defaultData"></theme-form-engine>
 
-        <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('next')" class="nhsuk-button" (click)="onSubmitStep('next')"> Continue </button>
+      <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('next')" class="nhsuk-button" (click)="onSubmitStep('next')"> Continue </button>
 
     </ng-container>
 
@@ -36,6 +36,16 @@
     <ng-container *ngIf="isSummaryStep()">
 
       <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
+
+
+      <!-- <theme-alert [type]="alert.type" [title]="alert.title">
+        <p> Please verify what's missing with your answers </p>
+        <ul class="nhsuk-list nhsuk-error-summary__list">
+          <li *ngFor="let item of summaryList.items">
+            <a *ngIf="item.errorMessage" [routerLink]="item.url"> {{ item.errorMessage | translate }} </a>
+          </li>
+        </ul>
+      </theme-alert> -->
 
       <div *ngIf="!summaryList.valid" class="nhsuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1">
         <h2 id="error-summary-title" class="nhsuk-error-summary__title"> There is a problem </h2>

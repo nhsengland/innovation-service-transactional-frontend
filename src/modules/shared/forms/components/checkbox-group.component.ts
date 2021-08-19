@@ -29,14 +29,16 @@ export class FormCheckboxGroupComponent implements OnInit, DoCheck {
   isRunningOnBrowser: boolean;
   isRunningOnServer: boolean;
 
-  // Return parent FormGroup (or FormArray) instance.
-  get parentFieldControl(): AbstractControl | null {
-    return this.injector.get(ControlContainer).control;
-  }
+  // Form controls.
+  get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
+  get fieldGroupControl(): FormGroup { return this.parentFieldControl?.get(this.groupName) as FormGroup; }
 
-  // Get hold of the control being used.
-  get fieldGroupControl(): FormGroup {
-    return this.parentFieldControl?.get(this.groupName) as FormGroup;
+  // Accessibility.
+  get ariaDescribedBy(): null | string {
+    let s = '';
+    if (this.description) { s += `hint-${this.id}`; }
+    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    return s || null;
   }
 
 

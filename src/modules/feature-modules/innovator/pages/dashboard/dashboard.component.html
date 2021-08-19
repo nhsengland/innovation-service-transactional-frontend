@@ -3,7 +3,9 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <h1 class="nhsuk-u-margin-bottom-3"> Hello{{ user.displayName ? ', ' + user.displayName : '' }}! </h1>
+      <p class="nhsuk-heading-l"> Hello{{ user.displayName ? ', ' + user.displayName : '' }}! </p>
+
+      <h1 class="nhsuk-u-margin-bottom-3"> {{ pageTitle }} </h1>
 
       <theme-alert [type]="alert.type" [title]="alert.title" [message]="alert.message"></theme-alert>
 

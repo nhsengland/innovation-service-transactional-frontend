@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineHelper, FormEngineModel } from '@app/base/forms';
+import { AlertType } from '@app/base/models';
 
 import { TRIAGE_INNOVATOR_PACK_QUESTIONS } from '../../config/constants.config';
 
@@ -15,6 +16,8 @@ import { SurveyService } from '../../services/survey.service';
 export class SurveyStepComponent extends CoreComponent implements OnInit, AfterViewInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
+
+  alert: AlertType = { type: null };
 
   stepsData: FormEngineModel[] = [];
   currentStep: {
@@ -229,6 +232,11 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
     const errors = FormEngineHelper.getErrors(form);
 
     this.summaryList.valid = form.valid;
+
+    if (!this.summaryList.valid) {
+      this.alert = { type: 'ERROR', title: 'Unable to fetch innovations transfers' };
+    }
+
     this.stepsData.forEach((step, stepIndex) => {
       step.parameters.forEach(p => {
 
