@@ -45,7 +45,6 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
   }
   @Input() pageUniqueField = true;
 
-
   hasError = false;
   errorMessage = '';
 
@@ -57,11 +56,18 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
     showHideDescription: null | string;
   }[] = [];
 
-
-  // Return parent FormGroup (or FormArray) instance.
+  // Form controls.
   get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
   get fieldArrayControl(): FormArray { return this.parentFieldControl?.get(this.arrayName) as FormArray; }
   get fieldArrayValues(): string[] { return this.fieldArrayControl.value as string[]; }
+
+  // Accessibility.
+  get ariaDescribedBy(): null | string {
+    let s = '';
+    if (this.description) { s += `hint-${this.id}`; }
+    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    return s || null;
+  }
 
 
   constructor(

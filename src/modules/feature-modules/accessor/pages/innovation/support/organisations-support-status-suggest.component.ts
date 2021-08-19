@@ -82,7 +82,12 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
             value: item.id,
             label: item.name,
             description,
-            items: item.organisationUnits.map(i => ({ value: i.id, label: i.name, description, isEditable: true })),
+            items: item.organisationUnits.map(i => ({
+              value: i.id,
+              label: i.name,
+              description: (item.organisationUnits.length === 1 ? description : undefined),
+              isEditable: true
+            })),
           };
 
         });

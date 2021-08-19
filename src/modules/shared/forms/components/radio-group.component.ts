@@ -40,6 +40,13 @@ export class FormRadioGroupComponent extends ControlValueAccessorConnector imple
   isRunningOnBrowser: boolean;
   isRunningOnServer: boolean;
 
+  // Accessibility.
+  get ariaDescribedBy(): null | string {
+    let s = '';
+    if (this.description) { s += `hint-${this.id}`; }
+    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    return s || null;
+  }
 
   // Get hold of the control being used.
   conditionalFormControl(f: string): FormControl { return this.parentFieldControl?.get(f) as FormControl; }
@@ -74,7 +81,7 @@ export class FormRadioGroupComponent extends ControlValueAccessorConnector imple
     this.id = this.id || RandomGeneratorHelper.generateRandom();
     this.divCssOverride = this.cssOverride || 'nhsuk-u-padding-top-4';
 
-   }
+  }
 
   ngDoCheck(): void {
 

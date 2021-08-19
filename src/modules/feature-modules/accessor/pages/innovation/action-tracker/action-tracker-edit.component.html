@@ -24,10 +24,10 @@
         <div class="nhsuk-grid-column-full">
 
           <div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': statusError}">
-            <fieldset class="nhsuk-fieldset">
+            <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="statusError ? 'error-status' : null">
               <legend class="nhsuk-fieldset__legend"> Choose a status </legend>
 
-              <span *ngIf="statusError" class="nhsuk-error-message"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ statusError | translate }} </span>
+              <span *ngIf="statusError" id="error-status" class="nhsuk-error-message"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ statusError | translate }} </span>
 
               <div class="nhsuk-radios">
                 <div *ngFor="let item of statusItems; let i = index" class="nhsuk-radios__item">

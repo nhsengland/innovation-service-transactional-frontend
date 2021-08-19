@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+import { RandomGeneratorHelper } from '@modules/core';
+
 
 @Component({
   selector: 'theme-alert',
@@ -24,12 +26,18 @@ export class AlertComponent {
   @Input() title?: string;
   @Input() message?: string;
 
+  id: string;
+
   componentType: null | '' | 'INFORMATION' | 'SUCCESS' | 'WARNING' | 'ERROR' = '';
 
   borderColorCSS = '';
 
 
-  constructor() { }
+  constructor() {
+
+    this.id = RandomGeneratorHelper.generateRandom();
+
+  }
 
 
 }

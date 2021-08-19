@@ -1,5 +1,5 @@
 <div class="nhsuk-form-group {{ divCssOverride }}" [ngClass]="{'nhsuk-form-group--error': hasError}">
-  
+
   <ng-container *ngIf="label && pageUniqueField">
     <h1 class="nhsuk-label-wrapper">
       <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id"> {{ label }} </label>
@@ -10,16 +10,18 @@
   </ng-container>
 
   <ng-container *ngIf="description">
-    <div class="nhsuk-hint" id="{{ id }}-hint" [innerHTML]="description"></div>
+    <div id="hint-{{ id }}" class="nhsuk-hint" [innerHTML]="description"></div>
   </ng-container>
 
   <ng-container *ngIf="hasError">
-    <span class="nhsuk-error-message">
+    <span id="error-{{ id }}" class="nhsuk-error-message">
       <span class="nhsuk-u-visually-hidden">Error:</span> {{ errorMessage | translate }}
     </span>
   </ng-container>
 
-  <input [formControl]="fieldControl" [id]="id" [name]="controlName" [type]="type" [placeholder]="placeholder" [value]="fieldControl.value" class="nhsuk-input" [ngClass]="inputCssClass" />
+  <input [formControl]="fieldControl" [id]="id" [name]="controlName" [type]="type" [placeholder]="placeholder" [value]="fieldControl.value" class="nhsuk-input" [ngClass]="inputCssClass"
+    [attr.aria-invalid]="hasError ? 'true' : null"
+    [attr.aria-describedby]="ariaDescribedBy" />
 
   <ng-content select="[append]"></ng-content>
 
