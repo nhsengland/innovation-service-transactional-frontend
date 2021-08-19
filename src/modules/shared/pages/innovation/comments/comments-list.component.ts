@@ -48,7 +48,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
       case 'commentCreationSuccess':
         this.summaryAlert = {
           type: 'success',
-          title: 'Your have successfully created a comment',
+          title: 'You have successfully created a comment',
           message: 'Everyone who is currently engaging with your innovation will be notified.'
         };
         break;
@@ -146,7 +146,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
         this.summaryAlert = {
           type: 'success',
-          title: 'Your have successfully replied to the comment',
+          title: 'You have successfully replied to the comment',
           message: ''
         };
 

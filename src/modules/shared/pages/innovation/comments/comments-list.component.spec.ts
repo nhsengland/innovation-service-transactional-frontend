@@ -59,7 +59,7 @@ describe('Shared/Pages/Innovation/CommentsPageInnovationCommentsListComponent', 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
     activatedRoute.snapshot.queryParams = { alert: 'commentCreationSuccess' };
 
-    const expected = { type: 'success', title: 'Your have successfully created a comment', message: 'Everyone who is currently engaging with your innovation will be notified.' };
+    const expected = { type: 'success', title: 'You have successfully created a comment', message: 'Everyone who is currently engaging with your innovation will be notified.' };
 
     fixture = TestBed.createComponent(PageInnovationCommentsListComponent);
     component = fixture.componentInstance;
@@ -205,7 +205,7 @@ describe('Shared/Pages/Innovation/CommentsPageInnovationCommentsListComponent', 
     const responseMock = true;
     innovationStore.createInnovationComment$ = () => of(responseMock as any);
 
-    const expected = { type: 'success', title: 'Your have successfully replied to the comment', message: '' };
+    const expected = { type: 'success', title: 'You have successfully replied to the comment', message: '' };
 
     fixture = TestBed.createComponent(PageInnovationCommentsListComponent);
     component = fixture.componentInstance;
