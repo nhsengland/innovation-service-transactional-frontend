@@ -44,6 +44,7 @@
                 </a>
                 <strong *ngIf="organisation.shared && organisation.info.status" class="nhsuk-tag"
                   [ngClass]="innovationSupportStatus[organisation.info.status].cssClass">{{ innovationSupportStatus[organisation.info.status].label }}</strong>
+                  <span *ngIf="organisation.shared && organisation.info.status" class="nhsuk-u-visually-hidden">Organisation unit with support status {{ innovationSupportStatus[organisation.info.status].label.toLowerCase() }}</span>
               </dd>
             </div>
 
@@ -54,6 +55,7 @@
                     <dt class="">{{ organisationUnit.name }}</dt>
                     <dd class="ml-auto">
                       <strong class="nhsuk-tag ml-auto" [ngClass]="innovationSupportStatus[organisationUnit.status].cssClass">{{ innovationSupportStatus[organisationUnit.status].label }}</strong>
+                      <span class="nhsuk-u-visually-hidden">Organisation unit with support status {{ innovationSupportStatus[organisationUnit.status].label.toLowerCase() }}</span>
                     </dd>
                   </div>
                 </div>
