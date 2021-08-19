@@ -23,15 +23,20 @@
   </dl>
 </ng-container>
 
+<ng-container *ngIf="files.length > 0">
+  <a id="openAddFileDialogBtn" href="javascript:void(0)" (click)="openAddFileDialog()"> Add new file </a>
+</ng-container>
+
 <ngx-dropzone
   id="{{ id }}"
   [multiple]="dzConfig.multiple"
   [accept]="dzConfig.acceptedFiles"
   [maxFileSize]="dzConfig.maxFileSize"
   (change)="onChange($event)"
-  style="margin-bottom: 50px">
+  >
   <ngx-dropzone-label> Click or drop your file here </ngx-dropzone-label>
-  <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f.id)">
-    <ngx-dropzone-label style="word-break: break-word">{{ f.file.name.length > 50 ? (f.file.name | slice:0:50) + '...' : f.file.name }} ({{ f.file.type }})</ngx-dropzone-label>
-  </ngx-dropzone-preview>
+
+  <file-upload-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f.id)" (keypress)="onRemove(f.id)" attr.aria-label="Remove file {{f.file.name}}">
+    <ngx-dropzone-label class="font-color-text">{{ f.file.name.length > 50 ? (f.file.name | slice:0:50) + '...' : f.file.name }}</ngx-dropzone-label>
+  </file-upload-preview>
 </ngx-dropzone>

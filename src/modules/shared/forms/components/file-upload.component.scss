@@ -1,0 +1,17 @@
+:host {
+  ngx-dropzone {
+    margin-bottom: 50px; 
+    flex-wrap: wrap; 
+    height: auto; 
+    min-height: 180px; 
+    justify-content: space-around; 
+    width: 100%;
+  }
+
+  #openAddFileDialogBtn {
+    float: right;
+    font-size: 19px;
+    font-weight: 400;
+    padding-bottom: 8px;
+  }
+}

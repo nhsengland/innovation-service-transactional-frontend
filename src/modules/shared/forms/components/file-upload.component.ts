@@ -18,6 +18,7 @@ import { LoggerService, Severity } from '@modules/core/services/logger.service';
 @Component({
   selector: 'theme-form-file-upload',
   templateUrl: 'file-upload.component.html',
+  styleUrls: ['./file-upload.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -76,7 +77,6 @@ export class FormFileUploadComponent implements OnInit {
 
   }
 
-
   private uploadFile(file: File): Observable<FileUploadType> {
 
     const formdata = new FormData();
@@ -96,7 +96,6 @@ export class FormFileUploadComponent implements OnInit {
     );
   }
 
-
   onChange(event: NgxDropzoneChangeEvent): void {
 
     event.addedFiles.forEach(file => {
@@ -104,6 +103,7 @@ export class FormFileUploadComponent implements OnInit {
         response => {
           this.files.push({ id: response.id, file });
           this.fieldArrayControl.push(new FormGroup({ id: new FormControl(response.id), name: new FormControl(response.name), url: new FormControl(response.url) }));
+          this.evaluateDropZoneTabIndex();
           this.cdr.detectChanges();
         },
         error => {
@@ -118,14 +118,13 @@ export class FormFileUploadComponent implements OnInit {
   }
 
   onRemove(id: string): void {
-
     this.files.splice(this.files.findIndex(item => item.id === id), 1);
 
     const arrayIndex = this.fieldArrayValues.findIndex(item => item.id === id);
     if (arrayIndex > -1) { this.fieldArrayControl.removeAt(arrayIndex); }
 
+    this.evaluateDropZoneTabIndex();
     this.cdr.detectChanges();
-
   }
 
   onRemovePreviousUploadedFile(id: string): void {
@@ -135,5 +134,21 @@ export class FormFileUploadComponent implements OnInit {
     if (arrayIndex > -1) { this.fieldArrayControl.removeAt(arrayIndex); }
 
     this.cdr.detectChanges();
+  }
+
+  evaluateDropZoneTabIndex(): void {
+    const dropZoneElem: any = document.getElementsByTagName('ngx-dropzone')[0];
+
+    if (this.files.length === 0) {
+      dropZoneElem.firstElementChild.setAttribute('tabIndex', '0');
+    } else {
+      dropZoneElem.firstElementChild.setAttribute('tabIndex', '-1');
+    }
+  }
+
+  openAddFileDialog(): void {
+    const dropZoneElem: any = document.getElementsByTagName('ngx-dropzone')[0];
+
+    dropZoneElem.firstElementChild.click();
   }
 }
