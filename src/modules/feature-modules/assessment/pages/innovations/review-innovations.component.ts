@@ -150,8 +150,6 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   onTableOrder(column: string): void {
 
-    console.log('sfsdfasdfsfdsf');
-
     this.innovationsList.setOrderBy(column);
     this.getInnovationsList();
 
