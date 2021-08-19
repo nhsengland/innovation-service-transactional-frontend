@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 
 
 @Component({
@@ -12,9 +13,9 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
 
   module: '' | 'innovator' | 'accessor' | 'assessment' = '';
 
-  summaryList: { label: string; value: string; editStepNumber?: number; }[] = [];
+  alert: AlertType = { type: null };
 
-  summaryAlert: { type: '' | 'error' | 'warning', title: string, message: string };
+  summaryList: { label: string; value: string; editStepNumber?: number; }[] = [];
 
 
   constructor(
@@ -28,21 +29,19 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'accountDetailsUpdateSuccess':
-        this.summaryAlert = {
-          type: 'warning',
-          title: 'Your information has been saved',
-          message: ''
+        this.alert = {
+          type: 'WARNING',
+          title: 'Your information has been saved'
         };
         break;
       case 'accountDetailsUpdateError':
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when creating an action',
           message: 'Please, try again or contact us for further help'
         };
         break;
       default:
-        this.summaryAlert = { type: '', title: '', message: '' };
         break;
     }
 

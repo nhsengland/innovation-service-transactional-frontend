@@ -32,12 +32,6 @@
               <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Needs assessment</p>
               <h1 class="">{{ innovation.name }}</h1>
 
-              <ng-container *ngIf="summaryAlert.type">
-                <div class="nhsuk-error-summary" [ngClass]="{'border-color-success': summaryAlert.type === 'success'}" aria-labelledby="alert-summary-title" role="alert" tabindex="-1">
-                  <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
-                </div>
-              </ng-container>
-
               <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">The innovation</h2>
               <p>{{ assessment?.description }}</p>
               <dl class="nhsuk-summary-list">

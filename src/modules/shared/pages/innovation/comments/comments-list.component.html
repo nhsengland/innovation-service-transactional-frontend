@@ -13,15 +13,11 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
 
-    <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
+    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+      <p> {{ alert.message }} </p>
+    </theme-alert>
 
-    <ng-container *ngIf="summaryAlert.type">
-      <div class="nhsuk-error-summary" [ngClass]="{'border-color-success': summaryAlert.type === 'success', 'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert"
-        tabindex="-1">
-        <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
-        <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
-      </div>
-    </ng-container>
+    <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
 
     <button class="nhsuk-button" routerLink="/{{ module }}/innovations/{{ innovationId }}/comments/new"> Add new comment </button>
 
@@ -36,7 +32,7 @@
           <span class="nhsuk-u-visually-hidden"> Comments are sorted by </span> Newest first
         </span>
         <a *ngIf="currentCreatedOrder === 'desc'" routerLink="/{{ module }}/innovations/{{ innovationId }}/comments" [queryParams]="{ createdOrder: 'asc' }"
-          class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-padding-left-3" aria-label="Sort comments by oldest first">
+          class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-left-3" aria-label="Sort comments by oldest first">
           Oldest first
         </a>
         <span *ngIf="currentCreatedOrder === 'asc'" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-left-3">
@@ -52,7 +48,7 @@
         <li *ngFor="let comment of commentsList" class="nhsuk-grid-column-full nhsuk-card-group__item">
           <div class="nhsuk-card nhsuk-u-padding-3">
 
-            <div class="d-flex justify-content-space-between nhsuk-u-margin-bottom-2">
+            <div class="d-flex justify-content-space-between nhsuk-u-margin-bottom-2" role="heading" aria-level="2">
               <div class="nhsuk-u-margin-bottom-0">
                 <div class="d-flex">
                   <div class="nhsuk-u-padding-right-1">
@@ -94,7 +90,7 @@
                     <span class="nhsuk-u-visually-hidden">Error:</span> {{ formSubmittedFields[comment.id] | translate }}
                   </span>
                 </ng-container>
-                <input formControlName="{{ comment.id }}" [name]="comment.id" type="text" class="nhsuk-input"
+                <input id="comment-{{ comment.id }}" formControlName="{{ comment.id }}" [name]="comment.id" type="text" class="nhsuk-input"
                   attr.aria-labelledby="comment-reply-label-{{ comment.id }}{{ formSubmittedFields[comment.id] ? ' error-' + comment.id : ''}}" />
                 <button class="nhsuk-button nhsuk-u-font-size-14 nhsuk-u-margin-left-2" (click)="onReply(comment.id)">
                   Reply <span class="nhsuk-u-visually-hidden"> for comment made by {{ comment.user.name }} on {{ comment.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </span>

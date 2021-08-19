@@ -3,6 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { CustomValidators, FormEngineHelper } from '@app/base/forms';
+import { AlertType } from '@app/base/models';
 import { RoutingHelper } from '@modules/core';
 import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
 import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
@@ -18,6 +19,9 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
   module: '' | 'innovator' | 'accessor' = '';
   innovationId: string;
+
+  alert: AlertType = { type: null };
+
   innovation: InnovationDataType;
   currentCreatedOrder: 'asc' | 'desc';
 
@@ -25,8 +29,6 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
   form = new FormGroup({});
   formSubmittedFields: { [key: string]: string } = {};
-
-  summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
 
 
   constructor(
@@ -46,14 +48,13 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'commentCreationSuccess':
-        this.summaryAlert = {
-          type: 'success',
+        this.alert = {
+          type: 'SUCCESS',
           title: 'You have successfully created a comment',
           message: 'Everyone who is currently engaging with your innovation will be notified.'
         };
         break;
       default:
-        this.summaryAlert = { type: '', title: '', message: '' };
         break;
     }
 
@@ -74,7 +75,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
       response => {
         this.commentsList = response;
         this.commentsList.forEach(item => {
-          this.form.addControl(`${item.id}`, new FormControl('', CustomValidators.required('A reply is required')));
+          this.form.addControl(`${item.id}`, new FormControl('', CustomValidators.required('A reply text is required')));
           this.formSubmittedFields[item.id] = '';
         });
 
@@ -128,8 +129,16 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
   onReply(commentId: string): void {
 
     if (!this.form.get(commentId)?.valid) {
+
       this.formSubmittedFields[commentId] = FormEngineHelper.getValidationMessage({ required: this.form.get(commentId)?.errors?.required });
+
+      setTimeout(() => {
+        const e = document.getElementById(`comment-${commentId}`);
+        if (e) { e.focus(); }
+      });
+
       return;
+
     }
 
     const body = {
@@ -144,10 +153,10 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
         this.form.get(commentId)?.setValue('');
         this.form.get(commentId)?.markAsUntouched();
 
-        this.summaryAlert = {
-          type: 'success',
+        this.alert = {
+          type: 'SUCCESS',
           title: 'You have successfully replied to the comment',
-          message: ''
+          setFocus: true
         };
 
       },
@@ -155,10 +164,11 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
         this.logger.error('Error fetching data');
 
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when creating an action',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help',
+          setFocus: true
         };
 
       });

@@ -21,14 +21,11 @@
 
       <ng-container *ngIf="isSummaryStep()">
 
-        <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
+        <theme-alert type="ERROR" title="An unknown error occured">
+          <p> You may try to go back and try again. </p>
+        </theme-alert>
 
-        <div class="nhsuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1">
-          <h2 class="nhsuk-error-summary__title" id="error-summary-title"> An unknown error occured </h2>
-          <div class="nhsuk-error-summary__body">
-            <p> You may try to go back and try again. </p>
-          </div>
-        </div>
+        <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
 
         <dl class="nhsuk-summary-list">
           <div *ngFor="let item of summaryList.items" class="nhsuk-summary-list__row">

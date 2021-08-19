@@ -28,7 +28,6 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
 
-  summaryAlert: { type: '' | 'error' | 'success', title: string, message: string };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -41,7 +40,6 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
-    this.summaryAlert = { type: '', title: '', message: '' };
 
   }
 

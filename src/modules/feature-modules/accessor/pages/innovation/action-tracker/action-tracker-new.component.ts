@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
+import { AlertType } from '@app/base/models';
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
 import { AccessorService } from '../../../services/accessor.service';
@@ -16,6 +17,8 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
 
   innovationId: string;
 
+  alert: AlertType = { type: null };
+
   sectionItems: { value: string, label: string }[] = [];
 
   form = new FormGroup({
@@ -23,7 +26,6 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
     description: new FormControl('', CustomValidators.required('A description is required'))
   });
 
-  summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -43,8 +45,6 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
         }, [])
       ];
     }, []);
-
-    this.summaryAlert = { type: '', title: '', message: '' };
 
     // Pre-selects section if it was provided.
     if (this.activatedRoute.snapshot.queryParams.section) {
@@ -66,10 +66,11 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
         this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionCreationSuccess' });
       },
       () => {
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when creating an action',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help',
+          setFocus: true
         };
       }
     );

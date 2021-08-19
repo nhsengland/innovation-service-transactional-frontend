@@ -5,9 +5,11 @@
 
       <p class="nhsuk-heading-l"> Hello{{ user.displayName ? ', ' + user.displayName : '' }}! </p>
 
-      <h1 class="nhsuk-u-margin-bottom-3"> {{ pageTitle }} </h1>
+      <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+        <p> {{ alert.message }} </p>
+      </theme-alert>
 
-      <theme-alert [type]="alert.type" [title]="alert.title" [message]="alert.message"></theme-alert>
+      <h1 class="nhsuk-u-margin-bottom-3"> {{ pageTitle }} </h1>
 
       <ul class="nhsuk-grid-row nhsuk-card-group">
         <li *ngFor="let item of innovationTransfers" class="nhsuk-grid-column-full nhsuk-card-group__item">

@@ -2,6 +2,7 @@ import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 import { MappedObject } from '@modules/core';
 import { FormEngineComponent, FormEngineParameterModel } from '@modules/shared/forms';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
@@ -24,6 +25,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   assessmentId: string;
   stepId: number;
 
+  alert: AlertType = { type: null };
+
   form: {
     sections: {
       title: string;
@@ -35,8 +38,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   assessmentHasBeenSubmitted: null | boolean;
 
   currentAnswers: { [key: string]: any };
-
-  summaryAlert: { type: '' | 'error' | 'warning', title: string, message: string };
 
 
   isValidStepId(): boolean {
@@ -64,8 +65,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     this.assessmentHasBeenSubmitted = null;
 
     this.currentAnswers = {};
-
-    this.summaryAlert = { type: '', title: '', message: '' };
 
   }
 
@@ -125,7 +124,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   onSubmit(action: 'update' | 'saveAsDraft' | 'submit'): void {
 
-    this.summaryAlert = { type: '', title: '', message: '' };
+    this.alert = { type: '' };
 
     let isValid = true;
 
@@ -170,10 +169,11 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
         }
       },
       () => {
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when starting needs assessment',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help',
+          setFocus: true
         };
       }
     );
