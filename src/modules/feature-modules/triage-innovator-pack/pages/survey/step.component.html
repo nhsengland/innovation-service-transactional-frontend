@@ -56,7 +56,7 @@
         </div>
       </dl>
 
-      <ng-container *ngIf="summaryList.items.length === 0">
+      <ng-container *ngIf="summaryList.valid">
         <h2 class="govuk-heading-m"> Complete this questionnaire </h2>
         <p class="govuk-body"> Your answers will help us guide you towards the most relevant information. You will be able to create an account after completing this questionnaire. </p>
         <form id="SurveyForm" method="post" enctype="application/json" novalidate=""></form>

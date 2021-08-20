@@ -35,6 +35,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
       // queryParams: MappedObject,
       errorMessage: string | null
     }[];
+    valid: boolean;
   };
 
   isFirstStep(): boolean { return this.currentStep.number === 1; }
@@ -62,7 +63,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
     this.totalNumberOfSteps = this.stepsData.length;
 
     this.currentAnswers = {};
-    this.summaryList = { items: [] };
+    this.summaryList = { items: [], valid: false };
 
   }
 
@@ -168,7 +169,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
 
   onSubmitSurvey(): void {
 
-    if (this.summaryList.items.length === 0) { // If no errors.
+    if (this.summaryList.valid) {
 
       this.surveyService.submitSurvey(this.currentAnswers).subscribe(
         response => {
@@ -228,13 +229,16 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
 
   prepareSummaryData(): void {
 
-    this.summaryList = { items: [] };
+    this.alert = { type: null };
+    this.summaryList = { items: [], valid: true };
 
     const parameters = this.stepsData.map(fd => fd.parameters).reduce((a, p) => [...a, ...p], []);
     const form = FormEngineHelper.buildForm(parameters, this.currentAnswers);
     const errors = FormEngineHelper.getErrors(form);
 
-    if (!form.valid) {
+    this.summaryList.valid = form.valid;
+
+    if (!this.summaryList.valid) {
       this.alert = { type: 'ERROR', title: 'Unable to fetch innovations transfers', setFocus: true };
     }
 

@@ -208,8 +208,8 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: FormEngineModel[] = [
         label: 'What type of support are you currently looking for?',
         description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the innovation service.',
         validations: {
-          isRequired: [true, 'Choose at least one type of support'],
-          max: [5, 'Please, choose only 5 types of support']
+          isRequired: [true, 'Choose between 1 and 5 types of support'],
+          max: [5, 'Choose between 1 and 5 types of support']
         },
         items: [
           { value: 'ASSESSMENT', label: 'Adoption and health technology assessment' },

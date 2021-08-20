@@ -38,7 +38,7 @@
   >
   <ngx-dropzone-label> Click or drop your file here </ngx-dropzone-label>
 
-  <file-upload-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f.id)" (keypress)="onRemove(f.id)" attr.aria-label="Remove file {{f.file.name}}">
+  <file-upload-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f.id)" (keypress)="onRemove(f.id)" attr.aria-label="Delete {{f.file.name}}">
     <ngx-dropzone-label class="font-color-text">{{ f.file.name.length > 50 ? (f.file.name | slice:0:50) + '...' : f.file.name }}</ngx-dropzone-label>
   </file-upload-preview>
 </ngx-dropzone>

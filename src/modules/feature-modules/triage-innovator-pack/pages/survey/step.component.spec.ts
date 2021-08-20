@@ -254,6 +254,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent', () => 
     spyOn(component, 'decodeQueryParams').and.returnValue({ a: 'submit', f: { organisationSize: 'some answer' } });
     const surveyId = 'c29tZUlk';
 
+    component.summaryList.valid = true;
     surveyService.submitSurvey = (survey: { [key: string]: any; }) => of({ id: surveyId });
     fixture.detectChanges();
 
@@ -338,6 +339,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent', () => 
 
     const surveyId = 'c29tZUlk';
     surveyService.submitSurvey = () => of({ id: surveyId });
+    component.summaryList.valid = true;
     component.onSubmitSurvey();
     fixture.detectChanges();
 
@@ -359,6 +361,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent', () => 
     fixture.detectChanges();
 
     surveyService.submitSurvey = () => throwError('error');
+    component.summaryList.valid = true;
     component.onSubmitSurvey();
     fixture.detectChanges();
 
