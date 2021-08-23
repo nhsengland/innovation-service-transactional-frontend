@@ -28,7 +28,7 @@
 
         <ng-container *ngIf="pageStatus === 'READY' && innovationsList.getTotalRowsNumber() > 0">
 
-          <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-2">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
+          <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-2" aria-live="polite">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
 
           <form *ngIf="currentTab.showAssignedToMe" [formGroup]="form" class="nhsuk-u-margin-bottom-1">
             <theme-form-checkbox controlName="assignedToMe" label="Only show innovations assigned to me" size="small"></theme-form-checkbox>
