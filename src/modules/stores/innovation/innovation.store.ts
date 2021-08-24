@@ -113,7 +113,7 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   getSectionTitle(sectionId: InnovationSectionsIds): string {
-    return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id === sectionId)?.title || '';
+    return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id === sectionId)?.title.toLowerCase() || '';
   }
 
   getSection(sectionId: InnovationSectionsIds): InnovationSectionConfigType['sections'][0] | undefined {
