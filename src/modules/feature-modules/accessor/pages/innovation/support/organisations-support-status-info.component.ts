@@ -46,6 +46,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
   ) {
 
     super();
+    this.setPageTitle('Support status');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
@@ -88,7 +89,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
             },
             showHideStatus: 'closed',
             showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
-            showHideDescription: `This will show ${organisation.organisationUnits.length} units that belong to the ${organisation.name}`
+            showHideDescription: `that belong to the ${organisation.name}`
           };
         }
 
@@ -105,12 +106,12 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
       case 'opened':
         organisation.showHideStatus = 'closed';
         organisation.showHideText = `Show ${organisation.info.organisationUnits.length} units`;
-        organisation.showHideDescription = `This will show ${organisation.info.organisationUnits.length} units that belong to the ${organisation.info.name}`;
+        organisation.showHideDescription = `that belong to the ${organisation.info.name}`;
         break;
       case 'closed':
         organisation.showHideStatus = 'opened';
         organisation.showHideText = `Hide ${organisation.info.organisationUnits.length} units`;
-        organisation.showHideDescription = `This will hide ${organisation.info.organisationUnits.length} units that belong to the ${organisation.info.name}`;
+        organisation.showHideDescription = `that belong to the ${organisation.info.name}`;
         break;
       default:
         break;

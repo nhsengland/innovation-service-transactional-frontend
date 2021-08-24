@@ -51,7 +51,9 @@ export const locale = {
 
     messages: {
       errors: {},
-      informations: {},
+      informations: {
+        fetching_information: 'Please, wait while we fetch information from server.'
+      },
       notifications: {},
       warnings: {}
     },

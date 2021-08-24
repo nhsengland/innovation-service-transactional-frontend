@@ -32,6 +32,7 @@ export class InnovationActionTrackerListComponent extends CoreComponent implemen
   ) {
 
     super();
+    this.setPageTitle('Action tracker');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
@@ -64,8 +65,10 @@ export class InnovationActionTrackerListComponent extends CoreComponent implemen
       response => {
         this.openedActionsList.setData(response.openedActions);
         this.closedActionsList.setData(response.closedActions);
+        this.setPageStatus('READY');
       },
       error => {
+        this.setPageStatus('ERROR');
         this.logger.error(error);
       }
     );

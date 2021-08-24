@@ -33,9 +33,14 @@ export const SECTION_1_2: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.l1,
-        description: 'This is a simple statement that summarises your innovation, shows how it\'s different and documents the value that it brings to the customer.',
-        parameters: [{ id: 'hasProblemTackleKnowledge', dataType: 'radio-group', validations: { isRequired: [true, 'Choose one option'] }, items: hasProblemTackleKnowledgeItems }]
+        parameters: [{
+          id: 'hasProblemTackleKnowledge',
+          dataType: 'radio-group',
+          label: stepsLabels.l1,
+          description: 'This is a simple statement that summarises your innovation, shows how it\'s different and documents the value that it brings to the customer.',
+          validations: { isRequired: [true, 'Choose one option'] },
+          items: hasProblemTackleKnowledgeItems
+        }]
       })
     ],
     runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
@@ -59,24 +64,41 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
   steps.push(
     new FormEngineModel({
-      label: stepsLabels.l2,
-      description: 'Example problem description:<br />The process of checking a patient’s pulse to determine if there is atrial fibrillation using a finger and a watch is inherently inaccurate.',
-      parameters: [{ id: 'problemsTackled', dataType: 'textarea', label: 'Enter a description', validations: { isRequired: true } }]
+      parameters: [{
+        id: 'problemsTackled',
+        dataType: 'textarea',
+        label: stepsLabels.l2,
+        description: 'Example problem description:<br />The process of checking a patient’s pulse to determine if there is atrial fibrillation using a finger and a watch is inherently inaccurate.',
+        validations: { isRequired: [true, 'A description of problems tackled is required'] }
+      }]
     }),
     new FormEngineModel({
-      label: stepsLabels.l3,
-      description: 'Example consequence description:<br />Using this method approximately 25% of patients are not referred to secondary care who should be (false negative) and 15% of patients who are referred are referred unnecessarily (false positive). For those patients who are not picked up at this stage, their underlying disease will progress before being correctly diagnosed.',
-      parameters: [{ id: 'problemsConsequences', dataType: 'textarea', label: 'Enter a description', validations: { isRequired: true } }]
+      parameters: [{
+        id: 'problemsConsequences',
+        dataType: 'textarea',
+        label: stepsLabels.l3,
+        description: 'Example consequence description:<br />Using this method approximately 25% of patients are not referred to secondary care who should be (false negative) and 15% of patients who are referred are referred unnecessarily (false positive). For those patients who are not picked up at this stage, their underlying disease will progress before being correctly diagnosed.',
+        validations: { isRequired: [true, 'A description of what are the consequences of the problem is required'] }
+      }]
     }),
     new FormEngineModel({
-      label: stepsLabels.l4,
-      description: 'Describe your improvement. What will happen differently? How might that lead to a reduction of the consequences of the problem?',
-      parameters: [{ id: 'intervention', dataType: 'textarea', label: 'Enter a description', validations: { isRequired: true } }]
+      parameters: [{
+        id: 'intervention',
+        dataType: 'textarea',
+        label: stepsLabels.l4,
+        description: 'Describe your improvement. What will happen differently? How might that lead to a reduction of the consequences of the problem?',
+
+        validations: { isRequired: [true, 'Improvement description is required'] }
+      }]
     }),
     new FormEngineModel({
-      label: stepsLabels.l5,
-      description: 'Example impact description:<br />A 20% reduction in emergency referrals from care homes to the Emergency Department. For a mid-sized Clinical Commissioning Group covering a population of 250,000, this would equate to 150-200 referrals per year.',
-      parameters: [{ id: 'interventionImpact', dataType: 'textarea', label: 'Enter a description', validations: { isRequired: true } }]
+      parameters: [{
+        id: 'interventionImpact',
+        dataType: 'textarea',
+        label: stepsLabels.l5,
+        description: 'Example impact description:<br />A 20% reduction in emergency referrals from care homes to the Emergency Department. For a mid-sized Clinical Commissioning Group covering a population of 250,000, this would equate to 150-200 referrals per year.',
+        validations: { isRequired: [true, 'A description of the impact of the intervention is required'] }
+      }]
     })
   );
 

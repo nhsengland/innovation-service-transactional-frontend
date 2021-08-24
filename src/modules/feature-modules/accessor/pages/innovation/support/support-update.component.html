@@ -1,79 +1,75 @@
-<ng-container *ngIf="summaryAlert.type">
-  <div class="nhsuk-error-summary" [ngClass]="{'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert" tabindex="-1">
-    <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
-    <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
-  </div>
-</ng-container>
-
 <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-3">
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <h1 class="nhsuk-heading-1"> Update support status </h1>
+      <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+        <p> {{ alert.message }} </p>
+      </theme-alert>
+
+      <h1> {{ pageTitle }} </h1>
 
       <form [formGroup]="form">
 
         <ng-container *ngIf="stepNumber === 1">
 
           <div class="nhsuk-form-group">
-            <div class="nhsuk-radios">
-              <div *ngFor="let item of supportStatus; let i = index" class="nhsuk-radios__item">
-                <input formControlName="status" id="status{{ i }}" type="radio" name="status" [value]="item.key" class="nhsuk-radios__input" />
-                <label for="status{{ i }}" class="nhsuk-label nhsuk-radios__label nhsuk-radios__label_padding_5"><strong class="nhsuk-tag" [ngClass]="item.cssClass">{{ item.label }}</strong></label>
-                <div class="nhsuk-hint nhsuk-radios__hint">{{ item.description }}</div>
+            <fieldset class="nhsuk-fieldset">
+              <legend class="nhsuk-fieldset__legend"> Choose a support status </legend>
+
+              <div class="nhsuk-radios">
+                <div *ngFor="let item of supportStatus; let i = index" class="nhsuk-radios__item">
+                  <input formControlName="status" id="status{{ i }}" type="radio" name="status" [value]="item.key" class="nhsuk-radios__input" />
+                  <label for="status{{ i }}" class="nhsuk-label nhsuk-radios__label nhsuk-radios__label_padding_5">
+                    <strong class="nhsuk-tag" [ngClass]="item.cssClass"> {{ item.label }} </strong>
+                  </label>
+                  <div class="nhsuk-hint nhsuk-radios__hint"> {{ item.description }} </div>
+                </div>
               </div>
-            </div>
+
+            </fieldset>
           </div>
 
-          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep()">Continue</button>
+          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep()"> Continue </button>
 
         </ng-container>
 
 
         <ng-container *ngIf="stepNumber === 2">
 
-          <h3 class="nhsuk-heading-3">
+          <div class="nhsuk-heading-m">
             <section class="d-flex align-items-center">
               <div> You selected </div>
-              <strong class="nhsuk-tag nhsuk-u-margin-left-3" [ngClass]="currentStatus.cssClass">{{ currentStatus.label }}</strong>
+              <strong class="nhsuk-tag nhsuk-u-margin-left-3" [ngClass]="currentStatus.cssClass"> {{ currentStatus.label }} </strong>
             </section>
-          </h3>
-          <p class="nhsuk-hint"> {{ currentStatus.description }} </p>
-          <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5"> Assign one or more accessors from {{ organisationUnit }} </h3>
-          <div class="nhsuk-form-group">
-            <theme-form-checkbox-array [arrayName]="accessorsArrayName" [items]="accessorList"></theme-form-checkbox-array>
           </div>
 
-          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep()">Continue</button>
+          <p class="nhsuk-hint"> {{ currentStatus.description }} </p>
+
+          <theme-form-checkbox-array arrayName="accessors" label="Assign one or more accessors from {{ organisationUnit }}" [items]="accessorList" [pageUniqueField]="false"></theme-form-checkbox-array>
+
+          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
 
         </ng-container>
 
 
         <ng-container *ngIf="stepNumber === 3">
 
-          <div class="nhsuk-form-group">
-            <ng-container *ngIf="selectedAccessors.length > 0">
-              <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5 nhsuk-cancel-wrapper"> You assigned </h3>
-            </ng-container>
-            <div *ngFor="let item of selectedAccessors" class="d-flex align-items-center">
-              <theme-svg-icon type="success" class="nhsuk-u-padding-top-1 nhsuk-u-margin-right-1"></theme-svg-icon>
-              <strong>{{ item.label }}</strong>
-            </div>
-            <br />
-            <h3 class="nhsuk-heading-3 nhsuk-radios__heading_margin_bottom_5"> Let the innovator know what's changed </h3>
-            <br />
-            <div>Enter your comment</div>
-            <div class="nhsuk-form-group">
-              <theme-form-textarea [controlName]="commentField" [cssOverride]="textAreaCssOverride"></theme-form-textarea>
-            </div>
-          </div>
+          <p *ngIf="selectedAccessors.length > 0" class="nhsuk-heading-m nhsuk-u-margin-0"> You assigned </p>
+          <ul>
+            <li *ngFor="let item of selectedAccessors" class="d-flex align-items-center">
+              <theme-svg-icon type="success" class="nhsuk-u-margin-top-2 nhsuk-u-margin-right-1"></theme-svg-icon>
+              <div> {{ item.label }} </div>
+            </li>
+          </ul>
 
-          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Save and post comment</button>
+          <theme-form-textarea controlName="comment" label="Let the innovator know what's changed" [pageUniqueField]="false"></theme-form-textarea>
+
+          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()"> Save and post comment </button>
 
         </ng-container>
 
-        <div class="nhsuk-cancel-wrapper">
+        <div class="nhsuk-u-padding-bottom-5">
           <a routerLink="/accessor/innovations/{{ innovationId }}/support"> Cancel </a>
         </div>
 

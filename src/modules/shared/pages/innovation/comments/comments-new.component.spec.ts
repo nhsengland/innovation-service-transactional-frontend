@@ -91,9 +91,10 @@ describe('Shared/Pages/Innovation/CommentsPageInnovationCommentsNewComponent', (
     innovationStore.createInnovationComment$ = () => throwError('error');
 
     const expected = {
-      type: 'error',
+      type: 'ERROR',
       title: 'An error occured when creating an action',
-      message: 'Please, try again or contact us for further help'
+      message: 'Please, try again or contact us for further help',
+      setFocus: true
     };
 
     fixture = TestBed.createComponent(PageInnovationCommentsNewComponent);
@@ -103,7 +104,7 @@ describe('Shared/Pages/Innovation/CommentsPageInnovationCommentsNewComponent', (
     component.onSubmit();
     fixture.detectChanges();
 
-    expect(component.summaryAlert).toEqual(expected);
+    expect(component.alert).toEqual(expected);
 
   });
 

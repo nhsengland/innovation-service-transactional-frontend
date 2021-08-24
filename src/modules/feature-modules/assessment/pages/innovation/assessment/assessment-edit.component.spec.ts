@@ -33,7 +33,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
         StoresModule,
         AssessmentModule
       ]
-    }).compileComponents();
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
@@ -122,9 +122,8 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
 
     fixture = TestBed.createComponent(InnovationAssessmentEditComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
 
-    component.onSubmit('continue');
+    component.onSubmit('submit');
     fixture.detectChanges();
 
     expect(routerSpy).toHaveBeenCalledWith(['/assessment/innovations/Inno01/assessments/Assess01/edit/2'], {});
@@ -133,7 +132,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
 
   it('should submit and call api with success', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', assessmentId: 'Assess01', stepId: 1 };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', assessmentId: 'Assess01', stepId: 2 };
     const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
     assessmentService.updateInnovationNeedsAssessment = () => of({ id: 'Assess01' });
@@ -155,9 +154,10 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
     assessmentService.updateInnovationNeedsAssessment = () => throwError('error');
 
     const expected = {
-      type: 'error',
+      type: 'ERROR',
       title: 'An error occured when starting needs assessment',
-      message: 'Please, try again or contact us for further help'
+      message: 'Please, try again or contact us for further help',
+      setFocus: true
     };
 
     fixture = TestBed.createComponent(InnovationAssessmentEditComponent);
@@ -167,7 +167,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
     component.onSubmit('saveAsDraft');
     fixture.detectChanges();
 
-    expect(component.summaryAlert).toEqual(expected);
+    expect(component.alert).toEqual(expected);
 
   });
 

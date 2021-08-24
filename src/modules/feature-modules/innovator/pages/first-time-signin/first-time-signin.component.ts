@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { concatMap } from 'rxjs/operators';
 
@@ -15,7 +15,7 @@ import { InnovatorService } from '../../services/innovator.service';
   selector: 'app-innovator-pages-first-time-signin',
   templateUrl: './first-time-signin.component.html'
 })
-export class FirstTimeSigninComponent extends CoreComponent implements OnInit, AfterViewInit {
+export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
@@ -103,9 +103,12 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
 
           this.currentStep.data = this.stepsData[this.currentStep.number - 1];
           this.currentStep.data.defaultData = this.currentAnswers;
+
+          this.setPageTitle(this.currentStep.data.parameters[0].label || ''); // 1 question per page approach.
         }
 
         if (this.isSummaryStep()) {
+          this.setPageTitle('First Time Signin failed');
           this.prepareSummaryData();
         }
 
@@ -113,8 +116,6 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
     );
 
   }
-
-  ngAfterViewInit(): void { }
 
 
   onSubmitStep(action: 'previous' | 'next'): void {
@@ -186,7 +187,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
     this.stepsData.forEach((step, stepIndex) => {
       if (this.isVisibleStep(stepIndex + 1)) {
         step.parameters.forEach(p => {
-          this.summaryList.items.push({ label: step.label || '', value: this.currentAnswers[p.id], url: `/innovator/first-time-signin/${stepIndex + 1}`, errorMessage: errors[p.id] || null });
+          this.summaryList.items.push({ label: step.parameters[0].label || '', value: this.currentAnswers[p.id], url: `/innovator/first-time-signin/${stepIndex + 1}`, errorMessage: errors[p.id] || null });
         });
       }
     });

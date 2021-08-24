@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
@@ -16,13 +17,13 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
   innovationId: string;
   actionId: string;
+
+  alert: AlertType = { type: null };
+
   actionName: string;
   actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
 
   action?: getInnovationActionInfoOutDTO;
-
-
-  summaryAlert: { type: '' | 'success' | 'error' | 'warning' | 'neutral' , title: string, message: string };
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
@@ -34,6 +35,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
   ) {
 
     super();
+    this.setPageTitle('Action detail');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.actionId = this.activatedRoute.snapshot.params.actionId;
@@ -44,14 +46,13 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
     switch (this.activatedRoute.snapshot.queryParams.alert) {
 
       case 'actionDeclined':
-        this.summaryAlert = {
-          type: 'neutral',
+        this.alert = {
+          type: 'INFORMATION',
           title: `Action declined`,
           message: 'The accessor will be notified.'
         };
         break;
       default:
-        this.summaryAlert = { type: '', title: '', message: '' };
         break;
     }
 
@@ -75,8 +76,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
   }
 
   private declineVisible(): void {
-    this.declineShow =  this.action?.status.toLocaleLowerCase()
-      === INNOVATION_SECTION_ACTION_STATUS.REQUESTED.label.toLocaleLowerCase();
+    this.declineShow = this.action?.status.toLocaleLowerCase() === INNOVATION_SECTION_ACTION_STATUS.REQUESTED.label.toLocaleLowerCase();
   }
 
 }

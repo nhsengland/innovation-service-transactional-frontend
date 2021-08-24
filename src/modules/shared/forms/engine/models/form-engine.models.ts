@@ -37,10 +37,10 @@ export class FormEngineParameterModel {
   validations?: { // Validations accepts 2 formats. Second format allows to display a custom (translated or not) message.
     isRequired?: boolean | [boolean, string];
     pattern?: string | [string, string];
-    min?: string | number;
-    max?: string | number;
-    minLength?: string | number;
-    maxLength?: string | number;
+    min?: number | [number, string];
+    max?: number | [number, string];
+    minLength?: number;
+    maxLength?: number;
   };
 
   additional?: FormEngineParameterModel[];

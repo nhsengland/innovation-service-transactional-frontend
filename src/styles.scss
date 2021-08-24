@@ -123,6 +123,32 @@ $service-manual-container-size: 1100px; // Container width variable.
   padding: 0.25rem 9999rem;
 }
 
+
+// Content visibility.
+@media (max-width: 48.0525em) {
+  .app-u-hide-mobile {
+    display: none
+  }
+}
+@media (min-width: 48.0625em) {
+  .app-u-hide-desktop {
+    display: none
+  }
+}
+@media print {
+  .app-u-hide-print {
+    display: none;
+  }
+  a:after {
+    content: none;
+  }
+  div.page-break {
+    break-before: always;
+    break-inside: avoid;
+  }
+}
+
+
 // Links and buttons.
 .button-as-link {
   font-family: 'Frutiger W01', Arial, sans-serif;
@@ -188,7 +214,6 @@ $service-manual-container-size: 1100px; // Container width variable.
   }
 }
 
-
 .nhsuk-checkboxes__input { // Undertermined checkboxes.
   + .undertermined-checkbox::after {
     height: unset !important;
@@ -197,6 +222,14 @@ $service-manual-container-size: 1100px; // Container width variable.
     width: 22px !important;
     transform: unset !important;
     opacity: 1 !important;
+  }
+}
+
+.nhsuk-checkboxes__conditional, .nhsuk-radios__conditional { // Conditional inputs labels smaller.
+  label.nhsuk-heading-m {
+    font-size: 1.1875rem;
+    font-weight: normal;
+    line-height: 1.47368;
   }
 }
 
@@ -284,7 +317,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 
 .app-tabs {
-  margin-bottom: 25px;
+  margin-bottom: 10px;
   border-bottom: solid 1px var(--color_nhsuk-grey-4);
 
   .app-tabs__list {
@@ -333,29 +366,5 @@ $service-manual-container-size: 1100px; // Container width variable.
 @media (min-width: 40.0625em) {
   .app-index-navigation {
     padding-top: 24px
-  }
-}
-
-/* Content visibility. */
-@media (max-width: 48.0525em) {
-  .app-u-hide-mobile {
-    display: none
-  }
-}
-@media (min-width: 48.0625em) {
-  .app-u-hide-desktop {
-    display: none
-  }
-}
-@media print {
-  .app-u-hide-print {
-    display: none;
-  }
-  a:after {
-    content: none;
-  }
-  div.page-break {
-    break-before: always;
-    break-inside: avoid;
   }
 }

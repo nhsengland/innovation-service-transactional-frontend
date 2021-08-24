@@ -14,7 +14,7 @@
             </div>
           </nav>
           <div class="nhsuk-u-padding-top-8">
-            <h3 class="nhsuk-heading-xs">{{ assessment?.finishedAt | date: ('app.date_formats.long_date' | translate) }}</h3>
+            <p class="nhsuk-heading-xs">{{ assessment?.finishedAt | date: ('app.date_formats.long_date' | translate) }}</p>
             <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.assignToName }}</p>
             <p class="nhsuk-hint">Needs assessment team</p>
           </div>
@@ -25,7 +25,7 @@
             <div class="nhsuk-grid-column-full">
 
               <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Needs assessment</p>
-              <h1 class="">{{ innovation.name }}</h1>
+              <h1>{{ innovation.name }}</h1>
 
               <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">The innovation</h2>
               <p>{{ assessment?.description }}</p>
@@ -53,7 +53,7 @@
               <p *ngFor="let item of suggestedOrganisations" class="nhsuk-u-margin-bottom-1">{{ item }}</p>
 
               <a routerLink="/accessor/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
-              <a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"> Update support status </a>
+              <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"> Update support status </a>
 
             </div>
           </div>
@@ -83,7 +83,7 @@
         <div *ngFor="let item of logHistory" class="nhsuk-grid-row">
 
           <div class="nhsuk-grid-column-one-quarter">
-            <h3 class="nhsuk-heading-xs nhsuk-u-margin-bottom-0"> {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }} </h3>
+            <p class="nhsuk-heading-xs nhsuk-u-margin-bottom-0"> {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }} </p>
             <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"> {{ item.createdBy }} </p>
             <p class="nhsuk-hint"> {{ item.organisationUnit.name }} </p>
           </div>

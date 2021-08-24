@@ -1,10 +1,9 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { NavigationEnd, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { filter } from 'rxjs/operators';
-
 import { isPlatformBrowser } from '@angular/common';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
+
 
 import { locale as enLanguage } from './config/translations/en';
 
@@ -18,7 +17,6 @@ export class AppComponent {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    private titleService: Title,
     public router: Router,
     private translateService: TranslateService
   ) {
@@ -27,8 +25,6 @@ export class AppComponent {
     this.translateService.setTranslation(enLanguage.lang, enLanguage.data, true);
     this.translateService.setDefaultLang('en');
     this.translateService.use('en');
-
-    this.titleService.setTitle(translateService.instant('app.title'));
 
     if (isPlatformBrowser(this.platformId)) {
 

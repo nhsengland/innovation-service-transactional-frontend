@@ -33,17 +33,20 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   supportLogType = SupportLogType;
 
+  isQualifyingAccessorRole = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private accessorService: AccessorService
   ) {
 
     super();
+    this.setPageTitle('Needs assessment overview');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
-
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
   }
 
 

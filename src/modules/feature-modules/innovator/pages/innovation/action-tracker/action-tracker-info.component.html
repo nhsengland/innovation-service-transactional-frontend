@@ -1,17 +1,9 @@
-<ng-container *ngIf="summaryAlert.type">
-  <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
-    <div class="nhsuk-grid-column-full">
-      <div class="nhsuk-error-summary" [ngClass]="{'border-color-neutral': summaryAlert.type === 'neutral', 'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert"
-        tabindex="-1">
-        <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
-        <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
-      </div>
-    </div>
-  </div>
-</ng-container>
-
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
+
+    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+      <p> {{ alert.message }} </p>
+    </theme-alert>
 
     <p class="nhsuk-hint nhsuk-u-padding-top-3 nhsuk-u-margin-bottom-0">{{ action?.displayId }}</p>
     <h1 class="nhsuk-heading-xl">{{ action?.name }}</h1>
@@ -21,7 +13,7 @@
         <dt class="nhsuk-summary-list__key"> Status </dt>
         <dd class="nhsuk-summary-list__value">
           <strong class="nhsuk-tag" [ngClass]="innovationSectionActionStatus[action?.status || ''].cssClass">{{ innovationSectionActionStatus[action?.status || ''].label }}</strong>
-          <a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/statuses" class="float-r"> What does this mean? </a>
+          <a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/statuses" class="float-r" arial-label="View actions status keys information"> Status key </a>
         </dd>
       </div>
       <div class="nhsuk-summary-list__row">
@@ -41,7 +33,8 @@
     </dl>
 
     <a routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ action?.section }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-5"> Go to section </a>
-    <a *ngIf="declineShow" routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/{{ action?.id }}/decline" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5 nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-5"> Decline action </a>
+    <a *ngIf="declineShow" routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/{{ action?.id }}/decline"
+      class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5 nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-5"> Decline action </a>
 
   </div>
 </div>

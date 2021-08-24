@@ -1,13 +1,6 @@
-<ng-container *ngIf="summaryAlert.type">
-  <div class="nhsuk-error-summary" [ngClass]="{'border-color-success': summaryAlert.type === 'success'}" aria-labelledby="alert-summary-title" role="alert" tabindex="-1">
-    <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
-    <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
-  </div>
-</ng-container>
-
 <div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
   <div class="nhsuk-grid-column-two-thirds">
-    <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation.name }}</h1>
+    <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation.name }}</p>
   </div>
   <div *ngIf="innovation.assessment.id" class="nhsuk-grid-column-one-third text-align-right">
     <a routerLink="/accessor/innovations/{{ innovationId }}/assessments/{{ innovation.assessment.id }}"> View needs assessment </a>
@@ -15,9 +8,15 @@
 </div>
 <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
 
-<h2 class="nhsuk-heading-xl">Support status</h2>
 
-<h3 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">{{ innovationSupport.organisationUnit }}</h3>
+<theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+  <p> {{ alert.message }} </p>
+</theme-alert>
+
+<h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
+
+
+<p class="nhsuk-heading-s nhsuk-u-margin-bottom-2">{{ innovationSupport.organisationUnit }}</p>
 <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 <dl class="nhsuk-summary-list">
   <div class="nhsuk-summary-list__row">
@@ -34,8 +33,7 @@
   </div>
 </dl>
 
-<a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support.id || 'new' }}" class="nhsuk-button"> Update status </a>
-
+<a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support.id || 'new' }}" class="nhsuk-button"> Update status </a>
 
 <h2 class="nhsuk-heading-l nhsuk-u-padding-top-5">All organisations</h2>
 

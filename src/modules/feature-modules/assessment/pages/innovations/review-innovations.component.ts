@@ -14,7 +14,7 @@ import { AssessmentService, getInnovationsListEndpointOutDTO } from '../../servi
 export class ReviewInnovationsComponent extends CoreComponent implements OnInit {
 
   tabs: { key: string, title: string, description: string, link: string, notifications?: number, queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' | 'NEEDS_ASSESSMENT' | 'IN_PROGRESS' } }[] = [];
-  currentTab: { status: string, description: string, innovationsOverdue: number };
+  currentTab: { key: string, status: string, description: string, innovationsOverdue: number };
 
   innovationsList: TableModel<(getInnovationsListEndpointOutDTO['data'][0])>;
 
@@ -27,6 +27,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   ) {
 
     super();
+    this.setPageTitle('Innovations');
 
     this.tabs = [
       {
@@ -52,7 +53,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
       }
     ];
 
-    this.currentTab = { status: '', description: '', innovationsOverdue: 0 };
+    this.currentTab = { key: '', status: '', description: '', innovationsOverdue: 0 };
 
     this.innovationsList = new TableModel({
       pageSize: 10000
@@ -70,9 +71,11 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
           return;
         }
 
+        const tab = this.tabs.find(t => t.queryParams.status === queryParams.status);
         this.currentTab = {
+          key: tab?.key || '',
           status: queryParams.status,
-          description: this.tabs.find(tab => tab.queryParams.status === queryParams.status)?.description || this.tabs[0].description,
+          description: tab?.description || this.tabs[0].description,
           innovationsOverdue: 0
         };
 
@@ -119,17 +122,23 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   getInnovationsList(): void {
 
+    this.setPageStatus('WAITING');
+
     this.assessmentService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(
       response => {
         this.innovationsList.setData(response.data, response.count);
         this.currentTab.innovationsOverdue = response.data.filter(item => item.isOverdue).length;
+        this.setPageStatus('READY');
       },
-      error => this.logger.error(error)
+      error => {
+        this.setPageStatus('ERROR');
+        this.logger.error(error);
+      }
     );
 
   }
 
-  getNotificationsGroupedByStatus(): void{
+  getNotificationsGroupedByStatus(): void {
     this.notificationService.getAllUnreadNotificationsGroupedByStatus('INNOVATION_STATUS').subscribe(
       response => {
         for (const t of this.tabs) {

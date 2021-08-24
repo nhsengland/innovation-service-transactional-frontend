@@ -35,19 +35,25 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
   steps: [
 
     new FormEngineModel({
-      label: 'What\'s your name?',
-      parameters: [{ id: 'displayName', dataType: 'text', label: 'Full name', validations: { isRequired: true } }]
+      parameters: [{
+        id: 'displayName',
+        dataType: 'text',
+        label: 'What\'s your full name?',
+        validations: { isRequired: [true, 'Name is required'] }
+      }]
     }),
 
     // new FormEngineModel({
-    //   label: 'Phone number',
-    //   parameters: [{ id: 'mobilePhone', dataType: 'text' }]
+    //   parameters: [{ id: 'mobilePhone', dataType: 'text', label: 'Phone number' }]
     // }),
 
     new FormEngineModel({
-      label: 'Are you creating this innovation as part of a company or organisation?',
+
       parameters: [{
-        id: 'isCompanyOrOrganisation', dataType: 'radio-group', validations: { isRequired: true },
+        id: 'isCompanyOrOrganisation',
+        dataType: 'radio-group',
+        label: 'Are you creating this innovation as part of a company or organisation?',
+        validations: { isRequired: [true, 'Choose one option'] },
         items: [
           {
             value: 'YES',
@@ -79,9 +85,11 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
 
   steps.push(
     new FormEngineModel({
-      label: 'What\'s the size of your company or organisation?',
       parameters: [{
-        id: 'organisationSize', dataType: 'radio-group', validations: { isRequired: [true, 'Organisation size is required'] },
+        id: 'organisationSize',
+        dataType: 'radio-group',
+        label: 'What\'s the size of your company or organisation?',
+        validations: { isRequired: [true, 'Organisation size is required'] },
         items: [
           { value: '1 to 5 employees', label: '1 to 5 employees' },
           { value: '6 to 25 employees', label: '6 to 25 employees' },

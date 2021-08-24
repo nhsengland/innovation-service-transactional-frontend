@@ -27,8 +27,13 @@ export const SECTION_3_1: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.l1,
-        parameters: [{ id: 'hasMarketResearch', dataType: 'radio-group', validations: { isRequired: true }, items: hasMarketResearchItems }]
+        parameters: [{
+          id: 'hasMarketResearch',
+          dataType: 'radio-group',
+          label: stepsLabels.l1,
+          validations: { isRequired: [true, 'Choose one option'] },
+          items: hasMarketResearchItems
+        }]
       }),
     ],
     runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
@@ -49,8 +54,12 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
   steps.push(
     new FormEngineModel({
-      label: stepsLabels.l2,
-      parameters: [{ id: 'marketResearch', dataType: 'textarea', validations: { isRequired: true } }]
+      parameters: [{
+        id: 'marketResearch',
+        dataType: 'textarea',
+        label: stepsLabels.l2,
+        validations: { isRequired: [true, 'A description of the market research is required'] }
+      }]
     })
   );
 

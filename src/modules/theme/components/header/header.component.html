@@ -1,5 +1,5 @@
 <noscript>
-  <div class="app-u-hide-print bg-color-warning" role="region" aria-label="Javascript">
+  <div class="app-u-hide-print bg-color-warning">
     <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
       <p class="nhsuk-body-s nhsuk-u-margin-0">It looks like JavaScript is disabled in your browser. You'll need to enable it if you want to create an account.</p>
       <p class="nhsuk-body-s nhsuk-u-margin-0">
@@ -11,9 +11,9 @@
 </noscript>
 
 <ng-container *ngIf="showCookiesBanner">
-  <div class="app-u-hide-print bg-color-white nhsuk-u-padding-top-4" role="region" aria-label="Cookies information">
+  <div class="app-u-hide-print bg-color-white nhsuk-u-padding-top-4">
     <div class="nhsuk-width-container app-width-container">
-      <h2>Cookies on the NHS website</h2>
+      <p class="nhsuk-heading-l">Cookies on the NHS website</p>
       <p>We've put some small files called cookies on your device to make our site work.</p>
       <p>We'd also like to use analytics cookies. These send information about how our site is used to services called Adobe Analytics, Hotjar and Google Analytics. We use this information to improve our site.</p>
       <p>Let us know if this is OK. We'll use a cookie to save your choice. You can <a routerLink="/policies/cookies-policy"> read more about our cookies </a> before you choose.</p>
@@ -26,23 +26,22 @@
 </ng-container>
 
 <ng-container *ngIf="showCookiesSaveSuccess">
-  <div class="app-u-hide-print cookie-success-banner" role="region" aria-label="Cookies save success">
+  <div class="app-u-hide-print cookie-success-banner">
     <div class="nhsuk-width-container app-width-container">
       <p class="nhsuk-u-margin-0">You can change your cookie settings at any time using our <a routerLink="/policies/cookies-policy">cookies page</a>.</p>
     </div>
   </div>
 </ng-container>
 
-<div class="app-u-hide-print nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2" role="region" aria-label="BETA Service information">
+<a class="nhsuk-skip-link" href="javascript:void()" (click)="handleSkipLinkClick($event)"> Skip to main content </a>
+
+<div class="app-u-hide-print nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
   <div class="nhsuk-width-container app-width-container d-flex">
     <strong class="nhsuk-tag nhsuk-u-margin-right-2"> BETA </strong>
     <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">This is a new service - your <a href="https://surveys.hotjar.com/8e2b12c2-150d-4704-9b09-4df3a791e51b" target="_blank" rel="noopener noreferrer">feedback</a> will help us to improve it.</p>
   </div>
 </div>
 
-<div role="region" aria-label="Skip">
-  <a class="nhsuk-skip-link" [href]="currentUrl"> Skip to main content </a>
-</div>
 
 <header class="nhsuk-header" role="banner">
 
@@ -68,64 +67,62 @@
 
   </div>
 
-  <ng-container *ngIf="showMenuBar">
-    <nav class="nhsuk-header__navigation app-header__navigation" id="header-navigation" role="navigation" aria-label="Primary navigation" aria-labelledby="label-navigation">
-      <div class="nhsuk-width-container app-width-container">
+  <nav id="header-navigation" class="nhsuk-header__navigation app-header__navigation" [ngClass]="{ 'only-mobile-menu': !showMenuBar }" role="navigation" aria-label="Primary navigation" aria-labelledby="label-navigation">
+    <div class="nhsuk-width-container app-width-container">
 
-        <p class="nhsuk-header__navigation-title"><span id="label-navigation">Menu</span>
-          <button class="nhsuk-header__navigation-close" id="close-menu">
-            <svg class="nhsuk-icon nhsuk-icon__close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"></path>
+      <p class="nhsuk-header__navigation-title"><span id="label-navigation">Menu</span>
+        <button class="nhsuk-header__navigation-close" id="close-menu">
+          <svg class="nhsuk-icon nhsuk-icon__close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"></path>
+          </svg>
+          <span class="nhsuk-u-visually-hidden">Close menu</span>
+        </button>
+      </p>
+
+      <ul class="nhsuk-header__navigation-list">
+        <li class="nhsuk-header__navigation-item">
+          <a class="nhsuk-header__navigation-link" routerLink="/triage-innovator-pack">
+            Find support
+            <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
             </svg>
-            <span class="nhsuk-u-visually-hidden">Close menu</span>
-          </button>
-        </p>
+          </a>
+        </li>
+        <li class="nhsuk-header__navigation-item">
+          <a class="nhsuk-header__navigation-link" href="/innovation-guides">
+            Innovation guides
+            <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
+            </svg>
+          </a>
+        </li>
+        <li class="nhsuk-header__navigation-item">
+          <a class="nhsuk-header__navigation-link" href="/case-studies">
+            Case studies
+            <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
+            </svg>
+          </a>
+        </li>
+        <li class="nhsuk-header__navigation-item">
+          <a class="nhsuk-header__navigation-link" href="/about-the-service">
+            About the service
+            <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
+            </svg>
+          </a>
+        </li>
+        <li class="nhsuk-header__navigation-item ml-auto">
+          <a class="nhsuk-header__navigation-link" href="{{ authenticationButton.url }}">
+            {{ authenticationButton.title }}
+            <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
+            </svg>
+          </a>
+        </li>
+      </ul>
 
-        <ul class="nhsuk-header__navigation-list">
-          <li class="nhsuk-header__navigation-item">
-            <a class="nhsuk-header__navigation-link" routerLink="/triage-innovator-pack">
-              Find support
-              <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
-              </svg>
-            </a>
-          </li>
-          <li class="nhsuk-header__navigation-item">
-            <a class="nhsuk-header__navigation-link" href="/innovation-guides">
-              Innovation guides
-              <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
-              </svg>
-            </a>
-          </li>
-          <li class="nhsuk-header__navigation-item">
-            <a class="nhsuk-header__navigation-link" href="/case-studies">
-              Case studies
-              <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
-              </svg>
-            </a>
-          </li>
-          <li class="nhsuk-header__navigation-item">
-            <a class="nhsuk-header__navigation-link" href="/about-the-service">
-              About the service
-              <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
-              </svg>
-            </a>
-          </li>
-          <li class="nhsuk-header__navigation-item ml-auto">
-            <a class="nhsuk-header__navigation-link" href="{{ authenticationButton.url }}">
-              {{ authenticationButton.title }}
-              <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
-              </svg>
-            </a>
-          </li>
-        </ul>
-
-      </div>
-    </nav>
-  </ng-container>
+    </div>
+  </nav>
 
 </header>

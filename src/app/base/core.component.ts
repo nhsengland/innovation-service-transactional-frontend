@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 import { NGXLogger } from 'ngx-logger';
 
 import { Request, Response } from 'express';
@@ -25,8 +27,13 @@ export class CoreComponent implements OnInit, OnDestroy {
   private serverRequest: Request | null;
   private serverResponse: Response | null;
 
+  private pageTitleHolder = '';
+  private pageStatusHolder: 'WAITING' | 'READY' | 'ERROR' = 'WAITING';
+
+  protected titleService: Title;
   protected router: Router;
   protected http: HttpClient;
+  protected translateService: TranslateService;
   protected logger: NGXLogger;
 
   protected stores: {
@@ -38,6 +45,7 @@ export class CoreComponent implements OnInit, OnDestroy {
   protected subscriptions: Subscription[] = [];
 
   constructor() {
+
     const injector = AppInjector.getInjector();
 
     this.platformId = injector.get(PLATFORM_ID);
@@ -50,8 +58,11 @@ export class CoreComponent implements OnInit, OnDestroy {
       this.serverResponse = null;
     }
 
+    this.titleService = injector.get(Title);
+    this.router = injector.get(Router);
     this.router = injector.get(Router);
     this.http = injector.get(HttpClient);
+    this.translateService = injector.get(TranslateService);
     this.logger = injector.get(NGXLogger);
 
     this.stores = {
@@ -61,6 +72,14 @@ export class CoreComponent implements OnInit, OnDestroy {
     };
 
   }
+
+  /* istanbul ignore next */
+  get requestBody(): MappedObject { return this.serverRequest?.body || {}; }
+  /* istanbul ignore next */
+  get pageTitle(): string { return this.pageTitleHolder || ''; }
+  /* istanbul ignore next */
+  get pageStatus(): string { return this.pageStatusHolder; }
+
 
   ngOnInit(): void { }
 
@@ -76,8 +95,15 @@ export class CoreComponent implements OnInit, OnDestroy {
     return this.serverRequest?.method?.toLowerCase() === 'post';
   }
 
-  /* istanbul ignore next */
-  get requestBody(): MappedObject { return this.serverRequest?.body || {}; }
+
+  setPageTitle(s: undefined | string): void {
+    this.pageTitleHolder = this.translateService.instant(s || '');
+    this.titleService.setTitle(`${this.translateService.instant(s || '')} | ${this.translateService.instant('app.title')}`);
+  }
+
+  setPageStatus(s: 'WAITING' | 'READY' | 'ERROR'): void {
+    this.pageStatusHolder = s;
+  }
 
 
   redirectTo(url: string, queryParams?: MappedObject): void {

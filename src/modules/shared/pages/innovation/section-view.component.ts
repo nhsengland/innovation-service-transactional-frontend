@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 import { WizardEngineModel, SummaryParsingType } from '@modules/shared/forms';
 
 import { InnovationSectionsIds, INNOVATION_SECTION_STATUS } from '@stores-module/innovation/innovation.models';
@@ -17,6 +18,8 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
   innovationId: string;
   sectionId: InnovationSectionsIds;
 
+  alert: AlertType = { type: null };
+
   section: {
     id: InnovationSectionsIds;
     title: string;
@@ -28,7 +31,6 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
   wizard: WizardEngineModel;
 
-  summaryAlert: { type: '' | 'error' | 'warning', title: string, message: string };
   summaryList: SummaryParsingType[];
 
   constructor(
@@ -36,6 +38,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
   ) {
 
     super();
+    this.setPageTitle('Section details');
 
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -43,32 +46,32 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'sectionUpdateSuccess':
-        this.summaryAlert = {
-          type: 'warning',
+        this.alert = {
+          type: 'WARNING',
           title: 'Your section has been saved',
-          message: 'You need to submit this section for review to notify your supporting accessor(s)'
+          message: 'You need to submit this section before you can submit your Innovation Record for needs assessment.'
         };
         break;
 
       case 'sectionUpdateError':
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when saving your section',
           message: 'Please, try again or contact us for further help'
         };
         break;
 
       case 'evidenceUpdateSuccess':
-        this.summaryAlert = {
-          type: 'warning',
+        this.alert = {
+          type: 'WARNING',
           title: 'Your evidence has been saved',
           message: 'You need to submit this section for review to notify your supporting accessor(s)'
         };
         break;
 
       case 'evidenceDeleteSuccess':
-        this.summaryAlert = {
-          type: 'warning',
+        this.alert = {
+          type: 'WARNING',
           title: 'Your evidence has been deleted',
           message: ''
         };
@@ -76,15 +79,14 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
       case 'evidenceUpdateError':
       case 'evidenceDeleteError':
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when saving your evidence',
           message: 'Please, try again or contact us for further help'
         };
         break;
 
       default:
-        this.summaryAlert = { type: '', title: '', message: '' };
         break;
     }
 
@@ -142,19 +144,20 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
         this.getSectionInfo();
 
-        this.summaryAlert = {
-          type: 'warning',
+        this.alert = {
+          type: 'WARNING',
           title: 'Your section has been submitted',
-          message: ''
+          setFocus: true
         };
 
       },
       () => {
 
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when submitting your section',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help',
+          setFocus: true
         };
 
       }

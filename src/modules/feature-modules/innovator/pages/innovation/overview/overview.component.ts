@@ -58,7 +58,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     private innovatorService: InnovatorService,
     private notificationService: NotificationService,
   ) {
+
     super();
+    this.setPageTitle('Innovation record overview');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.needsAssessmentCompleted = false;

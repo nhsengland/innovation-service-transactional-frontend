@@ -40,9 +40,7 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [
-              "node_modules/nhsuk-frontend/dist/nhsuk.min.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {

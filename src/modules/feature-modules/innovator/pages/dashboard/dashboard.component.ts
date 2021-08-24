@@ -32,6 +32,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   ) {
 
     super();
+    this.setPageTitle('Your innovations');
 
     const user = this.stores.authentication.getUserInfo();
     this.user = {
@@ -82,14 +83,16 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       () => {
         this.alert = {
           type: 'SUCCESS',
-          title: accept ? `You have successfully accepted ownership` : `You have successfully rejected ownership`
+          title: accept ? `You have successfully accepted ownership` : `You have successfully rejected ownership`,
+          setFocus: true
         };
       },
       () => {
         this.alert = {
           type: 'ERROR',
           title: 'An error occured',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help',
+          setFocus: true
         };
       }
     );

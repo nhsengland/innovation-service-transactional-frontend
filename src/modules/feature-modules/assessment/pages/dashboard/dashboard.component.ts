@@ -18,6 +18,7 @@ export class DashboardComponent extends CoreComponent {
   constructor() {
 
     super();
+    this.setPageTitle('Home');
 
     this.user = {
       displayName: this.stores.authentication.getUserInfo().displayName,

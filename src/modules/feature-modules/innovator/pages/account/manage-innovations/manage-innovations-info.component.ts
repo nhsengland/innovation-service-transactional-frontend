@@ -22,7 +22,12 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
 
   constructor(
     private innovatorService: InnovatorService
-  ) { super(); }
+  ) {
+
+    super();
+    this.setPageTitle('Manage innovations');
+
+  }
 
 
   ngOnInit(): void {
@@ -67,15 +72,17 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
     ).subscribe(
       () => {
         this.alert = {
-          type: 'INFORMATION',
-          title: `You have cancelled the request to transfer the ownership of '${innovation.name}'`
+          type: 'ACTION',
+          title: `You have cancelled the request to transfer the ownership of '${innovation.name}'`,
+          setFocus: true
         };
       },
       () => {
         this.alert = {
           type: 'ERROR',
           title: 'An error occured when cancelling the transfer',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help',
+          setFocus: true
         };
       }
     );

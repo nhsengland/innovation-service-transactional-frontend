@@ -1,21 +1,15 @@
 <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-3">
 
-  <ng-container *ngIf="summaryAlert.type">
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <div class="nhsuk-error-summary" [ngClass]="{'border-color-success': summaryAlert.type === 'success', 'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert"
-          tabindex="-1">
-          <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
-          <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
-        </div>
-      </div>
-    </div>
-  </ng-container>
-
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-two-thirds">
+    <div class="nhsuk-grid-column-full">
+
+      <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+        <p> {{ alert.message }} </p>
+      </theme-alert>
+
       <p class="nhsuk-hint nhsuk-u-padding-top-3 nhsuk-u-margin-bottom-0">{{ actionDisplayId }}</p>
-      <h1 class="nhsuk-heading-l nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-3">Update action status</h1>
+      <h1 class="nhsuk-heading-l nhsuk-u-padding-top-0 nhsuk-u-margin-bottom-3"> {{ pageTitle }} </h1>
+
     </div>
   </div>
 
@@ -25,22 +19,23 @@
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full">
 
-          <div class="nhsuk-form-group nhsuk-u-padding-top-4" [ngClass]="{'nhsuk-form-group--error': statusError}">
+          <div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': statusError}">
+            <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="statusError ? 'error-status' : null">
+              <legend class="nhsuk-fieldset__legend"> Choose a status </legend>
 
-            <ng-container *ngIf="statusError">
-              <span class="nhsuk-error-message"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ statusError | translate }} </span>
-            </ng-container>
+              <span *ngIf="statusError" id="error-status" class="nhsuk-error-message"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ statusError | translate }} </span>
 
-            <div class="nhsuk-radios">
-              <div *ngFor="let item of statusItems; let i = index" class="nhsuk-radios__item">
-                <input formControlName="status" id="status{{ i }}" type="radio" name="status" [value]="item.value" class="nhsuk-radios__input" />
-                <label for="status{{ i }}" class="nhsuk-label nhsuk-radios__label nhsuk-u-padding-top-1">
-                  <strong class="nhsuk-tag" [ngClass]="innovationSectionActionStatus[item.value].cssClass">{{ item.label }}</strong>
-                </label>
-                <div class="nhsuk-hint nhsuk-radios__hint">{{ item.description }}</div>
+              <div class="nhsuk-radios">
+                <div *ngFor="let item of statusItems; let i = index" class="nhsuk-radios__item">
+                  <input formControlName="status" id="status{{ i }}" type="radio" name="status" [value]="item.value" class="nhsuk-radios__input" />
+                  <label for="status{{ i }}" class="nhsuk-label nhsuk-radios__label nhsuk-u-padding-top-1">
+                    <strong class="nhsuk-tag" [ngClass]="innovationSectionActionStatus[item.value].cssClass">{{ item.label }}</strong>
+                  </label>
+                  <div class="nhsuk-hint nhsuk-radios__hint">{{ item.description }}</div>
+                </div>
               </div>
-            </div>
 
+            </fieldset>
           </div>
 
           <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep()">Continue</button>
@@ -51,8 +46,8 @@
     <ng-container *ngIf="stepNumber === 2">
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-two-thirds">
-          <theme-form-textarea controlName="comment" description="Enter a comment"></theme-form-textarea>
-          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Update status</button>
+          <theme-form-textarea controlName="comment" label="Enter a comment" [pageUniqueField]="false"></theme-form-textarea>
+          <button *ngIf="isQualifyingAccessorRole" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Update status</button>
         </div>
       </div>
     </ng-container>
