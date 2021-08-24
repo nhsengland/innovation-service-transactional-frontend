@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
+
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
@@ -9,7 +10,7 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation
   templateUrl: './innovation-support-status-list.component.html',
   styleUrls: ['./innovation-support-status-list.component.scss']
 })
-export class PageInnovationSupportStatusListComponent extends CoreComponent implements OnInit {
+export class PageInnovationSupportStatusListComponent extends CoreComponent {
 
   visibleStatus: (keyof typeof INNOVATION_SUPPORT_STATUS)[] = [
     'UNASSIGNED',
@@ -24,9 +25,11 @@ export class PageInnovationSupportStatusListComponent extends CoreComponent impl
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
 
-  constructor() { super(); }
+  constructor() {
 
+    super();
+    this.setPageTitle('Support status key ');
 
-  ngOnInit(): void { }
+  }
 
 }

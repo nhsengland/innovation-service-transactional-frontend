@@ -48,12 +48,12 @@
     font-size: 0.5em;
   }
 
-  [aria-sort="asc"] button:before,
-  [aria-sort="desc"] button:before {
+  [aria-sort="ascending"] button:before,
+  [aria-sort="descending"] button:before {
     content: none;
   }
 
-  [aria-sort="asc"] button:after {
+  [aria-sort="ascending"] button:after {
     content: " \25b2";
     font-size: .8em;
     position: absolute;
@@ -61,7 +61,7 @@
     top: 2px;
   }
 
-  [aria-sort="desc"] button:after {
+  [aria-sort="descending"] button:after {
     content: " \25bc";
     font-size: .8em;
     position: absolute;

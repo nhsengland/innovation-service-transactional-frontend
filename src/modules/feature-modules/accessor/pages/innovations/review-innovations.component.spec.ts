@@ -89,7 +89,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     const expected = [
       { key: 'name', label: 'Innovation', orderDir: 'none', orderable: true, align: 'text-align-left' },
-      { key: 'submittedAt', label: 'Submitted', orderDir: 'desc', orderable: true, align: 'text-align-left' },
+      { key: 'submittedAt', label: 'Submitted', orderDir: 'descending', orderable: true, align: 'text-align-left' },
       { key: 'mainCategory', label: 'Main category', orderDir: 'none', orderable: true, align: 'text-align-left' },
       { key: 'countryName', label: 'Location', orderDir: 'none', orderable: true, align: 'text-align-left' },
       { key: 'engagingOrganisations', label: 'Engaging organisations', orderDir: 'none', orderable: false, align: 'text-align-right' }
@@ -109,7 +109,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     const expected = [
       { key: 'name', label: 'Innovation', orderDir: 'none', orderable: true, align: 'text-align-left' },
-      { key: 'updatedAt', label: 'Updated', orderDir: 'desc', orderable: true, align: 'text-align-left' },
+      { key: 'updatedAt', label: 'Updated', orderDir: 'descending', orderable: true, align: 'text-align-left' },
       { key: 'mainCategory', label: 'Main category', orderDir: 'none', orderable: true, align: 'text-align-left' },
       { key: 'accessors', label: 'Accessor', orderDir: 'none', orderable: false, align: 'text-align-left' },
       { key: 'engagingOrganisations', label: 'Engaging organisations', orderDir: 'none', orderable: false, align: 'text-align-right' }
@@ -129,7 +129,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     const expected = [
       { key: 'name', label: 'Innovation', orderDir: 'none', orderable: true, align: 'text-align-left' },
-      { key: 'updatedAt', label: 'Updated', orderDir: 'desc', orderable: true, align: 'text-align-left' },
+      { key: 'updatedAt', label: 'Updated', orderDir: 'descending', orderable: true, align: 'text-align-left' },
       { key: 'mainCategory', label: 'Main category', orderDir: 'none', orderable: true, align: 'text-align-left' },
       { key: 'countryName', label: 'Location', orderDir: 'none', orderable: true, align: 'text-align-left' },
       { key: 'engagingOrganisations', label: 'Engaging organisations', orderDir: 'none', orderable: false, align: 'text-align-right' }

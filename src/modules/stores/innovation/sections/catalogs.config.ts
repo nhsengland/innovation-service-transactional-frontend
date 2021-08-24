@@ -28,7 +28,7 @@ export const categoriesItems = [
   { value: 'AI', label: 'Artificial intelligence (AI)' },
   { value: 'EDUCATION', label: 'Education or training of workforce' },
   { value: 'PPE', label: 'Personal protective equipment (PPE)' },
-  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCategoryDescription', dataType: 'text', validations: { isRequired: true } }) }
+  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCategoryDescription', dataType: 'text', label: 'Other category', validations: { isRequired: [true, 'Other category description is required'] } }) }
 ];
 export const mainCategoryItems = [
   { value: 'MEDICAL_DEVICE', label: 'Medical device' },
@@ -37,7 +37,7 @@ export const mainCategoryItems = [
   { value: 'AI', label: 'Artificial intelligence (AI)' },
   { value: 'EDUCATION', label: 'Education or training of workforce' },
   { value: 'PPE', label: 'Personal protective equipment (PPE)' },
-  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherMainCategoryDescription', dataType: 'text', validations: { isRequired: true } }) }
+  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherMainCategoryDescription', dataType: 'text', label: 'Other main category', validations: { isRequired: [true, 'Other main category description is required'] } }) }
 ];
 export const areasItems = [
   { value: 'COVID_19', label: 'COVID-19' },
@@ -149,7 +149,7 @@ export const generalBenefitItems = [
   { value: 'COST_SAVING', label: 'Is cost saving' },
   { value: 'INCREASES_EFFICIENCY', label: 'Increases efficiency' },
   { value: 'IMPROVES_PERFORMANCE', label: 'Improves performance' },
-  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherGeneralBenefit', dataType: 'text', validations: { isRequired: true } }) }
+  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherGeneralBenefit', dataType: 'text', label: 'Other NHS or social care benefit', validations: { isRequired: [true, 'Other MHS pr social care benefit is required'] } }) }
 ];
 export const environmentalBenefitItems = [
   { value: 'NO_SIGNIFICANT_BENEFITS', label: 'There are no significant environmental sustainability benefits associated with my technology' },
@@ -161,7 +161,10 @@ export const environmentalBenefitItems = [
   { value: 'LOWER_ENVIRONMENTAL_IMPACT', label: 'Lower environmental impact (e.g. less travel, better use of NHS resources)' },
   { value: 'OPTIMIZES_FINITE_RESOURCE_USE', label: 'Reduces or optimizes finite resource use (e.g. water, metals)' },
   { value: 'USES_RECYCLED_MATERIALS', label: 'Can be readily recycled or uses recycled materials' },
-  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherEnvironmentalBenefit', dataType: 'text', validations: { isRequired: true } }) }
+  { value: 'OTHER',
+    label: 'Other',
+    conditional: new FormEngineParameterModel({ id: 'otherEnvironmentalBenefit', dataType: 'text', label: 'Other environmental sustainability benefit', validations: { isRequired: [true, 'Other environmental sustainability benefit is required'] } })
+  }
 ];
 
 // // Section 2.3
@@ -187,7 +190,7 @@ export const hasPatentsItems = [
   { value: 'HAS_NONE', label: 'I don\'t have any patents, but believe I have freedom to operate' }
 ];
 export const hasOtherIntellectualItems = [
-  { value: 'YES', label: 'Yes', conditional: new FormEngineParameterModel({ id: 'otherIntellectual', dataType: 'text', validations: { isRequired: true } }) },
+  { value: 'YES', label: 'Yes', conditional: new FormEngineParameterModel({ id: 'otherIntellectual', dataType: 'text', label: 'Intellectual property name', validations: { isRequired: [true, 'Intellectual property name is required'] } }) },
   { value: 'NO', label: 'No' }
 ];
 
@@ -213,7 +216,7 @@ export const standardsTypeItems = [
   { value: 'MARKETING', label: 'Marketing authorisation' },
   { value: 'CQC', label: 'Care Quality Commission (CQC) registration' },
   { value: 'DTAC', label: 'Digital Technology Assessment Criteria (DTAC)' },
-  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRegulationDescription', dataType: 'text', validations: { isRequired: true } }) }
+  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRegulationDescription', dataType: 'text', label: 'Other standards and certifications that apply', validations: { isRequired: [true, 'Other standards and certifications is required'] } }) }
 ];
 export const standardsHasMetItems = [
   { value: 'YES', label: 'Yes' },
@@ -288,7 +291,7 @@ export const revenuesItems = [
   { value: 'SALES_OF_CONSUMABLES_OR_ACCESSORIES', label: 'Sales of consumables or accessories' },
   { value: 'SUBSCRIPTION', label: 'Subscription' },
   {
-    value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRevenueDescription', dataType: 'text', validations: { isRequired: true } })
+    value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRevenueDescription', dataType: 'text', label: 'Other revenue model', validations: { isRequired: [true, 'Other revenue model is required'] } })
   }
 ];
 export const hasFundindItems = [

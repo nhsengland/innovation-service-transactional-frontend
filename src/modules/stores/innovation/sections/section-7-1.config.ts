@@ -36,9 +36,14 @@ export const SECTION_7_1: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.l1,
-        description: 'LINK_TO_ADVANCED_GUIDE_CREATING_REVENUE_MODEL',
-        parameters: [{ id: 'hasRevenueModel', dataType: 'radio-group', validations: { isRequired: true }, items: hasRevenueModelItems }]
+        parameters: [{
+          id: 'hasRevenueModel',
+          dataType: 'radio-group',
+          label: stepsLabels.l1,
+          description: 'LINK_TO_ADVANCED_GUIDE_CREATING_REVENUE_MODEL',
+          validations: { isRequired: [true, 'Choose one option'] },
+          items: hasRevenueModelItems
+        }]
       })
     ],
     runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
@@ -64,22 +69,40 @@ function runtimeRules(steps: FormEngineModel[], currentValues: InboundPayloadTyp
 
   steps.push(
     new FormEngineModel({
-      label: stepsLabels.l2,
-      parameters: [{ id: 'revenues', dataType: 'checkbox-array', validations: { isRequired: true }, items: revenuesItems }]
+      parameters: [{
+        id: 'revenues',
+        dataType: 'checkbox-array',
+        label: stepsLabels.l2,
+        validations: { isRequired: [true, 'Choose at least one revenue model'] },
+        items: revenuesItems
+      }]
     }),
     new FormEngineModel({
-      label: stepsLabels.l3,
-      description: 'The more specific you can be with your answer, the better.',
-      parameters: [{ id: 'payingOrganisations', dataType: 'textarea', validations: { isRequired: true } }]
+      parameters: [{
+        id: 'payingOrganisations',
+        dataType: 'textarea',
+        label: stepsLabels.l3,
+        description: 'The more specific you can be with your answer, the better.',
+        validations: { isRequired: [true, 'Description is required'] }
+      }]
     }),
     new FormEngineModel({
-      label: stepsLabels.l4,
-      description: 'The more specific you can be with your answer, the better.',
-      parameters: [{ id: 'benefittingOrganisations', dataType: 'textarea', validations: { isRequired: true } }]
+      parameters: [{
+        id: 'benefittingOrganisations',
+        dataType: 'textarea',
+        label: stepsLabels.l4,
+        description: 'The more specific you can be with your answer, the better.',
+        validations: { isRequired: [true, 'Description is required'] }
+      }]
     }),
     new FormEngineModel({
-      label: stepsLabels.l5,
-      parameters: [{ id: 'hasFunding', dataType: 'radio-group', validations: { isRequired: true }, items: hasFundindItems }]
+      parameters: [{
+        id: 'hasFunding',
+        dataType: 'radio-group',
+        label: stepsLabels.l5,
+        validations: { isRequired: [true, 'Choose one option'] },
+        items: hasFundindItems
+      }]
     })
   );
 
@@ -88,8 +111,12 @@ function runtimeRules(steps: FormEngineModel[], currentValues: InboundPayloadTyp
   } else {
     steps.push(
       new FormEngineModel({
-        label: stepsLabels.l6,
-        parameters: [{ id: 'fundingDescription', dataType: 'textarea', validations: { isRequired: true } }]
+        parameters: [{
+          id: 'fundingDescription',
+          dataType: 'textarea',
+          label: stepsLabels.l6,
+          validations: { isRequired: [true, 'Description is required'] }
+        }]
       })
     );
   }

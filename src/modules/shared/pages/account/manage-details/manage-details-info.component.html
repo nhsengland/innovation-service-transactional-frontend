@@ -1,0 +1,21 @@
+<div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+  <div class="nhsuk-grid-column-full">
+
+    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+      <p> {{ alert.message }} </p>
+    </theme-alert>
+
+    <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
+
+    <dl class="nhsuk-summary-list">
+      <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key"> {{ item.label }} </dt>
+        <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.value"></dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a *ngIf="item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+        </dd>
+      </div>
+    </dl>
+
+  </div>
+</div>

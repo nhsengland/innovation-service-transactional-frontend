@@ -1,14 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { CoreComponent } from '@app/base';
+
 
 @Component({
   selector: 'shared-pages-not-found',
-  templateUrl: './not-found.component.html',
-  styleUrls: ['./not-found.component.scss'],
+  templateUrl: './not-found.component.html'
 })
-export class PageNotFoundComponent implements OnInit {
+export class PageNotFoundComponent extends CoreComponent {
 
-  constructor() { }
+  constructor() {
 
-  ngOnInit(): void { }
+    super();
+    this.setPageTitle('features.shared_pages.page_not_found.title');
+
+  }
 
 }

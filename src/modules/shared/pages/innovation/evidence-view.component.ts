@@ -29,6 +29,7 @@ export class InnovationSectionEvidenceViewComponent extends CoreComponent implem
   ) {
 
     super();
+    this.setPageTitle('Evidence details');
 
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;

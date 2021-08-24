@@ -18,7 +18,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 :root {
   --primary-color: #{$nhsuk-link-color};
   --success-color: #{$color_nhsuk-green};
-  --warning-color: #{$color_nhsuk-warm-yellow};
+  --warning-color: #{$color_nhsuk-yellow};
   --error-color: #{$nhsuk-error-color};
   --neutral-color: #{$color_nhsuk-blue};
 
@@ -59,6 +59,8 @@ $service-manual-container-size: 1100px; // Container width variable.
 .ml-auto { margin-left: auto; }
 .mr-auto { margin-right: auto; }
 
+.font-style-italic { font-style: italic; }
+
 .text-align-left { text-align: start; }
 .text-align-right { text-align: end; }
 .text-pre-line { white-space: pre-line; }
@@ -73,14 +75,18 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 .bg-color-white { background-color: var(--white); }
 .bg-color-grey { background-color: var(--color_nhsuk-grey-5); }
+.bg-color-warning { background-color: var(--warning-color); }
 
+.font-color-text { color: $nhsuk-text-color; }
 .font-color-secondary { color: $nhsuk-secondary-text-color; }
 .font-color-error { color: var(--error-color); }
 
 .border-bottom-0 { border-bottom: 0; }
 
+.border-color-primary { border-color: var(--primary-color); }
 .border-color-success { border-color: var(--success-color); }
 .border-color-warning { border-color: var(--warning-color); }
+.border-color-error { border-color: var(--error-color); }
 .border-color-neutral { border-color: var(--neutral-color); }
 
 .border-left-inset-neutral { border-left: 4px solid var(--color_nhsuk-grey-4); }
@@ -116,6 +122,32 @@ $service-manual-container-size: 1100px; // Container width variable.
   margin: 0 -9999rem;
   padding: 0.25rem 9999rem;
 }
+
+
+// Content visibility.
+@media (max-width: 48.0525em) {
+  .app-u-hide-mobile {
+    display: none
+  }
+}
+@media (min-width: 48.0625em) {
+  .app-u-hide-desktop {
+    display: none
+  }
+}
+@media print {
+  .app-u-hide-print {
+    display: none;
+  }
+  a:after {
+    content: none;
+  }
+  div.page-break {
+    break-before: always;
+    break-inside: avoid;
+  }
+}
+
 
 // Links and buttons.
 .button-as-link {
@@ -182,7 +214,6 @@ $service-manual-container-size: 1100px; // Container width variable.
   }
 }
 
-
 .nhsuk-checkboxes__input { // Undertermined checkboxes.
   + .undertermined-checkbox::after {
     height: unset !important;
@@ -191,6 +222,14 @@ $service-manual-container-size: 1100px; // Container width variable.
     width: 22px !important;
     transform: unset !important;
     opacity: 1 !important;
+  }
+}
+
+.nhsuk-checkboxes__conditional, .nhsuk-radios__conditional { // Conditional inputs labels smaller.
+  label.nhsuk-heading-m {
+    font-size: 1.1875rem;
+    font-weight: normal;
+    line-height: 1.47368;
   }
 }
 
@@ -278,7 +317,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 
 .app-tabs {
-  margin-bottom: 25px;
+  margin-bottom: 10px;
   border-bottom: solid 1px var(--color_nhsuk-grey-4);
 
   .app-tabs__list {
@@ -318,4 +357,14 @@ $service-manual-container-size: 1100px; // Container width variable.
 // Tags
 .nhsuk-tag--dark-grey {
   background-color: var(--color_nhsuk-grey-1);
+}
+
+.app-index-navigation {
+  padding-top: 16px;
+}
+
+@media (min-width: 40.0625em) {
+  .app-index-navigation {
+    padding-top: 24px
+  }
 }

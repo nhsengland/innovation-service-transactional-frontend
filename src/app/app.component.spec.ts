@@ -9,6 +9,8 @@ import { AppComponent } from './app.component';
 
 import { HeaderComponent } from '@modules/theme/components/header/header.component';
 import { FooterComponent } from '@modules/theme/components/footer/footer.component';
+import { ActivityTimeoutComponent } from '@modules/theme/components/activity-timeout/activity-timeout.component';
+
 import { LoggerService } from '@modules/core/services/logger.service';
 
 describe('AppComponent', () => {
@@ -23,10 +25,11 @@ describe('AppComponent', () => {
       ],
       declarations: [
         AppComponent,
-        FooterComponent,
         HeaderComponent,
+        FooterComponent,
+        ActivityTimeoutComponent
       ]
-    }).compileComponents();
+    });
 
   });
 

@@ -12,12 +12,13 @@ import { AccessorService, getActionsListEndpointOutDTO } from '../../services/ac
 })
 export class ActionsListComponent extends CoreComponent implements OnInit {
 
-  tabs: { title: string, link: string, queryParams: { openActions: 'true' | 'false' } }[] = [];
-  currentTab: { index: number, description: string };
+  tabs: { key: string, title: string, link: string, queryParams: { openActions: 'true' | 'false' } }[] = [];
+  currentTab: { index: number, key: string, contentTitle: string, description: string };
 
   actionsList: TableModel<getActionsListEndpointOutDTO['data'][0]>;
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -25,21 +26,24 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
   ) {
 
     super();
+    this.setPageTitle('Actions');
 
     this.tabs = [
       {
+        key: 'openActions',
         title: 'Open actions',
         link: '/accessor/actions',
         queryParams: { openActions: 'true' }
       },
       {
+        key: 'closedActions',
         title: 'Closed actions',
         link: '/accessor/actions',
         queryParams: { openActions: 'false' }
       }
     ];
 
-    this.currentTab = { index: 0, description: '' };
+    this.currentTab = { index: 0, key: '', contentTitle: '', description: '' };
 
     this.actionsList = new TableModel({
       visibleColumns: {
@@ -50,7 +54,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
       },
       pageSize: 10000,
       orderBy: 'createdAt',
-      orderDir: 'desc'
+      orderDir: 'descending'
     });
 
   }
@@ -66,6 +70,8 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
         }
 
         this.currentTab.index = this.tabs.findIndex(tab => tab.queryParams.openActions === queryParams.openActions);
+        this.currentTab.key = this.tabs[this.currentTab.index].key;
+        this.currentTab.contentTitle = `${this.tabs[this.currentTab.index].title} list`;
 
         this.actionsList.setData([]).setFilters({ openActions: queryParams.openActions });
 
@@ -79,12 +85,18 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
   getActionsList(): void {
 
+    this.setPageStatus('WAITING');
+
     this.accessorService.getActionsList(this.actionsList.getAPIQueryParams()).subscribe(
       response => {
         this.actionsList.setData(response.data, response.count);
         this.currentTab.description = `${response.count} ${this.tabs[this.currentTab.index].title.toLowerCase()} created by you`;
+        this.setPageStatus('READY');
       },
-      error => this.logger.error(error)
+      error => {
+        this.setPageStatus('ERROR');
+        this.logger.error(error);
+      }
     );
 
   }

@@ -1,83 +1,95 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FooterComponent } from '@modules/theme/components/footer/footer.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+
+import { CoreModule } from '@modules/core';
+import { StoresModule } from '@modules/stores';
+
+import { FooterComponent } from './footer.component';
+import { ActivityTimeoutComponent } from '../activity-timeout/activity-timeout.component';
 
 
-describe('FooterComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+describe('Theme/Components/Footer/FooterComponent', () => {
+
+  let component: FooterComponent;
+  let fixture: ComponentFixture<FooterComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        TranslateModule.forRoot(),
+        HttpClientTestingModule,
+        CoreModule,
+        StoresModule
       ],
       declarations: [
         FooterComponent,
+        ActivityTimeoutComponent
       ],
-    }).compileComponents();
+    });
   });
 
   it('should create the footer component', () => {
-    const fixture = TestBed.createComponent(FooterComponent);
-    const footer = fixture.componentInstance;
-    expect(footer).toBeTruthy();
+    fixture = TestBed.createComponent(FooterComponent);
+    component = fixture.componentInstance;
+    expect(component).toBeTruthy();
   });
 
   it('should render 5 item links', () => {
-    const fixture = TestBed.createComponent(FooterComponent);
+    fixture = TestBed.createComponent(FooterComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement;
+    const element = fixture.nativeElement;
 
-    expect(compiled.querySelectorAll('a.nhsuk-footer__list-item-link').length).toEqual(5);
+    expect(element.querySelectorAll('a.nhsuk-footer__list-item-link').length).toEqual(5);
   });
 
   it('should render Accessibility item link', () => {
-    const fixture = TestBed.createComponent(FooterComponent);
+    fixture = TestBed.createComponent(FooterComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement;
+    const element = fixture.nativeElement;
 
-    expect(compiled.querySelectorAll('a.nhsuk-footer__list-item-link')[0].textContent).toEqual('Accessibility statement');
+    expect(element.querySelectorAll('a.nhsuk-footer__list-item-link')[0].textContent).toEqual('Accessibility statement');
   });
 
   it('should render contact us link', () => {
-    const fixture = TestBed.createComponent(FooterComponent);
+    fixture = TestBed.createComponent(FooterComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement;
+    const element = fixture.nativeElement;
 
-    expect(compiled.querySelectorAll('a.nhsuk-footer__list-item-link')[1].textContent).toEqual('Contact us');
+    expect(element.querySelectorAll('a.nhsuk-footer__list-item-link')[1].textContent).toEqual('Contact us');
   });
 
   it('should render Cookies link', () => {
-    const fixture = TestBed.createComponent(FooterComponent);
+    fixture = TestBed.createComponent(FooterComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement;
+    const element = fixture.nativeElement;
 
-    expect(compiled.querySelectorAll('a.nhsuk-footer__list-item-link')[2].textContent).toEqual('Cookies');
+    expect(element.querySelectorAll('a.nhsuk-footer__list-item-link')[2].textContent).toEqual('Cookies');
   });
 
 
   it('should render Privacy Policy link', () => {
-    const fixture = TestBed.createComponent(FooterComponent);
+    fixture = TestBed.createComponent(FooterComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement;
+    const element = fixture.nativeElement;
 
-    expect(compiled.querySelectorAll('a.nhsuk-footer__list-item-link')[3].textContent).toEqual('Privacy policy');
+    expect(element.querySelectorAll('a.nhsuk-footer__list-item-link')[3].textContent).toEqual('Privacy policy');
   });
 
   it('should render Terms and conditions link', () => {
-    const fixture = TestBed.createComponent(FooterComponent);
+    fixture = TestBed.createComponent(FooterComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement;
+    const element = fixture.nativeElement;
 
-    expect(compiled.querySelectorAll('a.nhsuk-footer__list-item-link')[4].textContent).toEqual('Terms and conditions');
+    expect(element.querySelectorAll('a.nhsuk-footer__list-item-link')[4].textContent).toEqual('Terms and conditions');
   });
 
   it('should render copyright', () => {
-    const fixture = TestBed.createComponent(FooterComponent);
+    fixture = TestBed.createComponent(FooterComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement;
+    const element = fixture.nativeElement;
 
-    expect(compiled.querySelector('p.nhsuk-footer__copyright').textContent).toContain('Crown copyright');
+    expect(element.querySelector('p.nhsuk-footer__copyright').textContent).toContain('Crown copyright');
   });
 
 });

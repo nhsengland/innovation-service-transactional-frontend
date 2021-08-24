@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
@@ -123,7 +123,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent', () => 
 
   });
 
-  it('should be a question step (running in browser)', fakeAsync(() => {
+  it('should be a question step (running in browser)', () => {
 
     spyOn(common, 'isPlatformBrowser').and.returnValue(true);
     activatedRoute.snapshot.params = { id: 1 };
@@ -136,9 +136,9 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent', () => 
     expect(component.isValidStepId()).toBe(true);
     expect(component.isQuestionStep()).toBe(true);
 
-  }));
+  });
 
-  it('should be summary step (running in browser)', fakeAsync(() => {
+  it('should be summary step (running in browser)', () => {
 
     spyOn(common, 'isPlatformBrowser').and.returnValue(true);
     activatedRoute.snapshot.params = { id: 'summary' };
@@ -150,9 +150,9 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent', () => 
 
     expect(component.isSummaryStep()).toBe(true);
 
-  }));
+  });
 
-  it('should be redirected because is not a valid step (running in server)', fakeAsync(() => {
+  it('should be redirected because is not a valid step (running in server)', () => {
 
     injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: environmentStore.ENV });
     spyOn(common, 'isPlatformServer').and.returnValue(true);
@@ -166,9 +166,9 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent', () => 
     expect(serverRedirectSpy.status).toHaveBeenCalledWith(303);
     expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', 'not-found');
 
-  }));
+  });
 
-  it('should be a question step (running in server)', fakeAsync(() => {
+  it('should be a question step (running in server)', () => {
 
     injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: environmentStore.ENV });
     spyOn(common, 'isPlatformServer').and.returnValue(true);
@@ -185,7 +185,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent', () => 
     expect(component.isValidStepId()).toBe(true);
     expect(component.isQuestionStep()).toBe(true);
 
-  }));
+  });
 
   it('should be summary step (running in server)', () => {
 
@@ -241,7 +241,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent', () => 
 
   });
 
-  it('should submit information to server and redirect to end page (running in server)', fakeAsync(() => {
+  it('should submit information to server and redirect to end page (running in server)', () => {
 
     injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: environmentStore.ENV });
     spyOn(common, 'isPlatformServer').and.returnValue(true);
@@ -253,6 +253,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent', () => 
     spyOn(component, 'isDataRequest').and.returnValue(true);
     spyOn(component, 'decodeQueryParams').and.returnValue({ a: 'submit', f: { organisationSize: 'some answer' } });
     const surveyId = 'c29tZUlk';
+
     component.summaryList.valid = true;
     surveyService.submitSurvey = (survey: { [key: string]: any; }) => of({ id: surveyId });
     fixture.detectChanges();
@@ -261,7 +262,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent', () => 
     expect(serverRedirectSpy.status).toHaveBeenCalledWith(303);
     expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', `/triage-innovator-pack/survey/end?surveyId=${encodeURIComponent(component.encodeInfo(surveyId))}`);
 
-  }));
+  });
 
   it('should redirect if a unknown action was provided (running in server)', () => {
 
@@ -336,9 +337,9 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent', () => 
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    component.summaryList.valid = true;
     const surveyId = 'c29tZUlk';
     surveyService.submitSurvey = () => of({ id: surveyId });
+    component.summaryList.valid = true;
     component.onSubmitSurvey();
     fixture.detectChanges();
 
@@ -359,8 +360,8 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent', () => 
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    component.summaryList.valid = true;
     surveyService.submitSurvey = () => throwError('error');
+    component.summaryList.valid = true;
     component.onSubmitSurvey();
     fixture.detectChanges();
 

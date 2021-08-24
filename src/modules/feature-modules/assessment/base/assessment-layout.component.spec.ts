@@ -61,7 +61,7 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
       ],
       rightItems: [
         { title: 'Innovations', link: '/assessment/innovations', key: NotificationContextType.INNOVATION },
-        // { title: 'Account', link: '/assessment/account' },
+        { title: 'Account', link: '/assessment/account' },
         { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
       ]
     };

@@ -1,5 +1,5 @@
-import { getAppInsightsClient } from '../globals';
 import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
+import { getAppInsightsClient } from '../../globals';
 
 export const exceptionLoggingMiddleware = (err: any, req: any, res: any, next: any) => {
 

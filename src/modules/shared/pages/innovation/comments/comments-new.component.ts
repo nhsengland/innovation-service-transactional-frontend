@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
+import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CustomValidators } from '@app/base/forms';
+import { AlertType } from '@app/base/models';
 
 
 @Component({
@@ -13,22 +15,22 @@ export class PageInnovationCommentsNewComponent extends CoreComponent {
   module: '' | 'innovator' | 'accessor' = '';
   innovationId: string;
 
+  alert: AlertType = { type: null };
+
   form = new FormGroup({
-    comment: new FormControl('', Validators.required)
+    comment: new FormControl('', CustomValidators.required('A comment is required'))
   });
 
-  summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
 
   constructor(
     private activatedRoute: ActivatedRoute
   ) {
 
     super();
+    this.setPageTitle('New comment');
 
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-
-    this.summaryAlert = { type: '', title: '', message: '' };
 
   }
 
@@ -50,14 +52,14 @@ export class PageInnovationCommentsNewComponent extends CoreComponent {
 
         this.logger.error('Error fetching data');
 
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when creating an action',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help',
+          setFocus: true
         };
 
       });
-
 
   }
 

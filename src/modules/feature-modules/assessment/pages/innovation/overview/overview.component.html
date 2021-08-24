@@ -3,7 +3,7 @@
     <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation?.summary?.name }}</h1>
   </div>
   <div *ngIf="innovation?.assessment?.id && innovation?.summary?.status === 'COMPLETE'" class="nhsuk-grid-column-one-third text-align-right">
-    <a routerLink="/assessment/innovations/{{ innovation?.summary?.id || '' }}/assessment/{{ innovation?.assessment?.id || '' }}">View needs assessment</a>
+    <a routerLink="/assessment/innovations/{{ innovation?.summary?.id || '' }}/assessment/{{ innovation?.assessment?.id || '' }}"> View needs assessment </a>
   </div>
 </div>
 <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
@@ -13,7 +13,7 @@
     <div class="nhsuk-action-link">
       <a class="nhsuk-action-link__link" routerLink="/assessment/innovations/{{ innovation?.summary?.id || '' }}/assessments/new">
         <theme-svg-icon type="action"></theme-svg-icon>
-        <span class="nhsuk-action-link__text">Start the needs assessment process</span>
+        <span class="nhsuk-action-link__text"> Start the needs assessment process </span>
       </a>
     </div>
   </ng-container>

@@ -2,6 +2,7 @@ import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 import { MappedObject } from '@modules/core';
 import { FormEngineComponent, FormEngineParameterModel } from '@modules/shared/forms';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
@@ -24,6 +25,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   assessmentId: string;
   stepId: number;
 
+  alert: AlertType = { type: null };
+
   form: {
     sections: {
       title: string;
@@ -35,8 +38,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   assessmentHasBeenSubmitted: null | boolean;
 
   currentAnswers: { [key: string]: any };
-
-  summaryAlert: { type: '' | 'error' | 'warning', title: string, message: string };
 
 
   isValidStepId(): boolean {
@@ -52,6 +53,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   ) {
 
     super();
+    this.setPageTitle('Needs assessment');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovationName = '';
@@ -64,8 +66,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     this.currentAnswers = {};
 
-    this.summaryAlert = { type: '', title: '', message: '' };
-
   }
 
 
@@ -73,7 +73,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     // Update last step with the organisations list with description and pre-select all checkboxes.
     this.organisationsService.getOrganisationUnits().subscribe(response => {
-      NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="${this.stores.environment.BASE_URL}/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer">Support offer guide (opens in a new window)`;
+      NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="${this.stores.environment.BASE_URL}/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> Support offer guide (opens in a new window) </a>`;
       NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].groupedItems = response.map(item => ({ value: item.id, label: item.name, items: item.organisationUnits.map(i => ({ value: i.id, label: i.name })) }));
     });
 
@@ -122,9 +122,9 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   }
 
 
-  onSubmit(action: 'continue' | 'update' | 'saveAsDraft' | 'submit'): void {
+  onSubmit(action: 'update' | 'saveAsDraft' | 'submit'): void {
 
-    this.summaryAlert = { type: '', title: '', message: '' };
+    this.alert = { type: '' };
 
     let isValid = true;
 
@@ -150,25 +150,30 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       return;
     }
 
-    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (action === 'submit'), this.currentAnswers).subscribe(
+    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit'), this.currentAnswers).subscribe(
       () => {
         switch (action) {
-          case 'continue':
-            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
-            break;
           case 'update':
           case 'submit':
-            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`, { alert: 'needsAssessmentSubmited' });
+            switch (this.stepId) {
+              case 1:
+                this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
+                break;
+              case 2:
+                this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`, { alert: 'needsAssessmentSubmited' });
+                break;
+            }
             break;
           default:
             break;
         }
       },
       () => {
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when starting needs assessment',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help',
+          setFocus: true
         };
       }
     );

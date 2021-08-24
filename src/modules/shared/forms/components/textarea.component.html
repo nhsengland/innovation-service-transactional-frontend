@@ -1,19 +1,28 @@
-<div class="nhsuk-form-group {{cssOverride}}" [ngClass]="{'nhsuk-form-group--error': hasError}">
+<div class="nhsuk-form-group {{ divCssOverride }}" [ngClass]="{'nhsuk-form-group--error': hasError}">
 
-  <ng-container *ngIf="label">
-    <label class="nhsuk-heading-m nhsuk-u-margin-bottom-2" [for]="id">{{ label }}</label>
+  <ng-container *ngIf="label && pageUniqueField">
+    <h1 class="nhsuk-label-wrapper">
+      <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id"> {{ label }} </label>
+    </h1>
+  </ng-container>
+  <ng-container *ngIf="label && !pageUniqueField">
+    <label class="nhsuk-label" [for]="id"> {{ label }} </label>
   </ng-container>
 
   <ng-container *ngIf="description">
-    <div class="nhsuk-hint" id="{{ id }}-hint" [innerHTML]="description"></div>
+    <div class="nhsuk-hint" id="hint-{{ id }}" [innerHTML]="description"></div>
   </ng-container>
 
   <ng-container *ngIf="hasError">
-    <span class="nhsuk-error-message">
+    <span id="error-{{ id }}" class="nhsuk-error-message">
       <span class="nhsuk-u-visually-hidden">Error:</span> {{ errorMessage | translate }}
     </span>
   </ng-container>
 
-  <textarea [formControl]="fieldControl" [id]="id" [name]="controlName" [placeholder]="placeholder" rows="5" class="nhsuk-textarea" aria-describedby="">{{ fieldControl.value }}</textarea>
+  <textarea [formControl]="fieldControl" [id]="id" [name]="controlName" [placeholder]="placeholder" rows="5" class="nhsuk-textarea"
+  [attr.aria-invalid]="hasError ? 'true' : null"
+  [attr.aria-describedby]="ariaDescribedBy">
+    {{ fieldControl.value }}
+  </textarea>
 
 </div>

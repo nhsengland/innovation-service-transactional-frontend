@@ -28,17 +28,25 @@ export class FormRadioGroupComponent extends ControlValueAccessorConnector imple
   @Input() label?: string;
   @Input() description?: string;
   @Input() items?: FormEngineParameterModel['items'] = [];
-  @Input() cssOverwrite?: string;
+  @Input() pageUniqueField = true;
+  @Input() cssOverride?: string;
   @Input() additional?: FormEngineParameterModel[] = [];
 
   hasError = false;
   errorMessage = '';
 
-  divCssOverwrite = '';
+  divCssOverride = '';
 
   isRunningOnBrowser: boolean;
   isRunningOnServer: boolean;
 
+  // Accessibility.
+  get ariaDescribedBy(): null | string {
+    let s = '';
+    if (this.description) { s += `hint-${this.id}`; }
+    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    return s || null;
+  }
 
   // Get hold of the control being used.
   conditionalFormControl(f: string): FormControl { return this.parentFieldControl?.get(f) as FormControl; }
@@ -71,9 +79,9 @@ export class FormRadioGroupComponent extends ControlValueAccessorConnector imple
   ngOnInit(): void {
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
-    this.divCssOverwrite = this.cssOverwrite || 'nhsuk-u-padding-top-4';
+    this.divCssOverride = this.cssOverride || 'nhsuk-u-padding-top-4';
 
-   }
+  }
 
   ngDoCheck(): void {
 

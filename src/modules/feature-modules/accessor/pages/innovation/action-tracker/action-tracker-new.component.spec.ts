@@ -92,9 +92,10 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent
     accessorService.createAction = () => throwError('error');
 
     const expected = {
-      type: 'error',
+      type: 'ERROR',
       title: 'An error occured when creating an action',
-      message: 'Please, try again or contact us for further help'
+      message: 'Please, try again or contact us for further help',
+      setFocus: true
     };
 
     fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
@@ -105,7 +106,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent
     component.onSubmit();
     fixture.detectChanges();
 
-    expect(component.summaryAlert).toEqual(expected);
+    expect(component.alert).toEqual(expected);
 
   });
 

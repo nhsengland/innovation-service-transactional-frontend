@@ -31,6 +31,11 @@ export const locale = {
     features: {
 
       shared_pages: {
+        page_error: {
+          title: 'It appears that something went wrong!',
+          message: 'The operation you are trying to do is no longer available.',
+          action: 'Go back to home'
+        },
         page_not_found: {
           title: 'It appears that something went wrong!',
           message: 'Give us time while we investigate what happened that took you to here.',
@@ -46,7 +51,9 @@ export const locale = {
 
     messages: {
       errors: {},
-      informations: {},
+      informations: {
+        fetching_information: 'Please, wait while we fetch information from server.'
+      },
       notifications: {},
       warnings: {}
     },
@@ -55,6 +62,7 @@ export const locale = {
     shared: {
       forms_module: {
         validations: {
+          equal_to: 'Value does not match',
           invalid_email: 'Invalid email',
           invalid_format: 'Invalid format.',
           invalid_hexadecimal_format: 'Invalid hexadecimal format',

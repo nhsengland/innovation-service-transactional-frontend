@@ -1,28 +1,24 @@
 <ng-container *ngIf="module === 'accessor'">
   <div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
     <div class="nhsuk-grid-column-two-thirds">
-      <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovationName }}</h1>
+      <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0"> {{ innovationName }} </p>
     </div>
     <!-- <div *ngIf="innovation?.assessment?.id" class="nhsuk-grid-column-one-third text-align-right">
-      <a routerLink="/accessor/innovations/{{ innovation?.summary?.id || '' }}/assessments/{{ innovation?.assessment?.id || '' }}">View needs assessment</a>
+      <a routerLink="/accessor/innovations/{{ innovation?.summary?.id || '' }}/assessments/{{ innovation?.assessment?.id || '' }}"> View needs assessment </a>
     </div> -->
   </div>
   <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
 </ng-container>
 
 
-<ng-container *ngIf="summaryAlert.type">
-  <div class="nhsuk-error-summary" [ngClass]="{'border-color-success': summaryAlert.type === 'success', 'border-color-warning': summaryAlert.type === 'warning'}" aria-labelledby="alert-summary-title" role="alert"
-    tabindex="-1">
-    <h2 class="nhsuk-error-summary__title" id="alert-summary-title">{{ summaryAlert.title }}</h2>
-    <div class="nhsuk-error-summary__body" [innerHTML]="summaryAlert.message"></div>
-  </div>
-</ng-container>
-
-<h1 class="nhsuk-u-margin-bottom-3"> Innovation record </h1>
-
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
+
+    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+      <p> {{ alert.message }} </p>
+    </theme-alert>
+
+    <h1 class="nhsuk-u-margin-bottom-3"> {{ pageTitle }} </h1>
 
     <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
       <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="{'active': item}"></li>
@@ -48,7 +44,7 @@
 
     <h2>All sections</h2>
     <a [href]="documentUrl">
-      <h3 class="nhsuk-u-margin-bottom-6">Download all questions (DOCX, 820KB)</h3>
+      <p class="nhsuk-heading-m nhsuk-u-margin-bottom-6">Download all questions (DOCX, 820KB)</p>
     </a>
 
     <ol class="app-task-list">
@@ -59,7 +55,7 @@
           <span *ngIf="i === 0" class="nhsuk-heading-xs nhsuk-u-margin-bottom-0 float-r">Open actions</span>
         </h2>
 
-        <ul class="app-task-list__items">
+        <ol class="app-task-list__items">
           <li *ngFor="let section of sectionGroup.sections; let j = index" class="app-task-list__item">
 
             <ng-container *ngIf="section.status !== 'UNKNOWN'">
@@ -68,14 +64,21 @@
               </span>
             </ng-container>
 
-            <span class="app-task-list__task-name"> {{ (i + 1) + '.' + (j + 1) }} <a routerLink="{{ baseUrl }}/{{section.id}}" class="nhsuk-link">{{ section.title }}</a> </span>
+            <span class="app-task-list__task-name"> {{ (i + 1) + '.' + (j + 1) }} 
+              <a routerLink="{{ baseUrl }}/{{section.id}}"><span class="nhsuk-u-visually-hidden"> Go to </span> 
+                {{ section.title }} 
+                <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'NOT_STARTED'">Section not started</span>
+                <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'DRAFT'">Section in draft</span>
+                <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'SUBMITTED'">Section submitted</span>
+              </a> 
+            </span>
 
             <strong *ngIf="section.actionStatus" class="nhsuk-tag app-task-list__tag" [ngClass]="innovationSectionActionStatus[section.actionStatus].cssClass">
               {{ innovationSectionActionStatus[section.actionStatus].label }}
             </strong>
 
           </li>
-        </ul>
+        </ol>
 
       </li>
     </ol>

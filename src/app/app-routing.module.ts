@@ -5,11 +5,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
 
 // Pages.
+import { PageErrorComponent } from '@shared-module/pages/error/error.component';
 import { PageNotFoundComponent } from '@shared-module/pages/not-found/not-found.component';
 
 // Guards.
 import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
 import { AuthenticationRedirectionGuard } from '@modules/core/guards/authentication-redirection.guard';
+import { InnovationTransferRedirectionGuard } from '@modules/core/guards/innovation-transfer-redirection.guard';
 
 const authenticationModule: Promise<any> = import('@modules/feature-modules/authentication/authentication.module');
 const triageInnovatorPackModule: Promise<any> = import('@modules/feature-modules/triage-innovator-pack/triage-innovator-pack.module');
@@ -29,6 +31,13 @@ const routes: Routes = [
 
   {
     path: 'auth', loadChildren: () => authenticationModule.then(m => m.AuthenticationModule)
+  },
+
+  {
+    canActivate: [InnovationTransferRedirectionGuard],
+    path: 'transfers/:id',
+    pathMatch: 'full',
+    children: []
   },
 
   {
@@ -62,6 +71,12 @@ const routes: Routes = [
         path: 'accessor', loadChildren: () => accessorModule.then(m => m.AccessorModule)
       },
     ]
+  },
+
+  {
+    path: 'error',
+    component: BaseLayoutComponent,
+    children: [{ path: '', pathMatch: 'full', component: PageErrorComponent }]
   },
 
   {

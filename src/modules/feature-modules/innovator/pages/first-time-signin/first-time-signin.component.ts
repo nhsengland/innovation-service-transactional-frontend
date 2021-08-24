@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { concatMap } from 'rxjs/operators';
 
@@ -15,7 +15,7 @@ import { InnovatorService } from '../../services/innovator.service';
   selector: 'app-innovator-pages-first-time-signin',
   templateUrl: './first-time-signin.component.html'
 })
-export class FirstTimeSigninComponent extends CoreComponent implements OnInit, AfterViewInit {
+export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
@@ -73,7 +73,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
 
     // Update last step with the organisations list with description and pre-select all checkboxes.
     this.organisationsService.getAccessorsOrganisations().subscribe(response => {
-      this.stepsData[this.stepsData.length - 1].description = `<a href="${this.stores.environment.BASE_URL}/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer">What does each organisation do? (opens in a new window)</a>`;
+      this.stepsData[this.stepsData.length - 1].description = `<a href="${this.stores.environment.BASE_URL}/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> What does each organisation do? (opens in a new window) </a>`;
       this.stepsData[this.stepsData.length - 1].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
       this.currentAnswers = { organisationShares: response.map(item => item.id) };
     });
@@ -103,9 +103,12 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
 
           this.currentStep.data = this.stepsData[this.currentStep.number - 1];
           this.currentStep.data.defaultData = this.currentAnswers;
+
+          this.setPageTitle(this.currentStep.data.parameters[0].label || ''); // 1 question per page approach.
         }
 
         if (this.isSummaryStep()) {
+          this.setPageTitle('First Time Signin failed');
           this.prepareSummaryData();
         }
 
@@ -113,8 +116,6 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
     );
 
   }
-
-  ngAfterViewInit(): void { }
 
 
   onSubmitStep(action: 'previous' | 'next'): void {
@@ -137,19 +138,13 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
     this.prepareSummaryData();
 
     if (this.summaryList.valid) {
-      this.innovatorService.submitFirstTimeSigninInfo(this.currentAnswers).pipe(
+      this.innovatorService.submitFirstTimeSigninInfo('FIRST_TIME_SIGNIN', this.currentAnswers).pipe(
         concatMap(() => {
           return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
         })
       ).subscribe(
-        () => {
-          this.redirectTo(`innovator/dashboard`);
-          return;
-        },
-        () => {
-          this.redirectTo(`innovator/first-time-signin/summary`);
-          return;
-        }
+        () => this.redirectTo(`innovator/dashboard`),
+        () => this.redirectTo(`innovator/first-time-signin/summary`)
       );
     }
 
@@ -192,7 +187,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit, A
     this.stepsData.forEach((step, stepIndex) => {
       if (this.isVisibleStep(stepIndex + 1)) {
         step.parameters.forEach(p => {
-          this.summaryList.items.push({ label: step.label || '', value: this.currentAnswers[p.id], url: `/innovator/first-time-signin/${stepIndex + 1}`, errorMessage: errors[p.id] || null });
+          this.summaryList.items.push({ label: step.parameters[0].label || '', value: this.currentAnswers[p.id], url: `/innovator/first-time-signin/${stepIndex + 1}`, errorMessage: errors[p.id] || null });
         });
       }
     });

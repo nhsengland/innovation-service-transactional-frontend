@@ -1,4 +1,4 @@
-<h1 class="nhsuk-heading-m">Innovation record overview</h1>
+<h1 class="nhsuk-heading-m"> {{ pageTitle }} </h1>
 
 <ng-container *ngIf="contentReady">
   <div class="nhsuk-grid-row">
@@ -11,42 +11,42 @@
 
   <div class="nhsuk-grid-row">
     <div *ngIf="sections.submitted > 0" class="nhsuk-grid-column-one-third">
-      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.submitted }} <span
-          class="nhsuk-u-visually-hidden">sections submitted</span></h2>
+      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.submitted }} <span class="nhsuk-u-visually-hidden"> sections submitted </span></div>
       <p>sections submitted</p>
     </div>
     <div *ngIf="sections.draft > 0" class="nhsuk-grid-column-one-third">
-      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.draft }} <span
-          class="nhsuk-u-visually-hidden">sections in draft</span></h2>
+      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.draft }} <span class="nhsuk-u-visually-hidden"> sections in draft </span></div>
       <p>sections in draft</p>
     </div>
     <div *ngIf="sections.notStarted > 0" class="nhsuk-grid-column-one-third">
-      <h2 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ sections.notStarted }} <span
-          class="nhsuk-u-visually-hidden">sections not started</span></h2>
+      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.notStarted }} <span class="nhsuk-u-visually-hidden"> sections not started </span></div>
       <p>sections not started</p>
     </div>
   </div>
   <div class="nhsuk-grid-row" *ngIf="!isInAssessmentStatus()">
     <div class="nhsuk-grid-column-one-third">
-      See your <a routerLink="/innovator/innovations/{{ innovationId }}/record">innovation record</a>.
+      See your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a>
     </div>
   </div>
-  <!-- CREATION CARD -->
+
   <ng-container *ngIf="!isSubmittedForAssessment()">
     <div class="nhsuk-card nhsuk-u-margin-top-2">
       <div class="nhsuk-card__content">
-        <h3>Your next steps</h3>
-        <p class="d-flex nhsuk-u-margin-bottom-2">
-          <ng-container *ngTemplateOutlet="icon; context: { completed: allSectionsSubmitted()}"></ng-container>
-          <span class="nhsuk-u-margin-right-2"></span>
-          Submit all sections of your&nbsp;<a routerLink="/innovator/innovations/{{ innovationId }}/record">innovation
-            record </a>
-        </p>
-        <p class="d-flex">
-          <ng-container *ngTemplateOutlet="icon; context: { completed: false }"></ng-container>
-          <span class="nhsuk-u-margin-right-2"></span>
-          Submit the record for the needs assessment
-        </p>
+        <h2 class="nhsuk-heading-m"> Your next steps </h2>
+        <ol class="nhsuk-list nhsuk-u-padding-0">
+          <li class="d-flex">
+            <ng-container *ngTemplateOutlet="icon; context: { completed: allSectionsSubmitted()}"></ng-container>
+            <div class="nhsuk-u-margin-left-2">
+              Submit all sections of your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a>
+            </div>
+          </li>
+          <li class="d-flex">
+            <ng-container *ngTemplateOutlet="icon; context: { completed: false }"></ng-container>
+            <div class="nhsuk-u-margin-left-2">
+              Submit the record for the needs assessment
+            </div>
+          </li>
+        </ol>
       </div>
     </div>
   </ng-container>
@@ -55,7 +55,7 @@
     <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <h3>Support status</h3>
+        <h2 class="nhsuk-heading-m">Support status</h2>
       </div>
     </div>
     <div class="nhsuk-grid-column-two-thirds">
@@ -71,14 +71,12 @@
     <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <h3>Actions overview</h3>
+        <h2 class="nhsuk-heading-m">Actions overview</h2>
       </div>
       <div class="nhsuk-grid-column-two-thirds">
         <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.requested }}</p>
         <p class="">actions requested of you</p>
-        See your <strong><a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker">action
-            tracker</a></strong>
-
+        See your <strong><a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker"> action tracker</a></strong>
       </div>
       <div class="nhsuk-grid-column-one-third">
         <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.review }}</p>
@@ -90,7 +88,7 @@
     <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-        <h3>Support status</h3>
+        <h2 class="nhsuk-heading-m">Support status</h2>
       </div>
       <div class="nhsuk-grid-column-two-thirds">
         <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{supportStatus}}</p>
@@ -102,8 +100,7 @@
           </ul>
         </ng-container>
 
-        See <strong><a routerLink="/innovator/innovations/{{ innovationId }}/data-sharing">data sharing and
-            support</a></strong>
+        See <strong><a routerLink="/innovator/innovations/{{ innovationId }}/data-sharing"> data sharing and support</a></strong>
       </div>
       <div class="nhsuk-grid-column-one-third" *ngIf="showNeedsAssessmentCompleteCard()">
         <strong><a routerLink="/innovator/innovations/{{ innovationId }}/assessments/{{ assessmentId }}">Needs

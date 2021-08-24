@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 import { RoutingHelper } from '@modules/core';
 
 import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
@@ -16,8 +17,9 @@ import { AccessorService } from '../../../services/accessor.service';
 export class InnovationSupportInfoComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-
   innovation: InnovationDataType;
+
+  alert: AlertType = { type: null };
 
   innovationSupport: {
     organisationUnit: string;
@@ -27,8 +29,6 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
-  summaryAlert: { type: '' | 'error' | 'warning' | 'success', title: string, message: string };
-
   isQualifyingAccessorRole = false;
 
   constructor(
@@ -37,14 +37,14 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
   ) {
 
     super();
+    this.setPageTitle('Support status');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
 
-    this.summaryAlert = { type: '', title: '', message: '' };
-
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
+
   }
 
 
@@ -53,21 +53,20 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'supportUpdateSuccess':
-        this.summaryAlert = {
-          type: 'success',
+        this.alert = {
+          type: 'SUCCESS',
           title: 'Support status updated',
           message: 'You\'ve updated your support status and posted a comment to the innovator.'
         };
         break;
         case 'supportOrganisationSuggestSuccess':
-          this.summaryAlert = {
-            type: 'success',
+          this.alert = {
+            type: 'SUCCESS',
             title: 'Organisation suggestions sent',
             message: 'Your suggestions were saved and notifications sent.'
           };
           break;
       default:
-        this.summaryAlert = { type: '', title: '', message: '' };
         break;
     }
 
@@ -84,7 +83,6 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
     this.accessorService.getInnovationSupportInfo(this.innovationId, supportId).subscribe(
       response => {
-
         this.innovationSupport = {
           organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
           accessors: (response.accessors || []).map(item => item.name).join(', '),

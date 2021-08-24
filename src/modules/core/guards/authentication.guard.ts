@@ -25,7 +25,9 @@ export class AuthenticationGuard implements CanActivate {
     return this.authentication.initializeAuthentication$().pipe(
       map(response => response),
       catchError((e) => {
-        this.loggerService.trackTrace('[Auth Guard] Sign In Error', Severity.ERROR, { error: e});
+
+        this.loggerService.trackTrace('[AuthenticationGuard] Sign In Error', Severity.ERROR, { error: e });
+
         const redirectUrl = '/transactional/signin';
 
         if (isPlatformBrowser(this.platformId)) {

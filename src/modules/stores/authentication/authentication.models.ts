@@ -1,6 +1,8 @@
 export class AuthenticationModel {
 
   isSignIn: boolean;
+  isValidUser?: boolean;
+  hasInnovationTransfers?: boolean;
 
   user?: {
     id: string;
@@ -10,6 +12,7 @@ export class AuthenticationModel {
     organisations: {
       id: string;
       name: string;
+      size: string;
       role: 'OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
       isShadow: boolean;
       organisationUnits?: {
@@ -19,8 +22,6 @@ export class AuthenticationModel {
     }[];
     innovations: { id: string, name: string }[];
   };
-
-  didFirstTimeSignIn?: boolean;
 
 
   constructor() {

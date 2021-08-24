@@ -137,21 +137,21 @@ export class InnovationStore extends Store<InnovationModel> {
 
     section.steps = section.steps.map(s => { // Transform needed information.
 
-      switch (s.description) {
+      switch (s.parameters[0].description) { // 1 question per page approach.
         case 'LINK_TO_ADVANCED_GUIDE_INTELLECTUAL_PROPERTY':
-          s.description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about intellectual property.`;
+          s.parameters[0].description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer"> Innovation guides (opens in new window) </a> for more information about intellectual property.`;
           break;
         case 'LINK_TO_ADVANCED_GUIDE_REGULATIONS_STANDARDS':
-          s.description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about regulations and standards.`;
+          s.parameters[0].description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer"> Innovation guides (opens in new window) </a> for more information about regulations and standards.`;
           break;
         case 'LINK_TO_ADVANCED_GUIDE_COMPARATIVE_COST_BENEFIT':
-          s.description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about comparative cost benefit.`;
+          s.parameters[0].description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer"> Innovation guides (opens in new window) </a> for more information about comparative cost benefit.`;
           break;
         case 'LINK_TO_ADVANCED_GUIDE_CREATING_REVENUE_MODEL':
-          s.description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about creating a revenue model.`;
+          s.parameters[0].description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer"> Innovation guides (opens in new window) </a> for more information about creating a revenue model.`;
           break;
         case 'LINK_TO_ADVANCED_GUIDE_IMPLEMENTATION_PLANS':
-          s.description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about implementation plans.`;
+          s.parameters[0].description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer"> Innovation guides (opens in new window) </a> for more information about implementation plans.`;
           break;
         default:
           break;
