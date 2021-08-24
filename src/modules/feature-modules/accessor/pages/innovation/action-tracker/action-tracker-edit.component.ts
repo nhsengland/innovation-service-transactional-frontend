@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
-import { FormEngineHelper } from '@app/base/forms';
+import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CustomValidators, FormEngineHelper } from '@app/base/forms';
+import { AlertType } from '@app/base/models';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { AccessorService } from '../../../services/accessor.service';
@@ -14,10 +15,13 @@ import { AccessorService } from '../../../services/accessor.service';
 })
 export class InnovationActionTrackerEditComponent extends CoreComponent implements OnInit {
 
+  alert: AlertType = { type: null };
+
   innovationId: string;
   actionId: string;
   actionDisplayId: string;
   stepNumber: number;
+  isQualifyingAccessorRole = false;
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
@@ -36,11 +40,9 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
   statusError = '';
 
   form = new FormGroup({
-    status: new FormControl('', Validators.required),
-    comment: new FormControl('', Validators.required)
+    status: new FormControl('', CustomValidators.required('Please, choose a status')),
+    comment: new FormControl('', CustomValidators.required('A comment is required'))
   });
-
-  summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
 
 
   constructor(
@@ -49,13 +51,14 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
   ) {
 
     super();
+    this.setPageTitle('Update action status');
 
     this.actionDisplayId = '';
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.actionId = this.activatedRoute.snapshot.params.actionId;
     this.stepNumber = 1;
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
-    this.summaryAlert = { type: '', title: '', message: '' };
     this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
       response => this.actionDisplayId = response.displayId,
       error => {
@@ -95,10 +98,11 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
         this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionUpdateSuccess', status: this.statusItems.find(item => item.value === status)?.label });
       },
       () => {
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when creating an action',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help',
+          setFocus: true
         };
       }
     );

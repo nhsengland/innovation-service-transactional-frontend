@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { RoutingHelper } from '@modules/core';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
-import { getInnovationNeedsAssessmentEndpointOutDTO } from '@modules/feature-modules/accessor/services/accessor.service';
+import { getInnovationNeedsAssessmentEndpointOutDTO, getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/accessor/services/accessor.service';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
@@ -25,9 +25,15 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
   assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
   suggestedOrganisations: string[] = [];
+  logHistory: getSupportLogOutDTO[] = [];
 
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
+
+  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+  supportLogType = SupportLogType;
+
+  isQualifyingAccessorRole = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -35,11 +41,12 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   ) {
 
     super();
+    this.setPageTitle('Needs assessment overview');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
-
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
   }
 
 
@@ -103,6 +110,15 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
           }
         ];
 
+      },
+      error => {
+        this.logger.error(error);
+      }
+    );
+
+    this.accessorService.getSupportLog(this.innovationId).subscribe(
+      response => {
+        this.logHistory = response;
       },
       error => {
         this.logger.error(error);

@@ -34,7 +34,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
         StoresModule,
         AssessmentModule
       ]
-    }).compileComponents();
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
@@ -132,9 +132,10 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
     assessmentService.createInnovationNeedsAssessment = () => throwError('error');
 
     const expected = {
-      type: 'error',
+      type: 'ERROR',
       title: 'An error occured when starting needs assessment',
-      message: 'Please, try again or contact us for further help'
+      message: 'Please, try again or contact us for further help',
+      setFocus: true
     };
 
     fixture = TestBed.createComponent(InnovationAssessmentNewComponent);
@@ -146,7 +147,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
     component.onSubmit();
     fixture.detectChanges();
 
-    expect(component.summaryAlert).toEqual(expected);
+    expect(component.alert).toEqual(expected);
 
   });
 

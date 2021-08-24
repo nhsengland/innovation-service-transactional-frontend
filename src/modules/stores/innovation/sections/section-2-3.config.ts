@@ -38,8 +38,13 @@ export const SECTION_2_3: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        label: stepsLabels.l1,
-        parameters: [{ id: 'hasEvidence', dataType: 'radio-group', validations: { isRequired: true }, items: hasEvidenceItems }]
+        parameters: [{
+          id: 'hasEvidence',
+          dataType: 'radio-group',
+          label: stepsLabels.l1,
+          validations: { isRequired: [true, 'Choose one option'] },
+          items: hasEvidenceItems
+        }]
       })
     ],
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),

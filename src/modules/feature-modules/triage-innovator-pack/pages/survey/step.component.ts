@@ -3,8 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineHelper, FormEngineModel } from '@app/base/forms';
-// import { UtilsHelper } from '@app/base/helpers';
-import { MappedObject } from '@app/base/models';
+import { AlertType } from '@app/base/models';
 
 import { TRIAGE_INNOVATOR_PACK_QUESTIONS } from '../../config/constants.config';
 
@@ -17,6 +16,8 @@ import { SurveyService } from '../../services/survey.service';
 export class SurveyStepComponent extends CoreComponent implements OnInit, AfterViewInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
+
+  alert: AlertType = { type: null };
 
   stepsData: FormEngineModel[] = [];
   currentStep: {
@@ -83,11 +84,11 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
             this.currentStep.number = Number(params.id);
             this.currentStep.data = TRIAGE_INNOVATOR_PACK_QUESTIONS[this.currentStep.number - 1];
             this.currentStep.data.defaultData = this.currentAnswers;
-
-            document.getElementById('pageFirstFocus')?.focus();
+            this.setPageTitle(this.currentStep.data.parameters[0].label || ''); // Only 1 question per page.
           }
 
           if (this.isSummaryStep()) {
+            this.setPageTitle('Check your answers before completing');
             this.prepareSummaryData();
           }
 
@@ -167,7 +168,9 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
   }
 
   onSubmitSurvey(): void {
+
     if (this.summaryList.valid) {
+
       this.surveyService.submitSurvey(this.currentAnswers).subscribe(
         response => {
           this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/end`, { surveyId: response.id });
@@ -176,7 +179,9 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
           this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/summary`);
         }
       );
+
     }
+
   }
 
   getNavigationUrl(action: 'previous' | 'next'): string {
@@ -224,6 +229,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
 
   prepareSummaryData(): void {
 
+    this.alert = { type: null };
     this.summaryList = { items: [], valid: true };
 
     const parameters = this.stepsData.map(fd => fd.parameters).reduce((a, p) => [...a, ...p], []);
@@ -231,6 +237,11 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
     const errors = FormEngineHelper.getErrors(form);
 
     this.summaryList.valid = form.valid;
+
+    if (!this.summaryList.valid) {
+      this.alert = { type: 'ERROR', title: 'Unable to fetch innovations transfers', setFocus: true };
+    }
+
     this.stepsData.forEach((step, stepIndex) => {
       step.parameters.forEach(p => {
 
@@ -249,7 +260,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
         }
 
         this.summaryList.items.push({
-          label: step.label || '',
+          label: step.parameters[0].label || '',
           value,
           url: `/triage-innovator-pack/survey/${stepIndex + 1}`,
           // queryParams: this.isRunningOnServer() ? this.encodeQueryParams({ a: 'next', f: this.currentAnswers }) : {},

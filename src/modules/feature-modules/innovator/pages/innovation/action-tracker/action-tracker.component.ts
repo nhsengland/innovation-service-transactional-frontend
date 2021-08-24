@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-
-import { ActivatedRoute } from '@angular/router';
-import { getInnovationActionsListEndpointOutDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
 import { TableModel } from '@app/base/models';
-import { RoutingHelper } from '@modules/core';
-import { InnovationService } from '@modules/stores';
+
+import { getInnovationActionsListEndpointOutDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 
 @Component({
@@ -31,6 +28,7 @@ export class InnovationActionTrackerComponent extends CoreComponent implements O
   ) {
 
     super();
+    this.setPageTitle('Action tracker');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
@@ -59,11 +57,12 @@ export class InnovationActionTrackerComponent extends CoreComponent implements O
 
     this.innovatorService.getInnovationActionsList(this.innovationId).subscribe(
       response => {
-
         this.openedActionsList.setData(response.openedActions);
         this.closedActionsList.setData(response.closedActions);
+        this.setPageStatus('READY');
       },
       error => {
+        this.setPageStatus('ERROR');
         this.logger.error(error);
       }
     );

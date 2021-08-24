@@ -2,54 +2,51 @@ import { FormEngineModel, FormEngineParameterModel } from '@shared-module/forms'
 
 export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
   new FormEngineModel({
-    label: 'Welcome to the NHS innovation service!',
-    description: 'What\'s your name?',
     parameters: [
       {
         id: 'innovatorName',
         dataType: 'text',
-        label: 'Full name',
-        validations: { isRequired: true }
+        label: 'Welcome to the NHS innovation service!',
+        description: 'What\'s your name?',
+        validations: { isRequired: [true, 'Name is required'] }
       }
     ]
   }),
 
   new FormEngineModel({
-    label: 'What should we call your innovation?',
     parameters: [
       {
         id: 'innovationName',
         dataType: 'text',
-        label: 'Innovation name',
-        validations: { isRequired: true }
+        label: 'What should we call your innovation?',
+        validations: { isRequired: [true, 'Innovation name is required'] }
       }
     ]
   }),
 
   new FormEngineModel({
-    label: 'Please provide a short description of your innovation',
     parameters: [
       {
         id: 'innovationDescription',
         dataType: 'textarea',
-        label: 'Enter a description',
-        validations: { isRequired: true }
+        label: 'Please provide a short description of your innovation',
+        validations: { isRequired: [true, 'Innovation short description is required'] }
       }
     ]
   }),
 
   new FormEngineModel({
-    label: 'Are you creating this innovation as part of a company or organisation?',
     parameters: [
       {
         id: 'isCompanyOrOrganisation',
         dataType: 'radio-group',
-        validations: { isRequired: true },
+        label: 'Are you creating this innovation as part of a company or organisation?',
+        validations: { isRequired: [true, 'Choose one option'] },
         items: [
           {
             value: 'yes',
             label: 'Yes',
-            conditional: new FormEngineParameterModel({ id: 'organisationName', dataType: 'text', label: 'Company or organisation name', validations: { isRequired: true } })
+            conditional: new FormEngineParameterModel({ id: 'organisationName', dataType: 'text', label: 'Company or organisation name', validations: { isRequired: [true, 'Other description is required'] } })
           },
           { value: 'no', label: 'No' }
         ]
@@ -58,11 +55,11 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
   }),
 
   new FormEngineModel({
-    label: 'What\'s the size of your company or organisation?',
     parameters: [
       {
         id: 'organisationSize',
         dataType: 'radio-group',
+        label: 'What\'s the size of your company or organisation?',
         validations: { isRequired: [true, 'Organisation size is required'] },
         items: [
           { value: '1 to 5 employees', label: '1 to 5 employees' },
@@ -79,17 +76,17 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
   }),
 
   new FormEngineModel({
-    label: 'Where are you based?',
     parameters: [
       {
         id: 'location',
         dataType: 'radio-group',
-        validations: { isRequired: true },
+        label: 'Where are you based?',
+        validations: { isRequired: [true, 'Location is required'] },
         items: [
           {
             value: 'England',
             label: 'England',
-            conditional: new FormEngineParameterModel({ id: 'englandPostCode', dataType: 'text', label: 'First part of your postcode', description: 'For example SW1', validations: { isRequired: true } })
+            conditional: new FormEngineParameterModel({ id: 'englandPostCode', dataType: 'text', label: 'First part of your postcode', description: 'For example SW1', validations: { isRequired: [true, 'First part of your postcode is required'] } })
           },
           { value: 'Scotland', label: 'Scotland' },
           { value: 'Wales', label: 'Wales' },
@@ -98,7 +95,7 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
           {
             value: 'Based outside UK',
             label: 'I\'m based outside of the UK',
-            conditional: new FormEngineParameterModel({ id: 'locationCountryName', dataType: 'text', label: 'Country', validations: { isRequired: true } })
+            conditional: new FormEngineParameterModel({ id: 'locationCountryName', dataType: 'text', label: 'Country', validations: { isRequired: [true, 'Country is required'] } })
           },
         ]
       }
@@ -106,12 +103,12 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
   }),
 
   new FormEngineModel({
-    label: 'Finally, choose your data sharing preferences',
     parameters: [
       {
         id: 'organisationShares',
         dataType: 'checkbox-array',
-        validations: { isRequired: true },
+        label: 'Finally, choose your data sharing preferences',
+        validations: { isRequired: [true, 'Choose at least one organisation'] },
         items: []
       }
     ]

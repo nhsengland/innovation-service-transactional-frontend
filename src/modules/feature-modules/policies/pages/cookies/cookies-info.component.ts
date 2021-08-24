@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { CoreComponent } from '@app/base';
 
 import { COOKIES_USED } from '@feature-modules/policies/config/constants.config';
 
@@ -7,12 +9,15 @@ import { COOKIES_USED } from '@feature-modules/policies/config/constants.config'
   selector: 'app-policies-cookies-info',
   templateUrl: './cookies-info.component.html',
 })
-export class CookiesInfoComponent implements OnInit {
+export class CookiesInfoComponent extends CoreComponent {
 
   cookiesUsed = COOKIES_USED;
 
-  constructor() { }
+  constructor() {
 
-  ngOnInit(): void { }
+    super();
+    this.setPageTitle('Cookies on the NHS innovation service');
+
+  }
 
 }

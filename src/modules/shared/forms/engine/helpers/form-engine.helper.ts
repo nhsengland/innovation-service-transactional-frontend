@@ -153,16 +153,16 @@ export class FormEngineHelper {
       return '';
     }
 
-    // Native validations.
+    // Available validations.
     if ('required' in error) { return error.required.message || 'shared.forms_module.validations.required'; }
+    if ('equalTo' in error) { return error.equalTo.message || 'shared.forms_module.validations.equal_to'; }
     if ('email' in error) { return 'shared.forms_module.validations.invalid_email'; }
-    if ('min' in error) { return 'shared.forms_module.validations.min' + ` (${error.min.min})`; }
-    if ('max' in error) { return 'shared.forms_module.validations.max' + ` (${error.max.max})`; }
+    if ('min' in error) { return error.min.message || `shared.forms_module.validations.min (${error.min.min})`; }
+    if ('max' in error) { return error.max.message || 'shared.forms_module.validations.max' + ` (${error.max.max})`; }
     if ('minlength' in error) { return 'shared.forms_module.validations.min_length' + ` (${error.minlength.requiredLength})`; }
     if ('maxlength' in error) { return 'shared.forms_module.validations.max_length' + ` (${error.maxlength.requiredLength})`; }
     if ('pattern' in error) { return error.pattern.message || 'shared.forms_module.validations.invalid_format'; }
 
-    // Custom validators.
     if ('hexadecimalFormat' in error) { return 'shared.forms_module.validations.invalid_hexadecimal_format'; }
     if ('minHexadecimal' in error) { return 'shared.forms_module.validations.min_hexadecimal' + ` (${error.minHexadecimal.min})`; }
     if ('maxHexadecimal' in error) { return 'shared.forms_module.validations.max_hexadecimal' + ` (${error.maxHexadecimal.max})`; }
@@ -206,10 +206,50 @@ export class FormEngineHelper {
       if (validation[0]) { validators.push(CustomValidators.pattern(validation[0] as string, validation[1])); }
     }
 
-    if (parameter.validations?.minLength) { validators.push(Validators.minLength(parameter.validations.minLength as number)); }
-    if (parameter.validations?.maxLength) { validators.push(Validators.maxLength(parameter.validations.maxLength as number)); }
-    if (parameter.validations?.min) { validators.push(Validators.min(parameter.validations.min as number)); }
-    if (parameter.validations?.max) { validators.push(Validators.max(parameter.validations.max as number)); }
+    if (parameter.validations?.minLength) { validators.push(Validators.minLength(parameter.validations.minLength)); }
+    if (parameter.validations?.maxLength) { validators.push(Validators.maxLength(parameter.validations.maxLength)); }
+
+    if (parameter.validations?.min) {
+      validation = (typeof parameter.validations.min === 'number' ? [parameter.validations.min, null] : parameter.validations.min);
+      if (validation[0]) {
+
+        switch (parameter.dataType) {
+          case 'checkbox-array':
+            validators.push(CustomValidators.minCheckboxArray(validation[0] as number, validation[1] as string));
+            break;
+          // case 'checkbox-group':
+          //   validators.push(CustomValidators.requiredCheckboxGroup(validation[1]));
+          //   break;
+          default:
+            // validators.push(CustomValidators.required(validation[1]));
+            break;
+        }
+
+      }
+    }
+
+    if (parameter.validations?.max) {
+      validation = (typeof parameter.validations.max === 'number' ? [parameter.validations.max, null] : parameter.validations.max);
+      if (validation[0]) {
+
+        switch (parameter.dataType) {
+          case 'checkbox-array':
+            validators.push(CustomValidators.maxCheckboxArray(validation[0] as number, validation[1] as string));
+            break;
+          // case 'checkbox-group':
+          //   validators.push(CustomValidators.requiredCheckboxGroup(validation[1]));
+          //   break;
+          default:
+            // validators.push(CustomValidators.required(validation[1]));
+            break;
+        }
+
+      }
+    }
+
+
+    // if (parameter.validations?.min) { validators.push(Validators.min(parameter.validations.min as number)); }
+    // if (parameter.validations?.max) { validators.push(Validators.max(parameter.validations.max as number)); }
 
     return validators;
 

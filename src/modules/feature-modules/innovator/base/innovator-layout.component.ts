@@ -1,17 +1,16 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd } from '@angular/router';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
 import { RoutingHelper } from '@modules/core';
-import { Observable, Subject } from 'rxjs';
-import { InnovatorService } from '../services/innovator.service';
+
 import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 
 
 type RouteDataLayoutOptionsType = {
-  type: null | 'innovationLeftAsideMenu' | 'emptyLeftAside';
+  type: null | 'userAccountMenu' | 'innovationLeftAsideMenu' | 'emptyLeftAside';
   backLink?: null | { url?: string, label?: string };
   showInnovationHeader?: boolean;
 };
@@ -34,8 +33,8 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
   leftSideBar: { title: string, link: string, key?: string }[] = [];
 
-  notifications: {[key: string]: number};
-  mainMenuNotifications: {[key: string]: number};
+  notifications: { [key: string]: number };
+  mainMenuNotifications: { [key: string]: number };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -44,9 +43,8 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
     super();
 
-
     this.subscriptions.push(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e)),
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
     );
 
     this.notifications = {
@@ -57,7 +55,8 @@ export class InnovatorLayoutComponent extends CoreComponent {
       DATA_SHARING: 0,
     };
 
-    this.mainMenuNotifications = { };
+    this.mainMenuNotifications = {};
+
   }
 
 
@@ -66,22 +65,22 @@ export class InnovatorLayoutComponent extends CoreComponent {
     const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
 
-    this.subscriptions.push(
+    if (this.stores.authentication.isValidUser()) {
+
       this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
         response => {
           this.mainMenuNotifications = response;
         }
-      )
-    );
+      );
 
-    if (currentRouteInnovationId) {
-      this.subscriptions.push(
+      if (currentRouteInnovationId) {
         this.notificationService.getAllUnreadNotificationsGroupedByContext(currentRouteInnovationId).subscribe(
           response => {
             this.notifications = response;
           }
-        )
-      );
+        );
+      }
+
     }
 
     this.layoutOptions = {
@@ -102,7 +101,7 @@ export class InnovatorLayoutComponent extends CoreComponent {
         ],
         rightItems: [
           { title: 'Your innovations', link: '/innovator/innovations' },
-          // { title: 'Your account', link: '/innovator/account' },
+          { title: 'Your account', link: '/innovator/account' },
           { title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true }
         ]
       };
@@ -110,6 +109,13 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
 
     switch (this.layoutOptions.type) {
+
+      case 'userAccountMenu':
+        this.leftSideBar = [
+          { title: 'Your details', link: `/innovator/account/manage-details` },
+          { title: 'Manage innovations', link: `/innovator/account/manage-innovations` }
+        ];
+        break;
 
       case 'innovationLeftAsideMenu':
         this.leftSideBar = [

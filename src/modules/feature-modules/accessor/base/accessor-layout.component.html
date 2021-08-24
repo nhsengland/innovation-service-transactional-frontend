@@ -11,6 +11,9 @@
       <div *ngSwitchCase="'innovationLeftAsideMenu'">
         <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
       </div>
+      <div *ngSwitchCase="'userAccountMenu'">
+        <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
+      </div>
       <div *ngSwitchCase="null">
         <router-outlet></router-outlet>
       </div>
@@ -19,13 +22,16 @@
   </main>
 </div>
 
+<theme-footer></theme-footer>
+
 
 <ng-template #leftAsideMenu>
   <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-3">
 
     <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full app-component-reading-width">
+      <div class="nhsuk-grid-column-full">
         <div class="app-pane">
+
           <div class="app-pane__side-bar nhsuk-u-padding-top-3">
             <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
 
@@ -41,7 +47,7 @@
                 <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
                   <div class="side-menu-flex">
                     <div>
-                      <a class="app-side-nav__link" [routerLink]="item.link">{{ item.title }}</a>
+                      <a class="app-side-nav__link" [routerLink]="item.link"> {{ item.title }} </a>
                     </div>
                     <div>
                       <notification-tag *ngIf="notifications[item.key || ''] > 0" [count]="notifications[item.key || '']"></notification-tag>
@@ -52,14 +58,34 @@
 
             </nav>
           </div>
+
           <div class="app-pane__main-content">
+
             <router-outlet></router-outlet>
+
+            <div class="app-index-navigation app-u-hide-desktop">
+              <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
+
+                <ul class="nhsuk-list app-side-nav__list">
+                  <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
+                    <div class="side-menu-flex">
+                      <div>
+                        <a class="app-side-nav__link" [routerLink]="item.link"> {{ item.title }} </a>
+                      </div>
+                      <div>
+                        <notification-tag *ngIf="notifications[item.key || ''] > 0" [count]="notifications[item.key || '']"></notification-tag>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+
+              </nav>
+            </div>
           </div>
+
         </div>
       </div>
     </div>
 
   </div>
 </ng-template>
-
-<theme-footer></theme-footer>

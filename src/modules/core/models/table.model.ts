@@ -1,3 +1,7 @@
+type AlignType = 'left' | 'right' | 'center';
+
+type OrderDirectionType = 'none' | 'ascending' | 'descending';
+
 export type APIQueryParamsType = {
   take: number;
   skip: number;
@@ -9,7 +13,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
 
   dataSource: T[];
   visibleColumns: {
-    [key: string]: { label: string, align?: 'left' | 'right' | 'center', orderable?: boolean }
+    [key: string]: { label: string, align?: AlignType, orderable?: boolean }
   };
 
   totalRows: number;
@@ -19,11 +23,14 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
   pageSizeOptions: number[];
 
   orderBy: string;
-  orderDir: '' | 'asc' | 'desc';
+  orderDir: OrderDirectionType;
 
   filters: { [key: string]: string | number | boolean | string[] };
 
-  constructor(data: Omit<Partial<TableModel<T>>, 'visibleColumns'> & { visibleColumns?: { [key: string]: (string | { label: string; align?: 'left' | 'right' | 'center'; orderable?: boolean; }) } }) {
+  // This varaible is needed so angular lifecycle only refresh when something changes, when using thisgetHeaderColumns() on a *ngFor.
+  private cachedHeaderColumns: { key: string, label: string, align: string, orderable: boolean, orderDir: OrderDirectionType }[];
+
+  constructor(data: Omit<Partial<TableModel<T>>, 'visibleColumns'> & { visibleColumns?: { [key: string]: (string | { label: string; align?: AlignType; orderable?: boolean; }) } }) {
 
     this.dataSource = data.dataSource || [];
 
@@ -37,13 +44,16 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
     this.pageSizeOptions = data.pageSizeOptions || [5, 10, 25];
 
     this.orderBy = data.orderBy || '';
-    this.orderDir = data.orderDir || '';
+    this.orderDir = data.orderDir || 'none';
 
     this.filters = data.filters || {};
 
+    this.cachedHeaderColumns = [];
+    this.setHeaderColumns();
+
   }
 
-  setVisibleColumns(visibleColumns: { [key: string]: (string | { label: string; align?: 'left' | 'right' | 'center'; orderable?: boolean; }) }): this {
+  setVisibleColumns(visibleColumns: { [key: string]: (string | { label: string; align?: AlignType; orderable?: boolean; }) }): this {
 
     this.visibleColumns = {};
 
@@ -52,30 +62,36 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
       else { this.visibleColumns[key] = { label: item.label, align: item.align, orderable: item.orderable }; }
     }
 
+    this.setHeaderColumns();
+
     return this;
 
   }
 
-  setOrderBy(column: string, orderDir?: 'asc' | 'desc'): this {
+  setOrderBy(column: string, orderDir?: 'ascending' | 'descending'): this {
 
     if (orderDir) {
       this.orderBy = column;
       this.orderDir = orderDir;
+      this.setHeaderColumns();
       return this;
     }
 
     if (this.orderBy === column) {
-      this.orderDir = (['', 'asc'].includes(this.orderDir) ? 'desc' : 'asc');
+      this.orderDir = (['none', 'ascending'].includes(this.orderDir) ? 'descending' : 'ascending');
     } else {
       this.orderBy = column;
-      this.orderDir = 'asc';
+      this.orderDir = 'ascending';
     }
+
+    this.setHeaderColumns();
 
     return this;
   }
 
   setFilters(filters: { [key: string]: string | number | boolean | string[] }): this {
     Object.entries(filters).forEach(([key, item]) => this.filters[key] = item);
+    this.setHeaderColumns();
     return this;
   }
 
@@ -96,15 +112,21 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
     return this.visibleColumns[key]?.label || '';
   }
 
-  getHeaderColumns(): { key: string, label: string, align: string, orderable: boolean, orderDir: 'asc' | 'desc' | 'none' }[] {
+  getHeaderColumns(): { key: string, label: string, align: string, orderable: boolean, orderDir: OrderDirectionType }[] {
+    return this.cachedHeaderColumns;
 
-    return Object.entries(this.visibleColumns).map(([key, item]) => ({
+  }
+
+  setHeaderColumns(): void {
+
+    this.cachedHeaderColumns = Object.entries(this.visibleColumns).map(([key, item]) => ({
       key,
       label: item.label,
       align: `text-align-${item.align || 'left'}`, // Return the CSS class.
       orderable: item.orderable === true ? true : false,
-      orderDir: (this.orderBy === key ? this.orderDir : 'none') as 'asc' | 'desc' | 'none'
+      orderDir: (this.orderBy === key ? this.orderDir : 'none')
     }));
+
 
   }
 
@@ -113,12 +135,12 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
 
   getTotalRowsNumber(): number { return this.totalRows; }
 
-  getAPIQueryParams(): { take: number, skip: number, order?: { [key: string]: 'ASC' | 'DESC' }, filters?: any } {
+  getAPIQueryParams(): APIQueryParamsType {
 
     return {
       take: this.pageSize,
       skip: (this.page - 1) * this.pageSize,
-      order: this.orderBy ? { [this.orderBy]: (this.orderDir.toUpperCase() || 'ASC') as 'ASC' | 'DESC' } : undefined,
+      order: this.orderBy ? { [this.orderBy]: (this.orderDir === 'ascending' ? 'ASC' : 'DESC') } : undefined,
       filters: Object.keys(this.filters).length > 0 ? this.filters : undefined
     };
 

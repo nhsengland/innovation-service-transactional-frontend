@@ -42,7 +42,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
   });
 
 
-  it('should run submitFirstTimeSigninInfo(PayloadTest01) and return success', () => {
+  it('should run submitFirstTimeSigninInfo(FIRST_TIME_SIGNIN, PayloadTest01) and return success', () => {
 
     const payload = {
       innovatorName: 'User display name',
@@ -51,26 +51,26 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
       locationCountryName: 'Some location',
       // location: 'Other location',
       // englandPostCode: 'EN05',
-      isCompanyOrOrganisation: 'yes',
+      isCompanyOrOrganisation: 'no',
       // organisationName: 'Organisation name',
       // organisationSize: '1 to 5 workers',
       // organisationShares: ['Organisation 01']
     };
-    const responseMock = true;
-    const expected = '';
+    const responseMock = { id: 'id' };
+    const expected = { id: 'id' };
     let response: any = null;
 
 
-    service.submitFirstTimeSigninInfo(payload).subscribe(success => response = success, error => response = error);
+    service.submitFirstTimeSigninInfo('FIRST_TIME_SIGNIN', payload).subscribe(success => response = success, error => response = error);
 
     const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
-    expect(response).toBe(expected);
+    expect(response).toEqual(expected);
 
   });
 
-  it('should run submitFirstTimeSigninInfo(PayloadTest02) and return success', () => {
+  it('should run submitFirstTimeSigninInfo(FIRST_TIME_SIGNIN, PayloadTest02) and return success', () => {
 
     const payload = {
       innovatorName: 'User display name',
@@ -79,22 +79,43 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
       // locationCountryName: 'Some location',
       location: 'Other location',
       // englandPostCode: 'EN05',
-      isCompanyOrOrganisation: 'no',
+      isCompanyOrOrganisation: 'yes',
       organisationName: 'Organisation name',
       organisationSize: '1 to 5 workers',
       organisationShares: ['Organisation 01']
     };
-    const responseMock = true;
-    const expected = '';
+    const responseMock = { id: 'id' };
+    const expected = { id: 'id' };
     let response: any = null;
 
 
-    service.submitFirstTimeSigninInfo(payload).subscribe(success => response = success, error => response = error);
+    service.submitFirstTimeSigninInfo('FIRST_TIME_SIGNIN', payload).subscribe(success => response = success, error => response = error);
 
     const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
-    expect(response).toBe(expected);
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run submitFirstTimeSigninInfo(TRANSFER, PayloadTest01) and return success', () => {
+
+    const payload = {
+      innovatorName: 'User display name',
+      transferId: 'id',
+      isCompanyOrOrganisation: 'NO',
+    };
+    const responseMock = { id: 'id' };
+    const expected = { id: 'id' };
+    let response: any = null;
+
+
+    service.submitFirstTimeSigninInfo('TRANSFER', payload).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('POST');
+    expect(response).toEqual(expected);
 
   });
 

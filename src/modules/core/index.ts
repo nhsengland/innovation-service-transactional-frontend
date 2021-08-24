@@ -15,7 +15,7 @@ export { EnvironmentStore } from './stores/environment.store';
 
 
 // Interfaces.
-export { MappedObject } from './interfaces/base.interfaces';
+export { AlertType, MappedObject } from './interfaces/base.interfaces';
 
 // Models
 export { UrlModel } from './models/url.model';
@@ -28,3 +28,4 @@ export { APIQueryParamsType } from './models/table.model';
 export { RandomGeneratorHelper } from './helpers/random-generator.helper';
 export { RoutingHelper } from './helpers/routing.helper';
 export { DatesHelper } from './helpers/dates.helper';
+export { LocalStorageHelper } from './helpers/local-storage.helper';

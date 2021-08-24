@@ -8,6 +8,9 @@ import { ThemeModule } from '@modules/theme/theme.module';
 import { FormsModule } from './forms/forms.module';
 
 // Pages.
+import { PageAccountManageDetailsInfoComponent } from './pages/account/manage-details/manage-details-info.component';
+import { PageAccountManageDetailsEditComponent } from './pages/account/manage-details/manage-details-edit.component';
+
 import { InnovationSectionViewComponent } from './pages/innovation/section-view.component';
 import { InnovationSectionEvidenceViewComponent } from './pages/innovation/evidence-view.component';
 import { PageInnovationRecordComponent } from './pages/innovation/innovation-record.component';
@@ -15,6 +18,8 @@ import { PageActionStatusListComponent } from './pages/innovation/action-status-
 import { PageInnovationCommentsListComponent } from './pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from './pages/innovation/comments/comments-new.component';
 import { PageInnovationSupportStatusListComponent } from './pages/innovation/innovation-support-status-list.component';
+
+import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 
 // Services.
@@ -33,6 +38,9 @@ import { NotificationService } from './services/notification.service';
   ],
   declarations: [
     // Pages.
+    PageAccountManageDetailsInfoComponent,
+    PageAccountManageDetailsEditComponent,
+
     InnovationSectionViewComponent,
     InnovationSectionEvidenceViewComponent,
     PageInnovationRecordComponent,
@@ -40,6 +48,8 @@ import { NotificationService } from './services/notification.service';
     PageInnovationCommentsListComponent,
     PageInnovationCommentsNewComponent,
     PageInnovationSupportStatusListComponent,
+
+    PageErrorComponent,
     PageNotFoundComponent,
 
   ],

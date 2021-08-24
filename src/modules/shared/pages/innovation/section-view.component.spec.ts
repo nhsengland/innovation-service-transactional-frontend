@@ -56,12 +56,12 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'sectionUpdateSuccess' };
 
-    const expected = { type: 'warning', title: 'Your section has been saved', message: 'You need to submit this section for review to notify your supporting accessor(s)' };
+    const expected = { type: 'WARNING', title: 'Your section has been saved', message: 'You need to submit this section before you can submit your Innovation Record for needs assessment.' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.summaryAlert).toEqual(expected);
+    expect(component.alert).toEqual(expected);
 
   });
 
@@ -70,12 +70,12 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'sectionUpdateError' };
 
-    const expected = { type: 'error', title: 'An error occured when saving your section', message: 'Please, try again or contact us for further help' };
+    const expected = { type: 'ERROR', title: 'An error occured when saving your section', message: 'Please, try again or contact us for further help' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.summaryAlert).toEqual(expected);
+    expect(component.alert).toEqual(expected);
 
   });
 
@@ -84,12 +84,12 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'evidenceUpdateSuccess' };
 
-    const expected = { type: 'warning', title: 'Your evidence has been saved', message: 'You need to submit this section for review to notify your supporting accessor(s)' };
+    const expected = { type: 'WARNING', title: 'Your evidence has been saved', message: 'You need to submit this section for review to notify your supporting accessor(s)' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.summaryAlert).toEqual(expected);
+    expect(component.alert).toEqual(expected);
 
   });
 
@@ -98,12 +98,12 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'evidenceDeleteSuccess' };
 
-    const expected = { type: 'warning', title: 'Your evidence has been deleted', message: '' };
+    const expected = { type: 'WARNING', title: 'Your evidence has been deleted', message: '' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.summaryAlert).toEqual(expected);
+    expect(component.alert).toEqual(expected);
 
   });
 
@@ -112,12 +112,12 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'evidenceUpdateError' };
 
-    const expected = { type: 'error', title: 'An error occured when saving your evidence', message: 'Please, try again or contact us for further help' };
+    const expected = { type: 'ERROR', title: 'An error occured when saving your evidence', message: 'Please, try again or contact us for further help' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.summaryAlert).toEqual(expected);
+    expect(component.alert).toEqual(expected);
 
   });
 
@@ -126,12 +126,12 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS };
     activatedRoute.snapshot.queryParams = {};
 
-    const expected = { type: '', title: '', message: '' };
+    const expected = { type: null };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.summaryAlert).toEqual(expected);
+    expect(component.alert).toEqual(expected);
 
   });
 
@@ -204,9 +204,9 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     innovationStore.submitSections$ = () => of(responseMock2 as any);
 
     const expected = {
-      type: 'warning',
+      type: 'WARNING',
       title: 'Your section has been submitted',
-      message: ''
+      setFocus: true
     };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
@@ -214,7 +214,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
     component.onSubmitSection();
     fixture.detectChanges();
-    expect(component.summaryAlert).toEqual(expected);
+    expect(component.alert).toEqual(expected);
 
 
   });
@@ -238,9 +238,10 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     innovationStore.submitSections$ = () => throwError('error');
 
     const expected = {
-      type: 'error',
+      type: 'ERROR',
       title: 'An error occured when submitting your section',
-      message: 'Please, try again or contact us for further help'
+      message: 'Please, try again or contact us for further help',
+      setFocus: true
     };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
@@ -249,7 +250,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     component.onSubmitSection();
     fixture.detectChanges();
 
-    expect(component.summaryAlert).toEqual(expected);
+    expect(component.alert).toEqual(expected);
 
   });
 

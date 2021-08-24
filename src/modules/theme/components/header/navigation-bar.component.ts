@@ -10,7 +10,8 @@ export class HeaderNavigationBarComponent implements OnInit {
 
   @Input() leftMenuItems: { title: string, link: string, fullReload?: boolean }[] = [];
   @Input() rightMenuItems: { title: string, link: string, fullReload?: boolean }[] = [];
-  @Input() notifications: {[key: string]: number}  = { };
+  @Input() notifications: { [key: string]: number } = {};
+
   constructor() { }
 
   ngOnInit(): void { }

@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
+import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CustomValidators } from '@app/base/forms';
+import { AlertType } from '@app/base/models';
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
 import { AccessorService } from '../../../services/accessor.service';
@@ -15,14 +17,15 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
 
   innovationId: string;
 
+  alert: AlertType = { type: null };
+
   sectionItems: { value: string, label: string }[] = [];
 
   form = new FormGroup({
-    section: new FormControl('', Validators.required),
-    description: new FormControl('', Validators.required)
+    section: new FormControl('', CustomValidators.required('Choose at least one section')),
+    description: new FormControl('', CustomValidators.required('A description is required'))
   });
 
-  summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -30,6 +33,7 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
   ) {
 
     super();
+    this.setPageTitle('Request new action');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
@@ -41,8 +45,6 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
         }, [])
       ];
     }, []);
-
-    this.summaryAlert = { type: '', title: '', message: '' };
 
     // Pre-selects section if it was provided.
     if (this.activatedRoute.snapshot.queryParams.section) {
@@ -64,10 +66,11 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
         this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionCreationSuccess' });
       },
       () => {
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when creating an action',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help',
+          setFocus: true
         };
       }
     );

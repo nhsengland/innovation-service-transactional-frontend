@@ -24,14 +24,26 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
     // If Group Item has only one child item, then show the child only.
     this.filteredGI = (value || []).map(groupItem => {
       if (groupItem.items.length === 1) {
-        return { gItem: { ...groupItem.items[0], ...{ items: [] } }, showHideStatus: 'hidden', showHideText: null, selectedChildren: 0 };
+        return {
+          gItem: { ...groupItem.items[0], ...{ items: [] } },
+          showHideStatus: 'hidden',
+          showHideText: null,
+          showHideDescription: null,
+          selectedChildren: 0
+        };
       } else {
-        return { gItem: groupItem, showHideStatus: 'closed', showHideText: `Show ${groupItem.items.length} units`, selectedChildren: groupItem.items.filter(a => this.fieldArrayValues.includes(a.value)).length };
+        return {
+          gItem: groupItem,
+          showHideStatus: 'closed',
+          showHideText: `Show ${groupItem.items.length} units`,
+          showHideDescription: `that belong to the ${groupItem.label}`,
+          selectedChildren: groupItem.items.filter(a => this.fieldArrayValues.includes(a.value)).length
+        };
       }
     });
 
   }
-
+  @Input() pageUniqueField = true;
 
   hasError = false;
   errorMessage = '';
@@ -41,13 +53,21 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
     selectedChildren: number;
     showHideStatus: 'hidden' | 'opened' | 'closed';
     showHideText: null | string;
+    showHideDescription: null | string;
   }[] = [];
 
-
-  // Return parent FormGroup (or FormArray) instance.
+  // Form controls.
   get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
   get fieldArrayControl(): FormArray { return this.parentFieldControl?.get(this.arrayName) as FormArray; }
   get fieldArrayValues(): string[] { return this.fieldArrayControl.value as string[]; }
+
+  // Accessibility.
+  get ariaDescribedBy(): null | string {
+    let s = '';
+    if (this.description) { s += `hint-${this.id}`; }
+    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    return s || null;
+  }
 
 
   constructor(
@@ -99,10 +119,12 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
       case 'opened':
         filteredGI.showHideStatus = 'closed';
         filteredGI.showHideText = `Show ${filteredGI.gItem.items.length} units`;
+        filteredGI.showHideDescription = `that belong to the ${filteredGI.gItem.label}`;
         break;
       case 'closed':
         filteredGI.showHideStatus = 'opened';
         filteredGI.showHideText = `Hide ${filteredGI.gItem.items.length} units`;
+        filteredGI.showHideDescription = `that belong to the ${filteredGI.gItem.label}`;
         break;
       default:
         break;

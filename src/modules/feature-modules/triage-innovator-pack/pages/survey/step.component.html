@@ -1,5 +1,5 @@
 <!-- Necessary to be the first submit button when navigating through the keyboard. -->
-<button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('next')" class="nhsuk-u-visually-hidden" (click)="onSubmitStep('next')">Hidden button</button>
+<button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('next')" class="nhsuk-u-visually-hidden" (click)="onSubmitStep('next')" tabindex="-1"> Continue </button>
 
 <div class="nhsuk-back-link">
   <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('previous')" class="nhsuk-back-link__link button-as-link" (click)="onSubmitStep('previous')">
@@ -15,61 +15,50 @@
 
     <ng-container *ngIf="isQuestionStep()">
 
-      <div id="pageFirstFocus" class="nhsuk-hint nhsuk-u-margin-bottom-0" tabIndex="-1">Question {{ currentStep.number }} of {{ totalNumberOfSteps }}</div>
+      <div class="nhsuk-hint nhsuk-u-margin-bottom-0">Question {{ currentStep.number }} of {{ totalNumberOfSteps }}</div>
 
-      <fieldset class="nhsuk-fieldset" aria-describedby="example-hint">
+      <ng-container *ngIf="currentStep.data.details">
+        <details class="nhsuk-details">
+          <summary class="nhsuk-details__summary">
+            <span class="nhsuk-details__summary-text">{{ currentStep.data.details.title }}</span>
+          </summary>
+          <div class="nhsuk-details__text" [innerHTML]="currentStep.data.details.content"></div>
+        </details>
+      </ng-container>
 
-        <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">{{ currentStep.data.label }}</legend>
+      <theme-form-engine formId="SurveyForm" [parameters]="currentStep.data.parameters" [values]="currentStep.data.defaultData"></theme-form-engine>
 
-        <div *ngIf="currentStep.data.description" class="nhsuk-hint">{{ currentStep.data.description }}</div>
-
-        <ng-container *ngIf="currentStep.data.details">
-          <details class="nhsuk-details">
-            <summary class="nhsuk-details__summary">
-              <span class="nhsuk-details__summary-text">{{ currentStep.data.details.title }}</span>
-            </summary>
-            <div class="nhsuk-details__text" [innerHTML]="currentStep.data.details.content"></div>
-          </details>
-        </ng-container>
-
-        <theme-form-engine formId="SurveyForm" [parameters]="currentStep.data.parameters" [values]="currentStep.data.defaultData"></theme-form-engine>
-
-        <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('next')" class="nhsuk-button" (click)="onSubmitStep('next')"> Continue </button>
-
-      </fieldset>
+      <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('next')" class="nhsuk-button" (click)="onSubmitStep('next')"> Continue </button>
 
     </ng-container>
 
 
     <ng-container *ngIf="isSummaryStep()">
 
-      <h1 class="nhsuk-heading-l">Check your answers before completing</h1>
+      <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+        <p> Please verify what's missing with your answers </p>
+        <ul class="nhsuk-list nhsuk-error-summary__list">
+          <li *ngFor="let item of summaryList.items">
+            <a *ngIf="item.errorMessage" [routerLink]="item.url"> {{ item.errorMessage | translate }} </a>
+          </li>
+        </ul>
+      </theme-alert>
 
-      <div *ngIf="!summaryList.valid" class="nhsuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1">
-        <h2 class="nhsuk-error-summary__title" id="error-summary-title"> There is a problem </h2>
-        <div class="nhsuk-error-summary__body">
-          <p> Please verify what's missing with your answers </p>
-          <ul class="nhsuk-list nhsuk-error-summary__list">
-            <li *ngFor="let item of summaryList.items">
-              <a *ngIf="item.errorMessage" [routerLink]="item.url">{{ item.errorMessage | translate }}</a>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
 
       <dl class="nhsuk-summary-list">
         <div *ngFor="let item of summaryList.items" class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+          <dt class="nhsuk-summary-list__key"> {{ item.label }} </dt>
           <dd class="nhsuk-summary-list__value" [innerHTML]="item.value"></dd>
           <dd class="nhsuk-summary-list__actions">
-            <a [routerLink]="item.url">Change<span class="nhsuk-u-visually-hidden">{{ item.label | lowercase }}</span></a>
+            <a [routerLink]="item.url"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
           </dd>
         </div>
       </dl>
 
       <ng-container *ngIf="summaryList.valid">
-        <h2 class="govuk-heading-m">Complete this questionnaire</h2>
-        <p class="govuk-body">Your answers will help us guide you towards the most relevant information. You will be able to create an account after completing this questionnaire.</p>
+        <h2 class="govuk-heading-m"> Complete this questionnaire </h2>
+        <p class="govuk-body"> Your answers will help us guide you towards the most relevant information. You will be able to create an account after completing this questionnaire. </p>
         <form id="SurveyForm" method="post" enctype="application/json" novalidate=""></form>
         <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('submit')" class="nhsuk-button" (click)="onSubmitSurvey()"> Complete </button>
       </ng-container>

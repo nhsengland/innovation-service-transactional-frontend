@@ -10,12 +10,24 @@ export class CustomValidators {
     return (control: AbstractControl): ValidationErrors | null => (control.value as string[] || []).length > 0 ? null : { required: (message ? { message } : true) };
   }
 
+  static minCheckboxArray(min: number, message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => (control.value as string[] || []).length >= min ? null : { min: (message ? { message, min } : { min }) };
+  }
+
+  static maxCheckboxArray(max: number, message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => (control.value as string[] || []).length <= max ? null : { max: (message ? { message, max } : { max }) };
+  }
+
   static requiredCheckboxGroup(message?: string | null): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => (Object.entries(control.value as { [key: string]: boolean })).filter(item => item[1]).length > 0 ? null : { required: (message ? { message } : true) };
   }
 
   static pattern(pattern: string, message?: string | null): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => new RegExp(pattern).test(control.value) ? null : { pattern: (message ? { message } : true) };
+  }
+
+  static equalTo(value: string, message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => control.value === value ? null : { equalTo: (message ? { message } : true) };
   }
 
   static hexadecimalFormatValidator(): ValidatorFn {

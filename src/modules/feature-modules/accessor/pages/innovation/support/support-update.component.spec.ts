@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
+import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
@@ -12,7 +13,6 @@ import { InnovationSupportUpdateComponent } from './support-update.component';
 
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 import { ActivatedRoute } from '@angular/router';
-import { of, throwError } from 'rxjs';
 
 describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', () => {
 
@@ -81,25 +81,19 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
 
     accessorService.getInnovationSupportInfo = () => throwError('error');
     authenticationStore.getUserInfo = () => ({
+      id: '_id',
+      displayName: 'Test qualifying Accessor',
+      email: 'tqa@example.com',
+      type: 'ACCESSOR',
       organisations: [
         {
-          id: 'org_id',
-          isShadow: false,
-          name: 'organisation_1',
-          role: 'QUALIFYING_ACCESSOR',
+          id: 'org_id', isShadow: false, name: 'organisation_1', size: '', role: 'QUALIFYING_ACCESSOR',
           organisationUnits: [
-            {
-              id: '_unit_id',
-              name: 'ORG_UNIT',
-            }
+            { id: '_unit_id', name: 'ORG_UNIT' }
           ]
         }
       ],
-      displayName: 'Test qualifying Accessor',
-      email: 'tqa@example.com',
-      id: '_id',
-      innovations: [],
-      type: 'ACCESSOR',
+      innovations: []
     });
     const expected = 'ORG_UNIT';
 
@@ -125,8 +119,9 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
   it('should have support with ENGAGING status and accessors assigned', () => {
 
     accessorService.getInnovationSupportInfo = () => of({
+      id: 'support01',
       status: 'ENGAGING',
-      accessors: [{id: 'accessor_1', name: 'accessor 1'}]
+      accessors: [{ id: 'accessor_1', name: 'accessor 1' }]
     });
 
     const expected = 1;
@@ -144,8 +139,9 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
   it('should move to step 2 when status is ENGAGING', () => {
 
     accessorService.getInnovationSupportInfo = () => of({
+      id: 'support01',
       status: 'ENGAGING',
-      accessors: [{id: 'accessor_1', name: 'accessor 1'}]
+      accessors: [{ id: 'accessor_1', name: 'accessor 1' }]
     });
 
     const expected = 2;
@@ -165,6 +161,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
   it('should move to step 3 when status is NOT ENGAGING', () => {
 
     accessorService.getInnovationSupportInfo = () => of({
+      id: 'support01',
       status: 'NOT_YET',
       accessors: []
     });
@@ -186,6 +183,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
   it('should Submit when form is valid', () => {
 
     accessorService.getInnovationSupportInfo = () => of({
+      id: 'support01',
       status: 'NOT_YET',
       accessors: []
     });
@@ -208,6 +206,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
   it('should NOT Submit when form is invalid', () => {
 
     accessorService.getInnovationSupportInfo = () => of({
+      id: 'support01',
       status: 'NOT_YET',
       accessors: []
     });
@@ -226,4 +225,5 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
     expect(component.form.valid).toEqual(expected);
 
   });
+
 });

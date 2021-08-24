@@ -3,13 +3,13 @@
     <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation?.summary?.name }}</h1>
   </div>
   <div *ngIf="innovation?.assessment?.id" class="nhsuk-grid-column-one-half text-align-right">
-    <a routerLink="/accessor/innovations/{{ innovationId || '' }}/assessments/{{ innovation?.assessment?.id || '' }}">View needs assessment</a>
+    <a routerLink="/accessor/innovations/{{ innovationId || '' }}/assessments/{{ innovation?.assessment?.id || '' }}"> View needs assessment </a>
   </div>
 </div>
 <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
 
 
-<h3 class="nhsuk-heading-s nhsuk-u-margin-bottom-2">{{ innovationSupport.organisationUnit }}</h3>
+<p class="nhsuk-heading-s nhsuk-u-margin-bottom-2">{{ innovationSupport.organisationUnit }}</p>
 <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-3">
   <div class="nhsuk-summary-list__row">
@@ -22,7 +22,7 @@
   </div>
 </dl>
 
-<a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation?.support?.id ? innovation?.support?.id : 'new' }}" class="nhsuk-button nhsuk-u-margin-bottom-7"> Update status </a>
+<a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation?.support?.id ? innovation?.support?.id : 'new' }}" class="nhsuk-button nhsuk-u-margin-bottom-7"> Update status </a>
 
 <h2 class="nhsuk-heading-m">Innovation summary</h2>
 <dl class="nhsuk-summary-list">

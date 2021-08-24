@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
-import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CustomValidators } from '@app/base/forms';
+import { AlertType } from '@app/base/models';
 
 import { InnovatorService } from '../../../services/innovator.service';
 
@@ -15,16 +16,16 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
 
   innovationId: string;
   actionId: string;
+
+  alert: AlertType = { type: null };
+
   actionDisplayId: string;
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
-
   form = new FormGroup({
-    comment: new FormControl('', Validators.required)
+    comment: new FormControl('', CustomValidators.required('A comment is required'))
   });
-
-  summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
 
 
   constructor(
@@ -33,12 +34,12 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
   ) {
 
     super();
+    this.setPageTitle('Decline action');
 
     this.actionDisplayId = '';
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.actionId = this.activatedRoute.snapshot.params.actionId;
 
-    this.summaryAlert = { type: '', title: '', message: '' };
     this.innovatorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
       response => this.actionDisplayId = response.displayId,
       error => {
@@ -61,21 +62,16 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
 
     const status = 'DECLINED';
 
-    this.innovatorService.declineAction(this.innovationId, this.actionId,
-      {
-        ...this.form.value,
-        status,
-      }
-      ).subscribe(
+    this.innovatorService.declineAction(this.innovationId, this.actionId, { ...this.form.value, status }).subscribe(
       response => {
-
         this.redirectTo(`/innovator/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionDeclined', status });
       },
       () => {
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when declining an action',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help',
+          setFocus: true
         };
       }
     );

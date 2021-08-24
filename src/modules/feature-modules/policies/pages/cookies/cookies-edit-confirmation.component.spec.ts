@@ -1,7 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { ThemeModule } from '@modules/theme/theme.module';
+import { Injector } from '@angular/core';
+
+import { CoreModule, AppInjector } from '@modules/core';
+import { StoresModule } from '@modules/stores';
+import { PoliciesModule } from '@modules/feature-modules/policies/policies.module';
 
 import { CookiesEditConfirmationComponent } from './cookies-edit-confirmation.component';
 
@@ -13,13 +18,15 @@ describe('CookiesInfoComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
+        HttpClientTestingModule,
         RouterTestingModule,
-        ThemeModule
-      ],
-      declarations: [
-        CookiesEditConfirmationComponent,
-      ],
+        CoreModule,
+        StoresModule,
+        PoliciesModule
+      ]
     });
+
+    AppInjector.setInjector(TestBed.inject(Injector));
 
   });
 

@@ -7,4 +7,17 @@
   a:visited {
     color: #fff;
   }
+
+  a:focus {
+    color: #212b32;
+  }
+}
+
+// Hide the menu on desktop when necessary.
+#header-navigation {
+  &.only-mobile-menu {
+    @media (min-width: 61.865em) {
+      display: none;
+    }
+  }
 }

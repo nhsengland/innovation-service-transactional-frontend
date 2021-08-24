@@ -1,7 +1,8 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { CoreComponent } from '@app/base';
-import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
+import { Component, Input, OnChanges } from '@angular/core';
+
 import { AccessorSuggestionModel, AssessmentSuggestionModel, OrganisationSuggestion } from '@modules/stores/innovation/innovation.models';
+
+import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 
 @Component({
   selector: 'organisation-suggestions-card',

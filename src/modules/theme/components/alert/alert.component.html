@@ -1,0 +1,12 @@
+<ng-container *ngIf="type">
+
+  <div class="nhsuk-error-summary" [ngClass]="borderColorCSS" role="alert" tabindex="-1" attr.aria-labelledby="summary-title-{{ id }}">
+    <h2 id="summary-title-{{ id }}" class="nhsuk-error-summary__title"> {{ title }} </h2>
+    <div class="nhsuk-error-summary__body">
+
+      <ng-content></ng-content>
+
+    </div>
+  </div>
+
+</ng-container>
