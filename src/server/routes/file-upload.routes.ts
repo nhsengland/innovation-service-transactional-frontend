@@ -17,7 +17,7 @@ const upload = multer({
 
 const checkFileType = (file: any, cb: ((...args: any[]) => void)) => {
   // Allowed ext
-  const filetypes = /docx|pdf|csv|xlsx/;
+  const filetypes = /|docx|pdf|csv|xlsx|/;
 
   // Check ext
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
