@@ -57,7 +57,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
     this.module = this.activatedRoute.snapshot.data.module;
     this.baseUrl = `/${this.module}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
-    this.documentUrl = `${this.stores.environment.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
+    // this.documentUrl = `${this.stores.environment.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
+    this.documentUrl = `${this.stores.environment.APP_URL}/exports/${this.activatedRoute.snapshot.params.innovationId}/pdf`;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovationName = '';
 
