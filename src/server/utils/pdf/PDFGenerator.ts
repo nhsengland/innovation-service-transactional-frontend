@@ -1,5 +1,4 @@
 import { jsPDF } from 'jspdf';
-import moment from 'moment';
 
 export class PDFGenerator {
 
@@ -142,7 +141,9 @@ export class PDFGenerator {
       // .addVerticalSpace(0.19);
 
     const d = new Date();
-    const date = `${moment(d).format('DD MMMM YYYY')} at ${moment(d).format('HH:mm')}`;
+
+    const date = [d.getDate(), d.toLocaleDateString('en-GB', {month: 'long'}), d.getFullYear()].join(' ') + ' at ' + [d.getHours(), d.getMinutes()].join(':');
+
     this
       .addText(`Exported: ${date}`, 18, {color: '#585858'});
 
