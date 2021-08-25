@@ -86,7 +86,7 @@
             <div class="nhsuk-u-margin-left-3">
               <div class="nhsuk-form-group reply-container" [ngClass]="{'nhsuk-form-group--error': formSubmittedFields[comment.id]}">
                 <ng-container *ngIf="formSubmittedFields[comment.id]">
-                  <span id="error-{{ comment.id }}" class="nhsuk-error-message nhsuk-u-font-size-14">
+                  <span id="error-{{ comment.id }}" class="nhsuk-error-message nhsuk-u-font-size-14" role="alert">
                     <span class="nhsuk-u-visually-hidden">Error:</span> {{ formSubmittedFields[comment.id] | translate }}
                   </span>
                 </ng-container>
