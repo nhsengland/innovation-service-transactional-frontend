@@ -43,9 +43,13 @@
     </ng-container>
 
     <h2>All sections</h2>
+
     <a [href]="documentUrl">
-      <p class="nhsuk-heading-m nhsuk-u-margin-bottom-6">Download all questions (DOCX, 820KB)</p>
+      <p class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Export your innovation record to PDF</p>
     </a>
+    <p class="nhsuk-u-margin-bottom-6">
+      Exports your current innovation record as a PDF file.
+    </p>
 
     <ol class="app-task-list">
       <li *ngFor="let sectionGroup of innovationSections; let i = index">
@@ -64,13 +68,13 @@
               </span>
             </ng-container>
 
-            <span class="app-task-list__task-name"> {{ (i + 1) + '.' + (j + 1) }} 
-              <a routerLink="{{ baseUrl }}/{{section.id}}"><span class="nhsuk-u-visually-hidden"> Go to </span> 
-                {{ section.title }} 
+            <span class="app-task-list__task-name"> {{ (i + 1) + '.' + (j + 1) }}
+              <a routerLink="{{ baseUrl }}/{{section.id}}"><span class="nhsuk-u-visually-hidden"> Go to </span>
+                {{ section.title }}
                 <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'NOT_STARTED'">Section not started</span>
                 <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'DRAFT'">Section in draft</span>
                 <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'SUBMITTED'">Section submitted</span>
-              </a> 
+              </a>
             </span>
 
             <strong *ngIf="section.actionStatus" class="nhsuk-tag app-task-list__tag" [ngClass]="innovationSectionActionStatus[section.actionStatus].cssClass">
