@@ -23,7 +23,7 @@
             <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="statusError ? 'error-status' : null">
               <legend class="nhsuk-fieldset__legend"> Choose a status </legend>
 
-              <span *ngIf="statusError" id="error-status" class="nhsuk-error-message"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ statusError | translate }} </span>
+              <span *ngIf="statusError" id="error-status" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ statusError | translate }} </span>
 
               <div class="nhsuk-radios">
                 <div *ngFor="let item of statusItems; let i = index" class="nhsuk-radios__item">

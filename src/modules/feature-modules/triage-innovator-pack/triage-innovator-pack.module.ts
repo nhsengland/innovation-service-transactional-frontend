@@ -8,7 +8,6 @@ import { TriageInnovatorPackRoutingModule } from './triage-innovator-pack-routin
 // Pages.
 import { SurveyStartComponent } from './pages/survey/start.component';
 import { SurveyStepComponent } from './pages/survey/step.component';
-import { SurveyEndComponent } from './pages/survey/end.component';
 
 // Services.
 import { SurveyService } from './services/survey.service';
@@ -24,8 +23,7 @@ import { SurveyService } from './services/survey.service';
   declarations: [
     // Pages.
     SurveyStartComponent,
-    SurveyStepComponent,
-    SurveyEndComponent
+    SurveyStepComponent
   ],
   providers: [
     SurveyService
