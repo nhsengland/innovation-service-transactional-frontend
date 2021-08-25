@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import { IProfile } from 'passport-azure-ad';
-import { API_URL, BASE_PATH } from '../config/constants.config';
+import { BASE_PATH } from '../config/constants.config';
 import { generatePDF } from '../utils/pdf/parser';
 import { getAccessTokenByOid } from './authentication.routes';
 

@@ -1,27 +1,109 @@
 import { jsPDF } from 'jspdf';
+import fs from 'fs';
 
 export class PDFGenerator {
 
   private currentPosition = 0;
   private documentHeight = 0;
   private doc: jsPDF;
+  private pageWidth = 8.5; // 8.5 inches;
+  private lineHeight = 1.2;
+  private margin = 0.5;
+  private maxLineWidth = this.pageWidth - this.margin * 2;
+  private pointPerInch = 72;
 
   private options: {margin: number, top: number, lineSpacing: number, maxLen: number};
 
   constructor(opts?: {margin: number, top: number, lineSpacing: number, maxLen: number}) {
     opts = opts || {
-      margin: 15,
-      top: 25,
-      lineSpacing: 10,
-      maxLen: 180,
+      margin: 0.59,
+      top: 0.58,
+      lineSpacing: 0.39,
+      maxLen: 7,
     };
 
-    this.currentPosition = opts.top || 25;
-    const doc = new jsPDF();
+    this.currentPosition = opts.top || 0.98;
+
+    const doc = new jsPDF({
+      unit: 'in',
+    }).setProperties({title: 'Innovation Record Export'});
+
+    doc.setLineHeightFactor(this.lineHeight);
+
     this.documentHeight = doc.internal.pageSize.getHeight();
 
     this.doc = doc;
     this.options = opts;
+  }
+
+
+
+  private addBoldText(text: string, fontSize?: number, opts?: any): PDFGenerator {
+
+    this.doc.setFont('helvetica', 'bold');
+    this.doc.setTextColor(opts.color || '#000');
+
+    if (this.currentPosition >= this.documentHeight - (this.documentHeight * 0.10)) {
+      this.doc.addPage();
+      this.currentPosition = this.options.top;
+    }
+
+    if (fontSize) { this.doc.setFontSize(fontSize); }
+
+    const oneLineHeight = ((fontSize || 24) * this.lineHeight) / this.pointPerInch;
+
+    const t = this.doc
+      .setFont('helvetica')
+      .setFontSize(fontSize || 24)
+      .splitTextToSize(text, this.maxLineWidth);
+
+    const blockHeight = (t.length * oneLineHeight) + 0.19;
+
+    this.currentPosition += blockHeight;
+
+    this.doc.text(t, this.margin, this.currentPosition);
+
+    if (t.length === 1) {
+      this.currentPosition -= 0.19;
+    }
+
+    return this;
+  }
+
+  private addText(text: string, fontSize?: number, opts?: any): PDFGenerator {
+    this.doc.setFont('helvetica', 'normal');
+    this.doc.setTextColor(opts.color || '#000');
+
+    if (this.currentPosition >= this.documentHeight - (this.documentHeight * 0.10)) {
+      this.doc.addPage();
+      this.currentPosition = this.options.top;
+    }
+
+    if (fontSize) { this.doc.setFontSize(fontSize); }
+    const oneLineHeight = ((fontSize || 24) * this.lineHeight) / this.pointPerInch;
+
+    const t = this.doc
+    .setFont('helvetica')
+    .splitTextToSize(text, this.maxLineWidth);
+
+    const blockHeight = (t.length * oneLineHeight) + 0.29;
+    this.currentPosition += blockHeight;
+
+    this.doc.text(t, this.margin, this.currentPosition);
+
+    this.currentPosition += 0.19;
+
+    return this;
+  }
+
+  addPage(): PDFGenerator{
+    this.doc.addPage();
+    this.currentPosition = this.options.top;
+    return this;
+  }
+
+  save(): ArrayBuffer {
+    return this.doc.output('arraybuffer');
   }
 
   addVerticalSpace(amount: number): PDFGenerator {
@@ -29,38 +111,53 @@ export class PDFGenerator {
     return this;
   }
 
-  addBoldText(text: string, fontSize?: number, opts?: any): PDFGenerator {
-    this.doc.setFont('times', 'bold');
-    if (this.currentPosition >= this.documentHeight - (this.documentHeight * 0.10)) {
-      this.doc.addPage();
-      this.currentPosition = this.options.top;
-    }
+  hero( innovationName: string ): PDFGenerator {
+    this.currentPosition = (this.documentHeight / 2) - 3.2;
+    this
+      .addText('Innovation record export', 48, {color : '#005eb7'})
+      .addVerticalSpace(0.19);
+    this
+      .addText(innovationName, 24, {color : '#005eb7'})
+      .addVerticalSpace(0.39);
+    this
+      .addText('NHS Innovation service', 18, {color: '#585858'});
+      // .addVerticalSpace(0.19);
+    this
+      .addText(`Exported: ${new Date().toISOString()}`, 18, {color: '#585858'});
 
-    const t = this.doc.splitTextToSize(text, 120);
-    if (fontSize) { this.doc.setFontSize(fontSize); }
-
-
-    this.doc.text(t, this.options.margin, this.currentPosition);
-    this.currentPosition += (this.options.lineSpacing || 10);
     return this;
   }
 
-  addText(text: string, fontSize?: number, opts?: any): PDFGenerator {
-    this.doc.setFont('times', 'normal');
-    if (this.currentPosition >= this.documentHeight - (this.documentHeight * 0.10)) {
-      this.doc.addPage();
-      this.currentPosition = this.options.top;
-    }
+  h1( text: string ): PDFGenerator {
 
-    const t = this.doc.splitTextToSize(text, 120);
-    if (fontSize) { this.doc.setFontSize(fontSize); }
+    this
+      .addBoldText(text, 30,  {color : '#005eb7'})
+      .addVerticalSpace(0.29);
 
-    this.doc.text(t, this.options.margin, this.currentPosition);
-    this.currentPosition += (this.options.lineSpacing || 10);
     return this;
   }
 
-  save(): ArrayBuffer {
-    return this.doc.output('arraybuffer');
+  h2( text: string ): PDFGenerator {
+
+    this
+      .addBoldText(text, 18, {color: '#212b31'})
+      .addVerticalSpace(0.19);
+    return this;
+  }
+
+  h3( text: string ): PDFGenerator {
+
+    this
+      .addBoldText(text, 14, {color: '#212b31'});
+
+    return this;
+  }
+
+  p( text: string ): PDFGenerator {
+
+    this
+      .addText(text, 10, {color: '#212b31'});
+
+    return this;
   }
 }

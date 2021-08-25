@@ -1,59 +1,66 @@
 import { PDFGenerator } from './PDFGenerator';
 import axios from 'axios';
 import { API_URL } from '../../config/constants.config';
-import { sectionType } from '@modules/stores/innovation/innovation.models';
+import { getInnovationInfoEndpointDTO, sectionType } from '@modules/stores/innovation/innovation.models';
 import { MappedObject } from '@modules/core';
 import { AllSectionsSummary } from '@modules/stores/innovation/innovation.config';
 
 const getSections = async (innovationId: string, userId: string, config: any): Promise<{section: sectionType, data: MappedObject}[]> => {
   const url = `${API_URL}/api/innovators/${userId}/innovations/${innovationId}/sections`;
-
-  console.log(url);
-
   const response = await axios.get<{
     section: sectionType;
     data: MappedObject
   }[]>(url, config);
+  return response.data;
+};
 
-  console.log(response.data);
+const getInnovation = async (userId: string, innovationId: string, config: any) => {
+  const url = `${API_URL}/api/innovators/${userId}/innovations/${innovationId}`;
+  const response = await axios.get<getInnovationInfoEndpointDTO>(url, config);
   return response.data;
 };
 
 export const generatePDF = async (innovationId: string, userId: string, config: any) => {
+
+  const innovation = await getInnovation(userId, innovationId, config);
 
   const generator = new PDFGenerator();
 
   const sections = await getSections(innovationId, userId, config);
 
   const content = AllSectionsSummary(sections);
-  console.log('CONTENT', content);
+
+  generator
+    .hero(innovation.name)
+    .addPage();
+
+  let page = 0;
   for (const entry of content) {
 
+    // every major section goes into it's own page
+    if (page > 0) {
+      generator.addPage();
+    }
+    page++;
     const title = entry.title;
 
     generator
-      .addBoldText(title, 30)
-      .addVerticalSpace(20);
+      .h1(title);
 
     for (const section of entry.sections) {
 
       const title = section.section;
       generator
-        .addBoldText(title, 18)
-        .addVerticalSpace(10);
+        .h2(title);
 
       for (const answer of section.answers) {
-console.log('ANSWER', answer);
-const title = answer.label;
-generator
-          .addBoldText(title, 14)
-          .addVerticalSpace(5);
+        const title = answer.label;
+        generator
+          .h3(title);
 
-const value = answer.value.replace('<br />', ', ');
-console.log(answer.value);
-generator
-          .addText(value, 10)
-          .addVerticalSpace(10);
+        const value = answer.value.replace(/<br \/>/, ', ');
+        generator
+          .p(value);
       }
     }
   }
