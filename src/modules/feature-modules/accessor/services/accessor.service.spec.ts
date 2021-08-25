@@ -169,7 +169,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
     const expected = {
       ...responseMock,
       ...{
-        name: `Submit '${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION)}'`,
+        name: `Submit '${innovationStore.getSectionTitle(InnovationSectionsIds.COST_OF_INNOVATION).toLowerCase()}'`,
         createdBy: 'One guy name'
       }
     };
