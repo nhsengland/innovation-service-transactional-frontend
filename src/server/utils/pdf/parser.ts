@@ -31,25 +31,30 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
   const content = AllSectionsSummary(sections);
 
   generator
+    .addHeader();
+
+  generator
     .hero(innovation.name)
     .addPage();
 
-  let page = 0;
+  let currentSection = 1;
+  let currentSubSection = 1;
   for (const entry of content) {
 
     // every major section goes into it's own page
-    if (page > 0) {
+    if (generator.currentPage > 1) {
       generator.addPage();
     }
-    page++;
-    const title = entry.title;
+
+
+    const title = `${currentSection}. ${entry.title}`;
 
     generator
       .h1(title);
-
     for (const section of entry.sections) {
 
-      const title = section.section;
+      const title = `${currentSection}.${currentSubSection} ${section.section}`;
+      currentSubSection++;
       generator
         .h2(title);
 
@@ -63,6 +68,9 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
           .p(value);
       }
     }
+
+    currentSection++;
+    currentSubSection = 1;
   }
 
   const result = generator.save();

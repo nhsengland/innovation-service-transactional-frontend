@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf';
-import fs from 'fs';
+import moment from 'moment';
 
 export class PDFGenerator {
 
@@ -12,8 +12,10 @@ export class PDFGenerator {
   private maxLineWidth = this.pageWidth - this.margin * 2;
   private pointPerInch = 72;
 
+
   private options: {margin: number, top: number, lineSpacing: number, maxLen: number};
 
+  currentPage = 0;
   constructor(opts?: {margin: number, top: number, lineSpacing: number, maxLen: number}) {
     opts = opts || {
       margin: 0.59,
@@ -43,8 +45,8 @@ export class PDFGenerator {
     this.doc.setFont('helvetica', 'bold');
     this.doc.setTextColor(opts.color || '#000');
 
-    if (this.currentPosition >= this.documentHeight - (this.documentHeight * 0.10)) {
-      this.doc.addPage();
+    if (this.currentPosition >= this.documentHeight - 2) {
+      this.addPage();
       this.currentPosition = this.options.top;
     }
 
@@ -74,8 +76,8 @@ export class PDFGenerator {
     this.doc.setFont('helvetica', 'normal');
     this.doc.setTextColor(opts.color || '#000');
 
-    if (this.currentPosition >= this.documentHeight - (this.documentHeight * 0.10)) {
-      this.doc.addPage();
+    if (this.currentPosition >= this.documentHeight - 2) {
+      this.addPage();
       this.currentPosition = this.options.top;
     }
 
@@ -96,9 +98,25 @@ export class PDFGenerator {
     return this;
   }
 
-  addPage(): PDFGenerator{
+  addPage(): PDFGenerator {
     this.doc.addPage();
     this.currentPosition = this.options.top;
+    this.currentPage++;
+    this.addFooter(this.currentPage);
+    return this;
+  }
+
+  addHeader(): PDFGenerator {
+    const svg = '../../../assets/images/NHS_logo_logotype.png';
+    return this;
+  }
+
+  addFooter(page: number): PDFGenerator {
+    const prevSize = this.doc.getFontSize();
+    this.doc.setFontSize(12);
+    this.doc.setFont('helvetica', 'normal');
+    this.doc.text(`${page} | Innovation record`, this.margin, this.documentHeight - 1);
+    this.doc.setFontSize(prevSize);
     return this;
   }
 
@@ -122,8 +140,11 @@ export class PDFGenerator {
     this
       .addText('NHS Innovation service', 18, {color: '#585858'});
       // .addVerticalSpace(0.19);
+
+    const d = new Date();
+    const date = `${moment(d).format('DD MMMM YYYY')} at ${moment(d).format('HH:mm')}`;
     this
-      .addText(`Exported: ${new Date().toISOString()}`, 18, {color: '#585858'});
+      .addText(`Exported: ${date}`, 18, {color: '#585858'});
 
     return this;
   }
