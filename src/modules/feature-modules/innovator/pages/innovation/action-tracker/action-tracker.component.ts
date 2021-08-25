@@ -57,11 +57,12 @@ export class InnovationActionTrackerComponent extends CoreComponent implements O
 
     this.innovatorService.getInnovationActionsList(this.innovationId).subscribe(
       response => {
-
         this.openedActionsList.setData(response.openedActions);
         this.closedActionsList.setData(response.closedActions);
+        this.setPageStatus('READY');
       },
       error => {
+        this.setPageStatus('ERROR');
         this.logger.error(error);
       }
     );

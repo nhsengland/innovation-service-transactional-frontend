@@ -1,4 +1,5 @@
-import { Component, OnInit, OnChanges, Input, ChangeDetectionStrategy, ChangeDetectorRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ChangeDetectionStrategy, ChangeDetectorRef, SimpleChanges, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { FormArray, FormGroup } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 
@@ -38,6 +39,7 @@ export class FormEngineComponent implements OnInit, OnChanges {
   onlyOneField = true;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: object,
     private readonly logger: NGXLogger,
     private readonly cdr: ChangeDetectorRef
   ) { }
@@ -97,8 +99,25 @@ export class FormEngineComponent implements OnInit, OnChanges {
     const shouldTriggerChanges = triggerFormChanges !== undefined ? triggerFormChanges : true;
 
     if (shouldTriggerChanges && !this.form.valid) {
+
       this.form.markAllAsTouched();
+
+      if (isPlatformBrowser(this.platformId)) { // Try to focus the first invalid field available.
+        setTimeout(() => { // Await for the html injection if needed.
+          const h = document.querySelector('input[aria-invalid="true"], fieldset.nhsuk-fieldset, textarea[aria-invalid="true"]') as HTMLInputElement;
+          if (h) {
+            h.setAttribute('tabIndex', '-1');
+            h.focus();
+            h.addEventListener('blur', (e) => {
+              e.preventDefault();
+              h.removeAttribute('tabIndex');
+            });
+          }
+        });
+      }
+
       this.cdr.detectChanges();
+
     }
 
     return FormEngineHelper.getFormValues(this.form, this.parameters);

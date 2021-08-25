@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 import { InnovationService } from '@modules/stores';
 import { INNOVATION_SUPPORT_STATUS, OrganisationSuggestion } from '@modules/stores/innovation/innovation.models';
 
@@ -19,6 +20,8 @@ import { NotificationContextType, NotificationService } from '@modules/shared/se
 export class InnovationDataSharingComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
+
+  alert: AlertType = { type: null };
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
@@ -43,8 +46,6 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
   organisationInfoUrl: string;
 
-  summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string };
-
   organisationSuggestions: OrganisationSuggestion | undefined;
   shares: {id: string, status: string}[] | [];
 
@@ -61,20 +62,19 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.organisationInfoUrl = `${this.stores.environment.BASE_URL}/about-the-service/who-we-are`;
-    this.summaryAlert = { type: '', title: '', message: '' };
     this.shares = [];
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'sharingUpdateSuccess':
-        this.summaryAlert = {
-          type: 'success',
+        this.alert = {
+          type: 'SUCCESS',
           title: 'Data sharing preferences',
           message: 'Your data sharing preferences were changed.'
         };
         break;
       case 'sharingUpdateError':
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when updating data sharing preferences',
           message: 'Please, try again or contact us for further help'
         };
@@ -126,7 +126,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
             shared: (innovationShares.findIndex(i => i.id === organisation.id) > -1),
             showHideStatus: 'closed',
             showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
-            showHideDescription: `This will show ${organisation.organisationUnits.length} units that belong to the ${organisation.name}`
+            showHideDescription: `that belong to the ${organisation.name}`
           };
         }
 
@@ -145,12 +145,12 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
       case 'opened':
         organisation.showHideStatus = 'closed';
         organisation.showHideText = `Show ${organisation.info.organisationUnits.length} units`;
-        organisation.showHideDescription = `This will show ${organisation.info.organisationUnits.length} units that belong to the ${organisation.info.name}`;
+        organisation.showHideDescription = `that belong to the ${organisation.info.name}`;
         break;
       case 'closed':
         organisation.showHideStatus = 'opened';
         organisation.showHideText = `Hide ${organisation.info.organisationUnits.length} units`;
-        organisation.showHideDescription = `This will hide ${organisation.info.organisationUnits.length} units that belong to the ${organisation.info.name}`;
+        organisation.showHideDescription = `that belong to the ${organisation.info.name}`;
         break;
       default:
         break;

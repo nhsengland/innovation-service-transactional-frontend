@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 import { DatesHelper, RoutingHelper } from '@modules/core';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
@@ -23,12 +24,12 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
   assessmentId: string;
   innovation: InnovationDataType;
 
+  alert: AlertType = { type: null };
+
   assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] & { organisationsNames: string[] } | undefined;
 
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
-
-  summaryAlert: { type: '' | 'error' | 'success', title: string, message: string };
 
   shouldShowUpdatedAt = false;
 
@@ -43,7 +44,6 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
-    this.summaryAlert = { type: '', title: '', message: '' };
 
   }
 
@@ -52,14 +52,12 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'needsAssessmentSubmited':
-        this.summaryAlert = {
-          type: 'success',
-          title: 'Needs assessment successfully completed',
-          message: ''
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'Needs assessment successfully completed'
         };
         break;
       default:
-        this.summaryAlert = { type: '', title: '', message: '' };
         break;
     }
 

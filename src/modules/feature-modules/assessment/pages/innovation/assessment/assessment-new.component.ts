@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 import { FormEngineComponent, FormEngineParameterModel } from '@modules/shared/forms';
 
 import { AssessmentService } from '../../../services/assessment.service';
@@ -18,10 +19,10 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
   innovationId: string;
   innovationName: string;
 
+  alert: AlertType = { type: null };
+
   formParameters: FormEngineParameterModel[];
   formAnswers: { [key: string]: any };
-
-  summaryAlert: { type: '' | 'error' | 'warning', title: string, message: string };
 
 
   constructor(
@@ -45,8 +46,6 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
     ];
     this.formAnswers = {};
 
-    this.summaryAlert = { type: '', title: '', message: '' };
-
   }
 
 
@@ -65,7 +64,7 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
 
   onSubmit(): void {
 
-    this.summaryAlert = { type: '', title: '', message: '' };
+    this.alert = { type: null };
 
     const formData = this.formEngineComponent?.getFormValues();
 
@@ -80,10 +79,11 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
         this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${response.id}/edit`);
       },
       () => {
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when starting needs assessment',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help',
+          setFocus: true
         };
       }
     );

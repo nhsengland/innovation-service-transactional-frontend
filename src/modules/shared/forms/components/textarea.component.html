@@ -10,15 +10,19 @@
   </ng-container>
 
   <ng-container *ngIf="description">
-    <div class="nhsuk-hint" id="{{ id }}-hint" [innerHTML]="description"></div>
+    <div class="nhsuk-hint" id="hint-{{ id }}" [innerHTML]="description"></div>
   </ng-container>
 
   <ng-container *ngIf="hasError">
-    <span class="nhsuk-error-message">
+    <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
       <span class="nhsuk-u-visually-hidden">Error:</span> {{ errorMessage | translate }}
     </span>
   </ng-container>
 
-  <textarea [formControl]="fieldControl" [id]="id" [name]="controlName" [placeholder]="placeholder" rows="5" class="nhsuk-textarea">{{ fieldControl.value }}</textarea>
+  <textarea [formControl]="fieldControl" [id]="id" [name]="controlName" [placeholder]="placeholder" rows="5" class="nhsuk-textarea"
+  [attr.aria-invalid]="hasError ? 'true' : null"
+  [attr.aria-describedby]="ariaDescribedBy">
+    {{ fieldControl.value }}
+  </textarea>
 
 </div>

@@ -1,4 +1,4 @@
-import { getAppInsightsClient } from '../globals';
+import { getAppInsightsClient } from '../../globals';
 
 const methods: any = {
   trace:  ( message: string, severity: any, properties: any, req: any ) => {

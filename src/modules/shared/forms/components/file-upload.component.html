@@ -1,6 +1,6 @@
 <ng-container *ngIf="label && pageUniqueField">
   <h1 class="nhsuk-label-wrapper">
-    <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id"> {{ label }} {{ files.length > 0 ? '(' + files.length + ' file(s) uploaded)' : '' }} </label>
+    <div class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" aria-hidden="true" tabindex="-1"> {{ label }} {{ files.length > 0 ? '(' + files.length + ' file(s) uploaded)' : '' }} </div>
   </h1>
 </ng-container>
 <ng-container *ngIf="label && !pageUniqueField">
@@ -23,15 +23,24 @@
   </dl>
 </ng-container>
 
+<span class="nhsuk-u-visually-hidden" id="aux-upload-message"></span>
+
+<ng-container *ngIf="files.length > 0">
+  <a id="open-add-file-dialog-btn" href="javascript:void(0)" (click)="openAddFileDialog()"> Add new file </a>
+</ng-container>
+
 <ngx-dropzone
   id="{{ id }}"
   [multiple]="dzConfig.multiple"
   [accept]="dzConfig.acceptedFiles"
   [maxFileSize]="dzConfig.maxFileSize"
   (change)="onChange($event)"
-  style="margin-bottom: 50px">
-  <ngx-dropzone-label> Click or drop your file here </ngx-dropzone-label>
-  <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f.id)">
-    <ngx-dropzone-label style="word-break: break-word">{{ f.file.name.length > 50 ? (f.file.name | slice:0:50) + '...' : f.file.name }} ({{ f.file.type }})</ngx-dropzone-label>
-  </ngx-dropzone-preview>
+  >
+  <ngx-dropzone-label>
+    <label for="{{ id }}">Click or drop your file here</label>
+  </ngx-dropzone-label>
+
+  <file-upload-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f.id)" (keypress)="onRemove(f.id)" attr.aria-label="Delete {{f.file.name}}" role="button">
+    <ngx-dropzone-label class="font-color-text">{{ f.file.name.length > 50 ? (f.file.name | slice:0:50) + '...' : f.file.name }}</ngx-dropzone-label>
+  </file-upload-preview>
 </ngx-dropzone>

@@ -81,7 +81,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
           key: 'UNASSIGNED',
           title: 'Unassigned',
           mainDescription: 'Innovations awaiting status assignment from your organisation.',
-          secondaryDescription: 'You must assign a status within 30 days of submission',
+          secondaryDescription: 'If your organisation has been suggested to support an innovation, you must assign a status within 30 days of submission.',
           numberDescription: 'unassigned innovations',
           showAssignedToMe: false,
           link: '/accessor/innovations', queryParams: { status: 'UNASSIGNED' }
@@ -158,12 +158,18 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   getInnovationsList(): void {
 
+    this.setPageStatus('WAITING');
+
     this.accessorService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(
       response => {
         this.innovationsList.setData(response.data, response.count);
         this.currentTab.numberDescription = `${response.count} ${this.currentTab.numberDescription}`;
+        this.setPageStatus('READY');
       },
-      error => this.logger.error(error)
+      error => {
+        this.setPageStatus('ERROR');
+        this.logger.error(error);
+      }
     );
 
   }

@@ -1,6 +1,6 @@
 <div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': hasError}">
 
-  <fieldset class="nhsuk-fieldset" attr.aria-describedby="{{ id }}-hint">
+  <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="ariaDescribedBy">
 
     <legend *ngIf="label" class="nhsuk-fieldset__legend" [ngClass]="{ 'nhsuk-fieldset__legend--l': pageUniqueField }">
       <ng-container *ngIf="pageUniqueField">
@@ -10,11 +10,11 @@
     </legend>
 
     <ng-container *ngIf="description">
-      <div class="nhsuk-hint" id="{{ id }}-hint" [innerHTML]="description"></div>
+      <div id="hint-{{ id }}" class="nhsuk-hint" [innerHTML]="description"></div>
     </ng-container>
 
     <ng-container *ngIf="hasError">
-      <span class="nhsuk-error-message">
+      <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
         <span class="nhsuk-u-visually-hidden">Error:</span> {{ errorMessage | translate }}
       </span>
     </ng-container>
@@ -41,8 +41,9 @@
 
             <div class="nhsuk-checkboxes__item" [ngClass]="{'nhsuk-u-margin-left-4': item.group}">
               <ng-container *ngIf="isRunningOnBrowser">
-                <input *ngIf="!item.conditional" id="{{ id }}{{ i }}" type="checkbox" name="{{ arrayName }}[]" [value]="item.value" [checked]="isChecked(item.value)" (change)="onChanged($event)" class="nhsuk-checkboxes__input" />
-                <input *ngIf="item.conditional" id="{{ id }}{{ i }}" type="checkbox" name="{{ arrayName }}[]" [value]="item.value" [checked]="isChecked(item.value)" (change)="onChanged($event)" class="nhsuk-checkboxes__input" attr.aria-controls="conditional-{{ id }}{{ i }}" attr.aria-expanded="{{ isConditionalFieldVisible(item.conditional.id) ? 'true' : 'false' }}" />
+                <input id="{{ id }}{{ i }}" type="checkbox" name="{{ arrayName }}[]" [value]="item.value" [checked]="isChecked(item.value)" (change)="onChanged($event)" class="nhsuk-checkboxes__input"
+                  [attr.aria-controls]="item.conditional ? 'conditional-' + id + i : null"
+                  [attr.aria-expanded]="item.conditional ? (isConditionalFieldVisible(item.conditional.id) ? 'true' : 'false') : null" />
               </ng-container>
               <ng-container *ngIf="isRunningOnServer">
                 <input id="{{ id }}{{ i }}" type="checkbox" name="{{ arrayName }}[]" [value]="item.value" [checked]="isChecked(item.value)" class="nhsuk-checkboxes__input" />

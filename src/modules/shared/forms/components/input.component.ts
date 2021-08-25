@@ -34,6 +34,14 @@ export class FormInputComponent extends ControlValueAccessorConnector implements
   inputCssClass = '';
   divCssOverride = '';
 
+  // Accessibility.
+  get ariaDescribedBy(): null | string {
+    let s = '';
+    if (this.description) { s += `hint-${this.id}`; }
+    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    return s || null;
+  }
+
   constructor(
     injector: Injector,
     private cdr: ChangeDetectorRef

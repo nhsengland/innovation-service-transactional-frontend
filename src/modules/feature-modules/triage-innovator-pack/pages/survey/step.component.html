@@ -1,7 +1,7 @@
 <!-- Necessary to be the first submit button when navigating through the keyboard. -->
 <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('next')" class="nhsuk-u-visually-hidden" (click)="onSubmitStep('next')" tabindex="-1"> Continue </button>
 
-<div class="nhsuk-back-link">
+<div *ngIf="!isEndStep()" class="nhsuk-back-link">
   <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('previous')" class="nhsuk-back-link__link button-as-link" (click)="onSubmitStep('previous')">
     <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
@@ -17,37 +17,34 @@
 
       <div class="nhsuk-hint nhsuk-u-margin-bottom-0">Question {{ currentStep.number }} of {{ totalNumberOfSteps }}</div>
 
-        <ng-container *ngIf="currentStep.data.details">
-          <details class="nhsuk-details">
-            <summary class="nhsuk-details__summary">
-              <span class="nhsuk-details__summary-text">{{ currentStep.data.details.title }}</span>
-            </summary>
-            <div class="nhsuk-details__text" [innerHTML]="currentStep.data.details.content"></div>
-          </details>
-        </ng-container>
+      <ng-container *ngIf="currentStep.data.details">
+        <details class="nhsuk-details">
+          <summary class="nhsuk-details__summary">
+            <span class="nhsuk-details__summary-text">{{ currentStep.data.details.title }}</span>
+          </summary>
+          <div class="nhsuk-details__text" [innerHTML]="currentStep.data.details.content"></div>
+        </details>
+      </ng-container>
 
-        <theme-form-engine formId="SurveyForm" [parameters]="currentStep.data.parameters" [values]="currentStep.data.defaultData"></theme-form-engine>
+      <theme-form-engine formId="SurveyForm" [parameters]="currentStep.data.parameters" [values]="currentStep.data.defaultData"></theme-form-engine>
 
-        <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('next')" class="nhsuk-button" (click)="onSubmitStep('next')"> Continue </button>
+      <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('next')" class="nhsuk-button" (click)="onSubmitStep('next')"> Continue </button>
 
     </ng-container>
 
 
     <ng-container *ngIf="isSummaryStep()">
 
-      <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
+      <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+        <p> Please verify what's missing with your answers </p>
+        <ul class="nhsuk-list nhsuk-error-summary__list">
+          <li *ngFor="let item of summaryList.items">
+            <a *ngIf="item.errorMessage" [routerLink]="item.url"> {{ item.errorMessage | translate }} </a>
+          </li>
+        </ul>
+      </theme-alert>
 
-      <div *ngIf="!summaryList.valid" class="nhsuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1">
-        <h2 id="error-summary-title" class="nhsuk-error-summary__title"> There is a problem </h2>
-        <div class="nhsuk-error-summary__body">
-          <p> Please verify what's missing with your answers </p>
-          <ul class="nhsuk-list nhsuk-error-summary__list">
-            <li *ngFor="let item of summaryList.items">
-              <a *ngIf="item.errorMessage" [routerLink]="item.url"> {{ item.errorMessage | translate }} </a>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
 
       <dl class="nhsuk-summary-list">
         <div *ngFor="let item of summaryList.items" class="nhsuk-summary-list__row">
@@ -65,6 +62,54 @@
         <form id="SurveyForm" method="post" enctype="application/json" novalidate=""></form>
         <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('submit')" class="nhsuk-button" (click)="onSubmitSurvey()"> Complete </button>
       </ng-container>
+
+    </ng-container>
+
+
+    <ng-container *ngIf="isEndStep()">
+
+      <div class="app-panel app-panel--confirmation nhsuk-u-margin-bottom-6">
+        <h1 class="app-panel__title"> {{ pageTitle }} </h1>
+        <div class="app-panel__body"> Find your summary below </div>
+      </div>
+
+      <h2> Your next steps </h2>
+
+      <ng-container [ngSwitch]="endingData.rule">
+        <div *ngSwitchCase="'RULE_01'">
+          <p>
+            You may find the <a href="https://stage.innovation.nhs.uk/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">advanced innovation guide (opens in a new window)</a> useful.
+            To get support with progressing your innovation you can create an account.
+          </p>
+        </div>
+        <div *ngSwitchCase="'RULE_02'">
+          <p> To get support with </p>
+          <ul>
+            <li *ngFor="let item of endingData.bulletsList" [innerHTML]="item"></li>
+          </ul>
+          <p> create an account. </p>
+        </div>
+        <div *ngSwitchCase="'RULE_03'">
+          <ul>
+            <li *ngFor="let item of endingData.bulletsList" [innerHTML]="item"></li>
+          </ul>
+        </div>
+      </ng-container>
+
+      <p class="nhsuk-u-margin-bottom-7">
+        To receive support from the organisations behind the <a href="/about-the-service" target="_blank" rel="noopener noreferrer">NHS Innovation Service (opens in a new window)</a> you should create an account for your
+        organisation.
+      </p>
+
+      <div class="nhsuk-action-link">
+        <a [href]="signupUrl" class="nhsuk-action-link__link">
+          <svg class="nhsuk-icon nhsuk-icon__arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 2a10 10 0 0 0-9.95 9h11.64L9.74 7.05a1 1 0 0 1 1.41-1.41l5.66 5.65a1 1 0 0 1 0 1.42l-5.66 5.65a1 1 0 0 1-1.41 0 1 1 0 0 1 0-1.41L13.69 13H2.05A10 10 0 1 0 12 2z"></path>
+          </svg>
+          <span class="nhsuk-action-link__text"> Continue to create an account </span>
+        </a>
+      </div>
 
     </ng-container>
 

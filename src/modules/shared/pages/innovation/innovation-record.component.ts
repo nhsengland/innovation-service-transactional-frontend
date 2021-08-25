@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
 
@@ -15,6 +16,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   module: '' | 'innovator' | 'accessor' | 'assessment' = '';
   baseUrl = '';
   documentUrl = '';
+
+  alert: AlertType = { type: null };
 
   innovationId: string;
   innovationName: string;
@@ -30,8 +33,6 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   innovationSectionStatus = this.stores.innovation.INNOVATION_SECTION_STATUS;
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
-
-  summaryAlert: { type: '' | 'success' | 'error' | 'warning', title: string, message: string } = { type: '', title: '', message: '' };
 
 
   isInnovationInCreatedStatus(): boolean {
@@ -94,18 +95,20 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
         this.innovationStatus = response.status;
 
-        this.summaryAlert = {
-          type: 'success',
-          title: 'Your have successfully submitted your record for needs assessment',
-          message: 'You can expect the service team to get in touch within one week.'
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'You have successfully submitted your record for needs assessment',
+          message: 'You can expect the service team to get in touch within one week.',
+          setFocus: true
         };
 
       },
       () => {
-        this.summaryAlert = {
-          type: 'error',
+        this.alert = {
+          type: 'ERROR',
           title: 'An error occured when submitting your innovation',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help',
+          setFocus: true
         };
       }
     );

@@ -1,19 +1,26 @@
 <div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': hasError}">
+  
+  <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="ariaDescribedBy">
 
-  <fieldset class="nhsuk-fieldset" attr.aria-describedby="{{ id }}-hint">
     <legend *ngIf="label" class="nhsuk-fieldset__legend" [ngClass]="{ 'nhsuk-fieldset__legend--l': pageUniqueField }">
+
       <ng-container *ngIf="pageUniqueField">
         <h1 class="nhsuk-fieldset__heading"> {{ label }} </h1>
       </ng-container>
       <ng-container *ngIf="!pageUniqueField"> {{ label }} </ng-container>
+
+      <ng-container *ngIf="hasError"> <!-- Add error to legend for accessibility purposes -->
+        <div class="nhsuk-u-visually-hidden">Error: {{ errorMessage | translate }} </div>
+      </ng-container>
+
     </legend>
 
     <ng-container *ngIf="description">
-      <div class="nhsuk-hint" id="{{ id }}-hint" [innerHTML]="description"></div>
+      <div id="hint-{{ id }}" class="nhsuk-hint" [innerHTML]="description"></div>
     </ng-container>
 
     <ng-container *ngIf="hasError">
-      <span class="nhsuk-error-message">
+      <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
         <span class="nhsuk-u-visually-hidden">Error:</span> {{ errorMessage | translate }}
       </span>
     </ng-container>
