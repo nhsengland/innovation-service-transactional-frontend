@@ -3,17 +3,9 @@
   min-width: 200px !important;
   max-width: 200px !important;
 
-  &:hover,
-  &:focus {
-    ngx-dropzone-remove-badge {
-      opacity: 1;
-    }
-  }
 
   ngx-dropzone-remove-badge {
-    opacity: 0;
-    background-color: var(--error-color) ;
-    
+    background-color: var(--error-color) ;   
   }
 
   ngx-dropzone-label {
