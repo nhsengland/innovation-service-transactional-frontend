@@ -31,7 +31,7 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
   const content = AllSectionsSummary(sections);
 
   generator
-    .addHeader();
+    .addLogo();
 
   generator
     .hero(innovation.name)
