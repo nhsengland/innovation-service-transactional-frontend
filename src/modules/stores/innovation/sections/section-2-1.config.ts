@@ -166,7 +166,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   toReturn.push({
     label: stepsLabels.l1,
-    value: data.impacts?.map(impact => innovationImpactItems.find(item => item.value === impact)?.label).join('<br />'),
+    value: data.impacts?.map(impact => innovationImpactItems.find(item => item.value === impact)?.label).join('\n'),
     editStepNumber: toReturn.length + 1
   });
 
@@ -174,7 +174,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
   if (data.impacts?.includes('PATIENTS') || data.impactPatients) {
     toReturn.push({
       label: stepsLabels.l2,
-      value: data.subgroups?.map(group => group.name).join('<br />'),
+      value: data.subgroups?.map(group => group.name).join('\n'),
       editStepNumber: toReturn.length + 1
     });
     data.subgroups.forEach((item, i) => {

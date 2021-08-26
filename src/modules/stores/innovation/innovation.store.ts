@@ -126,40 +126,7 @@ export class InnovationStore extends Store<InnovationModel> {
       INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId)?.wizard || new WizardEngineModel({})
     );
 
-    this.updateSectionWizardDynamicInfo(section);
-
     return section;
-
-  }
-
-
-  updateSectionWizardDynamicInfo(section: WizardEngineModel): void {
-
-    section.steps = section.steps.map(s => { // Transform needed information.
-
-      switch (s.parameters[0].description) { // 1 question per page approach.
-        case 'LINK_TO_ADVANCED_GUIDE_INTELLECTUAL_PROPERTY':
-          s.parameters[0].description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer"> Innovation guides (opens in new window) </a> for more information about intellectual property.`;
-          break;
-        case 'LINK_TO_ADVANCED_GUIDE_REGULATIONS_STANDARDS':
-          s.parameters[0].description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer"> Innovation guides (opens in new window) </a> for more information about regulations and standards.`;
-          break;
-        case 'LINK_TO_ADVANCED_GUIDE_COMPARATIVE_COST_BENEFIT':
-          s.parameters[0].description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer"> Innovation guides (opens in new window) </a> for more information about comparative cost benefit.`;
-          break;
-        case 'LINK_TO_ADVANCED_GUIDE_CREATING_REVENUE_MODEL':
-          s.parameters[0].description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer"> Innovation guides (opens in new window) </a> for more information about creating a revenue model.`;
-          break;
-        case 'LINK_TO_ADVANCED_GUIDE_IMPLEMENTATION_PLANS':
-          s.parameters[0].description = `See <a href="${this.environmentStore.BASE_URL}/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer"> Innovation guides (opens in new window) </a> for more information about implementation plans.`;
-          break;
-        default:
-          break;
-      }
-
-      return s;
-
-    });
 
   }
 

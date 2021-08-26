@@ -267,7 +267,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
 
         switch (p.dataType) {
           case 'checkbox-array':
-            value = ((this.currentAnswers[p.id] || []) as string[]).map(v => (p.items || []).find(i => i.value === v)?.label).join('<br />');
+            value = ((this.currentAnswers[p.id] || []) as string[]).map(v => (p.items || []).find(i => i.value === v)?.label).join('\n');
             break;
           case 'radio-group':
             value = (p.items || []).find(i => i.value === this.currentAnswers[p.id])?.label || this.currentAnswers[p.id];

@@ -10,7 +10,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Request, Response } from 'express';
 import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
 
-import { AppInjector } from '@modules/core';
+import { AppInjector } from '@modules/core/injectors/app-injector';
 
 import { EnvironmentStore } from '@modules/core/stores/environment.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
@@ -59,7 +59,6 @@ export class CoreComponent implements OnInit, OnDestroy {
     }
 
     this.titleService = injector.get(Title);
-    this.router = injector.get(Router);
     this.router = injector.get(Router);
     this.http = injector.get(HttpClient);
     this.translateService = injector.get(TranslateService);

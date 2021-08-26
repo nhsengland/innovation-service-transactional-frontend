@@ -59,8 +59,9 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
         // As this page only appears for new users, if more innovation transfers exists to him, we just choose the first to finish the process.
         // User will have the opportunity to accept other transfers afterwards.
         const transfer = response[0];
-
         this.transferId = transfer.id;
+
+        // Updates wizard configuration step 1 description.
         this.wizard.steps[0].description = `${transfer.innovation.owner} has requested that you take ownership of ${transfer.innovation.name}.`;
 
 

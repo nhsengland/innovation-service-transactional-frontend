@@ -73,7 +73,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     // Update last step with the organisations list with description and pre-select all checkboxes.
     this.organisationsService.getOrganisationUnits().subscribe(response => {
-      NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="${this.stores.environment.BASE_URL}/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> Support offer guide (opens in a new window) </a>`;
+      NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> Support offer guide (opens in a new window) </a>`;
       NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].groupedItems = response.map(item => ({ value: item.id, label: item.name, items: item.organisationUnits.map(i => ({ value: i.id, label: i.name })) }));
     });
 

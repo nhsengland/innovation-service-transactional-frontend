@@ -50,8 +50,7 @@ import { NotificationService } from './services/notification.service';
     PageInnovationSupportStatusListComponent,
 
     PageErrorComponent,
-    PageNotFoundComponent,
-
+    PageNotFoundComponent
   ],
   providers: [
     OrganisationsService,

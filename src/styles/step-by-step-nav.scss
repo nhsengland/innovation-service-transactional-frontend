@@ -6,6 +6,13 @@ $number-circle-size: 26px;
 $number-circle-size-large: 35px;
 $top-border: solid 1px $nhsuk-border-color;
 
+@mixin govuk-text-colour {
+  color: $govuk-text-colour;
+  @include govuk-media-query($media-type: print) {
+    color: $govuk-print-text-colour;
+  }
+}
+
 @mixin step-nav-vertical-line ($line-style: solid) {
   content: "";
   position: absolute;
@@ -237,10 +244,6 @@ $top-border: solid 1px $nhsuk-border-color;
 //   text-shadow: 0 -#{$shadow-offset} 0 $shadow-colour, $shadow-offset 0 0 $shadow-colour, 0 $shadow-offset 0 $shadow-colour, -#{$shadow-offset} 0 0 $shadow-colour;
 // }
 
-.app-step-nav__circle-step-label,
-.app-step-nav__circle-step-colon {
-  @include govuk-visually-hidden;
-}
 
 .app-step-nav__header {
   padding: govuk-spacing(2) 0 0;
