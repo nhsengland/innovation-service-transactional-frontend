@@ -1,6 +1,12 @@
-// GOV.uk Design System.
+// GOV.uk Design System (only necessary styles).
 @import "node_modules/govuk-frontend/govuk/base";
 @import "node_modules/govuk-frontend/govuk/utilities/all";
+// @import "node_modules/govuk-frontend/govuk/settings/all";
+// @import "node_modules/govuk-frontend/govuk/tools/all";
+// @import "node_modules/govuk-frontend/govuk/helpers/clearfix";
+// @import "node_modules/govuk-frontend/govuk/helpers/focused";
+// @import "node_modules/govuk-frontend/govuk/helpers/spacing";
+
 
 // NHS Design System.
 @import 'node_modules/nhsuk-frontend/packages/nhsuk';
@@ -94,6 +100,8 @@ $service-manual-container-size: 1100px; // Container width variable.
 .right-border-separator { border-right: 2px solid var(--nhsuk-border-color); }
 .top-border-separator { border-top: 1px solid var(--nhsuk-border-color); }
 .bottom-border-separator { border-bottom: 1px solid var(--nhsuk-border-color); }
+
+.cursor-pointer {cursor: pointer; }
 
 // Container and layout classes.
 .app-width-container,
