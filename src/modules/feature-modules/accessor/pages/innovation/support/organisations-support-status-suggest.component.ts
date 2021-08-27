@@ -10,7 +10,7 @@ import { RoutingHelper } from '@modules/core';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { AccessorService, SupportLogType } from '../../../services/accessor.service';
 
-import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
+import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 
 @Component({
@@ -20,7 +20,7 @@ import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/
 export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-  innovation: InnovationDataType;
+  innovation: InnovationDataResolverType;
   stepId: number;
 
   alert: AlertType = { type: null };

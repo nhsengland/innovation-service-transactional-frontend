@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineModel, FileTypes, WizardEngineModel } from '@app/base/forms';
-import { UrlModel } from '@modules/core';
+import { RoutingHelper, UrlModel } from '@modules/core';
 import { SummaryParsingType } from '@modules/shared/forms';
-import { InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
+import { InnovationDataResolverType, InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-edit',
@@ -16,6 +16,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   innovationId: string;
+  innovation: InnovationDataResolverType;
   sectionId: InnovationSectionsIds;
 
   wizard: WizardEngineModel;
@@ -40,6 +41,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
     this.wizard = this.stores.innovation.getSectionWizard(this.sectionId);

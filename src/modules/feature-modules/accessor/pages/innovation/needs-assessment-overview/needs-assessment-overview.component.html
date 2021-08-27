@@ -69,7 +69,7 @@
               <p *ngFor="let item of suggestedOrganisations" class="nhsuk-u-margin-bottom-1">{{ item }}</p>
 
               <a routerLink="/accessor/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
-              <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary">
+              <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary">
                 Update support status
               </a>
 

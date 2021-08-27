@@ -40,6 +40,8 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
     innovationStore = TestBed.inject(InnovationStore);
 
+    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', status: 'IN_PROGRESS', assessment: {} } };
+
   });
 
   it('should create the component', () => {
@@ -51,26 +53,44 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
   });
 
-  it('should show "sectionUpdateSuccess" warning', () => {
+  it('should show "sectionUpdateSuccess" warning with innovation status = IN_PROGRESS', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'sectionUpdateSuccess' };
+
+    const expected = { type: 'SUCCESS', title: 'Your section has been saved', message: 'You need to submit the section if you want to share it with accessors.' };
+
+    fixture = TestBed.createComponent(InnovationSectionViewComponent);
+    component = fixture.componentInstance;
+    component.innovation = { id: 'Inno01', name: 'Innovation name', status: 'IN_PROGRESS', assessment: { id: undefined } };
+    fixture.detectChanges();
+    expect(component.alert).toEqual(expected);
+
+  });
+
+  it('should show "sectionUpdateSuccess" warning with innovation status = CREATED', () => {
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
+    activatedRoute.snapshot.queryParams = { alert: 'sectionUpdateSuccess' };
+    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', status: 'CREATED', assessment: {} } };
 
     const expected = { type: 'SUCCESS', title: 'Your section has been saved', message: 'You need to submit this section before you can submit your innovation record for needs assessment.' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
+    component.innovation = { id: 'Inno01', name: 'Innovation name', status: 'IN_PROGRESS', assessment: { id: undefined } };
     fixture.detectChanges();
     expect(component.alert).toEqual(expected);
 
   });
+
 
   it('should show "sectionUpdateError" warning', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'sectionUpdateError' };
 
-    const expected = { type: 'ERROR', title: 'An error occured when saving your section', message: 'Please, try again or contact us for further help' };
+    const expected = { type: 'ERROR', title: 'An error occured when saving your section', message: 'Please, try again or contact us for further help.' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
@@ -84,7 +104,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'evidenceUpdateSuccess' };
 
-    const expected = { type: 'SUCCESS', title: 'Your evidence has been saved', message: 'You need to submit this section for review to notify your supporting accessor(s)' };
+    const expected = { type: 'SUCCESS', title: 'Your evidence has been saved', message: 'You need to submit this section for review to notify your supporting accessor(s).' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
@@ -112,7 +132,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'evidenceUpdateError' };
 
-    const expected = { type: 'ERROR', title: 'An error occured when saving your evidence', message: 'Please, try again or contact us for further help' };
+    const expected = { type: 'ERROR', title: 'An error occured when saving your evidence', message: 'Please, try again or contact us for further help.' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
@@ -204,7 +224,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     innovationStore.submitSections$ = () => of(responseMock2 as any);
 
     const expected = {
-      type: 'WARNING',
+      type: 'SUCCESS',
       title: 'Your section has been submitted',
       setFocus: true
     };

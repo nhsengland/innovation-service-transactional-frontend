@@ -10,7 +10,7 @@
 
 <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-5"> {{ pageTitle }} </h1>
 
-<a *ngIf="innovation.support.status === 'ENGAGING'" routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" class="nhsuk-button nhsuk-u-margin-bottom-7"> Create new action </a>
+<a *ngIf="innovation.support?.status === 'ENGAGING'" routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" class="nhsuk-button nhsuk-u-margin-bottom-7"> Create new action </a>
 
 
 <ng-container *ngIf="pageStatus === 'WAITING'">

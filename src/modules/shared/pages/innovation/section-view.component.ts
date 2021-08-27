@@ -3,9 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
+import { RoutingHelper } from '@modules/core';
 import { WizardEngineModel, SummaryParsingType } from '@modules/shared/forms';
 
-import { InnovationSectionsIds, INNOVATION_SECTION_STATUS } from '@stores-module/innovation/innovation.models';
+import { InnovationDataResolverType, InnovationSectionsIds, INNOVATION_SECTION_STATUS } from '@stores-module/innovation/innovation.models';
 
 
 @Component({
@@ -16,6 +17,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
   module: '' | 'innovator' | 'accessor' = '';
   innovationId: string;
+  innovation: InnovationDataResolverType;
   sectionId: InnovationSectionsIds;
 
   alert: AlertType = { type: null };
@@ -42,6 +44,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
@@ -49,7 +52,10 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
         this.alert = {
           type: 'SUCCESS',
           title: 'Your section has been saved',
-          message: 'You need to submit this section before you can submit your innovation record for needs assessment.'
+          message:
+            this.innovation.status === 'IN_PROGRESS' ?
+              'You need to submit the section if you want to share it with accessors.' :
+              'You need to submit this section before you can submit your innovation record for needs assessment.'
         };
         break;
 
@@ -57,7 +63,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
         this.alert = {
           type: 'ERROR',
           title: 'An error occured when saving your section',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help.'
         };
         break;
 
@@ -65,7 +71,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
         this.alert = {
           type: 'SUCCESS',
           title: 'Your evidence has been saved',
-          message: 'You need to submit this section for review to notify your supporting accessor(s)'
+          message: 'You need to submit this section for review to notify your supporting accessor(s).'
         };
         break;
 
@@ -82,7 +88,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
         this.alert = {
           type: 'ERROR',
           title: 'An error occured when saving your evidence',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please, try again or contact us for further help.'
         };
         break;
 
@@ -119,10 +125,18 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
   getSectionInfo(): void {
     this.stores.innovation.getSectionInfo$(this.module, this.innovationId, this.section.id).subscribe(
       response => {
-        this.summaryList = this.wizard.runSummaryParsing(response.data);
+
         this.section.status = response.section.status;
         this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status);
         this.section.showSubmitButton = ['DRAFT'].includes(this.section.status);
+
+        if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status === 'DRAFT') {
+          // If accessor, only view information if section is submitted.
+          this.summaryList = [];
+        } else {
+          this.summaryList = this.wizard.runSummaryParsing(response.data);
+        }
+
       },
       () => {
         this.logger.error('Error fetching data');
@@ -145,7 +159,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
         this.getSectionInfo();
 
         this.alert = {
-          type: 'WARNING',
+          type: 'SUCCESS',
           title: 'Your section has been submitted',
           setFocus: true
         };

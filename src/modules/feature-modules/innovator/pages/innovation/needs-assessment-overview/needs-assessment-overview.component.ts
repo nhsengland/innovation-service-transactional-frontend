@@ -8,7 +8,7 @@ import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/ne
 import { getInnovationNeedsAssessmentEndpointOutDTO } from '@modules/feature-modules/innovator/services/innovator.service';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
-import { InnovationDataType } from '@modules/feature-modules/innovator/resolvers/innovation-data.resolver';
+import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 import { InnovatorService } from '../../../services/innovator.service';
 
@@ -21,7 +21,7 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
 
   innovationId: string;
   assessmentId: string;
-  innovation: InnovationDataType;
+  innovation: InnovationDataResolverType;
 
   assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
 
