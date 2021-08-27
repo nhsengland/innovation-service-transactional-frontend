@@ -227,7 +227,8 @@ function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
     toReturn.push({
       label: `Attachment ${i + 1}`,
       value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-      editStepNumber: 4
+      editStepNumber: 4,
+      allowHTML: true
     });
   });
 

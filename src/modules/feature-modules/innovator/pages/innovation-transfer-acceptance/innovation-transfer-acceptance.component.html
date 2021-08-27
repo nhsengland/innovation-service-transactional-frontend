@@ -14,8 +14,8 @@
 
       <ng-container *ngIf="isQuestionStep()">
 
-        <h1 *ngIf="wizard.currentStep().label" class="nhsuk-heading-l"> {{ wizard.currentStep().label }} </h1>
-        <div *ngIf="wizard.currentStep().description" id="page-parameter-hint" class="nhsuk-hint nhsuk-u-margin-bottom-0" [innerHTML]="wizard.currentStep().description"></div>
+        <h1 *ngIf="wizard.currentStep().label" class="nhsuk-heading-l">{{ wizard.currentStep().label }}</h1>
+        <div *ngIf="wizard.currentStep().description" id="page-parameter-hint" class="nhsuk-hint nhsuk-u-margin-bottom-0">{{ wizard.currentStep().description }}</div>
 
         <theme-form-engine formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
         <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
@@ -32,11 +32,10 @@
 
             <ng-container *ngIf="item.editStepNumber">
               <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-              <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.value"></dd>
+              <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
               <dd class="nhsuk-summary-list__actions">
                 <a [routerLink]="getStepUrl(item.editStepNumber)"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
               </dd>
-
             </ng-container>
           </div>
         </dl>

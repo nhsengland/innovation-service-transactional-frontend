@@ -27,6 +27,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   suggestedOrganisations: string[] = [];
   logHistory: getSupportLogOutDTO[] = [];
 
+  innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '' };
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
 
@@ -59,17 +60,14 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
         this.suggestedOrganisations = this.assessment.organisations.map(item => item.name);
 
         const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === response.assessment.maturityLevel) || 0) + 1;
+        this.innovationMaturityLevel = {
+          label: NEEDS_ASSESSMENT_QUESTIONS.innovation[1].label || '',
+          value: `${maturityLevelIndex} / ${maturityLevelItems.length}`,
+          levelIndex: maturityLevelIndex,
+          description: maturityLevelItems.find(item => item.value === response.assessment.maturityLevel)?.label || ''
+        };
 
         this.innovationSummary = [
-          {
-            label: NEEDS_ASSESSMENT_QUESTIONS.innovation[1].label,
-            value: `${maturityLevelIndex} / ${maturityLevelItems.length}`,
-            comment: `<ul class="progressbar nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1">
-            <li class="progressbar-item${maturityLevelIndex >= 1 ? ' active' : ''}" style="width: 10%"></li>
-            <li class="progressbar-item${maturityLevelIndex >= 2 ? ' active' : ''}" style="width: 10%"></li>
-            <li class="progressbar-item${maturityLevelIndex === 3 ? ' active' : ''}" style="width: 10%"></li>
-          </ul>${maturityLevelItems.find(item => item.value === response.assessment.maturityLevel)?.label}`
-          },
           {
             label: NEEDS_ASSESSMENT_QUESTIONS.innovation[2].label,
             value: yesPartiallyNoItems.find(item => item.value === response.assessment.hasRegulatoryApprovals)?.label || '',

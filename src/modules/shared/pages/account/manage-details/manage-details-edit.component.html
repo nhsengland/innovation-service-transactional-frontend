@@ -26,7 +26,7 @@
 
             <ng-container *ngIf="item.editStepNumber">
               <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-              <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.value"></dd>
+              <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
               <dd class="nhsuk-summary-list__actions">
                 <a [routerLink]="getStepUrl(item.editStepNumber)"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
               </dd>

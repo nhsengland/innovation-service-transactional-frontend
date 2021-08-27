@@ -40,7 +40,7 @@ export const SECTION_7_1: InnovationSectionConfigType['sections'][0] = {
           id: 'hasRevenueModel',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: 'LINK_TO_ADVANCED_GUIDE_CREATING_REVENUE_MODEL',
+          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about creating a revenue model.',
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasRevenueModelItems
         }]
@@ -139,7 +139,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
     toReturn.push(
       {
         label: stepsLabels.l2,
-        value: data.revenues?.map(v => v === 'OTHER' ? data.otherRevenueDescription : revenuesItems.find(item => item.value === v)?.label).join('<br />'),
+        value: data.revenues?.map(v => v === 'OTHER' ? data.otherRevenueDescription : revenuesItems.find(item => item.value === v)?.label).join('\n'),
         editStepNumber: 2
       },
       {

@@ -10,7 +10,7 @@
     <dl class="nhsuk-summary-list">
       <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
         <dt class="nhsuk-summary-list__key"> {{ item.label }} </dt>
-        <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.value"></dd>
+        <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
         <dd class="nhsuk-summary-list__actions">
           <a *ngIf="item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
         </dd>

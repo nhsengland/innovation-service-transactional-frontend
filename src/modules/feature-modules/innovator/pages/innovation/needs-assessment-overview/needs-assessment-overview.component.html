@@ -34,20 +34,37 @@
 
               <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">The innovation</h2>
               <p>{{ assessment?.description }}</p>
+
               <dl class="nhsuk-summary-list">
+
+                <!-- Maturity level item -->
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key nhsuk-u-font-weight-normal">{{ innovationMaturityLevel.label }}</dt>
+                  <dd class="nhsuk-summary-list__key width-auto">{{ innovationMaturityLevel.value }}</dd>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">
+                    <ul class="progressbar nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1">
+                      <li class="progressbar-item{{ innovationMaturityLevel.levelIndex >= 1 ? ' active' : ''}}" style="width: 10%"></li>
+                      <li class="progressbar-item{{ innovationMaturityLevel.levelIndex >= 2 ? ' active' : ''}}" style="width: 10%"></li>
+                      <li class="progressbar-item{{ innovationMaturityLevel.levelIndex === 3 ? ' active' : ''}}" style="width: 10%"></li>
+                    </ul>
+                    {{ innovationMaturityLevel.description }}
+                  </dd>
+                </div>
+
                 <div *ngFor="let item of innovationSummary" class="nhsuk-summary-list__row">
                   <dt class="nhsuk-summary-list__key nhsuk-u-font-weight-normal">{{ item.label }}</dt>
-                  <dd class="nhsuk-summary-list__key width-auto" [innerHTML]="item.value"></dd>
-                  <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.comment"></dd>
+                  <dd class="nhsuk-summary-list__key width-auto">{{ item.value }}</dd>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.comment }}</dd>
                 </div>
+
               </dl>
 
               <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">The innovator</h2>
               <dl class="nhsuk-summary-list">
                 <div *ngFor="let item of innovatorSummary" class="nhsuk-summary-list__row">
                   <dt class="nhsuk-summary-list__key nhsuk-u-font-weight-normal">{{ item.label }}</dt>
-                  <dd class="nhsuk-summary-list__key width-auto" [innerHTML]="item.value"></dd>
-                  <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.comment"></dd>
+                  <dd class="nhsuk-summary-list__key width-auto">{{ item.value }}</dd>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.comment }}</dd>
                 </div>
               </dl>
 

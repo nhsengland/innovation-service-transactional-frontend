@@ -45,7 +45,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           { label: 'Company', value: response.summary.company },
           { label: 'Location', value: `${response.summary.countryName}${response.summary.postCode ? ', ' + response.summary.postCode : ''}` },
           { label: 'Description', value: response.summary.description },
-          { label: 'Categories', value: response.summary.categories.map(v => v === 'OTHER' ? response.summary.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('<br />') }
+          { label: 'Categories', value: response.summary.categories.map(v => v === 'OTHER' ? response.summary.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
         ];
 
         this.innovatorSummary = [
