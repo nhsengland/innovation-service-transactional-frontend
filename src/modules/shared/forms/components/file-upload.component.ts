@@ -124,6 +124,7 @@ export class FormFileUploadComponent implements OnInit {
   }
 
   onRemove(id: string): void {
+
     this.files.splice(this.files.findIndex(item => item.id === id), 1);
 
     const arrayIndex = this.fieldArrayValues.findIndex(item => item.id === id);
@@ -172,9 +173,10 @@ export class FormFileUploadComponent implements OnInit {
   }
 
   openAddFileDialog(): void {
-    const dropZoneElem: any = document.getElementsByTagName('ngx-dropzone')[0];
 
+    const dropZoneElem: any = document.getElementsByTagName('ngx-dropzone')[0];
     dropZoneElem.firstElementChild.click();
+
   }
 
 }
