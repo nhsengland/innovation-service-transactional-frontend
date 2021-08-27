@@ -69,31 +69,40 @@ async function uploadFile(url: string, file: any): Promise<void> {
 }
 
 fileUploadRouter.post(`${BASE_PATH}/upload`, upload.single('file'), async (req, res) => {
+
   const user: IProfile = req.user || {};
   const oid: string = user.oid || '';
   const accessToken = getAccessTokenByOid(oid);
+  const file = req.file;
+  const reqBody = req.body;
+  const url = `${API_URL}/api/innovators/${reqBody.innovatorId}/innovations/${reqBody.innovationId}/upload`;
 
-  if (req.isAuthenticated() && accessToken) {
-    const reqBody = req.body;
-    const file = req.file;
-    const url = `${API_URL}/api/innovators/${reqBody.innovatorId}/innovations/${reqBody.innovationId}/upload`;
+  if (!req.isAuthenticated() || !accessToken) {
+    res.status(401).send();
+    return;
+  }
+
+  if (!file) {
+    res.status(400).send();
+    return;
+  }
+
+  try {
+
     const body = {
       context: reqBody.context,
       fileName: file.originalname
     };
 
-    try {
-      const fileInfo = await getUploadUrl(url, body, accessToken);
-      await uploadFile(fileInfo.url, file);
-      // const response = { id: fileInfo.id };
-      res.status(201).send(fileInfo);
-    } catch (error) {
-      console.error(`Error when attempting to upload data. Error: ${error}`);
-      res.status(500).send();
-    }
-  } else {
-    res.status(401).send();
+    const fileInfo = await getUploadUrl(url, body, accessToken);
+    await uploadFile(fileInfo.url, file);
+    res.status(201).send(fileInfo);
+
+  } catch (error) {
+    console.error(`Error when attempting to upload data. Error: ${error}`);
+    res.status(500).send();
   }
+
 });
 
 export default fileUploadRouter;
