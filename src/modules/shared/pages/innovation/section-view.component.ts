@@ -47,9 +47,9 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'sectionUpdateSuccess':
         this.alert = {
-          type: 'WARNING',
+          type: 'SUCCESS',
           title: 'Your section has been saved',
-          message: 'You need to submit this section before you can submit your Innovation Record for needs assessment.'
+          message: 'You need to submit this section before you can submit your innovation record for needs assessment.'
         };
         break;
 
@@ -63,7 +63,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
       case 'evidenceUpdateSuccess':
         this.alert = {
-          type: 'WARNING',
+          type: 'SUCCESS',
           title: 'Your evidence has been saved',
           message: 'You need to submit this section for review to notify your supporting accessor(s)'
         };

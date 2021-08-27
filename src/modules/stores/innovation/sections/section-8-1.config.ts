@@ -48,7 +48,7 @@ export const SECTION_8_1: InnovationSectionConfigType['sections'][0] = {
           id: 'hasDeployPlan',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: 'LINK_TO_ADVANCED_GUIDE_IMPLEMENTATION_PLANS',
+          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about implementation plans.',
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasDeployPlanItems
         }]
@@ -219,7 +219,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
     toReturn.push({
       label: stepsLabels.l3,
-      value: data.deploymentPlans?.map(item => item.name).join('<br />'),
+      value: data.deploymentPlans?.map(item => item.name).join('\n'),
       editStepNumber: toReturn.length + 1
     });
 
@@ -241,7 +241,8 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
     toReturn.push({
       label: `Attachment ${i + 1}`,
       value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-      editStepNumber: toReturn.length + 1
+      editStepNumber: toReturn.length + 1,
+      allowHTML: true
     });
   });
 

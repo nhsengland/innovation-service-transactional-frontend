@@ -267,7 +267,7 @@ export class AccessorService extends CoreService {
         id: response.id,
         displayId: response.displayId,
         status: response.status,
-        name: `Submit '${this.stores.innovation.getSectionTitle(response.section)}'`,
+        name: `Submit '${this.stores.innovation.getSectionTitle(response.section).toString().toLowerCase()}'`,
         description: response.description,
         section: response.section,
         createdAt: response.createdAt,

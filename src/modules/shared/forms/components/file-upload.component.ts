@@ -12,9 +12,6 @@ import { catchError, map, take } from 'rxjs/operators';
 import { FileTypes, FileUploadType } from '../engine/types/form-engine.types';
 
 
-
-
-
 @Component({
   selector: 'theme-form-file-upload',
   templateUrl: 'file-upload.component.html',
@@ -40,6 +37,8 @@ export class FormFileUploadComponent implements OnInit {
 
   files: { id: string, file: File }[] = [];
   previousUploadedFiles: FileUploadType[] = [];
+
+  isLoadingFile = false;
 
   dzConfig: {
     acceptedFiles: string;
@@ -98,6 +97,10 @@ export class FormFileUploadComponent implements OnInit {
 
   onChange(event: NgxDropzoneChangeEvent): void {
 
+    if (event.addedFiles.length > 0) {
+      this.isLoadingFile = true;
+    }
+
     event.addedFiles.forEach(file => {
       this.uploadFile(file).subscribe(
         response => {
@@ -105,9 +108,11 @@ export class FormFileUploadComponent implements OnInit {
           this.fieldArrayControl.push(new FormGroup({ id: new FormControl(response.id), name: new FormControl(response.name), url: new FormControl(response.url) }));
           this.evaluateDropZoneTabIndex();
           this.setAuxMessageAndFocus(`${file.name} added.`);
+          this.isLoadingFile = false;
           this.cdr.detectChanges();
         },
         error => {
+          this.isLoadingFile = false;
           this.loggerService.trackTrace('upload error', Severity.ERROR, { error });
         }
       );
@@ -119,6 +124,7 @@ export class FormFileUploadComponent implements OnInit {
   }
 
   onRemove(id: string): void {
+
     this.files.splice(this.files.findIndex(item => item.id === id), 1);
 
     const arrayIndex = this.fieldArrayValues.findIndex(item => item.id === id);
@@ -167,8 +173,10 @@ export class FormFileUploadComponent implements OnInit {
   }
 
   openAddFileDialog(): void {
-    const dropZoneElem: any = document.getElementsByTagName('ngx-dropzone')[0];
 
+    const dropZoneElem: any = document.getElementsByTagName('ngx-dropzone')[0];
     dropZoneElem.firstElementChild.click();
+
   }
+
 }

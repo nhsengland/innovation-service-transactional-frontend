@@ -49,7 +49,7 @@
       <dl class="nhsuk-summary-list">
         <div *ngFor="let item of summaryList.items" class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key"> {{ item.label }} </dt>
-          <dd class="nhsuk-summary-list__value" [innerHTML]="item.value"></dd>
+          <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
           <dd class="nhsuk-summary-list__actions">
             <a [routerLink]="item.url"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
           </dd>
@@ -78,7 +78,7 @@
       <ng-container [ngSwitch]="endingData.rule">
         <div *ngSwitchCase="'RULE_01'">
           <p>
-            You may find the <a href="https://stage.innovation.nhs.uk/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">advanced innovation guide (opens in a new window)</a> useful.
+            You may find the <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">advanced innovation guide (opens in a new window)</a> useful.
             To get support with progressing your innovation you can create an account.
           </p>
         </div>
@@ -97,8 +97,7 @@
       </ng-container>
 
       <p class="nhsuk-u-margin-bottom-7">
-        To receive support from the organisations behind the <a href="/about-the-service" target="_blank" rel="noopener noreferrer">NHS Innovation Service (opens in a new window)</a> you should create an account for your
-        organisation.
+        To receive support from the organisations behind the <a href="/about-the-service" target="_blank" rel="noopener noreferrer">NHS Innovation Service (opens in a new window)</a> you should create an account for your organisation.
       </p>
 
       <div class="nhsuk-action-link">

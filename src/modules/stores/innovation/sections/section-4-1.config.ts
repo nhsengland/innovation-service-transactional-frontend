@@ -50,7 +50,7 @@ export const SECTION_4_1: InnovationSectionConfigType['sections'][0] = {
           id: 'hasRegulationKnowledge',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: 'LINK_TO_ADVANCED_GUIDE_REGULATIONS_STANDARDS',
+          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer"> Innovation guides (opens in new window) </a> for more information about regulations and standards.',
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasRegulationKnowledgeItems
         }]
@@ -182,7 +182,7 @@ function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
 
     toReturn.push({
       label: stepsLabels.l2,
-      value: data.standards?.map(v => standardsTypeItems.find(item => item.value === v.type)?.label).join('<br />'),
+      value: data.standards?.map(v => standardsTypeItems.find(item => item.value === v.type)?.label).join('\n'),
       editStepNumber: 2
     });
 
@@ -199,7 +199,8 @@ function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
       toReturn.push({
         label: `Attachment ${i + 1}`,
         value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-        editStepNumber: toReturn.length + 1
+        editStepNumber: toReturn.length + 1,
+        allowHTML: true
       });
     });
 

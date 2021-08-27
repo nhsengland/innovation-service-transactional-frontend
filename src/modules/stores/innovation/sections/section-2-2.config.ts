@@ -193,20 +193,20 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
     data.subgroups?.forEach((subGroup, i) => {
       toReturn.push({
         label: `Group ${subGroup.name} benefit`,
-        value: subGroup.benefits.map(benefit => benefit === 'OTHER' ? subGroup.otherBenefit : subgroupBenefitItems.find(item => item.value === benefit)?.label).join('<br />'),
+        value: subGroup.benefits.map(benefit => benefit === 'OTHER' ? subGroup.otherBenefit : subgroupBenefitItems.find(item => item.value === benefit)?.label).join('\n'),
         editStepNumber: toReturn.length + 1
       });
     });
 
     toReturn.push({
       label: stepsLabels.l3,
-      value: data.generalBenefits?.map(benefit => benefit === 'OTHER' ? data.otherGeneralBenefit : generalBenefitItems.find(item => item.value === benefit)?.label).join('<br />'),
+      value: data.generalBenefits?.map(benefit => benefit === 'OTHER' ? data.otherGeneralBenefit : generalBenefitItems.find(item => item.value === benefit)?.label).join('\n'),
       editStepNumber: toReturn.length + 1
     });
 
     toReturn.push({
       label: stepsLabels.l4,
-      value: data.environmentalBenefits?.map(benefit => benefit === 'OTHER' ? data.otherEnvironmentalBenefit : environmentalBenefitItems.find(item => item.value === benefit)?.label).join('<br />'),
+      value: data.environmentalBenefits?.map(benefit => benefit === 'OTHER' ? data.otherEnvironmentalBenefit : environmentalBenefitItems.find(item => item.value === benefit)?.label).join('\n'),
       editStepNumber: toReturn.length + 1
     });
 

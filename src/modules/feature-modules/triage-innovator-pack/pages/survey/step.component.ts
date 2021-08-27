@@ -40,8 +40,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
 
   endingData: { rule: '' | 'RULE_01' | 'RULE_02' | 'RULE_03', bulletsList: string[] } = { rule: '', bulletsList: [] };
 
-  surveyId: string;
-  signupUrl: string;
+  signupUrl = '';
 
   isFirstStep(): boolean { return this.currentStep.number === 1; }
   isLastStep(): boolean { return this.currentStep.number === this.totalNumberOfSteps; }
@@ -70,9 +69,6 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
 
     this.currentAnswers = {};
     this.summaryList = { items: [], valid: false };
-
-    this.surveyId = this.activatedRoute.snapshot.queryParams.surveyId;
-    this.signupUrl = `${this.stores.environment.APP_URL}/signup?surveyId=${this.surveyId}`;
 
   }
 
@@ -195,6 +191,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
       this.surveyService.submitSurvey(this.currentAnswers).subscribe(
         response => {
           this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/end`, { surveyId: response.id });
+          this.signupUrl = `${this.stores.environment.APP_URL}/signup?surveyId=${response.id}`;
         },
         error => {
           this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/summary`);
@@ -270,7 +267,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
 
         switch (p.dataType) {
           case 'checkbox-array':
-            value = ((this.currentAnswers[p.id] || []) as string[]).map(v => (p.items || []).find(i => i.value === v)?.label).join('<br />');
+            value = ((this.currentAnswers[p.id] || []) as string[]).map(v => (p.items || []).find(i => i.value === v)?.label).join('\n');
             break;
           case 'radio-group':
             value = (p.items || []).find(i => i.value === this.currentAnswers[p.id])?.label || this.currentAnswers[p.id];

@@ -1,6 +1,10 @@
-// GOV.uk Design System.
-@import "node_modules/govuk-frontend/govuk/base";
-@import "node_modules/govuk-frontend/govuk/utilities/all";
+// GOV.uk Design System (only necessary styles).
+@import "node_modules/govuk-frontend/govuk/settings/all";
+@import "node_modules/govuk-frontend/govuk/tools/all";
+@import "node_modules/govuk-frontend/govuk/helpers/clearfix";
+@import "node_modules/govuk-frontend/govuk/helpers/focused";
+@import "node_modules/govuk-frontend/govuk/helpers/spacing";
+
 
 // NHS Design System.
 @import 'node_modules/nhsuk-frontend/packages/nhsuk';
@@ -65,12 +69,22 @@ $service-manual-container-size: 1100px; // Container width variable.
 .text-align-right { text-align: end; }
 .text-pre-line { white-space: pre-line; }
 .text-pre-wrap { white-space: pre-wrap; }
+.text-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.text-vertical-ellipsis-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
 
 .float-l { float: left; }
 .float-r { float: right; }
 
 .width-auto { width: auto; }
 
+.overflow-hidden { overflow: hidden; }
 .overflow-x-hidden { overflow-x: hidden; }
 
 .bg-color-white { background-color: var(--white); }
@@ -94,6 +108,9 @@ $service-manual-container-size: 1100px; // Container width variable.
 .right-border-separator { border-right: 2px solid var(--nhsuk-border-color); }
 .top-border-separator { border-top: 1px solid var(--nhsuk-border-color); }
 .bottom-border-separator { border-bottom: 1px solid var(--nhsuk-border-color); }
+
+.cursor-pointer { cursor: pointer; }
+
 
 // Container and layout classes.
 .app-width-container,

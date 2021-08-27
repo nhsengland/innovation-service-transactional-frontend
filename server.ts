@@ -15,6 +15,7 @@ import { exceptionLoggingMiddleware } from 'src/server/middlewares/exception-log
 import apiRouter from 'src/server/routes/api.routes';
 import authenticationRouter from 'src/server/routes/authentication.routes';
 import fileUploadRouter from 'src/server/routes/file-upload.routes';
+import pdfRouter from 'src/server/routes/pdf-generator.routes';
 import 'zone.js/dist/zone-node';
 import { AppServerModule } from './src/main.server';
 
@@ -65,6 +66,7 @@ export function app(): express.Express {
 
   // Routes
   server.use(authenticationRouter);
+  server.use(pdfRouter);
   server.use(fileUploadRouter);
   server.use(apiRouter);
 
