@@ -1,4 +1,6 @@
 import { jsPDF } from 'jspdf';
+import fs from 'fs';
+import path from 'path';
 
 export class PDFGenerator {
 
@@ -105,8 +107,12 @@ export class PDFGenerator {
     return this;
   }
 
-  addHeader(): PDFGenerator {
-    const svg = '../../../assets/images/NHS_logo_logotype.png';
+  addLogo(): PDFGenerator {
+    const imagePath = `${path.resolve('./src/assets/images/nhs-logo.png')}`;
+    const png = fs.readFileSync(imagePath);
+    const imgStr = Buffer.from(png).toString('base64');
+    this.doc.addImage(imgStr, 'png', this.pageWidth - 3, this.margin, 1.75, .75);
+
     return this;
   }
 
