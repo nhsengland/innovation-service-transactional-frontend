@@ -38,7 +38,7 @@
           </div>
         </dl>
 
-        <button class="nhsuk-button" (click)="onSubmitSurvey()"> Save </button>
+        <button class="nhsuk-button" (click)="onSubmitSurvey()"> {{ innovation.status === 'IN_PROGRESS' ? 'Save as draft' : 'Save' }} </button>
 
       </ng-container>
 

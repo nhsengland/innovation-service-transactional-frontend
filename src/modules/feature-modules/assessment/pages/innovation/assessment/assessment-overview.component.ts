@@ -9,7 +9,7 @@ import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/ne
 import { getInnovationNeedsAssessmentEndpointOutDTO } from '@modules/feature-modules/assessment/services/assessment.service';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
-import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
+import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 import { AssessmentService } from '../../../services/assessment.service';
 
@@ -22,7 +22,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
   innovationId: string;
   assessmentId: string;
-  innovation: InnovationDataType;
+  innovation: InnovationDataResolverType;
 
   alert: AlertType = { type: null };
 

@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 import { RoutingHelper } from '@modules/core';
 
-import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
+import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -17,7 +17,7 @@ import { AccessorService } from '../../../services/accessor.service';
 export class InnovationSupportInfoComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-  innovation: InnovationDataType;
+  innovation: InnovationDataResolverType;
 
   alert: AlertType = { type: null };
 
@@ -25,7 +25,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
     organisationUnit: string;
     accessors: string;
     status: string;
-  } = { organisationUnit: '', accessors: '' , status: '' };
+  } = { organisationUnit: '', accessors: '', status: '' };
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
@@ -59,21 +59,20 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
           message: 'You\'ve updated your support status and posted a comment to the innovator.'
         };
         break;
-        case 'supportOrganisationSuggestSuccess':
-          this.alert = {
-            type: 'SUCCESS',
-            title: 'Organisation suggestions sent',
-            message: 'Your suggestions were saved and notifications sent.'
-          };
-          break;
+      case 'supportOrganisationSuggestSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'Organisation suggestions sent',
+          message: 'Your suggestions were saved and notifications sent.'
+        };
+        break;
       default:
         break;
     }
 
     this.accessorService.getInnovationInfo(this.innovationId).subscribe(
       response => {
-        this.innovation.support.id = response.support?.id;
-        this.innovation.support.status = response.support?.status || 'UNASSIGNED';
+        this.innovation.support = { id: response.support?.id, status: response.support?.status || 'UNASSIGNED' };
         this.loadSupportInfo(this.innovation.support.id || '');
       }
     );

@@ -58,6 +58,7 @@ describe('FeatureModules/Accessor/Resolvers/InnovationDataResolver', () => {
     const expected = {
       id: '01',
       name: 'Innovation 01',
+      status: 'CREATED',
       assessment: { id: '01' },
       support: { id: '01', status: 'ENGAGED' }
     };

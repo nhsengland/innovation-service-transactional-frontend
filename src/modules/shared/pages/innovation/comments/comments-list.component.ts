@@ -5,10 +5,11 @@ import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { CustomValidators, FormEngineHelper } from '@app/base/forms';
 import { AlertType } from '@app/base/models';
 import { RoutingHelper } from '@modules/core';
-import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
+
 import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 
-import { getInnovationCommentsDTO } from '@stores-module/innovation/innovation.models';
+import { getInnovationCommentsDTO, InnovationDataResolverType } from '@stores-module/innovation/innovation.models';
+
 
 @Component({
   selector: 'shared-pages-innovation-comments-comments-list',
@@ -22,7 +23,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
   alert: AlertType = { type: null };
 
-  innovation: InnovationDataType;
+  innovation: InnovationDataResolverType;
   currentCreatedOrder: 'asc' | 'desc';
 
   commentsList: getInnovationCommentsDTO[];

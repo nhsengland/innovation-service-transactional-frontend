@@ -142,6 +142,19 @@ export enum InnovationSectionsIds {
   IMPLEMENTATION_PLAN = 'IMPLEMENTATION_PLAN',
 }
 
+export type InnovationDataResolverType = {
+  id: string;
+  name: string;
+  status: keyof typeof INNOVATION_STATUS;
+  assessment: {
+    id: undefined | string;
+  };
+  support?: {
+    id: undefined | string;
+    status: keyof typeof INNOVATION_SUPPORT_STATUS;
+  }
+};
+
 
 
 export type sectionType = {
