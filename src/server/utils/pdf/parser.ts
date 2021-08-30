@@ -3,7 +3,8 @@ import axios from 'axios';
 import { API_URL } from '../../config/constants.config';
 import { getInnovationInfoEndpointDTO, sectionType } from '@modules/stores/innovation/innovation.models';
 import { MappedObject } from '@modules/core';
-import { AllSectionsSummary } from '@modules/stores/innovation/innovation.config';
+import { AllSectionsOutboundPayloadType, AllSectionsSummary } from '@modules/stores/innovation/innovation.config';
+import { PDFGeneratorInnovationNotFoundError, PDFGeneratorParserError, PDFGeneratorSectionsNotFoundError } from '../errors';
 
 export const getSections = async (innovationId: string, userId: string, config: any): Promise<{section: sectionType, data: MappedObject}[]> => {
   const url = `${API_URL}/api/innovators/${userId}/innovations/${innovationId}/sections`;
@@ -22,13 +23,30 @@ export const getInnovation = async (userId: string, innovationId: string, config
 
 export const generatePDF = async (innovationId: string, userId: string, config: any) => {
 
-  const innovation = await getInnovation(userId, innovationId, config);
+  let content: AllSectionsOutboundPayloadType;
+  let innovation: getInnovationInfoEndpointDTO;
+  let sections: {section: sectionType, data: MappedObject }[];
 
   const generator = new PDFGenerator();
 
-  const sections = await getSections(innovationId, userId, config);
+  try {
+    innovation = await getInnovation(userId, innovationId, config);
+  }
+  catch (error) {
+    throw new PDFGeneratorInnovationNotFoundError(error);
+  }
 
-  const content = AllSectionsSummary(sections);
+  try {
+    sections = await getSections(innovationId, userId, config);
+  } catch (error) {
+    throw new PDFGeneratorSectionsNotFoundError(error);
+  }
+
+  try {
+    content = AllSectionsSummary(sections);
+  } catch (error) {
+    throw new PDFGeneratorParserError(error);
+  }
 
   generator
     .addLogo();
