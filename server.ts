@@ -8,7 +8,7 @@ import * as fs from 'fs';
 import * as helmet from 'helmet';
 import { join } from 'path';
 import { initAppInsights } from 'src/globals';
-import { BASE_PATH, BASE_URL, LOG_LEVEL, STATIC_CONTENT_PATH, VIEWS_PATH } from 'src/server/config/constants.config';
+import { BASE_PATH, BASE_URL, LOG_LEVEL, STATIC_CONTENT_PATH, VIEWS_PATH, ENABLE_ANALYTICS } from 'src/server/config/constants.config';
 import { handler } from 'src/server/handlers/logger.handler';
 import { appLoggingMiddleware } from 'src/server/middlewares/app-logging.middleware';
 import { exceptionLoggingMiddleware } from 'src/server/middlewares/exception-logging.middleware';
@@ -94,7 +94,7 @@ export function app(): express.Express {
       req, res,
       providers: [
         { provide: APP_BASE_HREF, useValue: req.baseUrl },
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL } }
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL, ENABLE_ANALYTICS } }
       ]
     });
   });
@@ -107,6 +107,7 @@ export function app(): express.Express {
       window.__env.BASE_PATH = '${BASE_PATH}';
       window.__env.API_URL = '${BASE_URL}${BASE_PATH}/api';
       window.__env.LOG_LEVEL = '${LOG_LEVEL}';
+      window.__env.ENABLE_ANALYTICS = '${ENABLE_ANALYTICS}';
     }(this));`);
   });
   // // All regular routes using the Universal engine.
@@ -115,7 +116,7 @@ export function app(): express.Express {
       req, res,
       providers: [
         { provide: APP_BASE_HREF, useValue: req.baseUrl },
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL } }
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL, ENABLE_ANALYTICS } }
       ]
     });
   });

@@ -8,6 +8,7 @@ type environmentVariables = {
   BASE_PATH: string;
   API_URL: string;
   LOG_LEVEL: NgxLoggerLevel;
+  ENABLE_ANALYTICS: boolean;
 };
 
 
@@ -20,7 +21,7 @@ type environmentVariables = {
 @Injectable()
 export class EnvironmentStore {
 
-  private environment: environmentVariables = { BASE_URL: '', BASE_PATH: '/', API_URL: '', LOG_LEVEL: NgxLoggerLevel.ERROR };
+  private environment: environmentVariables = { BASE_URL: '', BASE_PATH: '/', API_URL: '', LOG_LEVEL: NgxLoggerLevel.ERROR, ENABLE_ANALYTICS: true };
 
   get ENV(): environmentVariables { return this.environment; }
 
@@ -43,7 +44,8 @@ export class EnvironmentStore {
           BASE_URL: appServerENV.BASE_URL,
           BASE_PATH: ['', '/'].includes(appServerENV.BASE_PATH) ? '' : `${appServerENV.BASE_PATH?.startsWith('/') ? '' : '/'}${appServerENV.BASE_PATH}`,
           API_URL: appServerENV.API_URL,
-          LOG_LEVEL: NgxLoggerLevel[appServerENV.LOG_LEVEL]
+          LOG_LEVEL: NgxLoggerLevel[appServerENV.LOG_LEVEL],
+          ENABLE_ANALYTICS: appServerENV.ENABLE_ANALYTICS
         };
 
       } else {
@@ -55,7 +57,8 @@ export class EnvironmentStore {
           BASE_URL: browserEnv.BASE_URL,
           BASE_PATH: ['', '/'].includes(browserEnv.BASE_PATH) ? '' : `${browserEnv.BASE_PATH?.startsWith('/') ? '' : '/'}${browserEnv.BASE_PATH}`,
           API_URL: browserEnv.API_URL,
-          LOG_LEVEL: NgxLoggerLevel[browserEnv.LOG_LEVEL]
+          LOG_LEVEL: NgxLoggerLevel[browserEnv.LOG_LEVEL],
+          ENABLE_ANALYTICS: browserEnv.ENABLE_ANALYTICS
         };
 
       }
