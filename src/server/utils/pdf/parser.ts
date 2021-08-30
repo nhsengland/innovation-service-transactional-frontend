@@ -5,7 +5,7 @@ import { getInnovationInfoEndpointDTO, sectionType } from '@modules/stores/innov
 import { MappedObject } from '@modules/core';
 import { AllSectionsSummary } from '@modules/stores/innovation/innovation.config';
 
-const getSections = async (innovationId: string, userId: string, config: any): Promise<{section: sectionType, data: MappedObject}[]> => {
+export const getSections = async (innovationId: string, userId: string, config: any): Promise<{section: sectionType, data: MappedObject}[]> => {
   const url = `${API_URL}/api/innovators/${userId}/innovations/${innovationId}/sections`;
   const response = await axios.get<{
     section: sectionType;
@@ -14,7 +14,7 @@ const getSections = async (innovationId: string, userId: string, config: any): P
   return response.data;
 };
 
-const getInnovation = async (userId: string, innovationId: string, config: any) => {
+export const getInnovation = async (userId: string, innovationId: string, config: any) => {
   const url = `${API_URL}/api/innovators/${userId}/innovations/${innovationId}`;
   const response = await axios.get<getInnovationInfoEndpointDTO>(url, config);
   return response.data;
