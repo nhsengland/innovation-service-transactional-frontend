@@ -48,7 +48,7 @@ type AllSectionsInboundPayloadType = {
   data: MappedObject
 }[];
 
-type AllSectionsOutboundPayloadType = {
+export type AllSectionsOutboundPayloadType = {
   title: string;
   sections: {
     section: string,
