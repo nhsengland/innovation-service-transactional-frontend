@@ -57,7 +57,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
 
     this.visibleColumns = {};
 
-    for (const [key, item] of Object.entries(visibleColumns || {})) {
+    for (const [key, item] of Object.entries(visibleColumns)) {
       if (typeof item === 'string') { this.visibleColumns[key] = { label: item }; }
       else { this.visibleColumns[key] = { label: item.label, align: item.align, orderable: item.orderable }; }
     }
@@ -140,7 +140,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
     return {
       take: this.pageSize,
       skip: (this.page - 1) * this.pageSize,
-      order: this.orderBy ? { [this.orderBy]: (this.orderDir === 'ascending' ? 'ASC' : 'DESC') } : undefined,
+      order: this.orderBy ? { [this.orderBy]: (['none', 'ascending'].includes(this.orderDir) ? 'ASC' : 'DESC') } : undefined,
       filters: Object.keys(this.filters).length > 0 ? this.filters : undefined
     };
 

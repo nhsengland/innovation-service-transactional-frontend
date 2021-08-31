@@ -114,7 +114,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
         return;
       }
 
-      const urlQueryParams = this.decodeQueryParams(this.activatedRoute.snapshot.queryParams);
+      const urlQueryParams = this.decodeQueryParams(this.activatedRoute.snapshot.queryParams || {});
       this.currentAnswers = { ...(urlQueryParams.f || {}), ...this.requestBody };
 
       if (this.isQuestionStep()) {

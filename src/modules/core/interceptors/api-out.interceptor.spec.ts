@@ -1,34 +1,37 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import { ENV } from '@tests/app.mocks';
+import { ENV, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
-import { Injector } from '@angular/core';
-import * as common from '@angular/common';
+import { PLATFORM_ID } from '@angular/core';
+import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
 
-import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
-import { AuthenticationService  } from '@modules/stores';
+import { CoreModule, EnvironmentStore } from '@modules/core';
+import { AuthenticationService } from '@modules/stores';
 
-describe('Core/Interceptors/ApiOutInterceptor', () => {
+describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
 
   let httpMock: HttpTestingController;
   let environmentStore: EnvironmentStore;
   let authenticationService: AuthenticationService;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
+        RouterTestingModule,
         CoreModule
       ],
       providers: [
         AuthenticationService,
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV },
+        { provide: PLATFORM_ID, useValue: 'server' },
+        { provide: REQUEST, useValue: SERVER_REQUEST },
+        { provide: RESPONSE, useValue: SERVER_RESPONSE }
+
       ]
     });
-
-    AppInjector.setInjector(TestBed.inject(Injector));
 
     httpMock = TestBed.inject(HttpTestingController);
     environmentStore = TestBed.inject(EnvironmentStore);
@@ -41,12 +44,10 @@ describe('Core/Interceptors/ApiOutInterceptor', () => {
   });
 
 
-  it('should add header', () => {
+  it('should add Cookie header', () => {
 
     const responseMock = true;
     let response: any = null;
-
-    spyOn(common, 'isPlatformServer').and.returnValue(true);
 
     authenticationService.verifyUserSession().subscribe(success => response = success, error => response = error);
 
@@ -57,12 +58,51 @@ describe('Core/Interceptors/ApiOutInterceptor', () => {
 
   });
 
-  it('should not add header', () => {
+});
+
+
+
+
+
+describe('Core/Interceptors/ApiOutInterceptor running CLIENT side', () => {
+
+  let httpMock: HttpTestingController;
+  let environmentStore: EnvironmentStore;
+  let authenticationService: AuthenticationService;
+
+  beforeEach(() => {
+
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        CoreModule
+      ],
+      providers: [
+        AuthenticationService,
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV },
+
+        { provide: PLATFORM_ID, useValue: 'browser' },
+
+      ]
+    });
+
+    httpMock = TestBed.inject(HttpTestingController);
+    environmentStore = TestBed.inject(EnvironmentStore);
+    authenticationService = TestBed.inject(AuthenticationService);
+
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+  });
+
+
+
+  it('should NOT add Cookie header', () => {
 
     const responseMock = true;
     let response: any = null;
-
-    spyOn(common, 'isPlatformServer').and.returnValue(false);
 
     authenticationService.verifyUserSession().subscribe(success => response = success, error => response = error);
 

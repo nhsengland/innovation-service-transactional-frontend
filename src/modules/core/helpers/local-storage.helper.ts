@@ -1,14 +1,14 @@
-/* istanbul ignore file */
-
 export class LocalStorageHelper {
 
   static getObjectItem(key: string): null | { [key: string]: any } {
 
     try {
+
       const ls = localStorage.getItem(key);
       return ls ? JSON.parse(ls) : null;
 
     } catch (e) {
+      /* istanbul ignore next */
       return null;
     }
 

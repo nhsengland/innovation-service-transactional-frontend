@@ -3,10 +3,10 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LoggerTestingModule } from 'ngx-logger/testing';
 
-import { InjectorMock, EmptyMockComponent } from '@tests/app.mocks';
+import { EmptyMockComponent, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
-import { Injector } from '@angular/core';
-import * as common from '@angular/common';
+import { Injector, PLATFORM_ID } from '@angular/core';
+import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
 import { Router } from '@angular/router';
 
 import { CoreModule, AppInjector } from '@modules/core';
@@ -15,7 +15,7 @@ import { StoresModule } from '@modules/stores';
 import { CoreComponent } from './core.component';
 
 
-describe('App/CoreComponent running server side tests', () => {
+describe('App/Base/CoreComponent running SERVER side', () => {
 
   let component: CoreComponent;
   let fixture: ComponentFixture<CoreComponent>;
@@ -33,13 +33,14 @@ describe('App/CoreComponent running server side tests', () => {
       declarations: [
         CoreComponent
       ],
-      providers: []
-    }).compileComponents();
+      providers: [
+        { provide: PLATFORM_ID, useValue: 'server' },
+        { provide: REQUEST, useValue: SERVER_REQUEST },
+        { provide: RESPONSE, useValue: SERVER_RESPONSE }
+      ]
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
-
-    spyOn(common, 'isPlatformServer').and.returnValue(true);
-    spyOn(common, 'isPlatformBrowser').and.returnValue(false);
 
   });
 
@@ -49,223 +50,194 @@ describe('App/CoreComponent running server side tests', () => {
     expect(component).toBeTruthy();
   });
 
-  it(`should run isRunningOnBrowser() and return false`, () => {
+  it(`should run isRunningOnBrowser() and return FALSE`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
     expect(component.isRunningOnBrowser()).toBeFalsy();
   });
 
-  it(`should run isRunningOnServer() and return true`, () => {
+  it(`should run isRunningOnServer() and return TRUE`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
     expect(component.isRunningOnServer()).toBeTruthy();
+  });
+
+  it(`should run isDataRequest() and return FALSE when serverRequest.method is NOT defined`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    (component as any).serverRequest = {};
+    expect(component.isDataRequest()).toBeFalsy();
+  });
+  it(`should run isDataRequest() and return TRUE when serverRequest.method is NOT POST`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    (component as any).serverRequest = { method: 'GET' };
+    expect(component.isDataRequest()).toBeFalsy();
+  });
+  it(`should run isDataRequest() and return TRUE when serverRequest.method is POST`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    (component as any).serverRequest = { method: 'POST' };
+    expect(component.isDataRequest()).toBeTruthy();
+  });
+
+  it(`should run redirectTo()`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    component.redirectTo('/test', {});
+    expect(component.sResponse?.status).toHaveBeenCalledWith(303);
+    expect(component.sResponse?.setHeader).toHaveBeenCalledWith('Location', '/test');
+  });
+
+  it('should run encodeinfo()', () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    expect(component.encodeInfo('test')).toBe('dGVzdA==');
+  });
+
+  it('should run decodeInfo()', () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    expect(component.decodeInfo('dGVzdA==')).toBe('test');
   });
 
 });
 
 
 
-describe('App/CoreComponent running client side tests', () => {
+
+
+describe('App/Base/CoreComponent running CLIENT side', () => {
+
+  let router: Router;
+  let routerSpy: jasmine.Spy;
 
   let component: CoreComponent;
   let fixture: ComponentFixture<CoreComponent>;
-  let injectorSpy: jasmine.Spy;
 
   beforeEach(() => {
 
     TestBed.configureTestingModule({
       imports: [
+        HttpClientTestingModule,
         RouterTestingModule.withRoutes([
           { path: 'test', component: EmptyMockComponent }
         ]),
-
+        LoggerTestingModule,
+        CoreModule,
+        StoresModule
       ],
       declarations: [
         CoreComponent,
         EmptyMockComponent
       ],
       providers: [
-        InjectorMock,
+        { provide: PLATFORM_ID, useValue: 'browser' }
       ]
-    }).compileComponents();
+    });
 
-    spyOn(AppInjector, 'getInjector').and.returnValue(TestBed.inject(InjectorMock));
-    injectorSpy = spyOn(TestBed.inject(InjectorMock), 'get');
+    AppInjector.setInjector(TestBed.inject(Injector));
+
+    router = TestBed.inject(Router);
+    routerSpy = spyOn(router, 'navigate');
 
   });
 
-
-  it('should create the Core component', () => {
+  it('should create the component', () => {
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
 
-  it(`should run isRunningOnBrowser() and return true`, () => {
-    spyOn(common, 'isPlatformBrowser').and.returnValue(true);
+  it(`should run isRunningOnBrowser() and return TRUE`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
     expect(component.isRunningOnBrowser()).toBeTruthy();
   });
 
-  it(`should run isRunningOnServer() and return false`, () => {
-    spyOn(common, 'isPlatformServer').and.returnValue(false);
+  it(`should run isRunningOnServer() and return FALSE`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
     expect(component.isRunningOnServer()).toBeFalsy();
   });
 
-  it(`should run isDataRequest() and return true when serverRequest.method not defined`, () => {
+  it(`should run isDataRequest() and return FALSE`, () => {
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
-    expect(component.isDataRequest()).toBe(false);
-  });
-  it(`should run isDataRequest() and return true when serverRequest.method is POST`, () => {
-    injectorSpy.and.returnValue({ method: 'POST' });
-    fixture = TestBed.createComponent(CoreComponent);
-    component = fixture.componentInstance;
-    expect(component.isDataRequest()).toBeTruthy();
-  });
-  it(`should run isDataRequest() and return true when serverRequest.method is post`, () => {
-    injectorSpy.and.returnValue({ method: 'post' });
-    fixture = TestBed.createComponent(CoreComponent);
-    component = fixture.componentInstance;
-    expect(component.isDataRequest()).toBe(true);
-  });
-  it(`should run isDataRequest() and return true when serverRequest.method is not POST`, () => {
-    injectorSpy.and.returnValue({ method: 'GET' });
-    fixture = TestBed.createComponent(CoreComponent);
-    component = fixture.componentInstance;
-    expect(component.isDataRequest()).toBe(false);
-  });
-  it(`should run isDataRequest() and return false when serverRequest.method is null`, () => {
-    injectorSpy.and.returnValue({ method: null });
-    fixture = TestBed.createComponent(CoreComponent);
-    component = fixture.componentInstance;
-    expect(component.isDataRequest()).toBe(false);
-  });
-  it(`should run isDataRequest() and return false when serverRequest.method is undefined`, () => {
-    injectorSpy.and.returnValue({ method: undefined });
-    fixture = TestBed.createComponent(CoreComponent);
-    component = fixture.componentInstance;
-    expect(component.isDataRequest()).toBe(false);
+    expect(component.isDataRequest()).toBeFalsy();
   });
 
-  it(`should redirect to '/test' when 'redirecTo' is called and running on Browser`, () => {
-    const router = TestBed.inject(Router);
-    injectorSpy.and.returnValue(router);
-    spyOn(common, 'isPlatformBrowser').and.returnValue(true);
-    const routerSpy = spyOn(router, 'navigate');
+  it(`should run setPageTitle() with a EMPTY title`, () => {
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-    component.redirectTo('/test', {});
-
-    expect(routerSpy).toHaveBeenCalledWith(['/test'], { queryParams: {} });
+    component.setPageTitle(undefined);
+    expect(component.pageTitle).toBe('');
+  });
+  it(`should run setPageTitle() with a title`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    component.setPageTitle('New page title');
+    expect(component.pageTitle).toBe('New page title');
   });
 
-  it(`should set response headers 'status' to '303' and 'Location' to '/test' when 'redirecTo' is called and running on Server`, () => {
-
-    const status = jasmine.createSpy('status');
-    const setHeader = jasmine.createSpy('setHeader');
-
-    injectorSpy.and.returnValue({ status, setHeader });
-
-    spyOn(common, 'isPlatformBrowser').and.returnValue(false);
+  it(`should run setPageStatus()`, () => {
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    component.redirectTo('/test', {});
-
-    expect(status).toHaveBeenCalledWith(303);
-    expect(setHeader).toHaveBeenCalledWith('Location', '/test');
-
+    component.setPageStatus('WAITING');
+    expect(component.pageStatus).toBe('WAITING');
   });
 
-  it(`should set response headers 'status' to '303' and 'Location' to '/test?query=1' when 'redirecTo' is called with querystrings and running on Server`, () => {
-
-    const status = jasmine.createSpy('status');
-    const setHeader = jasmine.createSpy('setHeader');
-
-    injectorSpy.and.returnValue({ status, setHeader });
-
-    spyOn(common, 'isPlatformBrowser').and.returnValue(false);
+  it(`should run redirectTo() WITHOUT QueryParams`, () => {
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-    spyOn(component, 'encodeUrlQueryParams').and.returnValue('/test?query=1');
-    component.redirectTo('/test', { query: '1' });
-
-    expect(status).toHaveBeenCalledWith(303);
-    expect(setHeader).toHaveBeenCalledWith('Location', '/test?query=1');
-
-  });
-
-  it(`should set response headers 'status' to '303' and
-  'Location' to '/test?' when 'redirecTo' is called with 'undefined' and running on Server`, () => {
-
-    const status = jasmine.createSpy('status');
-    const setHeader = jasmine.createSpy('setHeader');
-
-    injectorSpy.and.returnValue({ status, setHeader });
-
-    spyOn(common, 'isPlatformBrowser').and.returnValue(false);
-    fixture = TestBed.createComponent(CoreComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
     component.redirectTo('/test');
-
-    expect(status).toHaveBeenCalledWith(303);
-    expect(setHeader).toHaveBeenCalledWith('Location', '/test');
-
+    expect(routerSpy).toHaveBeenCalledWith(['/test'], {});
   });
 
-  it('should encode info with btoa when running on the browser', () => {
-    const expected = 'dGVzdA==';
-    spyOn(common, 'isPlatformBrowser').and.returnValue(true);
-    const bufferSpy = spyOn(Buffer, 'from').and.callThrough();
-    const actual = component.encodeInfo('test');
-    expect(actual).toBe(expected);
-    expect(bufferSpy).not.toHaveBeenCalled();
+  it(`should run redirectTo() WITH QueryParams`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    component.redirectTo('/test', { param: 'test' });
+    expect(routerSpy).toHaveBeenCalledWith(['/test'], { queryParams: { param: 'test' } });
   });
 
-  it('should encode info with base64 when running on the server', () => {
-    const expected = 'dGVzdA==';
-    spyOn(common, 'isPlatformBrowser').and.returnValue(false);
-    const bufferSpy = spyOn(Buffer, 'from').and.callThrough();
-    const actual = component.encodeInfo('test');
-    expect(actual).toBe(expected);
-    expect(bufferSpy).toHaveBeenCalled();
+  it('should run encodeinfo()', () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    expect(component.encodeInfo('test')).toBe('dGVzdA==');
   });
 
-  it('should decode info with atob when running on the browser', () => {
-    const expected = 'test';
-    spyOn(common, 'isPlatformBrowser').and.returnValue(true);
-    const bufferSpy = spyOn(Buffer, 'from').and.callThrough();
-    const actual = component.decodeInfo('dGVzdA==');
-    expect(actual).toBe(expected);
-    expect(bufferSpy).not.toHaveBeenCalled();
+  it('should run encodeinfo() with EMPTY string', () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    expect(component.decodeInfo('')).toBe('');
   });
 
-  it('should decode info with base64 when running on the server', () => {
-    const expected = 'test';
-    spyOn(common, 'isPlatformBrowser').and.returnValue(false);
-    const bufferSpy = spyOn(Buffer, 'from').and.callThrough();
-    const actual = component.decodeInfo('dGVzdA==');
-    expect(actual).toBe(expected);
-    expect(bufferSpy).toHaveBeenCalled();
+  it('should run decodeInfo()', () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    expect(component.decodeInfo('dGVzdA==')).toBe('test');
   });
 
-  it('should encode url query params when on server', () => {
-    const expected = '/test?query_1=e3Rlc3RlXzE6IDZ9';
-    spyOn(common, 'isPlatformBrowser').and.returnValue(false);
-    const bufferSpy = spyOn(Buffer, 'from').and.callThrough();
-    const actual = component.encodeUrlQueryParams('/test', { query_1: '{teste_1: 6}' });
-    expect(actual).toBe(expected);
-    expect(bufferSpy).toHaveBeenCalled();
+  it('should run encodeUrlQueryParams() WITHOUT QueryParams', () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    const result = component.encodeUrlQueryParams('/test');
+    expect(result).toBe('/test');
   });
 
-  it('should decode url query params when on browser', () => {
-    const expected = { query_1: '{teste_1: 6}' };
-    spyOn(common, 'isPlatformBrowser').and.returnValue(true);
-    const bufferSpy = spyOn(Buffer, 'from').and.callThrough();
-    const actual = component.decodeQueryParams({ query_1: 'e3Rlc3RlXzE6IDZ9' });
-    expect(actual).toEqual(expected);
-    expect(bufferSpy).not.toHaveBeenCalled();
+  it('should run encodeUrlQueryParams() WITH QueryParams', () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    const result = component.encodeUrlQueryParams('/test', { query_1: { teste_1: 6 }, query_2: '', query_3: 'One value' });
+    expect(result).toBe('/test?query_1=eyJ0ZXN0ZV8xIjo2fQ%3D%3D&query_3=T25lIHZhbHVl');
+  });
+
+  it('should run decodeUrlQueryParams()', () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    const result = component.decodeQueryParams({ query_1: 'T25lIHZhbHVl' });
+    expect(result).toEqual({ query_1: 'One value' });
   });
 
 });

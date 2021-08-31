@@ -4,10 +4,10 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 
-
 import { locale as enLanguage } from './config/translations/en';
 
 declare let gtag: any;
+
 
 @Component({
   selector: 'app-root',

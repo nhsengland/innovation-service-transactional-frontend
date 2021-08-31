@@ -1,25 +1,29 @@
-import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+
+import { PLATFORM_ID } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
 import { AppComponent } from './app.component';
-
 import { HeaderComponent } from '@modules/theme/components/header/header.component';
 import { FooterComponent } from '@modules/theme/components/footer/footer.component';
 import { ActivityTimeoutComponent } from '@modules/theme/components/activity-timeout/activity-timeout.component';
 
-import { LoggerService } from '@modules/core/services/logger.service';
 
-describe('AppComponent', () => {
+describe('AppComponent running SERVER side', () => {
 
-  beforeEach( () => {
-     TestBed.configureTestingModule({
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
         HttpClientTestingModule,
+        RouterTestingModule,
         CoreModule,
         StoresModule
       ],
@@ -28,15 +32,64 @@ describe('AppComponent', () => {
         HeaderComponent,
         FooterComponent,
         ActivityTimeoutComponent
+      ],
+      providers: [
+        { provide: PLATFORM_ID, useValue: 'server' }
       ]
     });
 
   });
 
-  it('should create the app', () => {
-    spyOn(LoggerService.prototype, 'trackTrace').and.returnValue(null);
-    const fixture = TestBed.createComponent(AppComponent);
-    const component = fixture.componentInstance;
+  it('should create the component', () => {
+
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    expect(component).toBeTruthy();
+
+  });
+
+});
+
+
+
+
+
+describe('AppComponent running CLIENT side', () => {
+
+  let router: Router;
+
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        CoreModule,
+        StoresModule
+      ],
+      declarations: [
+        AppComponent,
+        HeaderComponent,
+        FooterComponent,
+        ActivityTimeoutComponent
+      ],
+      providers: [
+        { provide: PLATFORM_ID, useValue: 'browser' }
+      ]
+    });
+
+    router = TestBed.inject(Router);
+
+  });
+
+  it('should create the component and execute navigation code', () => {
+
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+
+    router.navigateByUrl('/'); // Simulate router navigation.
 
     expect(component).toBeTruthy();
 

@@ -2,7 +2,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { RoutingHelper } from './routing.helper';
 
-describe('RoutingHelper', () => {
+
+describe('Core/Helpers/RoutingHelper', () => {
 
   it(`should return all parameter from the route`, () => {
 
