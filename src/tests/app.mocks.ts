@@ -8,6 +8,21 @@ export const ENV = {
   LOG_LEVEL: 'TRACE'
 };
 
+export const SERVER_REQUEST = { method: 'get', headers: {} };
+export const SERVER_RESPONSE = { status: jest.fn(), setHeader: jest.fn() };
+
+
+export class LocalStorageMock {
+
+  store: { [key: string]: any } = {};
+
+  clear(): void { this.store = {}; }
+  getItem(key: string): null | { [key: string]: any } { return this.store[key] || null; }
+  setItem(key: string, value: any): void { this.store[key] = value; }
+  removeItem(key: string): void { delete this.store[key]; }
+
+}
+
 
 @Component({
   template: `<div></div>`,

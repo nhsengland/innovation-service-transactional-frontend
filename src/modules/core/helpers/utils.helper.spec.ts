@@ -1,5 +1,7 @@
 import { UtilsHelper } from './utils.helper';
-describe(`'utils.helper' suite`, () => {
+
+
+describe('Core/Helpers/UtilsHelper', () => {
 
   it(`should return 'true' when object is 'empty'`, () => {
     expect(UtilsHelper.isEmpty({})).toBe(true);

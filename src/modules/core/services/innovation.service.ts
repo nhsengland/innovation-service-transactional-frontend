@@ -12,14 +12,12 @@ import { UrlModel } from '../models/url.model';
 export class InnovationService {
 
   private APP_URL: string;
-  private API_URL: string;
 
   constructor(
     private http: HttpClient,
     private environmentStore: EnvironmentStore
   ) {
     this.APP_URL = this.environmentStore.APP_URL;
-    this.API_URL = this.environmentStore.API_URL;
   }
 
 
