@@ -14,7 +14,15 @@
       <div class="nhsuk-card nhsuk-card--clickable">
         <div class="nhsuk-card__content">
           <h2 class="nhsuk-card__heading nhsuk-heading-m">
-            <a class="nhsuk-card__link" [routerLink]="item.link"> {{ item.title }} </a>
+            <div class="side-menu-flex">
+              <div>
+                <a class="nhsuk-card__link" [routerLink]="item.link"> {{ item.title }} </a>
+              </div>
+              <div>
+                <notification-tag *ngIf="notifications && notifications.INNOVATION > 0" type="circle"></notification-tag>
+              </div>
+            </div>
+
           </h2>
           <p class="nhsuk-card__description">{{ item.description }}</p>
         </div>
