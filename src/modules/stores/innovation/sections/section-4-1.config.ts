@@ -199,7 +199,7 @@ function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
       toReturn.push({
         label: `Attachment ${i + 1}`,
         value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-        editStepNumber: toReturn.length + 1,
+        editStepNumber: 5,
         allowHTML: true
       });
     });
