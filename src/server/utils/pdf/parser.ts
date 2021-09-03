@@ -48,8 +48,10 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
     throw new PDFGeneratorParserError(error);
   }
 
-  generator
-    .addLogo();
+  // temporarely disables logo
+
+  // generator
+  //   .addLogo();
 
   generator
     .hero(innovation.name)
