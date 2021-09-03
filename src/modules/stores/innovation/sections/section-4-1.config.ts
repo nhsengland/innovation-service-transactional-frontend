@@ -195,11 +195,12 @@ function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
     });
 
     const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
+    const StepNumber: number = toReturn.length + 1;
     allFiles.forEach((item, i) => {
       toReturn.push({
         label: `Attachment ${i + 1}`,
         value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-        editStepNumber: 5,
+        editStepNumber: StepNumber,
         allowHTML: true
       });
     });
