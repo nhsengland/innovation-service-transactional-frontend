@@ -18,6 +18,8 @@ import { AccessorService } from '@modules/feature-modules/accessor/services/acce
 describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent', () => {
 
   let activatedRoute: ActivatedRoute;
+  let router: Router;
+  let routerSpy: jasmine.Spy;
 
   let accessorService: AccessorService;
 
@@ -38,6 +40,8 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent
     AppInjector.setInjector(TestBed.inject(Injector));
 
     activatedRoute = TestBed.inject(ActivatedRoute);
+    router = TestBed.inject(Router);
+    routerSpy = spyOn(router, 'navigate');
 
     accessorService = TestBed.inject(AccessorService);
 
@@ -45,11 +49,20 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent
 
 
   it('should create the component', () => {
+    fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
+    component = fixture.componentInstance;
+    expect(component).toBeTruthy();
+  });
+
+  it('should populate section form field', () => {
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+    activatedRoute.snapshot.queryParams = { section: 'INNOVATION_DESCRIPTION' };
 
     fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-    expect(component).toBeTruthy();
+
+    expect(component.form.get('section')?.value).toBe('INNOVATION_DESCRIPTION');
 
   });
 
@@ -60,7 +73,6 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent
     component = fixture.componentInstance;
 
     component.onSubmit();
-    fixture.detectChanges();
     expect(component.form.valid).toEqual(false);
 
   });
@@ -68,19 +80,16 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent
   it('should run onSubmit and call api with success', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
     const responseMock = { id: 'actionId' };
-    accessorService.createAction = () => of(responseMock as any);
+    accessorService.createAction = () => of(responseMock);
 
     fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
     component = fixture.componentInstance;
-
     component.form.get('section')?.setValue('A required value');
     component.form.get('description')?.setValue('A required value');
-    component.onSubmit();
-    fixture.detectChanges();
 
+    component.onSubmit();
     expect(routerSpy).toHaveBeenCalledWith(['/accessor/innovations/Inno01/action-tracker/actionId'], { queryParams: { alert: 'actionCreationSuccess' } });
 
   });
@@ -93,19 +102,17 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent
 
     const expected = {
       type: 'ERROR',
-      title: 'An error occured when creating an action',
-      message: 'Please, try again or contact us for further help',
+      title: 'An error occurred when creating an action',
+      message: 'Please try again or contact us for further help',
       setFocus: true
     };
 
     fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
     component = fixture.componentInstance;
-
     component.form.get('section')?.setValue('A required value');
     component.form.get('description')?.setValue('A required value');
-    component.onSubmit();
-    fixture.detectChanges();
 
+    component.onSubmit();
     expect(component.alert).toEqual(expected);
 
   });

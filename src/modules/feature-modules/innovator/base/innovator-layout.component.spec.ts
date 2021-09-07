@@ -3,23 +3,28 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
-import { ActivatedRoute, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { of } from 'rxjs';
 
 import { ENV } from '@tests/app.mocks';
+import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
-
 import { InnovatorModule } from '../innovator.module';
 
 import { InnovatorLayoutComponent } from './innovator-layout.component';
+
+import { NotificationService } from '@modules/shared/services/notification.service';
 
 
 describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
 
   let activatedRoute: ActivatedRoute;
+  let router: Router;
 
   let authenticationStore: AuthenticationStore;
+  let notificationService: NotificationService;
 
   let component: InnovatorLayoutComponent;
   let fixture: ComponentFixture<InnovatorLayoutComponent>;
@@ -41,21 +46,36 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
     AppInjector.setInjector(TestBed.inject(Injector));
 
     activatedRoute = TestBed.inject(ActivatedRoute);
+    router = TestBed.inject(Router);
 
     authenticationStore = TestBed.inject(AuthenticationStore);
+    notificationService = TestBed.inject(NotificationService);
 
   });
 
-
   it('should create the component', () => {
+    fixture = TestBed.createComponent(InnovatorLayoutComponent);
+    component = fixture.componentInstance;
+    authenticationStore.isValidUser = () => true; // Needed so it passes the firstTimeSigninGuard.
+    router.navigateByUrl('/'); // Simulate router navigation.
+    expect(component).toBeTruthy();
+  });
+
+  it('should have notifications', () => {
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+
+    authenticationStore.isValidUser = () => true;
+    notificationService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
 
     fixture = TestBed.createComponent(InnovatorLayoutComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-    expect(component).toBeTruthy();
+
+    (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
+    expect(component.mainMenuNotifications).toEqual({ INNOVATION: 1 });
+    expect(component.notifications).toEqual({ INNOVATION: 1 });
 
   });
-
 
   it('should have navigationMenuBar values when route is NOT first-time-signin', () => {
 
@@ -72,10 +92,8 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
 
     fixture = TestBed.createComponent(InnovatorLayoutComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
 
     (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
-
     expect(component.navigationMenuBar).toEqual(expected);
 
   });
@@ -92,7 +110,6 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
     fixture.detectChanges();
 
     (component as any).onRouteChange(new NavigationEnd(0, '/innovator/first-time-signin', '/'));
-
     expect(component.navigationMenuBar).toEqual(expected);
 
   });
@@ -100,7 +117,8 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
 
   it('should have leftSideBar with no values', () => {
 
-    activatedRoute.snapshot.data = { layoutOptions: {} };
+    activatedRoute.snapshot.data = { layoutOptions: { backLink: { url: '/', label: 'Go back' } } };
+    authenticationStore.isValidUser = () => true;
 
     const expected = [] as any;
 
@@ -109,12 +127,28 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
     fixture.detectChanges();
 
     (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
-
     expect(component.leftSideBar).toEqual(expected);
 
   });
 
-  it('should have leftSideBar with innovation menu values', () => {
+  it('should have leftSideBar with "userAccountMenu" menu values', () => {
+
+    activatedRoute.snapshot.data = { layoutOptions: { type: 'userAccountMenu' } };
+
+    const expected = [
+      { title: 'Your details', link: `/innovator/account/manage-details` },
+      { title: 'Manage innovations', link: `/innovator/account/manage-innovations` }
+    ];
+
+    fixture = TestBed.createComponent(InnovatorLayoutComponent);
+    component = fixture.componentInstance;
+
+    (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
+    expect(component.leftSideBar).toEqual(expected);
+
+  });
+
+  it('should have leftSideBar with "innovationLeftAsideMenu" menu values', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'innovation01' };
     activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' } };
@@ -129,16 +163,61 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
 
     fixture = TestBed.createComponent(InnovatorLayoutComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
 
     (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
-
     expect(component.leftSideBar).toEqual(expected);
 
   });
 
+  it('should have leftSideBar with "emptyLeftAside" menu values', () => {
 
-  it('should have innovationHeaderBar with no values', () => {
+    activatedRoute.snapshot.data = { layoutOptions: { type: 'emptyLeftAside' } };
+    authenticationStore.isValidUser = () => true;
+
+    const expected = [] as any;
+
+    fixture = TestBed.createComponent(InnovatorLayoutComponent);
+    component = fixture.componentInstance;
+
+    (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
+    expect(component.leftSideBar).toEqual(expected);
+
+  });
+
+  it('should show innovationHeaderBar with EMPTY innovation name', () => {
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+    activatedRoute.snapshot.data = { layoutOptions: { showInnovationHeader: true } };
+
+    const expected = { id: 'Inno01', name: null };
+
+    fixture = TestBed.createComponent(InnovatorLayoutComponent);
+    component = fixture.componentInstance;
+
+    (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
+    expect(component.innovationHeaderBar).toEqual(expected);
+
+  });
+
+  it('should show innovationHeaderBar with ALL information', () => {
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+    activatedRoute.snapshot.data = { layoutOptions: { showInnovationHeader: true } };
+
+    authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
+
+    const expected = { id: 'Inno01', name: 'Test innovation' };
+
+    fixture = TestBed.createComponent(InnovatorLayoutComponent);
+    component = fixture.componentInstance;
+
+    (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
+    fixture.detectChanges();
+    expect(component.innovationHeaderBar).toEqual(expected);
+
+  });
+
+  it('should have innovationHeaderBar with no values, hence NOT showing', () => {
 
     activatedRoute.snapshot.data = { layoutOptions: {} };
 
@@ -146,29 +225,8 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
 
     fixture = TestBed.createComponent(InnovatorLayoutComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
 
     (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
-
-    expect(component.innovationHeaderBar).toEqual(expected);
-
-  });
-
-  it('should have leftSideBar with innovation menu values', () => {
-
-    activatedRoute.snapshot.params = { innovationId: 'innovation01' };
-    activatedRoute.snapshot.data = { layoutOptions: { showInnovationHeader: true } };
-
-    spyOn(authenticationStore, 'getUserInfo').and.returnValue({ innovations: [{ id: 'innovation01', name: 'Innovation 01' }] });
-
-    const expected = { id: 'innovation01', name: 'Innovation 01' };
-
-    fixture = TestBed.createComponent(InnovatorLayoutComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
-
     expect(component.innovationHeaderBar).toEqual(expected);
 
   });

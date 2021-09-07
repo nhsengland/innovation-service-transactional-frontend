@@ -55,4 +55,5 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     );
 
   }
+
 }

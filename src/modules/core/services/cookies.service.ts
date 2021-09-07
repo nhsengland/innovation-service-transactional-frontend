@@ -37,24 +37,12 @@ export class CookiesService {
     try {
       return JSON.parse(this.coockieService.get('cookies-consent') || '{}');
     } catch (error) {
-      console.log('Error parsing consent cookies', error);
+      // console.log('Error parsing consent cookies', error);
       return {};
     }
   }
 
-  setConsentCookie(agreed: boolean): void {
-
-    this.coockieService.set('cookies-consent', JSON.stringify({ consented: true, necessary: true, analytics: agreed }), this.cookiesOptions);
-
-    if (agreed) { this.setAnalyticsScripts(); }
-    else {
-      this.deleteAnalyticsCookies();
-      this.removeAnalyticsScripts();
-    }
-
-  }
-
-  updateConsentCookie(analytics: boolean): void {
+  setConsentCookie(analytics: boolean): void {
 
     this.coockieService.set('cookies-consent', JSON.stringify({ consented: true, necessary: true, analytics }), this.cookiesOptions);
 
@@ -65,7 +53,6 @@ export class CookiesService {
     }
 
   }
-
 
   deleteAnalyticsCookies(): void {
 
@@ -98,9 +85,11 @@ export class CookiesService {
       let element: HTMLElement | null;
 
       element = document.getElementById('hj-analytics');
+      /* istanbul ignore next */
       element?.parentNode?.removeChild(element);
 
       element = document.getElementById('ga-analytics');
+      /* istanbul ignore next */
       element?.parentNode?.removeChild(element);
 
     }

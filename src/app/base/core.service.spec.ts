@@ -14,7 +14,6 @@ describe('App/Base/CoreService', () => {
   let service: CoreService;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,

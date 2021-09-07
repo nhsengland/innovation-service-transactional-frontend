@@ -126,7 +126,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
       return;
     }
 
-    this.currentAnswers = { ...this.currentAnswers, ...formData?.data };
+    this.currentAnswers = { ...this.currentAnswers, ...formData!.data };
 
     if (this.isLastStep() && action === 'next') { this.onSubmitSurvey(); }
     else { this.redirectTo(this.getNavigationUrl(action), { a: action }); }

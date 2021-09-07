@@ -48,6 +48,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
+
   }
 
 

@@ -6,6 +6,8 @@ import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
+import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
+
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
@@ -13,13 +15,17 @@ import { FormEngineComponent } from '@modules/shared/forms';
 
 import { InnovationTransferAcceptanceComponent } from './innovation-transfer-acceptance.component';
 
+import { InnovatorService } from '../../services/innovator.service';
+
 import { INNOVATION_TRANSFER } from './innovation-transfer-acceptance.config';
 
 
 describe('FeatureModules/Innovator/Pages/InnovationTransferAcceptanceComponent', () => {
 
   let activatedRoute: ActivatedRoute;
+
   let authenticationStore: AuthenticationStore;
+  let innovatorService: InnovatorService;
 
   let component: InnovationTransferAcceptanceComponent;
   let fixture: ComponentFixture<InnovationTransferAcceptanceComponent>;
@@ -37,34 +43,19 @@ describe('FeatureModules/Innovator/Pages/InnovationTransferAcceptanceComponent',
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    authenticationStore.getUserInfo = () => ({
-      id: '_id',
-      email: 'some@email.com',
-      displayName: 'A user',
-      type: '',
-      organisations: [{
-        id: 'org_id',
-        name: '',
-        size: '',
-        role: 'OWNER',
-        isShadow: true
-        // organisationUnits?: {          id: string;          name: string;        }[];
-      }],
-      innovations: []
-    });
+    authenticationStore = TestBed.inject(AuthenticationStore);
+    innovatorService = TestBed.inject(InnovatorService);
+
+    authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
 
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(InnovationTransferAcceptanceComponent);
     component = fixture.componentInstance;
-
     expect(component).toBeTruthy();
-
   });
 
 
@@ -75,8 +66,8 @@ describe('FeatureModules/Innovator/Pages/InnovationTransferAcceptanceComponent',
 
     fixture = TestBed.createComponent(InnovationTransferAcceptanceComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
 
+    fixture.detectChanges();
     expect(component.isQuestionStep()).toBe(true);
 
   });
@@ -89,8 +80,8 @@ describe('FeatureModules/Innovator/Pages/InnovationTransferAcceptanceComponent',
 
     fixture = TestBed.createComponent(InnovationTransferAcceptanceComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
 
+    fixture.detectChanges();
     expect(component.isSummaryStep()).toBe(true);
 
   });
@@ -100,6 +91,8 @@ describe('FeatureModules/Innovator/Pages/InnovationTransferAcceptanceComponent',
 
     activatedRoute.snapshot.params = { stepId: 1 };
     activatedRoute.params = of({ stepId: 1 }); // Simulate activatedRoute.params subscription.
+
+    innovatorService.getInnovationTransfers = () => of();
 
     fixture = TestBed.createComponent(InnovationTransferAcceptanceComponent);
     component = fixture.componentInstance;

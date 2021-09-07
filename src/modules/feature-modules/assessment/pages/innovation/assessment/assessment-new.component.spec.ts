@@ -14,11 +14,14 @@ import { AssessmentModule } from '@modules/feature-modules/assessment/assessment
 import { InnovationAssessmentNewComponent } from './assessment-new.component';
 
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
+import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
 describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNewComponent', () => {
 
   let activatedRoute: ActivatedRoute;
+  let router: Router;
+  let routerSpy: jasmine.Spy;
 
   let component: InnovationAssessmentNewComponent;
   let fixture: ComponentFixture<InnovationAssessmentNewComponent>;
@@ -39,33 +42,34 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
     AppInjector.setInjector(TestBed.inject(Injector));
 
     activatedRoute = TestBed.inject(ActivatedRoute);
+    router = TestBed.inject(Router);
+    routerSpy = spyOn(router, 'navigate');
 
     assessmentService = TestBed.inject(AssessmentService);
 
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(InnovationAssessmentNewComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     expect(component).toBeTruthy();
-
   });
 
 
   it('should run getInnovationInfo() with success', () => {
 
     const responseMock = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: '' },
+      summary: { id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: '' },
       contact: { name: 'A name', email: 'email', phone: '' },
       assessment: { id: '01', assignToName: 'Name' }
     };
-    assessmentService.getInnovationInfo = () => of(responseMock as any);
+    assessmentService.getInnovationInfo = () => of(responseMock);
+
     const expected = responseMock.summary.name;
 
     fixture = TestBed.createComponent(InnovationAssessmentNewComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovationName).toBe(expected);
 
@@ -75,20 +79,32 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
 
     assessmentService.getInnovationInfo = () => throwError(false);
 
-    const expected = '';
-
     fixture = TestBed.createComponent(InnovationAssessmentNewComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
-    expect(component.innovationName).toBe(expected);
+    expect(component.innovationName).toBe('');
 
   });
 
-
-  it('should submit survey with invalid form data', () => {
+  it('should run onSubmit() with NO formEngineComponent defined', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+
+    assessmentService.createInnovationNeedsAssessment = () => of({ id: 'Assess01' });
+
+    fixture = TestBed.createComponent(InnovationAssessmentNewComponent);
+    component = fixture.componentInstance;
+
+    component.onSubmit();
+    fixture.detectChanges();
+    expect(routerSpy).not.toHaveBeenCalledWith(['/assessment/innovations/Inno01/assessments/Assess01/edit'], {});
+
+  });
+
+  it('should run onSubmit() with invalid form data', () => {
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
 
     assessmentService.createInnovationNeedsAssessment = () => of({ id: 'Assess01' });
 
@@ -96,7 +112,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
     component = fixture.componentInstance;
 
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
-    spyOn(component.formEngineComponent, 'getFormValues').and.returnValue({ valid: false, data: { value1: 'some value' } });
+    component.formEngineComponent.getFormValues  = () => ({ valid: false, data: { value1: 'some value' } });
 
     component.onSubmit();
     fixture.detectChanges();
@@ -105,10 +121,9 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
 
   });
 
-  it('should submit survey with valid form data', () => {
+  it('should run onSubmit() with valid form data and API success', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
     assessmentService.createInnovationNeedsAssessment = () => of({ id: 'Assess01' });
 
@@ -116,16 +131,15 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
     component = fixture.componentInstance;
 
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
-    spyOn(component.formEngineComponent, 'getFormValues').and.returnValue({ valid: true, data: { value1: 'some value' } });
+    component.formEngineComponent.getFormValues  = () => ({ valid: true, data: { value1: 'some value' } });
 
     component.onSubmit();
     fixture.detectChanges();
-
     expect(routerSpy).toHaveBeenCalledWith(['/assessment/innovations/Inno01/assessments/Assess01/edit'], {});
 
   });
 
-  it('should submit survey with valid form data and api failed', () => {
+  it('should submit survey with valid form data and API failed', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
 
@@ -133,8 +147,8 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
 
     const expected = {
       type: 'ERROR',
-      title: 'An error occured when starting needs assessment',
-      message: 'Please, try again or contact us for further help',
+      title: 'An error occurred when starting needs assessment',
+      message: 'Please try again or contact us for further help',
       setFocus: true
     };
 
@@ -142,11 +156,10 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
     component = fixture.componentInstance;
 
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
-    spyOn(component.formEngineComponent, 'getFormValues').and.returnValue({ valid: true, data: { value1: 'some value' } });
+    component.formEngineComponent.getFormValues  = () => ({ valid: true, data: { value1: 'some value' } });
 
     component.onSubmit();
     fixture.detectChanges();
-
     expect(component.alert).toEqual(expected);
 
   });

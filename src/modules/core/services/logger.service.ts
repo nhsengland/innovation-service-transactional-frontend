@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Injectable, ErrorHandler } from '@angular/core';
 import { AxiosInstance } from 'axios';
 import axios from 'axios';

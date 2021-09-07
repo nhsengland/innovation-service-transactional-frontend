@@ -22,7 +22,6 @@ describe('FeatureModules/Innovator/Resolvers/InnovationDataResolver', () => {
   let innovatorService: InnovatorService;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,

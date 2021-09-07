@@ -90,8 +90,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
       }

@@ -1,59 +1,72 @@
 import { TestBed } from '@angular/core/testing';
 import { LoggerTestingModule } from 'ngx-logger/testing';
 
+import { PLATFORM_ID } from '@angular/core';
+
 import { ENV } from '@tests/app.mocks';
 
 import { EnvironmentStore } from './environment.store';
 
 
-describe('Core/Stores/EnvironmentStore running server side', () => {
+describe('Core/Stores/EnvironmentStore running SERVER side', () => {
 
-  let environmentStore: EnvironmentStore;
+  let store: EnvironmentStore;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         LoggerTestingModule
       ],
       providers: [
-        EnvironmentStore,
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
+        { provide: PLATFORM_ID, useValue: 'server' },
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV },
+        EnvironmentStore
       ]
     });
 
-    environmentStore = TestBed.inject(EnvironmentStore);
+    store = TestBed.inject(EnvironmentStore);
 
   });
 
   it('should set environment variables', () => {
+    expect(store.ENV).toEqual({ BASE_URL: 'http://demo.com', BASE_PATH: '', API_URL: 'http://demo.com/api', LOG_LEVEL: 0, ENABLE_ANALYTICS: true });
+    expect(store.APP_URL).toBe('http://demo.com');
+    expect(store.APP_ASSETS_URL).toBe('http://demo.com/static/assets');
+    expect(store.API_URL).toBe('http://demo.com/api');
+    expect(store.BASE_URL).toBe('http://demo.com');
+    expect(store.BASE_PATH).toBe('');
+  });
 
-    const expected = { BASE_URL: 'http://demo.com', BASE_PATH: '', API_URL: 'http://demo.com/api', LOG_LEVEL: 0 };
+  it('should run parseBasePath() with /', () => {
+    expect(store.parseBasePath('/')).toBe('');
+  });
 
-    expect(environmentStore.ENV).toEqual(expected);
-    expect(environmentStore.APP_URL).toBe('http://demo.com');
-    expect(environmentStore.APP_ASSETS_URL).toBe('http://demo.com/static/assets');
-    expect(environmentStore.API_URL).toBe('http://demo.com/api');
-    expect(environmentStore.BASE_URL).toBe('http://demo.com');
-    expect(environmentStore.BASE_PATH).toBe('');
+  it('should run parseBasePath() with /some-path', () => {
+    expect(store.parseBasePath('/some-path')).toBe('/some-path');
+  });
 
+  it('should run parseBasePath() with some-path', () => {
+    expect(store.parseBasePath('some-path')).toBe('/some-path');
   });
 
 });
 
 
-describe('Core/Stores/EnvironmentStore running client side', () => {
 
-  let environmentStore: EnvironmentStore;
+
+
+describe('Core/Stores/EnvironmentStore running CLIENT side', () => {
+
   let windowSpy: jest.SpyInstance;
+  let store: EnvironmentStore;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         LoggerTestingModule
       ],
       providers: [
+        { provide: PLATFORM_ID, useValue: 'browser' },
         EnvironmentStore
       ]
     });
@@ -61,21 +74,17 @@ describe('Core/Stores/EnvironmentStore running client side', () => {
     windowSpy = jest.spyOn(window, 'window', 'get');
     windowSpy.mockImplementation(() => ({ __env: ENV }));
 
-    environmentStore = TestBed.inject(EnvironmentStore);
+    store = TestBed.inject(EnvironmentStore);
 
   });
 
   it('should set environment variables', () => {
-
-    const expected = { BASE_URL: 'http://demo.com', BASE_PATH: '', API_URL: 'http://demo.com/api', LOG_LEVEL: 0 };
-
-    expect(environmentStore.ENV).toEqual(expected);
-    expect(environmentStore.APP_URL).toBe('http://demo.com');
-    expect(environmentStore.APP_ASSETS_URL).toBe('http://demo.com/static/assets');
-    expect(environmentStore.API_URL).toBe('http://demo.com/api');
-    expect(environmentStore.BASE_URL).toBe('http://demo.com');
-    expect(environmentStore.BASE_PATH).toBe('');
-
+    expect(store.ENV).toEqual({ BASE_URL: 'http://demo.com', BASE_PATH: '', API_URL: 'http://demo.com/api', LOG_LEVEL: 0, ENABLE_ANALYTICS: true });
+    expect(store.APP_URL).toBe('http://demo.com');
+    expect(store.APP_ASSETS_URL).toBe('http://demo.com/static/assets');
+    expect(store.API_URL).toBe('http://demo.com/api');
+    expect(store.BASE_URL).toBe('http://demo.com');
+    expect(store.BASE_PATH).toBe('');
   });
 
 });

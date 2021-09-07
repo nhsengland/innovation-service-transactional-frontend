@@ -32,7 +32,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   });
   formSubmitted = false;
 
-  groupedItems: FormEngineParameterModel['groupedItems'] = [];
+  groupedItems: Required<FormEngineParameterModel>['groupedItems'] = [];
 
   chosenUnits: {
     list: { organisation: string, units: string[] }[];
@@ -65,6 +65,18 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
   ngOnInit(): void {
 
+    this.subscriptions.push(
+      this.activatedRoute.params.subscribe(params => {
+
+        this.stepId = Number(params.stepId);
+
+        if (!this.isValidStepId()) {
+          this.redirectTo('not-found');
+        }
+
+      })
+    );
+
     forkJoin([
       this.organisationsService.getOrganisationUnits(),
       this.accessorService.getInnovationNeedsAssessment(this.innovationId, this.innovation.assessment.id || ''),
@@ -96,7 +108,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
           (this.form.get('organisationUnits') as FormArray).push(new FormControl(s.organisationUnit.id));
 
-          this.groupedItems?.forEach(o => {
+          this.groupedItems.forEach(o => {
             const ou = o.items.find(i => i.value === s.organisationUnit.id);
             if (ou) {
               ou.isEditable = false;
@@ -109,31 +121,20 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       }
     );
 
-    this.subscriptions.push(
-      this.activatedRoute.params.subscribe(params => {
-
-        this.stepId = Number(params.stepId);
-
-        if (!this.isValidStepId()) {
-          this.redirectTo('not-found');
-        }
-
-      })
-    );
   }
 
 
   onSubmitStep(): void {
 
-    if (!this.form.get('organisationUnits')?.valid) {
-      this.form.get('organisationUnits')?.markAsTouched();
+    if (!this.form.get('organisationUnits')!.valid) {
+      this.form.get('organisationUnits')!.markAsTouched();
       return;
     }
 
     let chosenUnitsValues: string[] = [];
-    const chosenUnitsList = (this.groupedItems || []).map(item => {
+    const chosenUnitsList = (this.groupedItems).map(item => {
 
-      const units = item.items.filter(i => (i.isEditable && (this.form.get('organisationUnits')?.value as string[]).includes(i.value)));
+      const units = item.items.filter(i => (i.isEditable && (this.form.get('organisationUnits')!.value as string[]).includes(i.value)));
 
       if (units.length === 0) { return { organisation: '', units: [] }; }
 
@@ -159,14 +160,14 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
     this.formSubmitted = true;
 
-    if (!this.form.valid || !this.form.get('confirm')?.value) {
+    if (!this.form.valid || !this.form.get('confirm')!.value) {
       this.form.markAllAsTouched();
       return;
     }
 
     const body = {
       organisationUnits: this.chosenUnits.values,
-      description: this.form.get('comment')?.value as string,
+      description: this.form.get('comment')!.value,
       type: SupportLogType.ACCESSOR_SUGGESTION,
     };
 
@@ -177,8 +178,8 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when creating an action',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when creating an action',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
       }

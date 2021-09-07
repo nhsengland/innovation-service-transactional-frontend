@@ -19,7 +19,7 @@ type TabType = {
   showAssignedToMe: boolean;
   link: string;
   queryParams: { status: keyof typeof INNOVATION_SUPPORT_STATUS; };
-  notifications?: number | undefined;
+  notifications?: number;
 };
 
 
@@ -174,11 +174,11 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   }
 
-  getNotificationsGroupedByStatus(): void{
+  getNotificationsGroupedByStatus(): void {
     this.notificationService.getAllUnreadNotificationsGroupedByStatus('SUPPORT_STATUS').subscribe(
       response => {
         for (const t of this.tabs) {
-          t.notifications = response ? response[t.key] : 0;
+          t.notifications = response[t.key] || 0;
         }
       }
     );
@@ -189,14 +189,14 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
     const currentStatus = queryParams.status;
     const currentTabIndex = this.tabs.findIndex(tab => tab.queryParams.status === currentStatus) || 0;
 
-    if (!currentStatus) {
+    if (!currentStatus || currentTabIndex === -1) {
       this.router.navigate(['/accessor/innovations'], { queryParams: { status: this.defaultStatus } });
       return;
     }
 
     this.currentTab = this.tabs[currentTabIndex];
 
-    this.form.get('assignedToMe')?.setValue(false, { emitEvent: false });
+    this.form.get('assignedToMe')!.setValue(false, { emitEvent: false });
 
     this.innovationsList.setData([]).setFilters({ status: currentStatus, assignedToMe: false });
 
@@ -245,7 +245,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   onFormChange(): void {
 
-    this.innovationsList.setFilters({ assignedToMe: this.form.get('assignedToMe')?.value });
+    this.innovationsList.setFilters({ assignedToMe: this.form.get('assignedToMe')!.value });
     this.getInnovationsList();
 
   }

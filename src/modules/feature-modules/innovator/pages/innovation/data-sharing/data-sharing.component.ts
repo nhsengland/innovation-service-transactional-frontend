@@ -47,7 +47,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
   organisationInfoUrl: string;
 
   organisationSuggestions: OrganisationSuggestion | undefined;
-  shares: {id: string, status: string}[] | [];
+  shares: {id: string, status: string}[];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -75,8 +75,8 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
       case 'sharingUpdateError':
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when updating data sharing preferences',
-          message: 'Please, try again or contact us for further help'
+          title: 'An error occurred when updating data sharing preferences',
+          message: 'Please try again or contact us for further help'
         };
         break;
     }

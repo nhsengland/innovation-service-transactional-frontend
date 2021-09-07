@@ -28,7 +28,7 @@ describe('FeatureModules/Innovator/Innovation/ActionTrackerComponent', () => {
         StoresModule,
         InnovatorModule
       ]
-    }).compileComponents();
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 

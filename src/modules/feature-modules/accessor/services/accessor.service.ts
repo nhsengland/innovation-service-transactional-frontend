@@ -14,7 +14,6 @@ export enum SupportLogType {
   STATUS_UPDATE = 'STATUS_UPDATE',
 }
 
-
 export type getInnovationsListEndpointInDTO = {
   count: number;
   data: {
@@ -26,11 +25,11 @@ export type getInnovationsListEndpointInDTO = {
     postcode: string;
     submittedAt: string; // '2021-04-16T09:23:49.396Z',
     support: {
-      id: string;
+      id?: string;
       status: keyof typeof INNOVATION_SUPPORT_STATUS;
-      createdAt: string; // '2021-04-16T09:23:49.396Z',
-      updatedAt: string; // '2021-04-16T09:23:49.396Z'
-      accessors: { id: string; name: string; }[];
+      createdAt?: string; // '2021-04-16T09:23:49.396Z',
+      updatedAt?: string; // '2021-04-16T09:23:49.396Z'
+      accessors?: { id: string; name: string; }[];
     };
     organisations: string[];
     assessment: { id: null | string; };
@@ -217,11 +216,11 @@ export class AccessorService extends CoreService {
           countryName: `${item.countryName}${item.postcode ? ', ' + item.postcode : ''}`,
           submittedAt: item.submittedAt,
           support: {
-            id: item.support?.id,
-            status: item.support?.status,
-            createdAt: item.support?.createdAt,
-            updatedAt: item.support?.updatedAt,
-            accessors: item.support?.accessors
+            id: item.support.id,
+            status: item.support.status,
+            createdAt: item.support.createdAt,
+            updatedAt: item.support.updatedAt,
+            accessors: item.support.accessors
           },
           organisations: item.organisations,
           assessment: item.assessment,
