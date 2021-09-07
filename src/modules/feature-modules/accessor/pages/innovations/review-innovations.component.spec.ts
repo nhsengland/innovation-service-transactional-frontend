@@ -13,6 +13,9 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 import { ReviewInnovationsComponent } from './review-innovations.component';
 
 import { AccessorService } from '../../services/accessor.service';
+import { NotificationService } from '@modules/shared/services/notification.service';
+
+import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
 describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () => {
@@ -20,11 +23,11 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
   let activatedRoute: ActivatedRoute;
 
   let authenticationStore: AuthenticationStore;
+  let accessorService: AccessorService;
+  let notificationService: NotificationService;
 
   let component: ReviewInnovationsComponent;
   let fixture: ComponentFixture<ReviewInnovationsComponent>;
-
-  let accessorService: AccessorService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -42,18 +45,15 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
     activatedRoute = TestBed.inject(ActivatedRoute);
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-
     accessorService = TestBed.inject(AccessorService);
+    notificationService = TestBed.inject(NotificationService);
 
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     expect(component).toBeTruthy();
-
   });
 
 
@@ -64,6 +64,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.tabs.length).toBe(2);
 
@@ -76,11 +77,11 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.tabs.length).toBe(7);
 
   });
-
 
   it('should have default values when status = UNASSIGNED', () => {
 
@@ -97,6 +98,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovationsList.getHeaderColumns()).toEqual(expected);
 
@@ -117,6 +119,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovationsList.getHeaderColumns()).toEqual(expected);
 
@@ -137,50 +140,79 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovationsList.getHeaderColumns()).toEqual(expected);
 
   });
 
 
-  it('should run getInnovations() with success', () => {
+  it('should run getInnovationsList() with success', () => {
 
     activatedRoute.queryParams = of({ status: 'UNASSIGNED' });
+
     authenticationStore.isQualifyingAccessorRole = () => true;
 
-    const dataMock = {
+    const responseMock = {
       count: 100,
-      data: [
-        { id: 'id01', status: 'CREATED', name: 'Innovation 01', supportStatus: 'UNASSIGNED', createdAt: '2020-01-01T00:00:00.000Z', updatedAt: '2020-01-01T00:00:00.000Z' }
-      ]
+      data: [{
+        id: 'id01',
+        name: 'Innovation Name',
+        mainCategory: '',
+        countryName: '',
+        submittedAt: '2020-01-01T00:00:00.000Z',
+        support: {
+          id: 'string',
+          status: 'UNASSIGNED' as keyof typeof INNOVATION_SUPPORT_STATUS,
+          createdAt: '2020-01-01T00:00:00.000Z',
+          updatedAt: '2020-01-01T00:00:00.000Z',
+          accessors: []
+        },
+        organisations: [],
+        assessment: { id: null }
+      }]
     };
-    accessorService.getInnovationsList = () => of(dataMock as any);
+    accessorService.getInnovationsList = () => of(responseMock);
 
-    const expected = dataMock.data;
+    const expected = responseMock.data;
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovationsList.getRecords()).toEqual(expected);
 
   });
 
-  it('should run getInnovations() with error', () => {
+  it('should run getInnovationsList() with error', () => {
 
     activatedRoute.queryParams = of({ status: 'UNASSIGNED' });
     authenticationStore.isQualifyingAccessorRole = () => true;
 
     accessorService.getInnovationsList = () => throwError(false);
 
-    const expected = [] as any;
-
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
-    expect(component.innovationsList.getRecords()).toEqual(expected);
+    expect(component.innovationsList.getRecords()).toEqual([]);
 
   });
 
+  it('should run getNotificationsGroupedByStatus()', () => {
+
+    activatedRoute.queryParams = of({ status: 'UNASSIGNED' });
+    authenticationStore.isQualifyingAccessorRole = () => true;
+
+    notificationService.getAllUnreadNotificationsGroupedByStatus = () => of({ UNASSIGNED: 1, INVALID_KEY: 0 });
+
+    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    expect(component.tabs.find(t => t.key === 'UNASSIGNED')?.notifications).toBe(1);
+
+  });
 
   it('should run onFormChange()', () => {
 
@@ -191,7 +223,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
     component.form.get('assignedToMe')?.setValue(true);
     fixture.detectChanges();
 
-    expect(component.innovationsList.filters).toEqual({ assignedToMe: true});
+    expect(component.innovationsList.filters).toEqual({ assignedToMe: true });
 
   });
 

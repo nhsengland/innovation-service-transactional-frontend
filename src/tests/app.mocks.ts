@@ -5,7 +5,8 @@ export const ENV = {
   BASE_URL: 'http://demo.com',
   BASE_PATH: '/',
   API_URL: 'http://demo.com/api',
-  LOG_LEVEL: 'TRACE'
+  LOG_LEVEL: 'TRACE',
+  ENABLE_ANALYTICS: true
 };
 
 export const SERVER_REQUEST = { method: 'get', headers: {} };

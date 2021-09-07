@@ -46,10 +46,10 @@ export class CookiesEditComponent extends CoreComponent implements OnInit {
 
     switch (this.form.value.analytics) {
       case 'true':
-        this.cookiesService.updateConsentCookie(true);
+        this.cookiesService.setConsentCookie(true);
         break;
       case 'false':
-        this.cookiesService.updateConsentCookie(false);
+        this.cookiesService.setConsentCookie(false);
         break;
       default:
         break;

@@ -47,13 +47,13 @@
       <a [href]="documentUrl">
         <h3 class="nhsuk-u-margin-bottom-6">Download all questions (DOCX, 820KB)</h3>
       </a>
+      <a [href]="pdfDocumentUrl">
+        <p class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Export your innovation record to PDF</p>
+      </a>
+      <p class="nhsuk-u-margin-bottom-6">
+        Exports your current innovation record as a PDF file.
+      </p>
     </ng-container>
-    <a [href]="pdfDocumentUrl">
-      <p class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Export your innovation record to PDF</p>
-    </a>
-    <p class="nhsuk-u-margin-bottom-6">
-      Exports your current innovation record as a PDF file.
-    </p>
 
     <ol class="app-task-list">
       <li *ngFor="let sectionGroup of innovationSections; let i = index">

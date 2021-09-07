@@ -69,8 +69,8 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when declining an action',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when declining an action',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
       }

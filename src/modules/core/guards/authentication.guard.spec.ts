@@ -2,11 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
-
 import { PLATFORM_ID } from '@angular/core';
 import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
 import { of, throwError } from 'rxjs';
+
+import { SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
 import { CoreModule } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
@@ -21,7 +21,6 @@ describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
   let guard: AuthenticationGuard;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -67,7 +66,6 @@ describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
   let guard: AuthenticationGuard;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,

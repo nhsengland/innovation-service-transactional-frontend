@@ -13,16 +13,20 @@ import { AssessmentModule } from '@modules/feature-modules/assessment/assessment
 import { ReviewInnovationsComponent } from './review-innovations.component';
 
 import { AssessmentService } from '../../services/assessment.service';
+import { NotificationService } from '@modules/shared/services/notification.service';
 
 
 describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () => {
 
   let activatedRoute: ActivatedRoute;
+  let router: Router;
+  let routerSpy: jasmine.Spy;
+
+  let assessmentService: AssessmentService;
+  let notificationService: NotificationService;
 
   let component: ReviewInnovationsComponent;
   let fixture: ComponentFixture<ReviewInnovationsComponent>;
-
-  let assessmentService: AssessmentService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -38,27 +42,25 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
     AppInjector.setInjector(TestBed.inject(Injector));
 
     activatedRoute = TestBed.inject(ActivatedRoute);
+    router = TestBed.inject(Router);
+    routerSpy = spyOn(router, 'navigate');
 
     assessmentService = TestBed.inject(AssessmentService);
+    notificationService = TestBed.inject(NotificationService);
 
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     expect(component).toBeTruthy();
-
   });
-
 
   it('should redirect if no status query param exists', () => {
 
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
-
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(routerSpy).toHaveBeenCalledWith(['/assessment/innovations'], { queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' } });
 
@@ -77,6 +79,7 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovationsList.getHeaderColumns()).toEqual(expected);
 
@@ -95,6 +98,7 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovationsList.getHeaderColumns()).toEqual(expected);
 
@@ -113,6 +117,7 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovationsList.getHeaderColumns()).toEqual(expected);
 
@@ -140,10 +145,12 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
       ]
     };
     assessmentService.getInnovationsList = () => of(responseMock as any);
+
     const expected = responseMock.data;
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovationsList.getRecords()).toEqual(expected);
 
@@ -155,12 +162,24 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
 
     assessmentService.getInnovationsList = () => throwError(false);
 
-    const expected = [] as any;
+    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    expect(component.innovationsList.getRecords()).toEqual([]);
+
+  });
+
+  it('should run getNotificationsGroupedByStatus()', () => {
+
+    notificationService.getAllUnreadNotificationsGroupedByStatus = () => of({ WAITING_NEEDS_ASSESSMENT: 1, INVALID_KEY: 0 });
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
-    expect(component.innovationsList.getRecords()).toEqual(expected);
+    component.getNotificationsGroupedByStatus();
+    expect(component.tabs.find(t => t.key === 'WAITING_NEEDS_ASSESSMENT')?.notifications).toBe(1);
 
   });
 
@@ -168,8 +187,8 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
 
+    fixture.detectChanges();
     component.onTableOrder('name');
     expect(component.innovationsList.orderBy).toEqual('name');
 

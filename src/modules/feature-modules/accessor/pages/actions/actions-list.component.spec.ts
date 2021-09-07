@@ -19,6 +19,8 @@ import { AccessorService, getActionsListEndpointInDTO } from '../../services/acc
 describe('FeatureModules/Accessor/Actions/ActionsListComponent', () => {
 
   let activatedRoute: ActivatedRoute;
+  let router: Router;
+  let routerSpy: jasmine.Spy;
 
   let component: ActionsListComponent;
   let fixture: ComponentFixture<ActionsListComponent>;
@@ -39,28 +41,26 @@ describe('FeatureModules/Accessor/Actions/ActionsListComponent', () => {
     AppInjector.setInjector(TestBed.inject(Injector));
 
     activatedRoute = TestBed.inject(ActivatedRoute);
+    router = TestBed.inject(Router);
+    routerSpy = spyOn(router, 'navigate');
 
     accessorService = TestBed.inject(AccessorService);
 
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(ActionsListComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     expect(component).toBeTruthy();
-
   });
 
 
   it('should redirect if no "openActions" query param exists', () => {
 
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
-
     fixture = TestBed.createComponent(ActionsListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
     expect(routerSpy).toHaveBeenCalledWith(['/accessor/actions'], { queryParams: { openActions: 'true' } });
 
   });
@@ -88,6 +88,7 @@ describe('FeatureModules/Accessor/Actions/ActionsListComponent', () => {
 
     fixture = TestBed.createComponent(ActionsListComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.actionsList.getRecords()).toEqual(expected);
 
@@ -102,6 +103,7 @@ describe('FeatureModules/Accessor/Actions/ActionsListComponent', () => {
 
     fixture = TestBed.createComponent(ActionsListComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.actionsList.getRecords()).toEqual(expected);
 
@@ -115,8 +117,8 @@ describe('FeatureModules/Accessor/Actions/ActionsListComponent', () => {
 
     fixture = TestBed.createComponent(ActionsListComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
 
+    fixture.detectChanges();
     component.onTableOrder('name');
     expect(component.actionsList.orderBy).toEqual('name');
 

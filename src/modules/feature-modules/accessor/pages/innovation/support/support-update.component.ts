@@ -10,8 +10,7 @@ import { AccessorService } from '../../../services/accessor.service';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-update',
-  templateUrl: './support-update.component.html',
-  styleUrls: ['./support-update.component.scss']
+  templateUrl: './support-update.component.html'
 })
 export class InnovationSupportUpdateComponent extends CoreComponent implements OnInit {
 
@@ -21,7 +20,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   alert: AlertType = { type: null };
 
-  accessorList: any[];
+  accessorsList: { value: string, label: string }[];
   selectedAccessors: any[];
   organisationUnit: string | undefined;
 
@@ -31,7 +30,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     checked: false,
     ...item
   })).filter(x => !x.hidden);
-
 
   currentStatus: { label: string, cssClass: string, description: string };
 
@@ -49,18 +47,20 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     super();
     this.setPageTitle('Update support status - status');
+    this.setStepTitle();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.supportId = this.activatedRoute.snapshot.params.supportId;
 
     this.stepNumber = 1;
 
-    this.accessorList = [];
+    this.accessorsList = [];
     this.selectedAccessors = [];
 
     this.currentStatus = { label: '', cssClass: '', description: '' };
-    this.organisationUnit = this.stores.authentication.getUserInfo().organisations?.[0]?.organisationUnits?.[0]?.name;
-    this.setStepTitle();
+    /* istanbul ignore next */
+    this.organisationUnit = this.stores.authentication.getUserInfo().organisations[0].organisationUnits?.[0]?.name;
+
   }
 
 
@@ -71,11 +71,10 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       this.accessorService.getInnovationSupportInfo(this.innovationId, this.supportId).subscribe(
         response => {
 
-          this.form.get('status')?.setValue(response.status);
+          this.form.get('status')!.setValue(response.status);
+
           response.accessors.forEach(accessor => {
-            (this.form.get('accessors') as FormArray).push(
-              new FormControl(accessor.id)
-            );
+            (this.form.get('accessors') as FormArray).push(new FormControl(accessor.id));
           });
 
         },
@@ -87,7 +86,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.accessorService.getAccessorsList().subscribe(
       response => {
-        this.accessorList = response.map((r) => ({ value: r.id, label: r.name }));
+        this.accessorsList = response.map((r) => ({ value: r.id, label: r.name }));
       }
     );
 
@@ -102,13 +101,13 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     if (!this.validateForm(this.stepNumber)) { return; }
 
-    this.selectedAccessors = (this.form.get('accessors')?.value as any[]).map((a) => {
-      return this.accessorList.find(acc => acc.value === a);
+    this.selectedAccessors = (this.form.get('accessors')!.value as string[]).map((a) => {
+      return this.accessorsList.find(acc => acc.value === a);
     });
 
-    if (this.stepNumber === 1 && this.form.get('status')?.value !== 'ENGAGING') {
+    if (this.stepNumber === 1 && this.form.get('status')!.value !== 'ENGAGING') {
 
-      this.currentStatus = (this.supportStatusObj as any)[this.form.get('status')?.value];
+      this.currentStatus = (this.supportStatusObj as any)[this.form.get('status')!.value];
 
       this.stepNumber++;
     }
@@ -118,18 +117,20 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       if (this.selectedAccessors.length === 0) {
         this.alert = {
           type: 'ERROR',
-          title: 'An error has occured when updating Status',
+          title: 'An error has occurred when updating Status',
           message: 'You must select at least one Accessor.',
           setFocus: true
         };
+
         return;
+
       } else {
         this.alert = { type: null, setFocus: false };
       }
 
     }
 
-    this.currentStatus = (this.supportStatusObj as any)[this.form.get('status')?.value];
+    this.currentStatus = (this.supportStatusObj as any)[this.form.get('status')!.value];
 
     if (this.currentStatus.label !== this.supportStatusObj.ENGAGING.label) {
       this.selectedAccessors = [];
@@ -137,9 +138,11 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.stepNumber++;
     this.setStepTitle();
+
   }
 
   onSubmit(): void {
+
     if (!this.validateForm(this.stepNumber)) { return; }
 
     this.accessorService.saveSupportStatus(this.innovationId, this.form.value, this.supportId).subscribe(
@@ -150,16 +153,17 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         this.logger.error(error);
       }
     );
+
   }
 
   private validateForm(step: number): boolean {
 
     switch (step) {
       case 1:
-        if (!this.form.get('status')?.valid) {
+        if (!this.form.get('status')!.valid) {
           this.alert = {
             type: 'ERROR',
-            title: 'An error has occured when updating Status',
+            title: 'An error has occurred when updating Status',
             message: 'You must select a status.',
             setFocus: true
           };
@@ -170,10 +174,10 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         break;
       case 3:
 
-        if (!this.form.get('comment')?.valid && this.form.get('status')?.value !== 'WAITING') {
+        if (!this.form.get('comment')!.valid && this.form.get('status')!.value !== 'WAITING') {
           this.alert = {
             type: 'ERROR',
-            title: 'An error has occured when updating the Comment',
+            title: 'An error has occurred when updating the Comment',
             message: 'You must add a Comment.',
             setFocus: true
           };
@@ -205,4 +209,5 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         break;
     }
   }
+
 }

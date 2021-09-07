@@ -4,6 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
 
+import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
+
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 
@@ -40,21 +42,22 @@ describe('FeatureModules/Accessor/Dashboard/DashboardComponent', () => {
 
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     expect(component).toBeTruthy();
 
   });
 
   it('should create the component', () => {
 
-    spyOn(authenticationStore, 'isQualifyingAccessorRole').and.returnValue(true);
-    spyOn(authenticationStore, 'getUserInfo').and.returnValue({ displayName: 'A user', organisations: [{ name: 'A organisation' }] });
+    authenticationStore.isQualifyingAccessorRole = () => true;
+    authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
+
+    const expected = { displayName: USER_INFO_INNOVATOR.displayName, organisation: USER_INFO_INNOVATOR.organisations[0].name };
 
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    expect(component.user).toEqual({ displayName: 'A user', organisation: 'A organisation' });
+    expect(component.user).toEqual(expected);
     expect(component.cardsList[0].title).toBe('Review innovations');
 
   });

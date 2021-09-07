@@ -12,7 +12,9 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 
 import { InnovationNeedsAssessmentOverviewComponent } from './needs-assessment-overview.component';
 
-import { AccessorService, getSupportLogInDTO, getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/accessor/services/accessor.service';
+import { AccessorService, SupportLogType } from '@modules/feature-modules/accessor/services/accessor.service';
+
+import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 
 describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', () => {
@@ -48,30 +50,87 @@ describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', 
 
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     expect(component).toBeTruthy();
-
   });
 
 
-  it('should run getInnovationNeedsAssessment() with success', () => {
+  it('should run getInnovationNeedsAssessment() with a response with all RELEVANT information', () => {
 
     const responseMock = {
       innovation: { id: '01', name: 'Innovation 01' },
       assessment: {
         description: 'description',
         maturityLevel: 'DISCOVERY',
-        organisations: []
-      }
+        hasRegulatoryApprovals: 'YES',
+        hasRegulatoryApprovalsComment: null,
+        hasEvidence: 'YES',
+        hasEvidenceComment: null,
+        hasValidation: 'YES',
+        hasValidationComment: null,
+        hasProposition: 'YES',
+        hasPropositionComment: null,
+        hasCompetitionKnowledge: 'DISCOVERY',
+        hasCompetitionKnowledgeComment: null,
+        hasImplementationPlan: 'YES',
+        hasImplementationPlanComment: null,
+        hasScaleResource: 'YES',
+        hasScaleResourceComment: null,
+        summary: null,
+        organisations: [],
+        assignToName: '',
+        finishedAt: null
+      },
+      support: { id: null }
     };
-    accessorService.getInnovationNeedsAssessment = () => of(responseMock as any);
+    accessorService.getInnovationNeedsAssessment = () => of(responseMock);
     const expected = responseMock.assessment;
 
     fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
     component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    expect(component.assessment).toEqual(expected);
+
+  });
+
+  it('should run getInnovationNeedsAssessment() with a response with EMPTY information', () => {
+
+    NEEDS_ASSESSMENT_QUESTIONS.innovation[1].label = '';
+
+    const responseMock = {
+      innovation: { id: '01', name: 'Innovation 01' },
+      assessment: {
+        description: 'description',
+        maturityLevel: null,
+        hasRegulatoryApprovals: null,
+        hasRegulatoryApprovalsComment: null,
+        hasEvidence: null,
+        hasEvidenceComment: null,
+        hasValidation: null,
+        hasValidationComment: null,
+        hasProposition: null,
+        hasPropositionComment: null,
+        hasCompetitionKnowledge: null,
+        hasCompetitionKnowledgeComment: null,
+        hasImplementationPlan: null,
+        hasImplementationPlanComment: null,
+        hasScaleResource: null,
+        hasScaleResourceComment: null,
+        summary: null,
+        organisations: [],
+        assignToName: '',
+        finishedAt: null
+      },
+      support: { id: null }
+    };
+    accessorService.getInnovationNeedsAssessment = () => of(responseMock);
+    const expected = responseMock.assessment;
+
+    fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
+    component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.assessment).toEqual(expected);
 
@@ -85,6 +144,7 @@ describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', 
 
     fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.assessment).toBe(expected);
 
@@ -93,32 +153,26 @@ describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', 
 
   it('should run getSupportLog() with success', () => {
 
-    const responseMock: getSupportLogInDTO[] = [
-      {
-        id: 'support01',
-        type: SupportLogType.STATUS_UPDATE,
-        description: 'description',
-        createdBy: 'A user',
-        createdAt: '2020-01-01T00:00:00.000Z',
-        innovationSupportStatus: 'ENGAGING',
-        organisationUnit: {
-          id: 'unit01', name: 'Unit 01', acronym: 'UN',
-          organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
-        }
-      }
-    ];
-    const expected: getSupportLogOutDTO[] = responseMock.map(item => ({
-      ...item,
+    accessorService.getSupportLog = () => of([{
+      id: 'support01',
+      type: SupportLogType.STATUS_UPDATE,
+      description: 'description',
+      createdBy: 'A user',
+      createdAt: '2020-01-01T00:00:00.000Z',
+      innovationSupportStatus: 'ENGAGING',
+      organisationUnit: {
+        id: 'unit01', name: 'Unit 01', acronym: 'UN',
+        organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
+      },
       logTitle: 'Updated support status',
       suggestedOrganisationUnitsNames: ['Unit 01']
-    }));
-
-    accessorService.getSupportLog = () => of(responseMock as any);
+    }]);
 
     fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
-    expect(component.logHistory[0].id).toBe(expected[0].id);
+    expect(component.logHistory[0].id).toBe('support01');
 
   });
 
@@ -126,12 +180,11 @@ describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', 
 
     accessorService.getSupportLog = () => throwError(false);
 
-    const expected: any = [];
-
     fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
-    expect(component.logHistory).toEqual(expected);
+    expect(component.logHistory).toEqual([]);
 
   });
 

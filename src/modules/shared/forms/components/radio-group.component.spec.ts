@@ -54,7 +54,7 @@ describe('FormRadioGroupComponent', () => {
         FormInputComponent,
         FormRadioGroupComponent,
       ],
-    }).compileComponents();
+    });
 
     hostFixture = TestBed.createComponent(HostComponent);
     hostComponent = hostFixture.componentInstance;

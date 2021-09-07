@@ -108,8 +108,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when submitting your innovation',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when submitting your innovation',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
       }

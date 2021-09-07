@@ -90,7 +90,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'sectionUpdateError' };
 
-    const expected = { type: 'ERROR', title: 'An error occured when saving your section', message: 'Please, try again or contact us for further help.' };
+    const expected = { type: 'ERROR', title: 'An error occurred when saving your section', message: 'Please try again or contact us for further help.' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
@@ -132,7 +132,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'evidenceUpdateError' };
 
-    const expected = { type: 'ERROR', title: 'An error occured when saving your evidence', message: 'Please, try again or contact us for further help.' };
+    const expected = { type: 'ERROR', title: 'An error occurred when saving your evidence', message: 'Please try again or contact us for further help.' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
@@ -259,8 +259,8 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
     const expected = {
       type: 'ERROR',
-      title: 'An error occured when submitting your section',
-      message: 'Please, try again or contact us for further help',
+      title: 'An error occurred when submitting your section',
+      message: 'Please try again or contact us for further help',
       setFocus: true
     };
 

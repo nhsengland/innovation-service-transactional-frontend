@@ -54,7 +54,7 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
         this.alert = {
           type: 'ERROR',
           title: 'Unable to fetch innovations transfers',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please try again or contact us for further help'
         };
       }
     );
@@ -80,8 +80,8 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when cancelling the transfer',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when cancelling the transfer',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
       }
