@@ -75,7 +75,7 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
       reason: this.form.get('reason')?.value
     };
 
-    this.innovatorService.transferInnovation(body).subscribe(
+    this.innovatorService.archiveInnovation(body).subscribe(
       () => {
         this.redirectTo('/innovator/account/manage-innovations');
       },
