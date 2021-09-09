@@ -16,7 +16,8 @@ type TabType = {
   mainDescription: string;
   secondaryDescription?: string;
   numberDescription?: string;
-  showAssignedToMe: boolean;
+  showAssignedToMeFilter: boolean;
+  showSuggestedOnlyFilter: boolean;
   link: string;
   queryParams: { status: keyof typeof INNOVATION_SUPPORT_STATUS; };
   notifications?: number;
@@ -24,10 +25,10 @@ type TabType = {
 
 
 @Component({
-  selector: 'app-accessor-pages-review-innovations',
-  templateUrl: './review-innovations.component.html'
+  selector: 'app-accessor-pages-innovations-review',
+  templateUrl: './innovations-review.component.html'
 })
-export class ReviewInnovationsComponent extends CoreComponent implements OnInit {
+export class InnovationsReviewComponent extends CoreComponent implements OnInit {
 
   defaultStatus: '' | 'UNASSIGNED' | 'ENGAGING' = '';
 
@@ -35,7 +36,8 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   currentTab: TabType;
 
   form = new FormGroup({
-    assignedToMe: new FormControl(false)
+    assignedToMe: new FormControl(false),
+    suggestedOnly: new FormControl(true)
   });
 
   innovationsList: TableModel<(getInnovationsListEndpointOutDTO['data'][0])>;
@@ -60,7 +62,8 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
           title: 'Engaging',
           mainDescription: 'Innovations being supported, assessed or guided by your organisation.',
           numberDescription: 'innovations in active engagement',
-          showAssignedToMe: false,
+          showAssignedToMeFilter: false,
+          showSuggestedOnlyFilter: false,
           link: '/accessor/innovations', queryParams: { status: 'ENGAGING' }
         },
         {
@@ -68,7 +71,8 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
           title: 'Completed',
           mainDescription: 'Your organisation has completed an engagement with these innovations.',
           numberDescription: 'innovations with completed engagements',
-          showAssignedToMe: false,
+          showAssignedToMeFilter: false,
+          showSuggestedOnlyFilter: false,
           link: '/accessor/innovations', queryParams: { status: 'COMPLETE' }
         }
       ];
@@ -83,49 +87,56 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
           mainDescription: 'Innovations awaiting status assignment from your organisation.',
           secondaryDescription: 'If your organisation has been suggested to support an innovation, you must assign a status within 30 days of submission.',
           numberDescription: 'unassigned innovations',
-          showAssignedToMe: false,
+          showAssignedToMeFilter: false,
+          showSuggestedOnlyFilter: true,
           link: '/accessor/innovations', queryParams: { status: 'UNASSIGNED' }
         },
         {
           key: 'ENGAGING',
           title: 'Engaging',
           mainDescription: 'Innovations being supported, assessed or guided by your organisation.',
-          showAssignedToMe: true,
+          showAssignedToMeFilter: true,
+          showSuggestedOnlyFilter: false,
           link: '/accessor/innovations', queryParams: { status: 'ENGAGING' }
         },
         {
           key: 'FURTHER_INFO_REQUIRED',
           title: 'Further info',
           mainDescription: 'Further information is needed from the innovator to make a decision.',
-          showAssignedToMe: false,
+          showAssignedToMeFilter: false,
+          showSuggestedOnlyFilter: false,
           link: '/accessor/innovations', queryParams: { status: 'FURTHER_INFO_REQUIRED' }
         },
         {
           key: 'WAITING',
           title: 'Waiting',
           mainDescription: 'Waiting for an internal decision to progress.',
-          showAssignedToMe: false,
+          showAssignedToMeFilter: false,
+          showSuggestedOnlyFilter: false,
           link: '/accessor/innovations', queryParams: { status: 'WAITING' }
         },
         {
           key: 'NOT_YET',
           title: 'Not yet',
           mainDescription: 'Innovations not yet ready for your support offer.',
-          showAssignedToMe: false,
+          showAssignedToMeFilter: false,
+          showSuggestedOnlyFilter: false,
           link: '/accessor/innovations', queryParams: { status: 'NOT_YET' }
         },
         {
           key: 'UNSUITABLE',
           title: 'Unsuitable',
           mainDescription: 'Your organisation has no suitable offer for these innovations.',
-          showAssignedToMe: false,
+          showAssignedToMeFilter: false,
+          showSuggestedOnlyFilter: false,
           link: '/accessor/innovations', queryParams: { status: 'UNSUITABLE' }
         },
         {
           key: 'COMPLETE',
           title: 'Completed',
           mainDescription: 'Your organisation has completed an engagement with these innovations.',
-          showAssignedToMe: false,
+          showAssignedToMeFilter: false,
+          showSuggestedOnlyFilter: false,
           link: '/accessor/innovations', queryParams: { status: 'COMPLETE' }
         }
       ];
@@ -135,7 +146,8 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
       key: 'UNASSIGNED',
       title: '',
       mainDescription: '',
-      showAssignedToMe: false,
+      showAssignedToMeFilter: false,
+      showSuggestedOnlyFilter: false,
       link: '',
       queryParams: { status: 'UNASSIGNED' }
     };
@@ -196,9 +208,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
     this.currentTab = this.tabs[currentTabIndex];
 
-    this.form.get('assignedToMe')!.setValue(false, { emitEvent: false });
-
-    this.innovationsList.setData([]).setFilters({ status: currentStatus, assignedToMe: false });
+    this.innovationsList.setData([]).setFilters({ status: currentStatus, ...this.form.value });
 
     switch (currentStatus) {
 
@@ -245,7 +255,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   onFormChange(): void {
 
-    this.innovationsList.setFilters({ assignedToMe: this.form.get('assignedToMe')!.value });
+    this.innovationsList.setFilters(this.form.value);
     this.getInnovationsList();
 
   }

@@ -190,19 +190,19 @@ describe('Core/Models/TableModel', () => {
   });
 
   it('should run getAPIQueryParams() with defaults', () => {
-    const expected = { take: 10, skip: 0 };
+    const expected = { take: 10, skip: 0, filters: {} };
     component = new TableModel<defaultDataSourceType>(defaultInit);
     expect(component.getAPIQueryParams()).toEqual(expected);
   });
 
   it('should run getAPIQueryParams() with orderBy defined and orderDir ascending', () => {
-    const expected = { take: 10, skip: 0, order: { c1: 'ASC' } };
+    const expected = { take: 10, skip: 0, order: { c1: 'ASC' }, filters: {} };
     component = new TableModel<defaultDataSourceType>({ ...defaultInit, ...{ orderBy: 'c1', orderDir: 'ascending' } });
     expect(component.getAPIQueryParams()).toEqual(expected);
   });
 
   it('should run getAPIQueryParams() with orderBy defined and orderDir descending', () => {
-    const expected = { take: 10, skip: 0, order: { c1: 'DESC' } };
+    const expected = { take: 10, skip: 0, order: { c1: 'DESC' }, filters: {} };
     component = new TableModel<defaultDataSourceType>({ ...defaultInit, ...{ orderBy: 'c1', orderDir: 'descending' } });
     expect(component.getAPIQueryParams()).toEqual(expected);
   });

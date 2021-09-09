@@ -4,7 +4,7 @@ import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 
-import { DatesHelper, MappedObject, UrlModel } from '@modules/core';
+import { APIQueryParamsType, DatesHelper, MappedObject, UrlModel } from '@modules/core';
 
 import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
@@ -101,12 +101,13 @@ export class AssessmentService extends CoreService {
 
   constructor() { super(); }
 
-  getInnovationsList(queryParams: { filters?: { status: string[] }, take: number, skip: number }): Observable<getInnovationsListEndpointOutDTO> {
+  getInnovationsList(queryParams: APIQueryParamsType): Observable<getInnovationsListEndpointOutDTO> {
+
+    const { filters, ...qParams } = queryParams;
 
     const qp = {
-      take: queryParams.take,
-      skip: queryParams.skip,
-      status: queryParams.filters?.status || [],
+      ...qParams,
+      status: filters.status || []
     };
 
     const url = new UrlModel(this.API_URL).addPath('/assessments/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);

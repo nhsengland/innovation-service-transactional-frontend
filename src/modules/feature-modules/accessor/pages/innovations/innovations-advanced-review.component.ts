@@ -1,0 +1,185 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { CoreComponent, FormArray, FormControl, FormGroup } from '@app/base';
+import { TableModel } from '@app/base/models';
+import { NotificationService } from '@modules/shared/services/notification.service';
+
+import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
+import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+
+import { AccessorService, getAdvancedInnovationsListEndpointOutDTO } from '../../services/accessor.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
+
+
+@Component({
+  selector: 'app-accessor-pages-innovations-advanced-review',
+  templateUrl: './innovations-advanced-review.component.html'
+})
+export class InnovationsAdvancedReviewComponent extends CoreComponent implements OnInit {
+
+  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+
+  form = new FormGroup({
+    search: new FormControl(),
+    mainCategories: new FormArray([]),
+    locations: new FormArray([]),
+    engagingOrganisations: new FormArray([]),
+    supporteStatuses: new FormArray([]),
+    assignedToMe: new FormControl(false),
+    suggestedOnly: new FormControl(true)
+  });
+
+  anyFilterSelected = false;
+  filters: {
+    key: string,
+    title: string,
+    showHideStatus: 'opened' | 'closed',
+    selected: { label: string, value: string }[]
+  }[] = [
+      { key: 'mainCategories', title: 'Main category', showHideStatus: 'closed', selected: [] },
+      { key: 'locations', title: 'Location', showHideStatus: 'closed', selected: [] },
+      { key: 'engagingOrganisations', title: 'Engaging organisations', showHideStatus: 'closed', selected: [] },
+      { key: 'supportStatuses', title: 'Support status', showHideStatus: 'closed', selected: [] }
+    ];
+
+  datasets: { [key: string]: { label: string, value: string }[] } = {
+    mainCategories: mainCategoryItems.map(i => ({ label: i.label, value: i.value })),
+    locations: locationItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ label: i.label, value: i.value })),
+    engagingOrganisations: [],
+    supportStatuses: []
+  };
+
+  innovationsList: TableModel<(getAdvancedInnovationsListEndpointOutDTO['data'][0])>;
+
+
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private accessorService: AccessorService,
+    private organisationsService: OrganisationsService,
+    private notificationService: NotificationService,
+  ) {
+
+    super();
+    this.setPageTitle('Innovations');
+
+    this.innovationsList = new TableModel({
+      pageSize: 10000
+    });
+
+    this.innovationsList.setVisibleColumns({
+      name: { label: 'Innovation', orderable: true },
+      submittedAt: { label: 'Submitted', orderable: true },
+      mainCategory: { label: 'Main category', orderable: true },
+      countryName: { label: 'Location', orderable: true },
+      supportStatus: { label: 'Support status', align: 'right', orderable: false }
+    }).setOrderBy('submittedAt', 'descending');
+
+    this.innovationsList.setFilters({ status: 'ENGAGING' }); // TEMP!!!!
+
+  }
+
+  ngOnInit(): void {
+
+    if (this.stores.authentication.isAccessorRole()) {
+      this.datasets.supportStatus = Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({ label: item.label, value: key })).filter(i => ['ENGAGING', 'COMPLETE'].includes(i.value));
+    } else if (this.stores.authentication.isQualifyingAccessorRole()) {
+      this.datasets.supportStatus = Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({ label: item.label, value: key }));
+    }
+
+    this.organisationsService.getAccessorsOrganisations().subscribe(
+      response => {
+        const myOrganisation = this.stores.authentication.getUserInfo().organisations[0].id;
+        this.datasets.engagingOrganisations = response
+        // .filter(i => i.id !== myOrganisation)
+        .map(i => ({ label: i.name, value: i.id }));
+      },
+      error => {
+        this.logger.error(error);
+      });
+
+    this.subscriptions.push(
+      this.form.valueChanges.subscribe(() => this.onFormChange())
+    );
+
+    this.getInnovationsList();
+
+  }
+
+
+  getInnovationsList(): void {
+
+    this.setPageStatus('WAITING');
+
+    this.accessorService.getAdvancedInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(
+      response => {
+        this.innovationsList.setData(response.data, response.count);
+        this.setPageStatus('READY');
+      },
+      error => {
+        this.setPageStatus('ERROR');
+        this.logger.error(error);
+      }
+    );
+
+  }
+
+  // getNotificationsGroupedByStatus(): void {
+  //   this.notificationService.getAllUnreadNotificationsGroupedByStatus('SUPPORT_STATUS').subscribe(
+  //     response => {
+  //       for (const t of this.tabs) {
+  //         t.notifications = response[t.key] || 0;
+  //       }
+  //     }
+  //   );
+  // }
+
+
+
+  onFormChange(): void {
+
+    this.filters.forEach(filter => {
+      const f = this.form.get(filter.key)?.value as string[] || [];
+
+      if (f.length > 0) {
+        filter.selected = this.datasets[filter.key].filter(i => (this.form.get(filter.key)?.value as string[]).includes(i.value));
+      }
+
+    });
+
+    this.anyFilterSelected = this.filters.filter(i => i.selected.length > 0).length > 0 || !!this.form.get('assignedToMe')?.value || !!this.form.get('suggestedOnly')?.value;
+
+
+    console.log(this.form.value);
+    this.innovationsList.setFilters(this.form.value);
+    this.getInnovationsList();
+    // this.getNotificationsGroupedByStatus();
+
+  }
+
+  onTableOrder(column: string): void {
+
+    this.innovationsList.setOrderBy(column);
+    this.getInnovationsList();
+  }
+
+
+  onOpenCloseFilter(filterKey: string): void {
+
+    const filter = this.filters.find(i => i.key === filterKey);
+
+    switch (filter?.showHideStatus) {
+      case 'opened':
+        filter.showHideStatus = 'closed';
+        break;
+      case 'closed':
+        filter.showHideStatus = 'opened';
+        break;
+      default:
+        break;
+    }
+
+  }
+
+}
