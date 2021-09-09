@@ -6,7 +6,7 @@ export type APIQueryParamsType = {
   take: number;
   skip: number;
   order?: { [key: string]: 'ASC' | 'DESC' };
-  filters?: any;
+  filters: { [key: string]: string | number | boolean | string[] };
 };
 
 export class TableModel<T = { [key: string]: string | number | boolean }> {
@@ -27,7 +27,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
 
   filters: { [key: string]: string | number | boolean | string[] };
 
-  // This varaible is needed so angular lifecycle only refresh when something changes, when using thisgetHeaderColumns() on a *ngFor.
+  // This variable is needed so angular lifecycle only refresh when something changes, when using this.getHeaderColumns() on a *ngFor.
   private cachedHeaderColumns: { key: string, label: string, align: string, orderable: boolean, orderDir: OrderDirectionType }[];
 
   constructor(data: Omit<Partial<TableModel<T>>, 'visibleColumns'> & { visibleColumns?: { [key: string]: (string | { label: string; align?: AlignType; orderable?: boolean; }) } }) {
@@ -127,7 +127,6 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
       orderDir: (this.orderBy === key ? this.orderDir : 'none')
     }));
 
-
   }
 
 
@@ -141,7 +140,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
       take: this.pageSize,
       skip: (this.page - 1) * this.pageSize,
       order: this.orderBy ? { [this.orderBy]: (['none', 'ascending'].includes(this.orderDir) ? 'ASC' : 'DESC') } : undefined,
-      filters: Object.keys(this.filters).length > 0 ? this.filters : undefined
+      filters: Object.keys(this.filters).length > 0 ? this.filters : {}
     };
 
   }

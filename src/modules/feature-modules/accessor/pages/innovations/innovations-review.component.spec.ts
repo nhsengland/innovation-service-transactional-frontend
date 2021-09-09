@@ -10,7 +10,7 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
-import { ReviewInnovationsComponent } from './review-innovations.component';
+import { InnovationsReviewComponent } from './innovations-review.component';
 
 import { AccessorService } from '../../services/accessor.service';
 import { NotificationService } from '@modules/shared/services/notification.service';
@@ -26,8 +26,8 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
   let accessorService: AccessorService;
   let notificationService: NotificationService;
 
-  let component: ReviewInnovationsComponent;
-  let fixture: ComponentFixture<ReviewInnovationsComponent>;
+  let component: InnovationsReviewComponent;
+  let fixture: ComponentFixture<InnovationsReviewComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -51,7 +51,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
   });
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    fixture = TestBed.createComponent(InnovationsReviewComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
@@ -62,7 +62,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
     activatedRoute.queryParams = of({ status: 'ENGAGING' });
     authenticationStore.isAccessorRole = () => true;
 
-    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    fixture = TestBed.createComponent(InnovationsReviewComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -75,7 +75,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
     activatedRoute.queryParams = of({ status: 'UNASSIGNED' });
     authenticationStore.isQualifyingAccessorRole = () => true;
 
-    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    fixture = TestBed.createComponent(InnovationsReviewComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -96,7 +96,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
       { key: 'engagingOrganisations', label: 'Engaging organisations', orderDir: 'none', orderable: false, align: 'text-align-right' }
     ];
 
-    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    fixture = TestBed.createComponent(InnovationsReviewComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -117,7 +117,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
       { key: 'engagingOrganisations', label: 'Engaging organisations', orderDir: 'none', orderable: false, align: 'text-align-right' }
     ];
 
-    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    fixture = TestBed.createComponent(InnovationsReviewComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -138,7 +138,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
       { key: 'engagingOrganisations', label: 'Engaging organisations', orderDir: 'none', orderable: false, align: 'text-align-right' }
     ];
 
-    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    fixture = TestBed.createComponent(InnovationsReviewComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -176,7 +176,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     const expected = responseMock.data;
 
-    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    fixture = TestBed.createComponent(InnovationsReviewComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -191,7 +191,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     accessorService.getInnovationsList = () => throwError(false);
 
-    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    fixture = TestBed.createComponent(InnovationsReviewComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -206,7 +206,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     notificationService.getAllUnreadNotificationsGroupedByStatus = () => of({ UNASSIGNED: 1, INVALID_KEY: 0 });
 
-    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    fixture = TestBed.createComponent(InnovationsReviewComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -216,14 +216,15 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   it('should run onFormChange()', () => {
 
-    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    fixture = TestBed.createComponent(InnovationsReviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
     component.form.get('assignedToMe')?.setValue(true);
+    component.form.get('suggestedOnly')?.setValue(true);
     fixture.detectChanges();
 
-    expect(component.innovationsList.filters).toEqual({ assignedToMe: true });
+    expect(component.innovationsList.filters).toEqual({ assignedToMe: true, suggestedOnly: true });
 
   });
 
@@ -234,7 +235,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     accessorService.getInnovationsList = () => of(dataMock as any);
 
-    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    fixture = TestBed.createComponent(InnovationsReviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 

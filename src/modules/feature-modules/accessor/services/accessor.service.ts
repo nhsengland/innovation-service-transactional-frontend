@@ -44,6 +44,24 @@ export type getInnovationsListEndpointOutDTO = {
   data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription' | 'postcode'>)[],
 };
 
+export type getAdvancedInnovationsListEndpointInDTO = {
+  count: number;
+  data: {
+    id: string;
+    name: string;
+    mainCategory: string;
+    otherMainCategoryDescription: string;
+    countryName: string;
+    postcode: string;
+    submittedAt: string; // '2021-04-16T09:23:49.396Z',
+    supportStatus: keyof typeof INNOVATION_SUPPORT_STATUS
+  }[];
+};
+export type getAdvancedInnovationsListEndpointOutDTO = {
+  count: number;
+  data: (Omit<getAdvancedInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription' | 'postcode'>)[],
+};
+
 export type getInnovationInfoEndpointDTO = {
   summary: {
     id: string;
@@ -199,8 +217,9 @@ export class AccessorService extends CoreService {
 
     const qp = {
       ...qParams,
-      supportStatus: filters.status as string,
-      assignedToMe: filters.assignedToMe ? 'true' : 'false'
+      supportStatus: filters.status || undefined,
+      assignedToMe: filters.assignedToMe ? 'true' : 'false',
+      suggestedOnly: filters.suggestedOnly ? 'true' : 'false'
     };
 
     const url = new UrlModel(this.API_URL).addPath('/accessors/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);
@@ -225,6 +244,36 @@ export class AccessorService extends CoreService {
           organisations: item.organisations,
           assessment: item.assessment,
           notifications: item.notifications,
+        }))
+      }))
+    );
+
+  }
+
+  getAdvancedInnovationsList(queryParams: APIQueryParamsType): Observable<getAdvancedInnovationsListEndpointOutDTO> {
+
+    const { filters, ...qParams } = queryParams;
+
+    const qp = {
+      ...qParams,
+      supportStatus: filters.status || undefined,
+      assignedToMe: filters.assignedToMe ? 'true' : 'false',
+      suggestedOnly: filters.suggestedOnly ? 'true' : 'false'
+    };
+
+    const url = new UrlModel(this.API_URL).addPath('/accessors/:userId/innovations/advanced').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);
+
+    return this.http.get<getAdvancedInnovationsListEndpointInDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => ({
+        count: response.count,
+        data: response.data.map(item => ({
+          id: item.id,
+          name: item.name,
+          mainCategory: item.otherMainCategoryDescription || mainCategoryItems.find(i => i.value === item.mainCategory)?.label || '',
+          countryName: `${item.countryName}${item.postcode ? ', ' + item.postcode : ''}`,
+          submittedAt: item.submittedAt,
+          supportStatus: item.supportStatus
         }))
       }))
     );

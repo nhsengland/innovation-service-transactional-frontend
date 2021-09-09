@@ -177,7 +177,7 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
 
   });
 
-  it('should do nothing when submitting a step and form not is valid', () => {
+  it('should run onSubmitStep() and DO NOTHING with form NOT valid', () => {
 
     activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
 
@@ -254,7 +254,7 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
 
   });
 
-  it('should generate url for first step', () => {
+  it('should run getNavigationUrl() for first step', () => {
 
     activatedRoute.snapshot.params = { id: 1 };
     activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
@@ -267,7 +267,7 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
 
   });
 
-  it('should generate url for last step', () => {
+  it('should run getNavigationUrl() for last step', () => {
 
     activatedRoute.snapshot.params = { id: 5 };
     activatedRoute.params = of({ id: 5 }); // Simulate activatedRoute.params subscription.
@@ -282,7 +282,7 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
 
   });
 
-  it('should generate url for summary step when pressing previous', () => {
+  it('should run getNavigationUrl() for summary step when pressing previous', () => {
 
     activatedRoute.snapshot.params = { id: 'summary' };
     activatedRoute.params = of({ id: 'summary' }); // Simulate activatedRoute.params subscription.
@@ -295,7 +295,7 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
 
   });
 
-  it('should generate url for a question step', () => {
+  it('should run getNavigationUrl() for a question step', () => {
 
     activatedRoute.snapshot.params = { id: 5 };
     activatedRoute.params = of({ id: 5 });

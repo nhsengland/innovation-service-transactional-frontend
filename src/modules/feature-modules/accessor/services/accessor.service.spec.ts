@@ -118,12 +118,33 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
     service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations?take=10&skip=0&supportStatus=UNASSIGNED&assignedToMe=false`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations?take=10&skip=0&supportStatus=UNASSIGNED&assignedToMe=false&suggestedOnly=false`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
 
   });
+
+
+  it('should run getInnovationsList() with filters and return success', () => {
+
+    const responseMock: getInnovationsListEndpointInDTO = { count: 0, data: [] };
+
+    const expected: getInnovationsListEndpointOutDTO = { count: responseMock.count, data: [] };
+
+    let response: any = null;
+
+    const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({ status: 'UNASSIGNED', assignedToMe: true, suggestedOnly: true });
+
+    service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations?take=10&skip=0&supportStatus=UNASSIGNED&assignedToMe=true&suggestedOnly=true`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
 
   it('should run getInnovationInfo() and return success', () => {
 
@@ -208,7 +229,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
   });
 
-  it('should run getActionsList() with filters and return success', () => {
+  it('should run getActionsList() and return success', () => {
 
     const responseMock: getActionsListEndpointInDTO = {
       count: 2,
@@ -228,6 +249,24 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
       count: responseMock.count,
       data: responseMock.data.map(item => ({ ...item, ...{ name: `Submit '${innovationStore.getSectionTitle(item.section)}'`, } }))
     };
+
+    const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({ openActions: '' });
+
+    let response: any = null;
+    service.getActionsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/actions?take=10&skip=0&openActions=`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run getActionsList() with filters and return success', () => {
+
+    const responseMock: getActionsListEndpointInDTO = { count: 0, data: [] };
+
+    const expected: getActionsListEndpointOutDTO = { count: 0, data: [] };
 
     const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({ openActions: 'true' });
 
