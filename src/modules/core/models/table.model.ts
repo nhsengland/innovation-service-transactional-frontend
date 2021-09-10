@@ -2,14 +2,14 @@ type AlignType = 'left' | 'right' | 'center';
 
 type OrderDirectionType = 'none' | 'ascending' | 'descending';
 
-export type APIQueryParamsType = {
+export type APIQueryParamsType<F = { [key: string]: string | number | boolean | string[] }> = {
   take: number;
   skip: number;
   order?: { [key: string]: 'ASC' | 'DESC' };
-  filters: { [key: string]: string | number | boolean | string[] };
+  filters: F;
 };
 
-export class TableModel<T = { [key: string]: string | number | boolean }> {
+export class TableModel<T = { [key: string]: string | number | boolean }, F = APIQueryParamsType['filters']> {
 
   dataSource: T[];
   visibleColumns: {
@@ -25,12 +25,12 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
   orderBy: string;
   orderDir: OrderDirectionType;
 
-  filters: { [key: string]: string | number | boolean | string[] };
+  filters: null | F;
 
   // This variable is needed so angular lifecycle only refresh when something changes, when using this.getHeaderColumns() on a *ngFor.
   private cachedHeaderColumns: { key: string, label: string, align: string, orderable: boolean, orderDir: OrderDirectionType }[];
 
-  constructor(data: Omit<Partial<TableModel<T>>, 'visibleColumns'> & { visibleColumns?: { [key: string]: (string | { label: string; align?: AlignType; orderable?: boolean; }) } }) {
+  constructor(data: Omit<Partial<TableModel<T, F>>, 'visibleColumns'> & { visibleColumns?: { [key: string]: (string | { label: string; align?: AlignType; orderable?: boolean; }) } }) {
 
     this.dataSource = data.dataSource || [];
 
@@ -46,7 +46,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
     this.orderBy = data.orderBy || '';
     this.orderDir = data.orderDir || 'none';
 
-    this.filters = data.filters || {};
+    this.filters = data.filters || null;
 
     this.cachedHeaderColumns = [];
     this.setHeaderColumns();
@@ -89,8 +89,8 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
     return this;
   }
 
-  setFilters(filters: { [key: string]: string | number | boolean | string[] }): this {
-    Object.entries(filters).forEach(([key, item]) => this.filters[key] = item);
+  setFilters(filters: F): this {
+    this.filters = filters;
     this.setHeaderColumns();
     return this;
   }
@@ -134,13 +134,13 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
 
   getTotalRowsNumber(): number { return this.totalRows; }
 
-  getAPIQueryParams(): APIQueryParamsType {
+  getAPIQueryParams(): APIQueryParamsType<F> {
 
     return {
       take: this.pageSize,
       skip: (this.page - 1) * this.pageSize,
       order: this.orderBy ? { [this.orderBy]: (['none', 'ascending'].includes(this.orderDir) ? 'ASC' : 'DESC') } : undefined,
-      filters: Object.keys(this.filters).length > 0 ? this.filters : {}
+      filters: this.filters || ({} as F)
     };
 
   }

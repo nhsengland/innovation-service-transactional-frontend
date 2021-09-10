@@ -208,7 +208,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
     this.currentTab = this.tabs[currentTabIndex];
 
-    this.innovationsList.setData([]).setFilters({ status: currentStatus, ...this.form.value });
+    this.innovationsList.setData([]).setFilters({ status: this.currentTab.key, ...this.form.value });
 
     switch (currentStatus) {
 
@@ -255,7 +255,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
   onFormChange(): void {
 
-    this.innovationsList.setFilters(this.form.value);
+    this.innovationsList.setFilters({ status: this.currentTab.key, ...this.form.value });
     this.getInnovationsList();
 
   }
