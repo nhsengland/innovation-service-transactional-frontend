@@ -16,7 +16,7 @@ import {
   AccessorService,
   getActionsListEndpointInDTO, getActionsListEndpointOutDTO,
   getInnovationNeedsAssessmentEndpointOutDTO, getInnovationsListEndpointInDTO, getInnovationsListEndpointOutDTO, getInnovationNeedsAssessmentEndpointInDTO, getInnovationSupportsDTO,
-  getSupportLogInDTO, SupportLogType, getSupportLogOutDTO
+  getSupportLogInDTO, SupportLogType, getSupportLogOutDTO, getAdvancedInnovationsListEndpointInDTO, getAdvancedInnovationsListEndpointOutDTO
 } from './accessor.service';
 
 
@@ -65,7 +65,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
   it('should run getInnovationsList() and return success', () => {
 
     const responseMock: getInnovationsListEndpointInDTO = {
-      count: 2,
+      count: 3,
       data: [
         {
           id: '01', name: 'Innovation 01', mainCategory: 'MEDICAL_DEVICE', otherMainCategoryDescription: '', countryName: 'England', postcode: 'SW01', submittedAt: '2021-04-16T09:23:49.396Z',
@@ -114,17 +114,16 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
     let response: any = null;
 
-    const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({ status: 'UNASSIGNED' });
+    const tableList = new TableModel({ visibleColumns: { name: 'Name' } });
 
     service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations?take=10&skip=0&supportStatus=UNASSIGNED&assignedToMe=false&suggestedOnly=false`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations?take=10&skip=0&assignedToMe=false&suggestedOnly=false`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
 
   });
-
 
   it('should run getInnovationsList() with filters and return success', () => {
 
@@ -139,6 +138,73 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
     service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
     const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations?take=10&skip=0&supportStatus=UNASSIGNED&assignedToMe=true&suggestedOnly=true`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+
+  it('should run getAdvancedInnovationsList() and return success', () => {
+
+    const responseMock: getAdvancedInnovationsListEndpointInDTO = {
+      count: 3,
+      data: [
+        { id: '01', name: 'Innovation 01', mainCategory: 'MEDICAL_DEVICE', otherMainCategoryDescription: '', countryName: 'England', postcode: 'SW01', submittedAt: '2021-04-16T09:23:49.396Z', supportStatus: 'WAITING' },
+        { id: '02', name: 'Innovation 02', mainCategory: 'MEDICAL_DEVICE', otherMainCategoryDescription: 'Other main category', countryName: 'England', postcode: '', submittedAt: '2021-04-16T09:23:49.396Z', supportStatus: 'WAITING' },
+        { id: '03', name: 'Innovation 03', mainCategory: 'INVALID_CATEGORY', otherMainCategoryDescription: '', countryName: 'England', postcode: '', submittedAt: '2021-04-16T09:23:49.396Z', supportStatus: null }
+      ]
+    };
+
+    const expected: getAdvancedInnovationsListEndpointOutDTO = {
+      count: responseMock.count,
+      data: [
+        { id: '01', name: 'Innovation 01', mainCategory: 'Medical device', countryName: 'England, SW01', submittedAt: '2021-04-16T09:23:49.396Z', supportStatus: 'WAITING' },
+        { id: '02', name: 'Innovation 02', mainCategory: 'Other main category', countryName: 'England', submittedAt: '2021-04-16T09:23:49.396Z', supportStatus: 'WAITING' },
+        { id: '03', name: 'Innovation 03', mainCategory: '', countryName: 'England', submittedAt: '2021-04-16T09:23:49.396Z', supportStatus: 'UNASSIGNED' }
+      ]
+    };
+
+    let response: any = null;
+
+    const tableList = new TableModel<
+      getAdvancedInnovationsListEndpointOutDTO['data'][0],
+      { name: string, mainCategories: string[], locations: string[], engagingOrganisations: string[], supportStatuses: string[], assignedToMe: boolean, suggestedOnly: boolean }
+    >({ visibleColumns: { name: 'Name' } });
+
+    service.getAdvancedInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations/advanced?take=10&skip=0&assignedToMe=false&suggestedOnly=false`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run getAdvancedInnovationsList() with filters and return success', () => {
+
+    const responseMock: getInnovationsListEndpointInDTO = { count: 0, data: [] };
+
+    const expected: getInnovationsListEndpointOutDTO = { count: responseMock.count, data: [] };
+
+    let response: any = null;
+
+    const tableList = new TableModel<
+      getAdvancedInnovationsListEndpointOutDTO['data'][0],
+      { name: string, mainCategories: string[], locations: string[], engagingOrganisations: string[], supportStatuses: string[], assignedToMe: boolean, suggestedOnly: boolean }
+    >({ visibleColumns: { name: 'Name' } }).setFilters({
+      name: 'name',
+      mainCategories: ['MEDICAL_DEVICE'],
+      locations: ['England'],
+      engagingOrganisations: ['OrgId01'],
+      supportStatuses: ['WAITING', 'ENGAGING'],
+      assignedToMe: true,
+      suggestedOnly: true
+    });
+
+    service.getAdvancedInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations/advanced?take=10&skip=0&name=name&cat=MEDICAL_DEVICE&loc=England&orgs=OrgId01&status=WAITING,ENGAGING&assignedToMe=true&suggestedOnly=true`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);

@@ -8,10 +8,10 @@
     </div>
 
     <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-one-third">
+      <div class="nhsuk-grid-column-one-quarter">
 
         <form [formGroup]="form">
-          <h2 class="">Filters</h2>
+          <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Filters</h2>
 
           <theme-form-input controlName="search" [pageUniqueField]="false">
             <ng-container append>
@@ -47,27 +47,27 @@
 
       </div>
 
-      <div class="nhsuk-grid-column-two-thirds">
+      <div class="nhsuk-grid-column-three-quarters">
 
-        <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-margin-top-3">
-          <caption class="nhsuk-table__caption">
+        <theme-spinner *ngIf="pageStatus === 'WAITING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+        <table *ngIf="pageStatus === 'READY'" class="nhsuk-table-responsive app-sortable-table">
+          <caption class="nhsuk-table__caption" aria-live="polite">
+
             <p class="nhsuk-u-margin-bottom-0">{{ innovationsList.getTotalRowsNumber() }} records found</p>
 
-            <ul class="nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1 nhsuk-u-padding-2 bg-color-grey">
+            <dl class="nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1 nhsuk-u-padding-2 bg-color-grey">
 
-              <ng-container *ngIf="!anyFilterSelected">
-                <li class="nhsuk-body-s">
-                  No filter has been selected
-                </li>
-              </ng-container>
+              <dt *ngIf="!anyFilterSelected" class="nhsuk-u-font-size-16"> No filter has been selected </dt>
 
               <ng-container *ngIf="anyFilterSelected">
+
                 <ng-container *ngFor="let filter of filters">
-                  <li *ngIf="filter.selected.length > 0" class="d-flex align-items-center">
-                    <div class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-right-3">{{ filter.title }}</div>
-                    <div>
-                      <span *ngFor="let selected of filter.selected" class="d-inline-block bordered-item nhsuk-u-margin-right-1">
-                        <a class="" href="#">
+                  <div *ngIf="filter.selected.length > 0" class="d-flex align-items-center border-bottom-neutral">
+                    <dt class="width-15 nhsuk-u-font-size-16">{{ filter.title }}</dt>
+                    <dd>
+                      <span *ngFor="let selected of filter.selected" class="d-inline-block bordered-item nhsuk-u-margin-1">
+                        <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.value)" attr.aria-label="Remove {{ selected.label }} from {{ filter.title }} filter">
                           <svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" aria-hidden="true" focusable="false" height="20" width="20">
                             <path
                               d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z">
@@ -77,20 +77,21 @@
                         <span class="nhsuk-u-font-size-14">{{ selected.label }}</span>
                       </span>
 
-                    </div>
-                  </li>
+                    </dd>
+                  </div>
                 </ng-container>
 
-                <li *ngIf="form.get('assignedToMe')?.value" class="nhsuk-body-s">
+                <dt *ngIf="form.get('assignedToMe')?.value" class="nhsuk-u-font-size-16 nhsuk-u-margin-top-2">
                   Viewing innovations assigned to me
-                </li>
+                </dt>
 
-                <li *ngIf="form.get('suggestedOnly')?.value" class="nhsuk-body-s">
+                <dt *ngIf="form.get('suggestedOnly')?.value" class="nhsuk-u-font-size-16 nhsuk-u-margin-top-2">
                   Viewing suggested innovations
-                </li>
+                </dt>
 
               </ng-container>
-            </ul>
+
+            </dl>
 
             <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 

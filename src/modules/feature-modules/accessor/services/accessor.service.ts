@@ -54,12 +54,12 @@ export type getAdvancedInnovationsListEndpointInDTO = {
     countryName: string;
     postcode: string;
     submittedAt: string; // '2021-04-16T09:23:49.396Z',
-    supportStatus: keyof typeof INNOVATION_SUPPORT_STATUS
+    supportStatus: null | keyof typeof INNOVATION_SUPPORT_STATUS
   }[];
 };
 export type getAdvancedInnovationsListEndpointOutDTO = {
   count: number;
-  data: (Omit<getAdvancedInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription' | 'postcode'>)[],
+  data: (Omit<getAdvancedInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription' | 'postcode' | 'supportStatus'> & { supportStatus: keyof typeof INNOVATION_SUPPORT_STATUS })[],
 };
 
 export type getInnovationInfoEndpointDTO = {
@@ -250,19 +250,24 @@ export class AccessorService extends CoreService {
 
   }
 
-  getAdvancedInnovationsList(queryParams: APIQueryParamsType): Observable<getAdvancedInnovationsListEndpointOutDTO> {
+  getAdvancedInnovationsList(
+    queryParams: APIQueryParamsType<{ name: string, mainCategories: string[], locations: string[], engagingOrganisations: string[], supportStatuses: string[], assignedToMe: boolean, suggestedOnly: boolean }>
+  ): Observable<getAdvancedInnovationsListEndpointOutDTO> {
 
     const { filters, ...qParams } = queryParams;
 
     const qp = {
       ...qParams,
-      supportStatus: filters.status || undefined,
+      name: filters.name || undefined,
+      cat: filters.mainCategories || undefined,
+      loc: filters.locations || undefined,
+      orgs: filters.engagingOrganisations || undefined,
+      status: filters.supportStatuses || undefined,
       assignedToMe: filters.assignedToMe ? 'true' : 'false',
       suggestedOnly: filters.suggestedOnly ? 'true' : 'false'
     };
 
     const url = new UrlModel(this.API_URL).addPath('/accessors/:userId/innovations/advanced').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);
-
     return this.http.get<getAdvancedInnovationsListEndpointInDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => ({
@@ -273,7 +278,7 @@ export class AccessorService extends CoreService {
           mainCategory: item.otherMainCategoryDescription || mainCategoryItems.find(i => i.value === item.mainCategory)?.label || '',
           countryName: `${item.countryName}${item.postcode ? ', ' + item.postcode : ''}`,
           submittedAt: item.submittedAt,
-          supportStatus: item.supportStatus
+          supportStatus: item.supportStatus || 'UNASSIGNED'
         }))
       }))
     );

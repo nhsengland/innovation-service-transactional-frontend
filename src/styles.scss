@@ -1,3 +1,6 @@
+// Angular Material.
+@import "node_modules/@angular/material/prebuilt-themes/indigo-pink";
+
 // GOV.uk Design System (only necessary styles).
 @import "node_modules/govuk-frontend/govuk/settings/all";
 @import "node_modules/govuk-frontend/govuk/tools/all";
@@ -9,6 +12,7 @@
 // NHS Design System.
 @import 'node_modules/nhsuk-frontend/packages/nhsuk';
 
+// Custom styles.
 @import 'styles/left-menu-layout';
 @import 'styles/panel';
 @import 'styles/sortable-table';
@@ -85,6 +89,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 .float-r { float: right; }
 
 .width-auto { width: auto; }
+.width-15 { width: 15%; }
 
 .overflow-hidden { overflow: hidden; }
 .overflow-x-hidden { overflow-x: hidden; }
@@ -100,6 +105,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 .font-color-error { color: var(--error-color); }
 
 .border-bottom-0 { border-bottom: 0; }
+.border-bottom-neutral { border-bottom: 1px solid var(--color_nhsuk-grey-4); }
 
 .border-color-primary { border-color: var(--primary-color); }
 .border-color-success { border-color: var(--success-color); }
@@ -192,6 +198,11 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 
 // Overrides.
+// Angular Material.
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: var(--primary-color) !important;
+}
+
 // // _header.scss: Header menu button spacing on mobile.
 .nhsuk-header__menu-toggle {
   @media (max-width: 40.0525em) {
