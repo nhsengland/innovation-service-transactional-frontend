@@ -15,15 +15,25 @@ const upload = multer({
   }
 });
 
-const checkFileType = (file: any, cb: ((...args: any[]) => void)) => {
-  // Allowed ext
-  const filetypes = /|docx|pdf|csv|xlsx|/;
+// Allowed ext
+const filetypes = /docx|pdf|csv|xlsx/;
 
+// Allowed mimetypes
+const whitelist = [
+  'application/pdf',
+  'text/csv',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+];
+
+const checkFileType = (file: any, cb: ((...args: any[]) => void)) => {
   // Check ext
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 
   // Check mime
-  const mimetype = filetypes.test(file.mimetype);
+  const mimetype = whitelist.includes(file.mimetype);
 
   if (mimetype && extname) {
     return cb(null, true);
@@ -69,7 +79,6 @@ async function uploadFile(url: string, file: any): Promise<void> {
 }
 
 fileUploadRouter.post(`${BASE_PATH}/upload`, upload.single('file'), async (req, res) => {
-
   const user: IProfile = req.user || {};
   const oid: string = user.oid || '';
   const accessToken = getAccessTokenByOid(oid);
