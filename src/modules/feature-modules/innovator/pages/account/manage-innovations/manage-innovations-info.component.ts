@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
@@ -21,12 +22,24 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
 
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService
   ) {
 
     super();
     this.setPageTitle('Manage innovations');
 
+    switch (this.activatedRoute.snapshot.queryParams.alert) {
+      case 'archivalSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'Innovation archived',
+          message: 'The innovation has been archived.'
+        };
+        break;
+      default:
+        break;
+    }
   }
 
 
