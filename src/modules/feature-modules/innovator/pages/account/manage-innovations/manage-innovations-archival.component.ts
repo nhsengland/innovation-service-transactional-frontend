@@ -6,7 +6,6 @@ import { AlertType } from '@app/base/models';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
-
 @Component({
   selector: 'shared-pages-account-manage-innovations-archival',
   templateUrl: './manage-innovations-archival.component.html'
@@ -15,6 +14,9 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
 
   stepNumber: 1 | 2 | 3 = 1;
   alert: AlertType = { type: null };
+  user: {
+    email: string
+  };
 
   form = new FormGroup({
     innovation: new FormControl('', CustomValidators.required('Please, choose an innovation')),
@@ -25,6 +27,8 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
 
   formInnovationsItems: FormEngineParameterModel['items'] = [];
 
+  innovationName = '';
+
   constructor(
     private innovatorService: InnovatorService
   ) {
@@ -32,10 +36,13 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
     super();
     this.setPageTitle('Archive an innovation');
 
+    const user = this.stores.authentication.getUserInfo();
+    this.user = {
+      email: user.email
+    };
   }
 
   ngOnInit(): void {
-    const user = this.stores.authentication.getUserInfo();
     this.innovatorService.getInnovationTransfers().subscribe(
       response => {
         this.formInnovationsItems = this.stores.authentication.getUserInfo()
@@ -53,7 +60,6 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
     );
   }
 
-
   onSubmitStep(): void {
 
     if (!this.validateForm(this.stepNumber)) { return; }
@@ -69,20 +75,28 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
       return;
     }
 
-    const body: { innovationId: string, reason: string, email: string } = {
-      innovationId: this.form.get('innovation')?.value,
-      email: this.form.get('email')?.value,
+    if (this.form.get('email')?.value !== this.user.email) {
+      this.alert = {
+        type: 'ERROR',
+        title: 'Invalid email',
+        message: 'Invalid email',
+        setFocus: true
+      };
+      return;
+    }
+
+    const body: { reason: string } = {
       reason: this.form.get('reason')?.value
     };
 
-    this.innovatorService.archiveInnovation(body).subscribe(
+    this.innovatorService.archiveInnovation(this.form.get('innovation')?.value, body).subscribe(
       () => {
-        this.redirectTo('/innovator/account/manage-innovations');
+        this.redirectTo('/innovator/account/manage-innovations', { alert: 'archivalSuccess' });
       },
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when creating an action',
+          title: 'An error occured when archiving the innovation',
           message: 'Please, try again or contact us for further help',
           setFocus: true
         };
@@ -97,6 +111,7 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
           this.form.get('innovation')?.markAsTouched();
           return false;
         }
+        this.innovationName = this.formInnovationsItems?.filter(item => this.form.get('innovation')?.value === item.value)[0].label || '';
         break;
       case 2:
         break;
@@ -113,10 +128,8 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
         this.setPageTitle('Archive an innovation');
         break;
       case 2:
-        this.setPageTitle('Archive '  + this.form.get('innovation')?.value);
-        break;
       case 3:
-        this.setPageTitle('Archive ' + this.form.get('innovation')?.value);
+        this.setPageTitle('Archive \'' + this.innovationName + '\'');
         break;
       default:
         break;
