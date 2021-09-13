@@ -83,7 +83,7 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
         generator
           .h3(title);
 
-        const value = answer.value.replace(/<br \/>/, ', ');
+        const value = answer.value.replace(/\n/gi, ', ');
         generator
           .p(value);
       }
