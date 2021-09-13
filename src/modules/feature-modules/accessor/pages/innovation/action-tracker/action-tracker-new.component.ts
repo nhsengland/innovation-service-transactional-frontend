@@ -48,7 +48,7 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
 
     // Pre-selects section if it was provided.
     if (this.activatedRoute.snapshot.queryParams.section) {
-      this.form.get('section')?.setValue(this.activatedRoute.snapshot.queryParams.section);
+      this.form.get('section')!.setValue(this.activatedRoute.snapshot.queryParams.section);
     }
 
   }
@@ -68,8 +68,8 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when creating an action',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when creating an action',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
       }

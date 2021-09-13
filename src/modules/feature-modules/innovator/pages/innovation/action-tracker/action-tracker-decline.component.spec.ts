@@ -87,8 +87,8 @@ describe('FeatureModules/Innovator/Innovation/InnovationActionTrackerEditCompone
 
     const expected = {
       type: 'ERROR',
-      title: 'An error occured when declining an action',
-      message: 'Please, try again or contact us for further help',
+      title: 'An error occurred when declining an action',
+      message: 'Please try again or contact us for further help',
       setFocus: true
     };
 

@@ -21,11 +21,13 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   @Input() label?: string;
   @Input() description?: string;
   @Input() items: FormEngineParameterModel['items'] = [];
+  @Input() size?: 'small' | 'normal';
   @Input() pageUniqueField = true;
   @Output() customOnChangeFunc = new EventEmitter<{ checked: boolean, item: string }>();
 
   hasError = false;
   errorMessage = '';
+  cssClass = '';
 
   isRunningOnBrowser: boolean;
   isRunningOnServer: boolean;
@@ -69,6 +71,7 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   ngOnInit(): void {
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
+    this.cssClass = this.size === 'small' ? 'form-checkboxes-small' : '';
 
     // This will filter any value not available on the items variable.
     const itemsValues = (this.items || []).map(item => item.value);

@@ -12,7 +12,8 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 
 import { InnovationActionTrackerListComponent } from './action-tracker-list.component';
 
-import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
+import { AccessorService, getInnovationActionsListEndpointOutDTO } from '@modules/feature-modules/accessor/services/accessor.service';
+import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
 
 
 describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerListComponent', () => {
@@ -48,26 +49,23 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerListComponen
 
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(InnovationActionTrackerListComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     expect(component).toBeTruthy();
-
   });
-
 
   it('should have initial information loaded', () => {
 
-    const getInnovationActionsListDataMock = {
-      openedActions: [{ id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 1 } }],
-      closedActions: [{ id: 'ID01', status: 'REQUESTED', name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 0 }}]
+    const responseMock: getInnovationActionsListEndpointOutDTO = {
+      openedActions: [{ id: 'ID01', displayId: '', status: 'REQUESTED', name: 'Submit section X', section: InnovationSectionsIds.COST_OF_INNOVATION, createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 1, hasNew: false } }],
+      closedActions: [{ id: 'ID01', displayId: '', status: 'REQUESTED', name: 'Submit section X', section: InnovationSectionsIds.COST_OF_INNOVATION, createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 0, hasNew: false }}]
     };
-    accessorService.getInnovationActionsList = () => of(getInnovationActionsListDataMock as any);
-    const expected = getInnovationActionsListDataMock.openedActions;
+    accessorService.getInnovationActionsList = () => of(responseMock);
+    const expected = responseMock.openedActions;
 
     fixture = TestBed.createComponent(InnovationActionTrackerListComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.openedActionsList.getRecords()).toEqual(expected);
 

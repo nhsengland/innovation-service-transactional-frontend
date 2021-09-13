@@ -67,7 +67,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
         this.assessment = { ...response.assessment, organisationsNames: response.assessment.organisations.map(item => item.name) };
 
-        this.shouldShowUpdatedAt = DatesHelper.dateDiff(this.assessment?.finishedAt || '', this.assessment?.updatedAt || '') > 0;
+        this.shouldShowUpdatedAt = DatesHelper.dateDiff(this.assessment.finishedAt || '', this.assessment.updatedAt || '') > 0;
 
         const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === response.assessment.maturityLevel) || 0) + 1;
         this.innovationMaturityLevel = {

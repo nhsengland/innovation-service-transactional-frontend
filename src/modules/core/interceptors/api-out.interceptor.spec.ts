@@ -2,10 +2,10 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { ENV, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
-
 import { PLATFORM_ID } from '@angular/core';
 import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
+
+import { ENV, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
 import { CoreModule, EnvironmentStore } from '@modules/core';
 import { AuthenticationService } from '@modules/stores';
@@ -71,7 +71,6 @@ describe('Core/Interceptors/ApiOutInterceptor running CLIENT side', () => {
   let authenticationService: AuthenticationService;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,

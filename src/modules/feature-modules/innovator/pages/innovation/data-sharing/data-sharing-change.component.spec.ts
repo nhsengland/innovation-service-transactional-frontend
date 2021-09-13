@@ -27,7 +27,7 @@ describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
         StoresModule,
         InnovatorModule
       ]
-    }).compileComponents();
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 

@@ -72,7 +72,7 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
       return;
     }
 
-    this.formAnswers = formData?.data;
+    this.formAnswers = formData.data;
 
     this.assessmentService.createInnovationNeedsAssessment(this.innovationId, this.formAnswers).subscribe(
       response => {
@@ -81,8 +81,8 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when starting needs assessment',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when starting needs assessment',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
       }

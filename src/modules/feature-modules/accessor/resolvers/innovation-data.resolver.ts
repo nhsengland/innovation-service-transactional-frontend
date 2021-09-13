@@ -33,7 +33,9 @@ export class InnovationDataResolver implements Resolve<InnovationDataResolverTyp
           }
         }),
         catchError(error => {
+          /* istanbul ignore next */
           this.logger.error('Error fetching data innovation data', error);
+          /* istanbul ignore next */
           return of(false);
         })
       )

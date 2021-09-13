@@ -62,9 +62,7 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovationTransferAcceptanceComponent,
 
     // Components.
-
-    OrganisationSuggestionsCardComponent,
-
+    OrganisationSuggestionsCardComponent
   ],
   providers: [
     // Services.
@@ -75,7 +73,6 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 
     // Resolvers.
     InnovationDataResolver
-
   ]
 })
 export class InnovatorModule { }

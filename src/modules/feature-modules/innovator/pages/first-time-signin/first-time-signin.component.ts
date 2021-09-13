@@ -5,9 +5,9 @@ import { concatMap } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineHelper, FormEngineModel } from '@app/base/forms';
 
-import { OrganisationsService } from '@shared-module/services/organisations.service';
+import { FIRST_TIME_SIGNIN_QUESTIONS } from '@stores-module/innovation/config/first-time-signin-catalog.config';
 
-import { FIRST_TIME_SIGNIN_QUESTIONS } from '../../config/constants.config';
+import { OrganisationsService } from '@shared-module/services/organisations.service';
 
 import { InnovatorService } from '../../services/innovator.service';
 
@@ -126,7 +126,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
       return;
     }
 
-    this.currentAnswers = { ...this.currentAnswers, ...formData?.data };
+    this.currentAnswers = { ...this.currentAnswers, ...formData!.data };
 
     if (this.isLastStep() && action === 'next') { this.onSubmitSurvey(); }
     else { this.redirectTo(this.getNavigationUrl(action), { a: action }); }

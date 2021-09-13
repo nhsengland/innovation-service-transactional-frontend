@@ -14,6 +14,8 @@ import { AssessmentService } from '../services/assessment.service';
 
 import { InnovationDataResolver } from './innovation-data.resolver';
 
+import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
+
 
 describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
 
@@ -22,7 +24,6 @@ describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
   let assessmentService: AssessmentService;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -42,24 +43,47 @@ describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
   });
 
 
-  it('should load innovation data', () => {
+  it('should load innovation data with payload 01', () => {
 
     const routeMock: Partial<ActivatedRouteSnapshot> = { params: { innovationId: 'Inno01' } };
 
-    const responseMock = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: '' },
+    assessmentService.getInnovationInfo = () => of({
+      summary: { id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: '' },
       contact: { name: 'A name', email: 'email', phone: '' },
       assessment: { id: '01', assignToName: 'Name' }
-    };
-    assessmentService.getInnovationInfo = () => of(responseMock as any);
+    });
 
-    let response: any = null;
     const expected = {
       id: '01',
       name: 'Innovation 01',
       status: 'CREATED',
-      assessment: { id: '01' },
+      assessment: { id: '01' }
     };
+
+    let response: any = null;
+    resolver.resolve(routeMock as any).subscribe(success => response = success, error => response = error);
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should load innovation data with payload 02', () => {
+
+    const routeMock: Partial<ActivatedRouteSnapshot> = { params: { innovationId: 'Inno01' } };
+
+    assessmentService.getInnovationInfo = () => of({
+      summary: { id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: '' },
+      contact: { name: 'A name', email: 'email', phone: '' },
+      // assessment: { id: '01', assignToName: 'Name' }
+    });
+
+    const expected = {
+      id: '01',
+      name: 'Innovation 01',
+      status: 'CREATED',
+      assessment: {}
+    };
+
+    let response: any = null;
 
     resolver.resolve(routeMock as any).subscribe(success => response = success, error => response = error);
     expect(response).toEqual(expected);
