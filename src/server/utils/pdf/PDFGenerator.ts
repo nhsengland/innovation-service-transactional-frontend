@@ -60,11 +60,12 @@ export class PDFGenerator {
       .setFontSize(fontSize || 24)
       .splitTextToSize(text, this.maxLineWidth);
 
-    const blockHeight = (t.length * oneLineHeight) + 0.19;
 
-    this.currentPosition += blockHeight;
 
     this.doc.text(t, this.margin, this.currentPosition);
+
+    const blockHeight = (t.length * oneLineHeight) + 0.29;
+    this.currentPosition += (blockHeight + 0.19);
 
     if (t.length === 1) {
       this.currentPosition -= 0.19;
@@ -83,18 +84,18 @@ export class PDFGenerator {
     }
 
     if (fontSize) { this.doc.setFontSize(fontSize); }
+
     const oneLineHeight = ((fontSize || 24) * this.lineHeight) / this.pointPerInch;
 
     const t = this.doc
     .setFont('helvetica')
     .splitTextToSize(text, this.maxLineWidth);
 
-    const blockHeight = (t.length * oneLineHeight) + 0.29;
-    this.currentPosition += blockHeight;
-
     this.doc.text(t, this.margin, this.currentPosition);
 
-    this.currentPosition += 0.19;
+    const blockHeight = (t.length * oneLineHeight) + 0.29;
+    this.currentPosition += (blockHeight + 0.19);
+    // this.currentPosition += 0.19;
 
     return this;
   }
