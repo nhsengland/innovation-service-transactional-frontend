@@ -85,11 +85,7 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
       return;
     }
 
-    const body: { reason: string } = {
-      reason: this.form.get('reason')?.value
-    };
-
-    this.innovatorService.archiveInnovation(this.form.get('innovation')?.value, body).subscribe(
+    this.innovatorService.archiveInnovation(this.form.get('innovation')?.value, this.form.get('reason')?.value).subscribe(
       () => {
         this.redirectTo('/innovator/account/manage-innovations', { alert: 'archivalSuccess' });
       },
