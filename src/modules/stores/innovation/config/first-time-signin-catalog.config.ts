@@ -4,56 +4,48 @@ import { locationItems } from './innovation-catalog.config';
 
 export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
   new FormEngineModel({
-    parameters: [
-      {
-        id: 'innovatorName',
-        dataType: 'text',
-        label: 'Welcome to the NHS innovation service!',
-        description: 'What\'s your name?',
-        validations: { isRequired: [true, 'Name is required'] }
-      }
-    ]
+    parameters: [{
+      id: 'innovatorName',
+      dataType: 'text',
+      label: 'Welcome to the NHS innovation service!',
+      description: 'What\'s your name?',
+      validations: { isRequired: [true, 'Name is required'] }
+    }]
   }),
 
   new FormEngineModel({
-    parameters: [
-      {
-        id: 'innovationName',
-        dataType: 'text',
-        label: 'What should we call your innovation?',
-        validations: { isRequired: [true, 'Innovation name is required'] }
-      }
-    ]
+    parameters: [{
+      id: 'innovationName',
+      dataType: 'text',
+      label: 'What should we call your innovation?',
+      validations: { isRequired: [true, 'Innovation name is required'] }
+    }]
   }),
 
   new FormEngineModel({
-    parameters: [
-      {
-        id: 'innovationDescription',
-        dataType: 'textarea',
-        label: 'Please provide a short description of your innovation',
-        validations: { isRequired: [true, 'Innovation short description is required'] }
-      }
-    ]
+    parameters: [{
+      id: 'innovationDescription',
+      dataType: 'textarea',
+      label: 'Please provide a short description of your innovation',
+      validations: { isRequired: [true, 'Innovation short description is required'] }
+    }]
   }),
 
   new FormEngineModel({
-    parameters: [
-      {
-        id: 'isCompanyOrOrganisation',
-        dataType: 'radio-group',
-        label: 'Are you creating this innovation as part of a company or organisation?',
-        validations: { isRequired: [true, 'Choose one option'] },
-        items: [
-          {
-            value: 'yes',
-            label: 'Yes',
-            conditional: new FormEngineParameterModel({ id: 'organisationName', dataType: 'text', label: 'Company or organisation name', validations: { isRequired: [true, 'Other description is required'] } })
-          },
-          { value: 'no', label: 'No' }
-        ]
-      }
-    ]
+    parameters: [{
+      id: 'isCompanyOrOrganisation',
+      dataType: 'radio-group',
+      label: 'Are you creating this innovation as part of a company or organisation?',
+      validations: { isRequired: [true, 'Choose one option'] },
+      items: [
+        {
+          value: 'yes',
+          label: 'Yes',
+          conditional: new FormEngineParameterModel({ id: 'organisationName', dataType: 'text', label: 'Company or organisation name', validations: { isRequired: [true, 'Other description is required'] } })
+        },
+        { value: 'no', label: 'No' }
+      ]
+    }]
   }),
 
   new FormEngineModel({
@@ -78,27 +70,23 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: FormEngineModel[] = [
   }),
 
   new FormEngineModel({
-    parameters: [
-      {
-        id: 'location',
-        dataType: 'radio-group',
-        label: 'Where are you based?',
-        validations: { isRequired: [true, 'Location is required'] },
-        items: locationItems
-      }
-    ]
+    parameters: [{
+      id: 'location',
+      dataType: 'radio-group',
+      label: 'Where are you developing your innovation?',
+      validations: { isRequired: [true, 'Location is required'] },
+      items: locationItems
+    }]
   }),
 
   new FormEngineModel({
-    parameters: [
-      {
-        id: 'organisationShares',
-        dataType: 'checkbox-array',
-        label: 'Finally, choose your data sharing preferences',
-        validations: { isRequired: [true, 'Choose at least one organisation'] },
-        items: []
-      }
-    ]
+    parameters: [{
+      id: 'organisationShares',
+      dataType: 'checkbox-array',
+      label: 'Finally, choose your data sharing preferences',
+      validations: { isRequired: [true, 'Choose at least one organisation'] },
+      items: []
+    }]
   }),
 
 ];

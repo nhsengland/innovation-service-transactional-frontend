@@ -1,30 +1,31 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { FormArray, FormControl } from '@angular/forms';
 import { of, throwError } from 'rxjs';
+
+import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
+import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { InnovationsAdvancedReviewComponent } from './innovations-advanced-review.component';
 
+import { OrganisationsService } from '@shared-module/services/organisations.service';
 import { AccessorService } from '../../services/accessor.service';
-import { NotificationService } from '@modules/shared/services/notification.service';
 
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
 describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () => {
 
-  let activatedRoute: ActivatedRoute;
-
   let authenticationStore: AuthenticationStore;
   let accessorService: AccessorService;
-  let notificationService: NotificationService;
+  let organisationsService: OrganisationsService;
+
 
   let component: InnovationsAdvancedReviewComponent;
   let fixture: ComponentFixture<InnovationsAdvancedReviewComponent>;
@@ -42,206 +43,216 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
-    activatedRoute = TestBed.inject(ActivatedRoute);
-
     authenticationStore = TestBed.inject(AuthenticationStore);
     accessorService = TestBed.inject(AccessorService);
-    notificationService = TestBed.inject(NotificationService);
+    organisationsService = TestBed.inject(OrganisationsService);
+
+    authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
 
   });
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
 
-  // it('should have AccessorRole tabs', () => {
+  it('should have AccessorRole tabs', () => {
 
-  //   activatedRoute.queryParams = of({ status: 'ENGAGING' });
-  //   authenticationStore.isAccessorRole = () => true;
+    authenticationStore.isAccessorRole = () => true;
 
-  //   fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
-  //   component = fixture.componentInstance;
+    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    component = fixture.componentInstance;
 
-  //   fixture.detectChanges();
-  //   expect(component.tabs.length).toBe(2);
+    fixture.detectChanges();
+    expect(component.datasets.supportStatuses.length).toBe(2);
 
-  // });
+  });
 
-  // it('should have QualifyingAccessorRole tabs', () => {
+  it('should have QualifyingAccessorRole tabs', () => {
 
-  //   activatedRoute.queryParams = of({ status: 'UNASSIGNED' });
-  //   authenticationStore.isQualifyingAccessorRole = () => true;
+    authenticationStore.isQualifyingAccessorRole = () => true;
 
-  //   fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
-  //   component = fixture.componentInstance;
+    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    component = fixture.componentInstance;
 
-  //   fixture.detectChanges();
-  //   expect(component.tabs.length).toBe(7);
+    fixture.detectChanges();
+    expect(component.datasets.supportStatuses.length).toBe(8);
 
-  // });
+  });
 
-  // it('should have default values when status = UNASSIGNED', () => {
+  it('should have default values', () => {
 
-  //   activatedRoute.queryParams = of({ status: 'UNASSIGNED' });
-  //   authenticationStore.isQualifyingAccessorRole = () => true;
+    organisationsService.getAccessorsOrganisations = () => of([
+      { id: 'orgId01', name: 'Org name 01' },
+      { id: 'org_id', name: 'Org name 02' }
+    ]);
 
-  //   const expected = [
-  //     { key: 'name', label: 'Innovation', orderDir: 'none', orderable: true, align: 'text-align-left' },
-  //     { key: 'submittedAt', label: 'Submitted', orderDir: 'descending', orderable: true, align: 'text-align-left' },
-  //     { key: 'mainCategory', label: 'Main category', orderDir: 'none', orderable: true, align: 'text-align-left' },
-  //     { key: 'countryName', label: 'Location', orderDir: 'none', orderable: true, align: 'text-align-left' },
-  //     { key: 'engagingOrganisations', label: 'Engaging organisations', orderDir: 'none', orderable: false, align: 'text-align-right' }
-  //   ];
+    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    component = fixture.componentInstance;
 
-  //   fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
-  //   component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component.datasets.engagingOrganisations).toEqual([{ value: 'orgId01', label: 'Org name 01' }]);
 
-  //   fixture.detectChanges();
-  //   expect(component.innovationsList.getHeaderColumns()).toEqual(expected);
+  });
 
-  // });
+  it('should NOT have default values', () => {
 
-  // it('should have default values when status = ENGAGING', () => {
+    organisationsService.getAccessorsOrganisations = () => throwError('error');
 
-  //   activatedRoute.queryParams = of({ status: 'ENGAGING' });
-  //   authenticationStore.isQualifyingAccessorRole = () => true;
+    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    component = fixture.componentInstance;
 
-  //   const expected = [
-  //     { key: 'name', label: 'Innovation', orderDir: 'none', orderable: true, align: 'text-align-left' },
-  //     { key: 'updatedAt', label: 'Updated', orderDir: 'descending', orderable: true, align: 'text-align-left' },
-  //     { key: 'mainCategory', label: 'Main category', orderDir: 'none', orderable: true, align: 'text-align-left' },
-  //     { key: 'accessors', label: 'Accessor', orderDir: 'none', orderable: false, align: 'text-align-left' },
-  //     { key: 'engagingOrganisations', label: 'Engaging organisations', orderDir: 'none', orderable: false, align: 'text-align-right' }
-  //   ];
+    fixture.detectChanges();
+    expect(component.datasets.engagingOrganisations).toEqual([]);
 
-  //   fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
-  //   component = fixture.componentInstance;
+  });
 
-  //   fixture.detectChanges();
-  //   expect(component.innovationsList.getHeaderColumns()).toEqual(expected);
+  it('should run getInnovationsList() with success', () => {
 
-  // });
+    const responseMock = {
+      count: 100,
+      data: [{
+        id: 'id01',
+        name: 'Innovation Name',
+        mainCategory: '',
+        countryName: '',
+        submittedAt: '2020-01-01T00:00:00.000Z',
+        supportStatus: 'UNASSIGNED' as keyof typeof INNOVATION_SUPPORT_STATUS
+      }]
+    };
+    accessorService.getAdvancedInnovationsList = () => of(responseMock);
 
-  // it('should have default values when status = WAITING', () => {
+    const expected = responseMock.data;
 
-  //   activatedRoute.queryParams = of({ status: 'WAITING' });
-  //   authenticationStore.isQualifyingAccessorRole = () => true;
+    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    component = fixture.componentInstance;
 
-  //   const expected = [
-  //     { key: 'name', label: 'Innovation', orderDir: 'none', orderable: true, align: 'text-align-left' },
-  //     { key: 'updatedAt', label: 'Updated', orderDir: 'descending', orderable: true, align: 'text-align-left' },
-  //     { key: 'mainCategory', label: 'Main category', orderDir: 'none', orderable: true, align: 'text-align-left' },
-  //     { key: 'countryName', label: 'Location', orderDir: 'none', orderable: true, align: 'text-align-left' },
-  //     { key: 'engagingOrganisations', label: 'Engaging organisations', orderDir: 'none', orderable: false, align: 'text-align-right' }
-  //   ];
+    component.getInnovationsList();
+    fixture.detectChanges();
+    expect(component.innovationsList.getRecords()).toEqual(expected);
 
-  //   fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
-  //   component = fixture.componentInstance;
+  });
 
-  //   fixture.detectChanges();
-  //   expect(component.innovationsList.getHeaderColumns()).toEqual(expected);
+  it('should run getInnovationsList() with error', () => {
 
-  // });
+    accessorService.getAdvancedInnovationsList = () => throwError(false);
 
+    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    component = fixture.componentInstance;
 
-  // it('should run getInnovationsList() with success', () => {
+    component.getInnovationsList();
+    fixture.detectChanges();
+    expect(component.innovationsList.getRecords()).toEqual([]);
 
-  //   activatedRoute.queryParams = of({ status: 'UNASSIGNED' });
+  });
 
-  //   authenticationStore.isQualifyingAccessorRole = () => true;
+  it('should run onFormChange()', fakeAsync(() => {
 
-  //   const responseMock = {
-  //     count: 100,
-  //     data: [{
-  //       id: 'id01',
-  //       name: 'Innovation Name',
-  //       mainCategory: '',
-  //       countryName: '',
-  //       submittedAt: '2020-01-01T00:00:00.000Z',
-  //       support: {
-  //         id: 'string',
-  //         status: 'UNASSIGNED' as keyof typeof INNOVATION_SUPPORT_STATUS,
-  //         createdAt: '2020-01-01T00:00:00.000Z',
-  //         updatedAt: '2020-01-01T00:00:00.000Z',
-  //         accessors: []
-  //       },
-  //       organisations: [],
-  //       assessment: { id: null }
-  //     }]
-  //   };
-  //   accessorService.getInnovationsList = () => of(responseMock);
+    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
 
-  //   const expected = responseMock.data;
+    component.form.get('search')?.setValue('A search text');
+    (component.form.get('mainCategories') as FormArray).push(new FormControl('MEDICAL_DEVICE'));
 
-  //   fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
-  //   component = fixture.componentInstance;
+    tick(500); // Needed because of the debounce on the form.
 
-  //   fixture.detectChanges();
-  //   expect(component.innovationsList.getRecords()).toEqual(expected);
+    expect(component.innovationsList.filters).toEqual({
+      name: 'A search text',
+      mainCategories: ['MEDICAL_DEVICE'],
+      locations: [],
+      engagingOrganisations: [],
+      supportStatuses: [],
+      assignedToMe: false,
+      suggestedOnly: true,
+    });
 
-  // });
+  }));
 
-  // it('should run getInnovationsList() with error', () => {
+  it('should run onTableOrder()', () => {
 
-  //   activatedRoute.queryParams = of({ status: 'UNASSIGNED' });
-  //   authenticationStore.isQualifyingAccessorRole = () => true;
+    const dataMock = { count: 0, data: [] };
 
-  //   accessorService.getInnovationsList = () => throwError(false);
+    accessorService.getAdvancedInnovationsList = () => of(dataMock as any);
 
-  //   fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
-  //   component = fixture.componentInstance;
+    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
 
-  //   fixture.detectChanges();
-  //   expect(component.innovationsList.getRecords()).toEqual([]);
+    component.onTableOrder('name');
+    expect(component.innovationsList.orderBy).toEqual('name');
 
-  // });
+  });
 
-  // it('should run getNotificationsGroupedByStatus()', () => {
+  it('should run onOpenCloseFilter() and do nothing with an invalid key', () => {
 
-  //   activatedRoute.queryParams = of({ status: 'UNASSIGNED' });
-  //   authenticationStore.isQualifyingAccessorRole = () => true;
+    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    component = fixture.componentInstance;
+    component.filters[0].showHideStatus = 'closed' as any;
 
-  //   notificationService.getAllUnreadNotificationsGroupedByStatus = () => of({ UNASSIGNED: 1, INVALID_KEY: 0 });
+    component.onOpenCloseFilter('invalidKey' as any);
+    expect(component.filters[0].showHideStatus).toBe('closed');
 
-  //   fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
-  //   component = fixture.componentInstance;
+  });
 
-  //   fixture.detectChanges();
-  //   expect(component.tabs.find(t => t.key === 'UNASSIGNED')?.notifications).toBe(1);
+  it('should run onOpenCloseFilter() and do nothing with an invalid status', () => {
 
-  // });
+    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    component = fixture.componentInstance;
+    component.filters[0].showHideStatus = 'invalid status' as any;
 
-  // it('should run onFormChange()', () => {
+    component.onOpenCloseFilter('mainCategories');
+    expect(component.filters[0].showHideStatus).toBe('invalid status');
 
-  //   fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
-  //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
+  });
 
-  //   component.form.get('assignedToMe')?.setValue(true);
-  //   component.form.get('suggestedOnly')?.setValue(true);
-  //   fixture.detectChanges();
+  it('should run onOpenCloseFilter() and close the filter', () => {
 
-  //   expect(component.innovationsList.filters).toEqual({ assignedToMe: true, suggestedOnly: true });
+    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    component = fixture.componentInstance;
+    component.filters[0].showHideStatus = 'opened';
 
-  // });
+    component.onOpenCloseFilter('mainCategories');
+    expect(component.filters[0].showHideStatus).toBe('closed');
 
+  });
 
-  // it('should run onTableOrder()', () => {
+  it('should run onOpenCloseFilter() and open the filter', () => {
 
-  //   const dataMock = { count: 0, data: [] };
+    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    component = fixture.componentInstance;
+    component.filters[0].showHideStatus = 'closed';
 
-  //   accessorService.getInnovationsList = () => of(dataMock as any);
+    component.onOpenCloseFilter('mainCategories');
+    expect(component.filters[0].showHideStatus).toBe('opened');
 
-  //   fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
-  //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
+  });
 
-  //   component.onTableOrder('name');
-  //   expect(component.innovationsList.orderBy).toEqual('name');
+  it('should run onRemoveFilter() with a invalid value', () => {
 
-  // });
+    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    component = fixture.componentInstance;
+    (component.form.get('mainCategories') as FormArray).push(new FormControl('MEDICAL_DEVICE'));
+
+    fixture.detectChanges();
+    component.onRemoveFilter('mainCategories', 'INVALID VALUE');
+    expect((component.form.get('mainCategories') as FormArray).length).toBe(1);
+
+  });
+
+  it('should run onRemoveFilter()', () => {
+
+    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    component = fixture.componentInstance;
+    (component.form.get('mainCategories') as FormArray).push(new FormControl('MEDICAL_DEVICE'));
+
+    fixture.detectChanges();
+    component.onRemoveFilter('mainCategories', 'MEDICAL_DEVICE');
+    expect((component.form.get('mainCategories') as FormArray).length).toBe(0);
+
+  });
 
 });
