@@ -5,6 +5,7 @@ import { FormEngineParameterModel, CustomValidators } from '@app/base/forms';
 import { AlertType } from '@app/base/models';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { concatMap } from 'rxjs/operators';
 
 @Component({
   selector: 'shared-pages-account-manage-innovations-archival',
@@ -18,12 +19,7 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
     email: string
   };
 
-  form = new FormGroup({
-    innovation: new FormControl('', CustomValidators.required('Please, choose an innovation')),
-    reason: new FormControl(''),
-    email: new FormControl('', [CustomValidators.required('An email is required'), Validators.email]),
-    confirmation: new FormControl('', [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('archive my innovation')]),
-  });
+  form: FormGroup;
 
   formInnovationsItems: FormEngineParameterModel['items'] = [];
 
@@ -40,6 +36,13 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
     this.user = {
       email: user.email
     };
+
+    this.form = new FormGroup({
+      innovation: new FormControl('', CustomValidators.required('Please, choose an innovation')),
+      reason: new FormControl(''),
+      email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email)]),
+      confirmation: new FormControl('', [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('archive my innovation')]),
+    });
   }
 
   ngOnInit(): void {
@@ -75,21 +78,11 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
       return;
     }
 
-    if (this.form.get('email')?.value !== this.user.email) {
-      this.alert = {
-        type: 'ERROR',
-        title: 'Invalid email',
-        message: 'Invalid email',
-        setFocus: true
-      };
-      return;
-    }
-
-    const body: { reason: string } = {
-      reason: this.form.get('reason')?.value
-    };
-
-    this.innovatorService.archiveInnovation(this.form.get('innovation')?.value, body).subscribe(
+    this.innovatorService.archiveInnovation(this.form.get('innovation')?.value, this.form.get('reason')?.value).pipe(
+      concatMap(() => {
+        return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
+      })
+    ).subscribe(
       () => {
         this.redirectTo('/innovator/account/manage-innovations', { alert: 'archivalSuccess' });
       },
