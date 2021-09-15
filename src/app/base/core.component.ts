@@ -120,7 +120,9 @@ export class CoreComponent implements OnInit, OnDestroy {
     }
 
     url = this.encodeUrlQueryParams(url, queryParams);
+    /* istanbul ignore next */
     this.serverResponse?.status(303);
+    /* istanbul ignore next */
     this.serverResponse?.setHeader('Location', url);
   }
 

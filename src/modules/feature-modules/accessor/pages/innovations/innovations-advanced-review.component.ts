@@ -130,14 +130,11 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
     this.setPageStatus('WAITING');
 
     this.filters.forEach(filter => {
-
-      const f = this.form.get(filter.key)?.value as string[] || [];
-      if (f.length > 0) {
-        filter.selected = this.datasets[filter.key].filter(i => f.includes(i.value));
-      }
-
+      const f = this.form.get(filter.key)!.value as string[];
+      filter.selected = this.datasets[filter.key].filter(i => f.includes(i.value));
     });
 
+    /* istanbul ignore next */
     this.anyFilterSelected = this.filters.filter(i => i.selected.length > 0).length > 0 || !!this.form.get('assignedToMe')?.value || !!this.form.get('suggestedOnly')?.value;
 
     this.innovationsList.setFilters({

@@ -21,7 +21,9 @@ import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/ne
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
+import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
 import { InnovationTransferAcceptanceComponent } from './pages/innovation-transfer-acceptance/innovation-transfer-acceptance.component';
+import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
 
 // Components.
 import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
@@ -61,7 +63,9 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovationOverviewComponent,
     InnovationSectionEvidenceEditComponent,
     InnovationSectionEditComponent,
+    InnovationNewComponent,
     InnovationTransferAcceptanceComponent,
+    InnovationsListComponent,
 
     // Components.
     OrganisationSuggestionsCardComponent

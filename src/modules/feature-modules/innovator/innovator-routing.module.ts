@@ -19,7 +19,9 @@ import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/ne
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
+import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
 import { InnovationTransferAcceptanceComponent } from './pages/innovation-transfer-acceptance/innovation-transfer-acceptance.component';
+import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
 
 import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details/manage-details-edit.component';
@@ -114,7 +116,8 @@ const routes: Routes = [
       {
         path: 'innovations',
         children: [
-          { path: '', pathMatch: 'full', component: DashboardComponent },
+          { path: '', pathMatch: 'full', component: InnovationsListComponent },
+          { path: 'new', pathMatch: 'full', component: InnovationNewComponent },
           {
             path: ':innovationId',
             data: { module: 'innovator' },

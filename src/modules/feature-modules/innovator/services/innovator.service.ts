@@ -155,6 +155,16 @@ export class InnovatorService extends CoreService {
 
   }
 
+  createInnovation(body: { name: string, description: string, countryName: string, postcode: string, organisationShares: string[] }): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() });
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
   getInnovationInfo(innovationId: string): Observable<getInnovationInfoEndpointDTO> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
