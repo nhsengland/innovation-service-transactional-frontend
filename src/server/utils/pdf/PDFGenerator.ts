@@ -91,11 +91,93 @@ export class PDFGenerator {
     .setFont('helvetica')
     .splitTextToSize(text, this.maxLineWidth);
 
-    this.doc.text(t, this.margin, this.currentPosition);
-
+    // check if current text of block will overflow the page vertically
     const blockHeight = (t.length * oneLineHeight) + 0.29;
-    this.currentPosition += (blockHeight + 0.19);
-    // this.currentPosition += 0.19;
+
+    const parts: string[][] = [];
+
+
+    // Potentially make this a recursive function
+
+    if (this.currentPosition + blockHeight > this.documentHeight) {
+
+      // initial height is the same as the instigator text block
+      let heigth = blockHeight;
+      // initial length is the same as the instigator array with split text block
+      let length = t.length;
+
+      // initializes temporary array of text with instigator text block array
+      let tempT = [...t];
+
+      // while the text size is higher than 90% of the document size
+      // text size is the sum of the text block height plus its current position on the document.
+      // if this sum is larger than 90% of the static document size, then we need to split the text
+      // so that it goes on the next page.
+      while (this.currentPosition + heigth > (this.documentHeight * 0.90)) {
+
+        length--;
+
+        // remove one line from the original array
+        // add that line to a new array of "excluded" lines
+
+        const range = tempT.slice(0, length);
+        const excluded = tempT.slice(length);
+
+        // calculate the new text height
+        const tempHeight = (range.length * oneLineHeight ) + 0.29;
+
+        // check if the current position plus the text height is still higher than 90% of the document size
+        if (this.currentPosition + tempHeight < this.documentHeight * 0.90) {
+          // the new height is smaller than 90% of the document.
+          // add that part to the output array
+          parts.push(range);
+
+          // calculate the position of the part
+          const tempPosition =  this.currentPosition + (tempHeight + 0.19);
+
+          // calculate the height of the excluded lines array
+          const excludedHeigth = (excluded.length * oneLineHeight) + 0.29;
+
+          // if the virtual position of the part plus the excluded text heigh is higher than 90% of the document height
+          if (tempPosition + excludedHeigth > this.documentHeight * 0.90 ) {
+
+            // the new temporary array is now the excluded lines because they also overflow 90% of a document height
+            tempT = [...excluded];
+            // the new height is the sum of the virtua position of the part plus the excluded lines height
+            heigth = tempPosition + excludedHeigth;
+
+          } else {
+
+            // the virtual position of the part plus the excluded text height fits on a single page
+            // add the excluded lines part
+            parts.push(excluded);
+            // the height is the position
+            heigth = excludedHeigth;
+          }
+
+        } else {
+
+          heigth = tempHeight;
+
+        }
+
+      }
+
+    } else {
+      parts.push(t);
+    }
+
+    for (const element of parts) {
+      this.doc.text(element, this.margin, this.currentPosition);
+      const tempHeight = (element.length * oneLineHeight ) + 0.29;
+      this.currentPosition += (tempHeight + 0.19);
+
+
+      if (this.currentPosition + tempHeight > this.documentHeight) {
+        this.addPage();
+        this.currentPosition = this.options.top;
+      }
+    }
 
     return this;
   }
