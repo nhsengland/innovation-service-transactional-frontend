@@ -47,7 +47,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
   organisationInfoUrl: string;
 
   organisationSuggestions: OrganisationSuggestion | undefined;
-  shares: {id: string, status: string}[];
+  shares: { id: string, status: string }[];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -132,7 +132,18 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
       });
 
-    });
+      this.setPageStatus('READY');
+
+    },
+      () => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch data sharing information',
+          message: 'Please try again or contact us for further help'
+        };
+      }
+    );
 
   }
 

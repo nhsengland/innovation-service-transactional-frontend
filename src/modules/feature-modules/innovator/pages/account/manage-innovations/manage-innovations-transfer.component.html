@@ -7,32 +7,38 @@
 
     <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
 
-    <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
-      <div class="nhsuk-heading-m nhsuk-warning-callout__label">
-        <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Warning </span>
-      </div>
-      <p> You will lose all access to an innovation when you transfer it to someone else. Your access is removed when the new owner accepts your transfer request. </p>
-    </div>
+    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
+    <ng-container *ngIf="pageStatus === 'READY'">
 
-    <form [formGroup]="form">
-
-      <ng-container *ngIf="stepNumber === 1">
-        <theme-form-radio-group controlName="innovation" label="Choose which innovation to transfer" [items]="formInnovationsItems" [pageUniqueField]="false"></theme-form-radio-group>
-        <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
-      </ng-container>
-
-      <ng-container *ngIf="stepNumber === 2">
-        <theme-form-input controlName="email" label="Enter the email of the new owner" [pageUniqueField]="false"></theme-form-input>
-        <theme-form-input controlName="confirmation" label="Are you sure that you want to transfer?" description="To confirm, please type the following: transfer my innovation" [pageUniqueField]="false"></theme-form-input>
-        <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3" (click)="onSubmitForm()"> Request transfer of ownership </button>
-      </ng-container>
-
-      <div class="nhsuk-u-padding-bottom-5">
-        <a routerLink="manage-innovations"> Cancel </a>
+      <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+        <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+          <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Warning </span>
+        </div>
+        <p> You will lose all access to an innovation when you transfer it to someone else. Your access is removed when the new owner accepts your transfer request. </p>
       </div>
 
-    </form>
+
+      <form [formGroup]="form">
+
+        <ng-container *ngIf="stepNumber === 1">
+          <theme-form-radio-group controlName="innovation" label="Choose which innovation to transfer" [items]="formInnovationsItems" [pageUniqueField]="false"></theme-form-radio-group>
+          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
+        </ng-container>
+
+        <ng-container *ngIf="stepNumber === 2">
+          <theme-form-input controlName="email" label="Enter the email of the new owner" [pageUniqueField]="false"></theme-form-input>
+          <theme-form-input controlName="confirmation" label="Are you sure that you want to transfer?" description="To confirm, please type the following: transfer my innovation" [pageUniqueField]="false"></theme-form-input>
+          <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3" (click)="onSubmitForm()"> Request transfer of ownership </button>
+        </ng-container>
+
+        <div class="nhsuk-u-padding-bottom-5">
+          <a routerLink="manage-innovations"> Cancel </a>
+        </div>
+
+      </form>
+
+    </ng-container>
 
   </div>
 </div>

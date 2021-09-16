@@ -83,8 +83,17 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
         this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
 
+        this.setPageStatus('READY');
+
       },
-      error => this.logger.error(error)
+      error => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch innovation record information',
+          message: 'Please try again or contact us for further help'
+        };
+      }
     );
 
   }

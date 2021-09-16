@@ -62,8 +62,11 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
           .length
           > 0;
 
+        this.setPageStatus('READY');
+
       },
       () => {
+        this.setPageStatus('ERROR');
         this.alert = {
           type: 'ERROR',
           title: 'Unable to fetch innovations transfers',

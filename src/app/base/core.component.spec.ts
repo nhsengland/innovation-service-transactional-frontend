@@ -80,6 +80,13 @@ describe('App/Base/CoreComponent running SERVER side', () => {
     expect(component.isDataRequest()).toBeTruthy();
   });
 
+  it(`should run setPageStatus()`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    component.setPageStatus('LOADING');
+    expect(component.pageStatus).toBe('LOADING');
+  });
+
   it(`should run redirectTo()`, () => {
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
@@ -181,8 +188,8 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
   it(`should run setPageStatus()`, () => {
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
-    component.setPageStatus('WAITING');
-    expect(component.pageStatus).toBe('WAITING');
+    component.setPageStatus('LOADING');
+    expect(component.pageStatus).toBe('LOADING');
   });
 
   it(`should run redirectTo() WITHOUT QueryParams`, () => {

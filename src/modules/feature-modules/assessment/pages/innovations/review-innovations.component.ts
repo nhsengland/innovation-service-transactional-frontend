@@ -124,7 +124,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   getInnovationsList(): void {
 
-    this.setPageStatus('WAITING');
+    this.setPageStatus('LOADING');
 
     this.assessmentService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(
       response => {

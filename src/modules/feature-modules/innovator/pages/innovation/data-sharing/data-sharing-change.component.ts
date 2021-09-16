@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent, FormArray, FormControl, FormGroup } from '@app/base';
+import { AlertType } from '@app/base/models';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
@@ -12,6 +14,8 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
   templateUrl: './data-sharing-change.component.html'
 })
 export class InnovationDataSharingChangeComponent extends CoreComponent implements OnInit {
+
+  alert: AlertType = { type: null };
 
   innovationId: string;
   organisationsList: { value: string, label: string }[];
@@ -49,20 +53,30 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
   ngOnInit(): void {
 
-    this.organisationsService.getAccessorsOrganisations().subscribe(
-      response => {
-        this.organisationsList = response.map(o => ({ value: o.id, label: o.name }));
+    forkJoin([
+      this.organisationsService.getAccessorsOrganisations(),
+      this.innovatorService.getInnovationShares(this.innovationId)
+    ]).subscribe(([organisations, innovationShares]) => {
 
-        this.innovatorService.getInnovationShares(this.innovationId).subscribe(
-          r => {
-            this.initialState.organisations = r;
-            r.forEach((organisation) => {
-              (this.form.get('organisations') as FormArray).push(
-                new FormControl(organisation.id)
-              );
-            });
-          }
+      this.organisationsList = organisations.map(o => ({ value: o.id, label: o.name }));
+
+      this.initialState.organisations = innovationShares;
+      innovationShares.forEach((organisation) => {
+        (this.form.get('organisations') as FormArray).push(
+          new FormControl(organisation.id)
         );
+      });
+
+      this.setPageStatus('READY');
+
+    },
+      () => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch data sharing information',
+          message: 'Please try again or contact us for further help'
+        };
       }
     );
 

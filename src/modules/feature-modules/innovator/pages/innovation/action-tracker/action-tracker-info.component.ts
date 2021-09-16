@@ -28,6 +28,8 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
   declineShow: boolean;
+
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService,
@@ -44,7 +46,6 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
     this.declineShow = false;
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
-
       case 'actionDeclined':
         this.alert = {
           type: 'INFORMATION',
@@ -63,20 +64,25 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
     this.innovatorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
       response => {
+
         this.action = response;
-        this.declineVisible();
+        this.declineShow = this.action.status.toLocaleLowerCase() === INNOVATION_SECTION_ACTION_STATUS.REQUESTED.label.toLocaleLowerCase();
+
+        this.setPageStatus('READY');
+
       },
       error => {
-        this.logger.error(error);
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch actions information',
+          message: 'Please try again or contact us for further help'
+        };
       }
     );
 
     this.notificationService.dismissNotification(this.actionId, NotificationContextType.ACTION).subscribe();
 
-  }
-
-  private declineVisible(): void {
-    this.declineShow = this.action?.status.toLocaleLowerCase() === INNOVATION_SECTION_ACTION_STATUS.REQUESTED.label.toLocaleLowerCase();
   }
 
 }

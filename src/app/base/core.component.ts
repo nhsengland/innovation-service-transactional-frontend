@@ -28,7 +28,7 @@ export class CoreComponent implements OnInit, OnDestroy {
   private serverResponse: Response | null;
 
   private pageTitleHolder = '';
-  private pageStatusHolder: 'WAITING' | 'READY' | 'ERROR' = 'WAITING';
+  private pageStatusHolder: 'LOADING' | 'READY' | 'ERROR' = 'LOADING';
 
   protected titleService: Title;
   protected router: Router;
@@ -107,8 +107,14 @@ export class CoreComponent implements OnInit, OnDestroy {
     this.titleService.setTitle(`${this.pageTitleHolder ? this.pageTitleHolder + ' | ' : ''}${this.translateService.instant('app.title')}`);
   }
 
-  setPageStatus(s: 'WAITING' | 'READY' | 'ERROR'): void {
-    this.pageStatusHolder = s;
+  setPageStatus(s: 'LOADING' | 'READY' | 'ERROR'): void {
+
+    // When running server side, the status always remains LOADING.
+    // The visual effects only are meant to be applied on the browser.
+    if (this.isRunningOnBrowser()) {
+      this.pageStatusHolder = s;
+    }
+
   }
 
 

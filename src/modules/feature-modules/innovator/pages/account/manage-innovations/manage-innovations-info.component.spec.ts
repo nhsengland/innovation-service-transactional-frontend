@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
@@ -17,6 +18,8 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
 
 
 describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountManageInnovationsInfoComponent', () => {
+
+  let activatedRoute: ActivatedRoute;
 
   let authenticationStore: AuthenticationStore;
   let innovatorService: InnovatorService;
@@ -37,6 +40,8 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountMa
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
+    activatedRoute = TestBed.inject(ActivatedRoute);
+
     authenticationStore = TestBed.inject(AuthenticationStore);
     innovatorService = TestBed.inject(InnovatorService);
 
@@ -49,6 +54,18 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountMa
     fixture = TestBed.createComponent(PageAccountManageInnovationsInfoComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
+  });
+
+  it('should show "archivalSuccess" success', () => {
+
+    activatedRoute.snapshot.queryParams = { alert: 'archivalSuccess' };
+
+    const expected = { type: 'SUCCESS', title: 'Innovation archival', message: 'Your innovation has been archived.' };
+
+    fixture = TestBed.createComponent(PageAccountManageInnovationsInfoComponent);
+    component = fixture.componentInstance;
+    expect(component.alert).toEqual(expected);
+
   });
 
   it('should have initial information loaded', () => {

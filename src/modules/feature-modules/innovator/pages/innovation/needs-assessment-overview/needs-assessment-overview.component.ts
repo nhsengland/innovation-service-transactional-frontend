@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 import { RoutingHelper } from '@modules/core';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
@@ -18,6 +19,8 @@ import { InnovatorService } from '../../../services/innovator.service';
   templateUrl: './needs-assessment-overview.component.html'
 })
 export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent implements OnInit {
+
+  alert: AlertType = { type: null };
 
   innovationId: string;
   assessmentId: string;
@@ -102,9 +105,16 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
           }
         ];
 
+        this.setPageStatus('READY');
+
       },
       error => {
-        this.logger.error(error);
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch needs assessment overview',
+          message: 'Please try again or contact us for further help'
+        };
       }
     );
 

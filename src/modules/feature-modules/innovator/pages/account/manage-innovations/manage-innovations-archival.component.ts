@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
+import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { FormEngineParameterModel, CustomValidators } from '@app/base/forms';
 import { AlertType } from '@app/base/models';
 
@@ -48,12 +48,16 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
   ngOnInit(): void {
     this.innovatorService.getInnovationTransfers().subscribe(
       response => {
+
         this.formInnovationsItems = this.stores.authentication.getUserInfo()
           .innovations
           .filter(i => !response.map(it => it.innovation.id).includes(i.id))
           .map(item => ({ value: item.id, label: item.name }));
+
+        this.setPageStatus('READY');
       },
       () => {
+        this.setPageStatus('ERROR');
         this.alert = {
           type: 'ERROR',
           title: 'Unable to fetch innovations transfers',
@@ -128,4 +132,5 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
         break;
     }
   }
+
 }

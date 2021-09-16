@@ -46,6 +46,7 @@ export type getInnovationActionInfoInDTO = {
   createdAt: string; // '2021-04-16T09:23:49.396Z',
   createdBy: { id: string; name: string; };
 };
+export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
 
 export type getInnovationSupportsInDTO = {
   id: string;
@@ -62,8 +63,6 @@ export type getInnovationSupportsInDTO = {
   accessors?: { id: string, name: string }[];
   notifications?: { [key: string]: number };
 };
-
-export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
 
 export type getInnovationActionsListEndpointOutDTO = {
   openedActions: (getInnovationActionsListEndpointInDTO & { name: string })[];

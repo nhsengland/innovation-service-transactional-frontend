@@ -115,4 +115,6 @@ describe('Theme/Components/ActivityTimeout/ActivityTimeoutComponent', () => {
 
   });
 
+
+
 });

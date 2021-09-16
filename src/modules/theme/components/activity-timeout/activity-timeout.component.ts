@@ -42,14 +42,6 @@ export class ActivityTimeoutComponent implements OnInit, OnDestroy {
 
     if (isPlatformBrowser(this.platformId)) {
 
-      // TODO: Remove after demos!
-      //////////////////////////////////
-      const isTest = Number(localStorage.getItem('timeout-test'));
-      if (isTest) {
-        this.minutesToLogout = isTest;
-      }
-      //////////////////////////////////
-
       document.body.addEventListener('click', () => this.reset());
       document.body.addEventListener('mouseover', () => this.reset());
       document.body.addEventListener('keyup', () => this.reset());
@@ -58,7 +50,7 @@ export class ActivityTimeoutComponent implements OnInit, OnDestroy {
 
     }
 
-    console.log('TO started', this.minutesToLogout);
+    console.log('Timeout started', this.minutesToLogout);
 
   }
 
@@ -80,13 +72,7 @@ export class ActivityTimeoutComponent implements OnInit, OnDestroy {
 
       this.setAccessibility();
 
-      // return;
     }
-
-    // if (difference < 0) {
-    //   this.state = 'TIMED_OUT';
-    //   this.signOut();
-    // }
 
   }
 
@@ -114,6 +100,7 @@ export class ActivityTimeoutComponent implements OnInit, OnDestroy {
   }
 
   signOut(): void {
+    /* istanbul ignore next */
     this.timeoutEvent.emit();
   }
 
