@@ -26,7 +26,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   summaryList: SummaryParsingType[];
 
-
   // isValidStepId(): boolean {
   //   const id = this.activatedRoute.snapshot.params.id;
   //   return ((1 <= Number(id) && Number(id) <= this.stepsData.length) || id === 'summary');
@@ -52,8 +51,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.summaryList = [];
 
   }
-
-
 
 
   ngOnInit(): void {
@@ -98,8 +95,11 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           })
         );
 
+        this.setPageStatus('READY');
+
       },
       () => {
+        this.setPageStatus('ERROR');
         this.logger.error('Error fetching data');
       });
 

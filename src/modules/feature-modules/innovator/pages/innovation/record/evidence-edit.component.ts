@@ -69,6 +69,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
 
     if (this.isCreation()) {
 
+      this.setPageStatus('READY');
       this.draw();
 
     } else {
@@ -77,9 +78,13 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
         response => {
           this.currentAnswers = this.wizard.runInboundParsing(response);
           this.wizard.runRules(this.currentAnswers);
+
+          this.setPageStatus('READY');
+
           this.draw();
         },
         () => {
+          this.setPageStatus('ERROR');
           this.logger.error('Error fetching data');
         }
       );

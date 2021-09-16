@@ -109,7 +109,7 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
 
   getInnovationsList(): void {
 
-    this.setPageStatus('WAITING');
+    this.setPageStatus('LOADING');
 
     this.accessorService.getAdvancedInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(
       response => {
@@ -127,7 +127,7 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
 
   onFormChange(): void {
 
-    this.setPageStatus('WAITING');
+    this.setPageStatus('LOADING');
 
     this.filters.forEach(filter => {
       const f = this.form.get(filter.key)!.value as string[];

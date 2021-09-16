@@ -87,6 +87,8 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
           })
         );
 
+        this.setPageStatus('READY');
+
       },
       error => this.redirectTo('error')
     );

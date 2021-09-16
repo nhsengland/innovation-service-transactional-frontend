@@ -49,8 +49,7 @@
 
       <div class="nhsuk-grid-column-three-quarters">
 
-        <theme-spinner *ngIf="pageStatus === 'WAITING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
+        <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
         <div *ngIf="pageStatus === 'READY'" aria-live="polite">
           <p class="nhsuk-u-margin-bottom-0">{{ innovationsList.getTotalRowsNumber() }} records found</p>

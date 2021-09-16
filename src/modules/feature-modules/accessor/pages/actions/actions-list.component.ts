@@ -85,7 +85,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
   getActionsList(): void {
 
-    this.setPageStatus('WAITING');
+    this.setPageStatus('LOADING');
 
     this.accessorService.getActionsList(this.actionsList.getAPIQueryParams()).subscribe(
       response => {

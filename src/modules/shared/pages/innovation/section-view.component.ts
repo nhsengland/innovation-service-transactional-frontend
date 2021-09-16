@@ -123,6 +123,9 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
 
   getSectionInfo(): void {
+
+    this.setPageStatus('LOADING');
+
     this.stores.innovation.getSectionInfo$(this.module, this.innovationId, this.section.id).subscribe(
       response => {
 
@@ -137,9 +140,16 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
           this.summaryList = this.wizard.runSummaryParsing(response.data);
         }
 
+        this.setPageStatus('READY');
+
       },
       () => {
-        this.logger.error('Error fetching data');
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch innovation section information',
+          message: 'Please try again or contact us for further help'
+        };
       });
 
   }

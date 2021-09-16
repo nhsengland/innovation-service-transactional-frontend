@@ -48,10 +48,20 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
 
   getInnovationsTransfers(): void {
+
+    this.setPageStatus('LOADING');
+
     this.innovatorService.getInnovationTransfers(true).subscribe(
-      response => this.innovationTransfers = response,
-      error => this.logger.error('Error fetching innovations transfer information', error)
+      response => {
+        this.innovationTransfers = response;
+        this.setPageStatus('READY');
+      },
+      error => {
+        this.setPageStatus('READY');
+        this.logger.error('Error fetching innovations transfer information', error);
+      }
     );
+
   }
 
   notificationsCount(): number {

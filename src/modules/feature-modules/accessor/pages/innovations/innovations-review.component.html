@@ -22,7 +22,7 @@
     <div class="nhsuk-grid-row">
       <div id="content-{{ currentTab.key }}" role="tabpanel" attr.aria-labelledby="tab-{{ currentTab.key }}" class="nhsuk-grid-column-full">
 
-        <ng-container *ngIf="pageStatus === 'WAITING'">
+        <ng-container *ngIf="pageStatus === 'LOADING'">
           <p> {{ 'messages.informations.fetching_information' | translate }} </p>
         </ng-container>
 
