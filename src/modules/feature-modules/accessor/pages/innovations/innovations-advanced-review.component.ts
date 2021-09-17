@@ -91,8 +91,9 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
 
     this.organisationsService.getAccessorsOrganisations().subscribe(
       response => {
-        const myOrganisation = this.stores.authentication.getUserInfo().organisations[0].id;
-        this.datasets.engagingOrganisations = response.filter(i => i.id !== myOrganisation).map(i => ({ label: i.name, value: i.id }));
+        this.datasets.engagingOrganisations = response
+          .sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
+          .map(i => ({ label: i.name, value: i.id }));
       },
       error => {
         this.logger.error(error);

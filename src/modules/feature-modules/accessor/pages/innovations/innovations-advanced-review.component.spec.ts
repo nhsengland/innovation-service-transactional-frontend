@@ -94,7 +94,8 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
     component = fixture.componentInstance;
 
     fixture.detectChanges();
-    expect(component.datasets.engagingOrganisations).toEqual([{ value: 'orgId01', label: 'Org name 01' }]);
+    expect(component.datasets.engagingOrganisations).toEqual([{ value: 'orgId01', label: 'Org name 01' },
+    { value: 'org_id', label: 'Org name 02' }]);
 
   });
 
