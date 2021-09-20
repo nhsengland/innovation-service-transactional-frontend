@@ -175,7 +175,7 @@ function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
 
     toReturn.push({
       label: stepsLabels.l2,
-      value: data.userTests?.map(item => item.kind).join('<br />'),
+      value: data.userTests?.map(item => item.kind).join('\n'),
       editStepNumber: 2
     });
 
@@ -192,7 +192,8 @@ function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
       toReturn.push({
         label: `Attachment ${i + 1}`,
         value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-        editStepNumber: toReturn.length + 1
+        editStepNumber: toReturn.length + 1,
+        allowHTML: true
       });
     });
 

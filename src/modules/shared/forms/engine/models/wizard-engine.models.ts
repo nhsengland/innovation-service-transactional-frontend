@@ -1,12 +1,15 @@
-import { MappedObject } from '@modules/core';
+import { MappedObject } from '@modules/core/interfaces/base.interfaces';
 import { FormEngineModel, FormEngineParameterModel } from './form-engine.models';
+
 
 export type SummaryParsingType = {
   label: string;
   value: null | undefined | string;
   editStepNumber?: number;
   evidenceId?: string;
+  allowHTML?: boolean;
 };
+
 
 export class WizardEngineModel {
 
@@ -29,10 +32,7 @@ export class WizardEngineModel {
   }
 
   runRules(data?: MappedObject): this {
-
-    const v = data || this.currentAnswers;
-
-    this.runtimeRules.forEach(rule => rule(this.steps, v, this.currentStepNumber));
+    this.runtimeRules.forEach(rule => rule(this.steps, data || this.currentAnswers, this.currentStepNumber));
     return this;
   }
 
@@ -46,8 +46,11 @@ export class WizardEngineModel {
   }
 
   runSummaryParsing(data?: MappedObject): SummaryParsingType[] {
-    const v = data || this.currentAnswers;
-    return this.summaryParsing ? this.summaryParsing(v) : [];
+
+    if (!this.summaryParsing) { return []; }
+
+    return this.summaryParsing(data || this.currentAnswers);
+
   }
 
 
@@ -55,7 +58,7 @@ export class WizardEngineModel {
   isFirstStep(): boolean { return this.currentStepNumber === 1; }
   isLastStep(): boolean { return this.currentStepNumber === this.steps.length; }
   isValidStepNumber(stepNumber: number | string): boolean {
-    return ((1 <= Number(stepNumber) && Number(stepNumber) <= this.steps.length));
+    return (1 <= Number(stepNumber) && Number(stepNumber) <= this.steps.length);
   }
 
 
@@ -68,7 +71,7 @@ export class WizardEngineModel {
   }
 
   previousStep(): this {
-    this.currentStepNumber++;
+    this.currentStepNumber--;
     return this;
   }
 

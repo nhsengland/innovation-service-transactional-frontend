@@ -1,0 +1,49 @@
+<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+        <p> {{ alert.message }} </p>
+      </theme-alert>
+    </div>
+  </div>
+
+  <div class="nhsuk-back-link">
+    <a href="javascript:void(0)" class="nhsuk-back-link__link" (click)="onSubmitStep('previous', $event)">
+      <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
+      </svg>
+      Go back
+    </a>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <h1 *ngIf="wizard.currentStep().label" class="nhsuk-heading-l"> {{ wizard.currentStep().label }} </h1>
+      <p *ngIf="wizard.currentStep().description"> {{ wizard.currentStep().description }}> </p>
+
+      <theme-form-engine formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
+
+      <div *ngIf="wizard.currentStepNumber === 1" class="nhsuk-inset-text">
+        <span class="nhsuk-u-visually-hidden">Information:</span>
+        <p>All innovations registered on this Use this service to get relevant information about developing your healthcare innovation.</p>
+      </div>
+
+      <div *ngIf="wizard.currentStepNumber === 2" class="nhsuk-inset-text">
+        <span class="nhsuk-u-visually-hidden">Information:</span>
+        <p>Please make sure that the innovation name is correct as you will not be able to change it later.</p>
+      </div>
+
+      <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">
+        {{ wizard.isFirstStep() ? 'Start now' : ( wizard.isLastStep() ? 'Complete registration' : 'Continue' ) }}
+      </button>
+
+      <div class="nhsuk-u-padding-bottom-5">
+        <a routerLink="/innovator/dashboard"> Cancel </a>
+      </div>
+
+    </div>
+  </div>
+
+</div>

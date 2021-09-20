@@ -1,14 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { ENV } from '@tests/app.mocks';
-
 import { Injector } from '@angular/core';
 
+import { ENV } from '@tests/app.mocks';
+
 import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
-import { StoresModule } from '@modules/stores';
 
 import { InnovationService } from './innovation.service';
+
 
 describe('Core/Services/InnovationService', () => {
 
@@ -20,11 +20,9 @@ describe('Core/Services/InnovationService', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        CoreModule,
-        StoresModule
+        CoreModule
       ],
       providers: [
-        InnovationService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });

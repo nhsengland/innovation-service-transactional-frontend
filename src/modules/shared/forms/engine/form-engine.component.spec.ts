@@ -45,7 +45,7 @@ describe('FormEngineComponent', () => {
         FormRadioGroupComponent,
         FormTextareaComponent
       ],
-    }).compileComponents();
+    });
 
     fixture = TestBed.createComponent(FormEngineComponent);
     component = fixture.componentInstance;

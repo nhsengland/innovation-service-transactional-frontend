@@ -13,6 +13,8 @@ import { InnovationOverviewComponent } from './overview.component';
 
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
 
+import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
+
 
 describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () => {
 
@@ -30,7 +32,7 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
         StoresModule,
         AssessmentModule
       ]
-    }).compileComponents();
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
@@ -40,27 +42,25 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
 
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(InnovationOverviewComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     expect(component).toBeTruthy();
-
   });
-
 
   it('should have innovation information loaded with payload 01', () => {
 
-    const dataMock = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: null, categories: ['Medical'], otherCategoryDescription: '' },
+    const responseMock = {
+      summary: { id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company', countryName: 'England', postCode: '', categories: ['MEDICAL_DEVICE'], otherCategoryDescription: '' },
       contact: { name: 'A name', email: 'email', phone: '' },
       assessment: { id: '01', assignToName: 'Name' }
     };
-    assessmentService.getInnovationInfo = () => of(dataMock as any);
-    const expected = dataMock;
+    assessmentService.getInnovationInfo = () => of(responseMock);
+
+    const expected = responseMock;
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovation).toEqual(expected);
 
@@ -68,16 +68,18 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
 
   it('should have innovation information loaded with payload 02', () => {
 
-    const dataMock = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['Medical', 'OTHER'], otherCategoryDescription: 'Other category' },
+    const responseMock = {
+      summary: { id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['MEDICAL_DEVICE', 'OTHER', 'INVALID'], otherCategoryDescription: 'Other category' },
       contact: { name: 'A name', email: 'email', phone: '' },
       assessment: { id: '01', assignToName: 'Name' }
     };
-    assessmentService.getInnovationInfo = () => of(dataMock as any);
-    const expected = dataMock;
+    assessmentService.getInnovationInfo = () => of(responseMock);
+
+    const expected = responseMock;
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovation).toEqual(expected);
 
@@ -86,12 +88,12 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
   it('should NOT have innovation information loaded', () => {
 
     assessmentService.getInnovationInfo = () => throwError('error');
-    const expected = [];
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
-    expect(component.innovation).toEqual(undefined);
+    expect(component.innovation).toBeUndefined();
 
   });
 

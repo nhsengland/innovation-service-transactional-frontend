@@ -3,6 +3,10 @@
 
     <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
 
+    <p>
+      If you are looking for specific innovations, use the <a routerLink="advanced-search" class="">advanced search innovations list</a>.
+    </p>
+
     <div class="app-tabs">
       <ul class="app-tabs__list" role="tablist" aria-label="Tabs">
         <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
@@ -18,7 +22,7 @@
     <div class="nhsuk-grid-row">
       <div id="content-{{ currentTab.key }}" role="tabpanel" attr.aria-labelledby="tab-{{ currentTab.key }}" class="nhsuk-grid-column-full">
 
-        <ng-container *ngIf="pageStatus === 'WAITING'">
+        <ng-container *ngIf="pageStatus === 'LOADING'">
           <p> {{ 'messages.informations.fetching_information' | translate }} </p>
         </ng-container>
 
@@ -30,8 +34,9 @@
 
           <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-2" aria-live="polite">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
 
-          <form *ngIf="currentTab.showAssignedToMe" [formGroup]="form" class="nhsuk-u-margin-bottom-1">
-            <theme-form-checkbox controlName="assignedToMe" label="Only show innovations assigned to me" size="small"></theme-form-checkbox>
+          <form [formGroup]="form" class="nhsuk-u-margin-bottom-1">
+            <theme-form-checkbox *ngIf="currentTab.showAssignedToMeFilter" controlName="assignedToMe" label="Only show innovations assigned to me" size="small"></theme-form-checkbox>
+            <theme-form-checkbox *ngIf="currentTab.showSuggestedOnlyFilter" controlName="suggestedOnly" label="Only show suggested innovations" size="small"></theme-form-checkbox>
           </form>
 
           <hr class="nhsuk-section-break nhsuk-section-break--visible" />
@@ -90,7 +95,7 @@
 
                 <td *ngIf="innovationsList.getColumnLabel('accessors')" class="nhsuk-table__cell">
                   <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('accessors') }}</span>
-                  {{ item.support.accessors[0]?.name }} {{ item.support.accessors.length > 1 ? '+ ' + (item.support.accessors.length - 1) : '' }}
+                  {{ !item.support.accessors ? '' : item.support.accessors[0]?.name + '' + (item.support.accessors.length > 1 ? ' + ' + ((item.support.accessors?.length || 0) - 1) : '') }}
                 </td>
 
                 <td class="nhsuk-table__cell text-align-right">

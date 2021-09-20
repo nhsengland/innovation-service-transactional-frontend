@@ -1,45 +1,59 @@
 <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
 
-  <div class="nhsuk-back-link">
-    <a [routerLink]="getNavigationUrl('previous')" class="nhsuk-back-link__link" (click)="onSubmitStep('previous', $event)">
-      <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
-      </svg>
-      Go back
-    </a>
-  </div>
-
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-two-thirds">
-
-      <ng-container *ngIf="isQuestionStep()">
-        <theme-form-engine formId="sectionForm" [parameters]="currentStep.parameters" [values]="currentAnswers"></theme-form-engine>
-        <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
-      </ng-container>
-
-      <ng-container *ngIf="isSummaryStep()">
-
-        <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
-
-        <dl class="nhsuk-summary-list">
-          <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
-
-            <ng-container *ngIf="item.editStepNumber">
-              <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-              <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.value"></dd>
-              <dd class="nhsuk-summary-list__actions">
-                <a [routerLink]="gotoStep(item.editStepNumber)"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
-              </dd>
-
-            </ng-container>
-          </div>
-        </dl>
-
-        <button class="nhsuk-button" (click)="onSubmitSurvey()"> Save </button>
-
-      </ng-container>
-
+    <div class="nhsuk-grid-column-full">
+      <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
     </div>
   </div>
+
+
+  <ng-container *ngIf="pageStatus === 'READY'">
+
+    <div class="nhsuk-back-link">
+      <a [routerLink]="getNavigationUrl('previous')" class="nhsuk-back-link__link" (click)="onSubmitStep('previous', $event)">
+        <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
+        </svg>
+        Go back
+      </a>
+    </div>
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+
+        <ng-container *ngIf="isQuestionStep()">
+          <theme-form-engine formId="sectionForm" [parameters]="currentStep.parameters" [values]="currentAnswers"></theme-form-engine>
+          <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
+        </ng-container>
+
+        <ng-container *ngIf="isSummaryStep()">
+
+          <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
+
+          <dl class="nhsuk-summary-list">
+            <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
+
+              <ng-container *ngIf="item.editStepNumber">
+                <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+                <dd class="nhsuk-summary-list__value text-pre-wrap">
+                  <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
+                  <span *ngIf="!item.allowHTML">{{ item.value }}</span>
+                </dd>
+                <dd class="nhsuk-summary-list__actions">
+                  <a [routerLink]="gotoStep(item.editStepNumber)"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+                </dd>
+
+              </ng-container>
+            </div>
+          </dl>
+
+          <button class="nhsuk-button" (click)="onSubmitSurvey()"> {{ innovation.status === 'IN_PROGRESS' ? 'Save as draft' : 'Save' }} </button>
+
+        </ng-container>
+
+      </div>
+    </div>
+
+  </ng-container>
 
 </div>

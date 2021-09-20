@@ -37,6 +37,7 @@ export class InnovationTransferRedirectionGuard implements CanActivate {
           window.location.assign(redirectUrl); // Full reload is needed to hit SSR.
         } else {
           this.serverResponse.status(303).setHeader('Location', redirectUrl);
+          /* istanbul ignore next */
           this.serverResponse.end();
         }
 
@@ -53,6 +54,7 @@ export class InnovationTransferRedirectionGuard implements CanActivate {
           window.location.assign(redirectUrl); // Full reload is needed to hit SSR.
         } else {
           this.serverResponse.status(303).setHeader('Location', redirectUrl);
+          /* istanbul ignore next */
           this.serverResponse.end();
         }
 

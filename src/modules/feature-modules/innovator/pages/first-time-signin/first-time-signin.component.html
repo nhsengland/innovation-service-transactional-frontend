@@ -21,7 +21,7 @@
 
       <ng-container *ngIf="isSummaryStep()">
 
-        <theme-alert type="ERROR" title="An unknown error occured">
+        <theme-alert type="ERROR" title="An unknown error occurred">
           <p> You may try to go back and try again. </p>
         </theme-alert>
 
@@ -30,7 +30,7 @@
         <dl class="nhsuk-summary-list">
           <div *ngFor="let item of summaryList.items" class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-            <dd class="nhsuk-summary-list__value">{{ item.value }}</dd>
+            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
             <dd class="nhsuk-summary-list__actions">
               <a [routerLink]="item.url"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
             </dd>

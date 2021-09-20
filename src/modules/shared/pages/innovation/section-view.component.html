@@ -7,30 +7,51 @@
 
     <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-5"> {{ section.title }} </h1>
 
-    <ng-container *ngIf="!section.isNotStarted">
+    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-      <h2 class="nhsuk-heading-m">{{ module === 'innovator' ? 'Submitted' : 'Your' }} answers</h2>
-      <dl class="nhsuk-summary-list">
-        <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-          <dd class="nhsuk-summary-list__value text-pre-wrap" [innerHTML]="item.value"></dd>
-          <dd class="nhsuk-summary-list__actions">
-            <a *ngIf="module === 'innovator' && item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
-            <a *ngIf="item.evidenceId" routerLink="evidence/{{ item.evidenceId }}"> View <span class="nhsuk-u-visually-hidden"> evidence detail </span></a>
-          </dd>
+    <ng-container *ngIf="pageStatus === 'READY'">
+
+      <ng-container *ngIf="!section.isNotStarted">
+
+        <div *ngIf="innovation.status === 'IN_PROGRESS' && section.status === 'DRAFT'" class="nhsuk-inset-text">
+          <span class="nhsuk-u-visually-hidden">Information:</span>
+          <p *ngIf="module === 'innovator'">
+            This section is not visible to accessors because you changed it to "In draft" status, you need to submit the section if you want to share it with accessors.
+          </p>
+          <p *ngIf="module === 'accessor'">
+            This section is not visible because the innovator has changed it status to "In Draft". If you need to see this section, you can create an action or comment asking them to resubmit.
+          </p>
         </div>
-      </dl>
 
-    </ng-container>
+        <ng-container *ngIf="summaryList.length > 0">
+          <h2 class="nhsuk-heading-m">{{ module === 'innovator' ? 'Your' : 'Submitted' }} answers</h2>
+          <dl class="nhsuk-summary-list">
+            <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
+              <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+              <dd class="nhsuk-summary-list__value text-pre-wrap">
+                <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
+                <span *ngIf="!item.allowHTML">{{ item.value }}</span>
+              </dd>
+              <dd class="nhsuk-summary-list__actions">
+                <a *ngIf="module === 'innovator' && item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+                <a *ngIf="item.evidenceId" routerLink="evidence/{{ item.evidenceId }}"> View <span class="nhsuk-u-visually-hidden"> evidence detail </span></a>
+              </dd>
+            </div>
+          </dl>
+        </ng-container>
 
-    <ng-container *ngIf="module === 'innovator'">
-      <button *ngIf="section.isNotStarted" type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-right-3">Start now</button>
-      <button *ngIf="section.showSubmitButton" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-right-3"> Submit </button>
-      <button *ngIf="section.hasEvidences" routerLink="evidence/new" class="nhsuk-button nhsuk-button--secondary"> Add evidence </button>
-    </ng-container>
+      </ng-container>
 
-    <ng-container *ngIf="module === 'accessor'">
-      <button routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" [queryParams]="{ section: sectionId }" class="nhsuk-button"> Create action for this section </button>
+      <ng-container *ngIf="module === 'innovator'">
+        <button *ngIf="section.isNotStarted" type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-right-3"> Start now </button>
+        <button *ngIf="section.showSubmitButton" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-right-3"> Submit </button>
+        <button *ngIf="section.hasEvidences" routerLink="evidence/new" class="nhsuk-button nhsuk-button--secondary"> Add evidence </button>
+      </ng-container>
+
+      <ng-container *ngIf="module === 'accessor'">
+        <button routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" [queryParams]="{ section: sectionId }" class="nhsuk-button"> Create action for this section </button>
+      </ng-container>
+
     </ng-container>
 
   </div>

@@ -6,17 +6,11 @@ import { NGXLogger } from 'ngx-logger';
 
 import { AssessmentService } from '../services/assessment.service';
 
-export type InnovationDataType = {
-  id: string;
-  name: string;
-  assessment: {
-    id: undefined | string;
-  };
-};
+import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 
 @Injectable()
-export class InnovationDataResolver implements Resolve<InnovationDataType> {
+export class InnovationDataResolver implements Resolve<InnovationDataResolverType> {
 
   constructor(
     private logger: NGXLogger,
@@ -24,17 +18,20 @@ export class InnovationDataResolver implements Resolve<InnovationDataType> {
   ) { }
 
 
-  resolve(route: ActivatedRouteSnapshot): Observable<InnovationDataType> {
+  resolve(route: ActivatedRouteSnapshot): Observable<InnovationDataResolverType> {
 
     return this.assessmentService.getInnovationInfo(route.params.innovationId).pipe(
       map(
         response => ({
           id: response.summary.id,
           name: response.summary.name,
+          status: response.summary.status,
           assessment: { id: response.assessment?.id }
         }),
         catchError(error => {
+          /* istanbul ignore next */
           this.logger.error('Error fetching data innovation data', error);
+          /* istanbul ignore next */
           return of(false);
         })
       )

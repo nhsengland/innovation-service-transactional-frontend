@@ -20,68 +20,85 @@
 
     <h1 class="nhsuk-u-margin-bottom-3"> {{ pageTitle }} </h1>
 
-    <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
-      <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="{'active': item}"></li>
-    </ul>
+    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-    <p class="d-flex nhsuk-u-margin-0">
-      <theme-svg-icon type="success"></theme-svg-icon>
-      <span class="nhsuk-u-margin-right-2"></span> {{ sections.submitted }} sections submitted
-    </p>
-    <p class="d-flex nhsuk-u-margin-0">
-      <theme-svg-icon type="edit"></theme-svg-icon>
-      <span class="nhsuk-u-margin-right-2"></span> {{ sections.draft }} section in draft
-    </p>
-    <p class="d-flex">
-      <theme-svg-icon type="error"></theme-svg-icon>
-      <span class="nhsuk-u-margin-right-2"></span> {{ sections.notStarted }} sections not started
-    </p>
+    <ng-container *ngIf="pageStatus === 'READY'">
 
-    <ng-container *ngIf="isInnovationInCreatedStatus()">
-      <button class="nhsuk-button nhsuk-u-margin-bottom-2" [disabled]="!allSectionsSubmitted()" (click)="onSubmitInnovation()"> Submit record for needs assessment </button>
-      <p class="nhsuk-body-s">Submit all sections before you can submit your record for needs assessment</p>
-    </ng-container>
+      <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
+        <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="{'active': item}"></li>
+      </ul>
 
-    <h2>All sections</h2>
-    <a [href]="documentUrl">
-      <p class="nhsuk-heading-m nhsuk-u-margin-bottom-6">Download all questions (DOCX, 820KB)</p>
-    </a>
+      <p class="d-flex nhsuk-u-margin-0">
+        <theme-svg-icon type="success"></theme-svg-icon>
+        <span class="nhsuk-u-margin-right-2"></span> {{ sections.submitted }} sections submitted
+      </p>
+      <p class="d-flex nhsuk-u-margin-0">
+        <theme-svg-icon type="edit"></theme-svg-icon>
+        <span class="nhsuk-u-margin-right-2"></span> {{ sections.draft }} section in draft
+      </p>
+      <p class="d-flex">
+        <theme-svg-icon type="error"></theme-svg-icon>
+        <span class="nhsuk-u-margin-right-2"></span> {{ sections.notStarted }} sections not started
+      </p>
 
-    <ol class="app-task-list">
-      <li *ngFor="let sectionGroup of innovationSections; let i = index">
+      <ng-container *ngIf="isInnovationInCreatedStatus()">
+        <button class="nhsuk-button nhsuk-u-margin-bottom-2" [disabled]="!allSectionsSubmitted()" (click)="onSubmitInnovation()"> Submit record for needs assessment </button>
+        <p class="nhsuk-body-s">Submit all sections before you can submit your record for needs assessment</p>
+      </ng-container>
 
-        <h2 class="app-task-list__section">
-          <span class="app-task-list__section-number">{{ i + 1 }}. </span> {{ sectionGroup.title }}
-          <span *ngIf="i === 0" class="nhsuk-heading-xs nhsuk-u-margin-bottom-0 float-r">Open actions</span>
-        </h2>
+      <h2>All sections</h2>
+      <ng-container *ngIf="module === 'innovator'">
 
-        <ol class="app-task-list__items">
-          <li *ngFor="let section of sectionGroup.sections; let j = index" class="app-task-list__item">
+        <a [href]="documentUrl">
+          <h3 class="nhsuk-u-margin-bottom-2">Download all questions (DOCX, 820KB)</h3>
+        </a>
 
-            <ng-container *ngIf="section.status !== 'UNKNOWN'">
-              <span class="app-task-list__task-icon">
-                <ng-container *ngTemplateOutlet="icon; context: { status: section.status }"></ng-container>
+        <a [href]="pdfDocumentUrl">
+          <p class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Export your innovation record to PDF</p>
+        </a>
+        <p class="nhsuk-u-margin-bottom-6">
+          Exports your current innovation record as a PDF file.
+        </p>
+
+      </ng-container>
+
+      <ol class="app-task-list">
+        <li *ngFor="let sectionGroup of innovationSections; let i = index">
+
+          <h2 class="app-task-list__section">
+            <span class="app-task-list__section-number">{{ i + 1 }}. </span> {{ sectionGroup.title }}
+            <span *ngIf="i === 0" class="nhsuk-heading-xs nhsuk-u-margin-bottom-0 float-r">Open actions</span>
+          </h2>
+
+          <ol class="app-task-list__items">
+            <li *ngFor="let section of sectionGroup.sections; let j = index" class="app-task-list__item">
+
+              <ng-container *ngIf="section.status !== 'UNKNOWN'">
+                <span class="app-task-list__task-icon">
+                  <ng-container *ngTemplateOutlet="icon; context: { status: section.status }"></ng-container>
+                </span>
+              </ng-container>
+
+              <span class="app-task-list__task-name"> {{ (i + 1) + '.' + (j + 1) }}
+                <a routerLink="{{ baseUrl }}/{{section.id}}"><span class="nhsuk-u-visually-hidden"> Go to </span>
+                  {{ section.title }}
+                  <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'NOT_STARTED'">Section not started</span>
+                  <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'DRAFT'">Section in draft</span>
+                  <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'SUBMITTED'">Section submitted</span>
+                </a>
               </span>
-            </ng-container>
 
-            <span class="app-task-list__task-name"> {{ (i + 1) + '.' + (j + 1) }} 
-              <a routerLink="{{ baseUrl }}/{{section.id}}"><span class="nhsuk-u-visually-hidden"> Go to </span> 
-                {{ section.title }} 
-                <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'NOT_STARTED'">Section not started</span>
-                <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'DRAFT'">Section in draft</span>
-                <span class="nhsuk-u-visually-hidden" *ngIf="section.status === 'SUBMITTED'">Section submitted</span>
-              </a> 
-            </span>
+              <strong *ngIf="section.actionStatus" class="nhsuk-tag app-task-list__tag" [ngClass]="innovationSectionActionStatus[section.actionStatus].cssClass">
+                {{ innovationSectionActionStatus[section.actionStatus].label }}
+              </strong>
 
-            <strong *ngIf="section.actionStatus" class="nhsuk-tag app-task-list__tag" [ngClass]="innovationSectionActionStatus[section.actionStatus].cssClass">
-              {{ innovationSectionActionStatus[section.actionStatus].label }}
-            </strong>
+            </li>
+          </ol>
 
-          </li>
-        </ol>
+        </li>
+      </ol>
 
-      </li>
-    </ol>
+    </ng-container>
 
   </div>
 </div>

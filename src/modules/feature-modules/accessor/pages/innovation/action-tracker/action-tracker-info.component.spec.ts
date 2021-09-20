@@ -13,7 +13,7 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 
 import { InnovationActionTrackerInfoComponent } from './action-tracker-info.component';
 
-import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
+import { AccessorService, getInnovationActionInfoOutDTO } from '@modules/feature-modules/accessor/services/accessor.service';
 
 
 describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponent', () => {
@@ -46,12 +46,9 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
 
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     expect(component).toBeTruthy();
-
   });
 
   it('should show "actionCreationSuccess" warning', () => {
@@ -63,7 +60,6 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
 
     fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     expect(component.alert).toEqual(expected);
 
   });
@@ -77,7 +73,6 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
 
     fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     expect(component.alert).toEqual(expected);
 
   });
@@ -87,19 +82,22 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01', actionId: 'Action01' };
 
-    const responseMock = {
+    const responseMock: getInnovationActionInfoOutDTO = {
       id: 'ID01',
+      displayId: '',
       status: 'REQUESTED',
-      name: 'Submit section X',
+      name: 'Submit section 01',
       description: 'some description',
       section: InnovationSectionsIds.COST_OF_INNOVATION,
-      createdAt: '2021-04-16T09:23:49.396Z',
-      createdBy: 'one guy'    };
-    accessorService.getInnovationActionInfo = () => of(responseMock as any);
+      createdAt: '2020-01-01T00:00:00.000Z',
+      createdBy: 'Innovation user'
+    };
+    accessorService.getInnovationActionInfo = () => of(responseMock);
     const expected = responseMock;
 
     fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.action).toBe(expected);
 
@@ -111,6 +109,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
 
     fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.action).toBe(undefined);
 

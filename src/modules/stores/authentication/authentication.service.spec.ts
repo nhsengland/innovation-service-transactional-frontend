@@ -13,7 +13,6 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
   let service: AuthenticationService;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,

@@ -20,7 +20,7 @@ export class ApiOutInterceptor implements HttpInterceptor {
 
       request = request.clone({
         withCredentials: true,
-        setHeaders: { Cookie: this.serverRequest?.headers.cookie || '' }
+        setHeaders: { Cookie: this.serverRequest.headers.cookie || '' }
       });
 
     } else {

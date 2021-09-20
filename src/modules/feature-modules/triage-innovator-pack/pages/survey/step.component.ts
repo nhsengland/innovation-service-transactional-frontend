@@ -38,14 +38,19 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
     valid: boolean;
   };
 
+  endingData: { rule: '' | 'RULE_01' | 'RULE_02' | 'RULE_03', bulletsList: string[] } = { rule: '', bulletsList: [] };
+
+  signupUrl = '';
+
   isFirstStep(): boolean { return this.currentStep.number === 1; }
   isLastStep(): boolean { return this.currentStep.number === this.totalNumberOfSteps; }
   isQuestionStep(): boolean { return Number.isInteger(Number(this.activatedRoute.snapshot.params.id)); }
   isSummaryStep(): boolean { return this.activatedRoute.snapshot.params.id === 'summary'; }
+  isEndStep(): boolean { return this.activatedRoute.snapshot.params.id === 'end'; }
 
   isValidStepId(): boolean {
     const id = this.activatedRoute.snapshot.params.id;
-    return ((1 <= Number(id) && Number(id) <= this.stepsData.length) || id === 'summary');
+    return ((1 <= Number(id) && Number(id) <= this.stepsData.length) || id === 'summary' || id === 'end');
   }
 
   constructor(
@@ -55,7 +60,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
 
     super();
 
-    this.stepsData = TRIAGE_INNOVATOR_PACK_QUESTIONS;
+    this.stepsData = TRIAGE_INNOVATOR_PACK_QUESTIONS.map(item => item.question);
     this.currentStep = {
       number: Number(this.activatedRoute.snapshot.params.id),
       data: new FormEngineModel({ parameters: [] })
@@ -82,7 +87,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
 
           if (this.isQuestionStep()) {
             this.currentStep.number = Number(params.id);
-            this.currentStep.data = TRIAGE_INNOVATOR_PACK_QUESTIONS[this.currentStep.number - 1];
+            this.currentStep.data = TRIAGE_INNOVATOR_PACK_QUESTIONS[this.currentStep.number - 1].question;
             this.currentStep.data.defaultData = this.currentAnswers;
             this.setPageTitle(this.currentStep.data.parameters[0].label || ''); // Only 1 question per page.
           }
@@ -90,6 +95,11 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
           if (this.isSummaryStep()) {
             this.setPageTitle('Check your answers before completing');
             this.prepareSummaryData();
+          }
+
+          if (this.isEndStep()) {
+            this.setPageTitle('Submitted successfully');
+            this.prepareEndingData();
           }
 
         })
@@ -104,17 +114,24 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
         return;
       }
 
-      const urlQueryParams = this.decodeQueryParams(this.activatedRoute.snapshot.queryParams);
+      const urlQueryParams = this.decodeQueryParams(this.activatedRoute.snapshot.queryParams || {});
       this.currentAnswers = { ...(urlQueryParams.f || {}), ...this.requestBody };
 
       if (this.isQuestionStep()) {
         this.currentStep.number = Number(this.activatedRoute.snapshot.params.id);
-        this.currentStep.data = TRIAGE_INNOVATOR_PACK_QUESTIONS[this.currentStep.number - 1];
+        this.currentStep.data = TRIAGE_INNOVATOR_PACK_QUESTIONS[this.currentStep.number - 1].question;
         this.currentStep.data.defaultData = this.currentAnswers;
+        this.setPageTitle(this.currentStep.data.parameters[0].label || ''); // Only 1 question per page.
       }
 
       if (this.isSummaryStep()) {
+        this.setPageTitle('Check your answers before completing');
         this.prepareSummaryData();
+      }
+
+      if (this.isEndStep()) {
+        this.setPageTitle('Submitted successfully');
+        this.prepareEndingData();
       }
 
       if (this.isDataRequest()) { // POST request will be treated here!
@@ -174,6 +191,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
       this.surveyService.submitSurvey(this.currentAnswers).subscribe(
         response => {
           this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/end`, { surveyId: response.id });
+          this.signupUrl = `${this.stores.environment.APP_URL}/signup?surveyId=${response.id}`;
         },
         error => {
           this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/summary`);
@@ -249,7 +267,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
 
         switch (p.dataType) {
           case 'checkbox-array':
-            value = ((this.currentAnswers[p.id] || []) as string[]).map(v => (p.items || []).find(i => i.value === v)?.label).join('<br />');
+            value = ((this.currentAnswers[p.id] || []) as string[]).map(v => (p.items || []).find(i => i.value === v)?.label).join('\n');
             break;
           case 'radio-group':
             value = (p.items || []).find(i => i.value === this.currentAnswers[p.id])?.label || this.currentAnswers[p.id];
@@ -268,6 +286,48 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
         });
       });
     });
+
+  }
+
+  prepareEndingData(): void {
+
+    // Rule 01: If innovators answer "YES" from Q3 to Q10, and Q11 contains "I'm only looking for information right now".
+    // Rule 02: If innovators answer "YES" from Q3 to Q10, and Q11 does NOT contains "I'm only looking for information right now".
+    // Rule 03: None of the previous, adds a text per each questions that is not YES.
+
+    const Q3ToQ10QuestionIds = ['hasProblemTackleKnowledge', 'hasMarketResearch', 'hasWhoBenefitsKnowledge', 'hasBenefits', 'hasTests', 'hasRelevanteCertifications', 'hasEvidence', 'hasCostEvidence'];
+
+    let yesToQuestion3To10 = true;
+    Q3ToQ10QuestionIds.forEach(item => {
+      yesToQuestion3To10 = yesToQuestion3To10 && this.currentAnswers[item] === 'YES';
+    });
+
+    if (yesToQuestion3To10 && this.currentAnswers.supportTypes?.includes('INFORMATION')) {
+      this.endingData = { rule: 'RULE_01', bulletsList: [] };
+      return;
+    } else if (yesToQuestion3To10 && !this.currentAnswers.supportTypes?.includes('INFORMATION')) {
+      const Q11 = TRIAGE_INNOVATOR_PACK_QUESTIONS.find(p => p.question.parameters[0].id === 'supportTypes');
+      this.endingData = {
+        rule: 'RULE_02',
+        bulletsList: ((this.currentAnswers.supportTypes || []) as string[]).map(v => (Q11?.question.parameters[0].items || []).find(i => i.value === v)?.label || '')
+      };
+      return;
+    }
+
+    this.endingData = {
+      rule: 'RULE_03',
+      bulletsList: Q3ToQ10QuestionIds.map(item => {
+
+        const question = TRIAGE_INNOVATOR_PACK_QUESTIONS.find(p => p.question.parameters[0].id === item);
+        const answer = question?.summary[this.currentAnswers[item]];
+
+        if (answer) { return answer; }
+
+        return '';
+
+      }).filter(item => item)
+
+    };
 
   }
 

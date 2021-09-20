@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { TableModel } from '@app/base/models';
+import { AlertType, TableModel } from '@app/base/models';
 
 import { getInnovationActionsListEndpointOutDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
@@ -12,6 +12,8 @@ import { getInnovationActionsListEndpointOutDTO, InnovatorService } from '@modul
   templateUrl: './action-tracker.component.html'
 })
 export class InnovationActionTrackerComponent extends CoreComponent implements OnInit {
+
+  alert: AlertType = { type: null };
 
   innovationId: string;
 
@@ -57,15 +59,23 @@ export class InnovationActionTrackerComponent extends CoreComponent implements O
 
     this.innovatorService.getInnovationActionsList(this.innovationId).subscribe(
       response => {
+
         this.openedActionsList.setData(response.openedActions);
         this.closedActionsList.setData(response.closedActions);
+
         this.setPageStatus('READY');
+
       },
       error => {
         this.setPageStatus('ERROR');
-        this.logger.error(error);
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch actions information',
+          message: 'Please try again or contact us for further help'
+        };
       }
     );
 
   }
+
 }

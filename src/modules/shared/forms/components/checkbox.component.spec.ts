@@ -40,7 +40,7 @@ describe('FormCheckboxComponent', () => {
         HostComponent,
         FormCheckboxComponent,
       ],
-    }).compileComponents();
+    });
 
     hostFixture = TestBed.createComponent(HostComponent);
     hostComponent = hostFixture.componentInstance;

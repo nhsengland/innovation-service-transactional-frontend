@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+// Angular Material.
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 // Base.
 import { BaseLayoutComponent } from './base/base-layout.component';
 
@@ -9,7 +12,6 @@ import { BaseLayoutComponent } from './base/base-layout.component';
 import { ActivityTimeoutComponent } from './components/activity-timeout/activity-timeout.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { HeaderComponent } from './components/header/header.component';
-import { HeaderBreadcrumbsBarComponent } from './components/header/breadcrumbs-bar.component';
 import { HeaderNavigationBarComponent } from './components/header/navigation-bar.component';
 import { FooterComponent } from './components/footer/footer.component';
 
@@ -19,12 +21,16 @@ import { ActionLinkComponent } from './components/navigation/action-link.compone
 import { BackLinkComponent } from './components/navigation/back-link.component';
 import { PrintLinkComponent } from './components/navigation/print-link.component';
 
+import { SpinnerComponent } from './components/spinner/spinner.component';
 import { NotificationTagComponent } from './components/tag/notification-tag.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+
+    // Angular Material.
+    MatProgressSpinnerModule
   ],
   declarations: [
     // Base.
@@ -34,7 +40,6 @@ import { NotificationTagComponent } from './components/tag/notification-tag.comp
     ActivityTimeoutComponent,
     AlertComponent,
     HeaderComponent,
-    HeaderBreadcrumbsBarComponent,
     HeaderNavigationBarComponent,
     FooterComponent,
 
@@ -44,10 +49,14 @@ import { NotificationTagComponent } from './components/tag/notification-tag.comp
     BackLinkComponent,
     PrintLinkComponent,
 
+    SpinnerComponent,
     NotificationTagComponent
   ],
   providers: [],
   exports: [
+    // Angular Material.
+    MatProgressSpinnerModule,
+
     // Base.
     BaseLayoutComponent,
 
@@ -55,7 +64,6 @@ import { NotificationTagComponent } from './components/tag/notification-tag.comp
     ActivityTimeoutComponent,
     AlertComponent,
     HeaderComponent,
-    HeaderBreadcrumbsBarComponent,
     HeaderNavigationBarComponent,
     FooterComponent,
 
@@ -65,6 +73,7 @@ import { NotificationTagComponent } from './components/tag/notification-tag.comp
     BackLinkComponent,
     PrintLinkComponent,
 
+    SpinnerComponent,
     NotificationTagComponent
   ]
 })

@@ -40,17 +40,27 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.actionId = this.activatedRoute.snapshot.params.actionId;
 
+  }
+
+
+  ngOnInit(): void {
+
     this.innovatorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
-      response => this.actionDisplayId = response.displayId,
+      response => {
+        this.actionDisplayId = response.displayId;
+        this.setPageStatus('READY');
+      },
       error => {
-        this.logger.error(error);
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch action information',
+          message: 'Please try again or contact us for further help'
+        };
       }
     );
 
   }
-
-
-  ngOnInit(): void { }
 
 
   onSubmit(): void {
@@ -69,8 +79,8 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when declining an action',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when declining an action',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
       }

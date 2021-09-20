@@ -1,0 +1,53 @@
+<div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+  <div class="nhsuk-grid-column-full">
+
+    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+      <p> {{ alert.message }} </p>
+    </theme-alert>
+
+    <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
+
+    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+    <ng-container *ngIf="pageStatus === 'READY'">
+
+      <form [formGroup]="form">
+
+        <ng-container *ngIf="stepNumber === 1">
+          <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+            <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+              <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Warning </span>
+            </div>
+            <p> You will no longer have access to an archived innovation. A record of the innovation will be stored on the service. </p>
+          </div>
+          <theme-form-radio-group controlName="innovation" label="Choose which innovation to archive" [items]="formInnovationsItems" [pageUniqueField]="false"></theme-form-radio-group>
+          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
+        </ng-container>
+
+        <ng-container *ngIf="stepNumber === 2">
+          <theme-form-textarea controlName="reason" label="What's your reason for archiving this innovation?" [pageUniqueField]="false"></theme-form-textarea>
+          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
+        </ng-container>
+
+        <ng-container *ngIf="stepNumber === 3">
+          <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+            <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+              <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
+            </div>
+            <p> You will no longer have access to an archived innovation. A record of the innovation will be stored on the service. </p>
+          </div>
+          <theme-form-input controlName="email" label="Enter your email" [pageUniqueField]="false"></theme-form-input>
+          <theme-form-input controlName="confirmation" label="Are you sure that you want to archive?" description="To confirm, please type the following: archive my innovation" [pageUniqueField]="false"></theme-form-input>
+          <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3" (click)="onSubmitForm()"> Archive innovation </button>
+        </ng-container>
+
+        <div class="nhsuk-u-padding-bottom-5">
+          <a routerLink="/innovator/account/manage-innovations"> Cancel </a>
+        </div>
+
+      </form>
+
+    </ng-container>
+
+  </div>
+</div>

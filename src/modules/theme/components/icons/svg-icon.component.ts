@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 
+
 @Component({
   selector: 'theme-svg-icon',
   templateUrl: './svg-icon.component.html'

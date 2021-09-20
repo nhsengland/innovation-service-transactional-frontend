@@ -40,7 +40,7 @@ describe('InputComponent', () => {
         HostComponent,
         FormInputComponent,
       ],
-    }).compileComponents();
+    });
 
     hostFixture = TestBed.createComponent(HostComponent);
     hostComponent = hostFixture.componentInstance;

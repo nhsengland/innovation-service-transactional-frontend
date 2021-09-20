@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
+import { NotificationService } from '@modules/shared/services/notification.service';
 
 @Component({
   selector: 'app-assessment-pages-dashboard',
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent extends CoreComponent {
+export class DashboardComponent extends CoreComponent implements OnInit {
 
   user: {
     displayName: string;
@@ -14,8 +15,11 @@ export class DashboardComponent extends CoreComponent {
   };
 
   cardsList: { title: string, link: string, description: string }[];
+  notifications: { [key: string]: number };
 
-  constructor() {
+  constructor(
+    private notificationService: NotificationService,
+  ) {
 
     super();
     this.setPageTitle('Home');
@@ -31,12 +35,24 @@ export class DashboardComponent extends CoreComponent {
         link: '/assessment/innovations',
         description: 'Find, review and create a needs assessment for all incoming innovations'
       },
-      // {
-      //   title: 'Your account',
-      //   link: '/assessment/account',
-      //   description: 'View and edit your details, manage email notifications'
-      // }
     ];
+
+    this.notifications = {
+      ACTION: 0,
+      COMMENT: 0,
+      INNOVATION: 0,
+      SUPPORT: 0,
+      DATA_SHARING: 0,
+    };
+  }
+
+  ngOnInit(): void {
+
+    this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
+      response => {
+        this.notifications = response;
+      }
+    );
 
   }
 

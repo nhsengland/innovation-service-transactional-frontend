@@ -66,16 +66,18 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(queryParams => {
 
-        if (!queryParams.status) {
+        const currentStatus = queryParams.status;
+        const currentTabIndex = this.tabs.findIndex(tab => tab.queryParams.status === currentStatus) || 0;
+
+        if (!currentStatus || currentTabIndex === -1) {
           this.router.navigate(['/assessment/innovations'], { queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' } });
           return;
         }
 
-        const tab = this.tabs.find(t => t.queryParams.status === queryParams.status);
         this.currentTab = {
-          key: tab?.key || '',
-          status: queryParams.status,
-          description: tab?.description || this.tabs[0].description,
+          key: this.tabs[currentTabIndex].key,
+          status: currentStatus,
+          description: this.tabs[currentTabIndex].description,
           innovationsOverdue: 0
         };
 
@@ -122,7 +124,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   getInnovationsList(): void {
 
-    this.setPageStatus('WAITING');
+    this.setPageStatus('LOADING');
 
     this.assessmentService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(
       response => {
@@ -142,7 +144,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
     this.notificationService.getAllUnreadNotificationsGroupedByStatus('INNOVATION_STATUS').subscribe(
       response => {
         for (const t of this.tabs) {
-          t.notifications = response ? response[t.key] : 0;
+          t.notifications = response[t.key] || 0;
         }
       }
     );

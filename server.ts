@@ -8,13 +8,14 @@ import * as fs from 'fs';
 import * as helmet from 'helmet';
 import { join } from 'path';
 import { initAppInsights } from 'src/globals';
-import { BASE_PATH, BASE_URL, LOG_LEVEL, STATIC_CONTENT_PATH, VIEWS_PATH } from 'src/server/config/constants.config';
+import { BASE_PATH, BASE_URL, LOG_LEVEL, STATIC_CONTENT_PATH, VIEWS_PATH, ENABLE_ANALYTICS } from 'src/server/config/constants.config';
 import { handler } from 'src/server/handlers/logger.handler';
 import { appLoggingMiddleware } from 'src/server/middlewares/app-logging.middleware';
 import { exceptionLoggingMiddleware } from 'src/server/middlewares/exception-logging.middleware';
 import apiRouter from 'src/server/routes/api.routes';
 import authenticationRouter from 'src/server/routes/authentication.routes';
 import fileUploadRouter from 'src/server/routes/file-upload.routes';
+import pdfRouter from 'src/server/routes/pdf-generator.routes';
 import 'zone.js/dist/zone-node';
 import { AppServerModule } from './src/main.server';
 
@@ -65,6 +66,7 @@ export function app(): express.Express {
 
   // Routes
   server.use(authenticationRouter);
+  server.use(pdfRouter);
   server.use(fileUploadRouter);
   server.use(apiRouter);
 
@@ -92,7 +94,7 @@ export function app(): express.Express {
       req, res,
       providers: [
         { provide: APP_BASE_HREF, useValue: req.baseUrl },
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL } }
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL, ENABLE_ANALYTICS } }
       ]
     });
   });
@@ -105,6 +107,7 @@ export function app(): express.Express {
       window.__env.BASE_PATH = '${BASE_PATH}';
       window.__env.API_URL = '${BASE_URL}${BASE_PATH}/api';
       window.__env.LOG_LEVEL = '${LOG_LEVEL}';
+      window.__env.ENABLE_ANALYTICS = '${ENABLE_ANALYTICS}';
     }(this));`);
   });
   // // All regular routes using the Universal engine.
@@ -113,7 +116,7 @@ export function app(): express.Express {
       req, res,
       providers: [
         { provide: APP_BASE_HREF, useValue: req.baseUrl },
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL } }
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL, ENABLE_ANALYTICS } }
       ]
     });
   });

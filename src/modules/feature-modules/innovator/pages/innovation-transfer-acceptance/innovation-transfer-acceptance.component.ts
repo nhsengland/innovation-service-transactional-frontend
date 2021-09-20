@@ -59,8 +59,9 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
         // As this page only appears for new users, if more innovation transfers exists to him, we just choose the first to finish the process.
         // User will have the opportunity to accept other transfers afterwards.
         const transfer = response[0];
-
         this.transferId = transfer.id;
+
+        // Updates wizard configuration step 1 description.
         this.wizard.steps[0].description = `${transfer.innovation.owner} has requested that you take ownership of ${transfer.innovation.name}.`;
 
 
@@ -86,6 +87,8 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
           })
         );
 
+        this.setPageStatus('READY');
+
       },
       error => this.redirectTo('error')
     );
@@ -103,7 +106,7 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
       return;
     }
 
-    this.wizard.addAnswers(formData?.data || {}).runRules();
+    this.wizard.addAnswers(formData!.data).runRules();
 
     this.redirectTo(this.getNavigationUrl(action));
 
@@ -134,12 +137,12 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
 
   getNavigationUrl(action: 'previous' | 'next'): string {
 
-    let url = `/${this.module}/innovation-transfer-acceptance`;
+    let url = `/innovator/innovation-transfer-acceptance`;
 
     switch (action) {
       case 'previous':
-        if (this.wizard.isFirstStep()) { url += `/1`; }
-        else if (this.isSummaryStep()) { url += `/${this.wizard.steps.length}`; }
+        if (this.isSummaryStep()) { url += `/${this.wizard.steps.length}`; }
+        else if (this.wizard.isFirstStep()) { url += `/1`; }
         else { url += `/${this.wizard.currentStepNumber - 1}`; }
         break;
 

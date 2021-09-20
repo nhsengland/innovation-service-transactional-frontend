@@ -141,7 +141,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
     },
     {
       label: stepsLabels.l3,
-      value: data.categories?.map(v => v === 'OTHER' ? data.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('<br />'),
+      value: data.categories?.map(v => v === 'OTHER' ? data.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n'),
       editStepNumber: 3
     },
     {
@@ -151,17 +151,17 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
     },
     {
       label: stepsLabels.l5,
-      value: data.areas?.map(v => areasItems.find(item => item.value === v)?.label).join('<br />'),
+      value: data.areas?.map(v => areasItems.find(item => item.value === v)?.label).join('\n'),
       editStepNumber: 5
     },
     {
       label: stepsLabels.l6,
-      value: data.clinicalAreas?.map(v => clinicalAreasItems.find(item => item.value === v)?.label).join('<br />'),
+      value: data.clinicalAreas?.map(v => clinicalAreasItems.find(item => item.value === v)?.label).join('\n'),
       editStepNumber: 6
     },
     {
       label: stepsLabels.l7,
-      value: data.careSettings?.map(v => careSettingsItems.find(item => item.value === v)?.label).join('<br />'),
+      value: data.careSettings?.map(v => careSettingsItems.find(item => item.value === v)?.label).join('\n'),
       editStepNumber: 7
     },
     {
@@ -171,7 +171,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
     },
     {
       label: stepsLabels.l9,
-      value: data.supportTypes?.map(v => supportTypesItems.find(item => item.value === v)?.label).join('<br />'),
+      value: data.supportTypes?.map(v => supportTypesItems.find(item => item.value === v)?.label).join('\n'),
       editStepNumber: 9
     }
   ];

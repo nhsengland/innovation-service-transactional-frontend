@@ -14,7 +14,7 @@
     </ng-container>
 
     <ng-container *ngIf="hasError">
-      <span id="error-{{ id }}" class="nhsuk-error-message">
+      <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
         <span class="nhsuk-u-visually-hidden">Error:</span> {{ errorMessage | translate }}
       </span>
     </ng-container>
@@ -39,7 +39,7 @@
 
           <ng-container *ngSwitchDefault>
 
-            <div class="nhsuk-checkboxes__item" [ngClass]="{'nhsuk-u-margin-left-4': item.group}">
+            <div class="nhsuk-checkboxes__item {{ cssClass }}" [ngClass]="{'nhsuk-u-margin-left-4': item.group}">
               <ng-container *ngIf="isRunningOnBrowser">
                 <input id="{{ id }}{{ i }}" type="checkbox" name="{{ arrayName }}[]" [value]="item.value" [checked]="isChecked(item.value)" (change)="onChanged($event)" class="nhsuk-checkboxes__input"
                   [attr.aria-controls]="item.conditional ? 'conditional-' + id + i : null"

@@ -14,7 +14,7 @@
     </ng-container>
 
     <ng-container *ngIf="hasError">
-      <span id="error-{{ id }}" class="nhsuk-error-message">
+      <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
         <span class="nhsuk-u-visually-hidden">Error:</span> {{ errorMessage | translate }}
       </span>
     </ng-container>

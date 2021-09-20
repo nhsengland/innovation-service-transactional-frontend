@@ -2,19 +2,39 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { Injector } from '@angular/core';
+import { Component, Injector, ViewChild } from '@angular/core';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { StoresModule, InnovationService } from '@modules/stores';
-import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
+import { StoresModule } from '@modules/stores';
+import { ThemeModule } from '@modules/theme/theme.module';
+import { SharedModule } from '@modules/shared/shared.module';
 
 import { OrganisationSuggestionsCardComponent } from './organisation-suggestion-card.component';
+
+import { NotificationService } from '@modules/shared/services/notification.service';
+
+import { OrganisationSuggestion } from '@modules/stores/innovation/innovation.models';
+
+
+@Component({
+  template: `<organisation-suggestions-card [suggestions]="suggestions" [shares]="shares"></organisation-suggestions-card>`
+})
+class HostComponent {
+
+  @ViewChild(OrganisationSuggestionsCardComponent) childComponent?: OrganisationSuggestionsCardComponent;
+
+  suggestions?: OrganisationSuggestion;
+  shares?: { id: string, status: string }[];
+
+}
 
 
 describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
 
-  let component: OrganisationSuggestionsCardComponent;
-  let fixture: ComponentFixture<OrganisationSuggestionsCardComponent>;
+  let notificationService: NotificationService;
+
+  let hostComponent: HostComponent;
+  let hostFixture: ComponentFixture<HostComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -23,20 +43,85 @@ describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        InnovatorModule
+        ThemeModule,
+        SharedModule
+      ],
+      declarations: [
+        HostComponent,
+        OrganisationSuggestionsCardComponent
       ]
-    }).compileComponents();
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
+
+    notificationService = TestBed.inject(NotificationService);
+
+    hostFixture = TestBed.createComponent(HostComponent);
+    hostComponent = hostFixture.componentInstance;
+
+  });
+
+  it('should create the component', () => {
+    hostFixture.detectChanges();
+    expect(hostComponent).toBeTruthy();
+  });
+
+  it('should create the component with empty information', () => {
+
+    hostComponent.suggestions = {
+      assessment: {
+        id: '',
+        suggestedOrganisations: []
+      },
+      accessors: [{
+        organisationUnit: {
+          id: '', name: '', acronym: '',
+          organisation: { id: '', name: '', acronym: '' }
+        },
+        suggestedOrganisations: []
+
+      }]
+    };
+
+    hostComponent.shares = undefined;
+
+    hostFixture.detectChanges();
+    expect(hostComponent).toBeTruthy();
 
   });
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(OrganisationSuggestionsCardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    expect(component).toBeTruthy();
+    notificationService.notifications = { DATA_SHARING: 1 };
+
+    hostComponent.suggestions =
+    {
+      assessment: {
+        id: 'assessmentId01',
+        suggestedOrganisations: [{
+          id: 'orgId01', name: ' Org name 01', acronym: 'ORG01',
+          organisationUnits: [{ id: 'orgUnitId01', name: 'Org unit name 01', acronym: 'ORGu01' }]
+        }]
+      },
+      accessors: [{
+        organisationUnit: {
+          id: 'orgUnitId01', name: 'Org unit name 01', acronym: 'ORGu01',
+          organisation: { id: 'orgId01', name: ' Org name 01', acronym: 'ORG01' }
+        },
+        suggestedOrganisations: [
+          { id: 'orgId02', name: ' Org name 02', acronym: 'ORG02' },
+          { id: 'orgId03', name: ' Org name 03', acronym: 'ORG03', }
+        ]
+      }]
+    };
+
+    hostComponent.shares = [
+      { id: 'orgId03', status: 'ENGAGING' }
+    ];
+
+    hostFixture.detectChanges();
+    expect(hostComponent.childComponent?.accessors).toEqual({ organisations: [' Org name 02 (ORG02)'], suggestors: 'Org unit name 01 ORG01' });
+    expect(hostComponent.childComponent?.assessments).toEqual({ organisations: [' Org name 01 (ORG01)'] });
 
   });
 

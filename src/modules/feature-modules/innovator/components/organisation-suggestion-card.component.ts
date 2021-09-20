@@ -12,7 +12,7 @@ import { NotificationContextType, NotificationService } from '@modules/shared/se
 export class OrganisationSuggestionsCardComponent implements OnChanges {
 
   @Input() suggestions: OrganisationSuggestion | undefined;
-  @Input() shares: {id: string, status: string }[] | undefined;
+  @Input() shares: { id: string, status: string }[] | undefined;
 
   assessments: {
     organisations: string[]
@@ -62,14 +62,14 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
     this.hasNewSuggestions = this.notificationService.notifications[NotificationContextType.DATA_SHARING] ? true : false;
   }
 
-  private parseAccessors(accessorsSuggestions: AccessorSuggestionModel[]): { suggestors: string, organisations: string[]} {
-    const shares = this.shares?.map(s => s.id);
+  private parseAccessors(accessorsSuggestions: AccessorSuggestionModel[]): { suggestors: string, organisations: string[] } {
+    const shares = this.shares?.map(s => s.id) || [];
     const accessorsUnits = accessorsSuggestions.map(as => `${as.organisationUnit.name} ${as.organisationUnit.organisation.acronym}`);
     const suggestedOrganisations = accessorsSuggestions
-      .flatMap( as => as.suggestedOrganisations
-        .filter(so => !shares?.includes(so.id))
-        .map( so => `${so.name} (${so.acronym})`)
-    );
+      .flatMap(as => as.suggestedOrganisations
+        .filter(so => !shares.includes(so.id))
+        .map(so => `${so.name} (${so.acronym})`)
+      );
 
     // removes duplicate entries
     const organisations = [...new Set(suggestedOrganisations)];
@@ -80,12 +80,12 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
     };
   }
 
-  private parseAssessments(assessmentsSuggestions: AssessmentSuggestionModel): { organisations: string[]} {
+  private parseAssessments(assessmentsSuggestions: AssessmentSuggestionModel): { organisations: string[] } {
 
-    const shares = this.shares?.map(s => s.id);
+    const shares = this.shares?.map(s => s.id) || [];
     const suggestedOrganisations = assessmentsSuggestions.suggestedOrganisations
-      .filter(so => !shares?.includes(so.id))
-      .map( so => `${so.name} (${so.acronym})`);
+      .filter(so => !shares.includes(so.id))
+      .map(so => `${so.name} (${so.acronym})`);
 
     // removes duplicate entries
     const organisations = [...new Set(suggestedOrganisations)];

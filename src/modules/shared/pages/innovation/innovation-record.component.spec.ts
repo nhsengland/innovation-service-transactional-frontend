@@ -25,7 +25,7 @@ describe('Shared/Pages/Innovation/PageInnovationRecordComponent', () => {
         StoresModule,
         InnovatorModule
       ]
-    }).compileComponents();
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 

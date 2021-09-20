@@ -24,7 +24,7 @@ export class AuthenticationGuard implements CanActivate {
 
     return this.authentication.initializeAuthentication$().pipe(
       map(response => response),
-      catchError((e) => {
+      catchError(e => {
 
         this.loggerService.trackTrace('[AuthenticationGuard] Sign In Error', Severity.ERROR, { error: e });
 
@@ -36,7 +36,9 @@ export class AuthenticationGuard implements CanActivate {
         }
 
         this.serverResponse.status(303).setHeader('Location', redirectUrl);
+        /* istanbul ignore next */
         this.serverResponse.end();
+        /* istanbul ignore next */
         return of(false);
       })
     );

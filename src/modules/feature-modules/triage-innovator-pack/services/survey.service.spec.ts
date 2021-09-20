@@ -18,7 +18,6 @@ describe('FeatureModules/TriageInnovatorPack/SurveyService', () => {
   let service: SurveyService;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,

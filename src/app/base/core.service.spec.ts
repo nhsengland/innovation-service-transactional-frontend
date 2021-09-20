@@ -14,7 +14,6 @@ describe('App/Base/CoreService', () => {
   let service: CoreService;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -34,7 +33,7 @@ describe('App/Base/CoreService', () => {
   });
 
 
-  it('should create Core servicet', () => {
+  it('should create the service', () => {
     expect(service).toBeTruthy();
   });
 

@@ -1,6 +1,13 @@
+<theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+  <p> {{ alert.message }} </p>
+</theme-alert>
+
 <h1 class="nhsuk-heading-m"> {{ pageTitle }} </h1>
 
-<ng-container *ngIf="contentReady">
+<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+<ng-container *ngIf="pageStatus === 'READY'">
+
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
@@ -99,16 +106,15 @@
             </li>
           </ul>
         </ng-container>
-
         See <strong><a routerLink="/innovator/innovations/{{ innovationId }}/data-sharing"> data sharing and support</a></strong>
       </div>
       <div class="nhsuk-grid-column-one-third" *ngIf="showNeedsAssessmentCompleteCard()">
-        <strong><a routerLink="/innovator/innovations/{{ innovationId }}/assessments/{{ assessmentId }}">Needs
-            assessment completed</a></strong>
+        <strong><a routerLink="/innovator/innovations/{{ innovationId }}/assessments/{{ assessmentId }}">Needs assessment completed</a></strong>
         <p>Your innovation is visible to all organisations you've selected.</p>
       </div>
     </div>
   </ng-container>
+
 </ng-container>
 
 <ng-template #icon let-completed="completed">

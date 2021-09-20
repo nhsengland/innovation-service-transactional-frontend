@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
@@ -14,8 +15,7 @@ import { NotificationContextType, NotificationService } from '@modules/shared/se
 })
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
 
-  contentReady = false;
-
+  alert: AlertType = { type: null };
   innovationId: string;
   innovationStatus: keyof typeof INNOVATION_STATUS = '';
   innovationSections: SectionsSummaryModel[] = [];
@@ -97,11 +97,16 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           .flatMap(s => (s.accessors || []).map(a => ({ ...a, unit: s.organisationUnit.name })));
       }
 
-      this.contentReady = true;
+      this.setPageStatus('READY');
 
     },
-      (error) => {
-        this.logger.error(error);
+      () => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch innovation record information',
+          message: 'Please try again or contact us for further help'
+        };
       }
     );
   }

@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 import { RoutingHelper } from '@modules/core';
 
-import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
+import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -17,7 +17,7 @@ import { AccessorService } from '../../../services/accessor.service';
 export class InnovationSupportInfoComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-  innovation: InnovationDataType;
+  innovation: InnovationDataResolverType;
 
   alert: AlertType = { type: null };
 
@@ -25,11 +25,12 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
     organisationUnit: string;
     accessors: string;
     status: string;
-  } = { organisationUnit: '', accessors: '' , status: '' };
+  } = { organisationUnit: '', accessors: '', status: '' };
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
   isQualifyingAccessorRole = false;
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -50,7 +51,6 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'supportUpdateSuccess':
         this.alert = {
@@ -59,39 +59,32 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
           message: 'You\'ve updated your support status and posted a comment to the innovator.'
         };
         break;
-        case 'supportOrganisationSuggestSuccess':
-          this.alert = {
-            type: 'SUCCESS',
-            title: 'Organisation suggestions sent',
-            message: 'Your suggestions were saved and notifications sent.'
-          };
-          break;
+      case 'supportOrganisationSuggestSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'Organisation suggestions sent',
+          message: 'Your suggestions were saved and notifications sent.'
+        };
+        break;
       default:
         break;
     }
 
-    this.accessorService.getInnovationInfo(this.innovationId).subscribe(
-      response => {
-        this.innovation.support.id = response.support?.id;
-        this.innovation.support.status = response.support?.status || 'UNASSIGNED';
-        this.loadSupportInfo(this.innovation.support.id || '');
-      }
-    );
+
+    this.innovationSupport.organisationUnit = this.stores.authentication.getAccessorOrganisationUnitName();
+
+    if (this.innovation.support?.id) {
+      this.accessorService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id).subscribe(
+        response => {
+          this.innovationSupport.accessors = (response.accessors).map(item => item.name).join(', ');
+          this.innovationSupport.status = response.status;
+        },
+        error => {
+          this.logger.error(error);
+        }
+      );
+    }
+
   }
 
-  loadSupportInfo(supportId: string): void {
-
-    this.accessorService.getInnovationSupportInfo(this.innovationId, supportId).subscribe(
-      response => {
-        this.innovationSupport = {
-          organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-          accessors: (response.accessors || []).map(item => item.name).join(', '),
-          status: response.status,
-        };
-      },
-      error => {
-        this.logger.error(error);
-      }
-    );
-  }
 }

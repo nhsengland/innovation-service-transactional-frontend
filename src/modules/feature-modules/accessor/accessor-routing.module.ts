@@ -6,7 +6,8 @@ import { AccessorLayoutComponent } from './base/accessor-layout.component';
 // Pages.
 import { ActionsListComponent } from './pages/actions/actions-list.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
+import { InnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
+import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationActionTrackerListComponent } from './pages/innovation/action-tracker/action-tracker-list.component';
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
@@ -85,7 +86,8 @@ const routes: Routes = [
       {
         path: 'innovations',
         children: [
-          { path: '', pathMatch: 'full', component: ReviewInnovationsComponent },
+          { path: '', pathMatch: 'full', component: InnovationsReviewComponent },
+          { path: 'advanced-search', pathMatch: 'full', component: InnovationsAdvancedReviewComponent },
           {
             path: ':innovationId',
             data: { module: 'accessor' },

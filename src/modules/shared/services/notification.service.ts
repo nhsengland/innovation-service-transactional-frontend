@@ -22,7 +22,7 @@ export type NotificationDismissResultDTO = {
 };
 
 
-export type getUnreadNotificationsEndpointDTO =  {
+export type getUnreadNotificationsEndpointDTO = {
   [key: string]: number;
 };
 
@@ -30,14 +30,14 @@ export type getUnreadNotificationsEndpointDTO =  {
 @Injectable()
 export class NotificationService extends CoreService {
 
-  notifications: {[key: string]: number} =  {};
+  notifications: { [key: string]: number } = {};
 
   constructor() { super(); }
 
   dismissNotification(contextId: string, contextType: string): Observable<NotificationDismissResultDTO> {
 
     const url = new UrlModel(this.API_URL).addPath('notifications');
-    return this.http.patch<NotificationDismissResultDTO>(url.buildUrl(), {contextId, contextType}).pipe(
+    return this.http.patch<NotificationDismissResultDTO>(url.buildUrl(), { contextId, contextType }).pipe(
       take(1),
       map(response => response)
     );
@@ -49,12 +49,12 @@ export class NotificationService extends CoreService {
     let url = new UrlModel(this.API_URL).addPath('notifications/context');
 
     if (innovationId) {
-      url = url.setQueryParams({innovationId});
+      url = url.setQueryParams({ innovationId });
     }
 
     return this.http.get<getUnreadNotificationsEndpointDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response =>  {
+      map(response => {
         this.notifications = response;
         return response;
       })
@@ -68,7 +68,7 @@ export class NotificationService extends CoreService {
 
     return this.http.get<getUnreadNotificationsEndpointDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response =>  {
+      map(response => {
         this.notifications = response;
         return response;
       })
