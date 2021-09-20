@@ -18,7 +18,6 @@ describe('Stores/Innovation/InnovationStore', () => {
   let innovationService: InnovationService;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,

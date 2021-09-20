@@ -7,7 +7,6 @@ import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
 // Pages.
 import { SurveyStartComponent } from './pages/survey/start.component';
 import { SurveyStepComponent } from './pages/survey/step.component';
-import { SurveyEndComponent } from './pages/survey/end.component';
 
 const routes: Routes = [
   {
@@ -15,7 +14,6 @@ const routes: Routes = [
     component: BaseLayoutComponent,
     children: [
       { path: '', pathMatch: 'full', component: SurveyStartComponent },
-      { path: 'survey/end', pathMatch: 'full', component: SurveyEndComponent },
       { path: 'survey/:id', pathMatch: 'full', component: SurveyStepComponent }
     ]
   }

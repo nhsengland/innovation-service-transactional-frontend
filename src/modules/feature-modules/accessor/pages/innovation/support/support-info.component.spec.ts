@@ -14,12 +14,14 @@ import { InnovationSupportInfoComponent } from './support-info.component';
 
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 
+import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+
 
 describe('FeatureModules/Accessor/Innovation/InnovationSupportInfoComponent', () => {
 
   let activatedRoute: ActivatedRoute;
-  let authenticationStore: AuthenticationStore;
 
+  let authenticationStore: AuthenticationStore;
   let accessorService: AccessorService;
 
   let component: InnovationSupportInfoComponent;
@@ -39,59 +41,77 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportInfoComponent', ()
     AppInjector.setInjector(TestBed.inject(Injector));
 
     activatedRoute = TestBed.inject(ActivatedRoute);
-    authenticationStore = TestBed.inject(AuthenticationStore);
 
+    authenticationStore = TestBed.inject(AuthenticationStore);
     accessorService = TestBed.inject(AccessorService);
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
 
+    authenticationStore.getAccessorOrganisationUnitName = () => 'Organisation Unit Name';
+
   });
 
 
   it('should create the component', () => {
+    fixture = TestBed.createComponent(InnovationSupportInfoComponent);
+    component = fixture.componentInstance;
+    expect(component).toBeTruthy();
+  });
+
+  it('should show "supportUpdateSuccess" alert', () => {
+
+    activatedRoute.snapshot.queryParams = { alert: 'supportUpdateSuccess' };
+
+    const expected = { type: 'SUCCESS', title: 'Support status updated', message: 'You\'ve updated your support status and posted a comment to the innovator.' };
 
     fixture = TestBed.createComponent(InnovationSupportInfoComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
-    expect(component).toBeTruthy();
+    expect(component.alert).toEqual(expected);
+
+  });
+
+  it('should show "supportOrganisationSuggestSuccess" alert', () => {
+
+    activatedRoute.snapshot.queryParams = { alert: 'supportOrganisationSuggestSuccess' };
+
+    const expected = { type: 'SUCCESS', title: 'Organisation suggestions sent', message: 'Your suggestions were saved and notifications sent.' };
+
+    fixture = TestBed.createComponent(InnovationSupportInfoComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    expect(component.alert).toEqual(expected);
 
   });
 
 
   it('should NOT make an API call', () => {
 
-    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { status: 'ENGAGING' }, assessment: {} } };
+    activatedRoute.snapshot.data.innovationData.support = undefined;
 
-    accessorService.getInnovationSupportInfo = () => throwError('error');
-    const expected = { organisationUnit: '', accessors: '', status: '' };
+    const expected = { organisationUnit: 'Organisation Unit Name', accessors: '', status: '' };
 
     fixture = TestBed.createComponent(InnovationSupportInfoComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovationSupport).toEqual(expected);
 
   });
 
-  it('should have support information loaded with payload 01', () => {
+  it('should have support information loaded', () => {
 
-    authenticationStore.getAccessorOrganisationUnitName = () => 'Organisation Name';
-
-    const dataMock = {
-      status: 'ENGAGING',
+    accessorService.getInnovationSupportInfo = () => of({
+      id: 'SupportId01',
+      status: 'ENGAGING' as keyof typeof INNOVATION_SUPPORT_STATUS,
       accessors: [{ id: '06E12E5C-3BA8-EB11-B566-0003FFD6549F', name: 'qaccesor_1' }],
-    };
-    const dataMockInnovation = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: null, categories: ['Medical'], otherCategoryDescription: '' },
-      contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' },
-      support: { id: '01', status: 'WAITING', accessors: [{ id: 'IdOne', name: 'Brigid Kosgei' }, { id: 'IdTwo', name: 'Brigid Kosgei the second' }] }
-    };
-    accessorService.getInnovationInfo = () => of (dataMockInnovation as any);
+    });
 
-    accessorService.getInnovationSupportInfo = () => of(dataMock as any);
     const expected = {
-      organisationUnit: 'Organisation Name',
+      organisationUnit: 'Organisation Unit Name',
       accessors: 'qaccesor_1',
       status: 'ENGAGING'
     };
@@ -103,43 +123,15 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportInfoComponent', ()
 
   });
 
-  it('should have innovation information loaded with payload 02', () => {
-
-    authenticationStore.getAccessorOrganisationUnitName = () => 'Organisation Name';
-
-    const dataMock = {
-      status: 'ENGAGING',
-      accessors: undefined
-    };
-    accessorService.getInnovationSupportInfo = () => of(dataMock as any);
-    const expected = {
-      organisationUnit: 'Organisation Name',
-      accessors: '',
-      status: 'ENGAGING',
-    };
-    const dataMockInnovation = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: null, categories: ['Medical'], otherCategoryDescription: '' },
-      contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' },
-      support: { id: '01', status: 'WAITING', accessors: [{ id: 'IdOne', name: 'Brigid Kosgei' }, { id: 'IdTwo', name: 'Brigid Kosgei the second' }] }
-    };
-    accessorService.getInnovationInfo = () => of (dataMockInnovation as any);
-
-    fixture = TestBed.createComponent(InnovationSupportInfoComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    expect(component.innovationSupport).toEqual(expected);
-
-
-  });
-
-  it('should NOT have support information loadedd due to API error', () => {
+  it('should NOT have support information loaded due to API error', () => {
 
     accessorService.getInnovationSupportInfo = () => throwError('error');
-    const expected = { organisationUnit: '', accessors: '', status: '' };
+
+    const expected = { organisationUnit: 'Organisation Unit Name', accessors: '', status: '' };
 
     fixture = TestBed.createComponent(InnovationSupportInfoComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovationSupport).toEqual(expected);
 

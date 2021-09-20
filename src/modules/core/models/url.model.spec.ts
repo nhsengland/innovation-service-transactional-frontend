@@ -2,11 +2,11 @@ import { UrlModel } from './url.model';
 
 const testVariables = {
   validSimpleUrl: 'http://testurl.com',
-  validComplexUrl: 'https://testurl.com:8080/path1/:id/path2?a=1&b=2&c={a:1}&d={"a":1,"b":"s"}',
+  validComplexUrl: 'https://testurl.com:8080/path1/:id/path2?a=1&b=someText&c={"a":1,"b":"s"}',
   malformedUrl: 'abcdefghijklmopqrstuvwxyz'
 };
 
-describe('UrlModel', () => {
+describe('Core/Models/UrlModel', () => {
 
   let component: UrlModel;
 
@@ -23,7 +23,7 @@ describe('UrlModel', () => {
       port: 8080,
       path: 'path1/:id/path2',
       pathParams: {},
-      queryParams: { a: '1', b: '2', c: '{a:1}', d: { a: 1, b: 's'} }
+      queryParams: { a: '1', b: 'someText', c: { a: 1, b: 's' } }
     };
     component = new UrlModel(testVariables.validComplexUrl);
     expect(component).toEqual(expected);
@@ -77,6 +77,18 @@ describe('UrlModel', () => {
     expect((component as any).path).toBe(expected);
   });
 
+  it('should add path to the existing empty path (without any start and end slash)', () => {
+    const expected = ':id/path2';
+    component = new UrlModel().addPath('/:id/path2/');
+    expect((component as any).path).toBe(expected);
+  });
+
+  it('should add path to the existing filled path (without any start and end slash)', () => {
+    const expected = 'path1/:id/path2';
+    component = new UrlModel().setPath('/path1').addPath('/:id/path2/');
+    expect((component as any).path).toBe(expected);
+  });
+
   it('should set path params', () => {
     const expected = { a: '1', b: '2', c: '3' };
     component = new UrlModel().setPathParams({ a: '1', b: '2', c: '3' });
@@ -96,10 +108,9 @@ describe('UrlModel', () => {
   });
 
   it('should return a valid url with a complex url as input', () => {
-    const expected = 'https://testurl.com:8080/path1/abc/path2?a=1&b=2&c=%7Ba:1%7D&d=%7B%22a%22:1,%22b%22:%22s%22%7D';
-    component = new UrlModel(testVariables.validComplexUrl).setPathParams({ id: 'abc' });
+    const expected = 'https://testurl.com:8080/path1/abc/path2?a=1&b=someText&c=%7B%22a%22:1,%22b%22:%22s%22%7D&d=one,two';
+    component = new UrlModel(testVariables.validComplexUrl).setPathParams({ id: 'abc' }).setQueryParams({ a: '1', b: 'someText', c: { a: 1, b: 's' }, d: ['one', 'two'] });
     expect(component.buildUrl()).toBe(expected);
   });
-
 
 });

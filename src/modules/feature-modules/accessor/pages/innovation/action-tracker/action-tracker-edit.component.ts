@@ -40,7 +40,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
   statusError = '';
 
   form = new FormGroup({
-    status: new FormControl('', CustomValidators.required('Please, choose a status')),
+    status: new FormControl('', CustomValidators.required('Please choose a status')),
     comment: new FormControl('', CustomValidators.required('A comment is required'))
   });
 
@@ -74,9 +74,9 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
 
   onSubmitStep(): void {
 
-    if (!this.form.get('status')?.valid) {
-      this.form.get('status')?.markAsTouched();
-      this.statusError = FormEngineHelper.getValidationMessage({ required: this.form.get('status')?.errors?.required });
+    if (!this.form.get('status')!.valid) {
+      this.form.get('status')!.markAsTouched();
+      this.statusError = FormEngineHelper.getValidationMessage({ required: this.form.get('status')!.errors!.required });
       return;
     }
 
@@ -94,14 +94,14 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
 
     this.accessorService.updateAction(this.innovationId, this.actionId, this.form.value).subscribe(
       response => {
-        const status: keyof typeof INNOVATION_SECTION_ACTION_STATUS = this.form.get('status')?.value || '';
+        const status: keyof typeof INNOVATION_SECTION_ACTION_STATUS = this.form.get('status')!.value;
         this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionUpdateSuccess', status: this.statusItems.find(item => item.value === status)?.label });
       },
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when creating an action',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when creating an action',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
       }

@@ -1,14 +1,20 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Injector } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { AppInjector, CoreModule } from '@modules/core';
-import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
-import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { StoresModule } from '@modules/stores';
+
+import { Injector } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
+
+import { AppInjector, CoreModule } from '@modules/core';
+import { StoresModule } from '@modules/stores';
+import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
+
 import { InnovationActionTrackerDeclineComponent } from './action-tracker-decline.component';
+
+import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+
 
 describe('FeatureModules/Innovator/Innovation/InnovationActionTrackerEditComponent', () => {
 
@@ -40,14 +46,48 @@ describe('FeatureModules/Innovator/Innovation/InnovationActionTrackerEditCompone
 
 
   it('should create the component', () => {
+    fixture = TestBed.createComponent(InnovationActionTrackerDeclineComponent);
+    component = fixture.componentInstance;
+    expect(component).toBeTruthy();
+  });
+
+  it('should have initial information loaded', () => {
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', actionId: 'Action01' };
+
+    const responseMock = {
+      id: 'ID01',
+      displayId: 'ID01_display',
+      status: 'REQUESTED' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
+      name: `Submit section name`,
+      description: '',
+      section: InnovationSectionsIds.COST_OF_INNOVATION,
+      createdAt: '2021-04-16T09:23:49.396Z',
+      createdBy: 'Accessor user'
+    };
+    innovatorService.getInnovationActionInfo = () => of(responseMock);
+
+    const expected = responseMock.displayId;
 
     fixture = TestBed.createComponent(InnovationActionTrackerDeclineComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
-    expect(component).toBeTruthy();
+    expect(component.actionDisplayId).toBe(expected);
 
   });
 
+  it('should NOT have initial information loaded', () => {
+
+    innovatorService.getInnovationActionInfo = () => throwError('error');
+
+    fixture = TestBed.createComponent(InnovationActionTrackerDeclineComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    expect(component.actionDisplayId).toBe('');
+
+  });
 
   it('should run onSubmit() with invalid form', () => {
 
@@ -75,7 +115,7 @@ describe('FeatureModules/Innovator/Innovation/InnovationActionTrackerEditCompone
     component.onSubmit();
     fixture.detectChanges();
 
-    expect(routerSpy).toHaveBeenCalledWith(['/innovator/innovations/Inno01/action-tracker/actionId'], { queryParams: { alert: 'actionDeclined', status: 'DECLINED'  } });
+    expect(routerSpy).toHaveBeenCalledWith(['/innovator/innovations/Inno01/action-tracker/actionId'], { queryParams: { alert: 'actionDeclined', status: 'DECLINED' } });
 
   });
 
@@ -87,8 +127,8 @@ describe('FeatureModules/Innovator/Innovation/InnovationActionTrackerEditCompone
 
     const expected = {
       type: 'ERROR',
-      title: 'An error occured when declining an action',
-      message: 'Please, try again or contact us for further help',
+      title: 'An error occurred when declining an action',
+      message: 'Please try again or contact us for further help',
       setFocus: true
     };
 

@@ -37,8 +37,8 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
       case 'accountDetailsUpdateError':
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when creating an action',
-          message: 'Please, try again or contact us for further help'
+          title: 'An error occurred when creating an action',
+          message: 'Please try again or contact us for further help'
         };
         break;
       default:
@@ -70,7 +70,7 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
         { label: 'Name', value: user.displayName, editStepNumber: 1 },
         { label: 'Email address', value: user.email },
         { label: 'Organisation', value: user.organisations[0].name },
-        { label: 'Service roles', value: user.organisations.map(item => this.stores.authentication.getRoleDescription(item.role)).join('<br />') }
+        { label: 'Service roles', value: user.organisations.map(item => this.stores.authentication.getRoleDescription(item.role)).join('\n') }
       ];
 
     } else if (this.stores.authentication.isAssessmentType()) {

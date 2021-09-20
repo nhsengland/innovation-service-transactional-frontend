@@ -3,8 +3,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+
+import { USER_INFO_ACCESSOR } from '@tests/data.mocks';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
@@ -40,21 +42,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
     authenticationStore = TestBed.inject(AuthenticationStore);
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    authenticationStore.getUserInfo = () => ({
-      id: '_id',
-      email: 'some@email.com',
-      displayName: 'A user',
-      type: '',
-      organisations: [{
-        id: 'org_id',
-        name: '',
-        size: '',
-        role: 'OWNER',
-        isShadow: true
-        // organisationUnits?: {          id: string;          name: string;        }[];
-      }],
-      innovations: []
-    });
+    authenticationStore.getUserInfo = () => USER_INFO_ACCESSOR;
 
   });
 
@@ -146,10 +134,10 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
     authenticationStore.isInnovatorType = () => true;
 
     const expected =   {
-      displayName: 'A user',
-      isCompanyOrOrganisation: 'NO',
-      organisationName: '',
-      organisationSize: null,
+      displayName: 'Test qualifying Accessor',
+      isCompanyOrOrganisation: 'YES',
+      organisationName: 'organisation_1',
+      organisationSize: '',
       organisationAdditionalInformation: { id: 'org_id' }
     };
 

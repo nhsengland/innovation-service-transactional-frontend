@@ -11,7 +11,7 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 
 import { InnovationOverviewComponent } from './overview.component';
 
-import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
+import { AccessorService, getInnovationInfoEndpointDTO } from '@modules/feature-modules/accessor/services/accessor.service';
 
 
 describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () => {
@@ -38,27 +38,23 @@ describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () =>
 
   });
 
-
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(InnovationOverviewComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     expect(component).toBeTruthy();
-
   });
-
 
   it('should have innovation information loaded with payload 01', () => {
 
-    const dataMock = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: null, categories: ['Medical'], otherCategoryDescription: '' },
-      contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' },
-      support: { id: '01', status: 'WAITING', accessors: [{ id: 'IdOne', name: 'Brigid Kosgei' }, { id: 'IdTwo', name: 'Brigid Kosgei the second' }] }
+    const responseMock: getInnovationInfoEndpointDTO = {
+      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: '', categories: ['MEDICAL_DEVICE'], otherCategoryDescription: '' },
+      contact: { name: 'A name' },
+      assessment: { id: '01' },
+      support: { id: '01', status: 'WAITING' },
+      notifications: {}
     };
-    accessorService.getInnovationInfo = () => of(dataMock as any);
-    const expected = dataMock;
+    accessorService.getInnovationInfo = () => of(responseMock);
+    const expected = responseMock;
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
     component = fixture.componentInstance;
@@ -69,16 +65,18 @@ describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () =>
 
   it('should have innovation information loaded with payload 02', () => {
 
-    const dataMock = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['Medical', 'OTHER'], otherCategoryDescription: 'Other category' },
-      contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' }
+    const dataMock: getInnovationInfoEndpointDTO = {
+      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['MEDICAL_DEVICE', 'OTHER', 'INVALID'], otherCategoryDescription: 'Other category' },
+      contact: { name: 'A name' },
+      assessment: { id: '01' },
+      notifications: {}
     };
-    accessorService.getInnovationInfo = () => of(dataMock as any);
+    accessorService.getInnovationInfo = () => of(dataMock);
     const expected = dataMock;
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovation).toEqual(expected);
 
@@ -91,6 +89,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () =>
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovation).toEqual(undefined);
 

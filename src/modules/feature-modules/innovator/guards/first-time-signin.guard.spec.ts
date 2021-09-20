@@ -16,7 +16,6 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
   let authenticationStore: AuthenticationStore;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,

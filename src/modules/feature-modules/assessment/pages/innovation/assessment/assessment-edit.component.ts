@@ -41,15 +41,15 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
 
   isValidStepId(): boolean {
-    const id = this.activatedRoute.snapshot.params.stepId;
+    const id = this.stepId;
     return (1 <= Number(id) && Number(id) <= 2);
   }
 
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private assessmentService: AssessmentService,
-    private organisationsService: OrganisationsService
+    protected activatedRoute: ActivatedRoute,
+    protected assessmentService: AssessmentService,
+    protected organisationsService: OrganisationsService
   ) {
 
     super();
@@ -73,7 +73,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     // Update last step with the organisations list with description and pre-select all checkboxes.
     this.organisationsService.getOrganisationUnits().subscribe(response => {
-      NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="${this.stores.environment.BASE_URL}/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> Support offer guide (opens in a new window) </a>`;
+      NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> Support offer guide (opens in a new window) </a>`;
       NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].groupedItems = response.map(item => ({ value: item.id, label: item.name, items: item.organisationUnits.map(i => ({ value: i.id, label: i.name })) }));
     });
 
@@ -128,7 +128,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     let isValid = true;
 
-    (this.formEngineComponent?.toArray() || []).forEach(engine => {
+    // This section is not easy to test. TOIMPROVE: Include this code on unit test.
+    (this.formEngineComponent?.toArray() || []).forEach(engine => /* istanbul ignore next */ {
 
       let formData: MappedObject;
 
@@ -146,7 +147,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     });
 
-    if (!isValid) {
+    if (!isValid) /* istanbul ignore next */ {
       return;
     }
 
@@ -171,8 +172,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when starting needs assessment',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when starting needs assessment',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
       }

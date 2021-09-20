@@ -10,7 +10,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Request, Response } from 'express';
 import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
 
-import { AppInjector } from '@modules/core';
+import { AppInjector } from '@modules/core/injectors/app-injector';
 
 import { EnvironmentStore } from '@modules/core/stores/environment.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
@@ -28,7 +28,7 @@ export class CoreComponent implements OnInit, OnDestroy {
   private serverResponse: Response | null;
 
   private pageTitleHolder = '';
-  private pageStatusHolder: 'WAITING' | 'READY' | 'ERROR' = 'WAITING';
+  private pageStatusHolder: 'LOADING' | 'READY' | 'ERROR' = 'LOADING';
 
   protected titleService: Title;
   protected router: Router;
@@ -60,7 +60,6 @@ export class CoreComponent implements OnInit, OnDestroy {
 
     this.titleService = injector.get(Title);
     this.router = injector.get(Router);
-    this.router = injector.get(Router);
     this.http = injector.get(HttpClient);
     this.translateService = injector.get(TranslateService);
     this.logger = injector.get(NGXLogger);
@@ -73,6 +72,10 @@ export class CoreComponent implements OnInit, OnDestroy {
 
   }
 
+  /* istanbul ignore next */
+  get sRequest(): null | Request { return this.serverRequest; }
+  /* istanbul ignore next */
+  get sResponse(): null | Response { return this.serverResponse; }
   /* istanbul ignore next */
   get requestBody(): MappedObject { return this.serverRequest?.body || {}; }
   /* istanbul ignore next */
@@ -97,12 +100,21 @@ export class CoreComponent implements OnInit, OnDestroy {
 
 
   setPageTitle(s: undefined | string): void {
-    this.pageTitleHolder = this.translateService.instant(s || '');
-    this.titleService.setTitle(`${this.translateService.instant(s || '')} | ${this.translateService.instant('app.title')}`);
+
+    if (!s) { this.pageTitleHolder = ''; }
+    else { this.pageTitleHolder = this.translateService.instant(s); }
+
+    this.titleService.setTitle(`${this.pageTitleHolder ? this.pageTitleHolder + ' | ' : ''}${this.translateService.instant('app.title')}`);
   }
 
-  setPageStatus(s: 'WAITING' | 'READY' | 'ERROR'): void {
-    this.pageStatusHolder = s;
+  setPageStatus(s: 'LOADING' | 'READY' | 'ERROR'): void {
+
+    // When running server side, the status always remains LOADING.
+    // The visual effects only are meant to be applied on the browser.
+    if (this.isRunningOnBrowser()) {
+      this.pageStatusHolder = s;
+    }
+
   }
 
 
@@ -114,7 +126,9 @@ export class CoreComponent implements OnInit, OnDestroy {
     }
 
     url = this.encodeUrlQueryParams(url, queryParams);
+    /* istanbul ignore next */
     this.serverResponse?.status(303);
+    /* istanbul ignore next */
     this.serverResponse?.setHeader('Location', url);
   }
 
@@ -133,13 +147,17 @@ export class CoreComponent implements OnInit, OnDestroy {
     url = `${url.split('?')[0]}`;
     url += Object.keys(queryParams || {}).length > 0 ? '?' : '';
 
-    for (let [key, value] of Object.entries(queryParams || {})) {
+    let qpValue = '';
 
-      if (UtilsHelper.isEmpty(value)) { break; }
+    for (const [key, value] of Object.entries(queryParams || {})) {
 
-      if (typeof value === 'object') { value = JSON.stringify(value); }
+      qpValue = value;
 
-      url += (url.slice(-1) === '?' ? '' : '&') + `${key}=${encodeURIComponent(this.encodeInfo(value))}`;
+      if (UtilsHelper.isEmpty(value)) { continue; }
+
+      if (typeof value === 'object') { qpValue = JSON.stringify(value); }
+
+      url += (url.slice(-1) === '?' ? '' : '&') + `${key}=${encodeURIComponent(this.encodeInfo(qpValue))}`;
 
     }
 
@@ -151,7 +169,7 @@ export class CoreComponent implements OnInit, OnDestroy {
 
     const o: MappedObject = {};
 
-    for (let [key, value] of Object.entries(queryParams || {})) {
+    for (let [key, value] of Object.entries(queryParams)) {
 
       value = decodeURIComponent(value);
       value = this.decodeInfo(value);

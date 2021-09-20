@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
@@ -21,12 +22,24 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
 
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService
   ) {
 
     super();
     this.setPageTitle('Manage innovations');
 
+    switch (this.activatedRoute.snapshot.queryParams.alert) {
+      case 'archivalSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'Innovation archival',
+          message: 'Your innovation has been archived.'
+        };
+        break;
+      default:
+        break;
+    }
   }
 
 
@@ -49,12 +62,15 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
           .length
           > 0;
 
+        this.setPageStatus('READY');
+
       },
       () => {
+        this.setPageStatus('ERROR');
         this.alert = {
           type: 'ERROR',
           title: 'Unable to fetch innovations transfers',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please try again or contact us for further help'
         };
       }
     );
@@ -80,8 +96,8 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when cancelling the transfer',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when cancelling the transfer',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
       }

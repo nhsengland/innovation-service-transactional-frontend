@@ -5,9 +5,9 @@ import { concatMap } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineHelper, FormEngineModel } from '@app/base/forms';
 
-import { OrganisationsService } from '@shared-module/services/organisations.service';
+import { FIRST_TIME_SIGNIN_QUESTIONS } from '@stores-module/innovation/config/first-time-signin-catalog.config';
 
-import { FIRST_TIME_SIGNIN_QUESTIONS } from '../../config/constants.config';
+import { OrganisationsService } from '@shared-module/services/organisations.service';
 
 import { InnovatorService } from '../../services/innovator.service';
 
@@ -73,7 +73,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
 
     // Update last step with the organisations list with description and pre-select all checkboxes.
     this.organisationsService.getAccessorsOrganisations().subscribe(response => {
-      this.stepsData[this.stepsData.length - 1].description = `<a href="${this.stores.environment.BASE_URL}/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> What does each organisation do? (opens in a new window) </a>`;
+      this.stepsData[this.stepsData.length - 1].description = `<a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> What does each organisation do? (opens in a new window) </a>`;
       this.stepsData[this.stepsData.length - 1].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
       this.currentAnswers = { organisationShares: response.map(item => item.id) };
     });
@@ -126,7 +126,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
       return;
     }
 
-    this.currentAnswers = { ...this.currentAnswers, ...formData?.data };
+    this.currentAnswers = { ...this.currentAnswers, ...formData!.data };
 
     if (this.isLastStep() && action === 'next') { this.onSubmitSurvey(); }
     else { this.redirectTo(this.getNavigationUrl(action), { a: action }); }

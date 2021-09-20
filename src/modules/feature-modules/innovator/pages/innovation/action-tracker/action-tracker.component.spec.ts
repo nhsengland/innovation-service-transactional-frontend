@@ -3,14 +3,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
+import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { StoresModule, InnovationService } from '@modules/stores';
+import { StoresModule } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { InnovationActionTrackerComponent } from './action-tracker.component';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { of } from 'rxjs';
 
 describe('FeatureModules/Innovator/Innovation/ActionTrackerComponent', () => {
 
@@ -28,7 +28,7 @@ describe('FeatureModules/Innovator/Innovation/ActionTrackerComponent', () => {
         StoresModule,
         InnovatorModule
       ]
-    }).compileComponents();
+    });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
@@ -37,12 +37,9 @@ describe('FeatureModules/Innovator/Innovation/ActionTrackerComponent', () => {
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(InnovationActionTrackerComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     expect(component).toBeTruthy();
-
   });
 
   it('should have initial information loaded with OpenActions', () => {
@@ -77,5 +74,16 @@ describe('FeatureModules/Innovator/Innovation/ActionTrackerComponent', () => {
     expect(component.closedActionsList.getRecords().length).toEqual(1);
   });
 
+  it('should NOT have initial information loaded', () => {
+
+    innovatorService.getInnovationActionsList = () => throwError('error');
+
+    fixture = TestBed.createComponent(InnovationActionTrackerComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    expect(component.pageStatus).toBe('ERROR');
+
+  });
 
 });

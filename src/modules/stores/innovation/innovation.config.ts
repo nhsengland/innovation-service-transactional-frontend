@@ -48,7 +48,7 @@ type AllSectionsInboundPayloadType = {
   data: MappedObject
 }[];
 
-type AllSectionsOutboundPayloadType = {
+export type AllSectionsOutboundPayloadType = {
   title: string;
   sections: {
     section: string,
@@ -57,13 +57,13 @@ type AllSectionsOutboundPayloadType = {
 }[];
 
 
-function AllSectionsSummary(data: AllSectionsInboundPayloadType): AllSectionsOutboundPayloadType {
+export function AllSectionsSummary(data: AllSectionsInboundPayloadType): AllSectionsOutboundPayloadType {
 
   return INNOVATION_SECTIONS.map(i => ({
     title: i.title,
     sections: i.sections.map(s => ({
       section: s.title,
-      answers: s.wizard.runSummaryParsing(data.find(d => d.section.id === s.id)?.data).map(a => ({ label: a.label, value: a.value || '' }))
+      answers: s.wizard.runSummaryParsing(data.find(d => d.section.section === s.id)?.data).map(a => ({ label: a.label, value: a.value || '' }))
     }))
   }));
 

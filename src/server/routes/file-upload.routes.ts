@@ -15,15 +15,25 @@ const upload = multer({
   }
 });
 
-const checkFileType = (file: any, cb: ((...args: any[]) => void)) => {
-  // Allowed ext
-  const filetypes = /|docx|pdf|csv|xlsx|/;
+// Allowed ext
+const filetypes = /docx|pdf|csv|xlsx/;
 
+// Allowed mimetypes
+const whitelist = [
+  'application/pdf',
+  'text/csv',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+];
+
+const checkFileType = (file: any, cb: ((...args: any[]) => void)) => {
   // Check ext
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 
   // Check mime
-  const mimetype = filetypes.test(file.mimetype);
+  const mimetype = whitelist.includes(file.mimetype);
 
   if (mimetype && extname) {
     return cb(null, true);
@@ -72,28 +82,36 @@ fileUploadRouter.post(`${BASE_PATH}/upload`, upload.single('file'), async (req, 
   const user: IProfile = req.user || {};
   const oid: string = user.oid || '';
   const accessToken = getAccessTokenByOid(oid);
+  const file = req.file;
+  const reqBody = req.body;
+  const url = `${API_URL}/api/innovators/${reqBody.innovatorId}/innovations/${reqBody.innovationId}/upload`;
 
-  if (req.isAuthenticated() && accessToken) {
-    const reqBody = req.body;
-    const file = req.file;
-    const url = `${API_URL}/api/innovators/${reqBody.innovatorId}/innovations/${reqBody.innovationId}/upload`;
+  if (!req.isAuthenticated() || !accessToken) {
+    res.status(401).send();
+    return;
+  }
+
+  if (!file) {
+    res.status(400).send();
+    return;
+  }
+
+  try {
+
     const body = {
       context: reqBody.context,
       fileName: file.originalname
     };
 
-    try {
-      const fileInfo = await getUploadUrl(url, body, accessToken);
-      await uploadFile(fileInfo.url, file);
-      // const response = { id: fileInfo.id };
-      res.status(201).send(fileInfo);
-    } catch (error) {
-      console.error(`Error when attempting to upload data. Error: ${error}`);
-      res.status(500).send();
-    }
-  } else {
-    res.status(401).send();
+    const fileInfo = await getUploadUrl(url, body, accessToken);
+    await uploadFile(fileInfo.url, file);
+    res.status(201).send(fileInfo);
+
+  } catch (error) {
+    console.error(`Error when attempting to upload data. Error: ${error}`);
+    res.status(500).send();
   }
+
 });
 
 export default fileUploadRouter;

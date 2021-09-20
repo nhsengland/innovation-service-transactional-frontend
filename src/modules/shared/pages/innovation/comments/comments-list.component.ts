@@ -5,10 +5,11 @@ import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { CustomValidators, FormEngineHelper } from '@app/base/forms';
 import { AlertType } from '@app/base/models';
 import { RoutingHelper } from '@modules/core';
-import { InnovationDataType } from '@modules/feature-modules/accessor/resolvers/innovation-data.resolver';
+
 import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 
-import { getInnovationCommentsDTO } from '@stores-module/innovation/innovation.models';
+import { getInnovationCommentsDTO, InnovationDataResolverType } from '@stores-module/innovation/innovation.models';
+
 
 @Component({
   selector: 'shared-pages-innovation-comments-comments-list',
@@ -22,7 +23,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
   alert: AlertType = { type: null };
 
-  innovation: InnovationDataType;
+  innovation: InnovationDataResolverType;
   currentCreatedOrder: 'asc' | 'desc';
 
   commentsList: getInnovationCommentsDTO[];
@@ -71,6 +72,9 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
   }
 
   getCommentsList(): void {
+
+    this.setPageStatus('LOADING');
+
     this.stores.innovation.getInnovationComments$(this.module, this.innovationId, this.currentCreatedOrder).subscribe(
       response => {
         this.commentsList = response;
@@ -88,9 +92,16 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
           this.notificationService.dismissNotification(comment, NotificationContextType.COMMENT).subscribe();
         }
 
+        this.setPageStatus('READY');
+
       },
       () => {
-        this.logger.error('Error fetching data');
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch comments information',
+          message: 'Please try again or contact us for further help'
+        };
       });
   }
 
@@ -166,8 +177,8 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when creating an action',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when creating an action',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
 
