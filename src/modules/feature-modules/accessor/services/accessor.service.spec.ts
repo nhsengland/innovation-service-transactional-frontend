@@ -96,7 +96,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
     service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations?take=10&skip=0&supportStatus=UNASSIGNED&assignedToMe=false`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//innovations?take=20&skip=0&supportStatus=UNASSIGNED&assignedToMe=false`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -212,7 +212,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
     let response: any = null;
     service.getActionsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//actions?take=10&skip=0&openActions=true`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors//actions?take=20&skip=0&openActions=true`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);

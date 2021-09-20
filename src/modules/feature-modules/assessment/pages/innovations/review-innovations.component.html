@@ -103,6 +103,10 @@
             </tbody>
           </table>
 
+          <pagination *ngIf="innovationsList.getTotalRowsNumber() > innovationsList.pageSize" class="align-items-center" [currentPage]="innovationsList.page" 
+            [pages]="innovationsList.getPages()" (updatePageEvent)="onPageChange($event)">
+            </pagination>
+            
         </ng-container>
 
       </div>

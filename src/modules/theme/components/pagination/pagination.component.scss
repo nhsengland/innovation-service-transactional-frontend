@@ -1,0 +1,17 @@
+.pagination {
+    display: inline-block;
+    padding: 25px 0;
+  }
+  
+  .pagination a {
+    background-color: #eff4f5;
+    float: left;
+    padding: 8px 16px;
+    margin: 2px;
+    text-decoration: underline;
+  }
+  
+  .pagination a.active {
+    background-color: #0060b8;
+    color: white;
+  }

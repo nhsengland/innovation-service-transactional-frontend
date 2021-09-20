@@ -55,9 +55,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
     this.currentTab = { key: '', status: '', description: '', innovationsOverdue: 0 };
 
-    this.innovationsList = new TableModel({
-      pageSize: 10000
-    });
+    this.innovationsList = new TableModel({ });
 
   }
 
@@ -80,6 +78,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
         };
 
         this.innovationsList.setData([]).setFilters({ status: [this.currentTab.status] });
+        this.innovationsList.page = 1;
 
         switch (this.currentTab.status) {
           case 'WAITING_NEEDS_ASSESSMENT':
@@ -153,6 +152,11 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
     this.innovationsList.setOrderBy(column);
     this.getInnovationsList();
 
+  }
+
+  onPageChange(event: { pageNumber: number }): void {
+    this.innovationsList.page = event.pageNumber;
+    this.getInnovationsList();
   }
 
 }

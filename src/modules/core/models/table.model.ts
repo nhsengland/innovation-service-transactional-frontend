@@ -40,7 +40,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
     this.totalRows = data.totalRows || 0;
 
     this.page = data.page || 1;
-    this.pageSize = data.pageSize || 10;
+    this.pageSize = data.pageSize || 20;
     this.pageSizeOptions = data.pageSizeOptions || [5, 10, 25];
 
     this.orderBy = data.orderBy || '';
@@ -107,7 +107,6 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
     return this;
   }
 
-
   getColumnLabel(key: string): string {
     return this.visibleColumns[key]?.label || '';
   }
@@ -127,9 +126,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
       orderDir: (this.orderBy === key ? this.orderDir : 'none')
     }));
 
-
   }
-
 
   getRecords(): T[] { return this.dataSource; }
 
@@ -144,6 +141,15 @@ export class TableModel<T = { [key: string]: string | number | boolean }> {
       filters: Object.keys(this.filters).length > 0 ? this.filters : undefined
     };
 
+  }
+
+  getPages(): number[] {
+    const totalPages = Math.ceil(this.totalRows / this.pageSize);
+    const pages = [];
+    for (let i = 0; i < totalPages; i++) {
+      pages.push(i + 1);
+    }
+    return pages;
   }
 
 }

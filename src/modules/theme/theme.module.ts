@@ -20,6 +20,7 @@ import { BackLinkComponent } from './components/navigation/back-link.component';
 import { PrintLinkComponent } from './components/navigation/print-link.component';
 
 import { NotificationTagComponent } from './components/tag/notification-tag.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { NotificationTagComponent } from './components/tag/notification-tag.comp
     BackLinkComponent,
     PrintLinkComponent,
 
-    NotificationTagComponent
+    NotificationTagComponent,
+    PaginationComponent
   ],
   providers: [],
   exports: [
@@ -65,7 +67,9 @@ import { NotificationTagComponent } from './components/tag/notification-tag.comp
     BackLinkComponent,
     PrintLinkComponent,
 
-    NotificationTagComponent
+    NotificationTagComponent,
+    PaginationComponent
+
   ]
 })
 export class ThemeModule { }

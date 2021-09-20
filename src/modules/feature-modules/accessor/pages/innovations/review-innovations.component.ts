@@ -140,9 +140,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
       queryParams: { status: 'UNASSIGNED' }
     };
 
-    this.innovationsList = new TableModel({
-      pageSize: 10000
-    });
+    this.innovationsList = new TableModel({});
 
   }
 
@@ -154,7 +152,6 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
     );
 
   }
-
 
   getInnovationsList(): void {
 
@@ -199,6 +196,8 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
     this.form.get('assignedToMe')?.setValue(false, { emitEvent: false });
 
     this.innovationsList.setData([]).setFilters({ status: currentStatus, assignedToMe: false });
+
+    this.innovationsList.page = 1;
 
     switch (currentStatus) {
 
@@ -250,10 +249,14 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   }
 
-
   onTableOrder(column: string): void {
 
     this.innovationsList.setOrderBy(column);
+    this.getInnovationsList();
+  }
+
+  onPageChange(event: { pageNumber: number }): void {
+    this.innovationsList.page = event.pageNumber;
     this.getInnovationsList();
   }
 

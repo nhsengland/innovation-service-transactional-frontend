@@ -15,7 +15,7 @@ const emptyExpected = {
   visibleColumns: {},
   totalRows: 0,
   page: 1,
-  pageSize: 10,
+  pageSize: 20,
   pageSizeOptions: [5, 10, 25],
   orderBy: '',
   orderDir: 'none',
@@ -28,7 +28,7 @@ const defaultExpected = {
   visibleColumns: { c1: { label: 'C1 label' }, c2: { label: 'C2 label' }, c3: { label: 'C3 label', align: 'left', orderable: true } },
   totalRows: 0,
   page: 1,
-  pageSize: 10,
+  pageSize: 20,
   pageSizeOptions: [5, 10, 25],
   orderBy: '',
   orderDir: 'none',
@@ -190,25 +190,25 @@ describe('Core/Models/TableModel', () => {
   });
 
   it('should run getAPIQueryParams() with defaults', () => {
-    const expected = { take: 10, skip: 0 };
+    const expected = { take: 20, skip: 0 };
     component = new TableModel<defaultDataSourceType>(defaultInit);
     expect(component.getAPIQueryParams()).toEqual(expected);
   });
 
   it('should run getAPIQueryParams() with orderBy defined and orderDir ascending', () => {
-    const expected = { take: 10, skip: 0, order: { c1: 'ASC' } };
+    const expected = { take: 20, skip: 0, order: { c1: 'ASC' } };
     component = new TableModel<defaultDataSourceType>({ ...defaultInit, ...{ orderBy: 'c1', orderDir: 'ascending' } });
     expect(component.getAPIQueryParams()).toEqual(expected);
   });
 
   it('should run getAPIQueryParams() with orderBy defined and orderDir descending', () => {
-    const expected = { take: 10, skip: 0, order: { c1: 'DESC' } };
+    const expected = { take: 20, skip: 0, order: { c1: 'DESC' } };
     component = new TableModel<defaultDataSourceType>({ ...defaultInit, ...{ orderBy: 'c1', orderDir: 'descending' } });
     expect(component.getAPIQueryParams()).toEqual(expected);
   });
 
   it('should run getAPIQueryParams() with orderBy, orderDir and filters defined', () => {
-    const expected = { take: 10, skip: 0, order: { c1: 'ASC' }, filters: { status: 'enabled' } };
+    const expected = { take: 20, skip: 0, order: { c1: 'ASC' }, filters: { status: 'enabled' } };
     component = new TableModel<defaultDataSourceType>(defaultInit);
     component.setOrderBy('c1');
     component.setFilters({ status: 'enabled' });
