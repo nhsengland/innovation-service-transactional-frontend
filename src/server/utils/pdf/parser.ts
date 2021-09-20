@@ -99,22 +99,42 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
 
 export const splitTextBlock = (source: string[], position: number, documentSetup: DocumentSetup, parts: string[][]): string[][] => {
 
+  // Get the real document size
+  // if the current position is not the beginning of the page
+  // the actual document size is the document height minus the current position of the caret
   const currentDocumentSize = Math.floor(documentSetup.documentHeight - position);
 
+  // Calculate the height of the current block of text
+  // Each entry in the source array corresponds to one line of text
+  // So the height of the source array is the product of its length with the height of one line
   const blockSize = source.length * documentSetup.lineHeight;
 
-
-
+  // The source will need to be split if its height overflows the document's real height
   if (blockSize > currentDocumentSize) {
+
+    // Calculates how many lines of text will fit on the currently available document space
+    // That will be the actual document height divided by the height of one line
     const lineAmount = Math.floor(currentDocumentSize / documentSetup.lineHeight);
-    const part = source.slice(0, lineAmount);
+
+    // Get a slice of the source array with just the amount of lines we know will fit on the current page
+    // So we know each entry of the array is one line of text
+    // Then we want a slice with the length equals to the amount of lines that will fit on the current page.
+    const part = source.slice(0, lineAmount - 1);
+
+    // add the part to the list of parts
     parts.push(part);
 
-    splitTextBlock(source.slice(lineAmount), 0, documentSetup, parts);
+    // make a recursive call with the remainder of the source array
+    // and with position 0, because now we know we're on a new page.
+    splitTextBlock(source.slice(lineAmount - 1), 0, documentSetup, parts);
   } else {
+
+    // if the source array fits on current page
+    // add the array to the list of parts
     parts.push(source);
   }
 
+  // return a list of arrays
   return parts;
 };
 
