@@ -96,3 +96,29 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
   const result = generator.save();
   return result;
 };
+
+export const splitTextBlock = (source: string[], position: number, documentSetup: DocumentSetup, parts: string[][]): string[][] => {
+
+  const currentDocumentSize = Math.floor(documentSetup.documentHeight - position);
+
+  const blockSize = source.length * documentSetup.lineHeight;
+
+
+
+  if (blockSize > currentDocumentSize) {
+    const lineAmount = Math.floor(currentDocumentSize / documentSetup.lineHeight);
+    const part = source.slice(0, lineAmount);
+    parts.push(part);
+
+    splitTextBlock(source.slice(lineAmount), 0, documentSetup, parts);
+  } else {
+    parts.push(source);
+  }
+
+  return parts;
+};
+
+export type DocumentSetup = {
+  documentHeight: number,
+  lineHeight: number,
+};
