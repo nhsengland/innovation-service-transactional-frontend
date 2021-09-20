@@ -92,8 +92,8 @@ describe('Shared/Pages/Innovation/CommentsPageInnovationCommentsNewComponent', (
 
     const expected = {
       type: 'ERROR',
-      title: 'An error occured when creating an action',
-      message: 'Please, try again or contact us for further help',
+      title: 'An error occurred when creating an action',
+      message: 'Please try again or contact us for further help',
       setFocus: true
     };
 

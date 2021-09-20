@@ -224,8 +224,8 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
     });
 
     data.deploymentPlans?.forEach(item => {
-      toReturn.push({ label: `Group ${item.name} comercial basis`, value: item.commercialBasis, editStepNumber: toReturn.length + 1 });
-      toReturn.push({ label: `Group ${item.name} org. deplyoment affect`, value: item.orgDeploymentAffect, editStepNumber: toReturn.length + 1 });
+      toReturn.push({ label: `What was the commercial basis for deployment in ${item.name}`, value: item.commercialBasis, editStepNumber: toReturn.length + 1 });
+      toReturn.push({ label: `How did the deployment of your innovation in ${item.name} affect the organisation?`, value: item.orgDeploymentAffect, editStepNumber: toReturn.length + 1 });
     });
 
   }

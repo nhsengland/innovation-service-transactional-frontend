@@ -188,18 +188,19 @@ function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
 
     data.standards?.forEach(standard => {
       toReturn.push({
-        label: `${standard.type === 'OTHER' ? data.otherRegulationDescription : standardsTypeItems.find(item => item.value === standard.type)?.label} certification`,
+        label: `Have you achieved certification for ${standard.type === 'OTHER' ? data.otherRegulationDescription : standardsTypeItems.find(item => item.value === standard.type)?.label}`,
         value: standardsHasMetItems.find(item => item.value === standard.hasMet)?.label,
         editStepNumber: toReturn.length + 1
       });
     });
 
     const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
+    const StepNumber: number = toReturn.length + 1;
     allFiles.forEach((item, i) => {
       toReturn.push({
         label: `Attachment ${i + 1}`,
         value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-        editStepNumber: toReturn.length + 1,
+        editStepNumber: StepNumber,
         allowHTML: true
       });
     });

@@ -31,6 +31,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
   isQualifyingAccessorRole = false;
 
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private accessorService: AccessorService
@@ -49,7 +50,6 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
 
   ngOnInit(): void {
-
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'supportUpdateSuccess':
@@ -70,27 +70,21 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
         break;
     }
 
-    this.accessorService.getInnovationInfo(this.innovationId).subscribe(
-      response => {
-        this.innovation.support = { id: response.support?.id, status: response.support?.status || 'UNASSIGNED' };
-        this.loadSupportInfo(this.innovation.support.id || '');
-      }
-    );
+
+    this.innovationSupport.organisationUnit = this.stores.authentication.getAccessorOrganisationUnitName();
+
+    if (this.innovation.support?.id) {
+      this.accessorService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id).subscribe(
+        response => {
+          this.innovationSupport.accessors = (response.accessors).map(item => item.name).join(', ');
+          this.innovationSupport.status = response.status;
+        },
+        error => {
+          this.logger.error(error);
+        }
+      );
+    }
+
   }
 
-  loadSupportInfo(supportId: string): void {
-
-    this.accessorService.getInnovationSupportInfo(this.innovationId, supportId).subscribe(
-      response => {
-        this.innovationSupport = {
-          organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-          accessors: (response.accessors || []).map(item => item.name).join(', '),
-          status: response.status,
-        };
-      },
-      error => {
-        this.logger.error(error);
-      }
-    );
-  }
 }

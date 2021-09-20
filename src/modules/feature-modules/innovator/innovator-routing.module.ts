@@ -6,6 +6,7 @@ import { InnovatorLayoutComponent } from './base/innovator-layout.component';
 // Pages.
 import { PageAccountManageInnovationsInfoComponent } from './pages/account/manage-innovations/manage-innovations-info.component';
 import { PageAccountManageInnovationsTransferComponent } from './pages/account/manage-innovations/manage-innovations-transfer.component';
+import { PageAccountManageInnovationsArchivalComponent } from './pages/account/manage-innovations/manage-innovations-archival.component';
 
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
@@ -18,7 +19,9 @@ import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/ne
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
+import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
 import { InnovationTransferAcceptanceComponent } from './pages/innovation-transfer-acceptance/innovation-transfer-acceptance.component';
+import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
 
 import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details/manage-details-edit.component';
@@ -100,6 +103,10 @@ const routes: Routes = [
               {
                 path: 'transfer', pathMatch: 'full', component: PageAccountManageInnovationsTransferComponent,
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'account/manage-innovations', label: 'Manage innovations' } } }
+              },
+              {
+                path: 'archive', pathMatch: 'full', component: PageAccountManageInnovationsArchivalComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'account/manage-innovations', label: 'Manage innovations' } } }
               }
             ]
           }
@@ -109,7 +116,8 @@ const routes: Routes = [
       {
         path: 'innovations',
         children: [
-          { path: '', pathMatch: 'full', component: DashboardComponent },
+          { path: '', pathMatch: 'full', component: InnovationsListComponent },
+          { path: 'new', pathMatch: 'full', component: InnovationNewComponent },
           {
             path: ':innovationId',
             data: { module: 'innovator' },

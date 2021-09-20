@@ -48,8 +48,10 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
     throw new PDFGeneratorParserError(error);
   }
 
-  generator
-    .addLogo();
+  // temporarely disables logo
+
+  // generator
+  //   .addLogo();
 
   generator
     .hero(innovation.name)
@@ -81,7 +83,7 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
         generator
           .h3(title);
 
-        const value = answer.value.replace(/<br \/>/, ', ');
+        const value = answer.value.replace(/\n/gi, ', ');
         generator
           .p(value);
       }

@@ -121,13 +121,9 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   getSectionWizard(sectionId: InnovationSectionsIds): WizardEngineModel {
-
-    const section = cloneDeep(
+    return cloneDeep(
       INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId)?.wizard || new WizardEngineModel({})
     );
-
-    return section;
-
   }
 
 

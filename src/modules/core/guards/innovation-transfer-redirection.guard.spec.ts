@@ -3,12 +3,12 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LoggerTestingModule } from 'ngx-logger/testing';
 
-import { SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
-
 import { PLATFORM_ID } from '@angular/core';
 import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { of, throwError } from 'rxjs';
+
+import { SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
 import { CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
@@ -27,7 +27,6 @@ describe('Core/Guards/InnovationTransferRedirectionGuard running SERVER side', (
   const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'transfers/transferID01' }, params: { id: 'transferID01' } };
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -86,7 +85,6 @@ describe('Core/Guards/InnovationTransferRedirectionGuard running CLIENT side', (
   const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'transfers/transferID01' }, params: { id: 'transferID01' } };
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,

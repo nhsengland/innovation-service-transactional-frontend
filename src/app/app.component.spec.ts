@@ -5,7 +5,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { CoreModule } from '@modules/core';
+import { ENV } from '@tests/app.mocks';
+
+import { CoreModule, CookiesService } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
 import { AppComponent } from './app.component';
@@ -52,11 +54,11 @@ describe('AppComponent running SERVER side', () => {
 
 
 
-
-
 describe('AppComponent running CLIENT side', () => {
 
   let router: Router;
+
+  let cookiesService: CookiesService;
 
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
@@ -76,11 +78,16 @@ describe('AppComponent running CLIENT side', () => {
         ActivityTimeoutComponent
       ],
       providers: [
-        { provide: PLATFORM_ID, useValue: 'browser' }
+        { provide: PLATFORM_ID, useValue: 'browser' },
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV },
       ]
     });
 
     router = TestBed.inject(Router);
+
+    cookiesService = TestBed.inject(CookiesService);
+
+    cookiesService.getConsentCookie = () => ({ consented: true, necessary: true, analytics: true });
 
   });
 

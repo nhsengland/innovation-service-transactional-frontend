@@ -71,7 +71,7 @@ export class WizardEngineModel {
   }
 
   previousStep(): this {
-    this.currentStepNumber++;
+    this.currentStepNumber--;
     return this;
   }
 

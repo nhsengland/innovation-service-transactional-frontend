@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-// TODO: create tests for this!!!!!
+// TODO: create tests.
 
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, Input, OnInit } from '@angular/core';

@@ -44,7 +44,7 @@
 
   <file-upload-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f.id)" (click)="onRemove(f.id)" (keypress)="onRemove(f.id)" attr.aria-label="Delete {{f.file.name}}" class="cursor-pointer" role="button">
     <ngx-dropzone-label class="font-color-text overflow-hidden">
-      <div class="text-ellipsis text-vertical-ellipsis-2">{{ f.file.name }}</div>
+      <div class="text-ellipsis text-vertical-ellipsis-2-lines">{{ f.file.name }}</div>
       <div class="nhsuk-u-padding-top-1 nhsuk-u-font-size-14">Click to remove</div>
     </ngx-dropzone-label>
 

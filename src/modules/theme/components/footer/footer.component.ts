@@ -25,6 +25,7 @@ export class FooterComponent {
 
   onTimeout(): void {
 
+    /* istanbul ignore next */
     window.location.assign(`${this.environmentStore.APP_URL}/signout`); // Full reload is needed to hit SSR.
 
   }

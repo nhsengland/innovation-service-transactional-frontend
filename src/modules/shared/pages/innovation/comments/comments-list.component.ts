@@ -72,6 +72,9 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
   }
 
   getCommentsList(): void {
+
+    this.setPageStatus('LOADING');
+
     this.stores.innovation.getInnovationComments$(this.module, this.innovationId, this.currentCreatedOrder).subscribe(
       response => {
         this.commentsList = response;
@@ -89,9 +92,16 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
           this.notificationService.dismissNotification(comment, NotificationContextType.COMMENT).subscribe();
         }
 
+        this.setPageStatus('READY');
+
       },
       () => {
-        this.logger.error('Error fetching data');
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch comments information',
+          message: 'Please try again or contact us for further help'
+        };
       });
   }
 
@@ -167,8 +177,8 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when creating an action',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when creating an action',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
 

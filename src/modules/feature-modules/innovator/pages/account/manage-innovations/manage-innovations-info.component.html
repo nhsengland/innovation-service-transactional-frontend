@@ -18,18 +18,26 @@
   </div>
 </div>
 
-<!-- <div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-two-thirds">
-    <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-5"> Archive an innovations </h2>
-    <p>Archive an innovation you are no longer working on. You will need to enter your password.</p>
-  </div>
-</div> -->
+<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-<div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
-  <div class="nhsuk-grid-column-two-thirds">
-    <h2 class="nhsuk-heading-l"> Transfer ownership of an innovation </h2>
-    <p *ngIf="!haveAnyActiveInnovation"> You have currenly no innovation to transfer. </p>
-    <p *ngIf="haveAnyActiveInnovation"> Transfer the ownership of an innovation to someone else. You will need their email address. </p>
-    <a *ngIf="haveAnyActiveInnovation" routerLink="transfer"> Transfer innovation ownership </a>
+<ng-container *ngIf="pageStatus === 'READY'">
+
+  <div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h2 class="nhsuk-heading-l"> Archive an innovation </h2>
+      <p *ngIf="!haveAnyActiveInnovation"> You have currenly no innovation to archive. </p>
+      <p *ngIf="haveAnyActiveInnovation"> Archive an innovation you are no longer working on. You will need to enter your password. </p>
+      <a *ngIf="haveAnyActiveInnovation" routerLink="archive"> Archive an innovation </a>
+    </div>
   </div>
-</div>
+
+  <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h2 class="nhsuk-heading-l"> Transfer ownership of an innovation </h2>
+      <p *ngIf="!haveAnyActiveInnovation"> You have currenly no innovation to transfer. </p>
+      <p *ngIf="haveAnyActiveInnovation"> Transfer the ownership of an innovation to someone else. You will need their email address. </p>
+      <a *ngIf="haveAnyActiveInnovation" routerLink="transfer"> Transfer innovation ownership </a>
+    </div>
+  </div>
+
+</ng-container>

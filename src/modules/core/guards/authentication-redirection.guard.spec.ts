@@ -2,9 +2,9 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { EmptyMockComponent } from '@tests/app.mocks';
-
 import { ActivatedRouteSnapshot } from '@angular/router';
+
+import { EmptyMockComponent } from '@tests/app.mocks';
 
 import { CoreModule } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
@@ -19,7 +19,6 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
   let guard: AuthenticationRedirectionGuard;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,

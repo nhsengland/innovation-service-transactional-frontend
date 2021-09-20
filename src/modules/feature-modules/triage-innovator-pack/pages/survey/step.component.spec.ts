@@ -399,7 +399,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 
   });
 
-  it('should generate url for first step', () => {
+  it('should run getNavigationUrl() for first step', () => {
 
     activatedRoute.snapshot.params = { id: 1 };
     activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
@@ -412,7 +412,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 
   });
 
-  it('should generate url for summary step', () => {
+  it('should run getNavigationUrl() for summary step', () => {
 
     activatedRoute.snapshot.params = { id: 'summary' };
     activatedRoute.params = of({ id: 'summary' }); // Simulate activatedRoute.params subscription.
@@ -425,7 +425,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 
   });
 
-  it('should generate url for a question step', () => {
+  it('should run getNavigationUrl() for a question step', () => {
 
     activatedRoute.snapshot.params = { id: 5 };
     activatedRoute.params = of({ id: 5 });

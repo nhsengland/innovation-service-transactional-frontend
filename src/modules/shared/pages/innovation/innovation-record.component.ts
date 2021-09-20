@@ -16,6 +16,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   module: '' | 'innovator' | 'accessor' | 'assessment' = '';
   baseUrl = '';
   documentUrl = '';
+  pdfDocumentUrl = '';
 
   alert: AlertType = { type: null };
 
@@ -57,8 +58,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
     this.module = this.activatedRoute.snapshot.data.module;
     this.baseUrl = `/${this.module}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
-    // this.documentUrl = `${this.stores.environment.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
-    this.documentUrl = `${this.stores.environment.APP_URL}/exports/${this.activatedRoute.snapshot.params.innovationId}/pdf`;
+    this.documentUrl = `${this.stores.environment.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
+    this.pdfDocumentUrl = `${this.stores.environment.APP_URL}/exports/${this.activatedRoute.snapshot.params.innovationId}/pdf`;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovationName = '';
 
@@ -82,8 +83,17 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
         this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
 
+        this.setPageStatus('READY');
+
       },
-      error => this.logger.error(error)
+      error => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch innovation record information',
+          message: 'Please try again or contact us for further help'
+        };
+      }
     );
 
   }
@@ -107,8 +117,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when submitting your innovation',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when submitting your innovation',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
       }

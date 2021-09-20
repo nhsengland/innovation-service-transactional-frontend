@@ -46,6 +46,7 @@ export type getInnovationActionInfoInDTO = {
   createdAt: string; // '2021-04-16T09:23:49.396Z',
   createdBy: { id: string; name: string; };
 };
+export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
 
 export type getInnovationSupportsInDTO = {
   id: string;
@@ -62,8 +63,6 @@ export type getInnovationSupportsInDTO = {
   accessors?: { id: string, name: string }[];
   notifications?: { [key: string]: number };
 };
-
-export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
 
 export type getInnovationActionsListEndpointOutDTO = {
   openedActions: (getInnovationActionsListEndpointInDTO & { name: string })[];
@@ -155,6 +154,16 @@ export class InnovatorService extends CoreService {
 
   }
 
+  createInnovation(body: { name: string, description: string, countryName: string, postcode: string, organisationShares: string[] }): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() });
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
   getInnovationInfo(innovationId: string): Observable<getInnovationInfoEndpointDTO> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
@@ -198,7 +207,7 @@ export class InnovatorService extends CoreService {
         id: response.id,
         displayId: response.displayId,
         status: response.status,
-        name: `Submit '${this.stores.innovation.getSectionTitle(response.section)}'`,
+        name: `Submit '${this.stores.innovation.getSectionTitle(response.section).toLowerCase()}'`,
         description: response.description,
         section: response.section,
         createdAt: response.createdAt,
@@ -314,6 +323,13 @@ export class InnovatorService extends CoreService {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/innovation-transfers/:transferId').setPathParams({ transferId });
     return this.http.patch<{ id: string }>(url.buildUrl(), { status }).pipe(take(1), map(response => response));
+
+  }
+
+  archiveInnovation(innovationId: string, reason: string ): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/archive').setPathParams({userId: this.stores.authentication.getUserId(), innovationId});
+    return this.http.patch<{ id: string }>(url.buildUrl(), { reason }).pipe(take(1), map(response => response));
 
   }
 

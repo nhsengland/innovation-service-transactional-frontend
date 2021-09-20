@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 import { SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
@@ -11,6 +12,8 @@ import { InnovationSectionsIds } from '@stores-module/innovation/innovation.mode
   templateUrl: './evidence-view.component.html'
 })
 export class InnovationSectionEvidenceViewComponent extends CoreComponent implements OnInit {
+
+  alert: AlertType = { type: null };
 
   module: '' | 'innovator' | 'accessor' = '';
   innovationId: string;
@@ -52,13 +55,20 @@ export class InnovationSectionEvidenceViewComponent extends CoreComponent implem
 
     this.stores.innovation.getSectionEvidence$(this.module, this.innovationId, this.evidence.id).subscribe(
       response => {
+
         this.summaryList = this.wizard.runSummaryParsing(response);
         this.evidence.title = this.summaryList[1].value || '';
+
+        this.setPageStatus('READY');
       },
       () => {
-        this.logger.error('Error fetching data');
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch evidence information',
+          message: 'Please try again or contact us for further help'
+        };
       });
-
 
   }
 
@@ -72,7 +82,6 @@ export class InnovationSectionEvidenceViewComponent extends CoreComponent implem
         this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`, { alert: 'evidenceDeleteSuccess' });
       },
       () => {
-        this.logger.error('Error fetching data');
         this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`, { alert: 'evidenceDeleteError' });
       });
 

@@ -17,7 +17,7 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
   alert: AlertType = { type: null };
 
   form = new FormGroup({
-    innovation: new FormControl('', CustomValidators.required('Please, choose an innovation')),
+    innovation: new FormControl('', CustomValidators.required('Please choose an innovation')),
     email: new FormControl('', [CustomValidators.required('An email is required'), Validators.email]),
     confirmation: new FormControl('', [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('transfer my innovation')]),
   });
@@ -38,16 +38,20 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
 
     this.innovatorService.getInnovationTransfers().subscribe(
       response => {
+
         this.formInnovationsItems = this.stores.authentication.getUserInfo()
           .innovations
           .filter(i => !response.map(it => it.innovation.id).includes(i.id))
           .map(item => ({ value: item.id, label: item.name }));
+
+        this.setPageStatus('READY');
       },
       () => {
+        this.setPageStatus('ERROR');
         this.alert = {
           type: 'ERROR',
           title: 'Unable to fetch innovations transfers',
-          message: 'Please, try again or contact us for further help'
+          message: 'Please try again or contact us for further help'
         };
       }
     );
@@ -57,8 +61,8 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
 
   onSubmitStep(): void {
 
-    if (!this.form.get('innovation')?.valid) {
-      this.form.get('innovation')?.markAsTouched();
+    if (!this.form.get('innovation')!.valid) {
+      this.form.get('innovation')!.markAsTouched();
       return;
     }
 
@@ -74,8 +78,8 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
     }
 
     const body: { innovationId: string, email: string } = {
-      innovationId: this.form.get('innovation')?.value,
-      email: this.form.get('email')?.value
+      innovationId: this.form.get('innovation')!.value,
+      email: this.form.get('email')!.value
     };
 
     this.innovatorService.transferInnovation(body).subscribe(
@@ -85,14 +89,13 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when creating an action',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when creating an action',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
       }
     );
 
   }
-
 
 }

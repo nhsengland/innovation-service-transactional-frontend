@@ -14,6 +14,8 @@ import { InnovationAssessmentOverviewComponent } from './assessment-overview.com
 
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
 
+import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
+
 
 describe('FeatureModules/Assessment/Innovation/InnovationAssessmentOverviewComponent', () => {
 
@@ -56,18 +58,106 @@ describe('FeatureModules/Assessment/Innovation/InnovationAssessmentOverviewCompo
 
   });
 
+  it('should show "needsAssessmentSubmited" success', () => {
 
-  it('should run getInnovationNeedsAssessment() with success', () => {
+    activatedRoute.snapshot.queryParams = { alert: 'needsAssessmentSubmited' };
+
+    const expected = { type: 'SUCCESS', title: 'Needs assessment successfully completed' };
+
+    fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component.alert).toEqual(expected);
+
+  });
+
+  it('should run getInnovationNeedsAssessment() with a response with all RELEVANT information', () => {
+
+    NEEDS_ASSESSMENT_QUESTIONS.innovation[1].label = '';
 
     const responseMock = {
       innovation: { id: '01', name: 'Innovation 01' },
-      assessment: { description: 'description', organisations: [] }
+      assessment: {
+        description: 'description',
+        maturityLevel: 'DISCOVERY',
+        hasRegulatoryApprovals: 'YES',
+        hasRegulatoryApprovalsComment: null,
+        hasEvidence: 'YES',
+        hasEvidenceComment: null,
+        hasValidation: 'YES',
+        hasValidationComment: null,
+        hasProposition: 'YES',
+        hasPropositionComment: null,
+        hasCompetitionKnowledge: 'DISCOVERY',
+        hasCompetitionKnowledgeComment: null,
+        hasImplementationPlan: 'YES',
+        hasImplementationPlanComment: null,
+        hasScaleResource: 'YES',
+        hasScaleResourceComment: null,
+        summary: null,
+        organisations: [{ id: 'OrgId', name: 'Org name', acronym: 'ORG', organisationUnits: [{ id: 'OrgUnitId', name: 'Org Unit name', acronym: 'ORGu' }] }],
+        assignToName: '',
+        finishedAt: null,
+        createdAt: '2020-01-01T00:00:00.000Z',
+        createdBy: '2020-01-01T00:00:00.000Z',
+        updatedAt: null,
+        updatedBy: null,
+        hasBeenSubmitted: true
+      },
+      support: { id: null }
     };
-    assessmentService.getInnovationNeedsAssessment = () => of(responseMock as any);
+    assessmentService.getInnovationNeedsAssessment = () => of(responseMock);
+
+    const expected = { ...responseMock.assessment, organisationsNames: ['Org name'] };
+
+    fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    expect(component.assessment).toEqual(expected);
+
+  });
+
+  it('should run getInnovationNeedsAssessment() with a response with EMPTY information', () => {
+
+    const responseMock = {
+      innovation: { id: '01', name: 'Innovation 01' },
+      assessment: {
+        description: 'description',
+        maturityLevel: null,
+        hasRegulatoryApprovals: null,
+        hasRegulatoryApprovalsComment: null,
+        hasEvidence: null,
+        hasEvidenceComment: null,
+        hasValidation: null,
+        hasValidationComment: null,
+        hasProposition: null,
+        hasPropositionComment: null,
+        hasCompetitionKnowledge: null,
+        hasCompetitionKnowledgeComment: null,
+        hasImplementationPlan: null,
+        hasImplementationPlanComment: null,
+        hasScaleResource: null,
+        hasScaleResourceComment: null,
+        summary: null,
+        organisations: [],
+        assignToName: '',
+        finishedAt: null,
+        createdAt: '2020-01-01T00:00:00.000Z',
+        createdBy: '2020-01-01T00:00:00.000Z',
+        updatedAt: null,
+        updatedBy: null,
+        hasBeenSubmitted: false
+      },
+      support: { id: null }
+    };
+    assessmentService.getInnovationNeedsAssessment = () => of(responseMock);
+
     const expected = { ...responseMock.assessment, organisationsNames: [] };
 
     fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.assessment).toEqual(expected);
 

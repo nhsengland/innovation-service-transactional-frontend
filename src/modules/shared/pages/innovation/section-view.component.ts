@@ -62,8 +62,8 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
       case 'sectionUpdateError':
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when saving your section',
-          message: 'Please, try again or contact us for further help.'
+          title: 'An error occurred when saving your section',
+          message: 'Please try again or contact us for further help.'
         };
         break;
 
@@ -87,8 +87,8 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
       case 'evidenceDeleteError':
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when saving your evidence',
-          message: 'Please, try again or contact us for further help.'
+          title: 'An error occurred when saving your evidence',
+          message: 'Please try again or contact us for further help.'
         };
         break;
 
@@ -123,6 +123,9 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
 
   getSectionInfo(): void {
+
+    this.setPageStatus('LOADING');
+
     this.stores.innovation.getSectionInfo$(this.module, this.innovationId, this.section.id).subscribe(
       response => {
 
@@ -137,9 +140,16 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
           this.summaryList = this.wizard.runSummaryParsing(response.data);
         }
 
+        this.setPageStatus('READY');
+
       },
       () => {
-        this.logger.error('Error fetching data');
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch innovation section information',
+          message: 'Please try again or contact us for further help'
+        };
       });
 
   }
@@ -169,8 +179,8 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
         this.alert = {
           type: 'ERROR',
-          title: 'An error occured when submitting your section',
-          message: 'Please, try again or contact us for further help',
+          title: 'An error occurred when submitting your section',
+          message: 'Please try again or contact us for further help',
           setFocus: true
         };
 

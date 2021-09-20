@@ -87,6 +87,8 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
           })
         );
 
+        this.setPageStatus('READY');
+
       },
       error => this.redirectTo('error')
     );
@@ -104,7 +106,7 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
       return;
     }
 
-    this.wizard.addAnswers(formData?.data || {}).runRules();
+    this.wizard.addAnswers(formData!.data).runRules();
 
     this.redirectTo(this.getNavigationUrl(action));
 
@@ -135,12 +137,12 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
 
   getNavigationUrl(action: 'previous' | 'next'): string {
 
-    let url = `/${this.module}/innovation-transfer-acceptance`;
+    let url = `/innovator/innovation-transfer-acceptance`;
 
     switch (action) {
       case 'previous':
-        if (this.wizard.isFirstStep()) { url += `/1`; }
-        else if (this.isSummaryStep()) { url += `/${this.wizard.steps.length}`; }
+        if (this.isSummaryStep()) { url += `/${this.wizard.steps.length}`; }
+        else if (this.wizard.isFirstStep()) { url += `/1`; }
         else { url += `/${this.wizard.currentStepNumber - 1}`; }
         break;
 
