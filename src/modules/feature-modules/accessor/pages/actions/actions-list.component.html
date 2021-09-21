@@ -72,6 +72,9 @@
             </tbody>
           </table>
 
+          <pagination class="align-items-center" [currentPage]="actionsList.page" [pageSize]="actionsList.pageSize" 
+          [totalRows]="actionsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
+
         </ng-container>
 
       </div>

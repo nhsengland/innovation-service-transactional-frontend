@@ -118,7 +118,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
     service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations?take=10&skip=0&assignedToMe=false&suggestedOnly=false`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations?take=20&skip=0&assignedToMe=false&suggestedOnly=false`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -137,7 +137,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
     service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations?take=10&skip=0&supportStatus=UNASSIGNED&assignedToMe=true&suggestedOnly=true`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations?take=20&skip=0&supportStatus=UNASSIGNED&assignedToMe=true&suggestedOnly=true`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -174,7 +174,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
     service.getAdvancedInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations/advanced?take=10&skip=0&assignedToMe=false&suggestedOnly=false`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations/advanced?take=20&skip=0&assignedToMe=false&suggestedOnly=false`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -204,7 +204,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
     service.getAdvancedInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations/advanced?take=10&skip=0&name=name&cat=MEDICAL_DEVICE&loc=England&orgs=OrgId01&status=WAITING,ENGAGING&assignedToMe=true&suggestedOnly=true`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/innovations/advanced?take=20&skip=0&name=name&cat=MEDICAL_DEVICE&loc=England&orgs=OrgId01&status=WAITING,ENGAGING&assignedToMe=true&suggestedOnly=true`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -321,7 +321,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
     let response: any = null;
     service.getActionsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/actions?take=10&skip=0&openActions=`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/actions?take=20&skip=0&openActions=`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -339,7 +339,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
     let response: any = null;
     service.getActionsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/actions?take=10&skip=0&openActions=true`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/accessors/UserId01/actions?take=20&skip=0&openActions=true`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);

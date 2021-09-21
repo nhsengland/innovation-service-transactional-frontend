@@ -1,0 +1,10 @@
+<div *ngIf="totalRecords > pageSize" class="pagination">
+  <a *ngIf="currentPage != 1" (click)="onPreviousPage()">« Prev</a>
+
+  <ng-container *ngFor="let page of getPages()">
+    <a [ngClass]="{active:currentPage === page}" (click)="onPageChange(page)">{{ page }}</a>
+  </ng-container>
+
+  <a *ngIf="currentPage != getPages()?.length" (click)="onNextPage()">Next »</a>
+
+</div>

@@ -52,7 +52,6 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
         createdAt: { label: 'Initiated', orderable: true },
         status: { label: 'Status', align: 'right', orderable: true }
       },
-      pageSize: 10000,
       orderBy: 'createdAt',
       orderDir: 'descending'
     });
@@ -74,6 +73,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
         this.currentTab.contentTitle = `${this.tabs[this.currentTab.index].title} list`;
 
         this.actionsList.setData([]).setFilters({ openActions: queryParams.openActions });
+        this.actionsList.page = 1;
 
         this.getActionsList();
 
@@ -101,10 +101,16 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
   }
 
-
   onTableOrder(column: string): void {
 
     this.actionsList.setOrderBy(column);
+    this.getActionsList();
+
+  }
+
+  onPageChange(event: { pageNumber: number }): void {
+
+    this.actionsList.page = event.pageNumber;
     this.getActionsList();
 
   }
