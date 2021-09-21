@@ -12,15 +12,17 @@ export class PaginationComponent implements OnInit {
   @Input() totalRows?: number;
   @Output() updatePageEvent = new EventEmitter<{ pageNumber: number }>();
 
+  totalRecords: number;
+
   constructor() {
-    this.totalRows = this.totalRows || 0;
+    this.totalRecords = this.totalRows || 0;
   }
 
   ngOnInit(): void {
   }
 
   getPages(): number[] {
-    const totalPages = Math.ceil(this.totalRows! / this.pageSize);
+    const totalPages = Math.ceil(this.totalRecords / this.pageSize);
     const pages = [];
     for (let i = 0; i < totalPages; i++) {
       pages.push(i + 1);
