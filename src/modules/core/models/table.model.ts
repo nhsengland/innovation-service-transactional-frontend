@@ -143,13 +143,4 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
 
   }
 
-  getPages(): number[] {
-    const totalPages = Math.ceil(this.totalRows / this.pageSize);
-    const pages = [];
-    for (let i = 0; i < totalPages; i++) {
-      pages.push(i + 1);
-    }
-    return pages;
-  }
-
 }
