@@ -14,17 +14,15 @@ import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.mo
 
 import { PageAccountManageInnovationsArchivalComponent } from './manage-innovations-archival.component';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { FormEngineParameterModel } from '@modules/shared/forms';
-
 
 describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArchivalComponent', () => {
 
   let router: Router;
   let routerSpy: jasmine.Spy;
-  
+
   let authenticationStore: AuthenticationStore;
   let innovatorService: InnovatorService;
-  
+
   let component: PageAccountManageInnovationsArchivalComponent;
   let fixture: ComponentFixture<PageAccountManageInnovationsArchivalComponent>;
 
@@ -51,12 +49,29 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
 
   });
 
-
   it('should create the component', () => {
 
     fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
+
+  });
+
+  it('should have initial information loaded', () => {
+
+    const responseMock = [
+      { id: 'TransferId01', email: 'some@email.com', innovation: { id: 'InnoNew01', name: 'Innovation name 01' } },
+      { id: 'TransferId02', email: 'some@email.com', innovation: { id: 'InnoNew02', name: 'Innovation name 02' } }
+    ];
+    innovatorService.getInnovationTransfers = () => of(responseMock);
+
+    const expected = [{ label: 'Test innovation', value: 'Inno01' }];
+
+    fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    expect(component.formInnovationsItems).toEqual(expected);
 
   });
 
@@ -98,6 +113,7 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
     authenticationStore.getUserInfo = () => ({
       ...USER_INFO_INNOVATOR, email: 'some@email.com'
     });
+    authenticationStore.initializeAuthentication$ = () => of(true);
 
     fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
     component = fixture.componentInstance;
@@ -136,7 +152,7 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
     component.stepNumber = 1;
     (component as any).setStepTitle();
     expect(component.pageTitle).toBe('Archive an innovation');
-    
+
   });
 
   it('should run setStepTitle() with step 2', () => {
@@ -160,4 +176,5 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
     expect(component.pageTitle).toBe('Archive \'Innovation\'');
 
   });
+
 });
