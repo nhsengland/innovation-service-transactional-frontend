@@ -40,7 +40,7 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
     this.form = new FormGroup({
       innovation: new FormControl('', CustomValidators.required('Please, choose an innovation')),
       reason: new FormControl(''),
-      email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email)]),
+      email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')]),
       confirmation: new FormControl('', [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('archive my innovation')]),
     });
   }
@@ -88,7 +88,7 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
       })
     ).subscribe(
       () => {
-        this.redirectTo('/innovator/account/manage-innovations', { alert: 'archivalSuccess' });
+        this.redirectTo('/innovator/account/manage-innovations', { alert: 'archivalSuccess', innovation: this.innovationName });
       },
       () => {
         this.alert = {

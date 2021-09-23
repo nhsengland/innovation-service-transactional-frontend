@@ -122,9 +122,11 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
     component.form.get('email')?.setValue('some@email.com');
     component.form.get('confirmation')?.setValue('archive my innovation');
 
+    component.innovationName = 'test';
+
     component.onSubmitForm();
     fixture.detectChanges();
-    expect(routerSpy).toHaveBeenCalledWith(['/innovator/account/manage-innovations'], { queryParams: { alert: 'archivalSuccess' } });
+    expect(routerSpy).toHaveBeenCalledWith(['/innovator/account/manage-innovations'], { queryParams: { alert: 'archivalSuccess', innovation: 'test' } });
 
   });
 
