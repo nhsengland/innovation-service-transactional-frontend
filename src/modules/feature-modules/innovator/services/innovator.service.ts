@@ -324,4 +324,10 @@ export class InnovatorService extends CoreService {
 
   }
 
+  deleteUserAccount(userId: string): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId').setPathParams({userId: this.stores.authentication.getUserId()});
+    return this.http.delete<{ id: string }>(url.buildUrl()).pipe(take(1), map(response => response));
+
+  }
 }

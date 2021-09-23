@@ -12,6 +12,7 @@ import { PageNotFoundComponent } from '@shared-module/pages/not-found/not-found.
 import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
 import { AuthenticationRedirectionGuard } from '@modules/core/guards/authentication-redirection.guard';
 import { InnovationTransferRedirectionGuard } from '@modules/core/guards/innovation-transfer-redirection.guard';
+import { PageAccountManageUserAccountNewComponent } from '@modules/shared/pages/manage-newaccount/manage-newaccount-load.component';
 
 const authenticationModule: Promise<any> = import('@modules/feature-modules/authentication/authentication.module');
 const triageInnovatorPackModule: Promise<any> = import('@modules/feature-modules/triage-innovator-pack/triage-innovator-pack.module');
@@ -72,24 +73,24 @@ const routes: Routes = [
       },
     ]
   },
-
   {
     path: 'error',
     component: BaseLayoutComponent,
     children: [{ path: '', pathMatch: 'full', component: PageErrorComponent }]
   },
-
   {
     path: 'not-found',
     component: BaseLayoutComponent,
     children: [{ path: '', pathMatch: 'full', component: PageNotFoundComponent }]
   },
-
+  {
+    path: 'manage-newaccount',
+    children: [{ path: '', pathMatch: 'full', component: PageAccountManageUserAccountNewComponent }]
+  },
   {
     path: '**',
     redirectTo: 'not-found',
   }
-
 ];
 
 @NgModule({

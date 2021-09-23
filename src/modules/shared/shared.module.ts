@@ -10,6 +10,7 @@ import { FormsModule } from './forms/forms.module';
 // Pages.
 import { PageAccountManageDetailsInfoComponent } from './pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from './pages/account/manage-details/manage-details-edit.component';
+import { PageAccountManageUserAccountNewComponent } from './pages/manage-newaccount/manage-newaccount-load.component';
 
 import { InnovationSectionViewComponent } from './pages/innovation/section-view.component';
 import { InnovationSectionEvidenceViewComponent } from './pages/innovation/evidence-view.component';
@@ -26,6 +27,7 @@ import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 import { OrganisationsService } from './services/organisations.service';
 import { NotificationService } from './services/notification.service';
 
+
 @NgModule({
   imports: [
     RouterModule,
@@ -40,7 +42,6 @@ import { NotificationService } from './services/notification.service';
     // Pages.
     PageAccountManageDetailsInfoComponent,
     PageAccountManageDetailsEditComponent,
-
     InnovationSectionViewComponent,
     InnovationSectionEvidenceViewComponent,
     PageInnovationRecordComponent,
@@ -50,7 +51,8 @@ import { NotificationService } from './services/notification.service';
     PageInnovationSupportStatusListComponent,
 
     PageErrorComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    PageAccountManageUserAccountNewComponent
   ],
   providers: [
     OrganisationsService,

@@ -10,6 +10,9 @@ import { InnovatorLayoutComponent } from './base/innovator-layout.component';
 import { PageAccountManageInnovationsInfoComponent } from './pages/account/manage-innovations/manage-innovations-info.component';
 import { PageAccountManageInnovationsTransferComponent } from './pages/account/manage-innovations/manage-innovations-transfer.component';
 import { PageAccountManageInnovationsArchivalComponent } from './pages/account/manage-innovations/manage-innovations-archival.component';
+import { PageAccountManageAccountInfoComponent } from './pages/account/manage-account/manage-account-info.component';
+import { PageAccountManageUserAccountComponent } from './pages/account/manage-account/manage-account-delete.component';
+
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
@@ -36,6 +39,7 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 
 
+
 @NgModule({
   imports: [
     ThemeModule,
@@ -50,6 +54,8 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     PageAccountManageInnovationsInfoComponent,
     PageAccountManageInnovationsTransferComponent,
     PageAccountManageInnovationsArchivalComponent,
+    PageAccountManageAccountInfoComponent,
+    PageAccountManageUserAccountComponent,
     DashboardComponent,
     FirstTimeSigninComponent,
     InnovationActionTrackerDeclineComponent,

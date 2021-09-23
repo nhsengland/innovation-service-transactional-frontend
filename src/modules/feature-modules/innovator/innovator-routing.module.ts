@@ -4,9 +4,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { InnovatorLayoutComponent } from './base/innovator-layout.component';
 
 // Pages.
+import { PageAccountManageAccountInfoComponent} from './pages/account/manage-account/manage-account-info.component';
 import { PageAccountManageInnovationsInfoComponent } from './pages/account/manage-innovations/manage-innovations-info.component';
 import { PageAccountManageInnovationsTransferComponent } from './pages/account/manage-innovations/manage-innovations-transfer.component';
 import { PageAccountManageInnovationsArchivalComponent } from './pages/account/manage-innovations/manage-innovations-archival.component';
+import { PageAccountManageUserAccountComponent } from './pages/account/manage-account/manage-account-delete.component';
 
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
@@ -107,8 +109,20 @@ const routes: Routes = [
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'account/manage-innovations', label: 'Manage innovations' } } }
               }
             ]
-          }
-        ]
+          },
+          {
+            path: 'manage-account',
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAccountManageAccountInfoComponent,
+                data: { layoutOptions: { type: 'userAccountMenu' } }
+              },
+              {
+                path: 'delete', pathMatch: 'full', component: PageAccountManageUserAccountComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'account/manage-account', label: 'Manage account' } } }
+              }]
+          },
+         ]
       },
 
       {
