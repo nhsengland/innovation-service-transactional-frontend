@@ -30,7 +30,7 @@ export type getInnovationInfoEndpointDTO = {
   assessment?: {
     id: string;
   };
-  action: {
+  actions: {
     requestedCount: number;
     inReviewCount: number;
   },
@@ -99,7 +99,7 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
 };
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
-  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'organisations' | 'orgNames'> & { organisations: string[], orgNames: string[] }
+  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'organisations'> & { organisations: string[], orgNames: string[] }
 };
 
 export type getInnovationTransfersDTO = {

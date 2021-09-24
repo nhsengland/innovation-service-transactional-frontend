@@ -238,7 +238,6 @@ export type SectionsSummaryModel = {
     actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
     isCompleted: boolean;
   }[]
-
 };
 
 export type OrganisationModel = {

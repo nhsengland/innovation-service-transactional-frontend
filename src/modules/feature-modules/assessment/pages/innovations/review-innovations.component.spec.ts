@@ -194,4 +194,15 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
 
   });
 
+  it('should run onPageChange()', () => {
+
+    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.onPageChange({ pageNumber: 2 });
+    expect(component.innovationsList.page).toBe(2);
+
+  });
+
 });
