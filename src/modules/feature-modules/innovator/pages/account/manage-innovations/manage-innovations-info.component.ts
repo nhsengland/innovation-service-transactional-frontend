@@ -33,8 +33,7 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
       case 'archivalSuccess':
         this.alert = {
           type: 'SUCCESS',
-          title: 'Innovation archival',
-          message: 'Your innovation has been archived.'
+          title: `You have archived the innovation '${this.activatedRoute.snapshot.queryParams.innovation}'`
         };
         break;
       default:

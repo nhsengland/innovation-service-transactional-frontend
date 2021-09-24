@@ -58,9 +58,9 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountMa
 
   it('should show "archivalSuccess" success', () => {
 
-    activatedRoute.snapshot.queryParams = { alert: 'archivalSuccess' };
+    activatedRoute.snapshot.queryParams = { alert: 'archivalSuccess', innovation: 'test' };
 
-    const expected = { type: 'SUCCESS', title: 'Innovation archival', message: 'Your innovation has been archived.' };
+    const expected = { type: 'SUCCESS', title: `You have archived the innovation 'test'` };
 
     fixture = TestBed.createComponent(PageAccountManageInnovationsInfoComponent);
     component = fixture.componentInstance;
