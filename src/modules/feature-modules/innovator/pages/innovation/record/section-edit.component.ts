@@ -77,7 +77,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
             this.wizard.gotoStep(Number(params.questionId));
             this.currentStep = this.wizard.currentStep();
 
-            this.setPageTitle(this.currentStep.parameters[0].label || ''); // Only 1 question per page.
+            this.setPageTitle(this.currentStep.parameters[0].label); // Only 1 question per page.
 
             if (this.currentStep.parameters[0].dataType === 'file-upload') {
               this.currentStep.parameters[0].fileUploadConfig = {
@@ -118,7 +118,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       return;
     }
 
-    this.currentAnswers = { ...this.currentAnswers, ...formData?.data };
+    this.currentAnswers = { ...this.currentAnswers, ...formData!.data };
 
     this.wizard.runRules(this.currentAnswers);
     this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);
@@ -154,13 +154,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     switch (action) {
       case 'previous':
-        if (this.wizard.isFirstStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}`; }
-        else if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${this.wizard.steps.length}`; }
+        if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${this.wizard.steps.length}`; }
+        else if (this.wizard.isFirstStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}`; }
         else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${this.wizard.currentStepNumber - 1}`; }
         break;
 
       case 'next':
-        if (this.isSummaryStep()) { url += ``; }
+        if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/summary`; }
         else if (this.wizard.isLastStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/summary`; }
         else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${this.wizard.currentStepNumber + 1}`; }
         break;

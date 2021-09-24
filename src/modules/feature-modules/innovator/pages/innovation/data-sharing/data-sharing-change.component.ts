@@ -98,7 +98,7 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
     this.showWarning = false;
 
     this.initialState.organisations.forEach((o) => {
-      const index = (this.form.get('organisations')?.value as string[]).findIndex((item) => item === o.id);
+      const index = (this.form.get('organisations')!.value as string[]).findIndex(item => item === o.id);
       if (index === -1) {
         this.showWarning = true;
       }

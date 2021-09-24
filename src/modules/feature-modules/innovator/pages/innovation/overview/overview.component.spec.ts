@@ -6,10 +6,12 @@ import { Injector } from '@angular/core';
 import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { StoresModule, InnovationStore, InnovationService } from '@modules/stores';
+import { StoresModule, InnovationStore } from '@modules/stores';
+import { InnovationSectionsIds, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { InnovationOverviewComponent } from './overview.component';
+
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 
@@ -40,16 +42,34 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
   });
 
   it('should create the component', () => {
+    fixture = TestBed.createComponent(InnovationOverviewComponent);
+    component = fixture.componentInstance;
+    expect(component).toBeTruthy();
+  });
+
+  it('should run allStepsComplete()', () => {
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component).toBeTruthy();
+    component.sections = { progressBar: [true, true], submitted: 2, draft: 0, notStarted: 0 };
+
+    expect(component.allStepsComplete()).toBe(true);
 
   });
 
+  it('should run showNeedsAssessmentCompleteCard()', () => {
 
-  it('should have innovation information loaded', () => {
+    fixture = TestBed.createComponent(InnovationOverviewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    component.innovationStatus = 'IN_PROGRESS';
+
+    expect(component.showNeedsAssessmentCompleteCard()).toBe(true);
+
+  });
+
+  it('should have innovation information loaded with payload 01', () => {
 
     const responseMock = {
       innovation: { status: 'CREATED' },
@@ -60,35 +80,114 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
       ]
     };
 
-    const innovationInfoMock = {
-      actions: {
-        requestedCount: 1,
-        inReviewcount: 0
-      }
-    };
+    innovatorService.getInnovationInfo = () => of({
+      id: '',
+      name: '',
+      status: 'CREATED' as keyof typeof INNOVATION_STATUS,
+      description: '',
+      countryName: '',
+      postcode: '',
+      submittedAt: '',
+      actions: { requestedCount: 1, inReviewCount: 2 },
+      notifications: {}
+    });
 
-    innovatorService.getInnovationInfo = () => of(innovationInfoMock as any);
-    innovationStore.getSectionsSummary$ = () => of(responseMock as any);
-    innovatorService.getInnovationSupports = () => of([] as any);
+    innovationStore.getSectionsSummary$ = () => of({
+      innovation: { name: '', status: 'CREATED' as keyof typeof INNOVATION_STATUS },
+      sections: [{
+        title: '',
+        sections: [{
+          id: InnovationSectionsIds.INNOVATION_DESCRIPTION,
+          title: '',
+          status: 'NOT_STARTED' as keyof typeof INNOVATION_SECTION_STATUS,
+          actionStatus: 'STARTED' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
+          isCompleted: true
+        }]
+      }]
+    });
+    innovatorService.getInnovationSupports = () => of([]);
+
     const expected = responseMock.innovation.status;
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
     expect(component.innovationStatus).toEqual(expected);
 
   });
 
+
+  it('should have innovation information loaded with payload 02', () => {
+
+    const responseMock = {
+      innovation: { status: 'CREATED' },
+      sections: [
+        { status: 'NOT_STARTED', isCompleted: false },
+        { status: 'DRAFT', isCompleted: false },
+        { status: 'SUBMITTED', isCompleted: true }
+      ]
+    };
+
+    innovatorService.getInnovationInfo = () => of({
+      id: '',
+      name: '',
+      status: 'CREATED' as keyof typeof INNOVATION_STATUS,
+      description: '',
+      countryName: '',
+      postcode: '',
+      submittedAt: '',
+      assessment: { id: 'assessmentId01' },
+      actions: { requestedCount: 1, inReviewCount: 2 },
+      notifications: {}
+    });
+
+    innovationStore.getSectionsSummary$ = () => of({
+      innovation: { name: '', status: 'CREATED' as keyof typeof INNOVATION_STATUS },
+      sections: [{
+        title: '',
+        sections: [{
+          id: InnovationSectionsIds.INNOVATION_DESCRIPTION,
+          title: '',
+          status: 'NOT_STARTED' as keyof typeof INNOVATION_SECTION_STATUS,
+          actionStatus: 'STARTED' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
+          isCompleted: true
+        }]
+      }]
+    });
+    innovatorService.getInnovationSupports = () => of([
+      {
+        id: 'supportId01',
+        status: 'ENGAGING' as keyof typeof INNOVATION_SUPPORT_STATUS,
+        organisationUnit: {
+          id: 'Unit01', name: 'Organisation unit 01',
+          organisation: { id: 'Organisation01', name: 'Organisation 01', acronym: 'ORG' }
+        }
+      }
+    ]);
+
+    const expected = responseMock.innovation.status;
+
+    fixture = TestBed.createComponent(InnovationOverviewComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    expect(component.innovationStatus).toEqual(expected);
+
+  });
+
+
   it('should NOT have innovation information loaded', () => {
 
-
     innovationStore.getSectionsSummary$ = () => throwError('error');
-    const expected = '';
+
+    const expected = { type: 'ERROR', title: 'Unable to fetch innovation record information', message: 'Please try again or contact us for further help' };
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.innovationStatus).toEqual(expected);
+
+    expect(component.alert).toEqual(expected);
 
   });
 

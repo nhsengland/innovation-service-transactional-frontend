@@ -13,6 +13,7 @@ import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { PageAccountManageInnovationsArchivalComponent } from './manage-innovations-archival.component';
+
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArchivalComponent', () => {
@@ -59,11 +60,10 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
 
   it('should have initial information loaded', () => {
 
-    const responseMock = [
+    innovatorService.getInnovationTransfers = () => of([
       { id: 'TransferId01', email: 'some@email.com', innovation: { id: 'InnoNew01', name: 'Innovation name 01' } },
       { id: 'TransferId02', email: 'some@email.com', innovation: { id: 'InnoNew02', name: 'Innovation name 02' } }
-    ];
-    innovatorService.getInnovationTransfers = () => of(responseMock);
+    ]);
 
     const expected = [{ label: 'Test innovation', value: 'Inno01' }];
 
@@ -72,6 +72,20 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
 
     fixture.detectChanges();
     expect(component.formInnovationsItems).toEqual(expected);
+
+  });
+
+  it('should NOT have initial information loaded', () => {
+
+    innovatorService.getInnovationTransfers = () => throwError('error');
+
+    const expected = { type: 'ERROR', title: 'Unable to fetch innovations transfers', message: 'Please, try again or contact us for further help' };
+
+    fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    expect(component.alert).toEqual(expected);
 
   });
 
@@ -97,7 +111,7 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
 
   });
 
-  it('should run onSubmit() with invalid form', () => {
+  it('should run onSubmitForm() with invalid form', () => {
 
     fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
     component = fixture.componentInstance;
@@ -107,19 +121,17 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
 
   });
 
-  it('should run onSubmit and call API with success', () => {
+  it('should run onSubmitForm() and call API with success', () => {
 
     innovatorService.archiveInnovation = () => of({ id: 'id' });
-    authenticationStore.getUserInfo = () => ({
-      ...USER_INFO_INNOVATOR, email: 'some@email.com'
-    });
+    authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
     authenticationStore.initializeAuthentication$ = () => of(true);
 
     fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
     component = fixture.componentInstance;
     component.form.get('innovation')?.setValue('A required value');
     component.form.get('reason')?.setValue('An optional value');
-    component.form.get('email')?.setValue('some@email.com');
+    component.form.get('email')?.setValue('i@email.com');
     component.form.get('confirmation')?.setValue('archive my innovation');
 
     component.innovationName = 'test';
@@ -130,20 +142,52 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
 
   });
 
-  it('should run onSubmit and call API with error', () => {
+  it('should run onSubmitForm() and call API with error', () => {
 
     innovatorService.archiveInnovation = () => throwError('error');
+    authenticationStore.initializeAuthentication$ = () => of(true);
+
+    const expected = { type: 'ERROR', title: 'An error occured when archiving the innovation', message: 'Please, try again or contact us for further help', setFocus: true };
 
     fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
     component = fixture.componentInstance;
     component.form.get('innovation')?.setValue('A required value');
     component.form.get('reason')?.setValue('An optional value');
-    component.form.get('email')?.setValue('some@email.com');
+    component.form.get('email')?.setValue('i@email.com');
     component.form.get('confirmation')?.setValue('archive my innovation');
 
     fixture.detectChanges();
     component.onSubmitForm();
-    expect(routerSpy).not.toHaveBeenCalledWith(['/innovator/account/manage-innovations'], { queryParams: { alert: 'archivalSuccess' } });
+    expect(component.alert).toEqual(expected);
+
+  });
+
+  it('should run validateForm() with step 1', () => {
+
+    fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
+    component = fixture.componentInstance;
+    component.stepNumber = 1;
+
+    (component as any).validateForm(1);
+    expect(component.form.get('innovation')?.valid).toBeFalsy();
+
+  });
+
+  it('should run validateForm() with step 2', () => {
+
+    fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
+    component = fixture.componentInstance;
+
+    expect((component as any).validateForm(2)).toBeTruthy();
+
+  });
+
+  it('should run validateForm() with INVALID step', () => {
+
+    fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
+    component = fixture.componentInstance;
+
+    expect((component as any).validateForm(3)).toBeTruthy();
 
   });
 
@@ -152,6 +196,7 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
     fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
     component = fixture.componentInstance;
     component.stepNumber = 1;
+
     (component as any).setStepTitle();
     expect(component.pageTitle).toBe('Archive an innovation');
 
@@ -163,6 +208,7 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
     component = fixture.componentInstance;
     component.innovationName = 'Innovation';
     component.stepNumber = 2;
+
     (component as any).setStepTitle();
     expect(component.pageTitle).toBe('Archive \'Innovation\'');
 
@@ -174,8 +220,20 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
     component = fixture.componentInstance;
     component.innovationName = 'Innovation';
     component.stepNumber = 3;
+
     (component as any).setStepTitle();
     expect(component.pageTitle).toBe('Archive \'Innovation\'');
+
+  });
+
+  it('should run setStepTitle() with INVALID step', () => {
+
+    fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
+    component = fixture.componentInstance;
+    component.stepNumber = 4 as any;
+
+    (component as any).setStepTitle();
+    expect(component.pageTitle).toBe('');
 
   });
 

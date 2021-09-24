@@ -244,4 +244,15 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   });
 
+  it('should run onPageChange()', () => {
+
+    fixture = TestBed.createComponent(InnovationsReviewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.onPageChange({ pageNumber: 2 });
+    expect(component.innovationsList.page).toBe(2);
+
+  });
+
 });

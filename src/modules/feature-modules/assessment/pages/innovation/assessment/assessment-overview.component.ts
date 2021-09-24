@@ -103,7 +103,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
           },
           {
             label: NEEDS_ASSESSMENT_QUESTIONS.innovator[1].label,
-            value: maturityLevelItems.find(item => item.value === response.assessment.hasCompetitionKnowledge)?.label || '',
+            value: yesPartiallyNoItems.find(item => item.value === response.assessment.hasCompetitionKnowledge)?.label || '',
             comment: response.assessment.hasCompetitionKnowledgeComment || ''
           },
           {
