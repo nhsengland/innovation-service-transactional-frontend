@@ -7,7 +7,7 @@ import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
 // Pages.
 import { PageErrorComponent } from '@shared-module/pages/error/error.component';
 import { PageNotFoundComponent } from '@shared-module/pages/not-found/not-found.component';
-
+import { PageAccountManageUserDeleteAccountMesasageComponent } from '@modules/shared/pages/account/manage-deleteaccoount/manage-deleteaccount-message.component';
 // Guards.
 import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
 import { AuthenticationRedirectionGuard } from '@modules/core/guards/authentication-redirection.guard';
@@ -83,6 +83,11 @@ const routes: Routes = [
     path: 'not-found',
     component: BaseLayoutComponent,
     children: [{ path: '', pathMatch: 'full', component: PageNotFoundComponent }]
+  },
+
+  {
+    path: 'manage-deleteaccount',
+    children: [{ path: '', pathMatch: 'full', component: PageAccountManageUserDeleteAccountMesasageComponent }]
   },
 
   {

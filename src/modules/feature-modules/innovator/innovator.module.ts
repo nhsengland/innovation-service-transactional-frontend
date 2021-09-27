@@ -25,6 +25,8 @@ import { InnovationNewComponent } from './pages/innovation-new/innovation-new.co
 import { InnovationTransferAcceptanceComponent } from './pages/innovation-transfer-acceptance/innovation-transfer-acceptance.component';
 import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
 
+import { PageAccountManageAccountInfoComponent } from './pages/account/manage-account/manage-account-info.component';
+import { PageAccountManageUserAccountComponent } from './pages/account/manage-account/manage-account-delete.component';
 // Components.
 import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
 
@@ -66,7 +68,8 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovationNewComponent,
     InnovationTransferAcceptanceComponent,
     InnovationsListComponent,
-
+    PageAccountManageAccountInfoComponent,
+    PageAccountManageUserAccountComponent,
     // Components.
     OrganisationSuggestionsCardComponent
   ],

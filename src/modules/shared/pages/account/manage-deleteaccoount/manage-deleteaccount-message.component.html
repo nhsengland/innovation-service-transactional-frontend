@@ -1,0 +1,11 @@
+<theme-header [showMenuBar]="false"></theme-header>
+<div class="nhsuk-grid-row nhsuk-u-margin-1 nhsuk-u-padding-4">
+  <!-- style="padding-left: 120px; padding-top: 30px;"> -->
+  <div class="nhsuk-grid-column-three-quarters">
+    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+      <p> {{ alert.message }} </p>
+      <a [href]="proceedLink" class="nhsuk-action-link__link">Innnovation service home</a>
+    </theme-alert>
+  </div>
+</div>
+<theme-footer></theme-footer>
