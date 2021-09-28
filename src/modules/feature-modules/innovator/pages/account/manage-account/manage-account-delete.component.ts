@@ -26,7 +26,7 @@ export class PageAccountManageUserAccountComponent extends CoreComponent impleme
   ) {
 
     super();
-    this.setPageTitle('Delete your acount');
+    this.setPageTitle('Delete your account');
 
     const user = this.stores.authentication.getUserInfo();
     this.users = {
@@ -36,7 +36,7 @@ export class PageAccountManageUserAccountComponent extends CoreComponent impleme
 
     this.form = new FormGroup({
       reason: new FormControl(''),
-      email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(this.users.email)]),
+      email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(this.users.email, 'The email is incorrect')]),
       confirmation: new FormControl('', [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('delete my account')]),
     });
   }
@@ -77,7 +77,7 @@ export class PageAccountManageUserAccountComponent extends CoreComponent impleme
         this.setPageTitle('DeleteAccount Step:1');
         break;
       case 2:
-        this.setPageTitle('DeleteAccount Step:2');
+        this.setPageTitle('Delete Account');
         break;
       default:
         break;
