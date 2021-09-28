@@ -326,10 +326,17 @@ export class InnovatorService extends CoreService {
 
   }
 
-  archiveInnovation(innovationId: string, reason: string ): Observable<{ id: string }> {
+  archiveInnovation(innovationId: string, reason: string): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/archive').setPathParams({userId: this.stores.authentication.getUserId(), innovationId});
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/archive').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
     return this.http.patch<{ id: string }>(url.buildUrl(), { reason }).pipe(take(1), map(response => response));
+
+  }
+
+  deleteUserAccount(userId: string, body: { reason: string }): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/delete').setPathParams({ userId: this.stores.authentication.getUserId() });
+    return this.http.patch<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
 
