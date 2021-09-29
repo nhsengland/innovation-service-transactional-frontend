@@ -74,10 +74,10 @@ export class PageAccountManageUserAccountComponent extends CoreComponent impleme
   private setStepTitle(): void {
     switch (this.stepNumber) {
       case 1:
-        this.setPageTitle('DeleteAccount Step:1');
+        this.setPageTitle('Delete your account');
         break;
       case 2:
-        this.setPageTitle('Delete Account');
+        this.setPageTitle('Delete your account');
         break;
       default:
         break;
