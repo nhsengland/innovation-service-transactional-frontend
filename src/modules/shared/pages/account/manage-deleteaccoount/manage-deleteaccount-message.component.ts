@@ -10,7 +10,6 @@ import { AlertType } from '@modules/core';
 })
 export class PageAccountManageUserDeleteAccountMesasageComponent extends CoreComponent {
   alert: AlertType = { type: null };
-  proceedLink = `${this.stores.environment.APP_URL}/`;
   constructor() {
 
     super();
