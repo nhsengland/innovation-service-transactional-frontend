@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
@@ -43,7 +43,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have notifications', () => {
+  it('should have notifications with API success', () => {
 
     notificationService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
 
@@ -52,6 +52,18 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
     fixture.detectChanges();
     expect(component.notifications).toEqual({ INNOVATION: 1 });
+
+  });
+
+  it('should NOT have notifications with API error', () => {
+
+    notificationService.getAllUnreadNotificationsGroupedByContext = () => throwError('error');
+
+    fixture = TestBed.createComponent(DashboardComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    expect(component.notifications).toEqual({ ACTION: 0, COMMENT: 0, INNOVATION: 0, SUPPORT: 0, DATA_SHARING: 0 });
 
   });
 

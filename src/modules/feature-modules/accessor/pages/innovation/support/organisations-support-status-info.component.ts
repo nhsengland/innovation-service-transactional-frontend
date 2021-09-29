@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 import { OrganisationsService } from '@shared-module/services/organisations.service';
 
 import { AccessorService } from '../../../services/accessor.service';
@@ -14,6 +15,8 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation
   templateUrl: './organisations-support-status-info.component.html'
 })
 export class InnovationSupportOrganisationsSupportStatusInfoComponent extends CoreComponent implements OnInit {
+
+  alert: AlertType = { type: null };
 
   innovationId: string;
 
@@ -94,7 +97,19 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
         }
 
       });
-    });
+
+      this.setPageStatus('READY');
+
+    },
+      () => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch innovation record information',
+          message: 'Please try again or contact us for further help'
+        };
+      }
+    );
   }
 
 

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges, ChangeDetectorRef, ChangeDetectionStrategy, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'pagination',
@@ -6,36 +6,21 @@ import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges, ChangeDe
   styleUrls: ['./pagination.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PaginationComponent implements OnInit, OnChanges {
+export class PaginationComponent implements OnInit {
 
   @Input() currentPage = 1;
   @Input() pageSize = 20;
-  @Input() totalRows?: number;
+  @Input() totalRows = 0;
   @Output() updatePageEvent = new EventEmitter<{ pageNumber: number }>();
 
-  totalRecords = 0;
 
-  constructor(private readonly cdr: ChangeDetectorRef) {
-  }
+  constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { }
 
-    this.cdr.detectChanges();
-
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-
-    if (changes.totalRows.currentValue !== changes.totalRows.previousValue) {
-      this.totalRecords = this.totalRows || 0;
-    }
-
-    this.cdr.detectChanges();
-
-  }
 
   getPages(): number[] {
-    const totalPages = Math.ceil(this.totalRecords / this.pageSize);
+    const totalPages = Math.ceil(this.totalRows / this.pageSize);
     const pages = [];
     for (let i = 0; i < totalPages; i++) {
       pages.push(i + 1);
@@ -44,14 +29,17 @@ export class PaginationComponent implements OnInit, OnChanges {
   }
 
   onNextPage(): void {
-    this.updatePageEvent.emit({ pageNumber: this.currentPage += 1 });
+    this.currentPage += 1;
+    this.updatePageEvent.emit({ pageNumber: this.currentPage });
   }
 
   onPreviousPage(): void {
-    this.updatePageEvent.emit({ pageNumber: this.currentPage -= 1 });
+    this.currentPage -= 1;
+    this.updatePageEvent.emit({ pageNumber: this.currentPage });
   }
 
   onPageChange(page: number): void {
+    this.currentPage = page;
     this.updatePageEvent.emit({ pageNumber: page });
   }
 
