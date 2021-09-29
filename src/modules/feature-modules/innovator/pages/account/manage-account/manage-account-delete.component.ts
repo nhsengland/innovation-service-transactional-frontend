@@ -43,8 +43,7 @@ export class PageAccountManageUserAccountComponent extends CoreComponent impleme
 
   onSubmitStep(): void {
     this.stepNumber++;
-    this.setStepTitle();
-  }
+    }
 
   onSubmitForm(): void {
     if (!this.form.valid) {
@@ -69,18 +68,5 @@ export class PageAccountManageUserAccountComponent extends CoreComponent impleme
         };
       }
     );
-  }
-
-  private setStepTitle(): void {
-    switch (this.stepNumber) {
-      case 1:
-        this.setPageTitle('DeleteAccount Step:1');
-        break;
-      case 2:
-        this.setPageTitle('Delete Account');
-        break;
-      default:
-        break;
-    }
   }
 }
