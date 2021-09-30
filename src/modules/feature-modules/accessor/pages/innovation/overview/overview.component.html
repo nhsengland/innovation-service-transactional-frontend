@@ -1,33 +1,42 @@
 <div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
   <div class="nhsuk-grid-column-one-half">
-    <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation?.summary?.name }}</h1>
+    <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation.name }}</h1>
   </div>
-  <div *ngIf="innovation?.assessment?.id" class="nhsuk-grid-column-one-half text-align-right">
-    <a routerLink="/accessor/innovations/{{ innovationId || '' }}/assessments/{{ innovation?.assessment?.id || '' }}"> View needs assessment </a>
+  <div *ngIf="innovation.assessment.id" class="nhsuk-grid-column-one-half text-align-right">
+    <a routerLink="/accessor/innovations/{{ innovationId }}/assessments/{{ innovation.assessment.id }}"> View needs assessment </a>
   </div>
 </div>
 <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
 
+<theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+  <p> {{ alert.message }} </p>
+</theme-alert>
 
-<p class="nhsuk-heading-s nhsuk-u-margin-bottom-2">{{ innovationSupport.organisationUnit }}</p>
-<hr class="nhsuk-section-break nhsuk-section-break--visible" />
-<dl class="nhsuk-summary-list nhsuk-u-margin-bottom-3">
-  <div class="nhsuk-summary-list__row">
-    <dt class="nhsuk-summary-list__key">Support status</dt>
-    <dd class="nhsuk-summary-list__value">
-      <strong class="nhsuk-tag app-task-list__tag float-l" [ngClass]="innovationSupportStatus[innovationSupport.status].cssClass">
-        {{ innovationSupportStatus[innovationSupport.status].label }}
-      </strong>
-    </dd>
-  </div>
-</dl>
+<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-<a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation?.support?.id ? innovation?.support?.id : 'new' }}" class="nhsuk-button nhsuk-u-margin-bottom-7"> Update status </a>
+<ng-container *ngIf="pageStatus === 'READY'">
 
-<h2 class="nhsuk-heading-m">Innovation summary</h2>
-<dl class="nhsuk-summary-list">
-  <div *ngFor="let item of innovationSummary" class="nhsuk-summary-list__row">
-    <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-    <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
-  </div>
-</dl>
+  <p class="nhsuk-heading-s nhsuk-u-margin-bottom-2">{{ innovationSupport.organisationUnit }}</p>
+  <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+  <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-3">
+    <div class="nhsuk-summary-list__row">
+      <dt class="nhsuk-summary-list__key">Support status</dt>
+      <dd class="nhsuk-summary-list__value">
+        <strong class="nhsuk-tag app-task-list__tag float-l" [ngClass]="innovationSupportStatus[innovationSupport.status].cssClass">
+          {{ innovationSupportStatus[innovationSupport.status].label }}
+        </strong>
+      </dd>
+    </div>
+  </dl>
+
+  <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-bottom-7"> Update status </a>
+
+  <h2 class="nhsuk-heading-m">Innovation summary</h2>
+  <dl class="nhsuk-summary-list">
+    <div *ngFor="let item of innovationSummary" class="nhsuk-summary-list__row">
+      <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+      <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+    </div>
+  </dl>
+
+</ng-container>

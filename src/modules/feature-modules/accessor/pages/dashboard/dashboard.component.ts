@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 
+
 @Component({
   selector: 'app-accessor-pages-dashboard',
   templateUrl: './dashboard.component.html'

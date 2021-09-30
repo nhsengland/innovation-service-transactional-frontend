@@ -15,9 +15,7 @@
     <div class="nhsuk-grid-row">
       <div id="content-{{ currentTab.key }}" role="tabpanel" attr.aria-labelledby="tab-{{ currentTab.key }}" class="nhsuk-grid-column-full">
 
-        <ng-container *ngIf="pageStatus === 'LOADING'">
-          <p> {{ 'messages.informations.fetching_information' | translate }} </p>
-        </ng-container>
+        <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
         <ng-container *ngIf="pageStatus === 'READY' && actionsList.getTotalRowsNumber() === 0">
           <p> There are no actions </p>
@@ -72,8 +70,7 @@
             </tbody>
           </table>
 
-          <pagination class="align-items-center" [currentPage]="actionsList.page" [pageSize]="actionsList.pageSize" 
-          [totalRows]="actionsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
+          <pagination [currentPage]="actionsList.page" [pageSize]="actionsList.pageSize" [totalRows]="actionsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
 
         </ng-container>
 

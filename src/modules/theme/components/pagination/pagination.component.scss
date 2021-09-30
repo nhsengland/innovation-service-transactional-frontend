@@ -1,17 +1,20 @@
 .pagination {
-    display: inline-block;
-    padding: 25px 0;
-  }
-  
-  .pagination a {
+  display: inline-block;
+  padding: 25px 0;
+
+  a {
     background-color: #eff4f5;
     float: left;
     padding: 8px 16px;
     margin: 2px;
+    cursor: pointer;
     text-decoration: underline;
   }
-  
-  .pagination a.active {
+
+  a.active {
     background-color: #0060b8;
+    cursor: pointer;
     color: white;
   }
+
+}

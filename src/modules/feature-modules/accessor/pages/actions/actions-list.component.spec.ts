@@ -111,9 +111,7 @@ describe('FeatureModules/Accessor/Actions/ActionsListComponent', () => {
 
   it('should run onTableOrder()', () => {
 
-    const responseMock: getActionsListEndpointInDTO = { count: 0, data: [] };
-
-    accessorService.getActionsList = () => of(responseMock as any);
+    accessorService.getActionsList = () => of({ count: 0, data: [] });
 
     fixture = TestBed.createComponent(ActionsListComponent);
     component = fixture.componentInstance;
@@ -121,6 +119,17 @@ describe('FeatureModules/Accessor/Actions/ActionsListComponent', () => {
     fixture.detectChanges();
     component.onTableOrder('name');
     expect(component.actionsList.orderBy).toEqual('name');
+
+  });
+
+  it('should run onPageChange()', () => {
+
+    fixture = TestBed.createComponent(ActionsListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.onPageChange({ pageNumber: 2 });
+    expect(component.actionsList.page).toBe(2);
 
   });
 

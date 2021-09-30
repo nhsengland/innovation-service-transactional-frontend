@@ -13,11 +13,11 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
 })
 export class PageAccountManageInnovationsArchivalComponent extends CoreComponent implements OnInit {
 
-  stepNumber: 1 | 2 | 3 = 1;
   alert: AlertType = { type: null };
-  user: {
-    email: string
-  };
+
+  stepNumber: 1 | 2 | 3 = 1;
+
+  user: { email: string };
 
   form: FormGroup;
 
@@ -105,6 +105,7 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
   }
 
   private validateForm(step: number): boolean {
+
     switch (step) {
       case 1:
         if (!this.form.get('innovation')!.valid) {

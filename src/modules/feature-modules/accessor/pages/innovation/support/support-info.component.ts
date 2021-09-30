@@ -46,11 +46,6 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
-  }
-
-
-  ngOnInit(): void {
-
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'supportUpdateSuccess':
         this.alert = {
@@ -70,17 +65,34 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
         break;
     }
 
+  }
+
+
+  ngOnInit(): void {
 
     this.innovationSupport.organisationUnit = this.stores.authentication.getAccessorOrganisationUnitName();
 
-    if (this.innovation.support?.id) {
+    if (!this.innovation.support?.id) {
+
+      this.setPageStatus('READY');
+
+    } else  {
       this.accessorService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id).subscribe(
         response => {
+
           this.innovationSupport.accessors = (response.accessors).map(item => item.name).join(', ');
           this.innovationSupport.status = response.status;
+
+          this.setPageStatus('READY');
+
         },
-        error => {
-          this.logger.error(error);
+        () => {
+          this.setPageStatus('ERROR');
+          this.alert = {
+            type: 'ERROR',
+            title: 'Unable to fetch support information',
+            message: 'Please try again or contact us for further help'
+          };
         }
       );
     }

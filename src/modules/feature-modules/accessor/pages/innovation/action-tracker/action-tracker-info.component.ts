@@ -71,10 +71,19 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
     this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
       response => {
+
         this.action = response;
+
+        this.setPageStatus('READY');
+
       },
       error => {
-        this.logger.error(error);
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch action information',
+          message: 'Please try again or contact us for further help'
+        };
       }
     );
 

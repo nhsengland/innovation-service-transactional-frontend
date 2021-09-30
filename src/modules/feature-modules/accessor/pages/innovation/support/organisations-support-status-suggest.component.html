@@ -7,53 +7,58 @@
 
     <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-5"> {{ pageTitle }} </h1>
 
+    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
   </div>
 </div>
 
+<ng-container *ngIf="pageStatus === 'READY'">
 
-<form [formGroup]="form">
+  <form [formGroup]="form">
 
-  <ng-container *ngIf="stepId === 1">
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <theme-form-grouped-checkbox-array arrayName="organisationUnits" label="Select the organisations you think would be right to offer support. These organisations will be notified." [groupedItems]="groupedItems"
-          [pageUniqueField]="false"></theme-form-grouped-checkbox-array>
-        <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep()">Continue</button>
-        <div class="nhsuk-u-padding-bottom-5">
-          <a routerLink="/accessor/innovations/{{ innovationId }}/support"> Cancel </a>
-        </div>
-      </div>
-    </div>
-  </ng-container>
-
-  <ng-container *ngIf="stepId === 2">
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-two-thirds">
-
-        <div class="nhsuk-u-padding-bottom-3">
-          <h2 class="nhsuk-u-margin-0"> Selected organisations </h2>
-          <div *ngFor="let organisation of chosenUnits.list">
-            <p class="nhsuk-u-margin-bottom-1"> {{ organisation.organisation }} </p>
-            <ul class="nhsuk-list nhsuk-u-margin-0 nhsuk-u-padding-left-5">
-              <li *ngFor="let unit of organisation.units" class="d-flex nhsuk-u-margin-0 nhsuk-u-padding-left-3">
-                <span class="app-task-list__task-icon">
-                  <theme-svg-icon type="success"></theme-svg-icon>
-                </span>
-                <span class="app-task-list__task-name"> {{ unit }} </span>
-              </li>
-            </ul>
+    <ng-container *ngIf="stepId === 1">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-full">
+          <theme-form-grouped-checkbox-array arrayName="organisationUnits" label="Select the organisations you think would be right to offer support. These organisations will be notified." [groupedItems]="groupedItems"
+            [pageUniqueField]="false"></theme-form-grouped-checkbox-array>
+          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep()">Continue</button>
+          <div class="nhsuk-u-padding-bottom-5">
+            <a routerLink="/accessor/innovations/{{ innovationId }}/support"> Cancel </a>
           </div>
         </div>
+      </div>
+    </ng-container>
 
-        <theme-form-textarea controlName="comment" label="Describe briefly why you selected these organisations" [pageUniqueField]="false"></theme-form-textarea>
-        <theme-form-checkbox controlName="confirm" label="I confirm that I understand the support offers of the selected organisations" size="small"></theme-form-checkbox>
-        <p *ngIf="formSubmitted" class="font-color-error">You need to confirm to proceed</p>
-        <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()"> Confirm and notify organisations </button>
-        <div class="nhsuk-u-padding-bottom-5">
-          <a routerLink="/accessor/innovations/{{ innovationId }}/support"> Cancel </a>
+    <ng-container *ngIf="stepId === 2">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-two-thirds">
+
+          <div class="nhsuk-u-padding-bottom-3">
+            <h2 class="nhsuk-u-margin-0"> Selected organisations </h2>
+            <div *ngFor="let organisation of chosenUnits.list">
+              <p class="nhsuk-u-margin-bottom-1"> {{ organisation.organisation }} </p>
+              <ul class="nhsuk-list nhsuk-u-margin-0 nhsuk-u-padding-left-5">
+                <li *ngFor="let unit of organisation.units" class="d-flex nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+                  <span class="app-task-list__task-icon">
+                    <theme-svg-icon type="success"></theme-svg-icon>
+                  </span>
+                  <span class="app-task-list__task-name"> {{ unit }} </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <theme-form-textarea controlName="comment" label="Describe briefly why you selected these organisations" [pageUniqueField]="false"></theme-form-textarea>
+          <theme-form-checkbox controlName="confirm" label="I confirm that I understand the support offers of the selected organisations" size="small"></theme-form-checkbox>
+          <p *ngIf="formSubmitted" class="font-color-error">You need to confirm to proceed</p>
+          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()"> Confirm and notify organisations </button>
+          <div class="nhsuk-u-padding-bottom-5">
+            <a routerLink="/accessor/innovations/{{ innovationId }}/support"> Cancel </a>
+          </div>
         </div>
       </div>
-    </div>
-  </ng-container>
+    </ng-container>
 
-</form>
+  </form>
+
+</ng-container>

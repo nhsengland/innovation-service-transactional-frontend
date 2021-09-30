@@ -4,7 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
@@ -71,8 +71,8 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
     fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);
     component = fixture.componentInstance;
-
     fixture.detectChanges();
+
     expect(component.organisations[0]).toEqual(expected);
 
   });
@@ -101,8 +101,8 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
     fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);
     component = fixture.componentInstance;
-
     fixture.detectChanges();
+
     expect(component.organisations[0]).toEqual(expected);
 
   });
@@ -131,8 +131,8 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
     fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);
     component = fixture.componentInstance;
-
     fixture.detectChanges();
+
     expect(component.organisations[0]).toEqual(expected);
 
   });
@@ -179,12 +179,24 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
     fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);
     component = fixture.componentInstance;
-
     fixture.detectChanges();
+
     expect(component.organisations[0]).toEqual(expected);
 
   });
 
+  it('should NOT have initial information loaded', () => {
+
+    organisationsService.getOrganisationUnits = () => throwError('error');
+    accessorService.getInnovationSupports = () => throwError('error');
+
+    fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.organisations.length).toBe(0);
+
+  });
 
   it('should run onShowHideClicked() and do nothing because organisations do not exists', () => {
 
