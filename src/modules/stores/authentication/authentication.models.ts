@@ -9,6 +9,7 @@ export class AuthenticationModel {
     email: string;
     displayName: string;
     type: '' | 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
+    phone: string;
     organisations: {
       id: string;
       name: string;

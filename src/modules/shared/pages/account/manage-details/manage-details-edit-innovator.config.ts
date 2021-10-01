@@ -9,7 +9,7 @@ type InboundPayloadType = Required<AuthenticationModel>['user'];
 
 type StepPayloadType = {
   displayName: string;
-  // mobilePhone?: string;
+  mobilePhone: string;
   isCompanyOrOrganisation: 'YES' | 'NO';
   organisationName: string;
   organisationSize: null | string;
@@ -20,7 +20,7 @@ type StepPayloadType = {
 
 type OutboundPayloadType = {
   displayName: string;
-  // mobilePhone?: string;
+  mobilePhone: string;
   organisation?: {
     id: string;
     name: string;
@@ -32,6 +32,7 @@ type OutboundPayloadType = {
 
 
 export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineModel({
+
   steps: [
 
     new FormEngineModel({
@@ -43,9 +44,9 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
       }]
     }),
 
-    // new FormEngineModel({
-    //   parameters: [{ id: 'mobilePhone', dataType: 'text', label: 'Phone number' }]
-    // }),
+    new FormEngineModel({
+      parameters: [{ id: 'mobilePhone', dataType: 'text', label: 'Phone number' }]
+    }),
 
     new FormEngineModel({
 
@@ -66,6 +67,7 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
     })
 
   ],
+
   runtimeRules: [(steps: FormEngineModel[], data: StepPayloadType, currentStep: number) => runtimeRules(steps, data, currentStep)],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data),
@@ -75,8 +77,11 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
 
 function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number): void {
 
-  steps.splice(2);
-
+  steps.splice(3);
+  //  if(location==="England")
+  // {
+  //   steps[1].parameters[0].validations = { pattern: "" }
+  // }
   if (data.isCompanyOrOrganisation === 'NO') {
     data.organisationName = '';
     data.organisationSize = null;
@@ -106,7 +111,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
     displayName: data.displayName,
-    // mobilePhone?: string;
+    mobilePhone: data.phone,
     isCompanyOrOrganisation: !data.organisations[0].isShadow ? 'YES' : 'NO',
     organisationName: data.organisations[0].name,
     organisationSize: data.organisations[0].size,
@@ -122,7 +127,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
     displayName: data.displayName,
-    // mobilePhone: data.mobilePhone,
+    mobilePhone: data.mobilePhone,
     organisation: {
       id: data.organisationAdditionalInformation.id,
       name: data.organisationName,
@@ -139,7 +144,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   toReturn.push(
     { label: 'Name', value: data.displayName, editStepNumber: 1 },
-    // { label: 'Phone', value: data.mobilePhone, editStepNumber: 2 },
+    { label: 'Phone', value: data.mobilePhone, editStepNumber: 2 },
     { label: 'Is company or organisation?', value: data.isCompanyOrOrganisation === 'YES' ? 'Yes' : 'No', editStepNumber: 2 }
   );
 

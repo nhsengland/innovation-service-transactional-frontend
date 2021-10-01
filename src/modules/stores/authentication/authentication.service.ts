@@ -25,6 +25,7 @@ type getUserInfoDto = {
       name: string;
     }[];
   }[];
+  phone: string;
 };
 
 
@@ -74,7 +75,8 @@ export class AuthenticationService {
         email: response.email,
         displayName: ['unknown'].includes(response.displayName) ? '' : response.displayName,
         type: response.type,
-        organisations: response.organisations
+        organisations: response.organisations,
+        phone: response.phone
       }))
     );
 
@@ -82,8 +84,8 @@ export class AuthenticationService {
 
   saveUserInfo(body: saveUserInfoDTO): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('me');
-    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
+const url = new UrlModel(this.API_URL).addPath('me');
+return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
     );
