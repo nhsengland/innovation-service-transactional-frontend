@@ -23,6 +23,8 @@ import { InnovationSupportInfoComponent } from './pages/innovation/support/suppo
 import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details/manage-details-edit.component';
 
+import { PageAccountEmailNotificationsComponent } from '@modules/shared/pages/account/email-notifications/manage-email-notifications.component';
+
 import { PageInnovationCommentsListComponent } from '@shared-module/pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from '@shared-module/pages/innovation/comments/comments-new.component';
 import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/innovation-record.component';
@@ -78,6 +80,15 @@ const routes: Routes = [
               },
               { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
               { path: 'edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent }
+            ]
+          },
+          {
+            path: 'email-notifications',
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAccountEmailNotificationsComponent,
+                data: { layoutOptions: { type: 'userAccountMenu' } }
+              }
             ]
           }
         ]
