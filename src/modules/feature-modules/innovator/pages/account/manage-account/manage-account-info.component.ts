@@ -13,11 +13,7 @@ import { getInnovationTransfersDTO, InnovatorService } from '@modules/feature-mo
 export class PageAccountManageAccountInfoComponent extends CoreComponent implements OnInit {
 
   alert: AlertType = { type: null };
-
-  // haveAnyActiveInnovation = false;
-  // innovationTransfers: getInnovationTransfersDTO[] = [];
-
-
+  changePassword = `${this.stores.environment.APP_URL}/change-password`;
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService
