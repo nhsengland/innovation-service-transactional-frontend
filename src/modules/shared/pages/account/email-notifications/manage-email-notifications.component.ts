@@ -33,8 +33,9 @@ export class PageAccountEmailNotificationsComponent extends CoreComponent implem
 
     if (this.stores.authentication.isAccessorType()) {
       this.notificationTypeList = [
-        { id: 'Action', value: 'Actions', isSubscribed: true },
-        { id: 'Support_Status_Change', value: 'Support status changes', isSubscribed: true }
+        { id: 'ACTION', value: 'Actions', isSubscribed: true },
+        // { id: 'COMMENT', value: 'Comments', isSubscribed: true },
+        { id: 'SUPPORT_STATUS_CHANGE', value: 'Support status changes', isSubscribed: true }
       ];
     }
 

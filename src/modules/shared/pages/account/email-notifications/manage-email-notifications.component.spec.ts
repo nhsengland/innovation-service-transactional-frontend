@@ -61,12 +61,12 @@ describe('PageAccountManageNotificationsComponent', () => {
 
     authenticationStore.isAccessorType = () => true;
 
-    const responseMock = [{ id: 'Support_Status_Change', isSubscribed: false }];
+    const responseMock = [{ id: 'SUPPORT_STATUS_CHANGE', isSubscribed: false }];
 
     emailNotificationService.getUserNotificationPreferences = () => of(responseMock);
 
-    const expected = [{ id: 'Action', value: 'Actions', isSubscribed: true },
-    { id: 'Support_Status_Change', value: 'Support status changes', isSubscribed: false }];
+    const expected = [{ id: 'ACTION', value: 'Actions', isSubscribed: true },
+    { id: 'SUPPORT_STATUS_CHANGE', value: 'Support status changes', isSubscribed: false }];
 
     fixture = TestBed.createComponent(PageAccountEmailNotificationsComponent);
     component = fixture.componentInstance;
