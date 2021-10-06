@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 
 import { MappedObject, UrlModel } from '@modules/core';
+
 import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
@@ -295,22 +296,6 @@ export class InnovatorService extends CoreService {
 
   }
 
-  // getInnovationTransfer(id: string): Observable<getInnovationTransfersDTO> {
-
-  //   return of({
-  //     id: 'someId',
-  //     email: 'some@email.com',
-  //     name: 'Guy that sent!',
-  //     innovation: { id: 'innoID', name: 'innovation Name', owner: 'Inno owner' }
-  //   });
-
-  //   const url = new UrlModel(this.API_URL).addPath('innovators/innovation-transfers/:id').setPathParams({ id });
-  //   return this.http.get<getInnovationTransfersDTO>(url.buildUrl()).pipe(
-  //     take(1),
-  //     map(response => response)
-  //   );
-
-  // }
 
   transferInnovation(body: { innovationId: string, email: string }): Observable<{ id: string }> {
 
@@ -326,10 +311,17 @@ export class InnovatorService extends CoreService {
 
   }
 
-  archiveInnovation(innovationId: string, reason: string ): Observable<{ id: string }> {
+  archiveInnovation(innovationId: string, reason: string): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/archive').setPathParams({userId: this.stores.authentication.getUserId(), innovationId});
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/archive').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
     return this.http.patch<{ id: string }>(url.buildUrl(), { reason }).pipe(take(1), map(response => response));
+
+  }
+
+  deleteUserAccount(body: { reason: string }): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/delete').setPathParams({ userId: this.stores.authentication.getUserId() });
+    return this.http.patch<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
 

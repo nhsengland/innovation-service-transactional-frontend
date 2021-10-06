@@ -17,6 +17,7 @@ import { NotificationContextType, NotificationService } from '@modules/shared/se
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
 
   alert: AlertType = { type: null };
+
   innovationId: string;
   innovationStatus: keyof typeof INNOVATION_STATUS = '';
   innovationSections: SectionsSummaryModel[] = [];

@@ -80,6 +80,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
         };
         break;
     }
+
   }
 
   ngOnInit(): void {

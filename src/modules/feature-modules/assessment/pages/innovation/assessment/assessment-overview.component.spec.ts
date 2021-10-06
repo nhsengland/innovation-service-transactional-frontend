@@ -88,7 +88,7 @@ describe('FeatureModules/Assessment/Innovation/InnovationAssessmentOverviewCompo
         hasValidationComment: null,
         hasProposition: 'YES',
         hasPropositionComment: null,
-        hasCompetitionKnowledge: 'DISCOVERY',
+        hasCompetitionKnowledge: 'YES',
         hasCompetitionKnowledgeComment: null,
         hasImplementationPlan: 'YES',
         hasImplementationPlanComment: null,

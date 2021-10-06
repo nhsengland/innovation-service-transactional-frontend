@@ -46,11 +46,6 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
 
-  }
-
-
-  ngOnInit(): void {
-
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'needsAssessmentSubmited':
         this.alert = {
@@ -61,6 +56,13 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
       default:
         break;
     }
+
+  }
+
+
+  ngOnInit(): void {
+
+
 
     this.assessmentService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId).subscribe(
       response => {
@@ -118,9 +120,16 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
           }
         ];
 
+        this.setPageStatus('READY');
+
       },
       error => {
-        this.logger.error(error);
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch needs assessment overview',
+          message: 'Please try again or contact us for further help'
+        };
       }
     );
 

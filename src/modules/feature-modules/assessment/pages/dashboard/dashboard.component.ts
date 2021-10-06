@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
+
 import { NotificationService } from '@modules/shared/services/notification.service';
+
 
 @Component({
   selector: 'app-assessment-pages-dashboard',
@@ -51,6 +53,11 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
       response => {
         this.notifications = response;
+        this.setPageStatus('READY');
+      },
+      error => {
+        this.setPageStatus('READY');
+        this.logger.error('Error fetching innovations transfer information', error);
       }
     );
 

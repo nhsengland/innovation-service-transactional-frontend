@@ -117,7 +117,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
         hasValidationComment: null,
         hasProposition: 'YES',
         hasPropositionComment: null,
-        hasCompetitionKnowledge: 'DISCOVERY',
+        hasCompetitionKnowledge: 'YES',
         hasCompetitionKnowledgeComment: null,
         hasImplementationPlan: 'YES',
         hasImplementationPlanComment: null,
@@ -161,6 +161,20 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
     fixture.detectChanges();
     expect(component.groupedItems[0]).toEqual(expected[0]);
     expect(component.groupedItems[1]).toEqual(expected[1]);
+
+  });
+
+  it('should NOT have initial information loaded', () => {
+
+    organisationsService.getOrganisationUnits = () => throwError('error');
+    accessorService.getInnovationNeedsAssessment = () => throwError('error');
+    accessorService.getInnovationSupports = () => throwError('error');
+
+    fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusSuggestComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.groupedItems.length).toBe(0);
 
   });
 

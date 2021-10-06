@@ -34,6 +34,9 @@ import { PageInnovationSupportStatusListComponent } from '@shared-module/pages/i
 import { InnovationSectionEvidenceViewComponent } from '@shared-module/pages/innovation/evidence-view.component';
 import { InnovationSectionViewComponent } from '@shared-module/pages/innovation/section-view.component';
 
+import { PageAccountManageAccountInfoComponent} from './pages/account/manage-account/manage-account-info.component';
+import { PageAccountManageUserAccountComponent } from './pages/account/manage-account/manage-account-delete.component';
+
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
@@ -109,6 +112,18 @@ const routes: Routes = [
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'account/manage-innovations', label: 'Manage innovations' } } }
               }
             ]
+          },
+          {
+            path: 'manage-account',
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAccountManageAccountInfoComponent,
+                data: { layoutOptions: { type: 'userAccountMenu' } }
+              },
+              {
+                path: 'delete', pathMatch: 'full', component: PageAccountManageUserAccountComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'account/manage-account', label: 'Manage account' } } }
+              }]
           }
         ]
       },

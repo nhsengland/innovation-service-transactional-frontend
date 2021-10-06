@@ -57,19 +57,33 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.actionId = this.activatedRoute.snapshot.params.actionId;
     this.stepNumber = 1;
-    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
-
-    this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
-      response => this.actionDisplayId = response.displayId,
-      error => {
-        this.logger.error(error);
-      }
-    );
 
   }
 
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
+
+    this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
+      response => {
+
+        this.actionDisplayId = response.displayId;
+
+        this.setPageStatus('READY');
+
+      },
+      error => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch actions information',
+          message: 'Please try again or contact us for further help'
+        };
+      }
+    );
+
+  }
 
 
   onSubmitStep(): void {

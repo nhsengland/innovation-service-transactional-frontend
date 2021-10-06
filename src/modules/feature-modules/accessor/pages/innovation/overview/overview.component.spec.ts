@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
@@ -11,10 +12,12 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 
 import { InnovationOverviewComponent } from './overview.component';
 
-import { AccessorService, getInnovationInfoEndpointDTO } from '@modules/feature-modules/accessor/services/accessor.service';
+import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 
 
 describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () => {
+
+  let activatedRoute: ActivatedRoute;
 
   let accessorService: AccessorService;
 
@@ -34,7 +37,11 @@ describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () =>
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
+    activatedRoute = TestBed.inject(ActivatedRoute);
+
     accessorService = TestBed.inject(AccessorService);
+
+    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
 
   });
 
@@ -46,39 +53,36 @@ describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () =>
 
   it('should have innovation information loaded with payload 01', () => {
 
-    const responseMock: getInnovationInfoEndpointDTO = {
+    accessorService.getInnovationInfo = () => of({
       summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: '', categories: ['MEDICAL_DEVICE'], otherCategoryDescription: '' },
       contact: { name: 'A name' },
       assessment: { id: '01' },
       support: { id: '01', status: 'WAITING' },
       notifications: {}
-    };
-    accessorService.getInnovationInfo = () => of(responseMock);
-    const expected = responseMock;
+    });
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.innovation).toEqual(expected);
+
+    expect(component.innovationSummary[0].value).toEqual('A name');
 
   });
 
   it('should have innovation information loaded with payload 02', () => {
 
-    const dataMock: getInnovationInfoEndpointDTO = {
+    accessorService.getInnovationInfo = () => of({
       summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['MEDICAL_DEVICE', 'OTHER', 'INVALID'], otherCategoryDescription: 'Other category' },
       contact: { name: 'A name' },
       assessment: { id: '01' },
       notifications: {}
-    };
-    accessorService.getInnovationInfo = () => of(dataMock);
-    const expected = dataMock;
+    });
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
-    expect(component.innovation).toEqual(expected);
+    expect(component.innovationSummary.find(i => i.label === 'Categories')?.value).toEqual('Medical device\nOther category\n');
 
   });
 
@@ -91,7 +95,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () =>
     component = fixture.componentInstance;
 
     fixture.detectChanges();
-    expect(component.innovation).toEqual(undefined);
+    expect(component.innovationSummary.length).toBe(0);
 
   });
 

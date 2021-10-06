@@ -65,7 +65,7 @@
                 <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0"> {{ comment.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </p>
               </div>
 
-              <p class="nhsuk-card__description">{{ comment.message }}</p>
+              <p class="nhsuk-card__description" style="word-wrap: break-word; overflow-wrap: break-word;hyphens: auto;">{{ comment.message }}</p>
 
               <div *ngFor="let reply of comment.replies" class="bg-color-grey nhsuk-u-margin-left-4 nhsuk-u-margin-bottom-3 nhsuk-u-padding-3">
                 <div class="d-flex justify-content-space-between nhsuk-u-margin-bottom-2">
@@ -81,7 +81,7 @@
                     </div>
                   </div>
                 </div>
-                <p class="nhsuk-card__description">{{ reply.message }}</p>
+                <p class="nhsuk-card__description" style="word-wrap: break-word; overflow-wrap: break-word;hyphens: auto;">{{ reply.message }}</p>
               </div>
 
               <p id="comment-reply-label-{{ comment.id }}" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0 nhsuk-u-margin-left-3">

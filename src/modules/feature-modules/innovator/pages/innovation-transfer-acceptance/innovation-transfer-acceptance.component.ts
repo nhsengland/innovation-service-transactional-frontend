@@ -81,6 +81,7 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
               return;
             }
 
+            /* istanbul ignore next */
             this.setPageTitle(this.wizard.currentStep().label || this.wizard.currentStep().parameters[0].label || '');
             this.wizard.gotoStep(Number(params.stepId));
 

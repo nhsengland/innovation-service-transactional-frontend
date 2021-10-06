@@ -66,7 +66,11 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   ngOnInit(): void {
 
-    if (this.supportId) {
+    if (!this.supportId) {
+
+      this.setPageStatus('READY');
+
+    } else {
 
       this.accessorService.getInnovationSupportInfo(this.innovationId, this.supportId).subscribe(
         response => {
@@ -77,9 +81,16 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
             (this.form.get('accessors') as FormArray).push(new FormControl(accessor.id));
           });
 
+          this.setPageStatus('READY');
+
         },
-        error => {
-          this.logger.error(error);
+        () => {
+          this.setPageStatus('ERROR');
+          this.alert = {
+            type: 'ERROR',
+            title: 'Unable to fetch support information',
+            message: 'Please try again or contact us for further help'
+          };
         }
       );
     }

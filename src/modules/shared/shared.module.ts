@@ -23,6 +23,7 @@ import { PageInnovationSupportStatusListComponent } from './pages/innovation/inn
 import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 
+import { PageAccountManageUserDeleteAccountMesasageComponent } from './pages/account/manage-deleteaccoount/manage-deleteaccount-message.component';
 // Services.
 import { OrganisationsService } from './services/organisations.service';
 import { NotificationService } from './services/notification.service';
@@ -53,7 +54,8 @@ import { EmailNotificationService } from './services/email-notifications.service
     PageInnovationSupportStatusListComponent,
 
     PageErrorComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    PageAccountManageUserDeleteAccountMesasageComponent
   ],
   providers: [
     OrganisationsService,

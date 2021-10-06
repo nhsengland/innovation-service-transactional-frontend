@@ -137,7 +137,8 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
 
     const expected = [
       { title: 'Your details', link: `/innovator/account/manage-details` },
-      { title: 'Manage innovations', link: `/innovator/account/manage-innovations` }
+      { title: 'Manage innovations', link: `/innovator/account/manage-innovations` },
+      { title: 'Manage account', link: `/innovator/account/manage-account` }
     ];
 
     fixture = TestBed.createComponent(InnovatorLayoutComponent);
