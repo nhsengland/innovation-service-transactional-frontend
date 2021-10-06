@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
@@ -20,32 +19,12 @@ export class PageAccountEmailNotificationsComponent extends CoreComponent implem
   notificationTypeList: { id: string; value: string; isSubscribed: boolean; }[] = [];
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private emailNotificationService: EmailNotificationService
   ) {
 
     super();
     this.setPageTitle('Email notifications');
 
-    this.module = this.activatedRoute.snapshot.data.module;
-
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'accountDetailsUpdateSuccess':
-        this.alert = {
-          type: 'WARNING',
-          title: 'Your information has been saved'
-        };
-        break;
-      case 'accountDetailsUpdateError':
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when creating an action',
-          message: 'Please try again or contact us for further help'
-        };
-        break;
-      default:
-        break;
-    }
   }
 
   ngOnInit(): void {
@@ -53,14 +32,17 @@ export class PageAccountEmailNotificationsComponent extends CoreComponent implem
     const user = this.stores.authentication.getUserInfo();
 
     if (this.stores.authentication.isAccessorType()) {
-
       this.notificationTypeList = [
         { id: 'Action', value: 'Actions', isSubscribed: true },
         { id: 'Support_Status_Change', value: 'Support status changes', isSubscribed: true }
       ];
-
     }
 
+    this.getUserPreference();
+
+  }
+
+  private getUserPreference(): void {
     this.emailNotificationService.getUserNotificationPreferences().subscribe(
       response => {
 
@@ -83,11 +65,40 @@ export class PageAccountEmailNotificationsComponent extends CoreComponent implem
         };
       }
     );
-
   }
 
   updatePreference(preferenceId: string, enabled: boolean): void {
-    const body = { id: preferenceId, isSubscribed: enabled };
-    this.emailNotificationService.updateUserNotificationPreference(body);
+    const preference = [{ id: preferenceId, isSubscribed: enabled }];
+    this.updateUserPreferences(preference);
+  }
+
+  unsubscribeAllPreferences(): void {
+    const preferences: { id: string; isSubscribed: boolean; }[] = [];
+
+    this.notificationTypeList.forEach(notification => {
+      preferences.push({ id: notification.id, isSubscribed: false });
+    });
+
+    this.updateUserPreferences(preferences);
+  }
+
+  private updateUserPreferences(preference: { id: string; isSubscribed: boolean; }[]): void {
+
+    this.emailNotificationService.updateUserNotificationPreference(preference).subscribe(
+      () => {
+        this.getUserPreference();
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'Your notification preference has been saved'
+        };
+      },
+      () => {
+        this.alert = {
+          type: 'ERROR',
+          title: 'An error occurred when updating notification preference',
+          message: 'Please try again or contact us for further help'
+        };
+      }
+    );
   }
 }

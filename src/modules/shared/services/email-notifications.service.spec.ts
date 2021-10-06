@@ -59,7 +59,7 @@ describe('Shared/Services/EmailNotificationService', () => {
 
   it('should run updateUserNotificationPreference() and return success', () => {
 
-    const payload = { id: 'Action', isSubscribed: false };
+    const payload = [{ id: 'Action', isSubscribed: false }];
     const responseMock = { id: 'id' };
     const expected = { id: 'id' };
     let response: any = null;

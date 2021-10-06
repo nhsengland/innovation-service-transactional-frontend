@@ -23,7 +23,7 @@ export class EmailNotificationService extends CoreService {
 
   }
 
-  updateUserNotificationPreference(body: MappedObject ): Observable<{ id: string }> {
+  updateUserNotificationPreference(body: getUserPreferenceResultDTO[] ): Observable<{ id: string }> {
 
     const url = new UrlModel(this.API_URL).addPath('user/:userId/notification-preference').setPathParams({ userId: this.stores.authentication.getUserId() });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
