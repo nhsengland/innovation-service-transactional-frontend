@@ -38,7 +38,7 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        InnovatorModule,
+        InnovatorModule
       ]
     });
 
@@ -111,7 +111,7 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
     component.onSubmitStep('next', new Event(''));
     fixture.detectChanges();
-    expect(component.wizard.currentStepNumber).toBe(2);
+    expect(component.wizard.currentStepId).toBe(2);
 
   });
 
@@ -169,7 +169,7 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
     component.navigateTo('previous');
     fixture.detectChanges();
-    expect(component.wizard.currentStepNumber).toBe(1);
+    expect(component.wizard.currentStepId).toBe(1);
 
   });
 
@@ -195,7 +195,7 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
     component.navigateTo('next');
     fixture.detectChanges();
-    expect(component.wizard.currentStepNumber).toBe(3);
+    expect(component.wizard.currentStepId).toBe(3);
 
   });
 
@@ -206,7 +206,7 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
     component.navigateTo('invalidAction' as any);
     fixture.detectChanges();
-    expect(component.wizard.currentStepNumber).toBe(1);
+    expect(component.wizard.currentStepId).toBe(1);
 
   });
 

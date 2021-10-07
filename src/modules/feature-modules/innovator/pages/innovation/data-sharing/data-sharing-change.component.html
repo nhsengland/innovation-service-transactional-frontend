@@ -16,12 +16,10 @@
         <p><a [href]="organisationInfoUrl" target="_blank" rel="noopener noreferrer"> What does each organisation do? (opens in a new window) </a></p>
 
         <form [formGroup]="form">
-          <theme-form-checkbox-array [arrayName]="organisationShareArrayName" label="Please choose you data sharing preferences" [items]="organisationsList" [pageUniqueField]="false"
-            (customOnChangeFunc)="dataSharingValidation($event)">
-          </theme-form-checkbox-array>
+          <theme-form-checkbox-array arrayName="organisations" label="Please choose you data sharing preferences" [items]="organisationsList" [pageUniqueField]="false"></theme-form-checkbox-array>
         </form>
 
-        <ng-container *ngIf="showWarning">
+        <ng-container *ngIf="showDataSharingValidationWarning">
           <div class="nhsuk-grid-row">
             <div class="nhsuk-grid-column-full">
               <div class="nhsuk-warning-callout">

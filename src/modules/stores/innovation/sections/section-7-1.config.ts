@@ -46,14 +46,14 @@ export const SECTION_7_1: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
+    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   })
 };
 
 
 
-function runtimeRules(steps: FormEngineModel[], currentValues: InboundPayloadType, currentStep: number): void {
+function runtimeRules(steps: FormEngineModel[], currentValues: InboundPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(1);
 

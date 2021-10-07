@@ -106,7 +106,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
         this.stepId = Number(params.stepId);
 
         if (!this.isValidStepId()) {
-          this.redirectTo('not-found');
+          this.redirectTo('/not-found');
           return;
         }
 

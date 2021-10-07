@@ -54,6 +54,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
 
     const payload = {
       innovatorName: 'User display name',
+      mobilePhone: '01010101',
       innovationName: 'Innovation name',
       innovationDescription: 'Some description',
       locationCountryName: 'Some location',
@@ -81,6 +82,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
 
     const payload = {
       innovatorName: 'User display name',
+      // mobilePhone: '01010101',
       innovationName: 'Innovation name',
       innovationDescription: 'Some description',
       // locationCountryName: 'Some location',

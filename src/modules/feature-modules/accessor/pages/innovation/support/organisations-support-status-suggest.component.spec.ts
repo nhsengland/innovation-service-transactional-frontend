@@ -81,7 +81,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
     component = fixture.componentInstance;
 
     fixture.detectChanges();
-    expect(routerSpy).toHaveBeenCalledWith(['not-found'], {});
+    expect(routerSpy).toHaveBeenCalledWith(['/not-found'], {});
 
   });
 

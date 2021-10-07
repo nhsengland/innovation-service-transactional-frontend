@@ -55,14 +55,14 @@ export const INNOVATION_TRANSFER: WizardEngineModel = new WizardEngineModel({
     })
 
   ],
-  runtimeRules: [(steps: FormEngineModel[], data: StepPayloadType, currentStep: number) => runtimeRules(steps, data, currentStep)],
+  runtimeRules: [(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, data, currentStep)],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data),
   summaryParsing: (data: StepPayloadType) => summaryParsing(data)
 });
 
 
-function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number): void {
+function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(3);
 

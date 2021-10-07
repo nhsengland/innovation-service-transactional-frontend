@@ -64,7 +64,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           this.activatedRoute.params.subscribe(params => {
 
             // if (!this.isValidStepId()) {
-            //   this.redirectTo('not-found');
+            //   this.redirectTo('/not-found');
             //   return;
             // }
 
@@ -156,13 +156,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       case 'previous':
         if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${this.wizard.steps.length}`; }
         else if (this.wizard.isFirstStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}`; }
-        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${this.wizard.currentStepNumber - 1}`; }
+        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${Number(this.wizard.currentStepId) - 1}`; }
         break;
 
       case 'next':
         if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/summary`; }
         else if (this.wizard.isLastStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/summary`; }
-        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${this.wizard.currentStepNumber + 1}`; }
+        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${Number(this.wizard.currentStepId) + 1}`; }
         break;
 
       default: // Should NOT happen!

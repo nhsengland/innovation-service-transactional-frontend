@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import * as common from '@angular/common';
+import { PLATFORM_ID } from '@angular/core';
 
 import { ActivityTimeoutComponent } from './activity-timeout.component';
 
@@ -15,15 +15,16 @@ describe('Theme/Components/ActivityTimeout/ActivityTimeoutComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule
       ],
       declarations: [
         ActivityTimeoutComponent
       ],
+      providers: [
+        { provide: PLATFORM_ID, useValue: 'browser' }
+      ]
     });
-
-    spyOn(common, 'isPlatformBrowser').and.returnValue(true);
 
   });
 
