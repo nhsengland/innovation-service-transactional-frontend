@@ -143,6 +143,7 @@ const routes: Routes = [
               },
               {
                 path: 'support', pathMatch: 'full', component: InnovationSupportInfoComponent,
+                resolve: { innovationData: InnovationDataResolver }, // Needed to repeat this resolver as support can be updated from this routes.
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } }
               },
               {
