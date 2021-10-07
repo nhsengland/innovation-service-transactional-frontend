@@ -13,21 +13,21 @@
         <ng-container *ngIf="item.isSubscribed; else unsubscribedBlock">
           <dd class="nhsuk-summary-list__value text-pre-wrap">You get instant updates</dd>
           <dd class="nhsuk-summary-list__actions">
-            <a [routerLink]="updatePreference(item.id, false)"> Unsubscribe <span class="nhsuk-u-visually-hidden"> {{ item.value | lowercase }} </span></a>
+            <a href="javascript:void(0)" (click)="updatePreference(item.id, false)"> Unsubscribe <span class="nhsuk-u-visually-hidden"> {{ item.value | lowercase }} </span></a>
           </dd>
         </ng-container>
 
         <ng-template #unsubscribedBlock>
           <dd class="nhsuk-summary-list__value text-pre-wrap">You do not get updates</dd>
           <dd class="nhsuk-summary-list__actions">
-            <a [routerLink]="updatePreference(item.id, true)"> Get updates <span class="nhsuk-u-visually-hidden"> {{ item.value | lowercase }} </span></a>
+            <a href="javascript:void(0)" (click)="updatePreference(item.id, true)"> Get updates <span class="nhsuk-u-visually-hidden"> {{ item.value | lowercase }} </span></a>
           </dd>
         </ng-template>
 
       </div>
     </dl>
 
-    <p class="nhsuk-u-margin-0 nhsuk-u-padding-bottom-5"><a routerLink=""> Unsubscribe from everything </a></p>
+    <p class="nhsuk-u-margin-0 nhsuk-u-padding-bottom-5"><a href="javascript:void(0)" (click)="unsubscribeAllPreferences()"> Unsubscribe from everything </a></p>
 
   </div>
 </div>
