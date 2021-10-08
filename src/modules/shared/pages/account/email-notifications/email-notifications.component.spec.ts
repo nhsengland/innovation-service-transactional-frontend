@@ -5,15 +5,13 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { USER_INFO_ACCESSOR } from '@tests/data.mocks';
-
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { StoresModule } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
 
-import { EmailNotificationService } from '@modules/shared/services/email-notifications.service';
+import { NotificationService } from '@modules/shared/services/notification.service';
 
-import { PageAccountEmailNotificationsComponent } from './manage-email-notifications.component';
+import { PageAccountEmailNotificationsComponent } from './email-notifications.component';
 import { of, throwError } from 'rxjs';
 
 describe('PageAccountManageNotificationsComponent', () => {
@@ -21,9 +19,7 @@ describe('PageAccountManageNotificationsComponent', () => {
   let router: Router;
   let routerSpy: jasmine.Spy;
 
-  let authenticationStore: AuthenticationStore;
-
-  let emailNotificationService: EmailNotificationService;
+  let notificationService: NotificationService;
 
   let component: PageAccountEmailNotificationsComponent;
   let fixture: ComponentFixture<PageAccountEmailNotificationsComponent>;
@@ -44,11 +40,8 @@ describe('PageAccountManageNotificationsComponent', () => {
     router = TestBed.inject(Router);
     routerSpy = spyOn(router, 'navigate');
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
+    notificationService = TestBed.inject(NotificationService);
 
-    emailNotificationService = TestBed.inject(EmailNotificationService);
-
-    authenticationStore.getUserInfo = () => USER_INFO_ACCESSOR;
   });
 
   it('should create the component', () => {
@@ -59,14 +52,13 @@ describe('PageAccountManageNotificationsComponent', () => {
 
   it('should have initial information loaded', () => {
 
-    authenticationStore.isAccessorType = () => true;
+    const responseMock = [{ id: 'ACTION', isSubscribed: true },
+    { id: 'SUPPORT_STATUS_CHANGE', isSubscribed: false }];
 
-    const responseMock = [{ id: 'SUPPORT_STATUS_CHANGE', isSubscribed: false }];
+    notificationService.getEmailNotificationTypes = () => of(responseMock);
 
-    emailNotificationService.getUserNotificationPreferences = () => of(responseMock);
-
-    const expected = [{ id: 'ACTION', value: 'Actions', isSubscribed: true },
-    { id: 'SUPPORT_STATUS_CHANGE', value: 'Support status changes', isSubscribed: false }];
+    const expected = [{ id: 'ACTION', title: 'Actions', isSubscribed: true },
+    { id: 'SUPPORT_STATUS_CHANGE', title: 'Support status changes', isSubscribed: false }];
 
     fixture = TestBed.createComponent(PageAccountEmailNotificationsComponent);
     component = fixture.componentInstance;
@@ -78,11 +70,11 @@ describe('PageAccountManageNotificationsComponent', () => {
 
   it('should NOT have initial information loaded', () => {
 
-    emailNotificationService.getUserNotificationPreferences = () => throwError('error');
+    notificationService.getEmailNotificationTypes = () => throwError('error');
 
     const expected = {
       type: 'ERROR',
-      title: 'Unable to fetch user notification preferences',
+      title: 'Unable to fetch email notifications',
       message: 'Please, try again or contact us for further help'
     };
 
@@ -96,7 +88,7 @@ describe('PageAccountManageNotificationsComponent', () => {
 
   it('should run onUpdatePreference and call API with success', () => {
 
-    emailNotificationService.updateUserNotificationPreference = () => of({ id: 'prefId', isSubscribed: true });
+    notificationService.updateUserNotificationPreferences = () => of({ id: 'prefId', isSubscribed: true });
 
     const expected = {
       type: 'SUCCESS',
@@ -106,7 +98,7 @@ describe('PageAccountManageNotificationsComponent', () => {
     fixture = TestBed.createComponent(PageAccountEmailNotificationsComponent);
     component = fixture.componentInstance;
 
-    component.updatePreference('prefId', true);
+    component.updateNotificationPreference('prefId', true);
     fixture.detectChanges();
     expect(component.alert).toEqual(expected);
 
@@ -114,7 +106,7 @@ describe('PageAccountManageNotificationsComponent', () => {
 
   it('should run onUpdatePreference and call API with error', () => {
 
-    emailNotificationService.updateUserNotificationPreference = () => throwError('error');
+    notificationService.updateUserNotificationPreferences = () => throwError('error');
 
     const expected = {
       type: 'ERROR',
@@ -125,7 +117,7 @@ describe('PageAccountManageNotificationsComponent', () => {
     fixture = TestBed.createComponent(PageAccountEmailNotificationsComponent);
     component = fixture.componentInstance;
 
-    component.updatePreference('prefId', true);
+    component.updateNotificationPreference('prefId', true);
     fixture.detectChanges();
     expect(component.alert).toEqual(expected);
 
@@ -133,7 +125,7 @@ describe('PageAccountManageNotificationsComponent', () => {
 
   it('should run unsubscribeAllPreferences and call API with success', () => {
 
-    emailNotificationService.updateUserNotificationPreference = () => of({ id: 'prefId', isSubscribed: true });
+    notificationService.updateUserNotificationPreferences = () => of({ id: 'prefId', isSubscribed: true });
 
     const expected = {
       type: 'SUCCESS',
@@ -143,11 +135,11 @@ describe('PageAccountManageNotificationsComponent', () => {
     fixture = TestBed.createComponent(PageAccountEmailNotificationsComponent);
     component = fixture.componentInstance;
     component.notificationTypeList = [
-      { id: 'Notification01', value: 'Notification type', isSubscribed: true },
-      { id: 'Notification01', value: 'Notification type', isSubscribed: true }
+      { id: 'Notification01', title: 'Notification type', description: '', isSubscribed: true },
+      { id: 'Notification01', title: 'Notification type', description: '', isSubscribed: true }
     ];
 
-    component.unsubscribeAllPreferences();
+    component.unsubscribeAllNotifications();
     fixture.detectChanges();
     expect(component.alert).toEqual(expected);
 

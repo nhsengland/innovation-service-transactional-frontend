@@ -10,7 +10,7 @@ import { FormsModule } from './forms/forms.module';
 // Pages.
 import { PageAccountManageDetailsInfoComponent } from './pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from './pages/account/manage-details/manage-details-edit.component';
-import { PageAccountEmailNotificationsComponent } from './pages/account/email-notifications/manage-email-notifications.component';
+import { PageAccountEmailNotificationsComponent } from './pages/account/email-notifications/email-notifications.component';
 
 import { InnovationSectionViewComponent } from './pages/innovation/section-view.component';
 import { InnovationSectionEvidenceViewComponent } from './pages/innovation/evidence-view.component';
@@ -27,7 +27,6 @@ import { PageAccountManageUserDeleteAccountMesasageComponent } from './pages/acc
 // Services.
 import { OrganisationsService } from './services/organisations.service';
 import { NotificationService } from './services/notification.service';
-import { EmailNotificationService } from './services/email-notifications.service';
 
 @NgModule({
   imports: [
@@ -59,8 +58,7 @@ import { EmailNotificationService } from './services/email-notifications.service
   ],
   providers: [
     OrganisationsService,
-    NotificationService,
-    EmailNotificationService
+    NotificationService
   ],
   exports: [
     CommonModule,

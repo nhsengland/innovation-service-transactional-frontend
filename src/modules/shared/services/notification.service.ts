@@ -4,7 +4,7 @@ import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 
-import { UrlModel } from '@modules/core';
+import { MappedObject, UrlModel } from '@modules/core';
 
 
 export enum NotificationContextType {
@@ -21,11 +21,20 @@ export type NotificationDismissResultDTO = {
   error?: any;
 };
 
+export type getEmailNotificationTypeDTO = {
+  id: string;
+  isSubscribed: boolean;
+};
 
 export type getUnreadNotificationsEndpointDTO = {
   [key: string]: number;
 };
 
+export const EMAIL_NOTIFICATION_TYPE = {
+  ACTION: { title: 'Actions' },
+  COMMENT: { title: 'Comments' },
+  SUPPORT_STATUS_CHANGE: { title: 'Support status changes' }
+};
 
 @Injectable()
 export class NotificationService extends CoreService {
@@ -72,6 +81,26 @@ export class NotificationService extends CoreService {
         this.notifications = response;
         return response;
       })
+    );
+
+  }
+
+  getEmailNotificationTypes(): Observable<getEmailNotificationTypeDTO[]> {
+
+    const url = new UrlModel(this.API_URL).addPath('email-notifications');
+    return this.http.get<getEmailNotificationTypeDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
+  updateUserNotificationPreferences(body: MappedObject): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_URL).addPath('email-notifications');
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
     );
 
   }

@@ -46,4 +46,35 @@ describe('Shared/Services/NotificationService', () => {
 
   });
 
+  it('should run getUserNotificationPreferences() and return success', () => {
+
+    const responseMock = [{ id: 'Action', isSubscribed: true }, { id: 'SupportStatusChange', isSubscribed: false }];
+    const expected = [{ id: 'Action', isSubscribed: true }, { id: 'SupportStatusChange', isSubscribed: false }];
+    let response: any = null;
+
+    service.getEmailNotificationTypes().subscribe(success => response = success, error => response = error);
+
+    const req = httpMock.expectOne(`${environmentStore.API_URL}/email-notifications`);
+    req.flush(responseMock);
+    expect(req.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run updateUserNotificationPreference() and return success', () => {
+
+    const payload = [{ id: 'Action', isSubscribed: false }];
+    const responseMock = { id: 'id' };
+    const expected = { id: 'id' };
+    let response: any = null;
+
+    service.updateUserNotificationPreferences(payload).subscribe(success => response = success, error => response = error);
+
+    const req = httpMock.expectOne(`${environmentStore.API_URL}/email-notifications`);
+    req.flush(responseMock);
+    expect(req.request.method).toBe('PUT');
+    expect(response).toEqual(expected);
+
+  });
+
 });
