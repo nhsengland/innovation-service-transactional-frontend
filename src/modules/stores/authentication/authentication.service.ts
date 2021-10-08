@@ -24,6 +24,7 @@ type getUserInfoDto = {
       name: string;
     }[];
   }[];
+  passwordResetOn: string;
 };
 
 
@@ -72,7 +73,8 @@ export class AuthenticationService {
         email: response.email,
         displayName: ['unknown'].includes(response.displayName) ? '' : response.displayName,
         type: response.type,
-        organisations: response.organisations
+        organisations: response.organisations,
+        passwordResetOn: response.passwordResetOn,
       }))
     );
 
