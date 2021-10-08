@@ -4,7 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { ENV, InjectorMock } from '@tests/app.mocks';
 
-import { Injector } from '@angular/core';
+import { Injector, PLATFORM_ID } from '@angular/core';
 import * as common from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
@@ -23,6 +23,9 @@ import { SurveyService } from '../../services/survey.service';
 describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running SERVER side tests', () => {
 
   let activatedRoute: ActivatedRoute;
+  let router: Router;
+  let routerSpy: jasmine.Spy;
+
   let environmentStore: EnvironmentStore;
   let surveyService: SurveyService;
 
@@ -43,6 +46,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
       ],
       providers: [
         InjectorMock,
+        { provide: PLATFORM_ID, useValue: 'server' },
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
@@ -50,6 +54,9 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
     AppInjector.setInjector(TestBed.inject(Injector));
 
     activatedRoute = TestBed.inject(ActivatedRoute);
+    router = TestBed.inject(Router);
+    routerSpy = spyOn(router, 'navigate');
+
     environmentStore = TestBed.inject(EnvironmentStore);
     surveyService = TestBed.inject(SurveyService);
 
@@ -71,7 +78,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
     fixture.detectChanges();
 
     expect(serverRedirectSpy.status).toHaveBeenCalledWith(303);
-    expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', 'not-found');
+    expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', '/not-found');
 
   });
 
@@ -199,6 +206,9 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running CLIENT side tests', () => {
 
   let activatedRoute: ActivatedRoute;
+  let router: Router;
+  let routerSpy: jasmine.Spy;
+
   let environmentStore: EnvironmentStore;
   let surveyService: SurveyService;
 
@@ -215,6 +225,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
         TriageInnovatorPackModule
       ],
       providers: [
+        { provide: PLATFORM_ID, useValue: 'browser' },
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
@@ -222,20 +233,18 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
     AppInjector.setInjector(TestBed.inject(Injector));
 
     activatedRoute = TestBed.inject(ActivatedRoute);
+    router = TestBed.inject(Router);
+    routerSpy = spyOn(router, 'navigate');
+
     environmentStore = TestBed.inject(EnvironmentStore);
     surveyService = TestBed.inject(SurveyService);
-
-    spyOn(common, 'isPlatformBrowser').and.returnValue(true);
 
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(SurveyStepComponent);
     component = fixture.componentInstance;
-
     expect(component).toBeTruthy();
-
   });
 
   it('should be on step 1', () => {
@@ -280,8 +289,6 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 
   it('should be redirected because is not a valid step (running in browser)', () => {
 
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
-
     activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
 
     fixture = TestBed.createComponent(SurveyStepComponent);
@@ -289,7 +296,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
     component.totalNumberOfSteps = 5;
     fixture.detectChanges();
 
-    expect(routerSpy).toHaveBeenCalledWith(['not-found'], {});
+    expect(routerSpy).toHaveBeenCalledWith(['/not-found'], {});
 
   });
 
@@ -340,8 +347,6 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 
   it('should redirect when submitting a step (running in browser)', () => {
 
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
-
     activatedRoute.snapshot.params = { id: 1 };
     activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
 
@@ -350,7 +355,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
     fixture.detectChanges();
 
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
-    spyOn(component.formEngineComponent, 'getFormValues').and.returnValue({ valid: true });
+    component.formEngineComponent.getFormValues = () => ({ valid: true, data: {} });
     component.onSubmitStep('next');
     fixture.detectChanges();
 
@@ -359,8 +364,6 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
   });
 
   it('should submit survey and redirect', () => {
-
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
     activatedRoute.snapshot.params = { id: 1 };
     activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
@@ -380,8 +383,6 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
   });
 
   it('should submit survey, give an error and redirect', () => {
-
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
     activatedRoute.snapshot.params = { id: 1 };
     activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.

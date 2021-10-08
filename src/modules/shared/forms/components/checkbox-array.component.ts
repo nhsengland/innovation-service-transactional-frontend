@@ -23,7 +23,6 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   @Input() items: FormEngineParameterModel['items'] = [];
   @Input() size?: 'small' | 'normal';
   @Input() pageUniqueField = true;
-  @Output() customOnChangeFunc = new EventEmitter<{ checked: boolean, item: string }>();
 
   hasError = false;
   errorMessage = '';
@@ -128,7 +127,6 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
       this.fieldArrayControl.removeAt(valueIndex);
     }
 
-    this.customOnChangeFunc.emit({ checked: event.checked, item: event.value });
   }
 
 }

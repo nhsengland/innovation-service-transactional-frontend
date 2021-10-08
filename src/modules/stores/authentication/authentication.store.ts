@@ -32,7 +32,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           this.state.isSignIn = true;
 
           return forkJoin([
-            this.authenticationService.verifyInnovator(user.id),
+            this.authenticationService.verifyInnovator(),
             this.authenticationService.getInnovations(user.id)
           ]).pipe(
             map(([innovatorInfo, innovations]) => {

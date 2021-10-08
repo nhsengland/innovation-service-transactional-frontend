@@ -147,8 +147,8 @@ describe('FeatureModules/Innovator/Pages/Innovation/DataSharingChangeComponent',
     fixture.detectChanges();
     (component.form.get('organisations') as FormArray).removeAt(1);
 
-    component.dataSharingValidation({ checked: true, item: 'Anything really' });
-    expect(component.showWarning).toBe(true);
+    component.dataSharingValidation();
+    expect(component.showDataSharingValidationWarning).toBe(true);
 
   });
 

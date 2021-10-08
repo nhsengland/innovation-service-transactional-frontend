@@ -61,10 +61,8 @@ const routes: Routes = [
 
       {
         path: 'first-time-signin',
-        children: [
-          { path: '', pathMatch: 'full', redirectTo: '1' },
-          { path: ':id', pathMatch: 'full', component: FirstTimeSigninComponent }
-        ]
+        pathMatch: 'full',
+        component: FirstTimeSigninComponent
       },
 
       {
