@@ -25,6 +25,7 @@ type getUserInfoDto = {
     }[];
   }[];
   passwordResetOn: string;
+  phone: string;
 };
 
 
@@ -75,6 +76,7 @@ export class AuthenticationService {
         type: response.type,
         organisations: response.organisations,
         passwordResetOn: response.passwordResetOn,
+        phone: response.phone,
       }))
     );
 

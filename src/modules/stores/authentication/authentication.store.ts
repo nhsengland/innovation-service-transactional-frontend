@@ -85,7 +85,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   getUserInfo(): Required<AuthenticationModel>['user'] {
-    return this.state.user || { id: '', email: '', displayName: '', type: '', organisations: [], innovations: [], passwordResetOn: '' };
+    return this.state.user || { id: '', email: '', displayName: '', type: '', organisations: [], innovations: [], passwordResetOn: '', phone: '' };
   }
 
   saveUserInfo$(body: MappedObject): Observable<{ id: string }> {
