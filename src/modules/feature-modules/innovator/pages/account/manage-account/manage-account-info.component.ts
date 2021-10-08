@@ -14,6 +14,10 @@ export class PageAccountManageAccountInfoComponent extends CoreComponent impleme
 
   alert: AlertType = { type: null };
   changePassword = `${this.stores.environment.APP_URL}/change-password`;
+
+  user: {
+    passwordResetOn: string
+  };
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService
@@ -21,6 +25,11 @@ export class PageAccountManageAccountInfoComponent extends CoreComponent impleme
 
     super();
     this.setPageTitle('Manage account');
-     }
+
+    const user = this.stores.authentication.getUserInfo();
+    this.user = {
+      passwordResetOn: user.passwordResetOn
+    };
+  }
 
 }

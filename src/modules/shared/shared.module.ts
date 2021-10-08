@@ -23,7 +23,7 @@ import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 
 import { PageAccountManageUserDeleteAccountMesasageComponent } from './pages/account/manage-deleteaccoount/manage-deleteaccount-message.component';
-import { PageManagePasswordconfirmationMesasageComponent } from './pages/account/manage-passwordconfirmation/manage-passwordconfirmation.component';
+
 // Services.
 import { OrganisationsService } from './services/organisations.service';
 import { NotificationService } from './services/notification.service';
@@ -53,8 +53,7 @@ import { NotificationService } from './services/notification.service';
 
     PageErrorComponent,
     PageNotFoundComponent,
-    PageAccountManageUserDeleteAccountMesasageComponent,
-    PageManagePasswordconfirmationMesasageComponent
+    PageAccountManageUserDeleteAccountMesasageComponent
   ],
   providers: [
     OrganisationsService,
