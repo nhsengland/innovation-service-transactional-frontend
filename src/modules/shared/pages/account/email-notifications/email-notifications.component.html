@@ -1,0 +1,27 @@
+<div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+  <div class="nhsuk-grid-column-full">
+
+    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+      <p> {{ alert.message }} </p>
+    </theme-alert>
+
+    <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
+
+    <dl class="nhsuk-summary-list">
+      <div *ngFor="let item of notificationTypeList" class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key"> {{ item.title }} </dt>
+        <dd class="nhsuk-summary-list__value text-pre-wrap"> {{ item.isSubscribed ?
+          'You get instant updates' : 'You do not get updates' }} </dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a href="javascript:void(0)" (click)="updateNotificationPreference(item.id, !item.isSubscribed)"> {{ item.isSubscribed ?
+            'Unsubscribe' : 'Get updates' }} <span class="nhsuk-u-visually-hidden"> {{ item.title | lowercase }}
+            </span></a>
+        </dd>
+      </div>
+    </dl>
+
+    <p class="nhsuk-u-margin-0 nhsuk-u-padding-bottom-5"><a *ngIf="isAnySubscribed" href="javascript:void(0)"
+        (click)="unsubscribeAllNotifications()"> Unsubscribe from everything </a></p>
+
+  </div>
+</div>

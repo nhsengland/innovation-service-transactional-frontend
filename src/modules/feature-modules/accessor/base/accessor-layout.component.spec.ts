@@ -116,7 +116,8 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
     activatedRoute.snapshot.data = { layoutOptions: { type: 'userAccountMenu' } };
 
     const expected = [
-      { title: 'Your details', link: `/accessor/account/manage-details` }
+      { title: 'Your details', link: `/accessor/account/manage-details` },
+      { title: 'Email notifications', link: `/accessor/account/email-notifications` }
     ];
 
     fixture = TestBed.createComponent(AccessorLayoutComponent);

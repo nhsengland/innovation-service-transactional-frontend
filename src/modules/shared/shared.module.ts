@@ -10,6 +10,7 @@ import { FormsModule } from './forms/forms.module';
 // Pages.
 import { PageAccountManageDetailsInfoComponent } from './pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from './pages/account/manage-details/manage-details-edit.component';
+import { PageAccountEmailNotificationsComponent } from './pages/account/email-notifications/email-notifications.component';
 
 import { InnovationSectionViewComponent } from './pages/innovation/section-view.component';
 import { InnovationSectionEvidenceViewComponent } from './pages/innovation/evidence-view.component';
@@ -42,6 +43,7 @@ import { NotificationService } from './services/notification.service';
     // Pages.
     PageAccountManageDetailsInfoComponent,
     PageAccountManageDetailsEditComponent,
+    PageAccountEmailNotificationsComponent,
 
     InnovationSectionViewComponent,
     InnovationSectionEvidenceViewComponent,
@@ -57,7 +59,7 @@ import { NotificationService } from './services/notification.service';
   ],
   providers: [
     OrganisationsService,
-    NotificationService,
+    NotificationService
   ],
   exports: [
     CommonModule,
