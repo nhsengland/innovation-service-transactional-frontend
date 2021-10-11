@@ -57,7 +57,7 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
       this.summaryList = [
         { label: 'Name', value: user.displayName, editStepNumber: 1 },
         { label: 'Email address', value: user.email },
-        { label: 'Mobile Number', value: user.phone, editStepNumber: 2 }
+        { label: 'Phone number', value: user.phone, editStepNumber: 2 }
       ];
 
       if (!user.organisations[0].isShadow) {

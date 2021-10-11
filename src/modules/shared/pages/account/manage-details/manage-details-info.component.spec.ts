@@ -88,7 +88,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsInfoCompone
     expect(component.summaryList).toEqual([
       { label: 'Name', value: USER_INFO_INNOVATOR.displayName, editStepNumber: 1 },
       { label: 'Email address', value: USER_INFO_INNOVATOR.email },
-      { label: 'Mobile Number', value: USER_INFO_INNOVATOR.phone, editStepNumber: 2 }
+      { label: 'Phone number', value: USER_INFO_INNOVATOR.phone, editStepNumber: 2 }
     ]);
 
   });
@@ -111,7 +111,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsInfoCompone
     expect(component.summaryList).toEqual([
       { label: 'Name', value: USER_INFO_INNOVATOR.displayName, editStepNumber: 1 },
       { label: 'Email address', value: USER_INFO_INNOVATOR.email },
-      { label: 'Mobile Number', value: USER_INFO_INNOVATOR.phone, editStepNumber: 2 },
+      { label: 'Phone number', value: USER_INFO_INNOVATOR.phone, editStepNumber: 2 },
       { label: 'Company', value: USER_INFO_INNOVATOR.organisations[0].name, editStepNumber: 3 },
       { label: 'Company size', value: USER_INFO_INNOVATOR.organisations[0].size, editStepNumber: 4 }
     ]);
