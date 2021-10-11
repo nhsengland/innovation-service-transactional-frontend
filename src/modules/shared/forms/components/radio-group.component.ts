@@ -33,7 +33,7 @@ export class FormRadioGroupComponent extends ControlValueAccessorConnector imple
   @Input() additional?: FormEngineParameterModel[] = [];
 
   hasError = false;
-  errorMessage = '';
+  error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
 
   divCssOverride = '';
 
@@ -86,7 +86,7 @@ export class FormRadioGroupComponent extends ControlValueAccessorConnector imple
   ngDoCheck(): void {
 
     this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
-    this.errorMessage = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : '';
+    this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : { message: '', params: {} };
 
     this.items?.filter(item => item.conditional).forEach(item => {
 

@@ -24,7 +24,7 @@ export class FormCheckboxGroupComponent implements OnInit, DoCheck {
   @Input() pageUniqueField = true;
 
   hasError = false;
-  errorMessage = '';
+  error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
 
   isRunningOnBrowser: boolean;
   isRunningOnServer: boolean;
@@ -60,7 +60,7 @@ export class FormCheckboxGroupComponent implements OnInit, DoCheck {
   ngDoCheck(): void {
 
     this.hasError = (this.fieldGroupControl.invalid && (this.fieldGroupControl.touched || this.fieldGroupControl.dirty));
-    this.errorMessage = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldGroupControl.errors) : '';
+    this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldGroupControl.errors) : { message: '', params: {} };
     this.cdr.detectChanges();
 
   }

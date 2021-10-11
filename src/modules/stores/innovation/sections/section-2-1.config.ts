@@ -118,7 +118,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           id: 'cliniciansImpactDetails',
           dataType: 'textarea',
           label: stepsLabels.l3,
-          validations: { isRequired: [true, 'Specification is required'] }
+          validations: { isRequired: [true, 'Specification is required'] },
+          lengthLimit: 'medium'
         }]
       })
     );

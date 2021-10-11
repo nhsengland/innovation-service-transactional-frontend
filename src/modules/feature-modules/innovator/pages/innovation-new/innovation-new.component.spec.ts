@@ -67,10 +67,10 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
     fixture = TestBed.createComponent(InnovationNewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     component.formEngineComponent = undefined;
 
     component.onSubmitStep('next', new Event(''));
-    fixture.detectChanges();
     expect(component.wizard.getAnswers()).toEqual({
       innovationName: '',
       innovationDescription: '',
@@ -86,11 +86,11 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
     fixture = TestBed.createComponent(InnovationNewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
     component.formEngineComponent.getFormValues = () => ({ valid: false, data: { value1: 'some value' } });
 
     component.onSubmitStep('next', new Event(''));
-    fixture.detectChanges();
     expect(component.wizard.getAnswers()).toEqual({
       innovationName: '',
       innovationDescription: '',
@@ -106,11 +106,11 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
     fixture = TestBed.createComponent(InnovationNewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
     component.formEngineComponent.getFormValues = () => ({ valid: true, data: { value1: 'some value' } });
 
     component.onSubmitStep('next', new Event(''));
-    fixture.detectChanges();
     expect(component.wizard.currentStepId).toBe(2);
 
   });
@@ -122,10 +122,10 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
     fixture = TestBed.createComponent(InnovationNewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
 
     component.submitWizard();
-    fixture.detectChanges();
-    expect(routerSpy).toHaveBeenCalledWith(['innovator/innovations'], { queryParams: { alert: 'innovationCreationSuccess', name: undefined } });
+    expect(routerSpy).toHaveBeenCalledWith(['innovator/innovations'], { queryParams: { alert: 'innovationCreationSuccess', name: '' } });
 
   });
 
@@ -143,9 +143,9 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
     fixture = TestBed.createComponent(InnovationNewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
 
     component.submitWizard();
-    fixture.detectChanges();
     expect(component.alert).toEqual(expected);
 
   });
@@ -154,9 +154,9 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
     fixture = TestBed.createComponent(InnovationNewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
 
     component.navigateTo('previous');
-    fixture.detectChanges();
     expect(routerSpy).toHaveBeenCalledWith(['innovator/dashboard'], {});
 
   });
@@ -165,10 +165,11 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
     fixture = TestBed.createComponent(InnovationNewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
+
     component.wizard.gotoStep(2);
 
     component.navigateTo('previous');
-    fixture.detectChanges();
     expect(component.wizard.currentStepId).toBe(1);
 
   });
@@ -178,11 +179,11 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
     fixture = TestBed.createComponent(InnovationNewComponent);
     component = fixture.componentInstance;
     component.wizard.gotoStep(5);
+    fixture.detectChanges();
 
     const spy = spyOn(component, 'submitWizard');
 
     component.navigateTo('next');
-    fixture.detectChanges();
     expect(spy).toHaveBeenCalled();
 
   });
@@ -191,10 +192,11 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
     fixture = TestBed.createComponent(InnovationNewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
+
     component.wizard.gotoStep(2);
 
     component.navigateTo('next');
-    fixture.detectChanges();
     expect(component.wizard.currentStepId).toBe(3);
 
   });
@@ -203,9 +205,9 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
     fixture = TestBed.createComponent(InnovationNewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
 
     component.navigateTo('invalidAction' as any);
-    fixture.detectChanges();
     expect(component.wizard.currentStepId).toBe(1);
 
   });

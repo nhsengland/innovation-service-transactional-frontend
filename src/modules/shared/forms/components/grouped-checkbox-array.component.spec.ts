@@ -83,7 +83,7 @@ describe('FormGroupCheckboxArrayComponent', () => {
     hostFixture.detectChanges();
 
     expect(hostComponent.childComponent?.hasError).toBe(true);
-    expect(hostComponent.childComponent?.errorMessage).toBe('shared.forms_module.validations.required');
+    expect(hostComponent.childComponent?.error.message).toBe('shared.forms_module.validations.required');
   });
 
   it('should form control field be invalid and field dirty', () => {
@@ -96,7 +96,7 @@ describe('FormGroupCheckboxArrayComponent', () => {
     hostFixture.detectChanges();
 
     expect(hostComponent.childComponent?.hasError).toBe(true);
-    expect(hostComponent.childComponent?.errorMessage).toBe('shared.forms_module.validations.required');
+    expect(hostComponent.childComponent?.error.message).toBe('shared.forms_module.validations.required');
   });
 
   it('should form control field change values well', () => {

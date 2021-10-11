@@ -51,7 +51,11 @@ describe('FeatureModules/Accessor/Dashboard/DashboardComponent', () => {
     authenticationStore.isQualifyingAccessorRole = () => true;
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
 
-    const expected = { displayName: USER_INFO_INNOVATOR.displayName, organisation: USER_INFO_INNOVATOR.organisations[0].name };
+    const expected = {
+      displayName: USER_INFO_INNOVATOR.displayName,
+      organisation: USER_INFO_INNOVATOR.organisations[0].name,
+      passwordResetOn: '2020-01-01T00:00:00.000Z'
+    };
 
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;

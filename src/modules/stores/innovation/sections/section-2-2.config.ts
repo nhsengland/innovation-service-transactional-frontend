@@ -132,7 +132,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'accessibilityImpactDetails',
         dataType: 'textarea',
         label: stepsLabels.l5,
-        validations: { isRequired: [true, 'Accessibility impact details are required'] }
+        validations: { isRequired: [true, 'Accessibility impact details are required'] },
+        lengthLimit: 'medium'
       }]
     }),
     new FormEngineModel({
@@ -140,7 +141,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'accessibilityStepsDetails',
         dataType: 'textarea',
         label: stepsLabels.l6,
-        validations: { isRequired: [true, 'Accessibility steps details are required'] }
+        validations: { isRequired: [true, 'Accessibility steps details are required'] },
+        lengthLimit: 'medium'
       }]
     })
   );

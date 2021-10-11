@@ -112,10 +112,10 @@ describe('FormEngineHelper', () => {
 
       { test: { required: true }, expected: 'shared.forms_module.validations.required' },
       { test: { email: true }, expected: 'shared.forms_module.validations.invalid_email' },
-      { test: { min: { min: 5 } }, expected: 'shared.forms_module.validations.min (5)' },
-      { test: { max: { max: 10 } }, expected: 'shared.forms_module.validations.max (10)' },
-      { test: { minlength: { requiredLength: 5 } }, expected: 'shared.forms_module.validations.min_length (5)' },
-      { test: { maxlength: { requiredLength: 10 } }, expected: 'shared.forms_module.validations.max_length (10)' },
+      { test: { min: { min: 5 } }, expected: 'shared.forms_module.validations.min' },
+      { test: { max: { max: 10 } }, expected: 'shared.forms_module.validations.max' },
+      { test: { minlength: { requiredLength: 5 } }, expected: 'shared.forms_module.validations.min_length' },
+      { test: { maxlength: { requiredLength: 10 } }, expected: 'shared.forms_module.validations.max_length' },
       { test: { pattern: true }, expected: 'shared.forms_module.validations.invalid_format' },
 
       { test: { hexadecimalFormat: true }, expected: 'shared.forms_module.validations.invalid_hexadecimal_format' },
@@ -127,7 +127,7 @@ describe('FormEngineHelper', () => {
     ];
 
     validationMessageTestSuite.forEach(v => {
-      expect(FormEngineHelper.getValidationMessage(v.test)).toBe(v.expected);
+      expect(FormEngineHelper.getValidationMessage(v.test).message).toBe(v.expected);
     });
 
   });

@@ -25,7 +25,7 @@
         </ng-container>
 
         <ng-container *ngIf="stepNumber === 2">
-          <theme-form-textarea controlName="reason" label="What's your reason for archiving this innovation?" [pageUniqueField]="false"></theme-form-textarea>
+          <theme-form-textarea controlName="reason" label="What's your reason for archiving this innovation?" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
           <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
         </ng-container>
 

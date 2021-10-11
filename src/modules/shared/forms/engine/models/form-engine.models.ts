@@ -42,6 +42,7 @@ export class FormEngineParameterModel {
     minLength?: number;
     maxLength?: number;
   };
+  lengthLimit?: 'small' | 'medium' | 'large';
 
   additional?: FormEngineParameterModel[];
 
@@ -92,6 +93,7 @@ export class FormEngineParameterModel {
     this.rank = data.rank || 0;
     this.validations = data.validations;
 
+    this.lengthLimit = data.lengthLimit;
     this.additional = data.additional;
 
     this.groupedItems = data.groupedItems;

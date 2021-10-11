@@ -12,13 +12,19 @@ export const USER_INFO_ACCESSOR: Required<AuthenticationModel>['user'] = {
       { id: '_unit_id', name: 'ORG_UNIT' }
     ]
   }],
-  innovations: []
+  innovations: [],
+  passwordResetOn: '2020-01-01T00:00:00.000Z',
+  phone: '212000000'
 };
+
+
 export const USER_INFO_INNOVATOR: Required<AuthenticationModel>['user'] = {
   id: '_id',
   email: 'i@email.com',
   displayName: 'Test innovator',
   type: 'INNOVATOR',
   organisations: [{ id: 'org_id', isShadow: true, name: '', size: '', role: 'OWNER' }],
-  innovations: [{ id: 'Inno01', name: 'Test innovation' }]
+  innovations: [{ id: 'Inno01', name: 'Test innovation' }],
+  passwordResetOn: '2020-01-01T00:00:00.000Z',
+  phone: '212000000'
 };
