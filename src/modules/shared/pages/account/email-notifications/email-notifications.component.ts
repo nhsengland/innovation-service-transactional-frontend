@@ -18,6 +18,8 @@ export class PageAccountEmailNotificationsComponent extends CoreComponent implem
 
   notificationTypeList: any[] = [];
 
+  isAnySubscribed: boolean = true;
+
   constructor(
     private notificationService: NotificationService
   ) {
@@ -48,6 +50,8 @@ export class PageAccountEmailNotificationsComponent extends CoreComponent implem
           { id: item.id, title: item.title, isSubscribed: response.find(r => r.id === item.id)?.isSubscribed }
         ));
 
+        this.isAnySubscribed = this.notificationTypeList.some(n => n.isSubscribed);
+
         this.setPageStatus('READY');
       },
       () => {
@@ -62,21 +66,21 @@ export class PageAccountEmailNotificationsComponent extends CoreComponent implem
   }
 
   updateNotificationPreference(notificationType: string, isSubscribed: boolean): void {
-    const preference = [{ id: notificationType, isSubscribed }];
+    const preference = [{ notificationType, isSubscribed }];
     this.updateNotificationPreferences(preference);
   }
 
   unsubscribeAllNotifications(): void {
-    const preferences: { id: string; isSubscribed: boolean; }[] = [];
+    const preferences: { notificationType: string; isSubscribed: boolean; }[] = [];
 
     this.notificationTypeList.forEach(notification => {
-      preferences.push({ id: notification.id, isSubscribed: false });
+      preferences.push({ notificationType: notification.id, isSubscribed: false });
     });
 
     this.updateNotificationPreferences(preferences);
   }
 
-  private updateNotificationPreferences(preference: { id: string; isSubscribed: boolean; }[]): void {
+  private updateNotificationPreferences(preference: { notificationType: string; isSubscribed: boolean; }[]): void {
 
     this.notificationService.updateUserNotificationPreferences(preference).subscribe(
       () => {

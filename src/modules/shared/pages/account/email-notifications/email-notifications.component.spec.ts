@@ -53,12 +53,12 @@ describe('PageAccountManageNotificationsComponent', () => {
   it('should have initial information loaded', () => {
 
     const responseMock = [{ id: 'ACTION', isSubscribed: true },
-    { id: 'SUPPORT_STATUS_CHANGE', isSubscribed: false }];
+    { id: 'SUPPORT', isSubscribed: false }];
 
     notificationService.getEmailNotificationTypes = () => of(responseMock);
 
     const expected = [{ id: 'ACTION', title: 'Actions', isSubscribed: true },
-    { id: 'SUPPORT_STATUS_CHANGE', title: 'Support status changes', isSubscribed: false }];
+    { id: 'SUPPORT', title: 'Support status changes', isSubscribed: false }];
 
     fixture = TestBed.createComponent(PageAccountEmailNotificationsComponent);
     component = fixture.componentInstance;

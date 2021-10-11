@@ -33,7 +33,7 @@ export type getUnreadNotificationsEndpointDTO = {
 export const EMAIL_NOTIFICATION_TYPE = {
   ACTION: { title: 'Actions' },
   COMMENT: { title: 'Comments' },
-  SUPPORT_STATUS_CHANGE: { title: 'Support status changes' }
+  SUPPORT: { title: 'Support status changes' }
 };
 
 @Injectable()
