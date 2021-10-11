@@ -138,7 +138,7 @@ export class FormEngineHelper {
       const controlErrors: ValidationErrors | null | undefined = formProperty?.errors;
       if (controlErrors) {
         Object.keys(controlErrors).forEach(keyError => {
-          result = { ...result, ...{ [key]: FormEngineHelper.getValidationMessage({ [keyError]: controlErrors[keyError] }) } };
+          result = { ...result, ...{ [key]: FormEngineHelper.getValidationMessage({ [keyError]: controlErrors[keyError] }).message } };
         });
       }
     });
@@ -147,27 +147,27 @@ export class FormEngineHelper {
   }
 
 
-  static getValidationMessage(error: ValidationErrors | null): string {
+  static getValidationMessage(error: ValidationErrors | null): { message: string, params: { [key: string]: string } } {
 
     if (!error || Object.keys(error).length === 0) { // if empty!
-      return '';
+      return { message: '', params: {} };
     }
 
     // Available validations.
-    if (error.required) { return error.required.message || 'shared.forms_module.validations.required'; }
-    if (error.equalTo) { return error.equalTo.message || 'shared.forms_module.validations.equal_to'; }
-    if (error.email) { return 'shared.forms_module.validations.invalid_email'; }
-    if (error.min) { return error.min.message || `shared.forms_module.validations.min (${error.min.min})`; }
-    if (error.max) { return error.max.message || 'shared.forms_module.validations.max' + ` (${error.max.max})`; }
-    if (error.minlength) { return 'shared.forms_module.validations.min_length' + ` (${error.minlength.requiredLength})`; }
-    if (error.maxlength) { return 'shared.forms_module.validations.max_length' + ` (${error.maxlength.requiredLength})`; }
-    if (error.pattern) { return error.pattern.message || 'shared.forms_module.validations.invalid_format'; }
+    if (error.required) { return { message: error.required.message || 'shared.forms_module.validations.required', params: {} }; }
+    if (error.equalTo) { return { message: error.equalTo.message || 'shared.forms_module.validations.equal_to', params: {} }; }
+    if (error.email) { return { message: 'shared.forms_module.validations.invalid_email', params: {} }; }
+    if (error.min) { return { message: error.min.message || 'shared.forms_module.validations.min', params: { min: error.min.min } }; }
+    if (error.max) { return { message: error.max.message || 'shared.forms_module.validations.max', params: { max: error.max.max } }; }
+    if (error.minlength) { return { message: 'shared.forms_module.validations.min_length', params: { minLength: error.minlength.requiredLength } }; }
+    if (error.maxlength) { return { message: 'shared.forms_module.validations.max_length', params: { maxLength: error.maxlength.requiredLength } }; }
+    if (error.pattern) { return { message: error.pattern.message || 'shared.forms_module.validations.invalid_format', params: {} }; }
 
-    if (error.hexadecimalFormat) { return 'shared.forms_module.validations.invalid_hexadecimal_format'; }
-    if (error.minHexadecimal) { return 'shared.forms_module.validations.min_hexadecimal' + ` (${error.minHexadecimal.min})`; }
-    if (error.maxHexadecimal) { return 'shared.forms_module.validations.max_hexadecimal' + ` (${error.maxHexadecimal.max})`; }
+    if (error.hexadecimalFormat) { return { message: 'shared.forms_module.validations.invalid_hexadecimal_format', params: {} }; }
+    if (error.minHexadecimal) { return { message: 'shared.forms_module.validations.min_hexadecimal' + ` (${error.minHexadecimal.min})`, params: {} }; }
+    if (error.maxHexadecimal) { return { message: 'shared.forms_module.validations.max_hexadecimal' + ` (${error.maxHexadecimal.max})`, params: {} }; }
 
-    return '';
+    return { message: '', params: {} };
 
   }
 

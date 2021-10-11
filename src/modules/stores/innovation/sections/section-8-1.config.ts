@@ -123,7 +123,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
             dataType: 'textarea',
             label: `What was the commercial basis for deployment in ${item.name}`,
             description: 'For example, did you provide your innovation for free or was it purchased?',
-            validations: { isRequired: [true, 'A description of what was the commercial basis for deployment is required'] }
+            validations: { isRequired: [true, 'A description of what was the commercial basis for deployment is required'] },
+            lengthLimit: 'medium'
           }]
         }),
         new FormEngineModel({
@@ -131,7 +132,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
             id: `deploymentPlansOrgDeploymentAffect_${i}`,
             dataType: 'textarea',
             label: `How did the deployment of your innovation in ${item.name} affect the organisation?`,
-            validations: { isRequired: [true, 'A description of how affect the organisation is required'] }
+            validations: { isRequired: [true, 'A description of how affect the organisation is required'] },
+            lengthLimit: 'medium'
           }]
         })
       );

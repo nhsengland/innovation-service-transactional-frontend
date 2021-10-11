@@ -58,7 +58,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'marketResearch',
         dataType: 'textarea',
         label: stepsLabels.l2,
-        validations: { isRequired: [true, 'A description of the market research is required'] }
+        validations: { isRequired: [true, 'A description of the market research is required'] },
+        lengthLimit: 'medium'
       }]
     })
   );

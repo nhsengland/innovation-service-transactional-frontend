@@ -90,7 +90,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
 
     if (!this.form.get('status')!.valid) {
       this.form.get('status')!.markAsTouched();
-      this.statusError = FormEngineHelper.getValidationMessage({ required: this.form.get('status')!.errors!.required });
+      this.statusError = FormEngineHelper.getValidationMessage({ required: this.form.get('status')!.errors!.required }).message;
       return;
     }
 

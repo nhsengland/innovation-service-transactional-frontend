@@ -16,7 +16,7 @@
     <p class="nhsuk-hint">Posting a comment will notify who is currently engaging with your innovation.</p>
 
     <form [formGroup]="form">
-      <theme-form-textarea controlName="comment" label="Enter your comment" [pageUniqueField]="false"></theme-form-textarea>
+      <theme-form-textarea controlName="comment" label="Enter your comment" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
       <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Post comment</button>
     </form>
 

@@ -92,6 +92,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         dataType: 'textarea',
         label: stepsLabels.l3,
         validations: { isRequired: [true, 'Description is required'] },
+        lengthLimit: 'medium',
         items: innovationPathwayKnowledgeItems
       }]
     })

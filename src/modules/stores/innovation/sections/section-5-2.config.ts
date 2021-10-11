@@ -108,7 +108,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           id: `userTestFeedback_${i}`,
           dataType: 'textarea',
           label: `Please describe the testing and feedback for ${item.kind}`,
-          validations: { isRequired: [true, 'Description is required'] }
+          validations: { isRequired: [true, 'Description is required'] },
+          lengthLimit: 'medium'
         }]
       })
     );

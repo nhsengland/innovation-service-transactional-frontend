@@ -83,7 +83,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: InboundPayloadTyp
         dataType: 'textarea',
         label: stepsLabels.l3,
         description: 'The more specific you can be with your answer, the better.',
-        validations: { isRequired: [true, 'Description is required'] }
+        validations: { isRequired: [true, 'Description is required'] },
+        lengthLimit: 'medium'
       }]
     }),
     new FormEngineModel({
@@ -92,7 +93,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: InboundPayloadTyp
         dataType: 'textarea',
         label: stepsLabels.l4,
         description: 'The more specific you can be with your answer, the better.',
-        validations: { isRequired: [true, 'Description is required'] }
+        validations: { isRequired: [true, 'Description is required'] },
+        lengthLimit: 'medium'
       }]
     }),
     new FormEngineModel({
@@ -115,7 +117,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: InboundPayloadTyp
           id: 'fundingDescription',
           dataType: 'textarea',
           label: stepsLabels.l6,
-          validations: { isRequired: [true, 'Description is required'] }
+          validations: { isRequired: [true, 'Description is required'] },
+          lengthLimit: 'medium'
         }]
       })
     );

@@ -51,7 +51,8 @@ export let FIRST_TIME_SIGNIN_QUESTIONS: WizardEngineModel = new WizardEngineMode
         id: 'innovationDescription',
         dataType: 'textarea',
         label: 'Please provide a short description of your innovation',
-        validations: { isRequired: [true, 'Innovation short description is required'] }
+        validations: { isRequired: [true, 'Innovation short description is required'] },
+        lengthLimit: 'medium'
       }]
     }),
 
@@ -127,7 +128,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
       parameters: [{
         id: 'mobilePhone',
         dataType: 'number',
-        label: 'What\'s your phone number',
+        label: 'What\'s your phone number (Optional)',
         description: 'If you\'d like to be contacted by phone about your innovation, please provide a contact number'
       }]
     }),

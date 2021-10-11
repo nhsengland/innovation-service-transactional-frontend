@@ -58,7 +58,7 @@ describe('FormTextareaComponent', () => {
     hostComponent.form.get('testField')?.markAsTouched();
     hostFixture.detectChanges();
     expect(hostComponent.childComponent?.hasError).toBe(true);
-    expect(hostComponent.childComponent?.errorMessage).toBe('shared.forms_module.validations.required');
+    expect(hostComponent.childComponent?.error.message).toBe('shared.forms_module.validations.required');
   });
 
   it('should form control field be disabled, hence valid', () => {
@@ -67,7 +67,7 @@ describe('FormTextareaComponent', () => {
     hostComponent.form.get('testField')?.disable();
     hostFixture.detectChanges();
     expect(hostComponent.childComponent?.hasError).toBe(false);
-    expect(hostComponent.childComponent?.errorMessage).toBe('');
+    expect(hostComponent.childComponent?.error.message).toBe('');
   });
 
 });

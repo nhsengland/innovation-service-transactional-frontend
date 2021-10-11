@@ -90,7 +90,8 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       id: 'summary',
       dataType: 'textarea',
       label: 'Please outline what type of support is currently needed',
-      validations: { isRequired: [true, 'Description of type of support currently needed is required'] }
+      validations: { isRequired: [true, 'Description of type of support currently needed is required'] },
+      lengthLimit: 'medium'
     })
   ],
 

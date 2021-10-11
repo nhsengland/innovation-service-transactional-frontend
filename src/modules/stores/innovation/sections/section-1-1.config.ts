@@ -43,7 +43,13 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        parameters: [{ id: 'description', dataType: 'textarea', label: stepsLabels.l1, validations: { isRequired: [true, 'Description is required'] } }]
+        parameters: [{
+          id: 'description',
+          dataType: 'textarea',
+          label: stepsLabels.l1,
+          validations: { isRequired: [true, 'Description is required'] },
+          lengthLimit: 'medium'
+        }]
       }),
       new FormEngineModel({
         parameters: [{

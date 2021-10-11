@@ -141,7 +141,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
     if (!this.form.get(commentId)?.valid) {
 
-      this.formSubmittedFields[commentId] = FormEngineHelper.getValidationMessage({ required: this.form.get(commentId)?.errors?.required });
+      this.formSubmittedFields[commentId] = FormEngineHelper.getValidationMessage({ required: this.form.get(commentId)?.errors?.required }).message;
 
       setTimeout(() => {
         const e = document.getElementById(`comment-${commentId}`);
