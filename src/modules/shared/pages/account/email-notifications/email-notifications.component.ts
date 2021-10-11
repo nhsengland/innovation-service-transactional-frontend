@@ -5,6 +5,12 @@ import { AlertType } from '@app/base/models';
 
 import { EMAIL_NOTIFICATION_TYPE, NotificationService } from '@modules/shared/services/notification.service';
 
+export type EmailNotificationType = {
+  id: string;
+  title: string;
+  isSubscribed: boolean;
+};
+
 @Component({
   selector: 'shared-pages-account-email-notifications',
   templateUrl: './email-notifications.component.html'
@@ -16,7 +22,7 @@ export class PageAccountEmailNotificationsComponent extends CoreComponent implem
 
   alert: AlertType = { type: null };
 
-  notificationTypeList: any[] = [];
+  notificationTypeList: EmailNotificationType[] = [];
 
   isAnySubscribed = true;
 
@@ -46,9 +52,16 @@ export class PageAccountEmailNotificationsComponent extends CoreComponent implem
         ));
         const applicableTypes = notificationTypes.filter(n => response.find(r => r.id === n.id));
 
-        this.notificationTypeList = applicableTypes.map(item => (
-          { id: item.id, title: item.title, isSubscribed: response.find(r => r.id === item.id)?.isSubscribed }
-        ));
+        this.notificationTypeList = [];
+
+        applicableTypes.forEach(item => {
+          const notificationType: EmailNotificationType = {
+            id: item.id,
+            title: item.title,
+            isSubscribed: response.find(r => r.id === item.id)?.isSubscribed!
+          };
+          this.notificationTypeList.push(notificationType);
+        });
 
         this.isAnySubscribed = this.notificationTypeList.some(n => n.isSubscribed);
 
