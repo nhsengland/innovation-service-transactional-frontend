@@ -40,7 +40,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     const resultInMinutes = Math.round(timediffer / 60000);
 
     if (resultInMinutes <= 1) {
-      this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password', setFocus: true };
+      this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
     }
 
 
