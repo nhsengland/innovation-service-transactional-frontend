@@ -139,7 +139,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
   toReturn.push(
     { label: 'Name', value: data.displayName, editStepNumber: 1 },
-    { label: 'Phone', value: data.mobilePhone, editStepNumber: 2 },
+    { label: 'Phone number', value: data.mobilePhone, editStepNumber: 2 },
     { label: 'Is company or organisation?', value: data.isCompanyOrOrganisation === 'YES' ? 'Yes' : 'No', editStepNumber: 3 }
   );
 
