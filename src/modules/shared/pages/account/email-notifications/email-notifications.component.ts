@@ -18,7 +18,7 @@ export class PageAccountEmailNotificationsComponent extends CoreComponent implem
 
   notificationTypeList: any[] = [];
 
-  isAnySubscribed: boolean = true;
+  isAnySubscribed = true;
 
   constructor(
     private notificationService: NotificationService
