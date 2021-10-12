@@ -44,7 +44,7 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
     }),
 
     new FormEngineModel({
-      parameters: [{ id: 'mobilePhone', dataType: 'text', label: 'Phone number' }]
+      parameters: [{ id: 'mobilePhone', dataType: 'text', label: 'What\'s your Phone number?' }]
     }),
 
     new FormEngineModel({

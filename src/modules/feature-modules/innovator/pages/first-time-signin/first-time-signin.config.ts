@@ -212,7 +212,7 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Summar
   );
 
   toReturn.push(
-    { label: 'Phone', value: data.mobilePhone, editStepNumber: lastMarkStep + 2 }
+    { label: 'Phone number', value: data.mobilePhone, editStepNumber: lastMarkStep + 2 }
   );
 
   toReturn.push(
