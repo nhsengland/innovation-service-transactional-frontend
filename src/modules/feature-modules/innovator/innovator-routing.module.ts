@@ -42,6 +42,7 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
+import { PageAccountEmailNotificationsComponent } from '@modules/shared/pages/account/email-notifications/email-notifications.component';
 
 
 const routes: Routes = [
@@ -95,6 +96,10 @@ const routes: Routes = [
               { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
               { path: 'edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent }
             ]
+          },
+          {
+            path: 'email-notifications', pathMatch: 'full', component: PageAccountEmailNotificationsComponent,
+            data: { layoutOptions: { type: 'userAccountMenu' } }
           },
           {
             path: 'manage-innovations',
