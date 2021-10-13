@@ -14,17 +14,21 @@ export type SummaryParsingType = {
 export class WizardEngineModel {
 
   steps: FormEngineModel[];
-  currentStepNumber: number;
+  currentStepId: number | 'summary';
   currentAnswers: { [key: string]: any };
-  runtimeRules: ((steps: FormEngineModel[], currentValues: any, currentStep: number) => void)[];
+  showSummary: boolean;
+  runtimeRules: ((steps: FormEngineModel[], currentValues: any, currentStep: number | 'summary') => void)[];
   inboundParsing?: (data: any) => MappedObject;
   outboundParsing?: (data: any) => MappedObject;
-  summaryParsing?: (data: any) => SummaryParsingType[];
+  summaryParsing?: (data: any, steps?: FormEngineModel[]) => SummaryParsingType[];
+
+  private summary: SummaryParsingType[] = [];
 
   constructor(data: Partial<WizardEngineModel>) {
     this.steps = data.steps || [];
-    this.currentStepNumber = data.currentStepNumber || 1;
+    this.currentStepId = data.currentStepId || 1;
     this.currentAnswers = data.currentAnswers || {};
+    this.showSummary = data.showSummary || false;
     this.runtimeRules = data.runtimeRules || [];
     this.inboundParsing = data.inboundParsing;
     this.outboundParsing = data.outboundParsing;
@@ -32,7 +36,7 @@ export class WizardEngineModel {
   }
 
   runRules(data?: MappedObject): this {
-    this.runtimeRules.forEach(rule => rule(this.steps, data || this.currentAnswers, this.currentStepNumber));
+    this.runtimeRules.forEach(rule => rule(this.steps, data || this.currentAnswers, this.currentStepId));
     return this;
   }
 
@@ -49,39 +53,76 @@ export class WizardEngineModel {
 
     if (!this.summaryParsing) { return []; }
 
-    return this.summaryParsing(data || this.currentAnswers);
+    this.summary = this.summaryParsing(data || this.currentAnswers, this.steps);
+
+    return this.summary;
 
   }
 
+  isFirstStep(): boolean { return Number(this.currentStepId) === 1; }
+  isLastStep(): boolean { return Number(this.currentStepId) === this.steps.length; }
+  isValidStep(step: number | 'summary'): boolean {
+    return ((1 <= Number(step) && Number(step) <= this.steps.length) || step === 'summary');
+  }
+  isQuestionStep(): boolean {
 
+    if (typeof this.currentStepId !== 'number') { return false; }
 
-  isFirstStep(): boolean { return this.currentStepNumber === 1; }
-  isLastStep(): boolean { return this.currentStepNumber === this.steps.length; }
-  isValidStepNumber(stepNumber: number | string): boolean {
-    return (1 <= Number(stepNumber) && Number(stepNumber) <= this.steps.length);
+    return (1 <= Number(this.currentStepId) && Number(this.currentStepId) <= this.steps.length);
+
+  }
+  isSummaryStep(): boolean {
+    return (this.showSummary && this.currentStepId === 'summary');
   }
 
 
   currentStep(): FormEngineModel {
-    return this.steps[this.currentStepNumber - 1];
+    if (typeof this.currentStepId === 'number') {
+      return this.steps[this.currentStepId - 1];
+    } else {
+      return new FormEngineModel({ parameters: [] });
+    }
   }
 
   currentStepParameters(): FormEngineParameterModel[] {
-    return this.steps[this.currentStepNumber - 1].parameters;
+    if (typeof this.currentStepId === 'number') {
+      return this.steps[this.currentStepId - 1].parameters;
+    } else {
+      return [];
+    }
   }
 
   previousStep(): this {
-    this.currentStepNumber--;
+
+    if (typeof this.currentStepId === 'number') {
+      this.currentStepId--;
+    } else if (this.showSummary && this.currentStepId === 'summary') {
+      this.currentStepId = this.steps.length;
+    }
+
     return this;
+
   }
 
   nextStep(): this {
-    this.currentStepNumber++;
+
+    if (this.showSummary && typeof this.currentStepId === 'number' && this.currentStepId === this.steps.length) {
+      this.runSummaryParsing();
+      this.currentStepId = 'summary';
+    } else if (typeof this.currentStepId === 'number') {
+      this.currentStepId++;
+    }
+
     return this;
+
   }
 
-  gotoStep(stepNumber: number): this {
-    this.currentStepNumber = stepNumber;
+  gotoStep(step: number | 'summary'): this {
+
+    if (step === 'summary') { this.runSummaryParsing(); }
+
+    this.currentStepId = step;
+
     return this;
   }
 
@@ -96,5 +137,7 @@ export class WizardEngineModel {
     this.currentAnswers = data;
     return this;
   }
+
+  getSummary(): SummaryParsingType[] { return this.summary; }
 
 }

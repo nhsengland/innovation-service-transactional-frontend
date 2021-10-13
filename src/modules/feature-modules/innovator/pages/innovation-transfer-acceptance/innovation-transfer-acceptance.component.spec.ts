@@ -119,7 +119,7 @@ describe('FeatureModules/Innovator/Pages/InnovationTransferAcceptanceComponent',
     component = fixture.componentInstance;
 
     fixture.detectChanges();
-    expect(routerSpy).toHaveBeenCalledWith(['not-found'], {});
+    expect(routerSpy).toHaveBeenCalledWith(['/not-found'], {});
 
   });
 

@@ -12,7 +12,7 @@
           </div>
           <p> By deleting your account, you will no longer have access to your innovations. If you want to keep copies, you should download a PDF from each Innovation Record page before proceeding. </p>
         </div>
-        <theme-form-textarea controlName="reason" label="What's the reason for deleting your account?" [pageUniqueField]="false"></theme-form-textarea>
+        <theme-form-textarea controlName="reason" label="What's the reason for deleting your account?" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
         <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
       </ng-container>
 

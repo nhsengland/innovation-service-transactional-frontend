@@ -119,7 +119,7 @@ export class InnovatorService extends CoreService {
 
     const body: {
       actionType: '' | 'first_time_signin' | 'transfer',
-      user: { displayName: string },
+      user: { displayName: string, mobilePhone?: string },
       transferId?: string,
       innovation?: { name: string, description: string, countryName: string, postcode: string, organisationShares: string[] },
       organisation?: { name: string, size: string }
@@ -132,6 +132,7 @@ export class InnovatorService extends CoreService {
     switch (type) {
       case 'FIRST_TIME_SIGNIN':
         body.actionType = 'first_time_signin';
+        body.user.mobilePhone = data.mobilePhone;
         body.innovation = {
           name: data.innovationName,
           description: data.innovationDescription,

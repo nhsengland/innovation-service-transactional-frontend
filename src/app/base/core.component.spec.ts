@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LoggerTestingModule } from 'ngx-logger/testing';
@@ -86,6 +86,14 @@ describe('App/Base/CoreComponent running SERVER side', () => {
     component.setPageStatus('LOADING');
     expect(component.pageStatus).toBe('LOADING');
   });
+
+  it(`should run focusBody()`, fakeAsync(() => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    component.focusBody();
+    tick(1000);
+    expect(component.pageStatus).toBe('LOADING'); // Do nothing really!
+  }));
 
   it(`should run redirectTo()`, () => {
     fixture = TestBed.createComponent(CoreComponent);
@@ -191,6 +199,14 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
     component.setPageStatus('LOADING');
     expect(component.pageStatus).toBe('LOADING');
   });
+
+  it(`should run focusBody()`, fakeAsync(() => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    component.focusBody();
+    tick(1000);
+    expect(document.activeElement?.nodeName).toBe('BODY');
+  }));
 
   it(`should run redirectTo() WITHOUT QueryParams`, () => {
     fixture = TestBed.createComponent(CoreComponent);

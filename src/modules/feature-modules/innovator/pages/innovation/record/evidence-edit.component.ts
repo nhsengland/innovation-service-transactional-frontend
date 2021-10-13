@@ -97,7 +97,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
       this.activatedRoute.params.subscribe(params => {
 
         // if (!this.isValidStepId()) {
-        //   this.redirectTo('not-found');
+        //   this.redirectTo('/not-found');
         //   return;
         // }
 
@@ -182,13 +182,13 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
       case 'previous':
         if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${this.wizard.steps.length}`; }
         else if (this.wizard.isFirstStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}${this.isCreation() ? '' : `/evidence/${this.activatedRoute.snapshot.params.evidenceId}`}`; }
-        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${this.wizard.currentStepNumber - 1}`; }
+        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${Number(this.wizard.currentStepId) - 1}`; }
         break;
 
       case 'next':
         if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/summary`; }
         else if (this.wizard.isLastStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/summary`; }
-        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${this.wizard.currentStepNumber + 1}`; }
+        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${Number(this.wizard.currentStepId) + 1}`; }
         break;
 
       default: // Should NOT happen!

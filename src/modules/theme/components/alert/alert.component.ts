@@ -32,7 +32,7 @@ export class AlertComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
 
-    if (changes.type.currentValue !== changes.type.previousValue) {
+    if (changes.type && changes.type.currentValue !== changes.type.previousValue) {
 
       switch (this.type) {
         case 'ACTION': this.borderColorCSS = 'border-color-primary'; break;

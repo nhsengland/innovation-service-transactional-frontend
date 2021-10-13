@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
+import { AlertType } from '@app/base/models';
 
 
 @Component({
@@ -8,10 +9,11 @@ import { CoreComponent } from '@app/base';
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent extends CoreComponent {
-
+  alert: AlertType = { type: null };
   user: {
     displayName: string;
     organisation: string;
+    passwordResetOn: string;
   };
 
   cardsList: { title: string, description: string, link: string, queryParams: { status?: string } }[];
@@ -24,8 +26,19 @@ export class DashboardComponent extends CoreComponent {
 
     this.user = {
       displayName: this.stores.authentication.getUserInfo().displayName,
-      organisation: this.stores.authentication.getUserInfo().organisations[0]?.name || ''
+      organisation: this.stores.authentication.getUserInfo().organisations[0]?.name || '',
+      passwordResetOn: this.stores.authentication.getUserInfo().passwordResetOn
     };
+
+    const startTime = new Date();
+    const endTime = new Date(this.user.passwordResetOn);
+    const timediffer = startTime.getTime() - endTime.getTime();
+    const resultInMinutes = Math.round(timediffer / 60000);
+
+    if (resultInMinutes <= 1) {
+      this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
+    }
+
 
     this.cardsList = [
       {

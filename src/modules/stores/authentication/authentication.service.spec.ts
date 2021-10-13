@@ -88,7 +88,7 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
     const expected = { userExists: true, hasInvites: false };
     let response: any = null;
 
-    service.verifyInnovator('010101').subscribe(success => response = success, error => response = error);
+    service.verifyInnovator().subscribe(success => response = success, error => response = error);
 
     const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/check`);
     httpRequest.flush(responseMock);
@@ -103,7 +103,7 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
     const expected = { userExists: false, hasInvites: false };
     let response: any = null;
 
-    service.verifyInnovator('010101').subscribe(success => response = success, error => response = error);
+    service.verifyInnovator().subscribe(success => response = success, error => response = error);
 
     const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/check`);
     httpRequest.flush(responseMock, { status: 404, statusText: 'Not found' });

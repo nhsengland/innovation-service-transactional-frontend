@@ -48,7 +48,7 @@
             </div>
           </div>
 
-          <theme-form-textarea controlName="comment" label="Describe briefly why you selected these organisations" [pageUniqueField]="false"></theme-form-textarea>
+          <theme-form-textarea controlName="comment" label="Describe briefly why you selected these organisations" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
           <theme-form-checkbox controlName="confirm" label="I confirm that I understand the support offers of the selected organisations" size="small"></theme-form-checkbox>
           <p *ngIf="formSubmitted" class="font-color-error">You need to confirm to proceed</p>
           <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()"> Confirm and notify organisations </button>

@@ -52,7 +52,7 @@ export const SECTION_5_2: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
+    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: SummaryPayloadType) => summaryParsing(data)
@@ -61,7 +61,7 @@ export const SECTION_5_2: InnovationSectionConfigType['sections'][0] = {
 
 
 
-function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number): void {
+function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(1);
 
@@ -108,7 +108,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           id: `userTestFeedback_${i}`,
           dataType: 'textarea',
           label: `Please describe the testing and feedback for ${item.kind}`,
-          validations: { isRequired: [true, 'Description is required'] }
+          validations: { isRequired: [true, 'Description is required'] },
+          lengthLimit: 'medium'
         }]
       })
     );

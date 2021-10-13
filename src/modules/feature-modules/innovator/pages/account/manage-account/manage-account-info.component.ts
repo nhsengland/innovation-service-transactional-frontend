@@ -13,11 +13,11 @@ import { getInnovationTransfersDTO, InnovatorService } from '@modules/feature-mo
 export class PageAccountManageAccountInfoComponent extends CoreComponent implements OnInit {
 
   alert: AlertType = { type: null };
+  changePassword = `${this.stores.environment.APP_URL}/change-password`;
 
-  // haveAnyActiveInnovation = false;
-  // innovationTransfers: getInnovationTransfersDTO[] = [];
-
-
+  user: {
+    passwordResetOn: string
+  };
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService
@@ -25,6 +25,11 @@ export class PageAccountManageAccountInfoComponent extends CoreComponent impleme
 
     super();
     this.setPageTitle('Manage account');
-     }
+
+    const user = this.stores.authentication.getUserInfo();
+    this.user = {
+      passwordResetOn: user.passwordResetOn
+    };
+  }
 
 }

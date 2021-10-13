@@ -7,13 +7,21 @@
 
     <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
 
-    </div>
+  </div>
+</div>
+<div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+  <div class="nhsuk-grid-column-full">
+    <h2 class="nhsuk-heading-l"> Change your Password </h2>
+    <p> You will need to enter your current password to change to a new one. </p>
+    <a [href]="changePassword"> Change your Password </a>
+    <h6> Last password update: {{ user.passwordResetOn  | date:'dd/MM/yyyy' }} </h6>
+  </div>
 </div>
 
 <div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
   <div class="nhsuk-grid-column-full">
     <h2 class="nhsuk-heading-l"> Delete your account </h2>
-    <p > You will need to confirm your email address to delete your account. </p>
+    <p> You will need to confirm your email address to delete your account. </p>
     <a routerLink="delete"> Delete your account </a>
   </div>
 </div>

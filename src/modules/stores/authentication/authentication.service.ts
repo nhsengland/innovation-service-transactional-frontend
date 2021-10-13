@@ -6,7 +6,6 @@ import { catchError, map, take } from 'rxjs/operators';
 import { EnvironmentStore } from '@modules/core/stores/environment.store';
 
 import { UrlModel } from '@modules/core/models/url.model';
-import { LoggerService, Severity } from '@modules/core/services/logger.service';
 
 
 type getUserInfoDto = {
@@ -25,6 +24,8 @@ type getUserInfoDto = {
       name: string;
     }[];
   }[];
+  passwordResetOn: string;
+  phone: string;
 };
 
 
@@ -48,8 +49,7 @@ export class AuthenticationService {
 
   constructor(
     private http: HttpClient,
-    private environmentStore: EnvironmentStore,
-    private loggerService: LoggerService,
+    private environmentStore: EnvironmentStore
   ) { }
 
 
@@ -74,7 +74,9 @@ export class AuthenticationService {
         email: response.email,
         displayName: ['unknown'].includes(response.displayName) ? '' : response.displayName,
         type: response.type,
-        organisations: response.organisations
+        organisations: response.organisations,
+        passwordResetOn: response.passwordResetOn,
+        phone: response.phone,
       }))
     );
 
@@ -90,7 +92,7 @@ export class AuthenticationService {
 
   }
 
-  verifyInnovator(userId: string): Observable<{ userExists: boolean, hasInvites: boolean }> {
+  verifyInnovator(): Observable<{ userExists: boolean, hasInvites: boolean }> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/check');
     return this.http.get<{ userExists: boolean, hasInvites: boolean }>(url.buildUrl()).pipe(

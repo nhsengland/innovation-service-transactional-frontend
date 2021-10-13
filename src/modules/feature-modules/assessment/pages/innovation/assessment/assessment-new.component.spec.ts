@@ -69,8 +69,8 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
 
     fixture = TestBed.createComponent(InnovationAssessmentNewComponent);
     component = fixture.componentInstance;
-
     fixture.detectChanges();
+
     expect(component.innovationName).toBe(expected);
 
   });
@@ -81,8 +81,8 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
 
     fixture = TestBed.createComponent(InnovationAssessmentNewComponent);
     component = fixture.componentInstance;
-
     fixture.detectChanges();
+
     expect(component.innovationName).toBe('');
 
   });
@@ -95,9 +95,9 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
 
     fixture = TestBed.createComponent(InnovationAssessmentNewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
 
     component.onSubmit();
-    fixture.detectChanges();
     expect(routerSpy).not.toHaveBeenCalledWith(['/assessment/innovations/Inno01/assessments/Assess01/edit'], {});
 
   });
@@ -110,13 +110,12 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
 
     fixture = TestBed.createComponent(InnovationAssessmentNewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
 
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
     component.formEngineComponent.getFormValues  = () => ({ valid: false, data: { value1: 'some value' } });
 
     component.onSubmit();
-    fixture.detectChanges();
-
     expect(routerSpy).not.toHaveBeenCalledWith(['/assessment/innovations/Inno01/assessments/Assess01/edit'], {});
 
   });
@@ -129,12 +128,12 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
 
     fixture = TestBed.createComponent(InnovationAssessmentNewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
 
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
     component.formEngineComponent.getFormValues  = () => ({ valid: true, data: { value1: 'some value' } });
 
     component.onSubmit();
-    fixture.detectChanges();
     expect(routerSpy).toHaveBeenCalledWith(['/assessment/innovations/Inno01/assessments/Assess01/edit'], {});
 
   });
@@ -154,12 +153,12 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
 
     fixture = TestBed.createComponent(InnovationAssessmentNewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
 
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
     component.formEngineComponent.getFormValues  = () => ({ valid: true, data: { value1: 'some value' } });
 
     component.onSubmit();
-    fixture.detectChanges();
     expect(component.alert).toEqual(expected);
 
   });

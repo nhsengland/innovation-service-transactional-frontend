@@ -29,7 +29,7 @@ export class FormInputComponent extends ControlValueAccessorConnector implements
   @Input() cssOverride?: string;
 
   hasError = false;
-  errorMessage = '';
+  error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
 
   inputCssClass = '';
   divCssOverride = '';
@@ -65,7 +65,7 @@ export class FormInputComponent extends ControlValueAccessorConnector implements
   ngDoCheck(): void {
 
     this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
-    this.errorMessage = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : '';
+    this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : { message: '', params: {} };
     this.cdr.detectChanges();
 
   }

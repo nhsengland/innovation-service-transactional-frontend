@@ -73,8 +73,8 @@ export const locale = {
           min_hexadecimal: 'Value below the minumum allowed',
           max: 'Value above the maximum allowed',
           max_hexadecimal: 'Value above the maximum allowed',
-          min_length: 'Min length',
-          max_length: 'Max length',
+          min_length: 'Text must have at least {{ maxLength }} characters',
+          max_length: 'Text cannot exceed {{ maxLength }} characters',
           password_mismatch: 'Passwords don\'t appear to match',
           password_regex: 'The password must contain at least minimum 8 characters: one uppercase, one lowercase, one number and one special character.',
           required: 'Required'
