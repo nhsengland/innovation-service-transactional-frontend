@@ -35,7 +35,7 @@ import { InnovationSectionViewComponent } from '@shared-module/pages/innovation/
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
-
+import { ActionAdvancedFilterComponent } from './pages/actions/actions-advanced-filter.component';
 
 const routes: Routes = [
 
@@ -66,7 +66,7 @@ const routes: Routes = [
         path: 'actions/statuses', pathMatch: 'full', component: PageActionStatusListComponent,
         data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/actions', label: 'Go back' } } }
       },
-
+      { path: 'actions/advanced-filter', pathMatch: 'full', component: ActionAdvancedFilterComponent },
       {
         path: 'account',
         children: [
