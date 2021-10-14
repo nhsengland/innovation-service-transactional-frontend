@@ -57,9 +57,32 @@ export type getAdvancedInnovationsListEndpointInDTO = {
     supportStatus: null | keyof typeof INNOVATION_SUPPORT_STATUS
   }[];
 };
+
 export type getAdvancedInnovationsListEndpointOutDTO = {
   count: number;
   data: (Omit<getAdvancedInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription' | 'postcode' | 'supportStatus'> & { supportStatus: keyof typeof INNOVATION_SUPPORT_STATUS })[],
+};
+
+export type getAdvanceActionsListEndpointInDTO = {
+  count: number;
+  data: {
+    id: string;
+    displayId: string;
+    status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
+    section: InnovationSectionsIds;
+    createdAt: string; // '2021-04-16T09:23:49.396Z',
+    updatedAt: string; // '2021-04-16T09:23:49.396Z',
+    innovation: {
+      id: string;
+      name: string;
+    };
+    notifications?: {
+      count: number;
+    }
+  }[];
+};
+export type getAdvanceActionsListEndpointOutDTO = {
+  count: number, data: (getAdvanceActionsListEndpointInDTO['data'][0] & { name: string })[]
 };
 
 export type getInnovationInfoEndpointDTO = {
@@ -342,6 +365,31 @@ export class AccessorService extends CoreService {
 
     const url = new UrlModel(this.API_URL).addPath('/accessors/:userId/actions').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);
     return this.http.get<getActionsListEndpointInDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => ({
+        count: response.count,
+        data: response.data.map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'`, } }))
+      }))
+    );
+
+  }
+
+
+
+  getAdvanceActionsList(
+    queryParams: APIQueryParamsType<{ name: string, innovationStatus: string[], innovationSection: string[] }>
+  ): Observable<getAdvanceActionsListEndpointOutDTO> {
+    const { filters, ...qParams } = queryParams;
+
+    const qp = {
+      ...qParams,
+      name: filters.name || undefined,
+      innovationStatus: filters.innovationStatus || undefined,
+      innovationSection: filters.innovationSection || undefined
+    };
+
+    const url = new UrlModel(this.API_URL).addPath('/accessors/:userId/actions/advance').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);
+    return this.http.get<getAdvanceActionsListEndpointInDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => ({
         count: response.count,
