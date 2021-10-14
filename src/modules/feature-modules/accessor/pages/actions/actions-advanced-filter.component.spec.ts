@@ -16,7 +16,9 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation
 import { ActionAdvancedFilterComponent } from './actions-advanced-filter.component';
 
 import { OrganisationsService } from '@shared-module/services/organisations.service';
-import { AccessorService } from '../../services/accessor.service';
+import { AccessorService, getAdvanceActionsListEndpointInDTO } from '../../services/accessor.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { response } from 'express';
 
 
 
@@ -25,8 +27,6 @@ describe('FeatureModules/Accessor/Actions/FilterActionComponent', () => {
   let authenticationStore: AuthenticationStore;
   let accessorService: AccessorService;
   let organisationsService: OrganisationsService;
-
-
   let component: ActionAdvancedFilterComponent;
   let fixture: ComponentFixture<ActionAdvancedFilterComponent>;
 
@@ -58,201 +58,162 @@ describe('FeatureModules/Accessor/Actions/FilterActionComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should run getActionsList() with error', () => {
 
-  // it('should have AccessorRole tabs', () => {
+    accessorService.getAdvanceActionsList = () => throwError(false);
 
-  //   authenticationStore.isAccessorRole = () => true;
+    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+    component = fixture.componentInstance;
 
-  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-  //   component = fixture.componentInstance;
+    component.getActionsList();
+    fixture.detectChanges();
+    expect(component.actionsList.getRecords()).toEqual([]);
 
-  //   fixture.detectChanges();
-  //   expect(component.datasets.supportStatuses.length).toBe(2);
+  });
 
-  // });
+  it('should run onTableOrder()', () => {
 
-  // it('should have QualifyingAccessorRole tabs', () => {
+    const dataMock = { count: 0, data: [] };
 
-  //   authenticationStore.isQualifyingAccessorRole = () => true;
+    accessorService.getAdvanceActionsList = () => of(dataMock as any);
 
-  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-  //   component = fixture.componentInstance;
+    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
 
-  //   fixture.detectChanges();
-  //   expect(component.datasets.supportStatuses.length).toBe(8);
+    component.onTableOrder('name');
+    expect(component.actionsList.orderBy).toEqual('name');
 
-  // });
+  });
 
-  // it('should have default values', () => {
+  it('should run onOpenCloseFilter() and do nothing with an invalid key', () => {
 
-  //   organisationsService.getAccessorsOrganisations = () => of([
-  //     { id: 'orgId01', name: 'Org name 01' },
-  //     { id: 'org_id', name: 'Org name 02' }
-  //   ]);
+    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+    component = fixture.componentInstance;
+    component.filters[0].showHideStatus = 'closed' as any;
 
-  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-  //   component = fixture.componentInstance;
+    component.onOpenCloseFilter('invalidKey' as any);
+    expect(component.filters[0].showHideStatus).toBe('closed');
 
-  //   fixture.detectChanges();
-  //   expect(component.datasets.engagingOrganisations).toEqual([{ value: 'orgId01', label: 'Org name 01' }]);
+  });
+  it('should run onOpenCloseFilter() and do nothing with an invalid status', () => {
 
-  // });
+    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+    component = fixture.componentInstance;
+    component.filters[0].showHideStatus = 'invalid status' as any;
 
-  // it('should NOT have default values', () => {
+    component.onOpenCloseFilter('innovationStatus');
+    expect(component.filters[0].showHideStatus).toBe('invalid status');
 
-  //   organisationsService.getAccessorsOrganisations = () => throwError('error');
+  });
 
-  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-  //   component = fixture.componentInstance;
 
-  //   fixture.detectChanges();
-  //   expect(component.datasets.engagingOrganisations).toEqual([]);
+  it('should run onOpenCloseFilter() and close the filter', () => {
 
-  // });
+    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+    component = fixture.componentInstance;
+    component.filters[0].showHideStatus = 'opened';
 
-  // it('should run getInnovationsList() with success', () => {
+    component.onOpenCloseFilter('innovationStatus');
+    expect(component.filters[0].showHideStatus).toBe('closed');
 
-  //   const responseMock = {
-  //     count: 100,
-  //     data: [{
-  //       id: 'id01',
-  //       name: 'Innovation Name',
-  //       mainCategory: '',
-  //       countryName: '',
-  //       submittedAt: '2020-01-01T00:00:00.000Z',
-  //       supportStatus: 'UNASSIGNED' as keyof typeof INNOVATION_SUPPORT_STATUS
-  //     }]
-  //   };
-  //   accessorService.getAdvancedInnovationsList = () => of(responseMock);
+  });
 
-  //   const expected = responseMock.data;
+  it('should run onOpenCloseFilter() and open the filter', () => {
 
-  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-  //   component = fixture.componentInstance;
+    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+    component = fixture.componentInstance;
+    component.filters[0].showHideStatus = 'closed';
 
-  //   component.getInnovationsList();
-  //   fixture.detectChanges();
-  //   expect(component.innovationsList.getRecords()).toEqual(expected);
+    component.onOpenCloseFilter('innovationStatus');
+    expect(component.filters[0].showHideStatus).toBe('opened');
 
-  // });
+  });
 
-  // it('should run getInnovationsList() with error', () => {
+  it('should run onTableOrder()', () => {
 
-  //   accessorService.getAdvancedInnovationsList = () => throwError(false);
+    accessorService.getActionsList = () => of({ count: 0, data: [] });
 
-  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-  //   component = fixture.componentInstance;
+    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+    component = fixture.componentInstance;
 
-  //   component.getInnovationsList();
-  //   fixture.detectChanges();
-  //   expect(component.innovationsList.getRecords()).toEqual([]);
+    fixture.detectChanges();
+    component.onTableOrder('name');
+    expect(component.actionsList.orderBy).toEqual('name');
 
-  // });
+  });
 
-  // it('should run onFormChange()', fakeAsync(() => {
+  it('should run onPageChange()', () => {
 
-  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-  //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
+    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
 
-  //   component.form.get('search')?.setValue('A search text');
-  //   (component.form.get('mainCategories') as FormArray).push(new FormControl('MEDICAL_DEVICE'));
+    component.onPageChange({ pageNumber: 2 });
+    expect(component.actionsList.page).toBe(2);
 
-  //   tick(500); // Needed because of the debounce on the form.
+  });
 
-  //   expect(component.innovationsList.filters).toEqual({
-  //     name: 'A search text',
-  //     mainCategories: ['MEDICAL_DEVICE'],
-  //     locations: [],
-  //     engagingOrganisations: [],
-  //     supportStatuses: [],
-  //     assignedToMe: false,
-  //     suggestedOnly: true,
-  //   });
+  it('should run onFormChange()', fakeAsync(() => {
 
-  // }));
+    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
 
-  // it('should run onTableOrder()', () => {
+    component.form.get('search')?.setValue('A search text');
+    (component.form.get('innovationStatus') as FormArray).push(new FormControl('IN_REVIEW'));
 
-  //   const dataMock = { count: 0, data: [] };
+    tick(500); // Needed because of the debounce on the form.
 
-  //   accessorService.getAdvancedInnovationsList = () => of(dataMock as any);
+    expect(component.actionsList.filters).toEqual({
+      name: 'A search text',
+      innovationStatus: ['IN_REVIEW'],
+      innovationSection: []
+    });
 
-  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-  //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
+  }));
 
-  //   component.onTableOrder('name');
-  //   expect(component.innovationsList.orderBy).toEqual('name');
+  it('should run onFormChange()', fakeAsync(() => {
 
-  // });
+    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
 
-  // it('should run onOpenCloseFilter() and do nothing with an invalid key', () => {
+    component.form.get('search')?.setValue('A search text');
+    (component.form.get('innovationSection') as FormArray).push(new FormControl('VALUE_PROPOSITION'));
 
-  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-  //   component = fixture.componentInstance;
-  //   component.filters[0].showHideStatus = 'closed' as any;
+    tick(500); // Needed because of the debounce on the form.
 
-  //   component.onOpenCloseFilter('invalidKey' as any);
-  //   expect(component.filters[0].showHideStatus).toBe('closed');
+    expect(component.actionsList.filters).toEqual({
+      name: 'A search text',
+      innovationStatus: [],
+      innovationSection: ['VALUE_PROPOSITION']
+    });
 
-  // });
+  }));
 
-  // it('should run onOpenCloseFilter() and do nothing with an invalid status', () => {
+  it('should run onRemoveFilter() with a invalid value', () => {
 
-  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-  //   component = fixture.componentInstance;
-  //   component.filters[0].showHideStatus = 'invalid status' as any;
+    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+    component = fixture.componentInstance;
+    (component.form.get('innovationSection') as FormArray).push(new FormControl('VALUE_PROPOSITION'));
 
-  //   component.onOpenCloseFilter('mainCategories');
-  //   expect(component.filters[0].showHideStatus).toBe('invalid status');
+    fixture.detectChanges();
+    component.onRemoveFilter('innovationSection', 'INVALID VALUE');
+    expect((component.form.get('innovationSection') as FormArray).length).toBe(1);
 
-  // });
+  });
 
-  // it('should run onOpenCloseFilter() and close the filter', () => {
+  it('should run onRemoveFilter()', () => {
 
-  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-  //   component = fixture.componentInstance;
-  //   component.filters[0].showHideStatus = 'opened';
+    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+    component = fixture.componentInstance;
+    (component.form.get('innovationSection') as FormArray).push(new FormControl('VALUE_PROPOSITION'));
 
-  //   component.onOpenCloseFilter('mainCategories');
-  //   expect(component.filters[0].showHideStatus).toBe('closed');
+    fixture.detectChanges();
+    component.onRemoveFilter('innovationSection', 'VALUE_PROPOSITION');
+    expect((component.form.get('innovationSection') as FormArray).length).toBe(0);
 
-  // });
-
-  // it('should run onOpenCloseFilter() and open the filter', () => {
-
-  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-  //   component = fixture.componentInstance;
-  //   component.filters[0].showHideStatus = 'closed';
-
-  //   component.onOpenCloseFilter('mainCategories');
-  //   expect(component.filters[0].showHideStatus).toBe('opened');
-
-  // });
-
-  // it('should run onRemoveFilter() with a invalid value', () => {
-
-  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-  //   component = fixture.componentInstance;
-  //   (component.form.get('mainCategories') as FormArray).push(new FormControl('MEDICAL_DEVICE'));
-
-  //   fixture.detectChanges();
-  //   component.onRemoveFilter('mainCategories', 'INVALID VALUE');
-  //   expect((component.form.get('mainCategories') as FormArray).length).toBe(1);
-
-  // });
-
-  // it('should run onRemoveFilter()', () => {
-
-  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-  //   component = fixture.componentInstance;
-  //   (component.form.get('mainCategories') as FormArray).push(new FormControl('MEDICAL_DEVICE'));
-
-  //   fixture.detectChanges();
-  //   component.onRemoveFilter('mainCategories', 'MEDICAL_DEVICE');
-  //   expect((component.form.get('mainCategories') as FormArray).length).toBe(0);
-
-  // });
+  });
 
 });
