@@ -3,16 +3,16 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+pool:
+  vmImage: ubuntu-latest
+
 trigger:
 - develop
 - master
 
-name: InnovationServiceTransactionalFrontend_$(SourceBranchName)_1.0.0_$(Date:yyyyMMdd)_$(Rev:.r)
-
 pr: none
 
-pool:
-  vmImage: ubuntu-latest
+name: InnovationServiceTransactionalFrontend_$(SourceBranchName)_1.0.0_$(Date:yyyyMMdd)_$(Rev:.r)
 
 variables:
   ARTIFACT_NAME: transactional-app
