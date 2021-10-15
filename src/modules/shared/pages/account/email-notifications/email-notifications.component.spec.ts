@@ -135,8 +135,8 @@ describe('PageAccountManageNotificationsComponent', () => {
     fixture = TestBed.createComponent(PageAccountEmailNotificationsComponent);
     component = fixture.componentInstance;
     component.notificationTypeList = [
-      { id: 'Notification01', title: 'Notification type', description: '', isSubscribed: true },
-      { id: 'Notification01', title: 'Notification type', description: '', isSubscribed: true }
+      { id: 'Notification01', title: 'Notification type', isSubscribed: true },
+      { id: 'Notification01', title: 'Notification type', isSubscribed: true }
     ];
 
     component.unsubscribeAllNotifications();
