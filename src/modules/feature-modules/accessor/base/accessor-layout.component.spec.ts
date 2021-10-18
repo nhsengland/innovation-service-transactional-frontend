@@ -117,7 +117,7 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
 
     const expected = [
       { title: 'Your details', link: `/accessor/account/manage-details` },
-      { title: 'Email notifications', link: `/accessor/account/email-notifications` }
+      // { title: 'Email notifications', link: `/accessor/account/email-notifications` }
     ];
 
     fixture = TestBed.createComponent(AccessorLayoutComponent);
