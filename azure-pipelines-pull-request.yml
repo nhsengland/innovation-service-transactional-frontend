@@ -3,17 +3,16 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+pool:
+  vmImage: ubuntu-latest
+
 trigger: none
 
 pr:
 - develop
 - master
 
-pool:
-  vmImage: ubuntu-latest
-
 steps:
-
 - task: NodeTool@0
   inputs:
     versionSpec: '12.x'
@@ -29,17 +28,12 @@ steps:
     npm run lint
   displayName: 'Run Lint'
 
-- script: |
-    npm run lint
-  displayName: 'Run Lint'
 
 - task: Npm@1
   inputs:
     command: 'custom'
     customCommand: 'test -- --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura'
-  continueOnError: true # Test failures should be published before failing the build
   displayName: 'Run Tests'
-
 
 - task: PublishTestResults@2
   displayName: 'Publish Unit Test Results'

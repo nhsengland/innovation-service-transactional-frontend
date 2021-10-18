@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { AlertType } from '@app/base/models';
+import { RoutingHelper } from '@modules/core';
+import { INNOVATION_SUPPORT_STATUS, InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 import { categoriesItems } from '@stores-module/innovation/sections/catalogs.config';
 
-import { AccessorService, getInnovationInfoEndpointDTO } from '../../../services/accessor.service';
+import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
+
+import { AccessorService } from '../../../services/accessor.service';
 
 
 @Component({
@@ -15,8 +18,11 @@ import { AccessorService, getInnovationInfoEndpointDTO } from '../../../services
 })
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
 
+  alert: AlertType = { type: null };
+
   innovationId: string;
-  innovation: getInnovationInfoEndpointDTO | undefined;
+  innovation: InnovationDataResolverType;
+
   isQualifyingAccessorRole = false;
 
   innovationSupport: {
@@ -38,7 +44,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.setPageTitle('Overview');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
+
   }
 
 
@@ -46,8 +54,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
     this.accessorService.getInnovationInfo(this.innovationId).subscribe(
       response => {
-
-        this.innovation = response;
 
         this.innovationSupport = {
           organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
@@ -62,9 +68,16 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           { label: 'Categories', value: response.summary.categories.map(v => v === 'OTHER' ? response.summary.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
         ];
 
+        this.setPageStatus('READY');
+
       },
-      error => {
-        this.logger.error(error);
+      () => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch innovation record information',
+          message: 'Please try again or contact us for further help'
+        };
       }
     );
 

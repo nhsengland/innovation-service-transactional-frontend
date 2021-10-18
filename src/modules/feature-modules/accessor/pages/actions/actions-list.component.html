@@ -1,23 +1,25 @@
 <section class="bg-color-white">
   <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
-
     <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
-
+    <!-- <p>
+      If you are looking for specific innovations, use the <a routerLink="advanced-filter">advanced search Actions
+        list</a>.
+    </p> -->
     <div class="app-tabs">
       <ul class="app-tabs__list" role="tablist" aria-label="Tabs">
         <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
-          <a id="tab-{{ item.key }}" [routerLink]="item.link" [queryParams]="item.queryParams" role="tab" attr.aria-controls="content-{{ item.key }}"
+          <a id="tab-{{ item.key }}" [routerLink]="item.link" [queryParams]="item.queryParams" role="tab"
+            attr.aria-controls="content-{{ item.key }}"
             attr.aria-selected="{{ currentTab.key === item.key ? 'true' : 'false' }}"> {{ item.title }} </a>
         </li>
       </ul>
     </div>
 
     <div class="nhsuk-grid-row">
-      <div id="content-{{ currentTab.key }}" role="tabpanel" attr.aria-labelledby="tab-{{ currentTab.key }}" class="nhsuk-grid-column-full">
+      <div id="content-{{ currentTab.key }}" role="tabpanel" attr.aria-labelledby="tab-{{ currentTab.key }}"
+        class="nhsuk-grid-column-full">
 
-        <ng-container *ngIf="pageStatus === 'LOADING'">
-          <p> {{ 'messages.informations.fetching_information' | translate }} </p>
-        </ng-container>
+        <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
         <ng-container *ngIf="pageStatus === 'READY' && actionsList.getTotalRowsNumber() === 0">
           <p> There are no actions </p>
@@ -26,8 +28,10 @@
         <ng-container *ngIf="pageStatus === 'READY' && actionsList.getTotalRowsNumber() > 0">
 
           <p class="d-flex align-items-center nhsuk-u-margin-bottom-2">
-            <span class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0 mr-auto"> {{ currentTab.description }} </span>
-            <span> <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0" arial-label="View status keys information"> Status key </a> </span>
+            <span class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0 mr-auto"> {{
+              currentTab.description }} </span>
+            <span> <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0"
+                arial-label="View status keys information"> Status key </a> </span>
           </p>
           <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
@@ -35,9 +39,11 @@
             <caption class="nhsuk-table__caption"> {{ currentTab.contentTitle }} </caption>
             <thead class="nhsuk-table__head">
               <tr class="">
-                <th *ngFor="let item of actionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                <th *ngFor="let item of actionsList.getHeaderColumns(); let i = index" scope="col"
+                  [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                   <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-                  <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
+                  <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label
+                    }}</button>
                 </th>
               </tr>
             </thead>
@@ -47,18 +53,23 @@
                   <div class="side-menu-flex">
                     <div>
                       <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('section') }}</span>
-                      <a routerLink="/accessor/innovations/{{ item.innovation.id }}/action-tracker/{{ item.id }}" attr.aria-label="View action named {{ item.name }} for innovation {{ item.innovation.name }}">
+                      <a routerLink="/accessor/innovations/{{ item.innovation.id }}/action-tracker/{{ item.id }}"
+                        attr.aria-label="View action named {{ item.name }} for innovation {{ item.innovation.name }}">
                         {{ item.name }}
                       </a>
                     </div>
                     <div>
-                      <notification-tag *ngIf="item.notifications && item.notifications.count > 0" type="circle"></notification-tag>
+                      <notification-tag *ngIf="item.notifications && item.notifications.count > 0" type="circle">
+                      </notification-tag>
                     </div>
                   </div>
                 </td>
                 <td class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('innovationName') }}</span>
-                  <a routerLink="/accessor/innovations/{{ item.innovation.id }}" attr.aria-label="View innovation {{ item.innovation.name }} details"> {{ item.innovation.name }} </a>
+                  <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('innovationName')
+                    }}</span>
+                  <a routerLink="/accessor/innovations/{{ item.innovation.id }}"
+                    attr.aria-label="View innovation {{ item.innovation.name }} details"> {{ item.innovation.name }}
+                  </a>
                 </td>
                 <td class="nhsuk-table__cell">
                   <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('createdAt') }}</span>
@@ -66,11 +77,15 @@
                 </td>
                 <td class="nhsuk-table__cell text-align-right">
                   <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('status') }}</span>
-                  <strong class="nhsuk-tag" [ngClass]="innovationSectionActionStatus[item.status]?.cssClass || ''">{{ innovationSectionActionStatus[item.status]?.label || '' }}</strong>
+                  <strong class="nhsuk-tag" [ngClass]="innovationSectionActionStatus[item.status]?.cssClass || ''">{{
+                    innovationSectionActionStatus[item.status]?.label || '' }}</strong>
                 </td>
               </tr>
             </tbody>
           </table>
+
+          <pagination [currentPage]="actionsList.page" [pageSize]="actionsList.pageSize"
+            [totalRows]="actionsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
 
         </ng-container>
 

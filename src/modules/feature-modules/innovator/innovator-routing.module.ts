@@ -34,11 +34,15 @@ import { PageInnovationSupportStatusListComponent } from '@shared-module/pages/i
 import { InnovationSectionEvidenceViewComponent } from '@shared-module/pages/innovation/evidence-view.component';
 import { InnovationSectionViewComponent } from '@shared-module/pages/innovation/section-view.component';
 
+import { PageAccountManageAccountInfoComponent} from './pages/account/manage-account/manage-account-info.component';
+import { PageAccountManageUserAccountComponent } from './pages/account/manage-account/manage-account-delete.component';
+
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
+import { PageAccountEmailNotificationsComponent } from '@modules/shared/pages/account/email-notifications/email-notifications.component';
 
 
 const routes: Routes = [
@@ -58,10 +62,8 @@ const routes: Routes = [
 
       {
         path: 'first-time-signin',
-        children: [
-          { path: '', pathMatch: 'full', redirectTo: '1' },
-          { path: ':id', pathMatch: 'full', component: FirstTimeSigninComponent }
-        ]
+        pathMatch: 'full',
+        component: FirstTimeSigninComponent
       },
 
       {
@@ -94,6 +96,10 @@ const routes: Routes = [
             ]
           },
           {
+            path: 'email-notifications', pathMatch: 'full', component: PageAccountEmailNotificationsComponent,
+            data: { layoutOptions: { type: 'userAccountMenu' } }
+          },
+          {
             path: 'manage-innovations',
             children: [
               {
@@ -109,6 +115,18 @@ const routes: Routes = [
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'account/manage-innovations', label: 'Manage innovations' } } }
               }
             ]
+          },
+          {
+            path: 'manage-account',
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAccountManageAccountInfoComponent,
+                data: { layoutOptions: { type: 'userAccountMenu' } }
+              },
+              {
+                path: 'delete', pathMatch: 'full', component: PageAccountManageUserAccountComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'account/manage-account', label: 'Manage account' } } }
+              }]
           }
         ]
       },

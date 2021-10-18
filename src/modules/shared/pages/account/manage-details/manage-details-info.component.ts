@@ -56,12 +56,13 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
 
       this.summaryList = [
         { label: 'Name', value: user.displayName, editStepNumber: 1 },
-        { label: 'Email address', value: user.email }
+        { label: 'Email address', value: user.email },
+        { label: 'Phone number', value: user.phone, editStepNumber: 2 }
       ];
 
       if (!user.organisations[0].isShadow) {
-        this.summaryList.push({ label: 'Company', value: user.organisations[0].name, editStepNumber: 2 });
-        this.summaryList.push({ label: 'Company size', value: user.organisations[0].size, editStepNumber: 3 });
+        this.summaryList.push({ label: 'Company', value: user.organisations[0].name, editStepNumber: 3 });
+        this.summaryList.push({ label: 'Company size', value: user.organisations[0].size, editStepNumber: 4 });
       }
 
     } else if (this.stores.authentication.isAccessorType()) {

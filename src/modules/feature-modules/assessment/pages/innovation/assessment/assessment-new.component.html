@@ -5,23 +5,29 @@
       <p> {{ alert.message }} </p>
     </theme-alert>
 
-    <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Starting needs assessment for</p>
-    <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ innovationName }}</h1>
+    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-    <div class="nhsuk-inset-text">
-      <span class="nhsuk-u-visually-hidden">Information:</span>
-      <p>
-        You will be assigned as the needs assessor for this innovation.<br />
-        Other members of the needs assessment team can still contribute if needed.
-      </p>
-    </div>
+    <ng-container *ngIf="pageStatus === 'READY'">
 
-    <theme-form-engine formId="sectionForm" [parameters]="formParameters" [values]="formAnswers"></theme-form-engine>
-    <button type="submit" form="sectionForm" class="nhsuk-button nhsuk-u-margin-top-5" (click)="onSubmit()">Start needs assessment and post comment</button>
+      <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Starting needs assessment for</p>
+      <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ innovationName }}</h1>
 
-    <div class="nhsuk-u-padding-bottom-5">
-      <a routerLink="/assessment/innovations/{{ innovationId }}"> Cancel </a>
-    </div>
+      <div class="nhsuk-inset-text">
+        <span class="nhsuk-u-visually-hidden">Information:</span>
+        <p>
+          You will be assigned as the needs assessor for this innovation.<br />
+          Other members of the needs assessment team can still contribute if needed.
+        </p>
+      </div>
+
+      <theme-form-engine formId="sectionForm" [parameters]="formParameters" [values]="formAnswers"></theme-form-engine>
+      <button type="submit" form="sectionForm" class="nhsuk-button nhsuk-u-margin-top-5" (click)="onSubmit()">Start needs assessment and post comment</button>
+
+      <div class="nhsuk-u-padding-bottom-5">
+        <a routerLink="/assessment/innovations/{{ innovationId }}"> Cancel </a>
+      </div>
+
+    </ng-container>
 
   </div>
 </div>

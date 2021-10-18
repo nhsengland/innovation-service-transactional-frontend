@@ -36,14 +36,14 @@ export const SECTION_3_1: InnovationSectionConfigType['sections'][0] = {
         }]
       }),
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
+    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   })
 };
 
 
 
-function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number): void {
+function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(1);
 
@@ -58,7 +58,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'marketResearch',
         dataType: 'textarea',
         label: stepsLabels.l2,
-        validations: { isRequired: [true, 'A description of the market research is required'] }
+        validations: { isRequired: [true, 'A description of the market research is required'] },
+        lengthLimit: 'medium'
       }]
     })
   );

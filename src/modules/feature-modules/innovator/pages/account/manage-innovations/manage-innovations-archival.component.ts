@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { FormEngineParameterModel, CustomValidators } from '@app/base/forms';
 import { AlertType } from '@app/base/models';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { concatMap } from 'rxjs/operators';
 
 @Component({
   selector: 'shared-pages-account-manage-innovations-archival',
@@ -13,11 +13,11 @@ import { concatMap } from 'rxjs/operators';
 })
 export class PageAccountManageInnovationsArchivalComponent extends CoreComponent implements OnInit {
 
-  stepNumber: 1 | 2 | 3 = 1;
   alert: AlertType = { type: null };
-  user: {
-    email: string
-  };
+
+  stepNumber: 1 | 2 | 3 = 1;
+
+  user: { email: string };
 
   form: FormGroup;
 
@@ -40,12 +40,13 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
     this.form = new FormGroup({
       innovation: new FormControl('', CustomValidators.required('Please, choose an innovation')),
       reason: new FormControl(''),
-      email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email)]),
+      email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')]),
       confirmation: new FormControl('', [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('archive my innovation')]),
     });
   }
 
   ngOnInit(): void {
+
     this.innovatorService.getInnovationTransfers().subscribe(
       response => {
 
@@ -55,6 +56,7 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
           .map(item => ({ value: item.id, label: item.name }));
 
         this.setPageStatus('READY');
+
       },
       () => {
         this.setPageStatus('ERROR');
@@ -65,6 +67,7 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
         };
       }
     );
+
   }
 
   onSubmitStep(): void {
@@ -82,13 +85,13 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
       return;
     }
 
-    this.innovatorService.archiveInnovation(this.form.get('innovation')?.value, this.form.get('reason')?.value).pipe(
+    this.innovatorService.archiveInnovation(this.form.get('innovation')!.value, this.form.get('reason')!.value).pipe(
       concatMap(() => {
         return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
       })
     ).subscribe(
       () => {
-        this.redirectTo('/innovator/account/manage-innovations', { alert: 'archivalSuccess' });
+        this.redirectTo('/innovator/account/manage-innovations', { alert: 'archivalSuccess', innovation: this.innovationName });
       },
       () => {
         this.alert = {
@@ -102,13 +105,15 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
   }
 
   private validateForm(step: number): boolean {
+
     switch (step) {
       case 1:
-        if (!this.form.get('innovation')?.valid) {
-          this.form.get('innovation')?.markAsTouched();
+        if (!this.form.get('innovation')!.valid) {
+          this.form.get('innovation')!.markAsTouched();
           return false;
         }
-        this.innovationName = this.formInnovationsItems?.filter(item => this.form.get('innovation')?.value === item.value)[0].label || '';
+        /* istanbul ignore next */
+        this.innovationName = this.formInnovationsItems?.filter(item => this.form.get('innovation')!.value === item.value)[0].label || '';
         break;
       case 2:
         break;
@@ -129,6 +134,7 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
         this.setPageTitle('Archive \'' + this.innovationName + '\'');
         break;
       default:
+        this.setPageTitle('');
         break;
     }
   }

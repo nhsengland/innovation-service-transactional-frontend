@@ -1,33 +1,36 @@
 <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
 
+  <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+    <p> {{ alert.message }} </p>
+  </theme-alert>
+  
   <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
 
-  <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
-    <div class="nhsuk-grid-column-one-half">
-      <p class="nhsuk-body-l nhsuk-u-margin-bottom-0">{{ user.displayName }}</p>
-      <p class="nhsuk-body-s">{{ user.organisation }}</p>
-    </div>
-  </div>
+  <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-  <ul class="nhsuk-grid-row nhsuk-card-group">
-    <li *ngFor="let item of cardsList" class="nhsuk-grid-column-one-third nhsuk-card-group__item">
-      <div class="nhsuk-card nhsuk-card--clickable">
-        <div class="nhsuk-card__content">
-          <h2 class="nhsuk-card__heading nhsuk-heading-m">
-            <div class="side-menu-flex">
-              <div>
-                <a class="nhsuk-card__link" [routerLink]="item.link"> {{ item.title }} </a>
-              </div>
-              <div>
-                <notification-tag *ngIf="notifications && notifications.INNOVATION > 0" type="circle"></notification-tag>
-              </div>
-            </div>
+  <ng-container *ngIf="pageStatus === 'READY'">
 
-          </h2>
-          <p class="nhsuk-card__description">{{ item.description }}</p>
-        </div>
+    <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
+      <div class="nhsuk-grid-column-one-half">
+        <p class="nhsuk-body-l nhsuk-u-margin-bottom-0">{{ user.displayName }}</p>
+        <p class="nhsuk-body-s">{{ user.organisation }}</p>
       </div>
-    </li>
-  </ul>
+    </div>
+
+    <ul class="nhsuk-grid-row nhsuk-card-group">
+      <li *ngFor="let item of cardsList" class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+        <div class="nhsuk-card nhsuk-card--clickable">
+          <div class="nhsuk-card__content">
+            <h2 class="nhsuk-card__heading nhsuk-heading-m d-flex">
+              <a class="nhsuk-card__link nhsuk-u-padding-right-2" [routerLink]="item.link"> {{ item.title }} </a>
+              <notification-tag *ngIf="notifications && notifications.INNOVATION > 0" type="circle"></notification-tag>
+            </h2>
+            <p class="nhsuk-card__description">{{ item.description }}</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+  </ng-container>
 
 </div>

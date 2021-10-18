@@ -9,6 +9,7 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
 import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
 
+
 @Component({
   selector: 'app-innovator-pages-innovations-overview',
   templateUrl: './overview.component.html'
@@ -16,6 +17,7 @@ import { NotificationContextType, NotificationService } from '@modules/shared/se
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
 
   alert: AlertType = { type: null };
+
   innovationId: string;
   innovationStatus: keyof typeof INNOVATION_STATUS = '';
   innovationSections: SectionsSummaryModel[] = [];
@@ -37,6 +39,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     notStarted: number;
   } = { progressBar: [], submitted: 0, draft: 0, notStarted: 0 };
 
+
   isInAssessmentStatus(): boolean {
     return this.stores.innovation.isAssessmentStatus(this.innovationStatus);
   }
@@ -53,6 +56,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     return this.allSectionsSubmitted() && this.isSubmittedForAssessment();
   }
 
+  showNeedsAssessmentCompleteCard(): boolean {
+    return !this.isInAssessmentStatus() && this.innovationStatus !== 'CREATED';
+  }
+
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService,
@@ -66,10 +74,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.needsAssessmentCompleted = false;
   }
 
-
-  showNeedsAssessmentCompleteCard(): boolean {
-    return !this.isInAssessmentStatus() && this.innovationStatus !== 'CREATED';
-  }
 
   ngOnInit(): void {
 
@@ -85,8 +89,23 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.needsAssessmentCompleted = !this.isInAssessmentStatus();
       this.assessmentId = innovationInfo.assessment?.id;
 
-      this.parseActionSummary(innovationInfo);
-      this.parseSectionSummary(sectionSummary);
+      this.actionSummary = {
+        requested: innovationInfo.actions.requestedCount,
+        review: innovationInfo.actions.inReviewCount
+      };
+
+      this.innovationStatus = sectionSummary.innovation.status;
+      this.innovationSections = sectionSummary.sections;
+
+
+      this.sections.progressBar = this.innovationSections.reduce((acc: boolean[], item) => {
+        return [...acc, ...item.sections.map(s => s.isCompleted)];
+      }, []).sort().reverse();
+
+      this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
+      this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
+      this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
+
 
       this.supportStatus = innovationSupports.find(s => s.status.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase())?.status || this.innovationSupportStatus.WAITING.label;
 
@@ -109,26 +128,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         };
       }
     );
-  }
-
-  private parseActionSummary(innovationInfo: any): void {
-    this.actionSummary = {
-      requested: innovationInfo?.actions?.requestedCount || 0,
-      review: innovationInfo?.actions?.inReviewCount || 0
-    };
-  }
-
-  private parseSectionSummary(sectionSummary: any): void {
-    this.innovationStatus = sectionSummary.innovation.status;
-    this.innovationSections = sectionSummary.sections;
-
-    this.sections.progressBar = this.innovationSections.reduce((acc: boolean[], item) => {
-      return [...acc, ...item.sections.map(s => s.isCompleted)];
-    }, []).sort().reverse();
-
-    this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
-    this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
-    this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
   }
 
 }

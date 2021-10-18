@@ -53,7 +53,7 @@ export const SECTION_6_1: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
+    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
@@ -62,7 +62,7 @@ export const SECTION_6_1: InnovationSectionConfigType['sections'][0] = {
 
 
 
-function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number): void {
+function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(1);
 
@@ -107,7 +107,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           dataType: 'textarea',
           label: stepsLabels.l2,
           description: 'For example, this could be expressed as the annual cost to an organisation in relation to the number of patients or people who would benefit from it.',
-          validations: { isRequired: [true, 'Description is required'] }
+          validations: { isRequired: [true, 'Description is required'] },
+          lengthLimit: 'medium'
         }]
       }),
       new FormEngineModel({
@@ -116,7 +117,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           dataType: 'textarea',
           label: stepsLabels.l3,
           description: 'This question forms part of the data required for NICE guidance.',
-          validations: { isRequired: [true, 'Sell expectations description is required'] }
+          validations: { isRequired: [true, 'Sell expectations description is required'] },
+          lengthLimit: 'medium'
         }]
       }),
       new FormEngineModel({
@@ -125,7 +127,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           dataType: 'textarea',
           label: stepsLabels.l4,
           description: 'This question forms part of the data required for NICE guidance.',
-          validations: { isRequired: [true, 'Usage expectations description is required'] }
+          validations: { isRequired: [true, 'Usage expectations description is required'] },
+          lengthLimit: 'medium'
         }]
       })
     );
@@ -141,7 +144,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
             dataType: 'textarea',
             label: `What's the cost of your innovation for ${item.name}?`,
             description: 'For example, this could be expressed as the annual cost to an organisation in relation to the number of patients or people who would benefit from it.',
-            validations: { isRequired: [true, 'Cost description is required'] }
+            validations: { isRequired: [true, 'Cost description is required'] },
+            lengthLimit: 'medium'
           }]
         }),
         new FormEngineModel({
@@ -170,7 +174,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
               dataType: 'textarea',
               label: `How many units of your innovation would you expect to sell per year in the UK for ${item.name}?`,
               description: 'This question forms part of the data required for NICE guidance.',
-              validations: { isRequired: [true, 'Sell expectations description is required'] }
+              validations: { isRequired: [true, 'Sell expectations description is required'] },
+              lengthLimit: 'medium'
             }]
           }),
           new FormEngineModel({
@@ -179,7 +184,8 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
               dataType: 'textarea',
               label: `Approximately how long is each unit of your innovation intended to be in use for ${item.name}?`,
               description: 'This question forms part of the data required for NICE guidance.',
-              validations: { isRequired: [true, 'Usage expectations description is required'] }
+              validations: { isRequired: [true, 'Usage expectations description is required'] },
+              lengthLimit: 'medium'
             }]
           })
         );

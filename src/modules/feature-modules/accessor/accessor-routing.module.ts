@@ -23,6 +23,8 @@ import { InnovationSupportInfoComponent } from './pages/innovation/support/suppo
 import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details/manage-details-edit.component';
 
+import { PageAccountEmailNotificationsComponent } from '@modules/shared/pages/account/email-notifications/email-notifications.component';
+
 import { PageInnovationCommentsListComponent } from '@shared-module/pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from '@shared-module/pages/innovation/comments/comments-new.component';
 import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/innovation-record.component';
@@ -33,7 +35,7 @@ import { InnovationSectionViewComponent } from '@shared-module/pages/innovation/
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
-
+import { ActionAdvancedFilterComponent } from './pages/actions/actions-advanced-filter.component';
 
 const routes: Routes = [
 
@@ -64,7 +66,7 @@ const routes: Routes = [
         path: 'actions/statuses', pathMatch: 'full', component: PageActionStatusListComponent,
         data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/actions', label: 'Go back' } } }
       },
-
+      { path: 'actions/advanced-filter', pathMatch: 'full', component: ActionAdvancedFilterComponent },
       {
         path: 'account',
         children: [
@@ -79,6 +81,10 @@ const routes: Routes = [
               { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
               { path: 'edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent }
             ]
+          },
+          {
+            path: 'email-notifications', pathMatch: 'full', component: PageAccountEmailNotificationsComponent,
+            data: { layoutOptions: { type: 'userAccountMenu' } }
           }
         ]
       },
@@ -143,6 +149,7 @@ const routes: Routes = [
               },
               {
                 path: 'support', pathMatch: 'full', component: InnovationSupportInfoComponent,
+                resolve: { innovationData: InnovationDataResolver }, // Needed to repeat this resolver as support can be updated from this routes.
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } }
               },
               {

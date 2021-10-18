@@ -70,8 +70,8 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
         this.subscriptions.push(
           this.activatedRoute.params.subscribe(params => {
 
-            if (!this.wizard.isValidStepNumber(params.stepId) && params.stepId !== 'summary') {
-              this.redirectTo('not-found');
+            if (!this.wizard.isValidStep(params.stepId)) {
+              this.redirectTo('/not-found');
               return;
             }
 
@@ -81,6 +81,7 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
               return;
             }
 
+            /* istanbul ignore next */
             this.setPageTitle(this.wizard.currentStep().label || this.wizard.currentStep().parameters[0].label || '');
             this.wizard.gotoStep(Number(params.stepId));
 
@@ -143,13 +144,13 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
       case 'previous':
         if (this.isSummaryStep()) { url += `/${this.wizard.steps.length}`; }
         else if (this.wizard.isFirstStep()) { url += `/1`; }
-        else { url += `/${this.wizard.currentStepNumber - 1}`; }
+        else { url += `/${Number(this.wizard.currentStepId) - 1}`; }
         break;
 
       case 'next':
         if (this.isSummaryStep()) { url += ``; }
         else if (this.wizard.isLastStep()) { url += `/summary`; }
-        else { url += `/${this.wizard.currentStepNumber + 1}`; }
+        else { url += `/${Number(this.wizard.currentStepId) + 1}`; }
         break;
 
       default: // Should NOT happen!

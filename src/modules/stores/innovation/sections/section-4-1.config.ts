@@ -56,7 +56,7 @@ export const SECTION_4_1: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number) => runtimeRules(steps, currentValues, currentStep)],
+    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
@@ -65,7 +65,7 @@ export const SECTION_4_1: InnovationSectionConfigType['sections'][0] = {
 
 
 
-function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number): void {
+function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(1);
 
@@ -79,7 +79,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
     return;
   }
 
-  if (currentStep > 2) { // Updates standards.hasMet value.
+  if (Number(currentStep) > 2) { // Updates standards.hasMet value.
     Object.keys(currentValues).filter(key => key.startsWith('standardHasMet_')).forEach((key) => {
       currentValues.standards[Number(key.split('_')[1])].hasMet = currentValues[key] as any;
     });

@@ -32,7 +32,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           this.state.isSignIn = true;
 
           return forkJoin([
-            this.authenticationService.verifyInnovator(user.id),
+            this.authenticationService.verifyInnovator(),
             this.authenticationService.getInnovations(user.id)
           ]).pipe(
             map(([innovatorInfo, innovations]) => {
@@ -85,7 +85,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   getUserInfo(): Required<AuthenticationModel>['user'] {
-    return this.state.user || { id: '', email: '', displayName: '', type: '', organisations: [], innovations: [] };
+    return this.state.user || { id: '', email: '', displayName: '', type: '', organisations: [], innovations: [], passwordResetOn: '', phone: '' };
   }
 
   saveUserInfo$(body: MappedObject): Observable<{ id: string }> {

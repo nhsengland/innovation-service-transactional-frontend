@@ -25,12 +25,12 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
     organisations: new FormArray([]),
   });
 
-  organisationShareArrayName = 'organisations';
   initialState: {
     organisations: { id: string, status: string }[]
   };
 
-  showWarning: boolean;
+  showDataSharingValidationWarning = false;
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -48,7 +48,7 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
     };
 
     this.organisationInfoUrl = `${this.stores.environment.BASE_URL}/about-the-service/who-we-are`;
-    this.showWarning = false;
+
   }
 
   ngOnInit(): void {
@@ -62,10 +62,12 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
       this.initialState.organisations = innovationShares;
       innovationShares.forEach((organisation) => {
-        (this.form.get('organisations') as FormArray).push(
-          new FormControl(organisation.id)
-        );
+        (this.form.get('organisations') as FormArray).push(new FormControl(organisation.id));
       });
+
+      this.subscriptions.push(
+        (this.form.get('organisations') as FormArray).valueChanges.subscribe(() => this.dataSharingValidation())
+      );
 
       this.setPageStatus('READY');
 
@@ -93,14 +95,14 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
   }
 
-  dataSharingValidation(event: { checked: boolean, item: string }): void {
+  dataSharingValidation(): void {
 
-    this.showWarning = false;
+    this.showDataSharingValidationWarning = false;
 
     this.initialState.organisations.forEach((o) => {
-      const index = (this.form.get('organisations')?.value as string[]).findIndex((item) => item === o.id);
+      const index = (this.form.get('organisations')!.value as string[]).findIndex(item => item === o.id);
       if (index === -1) {
-        this.showWarning = true;
+        this.showDataSharingValidationWarning = true;
       }
     });
 

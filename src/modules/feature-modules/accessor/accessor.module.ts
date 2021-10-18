@@ -22,7 +22,7 @@ import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './page
 import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './pages/innovation/support/organisations-support-status-suggest.component';
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
-
+import { ActionAdvancedFilterComponent } from './pages/actions/actions-advanced-filter.component';
 // Services.
 import { AccessorService } from './services/accessor.service';
 
@@ -56,6 +56,7 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovationSupportOrganisationsSupportStatusSuggestComponent,
     InnovationSupportUpdateComponent,
     InnovationSupportInfoComponent,
+    ActionAdvancedFilterComponent,
   ],
   providers: [
     // Services.

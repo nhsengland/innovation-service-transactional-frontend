@@ -135,6 +135,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
 
     const expected =   {
       displayName: 'Test qualifying Accessor',
+      mobilePhone: '212000000',
       isCompanyOrOrganisation: 'YES',
       organisationName: 'organisation_1',
       organisationSize: '',

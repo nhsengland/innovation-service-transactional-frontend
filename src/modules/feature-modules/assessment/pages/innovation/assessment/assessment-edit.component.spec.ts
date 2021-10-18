@@ -130,7 +130,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
     component = fixture.componentInstance;
 
     fixture.detectChanges();
-    expect(routerSpy).toHaveBeenCalledWith(['not-found'], {});
+    expect(routerSpy).toHaveBeenCalledWith(['/not-found'], {});
 
   });
 

@@ -23,10 +23,10 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   @Input() items: FormEngineParameterModel['items'] = [];
   @Input() size?: 'small' | 'normal';
   @Input() pageUniqueField = true;
-  @Output() customOnChangeFunc = new EventEmitter<{ checked: boolean, item: string }>();
 
   hasError = false;
-  errorMessage = '';
+  error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
+
   cssClass = '';
 
   isRunningOnBrowser: boolean;
@@ -87,7 +87,7 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   ngDoCheck(): void {
 
     this.hasError = (this.fieldArrayControl.invalid && (this.fieldArrayControl.touched || this.fieldArrayControl.dirty));
-    this.errorMessage = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldArrayControl.errors) : '';
+    this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldArrayControl.errors) : { message: '', params: {} };
 
     this.items?.filter(item => item.conditional).forEach(item => {
 
@@ -128,7 +128,6 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
       this.fieldArrayControl.removeAt(valueIndex);
     }
 
-    this.customOnChangeFunc.emit({ checked: event.checked, item: event.value });
   }
 
 }

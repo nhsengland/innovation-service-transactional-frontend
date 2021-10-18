@@ -10,6 +10,7 @@ import { FormsModule } from './forms/forms.module';
 // Pages.
 import { PageAccountManageDetailsInfoComponent } from './pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from './pages/account/manage-details/manage-details-edit.component';
+import { PageAccountEmailNotificationsComponent } from './pages/account/email-notifications/email-notifications.component';
 
 import { InnovationSectionViewComponent } from './pages/innovation/section-view.component';
 import { InnovationSectionEvidenceViewComponent } from './pages/innovation/evidence-view.component';
@@ -21,6 +22,8 @@ import { PageInnovationSupportStatusListComponent } from './pages/innovation/inn
 
 import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/not-found/not-found.component';
+
+import { PageAccountManageUserDeleteAccountMesasageComponent } from './pages/account/manage-deleteaccoount/manage-deleteaccount-message.component';
 
 // Services.
 import { OrganisationsService } from './services/organisations.service';
@@ -40,6 +43,7 @@ import { NotificationService } from './services/notification.service';
     // Pages.
     PageAccountManageDetailsInfoComponent,
     PageAccountManageDetailsEditComponent,
+    PageAccountEmailNotificationsComponent,
 
     InnovationSectionViewComponent,
     InnovationSectionEvidenceViewComponent,
@@ -50,11 +54,12 @@ import { NotificationService } from './services/notification.service';
     PageInnovationSupportStatusListComponent,
 
     PageErrorComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    PageAccountManageUserDeleteAccountMesasageComponent
   ],
   providers: [
     OrganisationsService,
-    NotificationService,
+    NotificationService
   ],
   exports: [
     CommonModule,

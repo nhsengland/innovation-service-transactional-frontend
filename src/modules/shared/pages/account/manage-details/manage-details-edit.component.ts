@@ -55,8 +55,8 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
     this.subscriptions.push(
       this.activatedRoute.params.subscribe(params => {
 
-        if (!this.wizard.isValidStepNumber(params.stepId) && params.stepId !== 'summary') {
-          this.redirectTo('not-found');
+        if (!this.wizard.isValidStep(params.stepId)) {
+          this.redirectTo('/not-found');
           return;
         }
 
@@ -118,13 +118,13 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
       case 'previous':
         if (this.wizard.isFirstStep()) { url += ``; }
         else if (this.isSummaryStep()) { url += `/edit/${this.wizard.steps.length}`; }
-        else { url += `/edit/${this.wizard.currentStepNumber - 1}`; }
+        else { url += `/edit/${Number(this.wizard.currentStepId) - 1}`; }
         break;
 
       case 'next':
         if (this.isSummaryStep()) { url += ``; }
         else if (this.wizard.isLastStep()) { url += `/edit/summary`; }
-        else { url += `/edit/${this.wizard.currentStepNumber + 1}`; }
+        else { url += `/edit/${Number(this.wizard.currentStepId) + 1}`; }
         break;
 
       default: // Should NOT happen!

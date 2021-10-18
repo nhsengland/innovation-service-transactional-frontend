@@ -62,7 +62,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations?take=10&skip=0&status=`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations?take=20&skip=0&status=`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -127,7 +127,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations?take=10&skip=0&status=ASSESSMENT`);
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations?take=20&skip=0&status=ASSESSMENT`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);

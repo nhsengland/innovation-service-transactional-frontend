@@ -73,6 +73,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
 
     fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
 
     expect(component.actionDisplayId).toBe(responseMock.displayId);
 
@@ -86,6 +87,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
 
     fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
 
     expect(component.actionDisplayId).toBe('');
 

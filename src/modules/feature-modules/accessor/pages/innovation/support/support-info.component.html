@@ -15,33 +15,38 @@
 
 <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
 
+<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-<p class="nhsuk-heading-s nhsuk-u-margin-bottom-2">{{ innovationSupport.organisationUnit }}</p>
-<hr class="nhsuk-section-break nhsuk-section-break--visible" />
-<dl class="nhsuk-summary-list">
-  <div class="nhsuk-summary-list__row">
-    <dt class="nhsuk-summary-list__key">Support status</dt>
-    <dd class="nhsuk-summary-list__value">
-      <strong class="nhsuk-tag app-task-list__tag float-l" [ngClass]="innovationSupportStatus[innovation.support?.status || 'UNASSIGNED'].cssClass">
-        {{ innovationSupportStatus[innovation.support?.status || 'UNASSIGNED'].label }}
-      </strong>
-    </dd>
+<ng-container *ngIf="pageStatus === 'READY'">
+
+  <p class="nhsuk-heading-s nhsuk-u-margin-bottom-2">{{ innovationSupport.organisationUnit }}</p>
+  <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+  <dl class="nhsuk-summary-list">
+    <div class="nhsuk-summary-list__row">
+      <dt class="nhsuk-summary-list__key">Support status</dt>
+      <dd class="nhsuk-summary-list__value">
+        <strong class="nhsuk-tag app-task-list__tag float-l" [ngClass]="innovationSupportStatus[innovation.support?.status || 'UNASSIGNED'].cssClass">
+          {{ innovationSupportStatus[innovation.support?.status || 'UNASSIGNED'].label }}
+        </strong>
+      </dd>
+    </div>
+    <div class="nhsuk-summary-list__row">
+      <dt class="nhsuk-summary-list__key">Assigned accessors</dt>
+      <dd class="nhsuk-summary-list__value">{{ innovationSupport.accessors }}</dd>
+    </div>
+  </dl>
+
+  <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button"> Update status </a>
+
+  <h2 class="nhsuk-heading-l nhsuk-u-padding-top-5">All organisations</h2>
+
+  <p class="nhsuk-u-margin-0"><a routerLink="/accessor/innovations/{{ innovationId }}/support/organisations"> View support status for all organisations </a></p>
+
+  <div class="nhsuk-action-link nhsuk-u-padding-top-5">
+    <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/organisations/suggest" class="nhsuk-action-link__link">
+      <theme-svg-icon type="action"></theme-svg-icon>
+      <span class="nhsuk-action-link__text"> Suggest organisations for support </span>
+    </a>
   </div>
-  <div class="nhsuk-summary-list__row">
-    <dt class="nhsuk-summary-list__key">Assigned accessors</dt>
-    <dd class="nhsuk-summary-list__value">{{ innovationSupport.accessors }}</dd>
-  </div>
-</dl>
 
-<a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button"> Update status </a>
-
-<h2 class="nhsuk-heading-l nhsuk-u-padding-top-5">All organisations</h2>
-
-<p class="nhsuk-u-margin-0"><a routerLink="/accessor/innovations/{{ innovationId }}/support/organisations"> View support status for all organisations </a></p>
-
-<div class="nhsuk-action-link nhsuk-u-padding-top-5">
-  <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/organisations/suggest" class="nhsuk-action-link__link">
-    <theme-svg-icon type="action"></theme-svg-icon>
-    <span class="nhsuk-action-link__text"> Suggest organisations for support </span>
-  </a>
-</div>
+</ng-container>

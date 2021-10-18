@@ -46,7 +46,7 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
   @Input() pageUniqueField = true;
 
   hasError = false;
-  errorMessage = '';
+  error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
 
   filteredGI: {
     gItem: { value: string; label: string; description?: string; isEditable?: boolean; items: { value: string; label: string; description?: string; isEditable?: boolean; }[]; };
@@ -84,7 +84,7 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
   ngDoCheck(): void {
 
     this.hasError = (this.fieldArrayControl.invalid && (this.fieldArrayControl.touched || this.fieldArrayControl.dirty));
-    this.errorMessage = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldArrayControl.errors) : '';
+    this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldArrayControl.errors) : { message: '', params: {} };
 
     this.cdr.detectChanges();
 

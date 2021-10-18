@@ -8,7 +8,6 @@ import { AlertType } from '@app/base/models';
 import { NotificationService } from '@modules/shared/services/notification.service';
 import { getInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
 
-
 @Component({
   selector: 'app-innovator-pages-dashboard',
   templateUrl: './dashboard.component.html'
@@ -19,7 +18,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   user: {
     displayName: string,
-    innovations: { id: string, name: string }[]
+    innovations: { id: string, name: string }[],
+    passwordResetOn: string
   };
 
   innovationTransfers: getInnovationTransfersDTO[] = [];
@@ -33,12 +33,21 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
     super();
     this.setPageTitle('Your innovations');
-
     const user = this.stores.authentication.getUserInfo();
     this.user = {
       displayName: user.displayName,
-      innovations: user.innovations
+      innovations: user.innovations,
+      passwordResetOn: user.passwordResetOn
     };
+
+    const startTime = new Date();
+    const endTime = new Date(this.user.passwordResetOn);
+    const timediffer = startTime.getTime() - endTime.getTime();
+    const resultInMinutes = Math.round(timediffer / 60000);
+
+    if (resultInMinutes <= 2) {
+      this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
+    }
 
   }
 
@@ -85,7 +94,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         const user = this.stores.authentication.getUserInfo();
         this.user = {
           displayName: user.displayName,
-          innovations: user.innovations
+          innovations: user.innovations,
+          passwordResetOn: user.passwordResetOn
         };
         return of(true);
       })

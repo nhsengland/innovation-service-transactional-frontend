@@ -1,6 +1,3 @@
-/* istanbul ignore file */
-// TODO: create tests
-
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -39,10 +36,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
   isCreation(): boolean { return !this.activatedRoute.snapshot.params.evidenceId; }
   isEdition(): boolean { return !!this.activatedRoute.snapshot.params.evidenceId; }
 
-  isQuestionStep(): boolean {
-
-    return Number.isInteger(Number(this.activatedRoute.snapshot.params.questionId));
-  }
+  isQuestionStep(): boolean { return Number.isInteger(Number(this.activatedRoute.snapshot.params.questionId)); }
   isSummaryStep(): boolean { return this.activatedRoute.snapshot.params.questionId === 'summary'; }
 
   constructor(
@@ -55,6 +49,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.evidenceId = this.activatedRoute.snapshot.params.evidenceId;
 
+    /* istanbul ignore next */
     this.wizard = this.stores.innovation.getSection(this.sectionId)?.evidences || new WizardEngineModel({});
 
     this.currentStep = new FormEngineModel({ parameters: [] });
@@ -68,6 +63,8 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
   ngOnInit(): void {
 
     if (this.isCreation()) {
+
+      this.wizard.runRules(this.currentAnswers);
 
       this.setPageStatus('READY');
       this.draw();
@@ -100,7 +97,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
       this.activatedRoute.params.subscribe(params => {
 
         // if (!this.isValidStepId()) {
-        //   this.redirectTo('not-found');
+        //   this.redirectTo('/not-found');
         //   return;
         // }
 
@@ -113,7 +110,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
         this.wizard.gotoStep(Number(params.questionId));
         this.currentStep = this.wizard.currentStep();
 
-        this.setPageTitle(this.currentStep.parameters[0].label || ''); // Only 1 question per page.
+        this.setPageTitle(this.currentStep.parameters[0].label); // Only 1 question per page.
 
         if (this.currentStep.parameters[0].dataType === 'file-upload') {
           this.currentStep.parameters[0].fileUploadConfig = {
@@ -144,7 +141,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
       return;
     }
 
-    this.currentAnswers = { ...this.currentAnswers, ...formData?.data };
+    this.currentAnswers = { ...this.currentAnswers, ...formData!.data };
 
     this.wizard.runRules(this.currentAnswers);
     this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);
@@ -183,15 +180,15 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
 
     switch (action) {
       case 'previous':
-        if (this.wizard.isFirstStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}${this.isCreation() ? '' : `/evidence/${this.activatedRoute.snapshot.params.evidenceId}`}`; }
-        else if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${this.wizard.steps.length}`; }
-        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${this.wizard.currentStepNumber - 1}`; }
+        if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${this.wizard.steps.length}`; }
+        else if (this.wizard.isFirstStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}${this.isCreation() ? '' : `/evidence/${this.activatedRoute.snapshot.params.evidenceId}`}`; }
+        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${Number(this.wizard.currentStepId) - 1}`; }
         break;
 
       case 'next':
-        if (this.isSummaryStep()) { url += ``; }
+        if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/summary`; }
         else if (this.wizard.isLastStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/summary`; }
-        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${this.wizard.currentStepNumber + 1}`; }
+        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidence/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${Number(this.wizard.currentStepId) + 1}`; }
         break;
 
       default: // Should NOT happen!

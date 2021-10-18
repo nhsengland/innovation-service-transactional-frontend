@@ -35,7 +35,7 @@
         </div>
 
         <div *ngSwitchCase="'textarea'">
-          <theme-form-textarea [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-textarea>
+          <theme-form-textarea [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField" [lengthLimit]="p.lengthLimit"></theme-form-textarea>
         </div>
 
         <div *ngSwitchCase="'file-upload'">

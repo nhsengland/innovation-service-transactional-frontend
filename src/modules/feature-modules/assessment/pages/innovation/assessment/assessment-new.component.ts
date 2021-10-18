@@ -42,6 +42,7 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
         dataType: 'textarea',
         label: 'Let the innovator know how you want to proceed',
         validations: { isRequired: [true, 'Comment is required'] },
+        lengthLimit: 'medium'
       })
     ];
     this.formAnswers = {};
@@ -53,10 +54,19 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
 
     this.assessmentService.getInnovationInfo(this.innovationId).subscribe(
       response => {
+
         this.innovationName = response.summary.name;
+
+        this.setPageStatus('READY');
+
       },
       error => {
-        this.logger.error(error);
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch information',
+          message: 'Please try again or contact us for further help'
+        };
       }
     );
 

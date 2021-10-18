@@ -81,7 +81,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
         this.activatedRoute.params.subscribe(params => {
 
           if (!this.isValidStepId()) {
-            this.redirectTo('not-found');
+            this.redirectTo('/not-found');
             return;
           }
 
@@ -110,7 +110,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
     if (this.isRunningOnServer()) {
 
       if (!this.isValidStepId()) {
-        this.redirectTo('not-found');
+        this.redirectTo('/not-found');
         return;
       }
 
@@ -151,7 +151,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
             break;
 
           default:
-            this.redirectTo('not-found'); // Should not happen!
+            this.redirectTo('/not-found'); // Should not happen!
             break;
         }
 

@@ -118,6 +118,17 @@ export class CoreComponent implements OnInit, OnDestroy {
   }
 
 
+  focusBody(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        document.body.setAttribute('tabindex', '-1');
+        document.body.focus();
+        document.body.removeAttribute('tabindex');
+      });
+    }
+  }
+
+
   redirectTo(url: string, queryParams?: MappedObject): void {
 
     if (this.isRunningOnBrowser()) {

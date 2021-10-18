@@ -1,5 +1,6 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
@@ -71,25 +72,33 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   ngOnInit(): void {
 
-    // Update last step with the organisations list with description and pre-select all checkboxes.
-    this.organisationsService.getOrganisationUnits().subscribe(response => {
-      NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> Support offer guide (opens in a new window) </a>`;
-      NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].groupedItems = response.map(item => ({ value: item.id, label: item.name, items: item.organisationUnits.map(i => ({ value: i.id, label: i.name })) }));
-    });
+    forkJoin([
+      this.organisationsService.getOrganisationUnits(),
+      this.assessmentService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId)
+    ]).subscribe(([organisationUnits, innovationNeedsAssessment]) => {
 
-    this.assessmentService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId).subscribe(
-      response => {
-        this.innovationName = response.innovation.name;
-        this.form.data = {
-          ...response.assessment,
-          organisationUnits: response.assessment.organisations.reduce((unitsAcc: string[], o) => [...unitsAcc, ...o.organisationUnits.map(u => u.id)], [])
+      // Update last step with the organisations list with description and pre-select all checkboxes.
+      NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> Support offer guide (opens in a new window) </a>`;
+      NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].groupedItems = organisationUnits.map(item => ({ value: item.id, label: item.name, items: item.organisationUnits.map(i => ({ value: i.id, label: i.name })) }));
+
+      this.innovationName = innovationNeedsAssessment.innovation.name;
+      this.form.data = {
+        ...innovationNeedsAssessment.assessment,
+        organisationUnits: innovationNeedsAssessment.assessment.organisations.reduce((unitsAcc: string[], o) => [...unitsAcc, ...o.organisationUnits.map(u => u.id)], [])
+      };
+      this.assessmentHasBeenSubmitted = innovationNeedsAssessment.assessment.hasBeenSubmitted;
+
+      this.setPageStatus('READY');
+
+    },
+      () => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch needs assessment overview',
+          message: 'Please try again or contact us for further help'
         };
-        this.assessmentHasBeenSubmitted = response.assessment.hasBeenSubmitted;
-      },
-      error => {
-        this.logger.error(error);
-      }
-    );
+      });
 
     this.subscriptions.push(
       this.activatedRoute.params.subscribe(params => {
@@ -97,7 +106,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
         this.stepId = Number(params.stepId);
 
         if (!this.isValidStepId()) {
-          this.redirectTo('not-found');
+          this.redirectTo('/not-found');
           return;
         }
 

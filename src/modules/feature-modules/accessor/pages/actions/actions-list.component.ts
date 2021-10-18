@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { TableModel } from '@app/base/models';
+import { AlertType, TableModel } from '@app/base/models';
 
 import { AccessorService, getActionsListEndpointOutDTO } from '../../services/accessor.service';
 
@@ -11,6 +11,8 @@ import { AccessorService, getActionsListEndpointOutDTO } from '../../services/ac
   templateUrl: './actions-list.component.html'
 })
 export class ActionsListComponent extends CoreComponent implements OnInit {
+
+  alert: AlertType = { type: null };
 
   tabs: { key: string, title: string, link: string, queryParams: { openActions: 'true' | 'false' } }[] = [];
   currentTab: { index: number, key: string, contentTitle: string, description: string };
@@ -52,7 +54,6 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
         createdAt: { label: 'Initiated', orderable: true },
         status: { label: 'Status', align: 'right', orderable: true }
       },
-      pageSize: 10000,
       orderBy: 'createdAt',
       orderDir: 'descending'
     });
@@ -74,6 +75,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
         this.currentTab.contentTitle = `${this.tabs[this.currentTab.index].title} list`;
 
         this.actionsList.setData([]).setFilters({ openActions: queryParams.openActions });
+        this.actionsList.page = 1;
 
         this.getActionsList();
 
@@ -95,16 +97,26 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
       },
       error => {
         this.setPageStatus('ERROR');
-        this.logger.error(error);
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch actions information',
+          message: 'Please try again or contact us for further help'
+        };
       }
     );
 
   }
 
-
   onTableOrder(column: string): void {
 
     this.actionsList.setOrderBy(column);
+    this.getActionsList();
+
+  }
+
+  onPageChange(event: { pageNumber: number }): void {
+
+    this.actionsList.page = event.pageNumber;
     this.getActionsList();
 
   }

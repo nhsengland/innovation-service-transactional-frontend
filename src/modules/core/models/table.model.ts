@@ -40,7 +40,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
     this.totalRows = data.totalRows || 0;
 
     this.page = data.page || 1;
-    this.pageSize = data.pageSize || 10;
+    this.pageSize = data.pageSize || 20;
     this.pageSizeOptions = data.pageSizeOptions || [5, 10, 25];
 
     this.orderBy = data.orderBy || '';
@@ -107,7 +107,6 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
     return this;
   }
 
-
   getColumnLabel(key: string): string {
     return this.visibleColumns[key]?.label || '';
   }
@@ -128,7 +127,6 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
     }));
 
   }
-
 
   getRecords(): T[] { return this.dataSource; }
 

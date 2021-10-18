@@ -71,7 +71,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
         this.stepId = Number(params.stepId);
 
         if (!this.isValidStepId()) {
-          this.redirectTo('not-found');
+          this.redirectTo('/not-found');
         }
 
       })
@@ -81,8 +81,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       this.organisationsService.getOrganisationUnits(),
       this.accessorService.getInnovationNeedsAssessment(this.innovationId, this.innovation.assessment.id || ''),
       this.accessorService.getInnovationSupports(this.innovationId, false)
-    ]).subscribe(
-      ([organisations, needsAssessmentInfo, supportsInfo]) => {
+    ]).subscribe(([organisations, needsAssessmentInfo, supportsInfo]) => {
 
         const needsAssessmentSuggestedOrganisations = needsAssessmentInfo.assessment.organisations.map(item => item.id);
 
@@ -118,6 +117,16 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
         });
 
+        this.setPageStatus('READY');
+
+      },
+      () => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch information',
+          message: 'Please try again or contact us for further help'
+        };
       }
     );
 

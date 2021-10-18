@@ -5,27 +5,33 @@
       <p> {{ alert.message }} </p>
     </theme-alert>
 
-    <p class="nhsuk-hint nhsuk-u-padding-top-3 nhsuk-u-margin-bottom-0">{{ stepId }} of 2</p>
-    <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ pageTitle }} </h1>
-    <p class="nhsuk-body-l">{{ innovationName }}</p>
+    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-    <ng-container *ngFor="let section of form.sections; let i = index">
+    <ng-container *ngIf="pageStatus === 'READY'">
 
-      <div class="full-width-section" [ngClass]="{'bg-color-white': !(i % 2)}">
-        <h2 *ngIf="section.title" class="nhsuk-heading-l nhsuk-u-padding-top-5 nhsuk-u-margin-bottom-0">{{ section.title }}</h2>
-        <theme-form-engine [parameters]="section.parameters" [values]="form.data"></theme-form-engine>
+      <p class="nhsuk-hint nhsuk-u-padding-top-3 nhsuk-u-margin-bottom-0">{{ stepId }} of 2</p>
+      <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ pageTitle }} </h1>
+      <p class="nhsuk-body-l">{{ innovationName }}</p>
+
+      <ng-container *ngFor="let section of form.sections; let i = index">
+
+        <div class="full-width-section" [ngClass]="{'bg-color-white': !(i % 2)}">
+          <h2 *ngIf="section.title" class="nhsuk-heading-l nhsuk-u-padding-top-5 nhsuk-u-margin-bottom-0">{{ section.title }}</h2>
+          <theme-form-engine [parameters]="section.parameters" [values]="form.data"></theme-form-engine>
+        </div>
+
+      </ng-container>
+
+      <div *ngIf="stepId === 2" class="nhsuk-inset-text nhsuk-u-margin-0">
+        <span class="nhsuk-u-visually-hidden">Information:</span>
+        <p> When you submit, the innovation, along with your needs assessment, will become visible to all organisations that the innovator has chosen to share their data with. </p>
       </div>
 
+      <button *ngIf="assessmentHasBeenSubmitted" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('update')">Update needs assessment</button>
+      <button *ngIf="!assessmentHasBeenSubmitted" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">Submit needs assessment</button>
+      <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5" (click)="onSubmit('saveAsDraft')">Save as draft</button>
+
     </ng-container>
-
-    <div *ngIf="stepId === 2" class="nhsuk-inset-text nhsuk-u-margin-0">
-      <span class="nhsuk-u-visually-hidden">Information:</span>
-      <p> When you submit, the innovation, along with your needs assessment, will become visible to all organisations that the innovator has chosen to share their data with. </p>
-    </div>
-
-    <button *ngIf="assessmentHasBeenSubmitted" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('update')">Update needs assessment</button>
-    <button *ngIf="!assessmentHasBeenSubmitted" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">Submit needs assessment</button>
-    <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5" (click)="onSubmit('saveAsDraft')">Save as draft</button>
 
   </div>
 </div>
