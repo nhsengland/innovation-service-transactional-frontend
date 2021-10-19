@@ -170,15 +170,15 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
 
   });
 
-  it('should run getNotificationsGroupedByStatus()', () => {
+  it('should run getTabsNotifications()', () => {
 
-    notificationService.getAllUnreadNotificationsGroupedByStatus = () => of({ WAITING_NEEDS_ASSESSMENT: 1, INVALID_KEY: 0 });
+    notificationService.innovationStatusNotifications = () => of({ WAITING_NEEDS_ASSESSMENT: 1, INVALID_KEY: 0 });
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
-    component.getNotificationsGroupedByStatus();
+    component.getTabsNotifications();
     expect(component.tabs.find(t => t.key === 'WAITING_NEEDS_ASSESSMENT')?.notifications).toBe(1);
 
   });
