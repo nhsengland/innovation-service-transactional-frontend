@@ -196,8 +196,7 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
     fixture.detectChanges();
 
     component.onSubmitWizard();
-    expect(routerSpy).toHaveBeenCalledWith(['innovator/dashboard'], {});
-
+    expect(routerSpy).toHaveBeenCalledWith(['innovator/dashboard'], { queryParams: { alert: 'alertDisabled' } });
   });
 
   it('should run onSubmitWizard() with API error', () => {

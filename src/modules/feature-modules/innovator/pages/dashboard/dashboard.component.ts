@@ -7,6 +7,7 @@ import { AlertType } from '@app/base/models';
 
 import { NotificationService } from '@modules/shared/services/notification.service';
 import { getInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-innovator-pages-dashboard',
@@ -28,7 +29,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   constructor(
     private notificationService: NotificationService,
-    private innovatorService: InnovatorService
+    private innovatorService: InnovatorService,
+    private activatedRoute: ActivatedRoute
   ) {
 
     super();
@@ -45,10 +47,15 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     const timediffer = startTime.getTime() - endTime.getTime();
     const resultInMinutes = Math.round(timediffer / 60000);
 
-    if (resultInMinutes <= 2) {
-      this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
+    switch (this.activatedRoute.snapshot.queryParams.alert) {
+      case 'alertDisabled':
+        break;
+      default:
+        if (resultInMinutes <= 2) {
+          this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
+        }
+        break;
     }
-
   }
 
   ngOnInit(): void {

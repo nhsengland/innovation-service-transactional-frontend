@@ -86,7 +86,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
         return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
       })
     ).subscribe(
-      () => this.redirectTo(`innovator/dashboard`),
+      () => this.redirectTo(`innovator/dashboard`, { alert: 'alertDisabled' }),
       () => {
         this.alert = {
           type: 'ERROR',
