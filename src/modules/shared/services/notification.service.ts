@@ -5,6 +5,7 @@ import { map, take } from 'rxjs/operators';
 import { CoreService } from '@app/base';
 
 import { MappedObject, UrlModel } from '@modules/core';
+import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
 export enum NotificationContextType {
@@ -36,12 +37,26 @@ export const EMAIL_NOTIFICATION_TYPE = {
   SUPPORT: { title: 'Support status changes' }
 };
 
+
 @Injectable()
 export class NotificationService extends CoreService {
 
+  // TODO: Remove this property when possible as this should not be a statefull service!
   notifications: { [key: string]: number } = {};
 
   constructor() { super(); }
+
+  // Specific context notifications methods.
+  innovationStatusNotifications(): Observable<Partial<{ [key in keyof typeof INNOVATION_STATUS]: number }>> {
+
+    const url = new UrlModel(this.API_URL).addPath('notifications/status').setQueryParams({ scope: 'INNOVATION_STATUS' });
+    return this.http.get<Partial<{ [key in keyof typeof INNOVATION_STATUS]: number }>>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
 
   dismissNotification(contextId: string, contextType: string): Observable<NotificationDismissResultDTO> {
 
@@ -71,7 +86,8 @@ export class NotificationService extends CoreService {
 
   }
 
-  getAllUnreadNotificationsGroupedByStatus(scope: string): Observable<getUnreadNotificationsEndpointDTO> {
+  // TODO: Remove this in the future for a specific and typed one!
+  getAllUnreadNotificationsGroupedByStatus(scope: 'SUPPORT_STATUS'): Observable<getUnreadNotificationsEndpointDTO> {
 
     const url = new UrlModel(this.API_URL).addPath('notifications/status').setQueryParams({ scope });
 
