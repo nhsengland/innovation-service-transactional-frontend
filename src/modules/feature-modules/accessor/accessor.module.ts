@@ -56,7 +56,7 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovationSupportOrganisationsSupportStatusSuggestComponent,
     InnovationSupportUpdateComponent,
     InnovationSupportInfoComponent,
-    ActionAdvancedFilterComponent,
+    ActionAdvancedFilterComponent
   ],
   providers: [
     // Services.

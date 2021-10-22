@@ -14,7 +14,8 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { InnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/assessment-new.component';
 import { InnovationAssessmentEditComponent } from './pages/innovation/assessment/assessment-edit.component';
-
+import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
+import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './pages/innovation/support/organisations-support-status-info.component';
 // Services.
 import { AssessmentService } from './services/assessment.service';
 
@@ -38,7 +39,9 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovationOverviewComponent,
     InnovationAssessmentOverviewComponent,
     InnovationAssessmentNewComponent,
-    InnovationAssessmentEditComponent
+    InnovationAssessmentEditComponent,
+    InnovationSupportInfoComponent,
+    InnovationSupportOrganisationsSupportStatusInfoComponent,
   ],
   providers: [
     // Services.

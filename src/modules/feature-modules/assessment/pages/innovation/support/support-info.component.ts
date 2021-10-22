@@ -7,11 +7,11 @@ import { RoutingHelper } from '@modules/core';
 
 import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
-import { AccessorService } from '../../../services/accessor.service';
-
+// import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
+import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
 
 @Component({
-  selector: 'app-accessor-pages-innovation-support-info',
+  selector: 'app-assessment-pages-innovation-support-info',
   templateUrl: './support-info.component.html'
 })
 export class InnovationSupportInfoComponent extends CoreComponent implements OnInit {
@@ -29,12 +29,12 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
-  isQualifyingAccessorRole = false;
+  // isQualifyingAccessorRole = false;
 
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService
+    private assessmentService: AssessmentService
   ) {
 
     super();
@@ -44,26 +44,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
 
-    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
-
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'supportUpdateSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'Support status updated',
-          message: 'You\'ve updated your support status and posted a comment to the innovator.'
-        };
-        break;
-      case 'supportOrganisationSuggestSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'Organisation suggestions sent',
-          message: 'Your suggestions were saved and notifications sent.'
-        };
-        break;
-      default:
-        break;
-    }
+    // this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
   }
 
@@ -77,7 +58,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
       this.setPageStatus('READY');
 
     } else {
-      this.accessorService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id).subscribe(
+      this.assessmentService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id).subscribe(
         response => {
 
           this.innovationSupport.accessors = (response.accessors).map(item => item.name).join(', ');

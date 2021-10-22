@@ -6,7 +6,7 @@ import { CoreService } from '@app/base';
 
 import { APIQueryParamsType, DatesHelper, MappedObject, UrlModel } from '@modules/core';
 
-import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 
@@ -92,9 +92,24 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
 };
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
-  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation'> & { hasBeenSubmitted: boolean}
+  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation'> & { hasBeenSubmitted: boolean }
 };
 
+export type getInnovationSupportsDTO = {
+  id: string;
+  status: keyof typeof INNOVATION_SUPPORT_STATUS;
+  organisationUnit: {
+    id: string;
+    name: string;
+    organisation: {
+      id: string;
+      name: string;
+      acronym: string;
+    };
+  };
+  accessors?: { id: string, name: string }[];
+  notifications?: { [key: string]: number };
+};
 
 @Injectable()
 export class AssessmentService extends CoreService {
@@ -210,6 +225,24 @@ export class AssessmentService extends CoreService {
       map(response => response)
     );
 
+  }
+
+  getInnovationSupportInfo(innovationId: string, supportId: string): Observable<{ id: string, status: keyof typeof INNOVATION_SUPPORT_STATUS, accessors: { id: string, name: string }[] }> {
+
+    const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId/supports/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
+    return this.http.get<{ id: string, status: keyof typeof INNOVATION_SUPPORT_STATUS, accessors: { id: string, name: string }[] }>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+  getInnovationSupports(innovationId: string, returnAccessorsInfo: boolean): Observable<getInnovationSupportsDTO[]> {
+
+    const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId }).setQueryParams({ full: returnAccessorsInfo });
+    return this.http.get<getInnovationSupportsDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
   }
 
 }

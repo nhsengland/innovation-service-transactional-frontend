@@ -6,6 +6,7 @@ import { CoreComponent } from '@app/base';
 
 import { RoutingHelper } from '@modules/core';
 import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
+import { InnovationDataResolverType, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
 type RouteDataLayoutOptionsType = {
@@ -56,47 +57,69 @@ export class AssessmentLayoutComponent extends CoreComponent {
 
   private onRouteChange(event: NavigationEnd): void {
 
-    const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
-    const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
+    // let innovation: InnovationDataResolverType = {
+    //   id: '',
+    //   name: '',
+    //   status: '',
+    //   assessment: {
+    //     id: '',
+    //   },
+    //   support: {
+    //     id: '',
+    //     status: '',
+    //   }
+    // }
 
-    if (this.stores.authentication.isValidUser()) {
+  const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
+  const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
 
-      this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
-        response => {
-          this.mainMenuNotifications = response;
-        }
-      );
+  // if(!currentRouteInnovationId) {
+  //   innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+  // }
 
+  if (this.stores.authentication.isValidUser()) {
+
+  this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
+    response => {
+      this.mainMenuNotifications = response;
     }
+  );
 
-    this.layoutOptions = {
-      type: routeData.type || null,
-      backLink: routeData.backLink ? { url: RoutingHelper.resolveUrl(routeData.backLink.url, this.activatedRoute), label: routeData.backLink.label } : null
-    };
+}
 
-    switch (this.layoutOptions.type) {
+  this.layoutOptions = {
+  type: routeData.type || null,
+  backLink: routeData.backLink ? { url: RoutingHelper.resolveUrl(routeData.backLink.url, this.activatedRoute), label: routeData.backLink.label } : null
+};
 
-      case 'userAccountMenu':
-        this.leftSideBar = [
-          { title: 'Your details', link: `/assessment/account/manage-details` }
-        ];
-        break;
+  switch (this.layoutOptions.type) {
 
-      case 'innovationLeftAsideMenu':
-        this.leftSideBar = [
-          { title: 'Overview', link: `/assessment/innovations/${currentRouteInnovationId}/overview` },
-          { title: 'Innovation record', link: `/assessment/innovations/${currentRouteInnovationId}/record` },
-          // { title: 'Action tracker', link: `/assessment/innovations/${currentRouteInnovationId}/action-tracker` },
-          // { title: 'Comments', link: `/assessment/innovations/${currentRouteInnovationId}/comments` }
-        ];
-        break;
+  case 'userAccountMenu':
+    this.leftSideBar = [
+      { title: 'Your details', link: `/assessment/account/manage-details` }
+    ];
+    break;
 
-      case 'emptyLeftAside':
-      default:
-        this.leftSideBar = [];
-        break;
+  case 'innovationLeftAsideMenu':
+    this.leftSideBar = [
+      { title: 'Overview', link: `/assessment/innovations/${currentRouteInnovationId}/overview` },
+      { title: 'Innovation record', link: `/assessment/innovations/${currentRouteInnovationId}/record` },
+      { title: 'Support status', link: `/assessment/innovations/${currentRouteInnovationId}/support` }
+      // { title: 'Action tracker', link: `/assessment/innovations/${currentRouteInnovationId}/action-tracker` },
+      // { title: 'Comments', link: `/assessment/innovations/${currentRouteInnovationId}/comments` }
+    ];
+    // if (innovation.status == 'IN_PROGRESS') {
+    //   this.leftSideBar.push({ title: 'Support status', link: `/assessment/innovations/${currentRouteInnovationId}/support` })
+    // }
 
-    }
+    break;
+
+  case 'emptyLeftAside':
+  default:
+    this.leftSideBar = [];
+    break;
+
+}
 
   }
 

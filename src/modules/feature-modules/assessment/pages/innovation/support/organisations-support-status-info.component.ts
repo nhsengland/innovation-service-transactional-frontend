@@ -5,13 +5,12 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 import { OrganisationsService } from '@shared-module/services/organisations.service';
-
-import { AccessorService } from '../../../services/accessor.service';
-
+// import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
 
 @Component({
-  selector: 'app-accessor-pages-innovation-support-organisations-support-status-info',
+  selector: 'app-assessment-pages-innovation-support-organisations-support-status-info',
   templateUrl: './organisations-support-status-info.component.html'
 })
 export class InnovationSupportOrganisationsSupportStatusInfoComponent extends CoreComponent implements OnInit {
@@ -40,26 +39,29 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
     showHideDescription: null | string;
   }[] = [];
 
-  isQualifyingAccessorRole = false;
+  // isQualifyingAccessorRole = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService,
+    private assessmentService: AssessmentService,
     private organisationsService: OrganisationsService
   ) {
 
     super();
     this.setPageTitle('Support status');
+
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
+    // this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
   }
 
 
   ngOnInit(): void {
+
+    this.setPageStatus('READY');
     forkJoin([
       this.organisationsService.getOrganisationUnits(),
-      this.accessorService.getInnovationSupports(this.innovationId, false),
+      this.assessmentService.getInnovationSupports(this.innovationId, false),
     ]).subscribe(([organisationUnits, organisationUnitsSupportStatus]) => {
 
       this.organisations = organisationUnits.map(organisation => {

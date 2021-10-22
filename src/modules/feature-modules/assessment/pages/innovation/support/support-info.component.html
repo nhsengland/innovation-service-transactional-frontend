@@ -1,0 +1,46 @@
+<div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
+  <div class="nhsuk-grid-column-two-thirds">
+    <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation.name }}</p>
+  </div>
+  <!-- <div *ngIf="innovation.assessment.id" class="nhsuk-grid-column-one-third text-align-right">
+    <a routerLink="/accessor/innovations/{{ innovationId }}/assessments/{{ innovation.assessment.id }}"> View needs assessment </a>
+  </div> -->
+</div>
+<hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
+
+
+<theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+  <p> {{ alert.message }} </p>
+</theme-alert>
+
+<h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
+
+<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+<ng-container *ngIf="pageStatus === 'READY'">
+
+  <p class="nhsuk-heading-s nhsuk-u-margin-bottom-2">{{ innovationSupport.organisationUnit }}</p>
+  <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+  <dl class="nhsuk-summary-list">
+    <div class="nhsuk-summary-list__row">
+      <dt class="nhsuk-summary-list__key">Support status</dt>
+      <dd class="nhsuk-summary-list__value">
+        <strong class="nhsuk-tag app-task-list__tag float-l"
+          [ngClass]="innovationSupportStatus[innovation.support?.status || 'UNASSIGNED'].cssClass">
+          {{ innovationSupportStatus[innovation.support?.status || 'UNASSIGNED'].label }}
+        </strong>
+      </dd>
+    </div>
+    <div class="nhsuk-summary-list__row">
+      <dt class="nhsuk-summary-list__key">Assigned accessors</dt>
+      <dd class="nhsuk-summary-list__value">
+        {{ innovationSupport.accessors }}
+      </dd>
+    </div>
+  </dl>
+
+  <h2 class="nhsuk-heading-l nhsuk-u-padding-top-5">All organisations</h2>
+
+  <p class="nhsuk-u-margin-0"><a routerLink="/assessment/innovations/{{ innovationId }}/support/organisations"> View
+      support status for all organisations </a></p>
+</ng-container>
