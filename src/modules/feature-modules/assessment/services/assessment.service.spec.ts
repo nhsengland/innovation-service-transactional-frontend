@@ -10,7 +10,7 @@ import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
 import { TableModel } from '@app/base/models';
 
-import { AssessmentService, getInnovationInfoEndpointDTO, getInnovationNeedsAssessmentEndpointInDTO, getInnovationNeedsAssessmentEndpointOutDTO, getInnovationsListEndpointInDTO, getInnovationsListEndpointOutDTO } from './assessment.service';
+import { AssessmentService, getInnovationInfoEndpointDTO, getInnovationNeedsAssessmentEndpointInDTO, getInnovationNeedsAssessmentEndpointOutDTO, getInnovationsListEndpointInDTO, getInnovationsListEndpointOutDTO, getSupportLogInDTO, getSupportLogOutDTO, SupportLogType } from './assessment.service';
 
 describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
@@ -269,6 +269,112 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PUT');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run getSupportLog() with type = "" and return success', () => {
+
+    const responseMock: getSupportLogInDTO[] = [
+      {
+        id: 'support01',
+        type: '' as any,
+        description: 'description',
+        createdBy: 'A user',
+        createdAt: '2020-01-01T00:00:00.000Z',
+        innovationSupportStatus: 'ENGAGING',
+        organisationUnit: {
+          id: 'unit01', name: 'Unit 01', acronym: 'UN',
+          organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
+        },
+        suggestedOrganisationUnits: []
+      }
+    ];
+    const expected: getSupportLogOutDTO[] = responseMock.map(item => ({
+      ...item,
+      logTitle: '',
+      suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits || []).map(o => o.name)
+    }));
+
+
+    let response: any = null;
+    service.getSupportLog('Inno01').subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run getSupportLog() with type = SupportLogType.ACCESSOR_SUGGESTION and return success', () => {
+
+    const responseMock: getSupportLogInDTO[] = [
+      {
+        id: 'support01',
+        type: SupportLogType.ACCESSOR_SUGGESTION,
+        description: 'description',
+        createdBy: 'A user',
+        createdAt: '2020-01-01T00:00:00.000Z',
+        innovationSupportStatus: 'ENGAGING',
+        organisationUnit: {
+          id: 'unit01', name: 'Unit 01', acronym: 'UN',
+          organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
+        },
+        suggestedOrganisationUnits: [
+          {
+            id: 'unit01', name: 'Unit 01', acronym: 'UN',
+            organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
+          }
+        ]
+      }
+    ];
+    const expected: getSupportLogOutDTO[] = responseMock.map(item => ({
+      ...item,
+      logTitle: 'Suggested organisations',
+      suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits || []).map(o => o.name)
+    }));
+
+
+    let response: any = null;
+    service.getSupportLog('Inno01').subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run getSupportLog() with type = SupportLogType.STATUS_UPDATE and return success', () => {
+
+    const responseMock: getSupportLogInDTO[] = [
+      {
+        id: 'support01',
+        type: SupportLogType.STATUS_UPDATE,
+        description: 'description',
+        createdBy: 'A user',
+        createdAt: '2020-01-01T00:00:00.000Z',
+        innovationSupportStatus: 'ENGAGING',
+        organisationUnit: {
+          id: 'unit01', name: 'Unit 01', acronym: 'UN',
+          organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
+        }
+      }
+    ];
+    const expected: getSupportLogOutDTO[] = responseMock.map(item => ({
+      ...item,
+      logTitle: 'Updated support status',
+      suggestedOrganisationUnitsNames: []
+    }));
+
+
+    let response: any = null;
+    service.getSupportLog('Inno01').subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
 
   });

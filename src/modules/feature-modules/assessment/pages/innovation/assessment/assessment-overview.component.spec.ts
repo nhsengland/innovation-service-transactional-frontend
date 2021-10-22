@@ -12,7 +12,7 @@ import { AssessmentModule } from '@modules/feature-modules/assessment/assessment
 
 import { InnovationAssessmentOverviewComponent } from './assessment-overview.component';
 
-import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
+import { AssessmentService, SupportLogType } from '@modules/feature-modules/assessment/services/assessment.service';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
@@ -45,6 +45,21 @@ describe('FeatureModules/Assessment/Innovation/InnovationAssessmentOverviewCompo
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
+
+    assessmentService.getSupportLog = () => of([{
+      id: 'support01',
+      type: SupportLogType.STATUS_UPDATE,
+      description: 'description',
+      createdBy: 'A user',
+      createdAt: '2020-01-01T00:00:00.000Z',
+      innovationSupportStatus: 'ENGAGING',
+      organisationUnit: {
+        id: 'unit01', name: 'Unit 01', acronym: 'UN',
+        organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
+      },
+      logTitle: 'Updated support status',
+      suggestedOrganisationUnitsNames: ['Unit 01']
+    }]);
 
   });
 
@@ -107,7 +122,6 @@ describe('FeatureModules/Assessment/Innovation/InnovationAssessmentOverviewCompo
       support: { id: null }
     };
     assessmentService.getInnovationNeedsAssessment = () => of(responseMock);
-
     const expected = { ...responseMock.assessment, organisationsNames: ['Org name'] };
 
     fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
@@ -152,7 +166,6 @@ describe('FeatureModules/Assessment/Innovation/InnovationAssessmentOverviewCompo
       support: { id: null }
     };
     assessmentService.getInnovationNeedsAssessment = () => of(responseMock);
-
     const expected = { ...responseMock.assessment, organisationsNames: [] };
 
     fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
