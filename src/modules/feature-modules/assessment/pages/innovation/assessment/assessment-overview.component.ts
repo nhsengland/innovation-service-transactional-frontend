@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 import { DatesHelper, RoutingHelper } from '@modules/core';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
-import { getInnovationNeedsAssessmentEndpointOutDTO } from '@modules/feature-modules/assessment/services/assessment.service';
+import { getInnovationNeedsAssessmentEndpointOutDTO, getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/assessment/services/assessment.service';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
@@ -27,6 +28,11 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
   alert: AlertType = { type: null };
 
   assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] & { organisationsNames: string[] } | undefined;
+
+  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+
+  logHistory: getSupportLogOutDTO[] = [];
+  supportLogType = SupportLogType;
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '' };
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
@@ -62,67 +68,69 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
   ngOnInit(): void {
 
+    forkJoin([
+      this.assessmentService.getSupportLog(this.innovationId),
+      this.assessmentService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId)
+    ]).subscribe(([supportLog, needsAssessmentInfo]) => {
 
+      this.logHistory = supportLog;
 
-    this.assessmentService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId).subscribe(
-      response => {
+      this.assessment = { ...needsAssessmentInfo.assessment, organisationsNames: needsAssessmentInfo.assessment.organisations.map(item => item.name) };
 
-        this.assessment = { ...response.assessment, organisationsNames: response.assessment.organisations.map(item => item.name) };
+      this.shouldShowUpdatedAt = DatesHelper.dateDiff(this.assessment.finishedAt || '', this.assessment.updatedAt || '') > 0;
 
-        this.shouldShowUpdatedAt = DatesHelper.dateDiff(this.assessment.finishedAt || '', this.assessment.updatedAt || '') > 0;
+      const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === needsAssessmentInfo.assessment.maturityLevel) || 0) + 1;
+      this.innovationMaturityLevel = {
+        label: NEEDS_ASSESSMENT_QUESTIONS.innovation[1].label || '',
+        value: `${maturityLevelIndex} / ${maturityLevelItems.length}`,
+        levelIndex: maturityLevelIndex,
+        description: maturityLevelItems.find(item => item.value === needsAssessmentInfo.assessment.maturityLevel)?.label || ''
+      };
 
-        const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === response.assessment.maturityLevel) || 0) + 1;
-        this.innovationMaturityLevel = {
-          label: NEEDS_ASSESSMENT_QUESTIONS.innovation[1].label || '',
-          value: `${maturityLevelIndex} / ${maturityLevelItems.length}`,
-          levelIndex: maturityLevelIndex,
-          description: maturityLevelItems.find(item => item.value === response.assessment.maturityLevel)?.label || ''
-        };
+      this.innovationSummary = [
+        {
+          label: NEEDS_ASSESSMENT_QUESTIONS.innovation[2].label,
+          value: yesPartiallyNoItems.find(item => item.value === needsAssessmentInfo.assessment.hasRegulatoryApprovals)?.label || '',
+          comment: needsAssessmentInfo.assessment.hasRegulatoryApprovalsComment || ''
+        },
+        {
+          label: NEEDS_ASSESSMENT_QUESTIONS.innovation[3].label,
+          value: yesPartiallyNoItems.find(item => item.value === needsAssessmentInfo.assessment.hasEvidence)?.label || '',
+          comment: needsAssessmentInfo.assessment.hasEvidenceComment || ''
+        },
+        {
+          label: NEEDS_ASSESSMENT_QUESTIONS.innovation[4].label,
+          value: yesPartiallyNoItems.find(item => item.value === needsAssessmentInfo.assessment.hasValidation)?.label || '',
+          comment: needsAssessmentInfo.assessment.hasValidationComment || ''
+        }
+      ];
 
-        this.innovationSummary = [
-          {
-            label: NEEDS_ASSESSMENT_QUESTIONS.innovation[2].label,
-            value: yesPartiallyNoItems.find(item => item.value === response.assessment.hasRegulatoryApprovals)?.label || '',
-            comment: response.assessment.hasRegulatoryApprovalsComment || ''
-          },
-          {
-            label: NEEDS_ASSESSMENT_QUESTIONS.innovation[3].label,
-            value: yesPartiallyNoItems.find(item => item.value === response.assessment.hasEvidence)?.label || '',
-            comment: response.assessment.hasEvidenceComment || ''
-          },
-          {
-            label: NEEDS_ASSESSMENT_QUESTIONS.innovation[4].label,
-            value: yesPartiallyNoItems.find(item => item.value === response.assessment.hasValidation)?.label || '',
-            comment: response.assessment.hasValidationComment || ''
-          }
-        ];
+      this.innovatorSummary = [
+        {
+          label: NEEDS_ASSESSMENT_QUESTIONS.innovator[0].label,
+          value: yesPartiallyNoItems.find(item => item.value === needsAssessmentInfo.assessment.hasProposition)?.label || '',
+          comment: needsAssessmentInfo.assessment.hasPropositionComment || ''
+        },
+        {
+          label: NEEDS_ASSESSMENT_QUESTIONS.innovator[1].label,
+          value: yesPartiallyNoItems.find(item => item.value === needsAssessmentInfo.assessment.hasCompetitionKnowledge)?.label || '',
+          comment: needsAssessmentInfo.assessment.hasCompetitionKnowledgeComment || ''
+        },
+        {
+          label: NEEDS_ASSESSMENT_QUESTIONS.innovator[2].label,
+          value: yesPartiallyNoItems.find(item => item.value === needsAssessmentInfo.assessment.hasImplementationPlan)?.label || '',
+          comment: needsAssessmentInfo.assessment.hasImplementationPlanComment || ''
+        },
+        {
+          label: NEEDS_ASSESSMENT_QUESTIONS.innovator[3].label,
+          value: yesPartiallyNoItems.find(item => item.value === needsAssessmentInfo.assessment.hasScaleResource)?.label || '',
+          comment: needsAssessmentInfo.assessment.hasScaleResourceComment || ''
+        }
+      ];
 
-        this.innovatorSummary = [
-          {
-            label: NEEDS_ASSESSMENT_QUESTIONS.innovator[0].label,
-            value: yesPartiallyNoItems.find(item => item.value === response.assessment.hasProposition)?.label || '',
-            comment: response.assessment.hasPropositionComment || ''
-          },
-          {
-            label: NEEDS_ASSESSMENT_QUESTIONS.innovator[1].label,
-            value: yesPartiallyNoItems.find(item => item.value === response.assessment.hasCompetitionKnowledge)?.label || '',
-            comment: response.assessment.hasCompetitionKnowledgeComment || ''
-          },
-          {
-            label: NEEDS_ASSESSMENT_QUESTIONS.innovator[2].label,
-            value: yesPartiallyNoItems.find(item => item.value === response.assessment.hasImplementationPlan)?.label || '',
-            comment: response.assessment.hasImplementationPlanComment || ''
-          },
-          {
-            label: NEEDS_ASSESSMENT_QUESTIONS.innovator[3].label,
-            value: yesPartiallyNoItems.find(item => item.value === response.assessment.hasScaleResource)?.label || '',
-            comment: response.assessment.hasScaleResourceComment || ''
-          }
-        ];
+      this.setPageStatus('READY');
 
-        this.setPageStatus('READY');
-
-      },
+    },
       error => {
         this.setPageStatus('ERROR');
         this.alert = {
