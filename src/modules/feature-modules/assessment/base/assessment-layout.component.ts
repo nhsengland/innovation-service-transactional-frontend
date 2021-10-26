@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 
 import { RoutingHelper } from '@modules/core';
 import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
-
+import { InnovationDataResolverType } from '@stores-module/innovation/innovation.models';
 
 type RouteDataLayoutOptionsType = {
   type: null | 'userAccountMenu' | 'innovationLeftAsideMenu' | 'emptyLeftAside';
@@ -53,11 +53,23 @@ export class AssessmentLayoutComponent extends CoreComponent {
 
   }
 
-
   private onRouteChange(event: NavigationEnd): void {
 
     const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
+
+    let innovation: InnovationDataResolverType = {
+      id: '',
+      name: '',
+      status: '',
+      assessment: {
+        id: '',
+      }
+    };
+
+    if (currentRouteInnovationId) {
+      innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    }
 
     if (this.stores.authentication.isValidUser()) {
 
@@ -89,6 +101,9 @@ export class AssessmentLayoutComponent extends CoreComponent {
           // { title: 'Action tracker', link: `/assessment/innovations/${currentRouteInnovationId}/action-tracker` },
           // { title: 'Comments', link: `/assessment/innovations/${currentRouteInnovationId}/comments` }
         ];
+        if (innovation.status === 'IN_PROGRESS') {
+          this.leftSideBar.push({ title: 'Support status', link: `/assessment/innovations/${currentRouteInnovationId}/support` });
+        }
         break;
 
       case 'emptyLeftAside':
