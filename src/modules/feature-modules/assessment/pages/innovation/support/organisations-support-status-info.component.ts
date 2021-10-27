@@ -52,7 +52,6 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    // this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
   }
 
 
@@ -63,9 +62,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
       this.organisationsService.getOrganisationUnits(),
       this.assessmentService.getInnovationSupports(this.innovationId, false),
     ]).subscribe(([organisationUnits, organisationUnitsSupportStatus]) => {
-
       this.organisations = organisationUnits.map(organisation => {
-
         if (organisation.organisationUnits.length === 1) {
           return {
             info: {
@@ -73,7 +70,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
               name: organisation.name,
               acronym: organisation.acronym,
               organisationUnits: [],
-              status: organisationUnitsSupportStatus.find(o => o.organisationUnit.id === organisation.id)?.status || 'UNASSIGNED'
+              status: organisationUnitsSupportStatus.find(o => o.organisationUnit.organisation.id === organisation.id)?.status || 'UNASSIGNED'
             },
             showHideStatus: 'hidden',
             showHideText: null,

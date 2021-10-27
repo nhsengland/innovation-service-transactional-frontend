@@ -129,12 +129,13 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
 
   it('should have leftSideBar with "innovationLeftAsideMenu" menu values', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'innovation01' };
-    activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' } };
-    activatedRoute.snapshot.data = { innovation: { status: '' } };
+    activatedRoute.snapshot.params = { innovationId: 'innovation01', status: '' };
+    activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' }, innovationData: { status: 'IN_PROGRESS' } };
+
     const expected = [
       { title: 'Overview', link: `/assessment/innovations/innovation01/overview` },
       { title: 'Innovation record', link: `/assessment/innovations/innovation01/record` },
+      { title: 'Support status', link: `/assessment/innovations/innovation01/support` },
       // { title: 'Action tracker', link: `/assessment/innovations/innovation01/action-tracker` },
       // { title: 'Comments', link: `/assessment/innovations/innovation01/comments` }
     ];
@@ -143,10 +144,28 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     component = fixture.componentInstance;
 
     (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
-    // expect(component.leftSideBar).toEqual(expected);
-
+    expect(component.leftSideBar).toEqual(expected);
   });
 
+  it('should have leftSideBar with "innovationLeftAsideMenu" menu values', () => {
+
+    activatedRoute.snapshot.params = { innovationId: 'innovation01', status: '' };
+    activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' }, innovationData: { status: '' } };
+
+    const expected = [
+      { title: 'Overview', link: `/assessment/innovations/innovation01/overview` },
+      { title: 'Innovation record', link: `/assessment/innovations/innovation01/record` },
+      // { title: 'Support status', link: `/assessment/innovations/innovation01/support` },
+      // { title: 'Action tracker', link: `/assessment/innovations/innovation01/action-tracker` },
+      // { title: 'Comments', link: `/assessment/innovations/innovation01/comments` }
+    ];
+
+    fixture = TestBed.createComponent(AssessmentLayoutComponent);
+    component = fixture.componentInstance;
+
+    (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
+    expect(component.leftSideBar).toEqual(expected);
+  });
   it('should have leftSideBar with "emptyLeftAside" menu values', () => {
 
     activatedRoute.snapshot.data = { layoutOptions: { type: 'emptyLeftAside' } };
