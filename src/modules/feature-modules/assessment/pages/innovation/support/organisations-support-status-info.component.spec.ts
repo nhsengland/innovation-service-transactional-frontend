@@ -123,7 +123,7 @@ describe('FeatureModules/Assessment/Innovation/Support/InnovationSupportOrganisa
     }]);
 
     const expected = {
-      info: { id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [], status: 'UNASSIGNED' },
+      info: { id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [], status: 'ENGAGING' },
       showHideStatus: 'hidden',
       showHideText: null,
       showHideDescription: null
