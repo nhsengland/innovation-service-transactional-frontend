@@ -3,8 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
-import { NotificationService } from '@modules/shared/services/notification.service';
+import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
 
+import { NotificationService } from '@modules/shared/services/notification.service';
 import { AssessmentService, getInnovationsListEndpointOutDTO } from '../../services/assessment.service';
 
 @Component({
@@ -13,7 +14,7 @@ import { AssessmentService, getInnovationsListEndpointOutDTO } from '../../servi
 })
 export class ReviewInnovationsComponent extends CoreComponent implements OnInit {
 
-  tabs: { key: string, title: string, description: string, link: string, notifications?: number, queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' | 'NEEDS_ASSESSMENT' | 'IN_PROGRESS' } }[] = [];
+  tabs: { key: keyof typeof INNOVATION_STATUS, title: string, description: string, link: string, notifications?: number, queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' | 'NEEDS_ASSESSMENT' | 'IN_PROGRESS' } }[] = [];
   currentTab: { key: string, status: string, description: string, innovationsOverdue: number };
 
   innovationsList: TableModel<(getInnovationsListEndpointOutDTO['data'][0])>;
@@ -23,7 +24,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   constructor(
     private activatedRoute: ActivatedRoute,
     private assessmentService: AssessmentService,
-    private notificationService: NotificationService,
+    private notificationService: NotificationService
   ) {
 
     super();
@@ -55,7 +56,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
     this.currentTab = { key: '', status: '', description: '', innovationsOverdue: 0 };
 
-    this.innovationsList = new TableModel({ });
+    this.innovationsList = new TableModel({});
 
   }
 
@@ -96,7 +97,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
             this.innovationsList.setVisibleColumns({
               name: { label: 'Innovation', orderable: true },
               assessmentStartDate: { label: 'Assessment start date', orderable: true },
-              assessedBy: { label: 'Assessed by', orderable: true },
+              assessedBy: { label: 'Assessed by', orderable: false },
               mainCategory: { label: 'Primary category', align: 'right', orderable: true }
             }).setOrderBy('updatedAt');
             break;
@@ -113,7 +114,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
         }
 
         this.getInnovationsList();
-        this.getNotificationsGroupedByStatus();
+        this.getTabsNotifications();
 
       })
     );
@@ -139,12 +140,10 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   }
 
-  getNotificationsGroupedByStatus(): void {
-    this.notificationService.getAllUnreadNotificationsGroupedByStatus('INNOVATION_STATUS').subscribe(
+  getTabsNotifications(): void {
+    this.notificationService.innovationStatusNotifications().subscribe(
       response => {
-        for (const t of this.tabs) {
-          t.notifications = response[t.key] || 0;
-        }
+        this.tabs.forEach(t => { t.notifications = response[t.key] || 0; });
       }
     );
   }

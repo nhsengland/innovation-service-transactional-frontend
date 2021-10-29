@@ -14,6 +14,8 @@
 
 <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-5"> {{ pageTitle }} </h1>
 
+<a *ngIf="innovation.support?.status === 'ENGAGING'" routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" class="nhsuk-button nhsuk-u-margin-bottom-7"> Create new action </a>
+
 <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
 <ng-container *ngIf="pageStatus === 'READY' && openedActionsList.getTotalRowsNumber() === 0">
@@ -21,8 +23,6 @@
 </ng-container>
 
 <ng-container *ngIf="pageStatus === 'READY' && openedActionsList.getTotalRowsNumber() > 0">
-
-  <a *ngIf="innovation.support?.status === 'ENGAGING'" routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" class="nhsuk-button nhsuk-u-margin-bottom-7"> Create new action </a>
 
   <table class="nhsuk-table-responsive app-sortable-table">
     <caption class="nhsuk-table__caption"> Open actions list </caption>

@@ -6,9 +6,13 @@ import { CoreService } from '@app/base';
 
 import { APIQueryParamsType, DatesHelper, MappedObject, UrlModel } from '@modules/core';
 
-import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 
+export enum SupportLogType {
+  ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
+  STATUS_UPDATE = 'STATUS_UPDATE',
+}
 
 export type getInnovationsListEndpointInDTO = {
   count: number;
@@ -61,7 +65,6 @@ export type getInnovationInfoEndpointDTO = {
   };
 };
 
-
 export type getInnovationNeedsAssessmentEndpointInDTO = {
   id: string;
   innovation: { id: string; name: string; };
@@ -90,12 +93,46 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
   updatedAt: null | string;
   updatedBy: null | string;
 };
+
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
   assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation'> & { hasBeenSubmitted: boolean}
 };
 
+export type getSupportLogInDTO = {
+  id: string;
+  type: SupportLogType;
+  description: string;
+  createdBy: string;
+  createdAt: string;
+  innovationSupportStatus: keyof typeof INNOVATION_SUPPORT_STATUS;
+  organisationUnit: {
+    id: string; name: string; acronym: string;
+    organisation: { id: string; name: string; acronym: string; };
+  };
+  suggestedOrganisationUnits?: {
+    id: string; name: string; acronym: string;
+    organisation: { id: string; name: string; acronym: string; };
+  }[];
+};
 
+export type getSupportLogOutDTO = getSupportLogInDTO & { logTitle: string; suggestedOrganisationUnitsNames: string[]; };
+
+export type getInnovationSupportsDTO = {
+  id: string;
+  status: keyof typeof INNOVATION_SUPPORT_STATUS;
+  organisationUnit: {
+    id: string;
+    name: string;
+    organisation: {
+      id: string;
+      name: string;
+      acronym: string;
+    };
+  };
+  accessors?: { id: string, name: string }[];
+  notifications?: { [key: string]: number };
+};
 @Injectable()
 export class AssessmentService extends CoreService {
 
@@ -186,6 +223,36 @@ export class AssessmentService extends CoreService {
 
   }
 
+  getSupportLog(innovationId: string): Observable<getSupportLogOutDTO[]> {
+
+    const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId/support-logs').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    return this.http.get<getSupportLogInDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response.map(item => {
+
+        let logTitle = '';
+
+        switch (item.type) {
+          case SupportLogType.ACCESSOR_SUGGESTION:
+            logTitle = 'Suggested organisations';
+            break;
+          case SupportLogType.STATUS_UPDATE:
+            logTitle = 'Updated support status';
+            break;
+          default:
+            break;
+        }
+
+        return {
+          ...item,
+          logTitle,
+          suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits || []).map(o => o.name)
+        };
+
+      }))
+    );
+  }
+
   createInnovationNeedsAssessment(innovationId: string, data: MappedObject): Observable<{ id: string }> {
 
     const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId/assessments').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
@@ -210,6 +277,15 @@ export class AssessmentService extends CoreService {
       map(response => response)
     );
 
+  }
+
+  getInnovationSupports(innovationId: string, returnAccessorsInfo: boolean): Observable<getInnovationSupportsDTO[]> {
+
+    const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId }).setQueryParams({ full: returnAccessorsInfo });
+    return this.http.get<getInnovationSupportsDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
   }
 
 }

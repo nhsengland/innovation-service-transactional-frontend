@@ -92,7 +92,7 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
     const expected = [
       { key: 'name', label: 'Innovation', orderDir: 'none', orderable: true, align: 'text-align-left' },
       { key: 'assessmentStartDate', label: 'Assessment start date', orderDir: 'none', orderable: true, align: 'text-align-left' },
-      { key: 'assessedBy', label: 'Assessed by', orderDir: 'none', orderable: true, align: 'text-align-left' },
+      { key: 'assessedBy', label: 'Assessed by', orderDir: 'none', orderable: false, align: 'text-align-left' },
       { key: 'mainCategory', label: 'Primary category', orderDir: 'none', orderable: true, align: 'text-align-right' }
     ];
 
@@ -170,15 +170,15 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
 
   });
 
-  it('should run getNotificationsGroupedByStatus()', () => {
+  it('should run getTabsNotifications()', () => {
 
-    notificationService.getAllUnreadNotificationsGroupedByStatus = () => of({ WAITING_NEEDS_ASSESSMENT: 1, INVALID_KEY: 0 });
+    notificationService.innovationStatusNotifications = () => of({ WAITING_NEEDS_ASSESSMENT: 1, INVALID_KEY: 0 });
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
-    component.getNotificationsGroupedByStatus();
+    component.getTabsNotifications();
     expect(component.tabs.find(t => t.key === 'WAITING_NEEDS_ASSESSMENT')?.notifications).toBe(1);
 
   });

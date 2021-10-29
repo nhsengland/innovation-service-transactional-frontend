@@ -5,11 +5,11 @@
 
     <div class="app-tabs">
       <ul class="app-tabs__list" role="tablist" aria-label="Tabs">
-        <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
+        <li *ngFor="let tab of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
           <div class="d-flex">
-            <a id="tab-{{ item.key }}" [routerLink]="item.link" [queryParams]="item.queryParams" role="tab" class="nhsuk-u-padding-right-1" attr.aria-controls="content-{{ item.key }}"
-              attr.aria-selected="{{ currentTab.key === item.key ? 'true' : 'false' }}"> {{ item.title }} </a>
-            <notification-tag *ngIf="item.notifications && item.notifications > 0" [count]="item.notifications"></notification-tag>
+            <a id="tab-{{ tab.key }}" [routerLink]="tab.link" [queryParams]="tab.queryParams" role="tab" class="nhsuk-u-padding-right-1" attr.aria-controls="content-{{ tab.key }}"
+              attr.aria-selected="{{ currentTab.key === tab.key ? 'true' : 'false' }}"> {{ tab.title }} </a>
+            <notification-tag *ngIf="tab.key !== 'IN_PROGRESS' && tab.notifications && tab.notifications > 0" [count]="tab.notifications"></notification-tag>
           </div>
         </li>
       </ul>
@@ -27,7 +27,7 @@
         <ng-container *ngIf="pageStatus === 'READY' && innovationsList.getTotalRowsNumber() > 0">
 
           <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">{{innovationsList.getTotalRowsNumber() }} innovations</p>
-          <p *ngIf="currentTab.innovationsOverdue > 0" class="nhsuk-body-s nhsuk-u-margin-bottom-2 d-flex align-items-center">
+          <p *ngIf="currentTab.key !== 'IN_PROGRESS' && currentTab.innovationsOverdue > 0" class="nhsuk-body-s nhsuk-u-margin-bottom-2 d-flex align-items-center">
             <span class="dot-error nhsuk-u-margin-right-2"></span>
             <span>{{ currentTab.innovationsOverdue }} are overdue</span>
           </p>
@@ -46,21 +46,15 @@
             <tbody class="nhsuk-table__body">
               <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
                 <td class="nhsuk-table__cell">
-                  <div class="side-menu-flex">
-                    <div>
+                  <div class="d-flex">
+                    <div class="nhsuk-u-padding-right-2">
                       <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }}</span>
                       <a *ngIf="currentTab.status !== 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation"> {{ item.name }} </a>
                       <a *ngIf="currentTab.status === 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}/assessments/{{item.assessment.id}}"
                         attr.aria-label="View {{ item.name }} innovation assessment details"> {{ item.name }} </a>
                     </div>
-                    <div>
-                      <ng-container *ngIf="item.notifications.isNew !== true">
-                        <notification-tag *ngIf="item.notifications && item.notifications.count > 0" [count]="item.notifications.count"></notification-tag>
-                      </ng-container>
-                      <ng-container *ngIf="item.notifications.isNew === true">
-                        <notification-tag *ngIf="item.notifications && item.notifications.count > 0" [isNew]="true"></notification-tag>
-                      </ng-container>
-                    </div>
+                    <notification-tag *ngIf="item.notifications.isNew !== true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" [count]="item.notifications.count"></notification-tag>
+                    <notification-tag *ngIf="item.notifications.isNew === true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" [isNew]="true"></notification-tag>
                   </div>
                 </td>
 
