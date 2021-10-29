@@ -113,7 +113,7 @@ export class InnovatorLayoutComponent extends CoreComponent {
       case 'userAccountMenu':
         this.leftSideBar = [
           { title: 'Your details', link: `/innovator/account/manage-details` },
-          // { title: 'Email notifications', link: `/innovator/account/email-notifications` },
+          { title: 'Email notifications', link: `/innovator/account/email-notifications` },
           { title: 'Manage innovations', link: `/innovator/account/manage-innovations` },
           { title: 'Manage account', link: `/innovator/account/manage-account` }
         ];
