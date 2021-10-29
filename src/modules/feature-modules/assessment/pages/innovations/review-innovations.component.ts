@@ -97,7 +97,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
             this.innovationsList.setVisibleColumns({
               name: { label: 'Innovation', orderable: true },
               assessmentStartDate: { label: 'Assessment start date', orderable: true },
-              assessedBy: { label: 'Assessed by', orderable: true },
+              assessedBy: { label: 'Assessed by', orderable: false },
               mainCategory: { label: 'Primary category', align: 'right', orderable: true }
             }).setOrderBy('updatedAt');
             break;

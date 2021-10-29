@@ -92,7 +92,7 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
     const expected = [
       { key: 'name', label: 'Innovation', orderDir: 'none', orderable: true, align: 'text-align-left' },
       { key: 'assessmentStartDate', label: 'Assessment start date', orderDir: 'none', orderable: true, align: 'text-align-left' },
-      { key: 'assessedBy', label: 'Assessed by', orderDir: 'none', orderable: true, align: 'text-align-left' },
+      { key: 'assessedBy', label: 'Assessed by', orderDir: 'none', orderable: false, align: 'text-align-left' },
       { key: 'mainCategory', label: 'Primary category', orderDir: 'none', orderable: true, align: 'text-align-right' }
     ];
 
