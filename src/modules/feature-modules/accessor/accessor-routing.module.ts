@@ -97,6 +97,7 @@ const routes: Routes = [
           {
             path: ':innovationId',
             data: { module: 'accessor' },
+            runGuardsAndResolvers: 'pathParamsOrQueryParamsChange',
             resolve: { innovationData: InnovationDataResolver },
             children: [
               { path: '', pathMatch: 'full', redirectTo: 'overview' },
