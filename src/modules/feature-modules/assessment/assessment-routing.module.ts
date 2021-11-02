@@ -18,6 +18,9 @@ import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/
 
 import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './pages/innovation/support/organisations-support-status-info.component';
 import { PageInnovationSupportStatusListComponent } from '@shared-module/pages/innovation/innovation-support-status-list.component';
+
+import { PageInnovationCommentsListComponent } from '@shared-module/pages/innovation/comments/comments-list.component';
+import { PageInnovationCommentsNewComponent } from '@shared-module/pages/innovation/comments/comments-new.component';
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 import { InnovationSectionViewComponent } from '@modules/shared/pages/innovation/section-view.component';
@@ -124,6 +127,14 @@ const routes: Routes = [
               //   path: 'comments', pathMatch: 'full', component: InnovationCommentsComponent,
               //   data: { layoutOptions: { type: 'innovationLeftAsideMenu', showInnovationHeader: false } }
               // }
+              {
+                path: 'comments', pathMatch: 'full', component: PageInnovationCommentsListComponent,
+                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } }
+              },
+              {
+                path: 'comments/new', pathMatch: 'full', component: PageInnovationCommentsNewComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/comments', label: 'Go back' } } }
+              },
             ]
           }
         ]
