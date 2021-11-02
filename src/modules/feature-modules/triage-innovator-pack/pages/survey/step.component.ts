@@ -98,7 +98,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
           }
 
           if (this.isEndStep()) {
-            this.setPageTitle('Submitted successfully');
+            this.setPageTitle('Questionnaire Completed');
             this.prepareEndingData();
           }
 
@@ -130,7 +130,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
       }
 
       if (this.isEndStep()) {
-        this.setPageTitle('Submitted successfully');
+        this.setPageTitle('Questionnaire Completed');
         this.prepareEndingData();
       }
 

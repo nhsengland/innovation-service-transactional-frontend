@@ -166,7 +166,7 @@ export class InnovationService {
 
 
   // Innovation comments methods.
-  getInnovationComments(module: '' | 'innovator' | 'accessor', innovationId: string, createdOrder: 'asc' | 'desc'): Observable<getInnovationCommentsDTO[]> {
+  getInnovationComments(module: '' | 'innovator' | 'accessor' |'assessment', innovationId: string, createdOrder: 'asc' | 'desc'): Observable<getInnovationCommentsDTO[]> {
 
     const endpointModule = this.endpointModule(module);
     const order = { order: { createdAt: createdOrder.toUpperCase() } };
@@ -178,7 +178,7 @@ export class InnovationService {
     );
   }
 
-  createInnovationComment(module: '' | 'innovator' | 'accessor', innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
+  createInnovationComment(module: '' | 'innovator' | 'accessor' |'assessment', innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
 
     const endpointModule = this.endpointModule(module);
 

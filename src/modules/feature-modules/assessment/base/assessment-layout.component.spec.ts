@@ -135,9 +135,9 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     const expected = [
       { title: 'Overview', link: `/assessment/innovations/innovation01/overview` },
       { title: 'Innovation record', link: `/assessment/innovations/innovation01/record` },
+      { title: 'Comments', link: `/assessment/innovations/innovation01/comments` },
       { title: 'Support status', link: `/assessment/innovations/innovation01/support` },
       // { title: 'Action tracker', link: `/assessment/innovations/innovation01/action-tracker` },
-      // { title: 'Comments', link: `/assessment/innovations/innovation01/comments` }
     ];
 
     fixture = TestBed.createComponent(AssessmentLayoutComponent);
