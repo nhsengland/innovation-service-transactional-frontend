@@ -24,7 +24,7 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
   form = new FormGroup({
-    comment: new FormControl('', CustomValidators.required('A comment is required'))
+    comment: new FormControl('')
   });
 
 
