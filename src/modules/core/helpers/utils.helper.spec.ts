@@ -1,7 +1,7 @@
 import { UtilsHelper } from './utils.helper';
 
 
-describe('Core/Helpers/UtilsHelper', () => {
+describe('Core/Helpers/UtilsHelper/isEmpty', () => {
 
   it(`should return 'true' when object is 'empty'`, () => {
     expect(UtilsHelper.isEmpty({})).toBe(true);
@@ -29,6 +29,19 @@ describe('Core/Helpers/UtilsHelper', () => {
 
   it(`should return 'false' when an 'Array with objects' is passed in`, () => {
     expect(UtilsHelper.isEmpty([{ prop: 1 }])).toBe(false);
+  });
+
+});
+
+
+describe('Core/Helpers/UtilsHelper/arrayFullTextSearch', () => {
+
+  const items = ['One cat', 'One dog', 'Two cats', 'Two dogs'];
+
+  it(`should return 'true' when object is 'empty'`, () => {
+    const search = 'One';
+    const expected = ['One cat', 'One dog'];
+    expect(UtilsHelper.arrayFullTextSearch(items, search)).toEqual(expected);
   });
 
 });

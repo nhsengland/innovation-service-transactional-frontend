@@ -204,6 +204,39 @@ $service-manual-container-size: 1100px; // Container width variable.
   stroke: var(--primary-color) !important;
 }
 
+.mat-autocomplete-panel {
+  border: 2px solid #0b0c0c;
+  border-top: 0;
+
+  .mat-option {
+    border-bottom: solid #b1b4b6;
+    border-width: 1px 0;
+    cursor: pointer;
+    display: block;
+    position: relative;
+
+    &:first-of-type { border-top-width: 0; }
+    &:last-of-type { border-bottom-width: 0; }
+    &:nth-child(odd) { background-color: var(--color_nhsuk-grey-5); }
+
+    &.mat-active, &:hover {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      color: var(--white);
+      outline: 0
+    }
+
+    // &.mat-active, &:hover, &.mat-option--no-results {
+    //   background-color: var(--white);
+    //   color: var(--color_nhsuk-grey-1);
+    //   // cursor: not-allowed
+    // }
+
+  }
+
+}
+
+
 // // _header.scss: Header menu button spacing on mobile.
 .nhsuk-header__menu-toggle {
   @media (max-width: 40.0525em) {
