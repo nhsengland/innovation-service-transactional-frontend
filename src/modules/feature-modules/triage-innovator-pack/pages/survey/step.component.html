@@ -85,11 +85,9 @@
 
     <div class="nhsuk-grid-column-two-thirds">
       <h2> Your next steps </h2>
-
       <p class="nhsuk-u-margin-bottom-7">
-        To receive support from the organisations behind the <a href="/about-the-service" target="_blank"
-          rel="noopener noreferrer">NHS Innovation Service (opens in a new window)</a> you should create an account for
-        your organisation.
+        Create an account to receive support from <a href="/about-the-service" target="_blank"
+          rel="noopener noreferrer">the organisations behind the NHS Innovation Service (opens in a new window)</a>.
       </p>
 
       <div class="nhsuk-action-link">
@@ -123,7 +121,9 @@
         <div *ngSwitchCase="'RULE_03'">
           <div *ngIf="endingData.bulletsList.length > 0">
             <h2> Further information </h2>
-            <p> Based on your responses of the questions, we suggest you read the following sections: </p>
+            <p><b> Based on your questionnaire responses, we recommend you read the following sections of the innovation
+                guides:</b>
+            </p>
             <ul>
               <li *ngFor="let item of endingData.bulletsList" [innerHTML]="item"></li>
             </ul>
