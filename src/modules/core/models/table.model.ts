@@ -104,6 +104,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
   clearData(): this {
     this.dataSource = [];
     this.totalRows = 0;
+    this.page = 1;
     return this;
   }
 

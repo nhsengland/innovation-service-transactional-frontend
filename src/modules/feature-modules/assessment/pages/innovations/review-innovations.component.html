@@ -26,11 +26,17 @@
 
         <ng-container *ngIf="pageStatus === 'READY' && innovationsList.getTotalRowsNumber() > 0">
 
-          <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">{{innovationsList.getTotalRowsNumber() }} innovations</p>
-          <p *ngIf="currentTab.key !== 'IN_PROGRESS' && currentTab.innovationsOverdue > 0" class="nhsuk-body-s nhsuk-u-margin-bottom-2 d-flex align-items-center">
+          <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
+
+          <p *ngIf="currentTab.key !== 'IN_PROGRESS' && currentTab.overdueInnovations > 0" class="nhsuk-body-s nhsuk-u-margin-bottom-2 d-flex align-items-center">
             <span class="dot-error nhsuk-u-margin-right-2"></span>
-            <span>{{ currentTab.innovationsOverdue }} are overdue</span>
+            <span>{{ currentTab.overdueInnovations }} are overdue</span>
           </p>
+
+          <form *ngIf="currentTab.key === 'IN_PROGRESS'" [formGroup]="form" class="nhsuk-u-margin-bottom-1">
+            <theme-form-radio-group controlName="supportFilter" label="Organisations support status"  [items]="formFilterItems" size="small" [pageUniqueField]="false"></theme-form-radio-group>
+          </form>
+
           <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
           <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-margin-top-3">

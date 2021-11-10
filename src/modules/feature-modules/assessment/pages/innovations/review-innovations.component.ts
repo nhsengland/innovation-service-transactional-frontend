@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
-import { CoreComponent } from '@app/base';
+import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { FormEngineParameterModel } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
 
@@ -15,11 +16,17 @@ import { AssessmentService, getInnovationsListEndpointOutDTO } from '../../servi
 export class ReviewInnovationsComponent extends CoreComponent implements OnInit {
 
   tabs: { key: keyof typeof INNOVATION_STATUS, title: string, description: string, link: string, notifications?: number, queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' | 'NEEDS_ASSESSMENT' | 'IN_PROGRESS' } }[] = [];
-  currentTab: { key: string, status: string, description: string, innovationsOverdue: number };
+  currentTab: { key: string, status: string, description: string, overdueInnovations: number };
+
+  form = new FormGroup({
+    supportFilter: new FormControl('UNASSIGNED')
+  });
+  formFilterItems: FormEngineParameterModel['items'] = [];
 
   innovationsList: TableModel<(getInnovationsListEndpointOutDTO['data'][0])>;
 
   innovationStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -54,7 +61,13 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
       }
     ];
 
-    this.currentTab = { key: '', status: '', description: '', innovationsOverdue: 0 };
+    this.currentTab = { key: '', status: '', description: '', overdueInnovations: 0 };
+
+    this.formFilterItems = [
+      { value: 'UNASSIGNED', label: 'Support status update overdue', description: `Qualifying accessor(s) at the recommended support organisation(s) have not updated the support status. All organisations are 'unassigned'` },
+      { value: 'ENGAGING', label: 'Supported innovations', description: `Support status 'Engaging' (at least one organisation is supporting)` },
+      { value: 'NOT_ENGAGING', label: 'Unsupported innovations', description: `Support status 'unassigned', 'completed', 'unsuitable', 'not yet', 'waiting' or 'further info'  (no organisation is 'engaging')` }
+    ];
 
     this.innovationsList = new TableModel({});
 
@@ -63,60 +76,8 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   ngOnInit(): void {
 
     this.subscriptions.push(
-      this.activatedRoute.queryParams.subscribe(queryParams => {
-
-        const currentStatus = queryParams.status;
-        const currentTabIndex = this.tabs.findIndex(tab => tab.queryParams.status === currentStatus) || 0;
-
-        if (!currentStatus || currentTabIndex === -1) {
-          this.router.navigate(['/assessment/innovations'], { queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' } });
-          return;
-        }
-
-        this.currentTab = {
-          key: this.tabs[currentTabIndex].key,
-          status: currentStatus,
-          description: this.tabs[currentTabIndex].description,
-          innovationsOverdue: 0
-        };
-
-        this.innovationsList.setData([]).setFilters({ status: [this.currentTab.status] });
-        this.innovationsList.page = 1;
-
-        switch (this.currentTab.status) {
-          case 'WAITING_NEEDS_ASSESSMENT':
-            this.innovationsList.setVisibleColumns({
-              name: { label: 'Innovation', orderable: true },
-              submittedAt: { label: 'Submitted', orderable: true },
-              location: { label: 'Location', orderable: true },
-              mainCategory: { label: 'Primary category', align: 'right', orderable: true }
-            }).setOrderBy('updatedAt');
-            break;
-
-          case 'NEEDS_ASSESSMENT':
-            this.innovationsList.setVisibleColumns({
-              name: { label: 'Innovation', orderable: true },
-              assessmentStartDate: { label: 'Assessment start date', orderable: true },
-              assessedBy: { label: 'Assessed by', orderable: false },
-              mainCategory: { label: 'Primary category', align: 'right', orderable: true }
-            }).setOrderBy('updatedAt');
-            break;
-
-          case 'IN_PROGRESS':
-            this.innovationsList.setVisibleColumns({
-              name: { label: 'Innovation', orderable: true },
-              assessmentDate: { label: 'Assessment date', orderable: true },
-              engagingEntities: { label: 'Engaging entities', orderable: true },
-              mainCategory: { label: 'Primary category', align: 'right', orderable: true }
-            }).setOrderBy('updatedAt');
-            break;
-
-        }
-
-        this.getInnovationsList();
-        this.getTabsNotifications();
-
-      })
+      this.activatedRoute.queryParams.subscribe(queryParams => this.onRouteChange(queryParams)),
+      this.form.valueChanges.subscribe(() => this.onFormChange())
     );
 
   }
@@ -129,7 +90,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
     this.assessmentService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(
       response => {
         this.innovationsList.setData(response.data, response.count);
-        this.currentTab.innovationsOverdue = response.data.filter(item => item.isOverdue).length;
+        this.currentTab.overdueInnovations = response.overdue;
         this.setPageStatus('READY');
       },
       error => {
@@ -147,6 +108,79 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
       }
     );
   }
+
+
+  onRouteChange(queryParams: Params): void {
+
+    const currentStatus = queryParams.status;
+    const currentTabIndex = this.tabs.findIndex(tab => tab.queryParams.status === currentStatus) || 0;
+
+    if (!currentStatus || currentTabIndex === -1) {
+      this.router.navigate(['/assessment/innovations'], { queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' } });
+      return;
+    }
+
+    this.currentTab = {
+      key: this.tabs[currentTabIndex].key,
+      status: currentStatus,
+      description: this.tabs[currentTabIndex].description,
+      overdueInnovations: 0
+    };
+
+    switch (this.currentTab.status) {
+      case 'WAITING_NEEDS_ASSESSMENT':
+        this.innovationsList
+          .clearData()
+          .setFilters({ status: [this.currentTab.status] })
+          .setVisibleColumns({
+            name: { label: 'Innovation', orderable: true },
+            submittedAt: { label: 'Submitted', orderable: true },
+            location: { label: 'Location', orderable: true },
+            mainCategory: { label: 'Primary category', align: 'right', orderable: true }
+          })
+          .setOrderBy('updatedAt');
+        break;
+
+      case 'NEEDS_ASSESSMENT':
+        this.innovationsList
+          .clearData()
+          .setFilters({ status: [this.currentTab.status] })
+          .setVisibleColumns({
+            name: { label: 'Innovation', orderable: true },
+            assessmentStartDate: { label: 'Assessment start date', orderable: true },
+            assessedBy: { label: 'Assessed by', orderable: false },
+            mainCategory: { label: 'Primary category', align: 'right', orderable: true }
+          })
+          .setOrderBy('assessmentStartDate');
+        break;
+
+      case 'IN_PROGRESS':
+        this.innovationsList
+          .clearData()
+          .setFilters({ status: [this.currentTab.status], ...this.form.value })
+          .setVisibleColumns({
+            name: { label: 'Innovation', orderable: true },
+            assessmentDate: { label: 'Assessment date', orderable: true },
+            engagingEntities: { label: 'Engaging entities', orderable: true },
+            mainCategory: { label: 'Primary category', align: 'right', orderable: true }
+          })
+          .setOrderBy('assessmentDate');
+        break;
+
+    }
+
+    this.getInnovationsList();
+    this.getTabsNotifications();
+
+  }
+
+  onFormChange(): void {
+
+    this.innovationsList.clearData().setFilters({ status: [this.currentTab.key], ...this.form.value });
+    this.getInnovationsList();
+
+  }
+
 
   onTableOrder(column: string): void {
 
