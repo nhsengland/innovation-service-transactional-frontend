@@ -299,6 +299,32 @@ $service-manual-container-size: 1100px; // Container width variable.
   }
 }
 
+.form-radios-small {
+  &.nhsuk-radios__item {
+    min-height: 30px;
+    padding: 0 0 0 35px;
+  }
+  .nhsuk-radios__label {
+    padding: 0;
+  }
+  .nhsuk-radios__hint {
+    font-size: 1.1rem;
+    padding: 0;
+  }
+  .nhsuk-radios__input + .nhsuk-radios__label::before {
+    height: 25px;
+    width: 25px;
+  }
+  .nhsuk-radios__input + .nhsuk-radios__label::after {
+    background: #000;
+    width: 13px;
+    height: 13px;
+    top: 6px;
+    left: 6px;
+    border-width: 0;
+  }
+}
+
 
 .form-items-group {
   width: unset;

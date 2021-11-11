@@ -91,7 +91,7 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
 
     const expected = [
       { key: 'name', label: 'Innovation', orderDir: 'none', orderable: true, align: 'text-align-left' },
-      { key: 'assessmentStartDate', label: 'Assessment start date', orderDir: 'none', orderable: true, align: 'text-align-left' },
+      { key: 'assessmentStartDate', label: 'Assessment start date', orderDir: 'ascending', orderable: true, align: 'text-align-left' },
       { key: 'assessedBy', label: 'Assessed by', orderDir: 'none', orderable: false, align: 'text-align-left' },
       { key: 'mainCategory', label: 'Primary category', orderDir: 'none', orderable: true, align: 'text-align-right' }
     ];
@@ -110,7 +110,7 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
 
     const expected = [
       { key: 'name', label: 'Innovation', orderDir: 'none', orderable: true, align: 'text-align-left' },
-      { key: 'assessmentDate', label: 'Assessment date', orderDir: 'none', orderable: true, align: 'text-align-left' },
+      { key: 'assessmentDate', label: 'Assessment date', orderDir: 'ascending', orderable: true, align: 'text-align-left' },
       { key: 'engagingEntities', label: 'Engaging entities', orderDir: 'none', orderable: true, align: 'text-align-left' },
       { key: 'mainCategory', label: 'Primary category', orderDir: 'none', orderable: true, align: 'text-align-right' }
     ];
@@ -180,6 +180,21 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
     fixture.detectChanges();
     component.getTabsNotifications();
     expect(component.tabs.find(t => t.key === 'WAITING_NEEDS_ASSESSMENT')?.notifications).toBe(1);
+
+  });
+
+  it('should run onFormChange()', () => {
+
+    activatedRoute.queryParams = of({ status: 'WAITING_NEEDS_ASSESSMENT' });
+
+    fixture = TestBed.createComponent(ReviewInnovationsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.form.get('supportFilter')?.setValue('ENGAGING');
+    fixture.detectChanges();
+
+    expect(component.innovationsList.filters).toEqual({ status: ['WAITING_NEEDS_ASSESSMENT'], supportFilter: 'ENGAGING' });
 
   });
 
