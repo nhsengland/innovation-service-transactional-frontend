@@ -18,6 +18,10 @@
           <theme-form-input type="password" [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
         </div>
 
+        <div *ngSwitchCase="'autocomplete'">
+          <theme-form-input-autocomplete [controlName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items" [pageUniqueField]="onlyOneField"></theme-form-input-autocomplete>
+        </div>
+
         <div *ngSwitchCase="'radio-group'">
           <theme-form-radio-group [controlName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items" [additional]="p.additional" [pageUniqueField]="onlyOneField"></theme-form-radio-group>
         </div>

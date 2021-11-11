@@ -28,6 +28,7 @@ export class FormRadioGroupComponent extends ControlValueAccessorConnector imple
   @Input() label?: string;
   @Input() description?: string;
   @Input() items?: FormEngineParameterModel['items'] = [];
+  @Input() size?: 'small' | 'normal';
   @Input() pageUniqueField = true;
   @Input() cssOverride?: string;
   @Input() additional?: FormEngineParameterModel[] = [];
@@ -35,6 +36,7 @@ export class FormRadioGroupComponent extends ControlValueAccessorConnector imple
   hasError = false;
   error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
 
+  cssClass = '';
   divCssOverride = '';
 
   isRunningOnBrowser: boolean;
@@ -79,6 +81,7 @@ export class FormRadioGroupComponent extends ControlValueAccessorConnector imple
   ngOnInit(): void {
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
+    this.cssClass = this.size === 'small' ? 'form-radios-small' : '';
     this.divCssOverride = this.cssOverride || 'nhsuk-u-padding-top-4';
 
   }

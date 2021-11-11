@@ -1,23 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
+
 import { SimpleChange } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
-import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxDropzoneModule } from 'ngx-dropzone';
+import { FormsModule } from '../forms.module';
 
 import { FormEngineComponent } from './form-engine.component';
-import { FormCheckboxComponent } from '../components/checkbox.component';
-import { FormCheckboxArrayComponent } from '../components/checkbox-array.component';
-import { FormCheckboxGroupComponent } from '../components/checkbox-group.component';
-import { FormFileUploadComponent } from '../components/file-upload.component';
-import { FormFileUploadPreviewComponent } from '../components/file-upload-preview.component';
-import { FormGroupedCheckboxArrayComponent } from '../components/grouped-checkbox-array.component';
-import { FormInputComponent } from '../components/input.component';
-import { FormRadioGroupComponent } from '../components/radio-group.component';
-import { FormTextareaComponent } from '../components/textarea.component';
 
 import { ALL_PARAMETER_TYPES_EMPTY, PARAMETERS_WITH_VALIDATIONS } from '../tests/form-engine.mock';
+
 
 describe('FormEngineComponent', () => {
 
@@ -27,24 +19,11 @@ describe('FormEngineComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientModule,
-        ReactiveFormsModule,
-        LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE, timestampFormat: 'mediumTime' }),
+        HttpClientTestingModule,
+        LoggerTestingModule,
         TranslateModule.forRoot(),
-        NgxDropzoneModule
-      ],
-      declarations: [
-        FormEngineComponent,
-        FormCheckboxComponent,
-        FormCheckboxArrayComponent,
-        FormCheckboxGroupComponent,
-        FormFileUploadComponent,
-        FormFileUploadPreviewComponent,
-        FormGroupedCheckboxArrayComponent,
-        FormInputComponent,
-        FormRadioGroupComponent,
-        FormTextareaComponent
-      ],
+        FormsModule
+      ]
     });
 
     fixture = TestBed.createComponent(FormEngineComponent);

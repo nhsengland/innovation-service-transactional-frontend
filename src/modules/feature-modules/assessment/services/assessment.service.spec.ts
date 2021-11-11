@@ -7,10 +7,16 @@ import { Injector } from '@angular/core';
 
 import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
 import { TableModel } from '@app/base/models';
 
-import { AssessmentService, getInnovationInfoEndpointDTO, getInnovationNeedsAssessmentEndpointInDTO, getInnovationNeedsAssessmentEndpointOutDTO, getInnovationsListEndpointInDTO, getInnovationsListEndpointOutDTO, getSupportLogInDTO, getSupportLogOutDTO, SupportLogType } from './assessment.service';
+import {
+  AssessmentService,
+  getInnovationInfoEndpointDTO, getInnovationNeedsAssessmentEndpointInDTO, getInnovationNeedsAssessmentEndpointOutDTO, getInnovationsListEndpointInDTO,
+  getInnovationsListEndpointOutDTO, getInnovationSupportsDTO, getSupportLogInDTO, getSupportLogOutDTO, SupportLogType
+} from './assessment.service';
+
 
 describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
@@ -54,8 +60,8 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
   it('should run getInnovationsList() and return success with NO filters', () => {
 
-    const responseMock = { count: 0, data: [] };
-    const expected = { count: 0, data: [] };
+    const responseMock: getInnovationsListEndpointInDTO = { count: 0, overdue: 0, data: [] };
+    const expected: getInnovationsListEndpointInDTO = { count: 0, overdue: 0, data: [] };
 
     const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({});
 
@@ -73,6 +79,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
     const responseMock: getInnovationsListEndpointInDTO = {
       count: 2,
+      overdue: 1,
       data: [
         {
           id: '01', name: 'Innovation 01', countryName: 'England', postCode: 'SW01', mainCategory: 'MEDICAL_DEVICE', otherMainCategoryDescription: '', submittedAt: '2020-01-01T00:00:00.000Z',
@@ -97,6 +104,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
     const expected: getInnovationsListEndpointOutDTO = {
       count: 2,
+      overdue: 1,
       data: [
         {
           id: '01', name: 'Innovation 01', countryName: 'England', postCode: 'SW01', mainCategory: 'Medical device', submittedAt: '2020-01-01T00:00:00.000Z',
@@ -228,51 +236,6 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
   });
 
-  it('should run createInnovationNeedsAssessment() and return success', () => {
-
-    const responseMock = { id: 'Assess01' };
-    const expected = responseMock;
-
-    let response: any = null;
-    service.createInnovationNeedsAssessment('inno01', { some: 'data' }).subscribe(success => response = success, error => response = error);
-
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/inno01/assessments`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('POST');
-    expect(response).toEqual(expected);
-
-  });
-
-  it('should run updateInnovationNeedsAssessment() and return success with isSubmission true', () => {
-
-    const responseMock = { id: 'Assess01' };
-    const expected = responseMock;
-
-    let response: any = null;
-    service.updateInnovationNeedsAssessment('inno01', 'assess01', true, { some: 'data' }).subscribe(success => response = success, error => response = error);
-
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('PUT');
-    expect(response).toEqual(expected);
-
-  });
-
-  it('should run updateInnovationNeedsAssessment() and return success with isSubmission false', () => {
-
-    const responseMock = { id: 'Assess01' };
-    const expected = responseMock;
-
-    let response: any = null;
-    service.updateInnovationNeedsAssessment('inno01', 'assess01', false, { some: 'data' }).subscribe(success => response = success, error => response = error);
-
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('PUT');
-    expect(response).toEqual(expected);
-
-  });
-
   it('should run getSupportLog() with type = "" and return success', () => {
 
     const responseMock: getSupportLogInDTO[] = [
@@ -373,6 +336,73 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     service.getSupportLog('Inno01').subscribe(success => response = success, error => response = error);
 
     const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run createInnovationNeedsAssessment() and return success', () => {
+
+    const responseMock = { id: 'Assess01' };
+    const expected = responseMock;
+
+    let response: any = null;
+    service.createInnovationNeedsAssessment('inno01', { some: 'data' }).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/inno01/assessments`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('POST');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run updateInnovationNeedsAssessment() and return success with isSubmission true', () => {
+
+    const responseMock = { id: 'Assess01' };
+    const expected = responseMock;
+
+    let response: any = null;
+    service.updateInnovationNeedsAssessment('inno01', 'assess01', true, { some: 'data' }).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('PUT');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run updateInnovationNeedsAssessment() and return success with isSubmission false', () => {
+
+    const responseMock = { id: 'Assess01' };
+    const expected = responseMock;
+
+    let response: any = null;
+    service.updateInnovationNeedsAssessment('inno01', 'assess01', false, { some: 'data' }).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('PUT');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run getInnovationSupports() and return success', () => {
+
+    const responseMock: getInnovationSupportsDTO = {
+      id: '01', status: 'CREATED' as keyof typeof INNOVATION_SUPPORT_STATUS,
+      organisationUnit: {
+        id: 'unit01', name: 'Unit 01',
+        organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
+      }
+    };
+
+    const expected = responseMock;
+
+    let response: any = null;
+    service.getInnovationSupports('inno01', false).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/inno01/supports?full=false`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);

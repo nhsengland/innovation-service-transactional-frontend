@@ -16,6 +16,7 @@ export enum SupportLogType {
 
 export type getInnovationsListEndpointInDTO = {
   count: number;
+  overdue: number;
   data: {
     id: string;
     name: string;
@@ -39,6 +40,7 @@ export type getInnovationsListEndpointInDTO = {
 };
 export type getInnovationsListEndpointOutDTO = {
   count: number;
+  overdue: number;
   data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription'> & { isOverdue: boolean })[]
 };
 
@@ -144,7 +146,8 @@ export class AssessmentService extends CoreService {
 
     const qp = {
       ...qParams,
-      status: filters.status || []
+      status: filters.status || [],
+      supportFilter: filters.supportFilter
     };
 
     const url = new UrlModel(this.API_URL).addPath('/assessments/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);
@@ -152,6 +155,7 @@ export class AssessmentService extends CoreService {
       take(1),
       map(response => ({
         count: response.count,
+        overdue: response.overdue || 0,
         data: response.data.map(item => ({
           id: item.id,
           name: item.name,

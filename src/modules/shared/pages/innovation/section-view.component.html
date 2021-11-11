@@ -49,7 +49,9 @@
       </ng-container>
 
       <ng-container *ngIf="module === 'accessor'">
-        <button routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" [queryParams]="{ section: sectionId }" class="nhsuk-button"> Create action for this section </button>
+        <ng-container *ngIf="innovation.support?.status === 'ENGAGING'">
+          <button routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" [queryParams]="{ section: sectionId }" class="nhsuk-button"> Create action for this section </button>
+        </ng-container>
       </ng-container>
 
     </ng-container>

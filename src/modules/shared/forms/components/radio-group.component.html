@@ -39,7 +39,7 @@
 
           <ng-container *ngSwitchDefault>
 
-            <div class="nhsuk-radios__item" [ngClass]="{'nhsuk-u-margin-left-4': item.group}">
+            <div class="nhsuk-radios__item {{ cssClass }}" [ngClass]="{'nhsuk-u-margin-left-4': item.group}">
               <ng-container *ngIf="isRunningOnBrowser">
                 <input [formControl]="fieldControl" id="{{ id }}{{ i }}" type="radio" [name]="controlName" [value]="item.value" class="nhsuk-radios__input"
                   [attr.aria-controls]="item.conditional ? 'conditional-' + id + i : null"
