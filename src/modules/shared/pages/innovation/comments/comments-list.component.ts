@@ -18,7 +18,7 @@ import { getInnovationCommentsDTO, InnovationDataResolverType } from '@stores-mo
 })
 export class PageInnovationCommentsListComponent extends CoreComponent implements OnInit {
 
-  module: '' | 'innovator' | 'accessor' = '';
+  module: '' | 'innovator' | 'accessor' | 'assessment' = '';
   innovationId: string;
 
   alert: AlertType = { type: null };

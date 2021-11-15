@@ -96,7 +96,7 @@ describe('FeatureModules/Innovator/Innovation/InnovationActionTrackerEditCompone
 
     component.onSubmit();
     fixture.detectChanges();
-    expect(component.form.valid).toEqual(false);
+    expect(component.form.valid).toEqual(true);
 
   });
 

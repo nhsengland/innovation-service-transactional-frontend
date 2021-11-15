@@ -128,11 +128,11 @@ export class InnovationStore extends Store<InnovationModel> {
 
 
   // Innovation comments methods.
-  getInnovationComments$(module: '' | 'innovator' | 'accessor', innovationId: string, createdOrder: 'asc' | 'desc'): Observable<getInnovationCommentsDTO[]> {
+  getInnovationComments$(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string, createdOrder: 'asc' | 'desc'): Observable<getInnovationCommentsDTO[]> {
     return this.innovationsService.getInnovationComments(module, innovationId, createdOrder);
   }
 
-  createInnovationComment$(module: '' | 'innovator' | 'accessor', innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
+  createInnovationComment$(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
     return this.innovationsService.createInnovationComment(module, innovationId, body);
   }
 

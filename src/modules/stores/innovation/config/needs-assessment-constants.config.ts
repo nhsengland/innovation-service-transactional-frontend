@@ -13,7 +13,8 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       dataType: 'textarea',
       label: 'Please provide a brief description of the innovation',
       description: 'Consider if anything provided by the innovator needs clarification, such as the innovation category or company location.',
-      validations: { isRequired: [true, 'Innovation description is required'] }
+      validations: { isRequired: [true, 'Innovation description is required'] },
+      lengthLimit: 'large'
     }),
     new FormEngineParameterModel({
       id: 'maturityLevel',
@@ -91,7 +92,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       dataType: 'textarea',
       label: 'Please outline what type of support is currently needed',
       validations: { isRequired: [true, 'Description of type of support currently needed is required'] },
-      lengthLimit: 'medium'
+      lengthLimit: 'large'
     })
   ],
 

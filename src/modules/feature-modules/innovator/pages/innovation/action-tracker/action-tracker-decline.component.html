@@ -24,8 +24,11 @@
         <form [formGroup]="form">
           <theme-form-textarea controlName="comment" label="Enter a comment" description="Please describe why you're declining this action" [pageUniqueField]="false" lengthLimit="medium"></theme-form-textarea>
           <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Confirm</button>
-          <a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/{{ actionId }}" class="nhsuk-back-link__link nhsuk-u-padding-left-0 nhsuk-u-margin-bottom-5"> Cancel </a>
         </form>
+
+        <div>
+          <a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/{{ actionId }}" class="nhsuk-back-link__link nhsuk-u-padding-left-0 nhsuk-u-margin-bottom-5"> Cancel </a>
+        </div>
 
       </ng-container>
 

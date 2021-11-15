@@ -40,3 +40,9 @@
     @include nhsuk-font($size: 32);
   }
 }
+
+.triage-questionaire__head {
+  margin-right: auto;
+  margin-left: auto;
+  width: 60%;
+}
