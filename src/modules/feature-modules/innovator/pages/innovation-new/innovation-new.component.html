@@ -21,13 +21,13 @@
     <div class="nhsuk-grid-column-two-thirds">
 
       <h1 *ngIf="wizard.currentStep().label" class="nhsuk-heading-l"> {{ wizard.currentStep().label }} </h1>
-      <p *ngIf="wizard.currentStep().description"> {{ wizard.currentStep().description }}> </p>
+      <p *ngIf="wizard.currentStep().description"> {{ wizard.currentStep().description }} </p>
 
       <theme-form-engine formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
 
       <div *ngIf="wizard.currentStepId === 1" class="nhsuk-inset-text">
         <span class="nhsuk-u-visually-hidden">Information:</span>
-        <p>All innovations registered on this Use this service to get relevant information about developing your healthcare innovation.</p>
+        <p>All innovations registered on this account should be developed by the same innovator or organisation.</p>
       </div>
 
       <div *ngIf="wizard.currentStepId === 2" class="nhsuk-inset-text">
