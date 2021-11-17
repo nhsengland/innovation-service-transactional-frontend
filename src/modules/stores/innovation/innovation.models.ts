@@ -31,7 +31,7 @@ export const INNOVATION_SUPPORT_STATUS = {
   ENGAGING: {
     label: 'Engaging', cssClass: 'nhsuk-tag--green',
     description: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.',
-    innovatorDescription: 'Ready to support, assess or provide guidance',
+    innovatorDescription: 'Ready to support, assess or provide guidance.',
     hidden: false
   },
   FURTHER_INFO_REQUIRED: {
@@ -55,7 +55,7 @@ export const INNOVATION_SUPPORT_STATUS = {
   UNASSIGNED: {
     label: 'Unassigned', cssClass: 'nhsuk-tag--red',
     description: 'No status assigned yet.',
-    innovatorDescription: 'No status assigned yet',
+    innovatorDescription: 'No status assigned yet.',
     hidden: true
   },
   UNSUITABLE: {
