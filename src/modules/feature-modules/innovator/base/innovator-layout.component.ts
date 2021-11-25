@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 
 import { RoutingHelper } from '@modules/core';
 
-import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 type RouteDataLayoutOptionsType = {
@@ -38,7 +38,7 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private notificationService: NotificationService,
+    private notificationsService: NotificationsService
   ) {
 
     super();
@@ -67,14 +67,14 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
     if (this.stores.authentication.isValidUser()) {
 
-      this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
+      this.notificationsService.getAllUnreadNotificationsGroupedByContext().subscribe(
         response => {
           this.mainMenuNotifications = response;
         }
       );
 
       if (currentRouteInnovationId) {
-        this.notificationService.getAllUnreadNotificationsGroupedByContext(currentRouteInnovationId).subscribe(
+        this.notificationsService.getAllUnreadNotificationsGroupedByContext(currentRouteInnovationId).subscribe(
           response => {
             this.notifications = response;
           }
@@ -125,7 +125,8 @@ export class InnovatorLayoutComponent extends CoreComponent {
           { title: 'Innovation record', link: `/innovator/innovations/${currentRouteInnovationId}/record` },
           { title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker`, key: NotificationContextType.ACTION },
           { title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments`, key: NotificationContextType.COMMENT },
-          { title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/data-sharing`, key: NotificationContextType.DATA_SHARING }
+          { title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/support`, key: NotificationContextType.DATA_SHARING },
+          { title: 'Activity log', link: `/innovator/innovations/${currentRouteInnovationId}/activity-log` }
         ];
         break;
 

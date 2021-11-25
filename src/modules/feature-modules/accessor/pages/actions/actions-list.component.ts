@@ -74,8 +74,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
         this.currentTab.key = this.tabs[this.currentTab.index].key;
         this.currentTab.contentTitle = `${this.tabs[this.currentTab.index].title} list`;
 
-        this.actionsList.setData([]).setFilters({ openActions: queryParams.openActions });
-        this.actionsList.page = 1;
+        this.actionsList.clearData().setFilters({ openActions: queryParams.openActions });
 
         this.getActionsList();
 
@@ -116,7 +115,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
   onPageChange(event: { pageNumber: number }): void {
 
-    this.actionsList.page = event.pageNumber;
+    this.actionsList.setPage(event.pageNumber);
     this.getActionsList();
 
   }

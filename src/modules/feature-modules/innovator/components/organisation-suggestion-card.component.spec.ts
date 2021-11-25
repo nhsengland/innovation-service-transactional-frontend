@@ -11,9 +11,9 @@ import { SharedModule } from '@modules/shared/shared.module';
 
 import { OrganisationSuggestionsCardComponent } from './organisation-suggestion-card.component';
 
-import { NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 
-import { OrganisationSuggestion } from '@modules/stores/innovation/innovation.models';
+import { OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
 
 
 @Component({
@@ -23,7 +23,7 @@ class HostComponent {
 
   @ViewChild(OrganisationSuggestionsCardComponent) childComponent?: OrganisationSuggestionsCardComponent;
 
-  suggestions?: OrganisationSuggestion;
+  suggestions?: OrganisationSuggestionModel;
   shares?: { id: string, status: string }[];
 
 }
@@ -31,7 +31,7 @@ class HostComponent {
 
 describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
 
-  let notificationService: NotificationService;
+  let notificationsService: NotificationsService;
 
   let hostComponent: HostComponent;
   let hostFixture: ComponentFixture<HostComponent>;
@@ -54,7 +54,7 @@ describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
-    notificationService = TestBed.inject(NotificationService);
+    notificationsService = TestBed.inject(NotificationsService);
 
     hostFixture = TestBed.createComponent(HostComponent);
     hostComponent = hostFixture.componentInstance;
@@ -92,7 +92,7 @@ describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
 
   it('should create the component', () => {
 
-    notificationService.notifications = { DATA_SHARING: 1 };
+    notificationsService.notifications = { DATA_SHARING: 1 };
 
     hostComponent.suggestions =
     {

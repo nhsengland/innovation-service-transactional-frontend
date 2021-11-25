@@ -3,7 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { TableModel } from '@app/base/models';
-import { NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
@@ -47,7 +47,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   constructor(
     private activatedRoute: ActivatedRoute,
     private accessorService: AccessorService,
-    private notificationService: NotificationService,
+    private notificationsService: NotificationsService,
   ) {
 
     super();
@@ -184,7 +184,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   }
 
   getNotificationsGroupedByStatus(): void {
-    this.notificationService.getAllUnreadNotificationsGroupedByStatus('SUPPORT_STATUS').subscribe(
+    this.notificationsService.getAllUnreadNotificationsGroupedByStatus('SUPPORT_STATUS').subscribe(
       response => {
         for (const t of this.tabs) {
           t.notifications = response[t.key] || 0;
@@ -207,28 +207,32 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
     this.innovationsList.setData([]).setFilters({ status: this.currentTab.key, ...this.form.value });
 
-    this.innovationsList.page = 1;
-
     switch (currentStatus) {
 
       case 'UNASSIGNED':
-        this.innovationsList.setVisibleColumns({
-          name: { label: 'Innovation', orderable: true },
-          submittedAt: { label: 'Submitted', orderable: true },
-          mainCategory: { label: 'Main category', orderable: true },
-          countryName: { label: 'Location', orderable: true },
-          engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
-        }).setOrderBy('submittedAt', 'descending');
+        this.innovationsList
+          .clearData()
+          .setVisibleColumns({
+            name: { label: 'Innovation', orderable: true },
+            submittedAt: { label: 'Submitted', orderable: true },
+            mainCategory: { label: 'Main category', orderable: true },
+            countryName: { label: 'Location', orderable: true },
+            engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
+          })
+          .setOrderBy('submittedAt', 'descending');
         break;
 
       case 'ENGAGING':
-        this.innovationsList.setVisibleColumns({
-          name: { label: 'Innovation', orderable: true },
-          updatedAt: { label: 'Updated', orderable: true },
-          mainCategory: { label: 'Main category', orderable: true },
-          accessors: { label: 'Accessor', orderable: false },
-          engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
-        }).setOrderBy('updatedAt', 'descending');
+        this.innovationsList
+          .clearData()
+          .setVisibleColumns({
+            name: { label: 'Innovation', orderable: true },
+            updatedAt: { label: 'Updated', orderable: true },
+            mainCategory: { label: 'Main category', orderable: true },
+            accessors: { label: 'Accessor', orderable: false },
+            engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
+          })
+          .setOrderBy('updatedAt', 'descending');
         break;
 
       case 'FURTHER_INFO_REQUIRED':
@@ -236,13 +240,16 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       case 'NOT_YET':
       case 'UNSUITABLE':
       case 'COMPLETE':
-        this.innovationsList.setVisibleColumns({
-          name: { label: 'Innovation', orderable: true },
-          updatedAt: { label: 'Updated', orderable: true },
-          mainCategory: { label: 'Main category', orderable: true },
-          countryName: { label: 'Location', orderable: true },
-          engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
-        }).setOrderBy('updatedAt', 'descending');
+        this.innovationsList
+          .clearData()
+          .setVisibleColumns({
+            name: { label: 'Innovation', orderable: true },
+            updatedAt: { label: 'Updated', orderable: true },
+            mainCategory: { label: 'Main category', orderable: true },
+            countryName: { label: 'Location', orderable: true },
+            engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
+          })
+          .setOrderBy('updatedAt', 'descending');
         break;
 
     }
@@ -266,7 +273,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   }
 
   onPageChange(event: { pageNumber: number }): void {
-    this.innovationsList.page = event.pageNumber;
+    this.innovationsList.setPage(event.pageNumber);
     this.getInnovationsList();
   }
 

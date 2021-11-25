@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 
-import { NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
+
 import { getInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-innovator-pages-dashboard',
@@ -28,7 +29,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   innovationGuidesUrl = `${this.stores.environment.BASE_URL}/innovation-guides`;
 
   constructor(
-    private notificationService: NotificationService,
+    private notificationsService: NotificationsService,
     private innovatorService: InnovatorService,
     private activatedRoute: ActivatedRoute
   ) {
@@ -82,8 +83,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   notificationsCount(): number {
     let count = 0;
-    const notifications = this.notificationService.notifications;
-    const names = Object.keys(this.notificationService.notifications);
+    const notifications = this.notificationsService.notifications;
+    const names = Object.keys(this.notificationsService.notifications);
     for (const name of names) {
       count += notifications[name];
     }

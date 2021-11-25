@@ -253,24 +253,24 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
       data.subgroups.forEach((subgroup, i) => {
 
         toReturn.push({
-          label: `Group ${subgroup.name} innovation cost`,
+          label: `What's the cost of your innovation for ${subgroup.name}?`,
           value: subgroup.costDescription,
           editStepNumber: toReturn.length + 1
         });
         toReturn.push({
-          label: `Group ${subgroup.name} eligible patients`,
+          label: `Roughly how many patients in ${subgroup.name} would be eligible for your innovation?`,
           value: patientRangeItems.find(item => item.value === subgroup.patientsRange)?.label,
           editStepNumber: toReturn.length + 1
         });
 
         if (!['NOT_RELEVANT'].includes(subgroup.patientsRange as string)) {
           toReturn.push({
-            label: `Group ${subgroup.name} sell expectations`,
+            label: `How many units of your innovation would you expect to sell per year in the UK for ${subgroup.name}?`,
             value: subgroup.sellExpectations,
             editStepNumber: toReturn.length + 1
           });
           toReturn.push({
-            label: `Group ${subgroup.name} usage expectations`,
+            label: `Approximately how long is each unit of your innovation intended to be in use for ${subgroup.name}?`,
             value: subgroup.usageExpectations,
             editStepNumber: toReturn.length + 1
           });

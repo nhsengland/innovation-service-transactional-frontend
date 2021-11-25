@@ -7,7 +7,7 @@ import { RoutingHelper } from '@modules/core';
 import { INNOVATION_SUPPORT_STATUS, InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 import { categoriesItems } from '@stores-module/innovation/sections/catalogs.config';
 
-import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -37,7 +37,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   constructor(
     private activatedRoute: ActivatedRoute,
     private accessorService: AccessorService,
-    private notificationService: NotificationService,
+    private notificationsService: NotificationsService,
   ) {
 
     super();
@@ -81,7 +81,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }
     );
 
-    this.notificationService.dismissNotification(this.innovationId, NotificationContextType.INNOVATION).subscribe();
+    this.notificationsService.dismissNotification(this.innovationId, NotificationContextType.INNOVATION).subscribe();
   }
 
 }

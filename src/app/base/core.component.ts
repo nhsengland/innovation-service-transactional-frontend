@@ -194,9 +194,9 @@ export class CoreComponent implements OnInit, OnDestroy {
 
   }
 
-  // translate(translation: string, params?: object) {
-  //   return this.translateService.instant(translation, params);
-  // }
+  translate(translation: string, params?: object): string {
+    return this.translateService.instant(translation, params);
+  }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());

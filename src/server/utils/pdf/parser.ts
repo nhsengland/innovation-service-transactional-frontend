@@ -1,12 +1,14 @@
-import { PDFGenerator } from './PDFGenerator';
 import axios from 'axios';
-import { API_URL } from '../../config/constants.config';
-import { getInnovationInfoEndpointDTO, sectionType } from '@modules/stores/innovation/innovation.models';
+import { PDFGenerator } from './PDFGenerator';
+
 import { MappedObject } from '@modules/core';
-import { AllSectionsOutboundPayloadType, AllSectionsSummary } from '@modules/stores/innovation/innovation.config';
+import { getInnovationInfoEndpointDTO, sectionType } from '@modules/stores/innovation/innovation.models';
+import { AllSectionsOutboundPayloadType, getAllSectionsSummary } from '@modules/stores/innovation/innovation.config';
+
+import { API_URL } from '../../config/constants.config';
 import { PDFGeneratorInnovationNotFoundError, PDFGeneratorParserError, PDFGeneratorSectionsNotFoundError } from '../errors';
 
-export const getSections = async (innovationId: string, userId: string, config: any): Promise<{section: sectionType, data: MappedObject}[]> => {
+export const getSections = async (innovationId: string, userId: string, config: any): Promise<{ section: sectionType, data: MappedObject }[]> => {
   const url = `${API_URL}/api/innovators/${userId}/innovations/${innovationId}/sections`;
   const response = await axios.get<{
     section: sectionType;
@@ -25,7 +27,7 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
 
   let content: AllSectionsOutboundPayloadType;
   let innovation: getInnovationInfoEndpointDTO;
-  let sections: {section: sectionType, data: MappedObject }[];
+  let sections: { section: sectionType, data: MappedObject }[];
 
   const generator = new PDFGenerator();
 
@@ -43,16 +45,10 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
   }
 
   try {
-    content = AllSectionsSummary(sections);
+    content = getAllSectionsSummary(sections);
   } catch (error) {
     throw new PDFGeneratorParserError(error);
   }
-
-  // temporarely disables logo
-
-  // generator
-  //   .addLogo();
-
   generator
     .hero(innovation.name)
     .addPage();

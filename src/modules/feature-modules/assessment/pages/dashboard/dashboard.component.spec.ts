@@ -11,11 +11,11 @@ import { AssessmentModule } from '@modules/feature-modules/assessment/assessment
 
 import { DashboardComponent } from './dashboard.component';
 
-import { NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 describe('FeatureModules/Innovator/DashboardComponent', () => {
 
-  let notificationService: NotificationService;
+  let notificationsService: NotificationsService;
 
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
@@ -33,7 +33,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
-    notificationService = TestBed.inject(NotificationService);
+    notificationsService = TestBed.inject(NotificationsService);
 
   });
 
@@ -45,7 +45,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
   it('should have notifications with API success', () => {
 
-    notificationService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
+    notificationsService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
 
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
@@ -57,7 +57,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
   it('should NOT have notifications with API error', () => {
 
-    notificationService.getAllUnreadNotificationsGroupedByContext = () => throwError('error');
+    notificationsService.getAllUnreadNotificationsGroupedByContext = () => throwError('error');
 
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;

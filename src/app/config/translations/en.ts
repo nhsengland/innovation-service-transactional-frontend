@@ -60,6 +60,100 @@ export const locale = {
 
     // Shared translations to serve external / catalog modules.
     shared: {
+
+      catalog: {
+        innovation: {
+          activity_log_groups: {
+            INNOVATION_MANAGEMENT: {
+              title: 'Innovation management',
+              description: 'Innovator activities regarding ownership and sharing preferences'
+            },
+            INNOVATION_RECORD: {
+              title: 'Innovation record',
+              description: 'Activities regarding the innovation information update'
+            },
+            NEEDS_ASSESSMENT: {
+              title: 'Needs assessment',
+              description: 'Needs assessment activities'
+            },
+            SUPPORT: {
+              title: 'Support',
+              description: 'Organisations related activities'
+            },
+            COMMENTS: {
+              title: 'Comments',
+              description: ''
+            },
+            ACTIONS: {
+              title: 'Actions',
+              description: ''
+            },
+          },
+          activity_log_items: {
+            INNOVATION_CREATION: {
+              title: 'Innovation creation',
+              message: `{{ innovationName }} created`,
+            },
+            OWNERSHIP_TRANSFER: {
+              title: 'Ownership transfer',
+              message: `Ownership was transfered from {{ actionUserName }} to {{ interveningUserName }}`
+            },
+            SHARING_PREFERENCES_UPDATE: {
+              title: 'Sharing preferences update',
+              message: `Sharing preferences changed`
+            },
+            SECTION_DRAFT_UPDATE: {
+              title: 'Section draft update',
+              message: `"{{ sectionTitle }}" section saved as a draft`
+            },
+            SECTION_SUBMISSION: {
+              title: 'Section submission',
+              message: `"{{ sectionTitle }}" section submitted`
+            },
+            INNOVATION_SUBMISSION: {
+              title: 'Innovation submission',
+              message: `Submitted for needs assessment`,
+            },
+            NEEDS_ASSESSMENT_START: {
+              title: 'Needs assessment start',
+              message: `{{ actionUserName }} started needs assessment`
+            },
+            NEEDS_ASSESSMENT_COMPLETED: {
+              title: 'Needs assessment completed',
+              message: `{{ actionUserName }} completed needs assessment`
+            },
+            ORGANISATION_SUGGESTION: {
+              title: 'Organisation suggestion',
+              message: `{{ actionUserName }} suggested one or more organisations to support`
+            },
+            SUPPORT_STATUS_UPDATE: {
+              title: 'Support status update',
+              message: `{{ actionUserName }} changed the support status of {{ organisationUnit }}`
+            },
+            COMMENT_CREATION: {
+              title: 'Comment creation',
+              message: `{{ actionUserName }} left a comment`
+            },
+            ACTION_CREATION: {
+              title: 'Action creation',
+              message: `{{ actionUserName }} created an action for section "{{ sectionTitle }}"`
+            },
+            ACTION_STATUS_IN_REVIEW_UPDATE: {
+              title: 'Action changed to in review',
+              message: `{{ totalActions }} actions for "{{ sectionTitle }}" section were changed to "In review"`
+            },
+            ACTION_STATUS_DECLINED_UPDATE: {
+              title: 'Action declined',
+              message: `{{ actionUserName }} declined an action from {{ interveningUserName }}`
+            },
+            ACTION_STATUS_COMPLETED_UPDATE: {
+              title: 'Action completed',
+              message: `{{ actionUserName }} marked an action as complete`
+            }
+          }
+        }
+      },
+
       forms_module: {
         validations: {
           equal_to: 'Value does not match',
@@ -80,6 +174,7 @@ export const locale = {
           required: 'Required'
         }
       }
+
     }
   }
 };

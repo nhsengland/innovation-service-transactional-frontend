@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+
 import { CoreComponent, FormArray, FormControl, FormGroup } from '@app/base';
 import { TableModel } from '@app/base/models';
-import { AccessorService, getAdvanceActionsListEndpointOutDTO } from '../../services/accessor.service';
+
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
+
+import { AccessorService, getAdvanceActionsListEndpointOutDTO } from '../../services/accessor.service';
+
 type FilterKeysType = 'innovationStatus' | 'innovationSection';
 
 @Component({
@@ -44,15 +47,13 @@ export class ActionAdvancedFilterComponent extends CoreComponent implements OnIn
   innovationsList: any;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private accessorService: AccessorService
   ) {
 
     super();
     this.setPageTitle('Actions');
-    this.actionsList = new TableModel({
-      pageSize: 20
-    });
+
+    this.actionsList = new TableModel({});
 
     this.actionsList.setVisibleColumns({
       section: { label: 'Action', orderable: true },
@@ -64,6 +65,7 @@ export class ActionAdvancedFilterComponent extends CoreComponent implements OnIn
   }
 
   ngOnInit(): void {
+
     this.datasets.innovationStatus = Object.entries(INNOVATION_SECTION_ACTION_STATUS).
       map(([key, item]) => ({ label: item.label, value: key })).
       filter(i => ['REQUESTED', 'IN_REVIEW', 'COMPLETED', 'DECLINED'].includes(i.value));
@@ -86,6 +88,7 @@ export class ActionAdvancedFilterComponent extends CoreComponent implements OnIn
   }
 
   getActionsList(): void {
+
     this.setPageStatus('LOADING');
 
     this.accessorService.getAdvanceActionsList(this.actionsList.getAPIQueryParams()).subscribe(
@@ -103,9 +106,8 @@ export class ActionAdvancedFilterComponent extends CoreComponent implements OnIn
   }
 
   onFormChange(): void {
-    this.setPageStatus('LOADING');
 
-    this.actionsList.page = 1;
+    this.setPageStatus('LOADING');
 
     this.filters.forEach(filter => {
       const f = this.form.get(filter.key)!.value as string[];
@@ -114,11 +116,13 @@ export class ActionAdvancedFilterComponent extends CoreComponent implements OnIn
     /* istanbul ignore next */
     this.anyFilterSelected = this.filters.filter(i => i.selected.length > 0).length > 0;
 
-    this.actionsList.setFilters({
-      name: this.form.get('search')!.value,
-      innovationStatus: this.form.get('innovationStatus')!.value,
-      innovationSection: this.form.get('innovationSection')!.value,
-    });
+    this.actionsList
+      .clearData()
+      .setFilters({
+        name: this.form.get('search')!.value,
+        innovationStatus: this.form.get('innovationStatus')!.value,
+        innovationSection: this.form.get('innovationSection')!.value,
+      });
 
     this.getActionsList();
 
@@ -158,9 +162,8 @@ export class ActionAdvancedFilterComponent extends CoreComponent implements OnIn
   }
 
   onPageChange(event: { pageNumber: number }): void {
-    this.actionsList.page = event.pageNumber;
+    this.actionsList.setPage(event.pageNumber);
     this.getActionsList();
   }
-
 
 }

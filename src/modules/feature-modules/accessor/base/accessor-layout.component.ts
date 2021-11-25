@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 
 import { RoutingHelper } from '@modules/core';
 
-import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 
 type RouteDataLayoutOptionsType = {
   type: null | 'userAccountMenu' | 'innovationLeftAsideMenu' | 'emptyLeftAside';
@@ -33,7 +33,7 @@ export class AccessorLayoutComponent extends CoreComponent {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private notificationService: NotificationService,
+    private notificationsService: NotificationsService,
   ) {
 
     super();
@@ -74,14 +74,14 @@ export class AccessorLayoutComponent extends CoreComponent {
 
     if (this.stores.authentication.isValidUser()) {
 
-      this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
+      this.notificationsService.getAllUnreadNotificationsGroupedByContext().subscribe(
         response => {
           this.mainMenuNotifications = response;
         }
       );
 
       if (currentRouteInnovationId) {
-        this.notificationService.getAllUnreadNotificationsGroupedByContext(currentRouteInnovationId).subscribe(
+        this.notificationsService.getAllUnreadNotificationsGroupedByContext(currentRouteInnovationId).subscribe(
           response => {
             this.notifications = response;
           }
@@ -110,7 +110,8 @@ export class AccessorLayoutComponent extends CoreComponent {
           { title: 'Innovation record', link: `/accessor/innovations/${currentRouteInnovationId}/record` },
           { title: 'Action tracker', link: `/accessor/innovations/${currentRouteInnovationId}/action-tracker`, key: NotificationContextType.ACTION },
           { title: 'Comments', link: `/accessor/innovations/${currentRouteInnovationId}/comments`, key: NotificationContextType.COMMENT },
-          { title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support`, key: NotificationContextType.SUPPORT }
+          { title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support`, key: NotificationContextType.SUPPORT },
+          { title: 'Activity log', link: `/accessor/innovations/${currentRouteInnovationId}/activity-log` }
         ];
         break;
 

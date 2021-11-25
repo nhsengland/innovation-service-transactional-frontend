@@ -1,8 +1,8 @@
 import { Component, Input, OnChanges } from '@angular/core';
 
-import { AccessorSuggestionModel, AssessmentSuggestionModel, OrganisationSuggestion } from '@modules/stores/innovation/innovation.models';
+import { AccessorSuggestionModel, AssessmentSuggestionModel, OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
 
-import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 
 @Component({
   selector: 'organisation-suggestions-card',
@@ -11,7 +11,7 @@ import { NotificationContextType, NotificationService } from '@modules/shared/se
 })
 export class OrganisationSuggestionsCardComponent implements OnChanges {
 
-  @Input() suggestions: OrganisationSuggestion | undefined;
+  @Input() suggestions: OrganisationSuggestionModel | undefined;
   @Input() shares: { id: string, status: string }[] | undefined;
 
   assessments: {
@@ -29,7 +29,7 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
   hasNewSuggestions = false;
 
   constructor(
-    private notificationService: NotificationService,
+    private notificationsService: NotificationsService,
   ) {
     this.showAccessorsCard = false;
     this.showAssessmentsCard = false;
@@ -59,7 +59,7 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
       }
     }
 
-    this.hasNewSuggestions = this.notificationService.notifications[NotificationContextType.DATA_SHARING] ? true : false;
+    this.hasNewSuggestions = this.notificationsService.notifications[NotificationContextType.DATA_SHARING] ? true : false;
   }
 
   private parseAccessors(accessorsSuggestions: AccessorSuggestionModel[]): { suggestors: string, organisations: string[] } {
