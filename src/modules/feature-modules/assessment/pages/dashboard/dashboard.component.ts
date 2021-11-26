@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 
-import { NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 @Component({
@@ -22,7 +22,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   notifications: { [key: string]: number };
 
   constructor(
-    private notificationService: NotificationService,
+    private notificationsService: NotificationsService,
   ) {
 
     super();
@@ -63,7 +63,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
+    this.notificationsService.getAllUnreadNotificationsGroupedByContext().subscribe(
       response => {
         this.notifications = response;
         this.setPageStatus('READY');

@@ -14,8 +14,9 @@ import { PageAccountEmailNotificationsComponent } from './pages/account/email-no
 
 import { InnovationSectionViewComponent } from './pages/innovation/section-view.component';
 import { InnovationSectionEvidenceViewComponent } from './pages/innovation/evidence-view.component';
-import { PageInnovationRecordComponent } from './pages/innovation/innovation-record.component';
 import { PageActionStatusListComponent } from './pages/innovation/action-status-list.component';
+import { PageInnovationActivityLogComponent } from './pages/innovation/innovation-activity-log.component';
+import { PageInnovationRecordComponent } from './pages/innovation/innovation-record.component';
 import { PageInnovationCommentsListComponent } from './pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from './pages/innovation/comments/comments-new.component';
 import { PageInnovationSupportStatusListComponent } from './pages/innovation/innovation-support-status-list.component';
@@ -27,7 +28,7 @@ import { PageAccountManageUserDeleteAccountMesasageComponent } from './pages/acc
 
 // Services.
 import { OrganisationsService } from './services/organisations.service';
-import { NotificationService } from './services/notification.service';
+import { NotificationsService } from './services/notifications.service';
 
 @NgModule({
   imports: [
@@ -47,6 +48,7 @@ import { NotificationService } from './services/notification.service';
 
     InnovationSectionViewComponent,
     InnovationSectionEvidenceViewComponent,
+    PageInnovationActivityLogComponent,
     PageInnovationRecordComponent,
     PageActionStatusListComponent,
     PageInnovationCommentsListComponent,
@@ -59,7 +61,7 @@ import { NotificationService } from './services/notification.service';
   ],
   providers: [
     OrganisationsService,
-    NotificationService
+    NotificationsService
   ],
   exports: [
     CommonModule,

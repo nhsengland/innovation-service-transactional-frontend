@@ -5,7 +5,7 @@ import { filter } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 
 import { RoutingHelper } from '@modules/core';
-import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 import { InnovationDataResolverType } from '@stores-module/innovation/innovation.models';
 
 type RouteDataLayoutOptionsType = {
@@ -31,7 +31,7 @@ export class AssessmentLayoutComponent extends CoreComponent {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private notificationService: NotificationService,
+    private notificationsService: NotificationsService,
   ) {
 
     super();
@@ -73,7 +73,7 @@ export class AssessmentLayoutComponent extends CoreComponent {
 
     if (this.stores.authentication.isValidUser()) {
 
-      this.notificationService.getAllUnreadNotificationsGroupedByContext().subscribe(
+      this.notificationsService.getAllUnreadNotificationsGroupedByContext().subscribe(
         response => {
           this.mainMenuNotifications = response;
         }
@@ -99,12 +99,15 @@ export class AssessmentLayoutComponent extends CoreComponent {
           { title: 'Overview', link: `/assessment/innovations/${currentRouteInnovationId}/overview` },
           { title: 'Innovation record', link: `/assessment/innovations/${currentRouteInnovationId}/record` },
           // { title: 'Action tracker', link: `/assessment/innovations/${currentRouteInnovationId}/action-tracker` },
-
         ];
+
         if (innovation.status === 'IN_PROGRESS') {
           this.leftSideBar.push({ title: 'Comments', link: `/assessment/innovations/${currentRouteInnovationId}/comments` });
           this.leftSideBar.push({ title: 'Support status', link: `/assessment/innovations/${currentRouteInnovationId}/support` });
         }
+
+        this.leftSideBar.push({ title: 'Activity log', link: `/assessment/innovations/${currentRouteInnovationId}/activity-log` });
+
         break;
 
       case 'emptyLeftAside':

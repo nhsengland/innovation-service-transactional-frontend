@@ -1,8 +1,6 @@
 <section class="bg-color-white">
   <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
-
     <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
-
     <div class="app-tabs">
       <ul class="app-tabs__list" role="tablist" aria-label="Tabs">
         <li *ngFor="let tab of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
@@ -14,94 +12,105 @@
         </li>
       </ul>
     </div>
-
     <div class="nhsuk-grid-row">
       <div id="content-{{ currentTab.key }}" role="tabpanel" attr.aria-labelledby="tab-{{ currentTab.key }}" class="nhsuk-grid-column-full">
 
         <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-        <ng-container *ngIf="pageStatus === 'READY' && innovationsList.getTotalRowsNumber() === 0">
-          <p> There are no innovations </p>
-        </ng-container>
+        <ng-container *ngIf="pageStatus === 'READY'">
 
-        <ng-container *ngIf="pageStatus === 'READY' && innovationsList.getTotalRowsNumber() > 0">
+          <ng-container *ngIf="currentTab.key !== 'IN_PROGRESS'">
+            <ng-container *ngIf="innovationsList.getTotalRowsNumber() > 0">
+              <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
+            </ng-container>
+            <p *ngIf="currentTab.key !== 'IN_PROGRESS' && currentTab.overdueInnovations > 0" class="nhsuk-body-s nhsuk-u-margin-bottom-2 d-flex align-items-center">
+              <span class="dot-error nhsuk-u-margin-right-2"></span>
+              <span>{{ currentTab.overdueInnovations }} are overdue</span>
+            </p>
+            <ng-container *ngIf="innovationsList.getTotalRowsNumber() > 0">
+              <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+            </ng-container>
+          </ng-container>
 
-          <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
+          <ng-container *ngIf="currentTab.key === 'IN_PROGRESS'">
+            <form *ngIf="currentTab.key === 'IN_PROGRESS'" [formGroup]="form" class="nhsuk-u-margin-bottom-1">
+              <theme-form-radio-group controlName="supportFilter" label="Organisations support status" [items]="formFilterItems" size="small" [pageUniqueField]="false"></theme-form-radio-group>
+            </form>
+            <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+          </ng-container>
 
-          <p *ngIf="currentTab.key !== 'IN_PROGRESS' && currentTab.overdueInnovations > 0" class="nhsuk-body-s nhsuk-u-margin-bottom-2 d-flex align-items-center">
-            <span class="dot-error nhsuk-u-margin-right-2"></span>
-            <span>{{ currentTab.overdueInnovations }} are overdue</span>
-          </p>
+          <ng-container *ngIf="innovationsList.getTotalRowsNumber() === 0">
+            <p class="nhsuk-u-padding-top-3"> There are no innovations to display. </p>
+          </ng-container>
 
-          <form *ngIf="currentTab.key === 'IN_PROGRESS'" [formGroup]="form" class="nhsuk-u-margin-bottom-1">
-            <theme-form-radio-group controlName="supportFilter" label="Organisations support status"  [items]="formFilterItems" size="small" [pageUniqueField]="false"></theme-form-radio-group>
-          </form>
+          <ng-container *ngIf="innovationsList.getTotalRowsNumber() > 0">
 
-          <hr class="nhsuk-section-break nhsuk-section-break--visible" />
-
-          <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-margin-top-3">
-            <caption class="nhsuk-table__caption"> {{ currentTab.description }} </caption>
-            <thead class="nhsuk-table__head">
-              <tr class="">
-                <th *ngFor="let item of innovationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
-                  <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-                  <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
-                </th>
-              </tr>
-            </thead>
-            <tbody class="nhsuk-table__body">
-              <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
-                <td class="nhsuk-table__cell">
-                  <div class="d-flex">
-                    <div class="nhsuk-u-padding-right-2">
-                      <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }}</span>
-                      <a *ngIf="currentTab.status !== 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation"> {{ item.name }} </a>
-                      <a *ngIf="currentTab.status === 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}/assessments/{{item.assessment.id}}"
-                        attr.aria-label="View {{ item.name }} innovation assessment details"> {{ item.name }} </a>
+            <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-margin-top-3">
+              <caption class="nhsuk-table__caption"> {{ currentTab.description }} </caption>
+              <thead class="nhsuk-table__head">
+                <tr class="">
+                  <th *ngFor="let item of innovationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                    <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+                    <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="nhsuk-table__body">
+                <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
+                  <td class="nhsuk-table__cell">
+                    <div class="d-flex">
+                      <div class="nhsuk-u-padding-right-2">
+                        <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }}</span>
+                        <a *ngIf="currentTab.status !== 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation"> {{ item.name }} </a>
+                        <a *ngIf="currentTab.status === 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}/assessments/{{item.assessment.id}}" attr.aria-label="View {{ item.name }} innovation assessment details">
+                          {{ item.name }}
+                        </a>
+                      </div>
+                      <notification-tag *ngIf="item.notifications.isNew !== true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" [count]="item.notifications.count"></notification-tag>
+                      <notification-tag *ngIf="item.notifications.isNew === true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" [isNew]="true"></notification-tag>
                     </div>
-                    <notification-tag *ngIf="item.notifications.isNew !== true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" [count]="item.notifications.count"></notification-tag>
-                    <notification-tag *ngIf="item.notifications.isNew === true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" [isNew]="true"></notification-tag>
-                  </div>
-                </td>
+                  </td>
 
-                <td *ngIf="innovationsList.getColumnLabel('submittedAt')" class="nhsuk-table__cell d-flex align-items-center">
-                  <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('submittedAt') }}</span>
-                  <span>{{ item.submittedAt | date: ('app.date_formats.long_date' | translate) }}</span>
-                  <span *ngIf="item.isOverdue" class="dot-error nhsuk-u-margin-left-2"></span>
-                </td>
+                  <td *ngIf="innovationsList.getColumnLabel('submittedAt')" class="nhsuk-table__cell d-flex align-items-center">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('submittedAt') }}</span>
+                    <span>{{ item.submittedAt | date: ('app.date_formats.long_date' | translate) }}</span>
+                    <span *ngIf="item.isOverdue" class="dot-error nhsuk-u-margin-left-2"></span>
+                  </td>
 
-                <td *ngIf="innovationsList.getColumnLabel('location')" class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('location') }}</span>
-                  {{ item.countryName }} {{ item.postCode ? ', ' + item.postCode : ''}}
-                </td>
+                  <td *ngIf="innovationsList.getColumnLabel('location')" class="nhsuk-table__cell">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('location') }}</span>
+                    {{ item.countryName }} {{ item.postCode ? ', ' + item.postCode : ''}}
+                  </td>
 
-                <td *ngIf="innovationsList.getColumnLabel('assessmentStartDate')" class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('assessmentStartDate') }}</span>
-                  {{ item.assessment.createdAt | date: ('app.date_formats.long_date' | translate) }}
-                </td>
-                <td *ngIf="innovationsList.getColumnLabel('assessedBy')" class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('assessedBy') }}</span>
-                  {{ item.assessment.assignTo.name }}
-                </td>
+                  <td *ngIf="innovationsList.getColumnLabel('assessmentStartDate')" class="nhsuk-table__cell">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('assessmentStartDate') }}</span>
+                    {{ item.assessment.createdAt | date: ('app.date_formats.long_date' | translate) }}
+                  </td>
+                  <td *ngIf="innovationsList.getColumnLabel('assessedBy')" class="nhsuk-table__cell">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('assessedBy') }}</span>
+                    {{ item.assessment.assignTo.name }}
+                  </td>
 
-                <td *ngIf="innovationsList.getColumnLabel('assessmentDate')" class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('assessmentDate') }}</span>
-                  {{ item.assessment.finishedAt | date: ('app.date_formats.long_date' | translate) }}
-                </td>
-                <td *ngIf="innovationsList.getColumnLabel('engagingEntities')" class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('engagingEntities') }}</span>
-                  {{ item.organisations.join(', ') }}
-                </td>
+                  <td *ngIf="innovationsList.getColumnLabel('assessmentDate')" class="nhsuk-table__cell">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('assessmentDate') }}</span>
+                    {{ item.assessment.finishedAt | date: ('app.date_formats.long_date' | translate) }}
+                  </td>
+                  <td *ngIf="innovationsList.getColumnLabel('engagingEntities')" class="nhsuk-table__cell">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('engagingEntities') }}</span>
+                    {{ item.organisations.join(', ') }}
+                  </td>
 
-                <td class="nhsuk-table__cell text-align-right">
-                  <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('mainCategory') }}</span>
-                  {{ item.mainCategory }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <td class="nhsuk-table__cell text-align-right">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('mainCategory') }}</span>
+                    {{ item.mainCategory }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-          <pagination [currentPage]="innovationsList.page" [pageSize]="innovationsList.pageSize" [totalRows]="innovationsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
+            <pagination [currentPage]="innovationsList.page" [pageSize]="innovationsList.pageSize" [totalRows]="innovationsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
+
+          </ng-container>
 
         </ng-container>
 

@@ -8,15 +8,15 @@ import { Injector } from '@angular/core';
 import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
-import { NotificationService } from './notification.service';
+import { NotificationsService } from './notifications.service';
 
 
-describe('Shared/Services/NotificationService', () => {
+describe('Shared/Services/NotificationsService', () => {
 
   let httpMock: HttpTestingController;
 
   let environmentStore: EnvironmentStore;
-  let service: NotificationService;
+  let service: NotificationsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -26,7 +26,7 @@ describe('Shared/Services/NotificationService', () => {
         StoresModule
       ],
       providers: [
-        NotificationService,
+        NotificationsService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
@@ -36,7 +36,7 @@ describe('Shared/Services/NotificationService', () => {
     httpMock = TestBed.inject(HttpTestingController);
 
     environmentStore = TestBed.inject(EnvironmentStore);
-    service = TestBed.inject(NotificationService);
+    service = TestBed.inject(NotificationsService);
 
   });
 

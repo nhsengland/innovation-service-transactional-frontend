@@ -14,7 +14,7 @@ import { AssessmentModule } from '../assessment.module';
 
 import { AssessmentLayoutComponent } from './assessment-layout.component';
 
-import { NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
@@ -23,7 +23,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
   let router: Router;
 
   let authenticationStore: AuthenticationStore;
-  let notificationService: NotificationService;
+  let notificationsService: NotificationsService;
 
   let component: AssessmentLayoutComponent;
   let fixture: ComponentFixture<AssessmentLayoutComponent>;
@@ -48,7 +48,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     router = TestBed.inject(Router);
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-    notificationService = TestBed.inject(NotificationService);
+    notificationsService = TestBed.inject(NotificationsService);
 
   });
 
@@ -85,7 +85,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
 
     authenticationStore.isValidUser = () => true;
-    notificationService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
+    notificationsService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
 
     fixture = TestBed.createComponent(AssessmentLayoutComponent);
     component = fixture.componentInstance;
@@ -127,7 +127,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
 
   });
 
-  it('should have leftSideBar with "innovationLeftAsideMenu" menu values', () => {
+  it('should have leftSideBar with "innovationLeftAsideMenu" menu values WITH innovation status IN_PROGRESS', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'innovation01', status: '' };
     activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' }, innovationData: { status: 'IN_PROGRESS' } };
@@ -138,6 +138,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
       { title: 'Comments', link: `/assessment/innovations/innovation01/comments` },
       { title: 'Support status', link: `/assessment/innovations/innovation01/support` },
       // { title: 'Action tracker', link: `/assessment/innovations/innovation01/action-tracker` },
+      { title: 'Activity log', link: `/assessment/innovations/innovation01/activity-log` }
     ];
 
     fixture = TestBed.createComponent(AssessmentLayoutComponent);
@@ -147,7 +148,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     expect(component.leftSideBar).toEqual(expected);
   });
 
-  it('should have leftSideBar with "innovationLeftAsideMenu" menu values', () => {
+  it('should have leftSideBar with "innovationLeftAsideMenu" menu values WITH innovation status != IN_PROGRESS', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'innovation01', status: '' };
     activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' }, innovationData: { status: '' } };
@@ -158,6 +159,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
       // { title: 'Support status', link: `/assessment/innovations/innovation01/support` },
       // { title: 'Action tracker', link: `/assessment/innovations/innovation01/action-tracker` },
       // { title: 'Comments', link: `/assessment/innovations/innovation01/comments` }
+      { title: 'Activity log', link: `/assessment/innovations/innovation01/activity-log` }
     ];
 
     fixture = TestBed.createComponent(AssessmentLayoutComponent);

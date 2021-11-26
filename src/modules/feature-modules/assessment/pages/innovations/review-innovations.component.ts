@@ -6,7 +6,7 @@ import { FormEngineParameterModel } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
 
-import { NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 import { AssessmentService, getInnovationsListEndpointOutDTO } from '../../services/assessment.service';
 
 @Component({
@@ -31,7 +31,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   constructor(
     private activatedRoute: ActivatedRoute,
     private assessmentService: AssessmentService,
-    private notificationService: NotificationService
+    private notificationsService: NotificationsService
   ) {
 
     super();
@@ -102,7 +102,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   }
 
   getTabsNotifications(): void {
-    this.notificationService.innovationStatusNotifications().subscribe(
+    this.notificationsService.innovationStatusNotifications().subscribe(
       response => {
         this.tabs.forEach(t => { t.notifications = response[t.key] || 0; });
       }
@@ -190,7 +190,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   }
 
   onPageChange(event: { pageNumber: number }): void {
-    this.innovationsList.page = event.pageNumber;
+    this.innovationsList.setPage(event.pageNumber);
     this.getInnovationsList();
   }
 

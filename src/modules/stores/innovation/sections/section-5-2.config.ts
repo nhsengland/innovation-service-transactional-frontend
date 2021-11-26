@@ -9,7 +9,7 @@ import { hasTestsItems } from './catalogs.config';
 const stepsLabels = {
   l1: 'Have you tested your innovation with users?',
   l2: 'What kind of testing with users have you done?',
-  l3: 'Please describe the testing and feedback for [testing type]',
+  // l3: 'Please describe the testing and feedback for [testing type]',
   l4: 'Please upload any documents demonstrating the testing you have done with users',
 };
 
@@ -182,7 +182,7 @@ function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
 
     data.userTests.forEach((item, i) => {
       toReturn.push({
-        label: `${item.kind} kind of testing`,
+        label: `Please describe the testing and feedback for ${item.kind}`,
         value: item.feedback,
         editStepNumber: toReturn.length + 1
       });

@@ -114,7 +114,7 @@ describe('FeatureModules/Innovator/Pages/Innovation/DataSharingChangeComponent',
     component = fixture.componentInstance;
 
     component.onSubmit();
-    expect(routerSpy).toHaveBeenCalledWith(['/innovator/innovations/Inno01/data-sharing'], { queryParams: { alert: 'sharingUpdateSuccess' } });
+    expect(routerSpy).toHaveBeenCalledWith(['/innovator/innovations/Inno01/support'], { queryParams: { alert: 'sharingUpdateSuccess' } });
 
   });
 
@@ -126,7 +126,7 @@ describe('FeatureModules/Innovator/Pages/Innovation/DataSharingChangeComponent',
     component = fixture.componentInstance;
 
     component.onSubmit();
-    expect(routerSpy).toHaveBeenCalledWith(['/innovator/innovations/Inno01/data-sharing'], { queryParams: { alert: 'sharingUpdateError' } });
+    expect(routerSpy).toHaveBeenCalledWith(['/innovator/innovations/Inno01/support'], { queryParams: { alert: 'sharingUpdateError' } });
 
   });
 

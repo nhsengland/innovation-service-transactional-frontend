@@ -5,11 +5,11 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 import { InnovationService } from '@modules/stores';
-import { INNOVATION_SUPPORT_STATUS, OrganisationSuggestion } from '@modules/stores/innovation/innovation.models';
+import { INNOVATION_SUPPORT_STATUS, OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 
@@ -46,7 +46,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
   organisationInfoUrl: string;
 
-  organisationSuggestions: OrganisationSuggestion | undefined;
+  organisationSuggestions: OrganisationSuggestionModel | undefined;
   shares: { id: string, status: string }[];
 
   constructor(
@@ -54,7 +54,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
     private organisationsService: OrganisationsService,
     private innovatorService: InnovatorService,
     private innovationService: InnovationService,
-    private notificationService: NotificationService,
+    private notificationsService: NotificationsService
   ) {
 
     super();
@@ -85,7 +85,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    this.notificationService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING).subscribe();
+    this.notificationsService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING).subscribe();
 
     forkJoin([
       this.organisationsService.getOrganisationUnits(),

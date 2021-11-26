@@ -13,7 +13,7 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 import { InnovationsReviewComponent } from './innovations-review.component';
 
 import { AccessorService } from '../../services/accessor.service';
-import { NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
@@ -24,7 +24,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   let authenticationStore: AuthenticationStore;
   let accessorService: AccessorService;
-  let notificationService: NotificationService;
+  let notificationsService: NotificationsService;
 
   let component: InnovationsReviewComponent;
   let fixture: ComponentFixture<InnovationsReviewComponent>;
@@ -46,7 +46,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     accessorService = TestBed.inject(AccessorService);
-    notificationService = TestBed.inject(NotificationService);
+    notificationsService = TestBed.inject(NotificationsService);
 
   });
 
@@ -204,7 +204,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
     activatedRoute.queryParams = of({ status: 'UNASSIGNED' });
     authenticationStore.isQualifyingAccessorRole = () => true;
 
-    notificationService.getAllUnreadNotificationsGroupedByStatus = () => of({ UNASSIGNED: 1, INVALID_KEY: 0 });
+    notificationsService.getAllUnreadNotificationsGroupedByStatus = () => of({ UNASSIGNED: 1, INVALID_KEY: 0 });
 
     fixture = TestBed.createComponent(InnovationsReviewComponent);
     component = fixture.componentInstance;

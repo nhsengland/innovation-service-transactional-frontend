@@ -15,7 +15,7 @@ import { InnovatorModule } from '../innovator.module';
 
 import { InnovatorLayoutComponent } from './innovator-layout.component';
 
-import { NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
@@ -24,7 +24,7 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
   let router: Router;
 
   let authenticationStore: AuthenticationStore;
-  let notificationService: NotificationService;
+  let notificationsService: NotificationsService;
 
   let component: InnovatorLayoutComponent;
   let fixture: ComponentFixture<InnovatorLayoutComponent>;
@@ -49,7 +49,7 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
     router = TestBed.inject(Router);
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-    notificationService = TestBed.inject(NotificationService);
+    notificationsService = TestBed.inject(NotificationsService);
 
   });
 
@@ -66,7 +66,7 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
 
     authenticationStore.isValidUser = () => true;
-    notificationService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
+    notificationsService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
 
     fixture = TestBed.createComponent(InnovatorLayoutComponent);
     component = fixture.componentInstance;
@@ -160,7 +160,8 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
       { title: 'Innovation record', link: `/innovator/innovations/innovation01/record` },
       { title: 'Action tracker', link: `/innovator/innovations/innovation01/action-tracker`, key: 'ACTION' },
       { title: 'Comments', link: `/innovator/innovations/innovation01/comments`, key: 'COMMENT' },
-      { title: 'Data sharing and support', link: `/innovator/innovations/innovation01/data-sharing`, key: 'DATA_SHARING' }
+      { title: 'Data sharing and support', link: `/innovator/innovations/innovation01/support`, key: 'DATA_SHARING' },
+      { title: 'Activity log', link: `/innovator/innovations/innovation01/activity-log` }
     ];
 
     fixture = TestBed.createComponent(InnovatorLayoutComponent);

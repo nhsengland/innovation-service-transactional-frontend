@@ -6,7 +6,7 @@ import { CustomValidators, FormEngineHelper } from '@app/base/forms';
 import { AlertType } from '@app/base/models';
 import { RoutingHelper } from '@modules/core';
 
-import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { getInnovationCommentsDTO, InnovationDataResolverType } from '@stores-module/innovation/innovation.models';
 
@@ -34,7 +34,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private notificationService: NotificationService,
+    private notificationsService: NotificationsService
   ) {
 
     super();
@@ -89,7 +89,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
         const toDismiss = [...commentsToDismiss, ...repliesToDismiss];
         for (const comment of toDismiss) {
-          this.notificationService.dismissNotification(comment, NotificationContextType.COMMENT).subscribe();
+          this.notificationsService.dismissNotification(comment, NotificationContextType.COMMENT).subscribe();
         }
 
         this.setPageStatus('READY');

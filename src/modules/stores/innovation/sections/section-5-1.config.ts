@@ -173,7 +173,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
     data.subgroups?.forEach((subgroup, i) => {
       toReturn.push({
-        label: `Group ${subgroup.name} care pathway`,
+        label: `Thinking about the current care pathway in the UK for ${subgroup.name}, which option best describes your innovation?`,
         value: carePathwayItems.find(item => item.value === subgroup.carePathway)?.label,
         editStepNumber: toReturn.length + 1
       });
