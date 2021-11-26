@@ -11,8 +11,8 @@ import { AuthenticationStore } from '@modules/stores/authentication/authenticati
 
 import {
   sectionType, InnovationSectionsIds, ActivityLogItemsEnum,
-  INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, ACTIVITY_LOG_ITEMS,
-  getInnovationSectionsDTO, getInnovationEvidenceDTO, getInnovationCommentsDTO, OrganisationSuggestionModel, ActivityLogTypesEnum
+  INNOVATION_STATUS, ACTIVITY_LOG_ITEMS,
+  getInnovationSectionsDTO, getInnovationEvidenceDTO, getInnovationCommentsDTO, OrganisationSuggestionModel
 } from './innovation.models';
 
 import { UrlModel } from '@modules/core/models/url.model';
@@ -36,9 +36,7 @@ export type ActivityLogInDTO = {
       interveningUserName?: string;
 
       assessmentId?: string;
-      innovationSUPPORTStatus?: keyof typeof INNOVATION_SUPPORT_STATUS; // TODO: This key is WRONG!
       sectionId?: InnovationSectionsIds;
-      sectionName?: InnovationSectionsIds; // TODO: This should NOT exist. Remove this when backend is fixed!
       actionId?: string;
 
       organisations?: string[];
@@ -56,7 +54,6 @@ export type ActivityLogOutDTO = {
       params: ActivityLogInDTO['data'][0]['params'] & {
         innovationName: string;
         sectionTitle: string;
-        innovationSupportStatus?: keyof typeof INNOVATION_SUPPORT_STATUS; // TODO: This should NOT exist. Remove this when backend is fixed!
       };
       link: null | { label: string; url: string; };
     })[]
@@ -136,16 +133,6 @@ export class InnovationService {
 
           let link: null | { label: string; url: string; } = null;
 
-          // TODO: This should NOT exist. Remove this when backend is fixed!
-          // Start hacks for demo!!!!!!!!!
-          // if (!i.params.sectionId && i.params.sectionName) {
-          //   i.params.sectionId = i.params.sectionName;
-          // }
-          if (i.params.actionId && !i.params.sectionId) {
-            i.params.sectionId = InnovationSectionsIds.INNOVATION_DESCRIPTION;
-          }
-          // END of hacks!!!!!!!!!
-
           switch (ACTIVITY_LOG_ITEMS[i.activity].link) {
             case 'NEEDS_ASSESSMENT':
               link = i.params.assessmentId ? { label: 'Go to Needs assessment', url: `/${module}/innovations/${i.innovation.id}/assessments/${i.params.assessmentId}` } : null;
@@ -171,8 +158,7 @@ export class InnovationService {
             params: {
               ...i.params,
               innovationName: i.innovation.name,
-              sectionTitle: getSectionTitle(i.params.sectionId || null),
-              innovationSupportStatus: i.params.innovationSUPPORTStatus || 'UNASSIGNED' // TODO: Remove this when possible!!!!
+              sectionTitle: getSectionTitle(i.params.sectionId || null)
             },
             link
           };
