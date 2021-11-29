@@ -11,7 +11,7 @@ import { AuthenticationStore } from '@modules/stores/authentication/authenticati
 
 import {
   sectionType, InnovationSectionsIds, ActivityLogItemsEnum,
-  INNOVATION_STATUS, ACTIVITY_LOG_ITEMS,
+  INNOVATION_STATUS, ACTIVITY_LOG_ITEMS, INNOVATION_SUPPORT_STATUS,
   getInnovationSectionsDTO, getInnovationEvidenceDTO, getInnovationCommentsDTO, OrganisationSuggestionModel
 } from './innovation.models';
 
@@ -38,6 +38,7 @@ export type ActivityLogInDTO = {
       assessmentId?: string;
       sectionId?: InnovationSectionsIds;
       actionId?: string;
+      innovationSupportStatus?: keyof typeof INNOVATION_SUPPORT_STATUS;
 
       organisations?: string[];
       organisationUnit?: string;
