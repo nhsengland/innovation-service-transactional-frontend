@@ -5,25 +5,28 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 
+import { MappedObject } from '@modules/core/interfaces/base.interfaces';
+import { APIQueryParamsType } from '@modules/core/models/table.model';
+
 import { Store } from '../store.class';
-import { EnvironmentStore } from '@modules/core/stores/environment.store';
 import { WizardEngineModel } from '@modules/shared/forms';
 
-import { InnovationService } from './innovation.service';
+import { InnovationService, UserModulesType, ActivityLogOutDTO, } from './innovation.service';
 
 import {
-  InnovationModel, SectionsSummaryModel, InnovationSectionsIds, sectionType, InnovationSectionConfigType, getInnovationEvidenceDTO,
-  INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS, getInnovationCommentsDTO
+  InnovationModel,
+  sectionType, InnovationSectionsIds, ActivityLogItemsEnum,
+  INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS,
+  SectionsSummaryModel, InnovationSectionConfigType,
+  getInnovationEvidenceDTO, getInnovationCommentsDTO
 } from './innovation.models';
-import { INNOVATION_SECTIONS } from './innovation.config';
-import { MappedObject } from '@modules/core/interfaces/base.interfaces';
+import { INNOVATION_SECTIONS, getSectionTitle } from './innovation.config';
 
 
 @Injectable()
 export class InnovationStore extends Store<InnovationModel> {
 
   constructor(
-    private environmentStore: EnvironmentStore,
     private innovationsService: InnovationService
   ) {
     super('store::innovations', new InnovationModel());
@@ -46,7 +49,11 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitInnovation(innovationId);
   }
 
-  getSectionsSummary$(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string): Observable<{ innovation: { name: string, status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {
+  getActivityLog$(module: UserModulesType, innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: keyof ActivityLogItemsEnum }>): Observable<ActivityLogOutDTO> {
+    return this.innovationsService.getInnovationActivityLog(module, innovationId, queryParams);
+  }
+
+  getSectionsSummary$(module: UserModulesType, innovationId: string): Observable<{ innovation: { name: string, status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {
 
     return this.innovationsService.getInnovationSections(module, innovationId).pipe(
       map(response => ({
@@ -88,7 +95,7 @@ export class InnovationStore extends Store<InnovationModel> {
 
   }
 
-  getSectionInfo$(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
+  getSectionInfo$(module: UserModulesType, innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
     return this.innovationsService.getSectionInfo(module, innovationId, section);
   }
 
@@ -100,7 +107,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitSections(innovationId, sections);
   }
 
-  getSectionEvidence$(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
+  getSectionEvidence$(module: UserModulesType, innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
     return this.innovationsService.getSectionEvidenceInfo(module, innovationId, evidenceId);
   }
 
@@ -113,7 +120,7 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   getSectionTitle(sectionId: InnovationSectionsIds): string {
-    return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id === sectionId)?.title || '';
+    return getSectionTitle(sectionId);
   }
 
   getSection(sectionId: InnovationSectionsIds): InnovationSectionConfigType['sections'][0] | undefined {
@@ -128,11 +135,11 @@ export class InnovationStore extends Store<InnovationModel> {
 
 
   // Innovation comments methods.
-  getInnovationComments$(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string, createdOrder: 'asc' | 'desc'): Observable<getInnovationCommentsDTO[]> {
+  getInnovationComments$(module: UserModulesType, innovationId: string, createdOrder: 'asc' | 'desc'): Observable<getInnovationCommentsDTO[]> {
     return this.innovationsService.getInnovationComments(module, innovationId, createdOrder);
   }
 
-  createInnovationComment$(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
+  createInnovationComment$(module: UserModulesType, innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
     return this.innovationsService.createInnovationComment(module, innovationId, body);
   }
 

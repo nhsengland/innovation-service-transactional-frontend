@@ -7,7 +7,7 @@ import { AlertType } from '@app/base/models';
 import { AssessmentService, getInnovationInfoEndpointDTO } from '../../../services/assessment.service';
 
 import { categoriesItems } from '@stores-module/innovation/sections/catalogs.config';
-import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 @Component({
@@ -28,7 +28,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   constructor(
     private activatedRoute: ActivatedRoute,
     private assessmentService: AssessmentService,
-    private notificationService: NotificationService,
+    private notificationsService: NotificationsService
   ) {
 
     super();
@@ -72,7 +72,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }
     );
 
-    this.notificationService.dismissNotification(this.innovationId, NotificationContextType.INNOVATION).subscribe();
+    this.notificationsService.dismissNotification(this.innovationId, NotificationContextType.INNOVATION).subscribe();
   }
 
 }

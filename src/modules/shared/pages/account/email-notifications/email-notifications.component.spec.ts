@@ -4,22 +4,23 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
+import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
 
-import { NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { PageAccountEmailNotificationsComponent } from './email-notifications.component';
-import { of, throwError } from 'rxjs';
 
-describe('PageAccountManageNotificationsComponent', () => {
+
+describe('Shared/Pages/Account/EmailNotifications/PageAccountManageNotificationsComponent', () => {
 
   let router: Router;
   let routerSpy: jasmine.Spy;
 
-  let notificationService: NotificationService;
+  let notificationsService: NotificationsService;
 
   let component: PageAccountEmailNotificationsComponent;
   let fixture: ComponentFixture<PageAccountEmailNotificationsComponent>;
@@ -40,7 +41,7 @@ describe('PageAccountManageNotificationsComponent', () => {
     router = TestBed.inject(Router);
     routerSpy = spyOn(router, 'navigate');
 
-    notificationService = TestBed.inject(NotificationService);
+    notificationsService = TestBed.inject(NotificationsService);
 
   });
 
@@ -55,7 +56,7 @@ describe('PageAccountManageNotificationsComponent', () => {
     const responseMock = [{ id: 'ACTION', isSubscribed: true },
     { id: 'SUPPORT', isSubscribed: false }];
 
-    notificationService.getEmailNotificationTypes = () => of(responseMock);
+    notificationsService.getEmailNotificationTypes = () => of(responseMock);
 
     const expected = [{ id: 'ACTION', title: 'Actions', isSubscribed: true },
     { id: 'SUPPORT', title: 'Support status changes', isSubscribed: false }];
@@ -70,7 +71,7 @@ describe('PageAccountManageNotificationsComponent', () => {
 
   it('should NOT have initial information loaded', () => {
 
-    notificationService.getEmailNotificationTypes = () => throwError('error');
+    notificationsService.getEmailNotificationTypes = () => throwError('error');
 
     const expected = {
       type: 'ERROR',
@@ -88,7 +89,7 @@ describe('PageAccountManageNotificationsComponent', () => {
 
   it('should run onUpdatePreference and call API with success', () => {
 
-    notificationService.updateUserNotificationPreferences = () => of({ id: 'prefId', isSubscribed: true });
+    notificationsService.updateUserNotificationPreferences = () => of({ id: 'prefId', isSubscribed: true });
 
     const expected = {
       type: 'SUCCESS',
@@ -106,7 +107,7 @@ describe('PageAccountManageNotificationsComponent', () => {
 
   it('should run onUpdatePreference and call API with error', () => {
 
-    notificationService.updateUserNotificationPreferences = () => throwError('error');
+    notificationsService.updateUserNotificationPreferences = () => throwError('error');
 
     const expected = {
       type: 'ERROR',
@@ -125,7 +126,7 @@ describe('PageAccountManageNotificationsComponent', () => {
 
   it('should run unsubscribeAllPreferences and call API with success', () => {
 
-    notificationService.updateUserNotificationPreferences = () => of({ id: 'prefId', isSubscribed: true });
+    notificationsService.updateUserNotificationPreferences = () => of({ id: 'prefId', isSubscribed: true });
 
     const expected = {
       type: 'SUCCESS',

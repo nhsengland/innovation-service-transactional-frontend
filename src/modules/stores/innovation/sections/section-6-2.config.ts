@@ -174,7 +174,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
 
       data.subgroups?.forEach(subgroup => {
         toReturn.push({
-          label: `Group ${subgroup.name} innovation cost`,
+          label: `What are the costs associated with use of your innovation, compared to current practice in the UK for ${subgroup.name}?`,
           value: costComparisonItems.find(item => item.value === subgroup.costComparison)?.label,
           editStepNumber: toReturn.length + 1
         });

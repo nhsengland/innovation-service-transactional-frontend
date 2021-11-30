@@ -447,3 +447,157 @@ describe('Stores/Innovation/InnovationService', () => {
   });
 
 });
+
+    // This will be use to test activity log endpoint.
+    // return of([
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.INNOVATION_CREATION,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       sectionName: ''
+    //     },
+    //     link: null
+    //   },
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.OWNERSHIP_TRANSFER,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       interveningUserName: 'Other guy',
+    //       sectionName: ''
+    //     },
+    //     link: null
+    //   },
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.SHARING_PREFERENCES_UPDATE,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       organisations: ['Org 01', 'Org 02', 'Org 03'],
+    //       sectionName: ''
+    //     },
+    //     link: null
+    //   },
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.SECTION_DRAFT_UPDATE,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       sectionId: InnovationSectionsIds.COST_OF_INNOVATION,
+    //       sectionName: 'the section name TODO!!!!!'
+    //     },
+    //     link: null
+    //   },
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.SECTION_SUBMISSION,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       sectionId: InnovationSectionsIds.COST_OF_INNOVATION,
+    //       sectionName: 'the section name TODO!!!!!',
+    //     },
+    //     link: { label: 'Go to section', url: `/innovator/innovations/Inno01/record/section/${InnovationSectionsIds.COST_OF_INNOVATION}` }
+    //   },
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.INNOVATION_SUBMISSION,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       sectionName: ''
+    //     },
+    //     link: null
+    //   },
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.NEEDS_ASSESSMENT_START,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       sectionName: '',
+    //       comment: { id: 'C123', value: 'This a comment!!!!!' }
+    //     },
+    //     link: null
+    //   },
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.NEEDS_ASSESSMENT_COMPLETED,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       sectionName: ''
+    //     },
+    //     link: { label: 'Go to needs assessment', url: `/innovator/innovations/Inno01/assessments/Assess01` }
+    //   },
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.ORGANISATION_SUGGESTION,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       organisations: ['Org 01', 'Org 02', 'Org 03'],
+    //       sectionName: ''
+    //     },
+    //     link: { label: 'Go to support information', url: `/innovator/innovations/Inno01/support` }
+    //   },
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.SUPPORT_STATUS_UPDATE,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       innovationSupportStatus: 'ENGAGING' as keyof typeof INNOVATION_SUPPORT_STATUS,
+    //       comment: { id: 'C123', value: 'This comment was inserted when the support changed!!' },
+    //       sectionName: ''
+    //     },
+    //     link: null
+    //   },
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.COMMENT_CREATION,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       comment: { id: 'C123', value: 'A comment was created!!!!!' },
+    //       sectionName: ''
+    //     },
+    //     link: null
+    //   },
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.ACTION_CREATION,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       comment: { id: 'C123', value: 'A comment from the action!!!!!' },
+    //       sectionName: ''
+    //     },
+    //     link: { label: 'Go to action', url: `/innovator/innovations/Inno01/action-tracker/Action01` }
+    //   },
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.ACTION_STATUS_IN_REVIEW_UPDATE,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       totalActions: 10,
+    //       sectionName: 'SECtion name here'
+    //     },
+    //     link: null
+    //   },
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.ACTION_STATUS_DECLINED_UPDATE,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       interveningUserName: 'Other guy',
+    //       comment: { id: 'C123', value: 'A comment from the action decline!!!!!' },
+    //       sectionName: ''
+    //     },
+    //     link: { label: 'Go to action', url: `/innovator/innovations/Inno01/action-tracker/Action01` }
+    //   },
+    //   {
+    //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.ACTION_STATUS_COMPLETED_UPDATE,
+    //     params: {
+    //       innovationName: 'Healthy App',
+    //       actionUserName: 'This guy',
+    //       comment: { id: 'C123', value: 'A comment from the action complete!!!!!' },
+    //       sectionName: ''
+    //     },
+    //     link: { label: 'Go to action', url: `/innovator/innovations/Inno01/action-tracker/Action01` }
+    //   }
+
+    // ]);

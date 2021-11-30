@@ -14,14 +14,14 @@ import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.mo
 import { DashboardComponent } from './dashboard.component';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
 
   let authenticationStore: AuthenticationStore;
   let innovatorService: InnovatorService;
-  let notificationService: NotificationService;
+  let notificationsService: NotificationsService;
 
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
@@ -41,7 +41,7 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     innovatorService = TestBed.inject(InnovatorService);
-    notificationService = TestBed.inject(NotificationService);
+    notificationsService = TestBed.inject(NotificationsService);
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
 
@@ -90,7 +90,7 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
 
   it('should run notificationsCount()', () => {
 
-    notificationService.notifications = { DATA_SHARING: 1 };
+    notificationsService.notifications = { DATA_SHARING: 1 };
 
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;

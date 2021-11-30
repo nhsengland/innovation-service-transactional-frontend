@@ -14,7 +14,7 @@ import { AccessorModule } from '../accessor.module';
 
 import { AccessorLayoutComponent } from './accessor-layout.component';
 
-import { NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
@@ -23,7 +23,7 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
   let router: Router;
 
   let authenticationStore: AuthenticationStore;
-  let notificationService: NotificationService;
+  let notificationsService: NotificationsService;
 
   let component: AccessorLayoutComponent;
   let fixture: ComponentFixture<AccessorLayoutComponent>;
@@ -48,7 +48,7 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
     router = TestBed.inject(Router);
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-    notificationService = TestBed.inject(NotificationService);
+    notificationsService = TestBed.inject(NotificationsService);
 
   });
 
@@ -85,7 +85,7 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
 
     authenticationStore.isValidUser = () => true;
-    notificationService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
+    notificationsService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
 
     fixture = TestBed.createComponent(AccessorLayoutComponent);
     component = fixture.componentInstance;
@@ -138,7 +138,8 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
       { title: 'Innovation record', link: `/accessor/innovations/innovation01/record` },
       { title: 'Action tracker', link: `/accessor/innovations/innovation01/action-tracker`, key: 'ACTION' },
       { title: 'Comments', link: `/accessor/innovations/innovation01/comments`, key: 'COMMENT' },
-      { title: 'Support status', link: `/accessor/innovations/innovation01/support`, key: 'SUPPORT' }
+      { title: 'Support status', link: `/accessor/innovations/innovation01/support`, key: 'SUPPORT' },
+      { title: 'Activity log', link: `/accessor/innovations/innovation01/activity-log` }
     ];
 
     fixture = TestBed.createComponent(AccessorLayoutComponent);

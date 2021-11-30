@@ -7,7 +7,7 @@ import { RandomGeneratorHelper } from '@modules/core';
 @Component({
   selector: 'theme-alert',
   templateUrl: './alert.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlertComponent implements OnChanges {
 

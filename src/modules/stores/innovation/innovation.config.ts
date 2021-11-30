@@ -57,7 +57,16 @@ export type AllSectionsOutboundPayloadType = {
 }[];
 
 
-export function AllSectionsSummary(data: AllSectionsInboundPayloadType): AllSectionsOutboundPayloadType {
+export function getSectionTitle(sectionId: null | InnovationSectionsIds): string {
+
+  if (!sectionId) { return ''; }
+
+  return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.sections.find(section => section.id === sectionId)?.title || '';
+
+}
+
+
+export function getAllSectionsSummary(data: AllSectionsInboundPayloadType): AllSectionsOutboundPayloadType {
 
   return INNOVATION_SECTIONS.map(i => ({
     title: i.title,
@@ -68,4 +77,3 @@ export function AllSectionsSummary(data: AllSectionsInboundPayloadType): AllSect
   }));
 
 }
-

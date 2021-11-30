@@ -4,13 +4,61 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 
+import { APIQueryParamsType } from '@modules/core/models/table.model';
+
 import { EnvironmentStore } from '@modules/core/stores/environment.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
-import { getInnovationSectionsDTO, sectionType, getInnovationEvidenceDTO, INNOVATION_STATUS, getInnovationCommentsDTO, OrganisationSuggestion } from './innovation.models';
+import {
+  sectionType, InnovationSectionsIds, ActivityLogItemsEnum,
+  INNOVATION_STATUS, ACTIVITY_LOG_ITEMS, INNOVATION_SUPPORT_STATUS,
+  getInnovationSectionsDTO, getInnovationEvidenceDTO, getInnovationCommentsDTO, OrganisationSuggestionModel
+} from './innovation.models';
 
 import { UrlModel } from '@modules/core/models/url.model';
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
+import { getSectionTitle } from './innovation.config';
+
+
+export type UserModulesType = '' | 'innovator' | 'accessor' | 'assessment';
+
+
+export type ActivityLogInDTO = {
+  count: number;
+  data: {
+    date: string; // '2020-01-01T00:00:00.000Z',
+    type: keyof ActivityLogItemsEnum;
+    activity: ActivityLogItemsEnum;
+    innovation: { id: string, name: string };
+    params: {
+
+      actionUserName: string;
+      interveningUserName?: string;
+
+      assessmentId?: string;
+      sectionId?: InnovationSectionsIds;
+      actionId?: string;
+      innovationSupportStatus?: keyof typeof INNOVATION_SUPPORT_STATUS;
+
+      organisations?: string[];
+      organisationUnit?: string;
+      comment?: { id: string; value: string; };
+      totalActions?: number;
+
+    };
+  }[];
+};
+export type ActivityLogOutDTO = {
+  count: number;
+  data: (Omit<ActivityLogInDTO['data'][0], 'innovation' | 'params'>
+    & {
+      params: ActivityLogInDTO['data'][0]['params'] & {
+        innovationName: string;
+        sectionTitle: string;
+      };
+      link: null | { label: string; url: string; };
+    })[]
+};
 
 
 @Injectable()
@@ -24,7 +72,8 @@ export class InnovationService {
     private authenticationStore: AuthenticationStore
   ) { }
 
-  private endpointModule(module: '' | 'innovator' | 'accessor' | 'assessment'): string {
+
+  private endpointModule(module: UserModulesType): string {
     switch (module) {
       case 'innovator':
         return 'innovators';
@@ -66,8 +115,62 @@ export class InnovationService {
 
   }
 
+  getInnovationActivityLog(module: UserModulesType, innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: keyof ActivityLogItemsEnum }>): Observable<ActivityLogOutDTO> {
 
-  getInnovationSections(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string): Observable<getInnovationSectionsDTO> {
+    const endpointModule = this.endpointModule(module);
+    const { filters, ...qParams } = queryParams;
+
+    const qp = {
+      ...qParams,
+      activityTypes: filters.activityTypes || undefined,
+    };
+
+    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/activities').setPathParams({ endpointModule, userId: this.authenticationStore.getUserId(), innovationId }).setQueryParams(qp);
+    return this.http.get<ActivityLogInDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => ({
+        count: response.count,
+        data: response.data.map(i => {
+
+          let link: null | { label: string; url: string; } = null;
+
+          switch (ACTIVITY_LOG_ITEMS[i.activity].link) {
+            case 'NEEDS_ASSESSMENT':
+              link = i.params.assessmentId ? { label: 'Go to Needs assessment', url: `/${module}/innovations/${i.innovation.id}/assessments/${i.params.assessmentId}` } : null;
+              break;
+            case 'SUPPORT_STATUS':
+              link = { label: 'Go to Support status', url: `/${module}/innovations/${i.innovation.id}/support` };
+              break;
+            case 'SECTION':
+              link = i.params.sectionId ? { label: 'View section', url: `/${module}/innovations/${i.innovation.id}/record/sections/${i.params.sectionId}` } : null;
+              break;
+            case 'ACTION':
+              if (['innovator', 'accessor'].includes(module) && i.params.actionId) { // Don't make sense for assessment users.
+                link = { label: 'View action', url: `/${module}/innovations/${i.innovation.id}/action-tracker/${i.params.actionId}` };
+              }
+              break;
+          }
+
+          return {
+            date: i.date,
+            type: i.type,
+            activity: i.activity,
+            innovation: i.innovation,
+            params: {
+              ...i.params,
+              innovationName: i.innovation.name,
+              sectionTitle: getSectionTitle(i.params.sectionId || null)
+            },
+            link
+          };
+
+        })
+      }))
+    );
+  }
+
+
+  getInnovationSections(module: UserModulesType, innovationId: string): Observable<getInnovationSectionsDTO> {
 
     const endpointModule = this.endpointModule(module);
 
@@ -80,7 +183,7 @@ export class InnovationService {
   }
 
 
-  getSectionInfo(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
+  getSectionInfo(module: UserModulesType, innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
 
     const endpointModule = this.endpointModule(module);
 
@@ -120,7 +223,7 @@ export class InnovationService {
   }
 
 
-  getSectionEvidenceInfo(module: '' | 'innovator' | 'accessor' | 'assessment', innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
+  getSectionEvidenceInfo(module: UserModulesType, innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
 
     const endpointModule = this.endpointModule(module);
 
@@ -166,7 +269,7 @@ export class InnovationService {
 
 
   // Innovation comments methods.
-  getInnovationComments(module: '' | 'innovator' | 'accessor' |'assessment', innovationId: string, createdOrder: 'asc' | 'desc'): Observable<getInnovationCommentsDTO[]> {
+  getInnovationComments(module: UserModulesType, innovationId: string, createdOrder: 'asc' | 'desc'): Observable<getInnovationCommentsDTO[]> {
 
     const endpointModule = this.endpointModule(module);
     const order = { order: { createdAt: createdOrder.toUpperCase() } };
@@ -178,7 +281,7 @@ export class InnovationService {
     );
   }
 
-  createInnovationComment(module: '' | 'innovator' | 'accessor' |'assessment', innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
+  createInnovationComment(module: UserModulesType, innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
 
     const endpointModule = this.endpointModule(module);
 
@@ -190,21 +293,16 @@ export class InnovationService {
 
   }
 
-  getInnovationOrganisationSuggestions(module: '' | 'innovator' | 'accessor', innovationId: string): Observable<OrganisationSuggestion> {
+  getInnovationOrganisationSuggestions(module: Extract<UserModulesType, '' | 'innovator' | 'accessor'>, innovationId: string): Observable<OrganisationSuggestionModel> {
 
     const endpointModule = this.endpointModule(module);
-    const url = new UrlModel(this.API_URL)
-      .addPath(':endpointModule/:userId/innovations/:innovationId/suggestions')
-      .setPathParams({
-        endpointModule,
-        userId: this.authenticationStore.getUserId(),
-        innovationId,
-      });
 
-    return this.http.get<OrganisationSuggestion>(url.buildUrl()).pipe(
+    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/suggestions').setPathParams({ endpointModule, userId: this.authenticationStore.getUserId(), innovationId });
+    return this.http.get<OrganisationSuggestionModel>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );
+
   }
 
 }

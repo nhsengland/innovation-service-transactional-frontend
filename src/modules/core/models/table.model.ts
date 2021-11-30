@@ -68,6 +68,11 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
 
   }
 
+  setPage(page: number): this {
+    this.page = page;
+    return this;
+  }
+
   setOrderBy(column: string, orderDir?: 'ascending' | 'descending'): this {
 
     if (orderDir) {

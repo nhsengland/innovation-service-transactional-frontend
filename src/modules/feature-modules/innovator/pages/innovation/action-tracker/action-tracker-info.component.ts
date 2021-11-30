@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
-import { NotificationContextType, NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { InnovatorService, getInnovationActionInfoOutDTO } from '../../../services/innovator.service';
@@ -33,7 +33,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService,
-    private notificationService: NotificationService
+    private notificationsService: NotificationsService
   ) {
 
     super();
@@ -81,7 +81,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
       }
     );
 
-    this.notificationService.dismissNotification(this.actionId, NotificationContextType.ACTION).subscribe();
+    this.notificationsService.dismissNotification(this.actionId, NotificationContextType.ACTION).subscribe();
 
   }
 

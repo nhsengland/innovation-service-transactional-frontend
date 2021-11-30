@@ -64,6 +64,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 .d-inline-block { display: inline-block; }
 .align-items-center { align-items: center; }
 .justify-content-space-between { justify-content: space-between; }
+.flex-direction-column { flex-direction: column; }
 
 .ml-auto { margin-left: auto; }
 .mr-auto { margin-right: auto; }
@@ -264,7 +265,10 @@ $service-manual-container-size: 1100px; // Container width variable.
     padding: 0 0 0 35px;
   }
   .nhsuk-checkboxes__label {
-    // margin-bottom: 0;
+    padding: 0;
+  }
+  .nhsuk-checkboxes__hint {
+    font-size: 1rem;
     padding: 0;
   }
   .nhsuk-checkboxes__input + .nhsuk-checkboxes__label::before {

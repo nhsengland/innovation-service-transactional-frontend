@@ -21,9 +21,10 @@ import { ActionLinkComponent } from './components/navigation/action-link.compone
 import { BackLinkComponent } from './components/navigation/back-link.component';
 import { PrintLinkComponent } from './components/navigation/print-link.component';
 
-import { SpinnerComponent } from './components/spinner/spinner.component';
-import { NotificationTagComponent } from './components/tag/notification-tag.component';
+import { NotificationTagComponent } from './components/notification-tag/notification-tag.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+
 
 @NgModule({
   imports: [
@@ -50,9 +51,9 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     BackLinkComponent,
     PrintLinkComponent,
 
-    SpinnerComponent,
     NotificationTagComponent,
-    PaginationComponent
+    PaginationComponent,
+    SpinnerComponent
   ],
   providers: [],
   exports: [
@@ -75,9 +76,9 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     BackLinkComponent,
     PrintLinkComponent,
 
-    SpinnerComponent,
     NotificationTagComponent,
-    PaginationComponent
+    PaginationComponent,
+    SpinnerComponent
   ]
 })
 export class ThemeModule { }

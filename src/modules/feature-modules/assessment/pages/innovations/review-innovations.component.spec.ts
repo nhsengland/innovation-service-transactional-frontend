@@ -13,7 +13,7 @@ import { AssessmentModule } from '@modules/feature-modules/assessment/assessment
 import { ReviewInnovationsComponent } from './review-innovations.component';
 
 import { AssessmentService } from '../../services/assessment.service';
-import { NotificationService } from '@modules/shared/services/notification.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () => {
@@ -23,7 +23,7 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
   let routerSpy: jasmine.Spy;
 
   let assessmentService: AssessmentService;
-  let notificationService: NotificationService;
+  let notificationsService: NotificationsService;
 
   let component: ReviewInnovationsComponent;
   let fixture: ComponentFixture<ReviewInnovationsComponent>;
@@ -46,7 +46,7 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
     routerSpy = spyOn(router, 'navigate');
 
     assessmentService = TestBed.inject(AssessmentService);
-    notificationService = TestBed.inject(NotificationService);
+    notificationsService = TestBed.inject(NotificationsService);
 
   });
 
@@ -172,7 +172,7 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
 
   it('should run getTabsNotifications()', () => {
 
-    notificationService.innovationStatusNotifications = () => of({ WAITING_NEEDS_ASSESSMENT: 1, INVALID_KEY: 0 });
+    notificationsService.innovationStatusNotifications = () => of({ WAITING_NEEDS_ASSESSMENT: 1, INVALID_KEY: 0 });
 
     fixture = TestBed.createComponent(ReviewInnovationsComponent);
     component = fixture.componentInstance;

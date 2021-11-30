@@ -39,7 +39,7 @@ export const EMAIL_NOTIFICATION_TYPE = {
 
 
 @Injectable()
-export class NotificationService extends CoreService {
+export class NotificationsService extends CoreService {
 
   // TODO: Remove this property when possible as this should not be a statefull service!
   notifications: { [key: string]: number } = {};

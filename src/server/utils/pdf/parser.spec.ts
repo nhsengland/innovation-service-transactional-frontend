@@ -1,10 +1,9 @@
-import { PDFGeneratorInnovationNotFoundError, PDFGeneratorSectionsNotFoundError } from '../errors';
 import * as parser from './parser';
 import { PDFGenerator } from './PDFGenerator';
+
 describe('PDF Parser Suite', () => {
 
   it ('should generate a PDF', async () => {
-    // Arrange
 
     spyOn(parser, 'getInnovation').and.returnValue({
       id: '_innovation_id',
@@ -43,54 +42,46 @@ describe('PDF Parser Suite', () => {
 
     spyOn(PDFGenerator.prototype, 'addLogo');
     const spy = spyOn(PDFGenerator.prototype, 'save');
-    // Act
 
-    const actual = await parser.generatePDF('_innovation_id', '_user_id', { });
-
-    // Assert
+    await parser.generatePDF('_innovation_id', '_user_id', { });
 
     expect(spy).toHaveBeenCalled();
+
   });
 
   it ('should throw Innovation exception', async () => {
-    // Arrange
 
     spyOn(parser, 'getInnovation').and.throwError('');
     const spy = spyOn(PDFGenerator.prototype, 'save');
     let err;
 
-    // Act
     try {
       await parser.generatePDF('_innovation_id', '_user_id', { });
     } catch (error) {
       err = error;
     }
 
-
-    // Assert
-
     expect(spy).not.toHaveBeenCalled();
     expect(err.name).toBe('PDFGeneratorInnovationNotFoundError');
+
   });
 
   it ('should throw Sections exception', async () => {
-    // Arrange
+
     spyOn(parser, 'getInnovation');
     spyOn(parser, 'getSections').and.throwError('');
     const spy = spyOn(PDFGenerator.prototype, 'save');
     let err;
 
-    // Act
     try {
       await parser.generatePDF('_innovation_id', '_user_id', { });
     } catch (error) {
       err = error;
     }
 
-
-    // Assert
-
     expect(spy).not.toHaveBeenCalled();
     expect(err.name).toBe('PDFGeneratorSectionsNotFoundError');
+
   });
+
 });
