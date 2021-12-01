@@ -33,13 +33,11 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
   activitiesList: TableModel<ActivitiesListType, { activityTypes: keyof ActivityLogTypesEnum }>;
 
+  currentDateOrderBy: 'ascending' | 'descending';
+
   form = new FormGroup({
     activityTypes: new FormArray([])
   });
-
-
-  currentDateOrderBy: 'ascending' | 'descending' = 'ascending';
-
 
   anyFilterSelected = false;
   filters: FiltersType[] = [{ key: 'activityTypes', title: 'Activity Types', showHideStatus: 'opened', selected: [] }];
@@ -69,7 +67,8 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
 
-    this.activitiesList = new TableModel({ orderBy: 'createdAt', orderDir: 'ascending' });
+    this.activitiesList = new TableModel({ orderBy: 'createdAt', orderDir: 'descending' });
+    this.currentDateOrderBy = 'descending';
 
   }
 
