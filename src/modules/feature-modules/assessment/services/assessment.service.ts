@@ -72,6 +72,7 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
   innovation: { id: string; name: string; };
   description: null | string;
   maturityLevel: null | string;
+  maturityLevelComment: null | string;
   hasRegulatoryApprovals: null | string;
   hasRegulatoryApprovalsComment: null | string;
   hasEvidence: null | string;
@@ -198,6 +199,7 @@ export class AssessmentService extends CoreService {
         assessment: {
           description: response.description,
           maturityLevel: response.maturityLevel,
+          maturityLevelComment: response.maturityLevelComment,
           hasRegulatoryApprovals: response.hasRegulatoryApprovals,
           hasRegulatoryApprovalsComment: response.hasRegulatoryApprovalsComment,
           hasEvidence: response.hasEvidence,

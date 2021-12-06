@@ -276,7 +276,8 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: { question: FormEngineModel, summa
             max: [5, 'Choose between 1 and 5 types of support']
           },
           items: [
-            { value: 'ASSESSMENT', label: 'Adoption and health technology assessment' },
+            { value: 'ADOPTION', label: 'Adoption' },
+            { value: 'ASSESSMENT', label: 'Health technology assessment' },
             { value: 'PRODUCT_MIGRATION', label: 'Bringing my product to or from the UK' },
             { value: 'CLINICAL_TESTS', label: 'Clinical trials and testing' },
             { value: 'COMMERCIAL', label: 'Commercial support and advice' },

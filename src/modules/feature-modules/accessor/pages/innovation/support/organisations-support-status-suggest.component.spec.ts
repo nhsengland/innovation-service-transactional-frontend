@@ -109,6 +109,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
       assessment: {
         description: 'description',
         maturityLevel: 'DISCOVERY',
+        maturityLevelComment: null,
         hasRegulatoryApprovals: 'YES',
         hasRegulatoryApprovalsComment: null,
         hasEvidence: 'YES',

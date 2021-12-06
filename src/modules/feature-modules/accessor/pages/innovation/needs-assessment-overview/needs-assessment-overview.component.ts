@@ -31,7 +31,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   suggestedOrganisations: string[] = [];
   logHistory: getSupportLogOutDTO[] = [];
 
-  innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '' };
+  innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
 
@@ -73,7 +73,8 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
         label: NEEDS_ASSESSMENT_QUESTIONS.innovation[1].label || '',
         value: `${maturityLevelIndex} / ${maturityLevelItems.length}`,
         levelIndex: maturityLevelIndex,
-        description: maturityLevelItems.find(item => item.value === needsAssessmentInfo.assessment.maturityLevel)?.label || ''
+        description: maturityLevelItems.find(item => item.value === needsAssessmentInfo.assessment.maturityLevel)?.label || '',
+        comment: needsAssessmentInfo.assessment.maturityLevelComment || ''
       };
 
       this.innovationSummary = [

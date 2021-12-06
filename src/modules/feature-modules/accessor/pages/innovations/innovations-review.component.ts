@@ -193,25 +193,18 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     );
   }
 
-  onRouteChange(queryParams: Params): void {
+  prepareInnovationsList(status: keyof typeof INNOVATION_SUPPORT_STATUS): void {
 
-    const currentStatus = queryParams.status;
-    const currentTabIndex = this.tabs.findIndex(tab => tab.queryParams.status === currentStatus) || 0;
-
-    if (!currentStatus || currentTabIndex === -1) {
-      this.router.navigate(['/accessor/innovations'], { queryParams: { status: this.defaultStatus } });
-      return;
-    }
-
-    this.currentTab = this.tabs[currentTabIndex];
-
-    this.innovationsList.setData([]).setFilters({ status: this.currentTab.key, ...this.form.value });
-
-    switch (currentStatus) {
+    switch (status) {
 
       case 'UNASSIGNED':
         this.innovationsList
           .clearData()
+          .setFilters({
+            status: this.currentTab.key,
+            assignedToMe: false,
+            suggestedOnly: this.form.get('suggestedOnly')!.value
+          })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
             submittedAt: { label: 'Submitted', orderable: true },
@@ -225,6 +218,11 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       case 'ENGAGING':
         this.innovationsList
           .clearData()
+          .setFilters({
+            status: this.currentTab.key,
+            assignedToMe: this.form.get('assignedToMe')!.value,
+            suggestedOnly: false
+          })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
             updatedAt: { label: 'Updated', orderable: true },
@@ -242,6 +240,11 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       case 'COMPLETE':
         this.innovationsList
           .clearData()
+          .setFilters({
+            status: this.currentTab.key,
+            assignedToMe: false,
+            suggestedOnly: false
+          })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
             updatedAt: { label: 'Updated', orderable: true },
@@ -254,6 +257,21 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
     }
 
+  }
+
+  onRouteChange(queryParams: Params): void {
+
+    const currentStatus = queryParams.status;
+    const currentTabIndex = this.tabs.findIndex(tab => tab.queryParams.status === currentStatus) || 0;
+
+    if (!currentStatus || currentTabIndex === -1) {
+      this.router.navigate(['/accessor/innovations'], { queryParams: { status: this.defaultStatus } });
+      return;
+    }
+
+    this.currentTab = this.tabs[currentTabIndex];
+
+    this.prepareInnovationsList(this.currentTab.key);
     this.getInnovationsList();
     this.getNotificationsGroupedByStatus();
 
@@ -261,7 +279,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
   onFormChange(): void {
 
-    this.innovationsList.setFilters({ status: this.currentTab.key, ...this.form.value });
+    this.prepareInnovationsList(this.currentTab.key);
     this.getInnovationsList();
 
   }
@@ -270,11 +288,14 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
     this.innovationsList.setOrderBy(column);
     this.getInnovationsList();
+
   }
 
   onPageChange(event: { pageNumber: number }): void {
+
     this.innovationsList.setPage(event.pageNumber);
     this.getInnovationsList();
+
   }
 
 }

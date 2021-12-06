@@ -44,20 +44,22 @@
                 <h1>{{ innovation.name }}</h1>
 
                 <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">The innovation</h2>
-                <p>{{ assessment?.description }}</p>
+                <p class="text-pre-wrap">{{ assessment?.description }}</p>
+
                 <dl class="nhsuk-summary-list">
 
+                  <!-- Maturity level item -->
                   <div class="nhsuk-summary-list__row">
-                    <!-- Maturity level item -->
                     <dt class="nhsuk-summary-list__key nhsuk-u-font-weight-normal">{{ innovationMaturityLevel.label }}</dt>
                     <dd class="nhsuk-summary-list__key width-auto">{{ innovationMaturityLevel.value }}</dd>
                     <dd class="nhsuk-summary-list__value text-pre-wrap">
-                      <ul class="progressbar nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1">
+                      <ul class="progressbar nhsuk-u-padding-top-2 nhsuk-u-margin-bottom-3">
                         <li class="progressbar-item{{ innovationMaturityLevel.levelIndex >= 1 ? ' active' : ''}}" style="width: 10%"></li>
                         <li class="progressbar-item{{ innovationMaturityLevel.levelIndex >= 2 ? ' active' : ''}}" style="width: 10%"></li>
                         <li class="progressbar-item{{ innovationMaturityLevel.levelIndex === 3 ? ' active' : ''}}" style="width: 10%"></li>
                       </ul>
-                      {{ innovationMaturityLevel.description }}
+                      <p class="nhsuk-body-s">{{ innovationMaturityLevel.description }}</p>
+                      <p *ngIf="innovationMaturityLevel.comment" class="nhsuk-u-margin-0">{{ innovationMaturityLevel.comment }}</p>
                     </dd>
                   </div>
 
@@ -79,7 +81,7 @@
                 </dl>
 
                 <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Support need summary</h2>
-                <p class="">{{ assessment?.summary }}</p>
+                <p class="text-pre-wrap">{{ assessment?.summary }}</p>
 
                 <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Suggested organisations</h2>
                 <p *ngFor="let item of suggestedOrganisations" class="nhsuk-u-margin-bottom-1">{{ item }}</p>
