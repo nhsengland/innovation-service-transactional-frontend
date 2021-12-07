@@ -22,7 +22,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       label: 'What\'s the approximate level of maturity of this innovation?',
       validations: { isRequired: [true, 'Choose one option'] },
       items: maturityLevelItems,
-      // additional: [new FormEngineParameterModel({ id: 'maturityLevelComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
+      additional: [new FormEngineParameterModel({ id: 'maturityLevelComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
     }),
     new FormEngineParameterModel({
       id: 'hasRegulatoryApprovals',
