@@ -88,7 +88,8 @@ export const mainPurposeItems = [
   { value: 'ENABLING_CARE', label: 'Enabling care, services or communication' }
 ];
 export const supportTypesItems = [
-  { value: 'ASSESSMENT', label: 'Adoption and health technology assessment' },
+  { value: 'ADOPTION', label: 'Adoption' },
+  { value: 'ASSESSMENT', label: 'Health technology assessment' },
   { value: 'PRODUCT_MIGRATION', label: 'Bringing my product to or from the UK' },
   { value: 'CLINICAL_TESTS', label: 'Clinical trials and testing' },
   { value: 'COMMERCIAL', label: 'Commercial support and advice' },

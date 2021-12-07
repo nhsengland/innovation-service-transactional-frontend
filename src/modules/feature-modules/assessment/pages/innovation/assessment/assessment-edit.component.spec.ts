@@ -76,6 +76,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
       assessment: {
         description: 'description',
         maturityLevel: null,
+        maturityLevelComment: null,
         hasRegulatoryApprovals: null,
         hasRegulatoryApprovalsComment: null,
         hasEvidence: null,

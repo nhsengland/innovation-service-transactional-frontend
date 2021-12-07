@@ -21,7 +21,8 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       dataType: 'radio-group',
       label: 'What\'s the approximate level of maturity of this innovation?',
       validations: { isRequired: [true, 'Choose one option'] },
-      items: maturityLevelItems
+      items: maturityLevelItems,
+      additional: [new FormEngineParameterModel({ id: 'maturityLevelComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
     }),
     new FormEngineParameterModel({
       id: 'hasRegulatoryApprovals',

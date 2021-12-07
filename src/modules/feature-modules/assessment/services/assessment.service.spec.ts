@@ -169,6 +169,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
       innovation: { id: 'Innov01', name: 'Innovation 01' },
       description: 'A description',
       maturityLevel: 'One value',
+      maturityLevelComment: 'One value',
       hasRegulatoryApprovals: 'One value',
       hasRegulatoryApprovalsComment: 'One value',
       hasEvidence: 'One value',
@@ -200,6 +201,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
       assessment: {
         description: responseMock.description,
         maturityLevel: responseMock.maturityLevel,
+        maturityLevelComment: responseMock.maturityLevelComment,
         hasRegulatoryApprovals: responseMock.hasRegulatoryApprovals,
         hasRegulatoryApprovalsComment: responseMock.hasRegulatoryApprovalsComment,
         hasEvidence: responseMock.hasEvidence,

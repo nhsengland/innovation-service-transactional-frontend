@@ -95,6 +95,7 @@ describe('FeatureModules/Assessment/Innovation/InnovationAssessmentOverviewCompo
       assessment: {
         description: 'description',
         maturityLevel: 'DISCOVERY',
+        maturityLevelComment: null,
         hasRegulatoryApprovals: 'YES',
         hasRegulatoryApprovalsComment: null,
         hasEvidence: 'YES',
@@ -139,6 +140,7 @@ describe('FeatureModules/Assessment/Innovation/InnovationAssessmentOverviewCompo
       assessment: {
         description: 'description',
         maturityLevel: null,
+        maturityLevelComment: null,
         hasRegulatoryApprovals: null,
         hasRegulatoryApprovalsComment: null,
         hasEvidence: null,
