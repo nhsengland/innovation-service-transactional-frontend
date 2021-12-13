@@ -32,16 +32,13 @@
             <div class="nhsuk-u-padding-top-8">
 
               <ng-container *ngIf="assessment?.hasBeenSubmitted && shouldShowUpdatedAt">
-                <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">Updated: {{ assessment?.updatedAt |
-                  date: ('app.date_formats.long_date' | translate) }}</p>
+                <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">Updated: {{ assessment?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</p>
                 <p class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.updatedBy }}</p>
                 <p class="nhsuk-body-s nhsuk-u-margin-bottom-5">Needs assessment team</p>
               </ng-container>
 
-              <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">Created: {{ assessment?.finishedAt |
-                date: ('app.date_formats.long_date' | translate) }}</p>
-              <p class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.assignToName }}
-              </p>
+              <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">Created: {{ assessment?.finishedAt | date: ('app.date_formats.long_date' | translate) }}</p>
+              <p class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.assignToName }}</p>
               <p class="nhsuk-body-s nhsuk-u-margin-bottom-5">Needs assessment team</p>
 
             </div>
@@ -54,27 +51,25 @@
                 <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus"></theme-alert>
 
                 <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Needs assessment</p>
-                <h1 class="">{{ innovation.name }}</h1>
+                <h1>{{ innovation.name }}</h1>
 
                 <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">The innovation</h2>
-                <p>{{ assessment?.description }}</p>
+                <p class="text-pre-wrap">{{ assessment?.description }}</p>
+
                 <dl class="nhsuk-summary-list">
 
                   <!-- Maturity level item -->
                   <div class="nhsuk-summary-list__row">
-                    <dt class="nhsuk-summary-list__key nhsuk-u-font-weight-normal">{{ innovationMaturityLevel.label }}
-                    </dt>
+                    <dt class="nhsuk-summary-list__key nhsuk-u-font-weight-normal">{{ innovationMaturityLevel.label }}</dt>
                     <dd class="nhsuk-summary-list__key width-auto">{{ innovationMaturityLevel.value }}</dd>
                     <dd class="nhsuk-summary-list__value text-pre-wrap">
-                      <ul class="progressbar nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1">
-                        <li class="progressbar-item{{ innovationMaturityLevel.levelIndex >= 1 ? ' active' : ''}}"
-                          style="width: 10%"></li>
-                        <li class="progressbar-item{{ innovationMaturityLevel.levelIndex >= 2 ? ' active' : ''}}"
-                          style="width: 10%"></li>
-                        <li class="progressbar-item{{ innovationMaturityLevel.levelIndex === 3 ? ' active' : ''}}"
-                          style="width: 10%"></li>
+                      <ul class="progressbar nhsuk-u-padding-top-2 nhsuk-u-margin-bottom-0">
+                        <li class="progressbar-item{{ innovationMaturityLevel.levelIndex >= 1 ? ' active' : ''}}" style="width: 10%"></li>
+                        <li class="progressbar-item{{ innovationMaturityLevel.levelIndex >= 2 ? ' active' : ''}}" style="width: 10%"></li>
+                        <li class="progressbar-item{{ innovationMaturityLevel.levelIndex === 3 ? ' active' : ''}}" style="width: 10%"></li>
                       </ul>
-                      {{ innovationMaturityLevel.description }}
+                      <p class="nhsuk-body-s font-color-secondary">{{ innovationMaturityLevel.description }}</p>
+                      <p *ngIf="innovationMaturityLevel.comment" class="nhsuk-u-margin-0">{{ innovationMaturityLevel.comment }}</p>
                     </dd>
                   </div>
 
@@ -96,15 +91,13 @@
                 </dl>
 
                 <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Support need summary</h2>
-                <p class="">{{ assessment?.summary }}</p>
+                <p class="text-pre-wrap">{{ assessment?.summary }}</p>
 
                 <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Suggested organisations</h2>
                 <p *ngFor="let item of assessment?.organisationsNames" class="nhsuk-u-margin-bottom-1">{{ item }}</p>
 
-                <a routerLink="/assessment/innovations/{{ innovationId }}"
-                  class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
-                <a routerLink="/assessment/innovations/{{ innovationId }}/assessments/{{ assessmentId }}/edit"
-                  class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"> Edit assessment </a>
+                <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
+                <a routerLink="/assessment/innovations/{{ innovationId }}/assessments/{{ assessmentId }}/edit" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"> Edit assessment </a>
 
               </div>
             </div>
@@ -129,8 +122,7 @@
               <div *ngFor="let item of logHistory" class="nhsuk-grid-row">
 
                 <div class="nhsuk-grid-column-one-quarter">
-                  <p class="nhsuk-heading-xs nhsuk-u-margin-bottom-0"> {{ item.createdAt | date:
-                    ('app.date_formats.long_date' | translate) }} </p>
+                  <p class="nhsuk-heading-xs nhsuk-u-margin-bottom-0"> {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }} </p>
                   <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"> {{ item.createdBy }} </p>
                   <p class="nhsuk-hint"> {{ item.organisationUnit.name }} </p>
                 </div>
@@ -139,13 +131,10 @@
                   <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0"> {{ item.logTitle }} </p>
                   <ng-container [ngSwitch]="item.type">
                     <div *ngSwitchCase="supportLogType.ACCESSOR_SUGGESTION">
-                      <p *ngFor="let organisationUnit of item.suggestedOrganisationUnitsNames"
-                        class="nhsuk-u-margin-bottom-0"> {{ organisationUnit }} </p>
+                      <p *ngFor="let organisationUnit of item.suggestedOrganisationUnitsNames" class="nhsuk-u-margin-bottom-0"> {{ organisationUnit }} </p>
                     </div>
                     <div *ngSwitchCase="supportLogType.STATUS_UPDATE">
-                      <strong class="nhsuk-tag"
-                        [ngClass]="innovationSupportStatus[item.innovationSupportStatus].cssClass">{{
-                        innovationSupportStatus[item.innovationSupportStatus].label }}</strong>
+                      <strong class="nhsuk-tag" [ngClass]="innovationSupportStatus[item.innovationSupportStatus].cssClass">{{ innovationSupportStatus[item.innovationSupportStatus].label }}</strong>
                     </div>
                   </ng-container>
                   <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-4">Comment</p>

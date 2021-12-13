@@ -20,18 +20,17 @@ import { InnovatorService } from '../../../services/innovator.service';
 })
 export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent implements OnInit {
 
-  alert: AlertType = { type: null };
-
   innovationId: string;
   assessmentId: string;
   innovation: InnovationDataResolverType;
 
+  alert: AlertType = { type: null };
+
   assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
 
-  innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '' };
+  innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
-
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -61,7 +60,8 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
           label: NEEDS_ASSESSMENT_QUESTIONS.innovation[1].label || '',
           value: `${maturityLevelIndex} / ${maturityLevelItems.length}`,
           levelIndex: maturityLevelIndex,
-          description: maturityLevelItems.find(item => item.value === response.assessment.maturityLevel)?.label || ''
+          description: maturityLevelItems.find(item => item.value === response.assessment.maturityLevel)?.label || '',
+          comment: response.assessment.maturityLevelComment || ''
         };
 
         this.innovationSummary = [

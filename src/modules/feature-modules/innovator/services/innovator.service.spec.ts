@@ -367,6 +367,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
       innovation: { id: '01', name: 'Innovation 01' },
       description: 'description',
       maturityLevel: null,
+      maturityLevelComment: null,
       hasRegulatoryApprovals: null,
       hasRegulatoryApprovalsComment: null,
       hasEvidence: null,
@@ -396,6 +397,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
       assessment: {
         description: responseMock.description,
         maturityLevel: responseMock.maturityLevel,
+        maturityLevelComment: responseMock.maturityLevelComment,
         hasRegulatoryApprovals: responseMock.hasRegulatoryApprovals,
         hasRegulatoryApprovalsComment: responseMock.hasRegulatoryApprovalsComment,
         hasEvidence: responseMock.hasEvidence,

@@ -220,11 +220,11 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    component.form.get('assignedToMe')?.setValue(true);
+    component.form.get('assignedToMe')?.setValue(false);
     component.form.get('suggestedOnly')?.setValue(true);
     fixture.detectChanges();
 
-    expect(component.innovationsList.filters).toEqual({ status: 'UNASSIGNED', assignedToMe: true, suggestedOnly: true });
+    expect(component.innovationsList.filters).toEqual({ status: 'UNASSIGNED', assignedToMe: false, suggestedOnly: true });
 
   });
 
