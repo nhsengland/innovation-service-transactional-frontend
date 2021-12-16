@@ -36,6 +36,19 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
     super();
     this.setPageTitle('Your innovations');
+
+    const user = this.stores.authentication.getUserInfo();
+    this.user = {
+      displayName: user.displayName,
+      innovations: user.innovations,
+      passwordResetOn: user.passwordResetOn
+    };
+
+
+  }
+
+  ngOnInit(): void {
+    this.getInnovationsTransfers();
     const user = this.stores.authentication.getUserInfo();
     this.user = {
       displayName: user.displayName,
@@ -57,10 +70,6 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         }
         break;
     }
-  }
-
-  ngOnInit(): void {
-    this.getInnovationsTransfers();
   }
 
 
