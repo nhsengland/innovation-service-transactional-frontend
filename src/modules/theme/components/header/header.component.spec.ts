@@ -7,7 +7,7 @@ import { StoresModule } from '@modules/stores';
 
 import { HeaderComponent } from './header.component';
 
-describe('HeaderComponent', () => {
+describe('Theme/Components/Header/HeaderComponent', () => {
 
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
@@ -27,83 +27,11 @@ describe('HeaderComponent', () => {
 
   });
 
-  it('should create the Header component', () => {
 
+  it('should create the component', () => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
-
     expect(component).toBeTruthy();
-
-  });
-
-  it('should render header contents', () => {
-
-    fixture = TestBed.createComponent(HeaderComponent);
-    fixture.detectChanges();
-    const element = fixture.nativeElement;
-
-    expect(element.querySelector('header').textContent.length).toBeGreaterThan(0);
-
-  });
-
-  it('should render header contents', () => {
-
-    fixture = TestBed.createComponent(HeaderComponent);
-    fixture.detectChanges();
-    const element = fixture.nativeElement;
-
-    expect(element.querySelector('header').textContent.length).toBeGreaterThan(0);
-
-  });
-
-  it('should render Home item link', () => {
-
-    fixture = TestBed.createComponent(HeaderComponent);
-    fixture.detectChanges();
-    const element = fixture.nativeElement;
-
-    expect(element.querySelectorAll('a.nhsuk-header__navigation-link')[0].textContent).toEqual(' Find support ');
-
-  });
-
-
-  it('should render Apply for support item link', () => {
-
-    fixture = TestBed.createComponent(HeaderComponent);
-    fixture.detectChanges();
-    const element = fixture.nativeElement;
-    expect(element.querySelectorAll('a.nhsuk-header__navigation-link')[1].textContent).toEqual(' Innovation guides ');
-
-  });
-
-  it('should render Case studies item link', () => {
-
-    fixture = TestBed.createComponent(HeaderComponent);
-    fixture.detectChanges();
-    const element = fixture.nativeElement;
-
-    expect(element.querySelectorAll('a.nhsuk-header__navigation-link')[2].textContent).toEqual(' Case studies ');
-
-  });
-
-  it('should render About the service item link', () => {
-
-    fixture = TestBed.createComponent(HeaderComponent);
-    fixture.detectChanges();
-    const element = fixture.nativeElement;
-
-    expect(element.querySelectorAll('a.nhsuk-header__navigation-link')[3].textContent).toEqual(' About the service ');
-
-  });
-
-  it('should render Sign in item link', () => {
-
-    fixture = TestBed.createComponent(HeaderComponent);
-    fixture.detectChanges();
-    const element = fixture.nativeElement;
-
-    expect(element.querySelectorAll('a.nhsuk-header__navigation-link')[4].textContent).toEqual(' My dashboard ');
-
   });
 
 });

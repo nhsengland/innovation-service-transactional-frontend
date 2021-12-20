@@ -68,8 +68,8 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
 
   it('should run getUserInfo() method and return success', () => {
 
-    const responseMock = { id: 'id', displayName: 'John Doe', type: 'INNOVATOR', organisations: [] };
-    const expected = { id: 'id', displayName: 'John Doe', type: 'INNOVATOR', organisations: [] };
+    const responseMock = { id: 'id', displayName: 'John Doe', type: 'INNOVATOR', roles: [], organisations: [] };
+    const expected = { id: 'id', displayName: 'John Doe', type: 'INNOVATOR', roles: [], organisations: [] };
     let response: any = null;
 
     service.getUserInfo().subscribe(success => response = success, error => response = error);

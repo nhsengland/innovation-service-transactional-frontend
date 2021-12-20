@@ -3,6 +3,16 @@ import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 
 import { AuthenticationStore } from '../../stores';
 
+
+const userTypePaths = {
+  '': 'innovator',
+  ADMIN: 'admin',
+  ASSESSMENT: 'assessment',
+  ACCESSOR: 'accessor',
+  INNOVATOR: 'innovator'
+};
+
+
 @Injectable()
 export class AuthenticationRedirectionGuard implements CanActivate {
 
@@ -13,32 +23,19 @@ export class AuthenticationRedirectionGuard implements CanActivate {
 
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): boolean {
 
-    switch (`${activatedRouteSnapshot.routeConfig?.path} | ${this.authentication.getUserType() || 'NOT_DEFINED'}`) {
+    const pathSegment = activatedRouteSnapshot.routeConfig?.path || '';
+    const userType = this.authentication.getUserType() || '';
 
-      case 'dashboard | ASSESSMENT':
-      case 'accessor | ASSESSMENT':
-      case 'innovator | ASSESSMENT':
-        this.router.navigateByUrl('assessment');
-        return false;
+    if (pathSegment === 'dashboard') {
+      this.router.navigateByUrl(userTypePaths[userType]);
+      return false;
+    }
 
-      case 'assessment | NOT_DEFINED':
-      case 'dashboard | NOT_DEFINED':
-      case 'accessor | NOT_DEFINED':
-      case 'dashboard | INNOVATOR':
-      case 'accessor | INNOVATOR':
-      case 'assessment | INNOVATOR':
-        this.router.navigateByUrl('innovator');
-        return false;
-
-      case 'dashboard | ACCESSOR':
-      case 'innovator | ACCESSOR':
-      case 'assessment | ACCESSOR':
-        this.router.navigateByUrl('accessor');
-        return false;
-
-      default:
-        return true;
-
+    if (pathSegment === userTypePaths[userType]) {
+      return true;
+    } else {
+      this.router.navigateByUrl(userTypePaths[this.authentication.getUserType()]);
+      return false;
     }
 
   }

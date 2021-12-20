@@ -4,17 +4,20 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
 
+import { ENV } from '@tests/app.mocks';
+
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { SharedModule } from '@shared-module/shared.module';
+import { TriageInnovatorPackModule } from '../triage-innovator-pack.module';
 
-import { PageAccountManageUserDeleteAccountMesasageComponent } from './manage-deleteaccount-message.component';
+import { TriageInnovatorPackLayoutComponent } from './triage-innovator-pack-layout.component';
 
 
-describe('Shared/Pages/ManageDeleteAccount/PageAccountManageUserAccountNewComponent', () => {
+describe('FeatureModules/TriageInnovatorPack/TriageInnovatorPackLayoutComponent', () => {
 
-  let component: PageAccountManageUserDeleteAccountMesasageComponent;
-  let fixture: ComponentFixture<PageAccountManageUserDeleteAccountMesasageComponent>;
+  let component: TriageInnovatorPackLayoutComponent;
+  let fixture: ComponentFixture<TriageInnovatorPackLayoutComponent>;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -22,19 +25,20 @@ describe('Shared/Pages/ManageDeleteAccount/PageAccountManageUserAccountNewCompon
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        SharedModule
+        TriageInnovatorPackModule
+      ],
+      providers: [
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
-    fixture = TestBed.createComponent(PageAccountManageUserDeleteAccountMesasageComponent);
-    component = fixture.componentInstance;
-
   });
 
   it('should create the component', () => {
-    fixture.detectChanges();
+    fixture = TestBed.createComponent(TriageInnovatorPackLayoutComponent);
+    component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
 

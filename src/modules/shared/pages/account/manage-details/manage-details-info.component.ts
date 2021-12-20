@@ -15,7 +15,7 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
 
   alert: AlertType = { type: null };
 
-  summaryList: { label: string; value: string; editStepNumber?: number; }[] = [];
+  summaryList: { label: string; value: null | string; editStepNumber?: number; }[] = [];
 
 
   constructor(

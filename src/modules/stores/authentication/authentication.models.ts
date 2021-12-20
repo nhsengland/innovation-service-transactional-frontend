@@ -8,12 +8,14 @@ export class AuthenticationModel {
     id: string;
     email: string;
     displayName: string;
-    type: '' | 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
+    phone: string;
+    type: '' | 'ADMIN' | 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
+    roles: ('ADMIN' | 'SERVICE_TEAM')[];
     organisations: {
       id: string;
       name: string;
-      size: string;
-      role: 'OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
+      size: null | string;
+      role: 'INNOVATOR_OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
       isShadow: boolean;
       organisationUnits?: {
         id: string;
@@ -22,7 +24,7 @@ export class AuthenticationModel {
     }[];
     innovations: { id: string, name: string }[];
     passwordResetOn: string;
-    phone: string;
+
   };
 
 
