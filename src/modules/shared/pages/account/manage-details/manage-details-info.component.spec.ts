@@ -97,7 +97,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsInfoCompone
 
     authenticationStore.getUserInfo = () => ({
       ...USER_INFO_INNOVATOR,
-      organisations: [{ id: 'org_id', isShadow: false, name: '', size: '', role: 'OWNER' }]
+      organisations: [{ id: 'org_id', isShadow: false, name: '', size: '', role: 'INNOVATOR_OWNER' }]
     });
 
     authenticationStore.isInnovatorType = () => true;

@@ -24,11 +24,13 @@
 $service-manual-container-size: 1100px; // Container width variable.
 
 :root {
-  --primary-color: #{$nhsuk-link-color};
+  --primary-color: #{$color_nhsuk-blue};
   --success-color: #{$color_nhsuk-green};
   --warning-color: #{$color_nhsuk-yellow};
   --error-color: #{$nhsuk-error-color};
   --neutral-color: #{$color_nhsuk-blue};
+
+  --nhsuk-text-color: #{$nhsuk-text-color};
 
   --white: #{$color_nhsuk-white};
 

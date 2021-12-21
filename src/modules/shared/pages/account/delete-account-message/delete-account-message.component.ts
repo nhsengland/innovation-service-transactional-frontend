@@ -1,23 +1,29 @@
-
 import { Component } from '@angular/core';
+
 import { CoreComponent } from '@app/base';
+
 import { AlertType } from '@modules/core';
 
 
 @Component({
-  selector: 'shared-pages-manage-deleteaccount',
-  templateUrl: './manage-deleteaccount-message.component.html'
+  selector: 'shared-pages-account-delete-account-message',
+  templateUrl: './delete-account-message.component.html'
 })
-export class PageAccountManageUserDeleteAccountMesasageComponent extends CoreComponent {
+export class PageAccountDeleteAccountMessageComponent extends CoreComponent {
+
   alert: AlertType = { type: null };
+
+
   constructor() {
 
     super();
-    this.setPageTitle('DeleteAccount');
+    this.setPageTitle('Delete account successful');
+
     this.alert = {
       type: 'INFORMATION',
       title: 'You have successfully deleted your account'
     };
+
   }
 
 }
