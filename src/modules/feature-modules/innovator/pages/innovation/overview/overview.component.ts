@@ -63,9 +63,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     return !this.isInAssessmentStatus() && this.innovationStatus !== 'CREATED';
   }
 
-  public isNotStartedStatus(): boolean {
-    return this.sections.notStarted > 0;
-  }
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService,
