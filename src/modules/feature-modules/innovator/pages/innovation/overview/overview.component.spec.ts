@@ -52,7 +52,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
     fixture = TestBed.createComponent(InnovationOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    component.sections = { progressBar: [true, true], submitted: 2, draft: 0, notStarted: 0 };
+    component.sections = { progressBar: ['1:active', '1:active'], submitted: 2, draft: 0, notStarted: 0 };
 
     expect(component.allStepsComplete()).toBe(true);
 

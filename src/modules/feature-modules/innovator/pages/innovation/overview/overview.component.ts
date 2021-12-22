@@ -10,6 +10,9 @@ import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovati
 import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 
 
+type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
+
+
 @Component({
   selector: 'app-innovator-pages-innovations-overview',
   templateUrl: './overview.component.html'
@@ -33,7 +36,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationStatusObj = this.stores.innovation.INNOVATION_STATUS;
 
   sections: {
-    progressBar: boolean[];
+    progressBar: ProgressBarType[];
     submitted: number;
     draft: number;
     notStarted: number;
@@ -97,10 +100,17 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovationStatus = sectionSummary.innovation.status;
       this.innovationSections = sectionSummary.sections;
 
-
-      this.sections.progressBar = this.innovationSections.reduce((acc: boolean[], item) => {
-        return [...acc, ...item.sections.map(s => s.isCompleted)];
-      }, []).sort().reverse();
+      this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
+        return [...acc, ...item.sections.map(s => {
+          switch (s.status) {
+            case 'SUBMITTED': return '1:active';
+            case 'DRAFT': return '2:warning';
+            case 'NOT_STARTED':
+            default:
+              return '3:inactive';
+          }
+        })];
+      }, []).sort();
 
       this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
       this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
