@@ -410,6 +410,14 @@ $service-manual-container-size: 1100px; // Container width variable.
       background: var(--nhsuk-button-color);
       // border-bottom: 1px solid var(--color_nhsuk-grey-3);
     }
+    &.draft {
+      background: var(--warning-color);
+      // border-bottom: 1px solid var(--color_nhsuk-grey-3);
+    }
+    &.notstarted
+    {
+      background: var(--nhsuk-border-color);
+    }
   }
 }
 

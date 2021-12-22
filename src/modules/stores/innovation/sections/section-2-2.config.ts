@@ -50,7 +50,9 @@ export const SECTION_2_2: InnovationSectionConfigType['sections'][0] = {
           dataType: 'radio-group',
           label: stepsLabels.l1,
           description: 'For example, your innovation could help reduce cost, benefit the public, improve the quality of healthcare or address a specific issue.',
-          validations: { isRequired: [true, 'Choose one option'] },
+          validations: {
+            isRequired: [true, 'Choose one option']
+          },
           items: hasBenefitsItems
         }]
       })
@@ -98,7 +100,10 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           id: `subgroupBenefits_${i}`,
           dataType: 'checkbox-array',
           label: `What benefits does your innovation create for patients or citizens of ${item.name}?`,
-          validations: { isRequired: [true, 'Choose at least one benefit'] },
+          validations: {
+            isRequired: [true, 'Choose at least one benefit'],
+            max: [3, 'Choose between 1 and 3 benefit']
+          },
           items: [...subgroupBenefitItems, ...[{ value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: `subgroupOtherBenefit_${i}`, dataType: 'text', label: 'Other benefits for patients or citizens', validations: { isRequired: [true, 'Other description is required'] } }) }]]
         }]
       })
@@ -113,7 +118,10 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'generalBenefits',
         dataType: 'checkbox-array',
         label: stepsLabels.l3,
-        validations: { isRequired: [true, 'Choose at least one benefit'] },
+        validations: {
+          isRequired: [true, 'Choose at least one benefit'],
+          max: [3, 'Choose between 1 and 3 benefit']
+        },
         items: generalBenefitItems
       }]
     }),
@@ -123,7 +131,10 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'environmentalBenefits',
         dataType: 'checkbox-array',
         label: stepsLabels.l4,
-        validations: { isRequired: [true, 'Choose at least one environmental benefit'] },
+        validations: {
+          isRequired: [true, 'Choose at least one environmental benefit'],
+          max: [3, 'Choose between 1 and 3 environmental benefit']
+        },
         items: environmentalBenefitItems
       }]
     }),

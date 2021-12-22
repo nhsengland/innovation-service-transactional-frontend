@@ -11,22 +11,28 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
-        <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="{'active': item}"></li>
+        <li *ngFor="let item of sections.progressBar" class="progressbar-item"
+          [ngClass]="{'active' : item  , 'draft':(!item&&isDraftStatus()),'notstarted':(!item&&isNotStartedStatus())}">
+        </li>
+
       </ul>
     </div>
   </div>
 
   <div class="nhsuk-grid-row">
     <div *ngIf="sections.submitted > 0" class="nhsuk-grid-column-one-third">
-      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.submitted }} <span class="nhsuk-u-visually-hidden"> sections submitted </span></div>
+      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.submitted }} <span
+          class="nhsuk-u-visually-hidden"> sections submitted </span></div>
       <p>sections submitted</p>
     </div>
     <div *ngIf="sections.draft > 0" class="nhsuk-grid-column-one-third">
-      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.draft }} <span class="nhsuk-u-visually-hidden"> sections in draft </span></div>
+      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.draft }} <span class="nhsuk-u-visually-hidden">
+          sections in draft </span></div>
       <p>sections in draft</p>
     </div>
     <div *ngIf="sections.notStarted > 0" class="nhsuk-grid-column-one-third">
-      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.notStarted }} <span class="nhsuk-u-visually-hidden"> sections not started </span></div>
+      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.notStarted }} <span
+          class="nhsuk-u-visually-hidden"> sections not started </span></div>
       <p>sections not started</p>
     </div>
   </div>
@@ -44,7 +50,8 @@
           <li class="d-flex">
             <ng-container *ngTemplateOutlet="icon; context: { completed: allSectionsSubmitted()}"></ng-container>
             <div class="nhsuk-u-margin-left-2">
-              Submit all sections of your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a>
+              Submit all sections of your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation
+                record </a>
             </div>
           </li>
           <li class="d-flex">
@@ -83,7 +90,8 @@
       <div class="nhsuk-grid-column-two-thirds">
         <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.requested }}</p>
         <p class="">actions requested of you</p>
-        See your <strong><a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker"> action tracker</a></strong>
+        See your <strong><a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker"> action
+            tracker</a></strong>
       </div>
       <div class="nhsuk-grid-column-one-third">
         <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.review }}</p>
@@ -106,10 +114,12 @@
             </li>
           </ul>
         </ng-container>
-        See <strong><a routerLink="/innovator/innovations/{{ innovationId }}/support"> data sharing and support</a></strong>
+        See <strong><a routerLink="/innovator/innovations/{{ innovationId }}/support"> data sharing and
+            support</a></strong>
       </div>
       <div class="nhsuk-grid-column-one-third" *ngIf="showNeedsAssessmentCompleteCard()">
-        <strong><a routerLink="/innovator/innovations/{{ innovationId }}/assessments/{{ assessmentId }}">Needs assessment completed</a></strong>
+        <strong><a routerLink="/innovator/innovations/{{ innovationId }}/assessments/{{ assessmentId }}">Needs
+            assessment completed</a></strong>
         <p>Your innovation is visible to all organisations you've selected.</p>
       </div>
     </div>

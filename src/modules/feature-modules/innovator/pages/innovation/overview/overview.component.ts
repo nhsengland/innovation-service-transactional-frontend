@@ -60,7 +60,13 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     return !this.isInAssessmentStatus() && this.innovationStatus !== 'CREATED';
   }
 
+  public isDraftStatus(): boolean {
+    return this.sections.draft > 0;
+  }
 
+  public isNotStartedStatus(): boolean {
+    return this.sections.notStarted > 0;
+  }
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService,
@@ -96,7 +102,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.innovationStatus = sectionSummary.innovation.status;
       this.innovationSections = sectionSummary.sections;
-
 
       this.sections.progressBar = this.innovationSections.reduce((acc: boolean[], item) => {
         return [...acc, ...item.sections.map(s => s.isCompleted)];
