@@ -35,6 +35,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersDeleteComponen
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageServiceUsersDeleteComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 

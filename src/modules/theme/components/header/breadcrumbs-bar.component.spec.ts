@@ -27,6 +27,7 @@ describe('Theme/Components/Header/NavigationBarComponent', () => {
   it('should create the component', () => {
     fixture = TestBed.createComponent(HeaderBreadcrumbsBarComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 

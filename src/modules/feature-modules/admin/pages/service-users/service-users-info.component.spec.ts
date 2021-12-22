@@ -35,6 +35,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersInfoComponent'
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageServiceUsersInfoComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 

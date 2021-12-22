@@ -26,6 +26,7 @@ describe('Theme/Components/PageTitle/PageTitleComponent', () => {
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageTitleComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 

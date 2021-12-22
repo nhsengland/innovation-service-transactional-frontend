@@ -41,6 +41,7 @@ describe('FeatureModules/Admin/Base/AdminLayoutComponent', () => {
   it('should create the component', () => {
     fixture = TestBed.createComponent(AdminLayoutComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 

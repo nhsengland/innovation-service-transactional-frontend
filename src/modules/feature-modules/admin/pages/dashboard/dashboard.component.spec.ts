@@ -35,6 +35,7 @@ describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageDashboardComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
