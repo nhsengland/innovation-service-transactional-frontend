@@ -50,9 +50,7 @@ export const SECTION_2_2: InnovationSectionConfigType['sections'][0] = {
           dataType: 'radio-group',
           label: stepsLabels.l1,
           description: 'For example, your innovation could help reduce cost, benefit the public, improve the quality of healthcare or address a specific issue.',
-          validations: {
-            isRequired: [true, 'Choose one option']
-          },
+          validations: { isRequired: [true, 'Choose one option'] },
           items: hasBenefitsItems
         }]
       })
