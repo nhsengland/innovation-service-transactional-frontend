@@ -42,7 +42,7 @@ export const SECTION_5_1: InnovationSectionConfigType['sections'][0] = {
           id: 'hasUKPathwayKnowledge',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: 'For example, your innovation could help reduce cost, benefit the public, improve the quality of healthcare or address a specific issue.',
+          description: 'This means mapping out the entire patient journey and the work done in different parts of the healthcare system. It\'s also key to understand the existing routines of clinical and care professionals, administrators, and anyone else who will be affected by your innovation.',
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasUKPathwayKnowledgeItems
         }]
