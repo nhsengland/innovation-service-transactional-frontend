@@ -25,7 +25,7 @@
     <ng-container *ngIf="pageStatus === 'READY'">
 
       <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
-        <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="{'active': item}"></li>
+        <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="item.substring(2)"></li>
       </ul>
 
       <p class="d-flex nhsuk-u-margin-0">

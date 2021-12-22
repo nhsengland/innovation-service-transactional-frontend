@@ -75,6 +75,9 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 .text-align-left { text-align: start; }
 .text-align-right { text-align: end; }
+.text-align-right-only-desktop {
+  @media (min-width: 48.0625em) { text-align: end; }
+}
 .text-pre-line { white-space: pre-line; }
 .text-pre-wrap { white-space: pre-wrap; }
 .text-ellipsis {
@@ -251,6 +254,15 @@ $service-manual-container-size: 1100px; // Container width variable.
   height: fit-content;
 }
 
+// // Buttons.
+.button-small {
+  font-size: 1rem;
+  line-height: 16px;
+  padding: 10px 12px;
+  margin: 0;
+  box-shadow: 0 3px 0 #004;
+}
+
 
 // Forms.
 .form-input-appended-button {
@@ -408,16 +420,11 @@ $service-manual-container-size: 1100px; // Container width variable.
 
     &.active {
       background: var(--nhsuk-button-color);
-      // border-bottom: 1px solid var(--color_nhsuk-grey-3);
     }
-    &.draft {
+    &.warning {
       background: var(--warning-color);
-      // border-bottom: 1px solid var(--color_nhsuk-grey-3);
     }
-    &.notstarted
-    {
-      background: var(--nhsuk-border-color);
-    }
+
   }
 }
 
