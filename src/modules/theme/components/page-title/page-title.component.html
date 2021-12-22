@@ -1,0 +1,20 @@
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+    <p *ngIf="titleHint" class="nhsuk-hint nhsuk-u-margin-bottom-0">{{ titleHint }}</p>
+    <h1>{{ title }}</h1>
+  </div>
+  <ng-container *ngIf="actions.length > 0">
+    <div class="nhsuk-grid-column-one-third text-align-right-only-desktop">
+
+      <div *ngFor="let item of actions" class="nhsuk-u-margin-bottom-1">
+        <a *ngIf="!item.fullReload" [routerLink]="item.url" [ngClass]="{'nhsuk-button button-small': item.type === 'button'}">
+          {{ item.label }}
+        </a>
+        <a *ngIf="item.fullReload" [href]="item.url" [ngClass]="{'nhsuk-button button-small': item.type === 'button'}">
+          {{ item.label }}
+        </a>
+      </div>
+
+    </div>
+  </ng-container>
+</div>

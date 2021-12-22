@@ -7,7 +7,7 @@ import { CoreComponent } from '@app/base';
   selector: 'app-admin-pages-dashboard',
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent extends CoreComponent implements OnInit {
+export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   constructor() {
 

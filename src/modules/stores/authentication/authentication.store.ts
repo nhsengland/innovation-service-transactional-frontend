@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { forkJoin, Observable, Observer, of } from 'rxjs';
+import { Observable, Observer, of } from 'rxjs';
 import { catchError, concatMap, map } from 'rxjs/operators';
 
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
@@ -55,7 +55,6 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       ).subscribe(
         () => {
           this.setState(this.state);
-          console.log('USER', this.state);
           observer.next(true);
           observer.complete();
         },
@@ -80,6 +79,9 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
   isAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'ACCESSOR'; }
   isQualifyingAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'QUALIFYING_ACCESSOR'; }
+
+  isAdminRole(): boolean { return this.state.user?.roles.includes('ADMIN') || false; }
+  isServiceTeamRole(): boolean { return this.state.user?.roles.includes('SERVICE_TEAM') || false; }
 
   getUserId(): string { return this.state.user?.id || ''; }
   getUserType(): Required<AuthenticationModel>['user']['type'] {

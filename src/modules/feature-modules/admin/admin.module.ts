@@ -8,7 +8,13 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { AdminLayoutComponent } from './base/admin-layout.component';
 
 // Pages.
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
+import { PageServiceUsersDeleteComponent } from './pages/service-users/service-users-delete.component';
+import { PageServiceUsersEditComponent } from './pages/service-users/service-users-edit.component';
+import { PageServiceUsersInfoComponent } from './pages/service-users/service-users-info.component';
+import { PageServiceUsersListComponent } from './pages/service-users/service-users-list.component';
+import { PageServiceUsersNewComponent } from './pages/service-users/service-users-new.component';
+
 
 
 @NgModule({
@@ -22,7 +28,12 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
     AdminLayoutComponent,
 
     // Pages.
-    DashboardComponent
+    PageDashboardComponent,
+    PageServiceUsersDeleteComponent,
+    PageServiceUsersListComponent,
+    PageServiceUsersEditComponent,
+    PageServiceUsersInfoComponent,
+    PageServiceUsersNewComponent
   ]
 })
 export class AdminModule { }

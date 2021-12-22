@@ -8,13 +8,13 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
-import { PageDashboardComponent } from './dashboard.component';
+import { PageServiceUsersDeleteComponent } from './service-users-delete.component';
 
 
-describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
+describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersDeleteComponent', () => {
 
-  let component: PageDashboardComponent;
-  let fixture: ComponentFixture<PageDashboardComponent>;
+  let component: PageServiceUsersDeleteComponent;
+  let fixture: ComponentFixture<PageServiceUsersDeleteComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -33,7 +33,7 @@ describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(PageDashboardComponent);
+    fixture = TestBed.createComponent(PageServiceUsersDeleteComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
