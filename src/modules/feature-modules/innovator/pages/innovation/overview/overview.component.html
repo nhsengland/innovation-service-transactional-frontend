@@ -12,7 +12,7 @@
     <div class="nhsuk-grid-column-full">
       <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
         <li *ngFor="let item of sections.progressBar" class="progressbar-item"
-          [ngClass]="{'active' : item  , 'draft':(!item&&isDraftStatus()),'notstarted':(!item&&isNotStartedStatus())}">
+          [ngClass]="{'active' : item  , 'draft':!item,'notstarted':(!item&&isNotStartedStatus())}">
         </li>
 
       </ul>

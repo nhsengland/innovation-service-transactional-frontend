@@ -60,10 +60,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     return !this.isInAssessmentStatus() && this.innovationStatus !== 'CREATED';
   }
 
-  public isDraftStatus(): boolean {
-    return this.sections.draft > 0;
-  }
-
   public isNotStartedStatus(): boolean {
     return this.sections.notStarted > 0;
   }
