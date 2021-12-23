@@ -8,14 +8,13 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
-import { DashboardComponent } from './dashboard.component';
+import { PageDashboardComponent } from './dashboard.component';
 
 
+describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
 
-describe('FeatureModules/Admin/Pages/Dashboard/DashboardComponent', () => {
-
-  let component: DashboardComponent;
-  let fixture: ComponentFixture<DashboardComponent>;
+  let component: PageDashboardComponent;
+  let fixture: ComponentFixture<PageDashboardComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -32,9 +31,11 @@ describe('FeatureModules/Admin/Pages/Dashboard/DashboardComponent', () => {
 
   });
 
+
   it('should create the component', () => {
-    fixture = TestBed.createComponent(DashboardComponent);
+    fixture = TestBed.createComponent(PageDashboardComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 

@@ -29,14 +29,14 @@
 
 
 // This 2 level menu can hold up to 4 items without sweating.
-// If more items are needed, this measure needs to be reevaluated. No need for that now!
 .app-multilevel-navigation {
 
   @media (min-width: 61.875em) {
 
     // This sets the height of the secondary menu.
+    // If more than 4 items are needed, this measure needs to be reevaluated. No need for that now!
     &.children-items-height {
-      margin-bottom: 145px
+      margin-bottom: 195px
     }
 
     .app-multilevel-navigation__navigation-item {
@@ -54,13 +54,8 @@
 
   .app-multilevel-navigation__toggle-button {
 
-    font-size: 1rem;
     border-left: 0;
     border-right: 0;
-    border-top: 4px solid transparent;
-    border-bottom: 4px solid transparent;
-    color: var(--primary-color);
-    padding: 12px 16px;
     display: flex;
     align-items: center;
     width: 100%;
@@ -75,6 +70,7 @@
 
     @media (min-width: 61.875em) {
 
+      font-size: 1rem;
       color: var(--white);
       cursor: pointer;
       padding: 12px 16px;

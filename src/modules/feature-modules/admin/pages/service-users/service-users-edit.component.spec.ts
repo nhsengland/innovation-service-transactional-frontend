@@ -1,23 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 
-import { ENV } from '@tests/app.mocks';
-
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { AdminModule } from '../admin.module';
+import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
-import { AdminLayoutComponent } from './admin-layout.component';
+import { PageServiceUsersEditComponent } from './service-users-edit.component';
 
 
+describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersEditComponent', () => {
 
-describe('FeatureModules/Admin/Base/AdminLayoutComponent', () => {
-
-  let component: AdminLayoutComponent;
-  let fixture: ComponentFixture<AdminLayoutComponent>;
+  let component: PageServiceUsersEditComponent;
+  let fixture: ComponentFixture<PageServiceUsersEditComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -27,9 +24,6 @@ describe('FeatureModules/Admin/Base/AdminLayoutComponent', () => {
         CoreModule,
         StoresModule,
         AdminModule
-      ],
-      providers: [
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
 
@@ -39,7 +33,7 @@ describe('FeatureModules/Admin/Base/AdminLayoutComponent', () => {
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(AdminLayoutComponent);
+    fixture = TestBed.createComponent(PageServiceUsersEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();

@@ -131,7 +131,7 @@
 
   <ng-container *ngIf="(item.children || []).length > 0">
 
-    <button type="button" class="app-multilevel-navigation__toggle-button" [ngClass]="{'button-closed': !item.isOpen, 'button-open': item.isOpen}" (click)="onHeaderMenuClick(item)" [attr.aria-expanded]="item.isOpen"
+    <button type="button" class="nhsuk-header__navigation-link app-multilevel-navigation__toggle-button" [ngClass]="{'button-closed': !item.isOpen, 'button-open': item.isOpen}" (click)="onHeaderMenuClick(item)" [attr.aria-expanded]="item.isOpen"
       attr.aria-label="{{ item.isOpen ? 'Hide' : 'Show' }} {{ item.title }} menu">
       {{ item.title }}
       <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">

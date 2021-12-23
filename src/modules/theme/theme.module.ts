@@ -12,6 +12,7 @@ import { BaseLayoutComponent } from './base/base-layout.component';
 import { ActivityTimeoutComponent } from './components/activity-timeout/activity-timeout.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { HeaderComponent } from './components/header/header.component';
+import { HeaderBreadcrumbsBarComponent } from './components/header/breadcrumbs-bar.component';
 import { HeaderNavigationBarComponent } from './components/header/navigation-bar.component';
 import { FooterComponent } from './components/footer/footer.component';
 
@@ -22,6 +23,7 @@ import { BackLinkComponent } from './components/navigation/back-link.component';
 import { PrintLinkComponent } from './components/navigation/print-link.component';
 
 import { NotificationTagComponent } from './components/notification-tag/notification-tag.component';
+import { PageTitleComponent } from './components/page-title/page-title.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 
@@ -42,6 +44,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     ActivityTimeoutComponent,
     AlertComponent,
     HeaderComponent,
+    HeaderBreadcrumbsBarComponent,
     HeaderNavigationBarComponent,
     FooterComponent,
 
@@ -52,6 +55,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     PrintLinkComponent,
 
     NotificationTagComponent,
+    PageTitleComponent,
     PaginationComponent,
     SpinnerComponent
   ],
@@ -67,6 +71,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     ActivityTimeoutComponent,
     AlertComponent,
     HeaderComponent,
+    HeaderBreadcrumbsBarComponent,
     HeaderNavigationBarComponent,
     FooterComponent,
 
@@ -77,6 +82,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     PrintLinkComponent,
 
     NotificationTagComponent,
+    PageTitleComponent,
     PaginationComponent,
     SpinnerComponent
   ]

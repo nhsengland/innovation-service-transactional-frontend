@@ -22,9 +22,8 @@ export class AdminLayoutComponent extends CoreComponent {
 
     this.navigationMenuBar = {
       leftItems: [
-        { title: 'Home', url: `/admin/dashboard` },
-        { title: 'Admin users', url: `/admin/administration-users` },
-        { title: 'Service users', url: `/admin/users` },
+        { title: 'Home', url: '/admin/dashboard' },
+        { title: 'Service users', url: '/admin/service-users' },
         {
           title: 'Management',
           description: 'This is the menu description',
@@ -39,6 +38,10 @@ export class AdminLayoutComponent extends CoreComponent {
         { title: 'Sign out', url: `${this.stores.environment.APP_URL}/signout`, fullReload: true }
       ]
     };
+
+    if (this.stores.authentication.isAdminRole()) {
+      this.navigationMenuBar.leftItems.splice(0, 0, { title: 'Admin users', url: '/admin/administration-users' } );
+    }
 
   }
 
