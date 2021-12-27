@@ -40,7 +40,7 @@ export class AdminLayoutComponent extends CoreComponent {
     };
 
     if (this.stores.authentication.isAdminRole()) {
-      this.navigationMenuBar.leftItems.splice(0, 0, { title: 'Admin users', url: '/admin/administration-users' } );
+      this.navigationMenuBar.leftItems.splice(1, 0, { title: 'Admin users', url: '/admin/administration-users' } );
     }
 
   }

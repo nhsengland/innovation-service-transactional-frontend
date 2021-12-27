@@ -12,6 +12,7 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
 
   titleActions: LinkType[] = [
     { type: 'link', label: 'Edit user', url: '/admin/service-users/User001/edit' },
+    { type: 'link', label: 'Lock user', url: '/admin/service-users/User001/lock' },
     { type: 'link', label: 'Delete user', url: '/admin/service-users/User001/delete' }
   ];
 

@@ -13,8 +13,11 @@ import { PageServiceUsersDeleteComponent } from './pages/service-users/service-u
 import { PageServiceUsersEditComponent } from './pages/service-users/service-users-edit.component';
 import { PageServiceUsersInfoComponent } from './pages/service-users/service-users-info.component';
 import { PageServiceUsersListComponent } from './pages/service-users/service-users-list.component';
+import { PageServiceUsersLockComponent } from './pages/service-users/service-users-lock.component';
 import { PageServiceUsersNewComponent } from './pages/service-users/service-users-new.component';
 
+// Services.
+import { ServiceUsersService } from './services/service-users.service';
 
 
 @NgModule({
@@ -30,10 +33,15 @@ import { PageServiceUsersNewComponent } from './pages/service-users/service-user
     // Pages.
     PageDashboardComponent,
     PageServiceUsersDeleteComponent,
-    PageServiceUsersListComponent,
     PageServiceUsersEditComponent,
     PageServiceUsersInfoComponent,
+    PageServiceUsersListComponent,
+    PageServiceUsersLockComponent,
     PageServiceUsersNewComponent
+  ],
+  providers: [
+    // Services.
+    ServiceUsersService
   ]
 })
 export class AdminModule { }

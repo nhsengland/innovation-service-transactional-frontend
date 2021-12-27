@@ -7,9 +7,10 @@ import { AdminLayoutComponent } from './base/admin-layout.component';
 // Pages.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 import { PageServiceUsersDeleteComponent } from './pages/service-users/service-users-delete.component';
-import { PageServiceUsersListComponent } from './pages/service-users/service-users-list.component';
 import { PageServiceUsersEditComponent } from './pages/service-users/service-users-edit.component';
 import { PageServiceUsersInfoComponent } from './pages/service-users/service-users-info.component';
+import { PageServiceUsersListComponent } from './pages/service-users/service-users-list.component';
+import { PageServiceUsersLockComponent } from './pages/service-users/service-users-lock.component';
 import { PageServiceUsersNewComponent } from './pages/service-users/service-users-new.component';
 
 
@@ -62,6 +63,11 @@ const routes: Routes = [
                 path: 'edit',
                 pathMatch: 'full',
                 component: PageServiceUsersEditComponent
+              },
+              {
+                path: 'lock',
+                pathMatch: 'full',
+                component: PageServiceUsersLockComponent
               },
               {
                 path: 'delete',
