@@ -99,9 +99,10 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         new FormEngineModel({
           parameters: [{
             id: `subGroupName_${i}`,
-            dataType: 'text',
+            dataType: 'textarea',
             label: `What condition best categorises ${item.name}?`,
-            validations: { isRequired: [true, 'Condition is required'] }
+            validations: { isRequired: [true, 'Condition is required'] },
+            lengthLimit: 'medium'
           }]
         })
       );

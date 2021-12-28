@@ -130,10 +130,11 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
     new FormEngineModel({
       parameters: [{
         id: 'summary',
-        dataType: 'text',
+        dataType: 'textarea',
         label: stepsLabels.l5,
         description: 'Please provide a short summary including the scope of the study and the key findings. Accessors will read this summary to understand if any particular piece of evidence is of interest in relation to what they can help you with.',
-        validations: { isRequired: [true, 'Summary is required'] }
+        validations: { isRequired: [true, 'Summary is required'] },
+        lengthLimit: 'medium'
       }]
     })
   );
