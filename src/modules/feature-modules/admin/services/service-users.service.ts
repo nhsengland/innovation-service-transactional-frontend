@@ -29,12 +29,12 @@ export class ServiceUsersService extends CoreService {
       headers: new HttpHeaders(headers)
     };
 
-    const url = new UrlModel(this.API_URL).addPath('/admin/:userId/lock-user').setPathParams({ userId: this.stores.authentication.getUserId() });
-    return this.http.post<lockUserEndpointDTO>(url.buildUrl(), body, ro).pipe(
+    const url = new UrlModel(this.API_URL).addPath('/user-admin/ping').setQueryParams({code: securityConfirmation?.code, id: securityConfirmation?.id});
+    return this.http.post<lockUserEndpointDTO>(url.buildUrl(), { }, ro).pipe(
       take(1),
       map(response => response),
       catchError(error => throwError({
-        objectId: error.objectId
+        objectId: error.error.id
       }))
     );
 
