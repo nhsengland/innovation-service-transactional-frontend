@@ -56,7 +56,7 @@ export class PageServiceUsersLockComponent extends CoreComponent implements OnIn
         };
 
         this.pageStep = 'SUCCESS';
-
+        console.log(this.pageStep);
       },
       error => {
 
