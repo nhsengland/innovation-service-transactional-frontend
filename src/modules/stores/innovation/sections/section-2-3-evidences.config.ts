@@ -145,7 +145,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'files',
         dataType: 'file-upload',
         label: stepsLabels.l6,
-        description: 'The files must be CSV, XLSX, DOCX or PDF.',
+        description: 'The files must be CSV, XLSX, DOCX or PDF, and should be of upto 9MB.',
         validations: { isRequired: [true, 'Upload at least one file'] }
       }],
     })
