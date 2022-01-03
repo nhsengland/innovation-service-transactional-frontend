@@ -15,7 +15,7 @@ export { EnvironmentStore } from './stores/environment.store';
 
 
 // Interfaces.
-export { AlertType, MappedObject } from './interfaces/base.interfaces';
+export { AlertType, LinkType, MappedObject } from './interfaces/base.interfaces';
 
 // Models
 export { UrlModel } from './models/url.model';

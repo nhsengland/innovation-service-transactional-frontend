@@ -8,9 +8,10 @@ import { ThemeModule } from '@modules/theme/theme.module';
 import { FormsModule } from './forms/forms.module';
 
 // Pages.
+import { PageAccountDeleteAccountMessageComponent } from './pages/account/delete-account-message/delete-account-message.component';
+import { PageAccountEmailNotificationsComponent } from './pages/account/email-notifications/email-notifications.component';
 import { PageAccountManageDetailsInfoComponent } from './pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from './pages/account/manage-details/manage-details-edit.component';
-import { PageAccountEmailNotificationsComponent } from './pages/account/email-notifications/email-notifications.component';
 
 import { InnovationSectionViewComponent } from './pages/innovation/section-view.component';
 import { InnovationSectionEvidenceViewComponent } from './pages/innovation/evidence-view.component';
@@ -23,8 +24,6 @@ import { PageInnovationSupportStatusListComponent } from './pages/innovation/inn
 
 import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/not-found/not-found.component';
-
-import { PageAccountManageUserDeleteAccountMesasageComponent } from './pages/account/manage-deleteaccoount/manage-deleteaccount-message.component';
 
 // Services.
 import { OrganisationsService } from './services/organisations.service';
@@ -42,9 +41,10 @@ import { NotificationsService } from './services/notifications.service';
   ],
   declarations: [
     // Pages.
+    PageAccountDeleteAccountMessageComponent,
+    PageAccountEmailNotificationsComponent,
     PageAccountManageDetailsInfoComponent,
     PageAccountManageDetailsEditComponent,
-    PageAccountEmailNotificationsComponent,
 
     InnovationSectionViewComponent,
     InnovationSectionEvidenceViewComponent,
@@ -57,7 +57,6 @@ import { NotificationsService } from './services/notifications.service';
 
     PageErrorComponent,
     PageNotFoundComponent,
-    PageAccountManageUserDeleteAccountMesasageComponent
   ],
   providers: [
     OrganisationsService,

@@ -8,25 +8,24 @@ import { EnvironmentStore } from '@modules/core/stores/environment.store';
 import { UrlModel } from '@modules/core/models/url.model';
 
 
-type getUserInfoDto = {
+type getUserInfoInDTO = {
   id: string;
   email: string;
   displayName: string;
-  type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
+  phone: string;
+  type: 'ADMIN' | 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
+  roles: ('ADMIN' | 'SERVICE_TEAM')[];
   organisations: {
     id: string;
     name: string;
-    size: string;
-    role: 'OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
+    size: null | string;
+    role: 'INNOVATOR_OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
     isShadow: boolean;
-    organisationUnits: {
-      id: string;
-      name: string;
-    }[];
+    organisationUnits: { id: string; name: string; }[];
   }[];
   passwordResetOn: string;
-  phone: string;
 };
+type getUserInfoOutDTO = Required<getUserInfoInDTO>;
 
 
 type getUserInnovationsDto = {
@@ -64,19 +63,20 @@ export class AuthenticationService {
 
   }
 
-  getUserInfo(): Observable<getUserInfoDto> {
+  getUserInfo(): Observable<getUserInfoOutDTO> {
 
     const url = new UrlModel(this.API_URL).addPath('me');
-    return this.http.get<getUserInfoDto>(url.buildUrl()).pipe(
+    return this.http.get<getUserInfoInDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => ({
         id: response.id,
         email: response.email,
         displayName: ['unknown'].includes(response.displayName) ? '' : response.displayName,
         type: response.type,
+        roles: response.roles || [],
         organisations: response.organisations,
         passwordResetOn: response.passwordResetOn,
-        phone: response.phone,
+        phone: response.phone
       }))
     );
 

@@ -13,11 +13,169 @@
   }
 }
 
-// Hide the menu on desktop when necessary.
-#header-navigation {
-  &.only-mobile-menu {
-    @media (min-width: 61.865em) {
-      display: none;
-    }
+
+.user-admin-information {
+  float: right;
+  text-align: end;
+
+  p {
+    font-size: 0.875rem !important;
+    color: var(--color_nhsuk-grey-5);
+    line-height: 20px;
+    margin: 0;
   }
+
+}
+
+
+// This 2 level menu can hold up to 4 items without sweating.
+.app-multilevel-navigation {
+
+  @media (min-width: 61.875em) {
+
+    // This sets the height of the secondary menu.
+    // If more than 4 items are needed, this measure needs to be reevaluated. No need for that now!
+    &.children-items-height {
+      margin-bottom: 195px
+    }
+
+    .app-multilevel-navigation__navigation-item {
+      display: block;
+      float: left;
+      margin: 0;
+      padding: 0;
+      position: static;
+      border-bottom: 0;
+      padding: 0;
+    }
+
+  }
+
+
+  .app-multilevel-navigation__toggle-button {
+
+    border-left: 0;
+    border-right: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background-color: transparent;
+    cursor: pointer;
+
+    .nhsuk-icon__chevron-right {
+      fill: #aeb7bd;
+      position: absolute;
+      right: 4px;
+    }
+
+    @media (min-width: 61.875em) {
+
+      font-size: 1rem;
+      color: var(--white);
+      cursor: pointer;
+      padding: 12px 16px;
+
+      &:after {
+        border-bottom: 2px solid var(--color_nhsuk-grey-5);
+        border-right: 2px solid var(--color_nhsuk-grey-5);
+        content: "";
+        display: inline-block;
+        height: 8px;
+        margin: 2px 0 0 10px;
+        vertical-align: middle;
+        width: 8px;
+        position: relative;
+      }
+
+      &.button-closed {
+        &:after {
+          -webkit-transform: translateY(-35%) rotate(45deg) scale(1);
+          -ms-transform: translateY(-35%) rotate(45deg) scale(1);
+          transform: translateY(-35%) rotate(45deg) scale(1);
+        }
+      }
+
+      &.button-open {
+        background-color: var(--white);
+        color: var(--nhsuk-text-color);
+
+        &:after {
+          -webkit-transform: translateY(0%) rotate(225deg) scale(1);
+          -ms-transform: translateY(0%) rotate(225deg) scale(1);
+          transform: translateY(0%) rotate(225deg) scale(1);
+          border-bottom: 2px solid #0b0c0c;
+          border-right: 2px solid #0b0c0c;
+        }
+      }
+
+    }
+
+    &:hover {
+      text-decoration: underline;
+
+      .nhsuk-icon__chevron-right {
+        fill: var(--primary-color);
+      }
+    }
+
+    &:focus-visible {
+      background-color: #ffeb3b;
+      border-bottom: 4px solid #212b32;
+      box-shadow: none;
+      color: #212b32;
+      outline: 4px solid transparent;
+      outline-offset: 4px;
+      text-decoration: none;
+
+      &:after {
+        border-bottom: 2px solid #0b0c0c;
+        border-right: 2px solid #0b0c0c;
+      }
+    }
+
+  }
+
+
+  .app-multilevel-navigation__dropdown-menu {
+
+    background: var(--white);
+    border-bottom: 1px solid var(--color_nhsuk-grey-5);
+
+    @media (min-width: 61.875em) {
+      left: 0;
+      position: absolute;
+      right: 0;
+    }
+
+    .app-multilevel-navigation__dropdown-menu-description {
+      text-align: start;
+      display: none;
+
+      @media (min-width: 48.0625em) {
+        display: block;
+        padding: 20px 0;
+      }
+    }
+
+    .app-multilevel-navigation__dropdown-menu-list {
+
+      list-style: none;
+      margin: 0;
+      padding: 20px;
+      text-align: start;
+
+      @media (min-width: 48.0625em) {
+        display: -ms-grid;
+        display: grid;
+        grid-auto-flow: column;
+        -ms-grid-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
+        -ms-grid-rows: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+      }
+
+    }
+
+  }
+
 }

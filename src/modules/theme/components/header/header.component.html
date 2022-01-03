@@ -59,70 +59,104 @@
       </a>
     </div>
 
-    <div class="nhsuk-header__content" id="content-header">
-      <div class="nhsuk-header__menu">
-        <button class="nhsuk-header__menu-toggle" id="toggle-menu" aria-controls="header-navigation" aria-label="Open menu">Menu</button>
+    <ng-container *ngIf="leftMenuBarItems.length > 0 || rightMenuBarItems.length > 0">
+      <div class="nhsuk-header__content" id="content-header">
+        <div class="nhsuk-header__menu nhsuk-u-padding-left-3">
+          <button class="nhsuk-header__menu-toggle" id="toggle-menu" aria-controls="header-navigation" aria-label="Open menu">Menu</button>
+        </div>
       </div>
+    </ng-container>
+
+    <div *ngIf="showUserInformation" class="user-admin-information">
+      <p>{{ user.displayName }}</p>
+      <p>{{ user.description }}</p>
     </div>
 
   </div>
 
-  <nav id="header-navigation" class="nhsuk-header__navigation app-header__navigation" [ngClass]="{ 'only-mobile-menu': !showMenuBar }" role="navigation" aria-label="Primary navigation" aria-labelledby="label-navigation">
-    <div class="nhsuk-width-container app-width-container">
 
-      <p class="nhsuk-header__navigation-title"><span id="label-navigation">Menu</span>
-        <button class="nhsuk-header__navigation-close" id="close-menu">
-          <svg class="nhsuk-icon nhsuk-icon__close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"></path>
-          </svg>
-          <span class="nhsuk-u-visually-hidden">Close menu</span>
-        </button>
-      </p>
+  <ng-container *ngIf="leftMenuBarItems.length > 0 || rightMenuBarItems.length > 0">
 
-      <ul class="nhsuk-header__navigation-list">
-        <li class="nhsuk-header__navigation-item">
-          <a class="nhsuk-header__navigation-link" routerLink="/triage-innovator-pack">
-            Find support
-            <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
-            </svg>
-          </a>
-        </li>
-        <li class="nhsuk-header__navigation-item">
-          <a class="nhsuk-header__navigation-link" href="/innovation-guides">
-            Innovation guides
-            <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
-            </svg>
-          </a>
-        </li>
-        <li class="nhsuk-header__navigation-item">
-          <a class="nhsuk-header__navigation-link" href="/case-studies">
-            Case studies
-            <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
-            </svg>
-          </a>
-        </li>
-        <li class="nhsuk-header__navigation-item">
-          <a class="nhsuk-header__navigation-link" href="/about-the-service">
-            About the service
-            <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
-            </svg>
-          </a>
-        </li>
-        <li class="nhsuk-header__navigation-item ml-auto">
-          <a class="nhsuk-header__navigation-link" href="{{ authenticationButton.url }}">
-            {{ authenticationButton.title }}
-            <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
-            </svg>
-          </a>
-        </li>
-      </ul>
+    <nav #headerNavigationElement id="header-navigation" role="navigation" class="nhsuk-header__navigation app-header__navigation app-multilevel-navigation" [ngClass]="{'children-items-height': menuBarItems.isChildrenOpened}"
+      aria-label="Primary navigation" aria-labelledby="label-navigation">
+      <div class="nhsuk-width-container app-width-container">
 
-    </div>
-  </nav>
+        <p class="nhsuk-header__navigation-title"><span id="label-navigation">Menu</span>
+          <button class="nhsuk-header__navigation-close" id="close-menu">
+            <svg class="nhsuk-icon nhsuk-icon__close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"></path>
+            </svg>
+            <span class="nhsuk-u-visually-hidden">Close menu</span>
+          </button>
+        </p>
+
+        <ul class="nhsuk-header__navigation-list">
+          <li *ngFor="let item of menuBarItems.left" class="nhsuk-header__navigation-item app-multilevel-navigation__navigation-item">
+            <ng-container *ngTemplateOutlet="menuItemTemplate; context: { item: item }"> </ng-container>
+          </li>
+          <li *ngFor="let item of menuBarItems.right; let first = first;" class="nhsuk-header__navigation-item" [ngClass]="{'ml-auto': first}">
+            <ng-container *ngTemplateOutlet="menuItemTemplate; context: { item: item }"> </ng-container>
+          </li>
+        </ul>
+
+      </div>
+    </nav>
+
+  </ng-container>
 
 </header>
+
+
+<ng-template #menuItemTemplateLink let-item="item" let-css="css" let-showIcon="showIcon">
+  <a *ngIf="!item.fullReload" [routerLink]="item.url" [class]="css">
+    {{ item.title }}
+    <svg *ngIf="showIcon" class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
+    </svg>
+  </a>
+  <a *ngIf="item.fullReload" [href]="item.url" [class]="css">
+    {{ item.title }}
+    <svg *ngIf="showIcon" class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
+    </svg>
+  </a>
+</ng-template>
+
+
+<ng-template #menuItemTemplate let-item="item">
+
+  <ng-container *ngIf="(item.children || []).length === 0">
+    <ng-container *ngTemplateOutlet="menuItemTemplateLink; context: { item: item, css: 'nhsuk-header__navigation-link', showIcon: true }"></ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="(item.children || []).length > 0">
+
+    <button type="button" class="nhsuk-header__navigation-link app-multilevel-navigation__toggle-button" [ngClass]="{'button-closed': !item.isOpen, 'button-open': item.isOpen}" (click)="onHeaderMenuClick(item)" [attr.aria-expanded]="item.isOpen"
+      attr.aria-label="{{ item.isOpen ? 'Hide' : 'Show' }} {{ item.title }} menu">
+      {{ item.title }}
+      <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
+      </svg>
+    </button>
+
+    <div *ngIf="item.isOpen" class="app-multilevel-navigation__dropdown-menu">
+      <div class="nhsuk-width-container app-width-container">
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-one-third">
+            <p class="nhsuk-body-m app-multilevel-navigation__dropdown-menu-description">{{ item.description }}</p>
+          </div>
+          <div class="nhsuk-grid-column-two-thirds">
+            <ul class="app-multilevel-navigation__dropdown-menu-list">
+              <li *ngFor="let childItem of item.children">
+                <ng-container *ngTemplateOutlet="menuItemTemplateLink; context: { item: childItem, css: 'nhsuk-u-font-size-16 nhsuk-u-font-weight-bold', showIcon: false }"></ng-container>
+                <p *ngIf="childItem.description" class="nhsuk-body-s nhsuk-u-margin-0">{{ childItem.description }}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
+</ng-template>

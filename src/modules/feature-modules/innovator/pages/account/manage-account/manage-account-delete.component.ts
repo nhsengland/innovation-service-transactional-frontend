@@ -57,7 +57,7 @@ export class PageAccountManageUserAccountComponent extends CoreComponent impleme
 
     this.innovatorService.deleteUserAccount(body).subscribe(
       () => {
-        this.redirectTo('/manage-deleteaccount', {});
+        this.redirectTo('/delete-account-message', {});
       },
       () => {
         this.alert = {
@@ -68,6 +68,7 @@ export class PageAccountManageUserAccountComponent extends CoreComponent impleme
         };
       }
     );
+
   }
 
 }

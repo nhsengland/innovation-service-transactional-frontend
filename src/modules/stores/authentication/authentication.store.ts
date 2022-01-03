@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { forkJoin, Observable, Observer, of } from 'rxjs';
+import { Observable, Observer, of } from 'rxjs';
 import { catchError, concatMap, map } from 'rxjs/operators';
 
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
@@ -27,20 +27,25 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       this.authenticationService.verifyUserSession().pipe(
         concatMap(() => this.authenticationService.getUserInfo()),
         concatMap(user => {
-
           this.state.user = { ...user, ...{ innovations: [] } };
           this.state.isSignIn = true;
+          return of(true);
+        }),
+        concatMap(() => this.authenticationService.verifyInnovator()),
+        concatMap(innovatorInfo => {
+          this.state.isValidUser = innovatorInfo.userExists;
+          this.state.hasInnovationTransfers = innovatorInfo.hasInvites;
+          return of(true);
+        }),
+        concatMap(() => {
 
-          return forkJoin([
-            this.authenticationService.verifyInnovator(),
-            this.authenticationService.getInnovations(user.id)
-          ]).pipe(
-            map(([innovatorInfo, innovations]) => {
+          if (this.state.user!.type !== 'INNOVATOR') {
+            return of(true); // Suppress error as this is only additional information.
+          }
 
-              this.state.isValidUser = innovatorInfo.userExists;
-              this.state.hasInnovationTransfers = innovatorInfo.hasInvites;
+          return this.authenticationService.getInnovations(this.state.user!.id).pipe(
+            map(innovations => {
               if (this.state.user) { this.state.user.innovations = innovations; }
-
               return true;
             }),
             catchError(() => of(true)) // Suppress error as this is only additional information.
@@ -75,6 +80,9 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   isAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'ACCESSOR'; }
   isQualifyingAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'QUALIFYING_ACCESSOR'; }
 
+  isAdminRole(): boolean { return this.state.user?.roles.includes('ADMIN') || false; }
+  isServiceTeamRole(): boolean { return this.state.user?.roles.includes('SERVICE_TEAM') || false; }
+
   getUserId(): string { return this.state.user?.id || ''; }
   getUserType(): Required<AuthenticationModel>['user']['type'] {
     return this.state.user?.type || '';
@@ -85,16 +93,16 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   getUserInfo(): Required<AuthenticationModel>['user'] {
-    return this.state.user || { id: '', email: '', displayName: '', type: '', organisations: [], innovations: [], passwordResetOn: '', phone: '' };
+    return this.state.user || { id: '', email: '', displayName: '', type: '', roles: [], organisations: [], innovations: [], passwordResetOn: '', phone: '' };
   }
 
   saveUserInfo$(body: MappedObject): Observable<{ id: string }> {
     return this.authenticationService.saveUserInfo(body as saveUserInfoDTO);
   }
 
-  getRoleDescription(role: 'OWNER' | 'ASSESSMENT' | 'INNOVATOR' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR'): string {
+  getRoleDescription(role: 'INNOVATOR_OWNER' | 'ASSESSMENT' | 'INNOVATOR' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR'): string {
     switch (role) {
-      case 'OWNER': return 'Owner';
+      case 'INNOVATOR_OWNER': return 'Owner';
       case 'ASSESSMENT': return 'Assessment';
       case 'INNOVATOR': return 'Innovator';
       case 'ACCESSOR': return 'Accessor';

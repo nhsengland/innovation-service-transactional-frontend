@@ -5,9 +5,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
 
 // Pages.
+import { PageAccountDeleteAccountMessageComponent } from '@shared-module/pages/account/delete-account-message/delete-account-message.component';
 import { PageErrorComponent } from '@shared-module/pages/error/error.component';
 import { PageNotFoundComponent } from '@shared-module/pages/not-found/not-found.component';
-import { PageAccountManageUserDeleteAccountMesasageComponent } from '@modules/shared/pages/account/manage-deleteaccoount/manage-deleteaccount-message.component';
 
 // Guards.
 import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
@@ -15,24 +15,16 @@ import { AuthenticationRedirectionGuard } from '@modules/core/guards/authenticat
 import { InnovationTransferRedirectionGuard } from '@modules/core/guards/innovation-transfer-redirection.guard';
 
 
-const authenticationModule: Promise<any> = import('@modules/feature-modules/authentication/authentication.module');
-const triageInnovatorPackModule: Promise<any> = import('@modules/feature-modules/triage-innovator-pack/triage-innovator-pack.module');
-const assessmentModule: Promise<any> = import('@modules/feature-modules/assessment/assessment.module');
-const innovatorModule: Promise<any> = import('@modules/feature-modules/innovator/innovator.module');
-const accessorModule: Promise<any> = import('@modules/feature-modules/accessor/accessor.module');
-const policiesModule: Promise<any> = import('@modules/feature-modules/policies/policies.module');
-
 const routes: Routes = [
 
   {
     path: '',
     pathMatch: 'full',
     redirectTo: '/triage-innovator-pack'
-    // TODO: NHSAAC-135: https://jupiter.bjss.com/browse/NHSAAC-135
   },
 
   {
-    path: 'auth', loadChildren: () => authenticationModule.then(m => m.AuthenticationModule)
+    path: 'auth', loadChildren: () => import('@feature-modules/authentication/authentication.module').then(m => m.AuthenticationModule)
   },
 
   {
@@ -43,11 +35,11 @@ const routes: Routes = [
   },
 
   {
-    path: 'triage-innovator-pack', loadChildren: () => triageInnovatorPackModule.then(m => m.TriageInnovatorPackModule)
+    path: 'triage-innovator-pack', loadChildren: () => import('@feature-modules/triage-innovator-pack/triage-innovator-pack.module').then(m => m.TriageInnovatorPackModule)
   },
 
   {
-    path: 'policies', loadChildren: () => policiesModule.then(m => m.PoliciesModule)
+    path: 'policies', loadChildren: () => import('@feature-modules/policies/policies.module').then(m => m.PoliciesModule)
   },
 
   {
@@ -62,17 +54,27 @@ const routes: Routes = [
       },
       {
         canActivate: [AuthenticationRedirectionGuard],
-        path: 'assessment', loadChildren: () => assessmentModule.then(m => m.AssessmentModule)
+        path: 'admin', loadChildren: () => import('@feature-modules/admin/admin.module').then(m => m.AdminModule)
       },
       {
         canActivate: [AuthenticationRedirectionGuard],
-        path: 'innovator', loadChildren: () => innovatorModule.then(m => m.InnovatorModule)
+        path: 'assessment', loadChildren: () => import('@feature-modules/assessment/assessment.module').then(m => m.AssessmentModule)
       },
       {
         canActivate: [AuthenticationRedirectionGuard],
-        path: 'accessor', loadChildren: () => accessorModule.then(m => m.AccessorModule)
+        path: 'innovator', loadChildren: () => import('@feature-modules/innovator/innovator.module').then(m => m.InnovatorModule)
       },
+      {
+        canActivate: [AuthenticationRedirectionGuard],
+        path: 'accessor', loadChildren: () => import('@feature-modules/accessor/accessor.module').then(m => m.AccessorModule)
+      }
     ]
+  },
+
+  {
+    path: 'delete-account-message',
+    component: BaseLayoutComponent,
+    children: [{ path: '', pathMatch: 'full', component: PageAccountDeleteAccountMessageComponent }]
   },
 
   {
@@ -85,11 +87,6 @@ const routes: Routes = [
     path: 'not-found',
     component: BaseLayoutComponent,
     children: [{ path: '', pathMatch: 'full', component: PageNotFoundComponent }]
-  },
-
-  {
-    path: 'manage-deleteaccount',
-    children: [{ path: '', pathMatch: 'full', component: PageAccountManageUserDeleteAccountMesasageComponent }]
   },
 
   {

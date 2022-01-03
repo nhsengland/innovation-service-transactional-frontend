@@ -7,6 +7,9 @@ import { AlertType } from '@app/base/models';
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
 
 
+type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
+
+
 @Component({
   selector: 'shared-pages-innovation-record',
   templateUrl: './innovation-record.component.html'
@@ -26,7 +29,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   innovationSections: SectionsSummaryModel[] = [];
 
   sections: {
-    progressBar: boolean[];
+    progressBar: ProgressBarType[];
     submitted: number;
     draft: number;
     notStarted: number;
@@ -75,9 +78,17 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         this.innovationStatus = response.innovation.status;
         this.innovationSections = response.sections;
 
-        this.sections.progressBar = this.innovationSections.reduce((acc: boolean[], item) => {
-          return [...acc, ...item.sections.map(section => section.isCompleted)];
-        }, []).sort().reverse();
+        this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
+          return [...acc, ...item.sections.map(s => {
+            switch (s.status) {
+              case 'SUBMITTED': return '1:active';
+              case 'DRAFT': return '2:warning';
+              case 'NOT_STARTED':
+              default:
+                return '3:inactive';
+            }
+          })];
+        }, []).sort();
 
         this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
         this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
