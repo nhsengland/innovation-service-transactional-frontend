@@ -11,7 +11,7 @@
 
     <ng-container *ngIf="pageStatus === 'READY'">
 
-      <form [formGroup]="form">
+      <form [formGroup]="form"  (ngSubmit)="onSubmitForm()">
 
         <ng-container *ngIf="stepNumber === 1">
           <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
@@ -21,12 +21,12 @@
             <p> You will no longer have access to your innovation. If you want to keep a copy, you should download a PDF from the Innovation Record page before proceeding. </p>
           </div>
           <theme-form-radio-group controlName="innovation" label="Choose which innovation to archive" [items]="formInnovationsItems" [pageUniqueField]="false"></theme-form-radio-group>
-          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
+          <button class="nhsuk-button nhsuk-u-margin-top-3"> Continue </button>
         </ng-container>
 
         <ng-container *ngIf="stepNumber === 2">
           <theme-form-textarea controlName="reason" label="What's your reason for archiving this innovation?" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
-          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
+          <button class="nhsuk-button nhsuk-u-margin-top-3"> Continue </button>
         </ng-container>
 
         <ng-container *ngIf="stepNumber === 3">
@@ -38,7 +38,7 @@
           </div>
           <theme-form-input controlName="email" label="Enter your email" [pageUniqueField]="false"></theme-form-input>
           <theme-form-input controlName="confirmation" label="Are you sure that you want to archive?" description="To confirm, please type the following: archive my innovation" [pageUniqueField]="false"></theme-form-input>
-          <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3" (click)="onSubmitForm()"> Archive innovation </button>
+          <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3"> Archive innovation </button>
         </ng-container>
 
         <div class="nhsuk-u-padding-bottom-5">

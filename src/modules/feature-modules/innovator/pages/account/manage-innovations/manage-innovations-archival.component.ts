@@ -40,9 +40,9 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
     this.form = new FormGroup({
       innovation: new FormControl('', {validators: [CustomValidators.required('Please, choose an innovation')]}),
       reason: new FormControl('', { updateOn: 'submit' }),
-      email: new FormControl('', {validators: [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')], updateOn: 'submit'}),
-      confirmation: new FormControl('', {validators: [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('archive my innovation')], updateOn: 'submit'}),
-      });
+      email: new FormControl('', {validators: [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')],  updateOn: 'submit'}),
+      confirmation: new FormControl('', {validators: [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('archive my innovation')],  updateOn: 'submit'}),
+    });
   }
 
   ngOnInit(): void {

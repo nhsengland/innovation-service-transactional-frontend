@@ -21,6 +21,7 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
     email: new FormControl('', { validators: [CustomValidators.required('An email is required'), Validators.email], updateOn: 'submit' }),
     confirmation: new FormControl('', { validators: [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('transfer my innovation')], updateOn: 'submit' }),
   });
+
   formInnovationsItems: FormEngineParameterModel['items'] = [];
 
 
