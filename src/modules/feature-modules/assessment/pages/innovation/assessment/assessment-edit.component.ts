@@ -1,4 +1,4 @@
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
@@ -25,6 +25,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   innovationName: string;
   assessmentId: string;
   stepId: number;
+  @ViewChild('draftBtn', { read: ElementRef }) draftBtn!: ElementRef;
 
   alert: AlertType = { type: null };
 
@@ -66,7 +67,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     this.assessmentHasBeenSubmitted = null;
 
     this.currentAnswers = {};
-
   }
 
 
@@ -122,6 +122,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               { title: 'Support need summary', parameters: NEEDS_ASSESSMENT_QUESTIONS.summary },
               { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.organisationUnits }
             ];
+            this.draftBtn.nativeElement.disabled = false;
+            this.draftBtn.nativeElement.textContent = 'Save as draft';
             break;
         }
 
@@ -163,6 +165,11 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit'), this.currentAnswers).subscribe(
       () => {
         switch (action) {
+          case 'saveAsDraft': {
+              this.draftBtn.nativeElement.disabled = true;
+              this.draftBtn.nativeElement.textContent = 'Saved';
+            }
+            break;
           case 'update':
           case 'submit':
             switch (this.stepId) {
@@ -179,6 +186,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
         }
       },
       () => {
+        // this.draftBtn.nativeElement.disabled = false;
         this.alert = {
           type: 'ERROR',
           title: 'An error occurred when starting needs assessment',

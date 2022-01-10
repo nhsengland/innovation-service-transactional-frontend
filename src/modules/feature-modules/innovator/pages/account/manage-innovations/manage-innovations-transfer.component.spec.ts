@@ -95,27 +95,36 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountMa
 
   });
 
-  it('should run onSubmitStep() with INVALID form', () => {
+  it('should run validateForm() with step 1', () => {
+
+    fixture = TestBed.createComponent(PageAccountManageInnovationsTransferComponent);
+    component = fixture.componentInstance;
+    component.stepNumber = 1;
+
+    (component as any).validateForm(1);
+    expect(component.form.get('innovation')?.valid).toBeFalsy();
+
+  });
+
+  it('should run validateForm() with step 2', () => {
 
     fixture = TestBed.createComponent(PageAccountManageInnovationsTransferComponent);
     component = fixture.componentInstance;
 
-    component.onSubmitStep();
-    expect(component.form.valid).toEqual(false);
+    expect((component as any).validateForm(2));
+    expect(component.form.get('email')?.valid).toBeFalsy();
+    expect(component.form.get('confirmation')?.valid).toBeFalsy();
 
   });
 
-  it('should run onSubmitStep() with VALID form and NO UNITS', () => {
+  it('should run validateForm() with INVALID step', () => {
 
     fixture = TestBed.createComponent(PageAccountManageInnovationsTransferComponent);
     component = fixture.componentInstance;
-    component.form.get('innovation')?.setValue('Inno01');
 
-    component.onSubmitStep();
-    expect(component.stepNumber).toBe(2);
+    expect((component as any).validateForm(3)).toBeTruthy();
 
   });
-
 
   it('should run onSubmit() with invalid form', () => {
 

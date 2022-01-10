@@ -38,11 +38,11 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
     };
 
     this.form = new FormGroup({
-      innovation: new FormControl('', {validators: [CustomValidators.required('Please, choose an innovation')], updateOn: 'submit'}),
+      innovation: new FormControl('', { validators: [CustomValidators.required('Please, choose an innovation')],  updateOn: 'submit' }),
       reason: new FormControl('', { updateOn: 'submit' }),
-      email: new FormControl('', {validators: [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')], updateOn: 'submit'}),
-      confirmation: new FormControl('', {validators: [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('archive my innovation')], updateOn: 'submit'}),
-      });
+      email: new FormControl('', {validators: [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')],  updateOn: 'submit'}),
+      confirmation: new FormControl('', {validators: [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('archive my innovation')],  updateOn: 'submit'}),
+    });
   }
 
   ngOnInit(): void {
@@ -70,38 +70,30 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
 
   }
 
-  onSubmitStep(): void {
-
-    if (!this.validateForm(this.stepNumber)) { return; }
-
-    this.stepNumber++;
-    this.setStepTitle();
-  }
-
   onSubmitForm(): void {
-
     if (!this.form.valid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+      this.validateForm(this.stepNumber);
+      this.setStepTitle();
+    } else {
 
-    this.innovatorService.archiveInnovation(this.form.get('innovation')!.value, this.form.get('reason')!.value).pipe(
-      concatMap(() => {
-        return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
-      })
-    ).subscribe(
-      () => {
-        this.redirectTo('/innovator/account/manage-innovations', { alert: 'archivalSuccess', innovation: this.innovationName });
-      },
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occured when archiving the innovation',
-          message: 'Please, try again or contact us for further help',
-          setFocus: true
-        };
-      }
-    );
+      this.innovatorService.archiveInnovation(this.form.get('innovation')!.value, this.form.get('reason')!.value).pipe(
+        concatMap(() => {
+          return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
+        })
+      ).subscribe(
+        () => {
+          this.redirectTo('/innovator/account/manage-innovations', { alert: 'archivalSuccess', innovation: this.innovationName });
+        },
+        () => {
+          this.alert = {
+            type: 'ERROR',
+            title: 'An error occured when archiving the innovation',
+            message: 'Please, try again or contact us for further help',
+            setFocus: true
+          };
+        }
+      );
+    }
   }
 
   private validateForm(step: number): boolean {
@@ -114,13 +106,31 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
         }
         /* istanbul ignore next */
         this.innovationName = this.formInnovationsItems?.filter(item => this.form.get('innovation')!.value === item.value)[0].label || '';
+        this.stepNumber++;
         break;
       case 2:
+        if (!this.form.get('reason')!.valid) {
+          this.form.get('reason')!.markAsTouched();
+          return false;
+        }
+        this.stepNumber++;
+        break;
+      case 3:
+        if (!this.form.get('email')!.valid && !this.form.get('confirmation')!.valid) {
+          if (!this.form.get('email')!.valid && !this.form.get('confirmation')!.valid) {
+            this.form.get('email')!.markAsTouched();
+            this.form.get('confirmation')!.markAsTouched();
+          } else if (!this.form.get('email')!.valid) {
+            this.form.get('email')!.markAsTouched();
+          } else if (!this.form.get('confirmation')!.valid) {
+            this.form.get('confirmation')!.markAsTouched();
+          }
+          return false;
+        }
         break;
       default:
         break;
     }
-
     return true;
   }
 

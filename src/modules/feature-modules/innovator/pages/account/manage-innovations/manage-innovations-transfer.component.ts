@@ -17,10 +17,11 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
   alert: AlertType = { type: null };
 
   form = new FormGroup({
-    innovation: new FormControl('', { validators: [CustomValidators.required('Please choose an innovation')], updateOn: 'submit' }),
-    email: new FormControl('', { validators: [CustomValidators.required('An email is required'), Validators.email], updateOn: 'submit' }),
-    confirmation: new FormControl('', { validators: [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('transfer my innovation')], updateOn: 'submit' }),
+    innovation: new FormControl('', {validators: [CustomValidators.required('Please choose an innovation')], updateOn: 'submit'}),
+    email: new FormControl('', {validators: [CustomValidators.required('An email is required'), Validators.email],  updateOn: 'submit'}),
+    confirmation: new FormControl('', {validators: [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('transfer my innovation')], updateOn: 'submit'}),
   });
+
   formInnovationsItems: FormEngineParameterModel['items'] = [];
 
 
@@ -57,44 +58,59 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
 
   }
 
+  onSubmitForm(): void {
+    if (!this.form.valid) {
+      this.validateForm(this.stepNumber);
+    } else {
 
-  onSubmitStep(): void {
+      const body: { innovationId: string, email: string } = {
+        innovationId: this.form.get('innovation')!.value,
+        email: this.form.get('email')!.value
+      };
 
-    if (!this.form.get('innovation')!.valid) {
-      this.form.get('innovation')!.markAsTouched();
-      return;
+      this.innovatorService.transferInnovation(body).subscribe(
+        () => {
+          this.redirectTo('/innovator/account/manage-innovations');
+        },
+        () => {
+          this.alert = {
+            type: 'ERROR',
+            title: 'An error occurred when creating an action',
+            message: 'Please try again or contact us for further help',
+            setFocus: true
+          };
+        }
+      );
     }
-
-    this.stepNumber = 2;
-
   }
 
-  onSubmitForm(): void {
+  private validateForm(step: number): boolean {
 
-    if (!this.form.valid) {
-      this.form.markAllAsTouched();
-      return;
+    switch (step) {
+      case 1:
+        if (!this.form.get('innovation')!.valid) {
+          this.form.get('innovation')!.markAsTouched();
+          return false;
+        }
+        this.stepNumber++;
+        break;
+      case 2:
+        if(!this.form.get('email')!.valid && !this.form.get('confirmation')!.valid) {
+          if (!this.form.get('email')!.valid && !this.form.get('confirmation')!.valid) {
+            this.form.get('email')!.markAsTouched();
+            this.form.get('confirmation')!.markAsTouched();
+          } else if (!this.form.get('email')!.valid) {
+            this.form.get('email')!.markAsTouched();
+          } else if (!this.form.get('confirmation')!.valid) {
+            this.form.get('confirmation')!.markAsTouched();
+          }
+          return false;
+        }
+        break;
+      default:
+        break;
     }
-
-    const body: { innovationId: string, email: string } = {
-      innovationId: this.form.get('innovation')!.value,
-      email: this.form.get('email')!.value
-    };
-
-    this.innovatorService.transferInnovation(body).subscribe(
-      () => {
-        this.redirectTo('/innovator/account/manage-innovations');
-      },
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when creating an action',
-          message: 'Please try again or contact us for further help',
-          setFocus: true
-        };
-      }
-    );
-
+    return true;
   }
 
 }
