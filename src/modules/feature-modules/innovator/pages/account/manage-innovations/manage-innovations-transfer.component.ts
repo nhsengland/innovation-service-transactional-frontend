@@ -95,7 +95,7 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
         this.stepNumber++;
         break;
       case 2:
-        if(!this.form.get('email')!.valid && !this.form.get('confirmation')!.valid) {
+        if (!this.form.get('email')!.valid && !this.form.get('confirmation')!.valid) {
           if (!this.form.get('email')!.valid && !this.form.get('confirmation')!.valid) {
             this.form.get('email')!.markAsTouched();
             this.form.get('confirmation')!.markAsTouched();

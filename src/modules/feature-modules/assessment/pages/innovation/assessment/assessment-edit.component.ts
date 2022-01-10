@@ -165,10 +165,9 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit'), this.currentAnswers).subscribe(
       () => {
         switch (action) {
-          case 'saveAsDraft': {
-              this.draftBtn.nativeElement.disabled = true;
-              this.draftBtn.nativeElement.textContent = 'Saved';
-            }
+          case 'saveAsDraft':
+            this.draftBtn.nativeElement.disabled = true;
+            this.draftBtn.nativeElement.textContent = 'Saved';
             break;
           case 'update':
           case 'submit':

@@ -89,28 +89,6 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
 
   });
 
-  // it('should run onSubmitStep() with INVALID form', () => {
-
-  //   fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
-  //   component = fixture.componentInstance;
-
-  //   component.onSubmitStep();
-  //   expect(component.form.valid).toEqual(false);
-
-  // });
-
-  // it('should run onSubmitStep() with VALID form', () => {
-
-  //   fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
-  //   component = fixture.componentInstance;
-  //   component.form.get('innovation')?.setValue('Inno01');
-  //   component.formInnovationsItems = [{ value: 'Inno01', label: 'Innovation' }];
-
-  //   component.onSubmitStep();
-  //   expect(component.stepNumber).toBe(2);
-
-  // });
-
   it('should run onSubmitForm() with invalid form', () => {
 
     fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
