@@ -1,4 +1,4 @@
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
@@ -40,12 +40,15 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   currentAnswers: { [key: string]: any };
 
+  saveAsDraft: {
+    disabled: boolean,
+    label: string
+  } = { disabled: false, label: 'Save as draft' };
 
   isValidStepId(): boolean {
     const id = this.stepId;
     return (1 <= Number(id) && Number(id) <= 2);
   }
-
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -66,7 +69,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     this.assessmentHasBeenSubmitted = null;
 
     this.currentAnswers = {};
-
   }
 
 
@@ -122,6 +124,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               { title: 'Support need summary', parameters: NEEDS_ASSESSMENT_QUESTIONS.summary },
               { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.organisationUnits }
             ];
+            this.saveAsDraft.disabled = false;
+            this.saveAsDraft.label = 'Save as draft';
             break;
         }
 
@@ -163,6 +167,10 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit'), this.currentAnswers).subscribe(
       () => {
         switch (action) {
+          case 'saveAsDraft':
+            this.saveAsDraft.disabled = true;
+            this.saveAsDraft.label = 'Saved';
+            break;
           case 'update':
           case 'submit':
             switch (this.stepId) {
@@ -179,6 +187,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
         }
       },
       () => {
+        // this.draftBtn.nativeElement.disabled = false;
         this.alert = {
           type: 'ERROR',
           title: 'An error occurred when starting needs assessment',
