@@ -29,7 +29,7 @@
 
       <button *ngIf="assessmentHasBeenSubmitted" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('update')">Update needs assessment</button>
       <button *ngIf="!assessmentHasBeenSubmitted" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">Submit needs assessment</button>
-      <button [hidden]="!draftBtn" #draftBtn class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5" (click)="onSubmit('saveAsDraft')">Save as draft</button>
+      <button [disabled]="saveAsDraft.disabled" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5" (click)="onSubmit('saveAsDraft')">{{ saveAsDraft.label }}</button>
 
     </ng-container>
 

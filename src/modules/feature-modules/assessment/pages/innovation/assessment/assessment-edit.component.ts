@@ -25,7 +25,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   innovationName: string;
   assessmentId: string;
   stepId: number;
-  @ViewChild('draftBtn', { read: ElementRef }) draftBtn!: ElementRef;
 
   alert: AlertType = { type: null };
 
@@ -41,12 +40,15 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   currentAnswers: { [key: string]: any };
 
+  saveAsDraft: {
+    disabled: boolean,
+    label: string
+  } = { disabled: false, label: 'Save as draft' };
 
   isValidStepId(): boolean {
     const id = this.stepId;
     return (1 <= Number(id) && Number(id) <= 2);
   }
-
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -122,8 +124,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               { title: 'Support need summary', parameters: NEEDS_ASSESSMENT_QUESTIONS.summary },
               { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.organisationUnits }
             ];
-            this.draftBtn.nativeElement.disabled = false;
-            this.draftBtn.nativeElement.textContent = 'Save as draft';
+            this.saveAsDraft.disabled = false;
+            this.saveAsDraft.label = 'Save as draft';
             break;
         }
 
@@ -166,8 +168,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       () => {
         switch (action) {
           case 'saveAsDraft':
-            this.draftBtn.nativeElement.disabled = true;
-            this.draftBtn.nativeElement.textContent = 'Saved';
+            this.saveAsDraft.disabled = true;
+            this.saveAsDraft.label = 'Saved';
             break;
           case 'update':
           case 'submit':
