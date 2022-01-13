@@ -33,7 +33,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
   @Input() values?: { [key: string]: any } = {};
   @Output() formChanges: any = new EventEmitter();
 
-  private formChangeSubscription: null | Subscription = null;
+  private formChangeSubscription = new Subscription();
   private loggerContext = 'Catalog::FormsModule::EngineComponent::';
 
   form: FormGroup = new FormGroup({});
@@ -59,9 +59,6 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
     this.contentReady = true;
     this.cdr.detectChanges();
 
-    this.formChangeSubscription = this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => {
-      this.formChanges.emit(this.form);
-    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -83,6 +80,12 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
     this.form = FormEngineHelper.buildForm(this.parameters, this.values);
 
     this.onlyOneField = this.parameters.length === 1;
+
+    this.formChangeSubscription.unsubscribe();
+    this.formChangeSubscription = new Subscription();
+    this.formChangeSubscription.add(
+      this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.formChanges.emit(this.form.value))
+    );
 
     this.cdr.detectChanges();
 
@@ -133,7 +136,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.formChangeSubscription?.unsubscribe();
+    this.formChangeSubscription.unsubscribe();
   }
 
 }
