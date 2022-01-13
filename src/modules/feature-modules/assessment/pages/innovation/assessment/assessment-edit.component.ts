@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
@@ -43,7 +43,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   saveAsDraft: {
     disabled: boolean,
     label: string
-  } = { disabled: false, label: 'Save as draft' };
+  } = { disabled: true, label: 'Saved' };
 
   isValidStepId(): boolean {
     const id = this.stepId;
@@ -112,6 +112,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
           return;
         }
 
+        this.saveAsDraft = { disabled: true, label: 'Saved' };
+
         switch (this.stepId) {
           case 1:
             this.form.sections = [
@@ -124,8 +126,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               { title: 'Support need summary', parameters: NEEDS_ASSESSMENT_QUESTIONS.summary },
               { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.organisationUnits }
             ];
-            this.saveAsDraft.disabled = false;
-            this.saveAsDraft.label = 'Save as draft';
             break;
         }
 
@@ -168,8 +168,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       () => {
         switch (action) {
           case 'saveAsDraft':
-            this.saveAsDraft.disabled = true;
-            this.saveAsDraft.label = 'Saved';
+            this.saveAsDraft = { disabled: true, label: 'Saved' };
             break;
           case 'update':
           case 'submit':
@@ -187,7 +186,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
         }
       },
       () => {
-        // this.draftBtn.nativeElement.disabled = false;
         this.alert = {
           type: 'ERROR',
           title: 'An error occurred when starting needs assessment',
@@ -197,6 +195,10 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       }
     );
 
+  }
+
+  onFormChange(): void {
+    this.saveAsDraft = { disabled: false, label: 'Save as draft' };
   }
 
 }
