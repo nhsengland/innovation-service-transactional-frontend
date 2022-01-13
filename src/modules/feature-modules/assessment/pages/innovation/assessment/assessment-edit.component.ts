@@ -199,4 +199,9 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   }
 
+  getFormChanges(form: any) {
+    this.saveAsDraft.disabled = false;
+    this.saveAsDraft.label = 'Save as draft';
+  }
+
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, ChangeDetectionStrategy, ChangeDetectorRef, SimpleChanges, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ChangeDetectionStrategy, ChangeDetectorRef, SimpleChanges, PLATFORM_ID, Inject, Output, EventEmitter } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { FormArray, FormGroup } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
@@ -6,6 +6,7 @@ import { NGXLogger } from 'ngx-logger';
 import { FormEngineHelper } from './helpers/form-engine.helper';
 
 import { FormEngineParameterModel } from './models/form-engine.models';
+import { debounceTime } from 'rxjs/operators';
 
 /**
  * @param parameters is an array of ParameterModel. For more info, check ParameterModel.
@@ -29,6 +30,7 @@ export class FormEngineComponent implements OnInit, OnChanges {
 
   @Input() parameters: FormEngineParameterModel[] = [];
   @Input() values?: { [key: string]: any } = {};
+  @Output() formChanges = new EventEmitter();
 
   private loggerContext = 'Catalog::FormsModule::EngineComponent::';
 
@@ -54,6 +56,10 @@ export class FormEngineComponent implements OnInit, OnChanges {
 
     this.contentReady = true;
     this.cdr.detectChanges();
+
+    this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => {
+      this.formChanges.emit(this.form.value);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
