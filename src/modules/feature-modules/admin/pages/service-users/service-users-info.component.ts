@@ -16,6 +16,12 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
     { type: 'link', label: 'Delete user', url: '/admin/service-users/User001/delete' }
   ];
 
+  sections: {
+    userInfo: { label: string; value: null | string; }[];
+    innovations: string[];
+    organisation: { label: string; value: null | string; }[];
+  } = { userInfo: [], innovations: [], organisation: [] };
+
   constructor() {
 
     super();
@@ -23,6 +29,24 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
 
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+
+    this.sections.userInfo = [
+      { label: 'Name', value: 'John Doe' },
+      { label: 'Type', value: 'Innovator' },
+      { label: 'Email address', value: 'email@some.uk' },
+      { label: 'Phone number', value: null }
+    ];
+
+    this.sections.innovations = ['Innovation 01', 'Innovation 02'];
+
+    this.sections.organisation = [
+      { label: 'Organisation', value: 'NICE' },
+      { label: 'Unit', value: 'NICE unit (if accessor)' },
+      { label: 'Assigned innovations', value: '57 (if accessor)' }
+    ];
+
+
+  }
 
 }
