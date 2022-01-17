@@ -33,9 +33,9 @@ export class PageAccountManageUserAccountComponent extends CoreComponent impleme
     this.user = { email: user.email };
 
     this.form = new FormGroup({
-      reason: new FormControl('', { updateOn: 'submit' }),
-      email: new FormControl('', {validators: [CustomValidators.required('An email is required'), CustomValidators.equalTo(this.user.email, 'The email is incorrect')],  updateOn: 'submit'}),
-      confirmation: new FormControl('', {validators: [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('delete my account')],  updateOn: 'submit'}),
+      reason: new FormControl(''),
+      email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(this.user.email, 'The email is incorrect')]),
+      confirmation: new FormControl('', [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('delete my account')]),
     });
 
   }
