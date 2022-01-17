@@ -14,7 +14,8 @@ const stepsLabels = {
   l6: 'Which clinical areas does your innovation impact on?',
   l7: 'In which care settings is your innovation relevant?',
   l8: 'What\'s the main purpose of your innovation?',
-  l9: 'What type of support are you currently looking for?'
+  l9: 'What type of support are you currently looking for?',
+  l10: 'Provide further information about what support you are seeking from the NHS Innovation Service.'
 };
 
 
@@ -31,6 +32,7 @@ type InboundPayloadType = {
   careSettings: ('AMBULANCE_OR_PARAMEDIC' | 'COMMUNITY' | 'HOSPITAL_INPATIENT' | 'HOSPITAL_OUTPATIENT' | 'MENTAL_HEALTH' | 'PATIENT_HOME' | 'PHARMACY' | 'PRIMARY_CARE' | 'SOCIAL_CARE')[];
   mainPurpose: 'PREVENT_CONDITION' | 'PREDICT_CONDITION' | 'DIAGNOSE_CONDITION' | 'MONITOR_CONDITION' | 'PROVIDE_TREATMENT' | 'MANAGE_CONDITION' | 'ENABLING_CARE';
   supportTypes: ('ADOPTION' | 'ASSESSMENT' | 'PRODUCT_MIGRATION' | 'CLINICAL_TESTS' | 'COMMERCIAL' | 'PROCUREMENT' | 'DEVELOPMENT' | 'EVIDENCE_EVALUATION' | 'FUNDING' | 'INFORMATION')[];
+  moreSupportDescription: string;
 };
 
 type StepPayloadType = InboundPayloadType;
@@ -124,6 +126,14 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
           validations: { isRequired: [true, 'Choose at least one type of support'] },
           items: supportTypesItems
         }]
+      }),
+      new FormEngineModel({
+        parameters: [{
+          id: 'moreSupportDescription',
+          dataType: 'textarea',
+          label: stepsLabels.l10,
+          lengthLimit: 'medium'
+        }]
       })
     ],
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
@@ -179,6 +189,11 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
       label: stepsLabels.l9,
       value: data.supportTypes?.map(v => supportTypesItems.find(item => item.value === v)?.label).join('\n'),
       editStepNumber: 9
+    },
+    {
+      label: stepsLabels.l10,
+      value: data.moreSupportDescription,
+      editStepNumber: 10
     }
   ];
 

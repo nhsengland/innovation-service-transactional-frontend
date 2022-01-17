@@ -5,10 +5,10 @@ import { LinkType } from '@app/base/models';
 
 
 @Component({
-  selector: 'app-admin-pages-service-users-list',
-  templateUrl: './service-users-list.component.html'
+  selector: 'app-admin-pages-service-users-find',
+  templateUrl: './service-users-find.component.html'
 })
-export class PageServiceUsersListComponent extends CoreComponent implements OnInit {
+export class PageServiceUsersFindComponent extends CoreComponent implements OnInit {
 
   titleActions: LinkType[] = [
     { type: 'button', label: 'New user', url: '/admin/service-users/new' }

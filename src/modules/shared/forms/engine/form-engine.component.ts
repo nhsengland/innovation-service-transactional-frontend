@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input, ChangeDetectionStrategy, ChangeDetectorRef, SimpleChanges, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, ChangeDetectionStrategy, ChangeDetectorRef, SimpleChanges, PLATFORM_ID, Inject, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { FormArray, FormGroup } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
@@ -6,6 +6,8 @@ import { NGXLogger } from 'ngx-logger';
 import { FormEngineHelper } from './helpers/form-engine.helper';
 
 import { FormEngineParameterModel } from './models/form-engine.models';
+import { debounceTime } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 /**
  * @param parameters is an array of ParameterModel. For more info, check ParameterModel.
@@ -22,14 +24,16 @@ import { FormEngineParameterModel } from './models/form-engine.models';
   styleUrls: ['./form-engine.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormEngineComponent implements OnInit, OnChanges {
+export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() formId = '';
   @Input() action = '';
 
   @Input() parameters: FormEngineParameterModel[] = [];
   @Input() values?: { [key: string]: any } = {};
+  @Output() formChanges: any = new EventEmitter();
 
+  private formChangeSubscription = new Subscription();
   private loggerContext = 'Catalog::FormsModule::EngineComponent::';
 
   form: FormGroup = new FormGroup({});
@@ -54,6 +58,7 @@ export class FormEngineComponent implements OnInit, OnChanges {
 
     this.contentReady = true;
     this.cdr.detectChanges();
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -75,6 +80,12 @@ export class FormEngineComponent implements OnInit, OnChanges {
     this.form = FormEngineHelper.buildForm(this.parameters, this.values);
 
     this.onlyOneField = this.parameters.length === 1;
+
+    this.formChangeSubscription.unsubscribe();
+    this.formChangeSubscription = new Subscription();
+    this.formChangeSubscription.add(
+      this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.formChanges.emit(this.form.value))
+    );
 
     this.cdr.detectChanges();
 
@@ -122,6 +133,10 @@ export class FormEngineComponent implements OnInit, OnChanges {
 
     return FormEngineHelper.getFormValues(this.form, this.parameters);
 
+  }
+
+  ngOnDestroy(): void {
+    this.formChangeSubscription.unsubscribe();
   }
 
 }

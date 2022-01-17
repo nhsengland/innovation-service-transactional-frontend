@@ -11,8 +11,8 @@ import { AdminLayoutComponent } from './base/admin-layout.component';
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 import { PageServiceUsersDeleteComponent } from './pages/service-users/service-users-delete.component';
 import { PageServiceUsersEditComponent } from './pages/service-users/service-users-edit.component';
+import { PageServiceUsersFindComponent } from './pages/service-users/service-users-find.component';
 import { PageServiceUsersInfoComponent } from './pages/service-users/service-users-info.component';
-import { PageServiceUsersListComponent } from './pages/service-users/service-users-list.component';
 import { PageServiceUsersLockComponent } from './pages/service-users/service-users-lock.component';
 import { PageServiceUsersNewComponent } from './pages/service-users/service-users-new.component';
 
@@ -34,8 +34,8 @@ import { ServiceUsersService } from './services/service-users.service';
     PageDashboardComponent,
     PageServiceUsersDeleteComponent,
     PageServiceUsersEditComponent,
+    PageServiceUsersFindComponent,
     PageServiceUsersInfoComponent,
-    PageServiceUsersListComponent,
     PageServiceUsersLockComponent,
     PageServiceUsersNewComponent
   ],

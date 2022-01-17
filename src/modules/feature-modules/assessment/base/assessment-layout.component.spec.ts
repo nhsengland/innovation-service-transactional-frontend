@@ -158,7 +158,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
       { title: 'Innovation record', link: `/assessment/innovations/innovation01/record` },
       // { title: 'Support status', link: `/assessment/innovations/innovation01/support` },
       // { title: 'Action tracker', link: `/assessment/innovations/innovation01/action-tracker` },
-      // { title: 'Comments', link: `/assessment/innovations/innovation01/comments` }
+      { title: 'Comments', link: `/assessment/innovations/innovation01/comments` },
       { title: 'Activity log', link: `/assessment/innovations/innovation01/activity-log` }
     ];
 

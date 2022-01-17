@@ -8,13 +8,13 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
-import { PageServiceUsersListComponent } from './service-users-list.component';
+import { PageServiceUsersFindComponent } from './service-users-find.component';
 
 
-describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersListComponent', () => {
+describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersFindComponent', () => {
 
-  let component: PageServiceUsersListComponent;
-  let fixture: ComponentFixture<PageServiceUsersListComponent>;
+  let component: PageServiceUsersFindComponent;
+  let fixture: ComponentFixture<PageServiceUsersFindComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -33,7 +33,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersListComponent'
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(PageServiceUsersListComponent);
+    fixture = TestBed.createComponent(PageServiceUsersFindComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();

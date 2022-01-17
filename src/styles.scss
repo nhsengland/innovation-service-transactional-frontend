@@ -74,6 +74,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 .font-style-italic { font-style: italic; }
 
 .text-align-left { text-align: start; }
+.text-align-center { text-align: center; }
 .text-align-right { text-align: end; }
 .text-align-right-only-desktop {
   @media (min-width: 48.0625em) { text-align: end; }
@@ -155,6 +156,11 @@ $service-manual-container-size: 1100px; // Container width variable.
 .full-width-section {
   margin: 0 -9999rem;
   padding: 0.25rem 9999rem;
+}
+
+.informational-section {
+  padding-top: 30px;
+  border-top: 1px solid var(--nhsuk-border-color);
 }
 
 

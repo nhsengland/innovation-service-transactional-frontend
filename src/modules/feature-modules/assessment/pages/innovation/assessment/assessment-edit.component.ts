@@ -40,12 +40,15 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   currentAnswers: { [key: string]: any };
 
+  saveAsDraft: {
+    disabled: boolean,
+    label: string
+  } = { disabled: true, label: 'Saved' };
 
   isValidStepId(): boolean {
     const id = this.stepId;
     return (1 <= Number(id) && Number(id) <= 2);
   }
-
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -66,7 +69,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     this.assessmentHasBeenSubmitted = null;
 
     this.currentAnswers = {};
-
   }
 
 
@@ -109,6 +111,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
           this.redirectTo('/not-found');
           return;
         }
+
+        this.saveAsDraft = { disabled: true, label: 'Saved' };
 
         switch (this.stepId) {
           case 1:
@@ -163,6 +167,9 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit'), this.currentAnswers).subscribe(
       () => {
         switch (action) {
+          case 'saveAsDraft':
+            this.saveAsDraft = { disabled: true, label: 'Saved' };
+            break;
           case 'update':
           case 'submit':
             switch (this.stepId) {
@@ -188,6 +195,10 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       }
     );
 
+  }
+
+  onFormChange(): void {
+    this.saveAsDraft = { disabled: false, label: 'Save as draft' };
   }
 
 }
