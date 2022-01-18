@@ -31,7 +31,6 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
   form = new FormGroup({});
   formSubmittedFields: { [key: string]: string } = {};
 
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private notificationsService: NotificationsService
@@ -39,7 +38,6 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
     super();
     this.setPageTitle('Comments');
-
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
@@ -61,6 +59,10 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
   }
 
+
+  allSectionsSubmitted(): boolean {
+    return this.innovation.status !== 'CREATED' && this.innovation.status !== '';
+  }
 
   ngOnInit(): void {
 
