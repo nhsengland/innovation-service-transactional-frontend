@@ -186,6 +186,7 @@ const routes: Routes = [
               },
               {
                 path: 'comments', pathMatch: 'full', component: PageInnovationCommentsListComponent,
+                resolve: { innovationData: InnovationDataResolver },
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', showInnovationHeader: true } }
               },
               {
