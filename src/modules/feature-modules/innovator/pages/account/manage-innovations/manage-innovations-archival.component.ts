@@ -42,7 +42,7 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
       reason: new FormControl(''),
       email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')]),
       confirmation: new FormControl('', [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('archive my innovation')]),
-    });
+    }, { updateOn: 'blur' });
   }
 
   ngOnInit(): void {
