@@ -26,6 +26,9 @@
 
       <button class="nhsuk-button" [disabled]="!allSectionsSubmitted()"
         routerLink="/{{ module }}/innovations/{{ innovationId }}/comments/new"> Add new comment </button>
+      <p *ngIf="!allSectionsSubmitted()">Submit your record before you add a new comment.</p>
+
+
 
       <div class="d-flex align-items-center justify-content-space-between nhsuk-u-margin-bottom-2">
         <div class="nhsuk-body-s font-color-secondary nhsuk-u-font-weight-bold nhsuk-u-margin-0"> Showing {{
