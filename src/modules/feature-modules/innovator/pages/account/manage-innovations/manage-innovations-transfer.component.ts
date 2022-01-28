@@ -89,8 +89,8 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occurred when creating an action',
-          message: 'Please try again or contact us for further help',
+          title: 'An error occurred when transferring innovation ownership.',
+          message: 'Please check the details and try again or contact us for further info.',
           setFocus: true
         };
       }
