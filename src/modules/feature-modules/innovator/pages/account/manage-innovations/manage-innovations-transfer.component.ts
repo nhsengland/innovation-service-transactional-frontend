@@ -20,7 +20,7 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
     innovation: new FormControl('', CustomValidators.required('Please choose an innovation')),
     email: new FormControl('', [CustomValidators.required('An email is required'), Validators.email]),
     confirmation: new FormControl('', [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('transfer my innovation')]),
-  });
+  }, { updateOn: 'blur' });
 
   formInnovationsItems: FormEngineParameterModel['items'] = [];
 
@@ -89,8 +89,8 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
       () => {
         this.alert = {
           type: 'ERROR',
-          title: 'An error occurred when creating an action',
-          message: 'Please try again or contact us for further help',
+          title: 'An error occurred when transferring innovation ownership.',
+          message: 'Please check the details and try again or contact us for further info.',
           setFocus: true
         };
       }
