@@ -4,6 +4,9 @@ import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { CREATE_NEW_USER_QUESTIONS } from './service-users-new.config';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { response } from 'express';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-admin-pages-service-users-new',
@@ -17,16 +20,41 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
 
   wizard: WizardEngineModel = new WizardEngineModel({});
 
-  constructor() {
+  constructor(
+    private organisationsService: OrganisationsService,
+  ) {
 
     super();
-    this.setPageTitle('Create new user');
-
+    this.setPageTitle('Create new user'); 
   }
 
   ngOnInit(): void {
     this.wizard = CREATE_NEW_USER_QUESTIONS;
-    this.wizard.setAnswers(this.wizard.runInboundParsing({})).runRules();
+    forkJoin([
+      this.organisationsService.getAccessorsOrganisations(),
+      this.organisationsService.getOrganisationUnits()
+    ]).subscribe(([orgnisation, units]) => {
+      const organisationList = units.map((unit) => ({ acronym: unit.acronym, name: unit.name, units: unit.organisationUnits.map(o => ({ acronym: o.acronym, name: o.name })) }))
+      this.wizard.setAnswers(this.wizard.runInboundParsing({ organisationList })).runRules();
+
+      this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = orgnisation.map((item: { [key: string]: any }) => ({ value: item.acronym, label: item.name }));
+      this.wizard.addAnswers({ organisationAcronym: orgnisation.map((item: { [key: string]: any }) => item.acronym) });
+
+      //units
+      // this.wizard.steps[this.wizard.steps.length - 2].parameters[0].items = units.map((unit) => ({ objRes:unit }));
+      // this.wizard.addAnswers({ organisationAcronym: units.map((item: { [key: string]: any }) => item.acronym) });
+      console.log(orgnisation, units);
+      // const units = units.filter()
+      this.setPageStatus('READY');
+
+
+    },
+      () => {
+        this.setPageStatus('READY');
+        this.logger.error('Error fetching organisations list');
+      });
+
+
     this.setPageStatus('READY');
   }
 

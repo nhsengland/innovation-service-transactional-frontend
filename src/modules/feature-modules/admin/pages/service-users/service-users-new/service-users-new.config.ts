@@ -3,16 +3,27 @@ import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEn
 
 // Types.
 type InboundPayloadType = {
+  organisationList: { acronym: string, name: string, units: { acronym: string, name: string }[] }[]
+};
+
+type StepPayloadType = {
   email: string,
   name: string,
-  type: null | 'ASSESSMENT' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR' | 'INNOVATOR',
+  type: null | 'ASSESSMENT' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR',
   organisationAcronym?: null | string, // Only for QA, A
   role?: null | 'QUALIFYING_ACCESSOR' | 'ACCESSOR', // Only for QA, A
-  organisationUnitAcronym?: null | string // Only for A
+  organisationUnitAcronym?: null | string, // Only for A
+  organisationList: { acronym: string, name: string, units: { acronym: string, name: string }[] }[]
 };
-type StepPayloadType = InboundPayloadType;
-type OutboundPayloadType = InboundPayloadType;
 
+type OutboundPayloadType = {
+  email: string,
+  name: string,
+  type: null | 'ASSESSMENT' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR',
+  organisationAcronym?: null | string, // Only for QA, A
+  role?: null | 'QUALIFYING_ACCESSOR' | 'ACCESSOR', // Only for QA, A
+  organisationUnitAcronym?: null | string, // Only for A
+};
 
 // This is a LET variable, because the organisations shares information is updated by the component that uses this variable.
 export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel({
@@ -46,10 +57,9 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
         label: 'Kindly select appropriate user type',
         validations: { isRequired: [true, 'Choose one option'] },
         items: [
-          { value: 'ASSESSMENT', label: 'Assessment' },
+          { value: 'ASSESSMENT', label: 'Needs Accessor' },
           { value: 'QUALIFYING_ACCESSOR', label: 'Qualifying Accessor'},
-          { value: 'ACCESSOR', label: 'Accessor' , },
-          { value: 'INNOVATOR', label: 'Innovator' },
+          { value: 'ACCESSOR', label: 'Accessor' },
         ]
       }]
     })
@@ -64,13 +74,15 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
 
 function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary'): void {
   // Backup current organisation shares items.
-  const organisationSharesItems = steps.find(s => s.parameters[0].id === 'organisationShares')?.parameters[0].items;
+  const organisationAcronym = steps.find(s => s.parameters[0].id === 'organisationAcronym')?.parameters[0].items;
+  // const organisationUnitAcronym = steps.find(s => s.parameters[0].id === 'organisationUnitAcronym')?.parameters[0].items;
 
   steps.splice(3);
 
-  if (data.type === 'ASSESSMENT' || data.type === 'INNOVATOR') {
+  if (data.type === 'ASSESSMENT') {
     data.organisationAcronym = null;
     data.organisationUnitAcronym = null;
+    data.role = null;
   } else {
 
     steps.push(
@@ -80,16 +92,28 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
           dataType: 'radio-group',
           label: 'Kindly select organisation?',
           validations: { isRequired: [true, 'Organisation is required'] },
-          items: [
-            { value: '1 to 5 employees', label: '1 to 5 employees' },
-            { value: '6 to 25 employees', label: '6 to 25 employees' },
-            { value: '26 to 100 employees', label: '26 to 100 employees' },
-            { value: 'More than 100 employees', label: 'More than 100 employees' }
-          ]
+          items: organisationAcronym
         }]
       })
+    
     );
+
   }
+
+  if(data.type  === 'ACCESSOR') {
+    steps.push(
+      new FormEngineModel({
+        parameters: [{
+          id: 'organisationUnitAcronym',
+          dataType: 'radio-group',
+          label: 'Kindly select unit?',
+          validations: { isRequired: [true, 'Unit is required'] },
+          items: data.organisationList.find((org) => (org.acronym === data.organisationAcronym))?.units.map(units => ({ value: units.acronym, label: units.name }))
+        }]
+      }),
+    )
+  } 
+  
 }
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
@@ -100,13 +124,26 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     type: null,
     organisationAcronym: null,
     organisationUnitAcronym: null,
-    role : null
+    role : null,
+    organisationList: data.organisationList
   };
 
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
+  if(data.type === 'ACCESSOR') {
+    data.role = 'ACCESSOR';
+  }
+
+  if(data.type === 'QUALIFYING_ACCESSOR') {
+    data.role = 'QUALIFYING_ACCESSOR';
+  }
+
+  // const unit = data.organisationList.find((org) => (org.acronym === data.organisationUnitAcronym && org.units.length < 1))
+  // ?.units.filter((unit: string) => unit.acronym);
+
+  
   return {
     name: data.name,
     email: data.email,
@@ -121,7 +158,8 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): SummaryParsingType[] {
 
   const toReturn: SummaryParsingType[] = [];
-
+  const organisationAcronym = steps.find(s => s.parameters[0].id === 'organisationAcronym')?.parameters[0].items;
+console.log(organisationAcronym);
   toReturn.push(
     { label: 'Email Id', value: data.email, editStepNumber: 1 },
     { label: 'User Name', value: data.name, editStepNumber: 2 },
@@ -132,13 +170,15 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Summar
   let lastMarkStep = 3;
 
   if (data.type === 'QUALIFYING_ACCESSOR' || data.type === 'ACCESSOR') {
-
+    const orgAcronym: { [key: string]: any }[0] = organisationAcronym?.filter((item) => (data.organisationAcronym === item.value))[0];
+   
     toReturn.push(
-        { label: 'Organisation?', value: data.organisationAcronym === null ? 'NA' : data.organisationAcronym, editStepNumber: 4 },
-        { label: 'Organisation Unit?', value: data.organisationUnitAcronym === null ? 'NA' : data.organisationUnitAcronym, editStepNumber: 5 }
+        { label: 'Organisation', value: orgAcronym.label === null ? 'NA' : orgAcronym.label, editStepNumber: 4 },
+        { label: 'role', value: data.role === null ? 'NA' : data.role, editStepNumber: 5 },
+        { label: 'Organisation Unit', value: data.organisationUnitAcronym === null ? 'NA' : data.organisationUnitAcronym, editStepNumber: 6 }
     );
 
-    lastMarkStep = 5;
+    lastMarkStep = 6;
 
   }
   return toReturn;
