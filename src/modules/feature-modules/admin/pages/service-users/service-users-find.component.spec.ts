@@ -39,4 +39,8 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersFindComponent'
     expect(component).toBeTruthy();
   });
 
+  it('should call the backend when clicking the search button', () => {
+
+  });
+
 });

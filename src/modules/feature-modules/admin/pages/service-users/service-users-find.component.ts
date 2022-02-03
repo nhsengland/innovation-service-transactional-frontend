@@ -22,6 +22,8 @@ export class PageServiceUsersFindComponent extends CoreComponent implements OnIn
 
   serviceUsers?: searchUserEndpointDTO[];
 
+  searching = false;
+
   constructor(
     private serviceUsersService: ServiceUsersService
   ) {
@@ -34,10 +36,15 @@ export class PageServiceUsersFindComponent extends CoreComponent implements OnIn
   ngOnInit(): void { }
 
   onSubmit(): void {
+    this.searching = true;
     const email = this.form.get('search')!.value;
-
+    this.form.setValue({search: ''});
     this.serviceUsersService.searchUser(email).subscribe( response => {
       this.serviceUsers = response;
+      this.searching = false;
+    },
+    () => {
+      this.searching = false;
     });
   }
 }
