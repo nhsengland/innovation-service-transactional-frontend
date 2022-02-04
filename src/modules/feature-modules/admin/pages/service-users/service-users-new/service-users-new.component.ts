@@ -25,25 +25,25 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
   ) {
 
     super();
-    this.setPageTitle('Create new user'); 
+    this.setPageTitle('Create new user');
   }
 
   ngOnInit(): void {
     this.wizard = CREATE_NEW_USER_QUESTIONS;
     forkJoin([
-      this.organisationsService.getAccessorsOrganisations(),
+
       this.organisationsService.getOrganisationUnits()
-    ]).subscribe(([orgnisation, units]) => {
-      const organisationList = units.map((unit) => ({ acronym: unit.acronym, name: unit.name, units: unit.organisationUnits.map(o => ({ acronym: o.acronym, name: o.name })) }))
-      this.wizard.setAnswers(this.wizard.runInboundParsing({ organisationList })).runRules();
+    ]).subscribe(([units]) => {
+      const organisationUnitList = units.map((unit) => ({ acronym: unit.acronym, name: unit.name, units: unit.organisationUnits.map(o => ({ acronym: o.acronym, name: o.name })) }));
+      this.wizard.setAnswers(this.wizard.runInboundParsing({ organisationUnitList })).runRules();
 
-      this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = orgnisation.map((item: { [key: string]: any }) => ({ value: item.acronym, label: item.name }));
-      this.wizard.addAnswers({ organisationAcronym: orgnisation.map((item: { [key: string]: any }) => item.acronym) });
+      this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = units.map((item: { [key: string]: any }) => ({ value: item.acronym, label: item.name }));
+      this.wizard.addAnswers({ organisationAcronym: units.map((item: { [key: string]: any }) => item.acronym) });
 
-      //units
+      // units
       // this.wizard.steps[this.wizard.steps.length - 2].parameters[0].items = units.map((unit) => ({ objRes:unit }));
       // this.wizard.addAnswers({ organisationAcronym: units.map((item: { [key: string]: any }) => item.acronym) });
-      console.log(orgnisation, units);
+      console.log(units);
       // const units = units.filter()
       this.setPageStatus('READY');
 
