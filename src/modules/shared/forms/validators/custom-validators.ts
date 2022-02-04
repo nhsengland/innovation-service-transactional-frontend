@@ -1,4 +1,7 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { map } from 'lodash';
+import { Observable } from 'rxjs';
 
 export class CustomValidators {
 
@@ -52,6 +55,13 @@ export class CustomValidators {
     };
   }
 
+  // static userValidator(userService: ServiceUsersService): AsyncValidatorFn {
+  //   return (control: AbstractControl): Observable<any |> => {
+  //     return userService.searchUserByEmail(control.value).pipe(
+  //       map((res) => (res) ? { 'emailExists': true} : null)
+  //     )      
+  //   };
+  // }
   // May be used in the future.
   // static passwordFieldsMatchValidator(formGroup: FormGroup): ValidationErrors | null {
   //   return formGroup.controls.password.value === formGroup.controls.confirmPassword.value ? null : { passwordFieldsMatch: true };

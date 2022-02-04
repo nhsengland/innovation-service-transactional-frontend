@@ -1,9 +1,12 @@
 
+import { Validators } from '@angular/forms';
 import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 // Types.
 type InboundPayloadType = {
-  organisationUnitList: { acronym: string, name: string, units: { acronym: string, name: string }[] }[]
+  organisationUnitList: { acronym: string, name: string, units: { acronym: string, name: string }[] }[],
+  service: ServiceUsersService
 };
 
 type StepPayloadType = {
@@ -13,7 +16,8 @@ type StepPayloadType = {
   organisationAcronym?: null | string, // Only for QA, A
   role?: null | 'QUALIFYING_ACCESSOR' | 'ACCESSOR', // Only for QA, A
   organisationUnitAcronym?: null | string, // Only for A
-  organisationUnitList: { acronym: string, name: string, units: { acronym: string, name: string }[] }[]
+  organisationUnitList: { acronym: string, name: string, units: { acronym: string, name: string }[] }[],
+  service: ServiceUsersService
 };
 
 type OutboundPayloadType = {
@@ -29,16 +33,6 @@ type OutboundPayloadType = {
 export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   showSummary: true,
   steps: [
-
-    new FormEngineModel({
-      parameters: [{
-        id: 'email',
-        dataType: 'text',
-        label: 'Kindly provide Email Id',
-        description: 'emailId?',
-        validations: { isRequired: [true, 'Email Id is required'] }
-      }]
-    }),
 
     new FormEngineModel({
       parameters: [{
@@ -77,7 +71,20 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
   const organisationAcronym = steps.find(s => s.parameters[0].id === 'organisationAcronym')?.parameters[0].items;
   // const organisationUnitAcronym = steps.find(s => s.parameters[0].id === 'organisationUnitAcronym')?.parameters[0].items;
 
-  steps.splice(3);
+  steps.splice(2);
+
+  steps.splice(0, 0,  new FormEngineModel({
+    parameters: [{
+      id: 'email',
+      dataType: 'text',
+      label: 'Kindly provide Email Id',
+      description: 'emailId?',
+      validations: { isRequired: [true, 'Email Id is required'] },
+      syncValidation: [Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')],
+      asyncValidator: [data.service.userValidator()],
+      updateOn: "blur"
+    }]
+  }));
 
   if (data.type === 'ASSESSMENT') {
     data.organisationAcronym = null;
@@ -133,15 +140,21 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     organisationAcronym: null,
     organisationUnitAcronym: null,
     role : null,
-    organisationUnitList: data.organisationUnitList
+    organisationUnitList: data.organisationUnitList,
+    service: data.service
   };
 
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
-  if (data.type === 'ACCESSOR' || data.type === 'QUALIFYING_ACCESSOR') {
+  if (data.type === 'ACCESSOR') {
     data.role = 'ACCESSOR';
+  }
+
+  if(data.type === 'QUALIFYING_ACCESSOR') {
+    data.role = 'QUALIFYING_ACCESSOR';
+    data.type = 'ACCESSOR';
   }
 
   // const unit = data.organisationList.find((org) => (org.acronym === data.organisationUnitAcronym && org.units.length < 1))

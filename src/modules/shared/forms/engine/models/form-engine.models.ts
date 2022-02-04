@@ -1,3 +1,4 @@
+import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { FileTypes } from '../types/form-engine.types';
 
 export class FormEngineModel {
@@ -45,6 +46,12 @@ export class FormEngineParameterModel {
   lengthLimit?: 'small' | 'medium' | 'large';
 
   additional?: FormEngineParameterModel[];
+
+  syncValidation?: ValidatorFn[];
+
+  asyncValidator?: AsyncValidatorFn[];
+
+  updateOn?: "change" | "blur" | "submit" | undefined;
 
   groupedItems?: { // Used in "grouped-checkbox-array" dataType.
     value: string;
@@ -98,6 +105,9 @@ export class FormEngineParameterModel {
 
     this.groupedItems = data.groupedItems;
     this.items = data.items;
+    this.syncValidation = data.syncValidation;
+    this.asyncValidator = data.asyncValidator;
+    this.updateOn = data.updateOn;
 
     if (data.fieldsGroupConfig) {
       this.fieldsGroupConfig = {
