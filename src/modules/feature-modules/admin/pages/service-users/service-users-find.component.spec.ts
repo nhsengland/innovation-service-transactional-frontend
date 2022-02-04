@@ -76,7 +76,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersFindComponent'
 
     fixture.detectChanges();
 
-    expect(component.serviceUsers?.length).toEqual(1);
+    expect(component.usersList.length).toEqual(1);
   });
 
   it('should call the backend when clicking the search button and return 0 records', () => {
@@ -92,6 +92,6 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersFindComponent'
 
     fixture.detectChanges();
 
-    expect(component.serviceUsers?.length).toEqual(0);
+    expect(component.usersList.length).toEqual(0);
   });
 });

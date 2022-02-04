@@ -20,7 +20,7 @@ export class PageServiceUsersFindComponent extends CoreComponent implements OnIn
     search: new FormControl()
   });
 
-  serviceUsers?: searchUserEndpointDTO[];
+  usersList: searchUserEndpointDTO[];
 
   searching = false;
 
@@ -30,7 +30,7 @@ export class PageServiceUsersFindComponent extends CoreComponent implements OnIn
 
     super();
     this.setPageTitle('Service users search');
-    this.serviceUsers = [];
+    this.usersList = [];
   }
 
   ngOnInit(): void { }
@@ -40,7 +40,7 @@ export class PageServiceUsersFindComponent extends CoreComponent implements OnIn
     const email = this.form.get('search')!.value;
     this.form.setValue({search: ''});
     this.serviceUsersService.searchUser(email).subscribe( response => {
-      this.serviceUsers = response;
+      this.usersList = response;
       this.searching = false;
     },
     () => {
