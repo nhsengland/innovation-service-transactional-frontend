@@ -1,5 +1,5 @@
 
-import { Validators } from '@angular/forms';
+import { AsyncValidatorFn, Validators } from '@angular/forms';
 import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 import { slice } from 'lodash';
@@ -7,7 +7,8 @@ import { slice } from 'lodash';
 // Types.
 type InboundPayloadType = {
   organisationUnitList: { acronym: string, name: string, units: { acronym: string, name: string }[] }[],
-  service: ServiceUsersService
+  service: ServiceUsersService,
+  emailValidator: AsyncValidatorFn
 };
 
 type StepPayloadType = {
@@ -18,7 +19,8 @@ type StepPayloadType = {
   role?: null | 'QUALIFYING_ACCESSOR' | 'ACCESSOR', // Only for QA, A
   organisationUnitAcronym?: null | string, // Only for A
   organisationUnitList: { acronym: string, name: string, units: { acronym: string, name: string }[] }[],
-  service: ServiceUsersService
+  service: ServiceUsersService,
+  emailValidator: AsyncValidatorFn
 };
 
 type OutboundPayloadType = {
@@ -78,9 +80,12 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
         dataType: 'text',
         label: 'Kindly provide Email Id',
         description: 'emailId?',
-        validations: { isRequired: [true, 'Email Id is required'] },
-        syncValidation: [Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')],
-        asyncValidator: [data.service.userEmailValidator('Email already exist')],
+        validations: { 
+          isRequired: [true, 'Email Id is required'], 
+          pattern: '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$', 
+          async: [data.emailValidator]
+        },
+        // syncValidation: [Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')],
         updateOn: 'blur'
       }]
     })
@@ -143,7 +148,8 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     organisationUnitAcronym: null,
     role : null,
     organisationUnitList: data.organisationUnitList,
-    service: data.service
+    service: data.service,
+    emailValidator: data.emailValidator
   };
 
 }

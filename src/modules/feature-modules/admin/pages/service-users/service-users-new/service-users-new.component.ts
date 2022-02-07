@@ -38,7 +38,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
     ]).subscribe(([units]) => {
       this.wizard = CREATE_NEW_USER_QUESTIONS;
       const organisationUnitList = units.map((unit) => ({ acronym: unit.acronym, name: unit.name, units: unit.organisationUnits.map(o => ({ acronym: o.acronym, name: o.name })) }));
-      this.wizard.setAnswers(this.wizard.runInboundParsing({ organisationUnitList, service: this.userService })).runRules();
+      this.wizard.setAnswers(this.wizard.runInboundParsing({ organisationUnitList, service: this.userService, emailValidator: this.userService.userEmailValidator })).runRules();
 
       this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = units.map((item: { [key: string]: any }) => ({ value: item.acronym, label: item.name }));
       this.wizard.addAnswers({ organisationAcronym: units.map((item: { [key: string]: any }) => item.acronym) });

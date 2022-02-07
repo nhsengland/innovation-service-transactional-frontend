@@ -24,7 +24,7 @@ export type createUserEndpointDTO = {
 export enum UserType {
   ACCESSOR = 'ACCESSOR',
   ASSESSMENT = 'ASSESSMENT'
-};
+}
 
 export type UserSearchResult = {
   id: string;
@@ -86,26 +86,20 @@ export class ServiceUsersService extends CoreService {
   searchUserByEmail(email: string): Observable<any> {
     const url = new UrlModel(this.API_URL).addPath('user-admin/users').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams({ email });
 
-    return timer(1000)
-    .pipe(
-      switchMap(() => {
-        // Check if email is available
-        return  this.http.head<UserSearchResult>(url.buildUrl()).pipe(
-          take(1),
-          map(response => response),
-          catchError(error => throwError({
-            objectId: error.error.id
-          }))
-        );
-      })
-    );
+
+      // Check if email is available
+      return  this.http.head<any>(url.buildUrl()).pipe(
+        take(1),
+        map(() => true),
+        catchError(error => throwError(false))
+      );
 
   }
 
-  userEmailValidator(message?: string): AsyncValidatorFn {
+  userEmailValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<any> => {
       return this.searchUserByEmail(control.value).pipe(
-        map(response => (response.status === 200) ? { asyncError: true, message } : null)
+        map(response => (response) ? { asyncError: true, message: "Email already exist" } : null)
       );
     };
   }
