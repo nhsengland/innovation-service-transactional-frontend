@@ -51,7 +51,7 @@ export class FormEngineParameterModel {
 
   asyncValidator?: AsyncValidatorFn[];
 
-  updateOn?: "change" | "blur" | "submit" | undefined;
+  updateOn?: 'change' | 'blur' | 'submit' | undefined = 'change';
 
   groupedItems?: { // Used in "grouped-checkbox-array" dataType.
     value: string;
