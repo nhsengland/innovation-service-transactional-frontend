@@ -40,6 +40,7 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
         dataType: 'text',
         label: 'Kindly provide Name',
         description: 'name?',
+        lengthLimit : 'small',
         validations: { isRequired: [true, 'Name is required'] }
       }]
     }),
@@ -82,7 +83,8 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
       validations: { isRequired: [true, 'Email Id is required'] },
       syncValidation: [Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')],
       asyncValidator: [data.service.userValidator()],
-      updateOn: "blur"
+      updateOn: "blur",
+      lengthLimit : 'small'
     }]
   }));
 
