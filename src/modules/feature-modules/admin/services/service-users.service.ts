@@ -11,6 +11,24 @@ export type lockUserEndpointDTO = {
   objectId?: string;
 };
 
+export type searchUserEndpointDTO = {
+  id: string;
+  displayName: string;
+  type: 'INNOVATOR' | 'ACCESSOR' | 'ASSESSMENT' | 'ADMIN',
+  email: string;
+  lockedAt?: Date,
+  userOrganisations?: [{
+    id: string;
+    name: string;
+    acronym: string;
+    role: string;
+    units?: [{
+      id: string;
+      name: string;
+      acronym: string;
+    }]
+  }]
+};
 
 @Injectable()
 export class ServiceUsersService extends CoreService {
@@ -38,6 +56,15 @@ export class ServiceUsersService extends CoreService {
       }))
     );
 
+  }
+
+  searchUser(email: string): Observable<searchUserEndpointDTO[]> {
+    const url = new UrlModel(this.API_URL).addPath('/user-admin/users').setQueryParams({ email });
+
+    return this.http.get<searchUserEndpointDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response),
+    );
   }
 
 }
