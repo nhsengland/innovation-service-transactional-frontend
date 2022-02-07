@@ -1,7 +1,4 @@
-import { AbstractControl, AsyncValidatorFn, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
-import { map } from 'lodash';
-import { Observable } from 'rxjs';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export class CustomValidators {
 

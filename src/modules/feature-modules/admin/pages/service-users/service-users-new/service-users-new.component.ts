@@ -3,11 +3,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { CoreComponent, FormGroup } from '@app/base';
 import { AlertType } from '@app/base/models';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
-import { CREATE_NEW_USER_QUESTIONS } from './service-users-new.config';
+
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { forkJoin } from 'rxjs';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
-import { concatMap } from 'rxjs/operators';
+
+import { CREATE_NEW_USER_QUESTIONS } from './service-users-new.config';
+
 
 @Component({
   selector: 'app-admin-pages-service-users-new',
@@ -25,7 +26,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
 
   constructor(
     private organisationsService: OrganisationsService,
-    private userService: ServiceUsersService
+    private serviceUsersService: ServiceUsersService
   ) {
 
     super();
@@ -33,25 +34,24 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
   }
 
   ngOnInit(): void {
-    forkJoin([
-      this.organisationsService.getOrganisationUnits()
-    ]).subscribe(([units]) => {
-      this.wizard = CREATE_NEW_USER_QUESTIONS;
-      const organisationUnitList = units.map((unit) => ({ acronym: unit.acronym, name: unit.name, units: unit.organisationUnits.map(o => ({ acronym: o.acronym, name: o.name })) }));
-      this.wizard.setAnswers(this.wizard.runInboundParsing({ organisationUnitList, service: this.userService, emailValidator: this.userService.userEmailValidator })).runRules();
 
-      this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = units.map((item: { [key: string]: any }) => ({ value: item.acronym, label: item.name }));
-      this.wizard.addAnswers({ organisationAcronym: units.map((item: { [key: string]: any }) => item.acronym) });
+    this.wizard = CREATE_NEW_USER_QUESTIONS;
 
-      // units
-      // this.wizard.steps[this.wizard.steps.length - 2].parameters[0].items = units.map((unit) => ({ objRes:unit }));
-      // this.wizard.addAnswers({ organisationAcronym: units.map((item: { [key: string]: any }) => item.acronym) });
-      console.log(units);
-      // const units = units.filter()
-      this.setPageStatus('READY');
+    // Adds async e-mail validator to the second step.
+    this.wizard.steps[1].parameters[0].validations = { ...this.wizard.steps[1].parameters[0].validations, async: [this.serviceUsersService.userEmailValidator()] };
 
+    this.organisationsService.getOrganisationUnits().subscribe(
+      response => {
 
-    },
+        const organisationsList = response.map(o => ({ acronym: o.acronym, name: o.name, units: o.organisationUnits.map(u => ({ acronym: u.acronym, name: u.name })) }));
+        this.wizard.setAnswers(this.wizard.runInboundParsing({ organisationsList })).runRules();
+
+        // this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = response.map((item: { [key: string]: any }) => ({ value: item.acronym, label: item.name }));
+        //         this.wizard.addAnswers({ organisationAcronym: response.map((item: { [key: string]: any }) => item.acronym) });
+
+        this.setPageStatus('READY');
+
+      },
       () => {
         this.setPageStatus('READY');
         this.logger.error('Error fetching organisations list');
@@ -60,6 +60,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
 
     this.setPageStatus('READY');
   }
+
 
   onSubmitStep(action: 'previous' | 'next'): void {
 
@@ -91,11 +92,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
 
     const body = this.wizard.runOutboundParsing();
     console.log(body);
-    this.userService.createUser(body).pipe(
-      concatMap(() => {
-        return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
-      })
-    ).subscribe(
+    this.serviceUsersService.createUser(body).subscribe(
       () => { this.redirectTo(`admin/service-users`, { alert: 'alertDisabled' }); },
       () => {
         this.alert = {
@@ -112,4 +109,5 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
   onFormChange(form: FormGroup): void {
     this.formChanges = form;
   }
+
 }

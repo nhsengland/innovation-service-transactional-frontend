@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable, throwError, timer } from 'rxjs';
-import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
+import { Observable, of, throwError, timer } from 'rxjs';
+import { catchError, delay, map, switchMap, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { UrlModel } from '@modules/core';
 import { HttpHeaders } from '@angular/common/http';
-import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
 
 
 export type lockUserEndpointDTO = {
@@ -60,8 +60,8 @@ export class ServiceUsersService extends CoreService {
       headers: new HttpHeaders(headers)
     };
 
-    const url = new UrlModel(this.API_URL).addPath('/user-admin/ping').setQueryParams({code: securityConfirmation?.code, id: securityConfirmation?.id});
-    return this.http.post<lockUserEndpointDTO>(url.buildUrl(), { }, ro).pipe(
+    const url = new UrlModel(this.API_URL).addPath('/user-admin/ping').setQueryParams({ code: securityConfirmation?.code, id: securityConfirmation?.id });
+    return this.http.post<lockUserEndpointDTO>(url.buildUrl(), {}, ro).pipe(
       take(1),
       map(response => response),
       catchError(error => throwError({
@@ -72,35 +72,28 @@ export class ServiceUsersService extends CoreService {
   }
 
   createUser(body: { [key: string]: any }): Observable<any> {
-    const url = new UrlModel(this.API_URL).addPath('user-admin/user').setPathParams({ userId: this.stores.authentication.getUserId() });
 
+    const url = new UrlModel(this.API_URL).addPath('user-admin/user').setPathParams({ userId: this.stores.authentication.getUserId() });
     return this.http.post<createUserEndpointDTO>(url.buildUrl(), body).pipe(
       take(1),
-      map(response => response),
-      catchError(error => throwError({
-        objectId: error.error.id
-      }))
+      map(response => response)
     );
-  }
-
-  searchUserByEmail(email: string): Observable<any> {
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams({ email });
-
-
-      // Check if email is available
-      return  this.http.head<any>(url.buildUrl()).pipe(
-        take(1),
-        map(() => true),
-        catchError(error => throwError(false))
-      );
 
   }
+
 
   userEmailValidator(): AsyncValidatorFn {
-    return (control: AbstractControl): Observable<any> => {
-      return this.searchUserByEmail(control.value).pipe(
-        map(response => (response) ? { asyncError: true, message: "Email already exist" } : null)
+
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+
+      const url = new UrlModel(this.API_URL).addPath('user-admin/users').setQueryParams({ email: control.value });
+      return this.http.head(url.buildUrl()).pipe(
+        take(1),
+        map(() => ({ customError: true, message: 'Email already exist' })),
+        catchError(() => of(null))
       );
+
     };
   }
+
 }
