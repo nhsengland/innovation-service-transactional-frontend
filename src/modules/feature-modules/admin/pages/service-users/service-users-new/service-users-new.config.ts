@@ -60,8 +60,7 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
       parameters: [{
         id: 'name',
         dataType: 'text',
-        label: 'Kindly provide Name',
-        description: 'name?',
+        label: 'Kindly provide Name',        
         validations: { isRequired: [true, 'Name is required'] }
       }]
     }),

@@ -8,6 +8,7 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 import { CREATE_NEW_USER_QUESTIONS } from './service-users-new.config';
+import { timer } from 'rxjs';
 
 
 @Component({
@@ -36,7 +37,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
   ngOnInit(): void {
 
     this.wizard = CREATE_NEW_USER_QUESTIONS;
-
+    this.wizard.currentStepId = 1;
     // Adds async e-mail validator to the second step.
     this.wizard.steps[1].parameters[0].validations = { ...this.wizard.steps[1].parameters[0].validations, async: [this.serviceUsersService.userEmailValidator()] };
 
@@ -90,10 +91,15 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
 
   onSubmitWizard(): void {
 
-    const body = this.wizard.runOutboundParsing();
-    console.log(body);
+    const body = this.wizard.runOutboundParsing(); 
     this.serviceUsersService.createUser(body).subscribe(
-      () => { this.redirectTo(`admin/service-users`, { alert: 'alertDisabled' }); },
+      () => { 
+        this.wizard.currentStepId = 1;
+        alert("User created successfully.");      
+        this.redirectTo(`admin/service-users`); 
+        //this.alert = { type: 'SUCCESS', title: 'User created successfully.', setFocus: true };                  
+        
+      },
       () => {
         this.alert = {
           type: 'ERROR',
@@ -102,7 +108,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
           setFocus: true
         };
       }
-    );
+    );    
 
   }
 
