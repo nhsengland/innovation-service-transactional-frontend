@@ -46,6 +46,11 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
     serviceUserService = TestBed.inject(ServiceUsersService);
     organisationsService = TestBed.inject(OrganisationsService);
 
+    organisationsService.getOrganisationUnits = () => of([
+      { id: 'orgId', acronym: 'orgId01', name: 'Org name 01', organisationUnits: [{ id: 'orgId', acronym: 'orgId01', name: 'Org name 01' }] },
+      { id: 'orgId', acronym: 'orgId02', name: 'Org name 02',  organisationUnits: [{ id: 'orgId', acronym: 'orgId01', name: 'Org name 01' }] }
+    ]);
+
   });
 
   it('should create the component', () => {
@@ -170,4 +175,51 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
     });
 
   });
+
+  it('should return `null` when email is valid', (() => {
+    fixture = TestBed.createComponent(PageServiceUsersNewComponent);
+    component = fixture.componentInstance;
+    const formData = component.formEngineComponent?.getFormValues();
+    component.wizard.addAnswers({ ...formData, email: 'example@test.com' }).runRules();
+    
+    const result: any = serviceUserService.userEmailValidator();
+    expect(result['customError']).toBeUndefined();
+  }));
+
+  it('should run onFormChange()', () => {
+
+    fixture = TestBed.createComponent(PageServiceUsersNewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.onFormChange({ value: 'some value' });
+    expect(component.formChanges).toStrictEqual({ value: 'some value' });
+
+  });
+  
+  it('should run getOrganisationUnits() with API Success', () => {
+
+    fixture = TestBed.createComponent(PageServiceUsersNewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.onFormChange({ value: 'some value' });
+    expect(component.formChanges).toStrictEqual({ value: 'some value' });
+
+  });
+
+  it('should run onSubmitStep() and redirect because is the first step', () => {
+
+    fixture = TestBed.createComponent(PageServiceUsersNewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
+    component.formEngineComponent.getFormValues = () => ({ valid: true, data: { value: 'some value' } });
+
+    component.onSubmitStep('previous');
+    expect(routerSpy).toHaveBeenCalledWith(['innovator'], {});
+
+  });
+
 });

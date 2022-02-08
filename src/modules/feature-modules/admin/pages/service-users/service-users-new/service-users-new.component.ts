@@ -8,7 +8,6 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 import { CREATE_NEW_USER_QUESTIONS } from './service-users-new.config';
-import { timer } from 'rxjs';
 
 
 @Component({
@@ -23,7 +22,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
 
   wizard: WizardEngineModel = new WizardEngineModel({});
 
-  formChanges: FormGroup = new FormGroup({});
+  formChanges: { [key: string]: any } = {};
 
   constructor(
     private organisationsService: OrganisationsService,
@@ -43,19 +42,13 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
 
     this.organisationsService.getOrganisationUnits().subscribe(
       response => {
-
         const organisationsList = response.map(o => ({ acronym: o.acronym, name: o.name, units: o.organisationUnits.map(u => ({ acronym: u.acronym, name: u.name })) }));
         this.wizard.setAnswers(this.wizard.runInboundParsing({ organisationsList })).runRules();
-
-        // this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = response.map((item: { [key: string]: any }) => ({ value: item.acronym, label: item.name }));
-        //         this.wizard.addAnswers({ organisationAcronym: response.map((item: { [key: string]: any }) => item.acronym) });
-
         this.setPageStatus('READY');
-
       },
       () => {
         this.setPageStatus('READY');
-        this.logger.error('Error fetching organisations list');
+        this.logger.error('Error fetching organisations units');
       });
 
 
@@ -96,9 +89,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
       (res) => {           
         this.wizard.currentStepId = 1;
         alert("User created successfully.");      
-        this.redirectTo(`admin/service-users/${res.id}`); 
-        //this.alert = { type: 'SUCCESS', title: 'User created successfully.', setFocus: true };                  
-        
+        this.redirectTo(`admin/service-users/${res.id}`);         
       },
       () => {
         this.submitBtnClicked = false;
@@ -113,8 +104,8 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
     
   }
 
-  onFormChange(form: FormGroup): void {
-    this.formChanges = form;
+  onFormChange(formData: { [key: string]: any }): void {
+    this.formChanges = formData;
   }
 
 }
