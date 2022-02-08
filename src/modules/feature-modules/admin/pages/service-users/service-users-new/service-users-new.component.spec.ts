@@ -149,9 +149,8 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
     fixture.detectChanges();
 
     component.onSubmitWizard();
-    component.redirectTo('/test', { param: 'test' });
-    expect(routerSpy).toHaveBeenCalledWith(['/test'], { queryParams: { param: 'test' } });
-    // expect(routerSpy).toHaveBeenCalledWith(['admin/service-users/user1']);
+    component.redirectTo('admin/service-users', { param: 'test' });
+    expect(routerSpy).toHaveBeenCalledWith(['admin/service-users'], { queryParams: { param: 'test' } });    
   });
 
   it('should run onSubmitWizard() with API error', () => {
