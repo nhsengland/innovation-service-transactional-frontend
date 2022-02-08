@@ -20,7 +20,7 @@ export class FormEngineHelper {
       const parameterValue = values[parameter.id];
       const conditionalFields = parameter.items?.filter(item => item.conditional?.id) || [];
       const additionalFields = parameter.additional || [];
-      const asyncValidate = parameter.validations?.async || [];
+
       switch (parameter.dataType) {
         case 'grouped-checkbox-array': // Creates an FormArray and pushes defaultValues into it.
         case 'checkbox-array': // Creates an FormArray and pushes defaultValues into it.
@@ -81,7 +81,7 @@ export class FormEngineHelper {
       // Apply validators only if parameter is visible!
       if (parameter.isVisible) {
         form.get(parameter.id)?.setValidators(FormEngineHelper.getParameterValidators(parameter));
-        form.get(parameter.id)?.setAsyncValidators(asyncValidate);
+        if (parameter.validations?.async) { form.get(parameter.id)?.setAsyncValidators(parameter.validations?.async); }
         form.get(parameter.id)?.updateValueAndValidity();
       }
 
@@ -167,7 +167,7 @@ export class FormEngineHelper {
     if (error.hexadecimalFormat) { return { message: 'shared.forms_module.validations.invalid_hexadecimal_format', params: {} }; }
     if (error.minHexadecimal) { return { message: 'shared.forms_module.validations.min_hexadecimal' + ` (${error.minHexadecimal.min})`, params: {} }; }
     if (error.maxHexadecimal) { return { message: 'shared.forms_module.validations.max_hexadecimal' + ` (${error.maxHexadecimal.max})`, params: {} }; }
-    if (error.asyncError) { return { message: error.message, params: {} }; }
+    if (error.customError) { return { message: error.message, params: {} }; }
     return { message: '', params: {} };
 
   }
@@ -206,10 +206,6 @@ export class FormEngineHelper {
         }
 
       }
-    }
-
-    if ((parameter.syncValidation as [])?.length > 1) {
-      validators.push(...(parameter.syncValidation as []));
     }
 
     if (parameter.validations?.pattern) {

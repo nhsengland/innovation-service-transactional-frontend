@@ -48,11 +48,6 @@ export class FormEngineParameterModel {
 
   additional?: FormEngineParameterModel[];
 
-  syncValidation?: ValidatorFn[];
-
-
-  updateOn?: 'change' | 'blur' | 'submit' | undefined = 'change';
-
   groupedItems?: { // Used in "grouped-checkbox-array" dataType.
     value: string;
     label: string;
@@ -105,8 +100,6 @@ export class FormEngineParameterModel {
 
     this.groupedItems = data.groupedItems;
     this.items = data.items;
-    this.syncValidation = data.syncValidation;
-    this.updateOn = data.updateOn;
 
     if (data.fieldsGroupConfig) {
       this.fieldsGroupConfig = {
