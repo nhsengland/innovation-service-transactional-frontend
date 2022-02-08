@@ -16,7 +16,7 @@ import { timer } from 'rxjs';
   templateUrl: './service-users-new.component.html'
 })
 export class PageServiceUsersNewComponent extends CoreComponent implements OnInit {
-
+  submitBtnClicked = false;
   alert: AlertType = { type: null };
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
@@ -90,17 +90,18 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
   }
 
   onSubmitWizard(): void {
-
-    const body = this.wizard.runOutboundParsing(); 
+    this.submitBtnClicked = true;
+    const body = this.wizard.runOutboundParsing();     
     this.serviceUsersService.createUser(body).subscribe(
-      () => { 
+      (res) => {           
         this.wizard.currentStepId = 1;
         alert("User created successfully.");      
-        this.redirectTo(`admin/service-users`); 
+        this.redirectTo(`admin/service-users/${res.id}`); 
         //this.alert = { type: 'SUCCESS', title: 'User created successfully.', setFocus: true };                  
         
       },
       () => {
+        this.submitBtnClicked = false;
         this.alert = {
           type: 'ERROR',
           title: 'An unknown error occurred',
@@ -108,8 +109,8 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
           setFocus: true
         };
       }
-    );    
-
+    );   
+    
   }
 
   onFormChange(form: FormGroup): void {

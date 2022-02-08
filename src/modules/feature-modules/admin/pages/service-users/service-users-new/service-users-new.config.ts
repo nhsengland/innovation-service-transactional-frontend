@@ -162,8 +162,8 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Summar
 
   toReturn.push(
     { label: 'User Type', value: data.type === 'QUALIFYING_ACCESSOR' ? 'Qualifying Accessor' : data.type === 'ACCESSOR' ? 'Accessor' : 'Needs Accessor', editStepNumber: 1 },
-    { label: 'User Name', value: data.name, editStepNumber: 2 },
-    { label: 'Email', value: data.email, editStepNumber: 3 },
+    { label: 'Email', value: data.email, editStepNumber: 2 },
+    { label: 'User Name', value: data.name, editStepNumber: 3 },
   );
 
   let lastMarkStep = 3;
@@ -172,8 +172,7 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Summar
     const orgAcronym: { [key: string]: any }[0] = organisationAcronym?.filter((item) => (data.organisationAcronym === item.value))[0];
 
     toReturn.push(
-      { label: 'Organisation', value: orgAcronym.label === null ? 'NA' : orgAcronym.label, editStepNumber: 4 },
-      { label: 'Role', value: data.type === 'QUALIFYING_ACCESSOR' ? 'Qualifying Accessor' : data.type === 'ACCESSOR' ? 'Accessor' : '', editStepNumber: 5 }
+      { label: 'Organisation', value: orgAcronym.label === null ? 'NA' : orgAcronym.label, editStepNumber: 4 },      
     );
 
     const unitsList = (data.organisationsList.find((org) => (org.acronym === data.organisationAcronym))?.units.map(units => ({ value: units.acronym, label: units.name })));
@@ -182,15 +181,18 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Summar
         const organisationUnitAcronym = steps.find(s => s.parameters[0].id === 'organisationUnitAcronym')?.parameters[0].items;
         const orgUnitAcronym: { [key: string]: any }[0] = organisationUnitAcronym?.filter((item) => (data.organisationUnitAcronym === item.value))[0];
         toReturn.push(
-          { label: 'Organisation Unit', value: orgUnitAcronym.label === null ? 'NA' : orgUnitAcronym.label, editStepNumber: 6 }
+          { label: 'Organisation Unit', value: orgUnitAcronym.label === null ? 'NA' : orgUnitAcronym.label, editStepNumber: 5 }
         );
       }
       else {
         toReturn.push(
-          { label: 'Organisation Unit', value: unitsList?.length ? unitsList[0].label : '', editStepNumber: 6 }
+          { label: 'Organisation Unit', value: unitsList?.length ? unitsList[0].label : '', editStepNumber: 4 }
         );
       }
     }
+    toReturn.push(
+      { label: 'Role', value: data.type === 'QUALIFYING_ACCESSOR' ? 'Qualifying Accessor' : data.type === 'ACCESSOR' ? 'Accessor' : '', editStepNumber: 1 }
+    );
     lastMarkStep = 6;
   }
   return toReturn;
