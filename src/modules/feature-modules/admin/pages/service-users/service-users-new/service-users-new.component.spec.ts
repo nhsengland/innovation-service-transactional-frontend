@@ -93,18 +93,6 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
     expect(component.wizard.currentStepId).toBe(1);
   });
 
-  it('should run onSubmitStep() and redirect because is the first step', () => {
-
-    fixture = TestBed.createComponent(PageServiceUsersNewComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
-    component.formEngineComponent.getFormValues = () => ({ valid: true, data: { value: 'some value' } });
-
-    component.onSubmitStep('previous');
-    expect(routerSpy).toHaveBeenCalledWith(['innovator'], {});// TBD
-  });
 
   it('should run onSubmitStep() and go to previous step', () => {
 
