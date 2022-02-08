@@ -1,12 +1,14 @@
 
-import { Validators } from '@angular/forms';
+import { AsyncValidatorFn, Validators } from '@angular/forms';
 import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { slice } from 'lodash';
 
 // Types.
 type InboundPayloadType = {
   organisationUnitList: { acronym: string, name: string, units: { acronym: string, name: string }[] }[],
-  service: ServiceUsersService
+  service: ServiceUsersService,
+  emailValidator: AsyncValidatorFn
 };
 
 type StepPayloadType = {
@@ -17,7 +19,8 @@ type StepPayloadType = {
   role?: null | 'QUALIFYING_ACCESSOR' | 'ACCESSOR', // Only for QA, A
   organisationUnitAcronym?: null | string, // Only for A
   organisationUnitList: { acronym: string, name: string, units: { acronym: string, name: string }[] }[],
-  service: ServiceUsersService
+  service: ServiceUsersService,
+  emailValidator: AsyncValidatorFn
 };
 
 type OutboundPayloadType = {
@@ -36,17 +39,6 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
 
     new FormEngineModel({
       parameters: [{
-        id: 'name',
-        dataType: 'text',
-        label: 'Kindly provide Name',
-        description: 'name?',
-        lengthLimit : 'small',
-        validations: { isRequired: [true, 'Name is required'] }
-      }]
-    }),
-
-    new FormEngineModel({
-      parameters: [{
         id: 'type',
         dataType: 'radio-group',
         label: 'Kindly select appropriate user type',
@@ -57,8 +49,17 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
           { value: 'ACCESSOR', label: 'Accessor' },
         ]
       }]
-    })
+    }),
 
+    new FormEngineModel({
+      parameters: [{
+        id: 'name',
+        dataType: 'text',
+        label: 'Kindly provide Name',
+        description: 'name?',
+        validations: { isRequired: [true, 'Name is required'] }
+      }]
+    }),
   ],
   runtimeRules: [(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, data, currentStep)],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
@@ -72,21 +73,25 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
   const organisationAcronym = steps.find(s => s.parameters[0].id === 'organisationAcronym')?.parameters[0].items;
   // const organisationUnitAcronym = steps.find(s => s.parameters[0].id === 'organisationUnitAcronym')?.parameters[0].items;
 
-  steps.splice(2);
+  steps.push(
+    new FormEngineModel({
+      parameters: [{
+        id: 'email',
+        dataType: 'text',
+        label: 'Kindly provide Email Id',
+        description: 'emailId?',
+        validations: { 
+          isRequired: [true, 'Email Id is required'], 
+          pattern: '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$', 
+          async: [data.emailValidator]
+        },
+        // syncValidation: [Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')],
+        updateOn: 'blur'
+      }]
+    })
+  );
+  steps.splice(3);
 
-  steps.splice(0, 0,  new FormEngineModel({
-    parameters: [{
-      id: 'email',
-      dataType: 'text',
-      label: 'Kindly provide Email Id',
-      description: 'emailId?',
-      validations: { isRequired: [true, 'Email Id is required'] },
-      syncValidation: [Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')],
-      asyncValidator: [data.service.userValidator()],
-      updateOn: "blur",
-      lengthLimit : 'small'
-    }]
-  }));
 
   if (data.type === 'ASSESSMENT') {
     data.organisationAcronym = null;
@@ -143,7 +148,8 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     organisationUnitAcronym: null,
     role : null,
     organisationUnitList: data.organisationUnitList,
-    service: data.service
+    service: data.service,
+    emailValidator: data.emailValidator
   };
 
 }
@@ -154,7 +160,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     data.role = 'ACCESSOR';
   }
 
-  if(data.type === 'QUALIFYING_ACCESSOR') {
+  if (data.type === 'QUALIFYING_ACCESSOR') {
     data.role = 'QUALIFYING_ACCESSOR';
     data.type = 'ACCESSOR';
   }
@@ -180,9 +186,9 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Summar
   const organisationAcronym = steps.find(s => s.parameters[0].id === 'organisationAcronym')?.parameters[0].items;
 
   toReturn.push(
-    { label: 'Email Id', value: data.email, editStepNumber: 1 },
+    { label: 'User Type', value: data.type === 'QUALIFYING_ACCESSOR' ? 'Qualifying Accessor' : data.type === 'ACCESSOR' ? 'Accessor' : 'Needs Accessor', editStepNumber: 1 },
     { label: 'User Name', value: data.name, editStepNumber: 2 },
-    { label: 'User Type', value: data.type === 'QUALIFYING_ACCESSOR' ? 'Qualifying Accessor' : data.type === 'ACCESSOR' ? 'Accessor' : 'Needs Accessor', editStepNumber: 3 }
+    { label: 'Email Id', value: data.email, editStepNumber: 3 },
   );
 
   let lastMarkStep = 3;

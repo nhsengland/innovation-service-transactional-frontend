@@ -42,6 +42,7 @@ export class FormEngineParameterModel {
     max?: number | [number, string];
     minLength?: number;
     maxLength?: number;
+    async?: AsyncValidatorFn[];
   };
   lengthLimit?: 'small' | 'medium' | 'large';
 
@@ -49,9 +50,8 @@ export class FormEngineParameterModel {
 
   syncValidation?: ValidatorFn[];
 
-  asyncValidator?: AsyncValidatorFn[];
 
-  updateOn?: "change" | "blur" | "submit" | undefined;
+  updateOn?: 'change' | 'blur' | 'submit' | undefined = 'change';
 
   groupedItems?: { // Used in "grouped-checkbox-array" dataType.
     value: string;
@@ -106,7 +106,6 @@ export class FormEngineParameterModel {
     this.groupedItems = data.groupedItems;
     this.items = data.items;
     this.syncValidation = data.syncValidation;
-    this.asyncValidator = data.asyncValidator;
     this.updateOn = data.updateOn;
 
     if (data.fieldsGroupConfig) {

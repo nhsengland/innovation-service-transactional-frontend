@@ -18,12 +18,12 @@ export type createUserEndpointDTO = {
   type: null | 'ASSESSMENT' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR',
   organisationAcronym?: null | string, // Only for QA, A
   role?: null | 'QUALIFYING_ACCESSOR' | 'ACCESSOR', // Only for QA, A
-  organisationUnitAcronym?: null | string, // Only for A
-}
+  organisationUnitAcronym?: null | string // Only for A
+};
 
 export enum UserType {
-  ACCESSOR = "ACCESSOR",
-  ASSESSMENT = "ASSESSMENT",
+  ACCESSOR = 'ACCESSOR',
+  ASSESSMENT = 'ASSESSMENT'
 }
 
 export type UserSearchResult = {
@@ -74,7 +74,7 @@ export class ServiceUsersService extends CoreService {
   createUser(body: { [key: string]: any }): Observable<any> {
     const url = new UrlModel(this.API_URL).addPath('user-admin/user').setPathParams({ userId: this.stores.authentication.getUserId() });
 
-    return this.http.post<createUserEndpointDTO>(url.buildUrl(), body).pipe(  
+    return this.http.post<createUserEndpointDTO>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response),
       catchError(error => throwError({
@@ -86,27 +86,21 @@ export class ServiceUsersService extends CoreService {
   searchUserByEmail(email: string): Observable<any> {
     const url = new UrlModel(this.API_URL).addPath('user-admin/users').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams({ email });
 
-    return timer(1000)
-    .pipe(
-      switchMap(() => {
-        // Check if email is available
-        return  this.http.get<UserSearchResult>(url.buildUrl()).pipe(  
-          take(1),
-          map(response => response),
-          catchError(error => throwError({
-            objectId: error.error.id
-          }))
-        );
-      })
-    );
-   
+
+      // Check if email is available
+      return  this.http.head<any>(url.buildUrl()).pipe(
+        take(1),
+        map(() => true),
+        catchError(error => throwError(false))
+      );
+
   }
 
-  userValidator(): AsyncValidatorFn {
+  userEmailValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<any> => {
       return this.searchUserByEmail(control.value).pipe(
-        map(res => (res) ? { 'emailExists': true} : null)
-      )      
+        map(response => (response) ? { asyncError: true, message: "Email already exist" } : null)
+      );
     };
   }
 }

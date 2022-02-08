@@ -11,7 +11,7 @@ export class FormEngineHelper {
 
     parameters = parameters.map(p => new FormEngineParameterModel(p)); // Making sure all defaults are present.
 
-    const form = new FormGroup({});
+    const form = new FormGroup({}, { updateOn: 'blur' });
 
     // Build form structure.
     // parameters = sortBy(parameters, ['rank', 'label']); // TODO: Order fields by rank!
@@ -20,7 +20,7 @@ export class FormEngineHelper {
       const parameterValue = values[parameter.id];
       const conditionalFields = parameter.items?.filter(item => item.conditional?.id) || [];
       const additionalFields = parameter.additional || [];
-      const asyncValidate = parameter.asyncValidator || [];
+      const asyncValidate = parameter.validations?.async || [];
       switch (parameter.dataType) {
         case 'grouped-checkbox-array': // Creates an FormArray and pushes defaultValues into it.
         case 'checkbox-array': // Creates an FormArray and pushes defaultValues into it.
@@ -167,14 +167,14 @@ export class FormEngineHelper {
     if (error.hexadecimalFormat) { return { message: 'shared.forms_module.validations.invalid_hexadecimal_format', params: {} }; }
     if (error.minHexadecimal) { return { message: 'shared.forms_module.validations.min_hexadecimal' + ` (${error.minHexadecimal.min})`, params: {} }; }
     if (error.maxHexadecimal) { return { message: 'shared.forms_module.validations.max_hexadecimal' + ` (${error.maxHexadecimal.max})`, params: {} }; }
-
+    if (error.asyncError) { return { message: error.message, params: {} }; }
     return { message: '', params: {} };
 
   }
 
 
   static createParameterFormControl(parameter: FormEngineParameterModel, value?: any): FormControl {
-    return new FormControl({ value: (typeof value !== 'boolean' && !value && value !== 0 ? null : value), disabled: !parameter.isEditable }, { updateOn: parameter.updateOn });
+    return new FormControl({ value: (typeof value !== 'boolean' && !value && value !== 0 ? null : value), disabled: !parameter.isEditable });
   }
 
   // static getParameterAsyncValidators(parameter: FormEngineParameterModel): AsyncValidatorFn[] {
@@ -208,8 +208,8 @@ export class FormEngineHelper {
       }
     }
 
-    if(parameter.syncValidation?.length) {
-      validators.push(...parameter.syncValidation)
+    if ((parameter.syncValidation as [])?.length > 1) {
+      validators.push(...(parameter.syncValidation as []));
     }
 
     if (parameter.validations?.pattern) {

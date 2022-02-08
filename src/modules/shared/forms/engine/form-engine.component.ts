@@ -84,7 +84,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
     this.formChangeSubscription.unsubscribe();
     this.formChangeSubscription = new Subscription();
     this.formChangeSubscription.add(
-      this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.formChanges.emit(this.form.value))
+      this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.formChanges.emit(this.form))
     );
 
     this.cdr.detectChanges();

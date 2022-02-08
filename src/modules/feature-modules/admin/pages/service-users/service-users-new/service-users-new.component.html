@@ -17,8 +17,9 @@
         <div class="nhsuk-grid-column-two-thirds">
   
           <ng-container *ngIf="wizard.isQuestionStep()">
-            <theme-form-engine formId="ftsForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
-            <button type="submit" form="ftsForm" class="nhsuk-button" (click)="onSubmitStep('next')"> Continue </button>
+            <span *ngIf="formChanges.invalid || formChanges.pending">Checking...</span>
+            <theme-form-engine formId="ftsForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()" (formChanges)="onFormChange($event)"></theme-form-engine>
+            <button type="submit" form="ftsForm" class="nhsuk-button" (click)="onSubmitStep('next')" [disabled]="formChanges.invalid || formChanges.pending"> Continue </button>
           </ng-container>
   
           <ng-container *ngIf="wizard.isSummaryStep()">

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { CoreComponent } from '@app/base';
+import { CoreComponent, FormGroup } from '@app/base';
 import { AlertType } from '@app/base/models';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { CREATE_NEW_USER_QUESTIONS } from './service-users-new.config';
@@ -21,6 +21,8 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
 
   wizard: WizardEngineModel = new WizardEngineModel({});
 
+  formChanges: FormGroup = new FormGroup({});
+
   constructor(
     private organisationsService: OrganisationsService,
     private userService: ServiceUsersService
@@ -36,7 +38,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
     ]).subscribe(([units]) => {
       this.wizard = CREATE_NEW_USER_QUESTIONS;
       const organisationUnitList = units.map((unit) => ({ acronym: unit.acronym, name: unit.name, units: unit.organisationUnits.map(o => ({ acronym: o.acronym, name: o.name })) }));
-      this.wizard.setAnswers(this.wizard.runInboundParsing({ organisationUnitList, service :this.userService })).runRules();
+      this.wizard.setAnswers(this.wizard.runInboundParsing({ organisationUnitList, service: this.userService, emailValidator: this.userService.userEmailValidator })).runRules();
 
       this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = units.map((item: { [key: string]: any }) => ({ value: item.acronym, label: item.name }));
       this.wizard.addAnswers({ organisationAcronym: units.map((item: { [key: string]: any }) => item.acronym) });
@@ -94,7 +96,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
         return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
       })
     ).subscribe(
-      () =>{ this.redirectTo(`admin/service-users`, { alert: 'alertDisabled' })},
+      () => { this.redirectTo(`admin/service-users`, { alert: 'alertDisabled' }); },
       () => {
         this.alert = {
           type: 'ERROR',
@@ -105,5 +107,9 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
       }
     );
 
+  }
+
+  onFormChange(form: FormGroup): void {
+    this.formChanges = form;
   }
 }
