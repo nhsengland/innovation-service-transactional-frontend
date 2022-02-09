@@ -176,13 +176,7 @@ export class FormEngineHelper {
   static createParameterFormControl(parameter: FormEngineParameterModel, value?: any): FormControl {
     return new FormControl({ value: (typeof value !== 'boolean' && !value && value !== 0 ? null : value), disabled: !parameter.isEditable });
   }
-
-  // static getParameterAsyncValidators(parameter: FormEngineParameterModel): AsyncValidatorFn[] {
-  //   const validators: AsyncValidatorFn[] = [...parameter.asyncValidator];
-  //   // validators.push(...parameter.asyncValidator);
-  //   return validators;
-  // }
-
+  
   static getParameterValidators(parameter: FormEngineParameterModel): ValidatorFn[] {
 
     const validators = [];
