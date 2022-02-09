@@ -84,12 +84,12 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
 
   onSubmitWizard(): void {
     this.submitBtnClicked = true;
-    const body = this.wizard.runOutboundParsing();     
+    const body = this.wizard.runOutboundParsing();
     this.serviceUsersService.createUser(body).subscribe(
-      (res) => {           
+      (res) => {
         this.wizard.currentStepId = 1;
-        alert("User created successfully.");      
-        this.redirectTo(`admin/service-users/${res.id}`);         
+        alert('User created successfully.');
+        this.redirectTo(`admin/service-users/${res.id}`);
       },
       () => {
         this.submitBtnClicked = false;
@@ -100,8 +100,8 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
           setFocus: true
         };
       }
-    );   
-    
+    );
+
   }
 
   onFormChange(formData: { [key: string]: any }): void {

@@ -91,10 +91,10 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
     fixture.detectChanges();
 
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
-    component.formEngineComponent.getFormValues = () => ({ valid: false, data: { value :'SA'} });
+    component.formEngineComponent.getFormValues = () => ({ valid: false, data: { value : 'SA'} });
 
     component.onSubmitStep('next');
-    
+
     expect(component.wizard.currentStepId).toBe(1);
   });
 
@@ -155,7 +155,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
 
     component.onSubmitWizard();
     component.redirectTo('admin/service-users', { param: 'test' });
-    expect(routerSpy).toHaveBeenCalledWith(['admin/service-users'], { queryParams: { param: 'test' } });    
+    expect(routerSpy).toHaveBeenCalledWith(['admin/service-users'], { queryParams: { param: 'test' } });
   });
 
   it('should run onSubmitWizard() with API error', () => {
@@ -181,9 +181,9 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
     component = fixture.componentInstance;
     const formData = component.formEngineComponent?.getFormValues();
     component.wizard.addAnswers({ ...formData, email: 'example@test.com' }).runRules();
-    
+
     const result: any = serviceUserService.userEmailValidator();
-    expect(result['customError']).toBeUndefined();
+    expect(result.customError).toBeUndefined();
   }));
 
   it('should run onFormChange()', () => {
@@ -196,7 +196,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
     expect(component.formChanges).toStrictEqual({ value: 'some value' });
 
   });
-  
+
   it('should run getOrganisationUnits() with API Success', () => {
 
     fixture = TestBed.createComponent(PageServiceUsersNewComponent);

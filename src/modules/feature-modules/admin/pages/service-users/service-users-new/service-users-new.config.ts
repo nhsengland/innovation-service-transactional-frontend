@@ -60,7 +60,7 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
       parameters: [{
         id: 'name',
         dataType: 'text',
-        label: 'Kindly provide Name',        
+        label: 'Kindly provide Name',
         validations: { isRequired: [true, 'Name is required'] }
       }]
     }),
@@ -172,7 +172,7 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Summar
     const orgAcronym: { [key: string]: any }[0] = organisationAcronym?.filter((item) => (data.organisationAcronym === item.value))[0];
 
     toReturn.push(
-      { label: 'Organisation', value: orgAcronym.label === null ? 'NA' : orgAcronym.label, editStepNumber: 4 },      
+      { label: 'Organisation', value: orgAcronym.label === null ? 'NA' : orgAcronym.label, editStepNumber: 4 },
     );
 
     const unitsList = (data.organisationsList.find((org) => (org.acronym === data.organisationAcronym))?.units.map(units => ({ value: units.acronym, label: units.name })));
