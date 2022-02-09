@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CoreComponent } from '@app/base';
+import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { LinkType } from '@app/base/models';
+import { response } from 'express';
+import { searchUserEndpointDTO, ServiceUsersService } from '../../services/service-users.service';
 
 
 @Component({
@@ -14,13 +16,35 @@ export class PageServiceUsersFindComponent extends CoreComponent implements OnIn
     { type: 'button', label: 'New user', url: '/admin/service-users/new' }
   ];
 
-  constructor() {
+  form = new FormGroup({
+    search: new FormControl()
+  });
+
+  usersList: searchUserEndpointDTO[];
+
+  searching = false;
+
+  constructor(
+    private serviceUsersService: ServiceUsersService
+  ) {
 
     super();
-    this.setPageTitle('Service users');
-
+    this.setPageTitle('Service users search');
+    this.usersList = [];
   }
 
   ngOnInit(): void { }
 
+  onSubmit(): void {
+    this.searching = true;
+    const email = this.form.get('search')!.value;
+    this.form.setValue({search: ''});
+    this.serviceUsersService.searchUser(email).subscribe( response => {
+      this.usersList = response;
+      this.searching = false;
+    },
+    () => {
+      this.searching = false;
+    });
+  }
 }
