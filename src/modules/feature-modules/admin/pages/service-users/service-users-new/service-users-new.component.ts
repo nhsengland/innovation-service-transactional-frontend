@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { CoreComponent, FormGroup } from '@app/base';
+import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
@@ -15,14 +15,14 @@ import { CREATE_NEW_USER_QUESTIONS } from './service-users-new.config';
   templateUrl: './service-users-new.component.html'
 })
 export class PageServiceUsersNewComponent extends CoreComponent implements OnInit {
-  submitBtnClicked = false;
-  alert: AlertType = { type: null };
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
+  alert: AlertType = { type: null };
+
   wizard: WizardEngineModel = new WizardEngineModel({});
 
-  formChanges: { [key: string]: any } = {};
+  submitBtnClicked = false;
 
   constructor(
     private organisationsService: OrganisationsService,
@@ -36,7 +36,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
   ngOnInit(): void {
 
     this.wizard = CREATE_NEW_USER_QUESTIONS;
-    this.wizard.currentStepId = 1;
+
     // Adds async e-mail validator to the second step.
     this.wizard.steps[1].parameters[0].validations = { ...this.wizard.steps[1].parameters[0].validations, async: [this.serviceUsersService.userEmailValidator()] };
 
@@ -83,29 +83,30 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
   }
 
   onSubmitWizard(): void {
+
     this.submitBtnClicked = true;
     const body = this.wizard.runOutboundParsing();
+
     this.serviceUsersService.createUser(body).subscribe(
-      (res) => {
-        this.wizard.currentStepId = 1;
-        alert('User created successfully.');
-        this.redirectTo(`admin/service-users/${res.id}`);
+      response => {
+
+        this.redirectTo(`admin/service-users/${response.id}`, { alert: 'userCreationSuccess' });
+
       },
       () => {
+
         this.submitBtnClicked = false;
+
         this.alert = {
           type: 'ERROR',
           title: 'An unknown error occurred',
           message: 'You may try to go back and try again.',
           setFocus: true
         };
+
       }
     );
 
-  }
-
-  onFormChange(formData: { [key: string]: any }): void {
-    this.formChanges = formData;
   }
 
 }

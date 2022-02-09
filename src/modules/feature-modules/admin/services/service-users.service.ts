@@ -12,14 +12,14 @@ export type lockUserEndpointDTO = {
   objectId?: string;
 };
 
-export type createUserEndpointDTO = {
-  email: string,
-  name: string,
-  type: null | 'ASSESSMENT' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR',
-  organisationAcronym?: null | string, // Only for QA, A
-  role?: null | 'QUALIFYING_ACCESSOR' | 'ACCESSOR', // Only for QA, A
-  organisationUnitAcronym?: null | string // Only for A
-};
+// export type createUserEndpointDTO = {
+//   email: string,
+//   name: string,
+//   type: null | 'ASSESSMENT' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR',
+//   organisationAcronym?: null | string, // Only for QA, A
+//   role?: null | 'QUALIFYING_ACCESSOR' | 'ACCESSOR', // Only for QA, A
+//   organisationUnitAcronym?: null | string // Only for A
+// };
 
 export enum UserType {
   ACCESSOR = 'ACCESSOR',
@@ -90,10 +90,10 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  createUser(body: { [key: string]: any }): Observable<any> {
+  createUser(body: { [key: string]: any }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/user').setPathParams({ userId: this.stores.authentication.getUserId() });
-    return this.http.post<createUserEndpointDTO>(url.buildUrl(), body).pipe(
+    const url = new UrlModel(this.API_URL).addPath('user-admin/user');
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
     );

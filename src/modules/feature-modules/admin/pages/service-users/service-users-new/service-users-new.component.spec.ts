@@ -1,19 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { of, throwError } from 'rxjs';
 
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormEngineComponent } from '@modules/shared/forms';
+import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { FormEngineComponent } from '@modules/shared/forms';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageServiceUsersNewComponent } from './service-users-new.component';
+
 import { OrganisationsService } from '@shared-module/services/organisations.service';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent', () => {
 
@@ -48,7 +50,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
 
     organisationsService.getOrganisationUnits = () => of([
       { id: 'orgId', acronym: 'orgId01', name: 'Org name 01', organisationUnits: [{ id: 'orgId', acronym: 'orgId01', name: 'Org name 01' }] },
-      { id: 'orgId', acronym: 'orgId02', name: 'Org name 02',  organisationUnits: [{ id: 'orgId', acronym: 'orgId01', name: 'Org name 01' }] }
+      { id: 'orgId', acronym: 'orgId02', name: 'Org name 02', organisationUnits: [{ id: 'orgId', acronym: 'orgId01', name: 'Org name 01' }] }
     ]);
 
   });
@@ -91,7 +93,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
     fixture.detectChanges();
 
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
-    component.formEngineComponent.getFormValues = () => ({ valid: false, data: { value : 'SA'} });
+    component.formEngineComponent.getFormValues = () => ({ valid: false, data: { value: 'SA' } });
 
     component.onSubmitStep('next');
 
@@ -147,15 +149,15 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
   it('should run onSubmitWizard() with API success', () => {
 
     authenticationStore.initializeAuthentication$ = () => of(true);
-    serviceUserService.createUser = () => of('');
+    serviceUserService.createUser = () => of({id: 'User01'});
 
     fixture = TestBed.createComponent(PageServiceUsersNewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
     component.onSubmitWizard();
-    component.redirectTo('admin/service-users', { param: 'test' });
-    expect(routerSpy).toHaveBeenCalledWith(['admin/service-users'], { queryParams: { param: 'test' } });
+    expect(routerSpy).toHaveBeenCalledWith(['admin/service-users/User01'], { queryParams: { alert: 'userCreationSuccess' } });
+
   });
 
   it('should run onSubmitWizard() with API error', () => {
@@ -167,6 +169,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
 
     component.onSubmitWizard();
     fixture.detectChanges();
+
     expect(component.alert).toEqual({
       type: 'ERROR',
       title: 'An unknown error occurred',
@@ -185,28 +188,6 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
     const result: any = serviceUserService.userEmailValidator();
     expect(result.customError).toBeUndefined();
   }));
-
-  it('should run onFormChange()', () => {
-
-    fixture = TestBed.createComponent(PageServiceUsersNewComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    component.onFormChange({ value: 'some value' });
-    expect(component.formChanges).toStrictEqual({ value: 'some value' });
-
-  });
-
-  it('should run getOrganisationUnits() with API Success', () => {
-
-    fixture = TestBed.createComponent(PageServiceUsersNewComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    component.onFormChange({ value: 'some value' });
-    expect(component.formChanges).toStrictEqual({ value: 'some value' });
-
-  });
 
   it('should run onSubmitStep() and redirect because is the first step', () => {
 
