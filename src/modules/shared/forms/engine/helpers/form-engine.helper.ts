@@ -1,4 +1,4 @@
-import { FormGroup, FormControl, ValidationErrors, FormArray, Validators, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormControl, ValidationErrors, FormArray, Validators, ValidatorFn, AsyncValidatorFn } from '@angular/forms';
 // import { sortBy } from 'lodash';
 
 import { FormEngineParameterModel } from '../models/form-engine.models';
@@ -11,7 +11,7 @@ export class FormEngineHelper {
 
     parameters = parameters.map(p => new FormEngineParameterModel(p)); // Making sure all defaults are present.
 
-    const form = new FormGroup({});
+    const form = new FormGroup({}, { updateOn: 'blur' });
 
     // Build form structure.
     // parameters = sortBy(parameters, ['rank', 'label']); // TODO: Order fields by rank!
@@ -81,6 +81,7 @@ export class FormEngineHelper {
       // Apply validators only if parameter is visible!
       if (parameter.isVisible) {
         form.get(parameter.id)?.setValidators(FormEngineHelper.getParameterValidators(parameter));
+        if (parameter.validations?.async) { form.get(parameter.id)?.setAsyncValidators(parameter.validations?.async); }
         form.get(parameter.id)?.updateValueAndValidity();
       }
 
@@ -166,7 +167,7 @@ export class FormEngineHelper {
     if (error.hexadecimalFormat) { return { message: 'shared.forms_module.validations.invalid_hexadecimal_format', params: {} }; }
     if (error.minHexadecimal) { return { message: 'shared.forms_module.validations.min_hexadecimal' + ` (${error.minHexadecimal.min})`, params: {} }; }
     if (error.maxHexadecimal) { return { message: 'shared.forms_module.validations.max_hexadecimal' + ` (${error.maxHexadecimal.max})`, params: {} }; }
-
+    if (error.customError) { return { message: error.message, params: {} }; }
     return { message: '', params: {} };
 
   }

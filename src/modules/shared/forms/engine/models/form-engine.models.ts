@@ -1,3 +1,4 @@
+import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { FileTypes } from '../types/form-engine.types';
 
 export class FormEngineModel {
@@ -41,6 +42,7 @@ export class FormEngineParameterModel {
     max?: number | [number, string];
     minLength?: number;
     maxLength?: number;
+    async?: AsyncValidatorFn[];
   };
   lengthLimit?: 'small' | 'medium' | 'large';
 

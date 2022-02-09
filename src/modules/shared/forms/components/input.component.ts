@@ -1,5 +1,6 @@
-import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, forwardRef, Injector } from '@angular/core';
+import { Component, Input, OnInit, DoCheck, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, forwardRef, Injector } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 import { ControlValueAccessorConnector } from '../base/control-value-accessor.connector';
 
@@ -17,7 +18,7 @@ import { RandomGeneratorHelper } from '@modules/core';
     multi: true
   }]
 })
-export class FormInputComponent extends ControlValueAccessorConnector implements OnInit, DoCheck {
+export class FormInputComponent extends ControlValueAccessorConnector implements OnInit, DoCheck, OnDestroy {
 
   @Input() id?: string;
   @Input() type?: 'text' | 'number' | 'hidden' | 'password';
@@ -27,6 +28,8 @@ export class FormInputComponent extends ControlValueAccessorConnector implements
   @Input() pageUniqueField = true;
   @Input() width?: 'one-third' | 'two-thirds' | 'three-quarters' | 'full';
   @Input() cssOverride?: string;
+
+  private fieldChangeSubscription = new Subscription();
 
   hasError = false;
   error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
@@ -60,14 +63,28 @@ export class FormInputComponent extends ControlValueAccessorConnector implements
     this.inputCssClass = this.width ? `nhsuk-u-width-${this.width}` : 'nhsuk-u-width-two-thirds';
     this.divCssOverride = this.cssOverride || ''; // nhsuk-u-padding-top-4
 
+    this.fieldChangeSubscription.add(
+      this.fieldControl.statusChanges.subscribe(i => this.onStatusChange())
+    );
+
   }
 
   ngDoCheck(): void {
+    this.onStatusChange();
+  }
+
+
+  onStatusChange(): void {
 
     this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
     this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : { message: '', params: {} };
     this.cdr.detectChanges();
 
+  }
+
+
+  ngOnDestroy(): void {
+    this.fieldChangeSubscription.unsubscribe();
   }
 
 }
