@@ -3,22 +3,23 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
+import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageServiceUsersFindComponent } from './service-users-find.component';
+
 import { searchUserEndpointDTO, ServiceUsersService } from '../../services/service-users.service';
-import { of } from 'rxjs';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersFindComponent', () => {
 
+  let serviceUsersService: ServiceUsersService;
+
   let component: PageServiceUsersFindComponent;
   let fixture: ComponentFixture<PageServiceUsersFindComponent>;
-
-  let serviceUsersService: ServiceUsersService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -45,8 +46,9 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersFindComponent'
     expect(component).toBeTruthy();
   });
 
-  it('should call the backend when clicking the search button and return 1 record', () => {
-    const mock: searchUserEndpointDTO[] = [{
+  it('should call onSubmit() and return success', () => {
+
+    const responseMock: searchUserEndpointDTO[] = [{
       id: ':id',
       displayName: ':displayName',
       email: 'test@example.com',
@@ -66,32 +68,32 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersFindComponent'
       ]
     }];
 
-    serviceUsersService.searchUser = () => of(mock);
+    serviceUsersService.searchUser = () => of(responseMock);
 
     fixture = TestBed.createComponent(PageServiceUsersFindComponent);
     component = fixture.componentInstance;
 
-    component.form.setValue({search: 'test@example.com' });
+    component.form.setValue({ email: 'test@example.com' });
     component.onSubmit();
-
     fixture.detectChanges();
 
     expect(component.usersList.length).toEqual(1);
+
   });
 
-  it('should call the backend when clicking the search button and return 0 records', () => {
-    const mock: searchUserEndpointDTO[] = [];
+  it('should call onSubmit() and return error', () => {
 
-    serviceUsersService.searchUser = () => of(mock);
+    serviceUsersService.searchUser = () => throwError('error');
 
     fixture = TestBed.createComponent(PageServiceUsersFindComponent);
     component = fixture.componentInstance;
 
-    component.form.setValue({search: 'test@example.com' });
+    component.form.setValue({ email: 'test@example.com' });
     component.onSubmit();
-
     fixture.detectChanges();
 
-    expect(component.usersList.length).toEqual(0);
+    expect(component.pageStatus).toBe('READY');
+
   });
+
 });

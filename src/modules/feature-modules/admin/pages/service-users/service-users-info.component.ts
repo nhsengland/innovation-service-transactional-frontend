@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { LinkType } from '@app/base/models';
+import { AlertType, LinkType } from '@app/base/models';
+
+import { RoutingHelper } from '@modules/core';
+
+import { ServiceUsersService } from '../../services/service-users.service';
 
 
 @Component({
@@ -10,11 +15,11 @@ import { LinkType } from '@app/base/models';
 })
 export class PageServiceUsersInfoComponent extends CoreComponent implements OnInit {
 
-  titleActions: LinkType[] = [
-    { type: 'link', label: 'Edit user', url: '/admin/service-users/User001/edit' },
-    { type: 'link', label: 'Lock user', url: '/admin/service-users/User001/lock' },
-    { type: 'link', label: 'Delete user', url: '/admin/service-users/User001/delete' }
-  ];
+  alert: AlertType = { type: null };
+
+  user: { id: string, name: string };
+
+  titleActions: LinkType[] = [];
 
   sections: {
     userInfo: { label: string; value: null | string; }[];
@@ -22,30 +27,85 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
     organisation: { label: string; value: null | string; }[];
   } = { userInfo: [], innovations: [], organisation: [] };
 
-  constructor() {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private serviceUsersService: ServiceUsersService
+  ) {
 
     super();
     this.setPageTitle('User information');
+
+    this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData(this.activatedRoute).user.displayName };
+
+    switch (this.activatedRoute.snapshot.queryParams.alert) {
+      case 'lockSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'User locked successfully',
+          // message: 'You\'ve updated your support status and posted a comment to the innovator.'
+        };
+        break;
+      case 'unlockSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'User unlocked successfully',
+          // message: 'Your suggestions were saved and notifications sent.'
+        };
+        break;
+      case 'userCreationSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'User created successfully',
+          // message: 'Your suggestions were saved and notifications sent.'
+        };
+        break;
+      default:
+        break;
+    }
 
   }
 
   ngOnInit(): void {
 
-    this.sections.userInfo = [
-      { label: 'Name', value: 'John Doe' },
-      { label: 'Type', value: 'Innovator' },
-      { label: 'Email address', value: 'email@some.uk' },
-      { label: 'Phone number', value: null }
-    ];
+    this.serviceUsersService.getUserFullInfo(this.user.id).subscribe(
+      response => {
 
-    this.sections.innovations = ['Innovation 01', 'Innovation 02'];
+        this.titleActions = [
+          // { type: 'link', label: 'Edit user', url: `/admin/service-users/${this.userId}/edit` },
+          {
+            type: 'link',
+            label: !response.lockedAt ? 'Lock user' : 'Unlock user',
+            url: `/admin/service-users/${this.user.id}/${!response.lockedAt ? 'lock' : 'unlock'}`
+          },
+          // { type: 'link', label: 'Delete user', url: `/admin/service-users/${this.userId}/delete` }
+        ];
 
-    this.sections.organisation = [
-      { label: 'Organisation', value: 'NICE' },
-      { label: 'Unit', value: 'NICE unit (if accessor)' },
-      { label: 'Assigned innovations', value: '57 (if accessor)' }
-    ];
+        this.sections.userInfo = [
+          { label: 'Name', value: response.displayName },
+          { label: 'Type', value: this.stores.authentication.getRoleDescription(response.type) },
+          { label: 'Email address', value: response.email }
+        ];
 
+        // this.sections.innovations = ['Innovation 01', 'Innovation 02'];
+
+        // this.sections.organisation = [
+        //   { label: 'Organisation', value: 'NICE' },
+        //   { label: 'Unit', value: 'NICE unit (if accessor)' },
+        //   { label: 'Assigned innovations', value: '57 (if accessor)' }
+        // ];
+
+        this.setPageStatus('READY');
+
+      },
+      error => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch the necessary information',
+          message: 'Please try again or contact us for further help'
+        };
+      }
+    );
 
   }
 

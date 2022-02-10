@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { LinkType } from '@app/base/models';
-import { response } from 'express';
+
 import { searchUserEndpointDTO, ServiceUsersService } from '../../services/service-users.service';
 
 
@@ -16,35 +16,43 @@ export class PageServiceUsersFindComponent extends CoreComponent implements OnIn
     { type: 'button', label: 'New user', url: '/admin/service-users/new' }
   ];
 
+  formSubmitted = false;
   form = new FormGroup({
-    search: new FormControl()
-  });
+    email: new FormControl('')
+  }, { updateOn: 'blur' });
 
-  usersList: searchUserEndpointDTO[];
+  usersList: searchUserEndpointDTO[] = [];
 
-  searching = false;
 
   constructor(
     private serviceUsersService: ServiceUsersService
   ) {
 
     super();
-    this.setPageTitle('Service users search');
-    this.usersList = [];
+    this.setPageTitle('Find a service user');
+
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+
+    this.setPageStatus('READY');
+
+  }
 
   onSubmit(): void {
-    this.searching = true;
-    const email = this.form.get('search')!.value;
-    this.form.setValue({search: ''});
-    this.serviceUsersService.searchUser(email).subscribe( response => {
-      this.usersList = response;
-      this.searching = false;
-    },
-    () => {
-      this.searching = false;
-    });
+
+    this.setPageStatus('LOADING');
+    this.formSubmitted = true;
+
+    this.serviceUsersService.searchUser(this.form.get('email')!.value).subscribe(
+      response => {
+        this.usersList = response;
+        this.setPageStatus('READY');
+      },
+      error => {
+        this.setPageStatus('READY');
+      });
+
   }
+
 }

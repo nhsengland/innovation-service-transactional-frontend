@@ -41,9 +41,12 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
       innovation: new FormControl('', CustomValidators.required('Please, choose an innovation')),
       reason: new FormControl(''),
       email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')]),
-      confirmation: new FormControl('', [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('archive my innovation')]),
-    }, { updateOn: 'blur' });
+      confirmation: new FormControl('', [CustomValidators.required('A confirmation text is neccessary'), CustomValidators.equalTo('archive my innovation')])
+    },
+      { updateOn: 'blur' }
+    );
   }
+
 
   ngOnInit(): void {
 
@@ -70,21 +73,31 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
 
   }
 
-  onSubmitStep(): void {
+  // onSubmitStep(): void {
 
-    if (!this.validateForm(this.stepNumber)) { return; }
+  //   console.log('onSubmitStep', this.form.valid);
 
-    this.stepNumber++;
-    this.setStepTitle();
-  }
+  //   if (!this.validateForm(this.stepNumber)) { return; }
+
+  //   this.stepNumber++;
+  //   this.setStepTitle();
+  // }
 
   onSubmitForm(): void {
 
-    if (!this.form.valid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+    // this.form.markAllAsTouched();
 
+    if (!this.parseForm()) { return; }
+
+
+    // console.log('onSubmitForm', this.form.valid, this.form);
+    // if (!this.form.valid) {
+    //   return;
+    // }
+
+    console.log('onSubmitForm - Faço chamada');
+
+    /*
     this.innovatorService.archiveInnovation(this.form.get('innovation')!.value, this.form.get('reason')!.value).pipe(
       concatMap(() => {
         return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
@@ -102,41 +115,53 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
         };
       }
     );
+    */
   }
 
-  private validateForm(step: number): boolean {
 
-    switch (step) {
-      case 1:
-        if (!this.form.get('innovation')!.valid) {
-          this.form.get('innovation')!.markAsTouched();
-          return false;
-        }
-        /* istanbul ignore next */
-        this.innovationName = this.formInnovationsItems?.filter(item => this.form.get('innovation')!.value === item.value)[0].label || '';
-        break;
-      case 2:
-        break;
-      default:
-        break;
-    }
+  private parseForm(): boolean {
 
-    return true;
-  }
-
-  private setStepTitle(): void {
     switch (this.stepNumber) {
       case 1:
-        this.setPageTitle('Archive an innovation');
-        break;
-      case 2:
-      case 3:
+        this.form.get('innovation')!.markAsTouched();
+        if (!this.form.get('innovation')!.valid) { return false; }
+        /* istanbul ignore next */
+        this.innovationName = this.formInnovationsItems?.filter(item => this.form.get('innovation')!.value === item.value)[0].label || '';
+        this.stepNumber++;
         this.setPageTitle('Archive \'' + this.innovationName + '\'');
         break;
+
+      case 2:
+        this.form.get('reason')!.markAsTouched();
+        this.stepNumber++;
+        this.setPageTitle('Archive \'' + this.innovationName + '\'');
+        break;
+
+      case 3:
+        this.form.markAllAsTouched();
+        break;
+
       default:
-        this.setPageTitle('');
         break;
     }
+
+    return this.form.valid;
+
   }
+
+  // private setStepTitle(): void {
+  //   switch (this.stepNumber) {
+  //     case 1:
+  //       this.setPageTitle('Archive an innovation');
+  //       break;
+  //     case 2:
+  //     case 3:
+  //       this.setPageTitle('Archive \'' + this.innovationName + '\'');
+  //       break;
+  //     default:
+  //       this.setPageTitle('');
+  //       break;
+  //   }
+  // }
 
 }

@@ -10,10 +10,10 @@ import { ServiceUsersService, getLockUserRulesOutDTO } from '../../services/serv
 
 
 @Component({
-  selector: 'app-admin-pages-service-users-lock',
-  templateUrl: './service-users-lock.component.html'
+  selector: 'app-admin-pages-service-users-unlock',
+  templateUrl: './service-users-unlock.component.html'
 })
-export class PageServiceUsersLockComponent extends CoreComponent implements OnInit {
+export class PageServiceUsersUnlockComponent extends CoreComponent implements OnInit {
 
   alert: AlertType = { type: null };
 
@@ -36,7 +36,7 @@ export class PageServiceUsersLockComponent extends CoreComponent implements OnIn
   ) {
 
     super();
-    this.setPageTitle('Lock user');
+    this.setPageTitle('Unlock user');
 
     this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData(this.activatedRoute).user.displayName };
 
@@ -45,10 +45,14 @@ export class PageServiceUsersLockComponent extends CoreComponent implements OnIn
 
   ngOnInit(): void {
 
-
-    this.serviceUsersService.getLockUserRules(this.user.id).subscribe(
+    this.serviceUsersService.getUserFullInfo(this.user.id).subscribe(
       response => {
-        this.rulesList = response;
+
+        if (!response.lockedAt) {
+          this.redirectTo(`admin/service-users/${this.user.id}`);
+          return;
+        }
+
         this.setPageStatus('READY');
       },
       () => {
@@ -70,10 +74,10 @@ export class PageServiceUsersLockComponent extends CoreComponent implements OnIn
 
     this.securityConfirmation.code = this.form.get('code')!.value;
 
-    this.serviceUsersService.lockUser(this.user.id, this.securityConfirmation).subscribe(
+    this.serviceUsersService.unlockUser(this.user.id, this.securityConfirmation).subscribe(
       () => {
 
-        this.redirectTo(`admin/service-users/${this.user.id}`, { alert: 'lockSuccess' });
+        this.redirectTo(`admin/service-users/${this.user.id}`, { alert: 'unlockSuccess' });
 
       },
       (error: { id: string }) => {

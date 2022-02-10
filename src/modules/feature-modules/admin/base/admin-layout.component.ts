@@ -7,7 +7,7 @@ import { MenuBarItemType } from '@modules/theme/components/header/header.compone
 
 @Component({
   selector: 'app-admin-layout',
-  templateUrl: './admin-layout.component.html',
+  templateUrl: './admin-layout.component.html'
 })
 export class AdminLayoutComponent extends CoreComponent {
 
