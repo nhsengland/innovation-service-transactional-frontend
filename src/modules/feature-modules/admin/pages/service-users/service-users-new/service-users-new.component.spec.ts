@@ -162,7 +162,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
 
   it('should run onSubmitWizard() with API error, returning 2LS ID', () => {
 
-    serviceUserService.createUser = () => throwError({error: { id: '123456ABCDFG' }});
+    serviceUserService.createUser = () => throwError({id: '123456ABCDFG' });
 
     fixture = TestBed.createComponent(PageServiceUsersNewComponent);
     component = fixture.componentInstance;

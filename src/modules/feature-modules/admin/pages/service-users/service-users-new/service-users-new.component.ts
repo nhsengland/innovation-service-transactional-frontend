@@ -97,11 +97,11 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
       response => {
         this.redirectTo(`admin/service-users/${response.id}`, { alert: 'userCreationSuccess' });
       },
-      (errorResponse) => {
+      (error) => {
         this.submitBtnClicked = false;
 
-        if (!this.securityConfirmation.id && errorResponse.error.id) {
-          this.securityConfirmation.id = errorResponse.error.id;
+        if (!this.securityConfirmation.id && error.id) {
+          this.securityConfirmation.id = error.id;
           this.pageStep = 'CODE_REQUEST';
 
         } else {

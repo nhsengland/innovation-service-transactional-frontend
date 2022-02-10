@@ -168,7 +168,10 @@ export class ServiceUsersService extends CoreService {
     const url = new UrlModel(this.API_URL).addPath('user-admin/user').setQueryParams(qp);
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
-      map(response => response)
+      map(response => response),
+      catchError(error => throwError({
+        id: error.error.id
+      }))
     );
 
   }
