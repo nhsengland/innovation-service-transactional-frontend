@@ -2,65 +2,54 @@
   <p> {{ alert.message }} </p>
 </theme-alert>
 
-<theme-page-title [title]="pageTitle" titleHint="Morgan Freeman"></theme-page-title>
+<theme-page-title [title]="pageTitle" [titleHint]="user.name"></theme-page-title>
 
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-two-thirds">
+<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-    <table class="nhsuk-table">
-      <caption>All conditions must be valid to be able to lock Morgan Freeman</caption>
-      <thead class="nhsuk-table__head nhsuk-u-visually-hidden">
-        <tr class="nhsuk-table__row">
-          <th class="nhsuk-table__header" scope="col"> Condition </th>
-          <th class="nhsuk-table__header" scope="col"> Is valid </th>
-        </tr>
-      </thead>
-      <tbody class="nhsuk-table__body">
-        <tr class="nhsuk-table__row">
-          <td class="nhsuk-table__cell">Accessor cannot be assigned to any innovation</td>
-          <td class="nhsuk-table__cell text-align-right">
-            <strong class="nhsuk-tag nhsuk-tag--green">Valid</strong>
-          </td>
-        </tr>
-        <tr class="nhsuk-table__row">
-          <td class="nhsuk-table__cell">
-            Accessor cannot be the only one on one organisation unit
-            <div class="nhsuk-hint nhsuk-u-margin-0">Is the only one on NICE</div>
-          </td>
-          <td class="nhsuk-table__cell text-align-right">
-            <strong class="nhsuk-tag nhsuk-tag--red">Invalid</strong>
-          </td>
-        </tr>
-        <tr class="nhsuk-table__row">
-          <td class="nhsuk-table__cell">Should have log on the past week</td>
-          <td class="nhsuk-table__cell text-align-right">
-            <strong class="nhsuk-tag nhsuk-tag--red">Invalid</strong>
-          </td>
-        </tr>
-      </tbody>
-    </table>
 
+<div *ngIf="pageStatus === 'READY'" aria-live="polite">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <table class="nhsuk-table">
+        <caption>All conditions must be valid to be able to lock {{ user.name }}</caption>
+        <thead class="nhsuk-table__head nhsuk-u-visually-hidden">
+          <tr class="nhsuk-table__row">
+            <th class="nhsuk-table__header" scope="col"> Condition </th>
+            <th class="nhsuk-table__header" scope="col"> Is valid </th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <tr *ngFor="let item of rulesList" class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">
+              {{ 'shared.catalog.user.lock_user_validations.' + item.key + '.label' | translate }}
+              <div *ngIf="!item.valid && !translationExists('shared.catalog.user.lock_user_validations.' + item.key + '.description')" class="nhsuk-hint nhsuk-u-margin-0">
+                {{ 'shared.catalog.user.lock_user_validations.' + item.key + '.description' | translate: item.meta }}
+              </div>
+            </td>
+            <td class="nhsuk-table__cell text-align-right">
+              <strong class="nhsuk-tag" [ngClass]="{'nhsuk-tag--green': item.valid, 'nhsuk-tag--red': !item.valid}">{{ item.valid ? 'Valid' : 'Invalid' }}</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
-
-
-<ng-container *ngIf="pageStep === 'FORM' || pageStep === 'CODE_REQUEST'">
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-      <form [formGroup]="form">
-
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <ng-container *ngIf="pageStep === 'CODE_REQUEST'">
           <theme-form-input controlName="code" label="Enter the confirmation code" [pageUniqueField]="false"></theme-form-input>
         </ng-container>
 
-        <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Lock user</button>
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3">Lock user</button>
 
       </form>
 
     </div>
   </div>
 
-</ng-container>
+</div>
