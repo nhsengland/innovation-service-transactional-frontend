@@ -25,7 +25,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
   submitBtnClicked = false;
 
   pageStep: 'RULES_LIST' | 'CODE_REQUEST' | 'SUCCESS' = 'RULES_LIST';
-  
+
   securityConfirmation = { id: '', code: '' };
 
   form = new FormGroup({
@@ -44,7 +44,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
   ngOnInit(): void {
 
     this.wizard = CREATE_NEW_USER_QUESTIONS;
-
+    // this.wizard.gotoStep(1);
     // Adds async e-mail validator to the second step.
     this.wizard.steps[1].parameters[0].validations = { ...this.wizard.steps[1].parameters[0].validations, async: [this.serviceUsersService.userEmailValidator()] };
 
@@ -95,15 +95,15 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
     this.submitBtnClicked = true;
     const body = this.wizard.runOutboundParsing();
     this.securityConfirmation.code = this.form.get('code')!.value;
-    this.serviceUsersService.createUser(body).subscribe(
-      response => {      
+    this.serviceUsersService.createUser(body, this.securityConfirmation).subscribe(
+      response => {
         this.redirectTo(`admin/service-users/${response.id}`, { alert: 'userCreationSuccess' });
       },
-      (error: {id: string}) => {        
+      (errorResponse) => {
         this.submitBtnClicked = false;
-        if (!this.securityConfirmation.id && error.id) {
 
-          this.securityConfirmation.id = error.id;
+        if (!this.securityConfirmation.id && errorResponse.error.id) {
+          this.securityConfirmation.id = errorResponse.error.id;
           this.pageStep = 'CODE_REQUEST';
 
         } else {

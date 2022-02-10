@@ -161,9 +161,11 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  createUser(body: { [key: string]: any }): Observable<{ id: string }> {
+  createUser(body: { [key: string]: any }, securityConfirmation: { id: string, code: string }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/user');
+    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
+
+    const url = new UrlModel(this.API_URL).addPath('user-admin/user').setQueryParams(qp);
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
