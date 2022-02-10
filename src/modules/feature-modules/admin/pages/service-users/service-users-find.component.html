@@ -42,7 +42,7 @@
             <p class="nhsuk-body-s nhsuk-u-margin-0">{{ item.displayName }} ({{ item.email }})</p>
           </div>
           <div class="d-flex flex-direction-column text-align-center">
-            <strong class="nhsuk-tag nhsuk-u-margin-bottom-2" [ngClass]="{'nhsuk-tag--green': !item.lockedAt, 'nhsuk-tag--red': item.lockedAt}">{{ item.lockedAt ? 'Blocked' : 'Active' }}</strong>
+            <strong class="nhsuk-tag nhsuk-u-margin-bottom-2" [ngClass]="{'nhsuk-tag--green': !item.lockedAt, 'nhsuk-tag--red': item.lockedAt}">{{ item.lockedAt ? 'Locked' : 'Active' }}</strong>
             <a routerLink="{{item.id}}">View</a>
           </div>
         </div>
