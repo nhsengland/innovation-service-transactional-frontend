@@ -28,6 +28,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   innovationGuidesUrl = `${this.stores.environment.BASE_URL}/innovation-guides`;
 
+  notifications: { [key: string]: number };
+
   constructor(
     private notificationsService: NotificationsService,
     private innovatorService: InnovatorService,
@@ -44,6 +46,13 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       passwordResetOn: user.passwordResetOn
     };
 
+    this.notifications = {
+      ACTION: 0,
+      COMMENT: 0,
+      INNOVATION: 0,
+      SUPPORT: 0,
+      DATA_SHARING: 0,
+    };
 
   }
 
@@ -70,6 +79,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         }
         break;
     }
+
+
   }
 
 
@@ -90,8 +101,21 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   }
 
-  notificationsCount(): number {
+  notificationsCount(id: string): number {
+
     let count = 0;
+
+    this.notificationsService.getAllUnreadNotificationsGroupedByContext(id).subscribe(
+      response => {
+        this.notifications = response;
+        this.setPageStatus('READY');
+      },
+      error => {
+        this.setPageStatus('READY');
+        this.logger.error('Error fetching innovations information', error);
+      }
+    );
+
     const notifications = this.notificationsService.notifications;
     const names = Object.keys(this.notificationsService.notifications);
     for (const name of names) {

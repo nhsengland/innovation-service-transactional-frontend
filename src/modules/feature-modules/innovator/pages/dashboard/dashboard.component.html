@@ -23,9 +23,12 @@
         <div class="nhsuk-card">
           <div class="nhsuk-card__content">
             <h2 class="nhsuk-card__heading nhsuk-heading-m"> You have an innovation ownership transfer request </h2>
-            <p class="nhsuk-card__description"> {{ item.innovation.owner }} has requested that you take ownership of {{ item.innovation.name }}. </p>
-            <button class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-0" (click)="onSubmitTransferResponse(item.id, true)"> Accept ownership </button>
-            <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-0" (click)="onSubmitTransferResponse(item.id, false)"> Reject request </button>
+            <p class="nhsuk-card__description"> {{ item.innovation.owner }} has requested that you take ownership of {{
+              item.innovation.name }}. </p>
+            <button class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-0"
+              (click)="onSubmitTransferResponse(item.id, true)"> Accept ownership </button>
+            <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-0"
+              (click)="onSubmitTransferResponse(item.id, false)"> Reject request </button>
           </div>
         </div>
       </li>
@@ -36,7 +39,8 @@
         <a routerLink="/innovator/innovations/{{ item.id }}" class="nhsuk-u-font-size-32 nhsuk-u-font-weight-bold">
           {{ item.name }} <span class="nhsuk-u-visually-hidden"> Access {{ item.name }} innovation </span>
         </a>
-        <notification-tag *ngIf="notificationsCount() > 0" [count]="notificationsCount()"></notification-tag>
+        <notification-tag *ngIf="notificationsCount(item.id) > 0" [count]="notificationsCount(item.id)">
+        </notification-tag>
       </li>
     </ul>
 
@@ -55,7 +59,8 @@
         <div class="nhsuk-card nhsuk-card--clickable">
           <div class="nhsuk-card__content">
             <h2 class="nhsuk-card__heading nhsuk-heading-m">
-              <a [href]="innovationGuidesUrl" target="_blank" rel="noopener noreferrer" class="nhsuk-card__link"> Innovation guides (opens in new window) </a>
+              <a [href]="innovationGuidesUrl" target="_blank" rel="noopener noreferrer" class="nhsuk-card__link">
+                Innovation guides (opens in new window) </a>
             </h2>
             <p class="nhsuk-card__description"> Access our starter and advanced innovation guides </p>
           </div>
