@@ -51,7 +51,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
     this.organisationsService.getOrganisationUnits().subscribe(
       response => {
         const organisationsList = response.map(o => ({ acronym: o.acronym, name: o.name, units: o.organisationUnits.map(u => ({ acronym: u.acronym, name: u.name })) }));
-        this.wizard.setAnswers(this.wizard.runInboundParsing({ organisationsList })).runRules();
+        this.wizard.gotoStep(1).setAnswers(this.wizard.runInboundParsing({ organisationsList })).runRules();
         this.setPageStatus('READY');
       },
       () => {

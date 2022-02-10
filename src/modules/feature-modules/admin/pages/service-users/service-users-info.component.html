@@ -1,50 +1,54 @@
-<theme-page-title [title]="pageTitle" titleHint="Morgan Freeman" [actions]="titleActions"></theme-page-title>
+<theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+  <p> {{ alert.message }} </p>
+</theme-alert>
 
-<section class="informational-section">
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-one-third">
-      <h2 class="nhsuk-heading-m">User information</h2>
-    </div>
-    <div class="nhsuk-grid-column-two-thirds">
-      <dl class="nhsuk-summary-list">
-        <div *ngFor="let item of sections.userInfo" class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key"> {{ item.label }} </dt>
-          <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
-          <!-- <dd class="nhsuk-summary-list__actions">
-            <a *ngIf="item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
-          </dd> -->
-        </div>
-      </dl>
-    </div>
-  </div>
-</section>
+<theme-page-title [title]="pageTitle" [titleHint]="user.name" [actions]="titleActions"></theme-page-title>
 
-<section class="informational-section">
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-one-third">
-      <h2 class="nhsuk-heading-m">Innovations</h2>
-    </div>
-    <div class="nhsuk-grid-column-two-thirds">
-      <p *ngFor="let item of sections.innovations">{{ item }}</p>
-    </div>
-  </div>
-</section>
+<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-<section class="informational-section">
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-one-third">
-      <h2 class="nhsuk-heading-m">Organisation</h2>
+<div *ngIf="pageStatus === 'READY'" aria-live="polite">
+
+  <section class="informational-section">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-one-third">
+        <h2 class="nhsuk-heading-m">User information</h2>
+      </div>
+      <div class="nhsuk-grid-column-two-thirds">
+        <dl class="nhsuk-summary-list">
+          <div *ngFor="let item of sections.userInfo" class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key"> {{ item.label }} </dt>
+            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+          </div>
+        </dl>
+      </div>
     </div>
-    <div class="nhsuk-grid-column-two-thirds">
-      <dl class="nhsuk-summary-list">
-        <div *ngFor="let item of sections.organisation" class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key"> {{ item.label }} </dt>
-          <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
-          <!-- <dd class="nhsuk-summary-list__actions">
-            <a *ngIf="item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
-          </dd> -->
-        </div>
-      </dl>
+  </section>
+
+  <!-- <section class="informational-section">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-one-third">
+        <h2 class="nhsuk-heading-m">Innovations</h2>
+      </div>
+      <div class="nhsuk-grid-column-two-thirds">
+        <p *ngFor="let item of sections.innovations">{{ item }}</p>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <section class="informational-section">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-one-third">
+        <h2 class="nhsuk-heading-m">Organisation</h2>
+      </div>
+      <div class="nhsuk-grid-column-two-thirds">
+        <dl class="nhsuk-summary-list">
+          <div *ngFor="let item of sections.organisation" class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key"> {{ item.label }} </dt>
+            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section> -->
+
+</div>

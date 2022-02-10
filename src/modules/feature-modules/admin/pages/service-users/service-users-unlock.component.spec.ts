@@ -10,12 +10,12 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
-import { PageServiceUsersLockComponent } from './service-users-lock.component';
+import { PageServiceUsersUnlockComponent } from './service-users-unlock.component';
 
-import { getLockUserRulesOutDTO, lockUserEndpointDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { getUserFullInfoDTO, lockUserEndpointDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 
-describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersLockComponent', () => {
+describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersUnlockComponent', () => {
 
   let activatedRoute: ActivatedRoute;
   let router: Router;
@@ -23,8 +23,8 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersLockComponent'
 
   let serviceUsersService: ServiceUsersService;
 
-  let component: PageServiceUsersLockComponent;
-  let fixture: ComponentFixture<PageServiceUsersLockComponent>;
+  let component: PageServiceUsersUnlockComponent;
+  let fixture: ComponentFixture<PageServiceUsersUnlockComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -52,74 +52,88 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersLockComponent'
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(PageServiceUsersLockComponent);
+    fixture = TestBed.createComponent(PageServiceUsersUnlockComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
+
   it('should have initial information loaded', () => {
 
-    const responseMock: getLockUserRulesOutDTO[] = [
-      {
-        key: 'lastAssessmentUserOnPlatform', valid: true,
-        meta: {}
-      },
-      {
-        key: 'lastAccessorUserOnOrganisation', valid: false,
-        meta: { organisation: { id: 'sdfsdafsdf', name: 'Org name' } }
-      },
-      {
-        key: 'lastAccessorUserOnOrganisationUnit', valid: false,
-        meta: { unit: { id: 'sdfas', name: 'Unit name' } }
-      },
-      {
-        key: 'lastAccessorFromUnitProvidingSupport', valid: false,
-        meta: { innovations: [{ id: 'sfasdads' }, { id: 'sdfsa' }] }
-      }
-    ];
-    serviceUsersService.getLockUserRules = () => of(responseMock);
-    const expected = responseMock;
+    const responseMock: getUserFullInfoDTO = {
+      id: 'User01',
+      email: 'user@email.com',
+      displayName: 'User name',
+      type: 'INNOVATOR',
+      lockedAt: '2020-01-01T00:00:00.000Z',
+      userOrganisations: [
+        { id: 'Org01', name: 'Org Name', role: 'INNOVATOR_OWNER', units: [] }
+      ]
+    };
+    serviceUsersService.getUserFullInfo = () => of(responseMock);
 
-    fixture = TestBed.createComponent(PageServiceUsersLockComponent);
+    fixture = TestBed.createComponent(PageServiceUsersUnlockComponent);
     component = fixture.componentInstance;
-
     fixture.detectChanges();
-    expect(component.rulesList).toEqual(expected);
+
+    expect(component.pageStatus).toBe('READY');
+
+  });
+
+  it('should REDIRECT because user is UNLOCKED', () => {
+
+    const responseMock: getUserFullInfoDTO = {
+      id: 'User01',
+      email: 'user@email.com',
+      displayName: 'User name',
+      type: 'INNOVATOR',
+      lockedAt: null,
+      userOrganisations: [
+        { id: 'Org01', name: 'Org Name', role: 'INNOVATOR_OWNER', units: [] }
+      ]
+    };
+    serviceUsersService.getUserFullInfo = () => of(responseMock);
+
+    fixture = TestBed.createComponent(PageServiceUsersUnlockComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(routerSpy).toHaveBeenCalledWith(['admin/service-users/User01'], {});
 
   });
 
   it('should NOT have initial information loaded', () => {
 
-    serviceUsersService.getLockUserRules = () => throwError('error');
+    serviceUsersService.getUserFullInfo = () => throwError('error');
 
-    fixture = TestBed.createComponent(PageServiceUsersLockComponent);
+    fixture = TestBed.createComponent(PageServiceUsersUnlockComponent);
     component = fixture.componentInstance;
-
     fixture.detectChanges();
-    expect(component.alert.type).toBe('ERROR');
+
+    expect(component.pageStatus).toBe('ERROR');
 
   });
 
   it('should run onSubmit and call api with success', () => {
 
     const responseMock: lockUserEndpointDTO = { id: 'User01', status: 'OK' };
-    serviceUsersService.lockUser = () => of(responseMock);
+    serviceUsersService.unlockUser = () => of(responseMock);
 
-    fixture = TestBed.createComponent(PageServiceUsersLockComponent);
+    fixture = TestBed.createComponent(PageServiceUsersUnlockComponent);
     component = fixture.componentInstance;
     component.form.get('code')?.setValue('Invalid status');
 
     component.onSubmit();
-    expect(routerSpy).toHaveBeenCalledWith(['admin/service-users/User01'], { queryParams: { alert: 'lockSuccess' } });
+    expect(routerSpy).toHaveBeenCalledWith(['admin/service-users/User01'], { queryParams: { alert: 'unlockSuccess' } });
 
   });
 
-  it('should run onSubmit and call api with error, returning 2LS object ID', () => {
+  it('should run onSubmit and call api with error, returning 2LS ID', () => {
 
-    serviceUsersService.lockUser = () => throwError({ id: '123456ABCDFG' });
+    serviceUsersService.unlockUser = () => throwError({ id: '123456ABCDFG' });
 
-    fixture = TestBed.createComponent(PageServiceUsersLockComponent);
+    fixture = TestBed.createComponent(PageServiceUsersUnlockComponent);
     component = fixture.componentInstance;
     component.form.get('code')?.setValue('12345');
 
@@ -130,9 +144,9 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersLockComponent'
 
   it('should run onSubmit and call api with error, having already a security confirmation id ', () => {
 
-    serviceUsersService.lockUser = () => throwError({ id: '123456ABCDFG' });
+    serviceUsersService.unlockUser = () => throwError({ id: '123456ABCDFG' });
 
-    fixture = TestBed.createComponent(PageServiceUsersLockComponent);
+    fixture = TestBed.createComponent(PageServiceUsersUnlockComponent);
     component = fixture.componentInstance;
     component.form.get('code')?.setValue('invalidCode');
     component.securityConfirmation.id = '2lsId';
