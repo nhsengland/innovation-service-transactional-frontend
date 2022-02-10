@@ -20,7 +20,7 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
 
   alert: AlertType = { type: null };
 
-  wizard: WizardEngineModel = new WizardEngineModel({});
+  wizard: WizardEngineModel = new WizardEngineModel(CREATE_NEW_USER_QUESTIONS);
 
   submitBtnClicked = false;
 
@@ -43,8 +43,6 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
 
   ngOnInit(): void {
 
-    this.wizard = CREATE_NEW_USER_QUESTIONS;
-    // this.wizard.gotoStep(1);
     // Adds async e-mail validator to the second step.
     this.wizard.steps[1].parameters[0].validations = { ...this.wizard.steps[1].parameters[0].validations, async: [this.serviceUsersService.userEmailValidator()] };
 
