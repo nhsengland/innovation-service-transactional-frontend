@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { CoreComponent } from '@app/base';
+import { CoreComponent, FormGroup, FormControl } from '@app/base';
 import { AlertType } from '@app/base/models';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
@@ -20,9 +20,17 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
 
   alert: AlertType = { type: null };
 
-  wizard: WizardEngineModel = new WizardEngineModel({});
+  wizard: WizardEngineModel = new WizardEngineModel(CREATE_NEW_USER_QUESTIONS);
 
   submitBtnClicked = false;
+
+  pageStep: 'RULES_LIST' | 'CODE_REQUEST' | 'SUCCESS' = 'RULES_LIST';
+
+  securityConfirmation = { id: '', code: '' };
+
+  form = new FormGroup({
+    code: new FormControl('')
+  }, { updateOn: 'blur' });
 
   constructor(
     private organisationsService: OrganisationsService,
@@ -34,8 +42,6 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
   }
 
   ngOnInit(): void {
-
-    this.wizard = CREATE_NEW_USER_QUESTIONS;
 
     // Adds async e-mail validator to the second step.
     this.wizard.steps[1].parameters[0].validations = { ...this.wizard.steps[1].parameters[0].validations, async: [this.serviceUsersService.userEmailValidator()] };
@@ -86,23 +92,23 @@ export class PageServiceUsersNewComponent extends CoreComponent implements OnIni
 
     this.submitBtnClicked = true;
     const body = this.wizard.runOutboundParsing();
-
-    this.serviceUsersService.createUser(body).subscribe(
+    this.securityConfirmation.code = this.form.get('code')!.value;
+    this.serviceUsersService.createUser(body, this.securityConfirmation).subscribe(
       response => {
-
         this.redirectTo(`admin/service-users/${response.id}`, { alert: 'userCreationSuccess' });
-
       },
-      () => {
-
+      (error) => {
         this.submitBtnClicked = false;
 
-        this.alert = {
-          type: 'ERROR',
-          title: 'An unknown error occurred',
-          message: 'You may try to go back and try again.',
-          setFocus: true
-        };
+        if (!this.securityConfirmation.id && error.id) {
+          this.securityConfirmation.id = error.id;
+          this.pageStep = 'CODE_REQUEST';
+
+        } else {
+
+          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your e-mail' });
+
+        }
 
       }
     );

@@ -38,9 +38,12 @@
               </dd>
             </div>
           </dl>
-
-          <button class="nhsuk-button" (click)="onSubmitWizard()" [disabled]="submitBtnClicked"> Create User </button>
-
+          <form [formGroup]="form" (ngSubmit)="onSubmitWizard()">
+            <ng-container *ngIf="pageStep === 'CODE_REQUEST'">
+              <theme-form-input controlName="code" label="Enter the confirmation code" [pageUniqueField]="false"></theme-form-input>
+            </ng-container>
+            <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" [disabled]="submitBtnClicked"> Create User </button>
+          </form>
         </ng-container>
 
       </div>

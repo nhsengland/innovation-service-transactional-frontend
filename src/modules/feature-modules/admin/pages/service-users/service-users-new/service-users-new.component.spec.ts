@@ -160,22 +160,30 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersNewComponent',
 
   });
 
-  it('should run onSubmitWizard() with API error', () => {
+  it('should run onSubmitWizard() with API error, returning 2LS ID', () => {
 
-    serviceUserService.createUser = () => throwError('error');
+    serviceUserService.createUser = () => throwError({id: '123456ABCDFG' });
 
     fixture = TestBed.createComponent(PageServiceUsersNewComponent);
     component = fixture.componentInstance;
+    component.form.get('code')?.setValue('12345');
+    component.onSubmitWizard();
+
+    expect(component.pageStep).toBe('CODE_REQUEST');
+
+  });
+
+  it('should run onSubmitWizard()  and call api with error, having already a security confirmation id ', () => {
+
+    serviceUserService.createUser = () => throwError({ id: '123456ABCDFG' });
+
+    fixture = TestBed.createComponent(PageServiceUsersNewComponent);
+    component = fixture.componentInstance;
+    component.form.get('code')?.setValue('invalidCode');
+    component.securityConfirmation.id = '2lsId';
 
     component.onSubmitWizard();
-    fixture.detectChanges();
-
-    expect(component.alert).toEqual({
-      type: 'ERROR',
-      title: 'An unknown error occurred',
-      message: 'You may try to go back and try again.',
-      setFocus: true
-    });
+    expect(component.form.valid).toBe(false);
 
   });
 
