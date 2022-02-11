@@ -50,6 +50,7 @@ export class PageServiceUsersFindComponent extends CoreComponent implements OnIn
         this.setPageStatus('READY');
       },
       error => {
+        this.usersList = [];
         this.setPageStatus('READY');
       });
 
