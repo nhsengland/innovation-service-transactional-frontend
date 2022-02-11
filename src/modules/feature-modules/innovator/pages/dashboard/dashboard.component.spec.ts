@@ -95,7 +95,7 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
 
-    expect(component.notificationsCount()).toBe(1);
+    expect(component.notificationsCount('')).toBe(1);
 
   });
 
