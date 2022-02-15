@@ -37,7 +37,7 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
         label: 'Kindly select appropriate user type',
         validations: { isRequired: [true, 'Choose one option'] },
         items: [
-          { value: 'ASSESSMENT', label: 'Needs Accessor' },
+          { value: 'ASSESSMENT', label: 'Needs Assessor' },
           { value: 'QUALIFYING_ACCESSOR', label: 'Qualifying Accessor' },
           { value: 'ACCESSOR', label: 'Accessor' }
         ]
@@ -161,7 +161,7 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Summar
   const organisationAcronym = steps.find(s => s.parameters[0].id === 'organisationAcronym')?.parameters[0].items;
 
   toReturn.push(
-    { label: 'User Type', value: data.type === 'QUALIFYING_ACCESSOR' ? 'Qualifying Accessor' : data.type === 'ACCESSOR' ? 'Accessor' : 'Needs Accessor', editStepNumber: 1 },
+    { label: 'User Type', value: data.type === 'QUALIFYING_ACCESSOR' ? 'Qualifying Accessor' : data.type === 'ACCESSOR' ? 'Accessor' : 'Needs Assessor', editStepNumber: 1 },
     { label: 'Email', value: data.email, editStepNumber: 2 },
     { label: 'User Name', value: data.name, editStepNumber: 3 },
   );

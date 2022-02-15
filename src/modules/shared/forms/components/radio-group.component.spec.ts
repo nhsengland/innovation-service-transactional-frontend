@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormEngineParameterModel } from '@app/base/forms';
 
 import { FormInputComponent } from '../components/input.component';
+import { FormTextareaComponent } from '../components/textarea.component';
 import { FormRadioGroupComponent } from './radio-group.component';
 
 @Component({
@@ -52,6 +53,7 @@ describe('FormRadioGroupComponent', () => {
       declarations: [
         HostComponent,
         FormInputComponent,
+        FormTextareaComponent,
         FormRadioGroupComponent,
       ],
     });

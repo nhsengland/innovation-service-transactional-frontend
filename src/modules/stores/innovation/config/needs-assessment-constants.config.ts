@@ -22,7 +22,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       label: 'What\'s the approximate level of maturity of this innovation?',
       validations: { isRequired: [true, 'Choose one option'] },
       items: maturityLevelItems,
-      additional: [new FormEngineParameterModel({ id: 'maturityLevelComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
+      additional: [new FormEngineParameterModel({ id: 'maturityLevelComment', dataType: 'textarea', label: '', lengthLimit: 'small', description: 'Comment (optional)' })]
     }),
     new FormEngineParameterModel({
       id: 'hasRegulatoryApprovals',
@@ -30,7 +30,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       label: 'Does it have all regulatory approvals, appropriate for the intended use?',
       validations: { isRequired: [true, 'Choose one option'] },
       items: yesPartiallyNoItems,
-      additional: [new FormEngineParameterModel({ id: 'hasRegulatoryApprovalsComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
+      additional: [new FormEngineParameterModel({ id: 'hasRegulatoryApprovalsComment', dataType: 'textarea', label: '', lengthLimit: 'small', description: 'Comment (optional)' })]
     }),
     new FormEngineParameterModel({
       id: 'hasEvidence',
@@ -38,7 +38,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       label: 'Does it have evidence to prove efficacy?',
       validations: { isRequired: [true, 'Choose one option'] },
       items: yesPartiallyNoItems,
-      additional: [new FormEngineParameterModel({ id: 'hasEvidenceComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
+      additional: [new FormEngineParameterModel({ id: 'hasEvidenceComment', dataType: 'textarea', label: '', lengthLimit: 'small', description: 'Comment (optional)' })]
     }),
     new FormEngineParameterModel({
       id: 'hasValidation',
@@ -46,7 +46,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       label: 'Does it have a real-world validation of organisational & financial benefit?',
       validations: { isRequired: [true, 'Choose one option'] },
       items: yesPartiallyNoItems,
-      additional: [new FormEngineParameterModel({ id: 'hasValidationComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
+      additional: [new FormEngineParameterModel({ id: 'hasValidationComment', dataType: 'textarea', label: '', lengthLimit: 'small', description: 'Comment (optional)' })]
     })
   ],
 
@@ -58,7 +58,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       description: 'This should be founded on a understanding of the value of the product to NHS patients, staff, services and organisations, gained through detailed market research',
       validations: { isRequired: [true, 'Choose one option'] },
       items: yesPartiallyNoItems,
-      additional: [new FormEngineParameterModel({ id: 'hasPropositionComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
+      additional: [new FormEngineParameterModel({ id: 'hasPropositionComment', dataType: 'textarea', label: '', lengthLimit: 'small', description: 'Comment (optional)' })]
     }),
     new FormEngineParameterModel({
       id: 'hasCompetitionKnowledge',
@@ -66,7 +66,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       label: 'Do they have a good insight into competitors, alternatives, and the market landscape?',
       validations: { isRequired: [true, 'Choose one option'] },
       items: yesPartiallyNoItems,
-      additional: [new FormEngineParameterModel({ id: 'hasCompetitionKnowledgeComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
+      additional: [new FormEngineParameterModel({ id: 'hasCompetitionKnowledgeComment', dataType: 'textarea', label: '', lengthLimit: 'small', description: 'Comment (optional)' })]
     }),
     new FormEngineParameterModel({
       id: 'hasImplementationPlan',
@@ -75,7 +75,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       description: 'An implementation plan should consider things like customer job roles affected, pathway redesign, route to reach market, understanding of the complexity and change management required.',
       validations: { isRequired: [true, 'Choose one option'] },
       items: yesPartiallyNoItems,
-      additional: [new FormEngineParameterModel({ id: 'hasImplementationPlanComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
+      additional: [new FormEngineParameterModel({ id: 'hasImplementationPlanComment', dataType: 'textarea', label: '', lengthLimit: 'small', description: 'Comment (optional)' })]
     }),
     new FormEngineParameterModel({
       id: 'hasScaleResource',
@@ -83,7 +83,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
       label: 'Do they have the resource to scale the innovation, or a viable plan to do this?',
       validations: { isRequired: [true, 'Choose one option'] },
       items: yesPartiallyNoItems,
-      additional: [new FormEngineParameterModel({ id: 'hasScaleResourceComment', dataType: 'text', label: '', description: 'Comment (optional)' })]
+      additional: [new FormEngineParameterModel({ id: 'hasScaleResourceComment', dataType: 'textarea', label: '', lengthLimit: 'small', description: 'Comment (optional)' })]
     })
   ],
 
