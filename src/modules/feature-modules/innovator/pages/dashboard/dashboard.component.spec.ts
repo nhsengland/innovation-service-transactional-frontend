@@ -15,7 +15,7 @@ import { DashboardComponent } from './dashboard.component';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { NotificationsService } from '@modules/shared/services/notifications.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
 
@@ -26,7 +26,6 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
   let activatedRoute: ActivatedRoute;
-  let router: Router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -48,7 +47,6 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
 
     activatedRoute = TestBed.inject(ActivatedRoute);
-    router = TestBed.inject(Router);
   });
 
   it('should create the component', () => {
@@ -135,11 +133,13 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
   });
 
   it('should have alert when password changed', () => {
-
+    activatedRoute.snapshot.queryParams = { alert: 'xxxx' };
+    // activatedRoute.queryParams = of({ alert: 'alertDisabled' });
 
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     component.user.passwordResetOn = new Date(new Date().getTime() -  2 * 60000).toString();
+
     const mockAlert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
 
     fixture.detectChanges();
