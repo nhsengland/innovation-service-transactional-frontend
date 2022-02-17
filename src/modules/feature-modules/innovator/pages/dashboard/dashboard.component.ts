@@ -9,6 +9,7 @@ import { AlertType } from '@app/base/models';
 import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { getInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
+import { count } from 'console';
 
 @Component({
   selector: 'app-innovator-pages-dashboard',
@@ -20,15 +21,13 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   user: {
     displayName: string,
-    innovations: { id: string, name: string }[],
+    innovations: { id: string, name: string, notifications: number }[],
     passwordResetOn: string
   };
 
   innovationTransfers: getInnovationTransfersDTO[] = [];
 
   innovationGuidesUrl = `${this.stores.environment.BASE_URL}/innovation-guides`;
-
-  notifications: { [key: string]: number };
 
   constructor(
     private notificationsService: NotificationsService,
@@ -42,44 +41,23 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     const user = this.stores.authentication.getUserInfo();
     this.user = {
       displayName: user.displayName,
-      innovations: user.innovations,
+      innovations: user.innovations.map(item => ({ ...item, ...{ notifications: 0 } })),
       passwordResetOn: user.passwordResetOn
     };
-
-    this.notifications = {
-      ACTION: 0,
-      COMMENT: 0,
-      INNOVATION: 0,
-      SUPPORT: 0,
-      DATA_SHARING: 0,
-    };
-
   }
 
   ngOnInit(): void {
     this.getInnovationsTransfers();
-    const user = this.stores.authentication.getUserInfo();
-    this.user = {
-      displayName: user.displayName,
-      innovations: user.innovations,
-      passwordResetOn: user.passwordResetOn
-    };
 
     const startTime = new Date();
     const endTime = new Date(this.user.passwordResetOn);
     const timediffer = startTime.getTime() - endTime.getTime();
     const resultInMinutes = Math.round(timediffer / 60000);
-
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'alertDisabled':
-        break;
-      default:
-        if (resultInMinutes <= 2) {
-          this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
-        }
-        break;
+    if (resultInMinutes <= 2) {
+      this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
     }
 
+    this.notificationsCount();
 
   }
 
@@ -101,28 +79,28 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   }
 
-  notificationsCount(id: string): number {
+  notificationsCount(): void {
+    this.user.innovations.map((item) => {
 
-    let count = 0;
+      this.notificationsService.getAllUnreadNotificationsGroupedByContext(item.id).subscribe(
+        response => {
 
-    this.notificationsService.getAllUnreadNotificationsGroupedByContext(id).subscribe(
-      response => {
-        this.notifications = response;
-        this.setPageStatus('READY');
-      },
-      error => {
-        this.setPageStatus('READY');
-        this.logger.error('Error fetching innovations information', error);
-      }
-    );
+          item.notifications = Object.values(response).reduce((partialSum, a) => partialSum + a, 0);
 
-    const notifications = this.notificationsService.notifications;
-    const names = Object.keys(this.notificationsService.notifications);
-    for (const name of names) {
-      count += notifications[name];
-    }
-
-    return count;
+        },
+        error => {
+          this.setPageStatus('READY');
+          this.alert = {
+            type: 'ERROR',
+            title: 'An error occurred',
+            message: 'Please try again or contact us for further help',
+            setFocus: true
+          };
+          this.logger.error('Error fetching innovations information', error);
+        }
+      );
+    });
+    this.setPageStatus('READY');
   }
 
 
@@ -135,7 +113,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         const user = this.stores.authentication.getUserInfo();
         this.user = {
           displayName: user.displayName,
-          innovations: user.innovations,
+          innovations: user.innovations.map(item => ({ ...item, ...{ notifications: 0 } })),
           passwordResetOn: user.passwordResetOn
         };
         return of(true);
