@@ -9,8 +9,6 @@ import { AlertType } from '@app/base/models';
 import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { getInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
-import { count } from 'console';
-
 @Component({
   selector: 'app-innovator-pages-dashboard',
   templateUrl: './dashboard.component.html'
