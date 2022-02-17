@@ -46,12 +46,6 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   ngOnInit(): void {
     this.getInnovationsTransfers();
-    // const user = this.stores.authentication.getUserInfo();
-    // this.user = {
-    //   displayName: user.displayName,
-    //   innovations: user.innovations.map(item => ({ ...item, ...{ notifications: 0 } })),
-    //   passwordResetOn: user.passwordResetOn
-    // };
 
     const startTime = new Date();
     const endTime = new Date(this.user.passwordResetOn);

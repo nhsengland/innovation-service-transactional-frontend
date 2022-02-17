@@ -134,7 +134,6 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
 
   it('should have alert when password changed', () => {
     activatedRoute.snapshot.queryParams = { alert: 'xxxx' };
-    // activatedRoute.queryParams = of({ alert: 'alertDisabled' });
 
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
