@@ -91,7 +91,7 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
   hasScaleResource: null | string;
   hasScaleResourceComment: null | string;
   summary: null | string;
-  organisations: { id: string; name: string; acronym: null | string; }[];
+  organisations: { id: string; name: string; acronym: null | string; organisationUnits: {id: string; name: string; acronym: string; }[];}[];
   assignToName: string;
   finishedAt: null | string;
   updatedBy: null | string;
@@ -101,7 +101,7 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
 };
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
-  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'organisations'> & { organisations: string[], orgNames: string[] }
+  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation' | 'organisations'> & { organisations: string[], orgNames: string[] , orgUnits: { id: string; name: string; acronym: null | string; organisationUnits: {id: string; name: string; acronym: string; }[];}[]; }
 };
 
 export type getInnovationTransfersDTO = {
@@ -283,6 +283,7 @@ export class InnovatorService extends CoreService {
           updatedBy: response.updatedBy,
           createdAt: response.createdAt,
           createdBy: response.createdBy,
+          orgUnits: response.organisations,
         }
       }))
     );

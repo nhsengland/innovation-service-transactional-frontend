@@ -27,7 +27,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
   alert: AlertType = { type: null };
 
-  assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] & { organisationsNames: string[] } | undefined;
+  assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] & { organisationsNames: {[key : string] : any}[] } | undefined;
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
@@ -75,7 +75,8 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
       this.logHistory = supportLog;
 
-      this.assessment = { ...needsAssessmentInfo.assessment, organisationsNames: needsAssessmentInfo.assessment.organisations.map(item => item.name) };
+      // this.assessment = { ...needsAssessmentInfo.assessment, organisationsNames: needsAssessmentInfo.assessment.organisations.map(item => item.name) };
+      this.assessment = { ...needsAssessmentInfo.assessment, organisationsNames: needsAssessmentInfo.assessment.organisations };
 
       this.shouldShowUpdatedAt = DatesHelper.dateDiff(this.assessment.finishedAt || '', this.assessment.updatedAt || '') > 0;
 
