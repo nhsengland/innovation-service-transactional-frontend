@@ -39,7 +39,7 @@
         <a routerLink="/innovator/innovations/{{ item.id }}" class="nhsuk-u-font-size-32 nhsuk-u-font-weight-bold">
           {{ item.name }} <span class="nhsuk-u-visually-hidden"> Access {{ item.name }} innovation </span>
         </a>
-        <notification-tag *ngIf="notificationsCount(item.id) > 0" [count]="notificationsCount(item.id)">
+        <notification-tag *ngIf="item.notifications > 0" [count]="item.notifications">
         </notification-tag>
       </li>
     </ul>
