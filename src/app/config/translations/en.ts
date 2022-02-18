@@ -159,15 +159,19 @@ export const locale = {
             },
             lastAccessorUserOnOrganisation: {
               label: 'User is not the only one on his organisation',
-              description: `{{ organisation.name }}`
+              description: '{{ organisation.name }}'
             },
             lastAccessorUserOnOrganisationUnit: {
               label: 'User is not the only one on his unit',
-              description: `{{ unit.name }}`
+              description: '{{ unit.name }}'
             },
             lastAccessorFromUnitProvidingSupport: {
               label: 'User is not the only one providing support',
-              description: `{{ innovations.length }} innovations being supported`
+              description: {
+               none: 'No innovation is being supported',
+               singular: '{{ supports.innovations.length }} innovation being supported',
+               plural: '{{ supports.innovations.length }} innovations being supported',
+              }
             }
           }
 

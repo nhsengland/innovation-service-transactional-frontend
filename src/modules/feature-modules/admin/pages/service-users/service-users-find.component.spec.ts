@@ -11,7 +11,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageServiceUsersFindComponent } from './service-users-find.component';
 
-import { searchUserEndpointDTO, ServiceUsersService } from '../../services/service-users.service';
+import { searchUserEndpointOutDTO, ServiceUsersService } from '../../services/service-users.service';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersFindComponent', () => {
@@ -48,11 +48,12 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersFindComponent'
 
   it('should call onSubmit() and return success', () => {
 
-    const responseMock: searchUserEndpointDTO[] = [{
+    const responseMock: searchUserEndpointOutDTO[] = [{
       id: ':id',
       displayName: ':displayName',
       email: 'test@example.com',
       type: 'ACCESSOR',
+      typeLabel: 'Accessor',
       userOrganisations: [
         {
           id: ':organisation_id',

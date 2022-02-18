@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { LinkType } from '@app/base/models';
 
-import { searchUserEndpointDTO, ServiceUsersService } from '../../services/service-users.service';
+import { searchUserEndpointOutDTO, ServiceUsersService } from '../../services/service-users.service';
 
 
 @Component({
@@ -19,9 +19,9 @@ export class PageServiceUsersFindComponent extends CoreComponent implements OnIn
   formSubmitted = false;
   form = new FormGroup({
     email: new FormControl('')
-  }, { updateOn: 'blur' });
+  }, { updateOn: 'change' }); // Needs to be 'change' to allow submtitting using the enter key.
 
-  usersList: searchUserEndpointDTO[] = [];
+  usersList: searchUserEndpointOutDTO[] = [];
 
 
   constructor(
