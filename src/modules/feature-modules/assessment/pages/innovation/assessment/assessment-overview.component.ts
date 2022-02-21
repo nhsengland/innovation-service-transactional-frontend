@@ -75,7 +75,6 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
       this.logHistory = supportLog;
 
-      // this.assessment = { ...needsAssessmentInfo.assessment, organisationsNames: needsAssessmentInfo.assessment.organisations.map(item => item.name) };
       this.assessment = { ...needsAssessmentInfo.assessment, organisationsNames: needsAssessmentInfo.assessment.organisations };
 
       this.shouldShowUpdatedAt = DatesHelper.dateDiff(this.assessment.finishedAt || '', this.assessment.updatedAt || '') > 0;
