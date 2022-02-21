@@ -100,10 +100,11 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     return this.authenticationService.saveUserInfo(body as saveUserInfoDTO);
   }
 
-  getRoleDescription(role: 'INNOVATOR_OWNER' | 'ASSESSMENT' | 'INNOVATOR' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR'): string {
+  getRoleDescription(role: 'ADMIN' | 'INNOVATOR_OWNER' | 'ASSESSMENT' | 'INNOVATOR' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR'): string {
     switch (role) {
+      case 'ADMIN': return 'Administrator';
       case 'INNOVATOR_OWNER': return 'Owner';
-      case 'ASSESSMENT': return 'Assessment';
+      case 'ASSESSMENT': return 'Needs Assessor';
       case 'INNOVATOR': return 'Innovator';
       case 'ACCESSOR': return 'Accessor';
       case 'QUALIFYING_ACCESSOR': return 'Qualifying accessor';

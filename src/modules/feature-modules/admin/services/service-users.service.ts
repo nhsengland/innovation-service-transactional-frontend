@@ -39,7 +39,12 @@ export type getLockUserRulesInDTO = {
   },
   lastAccessorFromUnitProvidingSupport: {
     valid: boolean,
-    meta?: { innovations: { id: string, name: string }[] }
+    meta?: {
+      supports: {
+        count: number;
+        innovations: { innovationId: string, innovationName: string; unitId: string; unitName: string }[]
+      }
+    }
   }
 };
 export type getLockUserRulesOutDTO = {
@@ -76,7 +81,7 @@ export type UserSearchResult = {
   serviceRoles?: { [key: string]: any }[];
 };
 
-export type searchUserEndpointDTO = {
+export type searchUserEndpointInDTO = {
   id: string;
   displayName: string;
   type: 'INNOVATOR' | 'ACCESSOR' | 'ASSESSMENT' | 'ADMIN',
@@ -94,6 +99,7 @@ export type searchUserEndpointDTO = {
     }]
   }]
 };
+export type searchUserEndpointOutDTO = searchUserEndpointInDTO & { typeLabel: string };
 
 @Injectable()
 export class ServiceUsersService extends CoreService {
@@ -176,12 +182,12 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  searchUser(email: string): Observable<searchUserEndpointDTO[]> {
+  searchUser(email: string): Observable<searchUserEndpointOutDTO[]> {
 
     const url = new UrlModel(this.API_URL).addPath('/user-admin/users').setQueryParams({ email });
-    return this.http.get<searchUserEndpointDTO[]>(url.buildUrl()).pipe(
+    return this.http.get<searchUserEndpointInDTO[]>(url.buildUrl()).pipe(
       take(1),
-      map(response => response),
+      map(response => response.map(item => ({ ...item, typeLabel: this.stores.authentication.getRoleDescription(item.type) })))
     );
 
   }

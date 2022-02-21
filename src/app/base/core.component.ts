@@ -199,7 +199,7 @@ export class CoreComponent implements OnInit, OnDestroy {
   }
 
   translationExists(translation: string): boolean {
-    return this.translateService.instant(translation) === translation;
+    return this.translateService.instant(translation) !== translation;
   }
 
   ngOnDestroy(): void {
