@@ -27,7 +27,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
   alert: AlertType = { type: null };
 
-  assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] & { organisationsNames: {[key : string] : any}[] } | undefined;
+  assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] & { organisationsNames: {[key: string]: any}[] } | undefined;
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 

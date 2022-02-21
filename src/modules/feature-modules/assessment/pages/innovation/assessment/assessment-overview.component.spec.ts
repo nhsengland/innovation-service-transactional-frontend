@@ -123,7 +123,7 @@ describe('FeatureModules/Assessment/Innovation/InnovationAssessmentOverviewCompo
       support: { id: null }
     };
     assessmentService.getInnovationNeedsAssessment = () => of(responseMock);
-    const expected = { ...responseMock.assessment, organisationsNames: ['Org name'] };
+    const expected = { ...responseMock.assessment, organisationsNames: [{ id: 'OrgId', name: 'Org name', acronym: 'ORG', organisationUnits: [{ id: 'OrgUnitId', name: 'Org Unit name', acronym: 'ORGu' }] }] };
 
     fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
     component = fixture.componentInstance;
