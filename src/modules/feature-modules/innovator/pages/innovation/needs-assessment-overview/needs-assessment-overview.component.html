@@ -82,7 +82,7 @@
                 <p class="text-pre-wrap">{{ assessment?.summary }}</p>
 
                 <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Suggested organisations</h2>
-                <div *ngFor="let organisation of assessment?.orgUnits">
+                <div *ngFor="let organisation of assessment?.organisations">
                   <p class="nhsuk-u-margin-bottom-1"> {{ organisation.name }} </p>
                     <div *ngFor="let unit of organisation?.organisationUnits" >
                       <ul *ngIf="organisation.name != unit.name" class="nhsuk-list nhsuk-u-margin-left-3 nhsuk-u-margin-bottom-0 border-left-inset-neutral">

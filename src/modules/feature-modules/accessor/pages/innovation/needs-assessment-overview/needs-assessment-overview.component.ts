@@ -28,7 +28,10 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   innovation: InnovationDataResolverType;
 
   assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
-  suggestedOrganisations: { [key: string]: any }[] = [];
+  suggestedOrganisations: {
+    id: string; name: string; acronym: null | string;
+    organisationUnits: { id: string; name: string; acronym: null | string; }[];
+  }[] = [];
   logHistory: getSupportLogOutDTO[] = [];
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
