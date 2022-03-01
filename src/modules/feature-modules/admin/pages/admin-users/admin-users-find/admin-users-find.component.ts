@@ -3,17 +3,17 @@ import { Component, OnInit } from '@angular/core';
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { LinkType } from '@app/base/models';
 
-import { searchUserEndpointOutDTO, ServiceUsersService } from '../../services/service-users.service';
+import { searchUserEndpointOutDTO, ServiceUsersService } from '../../../services/service-users.service';
 
 
 @Component({
-  selector: 'app-admin-pages-service-users-find',
-  templateUrl: './service-users-find.component.html'
+  selector: 'app-admin-pages-users-find',
+  templateUrl: './admin-users-find.component.html'
 })
-export class PageServiceUsersFindComponent extends CoreComponent implements OnInit {
+export class PageAdminUsersFindComponent extends CoreComponent implements OnInit {
 
   titleActions: LinkType[] = [
-    { type: 'button', label: 'New user', url: '/admin/service-users/new' }
+    { type: 'button', label: 'New Admin user', url: '/admin/administration-users/new' }
   ];
 
   formSubmitted = false;
@@ -29,7 +29,7 @@ export class PageServiceUsersFindComponent extends CoreComponent implements OnIn
   ) {
 
     super();
-    this.setPageTitle('Find a service user');
+    this.setPageTitle('Find a admin user');
 
   }
 
@@ -44,8 +44,9 @@ export class PageServiceUsersFindComponent extends CoreComponent implements OnIn
     this.setPageStatus('LOADING');
     this.formSubmitted = true;
 
-    this.serviceUsersService.searchUser(this.form.get('email')!.value, false).subscribe(
+    this.serviceUsersService.searchUser(this.form.get('email')!.value, true).subscribe(
       response => {
+        console.log(response);
         this.usersList = response;
         this.setPageStatus('READY');
       },
