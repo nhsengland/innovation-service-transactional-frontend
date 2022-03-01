@@ -31,7 +31,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() parameters: FormEngineParameterModel[] = [];
   @Input() values?: { [key: string]: any } = {};
-  @Output() formChanges: any = new EventEmitter();
+  @Output() formChanges: any = new EventEmitter<{ [key: string]: any }>();
 
   private formChangeSubscription = new Subscription();
   private loggerContext = 'Catalog::FormsModule::EngineComponent::';
@@ -104,6 +104,8 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
     return index;
   }
 
+
+  isFormPending(): boolean { return this.form.pending; }
 
   getFormValues(triggerFormChanges?: boolean): { valid: boolean, data: { [key: string]: any } } {
 

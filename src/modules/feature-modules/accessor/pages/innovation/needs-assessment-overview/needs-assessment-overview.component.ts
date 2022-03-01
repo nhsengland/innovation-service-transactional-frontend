@@ -10,7 +10,7 @@ import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/ne
 import { getInnovationNeedsAssessmentEndpointOutDTO, getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/accessor/services/accessor.service';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
-import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
+import { InnovationDataResolverType, OrganisationModel } from '@modules/stores/innovation/innovation.models';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -28,7 +28,10 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   innovation: InnovationDataResolverType;
 
   assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
-  suggestedOrganisations: string[] = [];
+  suggestedOrganisations: {
+    id: string; name: string; acronym: null | string;
+    organisationUnits: { id: string; name: string; acronym: null | string; }[];
+  }[] = [];
   logHistory: getSupportLogOutDTO[] = [];
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
@@ -66,7 +69,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
       this.logHistory = supportLog;
 
       this.assessment = needsAssessmentInfo.assessment;
-      this.suggestedOrganisations = this.assessment.organisations.map(item => item.name);
+      this.suggestedOrganisations = this.assessment.organisations;
 
       const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === needsAssessmentInfo.assessment.maturityLevel) || 0) + 1;
       this.innovationMaturityLevel = {

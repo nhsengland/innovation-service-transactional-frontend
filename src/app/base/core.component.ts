@@ -198,6 +198,10 @@ export class CoreComponent implements OnInit, OnDestroy {
     return this.translateService.instant(translation, params);
   }
 
+  translationExists(translation: string): boolean {
+    return this.translateService.instant(translation) !== translation;
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
   }

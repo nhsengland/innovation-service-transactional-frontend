@@ -67,7 +67,12 @@
       <ng-container *ngIf="additional">
         <ng-container *ngFor="let addi of additional; let i = index">
           <div class="nhsuk-u-padding-top-2"></div>
-          <theme-form-input [formControl]="conditionalFormControl(addi.id)" [label]="addi.label" [description]="addi.description" [pageUniqueField]="false"></theme-form-input>
+          <ng-container *ngIf="addi.dataType === 'text'">
+            <theme-form-input [formControl]="conditionalFormControl(addi.id)" [label]="addi.label" [description]="addi.description" [pageUniqueField]="false"></theme-form-input>
+          </ng-container>
+          <ng-container *ngIf="addi.dataType === 'textarea'">
+            <theme-form-textarea [formControl]="conditionalFormControl(addi.id)" [label]="addi.label" [description]="addi.description" [pageUniqueField]="false"></theme-form-textarea>
+          </ng-container>
         </ng-container>
       </ng-container>
 

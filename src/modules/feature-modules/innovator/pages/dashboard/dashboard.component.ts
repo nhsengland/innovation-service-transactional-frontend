@@ -9,7 +9,6 @@ import { AlertType } from '@app/base/models';
 import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { getInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
-
 @Component({
   selector: 'app-innovator-pages-dashboard',
   templateUrl: './dashboard.component.html'
@@ -20,7 +19,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   user: {
     displayName: string,
-    innovations: { id: string, name: string }[],
+    innovations: { id: string, name: string, notifications: number }[],
     passwordResetOn: string
   };
 
@@ -40,36 +39,24 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     const user = this.stores.authentication.getUserInfo();
     this.user = {
       displayName: user.displayName,
-      innovations: user.innovations,
+      innovations: user.innovations.map(item => ({ ...item, ...{ notifications: 0 } })),
       passwordResetOn: user.passwordResetOn
     };
-
-
   }
 
   ngOnInit(): void {
     this.getInnovationsTransfers();
-    const user = this.stores.authentication.getUserInfo();
-    this.user = {
-      displayName: user.displayName,
-      innovations: user.innovations,
-      passwordResetOn: user.passwordResetOn
-    };
 
     const startTime = new Date();
     const endTime = new Date(this.user.passwordResetOn);
     const timediffer = startTime.getTime() - endTime.getTime();
     const resultInMinutes = Math.round(timediffer / 60000);
-
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'alertDisabled':
-        break;
-      default:
-        if (resultInMinutes <= 2) {
-          this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
-        }
-        break;
+    if (resultInMinutes <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {
+      this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
     }
+
+    this.notificationsCount();
+
   }
 
 
@@ -90,15 +77,28 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   }
 
-  notificationsCount(): number {
-    let count = 0;
-    const notifications = this.notificationsService.notifications;
-    const names = Object.keys(this.notificationsService.notifications);
-    for (const name of names) {
-      count += notifications[name];
-    }
+  notificationsCount(): void {
+    this.user.innovations.map((item) => {
 
-    return count;
+      this.notificationsService.getAllUnreadNotificationsGroupedByContext(item.id).subscribe(
+        response => {
+
+          item.notifications = Object.values(response).reduce((partialSum, a) => partialSum + a, 0);
+
+        },
+        error => {
+          this.setPageStatus('READY');
+          this.alert = {
+            type: 'ERROR',
+            title: 'An error occurred',
+            message: 'Please try again or contact us for further help',
+            setFocus: true
+          };
+          this.logger.error('Error fetching innovations information', error);
+        }
+      );
+    });
+    this.setPageStatus('READY');
   }
 
 
@@ -111,7 +111,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         const user = this.stores.authentication.getUserInfo();
         this.user = {
           displayName: user.displayName,
-          innovations: user.innovations,
+          innovations: user.innovations.map(item => ({ ...item, ...{ notifications: 0 } })),
           passwordResetOn: user.passwordResetOn
         };
         return of(true);

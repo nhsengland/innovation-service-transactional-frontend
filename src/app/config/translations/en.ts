@@ -151,6 +151,30 @@ export const locale = {
               message: `{{ actionUserName }} marked an action as complete`
             }
           }
+        },
+        user: {
+          lock_user_validations: {
+            lastAssessmentUserOnPlatform: {
+              label: 'User is not the only one on the service'
+            },
+            lastAccessorUserOnOrganisation: {
+              label: 'User is not the only one on his organisation',
+              description: '{{ organisation.name }}'
+            },
+            lastAccessorUserOnOrganisationUnit: {
+              label: 'User is not the only one on his unit',
+              description: '{{ unit.name }}'
+            },
+            lastAccessorFromUnitProvidingSupport: {
+              label: 'User is not the only one providing support',
+              description: {
+               none: 'No innovation is being supported',
+               singular: '{{ supports.innovations.length }} innovation being supported',
+               plural: '{{ supports.innovations.length }} innovations being supported',
+              }
+            }
+          }
+
         }
       },
 

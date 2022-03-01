@@ -15,7 +15,7 @@ import { DashboardComponent } from './dashboard.component';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { NotificationsService } from '@modules/shared/services/notifications.service';
-
+import { ActivatedRoute } from '@angular/router';
 
 describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
 
@@ -25,6 +25,7 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
 
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
+  let activatedRoute: ActivatedRoute;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -45,6 +46,7 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
 
+    activatedRoute = TestBed.inject(ActivatedRoute);
   });
 
   it('should create the component', () => {
@@ -94,9 +96,53 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
 
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
+    component.notificationsCount();
 
-    expect(component.notificationsCount()).toBe(1);
+    expect(component.pageStatus).toBe('READY');
+  });
 
+  it('should have notifications with API success', () => {
+    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+
+    authenticationStore.isValidUser = () => true;
+    notificationsService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
+
+    fixture = TestBed.createComponent(DashboardComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    notificationsService.getAllUnreadNotificationsGroupedByContext(activatedRoute.snapshot.params.innovationId).subscribe(
+      response => expect(response).toEqual({ INNOVATION: 1 })
+    );
+  });
+
+  it('should NOT have notifications with API error', () => {
+
+    notificationsService.getAllUnreadNotificationsGroupedByContext = () => throwError('error');
+    const error = {
+      type: 'ERROR',
+      title: 'An error occurred',
+      message: 'Please try again or contact us for further help',
+      setFocus: true
+    };
+
+    fixture = TestBed.createComponent(DashboardComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component.alert).toEqual(error);
+  });
+
+  it('should have alert when password changed', () => {
+    activatedRoute.snapshot.queryParams = { alert: 'xxxx' };
+
+    fixture = TestBed.createComponent(DashboardComponent);
+    component = fixture.componentInstance;
+    component.user.passwordResetOn = new Date(new Date().getTime() -  2 * 60000).toString();
+
+    const mockAlert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
+
+    fixture.detectChanges();
+    expect(component.alert).toEqual(mockAlert);
   });
 
   it('should run onSubmitTransferResponse() ACCEPTING transfer and call API with success', () => {

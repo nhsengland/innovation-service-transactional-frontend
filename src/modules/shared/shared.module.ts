@@ -25,6 +25,9 @@ import { PageInnovationSupportStatusListComponent } from './pages/innovation/inn
 import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 
+// Pipes.
+import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
+
 // Services.
 import { OrganisationsService } from './services/organisations.service';
 import { NotificationsService } from './services/notifications.service';
@@ -57,6 +60,9 @@ import { NotificationsService } from './services/notifications.service';
 
     PageErrorComponent,
     PageNotFoundComponent,
+
+    // Pipes.
+    PluralTranslatePipe
   ],
   providers: [
     OrganisationsService,
@@ -67,7 +73,10 @@ import { NotificationsService } from './services/notifications.service';
     TranslateModule,
 
     // Modules.
-    FormsModule
+    FormsModule,
+
+    // Pipes.
+    PluralTranslatePipe
   ]
 })
 export class SharedModule { }

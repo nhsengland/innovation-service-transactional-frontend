@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CoreComponent } from '@app/base';
+import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { LinkType } from '@app/base/models';
+
+import { searchUserEndpointOutDTO, ServiceUsersService } from '../../services/service-users.service';
 
 
 @Component({
@@ -14,13 +16,44 @@ export class PageServiceUsersFindComponent extends CoreComponent implements OnIn
     { type: 'button', label: 'New user', url: '/admin/service-users/new' }
   ];
 
-  constructor() {
+  formSubmitted = false;
+  form = new FormGroup({
+    email: new FormControl('')
+  }, { updateOn: 'change' }); // Needs to be 'change' to allow submtitting using the enter key.
+
+  usersList: searchUserEndpointOutDTO[] = [];
+
+
+  constructor(
+    private serviceUsersService: ServiceUsersService
+  ) {
 
     super();
-    this.setPageTitle('Service users');
+    this.setPageTitle('Find a service user');
 
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+
+    this.setPageStatus('READY');
+
+  }
+
+  onSubmit(): void {
+
+    this.setPageStatus('LOADING');
+    this.formSubmitted = true;
+
+    this.serviceUsersService.searchUser(this.form.get('email')!.value).subscribe(
+      response => {
+        this.usersList = response;
+        this.setPageStatus('READY');
+      },
+      error => {
+        this.usersList = [];
+        this.setPageStatus('READY');
+      });
+
+  }
 
 }
