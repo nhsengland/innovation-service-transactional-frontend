@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 // Base layout.
 import { AdminLayoutComponent } from './base/admin-layout.component';
+import { PageAdminUsersFindComponent } from './pages/admin-users/admin-users-find/admin-users-find.component';
 
 // Pages.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
@@ -34,7 +35,18 @@ const routes: Routes = [
       },
 
       // NOTE: When creating the future admin-users routes, a guard should be created to protect those routes!
-
+      {
+        path: 'administration-users',
+        data: { breadcrumb: 'administartion users' },
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            data: { breadcrumb: null },
+            component: PageAdminUsersFindComponent
+          }
+        ]
+      },
       {
         path: 'service-users',
         data: { breadcrumb: 'Service users' },
