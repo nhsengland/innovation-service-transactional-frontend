@@ -121,13 +121,18 @@
                       }}
                     </span>
                   </ng-container>
-                  <input id="comment-{{ comment.id }}" formControlName="{{ comment.id }}" [name]="comment.id"
-                    type="text" maxlength="2000" class="nhsuk-input"
-                    attr.aria-labelledby="comment-reply-label-{{ comment.id }}{{ formSubmittedFields[comment.id] ? ' error-' + comment.id : ''}}" />
-                  <button class="nhsuk-button nhsuk-u-font-size-14 nhsuk-u-margin-left-2" (click)="onReply(comment.id)">
-                    Reply <span class="nhsuk-u-visually-hidden"> for comment made by {{ comment.user.name }} on {{
-                      comment.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </span>
-                  </button>
+                  <textarea id="comment-{{ comment.id }}" formControlName="{{ comment.id }}" [name]="comment.id"
+                    type="text" [maxlength]="2000" class="nhsuk-input" #commentId 
+                    attr.aria-labelledby="comment-reply-label-{{ comment.id }}{{ formSubmittedFields[comment.id] ? ' error-' + comment.id : ''}}" ></textarea>                    
+                    <div class="d-flex justify-content-space-between nhsuk-u-margin-bottom-2">
+                      <ng-container *ngIf="lengthLimitCharacters - (commentId.value || '').length > -1">
+                        You have {{ lengthLimitCharacters - (commentId.value || '').length }} characters remaining
+                      </ng-container>
+                      <button class="nhsuk-button nhsuk-u-font-size-14 nhsuk-u-margin-left-2" (click)="onReply(comment.id)">
+                        Reply <span class="nhsuk-u-visually-hidden"> for comment made by {{ comment.user.name }} on {{
+                          comment.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </span>
+                      </button>  
+                    </div>                
                 </div>
               </div>
 

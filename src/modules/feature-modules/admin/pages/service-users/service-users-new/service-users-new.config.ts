@@ -34,7 +34,7 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
       parameters: [{
         id: 'type',
         dataType: 'radio-group',
-        label: 'Kindly select appropriate user type',
+        label: 'Select user type',
         validations: { isRequired: [true, 'Choose one option'] },
         items: [
           { value: 'ASSESSMENT', label: 'Needs Assessor' },
@@ -48,7 +48,7 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
       parameters: [{
         id: 'email',
         dataType: 'text',
-        label: 'Kindly provide Email Id',
+        label: 'Provide the new user`s email address',
         validations: {
           isRequired: [true, 'Email is required'],
           pattern: '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'
@@ -60,7 +60,8 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
       parameters: [{
         id: 'name',
         dataType: 'text',
-        label: 'Kindly provide Name',
+        label: 'Name of the new user',
+        description: 'Include the first name and surname of the user, their name will appear on the service as it is written here.',
         validations: { isRequired: [true, 'Name is required'] }
       }]
     }),
@@ -89,7 +90,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
         parameters: [{
           id: 'organisationAcronym',
           dataType: 'radio-group',
-          label: 'Kindly select organisation?',
+          label: 'Which organisation is the new user affiliated to?',
           validations: { isRequired: [true, 'Organisation is required'] },
           items: data != null && data.organisationsList != null ? data.organisationsList.map(o => ({ value: o.acronym, label: o.name })) : []
         }]
@@ -107,7 +108,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
           parameters: [{
             id: 'organisationUnitAcronym',
             dataType: 'radio-group',
-            label: 'Kindly select unit?',
+            label: 'Which unit is the new user affiliated to?',
             validations: { isRequired: [true, 'Unit is required'] },
             items: selectedOrganisationUnits
           }]
@@ -190,10 +191,10 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Summar
         );
       }
     }
-    toReturn.push(
-      { label: 'Role', value: data.type === 'QUALIFYING_ACCESSOR' ? 'Qualifying Accessor' : data.type === 'ACCESSOR' ? 'Accessor' : '', editStepNumber: 1 }
-    );
-    lastMarkStep = 6;
+    // toReturn.push(
+    //   { label: 'Role', value: data.type === 'QUALIFYING_ACCESSOR' ? 'Qualifying Accessor' : data.type === 'ACCESSOR' ? 'Accessor' : '', editStepNumber: 1 }
+    // );
+    lastMarkStep = 5;
   }
   return toReturn;
 }
