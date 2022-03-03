@@ -215,7 +215,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
   it('should run getInnovationInfo() and return success', () => {
 
     const responseMock = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: null, categories: ['Medical'], otherCategoryDescription: '' },
+      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: null, categories: ['Medical'], otherCategoryDescription: '' },
       contact: { name: 'A name' },
       assessment: { id: '01' },
       support: { id: '01', status: 'WAITING' }

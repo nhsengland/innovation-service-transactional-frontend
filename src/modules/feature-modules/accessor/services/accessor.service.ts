@@ -96,6 +96,7 @@ export type getInnovationInfoEndpointDTO = {
     postCode: string;
     categories: string[];
     otherCategoryDescription: null | string;
+    companySize: string;
   };
   contact: {
     name: string;
