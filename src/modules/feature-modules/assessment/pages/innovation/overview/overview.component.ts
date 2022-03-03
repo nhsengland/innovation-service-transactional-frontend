@@ -21,7 +21,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationId: string;
   innovation: getInnovationInfoEndpointDTO | undefined;
 
-  innovationSummary: { label: string; value: string; }[] = [];
+  innovationSummary: { label: string; value: null | string; }[] = [];
   innovatorSummary: { label: string; value: string; }[] = [];
 
 
@@ -40,7 +40,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
 
   ngOnInit(): void {
-
     this.assessmentService.getInnovationInfo(this.innovationId).subscribe(
       response => {
 
@@ -48,6 +47,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
         this.innovationSummary = [
           { label: 'Company', value: response.summary.company },
+          { label: 'Company size', value: response.summary.companySize },
           { label: 'Location', value: `${response.summary.countryName}${response.summary.postCode ? ', ' + response.summary.postCode : ''}` },
           { label: 'Description', value: response.summary.description },
           { label: 'Categories', value: response.summary.categories.map(v => v === 'OTHER' ? response.summary.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
