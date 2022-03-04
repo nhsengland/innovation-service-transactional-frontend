@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 // Base layout.
 import { AdminLayoutComponent } from './base/admin-layout.component';
 import { PageAdminUsersFindComponent } from './pages/admin-users/admin-users-find/admin-users-find.component';
+import { PageAdminUsersInfoComponent } from './pages/admin-users/admin-users-info/admin-users-info.component';
 
 // Pages.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
@@ -44,6 +45,15 @@ const routes: Routes = [
             pathMatch: 'full',
             data: { breadcrumb: null },
             component: PageAdminUsersFindComponent
+          },
+          {
+            path: ':userId',
+            pathMatch: 'full',
+            resolve: { user: ServiceUserDataResolver },
+            data: {
+              breadcrumb: (data: { user: { id: string, displayName: string } }) => `${data.user.displayName}`
+            },
+            component: PageAdminUsersInfoComponent
           }
         ]
       },
