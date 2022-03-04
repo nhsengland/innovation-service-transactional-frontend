@@ -26,6 +26,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
   innovation: InnovationDataResolverType;
   currentCreatedOrder: 'asc' | 'desc';
 
+  lengthLimitCharacters = 2000;
   commentsList: getInnovationCommentsDTO[];
 
   form = new FormGroup({});

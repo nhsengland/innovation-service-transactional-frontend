@@ -1,6 +1,6 @@
 .reply-container {
 
-  display: flex;
+  // display: flex;
   flex-wrap: wrap;
 
   .nhsuk-error-message {
@@ -10,6 +10,10 @@
 
   input {
     flex: 1;
+  }
+
+  textarea {
+    height: 150px;
   }
 
   button {

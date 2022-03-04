@@ -36,7 +36,18 @@ const routes: Routes = [
       },
 
       // NOTE: When creating the future admin-users routes, a guard should be created to protect those routes!
-
+      {
+        path: 'administration-users',
+        data: { breadcrumb: 'administartion users' },
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            data: { breadcrumb: null },
+            component: PageAdminUsersFindComponent
+          }
+        ]
+      },
       {
         path: 'service-users',
         data: { breadcrumb: 'Service users' },

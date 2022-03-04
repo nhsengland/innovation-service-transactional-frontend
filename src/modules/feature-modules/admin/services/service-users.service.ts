@@ -63,14 +63,9 @@ export type getOrgnisationRoleRulesInDTO = {
   lastAccessorUserOnOrganisationUnit: {
     valid: boolean,
     meta?: {
-      organisation: {
-        id: string,
-        name: string,
-        unitsCount: number,
-        unit: {
-          id: string,
-          name: string
-        }
+      supports: {
+        count: number;
+        innovations: { innovationId: string, innovationName: string; unitId: string; unitName: string }[]
       }
     }
   }
@@ -211,9 +206,9 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  searchUser(email: string): Observable<searchUserEndpointOutDTO[]> {
+  searchUser(email: string, isAdmin: boolean): Observable<searchUserEndpointOutDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('/user-admin/users').setQueryParams({ email });
+    const url = new UrlModel(this.API_URL).addPath('/user-admin/users').setQueryParams({ email, isAdmin });
     return this.http.get<searchUserEndpointInDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response.map(item => ({ ...item, typeLabel: this.stores.authentication.getRoleDescription(item.type) })))

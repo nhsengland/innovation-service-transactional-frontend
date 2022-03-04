@@ -54,7 +54,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () =>
   it('should have innovation information loaded with payload 01', () => {
 
     accessorService.getInnovationInfo = () => of({
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: '', categories: ['MEDICAL_DEVICE'], otherCategoryDescription: '' },
+      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: '', categories: ['MEDICAL_DEVICE'], otherCategoryDescription: '' },
       contact: { name: 'A name' },
       assessment: { id: '01' },
       support: { id: '01', status: 'WAITING' },
@@ -72,7 +72,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () =>
   it('should have innovation information loaded with payload 02', () => {
 
     accessorService.getInnovationInfo = () => of({
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['MEDICAL_DEVICE', 'OTHER', 'INVALID'], otherCategoryDescription: 'Other category' },
+      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['MEDICAL_DEVICE', 'OTHER', 'INVALID'], otherCategoryDescription: 'Other category' },
       contact: { name: 'A name' },
       assessment: { id: '01' },
       notifications: {}
