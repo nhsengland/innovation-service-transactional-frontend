@@ -99,8 +99,10 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersInfoComponent'
       id: 'User01',
       email: 'user@email.com',
       displayName: 'User name',
+      phone: '12345',
       type: 'INNOVATOR',
       lockedAt: '2020-01-01T00:00:00.000Z',
+      innovations: [{id:'inn1',name: 'innovation'}],
       userOrganisations: [
         { id: 'Org01', name: 'Org Name', role: 'INNOVATOR_OWNER', units: [] }
       ]
@@ -124,8 +126,10 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersInfoComponent'
       id: 'User01',
       email: 'user@email.com',
       displayName: 'User name',
-      type: 'INNOVATOR',
+      phone: '12345',
+      type: 'ACCESSOR',
       lockedAt: null,
+      innovations: [{id:'inn1',name: 'innovation'}],
       userOrganisations: [
         { id: 'Org01', name: 'Org Name', role: 'INNOVATOR_OWNER', units: [] }
       ]

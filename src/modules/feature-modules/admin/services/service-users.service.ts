@@ -15,12 +15,17 @@ export type getUserMinimalInfoDTO = {
 export type getUserFullInfoDTO = {
   id: string;
   email: string;
+  phone: null | string;
   displayName: string;
   type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
   lockedAt: null | string;
+  innovations: {
+    id: string;
+    name: string;}[];
   userOrganisations: {
     id: string;
     name: string;
+    size: null | string;
     role: 'INNOVATOR_OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
     units: []
   }[]
