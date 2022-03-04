@@ -53,6 +53,34 @@ export type getLockUserRulesOutDTO = {
   meta: { [key: string]: any }
 };
 
+export type getOrganisationRoleRulesOutDTO = {
+  key: keyof getOrgnisationRoleRulesInDTO;
+  valid: boolean;
+  meta: { [key: string]: any }
+};
+
+export type getOrgnisationRoleRulesInDTO = {
+  lastAccessorUserOnOrganisationUnit: {
+    valid: boolean,
+    meta?: {
+      organisation: {
+        id: string,
+        name: string,
+        unitsCount: number,
+        unit: {
+          id: string,
+          name: string
+        }
+      }
+    }
+  }
+}
+
+export type changeUserTypeDTO = {
+  id: string;
+  status: string;
+}
+
 export type lockUserEndpointDTO = {
   id: string;
   status: string;
@@ -61,7 +89,8 @@ export type lockUserEndpointDTO = {
 
 export enum UserType {
   ACCESSOR = 'ACCESSOR',
-  ASSESSMENT = 'ASSESSMENT'
+  ASSESSMENT = 'ASSESSMENT',
+  QUALIFYING_ACCESSOR = 'QUALIFYING_ACCESSOR'
 }
 
 export type UserSearchResult = {
@@ -207,5 +236,36 @@ export class ServiceUsersService extends CoreService {
 
     };
   }
+
+  getChangeUserRoleRules(userId: string): Observable<getOrganisationRoleRulesOutDTO[]> {
+    
+    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId });
+    return this.http.get<getOrgnisationRoleRulesInDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => Object.entries(response).map(([key, item]) => ({
+        key: key as keyof getOrgnisationRoleRulesInDTO,
+        valid: item.valid,
+        meta: item.meta || {}
+      }))
+      )
+    );
+
+  }
+
+  changeUserRole(userId: string, securityConfirmation: { id: string, code: string }): Observable<changeUserTypeDTO> {
+
+    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
+
+    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId }).setQueryParams(qp);
+    return this.http.patch<changeUserTypeDTO>(url.buildUrl(), {}).pipe(
+      take(1),
+      map(response => response),  
+      catchError(error => throwError({
+        id: error.error.id
+      }))
+    );
+
+  }
+
 
 }

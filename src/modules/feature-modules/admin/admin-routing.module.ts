@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 
 // Base layout.
 import { AdminLayoutComponent } from './base/admin-layout.component';
+import { PageAdminUsersFindComponent } from './pages/admin-users/admin-users-find/admin-users-find.component';
+import { PageServiceChangeUserRole } from './pages/change-user-role/change-user-role.component';
 
 // Pages.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
@@ -82,6 +84,11 @@ const routes: Routes = [
                 path: 'delete',
                 pathMatch: 'full',
                 component: PageServiceUsersDeleteComponent
+              },
+              {
+                path: 'change-role',
+                pathMatch: 'full',
+                component: PageServiceChangeUserRole
               }
             ]
           }

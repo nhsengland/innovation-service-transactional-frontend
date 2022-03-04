@@ -6,7 +6,7 @@ import { AlertType, LinkType } from '@app/base/models';
 
 import { RoutingHelper } from '@modules/core';
 
-import { ServiceUsersService } from '../../services/service-users.service';
+import { ServiceUsersService, UserType } from '../../services/service-users.service';
 
 
 @Component({
@@ -69,7 +69,7 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
 
     this.serviceUsersService.getUserFullInfo(this.user.id).subscribe(
       response => {
-
+        console.log(response);
         this.titleActions = [
           // { type: 'link', label: 'Edit user', url: `/admin/service-users/${this.userId}/edit` },
           {
@@ -79,6 +79,17 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
           },
           // { type: 'link', label: 'Delete user', url: `/admin/service-users/${this.userId}/delete` }
         ];
+
+        if(
+          response.userOrganisations[0].role === UserType.ACCESSOR ||
+          response.userOrganisations[0].role === UserType.QUALIFYING_ACCESSOR
+        ) {
+          this.titleActions.push({
+            type: 'link',
+            label: 'Change Role',
+            url: `/admin/service-users/${this.user.id}/change-role`
+          });
+        }
 
         this.sections.userInfo = [
           { label: 'Name', value: response.displayName },
