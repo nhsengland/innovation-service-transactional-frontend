@@ -37,7 +37,7 @@ export class PageAdminUsersInfoComponent extends CoreComponent implements OnInit
     this.sections.userInfo = [
       { label: 'Name', value: 'Admin' },
       { label: 'Type', value: 'Admin' },
-      { label: 'Email address', value: 'test@test.com' }
+      { label: 'Email address', value: 'admin@admin.com' }
     ];
     this.setPageStatus('READY');
   }
