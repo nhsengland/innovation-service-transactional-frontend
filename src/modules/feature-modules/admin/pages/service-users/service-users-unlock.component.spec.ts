@@ -66,9 +66,11 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersUnlockComponen
       email: 'user@email.com',
       displayName: 'User name',
       type: 'INNOVATOR',
+      innovations: [{id: 'inn1', name: 'innovation'}],
+      phone: '12345678',
       lockedAt: '2020-01-01T00:00:00.000Z',
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', role: 'INNOVATOR_OWNER', units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 15', role: 'INNOVATOR_OWNER', units: [] }
       ]
     };
     serviceUsersService.getUserFullInfo = () => of(responseMock);
@@ -88,9 +90,11 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersUnlockComponen
       email: 'user@email.com',
       displayName: 'User name',
       type: 'INNOVATOR',
+      phone: '124',
       lockedAt: null,
+      innovations: [{id: 'inn1', name: 'innovation'}],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', role: 'INNOVATOR_OWNER', units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', role: 'INNOVATOR_OWNER', units: [] }
       ]
     };
     serviceUsersService.getUserFullInfo = () => of(responseMock);

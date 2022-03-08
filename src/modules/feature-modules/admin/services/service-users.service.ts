@@ -21,7 +21,7 @@ export type getUserFullInfoDTO = {
   lockedAt: null | string;
   innovations: {
     id: string;
-    name: string;}[];
+    name: string; }[];
   userOrganisations: {
     id: string;
     name: string;

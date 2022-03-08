@@ -19,7 +19,7 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
 
   user: { id: string, name: string };
 
-  userInfoType: string = '';
+  userInfoType = '';
 
   titleActions: LinkType[] = [];
 
@@ -74,15 +74,15 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
   ngOnInit(): void {
 
     this.serviceUsersService.getUserFullInfo(this.user.id).subscribe(
-      response => {        
+      response => {
         this.userInfoType = response.type;
 
-        this.titleActions = [          
+        this.titleActions = [
           {
             type: 'link',
             label: !response.lockedAt ? 'Lock user' : 'Unlock user',
             url: `/admin/service-users/${this.user.id}/${!response.lockedAt ? 'lock' : 'unlock'}`
-          },          
+          },
         ];
 
         this.sections.userInfo = [
@@ -90,19 +90,20 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
           { label: 'Type', value: this.stores.authentication.getRoleDescription(response.type) },
           { label: 'Email address', value: response.email },
           { label: 'Phone number', value: response.phone ? response.phone : ' NA' },
-          { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }         
+          { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }
         ];
 
-        if(response.type === 'INNOVATOR'){
-          this.sections.innovations = response.innovations?.map(x=>x.name); 
-          this.sections.userInfo = [...this.sections.userInfo,           
+        if (response.type === 'INNOVATOR'){
+          this.sections.innovations = response.innovations?.map(x => x.name);
+          this.sections.userInfo = [...this.sections.userInfo,
             { label: 'Company name', value: response.userOrganisations.length > 0 ? response.userOrganisations[0].name : 'NA' },
-            { label: 'Company size', value: response.userOrganisations.length > 0 ? response.userOrganisations[0].size : 'NA' }         
+            { label: 'Company size', value: response.userOrganisations.length > 0 ? response.userOrganisations[0].size : 'NA' }
           ];
         }
 
-        if(response.type === 'ACCESSOR')
-          this.sections.organisation = response.userOrganisations;            
+        if (response.type === 'ACCESSOR') {
+          this.sections.organisation = response.userOrganisations;
+        }
 
         this.setPageStatus('READY');
 

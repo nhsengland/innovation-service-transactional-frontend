@@ -43,19 +43,17 @@
         <div class="nhsuk-grid-column-one-third">
           <h2 class="nhsuk-heading-m">Organisation</h2>
         </div>
-        <div class="  ">
-          <dl class="nhsuk-summary-list">            
-            <div *ngFor="let organisation of sections.organisation" class="nhsuk-summary-list__row">
-              <p class="nhsuk-u-margin-bottom-1"> {{ organisation.name }} </p>
-                <div *ngFor="let unit of organisation?.units" >
-                  <ul *ngIf="organisation.name != unit.name" class="nhsuk-list nhsuk-u-margin-left-3 nhsuk-u-margin-bottom-0 border-left-inset-neutral">
-                    <li class="d-flex nhsuk-u-margin-0 nhsuk-u-padding-left-3">                        
-                      <span class="app-task-list__task-name"> {{ unit.name }} </span>
-                    </li>
-                  </ul>
-                </div>
-            </div>
-          </dl>
+        <div class="nhsuk-grid-column-two-thirds">                 
+          <div *ngFor="let organisation of sections.organisation" >
+            <p class="nhsuk-u-margin-bottom-1"> {{ organisation.name }} </p>
+              <div *ngFor="let unit of organisation?.units" >
+                <ul *ngIf="organisation.name != unit.name" class="nhsuk-list nhsuk-u-margin-left-3 nhsuk-u-margin-bottom-0 border-left-inset-neutral">
+                  <li class="d-flex nhsuk-u-margin-0 nhsuk-u-padding-left-3">                        
+                    <span class="app-task-list__task-name"> {{ unit.name }} </span>
+                  </li>
+                </ul>
+              </div>
+          </div>          
         </div>
       </div>
     </section>

@@ -102,12 +102,28 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersInfoComponent'
       phone: '12345',
       type: 'INNOVATOR',
       lockedAt: '2020-01-01T00:00:00.000Z',
-      innovations: [{id:'inn1',name: 'innovation'}],
+      innovations: [{id: 'inn1', name: 'innovation'}],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', role: 'INNOVATOR_OWNER', units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', role: 'INNOVATOR_OWNER', units: [] }
       ]
     };
+
+    const responseMock2: getUserFullInfoDTO = {
+      id: 'User01',
+      email: 'user@email.com',
+      displayName: 'User name',
+      phone: null,
+      type: 'INNOVATOR',
+      lockedAt: '2020-01-01T00:00:00.000Z',
+      innovations: [{id: 'inn1', name: 'innovation'}],
+      userOrganisations: [
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', role: 'INNOVATOR_OWNER', units: [] }
+      ]
+    };
+
     serviceUsersService.getUserFullInfo = () => of(responseMock);
+    serviceUsersService.getUserFullInfo = () => of(responseMock2);
+
     const expected = 'User name';
 
     fixture = TestBed.createComponent(PageServiceUsersInfoComponent);
@@ -129,9 +145,9 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersInfoComponent'
       phone: '12345',
       type: 'ACCESSOR',
       lockedAt: null,
-      innovations: [{id:'inn1',name: 'innovation'}],
+      innovations: [{id: 'inn1', name: 'innovation'}],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', role: 'INNOVATOR_OWNER', units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', role: 'INNOVATOR_OWNER', units: [] }
       ]
     };
     serviceUsersService.getUserFullInfo = () => of(responseMock);
