@@ -1,7 +1,7 @@
 import { Injector, NgModule } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { TransferHttpCacheModule } from '@nguniversal/common';
 
 import { CoreModule } from '@modules/core/core.module';
@@ -20,6 +20,7 @@ import { AppComponent } from './app.component';
     BrowserTransferStateModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    HttpClientXsrfModule,
     TransferHttpCacheModule,
 
     CoreModule,
