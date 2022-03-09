@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminLayoutComponent } from './base/admin-layout.component';
 import { PageAdminUsersFindComponent } from './pages/admin-users/admin-users-find/admin-users-find.component';
 import { PageServiceChangeUserRole } from './pages/change-user-role/change-user-role.component';
+import { PageAdminUsersInfoComponent } from './pages/admin-users/admin-users-info/admin-users-info.component';
 
 // Pages.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
@@ -18,7 +19,6 @@ import { PageServiceUsersUnlockComponent } from './pages/service-users/service-u
 
 // Resolvers.
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
-
 
 const routes: Routes = [
 
@@ -45,6 +45,15 @@ const routes: Routes = [
             pathMatch: 'full',
             data: { breadcrumb: null },
             component: PageAdminUsersFindComponent
+          },
+          {
+            path: ':userId',
+            pathMatch: 'full',
+            resolve: { user: ServiceUserDataResolver },
+            data: {
+              breadcrumb: (data: { user: { id: string, displayName: string } }) => `${data.user.displayName}`
+            },
+            component: PageAdminUsersInfoComponent
           }
         ]
       },

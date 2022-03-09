@@ -41,7 +41,7 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
       innovation: new FormControl('', CustomValidators.required('Please, choose an innovation')),
       reason: new FormControl(''),
       email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')]),
-      confirmation: new FormControl('', [CustomValidators.required('A confirmation text is neccessary'), CustomValidators.equalTo('archive my innovation')])
+      confirmation: new FormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('archive my innovation')])
     },
       { updateOn: 'blur' }
     );

@@ -6,7 +6,7 @@ import { AlertType, LinkType } from '@app/base/models';
 
 import { RoutingHelper } from '@modules/core';
 
-import { ServiceUsersService, UserType } from '../../services/service-users.service';
+import { ServiceUsersService, orgnisationRole } from '../../services/service-users.service';
 
 
 @Component({
@@ -59,6 +59,13 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
           // message: 'Your suggestions were saved and notifications sent.'
         };
         break;
+      case 'roleChangeSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'User role changed successfully',
+          // message: 'Your suggestions were saved and notifications sent.'
+        };
+        break;
       default:
         break;
     }
@@ -69,7 +76,6 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
 
     this.serviceUsersService.getUserFullInfo(this.user.id).subscribe(
       response => {
-        console.log(response);
         this.titleActions = [
           // { type: 'link', label: 'Edit user', url: `/admin/service-users/${this.userId}/edit` },
           {
@@ -81,12 +87,12 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
         ];
 
         if(
-          response.userOrganisations[0].role === UserType.ACCESSOR ||
-          response.userOrganisations[0].role === UserType.QUALIFYING_ACCESSOR
+          (response.userOrganisations[0].role === orgnisationRole.ACCESSOR ||
+          response.userOrganisations[0].role === orgnisationRole.QUALIFYING_ACCESSOR) && !response.lockedAt
         ) {
           this.titleActions.push({
             type: 'link',
-            label: 'Change Role',
+            label: 'Change role',
             url: `/admin/service-users/${this.user.id}/change-role`
           });
         }

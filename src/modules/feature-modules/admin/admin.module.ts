@@ -24,7 +24,7 @@ import { ServiceUsersService } from './services/service-users.service';
 
 // Resolvers.
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
-
+import { PageAdminUsersInfoComponent } from './pages/admin-users/admin-users-info/admin-users-info.component';
 
 @NgModule({
   imports: [
@@ -46,14 +46,15 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageServiceUsersNewComponent,
     PageServiceUsersUnlockComponent,
     PageAdminUsersFindComponent,
-    PageServiceChangeUserRole
+    PageServiceChangeUserRole,
+    PageAdminUsersInfoComponent
   ],
   providers: [
     // Services.
     ServiceUsersService,
 
     // Resolvers.
-    ServiceUserDataResolver
+    ServiceUserDataResolver,
   ]
 })
 export class AdminModule { }

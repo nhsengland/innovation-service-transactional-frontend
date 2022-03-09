@@ -9,10 +9,10 @@
 
 <div *ngIf="pageStatus === 'READY'" aria-live="polite">
 
-  <div class="nhsuk-grid-row">
+  <div *ngIf="role === 'ACCESSOR'"  class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <table class="nhsuk-table">
-        <caption>All conditions must be valid to be able to change role {{ user.name }}</caption>
+        <caption>Condition must be valid for changing role of {{ user.name }}</caption>
         <thead class="nhsuk-table__head nhsuk-u-visually-hidden">
           <tr class="nhsuk-table__row">
             <th class="nhsuk-table__header" scope="col"> Condition </th>
@@ -24,7 +24,7 @@
             <td class="nhsuk-table__cell">
               {{ 'shared.catalog.user.change_orggnisation_user_role_validations.' + item.key + '.label' | translate }}
               <div *ngIf="!item.valid && translationExists('shared.catalog.user.lock_user_validations.' + item.key + '.description')" class="nhsuk-hint nhsuk-u-margin-0">
-                {{ 'shared.catalog.user.change_orggnisation_user_role_validations.' + item.key + '.description' | pluralTranslate:item.meta?.supports.innovations.length | translate: item.meta }}
+                {{ 'shared.catalog.user.change_orggnisation_user_role_validations.' + item.key + '.description' | translate: item.meta }}
               </div>
             </td>
             <td class="nhsuk-table__cell text-align-right">

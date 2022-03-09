@@ -81,29 +81,11 @@ export type lockUserEndpointDTO = {
   status: string;
 };
 
-
-export enum UserType {
+export enum orgnisationRole {
   ACCESSOR = 'ACCESSOR',
-  ASSESSMENT = 'ASSESSMENT',
-  QUALIFYING_ACCESSOR = 'QUALIFYING_ACCESSOR'
+  QUALIFYING_ACCESSOR = 'QUALIFYING_ACCESSOR',
+  INNOVATOR_OWNER = 'INNOVATOR_OWNER'
 }
-
-export type UserSearchResult = {
-  id: string;
-  displayName: string;
-  type: UserType;
-  lockedAt?: Date;
-  userOrganisations: {
-    id: string;
-    name: string;
-    role: string;
-    units: {
-      id: string;
-      name: string;
-    }[];
-  }[];
-  serviceRoles?: { [key: string]: any }[];
-};
 
 export type searchUserEndpointInDTO = {
   id: string;
@@ -124,6 +106,15 @@ export type searchUserEndpointInDTO = {
   }]
 };
 export type searchUserEndpointOutDTO = searchUserEndpointInDTO & { typeLabel: string };
+
+export type changeUserRoleDTO = {
+  userId: string,
+  role: orgnisationRole | null,
+  securityConfirmation: {
+    id: string,
+    code: string
+  }    
+}
 
 @Injectable()
 export class ServiceUsersService extends CoreService {
@@ -232,7 +223,7 @@ export class ServiceUsersService extends CoreService {
     };
   }
 
-  getChangeUserRoleRules(userId: string): Observable<getOrganisationRoleRulesOutDTO[]> {
+  getUserRoleRules(userId: string): Observable<getOrganisationRoleRulesOutDTO[]> {
     
     const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId });
     return this.http.get<getOrgnisationRoleRulesInDTO>(url.buildUrl()).pipe(
@@ -247,12 +238,12 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  changeUserRole(userId: string, securityConfirmation: { id: string, code: string }): Observable<changeUserTypeDTO> {
+  changeUserRole(body: changeUserRoleDTO): Observable<changeUserTypeDTO> {
 
-    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
+    const qp = (body.securityConfirmation.id && body.securityConfirmation.code) ? body.securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId }).setQueryParams(qp);
-    return this.http.patch<changeUserTypeDTO>(url.buildUrl(), {}).pipe(
+    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId: body.userId }).setQueryParams(qp);
+    return this.http.patch<changeUserTypeDTO>(url.buildUrl(), { role: body.role }).pipe(
       take(1),
       map(response => response),  
       catchError(error => throwError({

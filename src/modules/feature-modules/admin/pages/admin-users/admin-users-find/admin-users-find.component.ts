@@ -46,7 +46,6 @@ export class PageAdminUsersFindComponent extends CoreComponent implements OnInit
 
     this.serviceUsersService.searchUser(this.form.get('email')!.value, true).subscribe(
       response => {
-        console.log(response);
         this.usersList = response;
         this.setPageStatus('READY');
       },
