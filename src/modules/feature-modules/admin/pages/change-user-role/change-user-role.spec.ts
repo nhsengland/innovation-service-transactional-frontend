@@ -124,7 +124,6 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceChangeUserRoleCompo
   it('should NOT have initial information loaded', () => {
 
     serviceUsersService.getUserRoleRules = () => throwError('error');
-    // serviceUsersService.getUserFullInfo = () => throwError('error');
 
     fixture = TestBed.createComponent(PageServiceChangeUserRoleComponent);
     component = fixture.componentInstance;
