@@ -13,7 +13,7 @@ import { searchUserEndpointOutDTO, ServiceUsersService } from '../../../services
 export class PageAdminUsersFindComponent extends CoreComponent implements OnInit {
 
   titleActions: LinkType[] = [
-    { type: 'button', label: 'New Admin user', url: '/admin/administration-users/new' }
+    { type: 'button', label: 'New admin user', url: '/admin/administration-users/new' }
   ];
 
   formSubmitted = false;

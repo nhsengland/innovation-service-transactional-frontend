@@ -6,7 +6,7 @@ import { AlertType, LinkType } from '@app/base/models';
 
 import { RoutingHelper } from '@modules/core';
 
-import { ServiceUsersService } from '../../services/service-users.service';
+import { ServiceUsersService, orgnisationRole } from '../../services/service-users.service';
 
 
 @Component({
@@ -65,6 +65,13 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
           // message: 'Your suggestions were saved and notifications sent.'
         };
         break;
+      case 'roleChangeSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'User role changed successfully',
+          // message: 'Your suggestions were saved and notifications sent.'
+        };
+        break;
       default:
         break;
     }
@@ -84,6 +91,17 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
             url: `/admin/service-users/${this.user.id}/${!response.lockedAt ? 'lock' : 'unlock'}`
           },
         ];
+
+        if (
+          (response.userOrganisations[0]?.role === orgnisationRole.ACCESSOR ||
+          response.userOrganisations[0]?.role === orgnisationRole.QUALIFYING_ACCESSOR) && !response.lockedAt
+        ) {
+          this.titleActions.push({
+            type: 'link',
+            label: 'Change role',
+            url: `/admin/service-users/${this.user.id}/change-role`
+          });
+        }
 
         this.sections.userInfo = [
           { label: 'Name', value: response.displayName },

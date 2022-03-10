@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 // Base layout.
 import { AdminLayoutComponent } from './base/admin-layout.component';
 import { PageAdminUsersFindComponent } from './pages/admin-users/admin-users-find/admin-users-find.component';
+import { PageServiceChangeUserRoleComponent } from './pages/change-user-role/change-user-role.component';
 import { PageAdminUsersInfoComponent } from './pages/admin-users/admin-users-info/admin-users-info.component';
 
 // Pages.
@@ -18,7 +19,6 @@ import { PageServiceUsersUnlockComponent } from './pages/service-users/service-u
 
 // Resolvers.
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
-
 
 const routes: Routes = [
 
@@ -104,6 +104,11 @@ const routes: Routes = [
                 path: 'delete',
                 pathMatch: 'full',
                 component: PageServiceUsersDeleteComponent
+              },
+              {
+                path: 'change-role',
+                pathMatch: 'full',
+                component: PageServiceChangeUserRoleComponent
               }
             ]
           }
