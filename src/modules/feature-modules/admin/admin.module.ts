@@ -17,7 +17,7 @@ import { PageServiceUsersLockComponent } from './pages/service-users/service-use
 import { PageServiceUsersNewComponent } from './pages/service-users/service-users-new/service-users-new.component';
 import { PageServiceUsersUnlockComponent } from './pages/service-users/service-users-unlock.component';
 import { PageAdminUsersFindComponent } from './pages/admin-users/admin-users-find/admin-users-find.component';
-import { PageServiceChangeUserRole } from './pages/change-user-role/change-user-role.component';
+import { PageServiceChangeUserRoleComponent } from './pages/change-user-role/change-user-role.component';
 
 // Services.
 import { ServiceUsersService } from './services/service-users.service';
@@ -46,7 +46,7 @@ import { PageAdminUsersInfoComponent } from './pages/admin-users/admin-users-inf
     PageServiceUsersNewComponent,
     PageServiceUsersUnlockComponent,
     PageAdminUsersFindComponent,
-    PageServiceChangeUserRole,
+    PageServiceChangeUserRoleComponent,
     PageAdminUsersInfoComponent
   ],
   providers: [

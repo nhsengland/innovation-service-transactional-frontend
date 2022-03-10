@@ -14,7 +14,7 @@ import { AuthenticationStore } from '@modules/stores';
   selector: 'app-admin-pages-change-user-role',
   templateUrl: './change-user-role.component.html'
 })
-export class PageServiceChangeUserRole extends CoreComponent implements OnInit {
+export class PageServiceChangeUserRoleComponent extends CoreComponent implements OnInit {
   alert: AlertType = { type: null };
 
   user: { id: string, name: string };
@@ -39,16 +39,16 @@ export class PageServiceChangeUserRole extends CoreComponent implements OnInit {
   ) {
 
     super();
-    this.user = { 
-      id: this.activatedRoute.snapshot.params.userId, 
+    this.user = {
+      id: this.activatedRoute.snapshot.params.userId,
       name: RoutingHelper.getRouteData(this.activatedRoute).user.displayName,
     };
     this.roleName = null;
     this.role = null;
   }
-  
-  ngOnInit(): void { 
-  
+
+  ngOnInit(): void {
+
     forkJoin([
       this.serviceUsersService.getUserRoleRules(this.user.id),
       this.serviceUsersService.getUserFullInfo(this.user.id)
@@ -58,11 +58,11 @@ export class PageServiceChangeUserRole extends CoreComponent implements OnInit {
         this.rulesList = rules;
 
         this.role = (userInfo.userOrganisations.map(org => org.role)[0] === orgnisationRole.QUALIFYING_ACCESSOR) ? orgnisationRole.ACCESSOR : orgnisationRole.QUALIFYING_ACCESSOR;
-       
-        this.roleName = this.stores.authentication.getRoleDescription(this.role)
-       
+
+        this.roleName = this.stores.authentication.getRoleDescription(this.role);
+
         this.setPageTitle(`Change role to ${this.roleName}`);
-       
+
         this.setPageStatus('READY');
       },
       () => {
@@ -75,7 +75,7 @@ export class PageServiceChangeUserRole extends CoreComponent implements OnInit {
       }
     );
 
-   
+
   }
 
   onSubmit(): void {
@@ -88,33 +88,29 @@ export class PageServiceChangeUserRole extends CoreComponent implements OnInit {
       userId: this.user.id,
       role: this.role,
       securityConfirmation: this.securityConfirmation
-    }
+    };
 
-    if(this.role) {
+    this.serviceUsersService.changeUserRole(body).subscribe(
+      () => {
 
-      this.serviceUsersService.changeUserRole(body).subscribe(
-        () => {
+        this.redirectTo(`admin/service-users/${this.user.id}`, { alert: 'roleChangeSuccess' });
 
-          this.redirectTo(`admin/service-users/${this.user.id}`, { alert: 'roleChangeSuccess' });
+      },
+      (error: { id: string }) => {
 
-        },
-        (error: { id: string }) => {
-          console.log(error);
-          console.log(this.securityConfirmation);
-          if (!this.securityConfirmation.id && error.id) {
+        if (!this.securityConfirmation.id && error.id) {
 
-            this.securityConfirmation.id = error.id;
-            this.pageStep = 'CODE_REQUEST';
+          this.securityConfirmation.id = error.id;
+          this.pageStep = 'CODE_REQUEST';
 
-          } else {
+        } else {
 
-            this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your e-mail' });
-
-          }
+          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your e-mail' });
 
         }
-      );
-    }
+
+      }
+    );
 
   }
 

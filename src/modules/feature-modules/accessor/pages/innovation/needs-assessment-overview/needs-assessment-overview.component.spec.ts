@@ -58,7 +58,7 @@ describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', 
         id: 'unit01', name: 'Unit 01', acronym: 'UN',
         organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
       },
-      logTitle: 'Updated support status',
+      logTitle: 'Updated  support status',
       suggestedOrganisationUnitsNames: ['Unit 01']
     }]);
 

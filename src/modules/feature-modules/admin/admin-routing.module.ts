@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 // Base layout.
 import { AdminLayoutComponent } from './base/admin-layout.component';
 import { PageAdminUsersFindComponent } from './pages/admin-users/admin-users-find/admin-users-find.component';
-import { PageServiceChangeUserRole } from './pages/change-user-role/change-user-role.component';
+import { PageServiceChangeUserRoleComponent } from './pages/change-user-role/change-user-role.component';
 import { PageAdminUsersInfoComponent } from './pages/admin-users/admin-users-info/admin-users-info.component';
 
 // Pages.
@@ -108,7 +108,7 @@ const routes: Routes = [
               {
                 path: 'change-role',
                 pathMatch: 'full',
-                component: PageServiceChangeUserRole
+                component: PageServiceChangeUserRoleComponent
               }
             ]
           }

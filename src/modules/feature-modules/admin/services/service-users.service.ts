@@ -15,12 +15,17 @@ export type getUserMinimalInfoDTO = {
 export type getUserFullInfoDTO = {
   id: string;
   email: string;
+  phone: null | string;
   displayName: string;
   type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
   lockedAt: null | string;
+  innovations: {
+    id: string;
+    name: string; }[];
   userOrganisations: {
     id: string;
     name: string;
+    size: null | string;
     role: 'INNOVATOR_OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
     units: []
   }[]
@@ -69,12 +74,12 @@ export type getOrgnisationRoleRulesInDTO = {
       }
     }
   }
-}
+};
 
 export type changeUserTypeDTO = {
   id: string;
   status: string;
-}
+};
 
 export type lockUserEndpointDTO = {
   id: string;
@@ -113,8 +118,8 @@ export type changeUserRoleDTO = {
   securityConfirmation: {
     id: string,
     code: string
-  }    
-}
+  }
+};
 
 @Injectable()
 export class ServiceUsersService extends CoreService {
@@ -224,7 +229,7 @@ export class ServiceUsersService extends CoreService {
   }
 
   getUserRoleRules(userId: string): Observable<getOrganisationRoleRulesOutDTO[]> {
-    
+
     const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId });
     return this.http.get<getOrgnisationRoleRulesInDTO>(url.buildUrl()).pipe(
       take(1),
@@ -245,7 +250,7 @@ export class ServiceUsersService extends CoreService {
     const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId: body.userId }).setQueryParams(qp);
     return this.http.patch<changeUserTypeDTO>(url.buildUrl(), { role: body.role }).pipe(
       take(1),
-      map(response => response),  
+      map(response => response),
       catchError(error => throwError({
         id: error.error.id
       }))
