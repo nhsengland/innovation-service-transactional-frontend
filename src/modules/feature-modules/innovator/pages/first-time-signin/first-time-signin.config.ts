@@ -140,7 +140,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
         label: 'Finally, choose your data sharing preferences',
         validations: { isRequired: [true, 'Choose at least one organisation'] },
         items: organisationSharesItems,
-        description: '<p class="nhsuk-u-margin-0"><a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer">What does each organisation do? (opens in a new window) </a></p>'
+        description: '<a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer">What does each organisation do? (opens in a new window) </a>'
       }]
     })
 
