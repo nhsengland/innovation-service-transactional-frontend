@@ -6,7 +6,7 @@ import { AlertType, LinkType } from '@app/base/models';
 
 import { RoutingHelper } from '@modules/core';
 
-import { ServiceUsersService } from '../../services/service-users.service';
+import { ServiceUsersService, orgnisationRole } from '../../services/service-users.service';
 
 
 @Component({
@@ -19,12 +19,18 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
 
   user: { id: string, name: string };
 
+  userInfoType = '';
+
   titleActions: LinkType[] = [];
 
   sections: {
     userInfo: { label: string; value: null | string; }[];
-    innovations: string[];
-    organisation: { label: string; value: null | string; }[];
+    innovations?: string[];
+    // organisation: { label: string; value: null | string; }[];
+    organisation?: {
+      id: string; name: string; role: null | string;
+      units: { id: string; name: string; supportCount: null | string; }[];
+    }[];
   } = { userInfo: [], innovations: [], organisation: [] };
 
   constructor(
@@ -59,6 +65,13 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
           // message: 'Your suggestions were saved and notifications sent.'
         };
         break;
+      case 'roleChangeSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'User role changed successfully',
+          // message: 'Your suggestions were saved and notifications sent.'
+        };
+        break;
       default:
         break;
     }
@@ -69,30 +82,46 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
 
     this.serviceUsersService.getUserFullInfo(this.user.id).subscribe(
       response => {
+        this.userInfoType = response.type;
 
         this.titleActions = [
-          // { type: 'link', label: 'Edit user', url: `/admin/service-users/${this.userId}/edit` },
           {
             type: 'link',
             label: !response.lockedAt ? 'Lock user' : 'Unlock user',
             url: `/admin/service-users/${this.user.id}/${!response.lockedAt ? 'lock' : 'unlock'}`
           },
-          // { type: 'link', label: 'Delete user', url: `/admin/service-users/${this.userId}/delete` }
         ];
+
+        if (
+          (response.userOrganisations[0]?.role === orgnisationRole.ACCESSOR ||
+          response.userOrganisations[0]?.role === orgnisationRole.QUALIFYING_ACCESSOR) && !response.lockedAt
+        ) {
+          this.titleActions.push({
+            type: 'link',
+            label: 'Change role',
+            url: `/admin/service-users/${this.user.id}/change-role`
+          });
+        }
 
         this.sections.userInfo = [
           { label: 'Name', value: response.displayName },
           { label: 'Type', value: this.stores.authentication.getRoleDescription(response.type) },
-          { label: 'Email address', value: response.email }
+          { label: 'Email address', value: response.email },
+          { label: 'Phone number', value: response.phone ? response.phone : ' NA' },
+          { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }
         ];
 
-        // this.sections.innovations = ['Innovation 01', 'Innovation 02'];
+        if (response.type === 'INNOVATOR'){
+          this.sections.innovations = response.innovations?.map(x => x.name);
+          this.sections.userInfo = [...this.sections.userInfo,
+            { label: 'Company name', value: response.userOrganisations.length > 0 ? response.userOrganisations[0].name : 'NA' },
+            { label: 'Company size', value: response.userOrganisations.length > 0 ? response.userOrganisations[0].size : 'NA' }
+          ];
+        }
 
-        // this.sections.organisation = [
-        //   { label: 'Organisation', value: 'NICE' },
-        //   { label: 'Unit', value: 'NICE unit (if accessor)' },
-        //   { label: 'Assigned innovations', value: '57 (if accessor)' }
-        // ];
+        if (response.type === 'ACCESSOR') {
+          this.sections.organisation = response.userOrganisations;
+        }
 
         this.setPageStatus('READY');
 

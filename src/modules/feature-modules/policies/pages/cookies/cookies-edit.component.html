@@ -4,6 +4,7 @@
     <h1> {{ pageTitle }}</h1>
 
     <form [formGroup]="form">
+      <theme-form-input type="hidden" controlName="_csrf"></theme-form-input>
 
       <p>Let us know which cookies we can use. We'll use a cookie to save your settings.</p>
 

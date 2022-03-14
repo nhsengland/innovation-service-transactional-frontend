@@ -1,23 +1,29 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
-import * as coockieParser from 'cookie-parser';
-import * as dotenv from 'dotenv';
-import * as express from 'express';
-import * as session from 'express-session';
-import * as fs from 'fs';
-import * as helmet from 'helmet';
+
+import coockieParser from 'cookie-parser';
+import csurf from 'csurf';
+import dotenv from 'dotenv';
+import express from 'express';
+import session from 'express-session';
+import fs from 'fs';
+import helmet from 'helmet';
 import { join } from 'path';
+
 import { initAppInsights } from 'src/globals';
 import { BASE_PATH, BASE_URL, LOG_LEVEL, STATIC_CONTENT_PATH, VIEWS_PATH, ENABLE_ANALYTICS } from 'src/server/config/constants.config';
 import { handler } from 'src/server/handlers/logger.handler';
 import { appLoggingMiddleware } from 'src/server/middlewares/app-logging.middleware';
 import { exceptionLoggingMiddleware } from 'src/server/middlewares/exception-logging.middleware';
+
 import apiRouter from 'src/server/routes/api.routes';
 import authenticationRouter from 'src/server/routes/authentication.routes';
 import fileUploadRouter from 'src/server/routes/file-upload.routes';
 import pdfRouter from 'src/server/routes/pdf-generator.routes';
-import 'zone.js/dist/zone-node';
+
 import { AppServerModule } from './src/main.server';
+
+import 'zone.js/dist/zone-node';
 
 dotenv.config();
 
@@ -45,8 +51,7 @@ export function app(): express.Express {
     }
   }));
 
-  // Helmet configuration
-
+  // Helmet configuration.
   server.use(
     helmet.hidePoweredBy(),
     helmet.hsts({
@@ -86,8 +91,8 @@ export function app(): express.Express {
   // Angular routing.
   // // Serve static files.
   server.get('*.*', express.static(distFolder, { maxAge: '1y' }));
-  // // "Data requests". For submited POST form informations.
 
+  // // "Data requests". For submited POST form informations.
   server.post(`${BASE_PATH}/insights`, handler);
   server.post('/*', (req, res) => {
     res.render(indexHtml, {
@@ -98,6 +103,7 @@ export function app(): express.Express {
       ]
     });
   });
+
   // Serve environment variables file.
   server.get('*/environment.js', (req, res) => {
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
@@ -110,16 +116,20 @@ export function app(): express.Express {
       window.__env.ENABLE_ANALYTICS = '${ENABLE_ANALYTICS}';
     }(this));`);
   });
+
   // // All regular routes using the Universal engine.
-  server.get('*', (req, res) => {
-    res.render(indexHtml, {
-      req, res,
-      providers: [
-        { provide: APP_BASE_HREF, useValue: req.baseUrl },
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL, ENABLE_ANALYTICS } }
-      ]
+  server.get('*',
+    csurf({ cookie: true }),
+    (req, res) => {
+      res.cookie('XSRF-TOKEN', req.csrfToken(), { httpOnly: false });
+      res.render(indexHtml, {
+        req, res,
+        providers: [
+          { provide: APP_BASE_HREF, useValue: req.baseUrl },
+          { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL, ENABLE_ANALYTICS } }
+        ]
+      });
     });
-  });
 
   return server;
 }

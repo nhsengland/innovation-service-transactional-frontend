@@ -50,7 +50,10 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
   it('should have innovation information loaded with payload 01', () => {
 
     const responseMock = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company', countryName: 'England', postCode: '', categories: ['MEDICAL_DEVICE'], otherCategoryDescription: '' },
+      summary: {
+        id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company',
+        companySize: '1 to 5 employees', countryName: 'England', postCode: '', categories: ['MEDICAL_DEVICE'], otherCategoryDescription: ''
+      },
       contact: { name: 'A name', email: 'email', phone: '' },
       assessment: { id: '01', assignToName: 'Name' }
     };
@@ -69,7 +72,10 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
   it('should have innovation information loaded with payload 02', () => {
 
     const responseMock = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['MEDICAL_DEVICE', 'OTHER', 'INVALID'], otherCategoryDescription: 'Other category' },
+      summary: {
+        id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company',
+        companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['MEDICAL_DEVICE', 'OTHER', 'INVALID'], otherCategoryDescription: 'Other category'
+      },
       contact: { name: 'A name', email: 'email', phone: '' },
       assessment: { id: '01', assignToName: 'Name' }
     };

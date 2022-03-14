@@ -1,5 +1,7 @@
 <form [formGroup]="form" [id]="formId" method="post" [action]="action" enctype="application/json" novalidate="" *ngIf="contentReady">
 
+  <input type="hidden" name="_csrf" [value]="csrfToken" />
+
   <ng-container *ngFor="let p of parameters; let i = index">
 
     <ng-container *ngIf="p.isVisible">

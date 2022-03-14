@@ -19,7 +19,7 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
   form = new FormGroup({
     innovation: new FormControl('', CustomValidators.required('Please choose an innovation')),
     email: new FormControl('', [CustomValidators.required('An email is required'), Validators.email]),
-    confirmation: new FormControl('', [CustomValidators.required('A confirmation text is neccessry'), CustomValidators.equalTo('transfer my innovation')]),
+    confirmation: new FormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('transfer my innovation')]),
   }, { updateOn: 'blur' });
 
   formInnovationsItems: FormEngineParameterModel['items'] = [];

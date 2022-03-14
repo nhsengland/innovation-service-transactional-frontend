@@ -59,7 +59,10 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
   it('should run getInnovationInfo() with success', () => {
 
     const responseMock = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: '' },
+      summary: {
+        id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description',
+        company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: ''
+      },
       contact: { name: 'A name', email: 'email', phone: '' },
       assessment: { id: '01', assignToName: 'Name' }
     };
@@ -113,7 +116,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
     fixture.detectChanges();
 
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
-    component.formEngineComponent.getFormValues  = () => ({ valid: false, data: { value1: 'some value' } });
+    component.formEngineComponent.getFormValues = () => ({ valid: false, data: { value1: 'some value' } });
 
     component.onSubmit();
     expect(routerSpy).not.toHaveBeenCalledWith(['/assessment/innovations/Inno01/assessments/Assess01/edit'], {});
@@ -131,7 +134,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
     fixture.detectChanges();
 
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
-    component.formEngineComponent.getFormValues  = () => ({ valid: true, data: { value1: 'some value' } });
+    component.formEngineComponent.getFormValues = () => ({ valid: true, data: { value1: 'some value' } });
 
     component.onSubmit();
     expect(routerSpy).toHaveBeenCalledWith(['/assessment/innovations/Inno01/assessments/Assess01/edit'], {});
@@ -156,7 +159,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
     fixture.detectChanges();
 
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
-    component.formEngineComponent.getFormValues  = () => ({ valid: true, data: { value1: 'some value' } });
+    component.formEngineComponent.getFormValues = () => ({ valid: true, data: { value1: 'some value' } });
 
     component.onSubmit();
     expect(component.alert).toEqual(expected);

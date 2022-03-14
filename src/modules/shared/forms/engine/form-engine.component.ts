@@ -1,13 +1,14 @@
 import { Component, OnInit, OnChanges, Input, ChangeDetectionStrategy, ChangeDetectorRef, SimpleChanges, PLATFORM_ID, Inject, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { HttpXsrfTokenExtractor } from '@angular/common/http';
+import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { FormArray, FormGroup } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 
 import { FormEngineHelper } from './helpers/form-engine.helper';
 
 import { FormEngineParameterModel } from './models/form-engine.models';
-import { debounceTime } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
 
 /**
  * @param parameters is an array of ParameterModel. For more info, check ParameterModel.
@@ -42,11 +43,18 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
 
   onlyOneField = true;
 
+  csrfToken = '';
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
+    private tokenExtractor: HttpXsrfTokenExtractor,
     private readonly logger: NGXLogger,
     private readonly cdr: ChangeDetectorRef
-  ) { }
+  ) {
+
+    this.csrfToken = this.tokenExtractor.getToken() || '';
+
+  }
 
   ngOnInit(): void {
 

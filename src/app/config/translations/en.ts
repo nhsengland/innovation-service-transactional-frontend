@@ -173,6 +173,11 @@ export const locale = {
                plural: '{{ supports.innovations.length }} innovations being supported',
               }
             }
+          },
+          change_orggnisation_user_role_validations: {
+            lastAccessorUserOnOrganisationUnit: {
+              label: 'User cannot be the last Qualifying Accessor on the organisation unit'
+            }
           }
 
         }

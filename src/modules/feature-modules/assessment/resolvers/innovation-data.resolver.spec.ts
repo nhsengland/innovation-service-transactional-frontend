@@ -48,7 +48,10 @@ describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
     const routeMock: Partial<ActivatedRouteSnapshot> = { params: { innovationId: 'Inno01' } };
 
     assessmentService.getInnovationInfo = () => of({
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: '' },
+      summary: {
+        id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company',
+        companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: ''
+      },
       contact: { name: 'A name', email: 'email', phone: '' },
       assessment: { id: '01', assignToName: 'Name' }
     });
@@ -71,7 +74,10 @@ describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
     const routeMock: Partial<ActivatedRouteSnapshot> = { params: { innovationId: 'Inno01' } };
 
     assessmentService.getInnovationInfo = () => of({
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: '' },
+      summary: {
+        id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company',
+        companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: ''
+      },
       contact: { name: 'A name', email: 'email', phone: '' },
       // assessment: { id: '01', assignToName: 'Name' }
     });

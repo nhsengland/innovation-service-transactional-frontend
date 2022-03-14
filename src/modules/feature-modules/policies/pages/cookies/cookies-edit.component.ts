@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpXsrfTokenExtractor } from '@angular/common/http';
 
 import { CookiesService } from '@modules/core';
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
@@ -16,6 +17,7 @@ export class CookiesEditComponent extends CoreComponent implements OnInit {
   analyticsCookies = COOKIES_USED.analytics;
 
   form = new FormGroup({
+    _csrf: new FormControl(this.tokenExtractor.getToken()),
     analytics: new FormControl('', CustomValidators.required('Choose one option'))
   });
 
@@ -25,13 +27,14 @@ export class CookiesEditComponent extends CoreComponent implements OnInit {
   ];
 
   constructor(
+    private tokenExtractor: HttpXsrfTokenExtractor,
     private cookiesService: CookiesService
   ) {
 
     super();
     this.setPageTitle('Choose which cookies we use');
 
-    this.form.get('analytics')?.setValue(this.cookiesService.getConsentCookie().analytics  ? 'true' : 'false');
+    this.form.get('analytics')?.setValue(this.cookiesService.getConsentCookie().analytics ? 'true' : 'false');
   }
 
   ngOnInit(): void { }

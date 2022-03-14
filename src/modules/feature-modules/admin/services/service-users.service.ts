@@ -15,12 +15,17 @@ export type getUserMinimalInfoDTO = {
 export type getUserFullInfoDTO = {
   id: string;
   email: string;
+  phone: null | string;
   displayName: string;
   type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
   lockedAt: null | string;
+  innovations: {
+    id: string;
+    name: string; }[];
   userOrganisations: {
     id: string;
     name: string;
+    size: null | string;
     role: 'INNOVATOR_OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
     units: []
   }[]
@@ -53,33 +58,39 @@ export type getLockUserRulesOutDTO = {
   meta: { [key: string]: any }
 };
 
+export type getOrganisationRoleRulesOutDTO = {
+  key: keyof getOrgnisationRoleRulesInDTO;
+  valid: boolean;
+  meta: { [key: string]: any }
+};
+
+export type getOrgnisationRoleRulesInDTO = {
+  lastAccessorUserOnOrganisationUnit: {
+    valid: boolean,
+    meta?: {
+      supports: {
+        count: number;
+        innovations: { innovationId: string, innovationName: string; unitId: string; unitName: string }[]
+      }
+    }
+  }
+};
+
+export type changeUserTypeDTO = {
+  id: string;
+  status: string;
+};
+
 export type lockUserEndpointDTO = {
   id: string;
   status: string;
 };
 
-
-export enum UserType {
+export enum orgnisationRole {
   ACCESSOR = 'ACCESSOR',
-  ASSESSMENT = 'ASSESSMENT'
+  QUALIFYING_ACCESSOR = 'QUALIFYING_ACCESSOR',
+  INNOVATOR_OWNER = 'INNOVATOR_OWNER'
 }
-
-export type UserSearchResult = {
-  id: string;
-  displayName: string;
-  type: UserType;
-  lockedAt?: Date;
-  userOrganisations: {
-    id: string;
-    name: string;
-    role: string;
-    units: {
-      id: string;
-      name: string;
-    }[];
-  }[];
-  serviceRoles?: { [key: string]: any }[];
-};
 
 export type searchUserEndpointInDTO = {
   id: string;
@@ -100,6 +111,15 @@ export type searchUserEndpointInDTO = {
   }]
 };
 export type searchUserEndpointOutDTO = searchUserEndpointInDTO & { typeLabel: string };
+
+export type changeUserRoleDTO = {
+  userId: string,
+  role: orgnisationRole | null,
+  securityConfirmation: {
+    id: string,
+    code: string
+  }
+};
 
 @Injectable()
 export class ServiceUsersService extends CoreService {
@@ -182,9 +202,9 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  searchUser(email: string): Observable<searchUserEndpointOutDTO[]> {
+  searchUser(email: string, isAdmin: boolean): Observable<searchUserEndpointOutDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('/user-admin/users').setQueryParams({ email });
+    const url = new UrlModel(this.API_URL).addPath('/user-admin/users').setQueryParams({ email, isAdmin });
     return this.http.get<searchUserEndpointInDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response.map(item => ({ ...item, typeLabel: this.stores.authentication.getRoleDescription(item.type) })))
@@ -207,5 +227,36 @@ export class ServiceUsersService extends CoreService {
 
     };
   }
+
+  getUserRoleRules(userId: string): Observable<getOrganisationRoleRulesOutDTO[]> {
+
+    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId });
+    return this.http.get<getOrgnisationRoleRulesInDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => Object.entries(response).map(([key, item]) => ({
+        key: key as keyof getOrgnisationRoleRulesInDTO,
+        valid: item.valid,
+        meta: item.meta || {}
+      }))
+      )
+    );
+
+  }
+
+  changeUserRole(body: changeUserRoleDTO): Observable<changeUserTypeDTO> {
+
+    const qp = (body.securityConfirmation.id && body.securityConfirmation.code) ? body.securityConfirmation : {};
+
+    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId: body.userId }).setQueryParams(qp);
+    return this.http.patch<changeUserTypeDTO>(url.buildUrl(), { role: body.role }).pipe(
+      take(1),
+      map(response => response),
+      catchError(error => throwError({
+        id: error.error.id
+      }))
+    );
+
+  }
+
 
 }
