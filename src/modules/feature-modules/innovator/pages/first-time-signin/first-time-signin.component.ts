@@ -23,21 +23,17 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
 
   wizard: WizardEngineModel = new WizardEngineModel({});
 
-  organisationInfoUrl: string;
 
   constructor(
     private organisationsService: OrganisationsService,
     private innovatorService: InnovatorService
-  ) {
-    super();
-    this.organisationInfoUrl = `${this.stores.environment.BASE_URL}/about-the-service/who-we-are`;
-  }
+  ) { super(); }
 
 
   ngOnInit(): void {
 
     this.wizard = FIRST_TIME_SIGNIN_QUESTIONS;
-    this.wizard.setAnswers(this.wizard.runInboundParsing({organisationInfoUrl: this.organisationInfoUrl})).runRules();
+    this.wizard.setAnswers(this.wizard.runInboundParsing({})).runRules();
 
     // Update last step with the organisations list with description and pre-select all checkboxes.
     this.organisationsService.getAccessorsOrganisations().subscribe(response => {
