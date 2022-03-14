@@ -17,24 +17,9 @@ type InboundPayloadType = {
   locationCountryName: string;
   mobilePhone: null | string;
   organisationShares: string[];
-  organisationInfoUrl: string;
 };
-
-type OutboundPayloadType = {
-  innovatorName: string;
-  innovationName: string;
-  innovationDescription: string;
-  isCompanyOrOrganisation: 'YES' | 'NO';
-  organisationName: string;
-  organisationSize: null | string;
-  location: string;
-  englandPostCode: null | string;
-  locationCountryName: string;
-  mobilePhone: null | string;
-  organisationShares: string[];
-};
-
 type StepPayloadType = InboundPayloadType;
+type OutboundPayloadType = InboundPayloadType;
 
 
 // This is a LET variable, because the organisations shares information is updated by the component that uses this variable.
@@ -176,8 +161,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     englandPostCode: null,
     locationCountryName: '',
     mobilePhone: null,
-    organisationShares: [],
-    organisationInfoUrl: data.organisationInfoUrl
+    organisationShares: []
   };
 
 }
