@@ -17,9 +17,24 @@ type InboundPayloadType = {
   locationCountryName: string;
   mobilePhone: null | string;
   organisationShares: string[];
+  organisationInfoUrl: string;
 };
+
+type OutboundPayloadType = {
+  innovatorName: string;
+  innovationName: string;
+  innovationDescription: string;
+  isCompanyOrOrganisation: 'YES' | 'NO';
+  organisationName: string;
+  organisationSize: null | string;
+  location: string;
+  englandPostCode: null | string;
+  locationCountryName: string;
+  mobilePhone: null | string;
+  organisationShares: string[];
+};
+
 type StepPayloadType = InboundPayloadType;
-type OutboundPayloadType = InboundPayloadType;
 
 
 // This is a LET variable, because the organisations shares information is updated by the component that uses this variable.
@@ -139,7 +154,8 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
         dataType: 'checkbox-array',
         label: 'Finally, choose your data sharing preferences',
         validations: { isRequired: [true, 'Choose at least one organisation'] },
-        items: organisationSharesItems
+        items: organisationSharesItems,
+        description: `<p class="nhsuk-u-margin-0"><a href="${data.organisationInfoUrl}" target="_blank" rel="noopener noreferrer">What does each organisation do? (opens in a new window) </a></p>`
       }]
     })
 
@@ -160,7 +176,8 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     englandPostCode: null,
     locationCountryName: '',
     mobilePhone: null,
-    organisationShares: []
+    organisationShares: [],
+    organisationInfoUrl: data.organisationInfoUrl
   };
 
 }

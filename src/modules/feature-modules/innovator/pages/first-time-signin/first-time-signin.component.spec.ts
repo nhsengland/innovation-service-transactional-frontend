@@ -96,6 +96,7 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
       englandPostCode: null,
       locationCountryName: '',
       mobilePhone: null,
+      organisationInfoUrl: '/about-the-service/who-we-are',
       organisationShares: ['orgId01', 'orgId02']
     });
 
@@ -122,6 +123,7 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
       englandPostCode: null,
       locationCountryName: '',
       mobilePhone: null,
+      organisationInfoUrl: '/about-the-service/who-we-are',
       organisationShares: ['orgId01', 'orgId02']
     });
 
