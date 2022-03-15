@@ -13,8 +13,7 @@ import { getInnovationCommentsDTO, InnovationDataResolverType } from '@stores-mo
 
 @Component({
   selector: 'shared-pages-innovation-comments-comments-list',
-  templateUrl: './comments-list.component.html',
-  styleUrls: ['./comments-list.component.scss']
+  templateUrl: './comments-list.component.html'
 })
 export class PageInnovationCommentsListComponent extends CoreComponent implements OnInit {
 
