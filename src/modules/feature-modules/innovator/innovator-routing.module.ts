@@ -44,6 +44,7 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
+import { PageInnovationCommentsEditComponent } from '@modules/shared/pages/innovation/comments/comments-edit.component';
 
 
 const routes: Routes = [
@@ -191,6 +192,10 @@ const routes: Routes = [
               },
               {
                 path: 'comments/new', pathMatch: 'full', component: PageInnovationCommentsNewComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/comments', label: 'Go back' } } }
+              },
+              {
+                path: 'comments/edit/:commentId', pathMatch: 'full', component: PageInnovationCommentsEditComponent,
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/comments', label: 'Go back' } } }
               },
               {

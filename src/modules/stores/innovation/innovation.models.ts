@@ -324,6 +324,8 @@ export type getInnovationCommentsDTO = {
   id: string;
   message: string;
   createdAt: string;
+  updatedAt: string;
+  is_editable: boolean;
   user: {
     id: string;
     type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
@@ -335,6 +337,8 @@ export type getInnovationCommentsDTO = {
     id: string;
     message: string;
     createdAt: string;
+    updatedAt: string;
+    is_editable: boolean;
     user: {
       id: string;
       type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';

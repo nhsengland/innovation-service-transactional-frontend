@@ -30,6 +30,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
   form = new FormGroup({});
   formSubmittedFields: { [key: string]: string } = {};
+  userId: string;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -42,6 +43,8 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
     this.currentCreatedOrder = 'desc';
+    this.userId = this.stores.authentication.getUserId();
+    console.log(this.userId);
 
     this.commentsList = [];
 
