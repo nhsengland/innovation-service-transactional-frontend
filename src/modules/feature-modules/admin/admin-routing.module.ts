@@ -16,6 +16,7 @@ import { PageServiceUsersInfoComponent } from './pages/service-users/service-use
 import { PageServiceUsersLockComponent } from './pages/service-users/service-users-lock.component';
 import { PageServiceUsersNewComponent } from './pages/service-users/service-users-new/service-users-new.component';
 import { PageServiceUsersUnlockComponent } from './pages/service-users/service-users-unlock.component';
+import { PageAdminUsersNewComponent } from './pages/admin-users/admin-users-new/admin-users-new.component';
 
 // Resolvers.
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
@@ -45,6 +46,11 @@ const routes: Routes = [
             pathMatch: 'full',
             data: { breadcrumb: null },
             component: PageAdminUsersFindComponent
+          },
+          {
+            path: 'new',
+            pathMatch: 'full',
+            component: PageAdminUsersNewComponent
           },
           {
             path: ':userId',

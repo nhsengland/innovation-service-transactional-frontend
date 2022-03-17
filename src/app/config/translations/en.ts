@@ -187,7 +187,7 @@ export const locale = {
         validations: {
           equal_to: 'Value does not match',
           invalid_email: 'Invalid email',
-          invalid_format: 'Invalid format.',
+          invalid_format: 'Invalid format',
           invalid_hexadecimal_format: 'Invalid hexadecimal format',
           invalid_json_format: 'Invalid JSON format',
           invalid_url_format: 'Invalid URL',
@@ -199,7 +199,7 @@ export const locale = {
           min_length: 'Text must have at least {{ maxLength }} characters',
           max_length: 'Text cannot exceed {{ maxLength }} characters',
           password_mismatch: 'Passwords don\'t appear to match',
-          password_regex: 'The password must contain at least minimum 8 characters: one uppercase, one lowercase, one number and one special character.',
+          password_regex: 'The password must contain at least minimum 8 characters: one uppercase, one lowercase, one number and one special character',
           required: 'Required'
         }
       }
