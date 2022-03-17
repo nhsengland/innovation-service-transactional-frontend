@@ -115,7 +115,7 @@
                   {{ reply.message }}
                   <span *ngIf="reply.updatedAt" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2"> (last edited at 11 October 2021 at 10:14 AM)</span>
                 </p>
-                <a *ngIf="reply.is_editable" routerLink="/{{ module }}/innovations/{{ innovationId }}/comments/edit" class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                <a *ngIf="reply.is_editable && reply.user.id === userId" routerLink="/{{ module }}/innovations/{{ innovationId }}/comments/edit" class="nhsuk-body-s nhsuk-u-margin-bottom-0">
                   Edit this reply
                 </a>
               </div>

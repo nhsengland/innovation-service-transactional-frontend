@@ -5,7 +5,6 @@ import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
 import { AlertType } from '@app/base/models';
 
-import { UrlModel } from '@modules/core';
 
 @Component({
   selector: 'shared-pages-innovation-comments-comments-edit',
@@ -16,8 +15,7 @@ export class PageInnovationCommentsEditComponent extends CoreComponent {
   module: '' | 'innovator' | 'accessor' = '';
   innovationId: string;
   commentId: string;
-  commentUrl: UrlModel;
-  comment: string;
+
   alert: AlertType = { type: null };
 
   form = new FormGroup({
@@ -35,14 +33,8 @@ export class PageInnovationCommentsEditComponent extends CoreComponent {
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.commentId = this.activatedRoute.snapshot.params.commentId;
-    this.commentUrl = new UrlModel(`/${this.module}/innovations/${this.innovationId}/comments`);
-    this.comment = this.activatedRoute.snapshot.data.comment;
-    console.log(this.activatedRoute.snapshot.data.comment);
   }
 
-  ngOnInit(): void {
-    
-  }
 
   onSubmit(): void {
 
@@ -55,7 +47,7 @@ export class PageInnovationCommentsEditComponent extends CoreComponent {
 
     this.stores.innovation.createInnovationComment$(this.module, this.innovationId, body).subscribe(
       () => {
-        this.redirectTo(this.commentUrl.buildUrl(), { alert: 'commentEditSuccess' });
+        this.redirectTo(`/${this.module}/innovations/${this.innovationId}/comments`, { alert: 'commentEditSuccess' });
       },
       () => {
 
