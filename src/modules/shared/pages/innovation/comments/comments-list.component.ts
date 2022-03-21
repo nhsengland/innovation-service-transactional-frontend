@@ -55,6 +55,13 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
           message: 'Everyone who is currently engaging with your innovation will be notified.'
         };
         break;
+      case 'commentEditSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'You have successfully updated a comment',
+          message: 'Everyone who is currently engaging with your innovation will be notified.'
+        };
+        break;
       default:
         break;
     }

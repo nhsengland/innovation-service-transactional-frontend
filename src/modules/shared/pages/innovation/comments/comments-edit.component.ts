@@ -67,7 +67,7 @@ export class PageInnovationCommentsEditComponent extends CoreComponent {
 
         this.alert = {
           type: 'ERROR',
-          title: 'An error occurred when creating an action',
+          title: 'An error occurred when updating an action',
           message: 'Please try again or contact us for further help',
           setFocus: true
         };
