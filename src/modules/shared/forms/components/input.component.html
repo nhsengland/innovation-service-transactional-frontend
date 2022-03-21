@@ -19,7 +19,7 @@
     </span>
   </ng-container>
 
-  <input [formControl]="fieldControl" [id]="id" [name]="controlName" [type]="type" [placeholder]="placeholder" [value]="fieldControl.value" class="nhsuk-input" [ngClass]="inputCssClass"
+  <input [formControl]="fieldControl" [id]="id" [name]="controlName" [type]="type" [placeholder]="placeholder" [value]="fieldControl.value" (focusout)="transformCase()" class="nhsuk-input" [ngClass]="inputCssClass"
     [attr.aria-invalid]="hasError ? 'true' : null"
     [attr.aria-describedby]="ariaDescribedBy" />
 

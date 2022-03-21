@@ -49,6 +49,8 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
         id: 'email',
         dataType: 'text',
         label: 'Provide the new user\'s email address',
+        description: 'Kindly enter email in lower case',
+        transformation: 'lower',
         validations: {
           isRequired: [true, 'Email is required'],
           pattern: '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'

@@ -23,25 +23,13 @@ type OutboundPayloadType = {
 export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   showSummary: true,
   steps: [
-    // new FormEngineModel({
-    //   parameters: [{
-    //     id: 'type',
-    //     dataType: 'radio-group',
-    //     label: 'Select user type',
-    //     validations: { isRequired: [true, 'Choose one option'] },
-    //     items: [
-    //       { value: 'ASSESSMENT', label: 'Needs Assessor' },
-    //       { value: 'QUALIFYING_ACCESSOR', label: 'Qualifying Accessor' },
-    //       { value: 'ACCESSOR', label: 'Accessor' }
-    //     ]
-    //   }]
-    // }),
 
     new FormEngineModel({
       parameters: [{
         id: 'email',
         dataType: 'text',
         label: 'Provide the new admin\'s email address',
+        description: 'Kindly enter email in lower case',
         validations: {
           isRequired: [true, 'Email is required'],
           pattern: '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'

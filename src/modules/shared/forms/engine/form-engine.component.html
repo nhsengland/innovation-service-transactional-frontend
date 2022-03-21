@@ -70,7 +70,7 @@
 
                   <div [ngSwitch]="f.dataType">
                     <div *ngSwitchDefault>
-                      <theme-form-input [controlName]="f.id" label="{{ f.label }} {{ i + 1}}" [description]="f.description" [pageUniqueField]="false">
+                      <theme-form-input [controlName]="f.id" label="{{ f.label }} {{ i + 1}}" [description]="f.description" [transformation]="f.transformation" [pageUniqueField]="false">
                         <ng-container append>
                           <button type="button" class="nhsuk-button nhsuk-button--secondary form-input-appended-button" (click)="removeFieldGroupRow(p.id, i)">Remove</button>
                         </ng-container>
@@ -90,7 +90,7 @@
         </div>
 
         <div *ngSwitchDefault>
-          <theme-form-input [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
+          <theme-form-input [controlName]="p.id" [label]="p.label" [description]="p.description" [transformation]="p.transformation"  [pageUniqueField]="onlyOneField"></theme-form-input>
         </div>
 
       </ng-container>
