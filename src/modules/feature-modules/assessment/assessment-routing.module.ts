@@ -26,6 +26,7 @@ import { PageInnovationSupportStatusListComponent } from '@shared-module/pages/i
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
+import { PageInnovationCommentsEditComponent } from '@modules/shared/pages/innovation/comments/comments-edit.component';
 
 const routes: Routes = [
 
@@ -130,13 +131,28 @@ const routes: Routes = [
               //   data: { layoutOptions: { type: 'innovationLeftAsideMenu', showInnovationHeader: false } }
               // }
               {
-                path: 'comments', pathMatch: 'full', component: PageInnovationCommentsListComponent,
-                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } }
-              },
-              {
-                path: 'comments/new', pathMatch: 'full', component: PageInnovationCommentsNewComponent,
-                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/comments', label: 'Go back' } } }
-              },
+                path: 'comments', 
+                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } },
+                children: [
+                  {
+                    path: '', component: PageInnovationCommentsListComponent,
+                    pathMatch: 'full'
+                  },
+                  {
+                    path: 'new', pathMatch: 'full', component: PageInnovationCommentsNewComponent,
+                    data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/comments', label: 'Go back' } } }
+                  },
+                  {
+                    path: ':commentId', pathMatch: 'full', component: PageInnovationCommentsEditComponent,
+                    data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/comments', label: 'Go back' } }, subModule: 'comment' }
+                  },
+                  {
+                    path: ':commentId/reply/:replyId', pathMatch: 'full', component: PageInnovationCommentsEditComponent,
+                    data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/comments', label: 'Go back' } }, subModule: 'reply' }
+                  }
+                ]
+              }
+              
             ]
           }
         ]

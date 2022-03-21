@@ -44,7 +44,6 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
     this.currentCreatedOrder = 'desc';
     this.userId = this.stores.authentication.getUserId();
-    console.log(this.userId);
 
     this.commentsList = [];
 
@@ -81,7 +80,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
     this.setPageStatus('LOADING');
 
     this.stores.innovation.getInnovationComments$(this.module, this.innovationId, this.currentCreatedOrder).subscribe(
-      response => {
+      response => { console.log(response)
         this.commentsList = response;
         this.commentsList.forEach(item => {
           this.form.addControl(`${item.id}`, new FormControl('', CustomValidators.required('A reply text is required')));

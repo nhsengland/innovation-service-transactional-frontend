@@ -293,6 +293,18 @@ export class InnovationService {
 
   }
 
+  updateInnovationComment(module: UserModulesType, innovationId: string, body: { comment: string, replyTo?: string }, commentId: string): Observable<{ id: string }> {
+
+    const endpointModule = this.endpointModule(module);
+
+    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/comments/:commentId').setPathParams({ endpointModule, userId: this.authenticationStore.getUserId(), innovationId, commentId });
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
   getInnovationOrganisationSuggestions(module: Extract<UserModulesType, '' | 'innovator' | 'accessor'>, innovationId: string): Observable<OrganisationSuggestionModel> {
 
     const endpointModule = this.endpointModule(module);

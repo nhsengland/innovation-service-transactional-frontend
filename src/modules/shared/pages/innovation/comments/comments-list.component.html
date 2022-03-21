@@ -55,7 +55,6 @@
         <ul class="nhsuk-grid-row nhsuk-card-group">
           <li *ngFor="let comment of commentsList" class="nhsuk-grid-column-full nhsuk-card-group__item">
             <div class="nhsuk-card nhsuk-u-padding-4">
-              <div>
               <div class="d-flex justify-content-space-between nhsuk-u-margin-bottom-2" role="heading" aria-level="2">
                 <div class="d-flex">
                   <div class="nhsuk-u-padding-right-2">
@@ -71,9 +70,9 @@
 
               <p class="nhsuk-u-margin-0" style="word-wrap: break-word; overflow-wrap: break-word; hyphens: auto;">
                 {{ comment.message }}
-                <span *ngIf="comment.updatedAt" class="nhsuk-body-s font-color-secondary"> (last edited at 11 October 2021 at 10:14 AM)</span>
+                <span *ngIf="comment.updated_at" class="nhsuk-body-s font-color-secondary"> (last edited at {{ comment.createdAt | date: ('app.date_formats.long_date_time' | translate) }})</span>
               </p>
-              <a *ngIf="comment.is_editable && comment.user.id === userId" routerLink="/{{ module }}/innovations/{{ innovationId }}/comments/edit/{{ comment.id }}" [state]="{comment: comment.message}" class="nhsuk-body-s nhsuk-u-margin-bottom-4 nhsuk-u-margin-top-2">
+              <a *ngIf="comment.is_editable && comment.user.id === userId" routerLink="/{{ module }}/innovations/{{ innovationId }}/comments/{{ comment.id }}" class="nhsuk-body-s nhsuk-u-margin-0 nhsuk-u-margin-top-2 d-inline-block">
                 Edit this comment
               </a>
               <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4 nhsuk-u-margin-top-4" />
@@ -98,10 +97,9 @@
               <button class="nhsuk-button button-small" (click)="onReply(comment.id)">
                 Reply <span class="nhsuk-u-visually-hidden"> for comment made by {{ comment.user.name }} on {{ comment.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </span>
               </button>
-            </div>
-              <hr *ngIf="comment.replies.length > 0" class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4 nhsuk-u-margin-top-4" />
+              <hr *ngIf="comment.replies.length > 0" class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-4" />
 
-              <div *ngFor="let reply of comment.replies" class="nhsuk-card bg-color-grey nhsuk-u-margin-bottom-3 nhsuk-u-padding-3">
+              <div *ngFor="let reply of comment.replies" class="nhsuk-card bg-color-grey nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-4 nhsuk-u-padding-3">
                 <div class="d-flex justify-content-space-between">
                   <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0">
                     {{ reply.user.name }}{{ reply.user.organisationUnit ? ', ' + reply.user.organisationUnit.name : '' }}
@@ -115,13 +113,10 @@
                   {{ reply.message }}
                   <span *ngIf="reply.updatedAt" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2"> (last edited at 11 October 2021 at 10:14 AM)</span>
                 </p>
-                <a *ngIf="reply.is_editable && reply.user.id === userId" routerLink="/{{ module }}/innovations/{{ innovationId }}/comments/edit" class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+                <a *ngIf="reply.is_editable && reply.user.id === userId" routerLink="/{{ module }}/innovations/{{ innovationId }}/comments/{{ comment.id }}/reply/{{ reply.id }}" class="nhsuk-body-s nhsuk-u-margin-bottom-0 d-inline-block">
                   Edit this reply
                 </a>
               </div>
-
-              
-
             </div>
           </li>
         </ul>

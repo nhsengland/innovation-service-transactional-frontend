@@ -324,7 +324,7 @@ export type getInnovationCommentsDTO = {
   id: string;
   message: string;
   createdAt: string;
-  updatedAt: string;
+  updated_at: string;
   is_editable: boolean;
   user: {
     id: string;
