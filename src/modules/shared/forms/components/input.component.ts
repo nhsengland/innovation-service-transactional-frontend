@@ -89,12 +89,4 @@ export class FormInputComponent extends ControlValueAccessorConnector implements
     this.fieldChangeSubscription.unsubscribe();
   }
 
-  transformCase(): void{
-    if (this.transformation === 'lower') {
-      this.fieldControl?.patchValue(this.fieldControl.value.toLowerCase());
-    }
-    if (this.transformation === 'upper') {
-      this.fieldControl?.patchValue(this.fieldControl.value.toUpperCase());
-    }
-  }
 }

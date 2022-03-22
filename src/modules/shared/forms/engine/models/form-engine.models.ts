@@ -30,7 +30,6 @@ export class FormEngineParameterModel {
   id: string;
   dataType: 'text' | 'textarea' | 'number' | 'password' | 'hidden' | 'autocomplete' | 'checkbox-group' | 'checkbox-array' | 'grouped-checkbox-array' | 'radio-group' | 'fields-group' | 'file-upload';
   label?: string;
-  transformation?: 'upper' | 'lower' ;
   description?: string;
   placeholder?: string;
   isVisible?: boolean;
@@ -95,7 +94,6 @@ export class FormEngineParameterModel {
     this.isEditable = data.isEditable !== undefined ? data.isEditable : true;
     this.rank = data.rank || 0;
     this.validations = data.validations;
-    this.transformation = data.transformation;
 
     this.lengthLimit = data.lengthLimit;
     this.additional = data.additional;
