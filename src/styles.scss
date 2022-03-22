@@ -89,6 +89,7 @@ $service-manual-container-size: 1100px; // Container width variable.
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .text-decoration-none { text-decoration: none; }
 
@@ -486,16 +487,5 @@ $service-manual-container-size: 1100px; // Container width variable.
   svg {
     position: relative;
     top: 5px;
-  }
-}
-
-
-.app-index-navigation {
-  padding-top: 16px;
-}
-
-@media (min-width: 40.0625em) {
-  .app-index-navigation {
-    padding-top: 24px
   }
 }

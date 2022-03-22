@@ -40,9 +40,9 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
   statusError = '';
 
   form = new FormGroup({
-    status: new FormControl('', CustomValidators.required('Please choose a status')),
+    status: new FormControl('', { validators: CustomValidators.required('Please choose a status'), updateOn: 'change' }),
     comment: new FormControl('', CustomValidators.required('A comment is required'))
-  });
+  }, { updateOn: 'blur' });
 
 
   constructor(

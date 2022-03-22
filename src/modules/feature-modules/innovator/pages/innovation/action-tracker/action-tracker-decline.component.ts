@@ -25,7 +25,7 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
 
   form = new FormGroup({
     comment: new FormControl('')
-  });
+  }, { updateOn: 'blur' });
 
 
   constructor(

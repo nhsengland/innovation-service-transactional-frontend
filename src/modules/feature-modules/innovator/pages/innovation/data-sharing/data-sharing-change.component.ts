@@ -22,8 +22,8 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
   organisationInfoUrl: string;
 
   form = new FormGroup({
-    organisations: new FormArray([]),
-  });
+    organisations: new FormArray([])
+  }, { updateOn: 'change' });
 
   initialState: {
     organisations: { id: string, status: string }[]
