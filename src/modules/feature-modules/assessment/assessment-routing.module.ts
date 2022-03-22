@@ -147,7 +147,7 @@ const routes: Routes = [
                     data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/comments', label: 'Go back' } }, subModule: 'comment' }
                   },
                   {
-                    path: ':commentId/reply/:replyId', pathMatch: 'full', component: PageInnovationCommentsEditComponent,
+                    path: ':commentId/replies/:replyId', pathMatch: 'full', component: PageInnovationCommentsEditComponent,
                     data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/comments', label: 'Go back' } }, subModule: 'reply' }
                   }
                 ]
