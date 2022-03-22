@@ -67,6 +67,19 @@ describe('Shared/Pages/Innovation/CommentsPageInnovationCommentsListComponent', 
     expect(component.alert).toEqual(expected);
 
   });
+  it('should show "commentEditSuccess" warning', () => {
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+    activatedRoute.snapshot.queryParams = { alert: 'commentEditSuccess' };
+
+    const expected = { type: 'SUCCESS', title: 'You have successfully updated a comment', message: 'Everyone who is currently engaging with your innovation will be notified.' };
+
+    fixture = TestBed.createComponent(PageInnovationCommentsListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component.alert).toEqual(expected);
+
+  });
 
 
   it('should have innovation information loaded', () => {

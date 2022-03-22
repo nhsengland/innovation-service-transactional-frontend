@@ -143,4 +143,8 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.createInnovationComment(module, innovationId, body);
   }
 
+  updateInnovationComment$(module: UserModulesType, innovationId: string, body: { comment: string, replyTo?: string }, commentId: string): Observable<{ id: string }> {
+    return this.innovationsService.updateInnovationComment(module, innovationId, body, commentId);
+  }
+
 }

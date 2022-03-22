@@ -31,6 +31,7 @@ import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
 // Services.
 import { OrganisationsService } from './services/organisations.service';
 import { NotificationsService } from './services/notifications.service';
+import { PageInnovationCommentsEditComponent } from './pages/innovation/comments/comments-edit.component';
 
 @NgModule({
   imports: [
@@ -56,6 +57,7 @@ import { NotificationsService } from './services/notifications.service';
     PageActionStatusListComponent,
     PageInnovationCommentsListComponent,
     PageInnovationCommentsNewComponent,
+    PageInnovationCommentsEditComponent,
     PageInnovationSupportStatusListComponent,
 
     PageErrorComponent,
