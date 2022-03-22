@@ -104,7 +104,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersInfoComponent'
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{id: 'inn1', name: 'innovation'}],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', role: 'INNOVATOR_OWNER', units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: 'INNOVATOR_OWNER', units: [] }
       ]
     };
 
@@ -117,7 +117,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersInfoComponent'
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{id: 'inn1', name: 'innovation'}],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', role: 'INNOVATOR_OWNER', units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: 'INNOVATOR_OWNER', units: [] }
       ]
     };
 
@@ -147,7 +147,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersInfoComponent'
       lockedAt: null,
       innovations: [{id: 'inn1', name: 'innovation'}],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', role: 'INNOVATOR_OWNER', units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: 'INNOVATOR_OWNER', units: [] }
       ]
     };
     serviceUsersService.getUserFullInfo = () => of(responseMock);
