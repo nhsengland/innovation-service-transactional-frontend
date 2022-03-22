@@ -28,7 +28,6 @@ export class FormInputComponent extends ControlValueAccessorConnector implements
   @Input() pageUniqueField = true;
   @Input() width?: 'one-third' | 'two-thirds' | 'three-quarters' | 'full';
   @Input() cssOverride?: string;
-  @Input() transformation?: 'upper' | 'lower' ;
 
   private fieldChangeSubscription = new Subscription();
 
@@ -60,7 +59,6 @@ export class FormInputComponent extends ControlValueAccessorConnector implements
     this.id = this.id || RandomGeneratorHelper.generateRandom();
     this.type = this.type || 'text';
     this.placeholder = this.placeholder || '';
-    this.transformation = this.transformation;
 
     this.inputCssClass = this.width ? `nhsuk-u-width-${this.width}` : 'nhsuk-u-width-two-thirds';
     this.divCssOverride = this.cssOverride || ''; // nhsuk-u-padding-top-4

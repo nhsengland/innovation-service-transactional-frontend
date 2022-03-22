@@ -85,7 +85,7 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Summar
 
   toReturn.push(
     { label: 'Email', value: data.email, editStepNumber: 1 },
-    { label: 'User Name', value: data.name, editStepNumber: 2 },
+    { label: 'Admin Name', value: data.name, editStepNumber: 2 },
   );
 
   const lastMarkStep = 2;

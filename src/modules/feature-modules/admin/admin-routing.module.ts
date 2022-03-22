@@ -39,7 +39,7 @@ const routes: Routes = [
       // NOTE: When creating the future admin-users routes, a guard should be created to protect those routes!
       {
         path: 'administration-users',
-        data: { breadcrumb: 'administartion users' },
+        data: { breadcrumb: 'administration users' },
         children: [
           {
             path: '',

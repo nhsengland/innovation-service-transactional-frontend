@@ -32,31 +32,10 @@ export class PageAdminUsersInfoComponent extends CoreComponent implements OnInit
     this.setPageTitle('Admin User information');
     this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData(this.activatedRoute).user.displayName };
     switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'lockSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'Admin locked successfully',
-          // message: 'You\'ve updated your support status and posted a comment to the innovator.'
-        };
-        break;
-      case 'unlockSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'Admin unlocked successfully',
-          // message: 'Your suggestions were saved and notifications sent.'
-        };
-        break;
       case 'adminCreationSuccess':
         this.alert = {
           type: 'SUCCESS',
           title: 'Admin created successfully',
-          // message: 'Your suggestions were saved and notifications sent.'
-        };
-        break;
-      case 'roleChangeSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'Admin role changed successfully',
           // message: 'Your suggestions were saved and notifications sent.'
         };
         break;
