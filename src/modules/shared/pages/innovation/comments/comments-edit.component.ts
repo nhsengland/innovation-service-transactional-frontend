@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
@@ -9,21 +9,20 @@ import { AlertType } from '@app/base/models';
   selector: 'shared-pages-innovation-comments-comments-edit',
   templateUrl: './comments-edit.component.html'
 })
-export class PageInnovationCommentsEditComponent extends CoreComponent {
+export class PageInnovationCommentsEditComponent extends CoreComponent implements OnInit {
 
   module: '' | 'innovator' | 'accessor' = '';
   subModule: 'comment' | 'reply';
+  currentCreatedOrder: 'asc' | 'desc' = 'desc';
   innovationId: string;
   commentId: string;
-  currentCreatedOrder: 'asc' | 'desc' = 'desc';
   userId: string;
   replyId: string;
   alert: AlertType = { type: null };
 
   form = new FormGroup({
-    message: new FormControl('', CustomValidators.required('A message is required'))
+    comment: new FormControl('', CustomValidators.required('A message is required'))
   });
-
 
   constructor(
     private activatedRoute: ActivatedRoute
@@ -41,10 +40,25 @@ export class PageInnovationCommentsEditComponent extends CoreComponent {
   }
 
   ngOnInit(): void {
-    
+
     this.setPageStatus('LOADING');
-    
-    this.getComment();
+
+    this.stores.innovation.getInnovationComments$(this.module, this.innovationId, this.currentCreatedOrder).subscribe(
+      response => {
+
+        const comment = response.filter(c => c.id === this.commentId)[0];
+        this.form.patchValue({ comment: (this.subModule === 'comment') ? comment.message : comment.replies.filter((r) => r.id === this.replyId)[0].message });
+
+        this.setPageStatus('READY');
+      },
+      () => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch comments information',
+          message: 'Please try again or contact us for further help'
+        };
+    });
   }
 
 
@@ -55,9 +69,9 @@ export class PageInnovationCommentsEditComponent extends CoreComponent {
       return;
     }
 
-    const body = { comment: this.form.get('message')?.value };
     const id = (this.subModule === 'comment') ? this.commentId : this.replyId;
-    this.stores.innovation.updateInnovationComment$(this.module, this.innovationId, body, id).subscribe(
+
+    this.stores.innovation.updateInnovationComment$(this.module, this.innovationId, this.form.value, id).subscribe(
       () => {
         this.redirectTo(`/${this.module}/innovations/${this.innovationId}/comments`, { alert: 'commentEditSuccess' });
       },
@@ -72,29 +86,9 @@ export class PageInnovationCommentsEditComponent extends CoreComponent {
           setFocus: true
         };
 
-      });
+    });
 
   }
 
-  getComment(): void {
-
-    this.stores.innovation.getInnovationComments$(this.module, this.innovationId, this.currentCreatedOrder).subscribe(
-      response => {
-        const comment = response.filter(c => c.id === this.commentId)[0];
-        this.form.patchValue({ 
-          message: (this.subModule === 'comment') ? comment.message : comment?.replies.filter((r) => r.id === this.replyId)[0].message
-        });
-
-        this.setPageStatus('READY');
-      },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch comments information',
-          message: 'Please try again or contact us for further help'
-        };
-    })
-  }
 
 }

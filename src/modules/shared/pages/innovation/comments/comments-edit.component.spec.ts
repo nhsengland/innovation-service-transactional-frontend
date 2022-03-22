@@ -65,13 +65,35 @@ describe('Shared/Pages/Innovation/CommentsPageInnovationCommentsEditComponent', 
 
   });
 
-  it('should run onSubmit and call api with success', () => {
+  it('should run onSubmit when submodule reply and call api with success', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+    activatedRoute.snapshot.data = { subModule: 'reply', module: 'innovator' };
+    activatedRoute.queryParams = of({ createdOrder: 'desc' });
     const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
     const responseMock = { id: 'commentId' };
-    innovationStore.createInnovationComment$ = () => of(responseMock as any);
+    innovationStore.updateInnovationComment$ = () => of(responseMock as any);
+
+    fixture = TestBed.createComponent(PageInnovationCommentsEditComponent);
+    component = fixture.componentInstance;
+
+    component.form.get('comment')?.setValue('A comment');
+    component.onSubmit();
+    fixture.detectChanges();
+
+    expect(routerSpy).toHaveBeenCalledWith(['/innovator/innovations/Inno01/comments'], { queryParams: { alert: 'commentEditSuccess' } });
+
+  });
+  it('should run onSubmit when submodule comment and call api with success', () => {
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+    activatedRoute.snapshot.data = { subModule: 'comment', module: 'innovator' };
+    activatedRoute.queryParams = of({ createdOrder: 'desc' });
+    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+
+    const responseMock = { id: 'commentId' };
+    innovationStore.updateInnovationComment$ = () => of(responseMock as any);
 
     fixture = TestBed.createComponent(PageInnovationCommentsEditComponent);
     component = fixture.componentInstance;
@@ -87,12 +109,12 @@ describe('Shared/Pages/Innovation/CommentsPageInnovationCommentsEditComponent', 
   it('should run onSubmit and call api with error', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-
-    innovationStore.createInnovationComment$ = () => throwError('error');
+    activatedRoute.snapshot.data = { subModule: 'comment', module: 'innovator' };
+    innovationStore.updateInnovationComment$ = () => throwError('error');
 
     const expected = {
       type: 'ERROR',
-      title: 'An error occurred when creating an action',
+      title: 'An error occurred when updating an action',
       message: 'Please try again or contact us for further help',
       setFocus: true
     };
@@ -108,7 +130,7 @@ describe('Shared/Pages/Innovation/CommentsPageInnovationCommentsEditComponent', 
 
   });
 
-  it('should throw error on getComment()', () => {
+  it('should throw error on get comments', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
     activatedRoute.queryParams = of({ createdOrder: 'desc' });
@@ -125,15 +147,15 @@ describe('Shared/Pages/Innovation/CommentsPageInnovationCommentsEditComponent', 
     expect(component.alert).toEqual(expected);
 
   });
-  it('should run getComment() with submodule comment', () => {
+  it('should get comment when submodule comment', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', commentId: 'comment01', replyId: 'reply01' };
-    activatedRoute.snapshot.data = { submodule: 'comment', module: 'innovator' };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', commentId: 'Comment01', replyId: 'Reply01' };
+    activatedRoute.snapshot.data = { subModule: 'comment', module: 'innovator' };
     activatedRoute.queryParams = of({ createdOrder: 'desc' });
     const responseMock01 = [
       {
         id: 'Comment01', message: 'Comment message', createdAt: '2020-01-01T00:00:00.000Z',
-        user: { id: 'User01', type: 'ACCESSOR', name: 'Name of user', organisationUnit: { id: 'OrgId01', name: 'Org. Unit' } },
+        user: { id: 'User01', type: 'INNOVATOR', name: 'Name of user', organisationUnit: { id: 'OrgId01', name: 'Org. Unit' } },
         replies: [
           {
             id: 'Reply01', message: 'Reply message', createdAt: '2020-01-01T00:00:00.000Z',
@@ -143,39 +165,37 @@ describe('Shared/Pages/Innovation/CommentsPageInnovationCommentsEditComponent', 
       }
     ];
     innovationStore.getInnovationComments$ = () => of(responseMock01 as any);
-  
-    fixture = TestBed.createComponent(PageInnovationCommentsEditComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    expect(component.isRunningOnBrowser()).toEqual(true);
 
-  });
-  it('should run getComment() with submodule reply', () => {
-
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', commentId: 'comment01', replyId: 'reply01' };
-    activatedRoute.params = of({ innovationId: 'Inno01', commentId: 'comment01', replyId: 'reply01' })
-    activatedRoute.snapshot.data = { submodule: 'reply', module: 'innovator' };
-    activatedRoute.queryParams = of({ createdOrder: 'desc' });
-    const responseMock01 = [
-      {
-        id: 'Comment01', message: 'Comment message', createdAt: '2020-01-01T00:00:00.000Z',
-        user: { id: 'User01', type: 'ACCESSOR', name: 'Name of user', organisationUnit: { id: 'OrgId01', name: 'Org. Unit' } },
-        replies: [
-          {
-            id: 'Reply01', message: 'Reply message', createdAt: '2020-01-01T00:00:00.000Z',
-            user: { id: 'User02', type: 'INNOVATOR', name: 'User 02', organisationUnit: { id: 'OrgId01', name: 'Org. Unit' } }
-          }
-        ]
-      }
-    ];
-    innovationStore.getInnovationComments$ = () => of(responseMock01 as any);
-  
     fixture = TestBed.createComponent(PageInnovationCommentsEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component.form.get('comment')?.value).toEqual('Comment message');
 
   });
+  it('should get replies with submodule reply', () => {
 
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', commentId: 'Comment01', replyId: 'Reply01' };
+    activatedRoute.snapshot.data = { subModule: 'reply', module: 'innovator' };
+    activatedRoute.queryParams = of({ createdOrder: 'desc' });
+    const responseMock01 = [
+      {
+        id: 'Comment01', message: 'Comment message', createdAt: '2020-01-01T00:00:00.000Z',
+        user: { id: 'User01', type: 'INNOVATOR', name: 'Name of user', organisationUnit: { id: 'OrgId01', name: 'Org. Unit' } },
+        replies: [
+          {
+            id: 'Reply01', message: 'Reply message', createdAt: '2020-01-01T00:00:00.000Z',
+            user: { id: 'User02', type: 'INNOVATOR', name: 'User 02', organisationUnit: { id: 'OrgId01', name: 'Org. Unit' } }
+          }
+        ]
+      }
+    ];
+    innovationStore.getInnovationComments$ = () => of(responseMock01 as any);
+
+    fixture = TestBed.createComponent(PageInnovationCommentsEditComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component.form.get('comment')?.value).toEqual('Reply message');
+
+  });
 
 });

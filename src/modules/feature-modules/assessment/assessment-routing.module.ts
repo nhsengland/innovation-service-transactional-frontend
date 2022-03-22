@@ -131,7 +131,7 @@ const routes: Routes = [
               //   data: { layoutOptions: { type: 'innovationLeftAsideMenu', showInnovationHeader: false } }
               // }
               {
-                path: 'comments', 
+                path: 'comments',
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } },
                 children: [
                   {
@@ -152,7 +152,7 @@ const routes: Routes = [
                   }
                 ]
               }
-              
+
             ]
           }
         ]
