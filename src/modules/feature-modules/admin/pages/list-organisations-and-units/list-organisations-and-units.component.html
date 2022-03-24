@@ -1,5 +1,5 @@
 <div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
+  <div class="nhsuk-grid-column-two-thirds">
 
     <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
       <p> {{ alert.message }} </p>
@@ -11,7 +11,7 @@
 
     <ng-container *ngIf="pageStatus === 'READY'">
 
-      <div class="nhsuk-grid-column-two-thirds nhsuk-u-padding-left-0 nhsuk-u-padding-bottom-5">
+      <div class="nhsuk-u-padding-bottom-5">
 
         <div class="d-flex nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
           <div class="width-50"> Organisation </div>
