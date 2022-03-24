@@ -38,7 +38,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   form = new FormGroup({
     assignedToMe: new FormControl(false),
     suggestedOnly: new FormControl(true)
-  });
+  }, { updateOn: 'change' });
 
   innovationsList: TableModel<(getInnovationsListEndpointOutDTO['data'][0])>;
 

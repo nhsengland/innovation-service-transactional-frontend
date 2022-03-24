@@ -1,4 +1,4 @@
-import { FormGroup, FormControl, ValidationErrors, FormArray, Validators, ValidatorFn, AsyncValidatorFn } from '@angular/forms';
+import { FormGroup, FormControl, ValidationErrors, FormArray, Validators, ValidatorFn, AsyncValidatorFn, AbstractControlOptions } from '@angular/forms';
 // import { sortBy } from 'lodash';
 
 import { FormEngineParameterModel } from '../models/form-engine.models';
@@ -22,14 +22,14 @@ export class FormEngineHelper {
       const additionalFields = parameter.additional || [];
 
       switch (parameter.dataType) {
-        case 'grouped-checkbox-array': // Creates an FormArray and pushes defaultValues into it.
         case 'checkbox-array': // Creates an FormArray and pushes defaultValues into it.
-          form.addControl(parameter.id, new FormArray([]));
+        case 'grouped-checkbox-array': // Creates an FormArray and pushes defaultValues into it.
+          form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
           (parameterValue as string[] || []).forEach(v => { (form.get(parameter.id) as FormArray).push(new FormControl(v)); });
           break;
 
         case 'checkbox-group': // Creates an FormGroup with one FormControl per item. Form will be something like: ParameterId = { ItemValue1: boolean, ItemValue2: boolean, ... }
-          form.addControl(parameter.id, new FormGroup({}));
+          form.addControl(parameter.id, new FormGroup({}, { updateOn: 'change' }));
           parameter.items?.forEach(item => {
             const itemValue = parameterValue ? (parameterValue as { [key: string]: boolean })[item.value] : false;
             (form.get(parameter.id) as FormGroup).addControl(item.value, FormEngineHelper.createParameterFormControl(parameter, itemValue));
@@ -52,8 +52,13 @@ export class FormEngineHelper {
           }
           break;
 
+        case 'autocomplete':
+        case 'radio-group':
+          form.addControl(parameter.id, FormEngineHelper.createParameterFormControl(parameter, parameterValue, { updateOn: 'change' }));
+          break;
+
         case 'file-upload': // Creates an FormArray and pushes defaultValues into it.
-          form.addControl(parameter.id, new FormArray([]));
+          form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
           (parameterValue as { id: string, name: string, url: string }[] || []).forEach(v => {
             (form.get(parameter.id) as FormArray).push(new FormGroup({ id: new FormControl(v.id), name: new FormControl(v.name), url: new FormControl(v.url) }));
           });
@@ -173,8 +178,8 @@ export class FormEngineHelper {
   }
 
 
-  static createParameterFormControl(parameter: FormEngineParameterModel, value?: any): FormControl {
-    return new FormControl({ value: (typeof value !== 'boolean' && !value && value !== 0 ? null : value), disabled: !parameter.isEditable });
+  static createParameterFormControl(parameter: FormEngineParameterModel, value?: any, options?: AbstractControlOptions): FormControl {
+    return new FormControl({ value: (typeof value !== 'boolean' && !value && value !== 0 ? null : value), disabled: !parameter.isEditable }, options);
   }
 
   static getParameterValidators(parameter: FormEngineParameterModel): ValidatorFn[] {

@@ -26,7 +26,7 @@ export class ActionAdvancedFilterComponent extends CoreComponent implements OnIn
     search: new FormControl(),
     innovationStatus: new FormArray([]),
     innovationSection: new FormArray([])
-  });
+  }, { updateOn: 'change' });
 
   anyFilterSelected = false;
   filters: {

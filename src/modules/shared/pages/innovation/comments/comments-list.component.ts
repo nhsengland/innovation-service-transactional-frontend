@@ -28,7 +28,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
   lengthLimitCharacters = 2000;
   commentsList: getInnovationCommentsDTO[];
 
-  form = new FormGroup({});
+  form = new FormGroup({}, { updateOn: 'blur' });
   formSubmittedFields: { [key: string]: string } = {};
   userId: string;
 

@@ -38,12 +38,11 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
     };
 
     this.form = new FormGroup({
-      innovation: new FormControl('', CustomValidators.required('Please, choose an innovation')),
+      innovation: new FormControl('', { validators: CustomValidators.required('Please, choose an innovation'), updateOn: 'change' }),
       reason: new FormControl(''),
       email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')]),
       confirmation: new FormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('archive my innovation')])
-    },
-      { updateOn: 'blur' }
+    }, { updateOn: 'blur' }
     );
   }
 
@@ -73,31 +72,13 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
 
   }
 
-  // onSubmitStep(): void {
-
-  //   console.log('onSubmitStep', this.form.valid);
-
-  //   if (!this.validateForm(this.stepNumber)) { return; }
-
-  //   this.stepNumber++;
-  //   this.setStepTitle();
-  // }
 
   onSubmitForm(): void {
 
-    // this.form.markAllAsTouched();
-
     if (!this.parseForm()) { return; }
 
+    if (!this.form.valid) { return; }
 
-    // console.log('onSubmitForm', this.form.valid, this.form);
-    // if (!this.form.valid) {
-    //   return;
-    // }
-
-    console.log('onSubmitForm - Faço chamada');
-
-    /*
     this.innovatorService.archiveInnovation(this.form.get('innovation')!.value, this.form.get('reason')!.value).pipe(
       concatMap(() => {
         return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
@@ -115,7 +96,7 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
         };
       }
     );
-    */
+
   }
 
 
@@ -148,20 +129,5 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
     return this.form.valid;
 
   }
-
-  // private setStepTitle(): void {
-  //   switch (this.stepNumber) {
-  //     case 1:
-  //       this.setPageTitle('Archive an innovation');
-  //       break;
-  //     case 2:
-  //     case 3:
-  //       this.setPageTitle('Archive \'' + this.innovationName + '\'');
-  //       break;
-  //     default:
-  //       this.setPageTitle('');
-  //       break;
-  //   }
-  // }
 
 }
