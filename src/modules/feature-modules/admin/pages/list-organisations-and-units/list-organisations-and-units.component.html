@@ -11,25 +11,24 @@
 
     <ng-container *ngIf="pageStatus === 'READY'">
 
-      <div class="nhsuk-u-padding-bottom-5">
+      <div class="nhsuk-grid-column-two-thirds nhsuk-u-padding-left-0 nhsuk-u-padding-bottom-5">
 
         <div class="d-flex nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
-          <div class="width-30 mr-auto"> Organisation </div>
-          <div class="width-15 ml-auto mr-auto"> Acronym</div>
-          <div class="width-15 ml-auto text-align-center"> Units</div>
+          <div class="width-50"> Organisation </div>
+          <div class="width-25"> Acronym</div>
         </div>
 
         <dl class="nhsuk-u-margin-0">
           <ng-container *ngFor="let organisation of organisations">
 
             <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'bottom-border-separator': organisation.showHideStatus !== 'opened'}">
-              <dt class="nhsuk-u-font-weight-normal width-45" [ngClass]="{ 'mr-auto': organisation.info.organisationUnits.length > 1 }">
+              <dt class="nhsuk-u-font-weight-normal width-50">
                 {{ organisation.info.name }}
               </dt>
-              <dd class="ml-auto mr-auto" [ngClass]="{ 'width-30': organisation.info.organisationUnits.length > 1, 'width-45': organisation.info.organisationUnits.length === 0 }">
+              <dd class="nhsuk-u-margin-0" [ngClass]="{ 'width-25': organisation.info.organisationUnits.length > 1 }">
                 {{ organisation.info.acronym }}
               </dd>
-              <dd *ngIf="organisation.info.organisationUnits.length > 1" class="width-15 ml-auto text-align-center">
+              <dd *ngIf="organisation.info.organisationUnits.length > 1" class="ml-auto">
                 <a href="javascript:void(0)" (click)="onShowHideClicked(organisation.info.id)">
                   {{ organisation.showHideText }} <span class="nhsuk-u-visually-hidden"> {{ organisation.showHideDescription }} </span>
                 </a>
@@ -40,10 +39,8 @@
               <dl class="nhsuk-u-margin-0">
                 <div *ngFor="let organisationUnit of organisation.info.organisationUnits; let i = index;" class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
                   <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'top-border-separator': i === 0}">
-                    <dt class="width-45">{{ organisationUnit.name }}</dt>
-                    <dd class="width-45">
-                      {{ organisationUnit.acronym }}
-                    </dd>
+                    <dt class="width-50">{{ organisationUnit.name }}</dt>
+                    <dd class="nhsuk-u-margin-0">{{ organisationUnit.acronym }}</dd>
                   </div>
                 </div>
               </dl>
