@@ -128,7 +128,7 @@ describe('FeatureModules/Admin/Pages/ListOrganisationsAndUnits/PageListOrganisat
 
     const expected = {
       type: 'ERROR',
-      title: 'Unable to fetch data sharing information',
+      title: 'Unable to fetch organisations information',
       message: 'Please try again or contact us for further help'
     };
 
