@@ -27,6 +27,7 @@ export type getUserFullInfoDTO = {
     name: string;
     size: null | string;
     role: 'INNOVATOR_OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
+    isShadow: boolean;
     units: []
   }[]
 };

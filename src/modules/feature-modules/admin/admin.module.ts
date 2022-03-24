@@ -18,6 +18,7 @@ import { PageServiceUsersNewComponent } from './pages/service-users/service-user
 import { PageServiceUsersUnlockComponent } from './pages/service-users/service-users-unlock.component';
 import { PageAdminUsersFindComponent } from './pages/admin-users/admin-users-find/admin-users-find.component';
 import { PageServiceChangeUserRoleComponent } from './pages/change-user-role/change-user-role.component';
+import { PageAdminUsersNewComponent } from './pages/admin-users/admin-users-new/admin-users-new.component';
 
 // Services.
 import { ServiceUsersService } from './services/service-users.service';
@@ -49,7 +50,8 @@ import { PageListOrganisationsAndUnitsComponent } from './pages/list-organisatio
     PageAdminUsersFindComponent,
     PageServiceChangeUserRoleComponent,
     PageAdminUsersInfoComponent,
-    PageListOrganisationsAndUnitsComponent
+    PageListOrganisationsAndUnitsComponent,
+    PageAdminUsersNewComponent
   ],
   providers: [
     // Services.
