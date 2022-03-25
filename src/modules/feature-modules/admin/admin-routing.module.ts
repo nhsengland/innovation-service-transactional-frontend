@@ -20,6 +20,7 @@ import { PageAdminUsersNewComponent } from './pages/admin-users/admin-users-new/
 
 // Resolvers.
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
+import { PageListOrganisationsAndUnitsComponent } from './pages/list-organisations-and-units/list-organisations-and-units.component';
 
 const routes: Routes = [
 
@@ -34,6 +35,11 @@ const routes: Routes = [
         path: 'dashboard',
         pathMatch: 'full',
         component: PageDashboardComponent
+      },
+      {
+        path: 'organisations',
+        pathMatch: 'full',
+        component: PageListOrganisationsAndUnitsComponent
       },
 
       // NOTE: When creating the future admin-users routes, a guard should be created to protect those routes!

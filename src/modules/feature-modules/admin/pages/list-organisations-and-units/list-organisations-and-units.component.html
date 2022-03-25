@@ -1,0 +1,55 @@
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+      <p> {{ alert.message }} </p>
+    </theme-alert>
+
+    <h1 class="nhsuk-u-margin-bottom"> {{ pageTitle }} </h1>
+
+    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+    <ng-container *ngIf="pageStatus === 'READY'">
+
+      <div class="nhsuk-u-padding-bottom-5">
+
+        <div class="d-flex nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
+          <div class="width-50"> Organisation </div>
+          <div class="width-25"> Acronym</div>
+        </div>
+
+        <dl class="nhsuk-u-margin-0">
+          <ng-container *ngFor="let organisation of organisations">
+
+            <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'bottom-border-separator': organisation.showHideStatus !== 'opened'}">
+              <dt class="nhsuk-u-font-weight-normal width-50">
+                {{ organisation.info.name }}
+              </dt>
+              <dd class="nhsuk-u-margin-0" [ngClass]="{ 'width-25': organisation.info.organisationUnits.length > 1 }">
+                {{ organisation.info.acronym }}
+              </dd>
+              <dd *ngIf="organisation.info.organisationUnits.length > 1" class="ml-auto">
+                <a href="javascript:void(0)" (click)="onShowHideClicked(organisation.info.id)">
+                  {{ organisation.showHideText }} <span class="nhsuk-u-visually-hidden"> {{ organisation.showHideDescription }} </span>
+                </a>
+              </dd>
+            </div>
+
+            <ng-container *ngIf="organisation.showHideStatus === 'opened'">
+              <dl class="nhsuk-u-margin-0">
+                <div *ngFor="let organisationUnit of organisation.info.organisationUnits; let i = index;" class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
+                  <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'top-border-separator': i === 0}">
+                    <dt class="width-50">{{ organisationUnit.name }}</dt>
+                    <dd class="nhsuk-u-margin-0">{{ organisationUnit.acronym }}</dd>
+                  </div>
+                </div>
+              </dl>
+            </ng-container>
+
+          </ng-container>
+        </dl>
+      </div>
+    </ng-container>
+
+  </div>
+</div>
