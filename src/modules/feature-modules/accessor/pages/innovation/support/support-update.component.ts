@@ -34,10 +34,10 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   currentStatus: { label: string, cssClass: string, description: string };
 
   form = new FormGroup({
-    status: new FormControl('', Validators.required),
-    accessors: new FormArray([]),
+    status: new FormControl('', { validators: Validators.required, updateOn: 'change' }),
+    accessors: new FormArray([], { updateOn: 'change' }),
     comment: new FormControl('', CustomValidators.required('A comment is required')),
-  });
+  }, { updateOn: 'blur' });
 
 
   constructor(

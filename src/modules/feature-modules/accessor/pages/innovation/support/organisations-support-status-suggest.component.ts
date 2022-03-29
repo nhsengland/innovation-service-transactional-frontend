@@ -26,10 +26,10 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   alert: AlertType = { type: null };
 
   form = new FormGroup({
-    organisationUnits: new FormArray([], Validators.required),
+    organisationUnits: new FormArray([], { validators: Validators.required, updateOn: 'change' }),
     comment: new FormControl('', CustomValidators.required('A comment is required')),
-    confirm: new FormControl(false)
-  });
+    confirm: new FormControl(false, { updateOn: 'change' })
+  }, { updateOn: 'blur' });
   formSubmitted = false;
 
   groupedItems: Required<FormEngineParameterModel>['groupedItems'] = [];
@@ -83,43 +83,43 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       this.accessorService.getInnovationSupports(this.innovationId, false)
     ]).subscribe(([organisations, needsAssessmentInfo, supportsInfo]) => {
 
-        const needsAssessmentSuggestedOrganisations = needsAssessmentInfo.assessment.organisations.map(item => item.id);
+      const needsAssessmentSuggestedOrganisations = needsAssessmentInfo.assessment.organisations.map(item => item.id);
 
-        this.groupedItems = organisations.map(item => {
+      this.groupedItems = organisations.map(item => {
 
-          const description = needsAssessmentSuggestedOrganisations.includes(item.id) ? 'Suggested by needs assessment' : undefined;
+        const description = needsAssessmentSuggestedOrganisations.includes(item.id) ? 'Suggested by needs assessment' : undefined;
 
-          return {
-            value: item.id,
-            label: item.name,
-            description,
-            items: item.organisationUnits.map(i => ({
-              value: i.id,
-              label: i.name,
-              description: (item.organisationUnits.length === 1 ? description : undefined),
-              isEditable: true
-            })),
-          };
+        return {
+          value: item.id,
+          label: item.name,
+          description,
+          items: item.organisationUnits.map(i => ({
+            value: i.id,
+            label: i.name,
+            description: (item.organisationUnits.length === 1 ? description : undefined),
+            isEditable: true
+          })),
+        };
 
+      });
+
+      supportsInfo.filter(s => s.status === 'ENGAGING').forEach(s => {
+
+        (this.form.get('organisationUnits') as FormArray).push(new FormControl(s.organisationUnit.id));
+
+        this.groupedItems.forEach(o => {
+          const ou = o.items.find(i => i.value === s.organisationUnit.id);
+          if (ou) {
+            ou.isEditable = false;
+            ou.label += ` (currently engaging)`;
+          }
         });
 
-        supportsInfo.filter(s => s.status === 'ENGAGING').forEach(s => {
+      });
 
-          (this.form.get('organisationUnits') as FormArray).push(new FormControl(s.organisationUnit.id));
+      this.setPageStatus('READY');
 
-          this.groupedItems.forEach(o => {
-            const ou = o.items.find(i => i.value === s.organisationUnit.id);
-            if (ou) {
-              ou.isEditable = false;
-              ou.label += ` (currently engaging)`;
-            }
-          });
-
-        });
-
-        this.setPageStatus('READY');
-
-      },
+    },
       () => {
         this.setPageStatus('ERROR');
         this.alert = {

@@ -17,9 +17,11 @@
         <span class="nhsuk-u-visually-hidden">Information:</span>
         <p> Sharing your data with an organisation means that they can view your innovation and initiate contact. It doesn't guarantee a response. </p>
       </div>
-
-      <p class="nhsuk-u-margin-0"><a [href]="organisationInfoUrl" target="_blank" rel="noopener noreferrer">What does each organisation do? (opens in a new window) </a></p>
-      <p><a routerLink="/innovator/innovations/{{ innovationId }}/support/statuses" arial-label="View support status keys information"> Support status key </a></p>
+      
+      <ul class="nhsuk-list">
+        <li><a [href]="organisationInfoUrl" target="_blank" rel="noopener noreferrer">What does each organisation do? (opens in a new window) </a></li>
+        <li><a routerLink="/innovator/innovations/{{ innovationId }}/support/statuses" arial-label="View support status keys information"> Support status key </a></li>
+      </ul>
 
       <div class="nhsuk-u-padding-bottom-5">
 

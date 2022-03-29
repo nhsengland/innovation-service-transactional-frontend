@@ -70,7 +70,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersUnlockComponen
       phone: '12345678',
       lockedAt: '2020-01-01T00:00:00.000Z',
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 15', role: 'INNOVATOR_OWNER', units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 15', isShadow: true, role: 'INNOVATOR_OWNER', units: [] }
       ]
     };
     serviceUsersService.getUserFullInfo = () => of(responseMock);
@@ -94,7 +94,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersUnlockComponen
       lockedAt: null,
       innovations: [{id: 'inn1', name: 'innovation'}],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', role: 'INNOVATOR_OWNER', units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: 'INNOVATOR_OWNER', units: [] }
       ]
     };
     serviceUsersService.getUserFullInfo = () => of(responseMock);

@@ -20,7 +20,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   form = new FormGroup({
     supportFilter: new FormControl('UNASSIGNED')
-  });
+  }, { updateOn: 'change' });
   formFilterItems: FormEngineParameterModel['items'] = [];
 
   innovationsList: TableModel<(getInnovationsListEndpointOutDTO['data'][0])>;

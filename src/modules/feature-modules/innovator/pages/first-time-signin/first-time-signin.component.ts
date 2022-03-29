@@ -37,7 +37,6 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
 
     // Update last step with the organisations list with description and pre-select all checkboxes.
     this.organisationsService.getAccessorsOrganisations().subscribe(response => {
-      this.wizard.steps[this.wizard.steps.length - 1].description = `<a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> What does each organisation do? (opens in a new window) </a>`;
       this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
       this.wizard.addAnswers({ organisationShares: response.map(item => item.id) });
 

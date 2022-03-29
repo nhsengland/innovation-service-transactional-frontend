@@ -22,9 +22,9 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
   sectionItems: { value: string, label: string }[] = [];
 
   form = new FormGroup({
-    section: new FormControl('', CustomValidators.required('Choose at least one section')),
+    section: new FormControl('', { validators: CustomValidators.required('Choose at least one section'), updateOn: 'change' }),
     description: new FormControl('', CustomValidators.required('A description is required'))
-  });
+  }, { updateOn: 'blur' });
 
 
   constructor(

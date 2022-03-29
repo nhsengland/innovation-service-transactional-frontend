@@ -83,7 +83,6 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
     this.serviceUsersService.getUserFullInfo(this.user.id).subscribe(
       response => {
         this.userInfoType = response.type;
-
         this.titleActions = [
           {
             type: 'link',
@@ -113,10 +112,12 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
 
         if (response.type === 'INNOVATOR'){
           this.sections.innovations = response.innovations?.map(x => x.name);
-          this.sections.userInfo = [...this.sections.userInfo,
-            { label: 'Company name', value: response.userOrganisations.length > 0 ? response.userOrganisations[0].name : 'NA' },
-            { label: 'Company size', value: response.userOrganisations.length > 0 ? response.userOrganisations[0].size : 'NA' }
-          ];
+          if (response.userOrganisations.length > 0 && !response.userOrganisations[0].isShadow) {
+            this.sections.userInfo = [...this.sections.userInfo,
+              { label: 'Company name', value: response.userOrganisations[0].name },
+              { label: 'Company size', value: response.userOrganisations[0].size }
+            ];
+          }
         }
 
         if (response.type === 'ACCESSOR') {

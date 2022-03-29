@@ -17,7 +17,7 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
   alert: AlertType = { type: null };
 
   form = new FormGroup({
-    innovation: new FormControl('', CustomValidators.required('Please choose an innovation')),
+    innovation: new FormControl('', { validators: CustomValidators.required('Please choose an innovation'), updateOn: 'change' }),
     email: new FormControl('', [CustomValidators.required('An email is required'), Validators.email]),
     confirmation: new FormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('transfer my innovation')]),
   }, { updateOn: 'blur' });

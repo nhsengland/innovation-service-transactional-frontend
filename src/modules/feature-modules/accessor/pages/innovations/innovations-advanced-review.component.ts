@@ -36,7 +36,7 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
     supportStatuses: new FormArray([]),
     assignedToMe: new FormControl(false),
     suggestedOnly: new FormControl(true)
-  });
+  }, { updateOn: 'change' });
 
   anyFilterSelected = false;
   filters: {

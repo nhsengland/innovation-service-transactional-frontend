@@ -19,7 +19,7 @@ export class PageInnovationCommentsNewComponent extends CoreComponent {
 
   form = new FormGroup({
     comment: new FormControl('', CustomValidators.required('A comment is required'))
-  });
+  }, { updateOn: 'blur' });
 
 
   constructor(
@@ -42,7 +42,7 @@ export class PageInnovationCommentsNewComponent extends CoreComponent {
       return;
     }
 
-    const body = { comment: this.form.get('comment')?.value };
+    const body = { comment: this.form.get('comment')!.value };
 
     this.stores.innovation.createInnovationComment$(this.module, this.innovationId, body).subscribe(
       () => {

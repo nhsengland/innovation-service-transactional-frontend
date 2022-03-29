@@ -57,7 +57,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceChangeUserRoleCompo
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{id: 'inn1', name: 'innovation'}],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', role: 'ACCESSOR', units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: 'ACCESSOR', units: [] }
       ]
     });
   });
@@ -107,7 +107,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceChangeUserRoleCompo
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{id: 'inn1', name: 'innovation'}],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', role: orgnisationRole.QUALIFYING_ACCESSOR, units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: orgnisationRole.QUALIFYING_ACCESSOR, units: [] }
       ]
     });
     serviceUsersService.getUserRoleRules = () => of(responseMock);

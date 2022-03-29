@@ -37,7 +37,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
   form = new FormGroup({
     activityTypes: new FormArray([])
-  });
+  }, { updateOn: 'change' });
 
   anyFilterSelected = false;
   filters: FiltersType[] = [{ key: 'activityTypes', title: 'Activity Types', showHideStatus: 'opened', selected: [] }];

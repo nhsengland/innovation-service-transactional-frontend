@@ -13,8 +13,7 @@ import { getInnovationCommentsDTO, InnovationDataResolverType } from '@stores-mo
 
 @Component({
   selector: 'shared-pages-innovation-comments-comments-list',
-  templateUrl: './comments-list.component.html',
-  styleUrls: ['./comments-list.component.scss']
+  templateUrl: './comments-list.component.html'
 })
 export class PageInnovationCommentsListComponent extends CoreComponent implements OnInit {
 
@@ -29,8 +28,9 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
   lengthLimitCharacters = 2000;
   commentsList: getInnovationCommentsDTO[];
 
-  form = new FormGroup({});
+  form = new FormGroup({}, { updateOn: 'blur' });
   formSubmittedFields: { [key: string]: string } = {};
+  userId: string;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -43,6 +43,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
     this.currentCreatedOrder = 'desc';
+    this.userId = this.stores.authentication.getUserId();
 
     this.commentsList = [];
 
@@ -51,6 +52,13 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
         this.alert = {
           type: 'SUCCESS',
           title: 'You have successfully created a comment',
+          message: 'Everyone who is currently engaging with your innovation will be notified.'
+        };
+        break;
+      case 'commentEditSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'You have successfully updated a comment',
           message: 'Everyone who is currently engaging with your innovation will be notified.'
         };
         break;
