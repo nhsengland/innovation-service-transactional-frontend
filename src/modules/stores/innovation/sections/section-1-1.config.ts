@@ -1,27 +1,31 @@
 import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
-
+import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 import { areasItems, careSettingsItems, categoriesItems, clinicalAreasItems, hasFinalProductItems, mainCategoryItems, mainPurposeItems, supportTypesItems } from './catalogs.config';
 
 
 // Labels.
 const stepsLabels = {
-  l1: 'Please provide a short description of your innovation',
-  l2: 'Do you have a working product, service or prototype?',
-  l3: 'Choose all categories that can be used to describe your innovation',
-  l4: 'If you had to select one primary category to describe your innovation, which one would it be?',
-  l5: 'Is your innovation relevant to any of the following areas?',
-  l6: 'Which clinical areas does your innovation impact on?',
-  l7: 'In which care settings is your innovation relevant?',
-  l8: 'What\'s the main purpose of your innovation?',
-  l9: 'What type of support are you currently looking for?',
-  l10: 'Provide further information about what support you are seeking from the NHS Innovation Service.'
+  l1: 'What is the name of your innovation',
+  l2: 'Please provide a short description of your innovation',
+  l3: 'Where are you developing your innovation',
+  l4: 'Do you have a working product, service or prototype?',
+  l5: 'Choose all categories that can be used to describe your innovation',
+  l6: 'If you had to select one primary category to describe your innovation, which one would it be?',
+  l7: 'Is your innovation relevant to any of the following areas?',
+  l8: 'Which clinical areas does your innovation impact on?',
+  l9: 'In which care settings is your innovation relevant?',
+  l10: 'What\'s the main purpose of your innovation?',
+  l11: 'What type of support are you currently looking for?',
+  l12: 'Provide further information about what support you are seeking from the NHS Innovation Service.'
 };
 
 
 // Types.
 type InboundPayloadType = {
+  innovationName: string;
   description: string;
+  location: string;
   hasFinalProduct: null | 'YES' | 'NO';
   categories: ('MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER')[];
   otherCategoryDescription: string;
@@ -46,18 +50,34 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
     steps: [
       new FormEngineModel({
         parameters: [{
+          id: 'innovationName',
+          dataType: 'text',
+          label: stepsLabels.l1,
+          validations: { isRequired: [true, 'Innovation name is required'], maxLength: 100 },
+        }]
+      }),
+      new FormEngineModel({
+        parameters: [{
           id: 'description',
           dataType: 'textarea',
-          label: stepsLabels.l1,
+          label: stepsLabels.l2,
           validations: { isRequired: [true, 'Description is required'] },
           lengthLimit: 'medium'
         }]
       }),
       new FormEngineModel({
         parameters: [{
+          id: 'location',
+          dataType: 'radio-group',
+          label: stepsLabels.l3,
+          validations: { isRequired: [true, 'Choose one option'] }, items: locationItems
+        }]
+      }),
+      new FormEngineModel({
+        parameters: [{
           id: 'hasFinalProduct',
           dataType: 'radio-group',
-          label: stepsLabels.l2,
+          label: stepsLabels.l4,
           description: 'By this, we mean something that performs the same function that the final product or service would.',
           validations: { isRequired: [true, 'Choose one option'] }, items: hasFinalProductItems
         }]
@@ -66,7 +86,7 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
         parameters: [{
           id: 'categories',
           dataType: 'checkbox-array',
-          label: stepsLabels.l3,
+          label: stepsLabels.l5,
           validations: { isRequired: [true, 'Choose at least one category'] },
           items: categoriesItems
         }]
@@ -75,7 +95,7 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
         parameters: [{
           id: 'mainCategory',
           dataType: 'radio-group',
-          label: stepsLabels.l4,
+          label: stepsLabels.l6,
           description: 'Your innovation may be a combination of various categories. Selecting the primary category will help us find the right people to support you.',
           items: mainCategoryItems
         }]
@@ -84,7 +104,7 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
         parameters: [{
           id: 'areas',
           dataType: 'checkbox-array',
-          label: stepsLabels.l5,
+          label: stepsLabels.l7,
           description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
           items: areasItems
         }]
@@ -93,7 +113,7 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
         parameters: [{
           id: 'clinicalAreas',
           dataType: 'checkbox-array',
-          label: stepsLabels.l6,
+          label: stepsLabels.l8,
           description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
           items: clinicalAreasItems
         }]
@@ -102,7 +122,7 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
         parameters: [{
           id: 'careSettings',
           dataType: 'checkbox-array',
-          label: stepsLabels.l7,
+          label: stepsLabels.l9,
           description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
           items: careSettingsItems
         }]
@@ -111,7 +131,7 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
         parameters: [{
           id: 'mainPurpose',
           dataType: 'radio-group',
-          label: stepsLabels.l8,
+          label: stepsLabels.l10,
           description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
           validations: { isRequired: [true, 'Choose one option'] },
           items: mainPurposeItems
@@ -121,7 +141,7 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
         parameters: [{
           id: 'supportTypes',
           dataType: 'checkbox-array',
-          label: stepsLabels.l9,
+          label: stepsLabels.l11,
           description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the innovation service.',
           validations: { isRequired: [true, 'Choose at least one type of support'] },
           items: supportTypesItems
@@ -131,7 +151,7 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
         parameters: [{
           id: 'moreSupportDescription',
           dataType: 'textarea',
-          label: stepsLabels.l10,
+          label: stepsLabels.l12,
           lengthLimit: 'medium'
         }]
       })
@@ -147,53 +167,63 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
   return [
     {
       label: stepsLabels.l1,
-      value: data.description,
+      value: data.innovationName,
       editStepNumber: 1
     },
     {
       label: stepsLabels.l2,
-      value: hasFinalProductItems.find(item => item.value === data.hasFinalProduct)?.label,
+      value: data.description,
       editStepNumber: 2
     },
     {
       label: stepsLabels.l3,
-      value: data.categories?.map(v => v === 'OTHER' ? data.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n'),
+      value: data.location,
       editStepNumber: 3
     },
     {
       label: stepsLabels.l4,
-      value: data.otherMainCategoryDescription || mainCategoryItems.find(item => item.value === data.mainCategory)?.label,
+      value: hasFinalProductItems.find(item => item.value === data.hasFinalProduct)?.label,
       editStepNumber: 4
     },
     {
       label: stepsLabels.l5,
-      value: data.areas?.map(v => areasItems.find(item => item.value === v)?.label).join('\n'),
+      value: data.categories?.map(v => v === 'OTHER' ? data.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n'),
       editStepNumber: 5
     },
     {
       label: stepsLabels.l6,
-      value: data.clinicalAreas?.map(v => clinicalAreasItems.find(item => item.value === v)?.label).join('\n'),
+      value: data.otherMainCategoryDescription || mainCategoryItems.find(item => item.value === data.mainCategory)?.label,
       editStepNumber: 6
     },
     {
       label: stepsLabels.l7,
-      value: data.careSettings?.map(v => careSettingsItems.find(item => item.value === v)?.label).join('\n'),
+      value: data.areas?.map(v => areasItems.find(item => item.value === v)?.label).join('\n'),
       editStepNumber: 7
     },
     {
       label: stepsLabels.l8,
-      value: mainPurposeItems.find(item => item.value === data.mainPurpose)?.label,
+      value: data.clinicalAreas?.map(v => clinicalAreasItems.find(item => item.value === v)?.label).join('\n'),
       editStepNumber: 8
     },
     {
       label: stepsLabels.l9,
-      value: data.supportTypes?.map(v => supportTypesItems.find(item => item.value === v)?.label).join('\n'),
+      value: data.careSettings?.map(v => careSettingsItems.find(item => item.value === v)?.label).join('\n'),
       editStepNumber: 9
     },
     {
       label: stepsLabels.l10,
-      value: data.moreSupportDescription,
+      value: mainPurposeItems.find(item => item.value === data.mainPurpose)?.label,
       editStepNumber: 10
+    },
+    {
+      label: stepsLabels.l11,
+      value: data.supportTypes?.map(v => supportTypesItems.find(item => item.value === v)?.label).join('\n'),
+      editStepNumber: 11
+    },
+    {
+      label: stepsLabels.l12,
+      value: data.moreSupportDescription,
+      editStepNumber: 12
     }
   ];
 
