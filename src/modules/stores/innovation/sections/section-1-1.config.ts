@@ -53,6 +53,7 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
           id: 'innovationName',
           dataType: 'text',
           label: stepsLabels.l1,
+          description: 'Enter the name of your innovation with a maximum of 100 characters',
           validations: { isRequired: [true, 'Innovation name is required'], maxLength: 100 },
         }]
       }),
