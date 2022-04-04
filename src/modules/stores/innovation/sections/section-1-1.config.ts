@@ -23,9 +23,11 @@ const stepsLabels = {
 
 // Types.
 type InboundPayloadType = {
-  innovationName: string;
+  name: string;
   description: string;
   location: string;
+  postcode: null | string;
+  countryName: string;
   hasFinalProduct: null | 'YES' | 'NO';
   categories: ('MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER')[];
   otherCategoryDescription: string;
@@ -39,7 +41,28 @@ type InboundPayloadType = {
   moreSupportDescription: string;
 };
 
-type StepPayloadType = InboundPayloadType;
+// type StepPayloadType = InboundPayloadType;
+
+type StepPayloadType = {
+  innovationName: string;
+  description: string;
+  location: string;
+  englandPostCode: null | string;
+  locationCountryName: string;
+  hasFinalProduct: null | 'YES' | 'NO';
+  categories: ('MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER')[];
+  otherCategoryDescription: string;
+  mainCategory: null | 'MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER';
+  otherMainCategoryDescription: string;
+  areas: ('COVID_19' | 'DATA_ANALYTICS_AND_RESEARCH' | 'DIGITALISING_SYSTEM' | 'IMPROVING_SYSTEM_FLOW' | 'INDEPENDENCE_AND_PREVENTION' | 'OPERATIONAL_EXCELLENCE' | 'PATIENT_ACTIVATION_AND_SELF_CARE' | 'PATIENT_SAFETY' | 'WORKFORCE_OPTIMISATION')[];
+  clinicalAreas: ('ACUTE' | 'AGEING' | 'CANCER' | 'CARDIO_ENDOCRINE_METABOLIC' | 'CHILDREN_AND_YOUNG' | 'DISEASE_AGNOSTIC' | 'GASTRO_KDNEY_LIVER' | 'INFECTION_INFLAMATION' | 'MATERNITY_REPRODUCTIVE_HEALTH' | 'MENTAL_HEALTH' | 'NEUROLOGY' | 'POPULATION_HEALTH' | 'RESPIRATORY' | 'UROLOGY' | 'WORKFORCE_AND_EDUCATION')[];
+  careSettings: ('AMBULANCE_OR_PARAMEDIC' | 'COMMUNITY' | 'HOSPITAL_INPATIENT' | 'HOSPITAL_OUTPATIENT' | 'MENTAL_HEALTH' | 'PATIENT_HOME' | 'PHARMACY' | 'PRIMARY_CARE' | 'SOCIAL_CARE')[];
+  mainPurpose: 'PREVENT_CONDITION' | 'PREDICT_CONDITION' | 'DIAGNOSE_CONDITION' | 'MONITOR_CONDITION' | 'PROVIDE_TREATMENT' | 'MANAGE_CONDITION' | 'ENABLING_CARE';
+  supportTypes: ('ADOPTION' | 'ASSESSMENT' | 'PRODUCT_MIGRATION' | 'CLINICAL_TESTS' | 'COMMERCIAL' | 'PROCUREMENT' | 'DEVELOPMENT' | 'EVIDENCE_EVALUATION' | 'FUNDING' | 'INFORMATION')[];
+  moreSupportDescription: string;
+};
+
+type OutboundPayloadType = InboundPayloadType;
 
 
 
@@ -157,10 +180,57 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
+    inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+    outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   })
 };
 
+function inboundParsing(data: InboundPayloadType): StepPayloadType {
+
+  return {
+    innovationName: data.name,
+    description: data.description,
+    location: data.countryName === 'Scotland' || data.countryName === 'England' || data.countryName === 'Northern Ireland' || data.countryName === 'Wales'  ? data.countryName : 'Based outside UK',
+    englandPostCode: data.postcode ? data.postcode : '',
+    locationCountryName: data.countryName,
+    hasFinalProduct:  data.hasFinalProduct,
+    categories: data.categories,
+    otherCategoryDescription: data.otherCategoryDescription,
+    mainCategory: data.mainCategory,
+    otherMainCategoryDescription: data.otherMainCategoryDescription,
+    areas: data.areas,
+    clinicalAreas: data.clinicalAreas,
+    careSettings: data.careSettings,
+    mainPurpose: data.mainPurpose,
+    supportTypes: data.supportTypes,
+    moreSupportDescription: data.moreSupportDescription
+  };
+
+}
+
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
+
+  return {
+    name: data.innovationName,
+    description: data.description,
+    location: data.location || data.locationCountryName,
+    postcode: data.englandPostCode,
+    countryName: data.locationCountryName ? data.locationCountryName : data.location,
+    hasFinalProduct:  data.hasFinalProduct,
+    categories: data.categories,
+    otherCategoryDescription: data.otherCategoryDescription,
+    mainCategory: data.mainCategory,
+    otherMainCategoryDescription: data.otherMainCategoryDescription,
+    areas: data.areas,
+    clinicalAreas: data.clinicalAreas,
+    careSettings: data.careSettings,
+    mainPurpose: data.mainPurpose,
+    supportTypes: data.supportTypes,
+    moreSupportDescription: data.moreSupportDescription
+  };
+
+}
 
 
 function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
@@ -178,7 +248,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
     },
     {
       label: stepsLabels.l3,
-      value: data.location,
+      value: `${data.locationCountryName || data.location}${data.englandPostCode ? ', ' + data.englandPostCode : ''}` ,
       editStepNumber: 3
     },
     {
