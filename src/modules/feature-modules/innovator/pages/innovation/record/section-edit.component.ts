@@ -6,6 +6,7 @@ import { FormEngineComponent, FormEngineModel, FileTypes, WizardEngineModel } fr
 import { RoutingHelper, UrlModel } from '@modules/core';
 import { SummaryParsingType } from '@modules/shared/forms';
 import { InnovationDataResolverType, InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
+import { concatMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-edit',
@@ -135,7 +136,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       this.innovationId,
       this.sectionId,
       this.wizard.runOutboundParsing(this.currentAnswers)
-    ).subscribe(
+    ).pipe(
+      concatMap(() => this.stores.authentication.initializeAuthentication$())).subscribe(
       () => { this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'sectionUpdateSuccess' }); },
       () => { this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'sectionUpdateError' }); }
     );
