@@ -38,8 +38,8 @@ export const NEW_INNOVATION_QUESTIONS: WizardEngineModel = new WizardEngineModel
         id: 'innovationName',
         dataType: 'text',
         label: 'What should we call your innovation?',
-        description: 'Innovation name',
-        validations: { isRequired: [true, 'Innovation name is required'] }
+        description: 'Enter the name of your innovation with a maximum of 100 characters',
+        validations: { isRequired: [true, 'Innovation name is required'], maxLength: 100 }
       }]
     }),
 
