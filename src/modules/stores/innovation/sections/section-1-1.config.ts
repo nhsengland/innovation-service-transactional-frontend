@@ -6,9 +6,9 @@ import { areasItems, careSettingsItems, categoriesItems, clinicalAreasItems, has
 
 // Labels.
 const stepsLabels = {
-  l1: 'What is the name of your innovation',
+  l1: 'What is the name of your innovation?',
   l2: 'Please provide a short description of your innovation',
-  l3: 'Where are you developing your innovation',
+  l3: 'Where are you developing your innovation?',
   l4: 'Do you have a working product, service or prototype?',
   l5: 'Choose all categories that can be used to describe your innovation',
   l6: 'If you had to select one primary category to describe your innovation, which one would it be?',
@@ -191,7 +191,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
     innovationName: data.name,
     description: data.description,
-    location: data.countryName === 'Scotland' || data.countryName === 'England' || data.countryName === 'Northern Ireland' || data.countryName === 'Wales'  ? data.countryName : 'Based outside UK',
+    location: locationItems.filter(item => !['', 'Based outside UK'].includes(item.value)).map(item => item.value).includes(data.countryName) ? data.countryName : 'Based outside UK',
     englandPostCode: data.postcode ? data.postcode : '',
     locationCountryName: data.countryName,
     hasFinalProduct:  data.hasFinalProduct,
