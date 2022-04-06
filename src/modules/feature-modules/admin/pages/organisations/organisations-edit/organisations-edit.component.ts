@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent, FormGroup, FormControl } from '@app/base';
 import { AlertType, MappedObject } from '@app/base/models';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { getOrganisationDTO, OrganisationsService, updateOrganisationDTO } from '@modules/shared/services/organisations.service';
 import { EDIT_ORGANISATIONS_QUESTIONS } from './organisations-edit.config';
 
 @Component({
@@ -15,7 +15,7 @@ export class PageAdminOrganisationEditComponent extends CoreComponent implements
 
   orgId: string;
   unitId: string;
-
+  submitBtnClicked = false;
   securityConfirmation = { id: '', code: '' };
   alert: AlertType = { type: null };
 
@@ -96,6 +96,7 @@ export class PageAdminOrganisationEditComponent extends CoreComponent implements
   onSubmitWizard(): void {
     const body: MappedObject = this.wizard.runOutboundParsing();
     this.securityConfirmation.code = this.form.get('code')!.value;
+    this.submitBtnClicked = true;
 
     switch (this.module) {
       case 'Organisation':
@@ -124,7 +125,8 @@ export class PageAdminOrganisationEditComponent extends CoreComponent implements
 
   }
 
-  errorResponse(error: any): void {
+  errorResponse(error: updateOrganisationDTO): void {
+    this.submitBtnClicked = false;
 
     if (!this.securityConfirmation.id && error.id) {
       this.securityConfirmation.id = error.id;

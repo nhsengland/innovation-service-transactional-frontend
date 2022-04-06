@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -95,7 +95,10 @@ export class OrganisationsService extends CoreService {
     const url = new UrlModel(this.API_URL).addPath('user-admin/organisation/:orgId').setPathParams({ orgId }).setQueryParams(qp);
     return this.http.patch<updateOrganisationDTO>(url.buildUrl(), body).pipe(
       take(1),
-      map(response => response)
+      map(response => response),
+      catchError(error => throwError({
+        id: error.error.id
+      }))
     );
 
   }
@@ -106,7 +109,10 @@ export class OrganisationsService extends CoreService {
     const url = new UrlModel(this.API_URL).addPath('user-admin/organisation-units/:organisationUnitId').setPathParams({ organisationUnitId }).setQueryParams(qp);
     return this.http.patch<updateOrganisationDTO>(url.buildUrl(), body).pipe(
       take(1),
-      map(response => response)
+      map(response => response),
+      catchError(error => throwError({
+        id: error.error.id
+      }))
     );
 
   }

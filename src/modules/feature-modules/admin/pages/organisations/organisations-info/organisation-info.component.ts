@@ -89,6 +89,7 @@ export class PageAdminOrganisationInfoComponent extends CoreComponent implements
             unit.showHideStatus = 'closed';
             unit.showHideText = `Show users`;
             unit.showHideDescription = `that belong to the ${unit.name}`;
+            unit.isLoading = false;
             break;
           case 'closed':
             this.organisationsService.getUsersByUnitId(id).subscribe(
@@ -99,7 +100,10 @@ export class PageAdminOrganisationInfoComponent extends CoreComponent implements
                 unit.showHideDescription = `that belong to the ${unit.name}`;
                 unit.isLoading = false;
               },
-              () => this.alert = { type: 'ERROR', title: 'Unable to fetch organisation users information', message: 'Please try again or contact us for further help' }
+              () => (
+                this.alert = { type: 'ERROR', title: 'Unable to fetch organisation users information', message: 'Please try again or contact us for further help' },
+                unit.isLoading = false
+              )
             );
             break;
           default:
