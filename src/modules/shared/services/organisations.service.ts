@@ -89,9 +89,10 @@ export class OrganisationsService extends CoreService {
 
   }
 
-  updateOrganisation(body: MappedObject, orgId: string): Observable<updateOrganisationDTO> {
+  updateOrganisation(body: MappedObject, securityConfirmation: { id: string, code: string }, orgId: string): Observable<updateOrganisationDTO> {
+    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/organisation/:orgId').setPathParams({ orgId });
+    const url = new UrlModel(this.API_URL).addPath('user-admin/organisation/:orgId').setPathParams({ orgId }).setQueryParams(qp);
     return this.http.patch<updateOrganisationDTO>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
@@ -99,9 +100,10 @@ export class OrganisationsService extends CoreService {
 
   }
 
-  updateUnit(body: MappedObject, organisationUnitId: string): Observable<updateOrganisationDTO> {
+  updateUnit(body: MappedObject, securityConfirmation: { id: string, code: string }, organisationUnitId: string): Observable<updateOrganisationDTO> {
+    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/organisation-units/:organisationUnitId').setPathParams({ organisationUnitId });
+    const url = new UrlModel(this.API_URL).addPath('user-admin/organisation-units/:organisationUnitId').setPathParams({ organisationUnitId }).setQueryParams(qp);
     return this.http.patch<updateOrganisationDTO>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)

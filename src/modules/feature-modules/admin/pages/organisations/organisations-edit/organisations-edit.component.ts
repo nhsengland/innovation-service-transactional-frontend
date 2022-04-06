@@ -99,7 +99,7 @@ export class PageAdminOrganisationEditComponent extends CoreComponent implements
 
     switch (this.module) {
       case 'Organisation':
-        this.organisationsService.updateOrganisation(body, this.orgId).subscribe(
+        this.organisationsService.updateOrganisation(body, this.securityConfirmation, this.orgId).subscribe(
           response => {
             (response.id) ?
               this.redirectTo(`admin/organisations/${response.id}`, { alert: 'updateOrganisationSuccess' })
@@ -109,7 +109,7 @@ export class PageAdminOrganisationEditComponent extends CoreComponent implements
         );
         break;
       case 'Unit':
-        this.organisationsService.updateUnit(body, this.unitId).subscribe(
+        this.organisationsService.updateUnit(body, this.securityConfirmation, this.unitId).subscribe(
           response => {
             (response.id) ?
             this.redirectTo(`admin/organisations/${this.orgId}`, { alert: 'updateUnitSuccess' })
