@@ -54,39 +54,6 @@ export type organisationUsersOutDTO = Omit<organisationUsersInDTO, 'role'> & {
   roleDescription: string;
 };
 
-// export type getOrganisationUnitsInDTO = {
-//   id: string;
-//   name: string;
-//   acronym: string;
-//   organisationUnits: {
-//     id: string;
-//     name: string;
-//     acronym: string;
-//     unitUsers: {
-//       displayName: string;
-//       id: string;
-//       role: 'ADMIN' | 'INNOVATOR_OWNER' | 'ASSESSMENT' | 'INNOVATOR' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR';
-//     }[];
-//   }[];
-// };
-// export type getOrganisationUnitsOutDTO = Omit<getOrganisationUnitsInDTO, 'organisationUnits'> & {
-//   id: string;
-//   name: string;
-//   acronym: string;
-//   organisationUnits: {
-//     id: string;
-//     name: string;
-//     acronym: string;
-//     unitUsers: {
-//       displayName: string;
-//       id: string;
-//       role: 'ADMIN' | 'INNOVATOR_OWNER' | 'ASSESSMENT' | 'INNOVATOR' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR';
-//       roleDescription: string;
-//     }[];
-//   }[]
-// };
-
-
 @Injectable()
 export class OrganisationsService extends CoreService {
 
