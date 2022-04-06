@@ -29,7 +29,7 @@ export class PageAdminUsersFindComponent extends CoreComponent implements OnInit
   ) {
 
     super();
-    this.setPageTitle('Find a admin user');
+    this.setPageTitle('Find an admin user');
 
   }
 

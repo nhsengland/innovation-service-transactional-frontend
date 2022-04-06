@@ -4,8 +4,8 @@ import { AlertType } from '@app/base/models';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 @Component({
-  selector: 'app-admin-pages-list-organisations-and-units',
-  templateUrl: './list-organisations-and-units.component.html'
+  selector: 'app-admin-pages-orgnisations-list',
+  templateUrl: './organisations-list.component.html'
 })
 export class PageListOrganisationsAndUnitsComponent extends CoreComponent implements OnInit {
 
