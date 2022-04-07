@@ -12,19 +12,16 @@ type StepPayloadType = InboundPayloadType;
 
 
 // This is a LET variable, because the organisations shares information is updated by the component that uses this variable.
-export let EDIT_ORGANISATIONS_QUESTIONS: WizardEngineModel = new WizardEngineModel({
+export let EDIT_ORGANISATION_UNIT_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   showSummary: true,
   steps: [
     new FormEngineModel({
       parameters: [{
         id: 'name',
         dataType: 'text',
-        label: 'Organisation name',
-        description: 'Enter the name of the Organisation with a maximum of 255 characters',
-        validations: {
-          isRequired: [true, 'Name is required'],
-          maxLength: 100
-        }
+        label: 'Unit name',
+        description: 'Enter the name of the Unit with a maximum of 255 characters',
+        validations: { isRequired: [true, 'Name is required'], maxLength: 255 }
       }]
     }),
 
@@ -32,8 +29,8 @@ export let EDIT_ORGANISATIONS_QUESTIONS: WizardEngineModel = new WizardEngineMod
       parameters: [{
         id: 'acronym',
         dataType: 'text',
-        label: 'Organisation acronym',
-        description: 'Enter the acronym of the Organisation with a maximum of 10 characters',
+        label: 'Unit acronym',
+        description: 'Enter the acronym of the Unit with a maximum of 10 characters',
         validations: { isRequired: [true, 'Acronym is required'], maxLength: 10 }
       }]
     }),

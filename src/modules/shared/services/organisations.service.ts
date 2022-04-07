@@ -126,20 +126,4 @@ export class OrganisationsService extends CoreService {
     );
 
   }
-
-  // Validators.
-  orgnisationAcronymValidator(organisationId: string): AsyncValidatorFn {
-
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-
-      const url = new UrlModel(this.API_URL).addPath('user-admin/organisation-acronym').setQueryParams({ organisationId, acronym: control.value });
-      return this.http.head(url.buildUrl()).pipe(
-        take(1),
-        map(() => ({ customError: true, message: 'Acronym already exist' })),
-        catchError(() => of(null))
-      );
-
-    };
-  }
-
 }

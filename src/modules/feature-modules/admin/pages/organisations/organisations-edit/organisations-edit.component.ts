@@ -6,6 +6,7 @@ import { AlertType, MappedObject } from '@app/base/models';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
 import { getOrganisationDTO, OrganisationsService, updateOrganisationDTO } from '@modules/shared/services/organisations.service';
 import { EDIT_ORGANISATIONS_QUESTIONS } from './organisations-edit.config';
+import { EDIT_ORGANISATION_UNIT_QUESTIONS } from './organisationUnits-edit.config';
 
 @Component({
   selector: 'app-admin-pages-organisations-edit',
@@ -26,7 +27,7 @@ export class PageAdminOrganisationEditComponent extends CoreComponent implements
     code: new FormControl('')
   }, { updateOn: 'blur' });
 
-  wizard: WizardEngineModel = new WizardEngineModel(EDIT_ORGANISATIONS_QUESTIONS);
+  wizard!: WizardEngineModel;
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
@@ -35,20 +36,29 @@ export class PageAdminOrganisationEditComponent extends CoreComponent implements
     private organisationsService: OrganisationsService
   ) {
     super();
-
     this.module = this.activatedRoute.snapshot.data.module;
     this.orgId = this.activatedRoute.snapshot.params.orgId;
     this.unitId = this.activatedRoute.snapshot.params.unitId;
+    switch (this.module) {
+      case 'Organisation':
+        this.wizard = new WizardEngineModel(EDIT_ORGANISATIONS_QUESTIONS);
+        break;
+      case 'Unit':
+        this.wizard = new WizardEngineModel(EDIT_ORGANISATION_UNIT_QUESTIONS);
+        break;
+      default:
+      break;
+    }
     this.setPageTitle(`Edit ${this.module}`);
   }
 
   ngOnInit(): void {
 
-    this.wizard.steps[0].parameters[0].validations = { ...this.wizard.steps[0].parameters[0].validations, maxLength: (this.module === 'Organisation') ? 100 : 255 };
-    this.wizard.steps[0].parameters[0].label = `${this.module} name`;
-    this.wizard.steps[1].parameters[0].label = `${this.module} acronym`;
-    this.wizard.steps[0].parameters[0].description = `Enter the name of the ${this.module} with a maximum of ${(this.module === 'Organisation') ? '100' : '255'} characters`;
-    this.wizard.steps[1].parameters[0].description = `Enter the acronym of the ${this.module} with a maximum of 10 characters`;
+    // this.wizard.steps[0].parameters[0].validations = { ...this.wizard.steps[0].parameters[0].validations, maxLength: (this.module === 'Organisation') ? 100 : 255 };
+    // this.wizard.steps[0].parameters[0].label = `${this.module} name`;
+    // this.wizard.steps[1].parameters[0].label = `${this.module} acronym`;
+    // this.wizard.steps[0].parameters[0].description = `Enter the name of the ${this.module} with a maximum of ${(this.module === 'Organisation') ? '100' : '255'} characters`;
+    // this.wizard.steps[1].parameters[0].description = `Enter the acronym of the ${this.module} with a maximum of 10 characters`;
 
     this.organisationsService.getOrganisation(this.orgId).subscribe((organisation) => {
       const data = (this.module === 'Organisation') ? ({ name: organisation.name, acronym: organisation.acronym }) : organisation.organisationUnits.filter(unit => (unit.id === this.unitId))[0];

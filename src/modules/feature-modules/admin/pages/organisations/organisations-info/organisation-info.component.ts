@@ -13,19 +13,19 @@ export class PageAdminOrganisationInfoComponent extends CoreComponent implements
   alert: AlertType = { type: null };
   orgId: string;
 
-  organisation!: {
-    id: string;
-    name: string;
-    acronym: string;
+  organisation?: {
+    id: string,
+    name: string,
+    acronym: string,
     organisationUnits: {
-      id: string;
-      name: string;
-      acronym: string;
+      id: string,
+      name: string,
+      acronym: string,
       users: organisationUsersOutDTO[],
       showHideStatus: 'hidden' | 'opened' | 'closed',
       showHideText: null | string,
       showHideDescription: null | string,
-      isLoading: boolean,
+      isLoading: boolean
     }[];
   };
 
@@ -78,39 +78,34 @@ export class PageAdminOrganisationInfoComponent extends CoreComponent implements
 
   onShowHideClicked(id: string): void {
 
-    this.organisation.organisationUnits = this.organisation.organisationUnits.map((unit) => {
+    const unit = this.organisation?.organisationUnits.find((unit) => unit.id === id);
 
-      if (unit.id === id) {
+    if (unit?.showHideStatus === 'closed') { unit.isLoading = true; }
 
-        if (unit.showHideStatus === 'closed') { unit.isLoading = true; }
-
-        switch (unit.showHideStatus) {
-          case 'opened':
-            unit.showHideStatus = 'closed';
-            unit.showHideText = `Show users`;
+    switch (unit?.showHideStatus) {
+      case 'opened':
+        unit.showHideStatus = 'closed';
+        unit.showHideText = `Show users`;
+        unit.showHideDescription = `that belong to the ${unit.name}`;
+        unit.isLoading = false;
+        break;
+      case 'closed':
+        this.organisationsService.getUsersByUnitId(id).subscribe(
+          (response) => {
+            unit.users = response;
+            unit.showHideStatus = 'opened';
+            unit.showHideText = `Hide users`;
             unit.showHideDescription = `that belong to the ${unit.name}`;
             unit.isLoading = false;
-            break;
-          case 'closed':
-            this.organisationsService.getUsersByUnitId(id).subscribe(
-              (response) => {
-                unit.users = response;
-                unit.showHideStatus = 'opened';
-                unit.showHideText = `Hide users`;
-                unit.showHideDescription = `that belong to the ${unit.name}`;
-                unit.isLoading = false;
-              },
-              () => (
-                this.alert = { type: 'ERROR', title: 'Unable to fetch organisation users information', message: 'Please try again or contact us for further help' },
-                unit.isLoading = false
-              )
-            );
-            break;
-          default:
-          break;
-        }
-      }
-      return unit;
-    });
+          },
+          () => (
+            this.alert = { type: 'ERROR', title: 'Unable to fetch organisation users information', message: 'Please try again or contact us for further help' },
+            unit.isLoading = false
+          )
+        );
+        break;
+      default:
+      break;
+    }
   }
 }
