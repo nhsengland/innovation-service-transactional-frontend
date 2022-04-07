@@ -18,22 +18,27 @@
           <div class="mr-auto">Name</div>
         </div>
         <dl class="nhsuk-u-margin-0">
-          <div class="d-flex nhsuk-body-m nhsuk-u-margin-0  nhsuk-u-padding-top-3  nhsuk-u-padding-bottom-3">
+
+          <div class="d-flex nhsuk-body-m nhsuk-u-margin-0  nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3">
             <div class="nhsuk-u-font-weight-normal nhsuk-u-margin-0 nhsuk-u-padding-right-3">
-              <dt class="nhsuk-body-m nhsuk-u-margin-0">{{organisation?.name}}</dt>
-              <dd class="nhsuk-body-m nhsuk-hint nhsuk-u-margin-0">{{organisation?.acronym}}</dd>
+              <dt class="nhsuk-body-m nhsuk-u-margin-0">{{ organisation.name }}</dt>
+              <dd class="nhsuk-body-m nhsuk-hint nhsuk-u-margin-0">{{ organisation.acronym }}</dd>
             </div>
             <dd class="ml-auto text-pre-wrap">
               <ul class="nhsuk-list text-align-right nhsuk-u-margin-0">
                 <li><a routerLink="edit">Change</a></li>
-                <li *ngIf="organisation?.organisationUnits?.length === 1">
-                  <a href="javascript:void(0)" (click)="onShowHideClicked(organisation?.organisationUnits[0].id)">{{ organisation?.organisationUnits[0].showHideText }}<span class="nhsuk-u-visually-hidden">{{ organisation?.organisationUnits[0].showHideDescription }}</span></a>
+                <li *ngIf="organisation.organisationUnits.length === 1">
+                  <a href="javascript:void(0)" (click)="onShowHideClicked(organisation.organisationUnits[0].id)">
+                    {{ organisation.organisationUnits[0].showHideText }}
+                    <span class="nhsuk-u-visually-hidden">{{ organisation.organisationUnits[0].showHideDescription }}</span>
+                  </a>
                 </li>
               </ul>
           </div>
-          <ng-container *ngIf="organisation?.organisationUnits[0].showHideStatus === 'opened' && organisation?.organisationUnits[0].isLoading === false && organisation?.organisationUnits.length === 1">
+
+          <ng-container *ngIf="organisation.organisationUnits.length === 1 && organisation.organisationUnits[0].showHideStatus === 'opened' && organisation.organisationUnits[0].isLoading === false">
             <dl class="nhsuk-u-margin-0">
-              <div *ngFor="let user of organisation?.organisationUnits[0].users; let i = index;" class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
+              <div *ngFor="let user of organisation.organisationUnits[0].users; let i = index;" class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
                 <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'top-border-separator': i === 0}">
                   <dt>{{ user.name }} ({{ user.roleDescription }})</dt>
                 </div>
@@ -41,25 +46,26 @@
             </dl>
           </ng-container>
 
-          <ng-container *ngIf="organisation?.organisationUnits[0].users.length === 0 && organisation?.organisationUnits.length === 1 && organisation?.organisationUnits[0].showHideStatus === 'opened' && organisation?.organisationUnits[0].isLoading === false">
+          <ng-container
+            *ngIf="organisation.organisationUnits.length === 1 && organisation.organisationUnits[0].users.length === 0 && organisation.organisationUnits[0].showHideStatus === 'opened' && organisation.organisationUnits[0].isLoading === false">
             <dl class="nhsuk-u-margin-0">
               <div class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
-                <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'top-border-separator': organisation?.organisationUnits[0]?.users.length === 0}">
+                <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'top-border-separator': organisation.organisationUnits[0].users.length === 0}">
                   <dt>No users are associated with this unit</dt>
                 </div>
               </div>
             </dl>
           </ng-container>
-          
-          <theme-spinner *ngIf="organisation?.organisationUnits[0]?.isLoading && (organisation?.organisationUnits?.length || 0) === 1" cssClass="nhsuk-u-margin-9" message="Loading users. Please wait..."></theme-spinner>
+
+          <theme-spinner *ngIf="organisation.organisationUnits.length === 1 && organisation.organisationUnits[0].isLoading" cssClass="nhsuk-u-margin-9" message="Loading users. Please wait..."></theme-spinner>
 
         </dl>
       </div>
     </div>
-    
+
     <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5" />
 
-    <div *ngIf="organisation?.organisationUnits?.length || 0 > 1" class="nhsuk-grid-row">
+    <div *ngIf="organisation.organisationUnits.length > 1" class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-one-third">
         <h2 class="nhsuk-heading-m">Units</h2>
       </div>
@@ -68,11 +74,11 @@
           <div>Name</div>
         </div>
         <dl class="nhsuk-u-margin-0">
-          <ng-container *ngFor="let unit of organisation?.organisationUnits">
+          <ng-container *ngFor="let unit of organisation.organisationUnits">
             <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'bottom-border-separator': unit.showHideStatus !== 'opened'}">
               <dt class="nhsuk-u-font-weight-normal nhsuk-u-padding-right-2">
-                <span class="nhsuk-body-m nhsuk-u-margin-0">{{unit.name}}</span>
-                <span class="nhsuk-body-m nhsuk-hint nhsuk-u-margin-0">{{unit.acronym}}</span>
+                <span class="nhsuk-body-m nhsuk-u-margin-0">{{ unit.name }}</span>
+                <span class="nhsuk-body-m nhsuk-hint nhsuk-u-margin-0">{{ unit.acronym }}</span>
               </dt>
               <dd class="text-pre-wrap ml-auto">
                 <ul class="nhsuk-list text-align-right nhsuk-u-margin-0">
@@ -88,7 +94,7 @@
               <dl class="nhsuk-u-margin-0">
                 <div *ngFor="let user of unit.users; let i = index;" class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
                   <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'top-border-separator': i === 0}">
-                    <dt>{{ user.name }} ({{user.roleDescription}})</dt>
+                    <dt>{{ user.name }} ({{ user.roleDescription }})</dt>
                   </div>
                 </div>
               </dl>
@@ -103,13 +109,12 @@
                 </div>
               </dl>
             </ng-container>
-            
-            <theme-spinner *ngIf="unit.isLoading" cssClass="nhsuk-u-margin-9" message="Loading users. Please wait..."></theme-spinner>
 
+            <theme-spinner *ngIf="unit.isLoading" cssClass="nhsuk-u-margin-9" message="Loading users. Please wait..."></theme-spinner>
 
           </ng-container>
         </dl>
-     
+
       </div>
     </div>
 

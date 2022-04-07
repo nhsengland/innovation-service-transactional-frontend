@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
 import { CoreComponent } from '@app/base';
-import { AlertType, LinkType } from '@app/base/models';
+import { AlertType } from '@app/base/models';
+
 import { OrganisationsService, organisationUsersOutDTO } from '@modules/shared/services/organisations.service';
+
 
 @Component({
   selector: 'app-admin-pages-organisations-info',
@@ -13,10 +16,10 @@ export class PageAdminOrganisationInfoComponent extends CoreComponent implements
   alert: AlertType = { type: null };
   orgId: string;
 
-  organisation?: {
-    id: string,
-    name: string,
-    acronym: string,
+  organisation: {
+    id: null | string,
+    name: null | string,
+    acronym: null | string,
     organisationUnits: {
       id: string,
       name: string,
@@ -27,14 +30,16 @@ export class PageAdminOrganisationInfoComponent extends CoreComponent implements
       showHideDescription: null | string,
       isLoading: boolean
     }[];
-  };
+  } = { id: null, name: null, acronym: null, organisationUnits: [] };
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private organisationsService: OrganisationsService
   ) {
+
     super();
     this.setPageTitle('Organisation information');
+
     this.orgId = this.activatedRoute.snapshot.params.orgId;
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
@@ -50,6 +55,7 @@ export class PageAdminOrganisationInfoComponent extends CoreComponent implements
   }
 
   ngOnInit(): void {
+
     this.organisationsService.getOrganisation(this.orgId).subscribe((organisation) => {
       this.organisation = {
         ...organisation,
@@ -78,7 +84,7 @@ export class PageAdminOrganisationInfoComponent extends CoreComponent implements
 
   onShowHideClicked(id: string): void {
 
-    const unit = this.organisation?.organisationUnits.find((unit) => unit.id === id);
+    const unit = this.organisation.organisationUnits.find(item => item.id === id);
 
     if (unit?.showHideStatus === 'closed') { unit.isLoading = true; }
 
@@ -105,7 +111,9 @@ export class PageAdminOrganisationInfoComponent extends CoreComponent implements
         );
         break;
       default:
-      break;
+        break;
     }
+
   }
+
 }
