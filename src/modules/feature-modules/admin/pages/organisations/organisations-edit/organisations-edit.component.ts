@@ -40,17 +40,17 @@ export class PageAdminOrganisationEditComponent extends CoreComponent implements
     this.orgId = this.activatedRoute.snapshot.params.orgId;
     this.unitId = this.activatedRoute.snapshot.params.unitId;
 
-    switch(this.module) {
-      case 'Organisation': 
+    switch (this.module) {
+      case 'Organisation':
         this.wizard = new WizardEngineModel(EDIT_ORGANISATIONS_QUESTIONS);
         break;
       case 'Unit':
         this.wizard = new WizardEngineModel(EDIT_ORGANISATION_UNIT_QUESTIONS);
         break;
       default:
-      break;    
+      break;
     }
-    
+
     this.setPageTitle(`Edit ${this.module}`);
   }
 
