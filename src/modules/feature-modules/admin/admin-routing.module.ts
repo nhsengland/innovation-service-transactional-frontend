@@ -20,7 +20,10 @@ import { PageAdminUsersNewComponent } from './pages/admin-users/admin-users-new/
 
 // Resolvers.
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
-import { PageListOrganisationsAndUnitsComponent } from './pages/list-organisations-and-units/list-organisations-and-units.component';
+import { PageListOrganisationsAndUnitsComponent } from './pages/organisations/organisations-list/organisations-list.component';
+import { PageAdminOrganisationInfoComponent } from './pages/organisations/organisations-info/organisation-info.component';
+import { PageAdminOrganisationEditComponent } from './pages/organisations/organisations-edit/organisations-edit.component';
+import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 
 const routes: Routes = [
 
@@ -38,8 +41,42 @@ const routes: Routes = [
       },
       {
         path: 'organisations',
-        pathMatch: 'full',
-        component: PageListOrganisationsAndUnitsComponent
+        data: { breadcrumb: 'Organisations' },
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            component: PageListOrganisationsAndUnitsComponent,
+            data: { breadcrumb: null },
+          },
+          {
+            path: ':orgId',
+            runGuardsAndResolvers: 'pathParamsOrQueryParamsChange',
+            resolve: { organisation: OrganisationDataResolver },
+            data: { breadcrumb: (data: { organisation: { id: string, name: string } }) => `${data.organisation.name}` },
+            children: [
+              {
+                path: '',
+                pathMatch: 'full',
+                component: PageAdminOrganisationInfoComponent,
+                data: { breadcrumb: null }
+              },
+              {
+                path: 'edit',
+                pathMatch: 'full',
+                component: PageAdminOrganisationEditComponent,
+                data: { module: 'Organisation' }
+              },
+              {
+                path: 'unit/:unitId/edit',
+                pathMatch: 'full',
+                component: PageAdminOrganisationEditComponent,
+                data: { module: 'Unit' }
+              }
+            ]
+          },
+
+        ]
       },
 
       // NOTE: When creating the future admin-users routes, a guard should be created to protect those routes!
