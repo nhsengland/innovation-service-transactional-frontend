@@ -44,10 +44,10 @@ export class PageAdminOrganisationInfoComponent extends CoreComponent implements
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'updateOrganisationSuccess':
-        this.alert = { type: 'SUCCESS', title: 'You\'ve successfully updated a organisation.' };
+        this.alert = { type: 'SUCCESS', title: 'You\'ve successfully updated the organisation.' };
         break;
       case 'updateUnitSuccess':
-        this.alert = { type: 'SUCCESS', title: 'You\'ve successfully updated a organisation unit.' };
+        this.alert = { type: 'SUCCESS', title: 'You\'ve successfully updated the organisation unit.' };
         break;
       default:
         break;
