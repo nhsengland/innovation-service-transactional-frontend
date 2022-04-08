@@ -20,7 +20,7 @@ export let EDIT_ORGANISATIONS_QUESTIONS: WizardEngineModel = new WizardEngineMod
         id: 'name',
         dataType: 'text',
         label: 'Organisation name',
-        description: 'Enter the name of the Organisation with a maximum of 255 characters',
+        description: 'Enter the name of the Organisation with a maximum of 100 characters',
         validations: {
           isRequired: [true, 'Name is required'],
           maxLength: 100
