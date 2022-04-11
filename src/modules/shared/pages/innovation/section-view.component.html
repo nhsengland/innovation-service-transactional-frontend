@@ -45,7 +45,7 @@
       <ng-container *ngIf="module === 'innovator'">
         <button *ngIf="section.isNotStarted" type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-right-3"> Start now </button>
         <button *ngIf="section.showSubmitButton" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-right-3"> Submit </button>
-        <button *ngIf="section.hasEvidences" routerLink="evidence/new" class="nhsuk-button nhsuk-button--secondary"> Add evidence </button>
+        <button *ngIf="section.hasEvidences && !section.isNotStarted" routerLink="evidence/new" class="nhsuk-button nhsuk-button--secondary"> Add evidence </button>
       </ng-container>
 
       <ng-container *ngIf="module === 'accessor'">
