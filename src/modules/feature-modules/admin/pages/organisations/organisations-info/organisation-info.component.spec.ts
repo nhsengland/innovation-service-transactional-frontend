@@ -72,7 +72,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminOrganisationInfoCompo
     activatedRoute.snapshot.params = { orgId: 'Org01' };
     activatedRoute.snapshot.queryParams = { alert: 'updateOrganisationSuccess' };
 
-    const expected = { type: 'SUCCESS', title: 'You\'ve successfully updated a organisation.' };
+    const expected = { type: 'SUCCESS', title: 'You\'ve successfully updated the organisation.' };
 
     fixture = TestBed.createComponent(PageAdminOrganisationInfoComponent);
     component = fixture.componentInstance;
@@ -84,7 +84,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminOrganisationInfoCompo
     activatedRoute.snapshot.params = { orgId: 'Org01' };
     activatedRoute.snapshot.queryParams = { alert: 'updateUnitSuccess' };
 
-    const expected = { type: 'SUCCESS', title: 'You\'ve successfully updated a organisation unit.' };
+    const expected = { type: 'SUCCESS', title: 'You\'ve successfully updated the organisation unit.' };
 
     fixture = TestBed.createComponent(PageAdminOrganisationInfoComponent);
     component = fixture.componentInstance;
