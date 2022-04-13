@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
+import https from 'https';
 import * as express from 'express';
 import { Router } from 'express';
 import { IProfile } from 'passport-azure-ad';
@@ -6,9 +7,23 @@ import { API_URL, BASE_PATH } from '../config/constants.config';
 import { getAccessTokenByOid } from './authentication.routes';
 
 const apiRouter: Router = express.Router();
+let axiosInstance: AxiosInstance;
+
+function getRequestHandler(): AxiosInstance {
+  if (!axiosInstance) {
+    // create axios instance
+    axiosInstance = axios.create({
+      timeout: 60000,
+      httpsAgent: new https.Agent({ keepAlive: true })
+    });
+  }
+
+  return axiosInstance;
+}
 
 // Authenticated endpoints: routes proxy
 apiRouter.all(`${BASE_PATH}/api/*`, (req, res) => {
+  const requestHandler: AxiosInstance = getRequestHandler();
   const user: IProfile = req.user || {};
   const oid: string = user.oid || '';
   const accessToken = getAccessTokenByOid(oid);
@@ -47,22 +62,22 @@ apiRouter.all(`${BASE_PATH}/api/*`, (req, res) => {
 
     switch (method.toUpperCase()) {
       case 'GET':
-        axios.get(url, config).then(success).catch(fail);
+        requestHandler.get(url, config).then(success).catch(fail);
         break;
       case 'POST':
-        axios.post(url, body, config).then(success).catch(fail);
+        requestHandler.post(url, body, config).then(success).catch(fail);
         break;
       case 'PATCH':
-        axios.patch(url, body, config).then(success).catch(fail);
+        requestHandler.patch(url, body, config).then(success).catch(fail);
         break;
       case 'PUT':
-        axios.put(url, body, config).then(success).catch(fail);
+        requestHandler.put(url, body, config).then(success).catch(fail);
         break;
       case 'HEAD':
-        axios.head(url, config).then(success).catch(fail);
+        requestHandler.head(url, config).then(success).catch(fail);
         break;
       case 'DELETE':
-        axios.delete(url, config).then(success).catch(fail);
+        requestHandler.delete(url, config).then(success).catch(fail);
         break;
       default:
         res.status(405).send();
@@ -75,9 +90,10 @@ apiRouter.all(`${BASE_PATH}/api/*`, (req, res) => {
 
 // Unauthenticated endpoint: Survey endpoint.
 apiRouter.post(`${BASE_PATH}/survey`, (req, res) => {
+  const requestHandler: AxiosInstance = getRequestHandler();
   const body = req.body;
 
-  axios.post(`${API_URL}/api/survey`, body)
+  requestHandler.post(`${API_URL}/api/survey`, body)
     .then((response: any) => {
       res.cookie('surveyId', response.data.id);
       res.send(response.data);
@@ -90,8 +106,9 @@ apiRouter.post(`${BASE_PATH}/survey`, (req, res) => {
 
 // Unauthenticated endpoint: Innovation transfer check endpoint.
 apiRouter.get(`${BASE_PATH}/innovators/innovation-transfers/:id/check`, (req, res) => {
+  const requestHandler: AxiosInstance = getRequestHandler();
 
-  axios.get(`${API_URL}/api/innovators/innovation-transfers/${req.params.id}/check`)
+  requestHandler.get(`${API_URL}/api/innovators/innovation-transfers/${req.params.id}/check`)
     .then((response) => {
       res.status(response.status).send(response.data);
     })
