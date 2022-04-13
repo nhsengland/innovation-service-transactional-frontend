@@ -90,7 +90,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
         parameters: [{
           id: 'organisationAcronym',
           dataType: 'radio-group',
-          label: 'Which organisation is the new user affiliated to?',
+          label: 'Which organisation is the new user associated to?',
           validations: { isRequired: [true, 'Organisation is required'] },
           items: data != null && data.organisationsList != null ? data.organisationsList.map(o => ({ value: o.acronym, label: o.name })) : []
         }]
@@ -108,9 +108,13 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
           parameters: [{
             id: 'organisationUnitAcronym',
             dataType: 'radio-group',
-            label: 'Which unit is the new user affiliated to?',
+            label: 'Which unit is the new user associated to?',
             validations: { isRequired: [true, 'Unit is required'] },
-            items: selectedOrganisationUnits
+            items: selectedOrganisationUnits.sort((a, b) => {
+              const x = a.label.toUpperCase();
+              const y = b.label.toUpperCase();
+              return x === y ? 0 : x > y ? 1 : -1;
+              })
           }]
         }),
       );
@@ -185,11 +189,11 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Summar
           { label: 'Organisation Unit', value: orgUnitAcronym.label === null ? 'NA' : orgUnitAcronym.label, editStepNumber: 5 }
         );
       }
-      else {
-        toReturn.push(
-          { label: 'Organisation Unit', value: unitsList?.length ? unitsList[0].label : '', editStepNumber: 4 }
-        );
-      }
+      // else {
+      //   toReturn.push(
+      //     { label: 'Organisation Unit', value: unitsList?.length ? unitsList[0].label : '', editStepNumber: 4 }
+      //   );
+      // }
     }
     // toReturn.push(
     //   { label: 'Role', value: data.type === 'QUALIFYING_ACCESSOR' ? 'Qualifying Accessor' : data.type === 'ACCESSOR' ? 'Accessor' : '', editStepNumber: 1 }
