@@ -102,13 +102,25 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
           });
         }
 
-        this.sections.userInfo = [
-          { label: 'Name', value: response.displayName },
-          { label: 'Type', value: this.stores.authentication.getRoleDescription(response.type) },
-          { label: 'Email address', value: response.email },
-          { label: 'Phone number', value: response.phone ? response.phone : ' NA' },
-          { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }
-        ];
+        if (response.type === 'ACCESSOR') {
+          this.sections.userInfo = [
+            { label: 'Name', value: response.displayName },
+            { label: 'Type', value: 'Authorised person' },
+            { label: 'Role', value: this.stores.authentication.getRoleDescription(response.type) },
+            { label: 'Email address', value: response.email },
+            { label: 'Phone number', value: response.phone ? response.phone : ' NA' },
+            { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }
+          ];
+        }
+        else {
+          this.sections.userInfo = [
+            { label: 'Name', value: response.displayName },
+            { label: 'Type', value: this.stores.authentication.getRoleDescription(response.type) },
+            { label: 'Email address', value: response.email },
+            { label: 'Phone number', value: response.phone ? response.phone : ' NA' },
+            { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }
+          ];
+        }
 
         if (response.type === 'INNOVATOR'){
           this.sections.innovations = response.innovations?.map(x => x.name);
