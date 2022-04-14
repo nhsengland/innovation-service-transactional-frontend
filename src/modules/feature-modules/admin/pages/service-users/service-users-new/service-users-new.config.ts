@@ -109,7 +109,11 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
             dataType: 'radio-group',
             label: 'Which unit is the new user associated to?',
             validations: { isRequired: [true, 'Unit is required'] },
-            items: selectedOrganisationUnits
+            items: selectedOrganisationUnits.sort((a, b) => {
+              const x = a.label.toUpperCase();
+              const y = b.label.toUpperCase();
+              return x === y ? 0 : x > y ? 1 : -1;
+              })
           }]
         }),
       );
