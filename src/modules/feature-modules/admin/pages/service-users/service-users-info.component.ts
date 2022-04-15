@@ -5,6 +5,8 @@ import { CoreComponent } from '@app/base';
 import { AlertType, LinkType } from '@app/base/models';
 
 import { RoutingHelper } from '@modules/core';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { forkJoin } from 'rxjs';
 
 import { ServiceUsersService, orgnisationRole } from '../../services/service-users.service';
 
@@ -25,17 +27,20 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
 
   sections: {
     userInfo: { label: string; value: null | string; }[];
-    innovations?: string[];
+    innovations: string[];
     // organisation: { label: string; value: null | string; }[];
-    organisation?: {
+    organisation: {
       id: string; name: string; role: null | string;
       units: { id: string; name: string; supportCount: null | string; }[];
     }[];
   } = { userInfo: [], innovations: [], organisation: [] };
 
+  unitLength: number = 0;
+
   constructor(
     private activatedRoute: ActivatedRoute,
-    private serviceUsersService: ServiceUsersService
+    private serviceUsersService: ServiceUsersService,
+    private organisationService: OrganisationsService
   ) {
 
     super();
@@ -72,6 +77,12 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
           // message: 'Your suggestions were saved and notifications sent.'
         };
         break;
+      case 'unitChangeSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: 'Organisation unit has been successfully changed',
+        }  
+      break; 
       default:
         break;
     }
@@ -79,10 +90,11 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
   }
 
   ngOnInit(): void {
-
-    this.serviceUsersService.getUserFullInfo(this.user.id).subscribe(
-      response => {
-        this.userInfoType = response.type;
+    forkJoin([
+      this.serviceUsersService.getUserFullInfo(this.user.id),
+      this.organisationService.getOrganisationUnits()
+    ]).subscribe(([response, organisations]) => {
+      this.userInfoType = response.type;
         this.titleActions = [
           {
             type: 'link',
@@ -92,14 +104,16 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
         ];
 
         if (
-          (response.userOrganisations[0]?.role === orgnisationRole.ACCESSOR ||
-          response.userOrganisations[0]?.role === orgnisationRole.QUALIFYING_ACCESSOR) && !response.lockedAt
+          (response.userOrganisations[0].role === orgnisationRole.ACCESSOR ||
+          response.userOrganisations[0].role === orgnisationRole.QUALIFYING_ACCESSOR) && !response.lockedAt
         ) {
           this.titleActions.push({
             type: 'link',
             label: 'Change role',
             url: `/admin/service-users/${this.user.id}/change-role`
           });
+
+          this.unitLength = organisations.filter(org => (response.userOrganisations[0].id === org.id))[0].organisationUnits.length;
         }
 
         this.sections.userInfo = [
@@ -111,7 +125,7 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
         ];
 
         if (response.type === 'INNOVATOR'){
-          this.sections.innovations = response.innovations?.map(x => x.name);
+          this.sections.innovations = response.innovations.map(x => x.name);
           if (response.userOrganisations.length > 0 && !response.userOrganisations[0].isShadow) {
             this.sections.userInfo = [...this.sections.userInfo,
               { label: 'Company name', value: response.userOrganisations[0].name },
