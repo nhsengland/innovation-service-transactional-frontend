@@ -35,7 +35,7 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
     }[];
   } = { userInfo: [], innovations: [], organisation: [] };
 
-  unitLength: number = 0;
+  unitLength = 0;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -81,8 +81,8 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
         this.alert = {
           type: 'SUCCESS',
           title: 'Organisation unit has been successfully changed',
-        }  
-      break; 
+        };
+        break;
       default:
         break;
     }
@@ -95,7 +95,7 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
       this.organisationService.getOrganisationUnits()
     ]).subscribe(([response, organisations]) => {
       this.userInfoType = response.type;
-        this.titleActions = [
+      this.titleActions = [
           {
             type: 'link',
             label: !response.lockedAt ? 'Lock user' : 'Unlock user',
@@ -103,7 +103,7 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
           },
         ];
 
-        if (
+      if (
           (response.userOrganisations[0].role === orgnisationRole.ACCESSOR ||
           response.userOrganisations[0].role === orgnisationRole.QUALIFYING_ACCESSOR) && !response.lockedAt
         ) {
@@ -116,7 +116,7 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
           this.unitLength = organisations.filter(org => (response.userOrganisations[0].id === org.id))[0].organisationUnits.length;
         }
 
-        this.sections.userInfo = [
+      this.sections.userInfo = [
           { label: 'Name', value: response.displayName },
           { label: 'Type', value: this.stores.authentication.getRoleDescription(response.type) },
           { label: 'Email address', value: response.email },
@@ -124,7 +124,7 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
           { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }
         ];
 
-        if (response.type === 'INNOVATOR'){
+      if (response.type === 'INNOVATOR'){
           this.sections.innovations = response.innovations.map(x => x.name);
           if (response.userOrganisations.length > 0 && !response.userOrganisations[0].isShadow) {
             this.sections.userInfo = [...this.sections.userInfo,
@@ -134,11 +134,11 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
           }
         }
 
-        if (response.type === 'ACCESSOR') {
+      if (response.type === 'ACCESSOR') {
           this.sections.organisation = response.userOrganisations;
         }
 
-        this.setPageStatus('READY');
+      this.setPageStatus('READY');
 
       },
       error => {

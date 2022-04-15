@@ -95,7 +95,7 @@ export type getOrganisationUnitRulesInDTO = {
     valid: boolean,
     meta?: { unit: { id: string, name: string } }
   },
-}
+};
 
 export type getOrganisationUnitRulesOutDTO = {
 
@@ -286,7 +286,7 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  
+
   changeOrganisationUserUnit(body: MappedObject, securityConfirmation: { id: string, code: string }, userId: string): Observable<any> {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};

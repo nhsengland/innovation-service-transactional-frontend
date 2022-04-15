@@ -8,7 +8,7 @@ import { RoutingHelper } from '@modules/core';
 import { forkJoin } from 'rxjs';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
-import { CHANGE_ORGANISATION_USER_UNIT } from './change-organisation-user-unit.config'
+import { CHANGE_ORGANISATION_USER_UNIT } from './change-organisation-user-unit.config';
 
 
 @Component({
@@ -22,9 +22,9 @@ export class PageServiceChangeOrganisationUserUnitComponent extends CoreComponen
   pageStep: 'CODE_REQUEST' | 'SUCCESS' | 'RULES_LIST' | 'UNIT_LIST' = 'RULES_LIST';
   rulesList: getOrganisationUnitRulesOutDTO[] = [];
   oldOrganisationUnits: { id: string, name: string, acronym: string, supportCount: null | string }[] = [];
-  titleHint: string = '';
-  submitBtnClicked: boolean = false;
-  isRulesValid: boolean = false;
+  titleHint = '';
+  submitBtnClicked = false;
+  isRulesValid = false;
 
   organisation: {
     id: string | null;
@@ -36,13 +36,13 @@ export class PageServiceChangeOrganisationUserUnitComponent extends CoreComponen
       acronym: string;
     }[];
   } = { id: null, name: null, acronym: null, organisationUnits: [] };
-  
+
   securityConfirmation = { id: '', code: '' };
-  
+
   form = new FormGroup({
     code: new FormControl('')
   }, { updateOn: 'blur' });
-  
+
   wizard: WizardEngineModel = new WizardEngineModel(CHANGE_ORGANISATION_USER_UNIT);
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
@@ -67,7 +67,7 @@ export class PageServiceChangeOrganisationUserUnitComponent extends CoreComponen
       this.serviceUsersService.getUserFullInfo(this.user.id),
       this.serviceUsersService.getOrgnisationUnitRules(this.user.id)
     ]).subscribe(([organisations, userInfo, orgnisationUnitRules]) => {
-      
+
       this.rulesList = orgnisationUnitRules;
       this.user.role = this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role).toLowerCase();
       this.titleHint = `${this.user.name} (${this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role)})`;
@@ -77,7 +77,7 @@ export class PageServiceChangeOrganisationUserUnitComponent extends CoreComponen
       this.wizard.steps[0].parameters[0].items = this.organisation.organisationUnits.map(unit => ({ value: unit.acronym, label: unit.name }));
       this.wizard.gotoStep(1).setAnswers(this.wizard.runInboundParsing({ organisation: this.organisation, assignedUnit: this.oldOrganisationUnits })).runRules();
       this.setPageStatus('READY');
-    }, 
+    },
     () => {
       this.setPageStatus('ERROR');
       this.alert = {
@@ -85,7 +85,7 @@ export class PageServiceChangeOrganisationUserUnitComponent extends CoreComponen
         title: 'Unable to fetch the necessary information',
         message: 'Please try again or contact us for further help'
       };
-    })
+    });
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
@@ -119,7 +119,7 @@ export class PageServiceChangeOrganisationUserUnitComponent extends CoreComponen
     this.securityConfirmation.code = this.form.get('code')!.value;
     const body = this.wizard.runOutboundParsing();
     body.organisationId = this.organisation.id;
- 
+
     this.serviceUsersService.changeOrganisationUserUnit(body, this.securityConfirmation, this.user.id).subscribe(
       () => this.redirectTo(`admin/service-users/${this.user.id}`, { alert: 'unitChangeSuccess' }),
       (error: { id: string }) => {
@@ -137,7 +137,7 @@ export class PageServiceChangeOrganisationUserUnitComponent extends CoreComponen
 
       }
 
-    )
+    );
   }
 
 }

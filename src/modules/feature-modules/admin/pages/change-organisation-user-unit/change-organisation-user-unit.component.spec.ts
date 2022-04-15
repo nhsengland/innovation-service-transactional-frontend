@@ -99,7 +99,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceChangeOrganisationU
     serviceUsersService.getOrgnisationUnitRules = () => of(responseMock);
 
 
-    
+
   });
 
 
@@ -109,7 +109,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceChangeOrganisationU
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
-  
+
 
   it('should have initial information loaded with role accessor', () => {
 
