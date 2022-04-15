@@ -104,6 +104,7 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
         ];
 
       if (
+          response.userOrganisations.length > 0 &&
           (response.userOrganisations[0].role === orgnisationRole.ACCESSOR ||
           response.userOrganisations[0].role === orgnisationRole.QUALIFYING_ACCESSOR) && !response.lockedAt
         ) {
