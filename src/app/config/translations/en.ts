@@ -178,6 +178,24 @@ export const locale = {
             lastAccessorUserOnOrganisationUnit: {
               label: 'User cannot be the last Qualifying Accessor on the organisation unit'
             }
+          },
+          change_organisation_user_unit: {
+            lastAccessorUserOnOrganisation: {
+              label: 'User is not the only {{ role }} within their organisation',
+              description: '{{ organisation.name }}'
+            },
+            lastAccessorUserOnOrganisationUnit: {
+              label: 'User is not the only {{ role }} within their organisation unit',
+              description: '{{ unit.name }}'
+            },
+            lastAccessorFromUnitProvidingSupport: {
+              label: 'User is not the person in their organisation or unit who is supporting an innovator',
+              description: {
+               none: 'No innovation is being supported',
+               singular: '{{ supports.innovations.length }} innovation being supported',
+               plural: '{{ supports.innovations.length }} innovations being supported',
+              }
+            }
           }
 
         }

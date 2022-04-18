@@ -24,6 +24,7 @@ import { PageListOrganisationsAndUnitsComponent } from './pages/organisations/or
 import { PageAdminOrganisationInfoComponent } from './pages/organisations/organisations-info/organisation-info.component';
 import { PageAdminOrganisationEditComponent } from './pages/organisations/organisations-edit/organisations-edit.component';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
+import { PageServiceChangeOrganisationUserUnitComponent } from './pages/change-organisation-user-unit/change-organisation-user-unit.component';
 
 const routes: Routes = [
 
@@ -158,6 +159,11 @@ const routes: Routes = [
                 path: 'change-role',
                 pathMatch: 'full',
                 component: PageServiceChangeUserRoleComponent
+              },
+              {
+                path: 'change-unit',
+                pathMatch: 'full',
+                component: PageServiceChangeOrganisationUserUnitComponent
               }
             ]
           }
