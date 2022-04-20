@@ -124,11 +124,11 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
         parameters: [{
           id: 'role',
           dataType: 'radio-group',
-          label: 'Select user role',
+          label: 'Which role should the new user have within the organisation?',
           validations: { isRequired: [true, 'Choose one role'] },
           items: [
-            { value: 'ACCESSOR', label: 'Accessor' },
             { value: 'QUALIFYING_ACCESSOR', label: 'Qualifying Accessor' },
+            { value: 'ACCESSOR', label: 'Accessor' }
           ]
         }]
       })
