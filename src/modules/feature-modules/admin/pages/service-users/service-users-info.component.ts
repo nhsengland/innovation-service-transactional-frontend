@@ -117,11 +117,11 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
           this.unitLength = organisations.filter(org => (response.userOrganisations[0].id === org.id))[0].organisationUnits.length;
         }
 
-      if (response.type === 'ACCESSOR') {
+      if (response.type === 'ACCESSOR'  && response.userOrganisations.length > 0) {
           this.sections.userInfo = [
             { label: 'Name', value: response.displayName },
             { label: 'Type', value: 'Authorised person' },
-            { label: 'Role', value: this.stores.authentication.getRoleDescription(response.type) },
+            { label: 'Role', value: this.stores.authentication.getRoleDescription(response.userOrganisations[0].role) },
             { label: 'Email address', value: response.email },
             { label: 'Phone number', value: response.phone ? response.phone : ' NA' },
             { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }
