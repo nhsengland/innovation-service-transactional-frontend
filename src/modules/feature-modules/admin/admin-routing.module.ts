@@ -17,7 +17,7 @@ import { PageServiceUsersLockComponent } from './pages/service-users/service-use
 import { PageServiceUsersNewComponent } from './pages/service-users/service-users-new/service-users-new.component';
 import { PageServiceUsersUnlockComponent } from './pages/service-users/service-users-unlock.component';
 import { PageAdminUsersNewComponent } from './pages/admin-users/admin-users-new/admin-users-new.component';
-
+import { PageAdminDeleteComponent } from './pages/admin-users/admin-users-delete/admin-users-delete.component';
 // Resolvers.
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 import { PageListOrganisationsAndUnitsComponent } from './pages/organisations/organisations-list/organisations-list.component';
@@ -102,8 +102,20 @@ const routes: Routes = [
             resolve: { user: ServiceUserDataResolver },
             data: {
               breadcrumb: (data: { user: { id: string, displayName: string } }) => `${data.user.displayName}`
-            },
-            component: PageAdminUsersInfoComponent
+            },            
+            children: [
+              {
+                path: '',
+                pathMatch: 'full',
+                data: { breadcrumb: null },
+                component: PageAdminUsersInfoComponent
+              },             
+              {
+                path: 'delete',
+                pathMatch: 'full',
+                component: PageAdminDeleteComponent
+              }
+            ]
           }
         ]
       },

@@ -53,6 +53,13 @@ export class PageAdminUsersInfoComponent extends CoreComponent implements OnInit
           { label: 'Type', value: response.type },
           { label: 'Email address', value: response.email }
         ];
+        this.titleActions = [
+          {
+            type: 'link',
+            label:  'Delete user',
+            url: `/admin/administration-users/${this.user.id}`
+          },
+        ];
         this.setPageStatus('READY');
       },
       error => {
