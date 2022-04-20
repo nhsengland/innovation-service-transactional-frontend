@@ -31,6 +31,7 @@ import { PageAdminOrganisationInfoComponent } from './pages/organisations/organi
 import { PageAdminOrganisationEditComponent } from './pages/organisations/organisations-edit/organisations-edit.component';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { PageServiceChangeOrganisationUserUnitComponent } from './pages/change-organisation-user-unit/change-organisation-user-unit.component';
+import { PageAdminAccountManageAccountInfoComponent } from './pages/account/manage-account/manage-account-info.component';
 
 @NgModule({
   imports: [
@@ -58,7 +59,8 @@ import { PageServiceChangeOrganisationUserUnitComponent } from './pages/change-o
     PageAdminUsersNewComponent,
     PageAdminOrganisationInfoComponent,
     PageAdminOrganisationEditComponent,
-    PageServiceChangeOrganisationUserUnitComponent
+    PageServiceChangeOrganisationUserUnitComponent,
+    PageAdminAccountManageAccountInfoComponent
   ],
   providers: [
     // Services.
