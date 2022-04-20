@@ -38,7 +38,7 @@
       <ng-container *ngIf="usersList.length > 0">
         <div *ngFor="let item of usersList" class="d-flex nhsuk-body-s nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
           <div class="mr-auto">
-            <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">{{ item.typeLabel }}</p>
+            <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">{{ item.typeLabel === 'Accessor' ? 'Authorised person' : item.typeLabel}}</p>
             <p class="nhsuk-body-s nhsuk-u-margin-0">{{ item.displayName }} ({{ item.email }})</p>
           </div>
           <div class="d-flex flex-direction-column text-align-center">
