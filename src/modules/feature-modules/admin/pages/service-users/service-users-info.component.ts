@@ -117,7 +117,7 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
           this.unitLength = organisations.filter(org => (response.userOrganisations[0].id === org.id))[0].organisationUnits.length;
         }
 
-        if (response.type === 'ACCESSOR') {
+      if (response.type === 'ACCESSOR') {
           this.sections.userInfo = [
             { label: 'Name', value: response.displayName },
             { label: 'Type', value: 'Authorised person' },
