@@ -57,7 +57,7 @@ export class PageAdminUsersInfoComponent extends CoreComponent implements OnInit
           {
             type: 'link',
             label:  'Delete user',
-            url: `/admin/administration-users/${this.user.id}`
+            url: `/admin/administration-users/${this.user.id}/delete`
           },
         ];
         this.setPageStatus('READY');

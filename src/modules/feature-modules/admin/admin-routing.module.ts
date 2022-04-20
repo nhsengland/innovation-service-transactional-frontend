@@ -25,6 +25,7 @@ import { PageAdminOrganisationInfoComponent } from './pages/organisations/organi
 import { PageAdminOrganisationEditComponent } from './pages/organisations/organisations-edit/organisations-edit.component';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { PageServiceChangeOrganisationUserUnitComponent } from './pages/change-organisation-user-unit/change-organisation-user-unit.component';
+import { PageAdminAccountManageAccountInfoComponent } from './pages/account/manage-account/manage-account-info.component';
 
 const routes: Routes = [
 
@@ -181,8 +182,24 @@ const routes: Routes = [
           }
 
         ]
+      },
+      {
+        path: 'account',
+        data: { breadcrumb: 'Account' },
+        children: [
+          { path: '', pathMatch: 'full', redirectTo: 'manage-account', data: { breadcrumb: null } },
+          {
+            path: 'manage-account',
+            data: { breadcrumb: 'Manage account' },
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAdminAccountManageAccountInfoComponent,
+                data: { layoutOptions: { type: 'userAccountMenu' } }
+              }
+            ]
+          }
+        ]
       }
-
     ]
   }
 ];

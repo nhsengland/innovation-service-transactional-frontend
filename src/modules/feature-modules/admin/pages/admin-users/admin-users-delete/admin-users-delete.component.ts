@@ -17,8 +17,8 @@ export class PageAdminDeleteComponent extends CoreComponent implements OnInit {
 
   stepNumber: 1 | 2 = 1;
 
-  user: { email: string };
-
+  // user: { email: string };
+  user: { id: string };
   form: FormGroup;
 
 
@@ -27,14 +27,14 @@ export class PageAdminDeleteComponent extends CoreComponent implements OnInit {
   ) {
 
     super();
-    this.setPageTitle('Delete min account');
+    this.setPageTitle('Delete admin account');
 
     const user = this.stores.authentication.getUserInfo();
-    this.user = { email: user.email };
+    this.user = { id: user.email };
 
     this.form = new FormGroup({
       reason: new FormControl(''),
-      email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(this.user.email, 'The email is incorrect')]),
+      email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(this.user.id, 'The email is incorrect')]),
       confirmation: new FormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('delete my account')]),
     }, { updateOn: 'blur' });
 

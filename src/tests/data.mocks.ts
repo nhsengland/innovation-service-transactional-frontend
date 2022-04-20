@@ -30,3 +30,16 @@ export const USER_INFO_INNOVATOR: Required<AuthenticationModel>['user'] = {
   passwordResetOn: '2020-01-01T00:00:00.000Z',
   phone: '212000000'
 };
+
+export const USER_INFO_ADMIN: Required<AuthenticationModel>['user'] = {
+  id: '_id',
+  email: 'a@gmail.com',
+  displayName: 'Test admin  ',
+  type: 'ADMIN',
+  roles: [ 'ADMIN', 'SERVICE_TEAM' ],
+  organisations: [],
+  passwordResetOn: '2022-03-10T07:42:24.0571567Z',
+  phone: '23422134',
+  innovations: []
+};
+
