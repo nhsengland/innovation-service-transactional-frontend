@@ -41,7 +41,7 @@ export class PageAdminDeleteComponent extends CoreComponent implements OnInit {
       reason: new FormControl(''),
       code: new FormControl(''),
       // email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(this.user.id, 'The email is incorrect')]),
-      confirmation: new FormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('delete admin account')]),
+      confirmation: new FormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('Delete the Administrator')]),
     }, { updateOn: 'blur' });
 
   }
