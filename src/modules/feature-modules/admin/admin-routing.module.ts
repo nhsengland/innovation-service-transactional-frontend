@@ -99,18 +99,18 @@ const routes: Routes = [
           },
           {
             path: ':userId',
-            pathMatch: 'full',
+            // pathMatch: 'full',
             resolve: { user: ServiceUserDataResolver },
             data: {
               breadcrumb: (data: { user: { id: string, displayName: string } }) => `${data.user.displayName}`
-            },            
+            },
             children: [
               {
                 path: '',
                 pathMatch: 'full',
                 data: { breadcrumb: null },
                 component: PageAdminUsersInfoComponent
-              },             
+              },
               {
                 path: 'delete',
                 pathMatch: 'full',

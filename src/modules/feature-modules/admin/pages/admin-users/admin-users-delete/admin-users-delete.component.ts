@@ -1,47 +1,49 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
 import { AlertType } from '@app/base/models';
 
-import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { ServiceUsersService } from '../../../services/service-users.service';
 
 
 @Component({
-  selector: 'pages-admin-users-delete',
+  selector: 'app-admin-pages-admin-users-delete',
   templateUrl: './admin-users-delete.component.html'
 })
 export class PageAdminDeleteComponent extends CoreComponent implements OnInit {
 
   alert: AlertType = { type: null };
 
-  stepNumber: 1 | 2 = 1;
+  pageStep: 'DELETE' | 'CODE_REQUEST' | 'SUCCESS' = 'DELETE';
 
-  // user: { email: string };
+  securityConfirmation = { id: '', code: '' };
+
+  submitBtnClicked = false;
+
   user: { id: string };
+
   form: FormGroup;
 
-
   constructor(
-    private innovatorService: InnovatorService
+    private activatedRoute: ActivatedRoute,
+    private serviceUsersService: ServiceUsersService
   ) {
 
     super();
     this.setPageTitle('Delete admin account');
 
-    const user = this.stores.authentication.getUserInfo();
-    this.user = { id: user.email };
+    const currentUser = this.stores.authentication.getUserInfo();
+    this.user = { id: this.activatedRoute.snapshot.params.userId };
 
     this.form = new FormGroup({
       reason: new FormControl(''),
-      email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(this.user.id, 'The email is incorrect')]),
-      confirmation: new FormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('delete my account')]),
+      code: new FormControl(''),
+      // email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(this.user.id, 'The email is incorrect')]),
+      confirmation: new FormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('delete admin account')]),
     }, { updateOn: 'blur' });
 
-  }
-
-  onSubmitStep(): void {
-    this.stepNumber++;
   }
 
   onSubmitForm(): void {
@@ -51,21 +53,27 @@ export class PageAdminDeleteComponent extends CoreComponent implements OnInit {
       return;
     }
 
-    const body: { reason: string } = {
-      reason: this.form.get('reason')?.value
-    };
+    this.submitBtnClicked = true;
 
-    this.innovatorService.deleteUserAccount(body).subscribe(
-      () => {
-        this.redirectTo('/delete-account-message', {});
+    this.securityConfirmation.code = this.form.get('code')!.value;
+
+    this.serviceUsersService.deleteAdminAccount(this.user.id, this.securityConfirmation).subscribe(
+      response => {
+        this.redirectTo(`admin/administration-users`, { alert: 'adminDeletedSuccess' });
       },
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occured while deleting user',
-          message: 'Please, try again or contact us for further help',
-          setFocus: true
-        };
+      (error) => {
+        this.submitBtnClicked = false;
+
+        if (!this.securityConfirmation.id && error.id) {
+          this.securityConfirmation.id = error.id;
+          this.pageStep = 'CODE_REQUEST';
+
+        } else {
+
+          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your e-mail' });
+
+        }
+
       }
     );
 

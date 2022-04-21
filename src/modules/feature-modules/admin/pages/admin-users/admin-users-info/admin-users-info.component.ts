@@ -17,7 +17,6 @@ export class PageAdminUsersInfoComponent extends CoreComponent implements OnInit
 
   titleActions: LinkType[] = [];
 
-
   sections: {
     userInfo: { label: string; value: null | string; }[];
     innovations: string[];
@@ -53,13 +52,16 @@ export class PageAdminUsersInfoComponent extends CoreComponent implements OnInit
           { label: 'Type', value: response.type },
           { label: 'Email address', value: response.email }
         ];
-        this.titleActions = [
-          {
-            type: 'link',
-            label:  'Delete user',
-            url: `/admin/administration-users/${this.user.id}/delete`
-          },
-        ];
+        const currentUser = this.stores.authentication.getUserInfo();
+        if (currentUser.id !== this.user.id) {
+          this.titleActions = [
+            {
+              type: 'link',
+              label:  'Delete user',
+              url: `/admin/administration-users/${this.user.id}/delete`
+            },
+          ];
+        }
         this.setPageStatus('READY');
       },
       error => {

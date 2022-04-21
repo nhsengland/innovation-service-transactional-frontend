@@ -230,6 +230,21 @@ export class ServiceUsersService extends CoreService {
 
   }
 
+  deleteAdminAccount(userId: string, securityConfirmation: { id: string, code: string }): Observable<{ id: string }> {
+
+    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
+
+    const url = new UrlModel(this.API_URL).addPath('user-admin/:userId/delete').setPathParams({ userId}).setQueryParams(qp);
+    return this.http.patch<{ id: string }>(url.buildUrl(), {}).pipe(
+      take(1),
+      map(response => response),
+      catchError(error => throwError({
+        id: error.error.id
+      }))
+    );
+
+  }
+
   searchUser(email: string, isAdmin: boolean): Observable<searchUserEndpointOutDTO[]> {
 
     const url = new UrlModel(this.API_URL).addPath('/user-admin/users').setQueryParams({ email, isAdmin });
