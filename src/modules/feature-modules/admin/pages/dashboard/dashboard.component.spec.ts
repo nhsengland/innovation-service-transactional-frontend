@@ -10,7 +10,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageDashboardComponent } from './dashboard.component';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 
 describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
@@ -57,6 +57,23 @@ describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
     expect(component.alert).toEqual(mockAlert);
   });
 
+  it('should have error alert when unable to fetch', () => {
+    activatedRoute.snapshot.queryParams = { alert: 'xxxx' };
+    service.getUserInfo = () => throwError('error');
+
+    fixture = TestBed.createComponent(PageDashboardComponent);
+    component = fixture.componentInstance;
+
+    const mockAlert = {
+      type: 'ERROR',
+      title: 'Unable to fetch user information',
+      message: 'Please try again or contact us for further help'
+    };
+
+    fixture.detectChanges();
+    expect(component.alert).toEqual(mockAlert);
+
+  });
 
 
 });

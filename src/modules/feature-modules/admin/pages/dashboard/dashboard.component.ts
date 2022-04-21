@@ -39,7 +39,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         this.setPageStatus('ERROR');
         this.alert = {
           type: 'ERROR',
-          title: 'Unable to fetch organisations information',
+          title: 'Unable to fetch user information',
           message: 'Please try again or contact us for further help'
         };
       }
