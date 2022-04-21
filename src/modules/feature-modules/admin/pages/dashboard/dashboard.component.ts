@@ -33,6 +33,15 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         if (resultInMinutes <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {
           this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
         }
+        this.setPageStatus('READY');
+      },
+      () => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch organisations information',
+          message: 'Please try again or contact us for further help'
+        };
       }
     );
   }
