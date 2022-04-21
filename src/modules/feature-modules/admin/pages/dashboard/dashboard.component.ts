@@ -12,7 +12,7 @@ import { AuthenticationService } from '@modules/stores';
 })
 export class PageDashboardComponent extends CoreComponent implements OnInit {
   alert: AlertType = { type: null };
-  
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private authenticationService: AuthenticationService
@@ -23,7 +23,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.authenticationService.getUserInfo().subscribe(
       (response) => {
         const startTime = new Date();
