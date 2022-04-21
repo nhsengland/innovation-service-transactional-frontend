@@ -157,7 +157,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     name: data.name,
     email: data.email,
-    type: data.type === 'AUTHORISED_PERSON' ? data.role : data.type,
+    type: data.type === 'AUTHORISED_PERSON' ? 'ACCESSOR' : data.type,
     role: data.role,
     organisationAcronym: data.organisationAcronym,
     organisationUnitAcronym: data.organisationUnitAcronym
