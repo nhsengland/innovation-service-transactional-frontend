@@ -47,7 +47,7 @@ describe('Shared/Pages/Account/Manageaccount/PageAccountManageUserAccountCompone
     fixture = TestBed.createComponent(PageAdminDeleteComponent);
     component = fixture.componentInstance;
     component.form.get('id')?.setValue('12345');
-    component.form.get('confirmation')?.setValue('Delete the Administrator');
+    component.form.get('confirmation')?.setValue('delete the administrator');
     component.form.markAllAsTouched();
     fixture.detectChanges();
     expect(component).toBeTruthy();
@@ -64,7 +64,7 @@ describe('Shared/Pages/Account/Manageaccount/PageAccountManageUserAccountCompone
     fixture.detectChanges();
 
     component.form.get('code')?.setValue('12345');
-    component.form.get('confirmation')?.setValue('Delete the Administrator');
+    component.form.get('confirmation')?.setValue('delete the administrator');
     component.form.markAllAsTouched();
 
     component.onSubmitForm();
@@ -93,7 +93,7 @@ describe('Shared/Pages/Account/Manageaccount/PageAccountManageUserAccountCompone
     fixture = TestBed.createComponent(PageAdminDeleteComponent);
     component = fixture.componentInstance;
     component.form.get('code')?.setValue('12345');
-    component.form.get('confirmation')?.setValue('Delete the Administrator');
+    component.form.get('confirmation')?.setValue('delete the administrator');
     component.form.markAllAsTouched();
 
     component.onSubmitForm();
@@ -109,7 +109,7 @@ describe('Shared/Pages/Account/Manageaccount/PageAccountManageUserAccountCompone
     fixture = TestBed.createComponent(PageAdminDeleteComponent);
     component = fixture.componentInstance;
     component.form.get('code')?.setValue('invalidCode');
-    component.form.get('confirmation')?.setValue('Delete the Administrator');
+    component.form.get('confirmation')?.setValue('delete the administrator');
     component.securityConfirmation.id = '2lsId';
 
     component.onSubmitForm();
