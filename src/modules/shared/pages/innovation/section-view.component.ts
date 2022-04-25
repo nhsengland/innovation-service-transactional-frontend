@@ -137,7 +137,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
           // If accessor, only view information if section is submitted.
           this.summaryList = [];
         } else {
-          this.summaryList = this.wizard.runSummaryParsing(response.data);
+          this.summaryList = this.wizard.runSummaryParsing( this.wizard.runInboundParsing(response.data));
         }
 
         this.setPageStatus('READY');

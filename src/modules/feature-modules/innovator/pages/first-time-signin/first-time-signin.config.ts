@@ -42,7 +42,8 @@ export let FIRST_TIME_SIGNIN_QUESTIONS: WizardEngineModel = new WizardEngineMode
         id: 'innovationName',
         dataType: 'text',
         label: 'What should we call your innovation?',
-        validations: { isRequired: [true, 'Innovation name is required'] }
+        description: 'Enter the name of your innovation with a maximum of 100 characters',
+        validations: { isRequired: [true, 'Innovation name is required'], maxLength: 100 }
       }]
     }),
 

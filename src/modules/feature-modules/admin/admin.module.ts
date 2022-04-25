@@ -19,6 +19,7 @@ import { PageServiceUsersUnlockComponent } from './pages/service-users/service-u
 import { PageAdminUsersFindComponent } from './pages/admin-users/admin-users-find/admin-users-find.component';
 import { PageServiceChangeUserRoleComponent } from './pages/change-user-role/change-user-role.component';
 import { PageAdminUsersNewComponent } from './pages/admin-users/admin-users-new/admin-users-new.component';
+import { PageAdminDeleteComponent } from './pages/admin-users/admin-users-delete/admin-users-delete.component';
 
 // Services.
 import { ServiceUsersService } from './services/service-users.service';
@@ -26,7 +27,12 @@ import { ServiceUsersService } from './services/service-users.service';
 // Resolvers.
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 import { PageAdminUsersInfoComponent } from './pages/admin-users/admin-users-info/admin-users-info.component';
-import { PageListOrganisationsAndUnitsComponent } from './pages/list-organisations-and-units/list-organisations-and-units.component';
+import { PageListOrganisationsAndUnitsComponent } from './pages/organisations/organisations-list/organisations-list.component';
+import { PageAdminOrganisationInfoComponent } from './pages/organisations/organisations-info/organisation-info.component';
+import { PageAdminOrganisationEditComponent } from './pages/organisations/organisations-edit/organisations-edit.component';
+import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
+import { PageServiceChangeOrganisationUserUnitComponent } from './pages/change-organisation-user-unit/change-organisation-user-unit.component';
+import { PageAdminAccountManageAccountInfoComponent } from './pages/account/manage-account/manage-account-info.component';
 
 @NgModule({
   imports: [
@@ -51,7 +57,12 @@ import { PageListOrganisationsAndUnitsComponent } from './pages/list-organisatio
     PageServiceChangeUserRoleComponent,
     PageAdminUsersInfoComponent,
     PageListOrganisationsAndUnitsComponent,
-    PageAdminUsersNewComponent
+    PageAdminUsersNewComponent,
+    PageAdminOrganisationInfoComponent,
+    PageAdminOrganisationEditComponent,
+    PageServiceChangeOrganisationUserUnitComponent,
+    PageAdminDeleteComponent,
+    PageAdminAccountManageAccountInfoComponent
   ],
   providers: [
     // Services.
@@ -59,6 +70,7 @@ import { PageListOrganisationsAndUnitsComponent } from './pages/list-organisatio
 
     // Resolvers.
     ServiceUserDataResolver,
+    OrganisationDataResolver
   ]
 })
 export class AdminModule { }

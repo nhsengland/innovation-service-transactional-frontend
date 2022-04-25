@@ -28,10 +28,17 @@
               <dd class="nhsuk-u-margin-0" [ngClass]="{ 'width-25': organisation.info.organisationUnits.length > 1 }">
                 {{ organisation.info.acronym }}
               </dd>
-              <dd *ngIf="organisation.info.organisationUnits.length > 1" class="ml-auto">
-                <a href="javascript:void(0)" (click)="onShowHideClicked(organisation.info.id)">
-                  {{ organisation.showHideText }} <span class="nhsuk-u-visually-hidden"> {{ organisation.showHideDescription }} </span>
-                </a>
+              <dd class="ml-auto">
+                <ul class="nhsuk-list text-align-right nhsuk-u-margin-0">
+                  <li>
+                    <a *ngIf="organisation.info.organisationUnits.length > 1" href="javascript:void(0)" (click)="onShowHideClicked(organisation.info.id)">
+                      {{ organisation.showHideText }} <span class="nhsuk-u-visually-hidden"> {{ organisation.showHideDescription }} </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a routerLink="{{organisation.info.id}}" title="View">View</a>
+                  </li>
+                </ul>
               </dd>
             </div>
 

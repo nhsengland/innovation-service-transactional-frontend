@@ -7,12 +7,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { InnovationStore, StoresModule } from '@modules/stores';
+import { InnovationStore, StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation/innovation.models';
 import { FormEngineComponent } from '@modules/shared/forms';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { InnovationSectionEditComponent } from './section-edit.component';
+import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 
 
 describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionEditComponent', () => {
@@ -22,6 +23,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
   let routerSpy: jasmine.Spy;
 
   let innovationStore: InnovationStore;
+  let authenticationStore: AuthenticationStore;
 
   let component: InnovationSectionEditComponent;
   let fixture: ComponentFixture<InnovationSectionEditComponent>;
@@ -38,6 +40,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
+    authenticationStore = TestBed.inject(AuthenticationStore);
+    authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
@@ -182,6 +186,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
   it('should run onSubmitSurvey() and call api with success', () => {
 
     innovationStore.updateSectionInfo$ = () => of({ hasRegulationKnowledge: 'YES_ALL' });
+    authenticationStore.initializeAuthentication$ = () => of(true);
 
     fixture = TestBed.createComponent(InnovationSectionEditComponent);
     component = fixture.componentInstance;

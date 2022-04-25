@@ -107,7 +107,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       case 'ASSESSMENT': return 'Needs Assessor';
       case 'INNOVATOR': return 'Innovator';
       case 'ACCESSOR': return 'Accessor';
-      case 'QUALIFYING_ACCESSOR': return 'Qualifying accessor';
+      case 'QUALIFYING_ACCESSOR': return 'Qualifying Accessor';
       default: return '';
     }
   }

@@ -17,10 +17,15 @@ import { PageServiceUsersLockComponent } from './pages/service-users/service-use
 import { PageServiceUsersNewComponent } from './pages/service-users/service-users-new/service-users-new.component';
 import { PageServiceUsersUnlockComponent } from './pages/service-users/service-users-unlock.component';
 import { PageAdminUsersNewComponent } from './pages/admin-users/admin-users-new/admin-users-new.component';
-
+import { PageAdminDeleteComponent } from './pages/admin-users/admin-users-delete/admin-users-delete.component';
 // Resolvers.
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
-import { PageListOrganisationsAndUnitsComponent } from './pages/list-organisations-and-units/list-organisations-and-units.component';
+import { PageListOrganisationsAndUnitsComponent } from './pages/organisations/organisations-list/organisations-list.component';
+import { PageAdminOrganisationInfoComponent } from './pages/organisations/organisations-info/organisation-info.component';
+import { PageAdminOrganisationEditComponent } from './pages/organisations/organisations-edit/organisations-edit.component';
+import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
+import { PageServiceChangeOrganisationUserUnitComponent } from './pages/change-organisation-user-unit/change-organisation-user-unit.component';
+import { PageAdminAccountManageAccountInfoComponent } from './pages/account/manage-account/manage-account-info.component';
 
 const routes: Routes = [
 
@@ -38,8 +43,42 @@ const routes: Routes = [
       },
       {
         path: 'organisations',
-        pathMatch: 'full',
-        component: PageListOrganisationsAndUnitsComponent
+        data: { breadcrumb: 'Organisations' },
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            component: PageListOrganisationsAndUnitsComponent,
+            data: { breadcrumb: null },
+          },
+          {
+            path: ':orgId',
+            runGuardsAndResolvers: 'pathParamsOrQueryParamsChange',
+            resolve: { organisation: OrganisationDataResolver },
+            data: { breadcrumb: (data: { organisation: { id: string, name: string } }) => `${data.organisation.name}` },
+            children: [
+              {
+                path: '',
+                pathMatch: 'full',
+                component: PageAdminOrganisationInfoComponent,
+                data: { breadcrumb: null }
+              },
+              {
+                path: 'edit',
+                pathMatch: 'full',
+                component: PageAdminOrganisationEditComponent,
+                data: { module: 'Organisation' }
+              },
+              {
+                path: 'unit/:unitId/edit',
+                pathMatch: 'full',
+                component: PageAdminOrganisationEditComponent,
+                data: { module: 'Unit' }
+              }
+            ]
+          },
+
+        ]
       },
 
       // NOTE: When creating the future admin-users routes, a guard should be created to protect those routes!
@@ -60,12 +99,24 @@ const routes: Routes = [
           },
           {
             path: ':userId',
-            pathMatch: 'full',
+            // pathMatch: 'full',
             resolve: { user: ServiceUserDataResolver },
             data: {
               breadcrumb: (data: { user: { id: string, displayName: string } }) => `${data.user.displayName}`
             },
-            component: PageAdminUsersInfoComponent
+            children: [
+              {
+                path: '',
+                pathMatch: 'full',
+                data: { breadcrumb: null },
+                component: PageAdminUsersInfoComponent
+              },
+              {
+                path: 'delete',
+                pathMatch: 'full',
+                component: PageAdminDeleteComponent
+              }
+            ]
           }
         ]
       },
@@ -121,13 +172,34 @@ const routes: Routes = [
                 path: 'change-role',
                 pathMatch: 'full',
                 component: PageServiceChangeUserRoleComponent
+              },
+              {
+                path: 'change-unit',
+                pathMatch: 'full',
+                component: PageServiceChangeOrganisationUserUnitComponent
               }
             ]
           }
 
         ]
+      },
+      {
+        path: 'account',
+        data: { breadcrumb: 'Account' },
+        children: [
+          { path: '', pathMatch: 'full', redirectTo: 'manage-account', data: { breadcrumb: null } },
+          {
+            path: 'manage-account',
+            data: { breadcrumb: 'Manage account' },
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAdminAccountManageAccountInfoComponent,
+                data: { layoutOptions: { type: 'userAccountMenu' } }
+              }
+            ]
+          }
+        ]
       }
-
     ]
   }
 ];
