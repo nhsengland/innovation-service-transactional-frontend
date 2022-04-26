@@ -330,7 +330,30 @@ export class ServiceUsersService extends CoreService {
     );
   }
 
-
+  getListOfTerms(): Observable<any> {
+    return of([
+      {
+        name: 'Test1',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Test2',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Test3',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Test4',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+    ])
+  }
 
 
 }

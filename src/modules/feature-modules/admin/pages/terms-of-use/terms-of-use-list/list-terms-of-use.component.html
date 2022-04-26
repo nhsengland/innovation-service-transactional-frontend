@@ -1,0 +1,20 @@
+<theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+  <p> {{ alert.message }} </p>
+</theme-alert>
+
+<theme-page-title [title]="pageTitle"></theme-page-title>
+
+<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+<div aria-live="polite" *ngIf="pageStatus === 'READY'">
+  <section>
+    <h2>Versios of terms of use</h2>
+    <ul class="nhsuk-list">
+      <li>Create a unique name</li>
+      <li>Write a short summary to explain your updates</li>
+      <li>Share these updates with users of the service (optional)</li>
+    </ul>
+
+  </section>
+
+</div>
