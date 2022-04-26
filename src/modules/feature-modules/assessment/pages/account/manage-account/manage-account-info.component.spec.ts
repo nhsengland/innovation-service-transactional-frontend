@@ -9,7 +9,7 @@ import { USER_INFO_ASSESSMENT } from '@tests/data.mocks';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
-import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
+import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
 
 import { PageAccountAssessmentManageAccountInfoComponent } from './manage-account-info.component';
 
@@ -31,7 +31,7 @@ describe('FeatureModules/Assessment/Pages/Account/Manageaccount/PageAccountAsses
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        InnovatorModule
+        AssessmentModule
       ]
     });
 

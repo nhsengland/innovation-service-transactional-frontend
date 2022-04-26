@@ -9,7 +9,7 @@ import { USER_INFO_ACCESSOR } from '@tests/data.mocks';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
-import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
+import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { PageAccountAccessorManageAccountInfoComponent } from './manage-account-info.component';
 
@@ -31,7 +31,7 @@ describe('FeatureModules/Accessor/Pages/Account/Manageaccount/PageAccountAccesso
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        InnovatorModule
+        AccessorModule
       ]
     });
 
