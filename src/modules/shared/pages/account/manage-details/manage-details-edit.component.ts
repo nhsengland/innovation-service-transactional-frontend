@@ -10,6 +10,7 @@ import { SummaryParsingType } from '@modules/shared/forms';
 
 import { ACCOUNT_DETAILS_INNOVATOR } from './manage-details-edit-innovator.config';
 import { ACCOUNT_DETAILS_ACCESSOR } from './manage-details-edit-accessor.config';
+import { ACCOUNT_DETAILS_ADMIN } from './manage-details-edit-admin.config';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
-  module: '' | 'innovator' | 'accessor' | 'assessment' = '';
+  module: '' | 'innovator' | 'accessor' | 'assessment' | 'admin' = '';
 
   wizard: WizardEngineModel = new WizardEngineModel({});
 
@@ -47,6 +48,8 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
       this.wizard = ACCOUNT_DETAILS_INNOVATOR;
     } else if (this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType()) {
       this.wizard = ACCOUNT_DETAILS_ACCESSOR;
+    } else if (this.stores.authentication.isAdminRole()) {
+      this.wizard = ACCOUNT_DETAILS_ADMIN;
     }
 
     const user = this.stores.authentication.getUserInfo();
