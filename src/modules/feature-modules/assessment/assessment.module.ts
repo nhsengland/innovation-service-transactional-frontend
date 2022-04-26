@@ -15,6 +15,7 @@ import { InnovationAssessmentOverviewComponent } from './pages/innovation/assess
 import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/assessment-new.component';
 import { InnovationAssessmentEditComponent } from './pages/innovation/assessment/assessment-edit.component';
 import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './pages/innovation/support/organisations-support-status-info.component';
+import { PageAccountAssessmentManageAccountInfoComponent } from './pages/account/manage-account/manage-account-info.component';
 // Services.
 import { AssessmentService } from './services/assessment.service';
 
@@ -39,7 +40,8 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovationAssessmentOverviewComponent,
     InnovationAssessmentNewComponent,
     InnovationAssessmentEditComponent,
-    InnovationSupportOrganisationsSupportStatusInfoComponent
+    InnovationSupportOrganisationsSupportStatusInfoComponent,
+    PageAccountAssessmentManageAccountInfoComponent,
   ],
   providers: [
     // Services.

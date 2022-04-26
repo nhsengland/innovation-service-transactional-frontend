@@ -23,20 +23,15 @@ import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './p
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
 import { ActionAdvancedFilterComponent } from './pages/actions/actions-advanced-filter.component';
+import { PageAccountAccessorManageAccountInfoComponent } from './pages/account/manage-account/manage-account-info.component';
 // Services.
 import { AccessorService } from './services/accessor.service';
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 
-
 @NgModule({
-  imports: [
-    ThemeModule,
-    SharedModule,
-
-    AccessorRoutingModule
-  ],
+  imports: [ThemeModule, SharedModule, AccessorRoutingModule],
   declarations: [
     AccessorLayoutComponent,
 
@@ -57,13 +52,14 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovationSupportUpdateComponent,
     InnovationSupportInfoComponent,
     ActionAdvancedFilterComponent,
+    PageAccountAccessorManageAccountInfoComponent,
   ],
   providers: [
     // Services.
     AccessorService,
 
     // Resolvers.
-    InnovationDataResolver
-  ]
+    InnovationDataResolver,
+  ],
 })
-export class AccessorModule { }
+export class AccessorModule {}

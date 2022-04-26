@@ -16,9 +16,7 @@ import { AssessmentLayoutComponent } from './assessment-layout.component';
 
 import { NotificationsService } from '@modules/shared/services/notifications.service';
 
-
 describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
-
   let activatedRoute: ActivatedRoute;
   let router: Router;
 
@@ -35,11 +33,11 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        AssessmentModule
+        AssessmentModule,
       ],
       providers: [
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
-      ]
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV },
+      ],
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -49,7 +47,6 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     notificationsService = TestBed.inject(NotificationsService);
-
   });
 
   it('should create the component', () => {
@@ -59,46 +56,48 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     expect(component).toBeTruthy();
   });
 
-
   it('should have navigationMenuBar default values', () => {
-
     const expected = {
-      leftItems: [
-        { title: 'Home', link: '/assessment/dashboard' }
-      ],
+      leftItems: [{ title: 'Home', link: '/assessment/dashboard' }],
       rightItems: [
-        { title: 'Innovations', link: '/assessment/innovations', key: 'INNOVATION' },
+        {
+          title: 'Innovations',
+          link: '/assessment/innovations',
+          key: 'INNOVATION',
+        },
         { title: 'Account', link: '/assessment/account' },
-        { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
-      ]
+        {
+          title: 'Sign out',
+          link: `http://demo.com/signout`,
+          fullReload: true,
+        },
+      ],
     };
 
     fixture = TestBed.createComponent(AssessmentLayoutComponent);
     component = fixture.componentInstance;
 
     expect(component.navigationMenuBar).toEqual(expected);
-
   });
 
   it('should have notifications', () => {
-
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
 
     authenticationStore.isValidUser = () => true;
-    notificationsService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
+    notificationsService.getAllUnreadNotificationsGroupedByContext = () =>
+      of({ INNOVATION: 1 });
 
     fixture = TestBed.createComponent(AssessmentLayoutComponent);
     component = fixture.componentInstance;
 
     (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
     expect(component.mainMenuNotifications).toEqual({ INNOVATION: 1 });
-
   });
 
-
   it('should have leftSideBar with no values', () => {
-
-    activatedRoute.snapshot.data = { layoutOptions: { backLink: { url: '/', label: 'Go back' } } };
+    activatedRoute.snapshot.data = {
+      layoutOptions: { backLink: { url: '/', label: 'Go back' } },
+    };
     authenticationStore.isValidUser = () => true;
 
     const expected = [] as any;
@@ -108,15 +107,19 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
 
     (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
     expect(component.leftSideBar).toEqual(expected);
-
   });
 
   it('should have leftSideBar with "userAccountMenu" menu values', () => {
-
-    activatedRoute.snapshot.data = { layoutOptions: { type: 'userAccountMenu' } };
+    activatedRoute.snapshot.data = {
+      layoutOptions: { type: 'userAccountMenu' },
+    };
 
     const expected = [
-      { title: 'Your details', link: `/assessment/account/manage-details` }
+      { title: 'Your details', link: `/assessment/account/manage-details` },
+      {
+        title: 'Manage account',
+        link: `/assessment/account/manage-account`,
+      },
     ];
 
     fixture = TestBed.createComponent(AssessmentLayoutComponent);
@@ -124,21 +127,40 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
 
     (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
     expect(component.leftSideBar).toEqual(expected);
-
   });
 
   it('should have leftSideBar with "innovationLeftAsideMenu" menu values WITH innovation status IN_PROGRESS', () => {
-
-    activatedRoute.snapshot.params = { innovationId: 'innovation01', status: '' };
-    activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' }, innovationData: { status: 'IN_PROGRESS' } };
+    activatedRoute.snapshot.params = {
+      innovationId: 'innovation01',
+      status: '',
+    };
+    activatedRoute.snapshot.data = {
+      layoutOptions: { type: 'innovationLeftAsideMenu' },
+      innovationData: { status: 'IN_PROGRESS' },
+    };
 
     const expected = [
-      { title: 'Overview', link: `/assessment/innovations/innovation01/overview` },
-      { title: 'Innovation record', link: `/assessment/innovations/innovation01/record` },
-      { title: 'Comments', link: `/assessment/innovations/innovation01/comments` },
-      { title: 'Support status', link: `/assessment/innovations/innovation01/support` },
+      {
+        title: 'Overview',
+        link: `/assessment/innovations/innovation01/overview`,
+      },
+      {
+        title: 'Innovation record',
+        link: `/assessment/innovations/innovation01/record`,
+      },
+      {
+        title: 'Comments',
+        link: `/assessment/innovations/innovation01/comments`,
+      },
+      {
+        title: 'Support status',
+        link: `/assessment/innovations/innovation01/support`,
+      },
       // { title: 'Action tracker', link: `/assessment/innovations/innovation01/action-tracker` },
-      { title: 'Activity log', link: `/assessment/innovations/innovation01/activity-log` }
+      {
+        title: 'Activity log',
+        link: `/assessment/innovations/innovation01/activity-log`,
+      },
     ];
 
     fixture = TestBed.createComponent(AssessmentLayoutComponent);
@@ -149,17 +171,34 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
   });
 
   it('should have leftSideBar with "innovationLeftAsideMenu" menu values WITH innovation status != IN_PROGRESS', () => {
-
-    activatedRoute.snapshot.params = { innovationId: 'innovation01', status: '' };
-    activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' }, innovationData: { status: '' } };
+    activatedRoute.snapshot.params = {
+      innovationId: 'innovation01',
+      status: '',
+    };
+    activatedRoute.snapshot.data = {
+      layoutOptions: { type: 'innovationLeftAsideMenu' },
+      innovationData: { status: '' },
+    };
 
     const expected = [
-      { title: 'Overview', link: `/assessment/innovations/innovation01/overview` },
-      { title: 'Innovation record', link: `/assessment/innovations/innovation01/record` },
+      {
+        title: 'Overview',
+        link: `/assessment/innovations/innovation01/overview`,
+      },
+      {
+        title: 'Innovation record',
+        link: `/assessment/innovations/innovation01/record`,
+      },
       // { title: 'Support status', link: `/assessment/innovations/innovation01/support` },
       // { title: 'Action tracker', link: `/assessment/innovations/innovation01/action-tracker` },
-      { title: 'Comments', link: `/assessment/innovations/innovation01/comments` },
-      { title: 'Activity log', link: `/assessment/innovations/innovation01/activity-log` }
+      {
+        title: 'Comments',
+        link: `/assessment/innovations/innovation01/comments`,
+      },
+      {
+        title: 'Activity log',
+        link: `/assessment/innovations/innovation01/activity-log`,
+      },
     ];
 
     fixture = TestBed.createComponent(AssessmentLayoutComponent);
@@ -169,8 +208,9 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     expect(component.leftSideBar).toEqual(expected);
   });
   it('should have leftSideBar with "emptyLeftAside" menu values', () => {
-
-    activatedRoute.snapshot.data = { layoutOptions: { type: 'emptyLeftAside' } };
+    activatedRoute.snapshot.data = {
+      layoutOptions: { type: 'emptyLeftAside' },
+    };
     authenticationStore.isValidUser = () => true;
 
     const expected = [] as any;
@@ -180,7 +220,5 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
 
     (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
     expect(component.leftSideBar).toEqual(expected);
-
   });
-
 });
