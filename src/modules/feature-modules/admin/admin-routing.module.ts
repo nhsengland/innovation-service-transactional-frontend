@@ -27,6 +27,7 @@ import { OrganisationDataResolver } from './resolvers/organisation-data.resolver
 import { PageServiceChangeOrganisationUserUnitComponent } from './pages/change-organisation-user-unit/change-organisation-user-unit.component';
 import { PageAdminAccountManageAccountInfoComponent } from './pages/account/manage-account/manage-account-info.component';
 import { PageAdminTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list/list-terms-of-use.component';
+import { PageAdminTermsOfUseNewComponent } from './pages/terms-of-use/terms-of-use-new/terms-of-use-new.component';
 
 const routes: Routes = [
 
@@ -202,10 +203,11 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'terms-of-use',
-        data: { breadcrumb: 'Terms of user' },
+        path: 'terms-conditions',
+        data: { breadcrumb: 'Terms of use' },
         children: [
-          { path: '', pathMatch: 'full', component: PageAdminTermsOfUseListComponent }
+          { path: '', pathMatch: 'full', component: PageAdminTermsOfUseListComponent },
+          { path: 'new-version', pathMatch: 'full', component: PageAdminTermsOfUseNewComponent }
         ]
       }
     ]

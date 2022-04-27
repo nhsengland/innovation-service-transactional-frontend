@@ -1,0 +1,16 @@
+<theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+  <p> {{ alert.message }} </p>
+</theme-alert>
+
+<theme-page-title [title]="pageTitle"></theme-page-title>
+
+<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+<div aria-live="polite">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <theme-form-engine [parameters]="form.parameters" [values]="form.data"></theme-form-engine>
+      <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">Save update</button>
+    </div>
+  </div>
+</div>

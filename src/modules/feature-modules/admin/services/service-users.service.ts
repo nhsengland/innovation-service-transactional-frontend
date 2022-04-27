@@ -4,7 +4,7 @@ import { Observable, of, throwError, timer } from 'rxjs';
 import { catchError, delay, map, switchMap, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { MappedObject, UrlModel } from '@modules/core';
+import { APIQueryParamsType, MappedObject, UrlModel } from '@modules/core';
 
 
 export type getUserMinimalInfoDTO = {
@@ -330,27 +330,148 @@ export class ServiceUsersService extends CoreService {
     );
   }
 
-  getListOfTerms(): Observable<any> {
+  getListOfTerms(queryParams: APIQueryParamsType): Observable<any> {
+    console.log(queryParams)
     return of([
       {
-        name: 'Test1',
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'Test2',
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'Test3',
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'Test4',
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit New',
+        createdAt: new Date(),
+        updatedAt: new Date().setTime(new Date().getTime()-(7*24*3600000))
       },
     ])
   }
