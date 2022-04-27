@@ -28,6 +28,8 @@ import { PageServiceChangeOrganisationUserUnitComponent } from './pages/change-o
 import { PageAdminAccountManageAccountInfoComponent } from './pages/account/manage-account/manage-account-info.component';
 import { PageAdminTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list/list-terms-of-use.component';
 import { PageAdminTermsOfUseNewComponent } from './pages/terms-of-use/terms-of-use-new/terms-of-use-new.component';
+import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
+import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
 
 const routes: Routes = [
 
@@ -36,7 +38,7 @@ const routes: Routes = [
   {
     path: '',
     component: AdminLayoutComponent,
-    data: { breadcrumb: 'Home' },
+    data: { breadcrumb: 'Home', module: 'admin' },
     children: [
       {
         path: 'dashboard',
@@ -189,7 +191,7 @@ const routes: Routes = [
         path: 'account',
         data: { breadcrumb: 'Account' },
         children: [
-          { path: '', pathMatch: 'full', redirectTo: 'manage-account', data: { breadcrumb: null } },
+          { path: '', pathMatch: 'full', redirectTo: 'manage-details', data: { breadcrumb: null } },
           {
             path: 'manage-account',
             data: { breadcrumb: 'Manage account' },
@@ -199,7 +201,19 @@ const routes: Routes = [
                 data: { layoutOptions: { type: 'userAccountMenu' } }
               }
             ]
-          }
+          },
+          {
+            path: 'manage-details',
+            data: { breadcrumb: 'Manage details' },
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAccountManageDetailsInfoComponent,
+                data: { layoutOptions: { type: 'userAccountMenu' } }
+              },
+              { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
+              { path: 'edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent }
+            ]
+          },
         ]
       },
       {
