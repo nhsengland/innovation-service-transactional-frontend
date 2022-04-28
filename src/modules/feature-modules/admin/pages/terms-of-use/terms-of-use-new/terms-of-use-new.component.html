@@ -2,15 +2,31 @@
   <p> {{ alert.message }} </p>
 </theme-alert>
 
+<div class="nhsuk-back-link">
+  <a routerLink="../" class="nhsuk-back-link__link">
+    <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
+    </svg>
+    Go back
+  </a>
+</div>
+
 <theme-page-title [title]="pageTitle"></theme-page-title>
 
 <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-<div aria-live="polite">
+<div aria-live="polite" *ngIf="pageStatus === 'READY'">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-      <theme-form-engine [parameters]="form.parameters" [values]="form.data"></theme-form-engine>
-      <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">Save update</button>
+      <!-- <theme-form-engine [parameters]="form.parameters" [values]="form.data"></theme-form-engine> -->
+      <form [formGroup]="form">
+        <theme-form-input controlName="name" label="What should we call your terms and conditions version?" [pageUniqueField]="false"></theme-form-input>
+        <theme-form-radio-group controlName="type" [items]="typeItems" label="Which users do this terms and conditions relate to?" [pageUniqueField]="false"></theme-form-radio-group>
+        <theme-form-textarea controlName="key_changes" label="What are the key changes in this version?" description="Summaries changes" [pageUniqueField]="false" lengthLimit="medium"></theme-form-textarea>
+        <theme-form-checkbox controlName="notify_user" label="Yes, notify all relevant Innovation Service users"></theme-form-checkbox>
+        <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">Save update</button>
+      </form>
+
     </div>
   </div>
 </div>
