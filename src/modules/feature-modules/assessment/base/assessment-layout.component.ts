@@ -90,7 +90,8 @@ export class AssessmentLayoutComponent extends CoreComponent {
 
       case 'userAccountMenu':
         this.leftSideBar = [
-          { title: 'Your details', link: `/assessment/account/manage-details` }
+          { title: 'Your details', link: `/assessment/account/manage-details` },
+          { title: 'Manage account', link: `/assessment/account/manage-account` }
         ];
         break;
 
