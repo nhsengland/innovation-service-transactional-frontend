@@ -21,9 +21,11 @@ export const ACCOUNT_DETAILS_ADMIN: WizardEngineModel = new WizardEngineModel({
         id: 'displayName',
         dataType: 'text',
         label: 'What\'s your full name?',
+        description: 'Enter your name with a maximum of 100 characters',
         validations: {
           isRequired: [true, 'Name is required'],
-          pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed']
+          pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
+          maxLength: 100
         }
       }]
     }),
