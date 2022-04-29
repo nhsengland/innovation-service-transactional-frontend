@@ -5,6 +5,7 @@ import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { AlertType } from '@app/base/models';
 
 import { RoutingHelper } from '@modules/core';
+import { forkJoin } from 'rxjs';
 
 import { ServiceUsersService, getLockUserRulesOutDTO } from '../../services/service-users.service';
 
@@ -29,6 +30,9 @@ export class PageServiceUsersLockComponent extends CoreComponent implements OnIn
     code: new FormControl('')
   }, { updateOn: 'blur' });
 
+  pageType: 'RULES' | 'LOCK_USER' = 'RULES';
+
+  userType = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -44,12 +48,27 @@ export class PageServiceUsersLockComponent extends CoreComponent implements OnIn
 
 
   ngOnInit(): void {
-
-
-    this.serviceUsersService.getLockUserRules(this.user.id).subscribe(
-      response => {
-        this.rulesList = response;
+    forkJoin([
+      this.serviceUsersService.getUserFullInfo(this.user.id),
+    this.serviceUsersService.getLockUserRules(this.user.id)]).subscribe(
+      ([userInfo, response]) => {
         this.setPageStatus('READY');
+        if (userInfo.type === 'INNOVATOR')
+        {
+          this.userType = this.stores.authentication.getRoleDescription(userInfo.type);
+          this.pageType = 'LOCK_USER';
+        }
+        else
+        {
+          this.pageType = 'RULES';
+          this.rulesList = response;
+          if (userInfo.type === 'ACCESSOR' && userInfo.userOrganisations.length > 0) {
+            this.userType = this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role);
+          }
+          else {
+            this.userType = this.stores.authentication.getRoleDescription(userInfo.type);
+          }
+        }
       },
       () => {
         this.setPageStatus('ERROR');
@@ -63,6 +82,9 @@ export class PageServiceUsersLockComponent extends CoreComponent implements OnIn
 
   }
 
+  nextStep(): void{
+    this.pageType = 'LOCK_USER';
+  }
 
   onSubmit(): void {
 

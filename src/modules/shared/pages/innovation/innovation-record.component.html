@@ -7,6 +7,12 @@
       <a routerLink="/accessor/innovations/{{ innovation?.summary?.id || '' }}/assessments/{{ innovation?.assessment?.id || '' }}"> View needs assessment </a>
     </div> -->
   </div>
+  <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+    <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+      <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
+    </div>
+    <p> Please Note that the Innovator {{ innovationName }} account has been locked by the Admin.</p>
+  </div>
   <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
 </ng-container>
 
