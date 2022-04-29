@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 
 import { NotificationsService } from '@modules/shared/services/notifications.service';
+import { AuthenticationService } from '@modules/stores';
 
 
 @Component({
@@ -22,6 +24,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   notifications: { [key: string]: number };
 
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private authenticationService: AuthenticationService,
     private notificationsService: NotificationsService,
   ) {
 
@@ -74,6 +78,27 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       }
     );
 
+
+    this.authenticationService.getUserInfo().subscribe(
+      (response) => {
+        const startTime = new Date();
+        const endTime = new Date(response.passwordResetOn);
+        const timediffer = startTime.getTime() - endTime.getTime();
+        const resultInMinutes = Math.round(timediffer / 60000);
+        if (resultInMinutes <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {
+          this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
+        }
+        this.setPageStatus('READY');
+      },
+      () => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch user information',
+          message: 'Please try again or contact us for further help'
+        };
+      }
+    );
   }
 
 }
