@@ -54,7 +54,8 @@ describe('FeatureModules/Accessor/Resolvers/InnovationDataResolver', () => {
       contact: { name: 'A name' },
       support: { id: '01', status: 'ENGAGED' as keyof typeof INNOVATION_SUPPORT_STATUS },
       assessment: { id: '01' },
-      notifications: {}
+      notifications: {},
+      lockedInnovatorValidation: { displayIsInnovatorLocked: false, innovatorName : 'test'}
     });
 
     const expected = {
@@ -62,7 +63,8 @@ describe('FeatureModules/Accessor/Resolvers/InnovationDataResolver', () => {
       name: 'Innovation 01',
       status: 'CREATED',
       assessment: { id: '01' },
-      support: { id: '01', status: 'ENGAGED' }
+      support: { id: '01', status: 'ENGAGED' },
+      lockedInnovatorValidation: { displayIsInnovatorLocked: false, innovatorName : 'test'}
     };
 
     let response: any = null;
@@ -82,7 +84,8 @@ describe('FeatureModules/Accessor/Resolvers/InnovationDataResolver', () => {
         company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: ''
       },
       contact: { name: 'A name' },
-      notifications: {}
+      notifications: {},
+      lockedInnovatorValidation: { displayIsInnovatorLocked: true, innovatorName : 'test'}
     });
 
     const expected = {
@@ -90,7 +93,8 @@ describe('FeatureModules/Accessor/Resolvers/InnovationDataResolver', () => {
       name: 'Innovation 01',
       status: 'CREATED',
       assessment: {},
-      support: { status: 'UNASSIGNED' }
+      support: { status: 'UNASSIGNED' },
+      lockedInnovatorValidation: { displayIsInnovatorLocked: true, innovatorName : 'test'}
     };
 
     let response: any = null;

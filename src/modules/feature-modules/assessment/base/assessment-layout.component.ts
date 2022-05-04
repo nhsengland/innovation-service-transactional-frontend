@@ -64,6 +64,10 @@ export class AssessmentLayoutComponent extends CoreComponent {
       status: '',
       assessment: {
         id: '',
+      },
+      lockedInnovatorValidation: {
+        displayIsInnovatorLocked: false,
+        innovatorName: ''
       }
     };
 

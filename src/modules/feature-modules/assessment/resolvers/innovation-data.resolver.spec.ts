@@ -53,14 +53,16 @@ describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
         companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: ''
       },
       contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' }
+      assessment: { id: '01', assignToName: 'Name' },
+      lockedInnovatorValidation: { displayIsInnovatorLocked: false, innovatorName : 'test'}
     });
 
     const expected = {
       id: '01',
       name: 'Innovation 01',
       status: 'CREATED',
-      assessment: { id: '01' }
+      assessment: { id: '01' },
+      lockedInnovatorValidation: { displayIsInnovatorLocked: false, innovatorName : 'test'}
     };
 
     let response: any = null;
@@ -80,13 +82,15 @@ describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
       },
       contact: { name: 'A name', email: 'email', phone: '' },
       // assessment: { id: '01', assignToName: 'Name' }
+      lockedInnovatorValidation: { displayIsInnovatorLocked: true, innovatorName : 'test'}
     });
 
     const expected = {
       id: '01',
       name: 'Innovation 01',
       status: 'CREATED',
-      assessment: {}
+      assessment: {},
+      lockedInnovatorValidation: { displayIsInnovatorLocked: true, innovatorName : 'test'}
     };
 
     let response: any = null;

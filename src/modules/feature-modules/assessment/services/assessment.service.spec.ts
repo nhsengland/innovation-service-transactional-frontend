@@ -147,7 +147,8 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     const responseMock: getInnovationInfoEndpointDTO = {
       summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: '' },
       contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' }
+      assessment: { id: '01', assignToName: 'Name' },
+      lockedInnovatorValidation: { displayIsInnovatorLocked : false, innovatorName : 'test'}
     };
 
     const expected = responseMock;

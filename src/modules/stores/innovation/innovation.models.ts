@@ -269,7 +269,11 @@ export type InnovationDataResolverType = {
   support?: {
     id: undefined | string;
     status: keyof typeof INNOVATION_SUPPORT_STATUS;
-  }
+  };
+  lockedInnovatorValidation?: {
+    displayIsInnovatorLocked: boolean;
+    innovatorName?: string;
+  };
 };
 
 

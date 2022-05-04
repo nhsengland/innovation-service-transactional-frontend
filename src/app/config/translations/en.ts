@@ -155,7 +155,7 @@ export const locale = {
         user: {
           lock_user_validations: {
             lastAssessmentUserOnPlatform: {
-              label: 'User is not the only one on the service'
+              label: 'User is not the only needs assessor on the service'
             },
             lastAccessorUserOnOrganisation: {
               label: 'User is not the only one on his organisation',
