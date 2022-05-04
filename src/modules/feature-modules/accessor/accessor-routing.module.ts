@@ -37,6 +37,7 @@ import { PageInnovationSupportStatusListComponent } from '@shared-module/pages/i
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 import { PageInnovationCommentsEditComponent } from '@modules/shared/pages/innovation/comments/comments-edit.component';
+import { PageAccessorAccountManageAccountInfoComponent } from './pages/manage-account/manage-account-info.component';
 
 const routes: Routes = [
 
@@ -86,7 +87,17 @@ const routes: Routes = [
           {
             path: 'email-notifications', pathMatch: 'full', component: PageAccountEmailNotificationsComponent,
             data: { layoutOptions: { type: 'userAccountMenu' } }
-          }
+          },
+          {
+            path: 'manage-account',
+            data: { breadcrumb: 'Manage account' },
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAccessorAccountManageAccountInfoComponent,
+                data: { layoutOptions: { type: 'userAccountMenu' } }
+              }
+            ]
+          },
         ]
       },
 

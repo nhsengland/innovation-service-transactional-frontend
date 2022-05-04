@@ -1,14 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
+import { AuthenticationService } from '@modules/stores';
 
 
 @Component({
   selector: 'app-accessor-pages-dashboard',
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent extends CoreComponent {
+export class DashboardComponent extends CoreComponent implements OnInit {
   alert: AlertType = { type: null };
   user: {
     displayName: string;
@@ -19,7 +21,9 @@ export class DashboardComponent extends CoreComponent {
   cardsList: { title: string, description: string, link: string, queryParams: { status?: string } }[];
 
 
-  constructor() {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private authenticationService: AuthenticationService) {
 
     super();
     this.setPageTitle('Home');
@@ -29,16 +33,6 @@ export class DashboardComponent extends CoreComponent {
       organisation: this.stores.authentication.getUserInfo().organisations[0]?.name || '',
       passwordResetOn: this.stores.authentication.getUserInfo().passwordResetOn
     };
-
-    const startTime = new Date();
-    const endTime = new Date(this.user.passwordResetOn);
-    const timediffer = startTime.getTime() - endTime.getTime();
-    const resultInMinutes = Math.round(timediffer / 60000);
-
-    if (resultInMinutes <= 1) {
-      this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
-    }
-
 
     this.cardsList = [
       {
@@ -73,4 +67,26 @@ export class DashboardComponent extends CoreComponent {
 
   }
 
+  ngOnInit(): void {
+    this.authenticationService.getUserInfo().subscribe(
+      (response) => {
+        const startTime = new Date();
+        const endTime = new Date(response.passwordResetOn);
+        const timediffer = startTime.getTime() - endTime.getTime();
+        const resultInMinutes = Math.round(timediffer / 60000);
+        if (resultInMinutes <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {
+          this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
+        }
+        this.setPageStatus('READY');
+      },
+      () => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch user information',
+          message: 'Please try again or contact us for further help'
+        };
+      }
+    );
+  }
 }
