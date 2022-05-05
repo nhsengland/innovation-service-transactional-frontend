@@ -1,12 +1,12 @@
-import { Component, OnInit, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { MappedObject } from '@modules/core';
-
+import { Component, OnInit } from '@angular/core';
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { AlertType } from '@app/base/models';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
-import { TableModel } from '@app/base/models';
-import { CustomValidators, FormEngineComponent, FormEngineParameterModel } from '@modules/shared/forms';
+import { Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { response } from 'express';
+import { HttpErrorResponse } from '@angular/common/http';
+import { CustomValidators } from '@modules/shared/forms';
 
 
 @Component({
@@ -14,99 +14,108 @@ import { CustomValidators, FormEngineComponent, FormEngineParameterModel } from 
   templateUrl: './terms-of-use-new.component.html'
 })
 export class PageAdminTermsOfUseNewComponent extends CoreComponent implements OnInit {
-  
-  @ViewChildren(FormEngineComponent) formEngineComponent?: QueryList<FormEngineComponent>;
 
   alert: AlertType = { type: null };
+  typeItems: { value: string, label: string }[] = [
+    { label: 'Support organisation', value: 'SUPPORT_ORGANISATION' },
+    { label: 'Innovations', value: 'INNOVATOR' }
+  ];
+  module: 'New' | 'Edit';
+  tou: any;
+  id: string;
 
-  // form: {
-  //   parameters: FormEngineParameterModel[];
-  //   data: { [key: string]: any };
-  // };
   form = new FormGroup({
-    name: new FormControl(''),
-    type: new FormControl(''),
-    key_changes: new FormControl(''),
-    notify_user: new FormControl('false', { updateOn: 'change' })
+    name: new FormControl('', [Validators.maxLength(500), CustomValidators.required('Please enter name of terms of use')]),
+    touType: new FormControl('', [CustomValidators.required('Please select one of the option')]),
+    summary: new FormControl('', [CustomValidators.required('Please enter summary of terms of use')]),
+    notifyUser: new FormControl(0, { updateOn: 'change' })
   }, { updateOn: 'blur' });
 
-  currentAnswers: { [key: string]: any };
-
-  typeItems: { value: string, label: string }[] = [
-    { label: 'Support organisation', value: 'support_organisation' },
-    { label: 'Innovations', value: 'innovations' }
-  ];
-
-  constructor() {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private userService: ServiceUsersService
+  ) {
 
     super();
-    this.setPageTitle('New version');
-    // this.form = { 
-    //   parameters: [
-    //     new FormEngineParameterModel({
-    //       id: 'name',
-    //       dataType: 'text',
-    //       label: 'What should we call your terms and conditions version?',
-    //       description: 'Terms of use name',
-    //       validations: { isRequired: [true, 'Term name is required'] },
-    //     }),
-    //     new FormEngineParameterModel({
-    //       id: 'type',
-    //       dataType: 'radio-group',
-    //       label: 'Which users do this terms and conditions relate to?',
-    //       validations: { isRequired: [true, 'Choose one option'] },
-    //       items: [
-    //         { label: 'Support organisation', value: 'support_organisation' },
-    //         { label: 'Innovations', value: 'innovations' }
-    //       ]
-    //     }),
-    //     new FormEngineParameterModel({
-    //       id: 'key_changes',
-    //       dataType: 'textarea',
-    //       label: 'What are the key changes in this version?',
-    //       description: 'Summaries changes',
-    //       validations: { isRequired: [true, 'Term name is required'] },
-    //       lengthLimit: 'large'
-    //     }),
-    //     new FormEngineParameterModel({
-    //       id: 'notify_user',
-    //       dataType: 'checkbox-group',
-    //       description: 'If you would like to show this summary of changes to the selected users of this service, tick the checkbox below. If not, your changes will be saved but not shared',
-    //       validations: { isRequired: [true, 'Term name is required'] },
-    //       items: [{ label: 'Yes, notify all relevant Innovation Service users', value: 'true' }],
-    //     }),
-    //   ],
-    //   data: {} 
-    // };
-    this.currentAnswers = {};
+    this.module = this.activatedRoute.snapshot.data.module;
+    this.id = this.activatedRoute.snapshot.params.id;
+    this.setPageTitle(`${this.module} version`);
   }
 
   ngOnInit(): void {
+
+    if (this.module === 'Edit') {
+
+      this.userService.getTermsById(this.id).subscribe(
+        response => {
+
+          this.form.setValue({
+            name: response.name,
+            touType: response.touType,
+            summary: response.summary,
+            notifyUser: (response.releasedAt) ? 1 : 0
+          });
+
+          this.setPageStatus('READY');
+        },
+        () => {
+          this.setPageStatus('ERROR');
+          this.errorResponse();
+        }
+     );
+    }
     this.setPageStatus('READY');
   }
 
-  onSubmit(action: 'update' | 'saveAsDraft' | 'submit'): void {
-    this.alert = { type: '' };
+  onSubmit(): void {
 
-    let isValid = true;
+    if (this.form.invalid) { return; }
 
-    // This section is not easy to test. TOIMPROVE: Include this code on unit test.
-    (this.formEngineComponent?.toArray() || []).forEach(engine => /* istanbul ignore next */ {
+    const body = this.form.value;
 
-      let formData: MappedObject;
+    if (this.form.value.notifyUser) { body.releasedAt = new Date(); }
 
-      formData = engine.getFormValues(true);
+    delete body.notifyUser;
 
-      if (!formData?.valid) { isValid = false; }
+    switch (this.module) {
 
+      case 'New':
+        this.userService.createVersion(body).subscribe(
+          () => this.redirectTo(`admin/terms-conditions`, { alert: 'versionCreationSuccess' }),
+          (error: { code: string }) => this.errorResponse(error.code)
+        );
+        break;
 
-      this.currentAnswers = { ...this.currentAnswers, ...formData?.data };
+      case 'Edit':
+        this.userService.updateTermsById(this.id, body).subscribe(
+          () =>  this.redirectTo(`admin/terms-conditions`, { alert: 'versionUpdatedSuccess' }),
+          (error: { code: string }) => this.errorResponse(error.code)
+        );
+        break;
 
-    });
-
-    if (!isValid) /* istanbul ignore next */ {
-      return;
+      default:
+        break;
     }
-    console.log(this.currentAnswers);
+
   }
+
+  errorResponse(code?: string): void {
+    switch (code || '') {
+      case 'UniqueKeyError':
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to create new version',
+          message: 'Please try to enter unique name of terms of use'
+        };
+        break;
+      default:
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch the necessary information',
+          message: 'Please try again or contact us for further help'
+        };
+        break;
+    }
+  }
+
 }

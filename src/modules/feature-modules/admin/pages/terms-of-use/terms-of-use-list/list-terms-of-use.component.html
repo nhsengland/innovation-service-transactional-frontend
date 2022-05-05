@@ -26,53 +26,34 @@
     <ng-container *ngIf="pageStatus === 'READY'">
 
       <div class="nhsuk-u-padding-bottom-5">
+        <ng-container *ngIf="terms.getTotalRowsNumber(); else emptyRows">
+          <div class="d-flex nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
+            <div class="width-60"> Name </div>
+            <div class="width-20"> Creation date </div>
+            <div class="width-20"> Release date </div>
+          </div>
 
-        <div class="d-flex nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
-          <div class="width-60"> Name </div>
-          <div class="width-20"> Creation date </div>
-          <div class="width-20"> Release date </div>
-        </div>
-
-        <dl class="nhsuk-u-margin-0">
-          <ng-container *ngFor="let item of terms.getRecords()">
+          <dl class="nhsuk-u-margin-0" *ngFor="let item of terms.getRecords()">
 
             <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
               <dt class="nhsuk-u-font-weight-normal width-60">
-                <a routerLink="/">{{ item.name }}</a>
+                <a [routerLink]="(item.releasedAt) ? 'show-version/'+item.id : 'edit-version/'+item.id">{{ item.name }}</a>
               </dt>
               <dd class="width-20 ml-auto">
                 {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}
               </dd>
               <dd class="width-20 ml-auto">
-                {{ item.updatedAt | date: ('app.date_formats.long_date' | translate) }}
+                {{ item.releasedAt | date: ('app.date_formats.long_date' | translate) }}
               </dd>
             </div>
-          </ng-container>
-        </dl>
+        
+          </dl>
+        </ng-container>
+        <ng-template #emptyRows>
+          <dt>Create a version, then view or edit it here.</dt>
+        </ng-template>
       </div>
     </ng-container>
-    <!-- <table class="nhsuk-table">
-      <caption class="nhsuk-table__caption nhsuk-table__caption--m">All Versions</caption>
-      <thead class="nhsuk-table__head">
-        <tr class="nhsuk-table__row">
-          <th scope="col" class="nhsuk-table__header nhsuk-!-width-one-half">Name</th>
-          <th scope="col" class="nhsuk-table__header nhsuk-!-width-one-quarter">Creation date</th>
-          <th scope="col" class="nhsuk-table__header nhsuk-!-width-one-quarter">Release date</th>
-        </tr>
-      </thead>
-      <tbody class="nhsuk-table__body">
-        <ng-container *ngIf="terms.getTotalRowsNumber() > 0; else noItems">
-          <tr *ngFor="let item of terms.getRecords()" class="nhsuk-table__row">
-            <th scope="row" class="nhsuk-table__header"><a routerLink="/">{{ item.name }}</a></th>
-            <td class="nhsuk-table__cell">{{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}</td>
-            <td class="nhsuk-table__cell">{{ item.updatedAt | date: ('app.date_formats.long_date' | translate) }}</td>
-          </tr>
-        </ng-container>
-        <ng-template #noItems>
-          <tr><td colspan="3">Create a version, then view or edit it here.</td></tr>
-        </ng-template>
-      </tbody>
-    </table> -->
 
     <pagination [currentPage]="terms.page" [pageSize]="terms.pageSize" [totalRows]="terms.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
 

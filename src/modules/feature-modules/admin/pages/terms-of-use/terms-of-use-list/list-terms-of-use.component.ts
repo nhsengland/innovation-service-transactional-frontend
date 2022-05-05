@@ -15,9 +15,12 @@ export class PageAdminTermsOfUseListComponent extends CoreComponent implements O
 
   alert: AlertType = { type: null };
   terms: TableModel<{
+    id: string,
     name: string,
-    createdAt: string,
-    updatedAt: string
+    touType: string,
+    summary: string,
+    releasedAt?: string,
+    createdAt: string
   }>;
 
   constructor(
@@ -29,8 +32,11 @@ export class PageAdminTermsOfUseListComponent extends CoreComponent implements O
     this.setPageTitle('Terms of use');
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'updateOrganisationSuccess':
-        this.alert = { type: 'SUCCESS', title: 'You\'ve successfully updated the organisation.' };
+      case 'versionCreationSuccess':
+        this.alert = { type: 'SUCCESS', title: 'You\'ve successfully created new version.' };
+        break;
+      case 'versionUpdatedSuccess':
+        this.alert = { type: 'SUCCESS', title: 'You\'ve successfully updated a version.' };
         break;
       default:
         break;
@@ -46,25 +52,23 @@ export class PageAdminTermsOfUseListComponent extends CoreComponent implements O
   getTerms(): void {
     this.setPageStatus('LOADING');
     this.userService.getListOfTerms(this.terms.getAPIQueryParams()).subscribe(
-      (response) => { 
-        this.terms.setData(response, response.length);
-        console.log(this.terms);
+      (response) => {
+        this.terms.setData(response.data, response.count);
         this.setPageStatus('READY');
       },
-      () => { 
+      () => {
         this.setPageStatus('ERROR');
-        this.alert = { 
-          type: 'ERROR',  
+        this.alert = {
+          type: 'ERROR',
           title: 'Unable to fetch organisations information',
           message: 'Please try again or contact us for further help'
-        } 
+        };
       }
-    )
+    );
   }
-  onPageChange(event: { pageNumber: number }): void {
 
+  onPageChange(event: { pageNumber: number }): void {
     this.terms.setPage(event.pageNumber);
-    // this.getInnovationsList();
     this.getTerms();
   }
 

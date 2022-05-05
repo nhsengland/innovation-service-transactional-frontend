@@ -5,17 +5,16 @@ import { Injector } from '@angular/core';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
-import { PageAdminTermsOfUseListComponent } from './list-terms-of-use.component';
+import { PageAdminTermsOfUseInfoComponent } from './terms-of-use-info.component';
 import { ActivatedRoute } from '@angular/router';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { of, throwError } from 'rxjs';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 
-describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseListComponent', () => {
+describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseInfoComponent', () => {
 
-  let component: PageAdminTermsOfUseListComponent;
-  let fixture: ComponentFixture<PageAdminTermsOfUseListComponent>;
+  let component: PageAdminTermsOfUseInfoComponent;
+  let fixture: ComponentFixture<PageAdminTermsOfUseInfoComponent>;
   let activatedRoute: ActivatedRoute;
   let userService: ServiceUsersService;
 
@@ -37,7 +36,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseListCompone
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(PageAdminTermsOfUseListComponent);
+    fixture = TestBed.createComponent(PageAdminTermsOfUseInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
@@ -45,9 +44,9 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseListCompone
 
   it('should NOT have default information loaded', () => {
 
-    userService.getListOfTerms = () => throwError('error');
+    userService.getTermsById = () => throwError('error');
 
-    fixture = TestBed.createComponent(PageAdminTermsOfUseListComponent);
+    fixture = TestBed.createComponent(PageAdminTermsOfUseInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
@@ -58,36 +57,22 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseListCompone
 
   it('should have default information loaded', () => {
 
-    userService.getListOfTerms = () => of(
+    userService.getTermsById = () => of(
       {
-        count: 1,
-        data: [{
-          id: 'term 01',
-          name: 'term',
-          touType: 'TEST',
-          summary: 'TEST',
-          releasedAt: '01-02-2022',
-          createdAt: '12-01-2022'
-        }]
-     }
+        id: 'term 01',
+        name: 'term',
+        touType: 'TEST',
+        summary: 'TEST',
+        releasedAt: '01-02-2022',
+        createdAt: '12-01-2022'
+      }
     );
 
-    fixture = TestBed.createComponent(PageAdminTermsOfUseListComponent);
+    fixture = TestBed.createComponent(PageAdminTermsOfUseInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
     expect(component.pageStatus).toBe('READY');
-
-  });
-
-  it('should run onPageChange()', () => {
-
-    fixture = TestBed.createComponent(PageAdminTermsOfUseListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    component.onPageChange({ pageNumber: 2 });
-    expect(component.terms.page).toBe(2);
 
   });
 
