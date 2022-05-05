@@ -158,15 +158,15 @@ export const locale = {
               label: 'User is not the only needs assessor on the service'
             },
             lastAccessorUserOnOrganisation: {
-              label: 'User is not the only one on his organisation',
+              label: 'User is not the only qualifying accessor within their organisation',
               description: '{{ organisation.name }}'
             },
             lastAccessorUserOnOrganisationUnit: {
-              label: 'User is not the only one on his unit',
+              label: 'User is not the only qualifying accessor within their unit',
               description: '{{ unit.name }}'
             },
             lastAccessorFromUnitProvidingSupport: {
-              label: 'User is not the only one providing support',
+              label: 'User is not the person in their unit who is supporting an innovator',
               description: {
                none: 'No innovation is being supported',
                singular: '{{ supports.innovations.length }} innovation being supported',
