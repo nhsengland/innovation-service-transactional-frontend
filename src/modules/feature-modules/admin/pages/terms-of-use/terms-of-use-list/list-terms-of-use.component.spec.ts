@@ -91,4 +91,28 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseListCompone
   });
 
 
+  it('should show "versionCreationSuccess" warning', () => {
+
+    activatedRoute.snapshot.queryParams = { alert: 'versionCreationSuccess' };
+
+    const expected = { type: 'SUCCESS', title: 'You\'ve successfully created new version.' };
+
+    fixture = TestBed.createComponent(PageAdminTermsOfUseListComponent);
+    component = fixture.componentInstance;
+    expect(component.alert).toEqual(expected);
+
+  });
+  it('should show "versionUpdatedSuccess" warning', () => {
+
+    activatedRoute.snapshot.queryParams = { alert: 'versionUpdatedSuccess' };
+
+    const expected = { type: 'SUCCESS', title: 'You\'ve successfully updated  version.' };
+
+    fixture = TestBed.createComponent(PageAdminTermsOfUseListComponent);
+    component = fixture.componentInstance;
+    expect(component.alert).toEqual(expected);
+
+  });
+
+
 });

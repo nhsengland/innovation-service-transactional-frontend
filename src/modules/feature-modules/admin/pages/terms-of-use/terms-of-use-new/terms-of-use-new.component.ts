@@ -19,7 +19,6 @@ export class PageAdminTermsOfUseNewComponent extends CoreComponent implements On
     { label: 'Innovations', value: 'INNOVATOR' }
   ];
   module: 'New' | 'Edit';
-  tou: any;
   id: string;
 
   form = new FormGroup({
@@ -91,8 +90,8 @@ export class PageAdminTermsOfUseNewComponent extends CoreComponent implements On
         );
         break;
 
-      default:
-        break;
+      default: this.errorResponse();
+               break;
     }
 
   }
