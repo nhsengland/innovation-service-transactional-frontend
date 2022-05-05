@@ -8,7 +8,6 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { PageAdminTermsOfUseNewComponent } from './terms-of-use-new.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
-import { of, throwError } from 'rxjs';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseNewComponent', () => {

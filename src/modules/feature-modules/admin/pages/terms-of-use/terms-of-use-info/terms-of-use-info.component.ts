@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 

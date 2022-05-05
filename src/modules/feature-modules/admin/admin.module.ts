@@ -35,7 +35,7 @@ import { PageServiceChangeOrganisationUserUnitComponent } from './pages/change-o
 import { PageAdminAccountManageAccountInfoComponent } from './pages/account/manage-account/manage-account-info.component';
 import { PageAdminTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list/list-terms-of-use.component';
 import { PageAdminTermsOfUseNewComponent } from './pages/terms-of-use/terms-of-use-new/terms-of-use-new.component';
-import { PageAdminTermsOfUseInfo } from './pages/terms-of-use/terms-of-use-info/terms-of-use-info.component';
+import { PageAdminTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info/terms-of-use-info.component';
 
 @NgModule({
   imports: [
@@ -68,7 +68,7 @@ import { PageAdminTermsOfUseInfo } from './pages/terms-of-use/terms-of-use-info/
     PageAdminAccountManageAccountInfoComponent,
     PageAdminTermsOfUseListComponent,
     PageAdminTermsOfUseNewComponent,
-    PageAdminTermsOfUseInfo
+    PageAdminTermsOfUseInfoComponent
   ],
   providers: [
     // Services.

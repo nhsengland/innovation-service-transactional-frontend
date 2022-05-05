@@ -30,7 +30,7 @@ import { PageAdminTermsOfUseListComponent } from './pages/terms-of-use/terms-of-
 import { PageAdminTermsOfUseNewComponent } from './pages/terms-of-use/terms-of-use-new/terms-of-use-new.component';
 import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
-import { PageAdminTermsOfUseInfo } from './pages/terms-of-use/terms-of-use-info/terms-of-use-info.component';
+import { PageAdminTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info/terms-of-use-info.component';
 
 const routes: Routes = [
 
@@ -224,7 +224,7 @@ const routes: Routes = [
           { path: '', pathMatch: 'full', component: PageAdminTermsOfUseListComponent },
           { path: 'new-version', pathMatch: 'full', component: PageAdminTermsOfUseNewComponent, data: { module: 'New' } },
           { path: 'edit-version/:id', pathMatch: 'full', component: PageAdminTermsOfUseNewComponent, data: { module: 'Edit' } },
-          { path: 'show-version/:id', pathMatch: 'full', component: PageAdminTermsOfUseInfo }
+          { path: 'show-version/:id', pathMatch: 'full', component: PageAdminTermsOfUseInfoComponent }
         ]
       }
     ]
