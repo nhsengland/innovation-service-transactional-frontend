@@ -53,7 +53,7 @@ export class AdminLayoutComponent extends CoreComponent {
           description: 'This is the menu description',
           children: [
             { title: 'Organisations', url: '/admin/organisations', description: 'Manage organisations and associated units' },
-            { title: 'Terms and conditions', url: '/admin/terms-conditions', description: 'Create a new version and trigger acceptance by the users' }
+            { title: 'Terms of use', url: '/admin/terms-conditions', description: 'Create a new version and trigger acceptance by the users' }
           ]
         }
       ],
