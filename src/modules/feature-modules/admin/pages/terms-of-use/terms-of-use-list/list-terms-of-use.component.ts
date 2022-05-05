@@ -36,7 +36,7 @@ export class PageAdminTermsOfUseListComponent extends CoreComponent implements O
         this.alert = { type: 'SUCCESS', title: 'You\'ve successfully created new version.' };
         break;
       case 'versionUpdatedSuccess':
-        this.alert = { type: 'SUCCESS', title: 'You\'ve successfully updated a version.' };
+        this.alert = { type: 'SUCCESS', title: 'You\'ve successfully updated  version.' };
         break;
       default:
         break;
@@ -52,19 +52,19 @@ export class PageAdminTermsOfUseListComponent extends CoreComponent implements O
   getTerms(): void {
     this.setPageStatus('LOADING');
     this.userService.getListOfTerms(this.terms.getAPIQueryParams()).subscribe(
-      (response) => {
+      (response) => { 
         this.terms.setData(response.data, response.count);
         this.setPageStatus('READY');
       },
-      () => {
+      () => { 
         this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
+        this.alert = { 
+          type: 'ERROR',  
           title: 'Unable to fetch organisations information',
           message: 'Please try again or contact us for further help'
-        };
+        } 
       }
-    );
+    )
   }
 
   onPageChange(event: { pageNumber: number }): void {

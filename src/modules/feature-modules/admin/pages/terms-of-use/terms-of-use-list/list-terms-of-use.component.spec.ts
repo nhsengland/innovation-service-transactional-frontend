@@ -7,7 +7,6 @@ import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { PageAdminTermsOfUseListComponent } from './list-terms-of-use.component';
 import { ActivatedRoute } from '@angular/router';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { of, throwError } from 'rxjs';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
