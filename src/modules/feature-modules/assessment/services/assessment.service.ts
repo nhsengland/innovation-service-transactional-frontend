@@ -66,6 +66,10 @@ export type getInnovationInfoEndpointDTO = {
     id: string;
     assignToName: string;
   };
+  lockedInnovatorValidation: {
+    displayIsInnovatorLocked: boolean,
+    innovatorName?: string
+  }
 };
 
 export type getInnovationNeedsAssessmentEndpointInDTO = {

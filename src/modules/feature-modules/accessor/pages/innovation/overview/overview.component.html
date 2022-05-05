@@ -7,6 +7,12 @@
   </div>
 </div>
 <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
+<div *ngIf="innovation.lockedInnovatorValidation?.displayIsInnovatorLocked" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+  <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+    <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
+  </div>
+  <p> Please Note that the Innovator {{ innovation.lockedInnovatorValidation?.innovatorName }} account has been locked by the Admin.</p>
+</div>
 
 <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
   <p> {{ alert.message }} </p>

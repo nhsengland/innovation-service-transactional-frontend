@@ -41,7 +41,6 @@ describe('Shared/Pages/Innovation/CommentsPageInnovationCommentsListComponent', 
 
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', assessment: {} } };
 
-
   });
 
   it('should create the component', () => {

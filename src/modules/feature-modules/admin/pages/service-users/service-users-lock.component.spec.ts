@@ -12,7 +12,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageServiceUsersLockComponent } from './service-users-lock.component';
 
-import { getLockUserRulesOutDTO, lockUserEndpointDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { getLockUserRulesOutDTO, lockUserEndpointDTO, ServiceUsersService, orgnisationRole } from '@modules/feature-modules/admin/services/service-users.service';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersLockComponent', () => {
@@ -78,6 +78,19 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersLockComponent'
         meta: { innovations: [{ id: 'sfasdads' }, { id: 'sdfsa' }] }
       }
     ];
+    serviceUsersService.getUserFullInfo = () => of({
+      id: 'User01',
+      email: 'user@email.com',
+      displayName: 'User name',
+      phone: '12345',
+      type: 'ACCESSOR',
+      lockedAt: '2020-01-01T00:00:00.000Z',
+      innovations: [{id: 'inn1', name: 'innovation'}],
+      userOrganisations: [
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: orgnisationRole.QUALIFYING_ACCESSOR, units: [] }
+      ]
+    });
+
     serviceUsersService.getLockUserRules = () => of(responseMock);
     const expected = responseMock;
 
@@ -89,10 +102,98 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersLockComponent'
 
   });
 
+  it('should have initial information loaded 2', () => {
+
+    const responseMock: getLockUserRulesOutDTO[] = [
+      {
+        key: 'lastAssessmentUserOnPlatform', valid: true,
+        meta: {}
+      },
+      {
+        key: 'lastAccessorUserOnOrganisation', valid: false,
+        meta: { organisation: { id: 'sdfsdafsdf', name: 'Org name' } }
+      },
+      {
+        key: 'lastAccessorUserOnOrganisationUnit', valid: false,
+        meta: { unit: { id: 'sdfas', name: 'Unit name' } }
+      },
+      {
+        key: 'lastAccessorFromUnitProvidingSupport', valid: false,
+        meta: { innovations: [{ id: 'sfasdads' }, { id: 'sdfsa' }] }
+      }
+    ];
+    serviceUsersService.getUserFullInfo = () => of({
+      id: 'User01',
+      email: 'user@email.com',
+      displayName: 'User name',
+      phone: '12345',
+      type: 'INNOVATOR',
+      lockedAt: '2020-01-01T00:00:00.000Z',
+      innovations: [{id: 'inn1', name: 'innovation'}],
+      userOrganisations: [
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: orgnisationRole.QUALIFYING_ACCESSOR, units: [] }
+      ]
+    });
+
+    serviceUsersService.getLockUserRules = () => of(responseMock);
+    const expected = responseMock;
+
+    fixture = TestBed.createComponent(PageServiceUsersLockComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    expect(component.userType).toEqual('Innovator');
+
+  });
+
+
+  it('should have initial information loaded 03', () => {
+
+    const responseMock: getLockUserRulesOutDTO[] = [
+      {
+        key: 'lastAssessmentUserOnPlatform', valid: true,
+        meta: {}
+      },
+      {
+        key: 'lastAccessorUserOnOrganisation', valid: false,
+        meta: { organisation: { id: 'sdfsdafsdf', name: 'Org name' } }
+      },
+      {
+        key: 'lastAccessorUserOnOrganisationUnit', valid: false,
+        meta: { unit: { id: 'sdfas', name: 'Unit name' } }
+      },
+      {
+        key: 'lastAccessorFromUnitProvidingSupport', valid: false,
+        meta: { innovations: [{ id: 'sfasdads' }, { id: 'sdfsa' }] }
+      }
+    ];
+    serviceUsersService.getUserFullInfo = () => of({
+      id: 'User01',
+      email: 'user@email.com',
+      displayName: 'User name',
+      phone: '12345',
+      type: 'ACCESSOR',
+      lockedAt: '2020-01-01T00:00:00.000Z',
+      innovations: [{id: 'inn1', name: 'innovation'}],
+      userOrganisations: [
+
+      ]
+    });
+
+    serviceUsersService.getLockUserRules = () => of(responseMock);
+    const expected = responseMock;
+
+    fixture = TestBed.createComponent(PageServiceUsersLockComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    expect(component.rulesList).toEqual(expected);
+
+  });
   it('should NOT have initial information loaded', () => {
 
     serviceUsersService.getLockUserRules = () => throwError('error');
-
+    serviceUsersService.getUserRoleRules = () => throwError('error');
     fixture = TestBed.createComponent(PageServiceUsersLockComponent);
     component = fixture.componentInstance;
 
@@ -101,6 +202,17 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUsersLockComponent'
 
   });
 
+  it('should run onNextStep', () => {
+
+    const responseMock = 'LOCK_USER';
+
+    fixture = TestBed.createComponent(PageServiceUsersLockComponent);
+    component = fixture.componentInstance;
+
+    component.nextStep();
+    expect(component.pageType).toBe(responseMock);
+
+  });
   it('should run onSubmit and call api with success', () => {
 
     const responseMock: lockUserEndpointDTO = { id: 'User01', status: 'OK' };

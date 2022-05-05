@@ -64,7 +64,8 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
         company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: ''
       },
       contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' }
+      assessment: { id: '01', assignToName: 'Name' },
+      lockedInnovatorValidation: { displayIsInnovatorLocked : false, innovatorName : 'test'}
     };
     assessmentService.getInnovationInfo = () => of(responseMock);
 

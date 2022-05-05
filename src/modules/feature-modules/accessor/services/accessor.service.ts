@@ -107,7 +107,11 @@ export type getInnovationInfoEndpointDTO = {
   support?: {
     id: string;
     status: keyof typeof INNOVATION_SUPPORT_STATUS;
-  },
+  };
+  lockedInnovatorValidation: {
+    displayIsInnovatorLocked: boolean;
+    innovatorName?: string;
+  };
   notifications: { [key: string]: number },
 };
 
