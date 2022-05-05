@@ -41,7 +41,7 @@ export class PageAdminTermsOfUseNewComponent extends CoreComponent implements On
 
   ngOnInit(): void {
 
-    if (this.module === 'Edit') { 
+    if (this.module === 'Edit') {
 
       this.userService.getTermsById(this.id).subscribe(
         response => {
