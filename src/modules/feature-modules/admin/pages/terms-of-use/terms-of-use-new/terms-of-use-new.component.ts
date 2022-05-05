@@ -104,8 +104,7 @@ export class PageAdminTermsOfUseNewComponent extends CoreComponent implements On
       case 'UniqueKeyError':
         this.alert = {
           type: 'ERROR',
-          title: 'Unable to create new version',
-          message: 'Please try to enter unique name of terms of use'
+          title: 'A version of the terms of use with this name already exists, please re-name this new version',
         };
         break;
       default:
