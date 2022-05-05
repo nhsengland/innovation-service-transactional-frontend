@@ -91,7 +91,7 @@ export class PageAdminTermsOfUseNewComponent extends CoreComponent implements On
         break;
 
       default: this.errorResponse();
-      break;
+               break;
     }
 
   }

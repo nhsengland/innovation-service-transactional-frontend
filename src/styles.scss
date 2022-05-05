@@ -109,6 +109,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 .overflow-hidden { overflow: hidden; }
 .overflow-x-hidden { overflow-x: hidden; }
+.overflow-x-scroll { overflow-x: scroll; }
 
 .bg-color-white { background-color: var(--white); }
 .bg-color-grey { background-color: var(--color_nhsuk-grey-5); }
@@ -136,7 +137,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 .bottom-border-separator { border-bottom: 1px solid var(--nhsuk-border-color); }
 
 .cursor-pointer { cursor: pointer; }
-
+.min-width-767 { min-width: 767px }
 
 // Container and layout classes.
 .app-width-container,
