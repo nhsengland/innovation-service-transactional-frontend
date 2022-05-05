@@ -67,7 +67,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseNewComponen
     fixture.detectChanges();
     const expected = {
       type: 'ERROR',
-      title: 'Unable to fetch the necessary information',
+      title: 'Unable to perform the necessary action',
       message: 'Please try again or contact us for further help'
     };
 
@@ -112,7 +112,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseNewComponen
     component.onSubmit();
     const expected = {
       type: 'ERROR',
-      title: 'Unable to fetch the necessary information',
+      title: 'Unable to perform the necessary action',
       message: 'Please try again or contact us for further help'
     };
 
@@ -216,7 +216,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseNewComponen
     component.onSubmit();
     const expected = {
       type: 'ERROR',
-      title: 'Unable to fetch the necessary information',
+      title: 'Unable to perform the necessary action',
       message: 'Please try again or contact us for further help'
     };
 
@@ -237,7 +237,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseNewComponen
     component.form.get('notifyUser')?.setValue(0);
     const expected = {
       type: 'ERROR',
-      title: 'Unable to fetch the necessary information',
+      title: 'Unable to perform the necessary action',
       message: 'Please try again or contact us for further help'
     };
     component.onSubmit();
