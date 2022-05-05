@@ -109,7 +109,11 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 .overflow-hidden { overflow: hidden; }
 .overflow-x-hidden { overflow-x: hidden; }
-.overflow-x-scroll { overflow-x: scroll; }
+.overflow-x-scroll {
+  @media (max-width: 767px) {
+    overflow-x: scroll;
+  }
+}
 
 .bg-color-white { background-color: var(--white); }
 .bg-color-grey { background-color: var(--color_nhsuk-grey-5); }
