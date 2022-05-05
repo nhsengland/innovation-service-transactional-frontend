@@ -23,8 +23,8 @@
           <tr *ngFor="let item of rulesList" class="nhsuk-table__row">
             <td class="nhsuk-table__cell">
               {{ 'shared.catalog.user.lock_user_validations.' + item.key + '.label' | translate }}
-              <div *ngIf="!item.valid && translationExists('shared.catalog.user.lock_user_validations.' + item.key + '.description')" class="nhsuk-hint nhsuk-u-margin-0">
-                {{ 'shared.catalog.user.lock_user_validations.' + item.key + '.description' | pluralTranslate:item.meta?.supports.innovations.length | translate: item.meta }}
+              <div *ngIf="!item.valid && translationExists('shared.catalog.user.lock_user_validations.' + item.key + '.description')" class="nhsuk-hint nhsuk-u-margin-0">                
+                {{ (item.meta?.unit || item.meta?.organisation) ? ('shared.catalog.user.change_organisation_user_unit.' + item.key + '.description' | translate: item?.meta) : 'shared.catalog.user.change_organisation_user_unit.' + item.key + '.description' | pluralTranslate: item?.meta?.supports?.innovations?.length | translate: item?.meta }}
               </div>
             </td>
             <td class="nhsuk-table__cell text-align-right">
