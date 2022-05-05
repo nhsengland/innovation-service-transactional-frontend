@@ -41,7 +41,7 @@ export class PageAdminTermsOfUseNewComponent extends CoreComponent implements On
 
   ngOnInit(): void {
 
-    if (this.module === 'Edit') {
+    if (this.module === 'Edit') { 
 
       this.userService.getTermsById(this.id).subscribe(
         response => {
@@ -107,7 +107,7 @@ export class PageAdminTermsOfUseNewComponent extends CoreComponent implements On
       default:
         this.alert = {
           type: 'ERROR',
-          title: 'Unable to fetch the necessary information',
+          title: 'Unable to perform the necessary action',
           message: 'Please try again or contact us for further help'
         };
         break;
