@@ -103,13 +103,15 @@ export class PageAdminTermsOfUseNewComponent extends CoreComponent implements On
         this.alert = {
           type: 'ERROR',
           title: 'A version of the terms of use with this name already exists, please re-name this new version',
+          setFocus: true
         };
         break;
       default:
         this.alert = {
           type: 'ERROR',
           title: 'Unable to perform the necessary action',
-          message: 'Please try again or contact us for further help'
+          message: 'Please try again or contact us for further help',
+          setFocus: true
         };
         break;
     }
