@@ -68,7 +68,8 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseNewComponen
     const expected = {
       type: 'ERROR',
       title: 'Unable to perform the necessary action',
-      message: 'Please try again or contact us for further help'
+      message: 'Please try again or contact us for further help',
+      setFocus: true
     };
 
     expect(component.alert).toEqual(expected);
@@ -113,7 +114,8 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseNewComponen
     const expected = {
       type: 'ERROR',
       title: 'Unable to perform the necessary action',
-      message: 'Please try again or contact us for further help'
+      message: 'Please try again or contact us for further help',
+      setFocus: true
     };
 
     expect(component.alert).toEqual(expected);
@@ -134,6 +136,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseNewComponen
     const expected = {
       type: 'ERROR',
       title: 'A version of the terms of use with this name already exists, please re-name this new version',
+      setFocus: true
     };
 
     expect(component.alert).toEqual(expected);
@@ -189,6 +192,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseNewComponen
     const expected = {
       type: 'ERROR',
       title: 'A version of the terms of use with this name already exists, please re-name this new version',
+      setFocus: true
     };
 
     expect(component.alert).toEqual(expected);
@@ -217,7 +221,8 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseNewComponen
     const expected = {
       type: 'ERROR',
       title: 'Unable to perform the necessary action',
-      message: 'Please try again or contact us for further help'
+      message: 'Please try again or contact us for further help',
+      setFocus: true
     };
 
     expect(component.alert).toEqual(expected);
@@ -238,7 +243,8 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageAdminTermsOfUseNewComponen
     const expected = {
       type: 'ERROR',
       title: 'Unable to perform the necessary action',
-      message: 'Please try again or contact us for further help'
+      message: 'Please try again or contact us for further help',
+      setFocus: true
     };
     component.onSubmit();
     expect(component.alert).toEqual(expected);
