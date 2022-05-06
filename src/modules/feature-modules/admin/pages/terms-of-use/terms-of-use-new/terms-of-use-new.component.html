@@ -19,8 +19,8 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <theme-form-input controlName="name" description="Enter the name of terms of use with a maximum of 500 characters" label="What should we call your terms and conditions version?" [pageUniqueField]="false"></theme-form-input>
-        <theme-form-radio-group controlName="touType" [items]="typeItems" label="Which users do this terms and conditions relate to?" [pageUniqueField]="false"></theme-form-radio-group>
+        <theme-form-input controlName="name" description="Enter the name of terms of use with a maximum of 500 characters" label="What should we call your terms of use version?" [pageUniqueField]="false"></theme-form-input>
+        <theme-form-radio-group controlName="touType" [items]="typeItems" label="Which users do these terms of use relate to?" [pageUniqueField]="false"></theme-form-radio-group>
         <theme-form-textarea controlName="summary" label="What are the key changes in this version?" description="Summaries changes" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
         <div>
           <p>If you would like to show this summary of changes to the selected users of this service, tick the checkbox below. If not, your changes will be saved but not shared.</p>

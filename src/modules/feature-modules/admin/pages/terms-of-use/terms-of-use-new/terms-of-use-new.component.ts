@@ -22,9 +22,9 @@ export class PageAdminTermsOfUseNewComponent extends CoreComponent implements On
   id: string;
 
   form = new FormGroup({
-    name: new FormControl('', [Validators.maxLength(500), CustomValidators.required('Please enter name of terms of use')]),
+    name: new FormControl('', [Validators.maxLength(500), CustomValidators.required('Please enter the name of terms of use')]),
     touType: new FormControl('', [CustomValidators.required('Please select one of the option')]),
-    summary: new FormControl('', [CustomValidators.required('Please enter summary of terms of use')]),
+    summary: new FormControl('', [CustomValidators.required('Please enter the summary of terms of use')]),
     notifyUser: new FormControl(0, { updateOn: 'change' })
   }, { updateOn: 'blur' });
 
@@ -66,7 +66,7 @@ export class PageAdminTermsOfUseNewComponent extends CoreComponent implements On
 
   onSubmit(): void {
 
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
 
     const body = this.form.value;
 
@@ -90,8 +90,9 @@ export class PageAdminTermsOfUseNewComponent extends CoreComponent implements On
         );
         break;
 
-      default: this.errorResponse();
-               break;
+      default:
+        this.errorResponse();
+        break;
     }
 
   }
