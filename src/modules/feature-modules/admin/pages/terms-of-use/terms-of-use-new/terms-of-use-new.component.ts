@@ -24,7 +24,7 @@ export class PageAdminTermsOfUseNewComponent extends CoreComponent implements On
   form = new FormGroup({
     name: new FormControl('', [Validators.maxLength(500), CustomValidators.required('Please enter the name of terms of use')]),
     touType: new FormControl('', [CustomValidators.required('Please select one of the options')]),
-    summary: new FormControl('', [CustomValidators.required('Please enter the summary of terms of use')]),
+    summary: new FormControl(''),
     notifyUser: new FormControl(0, { updateOn: 'change' })
   }, { updateOn: 'blur' });
 
