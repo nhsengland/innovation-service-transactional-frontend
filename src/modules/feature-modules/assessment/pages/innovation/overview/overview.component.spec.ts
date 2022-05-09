@@ -55,7 +55,8 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
         companySize: '1 to 5 employees', countryName: 'England', postCode: '', categories: ['MEDICAL_DEVICE'], otherCategoryDescription: ''
       },
       contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' }
+      assessment: { id: '01', assignToName: 'Name' },
+      lockedInnovatorValidation: { displayIsInnovatorLocked : true, innovatorName : 'test'}
     };
     assessmentService.getInnovationInfo = () => of(responseMock);
 
@@ -77,7 +78,8 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
         companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['MEDICAL_DEVICE', 'OTHER', 'INVALID'], otherCategoryDescription: 'Other category'
       },
       contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' }
+      assessment: { id: '01', assignToName: 'Name' },
+      lockedInnovatorValidation: { displayIsInnovatorLocked : false, innovatorName : 'test'}
     };
     assessmentService.getInnovationInfo = () => of(responseMock);
 

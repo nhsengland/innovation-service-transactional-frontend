@@ -9,7 +9,7 @@
 
 <div *ngIf="pageStatus === 'READY'" aria-live="polite">
 
-  <div class="nhsuk-grid-row">
+  <div *ngIf="pageType === 'RULES'" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <table class="nhsuk-table">
         <caption>All conditions must be valid to be able to lock {{ user.name }}</caption>
@@ -23,8 +23,8 @@
           <tr *ngFor="let item of rulesList" class="nhsuk-table__row">
             <td class="nhsuk-table__cell">
               {{ 'shared.catalog.user.lock_user_validations.' + item.key + '.label' | translate }}
-              <div *ngIf="!item.valid && translationExists('shared.catalog.user.lock_user_validations.' + item.key + '.description')" class="nhsuk-hint nhsuk-u-margin-0">
-                {{ 'shared.catalog.user.lock_user_validations.' + item.key + '.description' | pluralTranslate:item.meta?.supports.innovations.length | translate: item.meta }}
+              <div *ngIf="!item.valid && translationExists('shared.catalog.user.lock_user_validations.' + item.key + '.description')" class="nhsuk-hint nhsuk-u-margin-0">                
+                {{ (item.meta?.unit || item.meta?.organisation) ? ('shared.catalog.user.change_organisation_user_unit.' + item.key + '.description' | translate: item?.meta) : 'shared.catalog.user.change_organisation_user_unit.' + item.key + '.description' | pluralTranslate: item?.meta?.supports?.innovations?.length | translate: item?.meta }}
               </div>
             </td>
             <td class="nhsuk-table__cell text-align-right">
@@ -33,23 +33,36 @@
           </tr>
         </tbody>
       </table>
-    </div>
-  </div>
-
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-two-thirds">
-
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
-        <ng-container *ngIf="pageStep === 'CODE_REQUEST'">
-          <theme-form-input controlName="code" label="Enter the confirmation code" [pageUniqueField]="false"></theme-form-input>
-        </ng-container>
-
-        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3">Lock user</button>
+      <form [formGroup]="form" (ngSubmit)="nextStep()">
+        
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3">Continue</button>
 
       </form>
-
     </div>
   </div>
 
+    <div *ngIf="pageType === 'LOCK_USER'" class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+        <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+          <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+            <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
+          </div>
+          <p> {{userType}} accounts should only be locked in exceptional circumstances, for example if the user has breached the Term of Use.</p>
+        </div>
+      </div>
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-two-thirds">
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+            <ng-container *ngIf="pageStep === 'CODE_REQUEST'">
+              <theme-form-input controlName="code" label="Enter the confirmation code" [pageUniqueField]="false"></theme-form-input>
+            </ng-container>
+
+            <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3">Lock user</button>
+
+          </form>
+        </div>
+      </div>
+  </div>
 </div>

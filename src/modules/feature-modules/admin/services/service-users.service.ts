@@ -4,7 +4,8 @@ import { Observable, of, throwError, timer } from 'rxjs';
 import { catchError, delay, map, switchMap, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { MappedObject, UrlModel } from '@modules/core';
+import { APIQueryParamsType, MappedObject, UrlModel } from '@modules/core';
+import { response } from 'express';
 
 
 export type getUserMinimalInfoDTO = {
@@ -147,6 +148,18 @@ export type changeUserRoleDTO = {
     id: string,
     code: string
   }
+};
+
+export type getListOfTerms = {
+  count: number,
+  data: {
+    id: string,
+    name: string,
+    touType: string,
+    summary: string,
+    releasedAt?: string,
+    createdAt: string
+  }[]
 };
 
 @Injectable()
@@ -330,7 +343,56 @@ export class ServiceUsersService extends CoreService {
     );
   }
 
+  getListOfTerms(queryParams: APIQueryParamsType): Observable<getListOfTerms> {
 
+    const url = new UrlModel(this.API_URL).addPath('user-admin/tou').setQueryParams({ ...queryParams });
 
+    return this.http.get<getListOfTerms>(url.buildUrl()).pipe(
+      take(1),
+      map(response => ({
+        count: response.count,
+        data: response.data.map(items => ({
+          id: items.id,
+          name: items.name,
+          summary: items.summary,
+          touType: items.touType,
+          releasedAt: items.releasedAt,
+          createdAt: items.createdAt
+        }))
+      }))
+    );
+  }
+
+  createVersion(body: { [key: string]: any }): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_URL).addPath('user-admin/tou');
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response),
+      catchError(error => throwError({
+        code: error.error.error
+      }))
+    );
+
+  }
+
+  getTermsById(id: string): Observable<any> {
+
+    const url = new UrlModel(this.API_URL).addPath('user-admin/tou/:id').setPathParams({ id });
+    return this.http.get<getLockUserRulesInDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
+  updateTermsById(id: string, data: MappedObject): Observable<any> {
+    const body = Object.assign({}, data);
+
+    const url = new UrlModel(this.API_URL).addPath('user-admin/tou/:id').setPathParams({ id });
+    return this.http.put<any>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
 
 }

@@ -26,6 +26,11 @@ import { PageAdminOrganisationEditComponent } from './pages/organisations/organi
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { PageServiceChangeOrganisationUserUnitComponent } from './pages/change-organisation-user-unit/change-organisation-user-unit.component';
 import { PageAdminAccountManageAccountInfoComponent } from './pages/account/manage-account/manage-account-info.component';
+import { PageAdminTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list/list-terms-of-use.component';
+import { PageAdminTermsOfUseNewComponent } from './pages/terms-of-use/terms-of-use-new/terms-of-use-new.component';
+import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
+import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
+import { PageAdminTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info/terms-of-use-info.component';
 
 const routes: Routes = [
 
@@ -34,7 +39,7 @@ const routes: Routes = [
   {
     path: '',
     component: AdminLayoutComponent,
-    data: { breadcrumb: 'Home' },
+    data: { breadcrumb: 'Home', module: 'admin' },
     children: [
       {
         path: 'dashboard',
@@ -187,7 +192,7 @@ const routes: Routes = [
         path: 'account',
         data: { breadcrumb: 'Account' },
         children: [
-          { path: '', pathMatch: 'full', redirectTo: 'manage-account', data: { breadcrumb: null } },
+          { path: '', pathMatch: 'full', redirectTo: 'manage-details', data: { breadcrumb: null } },
           {
             path: 'manage-account',
             data: { breadcrumb: 'Manage account' },
@@ -197,7 +202,29 @@ const routes: Routes = [
                 data: { layoutOptions: { type: 'userAccountMenu' } }
               }
             ]
-          }
+          },
+          {
+            path: 'manage-details',
+            data: { breadcrumb: 'Manage details' },
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAccountManageDetailsInfoComponent,
+                data: { layoutOptions: { type: 'userAccountMenu' } }
+              },
+              { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
+              { path: 'edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent }
+            ]
+          },
+        ]
+      },
+      {
+        path: 'terms-conditions',
+        data: { breadcrumb: 'Terms of use' },
+        children: [
+          { path: '', pathMatch: 'full', component: PageAdminTermsOfUseListComponent },
+          { path: 'new-version', pathMatch: 'full', component: PageAdminTermsOfUseNewComponent, data: { module: 'New' } },
+          { path: 'edit-version/:id', pathMatch: 'full', component: PageAdminTermsOfUseNewComponent, data: { module: 'Edit' } },
+          { path: 'show-version/:id', pathMatch: 'full', component: PageAdminTermsOfUseInfoComponent }
         ]
       }
     ]

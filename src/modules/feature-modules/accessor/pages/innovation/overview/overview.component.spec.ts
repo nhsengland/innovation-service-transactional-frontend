@@ -58,7 +58,8 @@ describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () =>
       contact: { name: 'A name' },
       assessment: { id: '01' },
       support: { id: '01', status: 'WAITING' },
-      notifications: {}
+      notifications: {},
+      lockedInnovatorValidation: { displayIsInnovatorLocked : false, innovatorName : 'test'}
     });
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
@@ -75,7 +76,8 @@ describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () =>
       summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['MEDICAL_DEVICE', 'OTHER', 'INVALID'], otherCategoryDescription: 'Other category' },
       contact: { name: 'A name' },
       assessment: { id: '01' },
-      notifications: {}
+      notifications: {},
+      lockedInnovatorValidation: { displayIsInnovatorLocked : true, innovatorName : 'test'}
     });
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);

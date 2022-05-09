@@ -116,7 +116,8 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     activatedRoute.snapshot.data = { layoutOptions: { type: 'userAccountMenu' } };
 
     const expected = [
-      { title: 'Your details', link: `/assessment/account/manage-details` }
+      { title: 'Your details', link: `/assessment/account/manage-details` },
+      { title: 'Manage account', link: `/assessment/account/manage-account` }
     ];
 
     fixture = TestBed.createComponent(AssessmentLayoutComponent);

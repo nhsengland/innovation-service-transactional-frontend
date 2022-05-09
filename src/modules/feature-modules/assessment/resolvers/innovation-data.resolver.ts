@@ -26,7 +26,11 @@ export class InnovationDataResolver implements Resolve<InnovationDataResolverTyp
           id: response.summary.id,
           name: response.summary.name,
           status: response.summary.status,
-          assessment: { id: response.assessment?.id }
+          assessment: { id: response.assessment?.id },
+          lockedInnovatorValidation: {
+            displayIsInnovatorLocked: response.lockedInnovatorValidation.displayIsInnovatorLocked,
+            innovatorName: response.lockedInnovatorValidation.innovatorName
+          },
         }),
         catchError(error => {
           /* istanbul ignore next */

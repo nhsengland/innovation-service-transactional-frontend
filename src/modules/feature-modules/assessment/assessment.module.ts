@@ -15,6 +15,8 @@ import { InnovationAssessmentOverviewComponent } from './pages/innovation/assess
 import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/assessment-new.component';
 import { InnovationAssessmentEditComponent } from './pages/innovation/assessment/assessment-edit.component';
 import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './pages/innovation/support/organisations-support-status-info.component';
+import { PageAssessmentAccountManageAccountInfoComponent } from './pages/manage-account/manage-account-info.component';
+
 // Services.
 import { AssessmentService } from './services/assessment.service';
 
@@ -22,12 +24,7 @@ import { AssessmentService } from './services/assessment.service';
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 
 @NgModule({
-  imports: [
-    ThemeModule,
-    SharedModule,
-
-    AssessmentRoutingModule
-  ],
+  imports: [ThemeModule, SharedModule, AssessmentRoutingModule],
   declarations: [
     AssessmentLayoutComponent,
 
@@ -39,14 +36,15 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovationAssessmentOverviewComponent,
     InnovationAssessmentNewComponent,
     InnovationAssessmentEditComponent,
-    InnovationSupportOrganisationsSupportStatusInfoComponent
+    InnovationSupportOrganisationsSupportStatusInfoComponent,
+    PageAssessmentAccountManageAccountInfoComponent,
   ],
   providers: [
     // Services.
     AssessmentService,
 
     // Resolvers.
-    InnovationDataResolver
-  ]
+    InnovationDataResolver,
+  ],
 })
-export class AssessmentModule { }
+export class AssessmentModule {}

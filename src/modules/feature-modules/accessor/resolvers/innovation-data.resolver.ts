@@ -30,7 +30,12 @@ export class InnovationDataResolver implements Resolve<InnovationDataResolverTyp
           support: {
             id: response.support?.id,
             status: response.support?.status || 'UNASSIGNED'
-          }
+          },
+          lockedInnovatorValidation: {
+            displayIsInnovatorLocked: response.lockedInnovatorValidation.displayIsInnovatorLocked,
+            innovatorName: response.lockedInnovatorValidation.innovatorName
+          },
+
         }),
         catchError(error => {
           /* istanbul ignore next */

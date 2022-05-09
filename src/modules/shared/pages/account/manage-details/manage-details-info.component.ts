@@ -81,6 +81,12 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
         { label: 'Email address', value: user.email }
       ];
 
+    } else if (this.stores.authentication.isAdminRole()) {
+      this.summaryList = [
+        { label: 'Name', value: user.displayName, editStepNumber: 1 },
+        { label: 'Email address', value: user.email },
+        { label: 'User type', value: this.stores.authentication.getRoleDescription(user.type as 'ADMIN') }
+      ];
     }
 
   }

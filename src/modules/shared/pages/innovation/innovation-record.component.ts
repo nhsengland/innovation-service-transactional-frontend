@@ -3,9 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
+import { RoutingHelper } from '@modules/core';
 
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
 
+import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -21,6 +23,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   documentUrl = '';
   pdfDocumentUrl = '';
 
+  innovation: InnovationDataResolverType;
   alert: AlertType = { type: null };
 
   innovationId: string;
@@ -65,7 +68,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.pdfDocumentUrl = `${this.stores.environment.APP_URL}/exports/${this.activatedRoute.snapshot.params.innovationId}/pdf`;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovationName = '';
-
+    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
   }
 
 

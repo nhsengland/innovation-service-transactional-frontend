@@ -7,7 +7,9 @@ import { AlertType } from '@app/base/models';
 import { OrganisationsService } from '@shared-module/services/organisations.service';
 // import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
+import { RoutingHelper } from '@modules/core';
 
 @Component({
   selector: 'app-assessment-pages-innovation-support-organisations-support-status-info',
@@ -20,6 +22,8 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
   innovationId: string;
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+
+  innovation: InnovationDataResolverType;
 
   organisations: {
     info: {
@@ -51,7 +55,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
     this.setPageTitle('Support status');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-
+    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
   }
 
 
