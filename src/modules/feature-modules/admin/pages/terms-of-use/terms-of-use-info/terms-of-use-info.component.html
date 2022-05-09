@@ -20,7 +20,8 @@
 
         <div class="nhsuk-inset-text">
           <span class="nhsuk-u-visually-hidden">Information: </span>
-          <p>{{ tou.summary }}</p>
+          <p *ngIf="tou.summary">{{ tou.summary }}</p>
+          <p *ngIf="!tou.summary">This version was released without a summary of the changes</p>
         </div>
       </div>
     </div>
