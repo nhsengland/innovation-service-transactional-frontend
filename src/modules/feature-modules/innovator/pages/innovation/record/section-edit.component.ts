@@ -124,13 +124,27 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.wizard.runRules(this.currentAnswers);
     this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);
 
-    this.redirectTo(this.getNavigationUrl(action));
+    console.log(this.wizard.runOutboundParsing(formData!.data));
+
+    if (action === 'next') {
+    this.stores.innovation.updateSectionInfo$(
+      this.innovationId,
+      this.sectionId,
+      this.wizard.runOutboundParsing(formData!.data)
+    ).pipe(
+      concatMap(() => this.stores.authentication.initializeAuthentication$())).subscribe(
+      () => { this.redirectTo(this.getNavigationUrl(action)); },
+      () => { alert('Error in saving data'); }
+    );
+    }
+
+    // this.redirectTo(this.getNavigationUrl(action));
 
   }
 
 
 
-  onSubmitSurvey(): void {
+  onSubmitSection(): void {
 
     this.stores.innovation.updateSectionInfo$(
       this.innovationId,

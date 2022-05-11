@@ -23,7 +23,7 @@
 
         <ng-container *ngIf="isQuestionStep()">
           <theme-form-engine formId="sectionForm" [parameters]="currentStep.parameters" [values]="currentAnswers"></theme-form-engine>
-          <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
+          <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Save and continue</button>
         </ng-container>
 
         <ng-container *ngIf="isSummaryStep()">
@@ -47,7 +47,7 @@
             </div>
           </dl>
 
-          <button class="nhsuk-button" (click)="onSubmitSurvey()"> {{ innovation.status === 'IN_PROGRESS' ? 'Save as draft' : 'Save' }} </button>
+          <button class="nhsuk-button" (click)="onSubmitSection()"> {{ innovation.status === 'IN_PROGRESS' ? 'Save as draft' : 'Save' }} </button>
 
         </ng-container>
 
