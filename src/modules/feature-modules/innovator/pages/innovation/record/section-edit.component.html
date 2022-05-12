@@ -1,5 +1,7 @@
 <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
-
+  <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+    <p> {{ alert.message }} </p>
+  </theme-alert>
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>

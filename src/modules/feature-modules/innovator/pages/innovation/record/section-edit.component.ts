@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { AlertType, LinkType } from '@app/base/models';
 import { FormEngineComponent, FormEngineModel, FileTypes, WizardEngineModel } from '@app/base/forms';
 import { RoutingHelper, UrlModel } from '@modules/core';
 import { SummaryParsingType } from '@modules/shared/forms';
@@ -16,6 +17,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
+  alert: AlertType = { type: null };
   innovationId: string;
   innovation: InnovationDataResolverType;
   sectionId: InnovationSectionsIds;
@@ -110,32 +112,45 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
 
   onSubmitStep(action: 'previous' | 'next', event: Event): void {
-
+    this.alert = {type:null};
     event.preventDefault();
 
     const formData = this.formEngineComponent?.getFormValues();
 
     if (action === 'next' && !formData?.valid) { // Apply validation only when moving forward.
+      this.alert = {type:null};
       return;
     }
 
     this.currentAnswers = { ...this.currentAnswers, ...formData!.data };
 
     this.wizard.runRules(this.currentAnswers);
-    this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);
-
-    console.log(this.wizard.runOutboundParsing(formData!.data));
+    this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);    
 
     if (action === 'next') {
-    this.stores.innovation.updateSectionInfo$(
-      this.innovationId,
-      this.sectionId,
-      this.wizard.runOutboundParsing(formData!.data)
-    ).pipe(
-      concatMap(() => this.stores.authentication.initializeAuthentication$())).subscribe(
-      () => { this.redirectTo(this.getNavigationUrl(action)); },
-      () => { alert('Error in saving data'); }
-    );
+      this.stores.innovation.updateSectionInfo$(
+        this.innovationId,
+        this.sectionId,
+        this.wizard.runOutboundParsing(formData!.data)
+      ).pipe(
+        concatMap(() => this.stores.authentication.initializeAuthentication$())).subscribe(
+        () => { 
+          this.redirectTo(this.getNavigationUrl(action)); 
+          this.alert = {
+            type: 'SUCCESS',
+            title: 'Data saved successfully',
+            // message: 'Your suggestions were saved and notifications sent.'
+          };
+        
+        },
+        () => { 
+          this.alert = {
+            type: 'ERROR',
+            title: 'Unable to save data',
+            message: 'Please try again or contact us for further help'
+          };
+        }
+      );
     }
 
     // this.redirectTo(this.getNavigationUrl(action));
