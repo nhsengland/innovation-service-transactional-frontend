@@ -19,6 +19,8 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
   innovationId: string;
   innovation: InnovationDataResolverType;
   sectionId: InnovationSectionsIds;
+  
+  showNextSectionButton: boolean = false;
 
   alert: AlertType = { type: null };
 
@@ -51,12 +53,10 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
       case 'sectionUpdateSuccess':
         this.alert = {
           type: 'SUCCESS',
-          title: 'Your section has been saved',
-          message:
-            this.innovation.status === 'IN_PROGRESS' ?
-              'You need to submit the section if you want to share it with accessors.' :
-              'You need to submit this section before you can submit your innovation record for needs assessment.'
+          title: 'You have confirmed your answers for this section',
+          message: 'Go to next section or return to innovation record',            
         };
+        this.showNextSectionButton = true;
         break;
 
       case 'sectionUpdateError':
@@ -159,7 +159,9 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
     return `edit/${stepNumber}`;
   }
 
-
+  nextSection(){
+    
+  }
 
   onSubmitSection(): void {
 

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { AlertType, LinkType } from '@app/base/models';
-import { FormEngineComponent, FormEngineModel, FileTypes, WizardEngineModel } from '@app/base/forms';
+import { FormEngineComponent, FormEngineModel, FileTypes, WizardEngineModel, FormEngineHelper } from '@app/base/forms';
 import { RoutingHelper, UrlModel } from '@modules/core';
 import { SummaryParsingType } from '@modules/shared/forms';
 import { InnovationDataResolverType, InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
@@ -21,7 +21,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   innovationId: string;
   innovation: InnovationDataResolverType;
   sectionId: InnovationSectionsIds;
-
+  showSubmitButton: boolean = false;
   wizard: WizardEngineModel;
 
   currentStep: FormEngineModel;
@@ -77,6 +77,10 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
               return;
             }
 
+            
+            const form = FormEngineHelper.buildForm(this.currentStep.parameters, this.currentAnswers);
+            this.showSubmitButton = form.valid;
+            
             this.wizard.gotoStep(Number(params.questionId));
             this.currentStep = this.wizard.currentStep();
 
@@ -118,7 +122,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     const formData = this.formEngineComponent?.getFormValues();
 
     if (action === 'next' && !formData?.valid) { // Apply validation only when moving forward.
-      this.alert = {type:null};
+      this.alert = {type:null};      
       return;
     }
 
@@ -161,15 +165,15 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   onSubmitSection(): void {
 
-    this.stores.innovation.updateSectionInfo$(
+    this.stores.innovation.submitSections$(
       this.innovationId,
-      this.sectionId,
-      this.wizard.runOutboundParsing(this.currentAnswers)
+      [this.sectionId]
+      //.wizard.runOutboundParsing(this.currentAnswers)
     ).pipe(
       concatMap(() => this.stores.authentication.initializeAuthentication$())).subscribe(
       () => { this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'sectionUpdateSuccess' }); },
       () => { this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'sectionUpdateError' }); }
-    );
+    );    
 
   }
 
