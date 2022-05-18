@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 import * as dotenv from 'dotenv';
 import * as express from 'express';
@@ -5,7 +6,7 @@ import { Router } from 'express';
 import * as passport from 'passport';
 import { IOIDCStrategyOptionWithoutRequest, IProfile, OIDCStrategy, VerifyCallback } from 'passport-azure-ad';
 import { getAppInsightsClient } from 'src/globals';
-import { BASE_PATH } from '../config/constants.config';
+import { API_URL, BASE_PATH } from '../config/constants.config';
 
 dotenv.config();
 
@@ -152,15 +153,37 @@ authenticationRouter.get(`${BASE_PATH}/auth/user`, (req, res) => {
 
 // MS Azure OpenId Connect strategy (passport) and callbacks handling.
 authenticationRouter.get(`${BASE_PATH}/signup`, (req, res) => {
-  const azSignupUri = `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&prompt=login`
+  const azSignupUri = `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&response_mode=query&prompt=login`
     + `&p=${OAUTH_CONFIGURATION.signupPolicy}` // add policy information
     + `&client_id=${OAUTH_CONFIGURATION.clientID}` // add client id
     + `&redirect_uri=${encodeURIComponent(OAUTH_CONFIGURATION.signupRedirectUrl)}` // add redirect uri
+    + `&state=${req.query.surveyId || ''}` // add survey id to state
     + `&survey_id=${req.query.surveyId || ''}`; // add survey id
+
   res.redirect(azSignupUri);
 });
+
 authenticationRouter.get(`${BASE_PATH}/signup/callback`, (req, res) => {
-  res.redirect(`${BASE_PATH}/auth/signup/confirmation`);
+  const query = req.query;
+  const state = query.state || '';
+  const idToken = query.id_token || '';
+
+  if (state && idToken) {
+    const body = {
+      surveyId: state,
+      idToken
+    };
+
+    axios.post(`${API_URL}/api/me`, body)
+      .then((response: any) => {
+        res.redirect(`${BASE_PATH}/auth/signup/confirmation`);
+      })
+      .catch((error: any) => {
+        console.error(`Error when attempting to save the user: ${API_URL}/api/me. Error: ${error}`);
+        // TODO : error handling if we stop using AZ AD B2C
+        res.redirect(`${BASE_PATH}/auth/signup/confirmation`);
+      });
+  }
 });
 
 // Login endpoint - AD OpenIdConnect
