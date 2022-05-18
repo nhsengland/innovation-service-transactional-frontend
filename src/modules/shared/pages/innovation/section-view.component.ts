@@ -5,6 +5,7 @@ import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 import { RoutingHelper } from '@modules/core';
 import { WizardEngineModel, SummaryParsingType } from '@modules/shared/forms';
+import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
 import { InnovationDataResolverType, InnovationSectionsIds, INNOVATION_SECTION_STATUS } from '@stores-module/innovation/innovation.models';
 
@@ -19,6 +20,10 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
   innovationId: string;
   innovation: InnovationDataResolverType;
   sectionId: InnovationSectionsIds;
+  baseUrl = '';
+  nextUrl = '';
+  keys = INNOVATION_SECTIONS.flatMap(x => x.sections.map(y => y.id));
+  showNextSectionButton = false;
 
   alert: AlertType = { type: null };
 
@@ -46,17 +51,20 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
+    this.baseUrl = `/${this.module}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'sectionUpdateSuccess':
         this.alert = {
           type: 'SUCCESS',
-          title: 'Your section has been saved',
-          message:
-            this.innovation.status === 'IN_PROGRESS' ?
-              'You need to submit the section if you want to share it with accessors.' :
-              'You need to submit this section before you can submit your innovation record for needs assessment.'
+          title: 'You have confirmed your answers for this section',
+          message: 'Go to next section or return to innovation record',
         };
+        if ((this.keys.indexOf(this.sectionId) + 1) !== this.keys.length)
+        {
+          this.showNextSectionButton = true;
+          this.nextUrl = `${this.baseUrl}/${this.keys[this.keys.indexOf(this.sectionId) + 1]}`;
+        }
         break;
 
       case 'sectionUpdateError':
@@ -116,9 +124,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
 
   ngOnInit(): void {
-
     this.getSectionInfo();
-
   }
 
 
@@ -159,7 +165,29 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
     return `edit/${stepNumber}`;
   }
 
+  nextSection(): void {
+    this.alert = {type: null};
+    this.showNextSectionButton = false;
 
+    if ((this.keys.indexOf(this.sectionId) + 1) !== this.keys.length)    {
+      const section = this.stores.innovation.getSection(this.keys[this.keys.indexOf(this.sectionId) + 1]);
+      this.sectionId = this.keys[this.keys.indexOf(this.sectionId) + 1];
+      this.section = {
+        id: this.sectionId,
+        title: section?.title || '',
+        status: 'UNKNOWN',
+        isNotStarted: false,
+        showSubmitButton: false,
+        hasEvidences: !!section?.evidences?.steps.length
+      };
+
+      this.wizard = section?.wizard || new WizardEngineModel({});
+
+      this.summaryList = [];
+      this.getSectionInfo();
+      this.redirectTo(this.nextUrl);
+    }
+  }
 
   onSubmitSection(): void {
 

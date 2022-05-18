@@ -31,7 +31,17 @@ type StepPayloadType = Omit<InboundPayloadType, 'files'>
   & { files: { id: string; name: string; url: string; }[] }
   & { [key: string]: null | string };
 
-type OutboundPayloadType = Omit<InboundPayloadType, 'files'> & { files: string[] };
+// type OutboundPayloadType = Omit<InboundPayloadType, 'files'> & { files: string[] };
+type OutboundPayloadType = {
+  hasRegulationKnowledge?: null | 'YES_ALL' | 'YES_SOME' | 'NO' | 'NOT_RELEVANT';
+  standards?: {
+    id: null | string;
+    type: null | 'CE_UKCA_NON_MEDICAL' | 'CE_UKCA_CLASS_I' | 'CE_UKCA_CLASS_II_A' | 'CE_UKCA_CLASS_II_B' | 'CE_UKCA_CLASS_III' | 'IVD_GENERAL' | 'IVD_SELF_TEST' | 'IVD_ANNEX_LIST_A' | 'IVD_ANNEX_LIST_B' | 'MARKETING' | 'CQC' | 'DTAC' | 'OTHER';
+    hasMet: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET';
+  }[];
+  otherRegulationDescription?: null | string;
+  files?: string[];
+};
 
 type SummaryPayloadType = Omit<InboundPayloadType, 'files'>
   & { standardsType: string[] }
@@ -154,7 +164,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     hasRegulationKnowledge: data.hasRegulationKnowledge,
     standards: data.standards,
     otherRegulationDescription: data.otherRegulationDescription,
-    files: data.files.map(item => item.id)
+    files: data.files?.map(item => item.id)
   });
 
   if (['NO', 'NOT_RELEVANT'].includes(parsedData.hasRegulationKnowledge || 'NO')) {

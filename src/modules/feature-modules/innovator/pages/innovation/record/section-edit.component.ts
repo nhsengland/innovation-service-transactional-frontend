@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { FormEngineComponent, FormEngineModel, FileTypes, WizardEngineModel } from '@app/base/forms';
+import { AlertType, LinkType } from '@app/base/models';
+import { FormEngineComponent, FormEngineModel, FileTypes, WizardEngineModel, FormEngineHelper } from '@app/base/forms';
 import { RoutingHelper, UrlModel } from '@modules/core';
 import { SummaryParsingType } from '@modules/shared/forms';
 import { InnovationDataResolverType, InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
@@ -16,10 +17,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
+  alert: AlertType = { type: null };
   innovationId: string;
   innovation: InnovationDataResolverType;
   sectionId: InnovationSectionsIds;
-
+  showSubmitButton = false;
+  showSaveButton = false;
+  saveButtonText = 'Save and continue';
   wizard: WizardEngineModel;
 
   currentStep: FormEngineModel;
@@ -110,12 +114,15 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
 
   onSubmitStep(action: 'previous' | 'next', event: Event): void {
-
+    this.alert = {type: null};
     event.preventDefault();
 
     const formData = this.formEngineComponent?.getFormValues();
 
     if (action === 'next' && !formData?.valid) { // Apply validation only when moving forward.
+      this.alert = {type: null};
+      this.showSaveButton = false;
+      this.saveButtonText = 'Save and continue';
       return;
     }
 
@@ -124,18 +131,51 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.wizard.runRules(this.currentAnswers);
     this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);
 
-    this.redirectTo(this.getNavigationUrl(action));
+    if (action === 'next') {
+      this.showSaveButton = true;
+      this.saveButtonText = '...saving data';
+      this.stores.innovation.updateSectionInfo$(
+        this.innovationId,
+        this.sectionId,
+        this.wizard.runOutboundParsing(this.currentAnswers)
+      ).pipe(
+        concatMap(() => this.stores.authentication.initializeAuthentication$())).subscribe(
+        () => {
+          this.showSaveButton = false;
+          this.saveButtonText = 'Save and continue';
+          this.redirectTo(this.getNavigationUrl(action));
+          this.alert = {
+            type: 'SUCCESS',
+            title: 'Data saved successfully',
+            // message: 'Your suggestions were saved and notifications sent.'
+          };
+
+        },
+        () => {
+          this.showSaveButton = false;
+          this.saveButtonText = 'Save and continue';
+          this.alert = {
+            type: 'ERROR',
+            title: 'Unable to save data',
+            message: 'Please try again or contact us for further help'
+          };
+        }
+      );
+    }
+
+
+    // this.redirectTo(this.getNavigationUrl(action));
 
   }
 
 
 
-  onSubmitSurvey(): void {
+  onSubmitSection(): void {
 
-    this.stores.innovation.updateSectionInfo$(
+    this.stores.innovation.submitSections$(
       this.innovationId,
-      this.sectionId,
-      this.wizard.runOutboundParsing(this.currentAnswers)
+      [this.sectionId]
+      // .wizard.runOutboundParsing(this.currentAnswers)
     ).pipe(
       concatMap(() => this.stores.authentication.initializeAuthentication$())).subscribe(
       () => { this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'sectionUpdateSuccess' }); },
@@ -162,8 +202,17 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         break;
 
       case 'next':
-        if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/summary`; }
-        else if (this.wizard.isLastStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/summary`; }
+        if (this.isSummaryStep()) {
+          // const formData = this.formEngineComponent?.getFormValues();
+          const form = FormEngineHelper.buildForm(this.wizard.steps.flatMap(x => x.parameters), this.currentAnswers);
+          this.showSubmitButton = form.valid;
+          url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/summary`;
+        }
+        else if (this.wizard.isLastStep()) {
+          const form = FormEngineHelper.buildForm(this.wizard.steps.flatMap(x => x.parameters), this.currentAnswers);
+          this.showSubmitButton = form.valid;
+          url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/summary`;
+        }
         else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${Number(this.wizard.currentStepId) + 1}`; }
         break;
 

@@ -1,5 +1,11 @@
 <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
-
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+        <p> {{ alert.message }} </p>
+      </theme-alert>
+    </div>
+  </div>
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
@@ -23,7 +29,7 @@
 
         <ng-container *ngIf="isQuestionStep()">
           <theme-form-engine formId="sectionForm" [parameters]="currentStep.parameters" [values]="currentAnswers"></theme-form-engine>
-          <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
+          <button type="submit" form="sectionForm" [disabled]="showSaveButton" class="nhsuk-button" (click)="onSubmitStep('next', $event)"> {{ saveButtonText }}</button>
         </ng-container>
 
         <ng-container *ngIf="isSummaryStep()">
@@ -47,7 +53,7 @@
             </div>
           </dl>
 
-          <button class="nhsuk-button" (click)="onSubmitSurvey()"> {{ innovation.status === 'IN_PROGRESS' ? 'Save as draft' : 'Save' }} </button>
+          <button [disabled]="!showSubmitButton" class="nhsuk-button" (click)="onSubmitSection()"> {{ innovation.status === 'IN_PROGRESS' ? 'Save as draft' : 'Confirm section answers' }} </button> <p *ngIf="!showSubmitButton"> Kindly answer mandatory questions to proceed </p>
 
         </ng-container>
 

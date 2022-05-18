@@ -189,7 +189,7 @@ function outboundParsing(data: StepPayloadType): any {
     isDeployed: data.isDeployed,
     deploymentPlans: data.deploymentPlans,
     hasResourcesToScale: data.hasResourcesToScale,
-    files: data.files.map(item => item.id)
+    files: data.files?.map(item => item.id)
   });
 
   if (['NO'].includes(data.isDeployed || 'NO')) {

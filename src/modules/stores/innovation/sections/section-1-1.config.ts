@@ -62,7 +62,24 @@ type StepPayloadType = {
   moreSupportDescription: string;
 };
 
-type OutboundPayloadType = InboundPayloadType;
+type OutboundPayloadType = {
+  name?: string;
+  description?: string;
+  location?: string;
+  postcode?: null | string;
+  countryName?: string;
+  hasFinalProduct?: null | 'YES' | 'NO';
+  categories?: ('MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER')[];
+  otherCategoryDescription?: string;
+  mainCategory?: null | 'MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER';
+  otherMainCategoryDescription?: string;
+  areas?: ('COVID_19' | 'DATA_ANALYTICS_AND_RESEARCH' | 'DIGITALISING_SYSTEM' | 'IMPROVING_SYSTEM_FLOW' | 'INDEPENDENCE_AND_PREVENTION' | 'OPERATIONAL_EXCELLENCE' | 'PATIENT_ACTIVATION_AND_SELF_CARE' | 'PATIENT_SAFETY' | 'WORKFORCE_OPTIMISATION')[];
+  clinicalAreas?: ('ACUTE' | 'AGEING' | 'CANCER' | 'CARDIO_ENDOCRINE_METABOLIC' | 'CHILDREN_AND_YOUNG' | 'DISEASE_AGNOSTIC' | 'GASTRO_KDNEY_LIVER' | 'INFECTION_INFLAMATION' | 'MATERNITY_REPRODUCTIVE_HEALTH' | 'MENTAL_HEALTH' | 'NEUROLOGY' | 'POPULATION_HEALTH' | 'RESPIRATORY' | 'UROLOGY' | 'WORKFORCE_AND_EDUCATION')[];
+  careSettings?: ('AMBULANCE_OR_PARAMEDIC' | 'COMMUNITY' | 'HOSPITAL_INPATIENT' | 'HOSPITAL_OUTPATIENT' | 'MENTAL_HEALTH' | 'PATIENT_HOME' | 'PHARMACY' | 'PRIMARY_CARE' | 'SOCIAL_CARE')[];
+  mainPurpose?: 'PREVENT_CONDITION' | 'PREDICT_CONDITION' | 'DIAGNOSE_CONDITION' | 'MONITOR_CONDITION' | 'PROVIDE_TREATMENT' | 'MANAGE_CONDITION' | 'ENABLING_CARE';
+  supportTypes?: ('ADOPTION' | 'ASSESSMENT' | 'PRODUCT_MIGRATION' | 'CLINICAL_TESTS' | 'COMMERCIAL' | 'PROCUREMENT' | 'DEVELOPMENT' | 'EVIDENCE_EVALUATION' | 'FUNDING' | 'INFORMATION')[];
+  moreSupportDescription?: string;
+};
 
 
 
