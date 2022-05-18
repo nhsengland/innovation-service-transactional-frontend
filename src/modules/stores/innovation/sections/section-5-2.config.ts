@@ -149,7 +149,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   const parsedData = cloneDeep({
     hasTests: data.hasTests,
     userTests: data.userTests,
-    files: data.files.map(item => item.id)
+    files: data.files?.map(item => item.id)
   });
 
   if (['NOT_YET'].includes(parsedData.hasTests || 'NOT_YET')) {

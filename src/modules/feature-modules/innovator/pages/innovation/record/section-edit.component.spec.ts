@@ -183,7 +183,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
 
   });
 
-  it('should run onSubmitSurvey() and call api with success', () => {
+  it('should run onSubmitSection() and call api with success', () => {
 
     innovationStore.updateSectionInfo$ = () => of({ hasRegulationKnowledge: 'YES_ALL' });
     authenticationStore.initializeAuthentication$ = () => of(true);
@@ -192,12 +192,12 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    component.onSubmitSurvey();
+    component.onSubmitSection();
     expect(routerSpy).toHaveBeenCalledWith(['innovator/innovations/Inno01/record/sections/REGULATIONS_AND_STANDARDS'], { queryParams: { alert: 'sectionUpdateSuccess' } });
 
   });
 
-  it('should run onSubmitSurvey() and call api with error', () => {
+  it('should run onSubmitSection() and call api with error', () => {
 
     innovationStore.updateSectionInfo$ = () => throwError('error');
 
@@ -205,7 +205,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    component.onSubmitSurvey();
+    component.onSubmitSection();
     expect(routerSpy).toHaveBeenCalledWith(['innovator/innovations/Inno01/record/sections/REGULATIONS_AND_STANDARDS'], { queryParams: { alert: 'sectionUpdateError' } });
 
   });

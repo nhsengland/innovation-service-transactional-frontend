@@ -28,7 +28,16 @@ type InboundPayloadType = {
 // [key: string] is needed to support subGroupName_${number} properties.
 type StepPayloadType = InboundPayloadType & { [key: string]: null | 'ONLY_OPTION' | 'BETTER_OPTION' | 'EQUIVALENT_OPTION' | 'FIT_LESS_COSTS' | 'NO_KNOWLEDGE' };
 
-type OutboundPayloadType = InboundPayloadType;
+type OutboundPayloadType = {
+  hasUKPathwayKnowledge?: null | 'YES' | 'NO' | 'NOT_RELEVANT';
+  innovationPathwayKnowledge?: null | 'PATHWAY_EXISTS_AND_CHANGED' | 'PATHWAY_EXISTS_AND_FITS' | 'NO_PATHWAY'
+  potentialPathway?: null | string;
+  subgroups?: {
+    id: string;
+    name: string;
+    carePathway: null | 'ONLY_OPTION' | 'BETTER_OPTION' | 'EQUIVALENT_OPTION' | 'FIT_LESS_COSTS' | 'NO_KNOWLEDGE';
+  }[];
+};
 
 
 
@@ -134,7 +143,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   if (['NO', 'NOT_RELEVANT'].includes(parsedData.hasUKPathwayKnowledge || 'NO')) {
     parsedData.innovationPathwayKnowledge = null;
     parsedData.potentialPathway = null;
-    parsedData.subgroups = parsedData.subgroups.map(item => ({
+    parsedData.subgroups = parsedData.subgroups?.map(item => ({
       id: item.id, name: item.name, carePathway: null
     }));
   }

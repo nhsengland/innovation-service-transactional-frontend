@@ -21,7 +21,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   innovationId: string;
   innovation: InnovationDataResolverType;
   sectionId: InnovationSectionsIds;
-  showSubmitButton: boolean = false;
+  showSubmitButton = false;
+  showSaveButton = false;
+  saveButtonText = 'Save and continue';
   wizard: WizardEngineModel;
 
   currentStep: FormEngineModel;
@@ -77,10 +79,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
               return;
             }
 
-            
-            const form = FormEngineHelper.buildForm(this.currentStep.parameters, this.currentAnswers);
-            this.showSubmitButton = form.valid;
-            
             this.wizard.gotoStep(Number(params.questionId));
             this.currentStep = this.wizard.currentStep();
 
@@ -116,38 +114,46 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
 
   onSubmitStep(action: 'previous' | 'next', event: Event): void {
-    this.alert = {type:null};
+    this.alert = {type: null};
     event.preventDefault();
 
     const formData = this.formEngineComponent?.getFormValues();
 
     if (action === 'next' && !formData?.valid) { // Apply validation only when moving forward.
-      this.alert = {type:null};      
+      this.alert = {type: null};
+      this.showSaveButton = false;
+      this.saveButtonText = 'Save and continue';
       return;
     }
 
     this.currentAnswers = { ...this.currentAnswers, ...formData!.data };
 
     this.wizard.runRules(this.currentAnswers);
-    this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);    
+    this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);
 
     if (action === 'next') {
+      this.showSaveButton = true;
+      this.saveButtonText = '...saving data';
       this.stores.innovation.updateSectionInfo$(
         this.innovationId,
         this.sectionId,
-        this.wizard.runOutboundParsing(formData!.data)
+        this.wizard.runOutboundParsing(this.currentAnswers)
       ).pipe(
         concatMap(() => this.stores.authentication.initializeAuthentication$())).subscribe(
-        () => { 
-          this.redirectTo(this.getNavigationUrl(action)); 
+        () => {
+          this.showSaveButton = false;
+          this.saveButtonText = 'Save and continue';
+          this.redirectTo(this.getNavigationUrl(action));
           this.alert = {
             type: 'SUCCESS',
             title: 'Data saved successfully',
             // message: 'Your suggestions were saved and notifications sent.'
           };
-        
+
         },
-        () => { 
+        () => {
+          this.showSaveButton = false;
+          this.saveButtonText = 'Save and continue';
           this.alert = {
             type: 'ERROR',
             title: 'Unable to save data',
@@ -156,6 +162,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         }
       );
     }
+
 
     // this.redirectTo(this.getNavigationUrl(action));
 
@@ -168,12 +175,12 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.stores.innovation.submitSections$(
       this.innovationId,
       [this.sectionId]
-      //.wizard.runOutboundParsing(this.currentAnswers)
+      // .wizard.runOutboundParsing(this.currentAnswers)
     ).pipe(
       concatMap(() => this.stores.authentication.initializeAuthentication$())).subscribe(
       () => { this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'sectionUpdateSuccess' }); },
       () => { this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'sectionUpdateError' }); }
-    );    
+    );
 
   }
 
@@ -195,8 +202,17 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         break;
 
       case 'next':
-        if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/summary`; }
-        else if (this.wizard.isLastStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/summary`; }
+        if (this.isSummaryStep()) {
+          // const formData = this.formEngineComponent?.getFormValues();
+          const form = FormEngineHelper.buildForm(this.wizard.steps.flatMap(x => x.parameters), this.currentAnswers);
+          this.showSubmitButton = form.valid;
+          url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/summary`;
+        }
+        else if (this.wizard.isLastStep()) {
+          const form = FormEngineHelper.buildForm(this.wizard.steps.flatMap(x => x.parameters), this.currentAnswers);
+          this.showSubmitButton = form.valid;
+          url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/summary`;
+        }
         else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/edit/${Number(this.wizard.currentStepId) + 1}`; }
         break;
 

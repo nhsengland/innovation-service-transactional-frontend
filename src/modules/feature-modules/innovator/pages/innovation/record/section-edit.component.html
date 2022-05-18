@@ -29,7 +29,7 @@
 
         <ng-container *ngIf="isQuestionStep()">
           <theme-form-engine formId="sectionForm" [parameters]="currentStep.parameters" [values]="currentAnswers"></theme-form-engine>
-          <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Save and continue</button>
+          <button type="submit" form="sectionForm" [disabled]="showSaveButton" class="nhsuk-button" (click)="onSubmitStep('next', $event)"> {{ saveButtonText }}</button>
         </ng-container>
 
         <ng-container *ngIf="isSummaryStep()">
@@ -53,7 +53,7 @@
             </div>
           </dl>
 
-          <button *ngIf="showSubmitButton" class="nhsuk-button" (click)="onSubmitSection()"> {{ innovation.status === 'IN_PROGRESS' ? 'Save as draft' : 'Confirm section answers' }} </button>
+          <button [disabled]="!showSubmitButton" class="nhsuk-button" (click)="onSubmitSection()"> {{ innovation.status === 'IN_PROGRESS' ? 'Save as draft' : 'Confirm section answers' }} </button> <p *ngIf="!showSubmitButton"> Kindly answer mandatory questions to proceed </p>
 
         </ng-container>
 
