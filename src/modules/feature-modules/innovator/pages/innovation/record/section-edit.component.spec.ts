@@ -172,6 +172,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
 
   it('should run onSubmitStep() and redirect to next step', () => {
 
+    innovationStore.updateSectionInfo$ = () => of({ hasRegulationKnowledge: 'YES_ALL' });
+    authenticationStore.initializeAuthentication$ = () => of(true);
     fixture = TestBed.createComponent(InnovationSectionEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -185,7 +187,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
 
   it('should run onSubmitSection() and call api with success', () => {
 
-    innovationStore.updateSectionInfo$ = () => of({ hasRegulationKnowledge: 'YES_ALL' });
+    const responseMock2 = { some: 'values' };
+    innovationStore.submitSections$ = () => of(responseMock2 as any);
     authenticationStore.initializeAuthentication$ = () => of(true);
 
     fixture = TestBed.createComponent(InnovationSectionEditComponent);
@@ -199,7 +202,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
 
   it('should run onSubmitSection() and call api with error', () => {
 
-    innovationStore.updateSectionInfo$ = () => throwError('error');
+    innovationStore.submitSections$ = () => throwError('error');
 
     fixture = TestBed.createComponent(InnovationSectionEditComponent);
     component = fixture.componentInstance;

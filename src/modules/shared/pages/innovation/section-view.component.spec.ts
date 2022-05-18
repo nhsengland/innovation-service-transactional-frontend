@@ -58,7 +58,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'sectionUpdateSuccess' };
 
-    const expected = { type: 'SUCCESS', title: 'Your section has been saved', message: 'You need to submit the section if you want to share it with accessors.' };
+    const expected = { type: 'SUCCESS', title:  'You have confirmed your answers for this section', message: 'Go to next section or return to innovation record' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
@@ -74,7 +74,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.queryParams = { alert: 'sectionUpdateSuccess' };
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', status: 'CREATED', assessment: {} } };
 
-    const expected = { type: 'SUCCESS', title: 'Your section has been saved', message: 'You need to submit this section before you can submit your innovation record for needs assessment.' };
+    const expected = { type: 'SUCCESS', title: 'You have confirmed your answers for this section', message: 'Go to next section or return to innovation record' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
