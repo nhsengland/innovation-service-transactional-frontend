@@ -138,8 +138,12 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         this.sectionId,
         this.wizard.runOutboundParsing(this.currentAnswers)
       ).pipe(
-        concatMap(() => this.stores.authentication.initializeAuthentication$())).subscribe(
-        () => {
+        concatMap(() => this.stores.authentication.initializeAuthentication$()),
+        concatMap(() => this.stores.innovation.getSectionInfo$('innovator', this.innovationId, this.sectionId))).subscribe(
+        (response) => {
+          this.currentAnswers = this.wizard.runInboundParsing(response.data);
+          this.wizard.runRules(this.currentAnswers);
+
           this.showSaveButton = false;
           this.saveButtonText = 'Save and continue';
           this.redirectTo(this.getNavigationUrl(action));

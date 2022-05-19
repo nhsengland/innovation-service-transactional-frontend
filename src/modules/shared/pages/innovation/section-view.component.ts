@@ -59,7 +59,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
         this.alert = {
           type: 'SUCCESS',
           title: 'You have confirmed your answers for this section',
-          message: 'Go to next section or return to innovation record',
+          message: 'Go to next section or return to the full innovation record',
         };
         if ((this.keys.indexOf(this.sectionId) + 1) !== this.keys.length) {
           this.showNextSectionButton = true;
