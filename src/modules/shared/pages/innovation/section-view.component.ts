@@ -52,6 +52,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.baseUrl = `/${this.module}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
+    this.nextUrl = `${this.baseUrl}/${this.keys[this.keys.indexOf(this.sectionId) + 1]}`;
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'sectionUpdateSuccess':
@@ -60,10 +61,8 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
           title: 'You have confirmed your answers for this section',
           message: 'Go to next section or return to innovation record',
         };
-        if ((this.keys.indexOf(this.sectionId) + 1) !== this.keys.length)
-        {
+        if ((this.keys.indexOf(this.sectionId) + 1) !== this.keys.length) {
           this.showNextSectionButton = true;
-          this.nextUrl = `${this.baseUrl}/${this.keys[this.keys.indexOf(this.sectionId) + 1]}`;
         }
         break;
 
@@ -81,6 +80,9 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
           title: 'Your evidence has been saved',
           message: 'You need to submit this section for review to notify your supporting accessor(s).'
         };
+        if ((this.keys.indexOf(this.sectionId) + 1) !== this.keys.length) {
+          this.showNextSectionButton = true;
+        }
         break;
 
       case 'evidenceDeleteSuccess':

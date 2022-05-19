@@ -120,7 +120,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     const formData = this.formEngineComponent?.getFormValues();
 
     if (action === 'next' && !formData?.valid) { // Apply validation only when moving forward.
-      this.alert = {type: null};
       this.showSaveButton = false;
       this.saveButtonText = 'Save and continue';
       return;
