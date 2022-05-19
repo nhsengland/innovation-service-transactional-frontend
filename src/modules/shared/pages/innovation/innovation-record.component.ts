@@ -91,7 +91,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
                 return '3:inactive';
             }
           })];
-        }, []).sort();
+        }, []);
 
         this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
         this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
