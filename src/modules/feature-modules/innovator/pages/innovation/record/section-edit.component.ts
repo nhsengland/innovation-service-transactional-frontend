@@ -147,11 +147,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           this.showSaveButton = false;
           this.saveButtonText = 'Save and continue';
           this.redirectTo(this.getNavigationUrl(action));
-          this.alert = {
-            type: 'SUCCESS',
-            title: 'Data saved successfully',
-            // message: 'Your suggestions were saved and notifications sent.'
-          };
 
         },
         () => {
