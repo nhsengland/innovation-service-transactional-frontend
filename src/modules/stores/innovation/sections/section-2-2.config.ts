@@ -98,6 +98,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           id: `subgroupBenefits_${i}`,
           dataType: 'checkbox-array',
           label: `What benefits does your innovation create for patients or citizens of ${item.name}?`,
+          description: 'Choose up to 3 benefits',
           validations: {
             isRequired: [true, 'Choose at least one benefit'],
             max: [3, 'Choose between 1 and 3 benefit']
@@ -116,6 +117,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'generalBenefits',
         dataType: 'checkbox-array',
         label: stepsLabels.l3,
+        description: 'Choose up to 3 benefits',
         validations: {
           isRequired: [true, 'Choose at least one benefit'],
           max: [3, 'Choose between 1 and 3 benefit']
@@ -129,6 +131,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'environmentalBenefits',
         dataType: 'checkbox-array',
         label: stepsLabels.l4,
+        description: 'Choose up to 3 benefits',
         validations: {
           isRequired: [true, 'Choose at least one environmental benefit'],
           max: [3, 'Choose between 1 and 3 environmental benefit']
