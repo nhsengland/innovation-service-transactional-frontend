@@ -33,6 +33,7 @@ import { PageInnovationCommentsListComponent } from '@shared-module/pages/innova
 import { PageInnovationCommentsNewComponent } from '@shared-module/pages/innovation/comments/comments-new.component';
 import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/innovation-record.component';
 import { PageInnovationSupportStatusListComponent } from '@shared-module/pages/innovation/innovation-support-status-list.component';
+import { PageTermsOfUseComponent } from '@shared-module/pages/terms-of-use/terms-of-use.component';
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
@@ -57,6 +58,12 @@ const routes: Routes = [
         path: 'dashboard',
         pathMatch: 'full',
         component: DashboardComponent
+      },
+
+      {
+        path: 'termsofuse',
+        pathMatch: 'full',
+        component: PageTermsOfUseComponent
       },
 
       {

@@ -1,0 +1,46 @@
+<theme-header></theme-header>
+<theme-header-navigation-bar [rightMenuItems]="navigationMenuBar.rightItems" ></theme-header-navigation-bar>
+<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">   
+      
+    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+  
+    <ng-container *ngIf="pageStatus === 'READY'">
+  
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-two-thirds">
+            <theme-page-title [title]="pageTitle"></theme-page-title>
+            <p>We've updated our <a href="javascript:;" (click)="termsOfUse()">terms of use</a> and <a href="#">cookies policy</a></p>         
+
+            <div *ngIf="summaryInfo">
+            <p>Here is a summary of the changes in these terms of use:</p>  
+            <div class="nhsuk-inset-text">
+                <span class="nhsuk-u-visually-hidden">Information: </span>
+                <p *ngIf="tou.summary">{{ tou.summary }}</p>
+                <p *ngIf="!tou.summary">This version was released without a summary of the changes</p>
+            </div>
+            </div>
+
+            <p>By continuing you agree to our updated terms of use </p>
+
+            <button  type="submit" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" >Agree and continue</button>          
+        </div> 
+        <div *ngIf="!isAgree" class="nhsuk-grid-column-one-third nhsuk-u-padding-top-9">
+            <div class="nhsuk-card x-card-top-border ">
+                <div class="nhsuk-card__content">
+                    <h2 class="nhsuk-card__heading nhsuk-heading-m"> Other options </h2>
+                    <ul class="nhsuk-list">
+                      <li class="app-tabs__item">If you do not agree to the new terms, you cannot use your Innovation Service account. <a href="signOutURL">Sign out and go to the Innovation Service homepage.</a></li>
+                      <li class="app-tabs__item">If you no longer need your account, or need to delete information saved in your account you can<a href="/innovation-guides/advanced-innovation-guide"> contact us. </a></li>
+                    </ul>
+                  </div>
+            </div>
+        </div>
+      </div>             
+    <a *ngIf="isAgree" href="javascript:;" (click)="notAgree()">I do not agree</a>
+  
+    </ng-container>
+  
+</div>
+
+<theme-footer></theme-footer>
+  
