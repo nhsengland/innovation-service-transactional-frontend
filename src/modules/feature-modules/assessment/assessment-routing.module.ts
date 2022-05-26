@@ -37,6 +37,12 @@ const routes: Routes = [
   },
 
   {
+    path: 'termsofuse',
+    pathMatch: 'full',
+    component: PageTermsOfUseComponent
+  },
+
+  {
     path: '',
     component: AssessmentLayoutComponent,
     data: { module: 'assessment' },
@@ -45,12 +51,6 @@ const routes: Routes = [
         path: 'dashboard',
         pathMatch: 'full',
         component: DashboardComponent,
-      },
-
-      {
-        path: 'termsofuse',
-        pathMatch: 'full',
-        component: PageTermsOfUseComponent
       },
 
       {

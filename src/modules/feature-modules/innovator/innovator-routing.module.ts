@@ -74,6 +74,7 @@ const routes: Routes = [
         component: FirstTimeSigninComponent
       },
 
+
       {
         path: 'innovation-transfer-acceptance',
         children: [

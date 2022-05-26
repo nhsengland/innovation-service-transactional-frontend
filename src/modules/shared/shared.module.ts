@@ -33,6 +33,7 @@ import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
 import { OrganisationsService } from './services/organisations.service';
 import { NotificationsService } from './services/notifications.service';
 import { PageInnovationCommentsEditComponent } from './pages/innovation/comments/comments-edit.component';
+import { UserTermsOfUseService } from './services/userTermsOfuse.service';
 
 @NgModule({
   imports: [
@@ -61,7 +62,7 @@ import { PageInnovationCommentsEditComponent } from './pages/innovation/comments
     PageInnovationCommentsEditComponent,
     PageInnovationSupportStatusListComponent,
     PageTermsOfUseComponent,
-    
+
     PageErrorComponent,
     PageNotFoundComponent,
 
@@ -70,7 +71,8 @@ import { PageInnovationCommentsEditComponent } from './pages/innovation/comments
   ],
   providers: [
     OrganisationsService,
-    NotificationsService
+    NotificationsService,
+    UserTermsOfUseService
   ],
   exports: [
     CommonModule,

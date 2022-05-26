@@ -39,7 +39,13 @@ export type saveUserInfoDTO = {
   organisation?: { id: string; name: string; isShadow: boolean; size: null | string; }
 };
 
-
+export type userTermsOfUseInfo = {
+  id: string,
+  name: string,
+  summary: string,
+  releasedAt?: string,
+  isAccepted: string
+};
 @Injectable()
 export class AuthenticationService {
 
@@ -112,6 +118,16 @@ export class AuthenticationService {
       catchError(() => of([])) // On error, just return no innovation at all.
     );
 
+  }
+
+  userTermsOfUseInfo(): Observable<any> {
+
+    const url = new UrlModel(this.API_URL).addPath('/tou/me');
+    return this.http.get<userTermsOfUseInfo>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response),
+      catchError(() => of([]))
+    );
   }
 
 }
