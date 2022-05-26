@@ -38,6 +38,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     authenticationService.getUserInfo = () => of({ id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', roles: [], organisations: [], passwordResetOn: '', phone: '' });
     authenticationService.verifyInnovator = () => of({ userExists: true, hasInvites: false });
     authenticationService.getInnovations = () => of([{ id: 'abc123zxc', name: 'HealthyApp' }]);
+    authenticationService.userTermsOfUseInfo = () => of([{ id: 'abc123zxc', name: 'HealthyApp', summary: '' }]);
 
     const expectedResponse = true;
     const expectedState: AuthenticationModel = {
@@ -52,6 +53,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     expect(authenticationStore.state.isSignIn).toEqual(expectedState.isSignIn);
     expect(authenticationStore.state.user).toEqual(expectedState.user);
     expect(authenticationStore.state.isValidUser).toEqual(true);
+    expect(authenticationStore.state.isTermsOfUseAccepted).toEqual(expectedState.isTermsOfUseAccepted);
 
   });
 
@@ -61,6 +63,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     authenticationService.getUserInfo = () => of({ id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', roles: [], organisations: [], passwordResetOn: '', phone: '' });
     authenticationService.verifyInnovator = () => of({ userExists: false, hasInvites: false });
     authenticationService.getInnovations = () => of([]);
+    authenticationService.userTermsOfUseInfo = () => of([]);
 
     const expectedResponse = true;
     const expectedState: AuthenticationModel = {
@@ -74,7 +77,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     expect(response).toBe(expectedResponse);
     expect(authenticationStore.state.isSignIn).toEqual(expectedState.isSignIn);
     expect(authenticationStore.state.user).toEqual(expectedState.user);
-
+    expect(authenticationStore.state.isTermsOfUseAccepted).toEqual(expectedState.isTermsOfUseAccepted);
   });
 
   it('should run initializeAuthentication$() and return error', () => {
