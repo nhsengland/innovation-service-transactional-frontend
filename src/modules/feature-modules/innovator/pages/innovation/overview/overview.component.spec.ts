@@ -13,6 +13,7 @@ import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.mo
 import { InnovationOverviewComponent } from './overview.component';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { InnovationStatusEnum } from '@modules/shared/enums';
 
 
 describe('FeatureModules/Innovator/DashboardComponent', () => {
@@ -83,7 +84,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
     innovatorService.getInnovationInfo = () => of({
       id: '',
       name: '',
-      status: 'CREATED' as keyof typeof INNOVATION_STATUS,
+      status: InnovationStatusEnum.CREATED,
       description: '',
       countryName: '',
       postcode: '',
@@ -132,7 +133,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
     innovatorService.getInnovationInfo = () => of({
       id: '',
       name: '',
-      status: 'CREATED' as keyof typeof INNOVATION_STATUS,
+      status: InnovationStatusEnum.CREATED,
       description: '',
       countryName: '',
       postcode: '',

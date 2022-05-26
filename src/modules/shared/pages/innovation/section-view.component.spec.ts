@@ -12,6 +12,7 @@ import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.mo
 
 import { InnovationSectionViewComponent } from './section-view.component';
 import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
+import { InnovationStatusEnum } from '@modules/shared/enums';
 
 
 describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
@@ -58,11 +59,11 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'sectionUpdateSuccess' };
 
-    const expected = { type: 'SUCCESS', title:  'You have confirmed your answers for this section', message: 'Go to next section or return to the full innovation record' };
+    const expected = { type: 'SUCCESS', title: 'You have confirmed your answers for this section', message: 'Go to next section or return to the full innovation record' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
-    component.innovation = { id: 'Inno01', name: 'Innovation name', status: 'IN_PROGRESS', assessment: { id: undefined } };
+    component.innovation = { id: 'Inno01', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS, owner: { isActive: true, name: 'User name' } };
     fixture.detectChanges();
     expect(component.alert).toEqual(expected);
 
@@ -78,7 +79,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
-    component.innovation = { id: 'Inno01', name: 'Innovation name', status: 'IN_PROGRESS', assessment: { id: undefined } };
+    component.innovation = { id: 'Inno01', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS, owner: { isActive: true, name: 'User name' } };
     fixture.detectChanges();
     expect(component.alert).toEqual(expected);
 

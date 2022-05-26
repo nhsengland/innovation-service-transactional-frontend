@@ -7,6 +7,8 @@ import { TableModel } from '@app/base/models';
 
 import { RoutingHelper } from '@modules/core';
 
+import { ContextInnovationType } from '@modules/stores/context/context.models';
+
 import { ActivityLogOutDTO } from '@modules/stores/innovation/innovation.service';
 
 import {
@@ -26,7 +28,7 @@ type FiltersType = { key: FilterKeysType, title: string, showHideStatus: 'opened
 export class PageInnovationActivityLogComponent extends CoreComponent implements OnInit {
 
   module: '' | 'innovator' | 'accessor' | 'assessment' = '';
-  innovation: InnovationDataResolverType;
+  innovation: ContextInnovationType;
 
   INNOVATION_SUPPORT_STATUS = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   ACTIVITY_LOG_ITEMS = ACTIVITY_LOG_ITEMS;
@@ -65,7 +67,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
     this.setPageTitle('Activity log');
 
     this.module = this.activatedRoute.snapshot.data.module;
-    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    this.innovation = this.stores.context.getInnovation();
 
     this.activitiesList = new TableModel({ orderBy: 'createdAt', orderDir: 'descending' });
     this.currentDateOrderBy = 'descending';

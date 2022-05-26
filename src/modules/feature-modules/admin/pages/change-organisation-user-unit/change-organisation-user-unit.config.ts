@@ -1,4 +1,4 @@
-import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 
 
 // Types.
@@ -66,9 +66,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   };
 }
 
-function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): SummaryParsingType[] {
+function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): WizardSummaryType[] {
 
-  const toReturn: SummaryParsingType[] = [];
+  const toReturn: WizardSummaryType[] = [];
   const unitsList = data.organisation.organisationUnits?.filter(unit => (data.organisationUnitAcronym === unit?.acronym));
 
   toReturn.push(

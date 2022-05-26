@@ -1,5 +1,5 @@
 
-import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, FormEngineParameterModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 
@@ -185,9 +185,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
 }
 
-function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): SummaryParsingType[] {
+function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): WizardSummaryType[] {
 
-  const toReturn: SummaryParsingType[] = [];
+  const toReturn: WizardSummaryType[] = [];
 
   toReturn.push(
     { label: 'Your name', value: data.innovatorName, editStepNumber: 1 },

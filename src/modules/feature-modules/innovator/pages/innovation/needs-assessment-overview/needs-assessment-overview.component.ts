@@ -3,13 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
-import { RoutingHelper } from '@modules/core';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
+import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { ContextInnovationType } from '@modules/stores/context/context.models';
 
 import { getInnovationNeedsAssessmentEndpointOutDTO } from '@modules/feature-modules/innovator/services/innovator.service';
-import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
-
-import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 import { InnovatorService } from '../../../services/innovator.service';
 
@@ -22,7 +20,7 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
 
   innovationId: string;
   assessmentId: string;
-  innovation: InnovationDataResolverType;
+  innovation: ContextInnovationType;
 
   alert: AlertType = { type: null };
 
@@ -42,7 +40,7 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
-    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    this.innovation = this.stores.context.getInnovation();
 
   }
 

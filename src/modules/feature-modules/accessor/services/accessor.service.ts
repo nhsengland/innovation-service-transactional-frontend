@@ -7,6 +7,7 @@ import { MappedObject, UrlModel, APIQueryParamsType } from '@modules/core';
 
 import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/shared/enums';
 
 
 export enum SupportLogType {
@@ -89,7 +90,7 @@ export type getInnovationInfoEndpointDTO = {
   summary: {
     id: string;
     name: string;
-    status: keyof typeof INNOVATION_STATUS;
+    status: InnovationStatusEnum;
     description: string;
     company: string;
     countryName: string;
@@ -106,7 +107,7 @@ export type getInnovationInfoEndpointDTO = {
   };
   support?: {
     id: string;
-    status: keyof typeof INNOVATION_SUPPORT_STATUS;
+    status: InnovationSupportStatusEnum;
   };
   lockedInnovatorValidation: {
     displayIsInnovatorLocked: boolean;

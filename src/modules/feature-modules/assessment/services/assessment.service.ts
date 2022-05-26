@@ -8,6 +8,7 @@ import { APIQueryParamsType, DatesHelper, MappedObject, UrlModel } from '@module
 
 import { INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { InnovationStatusEnum } from '@modules/shared/enums';
 
 export enum SupportLogType {
   ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
@@ -48,7 +49,7 @@ export type getInnovationInfoEndpointDTO = {
   summary: {
     id: string;
     name: string;
-    status: keyof typeof INNOVATION_STATUS;
+    status: InnovationStatusEnum;
     description: string;
     company: string;
     countryName: string;

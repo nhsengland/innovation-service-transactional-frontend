@@ -1,8 +1,13 @@
+import { FormEngineHelper } from '../helpers/form-engine.helper';
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
 import { FormEngineModel, FormEngineParameterModel } from './form-engine.models';
 
 
-export type SummaryParsingType = {
+export type WizardStepType = FormEngineModel & {
+  saveStrategy?: 'updateAndWait';
+};
+
+export type WizardSummaryType = {
   label: string;
   value: null | undefined | string;
   editStepNumber?: number;
@@ -13,20 +18,20 @@ export type SummaryParsingType = {
 
 export class WizardEngineModel {
 
-  steps: FormEngineModel[];
+  steps: WizardStepType[];
   currentStepId: number | 'summary';
   currentAnswers: { [key: string]: any };
   showSummary: boolean;
   runtimeRules: ((steps: FormEngineModel[], currentValues: any, currentStep: number | 'summary') => void)[];
   inboundParsing?: (data: any) => MappedObject;
   outboundParsing?: (data: any) => MappedObject;
-  summaryParsing?: (data: any, steps?: FormEngineModel[]) => SummaryParsingType[];
+  summaryParsing?: (data: any, steps?: FormEngineModel[]) => WizardSummaryType[];
 
-  private summary: SummaryParsingType[] = [];
+  private summary: WizardSummaryType[] = [];
 
   constructor(data: Partial<WizardEngineModel>) {
     this.steps = data.steps || [];
-    this.currentStepId = data.currentStepId || 1;
+    this.currentStepId = parseInt(data.currentStepId as string, 10) || 1;
     this.currentAnswers = data.currentAnswers || {};
     this.showSummary = data.showSummary || false;
     this.runtimeRules = data.runtimeRules || [];
@@ -49,7 +54,7 @@ export class WizardEngineModel {
     return this.outboundParsing ? this.outboundParsing(v) : v;
   }
 
-  runSummaryParsing(data?: MappedObject): SummaryParsingType[] {
+  runSummaryParsing(data?: MappedObject): WizardSummaryType[] {
 
     if (!this.summaryParsing) { return []; }
 
@@ -76,24 +81,22 @@ export class WizardEngineModel {
   }
 
 
-  currentStep(): FormEngineModel {
+  currentStep(): FormEngineModel & WizardStepType {
     if (typeof this.currentStepId === 'number') {
       return this.steps[this.currentStepId - 1];
     } else {
-      return new FormEngineModel({ parameters: [] });
+      return { ...new FormEngineModel({ parameters: [] }) };
     }
   }
-
+  currentStepTitle(): string {
+    const step = this.currentStep();
+    return step.label || step.parameters[0]?.label || '';
+  }
   currentStepParameters(): FormEngineParameterModel[] {
-    if (typeof this.currentStepId === 'number') {
-      return this.steps[this.currentStepId - 1].parameters;
-    } else {
-      return [];
-    }
+    return this.currentStep().parameters;
   }
 
   previousStep(): this {
-
     if (typeof this.currentStepId === 'number') {
       this.currentStepId--;
     } else if (this.showSummary && this.currentStepId === 'summary') {
@@ -121,7 +124,7 @@ export class WizardEngineModel {
 
     if (step === 'summary') { this.runSummaryParsing(); }
 
-    this.currentStepId = step;
+    this.currentStepId = parseInt(step as string, 10);
 
     return this;
   }
@@ -138,6 +141,26 @@ export class WizardEngineModel {
     return this;
   }
 
-  getSummary(): SummaryParsingType[] { return this.summary; }
+  getSummary(): WizardSummaryType[] { return this.summary; }
+
+
+
+
+  validateData(): { valid: boolean, errors: { label: string, error: string }[] } {
+
+    const parameters = this.steps.flatMap(step => step.parameters);
+    const form = FormEngineHelper.buildForm(parameters, this.currentAnswers);
+
+    return {
+      valid: form.valid,
+      errors: Object.entries(FormEngineHelper.getErrors(form)).map(([key, value]) => ({
+        label: parameters.find(p => p.id === key)?.label || '',
+        error: value || ''
+      }))
+    };
+
+  }
+
+
 
 }

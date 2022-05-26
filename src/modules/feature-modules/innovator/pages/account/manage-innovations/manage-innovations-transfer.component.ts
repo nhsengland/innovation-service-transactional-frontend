@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
 import { FormEngineParameterModel, CustomValidators } from '@app/base/forms';
 import { AlertType } from '@app/base/models';
 
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 
@@ -26,6 +28,7 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
 
 
   constructor(
+    private innovationsService: InnovationsService,
     private innovatorService: InnovatorService
   ) {
 
@@ -36,16 +39,16 @@ export class PageAccountManageInnovationsTransferComponent extends CoreComponent
 
   ngOnInit(): void {
 
-    this.innovatorService.getInnovationTransfers().subscribe(
-      response => {
+    forkJoin([
+      this.innovationsService.getInnovationsList(),
+      this.innovatorService.getInnovationTransfers()
+    ]).subscribe(([innovationsList, innovationTransfers]) => {
 
-        this.formInnovationsItems = this.stores.authentication.getUserInfo()
-          .innovations
-          .filter(i => !response.map(it => it.innovation.id).includes(i.id))
-          .map(item => ({ value: item.id, label: item.name }));
+      this.formInnovationsItems = innovationsList.filter(i => !innovationTransfers.map(it => it.innovation.id).includes(i.id))
+        .map(item => ({ value: item.id, label: item.name }));
 
-        this.setPageStatus('READY');
-      },
+      this.setPageStatus('READY');
+    },
       () => {
         this.setPageStatus('ERROR');
         this.alert = {

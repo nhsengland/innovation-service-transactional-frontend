@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
 import { hasDeployPlanItems, hasResourcesToScaleItems } from './catalogs.config';
@@ -63,16 +63,17 @@ export const SECTION_8_1: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+    runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data),
+    showSummary: true
   })
 };
 
 
 
-function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
+function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(2);
 
@@ -94,8 +95,11 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
   if (['YES'].includes(currentValues.isDeployed || 'NO')) {
 
-    steps.push(
-      new FormEngineModel({
+    steps.push({
+
+      saveStrategy: 'updateAndWait',
+
+      ...new FormEngineModel({
         parameters: [{
           id: 'deploymentPlans',
           dataType: 'fields-group',
@@ -113,7 +117,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           }
         }]
       })
-    );
+    });
 
     (currentValues.deploymentPlans || []).forEach((item, i) => {
       steps.push(
@@ -182,7 +186,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 }
 
 
-function outboundParsing(data: StepPayloadType): any {
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   const parsedData = cloneDeep({
     hasDeployPlan: data.hasDeployPlan,
@@ -201,9 +205,9 @@ function outboundParsing(data: StepPayloadType): any {
 }
 
 
-function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
+function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
-  const toReturn: SummaryParsingType[] = [];
+  const toReturn: WizardSummaryType[] = [];
 
   toReturn.push({
     label: stepsLabels.l1,
