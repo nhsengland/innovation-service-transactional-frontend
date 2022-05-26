@@ -7,13 +7,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { InnovationStore, StoresModule, AuthenticationStore } from '@modules/stores';
+import { InnovationStore, StoresModule, AuthenticationStore, ContextStore } from '@modules/stores';
 import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation/innovation.models';
 import { FormEngineComponent } from '@modules/shared/forms';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { InnovationSectionEditComponent } from './section-edit.component';
-import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
+import { CONTEXT_INNOVATION_INFO, USER_INFO_INNOVATOR } from '@tests/data.mocks';
 
 
 describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionEditComponent', () => {
@@ -22,8 +22,9 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
   let router: Router;
   let routerSpy: jasmine.Spy;
 
-  let innovationStore: InnovationStore;
   let authenticationStore: AuthenticationStore;
+  let contextStore: ContextStore;
+  let innovationStore: InnovationStore;
 
   let component: InnovationSectionEditComponent;
   let fixture: ComponentFixture<InnovationSectionEditComponent>;
@@ -40,14 +41,17 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
-    authenticationStore = TestBed.inject(AuthenticationStore);
-    authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
     routerSpy = spyOn(router, 'navigate');
 
+    authenticationStore = TestBed.inject(AuthenticationStore);
+    contextStore = TestBed.inject(ContextStore);
     innovationStore = TestBed.inject(InnovationStore);
+
+    authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
+    contextStore.getInnovation = () => CONTEXT_INNOVATION_INFO;
 
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 1 };
@@ -78,27 +82,6 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
     expect(component).toBeTruthy();
   });
 
-  it('should run isQuestionStep()', (() => {
-
-    fixture = TestBed.createComponent(InnovationSectionEditComponent);
-    component = fixture.componentInstance;
-
-    expect(component.isQuestionStep()).toBe(true);
-
-  }));
-
-  it('should run isSummaryStep()', () => {
-
-    activatedRoute.snapshot.params = { sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 'summary' };
-    activatedRoute.params = of({ sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 'summary' }); // Simulate activatedRoute.params subscription.
-
-    fixture = TestBed.createComponent(InnovationSectionEditComponent);
-    component = fixture.componentInstance;
-
-    fixture.detectChanges();
-    expect(component.isSummaryStep()).toBe(true);
-
-  });
 
   it('should have initial information loaded', fakeAsync(() => {
 
@@ -111,7 +94,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
 
     tick(1000);
 
-    expect(component.currentAnswers).toEqual({
+    expect(component.wizard.getAnswers()).toEqual({
       hasRegulationKnowledge: 'YES_ALL',
       standardsType: [],
       standards: [],
@@ -140,8 +123,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
     fixture.detectChanges();
     component.formEngineComponent = undefined;
 
-    component.onSubmitStep('next', new Event(''));
-    expect(component.currentAnswers).toEqual({
+    component.onSubmitStep('next');
+    expect(component.wizard.getAnswers()).toEqual({
       hasRegulationKnowledge: 'YES_ALL',
       standardsType: [],
       standards: [],
@@ -159,8 +142,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
     component.formEngineComponent.getFormValues = () => ({ valid: false, data: { hasRegulationKnowledge: 'YES_ALL' } });
 
-    component.onSubmitStep('next', new Event(''));
-    expect(component.currentAnswers).toEqual({
+    component.onSubmitStep('next');
+    expect(component.wizard.getAnswers()).toEqual({
       hasRegulationKnowledge: 'YES_ALL',
       standardsType: [],
       standards: [],
@@ -172,16 +155,17 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
 
   it('should run onSubmitStep() and redirect to next step', () => {
 
-    innovationStore.updateSectionInfo$ = () => of({ hasRegulationKnowledge: 'YES_ALL' });
     authenticationStore.initializeAuthentication$ = () => of(true);
+    innovationStore.updateSectionInfo$ = () => of({ hasRegulationKnowledge: 'YES_ALL' });
+
     fixture = TestBed.createComponent(InnovationSectionEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
     component.formEngineComponent.getFormValues = () => ({ valid: true, data: { hasRegulationKnowledge: 'YES_ALL' } });
 
-    component.onSubmitStep('next', new Event(''));
-    expect(routerSpy).toHaveBeenCalledWith(['/innovator/innovations/Inno01/record/sections/REGULATIONS_AND_STANDARDS/edit/2'], {});
+    component.onSubmitStep('next');
+    expect(component.wizard.currentStepId).toBe(2);
 
   });
 
@@ -196,7 +180,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
     fixture.detectChanges();
 
     component.onSubmitSection();
-    expect(routerSpy).toHaveBeenCalledWith(['innovator/innovations/Inno01/record/sections/REGULATIONS_AND_STANDARDS'], { queryParams: { alert: 'sectionUpdateSuccess' } });
+    expect(routerSpy).toHaveBeenCalledWith(['innovator/innovations/innovationId01/record/sections/REGULATIONS_AND_STANDARDS'], { queryParams: { alert: 'sectionUpdateSuccess' } });
 
   });
 
@@ -209,92 +193,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
     fixture.detectChanges();
 
     component.onSubmitSection();
-    expect(routerSpy).toHaveBeenCalledWith(['innovator/innovations/Inno01/record/sections/REGULATIONS_AND_STANDARDS'], { queryParams: { alert: 'sectionUpdateError' } });
-
-  });
-
-  it('should run getNavigationUrl() for summary step when pressing PREVIOUS', () => {
-
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 'summary' };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 'summary' }); // Simulate activatedRoute.params subscription.
-
-    fixture = TestBed.createComponent(InnovationSectionEditComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    expect(component.getNavigationUrl('previous')).toBe(`/innovator/innovations/Inno01/record/sections/REGULATIONS_AND_STANDARDS/edit/3`);
-
-  });
-
-  it('should run getNavigationUrl() for first step when pressing PREVIOUS', () => {
-
-    fixture = TestBed.createComponent(InnovationSectionEditComponent);
-    component = fixture.componentInstance;
-
-    fixture.detectChanges();
-    expect(component.getNavigationUrl('previous')).toBe('/innovator/innovations/Inno01/record/sections/REGULATIONS_AND_STANDARDS');
-
-  });
-
-  it('should run getNavigationUrl() for a question step when pressiong PREVIOUS', () => {
-
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 2 };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 2 }); // Simulate activatedRoute.params subscription.
-
-    fixture = TestBed.createComponent(InnovationSectionEditComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    expect(component.getNavigationUrl('previous')).toBe('/innovator/innovations/Inno01/record/sections/REGULATIONS_AND_STANDARDS/edit/1');
-
-  });
-
-  it('should run getNavigationUrl() for summary step when pressing NEXT', () => {
-
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 'summary' };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 'summary' });
-
-    fixture = TestBed.createComponent(InnovationSectionEditComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    expect(component.getNavigationUrl('next')).toBe('/innovator/innovations/Inno01/record/sections/REGULATIONS_AND_STANDARDS/edit/summary');
-
-  });
-
-  it('should run getNavigationUrl() for last step when pressing NEXT', () => {
-
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 3 };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 3 });
-
-    fixture = TestBed.createComponent(InnovationSectionEditComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    expect(component.getNavigationUrl('next')).toBe('/innovator/innovations/Inno01/record/sections/REGULATIONS_AND_STANDARDS/edit/summary');
-
-  });
-
-  it('should run getNavigationUrl() for a question step when pressiong NEXT', () => {
-
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 2 };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 2 });
-
-    fixture = TestBed.createComponent(InnovationSectionEditComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    expect(component.getNavigationUrl('next')).toBe('/innovator/innovations/Inno01/record/sections/REGULATIONS_AND_STANDARDS/edit/3');
-
-  });
-
-  it('should run getNavigationUrl() and return initial URL with INVALID action', () => {
-
-    fixture = TestBed.createComponent(InnovationSectionEditComponent);
-    component = fixture.componentInstance;
-
-    fixture.detectChanges();
-    expect(component.getNavigationUrl('invalidAction' as any)).toBe('/innovator/innovations/Inno01/record');
+    expect(routerSpy).toHaveBeenCalledWith(['innovator/innovations/innovationId01/record/sections/REGULATIONS_AND_STANDARDS'], { queryParams: { alert: 'sectionUpdateError' } });
 
   });
 

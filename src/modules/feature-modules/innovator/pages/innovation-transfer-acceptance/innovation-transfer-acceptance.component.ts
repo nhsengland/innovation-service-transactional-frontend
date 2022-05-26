@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { RoutingHelper } from '@modules/core';
 
-import { SummaryParsingType } from '@modules/shared/forms';
+import { WizardSummaryType } from '@modules/shared/forms';
 
 import { InnovatorService } from '../../services/innovator.service';
 
@@ -26,7 +26,7 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
 
   wizard: WizardEngineModel = new WizardEngineModel({});
 
-  summaryList: SummaryParsingType[] = [];
+  summaryList: WizardSummaryType[] = [];
 
   isQuestionStep(): boolean { return Number.isInteger(Number(this.activatedRoute.snapshot.params.stepId)); }
   isSummaryStep(): boolean { return this.activatedRoute.snapshot.params.stepId === 'summary'; }

@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin, of } from 'rxjs';
+import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { getInnovationTransfersDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { of } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
 
 
 @Component({
@@ -23,6 +24,7 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private innovationsService: InnovationsService,
     private innovatorService: InnovatorService
   ) {
 
@@ -50,20 +52,20 @@ export class PageAccountManageInnovationsInfoComponent extends CoreComponent imp
 
   getInnovationsTransfers(): void {
 
-    this.innovatorService.getInnovationTransfers().subscribe(
-      response => {
+    forkJoin([
+      this.innovationsService.getInnovationsList(),
+      this.innovatorService.getInnovationTransfers()
+    ]).subscribe(([innovationsList, innovationTransfers]) => {
 
-        this.innovationTransfers = response;
+      this.innovationTransfers = innovationTransfers;
 
-        this.haveAnyActiveInnovation = this.stores.authentication.getUserInfo()
-          .innovations
-          .filter(i => !this.innovationTransfers.map(it => it.innovation.id).includes(i.id))
-          .length
-          > 0;
+      this.haveAnyActiveInnovation = innovationsList.filter(i => !this.innovationTransfers.map(it => it.innovation.id).includes(i.id))
+        .length
+        > 0;
 
-        this.setPageStatus('READY');
+      this.setPageStatus('READY');
 
-      },
+    },
       () => {
         this.setPageStatus('ERROR');
         this.alert = {

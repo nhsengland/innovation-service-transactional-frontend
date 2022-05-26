@@ -4,11 +4,11 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { CustomValidators, FormEngineHelper } from '@app/base/forms';
 import { AlertType } from '@app/base/models';
-import { RoutingHelper } from '@modules/core';
 
+import { ContextInnovationType } from '@modules/stores/context/context.models';
 import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 
-import { getInnovationCommentsDTO, InnovationDataResolverType } from '@stores-module/innovation/innovation.models';
+import { getInnovationCommentsDTO } from '@stores-module/innovation/innovation.models';
 
 
 @Component({
@@ -22,7 +22,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
   alert: AlertType = { type: null };
 
-  innovation: InnovationDataResolverType;
+  innovation: ContextInnovationType;
   currentCreatedOrder: 'asc' | 'desc';
 
   lengthLimitCharacters = 2000;
@@ -41,7 +41,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
     this.setPageTitle('Comments');
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    this.innovation = this.stores.context.getInnovation();
     this.currentCreatedOrder = 'desc';
     this.userId = this.stores.authentication.getUserId();
 
@@ -70,7 +70,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
 
   allSectionsSubmitted(): boolean {
-    return this.innovation.status !== 'CREATED' && this.innovation.status !== '';
+    return this.innovation.status !== 'CREATED';
   }
 
   ngOnInit(): void {

@@ -1,4 +1,6 @@
-import { AuthenticationModel } from '@modules/stores';
+import { InnovationStatusEnum } from '@modules/shared/enums';
+import { AuthenticationModel, ContextModel } from '@modules/stores';
+import { ContextInnovationType } from '@modules/stores/context/context.models';
 
 
 export const USER_INFO_ACCESSOR: Required<AuthenticationModel>['user'] = {
@@ -13,7 +15,6 @@ export const USER_INFO_ACCESSOR: Required<AuthenticationModel>['user'] = {
       { id: '_unit_id', name: 'ORG_UNIT' }
     ]
   }],
-  innovations: [],
   passwordResetOn: '2020-01-01T00:00:00.000Z',
   phone: '212000000'
 };
@@ -26,7 +27,6 @@ export const USER_INFO_INNOVATOR: Required<AuthenticationModel>['user'] = {
   type: 'INNOVATOR',
   roles: [],
   organisations: [{ id: 'org_id', isShadow: true, name: '', size: '', role: 'INNOVATOR_OWNER' }],
-  innovations: [{ id: 'Inno01', name: 'Test innovation' }],
   passwordResetOn: '2020-01-01T00:00:00.000Z',
   phone: '212000000'
 };
@@ -39,7 +39,13 @@ export const USER_INFO_ADMIN: Required<AuthenticationModel>['user'] = {
   roles: [ 'ADMIN', 'SERVICE_TEAM' ],
   organisations: [],
   passwordResetOn: '2022-03-10T07:42:24.0571567Z',
-  phone: '23422134',
-  innovations: []
+  phone: '23422134'
 };
 
+
+export const CONTEXT_INNOVATION_INFO: ContextInnovationType = {
+  id: 'innovationId01',
+  name: 'Test innovation',
+  status: InnovationStatusEnum.IN_PROGRESS,
+  owner: {    name: 'User name 01',    isActive: true  }
+};

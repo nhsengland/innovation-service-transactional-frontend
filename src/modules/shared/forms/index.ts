@@ -8,7 +8,7 @@ export { FormEngineComponent } from './engine/form-engine.component';
 
 // Models.
 export { FormEngineModel, FormEngineParameterModel } from './engine/models/form-engine.models';
-export { WizardEngineModel, SummaryParsingType } from './engine/models/wizard-engine.models';
+export { WizardEngineModel, WizardStepType, WizardSummaryType } from './engine/models/wizard-engine.models';
 
 // Types.
 

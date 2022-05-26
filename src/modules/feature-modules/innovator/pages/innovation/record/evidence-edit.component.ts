@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineModel, FileTypes } from '@app/base/forms';
 import { UrlModel } from '@modules/core';
-import { SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
 
 @Component({
@@ -24,7 +24,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
   currentStep: FormEngineModel;
   currentAnswers: { [key: string]: any };
 
-  summaryList: SummaryParsingType[];
+  summaryList: WizardSummaryType[];
 
   // TODO: Make sure is a valid step.
   // isValidStepId(): boolean {

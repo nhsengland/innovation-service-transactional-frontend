@@ -10,11 +10,11 @@ import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { FormEngineComponent } from '@modules/shared/forms';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
+import { InnovationStatusEnum } from '@modules/shared/enums';
 
 import { InnovationAssessmentNewComponent } from './assessment-new.component';
 
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
-import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
 describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNewComponent', () => {
@@ -60,7 +60,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
 
     const responseMock = {
       summary: {
-        id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description',
+        id: '01', name: 'Innovation 01', status: InnovationStatusEnum.CREATED, description: 'A description',
         company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: ''
       },
       contact: { name: 'A name', email: 'email', phone: '' },

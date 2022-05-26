@@ -1,4 +1,4 @@
-import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
 import { hasOtherIntellectualItems, hasPatentsItems } from './catalogs.config';
@@ -17,9 +17,7 @@ type InboundPayloadType = {
   hasOtherIntellectual: null | 'YES' | 'NO';
   otherIntellectual: null | string;
 };
-
 type StepPayloadType = InboundPayloadType;
-
 
 
 export const SECTION_3_2: InnovationSectionConfigType['sections'][0] = {
@@ -48,13 +46,14 @@ export const SECTION_3_2: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
-    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data),
+    showSummary: true
   })
 };
 
 
 
-function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
+function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   return [
     {

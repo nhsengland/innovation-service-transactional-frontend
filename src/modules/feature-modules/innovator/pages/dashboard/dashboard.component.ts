@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { forkJoin, Observable, of, Subscription } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { getInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
+
 @Component({
   selector: 'app-innovator-pages-dashboard',
   templateUrl: './dashboard.component.html'
@@ -28,6 +30,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   innovationGuidesUrl = `${this.stores.environment.BASE_URL}/innovation-guides`;
 
   constructor(
+    private innovationsService: InnovationsService,
     private notificationsService: NotificationsService,
     private innovatorService: InnovatorService,
     private activatedRoute: ActivatedRoute
@@ -39,13 +42,14 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     const user = this.stores.authentication.getUserInfo();
     this.user = {
       displayName: user.displayName,
-      innovations: user.innovations.map(item => ({ ...item, ...{ notifications: 0 } })),
+      innovations: [],
       passwordResetOn: user.passwordResetOn
     };
   }
 
   ngOnInit(): void {
-    this.getInnovationsTransfers();
+
+    this.getPageInformation();
 
     const startTime = new Date();
     const endTime = new Date(this.user.passwordResetOn);
@@ -55,50 +59,52 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
     }
 
-    this.notificationsCount();
 
   }
 
 
-  getInnovationsTransfers(): void {
+  getPageInformation(): any {
 
     this.setPageStatus('LOADING');
 
-    this.innovatorService.getInnovationTransfers(true).subscribe(
-      response => {
-        this.innovationTransfers = response;
-        this.setPageStatus('READY');
-      },
-      error => {
+    return forkJoin([
+      this.innovationsService.getInnovationsList(),
+      this.innovatorService.getInnovationTransfers(true),
+    ]).subscribe(([innovationsList, innovationsTransfers]) => {
+
+      this.user.innovations = innovationsList.map(item => ({ ...item, ...{ notifications: 0 } }));
+      this.innovationTransfers = innovationsTransfers;
+
+      this.user.innovations.forEach((item) => {
+
+        this.notificationsService.getAllUnreadNotificationsGroupedByContext(item.id).subscribe(
+          response => {
+
+            item.notifications = Object.values(response).reduce((partialSum, a) => partialSum + a, 0);
+            this.setPageStatus('READY');
+
+          },
+          error => {
+            this.setPageStatus('READY');
+            this.alert = {
+              type: 'ERROR',
+              title: 'An error occurred',
+              message: 'Please try again or contact us for further help',
+              setFocus: true
+            };
+            this.logger.error('Error fetching innovations information', error);
+          }
+        );
+      });
+
+    },
+      (error) => {
         this.setPageStatus('READY');
         this.logger.error('Error fetching innovations transfer information', error);
       }
     );
 
-  }
 
-  notificationsCount(): void {
-    this.user.innovations.map((item) => {
-
-      this.notificationsService.getAllUnreadNotificationsGroupedByContext(item.id).subscribe(
-        response => {
-
-          item.notifications = Object.values(response).reduce((partialSum, a) => partialSum + a, 0);
-
-        },
-        error => {
-          this.setPageStatus('READY');
-          this.alert = {
-            type: 'ERROR',
-            title: 'An error occurred',
-            message: 'Please try again or contact us for further help',
-            setFocus: true
-          };
-          this.logger.error('Error fetching innovations information', error);
-        }
-      );
-    });
-    this.setPageStatus('READY');
   }
 
 
@@ -106,16 +112,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
     this.innovatorService.updateTransferInnovation(transferId, (accept ? 'COMPLETED' : 'DECLINED')).pipe(
       concatMap(() => this.stores.authentication.initializeAuthentication$()), // Initialize authentication in order to update First Time SignIn information.
-      concatMap(() => {
-        this.getInnovationsTransfers();
-        const user = this.stores.authentication.getUserInfo();
-        this.user = {
-          displayName: user.displayName,
-          innovations: user.innovations.map(item => ({ ...item, ...{ notifications: 0 } })),
-          passwordResetOn: user.passwordResetOn
-        };
-        return of(true);
-      })
+      concatMap(() => this.getPageInformation())
     ).subscribe(
       () => {
         this.alert = {

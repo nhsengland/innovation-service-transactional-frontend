@@ -22,7 +22,6 @@ export class AuthenticationModel {
         name: string;
       }[];
     }[];
-    innovations: { id: string, name: string }[];
     passwordResetOn: string;
 
   };

@@ -8,6 +8,8 @@ import { MappedObject, UrlModel } from '@modules/core';
 
 import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
+import { InnovationStatusEnum } from '@modules/shared/enums';
+
 
 type getInnovationActionsListEndpointInDTO = {
   id: string;
@@ -23,7 +25,7 @@ type getInnovationActionsListEndpointInDTO = {
 export type getInnovationInfoEndpointDTO = {
   id: string;
   name: string;
-  status: keyof typeof INNOVATION_STATUS;
+  status: InnovationStatusEnum;
   description: string;
   countryName: string;
   postcode: string;

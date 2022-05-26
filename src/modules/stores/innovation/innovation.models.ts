@@ -1,3 +1,4 @@
+import { InnovationSupportStatusEnum } from '@modules/shared/enums';
 import { WizardEngineModel } from '@modules/shared/forms';
 
 // Store state model.
@@ -268,12 +269,16 @@ export type InnovationDataResolverType = {
   };
   support?: {
     id: undefined | string;
-    status: keyof typeof INNOVATION_SUPPORT_STATUS;
+    status: InnovationSupportStatusEnum;
   };
   lockedInnovatorValidation?: {
     displayIsInnovatorLocked: boolean;
     innovatorName?: string;
   };
+  owner: {
+    isActive: boolean;
+    name: string;
+  }
 };
 
 
