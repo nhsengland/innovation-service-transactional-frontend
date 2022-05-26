@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { FormEngineParameterModel, CustomValidators } from '@app/base/forms';
 import { AlertType } from '@app/base/models';
 
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+
 
 @Component({
   selector: 'shared-pages-account-manage-innovations-archival',
@@ -26,6 +29,7 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
   innovationName = '';
 
   constructor(
+    private innovationsService: InnovationsService,
     private innovatorService: InnovatorService
   ) {
 
@@ -49,17 +53,19 @@ export class PageAccountManageInnovationsArchivalComponent extends CoreComponent
 
   ngOnInit(): void {
 
-    this.innovatorService.getInnovationTransfers().subscribe(
-      response => {
 
-        this.formInnovationsItems = this.stores.authentication.getUserInfo()
-          .innovations
-          .filter(i => !response.map(it => it.innovation.id).includes(i.id))
-          .map(item => ({ value: item.id, label: item.name }));
+    forkJoin([
+      this.innovationsService.getInnovationsList(),
+      this.innovatorService.getInnovationTransfers()
+    ]).subscribe(([innovationsList, innovationTransfers]) => {
 
-        this.setPageStatus('READY');
+      this.formInnovationsItems = innovationsList
+        .filter(i => !innovationTransfers.map(it => it.innovation.id).includes(i.id))
+        .map(item => ({ value: item.id, label: item.name }));
 
-      },
+      this.setPageStatus('READY');
+
+    },
       () => {
         this.setPageStatus('ERROR');
         this.alert = {

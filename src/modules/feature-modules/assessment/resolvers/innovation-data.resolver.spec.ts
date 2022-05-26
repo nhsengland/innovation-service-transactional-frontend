@@ -9,12 +9,11 @@ import { of, throwError } from 'rxjs';
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
+import { InnovationStatusEnum } from '@modules/shared/enums';
 
 import { AssessmentService } from '../services/assessment.service';
 
 import { InnovationDataResolver } from './innovation-data.resolver';
-
-import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
 describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
@@ -49,12 +48,12 @@ describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
 
     assessmentService.getInnovationInfo = () => of({
       summary: {
-        id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company',
+        id: '01', name: 'Innovation 01', status: InnovationStatusEnum.CREATED, description: 'A description', company: 'User company',
         companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: ''
       },
       contact: { name: 'A name', email: 'email', phone: '' },
       assessment: { id: '01', assignToName: 'Name' },
-      lockedInnovatorValidation: { displayIsInnovatorLocked: false, innovatorName : 'test'}
+      lockedInnovatorValidation: { displayIsInnovatorLocked: false, innovatorName: 'test' }
     });
 
     const expected = {
@@ -62,7 +61,8 @@ describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
       name: 'Innovation 01',
       status: 'CREATED',
       assessment: { id: '01' },
-      lockedInnovatorValidation: { displayIsInnovatorLocked: false, innovatorName : 'test'}
+      lockedInnovatorValidation: { displayIsInnovatorLocked: false, innovatorName: 'test' },
+      owner: { isActive: true, name: 'test' }
     };
 
     let response: any = null;
@@ -77,20 +77,21 @@ describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
 
     assessmentService.getInnovationInfo = () => of({
       summary: {
-        id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company',
+        id: '01', name: 'Innovation 01', status: InnovationStatusEnum.CREATED, description: 'A description', company: 'User company',
         companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: ''
       },
       contact: { name: 'A name', email: 'email', phone: '' },
       // assessment: { id: '01', assignToName: 'Name' }
-      lockedInnovatorValidation: { displayIsInnovatorLocked: true, innovatorName : 'test'}
+      lockedInnovatorValidation: { displayIsInnovatorLocked: true, innovatorName: 'test' }
     });
 
     const expected = {
       id: '01',
       name: 'Innovation 01',
       status: 'CREATED',
-      assessment: {},
-      lockedInnovatorValidation: { displayIsInnovatorLocked: true, innovatorName : 'test'}
+      assessment: { id: undefined },
+      lockedInnovatorValidation: { displayIsInnovatorLocked: true, innovatorName: 'test' },
+      owner: { isActive: false, name: 'test' }
     };
 
     let response: any = null;
@@ -110,7 +111,7 @@ describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
     let response: any = null;
 
     resolver.resolve(routeMock as any).subscribe(success => response = success, error => response = error);
-    expect(response).toBe('error');
+    expect(response).toBe(false);
 
   });
 

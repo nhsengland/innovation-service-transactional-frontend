@@ -30,6 +30,7 @@ import { PageNotFoundComponent } from './pages/not-found/not-found.component';
 import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
 
 // Services.
+import { InnovationsService } from './services/innovations.service';
 import { OrganisationsService } from './services/organisations.service';
 import { NotificationsService } from './services/notifications.service';
 import { PageInnovationCommentsEditComponent } from './pages/innovation/comments/comments-edit.component';
@@ -70,6 +71,7 @@ import { UserTermsOfUseService } from './services/userTermsOfuse.service';
     PluralTranslatePipe
   ],
   providers: [
+    InnovationsService,
     OrganisationsService,
     NotificationsService,
     UserTermsOfUseService

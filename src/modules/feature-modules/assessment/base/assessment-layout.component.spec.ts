@@ -9,12 +9,14 @@ import { of } from 'rxjs';
 import { ENV } from '@tests/app.mocks';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { StoresModule, AuthenticationStore, ContextStore } from '@modules/stores';
 import { AssessmentModule } from '../assessment.module';
 
 import { AssessmentLayoutComponent } from './assessment-layout.component';
 
 import { NotificationsService } from '@modules/shared/services/notifications.service';
+import { CONTEXT_INNOVATION_INFO } from '@tests/data.mocks';
+import { InnovationStatusEnum } from '@modules/shared/enums';
 
 
 describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
@@ -23,6 +25,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
   let router: Router;
 
   let authenticationStore: AuthenticationStore;
+  let contextStore: ContextStore;
   let notificationsService: NotificationsService;
 
   let component: AssessmentLayoutComponent;
@@ -48,6 +51,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     router = TestBed.inject(Router);
 
     authenticationStore = TestBed.inject(AuthenticationStore);
+    contextStore = TestBed.inject(ContextStore);
     notificationsService = TestBed.inject(NotificationsService);
 
   });
@@ -131,7 +135,9 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
   it('should have leftSideBar with "innovationLeftAsideMenu" menu values WITH innovation status IN_PROGRESS', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'innovation01', status: '' };
-    activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' }, innovationData: { status: 'IN_PROGRESS' } };
+    activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' } };
+
+    contextStore.getInnovation = () => ({ ...CONTEXT_INNOVATION_INFO, status: InnovationStatusEnum.IN_PROGRESS });
 
     const expected = [
       { title: 'Overview', link: `/assessment/innovations/innovation01/overview` },
@@ -154,6 +160,8 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'innovation01', status: '' };
     activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' }, innovationData: { status: '' } };
 
+    contextStore.getInnovation = () => ({ ...CONTEXT_INNOVATION_INFO, status: InnovationStatusEnum.CREATED });
+
     const expected = [
       { title: 'Overview', link: `/assessment/innovations/innovation01/overview` },
       { title: 'Innovation record', link: `/assessment/innovations/innovation01/record` },
@@ -169,6 +177,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
     expect(component.leftSideBar).toEqual(expected);
   });
+
   it('should have leftSideBar with "emptyLeftAside" menu values', () => {
 
     activatedRoute.snapshot.data = { layoutOptions: { type: 'emptyLeftAside' } };

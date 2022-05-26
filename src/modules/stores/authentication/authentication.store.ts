@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Observer, of } from 'rxjs';
-import { catchError, concatMap, map } from 'rxjs/operators';
+import { concatMap } from 'rxjs/operators';
 
 import { MappedObject } from '@modules/core/interfaces/base.interfaces';
 
@@ -27,7 +27,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       this.authenticationService.verifyUserSession().pipe(
         concatMap(() => this.authenticationService.getUserInfo()),
         concatMap(user => {
-          this.state.user = { ...user, ...{ innovations: [] } };
+          this.state.user = user;
           this.state.isSignIn = true;
           return of(true);
         }),
@@ -48,13 +48,15 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
             return of(true); // Suppress error as this is only additional information.
           }
 
-          return this.authenticationService.getInnovations(this.state.user!.id).pipe(
-            map(innovations => {
-              if (this.state.user) { this.state.user.innovations = innovations; }
-              return true;
-            }),
-            catchError(() => of(true)) // Suppress error as this is only additional information.
-          );
+          return of(true);
+
+          // return this.authenticationService.getInnovations(this.state.user!.id).pipe(
+          //   map(innovations => {
+          //     if (this.state.user) { this.state.user.innovations = innovations; }
+          //     return true;
+          //   }),
+          //   catchError(() => of(true)) // Suppress error as this is only additional information.
+          // );
 
         })
       ).subscribe(
@@ -98,7 +100,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   getUserInfo(): Required<AuthenticationModel>['user'] {
-    return this.state.user || { id: '', email: '', displayName: '', type: '', roles: [], organisations: [], innovations: [], passwordResetOn: '', phone: '' };
+    return this.state.user || { id: '', email: '', displayName: '', type: '', roles: [], organisations: [], passwordResetOn: '', phone: '' };
   }
 
   saveUserInfo$(body: MappedObject): Observable<{ id: string }> {

@@ -62,8 +62,10 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
   private onRouteChange(event: NavigationEnd): void {
 
-    const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
+    const routeData = RoutingHelper.getRouteData(this.activatedRoute);
+    const routeDataLayoutOptions: RouteDataLayoutOptionsType = routeData.layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
+    const innovation = currentRouteInnovationId ? this.stores.context.getInnovation() : null;
 
     if (this.stores.authentication.isValidUser()) {
 
@@ -84,9 +86,9 @@ export class InnovatorLayoutComponent extends CoreComponent {
     }
 
     this.layoutOptions = {
-      type: routeData.type || null,
-      backLink: routeData.backLink ? { url: RoutingHelper.resolveUrl(routeData.backLink.url, this.activatedRoute), label: routeData.backLink.label } : null,
-      showInnovationHeader: routeData.showInnovationHeader || false
+      type: routeDataLayoutOptions.type || null,
+      backLink: routeDataLayoutOptions.backLink ? { url: RoutingHelper.resolveUrl(routeDataLayoutOptions.backLink.url, this.activatedRoute), label: routeDataLayoutOptions.backLink.label } : null,
+      showInnovationHeader: routeDataLayoutOptions.showInnovationHeader || false
     };
 
     if (event.url.startsWith('/innovator/first-time-signin')) {
@@ -137,7 +139,7 @@ export class InnovatorLayoutComponent extends CoreComponent {
     }
 
     if (this.layoutOptions.showInnovationHeader) {
-      this.innovationHeaderBar = { id: currentRouteInnovationId, name: this.stores.authentication.getUserInfo().innovations.find(item => item.id === currentRouteInnovationId)?.name || null };
+      this.innovationHeaderBar = { id: currentRouteInnovationId, name: innovation?.name || '' };
     } else {
       this.innovationHeaderBar = { id: null, name: null };
     }

@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
-import { RoutingHelper } from '@modules/core';
-import { WizardEngineModel, SummaryParsingType } from '@modules/shared/forms';
+import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
+import { ContextInnovationType } from '@modules/stores/context/context.models';
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
-import { InnovationDataResolverType, InnovationSectionsIds, INNOVATION_SECTION_STATUS } from '@stores-module/innovation/innovation.models';
+import { InnovationSectionsIds, INNOVATION_SECTION_STATUS } from '@stores-module/innovation/innovation.models';
 
 
 @Component({
@@ -18,7 +18,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
   module: '' | 'innovator' | 'accessor' = '';
   innovationId: string;
-  innovation: InnovationDataResolverType;
+  innovation: ContextInnovationType;
   sectionId: InnovationSectionsIds;
   baseUrl = '';
   nextUrl = '';
@@ -38,7 +38,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
   wizard: WizardEngineModel;
 
-  summaryList: SummaryParsingType[];
+  summaryList: WizardSummaryType[];
 
   constructor(
     private activatedRoute: ActivatedRoute
@@ -49,7 +49,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    this.innovation = this.stores.context.getInnovation();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.baseUrl = `/${this.module}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
     this.nextUrl = `${this.baseUrl}/${this.keys[this.keys.indexOf(this.sectionId) + 1]}`;

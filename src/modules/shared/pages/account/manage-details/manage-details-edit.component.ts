@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { RoutingHelper } from '@modules/core';
 
-import { SummaryParsingType } from '@modules/shared/forms';
+import { WizardSummaryType } from '@modules/shared/forms';
 
 import { ACCOUNT_DETAILS_INNOVATOR } from './manage-details-edit-innovator.config';
 import { ACCOUNT_DETAILS_ACCESSOR } from './manage-details-edit-accessor.config';
@@ -25,7 +25,7 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
 
   wizard: WizardEngineModel = new WizardEngineModel({});
 
-  summaryList: SummaryParsingType[] = [];
+  summaryList: WizardSummaryType[] = [];
 
   isQuestionStep(): boolean { return Number.isInteger(Number(this.activatedRoute.snapshot.params.stepId)); }
   isSummaryStep(): boolean { return this.activatedRoute.snapshot.params.stepId === 'summary'; }

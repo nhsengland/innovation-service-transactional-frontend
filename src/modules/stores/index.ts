@@ -10,3 +10,7 @@ export { AuthenticationModel } from './authentication/authentication.models';
 export { InnovationStore } from './innovation/innovation.store';
 export { InnovationService } from './innovation/innovation.service';
 export { InnovationModel } from './innovation/innovation.models';
+
+// Context Store.
+export { ContextStore } from './context/context.store';
+export { ContextModel } from './context/context.models';

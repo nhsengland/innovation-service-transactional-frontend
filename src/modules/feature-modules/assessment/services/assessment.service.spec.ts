@@ -11,6 +11,8 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
 import { TableModel } from '@app/base/models';
 
+import { InnovationStatusEnum } from '@modules/shared/enums';
+
 import {
   AssessmentService,
   getInnovationInfoEndpointDTO, getInnovationNeedsAssessmentEndpointInDTO, getInnovationNeedsAssessmentEndpointOutDTO, getInnovationsListEndpointInDTO,
@@ -145,7 +147,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
   it('should run getInnovationInfo() and return success', () => {
 
     const responseMock: getInnovationInfoEndpointDTO = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: '' },
+      summary: { id: '01', name: 'Innovation 01', status: InnovationStatusEnum.CREATED, description: 'A description', company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: '' },
       contact: { name: 'A name', email: 'email', phone: '' },
       assessment: { id: '01', assignToName: 'Name' },
       lockedInnovatorValidation: { displayIsInnovatorLocked : false, innovatorName : 'test'}

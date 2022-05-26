@@ -1,4 +1,4 @@
-import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, FormEngineParameterModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 
 
 // Types.
@@ -115,9 +115,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
 }
 
-function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
+function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
-  const toReturn: SummaryParsingType[] = [];
+  const toReturn: WizardSummaryType[] = [];
 
   toReturn.push(
     { label: 'Name', value: data.innovatorName, editStepNumber: 2 },

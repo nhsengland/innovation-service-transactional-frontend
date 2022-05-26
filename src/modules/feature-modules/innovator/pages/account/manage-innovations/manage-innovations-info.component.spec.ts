@@ -11,10 +11,11 @@ import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
-
-import { PageAccountManageInnovationsInfoComponent } from './manage-innovations-info.component';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+
+import { PageAccountManageInnovationsInfoComponent } from './manage-innovations-info.component';
 
 
 describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountManageInnovationsInfoComponent', () => {
@@ -22,6 +23,7 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountMa
   let activatedRoute: ActivatedRoute;
 
   let authenticationStore: AuthenticationStore;
+  let innovationsService: InnovationsService;
   let innovatorService: InnovatorService;
 
   let component: PageAccountManageInnovationsInfoComponent;
@@ -43,6 +45,7 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountMa
     activatedRoute = TestBed.inject(ActivatedRoute);
 
     authenticationStore = TestBed.inject(AuthenticationStore);
+    innovationsService = TestBed.inject(InnovationsService);
     innovatorService = TestBed.inject(InnovatorService);
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
@@ -69,6 +72,10 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountMa
   });
 
   it('should have initial information loaded', () => {
+
+    innovationsService.getInnovationsList = () => of([
+      { id: 'innovationId01', name: 'Innovation Name 01' }
+    ]);
 
     const responseMock = [
       { id: 'TransferId01', email: 'some@email.com', innovation: { id: 'Inno01', name: 'Innovation name 01' } },

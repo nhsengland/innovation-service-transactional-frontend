@@ -8,12 +8,12 @@ import { of, throwError } from 'rxjs';
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
+import { InnovationStatusEnum } from '@modules/shared/enums';
 
 import { InnovationOverviewComponent } from './overview.component';
 
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
 
-import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 
 describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () => {
@@ -51,7 +51,7 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
 
     const responseMock = {
       summary: {
-        id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company',
+        id: '01', name: 'Innovation 01', status: InnovationStatusEnum.CREATED, description: 'A description', company: 'User company',
         companySize: '1 to 5 employees', countryName: 'England', postCode: '', categories: ['MEDICAL_DEVICE'], otherCategoryDescription: ''
       },
       contact: { name: 'A name', email: 'email', phone: '' },
@@ -74,7 +74,7 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
 
     const responseMock = {
       summary: {
-        id: '01', name: 'Innovation 01', status: 'CREATED' as keyof typeof INNOVATION_STATUS, description: 'A description', company: 'User company',
+        id: '01', name: 'Innovation 01', status: InnovationStatusEnum.CREATED, description: 'A description', company: 'User company',
         companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['MEDICAL_DEVICE', 'OTHER', 'INVALID'], otherCategoryDescription: 'Other category'
       },
       contact: { name: 'A name', email: 'email', phone: '' },

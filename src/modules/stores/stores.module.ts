@@ -6,13 +6,17 @@ import { AuthenticationService } from './authentication/authentication.service';
 import { InnovationStore } from './innovation/innovation.store';
 import { InnovationService } from './innovation/innovation.service';
 
+import { ContextStore } from './context/context.store';
+
+
 
 @NgModule({
   providers: [
     AuthenticationStore,
     AuthenticationService,
     InnovationStore,
-    InnovationService
+    InnovationService,
+    ContextStore
   ]
 })
 export class StoresModule {

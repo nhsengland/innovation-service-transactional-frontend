@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
-import { SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
 
@@ -25,7 +25,7 @@ export class InnovationSectionEvidenceViewComponent extends CoreComponent implem
 
   wizard: WizardEngineModel;
 
-  summaryList: SummaryParsingType[];
+  summaryList: WizardSummaryType[];
 
   constructor(
     private activatedRoute: ActivatedRoute

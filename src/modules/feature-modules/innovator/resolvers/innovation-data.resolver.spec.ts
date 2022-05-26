@@ -56,7 +56,11 @@ describe('FeatureModules/Innovator/Resolvers/InnovationDataResolver', () => {
       id: '01',
       name: 'Innovation 01',
       status: 'CREATED',
-      assessment: { id: '01' }
+      assessment: { id: '01' },
+      owner: {
+        isActive: true,
+        name: ''
+      }
     };
 
     resolver.resolve(routeMock as any).subscribe(success => response = success, error => response = error);
@@ -74,7 +78,7 @@ describe('FeatureModules/Innovator/Resolvers/InnovationDataResolver', () => {
     let response: any = null;
 
     resolver.resolve(routeMock as any).subscribe(success => response = success, error => response = error);
-    expect(response).toBe('error');
+    expect(response).toBe(false);
 
   });
 
