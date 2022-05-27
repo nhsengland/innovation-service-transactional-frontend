@@ -19,10 +19,11 @@
             <p> {{ alert.message }} </p>
           </theme-alert>  
           <h1 >{{title}}</h1>        
-          <p>We've updated our <a href="javascript:;" (click)="termsOfUse()">terms of use</a> and <a href="/transactional/policies/cookies-policy">cookies policy</a></p>         
+          <p *ngIf="isAgree">We've updated our <a href="javascript:;" (click)="termsOfUse()">terms of use privacy notice</a> and <a href="/transactional/policies/cookies-policy">cookies policy.</a></p>         
+          <p *ngIf="!isAgree">You need to agree to the updated <a href="javascript:;" (click)="termsOfUse()">terms of use privacy notice</a> and <a href="/transactional/policies/cookies-policy">cookies policy</a> to keep using your account.</p>         
 
           <div *ngIf="summaryInfo">
-            <p>Here is a summary of the changes in these terms of use:</p>  
+            <p>Here is a summary of the changes:</p>  
             <div class="nhsuk-inset-text">
               <span class="nhsuk-u-visually-hidden">Information: </span>
               <p *ngIf="tou.summary">{{ tou.summary }}</p>
@@ -30,7 +31,7 @@
             </div>
           </div>
 
-          <p>By continuing you agree to our updated terms of use </p>
+          <p *ngIf="isAgree">By continuing you agree to our updated terms of use </p>
 
           <button  type="submit" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-right-3" (click)="onAgree()">Agree and continue</button>                    
         </div> 
