@@ -21,6 +21,7 @@ import { PageInnovationRecordComponent } from './pages/innovation/innovation-rec
 import { PageInnovationCommentsListComponent } from './pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from './pages/innovation/comments/comments-new.component';
 import { PageInnovationSupportStatusListComponent } from './pages/innovation/innovation-support-status-list.component';
+import { PageTermsOfUseComponent } from '@shared-module/pages/terms-of-use/terms-of-use.component';
 
 import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/not-found/not-found.component';
@@ -33,6 +34,7 @@ import { InnovationsService } from './services/innovations.service';
 import { OrganisationsService } from './services/organisations.service';
 import { NotificationsService } from './services/notifications.service';
 import { PageInnovationCommentsEditComponent } from './pages/innovation/comments/comments-edit.component';
+import { UserTermsOfUseService } from './services/userTermsOfuse.service';
 
 @NgModule({
   imports: [
@@ -60,6 +62,7 @@ import { PageInnovationCommentsEditComponent } from './pages/innovation/comments
     PageInnovationCommentsNewComponent,
     PageInnovationCommentsEditComponent,
     PageInnovationSupportStatusListComponent,
+    PageTermsOfUseComponent,
 
     PageErrorComponent,
     PageNotFoundComponent,
@@ -70,7 +73,8 @@ import { PageInnovationCommentsEditComponent } from './pages/innovation/comments
   providers: [
     InnovationsService,
     OrganisationsService,
-    NotificationsService
+    NotificationsService,
+    UserTermsOfUseService
   ],
   exports: [
     CommonModule,

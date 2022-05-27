@@ -31,6 +31,11 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           this.state.isSignIn = true;
           return of(true);
         }),
+        concatMap(() => this.authenticationService.userTermsOfUseInfo()),
+        concatMap(response => {
+          this.state.isTermsOfUseAccepted = response.isAccepted;
+          return of(true);
+        }),
         concatMap(() => this.authenticationService.verifyInnovator()),
         concatMap(innovatorInfo => {
           this.state.isValidUser = innovatorInfo.userExists;
@@ -113,5 +118,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       default: return '';
     }
   }
+
+  getUserTermsOfUseInfo(): boolean { return this.state.isTermsOfUseAccepted ?? false; }
 
 }

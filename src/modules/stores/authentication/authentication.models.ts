@@ -3,7 +3,7 @@ export class AuthenticationModel {
   isSignIn: boolean;
   isValidUser?: boolean;
   hasInnovationTransfers?: boolean;
-
+  isTermsOfUseAccepted?: boolean;
   user?: {
     id: string;
     email: string;

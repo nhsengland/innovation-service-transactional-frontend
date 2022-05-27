@@ -1,0 +1,55 @@
+<theme-header></theme-header>
+<theme-header-navigation-bar [rightMenuItems]="navigationMenuBar.rightItems" ></theme-header-navigation-bar>
+<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">   
+  
+    <div *ngIf="!isAgree" class="nhsuk-back-link">
+      <a href="javascript:;" class="nhsuk-back-link__link" (click)="notAgree()">
+        <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
+        </svg>
+        Go back
+      </a>
+    </div>
+    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+  
+    <ng-container *ngIf="pageStatus === 'READY'">    
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-two-thirds">  
+          <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+            <p> {{ alert.message }} </p>
+          </theme-alert>  
+          <h1 >{{title}}</h1>        
+          <p>We've updated our <a href="javascript:;" (click)="termsOfUse()">terms of use</a> and <a href="/transactional/policies/cookies-policy">cookies policy</a></p>         
+
+          <div *ngIf="summaryInfo">
+            <p>Here is a summary of the changes in these terms of use:</p>  
+            <div class="nhsuk-inset-text">
+              <span class="nhsuk-u-visually-hidden">Information: </span>
+              <p *ngIf="tou.summary">{{ tou.summary }}</p>
+              <p *ngIf="!tou.summary">This version was released without a summary of the changes</p>
+            </div>
+          </div>
+
+          <p>By continuing you agree to our updated terms of use </p>
+
+          <button  type="submit" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-right-3" (click)="onAgree()">Agree and continue</button>                    
+        </div> 
+        <div *ngIf="!isAgree" class="nhsuk-grid-column-one-third nhsuk-u-padding-top-5">
+          <div class="nhsuk-card x-card-top-border ">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m"> Other options </h2>
+              <ul class="nhsuk-list nhsuk-list--bullet">
+                <li >If you do not agree to the new terms, you cannot use your Innovation Service account. <a [href]="signOutURL" >Sign out and go to the Innovation Service homepage.</a></li>
+                <li >If you no longer need your account, or need to delete information saved in your account you can <a href="/contact-us">contact us. </a></li>
+              </ul>
+            </div>
+          </div>
+        </div>        
+      </div> 
+      <a *ngIf="isAgree" href="javascript:;"  (click)="notAgree()">I do not agree</a>              
+    </ng-container>
+  
+</div>
+
+<theme-footer></theme-footer>
+  
