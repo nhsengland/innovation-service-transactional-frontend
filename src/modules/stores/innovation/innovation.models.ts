@@ -138,6 +138,11 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
     label: 'Completed',
     cssClass: 'nhsuk-tag--green',
     description: 'An accessor has closed the action after reviewing the information.'
+  },
+  CANCELLED: {
+    label: 'Cancelled',
+    cssClass: 'nhsuk-tag--red',
+    description: 'An accessor has cancelled the action.'
   }
 };
 
@@ -166,7 +171,8 @@ export enum ActivityLogItemsEnum {
   ACTION_CREATION = 'ACTION_CREATION',
   ACTION_STATUS_IN_REVIEW_UPDATE = 'ACTION_STATUS_IN_REVIEW_UPDATE',
   ACTION_STATUS_DECLINED_UPDATE = 'ACTION_STATUS_DECLINED_UPDATE',
-  ACTION_STATUS_COMPLETED_UPDATE = 'ACTION_STATUS_COMPLETED_UPDATE'
+  ACTION_STATUS_COMPLETED_UPDATE = 'ACTION_STATUS_COMPLETED_UPDATE',
+  ACTION_STATUS_CANCELLED_UPDATE = 'ACTION_STATUS_CANCELLED_UPDATE'
 }
 
 
@@ -256,7 +262,12 @@ export const ACTIVITY_LOG_ITEMS: {
     type: ActivityLogTypesEnum.ACTIONS,
     details: 'COMMENT',
     link: 'ACTION'
-  }
+  },
+  ACTION_STATUS_CANCELLED_UPDATE: {
+    type: ActivityLogTypesEnum.ACTIONS,
+    details: null,
+    link: null
+  },
 };
 
 

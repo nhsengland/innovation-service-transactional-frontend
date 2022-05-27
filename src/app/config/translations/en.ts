@@ -149,6 +149,10 @@ export const locale = {
             ACTION_STATUS_COMPLETED_UPDATE: {
               title: 'Action completed',
               message: `{{ actionUserName }} marked an action as complete`
+            },
+            ACTION_STATUS_CANCELLED_UPDATE: {
+              title: 'Action cancelled',
+              message: `{{ totalActions }} actions for {{ sectionTitle }} section were changed to "Cancelled"`
             }
           }
         },
@@ -168,9 +172,9 @@ export const locale = {
             lastAccessorFromUnitProvidingSupport: {
               label: 'User is not the person in their unit who is supporting an innovator',
               description: {
-               none: 'No innovation is being supported',
-               singular: '{{ supports.innovations.length }} innovation being supported',
-               plural: '{{ supports.innovations.length }} innovations being supported',
+                none: 'No innovation is being supported',
+                singular: '{{ supports.innovations.length }} innovation being supported',
+                plural: '{{ supports.innovations.length }} innovations being supported',
               }
             }
           },
@@ -191,9 +195,9 @@ export const locale = {
             lastAccessorFromUnitProvidingSupport: {
               label: 'User is not the person in their organisation or unit who is supporting an innovator',
               description: {
-               none: 'No innovation is being supported',
-               singular: '{{ supports.innovations.length }} innovation being supported',
-               plural: '{{ supports.innovations.length }} innovations being supported',
+                none: 'No innovation is being supported',
+                singular: '{{ supports.innovations.length }} innovation being supported',
+                plural: '{{ supports.innovations.length }} innovations being supported',
               }
             }
           }
