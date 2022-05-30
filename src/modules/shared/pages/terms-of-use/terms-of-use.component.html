@@ -19,15 +19,14 @@
             <p> {{ alert.message }} </p>
           </theme-alert>  
           <h1 >{{title}}</h1>        
-          <p *ngIf="isAgree">We've updated our <a href="javascript:;" (click)="termsOfUse()">terms of use privacy notice</a> and <a href="/transactional/policies/cookies-policy">cookies policy.</a></p>         
-          <p *ngIf="!isAgree">You need to agree to the updated <a href="javascript:;" (click)="termsOfUse()">terms of use privacy notice</a> and <a href="/transactional/policies/cookies-policy">cookies policy</a> to keep using your account.</p>         
+          <p *ngIf="isAgree">We've updated our <a [href]="policyURL" >terms of use privacy notice</a> and <a href="/transactional/policies/cookies-policy">cookies policy.</a></p>         
+          <p *ngIf="!isAgree">You need to agree to the updated <a [href]="policyURL" >terms of use privacy notice</a> and <a href="/transactional/policies/cookies-policy">cookies policy</a> to keep using your account.</p>         
 
-          <div *ngIf="summaryInfo">
+          <div *ngIf="tou.summary && isAgree">
             <p>Here is a summary of the changes:</p>  
             <div class="nhsuk-inset-text">
               <span class="nhsuk-u-visually-hidden">Information: </span>
-              <p *ngIf="tou.summary">{{ tou.summary }}</p>
-              <p *ngIf="!tou.summary">This version was released without a summary of the changes</p>
+              <p *ngIf="tou.summary">{{ tou.summary }}</p>              
             </div>
           </div>
 

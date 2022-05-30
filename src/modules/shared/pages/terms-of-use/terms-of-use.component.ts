@@ -14,7 +14,8 @@ export class PageTermsOfUseComponent extends CoreComponent implements OnInit {
   id: string;
   title = 'Account terms of use update';
   signOutURL: string;
-  summaryInfo = false;
+  policyURL: string;
+  userType: string;
   isAgree = true;
   tou: {
     id: string,
@@ -39,6 +40,8 @@ export class PageTermsOfUseComponent extends CoreComponent implements OnInit {
         { title: 'Sign out', link: this.signOutURL, fullReload: true }
       ]
     };
+    this.userType = this.stores.authentication.getUserType();
+    this.policyURL = `${this.stores.environment.APP_URL}` + this.userType === 'INNOVATOR' ? `/terms-of-use/data-inputter` : `/terms-of-use/accessors`;
   }
 
   ngOnInit(): void {
@@ -56,11 +59,6 @@ export class PageTermsOfUseComponent extends CoreComponent implements OnInit {
     });
   }
 
-  termsOfUse(): void{
-    this.alert = { type: null };
-    this.summaryInfo = !this.summaryInfo;
-  }
-
   notAgree(): void{
     this.alert = { type: null };
     this.isAgree = !this.isAgree;
@@ -74,8 +72,8 @@ export class PageTermsOfUseComponent extends CoreComponent implements OnInit {
 
   onAgree(): void{
     this.alert = { type: null };
-    const userType = this.stores.authentication.getUserType();
-    const dashboardPath = '/transactional/' + userType.toLocaleLowerCase() + '/dashboard';
+
+    const dashboardPath = '/transactional/' + this.userType.toLocaleLowerCase() + '/dashboard';
     this.userTOUService.agreeTermsById(this.tou.id).subscribe(response => {
       window.location.assign(dashboardPath);
     },
