@@ -41,7 +41,7 @@ export class PageTermsOfUseComponent extends CoreComponent implements OnInit {
       ]
     };
     this.userType = this.stores.authentication.getUserType();
-    this.policyURL = `${this.stores.environment.APP_URL}` + this.userType === 'INNOVATOR' ? `/terms-of-use/data-inputter` : `/terms-of-use/accessors`;
+    this.policyURL = `${this.stores.environment.APP_URL}` + (this.userType === 'INNOVATOR' ? `/terms-of-use/data-inputter` : `/terms-of-use/accessors`);
   }
 
   ngOnInit(): void {
