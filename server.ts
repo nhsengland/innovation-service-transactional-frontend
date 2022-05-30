@@ -11,7 +11,7 @@ import helmet from 'helmet';
 import { join } from 'path';
 
 import { initAppInsights } from 'src/globals';
-import { BASE_PATH, BASE_URL, LOG_LEVEL, STATIC_CONTENT_PATH, VIEWS_PATH, ENABLE_ANALYTICS } from 'src/server/config/constants.config';
+import { ENVIRONMENT } from 'src/server/config/constants.config';
 import { handler } from 'src/server/handlers/logger.handler';
 import { appLoggingMiddleware } from 'src/server/middlewares/app-logging.middleware';
 import { exceptionLoggingMiddleware } from 'src/server/middlewares/exception-logging.middleware';
@@ -33,8 +33,8 @@ export function app(): express.Express {
   initAppInsights();
 
   const server = express();
-  const staticContentPath = `${BASE_PATH}${STATIC_CONTENT_PATH}`;
-  const distFolder = join(process.cwd(), VIEWS_PATH);
+  const staticContentPath = `${ENVIRONMENT.BASE_PATH}${ENVIRONMENT.STATIC_CONTENT_PATH}`;
+  const distFolder = join(process.cwd(), ENVIRONMENT.VIEWS_PATH);
   const indexHtml = fs.existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
   server.engine('html', ngExpressEngine({ bootstrap: AppServerModule })); // Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
@@ -80,7 +80,7 @@ export function app(): express.Express {
   server.use(exceptionLoggingMiddleware);
 
   // PING Endpoint
-  server.get(`${BASE_PATH}/ping`, (req, res) => {
+  server.get(`${ENVIRONMENT.BASE_PATH}/ping`, (req, res) => {
     const response = {
       state: 'Running'
     };
@@ -93,13 +93,21 @@ export function app(): express.Express {
   server.get('*.*', express.static(distFolder, { maxAge: '1y' }));
 
   // // "Data requests". For submited POST form informations.
-  server.post(`${BASE_PATH}/insights`, handler);
+  server.post(`${ENVIRONMENT.BASE_PATH}/insights`, handler);
   server.post('/*', (req, res) => {
     res.render(indexHtml, {
       req, res,
       providers: [
         { provide: APP_BASE_HREF, useValue: req.baseUrl },
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL, ENABLE_ANALYTICS } }
+        {
+          provide: 'APP_SERVER_ENVIRONMENT_VARIABLES',
+          useValue: {
+            BASE_URL: ENVIRONMENT.BASE_URL,
+            BASE_PATH: ENVIRONMENT.BASE_PATH,
+            LOG_LEVEL: ENVIRONMENT.LOG_LEVEL,
+            ENABLE_ANALYTICS: ENVIRONMENT.ENABLE_ANALYTICS
+          }
+        }
       ]
     });
   });
@@ -109,11 +117,10 @@ export function app(): express.Express {
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
     res.send(`(function (window) {
       window.__env = window.__env || {};
-      window.__env.BASE_URL = '${BASE_URL}';
-      window.__env.BASE_PATH = '${BASE_PATH}';
-      window.__env.API_URL = '${BASE_URL}${BASE_PATH}/api';
-      window.__env.LOG_LEVEL = '${LOG_LEVEL}';
-      window.__env.ENABLE_ANALYTICS = '${ENABLE_ANALYTICS}';
+      window.__env.BASE_URL = '${ENVIRONMENT.BASE_URL}';
+      window.__env.BASE_PATH = '${ENVIRONMENT.BASE_PATH}';
+      window.__env.LOG_LEVEL = '${ENVIRONMENT.LOG_LEVEL}';
+      window.__env.ENABLE_ANALYTICS = '${ENVIRONMENT.ENABLE_ANALYTICS}';
     }(this));`);
   });
 
@@ -126,7 +133,15 @@ export function app(): express.Express {
         req, res,
         providers: [
           { provide: APP_BASE_HREF, useValue: req.baseUrl },
-          { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: { BASE_URL, BASE_PATH, API_URL: `${BASE_URL}${BASE_PATH}/api`, LOG_LEVEL, ENABLE_ANALYTICS } }
+          {
+            provide: 'APP_SERVER_ENVIRONMENT_VARIABLES',
+            useValue: {
+              BASE_URL: ENVIRONMENT.BASE_URL,
+              BASE_PATH: ENVIRONMENT.BASE_PATH,
+              LOG_LEVEL: ENVIRONMENT.LOG_LEVEL,
+              ENABLE_ANALYTICS: ENVIRONMENT.ENABLE_ANALYTICS
+            }
+          }
         ]
       });
     });

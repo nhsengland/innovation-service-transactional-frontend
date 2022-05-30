@@ -29,10 +29,13 @@ describe('Core/Stores/EnvironmentStore running SERVER side', () => {
   });
 
   it('should set environment variables', () => {
-    expect(store.ENV).toEqual({ BASE_URL: 'http://demo.com', BASE_PATH: '', API_URL: 'http://demo.com/api', LOG_LEVEL: 0, ENABLE_ANALYTICS: true });
+    expect(store.ENV).toEqual({ BASE_URL: 'http://demo.com', BASE_PATH: '', LOG_LEVEL: 0, ENABLE_ANALYTICS: true });
     expect(store.APP_URL).toBe('http://demo.com');
     expect(store.APP_ASSETS_URL).toBe('http://demo.com/static/assets');
     expect(store.API_URL).toBe('http://demo.com/api');
+    expect(store.API_ADMIN).toBe('http://demo.com/api/configuration');
+    expect(store.API_INNOVATIONS).toBe('http://demo.com/api/innovations');
+    expect(store.API_USERS).toBe('http://demo.com/api/management/users');
     expect(store.BASE_URL).toBe('http://demo.com');
     expect(store.BASE_PATH).toBe('');
   });
@@ -79,10 +82,13 @@ describe('Core/Stores/EnvironmentStore running CLIENT side', () => {
   });
 
   it('should set environment variables', () => {
-    expect(store.ENV).toEqual({ BASE_URL: 'http://demo.com', BASE_PATH: '', API_URL: 'http://demo.com/api', LOG_LEVEL: 0, ENABLE_ANALYTICS: true });
+    expect(store.ENV).toEqual({ BASE_URL: 'http://demo.com', BASE_PATH: '', LOG_LEVEL: 0, ENABLE_ANALYTICS: true });
     expect(store.APP_URL).toBe('http://demo.com');
     expect(store.APP_ASSETS_URL).toBe('http://demo.com/static/assets');
     expect(store.API_URL).toBe('http://demo.com/api');
+    expect(store.API_ADMIN).toBe('http://demo.com/api/configuration');
+    expect(store.API_INNOVATIONS).toBe('http://demo.com/api/innovations');
+    expect(store.API_USERS).toBe('http://demo.com/api/management/users');
     expect(store.BASE_URL).toBe('http://demo.com');
     expect(store.BASE_PATH).toBe('');
   });

@@ -1,15 +1,16 @@
 import axios from 'axios';
-import { PDFGenerator } from './PDFGenerator';
 
 import { MappedObject } from '@modules/core';
 import { getInnovationInfoEndpointDTO, sectionType } from '@modules/stores/innovation/innovation.models';
 import { AllSectionsOutboundPayloadType, getAllSectionsSummary } from '@modules/stores/innovation/innovation.config';
 
-import { API_URL } from '../../config/constants.config';
+import { ENVIRONMENT } from '../../config/constants.config';
+import { PDFGenerator } from './PDFGenerator';
 import { PDFGeneratorInnovationNotFoundError, PDFGeneratorParserError, PDFGeneratorSectionsNotFoundError } from '../errors';
 
+
 export const getSections = async (innovationId: string, userId: string, config: any): Promise<{ section: sectionType, data: MappedObject }[]> => {
-  const url = `${API_URL}/api/innovators/${userId}/innovations/${innovationId}/sections`;
+  const url = `${ENVIRONMENT.API_URL}/api/innovators/${userId}/innovations/${innovationId}/sections`;
   const response = await axios.get<{
     section: sectionType;
     data: MappedObject
@@ -18,7 +19,7 @@ export const getSections = async (innovationId: string, userId: string, config: 
 };
 
 export const getInnovation = async (userId: string, innovationId: string, config: any) => {
-  const url = `${API_URL}/api/innovators/${userId}/innovations/${innovationId}`;
+  const url = `${ENVIRONMENT.API_URL}/api/innovators/${userId}/innovations/${innovationId}`;
   const response = await axios.get<getInnovationInfoEndpointDTO>(url, config);
   return response.data;
 };
@@ -63,25 +64,18 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
     }
 
 
-    const title = `${currentSection}. ${entry.title}`;
+    generator.h1(`${currentSection}. ${entry.title}`);
 
-    generator
-      .h1(title);
     for (const section of entry.sections) {
 
-      const title = `${currentSection}.${currentSubSection} ${section.section}`;
+      generator.h2(`${currentSection}.${currentSubSection} ${section.section}`);
       currentSubSection++;
-      generator
-        .h2(title);
 
       for (const answer of section.answers) {
-        const title = answer.label;
-        generator
-          .h3(title);
 
-        const value = answer.value.replace(/\n/gi, ', ');
-        generator
-          .p(value);
+        generator.h3(answer.label);
+        generator.p(answer.value.replace(/\n/gi, ', '));
+
       }
     }
 
@@ -91,4 +85,5 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
 
   const result = generator.save();
   return result;
+
 };

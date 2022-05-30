@@ -4,7 +4,7 @@ import { Router } from 'express';
 import * as multer from 'multer';
 import { IProfile } from 'passport-azure-ad';
 import * as path from 'path';
-import { API_URL, BASE_PATH } from '../config/constants.config';
+import { ENVIRONMENT } from '../config/constants.config';
 import { getAccessTokenByOid } from './authentication.routes';
 
 const storage = multer.memoryStorage();
@@ -73,18 +73,18 @@ async function uploadFile(url: string, file: any): Promise<void> {
 
     await axios(url, config);
   } catch (error) {
-    console.error(error);
+    console.error('uploadFile', error);
     throw error;
   }
 }
 
-fileUploadRouter.post(`${BASE_PATH}/upload`, upload.single('file'), async (req, res) => {
+fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload`, upload.single('file'), async (req, res) => {
   const user: IProfile = req.user || {};
   const oid: string = user.oid || '';
   const accessToken = getAccessTokenByOid(oid);
   const file = req.file;
   const reqBody = req.body;
-  const url = `${API_URL}/api/innovators/${reqBody.innovatorId}/innovations/${reqBody.innovationId}/upload`;
+  const url = `${ENVIRONMENT.API_URL}/api/innovators/${reqBody.innovatorId}/innovations/${reqBody.innovationId}/upload`;
 
   if (!req.isAuthenticated() || !accessToken) {
     res.status(401).send();

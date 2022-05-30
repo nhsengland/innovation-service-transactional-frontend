@@ -2,10 +2,22 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-export const BASE_URL = process.env.BASE_URL || '';
-export const BASE_PATH = ['', '/'].includes(process.env.BASE_PATH || '') ? '' : `${process.env.BASE_PATH?.startsWith('/') ? '' : '/'}${process.env.BASE_PATH}`;
-export const API_URL = process.env.API_URL || '';
-export const LOG_LEVEL = process.env.LOG_LEVEL || 'ERROR';
-export const VIEWS_PATH = process.env.VIEWS_PATH || '';
-export const STATIC_CONTENT_PATH = process.env.STATIC_CONTENT_PATH || '';
-export const ENABLE_ANALYTICS = process.env.ENABLE_ANALYTICS || true;
+
+export const ENVIRONMENT = {
+
+  BASE_URL: process.env.BASE_URL || '',
+  BASE_PATH: ['', '/'].includes(process.env.BASE_PATH || '') ? '' : `${process.env.BASE_PATH?.startsWith('/') ? '' : '/'}${process.env.BASE_PATH}`,
+
+  API_URL: process.env.API_URL || '',
+
+  LOG_LEVEL: process.env.LOG_LEVEL || 'ERROR',
+  VIEWS_PATH: process.env.VIEWS_PATH || '',
+  STATIC_CONTENT_PATH: process.env.STATIC_CONTENT_PATH || '',
+  ENABLE_ANALYTICS: process.env.ENABLE_ANALYTICS || true,
+
+  LOCAL_MODE: process.env.LOCAL_MODE || null,
+  LOCAL_API_USERS_BASE_URL: process.env.LOCAL_API_USERS_BASE_URL || '',
+  LOCAL_API_INNOVATIONS_BASE_URL: process.env.LOCAL_API_INNOVATIONS_BASE_URL || '',
+  LOCAL_API_ADMIN_BASE_URL: process.env.LOCAL_API_ADMIN_BASE_URL || '',
+
+};

@@ -1,12 +1,12 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { NGXLogger, NgxLoggerLevel } from 'ngx-logger';
+
 import { UrlModel } from '../models/url.model';
 
 
 type environmentVariables = {
   BASE_URL: string;
   BASE_PATH: string;
-  API_URL: string;
   LOG_LEVEL: NgxLoggerLevel;
   ENABLE_ANALYTICS: boolean;
 };
@@ -21,13 +21,21 @@ type environmentVariables = {
 @Injectable()
 export class EnvironmentStore {
 
-  private environment: environmentVariables = { BASE_URL: '', BASE_PATH: '/', API_URL: '', LOG_LEVEL: NgxLoggerLevel.ERROR, ENABLE_ANALYTICS: true };
+  private environment: environmentVariables = {
+    BASE_URL: '',
+    BASE_PATH: '/',
+    LOG_LEVEL: NgxLoggerLevel.ERROR,
+    ENABLE_ANALYTICS: true
+  };
 
   get ENV(): environmentVariables { return this.environment; }
 
   get APP_URL(): string { return new UrlModel(this.environment.BASE_URL).setPath(this.environment.BASE_PATH).buildUrl(); }
   get APP_ASSETS_URL(): string { return new UrlModel(this.environment.BASE_URL).setPath(this.environment.BASE_PATH).addPath('static/assets').buildUrl(); }
-  get API_URL(): string { return this.environment.API_URL; }
+  get API_URL(): string { return new UrlModel(this.environment.BASE_URL).setPath(this.environment.BASE_PATH).addPath('api').buildUrl(); }
+  get API_ADMIN(): string { return new UrlModel(this.environment.BASE_URL).setPath(this.environment.BASE_PATH).addPath('api/configuration').buildUrl(); }
+  get API_INNOVATIONS(): string { return new UrlModel(this.environment.BASE_URL).setPath(this.environment.BASE_PATH).addPath('api/innovations').buildUrl(); }
+  get API_USERS(): string { return new UrlModel(this.environment.BASE_URL).setPath(this.environment.BASE_PATH).addPath('api/management/users').buildUrl(); }
   get BASE_URL(): string { return this.environment.BASE_URL; }
   get BASE_PATH(): string { return this.environment.BASE_PATH; }
 
@@ -43,7 +51,6 @@ export class EnvironmentStore {
         this.environment = {
           BASE_URL: appServerENV.BASE_URL,
           BASE_PATH: this.parseBasePath(appServerENV.BASE_PATH),
-          API_URL: appServerENV.API_URL,
           LOG_LEVEL: NgxLoggerLevel[appServerENV.LOG_LEVEL],
           ENABLE_ANALYTICS: appServerENV.ENABLE_ANALYTICS
         };
@@ -56,8 +63,7 @@ export class EnvironmentStore {
 
         this.environment = {
           BASE_URL: browserEnv.BASE_URL,
-          BASE_PATH: this.parseBasePath(browserEnv.BASE_PATH), // ['', '/'].includes(browserEnv.BASE_PATH) ? '' : `${browserEnv.BASE_PATH?.startsWith('/') ? '' : '/'}${browserEnv.BASE_PATH}`,
-          API_URL: browserEnv.API_URL,
+          BASE_PATH: this.parseBasePath(browserEnv.BASE_PATH),
           LOG_LEVEL: NgxLoggerLevel[browserEnv.LOG_LEVEL],
           ENABLE_ANALYTICS: browserEnv.ENABLE_ANALYTICS
         };
