@@ -22,21 +22,26 @@ function getRequestHandler(): AxiosInstance {
 function parseAPIUrl(url: string): string {
 
   const urlEndingSegments = url.substring(url.indexOf('api')); // Includes api/...
+  let apiUrl = ENVIRONMENT.API_URL;
 
   if (ENVIRONMENT.LOCAL_MODE) {
     switch (true) {
-      case url.includes('api/management/users'):
-        return new URL(urlEndingSegments, ENVIRONMENT.LOCAL_API_USERS_BASE_URL).href;
+      case url.includes('api/users'):
+        apiUrl = ENVIRONMENT.LOCAL_API_USERS_BASE_URL;
+        break;
       case url.includes('api/innovations'):
-        return new URL(urlEndingSegments, ENVIRONMENT.LOCAL_API_INNOVATIONS_BASE_URL).href;
+        apiUrl = ENVIRONMENT.LOCAL_API_INNOVATIONS_BASE_URL;
+        break;
       case url.includes('api/configuration'):
-        return new URL(urlEndingSegments, ENVIRONMENT.LOCAL_API_ADMIN_BASE_URL).href;
+        apiUrl = ENVIRONMENT.LOCAL_API_ADMIN_BASE_URL;
+        break;
       default:
-        return new URL(urlEndingSegments, ENVIRONMENT.API_URL).href;
+        apiUrl = ENVIRONMENT.API_URL;
+        break;
     }
-  } else {
-    return new URL(urlEndingSegments, ENVIRONMENT.API_URL).href;
   }
+
+  return new URL(urlEndingSegments, apiUrl).href;
 
 }
 
