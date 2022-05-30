@@ -22,7 +22,7 @@
           <p *ngIf="isAgree">We've updated our <a [href]="policyURL" >terms of use privacy notice</a> and <a href="/transactional/policies/cookies-policy">cookies policy.</a></p>         
           <p *ngIf="!isAgree">You need to agree to the updated <a [href]="policyURL" >terms of use privacy notice</a> and <a href="/transactional/policies/cookies-policy">cookies policy</a> to keep using your account.</p>         
 
-          <div *ngIf="tou.summary && isAgree">
+          <div *ngIf="tou.summary">
             <p>Here is a summary of the changes:</p>  
             <div class="nhsuk-inset-text">
               <span class="nhsuk-u-visually-hidden">Information: </span>
