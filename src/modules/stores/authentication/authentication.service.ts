@@ -39,13 +39,15 @@ export type saveUserInfoDTO = {
   organisation?: { id: string; name: string; isShadow: boolean; size: null | string; }
 };
 
-export type userTermsOfUseInfo = {
-  id: string,
-  name: string,
-  summary: string,
-  releasedAt?: string,
-  isAccepted: string
+export type GetTermsOfUseLastVersionInfoDTO = {
+  id: string;
+  name: string;
+  summary: string;
+  releasedAt?: string;
+  isAccepted: boolean;
 };
+
+
 @Injectable()
 export class AuthenticationService {
 
@@ -120,14 +122,15 @@ export class AuthenticationService {
 
   }
 
-  userTermsOfUseInfo(): Observable<any> {
+  userTermsOfUseInfo(): Observable<null | GetTermsOfUseLastVersionInfoDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('/tou/me');
-    return this.http.get<userTermsOfUseInfo>(url.buildUrl()).pipe(
+    const url = new UrlModel(this.API_URL).addPath('tou/me');
+    return this.http.get<GetTermsOfUseLastVersionInfoDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response),
-      catchError(() => of([]))
+      catchError(() => of(null))
     );
+
   }
 
 }

@@ -1,0 +1,52 @@
+<theme-header></theme-header>
+<theme-header-navigation-bar [rightMenuItems]="navigationMenuBar.rightItems"></theme-header-navigation-bar>
+
+<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
+
+  <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+    <p> {{ alert.message }} </p>
+  </theme-alert>
+
+  <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+  <ng-container *ngIf="pageStatus === 'READY'">
+
+    <div class="nhsuk-grid-row">
+
+      <div class="nhsuk-grid-column-two-thirds">
+
+        <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
+
+        <p>We've updated our <a [href]="policyURL">terms of use</a> and <a routerLink="/policies/cookies-policy">cookies policy</a>.</p>
+
+        <div *ngIf="termsOfUseVersion.summary">
+          <p>Here is a summary of the changes:</p>
+          <div class="nhsuk-inset-text">
+            <p>{{ termsOfUseVersion.summary }}</p>
+          </div>
+        </div>
+
+        <p>By continuing you agree to our updated terms of use.</p>
+        <button type="button" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-right-3" (click)="onAgree()">Agree and continue</button>
+
+      </div>
+
+      <div class="nhsuk-grid-column-one-third nhsuk-u-padding-top-5">
+        <div class="nhsuk-card x-card-top-border ">
+          <div class="nhsuk-card__content">
+            <h2 class="nhsuk-card__heading nhsuk-heading-m"> Other options </h2>
+            <ul class="nhsuk-list">
+              <li>If you do not agree to the new terms, you cannot use your Innovation Service account. <a href="{{ appUrl }}/signout">Sign out and go to the Innovation Service homepage</a>.</li>
+              <li>If you no longer need your account and want to delete your information, you can <a href="{{ baseUrl }}/contact-us">contact us. </a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </ng-container>
+
+</div>
+
+<theme-footer></theme-footer>

@@ -33,7 +33,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
         }),
         concatMap(() => this.authenticationService.userTermsOfUseInfo()),
         concatMap(response => {
-          this.state.isTermsOfUseAccepted = response.isAccepted;
+          this.state.isTermsOfUseAccepted = response?.isAccepted ?? false;
           return of(true);
         }),
         concatMap(() => this.authenticationService.verifyInnovator()),

@@ -37,7 +37,7 @@ import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/i
 import { PageInnovationCommentsListComponent } from '@shared-module/pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from '@shared-module/pages/innovation/comments/comments-new.component';
 import { PageInnovationSupportStatusListComponent } from '@shared-module/pages/innovation/innovation-support-status-list.component';
-import { PageTermsOfUseComponent } from '@shared-module/pages/terms-of-use/terms-of-use.component';
+import { PageTermsOfUseAcceptanceComponent } from '@shared-module/pages/terms-of-use/terms-of-use-acceptance.component';
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
@@ -56,9 +56,9 @@ const routes: Routes = [
   },
 
   {
-    path: 'termsofuse',
+    path: 'terms-of-use',
     pathMatch: 'full',
-    component: PageTermsOfUseComponent
+    component: PageTermsOfUseAcceptanceComponent
   },
 
   {

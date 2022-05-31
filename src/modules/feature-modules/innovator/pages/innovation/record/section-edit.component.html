@@ -4,11 +4,8 @@
     <div class="nhsuk-grid-column-two-thirds">
       <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
         <p> {{ alert.message }} </p>
-
         <ul *ngIf="alert.errorsList.length > 0" class="nhsuk-list nhsuk-error-summary__list">
-          <li *ngFor="let item of alert.errorsList">
-            {{ item.label }}<br />({{ item.error | translate }})
-          </li>
+          <li *ngFor="let item of alert.errorsList">{{ item.label }}<br />({{ item.error | translate }})</li>
         </ul>
       </theme-alert>
     </div>
@@ -40,7 +37,7 @@
           <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
 
           <dl class="nhsuk-summary-list">
-            <div *ngFor="let item of wizard.getSummary(); let i = index;" class="nhsuk-summary-list__row">
+            <div *ngFor="let item of wizard.getSummary()" class="nhsuk-summary-list__row">
               <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
               <dd class="nhsuk-summary-list__value text-pre-wrap">
                 <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>

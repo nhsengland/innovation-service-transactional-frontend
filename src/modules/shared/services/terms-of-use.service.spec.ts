@@ -1,0 +1,76 @@
+import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+
+import { ENV } from '@tests/app.mocks';
+
+import { Injector } from '@angular/core';
+
+import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
+import { StoresModule } from '@modules/stores';
+
+import { GetTermsOfUseLastVersionInfoDTO, TermsOfUseService } from './terms-of-use.service';
+
+
+describe('Shared/Services/TermsOfUseService', () => {
+
+  let httpMock: HttpTestingController;
+  let environmentStore: EnvironmentStore;
+  let service: TermsOfUseService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        CoreModule,
+        StoresModule
+      ],
+      providers: [
+        TermsOfUseService,
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
+      ]
+    });
+
+    AppInjector.setInjector(TestBed.inject(Injector));
+
+    httpMock = TestBed.inject(HttpTestingController);
+    environmentStore = TestBed.inject(EnvironmentStore);
+    service = TestBed.inject(TermsOfUseService);
+
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+  });
+
+
+  it('should run getTermsOfUseLastVersionInfo() and return success', () => {
+
+    const responseMock: GetTermsOfUseLastVersionInfoDTO  = { id: 'id1', name: 'Organisation 01', summary: 'summary', isAccepted: 'true' };
+    const expected = responseMock;
+
+    let response: any = null;
+    service.getTermsOfUseLastVersionInfo().subscribe(success => response = success, error => response = error);
+
+    const req = httpMock.expectOne(`${environmentStore.API_URL}/tou/me`);
+    req.flush(responseMock);
+    expect(req.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run acceptTermsOfUseVersion() and return success', () => {
+
+    const responseMock  = { id: 'id1' };
+    const expected = responseMock;
+
+    let response: any = null;
+    service.acceptTermsOfUseVersion('id1').subscribe(success => response = success, error => response = error);
+
+    const req = httpMock.expectOne(`${environmentStore.API_URL}/tou/id1/accept`);
+    req.flush(responseMock);
+    expect(req.request.method).toBe('PATCH');
+    expect(response).toEqual(expected);
+
+  });
+
+});
