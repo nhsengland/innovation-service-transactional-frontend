@@ -18,10 +18,12 @@ import { InnovationSectionEvidenceViewComponent } from './pages/innovation/evide
 import { PageActionStatusListComponent } from './pages/innovation/action-status-list.component';
 import { PageInnovationActivityLogComponent } from './pages/innovation/innovation-activity-log.component';
 import { PageInnovationRecordComponent } from './pages/innovation/innovation-record.component';
+import { PageInnovationCommentsEditComponent } from './pages/innovation/comments/comments-edit.component';
 import { PageInnovationCommentsListComponent } from './pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from './pages/innovation/comments/comments-new.component';
 import { PageInnovationSupportStatusListComponent } from './pages/innovation/innovation-support-status-list.component';
-import { PageTermsOfUseComponent } from '@shared-module/pages/terms-of-use/terms-of-use.component';
+
+import { PageTermsOfUseAcceptanceComponent } from '@shared-module/pages/terms-of-use/terms-of-use-acceptance.component';
 
 import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/not-found/not-found.component';
@@ -31,10 +33,9 @@ import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
 
 // Services.
 import { InnovationsService } from './services/innovations.service';
-import { OrganisationsService } from './services/organisations.service';
 import { NotificationsService } from './services/notifications.service';
-import { PageInnovationCommentsEditComponent } from './pages/innovation/comments/comments-edit.component';
-import { UserTermsOfUseService } from './services/userTermsOfuse.service';
+import { OrganisationsService } from './services/organisations.service';
+import { TermsOfUseService } from './services/terms-of-use.service';
 
 @NgModule({
   imports: [
@@ -62,7 +63,7 @@ import { UserTermsOfUseService } from './services/userTermsOfuse.service';
     PageInnovationCommentsNewComponent,
     PageInnovationCommentsEditComponent,
     PageInnovationSupportStatusListComponent,
-    PageTermsOfUseComponent,
+    PageTermsOfUseAcceptanceComponent,
 
     PageErrorComponent,
     PageNotFoundComponent,
@@ -72,9 +73,9 @@ import { UserTermsOfUseService } from './services/userTermsOfuse.service';
   ],
   providers: [
     InnovationsService,
-    OrganisationsService,
     NotificationsService,
-    UserTermsOfUseService
+    OrganisationsService,
+    TermsOfUseService
   ],
   exports: [
     CommonModule,
