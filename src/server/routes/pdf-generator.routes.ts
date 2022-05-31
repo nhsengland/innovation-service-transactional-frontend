@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import { IProfile } from 'passport-azure-ad';
-import { BASE_PATH } from '../config/constants.config';
+import { ENVIRONMENT } from '../config/constants.config';
 import { generatePDF } from '../utils/pdf/parser';
 import { getAccessTokenByOid } from './authentication.routes';
 import { getAppInsightsClient } from '../../globals';
@@ -8,7 +8,7 @@ import { getAppInsightsClient } from '../../globals';
 const pdfRouter: Router = express.Router();
 
 // Generate PDF endpoint
-pdfRouter.get(`${BASE_PATH}/exports/:innovationId/pdf`, (req, res) => {
+pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) => {
     try {
 
     const innovationId = req.params.innovationId;

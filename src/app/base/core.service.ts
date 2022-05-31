@@ -23,6 +23,9 @@ export class CoreService {
 
   protected APP_URL: string;
   protected API_URL: string;
+  protected API_ADMIN: string;
+  protected API_INNOVATIONS: string;
+  protected API_USERS: string;
 
 
   constructor() {
@@ -40,6 +43,9 @@ export class CoreService {
 
     this.APP_URL = this.stores.environment.APP_URL;
     this.API_URL = this.stores.environment.API_URL;
+    this.API_ADMIN = this.stores.environment.API_ADMIN;
+    this.API_INNOVATIONS = this.stores.environment.API_INNOVATIONS;
+    this.API_USERS = this.stores.environment.API_USERS;
 
   }
 
