@@ -1,20 +1,28 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-full">
 
-    <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-5"> {{ section.title }} </h1>
-
     <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
       <p> {{ alert.message }} </p>
     </theme-alert>
-    <button *ngIf="showNextSectionButton" (click)="nextSection()" class="nhsuk-button nhsuk-u-margin-right-3"> Continue to next section </button>
-    
+
     <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
     <ng-container *ngIf="pageStatus === 'READY'">
 
+      <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-5">
+        {{ section.title }}
+        <div class="d-block">
+          <strong class="nhsuk-tag" [ngClass]="{ 'nhsuk-tag--yellow': section.status.id === 'DRAFT', 'nhsuk-tag--green': section.status.id === 'SUBMITTED'} ">
+            {{ section.status.label }}
+          </strong>
+        </div>
+      </h1>
+
+      <button *ngIf="section.nextSectionId" routerLink="../{{ section.nextSectionId }}" class="nhsuk-button nhsuk-u-margin-right-3"> Continue to next section </button>
+
       <ng-container *ngIf="!section.isNotStarted">
 
-        <div *ngIf="innovation.status === 'IN_PROGRESS' && section.status === 'DRAFT'" class="nhsuk-inset-text">
+        <div *ngIf="innovation.status === 'IN_PROGRESS' && section.status.id === 'DRAFT'" class="nhsuk-inset-text">
           <span class="nhsuk-u-visually-hidden">Information:</span>
           <p *ngIf="module === 'innovator'">
             This section is not visible to accessors because you changed it to "In draft" status, you need to submit the section if you want to share it with accessors.
@@ -45,14 +53,16 @@
 
       <ng-container *ngIf="module === 'innovator'">
         <button *ngIf="section.isNotStarted" type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-right-3"> Start now </button>
-        <!-- <button *ngIf="section.showSubmitButton" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-right-3"> Confirm section answers </button> -->
-        <button *ngIf="section.hasEvidences && !section.isNotStarted" routerLink="evidence/new" class="nhsuk-button nhsuk-button--secondary"> Add evidence </button>
+        <div>
+          <button *ngIf="section.hasEvidences && !section.isNotStarted" routerLink="evidence/new" class="nhsuk-button nhsuk-button--secondary"> Add evidence </button>
+        </div>
+        <div>
+          <button *ngIf="section.showSubmitButton" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-right-3"> Confirm section answers </button>
+        </div>
       </ng-container>
 
-      <ng-container *ngIf="module === 'accessor'">
-        <ng-container *ngIf="innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED'">
-          <button routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" [queryParams]="{ section: sectionId }" class="nhsuk-button"> Create action for this section </button>
-        </ng-container>
+      <ng-container *ngIf="module === 'accessor' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED')">
+        <button routerLink="/accessor/innovations/{{ innovation.id }}/action-tracker/new" [queryParams]="{ section: section.id }" class="nhsuk-button"> Create action for this section </button>
       </ng-container>
 
     </ng-container>

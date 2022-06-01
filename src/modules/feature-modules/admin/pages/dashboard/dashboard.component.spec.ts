@@ -5,20 +5,23 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Injector } from '@angular/core';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { AuthenticationService, StoresModule } from '@modules/stores';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageDashboardComponent } from './dashboard.component';
 import { ActivatedRoute } from '@angular/router';
-import { of, throwError } from 'rxjs';
+
+import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 
 
 describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
 
+  let activatedRoute: ActivatedRoute;
+
+  let authenticationStore: AuthenticationStore;
+
   let component: PageDashboardComponent;
   let fixture: ComponentFixture<PageDashboardComponent>;
-  let activatedRoute: ActivatedRoute;
-  let service: AuthenticationService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -32,8 +35,13 @@ describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
+
     activatedRoute = TestBed.inject(ActivatedRoute);
-    service = TestBed.inject(AuthenticationService);
+
+    authenticationStore = TestBed.inject(AuthenticationStore);
+
+    authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
+
   });
 
 
@@ -45,35 +53,20 @@ describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
   });
 
   it('should have alert when password changed', () => {
-    activatedRoute.snapshot.queryParams = { alert: 'xxxx' };
-    service.getUserInfo = () => of({ id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: 'INNOVATOR', roles: [], organisations: [], passwordResetOn: new Date(new Date().getTime() -  1 * 60000).toString(), phone: '' });
+
+    authenticationStore.getUserInfo = () => ({
+      ...USER_INFO_INNOVATOR,
+      type: 'ADMIN',
+      passwordResetOn: new Date(new Date().getTime() - 1 * 60000).toString()
+    });
+
+    const expected = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
 
     fixture = TestBed.createComponent(PageDashboardComponent);
     component = fixture.componentInstance;
-
-    const mockAlert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
-
     fixture.detectChanges();
-    expect(component.alert).toEqual(mockAlert);
-  });
-
-  it('should have error alert when unable to fetch', () => {
-    activatedRoute.snapshot.queryParams = { alert: 'xxxx' };
-    service.getUserInfo = () => throwError('error');
-
-    fixture = TestBed.createComponent(PageDashboardComponent);
-    component = fixture.componentInstance;
-
-    const mockAlert = {
-      type: 'ERROR',
-      title: 'Unable to fetch user information',
-      message: 'Please try again or contact us for further help'
-    };
-
-    fixture.detectChanges();
-    expect(component.alert).toEqual(mockAlert);
+    expect(component.alert).toEqual(expected);
 
   });
-
 
 });

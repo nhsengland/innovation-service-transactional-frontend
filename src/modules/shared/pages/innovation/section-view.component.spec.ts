@@ -3,22 +3,26 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, InnovationStore } from '@modules/stores';
+import { StoresModule, InnovationStore, ContextStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { InnovationSectionViewComponent } from './section-view.component';
 import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
 import { InnovationStatusEnum } from '@modules/shared/enums';
 
+import { CONTEXT_INNOVATION_INFO } from '@tests/data.mocks';
+
 
 describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
   let activatedRoute: ActivatedRoute;
+  let router: Router;
 
+  let contextStore: ContextStore;
   let innovationStore: InnovationStore;
 
   let component: InnovationSectionViewComponent;
@@ -38,28 +42,29 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     AppInjector.setInjector(TestBed.inject(Injector));
 
     activatedRoute = TestBed.inject(ActivatedRoute);
+    router = TestBed.inject(Router);
 
+    contextStore = TestBed.inject(ContextStore);
     innovationStore = TestBed.inject(InnovationStore);
 
-    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', status: 'IN_PROGRESS', assessment: {} } };
+    contextStore.getInnovation = () => ({ ...CONTEXT_INNOVATION_INFO, status: InnovationStatusEnum.IN_PROGRESS });
 
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
+    router.navigateByUrl('/'); // Simulate router navigation.
     fixture.detectChanges();
     expect(component).toBeTruthy();
-
   });
 
-  it('should show "sectionUpdateSuccess" warning with innovation status = IN_PROGRESS', () => {
+  it('should show "sectionUpdateSuccess" warning', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'sectionUpdateSuccess' };
 
-    const expected = { type: 'SUCCESS', title: 'You have confirmed your answers for this section', message: 'Go to next section or return to the full innovation record' };
+    const expected = { type: 'SUCCESS', title: 'Your answers have been confirmed for this section', message: 'Go to next section or return to the full innovation record' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
@@ -68,23 +73,6 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     expect(component.alert).toEqual(expected);
 
   });
-
-  it('should show "sectionUpdateSuccess" warning with innovation status = CREATED', () => {
-
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
-    activatedRoute.snapshot.queryParams = { alert: 'sectionUpdateSuccess' };
-    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', status: 'CREATED', assessment: {} } };
-
-    const expected = { type: 'SUCCESS', title: 'You have confirmed your answers for this section', message: 'Go to next section or return to the full innovation record' };
-
-    fixture = TestBed.createComponent(InnovationSectionViewComponent);
-    component = fixture.componentInstance;
-    component.innovation = { id: 'Inno01', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS, owner: { isActive: true, name: 'User name' } };
-    fixture.detectChanges();
-    expect(component.alert).toEqual(expected);
-
-  });
-
 
   it('should show "sectionUpdateError" warning', () => {
 
@@ -119,7 +107,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'evidenceDeleteSuccess' };
 
-    const expected = { type: 'WARNING', title: 'Your evidence has been deleted', message: '' };
+    const expected = { type: 'WARNING', title: 'Your evidence has been deleted' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
@@ -157,7 +145,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
   });
 
 
-  it('should have initial information loaded', () => {
+  it('should have initial information loaded FOR an Innovator', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
 
@@ -172,35 +160,50 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
       data: { some: 'values' }
     };
     innovationStore.getSectionInfo$ = () => of(responseMock as any);
-    const expected = 'NOT_STARTED';
+    const expected = { id: 'NOT_STARTED', label: 'Not started' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.section.status).toBe(expected);
+    expect(component.section.status).toEqual(expected);
 
   });
+
+
+  it('should display a message that section is in DRAFT', () => {
+
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
+    activatedRoute.snapshot.data = { module: 'accessor' };
+
+    const responseMock = {
+      section: {
+        id: 'someId',
+        section: InnovationSectionsIds,
+        status: 'DRAFT',
+        actionStatus: '',
+        updatedAt: '2020-01-01T00:00:00.000Z'
+      },
+      data: { some: 'values' }
+    };
+    innovationStore.getSectionInfo$ = () => of(responseMock as any);
+
+    fixture = TestBed.createComponent(InnovationSectionViewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component.summaryList).toEqual([]);
+
+  });
+
 
   it('should NOT have initial information loaded', () => {
 
     innovationStore.getSectionInfo$ = () => throwError('error');
-    const expected = 'UNKNOWN';
+    const expected = { id: 'UNKNOWN', label: '' };
 
     fixture = TestBed.createComponent(InnovationSectionViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.section.status).toBe(expected);
-
-  });
-
-
-  it('should run getEditUrl()', () => {
-
-    fixture = TestBed.createComponent(InnovationSectionViewComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    expect(component.getEditUrl(1)).toBe('edit/1');
+    expect(component.section.status).toEqual(expected);
 
   });
 
