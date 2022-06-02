@@ -45,7 +45,7 @@ describe('Shared/Services/TermsOfUseService', () => {
 
   it('should run getTermsOfUseLastVersionInfo() and return success', () => {
 
-    const responseMock: GetTermsOfUseLastVersionInfoDTO  = { id: 'id1', name: 'Organisation 01', summary: 'summary', isAccepted: 'true' };
+    const responseMock: GetTermsOfUseLastVersionInfoDTO  = { id: 'id1', name: 'Organisation 01', summary: 'summary', isAccepted: true };
     const expected = responseMock;
 
     let response: any = null;

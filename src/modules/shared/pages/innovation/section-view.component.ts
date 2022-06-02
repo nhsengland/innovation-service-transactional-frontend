@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
+
 import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { ContextInnovationType } from '@modules/stores/context/context.models';
+
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
 import { InnovationSectionsIds, INNOVATION_SECTION_STATUS } from '@stores-module/innovation/innovation.models';
@@ -16,29 +19,24 @@ import { InnovationSectionsIds, INNOVATION_SECTION_STATUS } from '@stores-module
 })
 export class InnovationSectionViewComponent extends CoreComponent implements OnInit {
 
-  module: '' | 'innovator' | 'accessor' = '';
-  innovationId: string;
-  innovation: ContextInnovationType;
-  sectionId: InnovationSectionsIds;
-  baseUrl = '';
-  nextUrl = '';
-  keys = INNOVATION_SECTIONS.flatMap(x => x.sections.map(y => y.id));
-  showNextSectionButton = false;
-
   alert: AlertType = { type: null };
+
+  module: '' | 'innovator' | 'accessor' = '';
+  innovation: ContextInnovationType;
 
   section: {
     id: InnovationSectionsIds;
+    nextSectionId: null | string,
     title: string;
-    status: keyof typeof INNOVATION_SECTION_STATUS;
+    status: { id: keyof typeof INNOVATION_SECTION_STATUS, label: string };
     isNotStarted: boolean;
     showSubmitButton: boolean;
     hasEvidences: boolean;
+    wizard: WizardEngineModel;
   };
 
-  wizard: WizardEngineModel;
+  summaryList: WizardSummaryType[] = [];
 
-  summaryList: WizardSummaryType[];
 
   constructor(
     private activatedRoute: ActivatedRoute
@@ -48,58 +46,73 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
     this.setPageTitle('Section details');
 
     this.module = this.activatedRoute.snapshot.data.module;
-    this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
-    this.sectionId = this.activatedRoute.snapshot.params.sectionId;
-    this.baseUrl = `/${this.module}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
-    this.nextUrl = `${this.baseUrl}/${this.keys[this.keys.indexOf(this.sectionId) + 1]}`;
+
+    this.section = {
+      id: this.activatedRoute.snapshot.params.sectionId,
+      nextSectionId: null,
+      title: '',
+      status: { id: 'UNKNOWN', label: '' },
+      isNotStarted: false,
+      showSubmitButton: false,
+      hasEvidences: false,
+      wizard: new WizardEngineModel({})
+    };
+
+  }
+
+  ngOnInit(): void {
+
+    this.initializePage();
+
+    // This router subscription is needed for the button to go to the next step.
+    // As is it the same component, we can't use the routerLink directive alone.
+    this.subscriptions.push(
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.initializePage())
+    );
+
+  }
+
+
+  private initializePage(): void {
+
+    this.setPageStatus('LOADING');
+
+    const section = this.stores.innovation.getSection(this.activatedRoute.snapshot.params.sectionId);
+    this.section = {
+      id: this.activatedRoute.snapshot.params.sectionId,
+      nextSectionId: null,
+      title: section?.title || '',
+      status: { id: 'UNKNOWN', label: '' },
+      isNotStarted: false,
+      showSubmitButton: false,
+      hasEvidences: !!section?.evidences?.steps.length,
+      wizard: section?.wizard || new WizardEngineModel({})
+    };
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'sectionUpdateSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'You have confirmed your answers for this section',
-          message: (this.keys.indexOf(this.sectionId) + 1) !== this.keys.length ? 'Go to next section or return to the full innovation record' : '',
-        };
-        if ((this.keys.indexOf(this.sectionId) + 1) !== this.keys.length) {
-          this.showNextSectionButton = true;
-        }
+        const sectionsIdsList = INNOVATION_SECTIONS.flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
+        const currentSectionIndex = sectionsIdsList.indexOf(this.section.id);
+        this.section.nextSectionId = sectionsIdsList[currentSectionIndex + 1] || null;
+        this.alert = { type: 'SUCCESS', title: 'Your answers have been confirmed for this section', message: currentSectionIndex < sectionsIdsList.length - 1 ? 'Go to next section or return to the full innovation record' : undefined };
         break;
 
       case 'sectionUpdateError':
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when saving your section',
-          message: 'Please try again or contact us for further help.'
-        };
+        this.alert = { type: 'ERROR', title: 'An error occurred when saving your section', message: 'Please try again or contact us for further help.' };
         break;
 
       case 'evidenceUpdateSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'Your evidence has been saved',
-          message: 'You need to submit this section for review to notify your supporting accessor(s).'
-        };
-        if ((this.keys.indexOf(this.sectionId) + 1) !== this.keys.length) {
-          this.showNextSectionButton = true;
-        }
+        this.alert = { type: 'SUCCESS', title: 'Your evidence has been saved', message: 'You need to submit this section for review to notify your supporting accessor(s).' };
         break;
 
       case 'evidenceDeleteSuccess':
-        this.alert = {
-          type: 'WARNING',
-          title: 'Your evidence has been deleted',
-          message: ''
-        };
+        this.alert = { type: 'WARNING', title: 'Your evidence has been deleted' };
         break;
 
       case 'evidenceUpdateError':
       case 'evidenceDeleteError':
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when saving your evidence',
-          message: 'Please try again or contact us for further help.'
-        };
+        this.alert = { type: 'ERROR', title: 'An error occurred when saving your evidence', message: 'Please try again or contact us for further help.' };
         break;
 
       default:
@@ -107,45 +120,18 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
     }
 
 
-    const section = this.stores.innovation.getSection(this.sectionId);
-
-    this.section = {
-      id: this.sectionId,
-      title: section?.title || '',
-      status: 'UNKNOWN',
-      isNotStarted: false,
-      showSubmitButton: false,
-      hasEvidences: !!section?.evidences?.steps.length
-    };
-
-    this.wizard = section?.wizard || new WizardEngineModel({});
-
-    this.summaryList = [];
-
-  }
-
-
-  ngOnInit(): void {
-    this.getSectionInfo();
-  }
-
-
-  getSectionInfo(): void {
-
-    this.setPageStatus('LOADING');
-
-    this.stores.innovation.getSectionInfo$(this.module, this.innovationId, this.section.id).subscribe(
+    this.stores.innovation.getSectionInfo$(this.module, this.innovation.id, this.section.id).subscribe(
       response => {
 
-        this.section.status = response.section.status;
-        this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status);
-        this.section.showSubmitButton = ['DRAFT'].includes(this.section.status);
+        this.section.status = { id: response.section.status, label: INNOVATION_SECTION_STATUS[response.section.status]?.label || '' };
+        this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
+        this.section.showSubmitButton = ['DRAFT'].includes(this.section.status.id);
 
-        if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status === 'DRAFT') {
+        if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
           // If accessor, only view information if section is submitted.
           this.summaryList = [];
         } else {
-          this.summaryList = this.wizard.runSummaryParsing( this.wizard.runInboundParsing(response.data));
+          this.summaryList = this.section.wizard.runSummaryParsing(this.section.wizard.runInboundParsing(response.data));
         }
 
         this.setPageStatus('READY');
@@ -162,41 +148,13 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
   }
 
-
-  getEditUrl(stepNumber: number): string {
-    return `edit/${stepNumber}`;
-  }
-
-  nextSection(): void {
-    this.alert = {type: null};
-    this.showNextSectionButton = false;
-
-    if ((this.keys.indexOf(this.sectionId) + 1) !== this.keys.length)    {
-      const section = this.stores.innovation.getSection(this.keys[this.keys.indexOf(this.sectionId) + 1]);
-      this.sectionId = this.keys[this.keys.indexOf(this.sectionId) + 1];
-      this.section = {
-        id: this.sectionId,
-        title: section?.title || '',
-        status: 'UNKNOWN',
-        isNotStarted: false,
-        showSubmitButton: false,
-        hasEvidences: !!section?.evidences?.steps.length
-      };
-
-      this.wizard = section?.wizard || new WizardEngineModel({});
-
-      this.summaryList = [];
-      this.getSectionInfo();
-      this.redirectTo(this.nextUrl);
-    }
-  }
-
   onSubmitSection(): void {
 
-    this.stores.innovation.submitSections$(this.innovationId, [this.section.id]).subscribe(
+    this.stores.innovation.submitSections$(this.innovation.id, [this.section.id]).subscribe(
       () => {
 
-        this.getSectionInfo();
+        this.section.status = { id: 'SUBMITTED', label: 'Submitted' };
+        this.section.showSubmitButton = false;
 
         this.alert = {
           type: 'SUCCESS',
