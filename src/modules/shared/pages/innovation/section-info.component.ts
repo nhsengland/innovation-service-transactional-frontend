@@ -14,10 +14,10 @@ import { InnovationSectionsIds, INNOVATION_SECTION_STATUS } from '@stores-module
 
 
 @Component({
-  selector: 'shared-pages-innovation-section-view',
-  templateUrl: './section-view.component.html'
+  selector: 'shared-pages-innovation-section-info',
+  templateUrl: './section-info.component.html'
 })
-export class InnovationSectionViewComponent extends CoreComponent implements OnInit {
+export class InnovationSectionInfoComponent extends CoreComponent implements OnInit {
 
   alert: AlertType = { type: null };
 
@@ -74,6 +74,14 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
   }
 
 
+  private getNextSectionId(): string | null {
+
+    const sectionsIdsList = INNOVATION_SECTIONS.flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
+    const currentSectionIndex = sectionsIdsList.indexOf(this.section.id);
+    return sectionsIdsList[currentSectionIndex + 1] || null;
+
+  }
+
   private initializePage(): void {
 
     this.setPageStatus('LOADING');
@@ -92,10 +100,8 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'sectionUpdateSuccess':
-        const sectionsIdsList = INNOVATION_SECTIONS.flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
-        const currentSectionIndex = sectionsIdsList.indexOf(this.section.id);
-        this.section.nextSectionId = sectionsIdsList[currentSectionIndex + 1] || null;
-        this.alert = { type: 'SUCCESS', title: 'Your answers have been confirmed for this section', message: currentSectionIndex < sectionsIdsList.length - 1 ? 'Go to next section or return to the full innovation record' : undefined };
+        this.section.nextSectionId = this.getNextSectionId();
+        this.alert = { type: 'SUCCESS', title: 'Your answers have been confirmed for this section', message: this.section.nextSectionId ? 'Go to next section or return to the full innovation record' : undefined };
         break;
 
       case 'sectionUpdateError':
@@ -116,6 +122,7 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
         break;
 
       default:
+        this.alert = { type: null };
         break;
     }
 
@@ -155,12 +162,8 @@ export class InnovationSectionViewComponent extends CoreComponent implements OnI
 
         this.section.status = { id: 'SUBMITTED', label: 'Submitted' };
         this.section.showSubmitButton = false;
-
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'Your section has been submitted',
-          setFocus: true
-        };
+        this.section.nextSectionId = this.getNextSectionId();
+        this.alert = { type: 'SUCCESS', title: 'Your answers have been confirmed for this section', message: this.section.nextSectionId ? 'Go to next section or return to the full innovation record' : undefined };
 
       },
       () => {
