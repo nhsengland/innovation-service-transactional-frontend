@@ -16,7 +16,7 @@ import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './page
 import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details/manage-details-edit.component';
 
-import { InnovationSectionViewComponent } from '@shared-module/pages/innovation/section-view.component';
+import { InnovationSectionInfoComponent } from '@shared-module/pages/innovation/section-info.component';
 import { InnovationSectionEvidenceViewComponent } from '@shared-module/pages/innovation/evidence-view.component';
 import { PageInnovationActivityLogComponent } from '@shared-module/pages/innovation/innovation-activity-log.component';
 import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/innovation-record.component';
@@ -189,7 +189,7 @@ const routes: Routes = [
               {
                 path: 'record/sections/:sectionId',
                 pathMatch: 'full',
-                component: InnovationSectionViewComponent,
+                component: InnovationSectionInfoComponent,
                 data: {
                   layoutOptions: {
                     type: 'emptyLeftAside',

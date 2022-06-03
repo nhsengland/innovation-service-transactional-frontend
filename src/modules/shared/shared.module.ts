@@ -13,7 +13,7 @@ import { PageAccountEmailNotificationsComponent } from './pages/account/email-no
 import { PageAccountManageDetailsInfoComponent } from './pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from './pages/account/manage-details/manage-details-edit.component';
 
-import { InnovationSectionViewComponent } from './pages/innovation/section-view.component';
+import { InnovationSectionInfoComponent } from './pages/innovation/section-info.component';
 import { InnovationSectionEvidenceViewComponent } from './pages/innovation/evidence-view.component';
 import { PageActionStatusListComponent } from './pages/innovation/action-status-list.component';
 import { PageInnovationActivityLogComponent } from './pages/innovation/innovation-activity-log.component';
@@ -54,7 +54,7 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     PageAccountManageDetailsInfoComponent,
     PageAccountManageDetailsEditComponent,
 
-    InnovationSectionViewComponent,
+    InnovationSectionInfoComponent,
     InnovationSectionEvidenceViewComponent,
     PageInnovationActivityLogComponent,
     PageInnovationRecordComponent,
