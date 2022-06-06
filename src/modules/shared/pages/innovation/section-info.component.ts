@@ -132,13 +132,17 @@ export class InnovationSectionInfoComponent extends CoreComponent implements OnI
 
         this.section.status = { id: response.section.status, label: INNOVATION_SECTION_STATUS[response.section.status]?.label || '' };
         this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
-        this.section.showSubmitButton = ['DRAFT'].includes(this.section.status.id);
+
+        this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data));
+
+        const validInformation = this.section.wizard.validateData();
+        this.section.showSubmitButton = validInformation.valid && ['DRAFT'].includes(this.section.status.id);
 
         if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
           // If accessor, only view information if section is submitted.
           this.summaryList = [];
         } else {
-          this.summaryList = this.section.wizard.runSummaryParsing(this.section.wizard.runInboundParsing(response.data));
+          this.summaryList = this.section.wizard.runSummaryParsing();
         }
 
         this.setPageStatus('READY');
