@@ -4,6 +4,8 @@ export class AuthenticationModel {
   isValidUser?: boolean;
   hasInnovationTransfers?: boolean;
 
+  isTermsOfUseAccepted?: boolean;
+
   user?: {
     id: string;
     email: string;
@@ -22,7 +24,6 @@ export class AuthenticationModel {
         name: string;
       }[];
     }[];
-    innovations: { id: string, name: string }[];
     passwordResetOn: string;
 
   };

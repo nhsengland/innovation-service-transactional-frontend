@@ -14,6 +14,7 @@ import { AppInjector } from '@modules/core/injectors/app-injector';
 
 import { EnvironmentStore } from '@modules/core/stores/environment.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
+import { ContextStore } from '@modules/stores/context/context.store';
 import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 
 import { UtilsHelper } from './helpers';
@@ -39,6 +40,7 @@ export class CoreComponent implements OnInit, OnDestroy {
   protected stores: {
     environment: EnvironmentStore;
     authentication: AuthenticationStore;
+    context: ContextStore;
     innovation: InnovationStore;
   };
 
@@ -67,6 +69,7 @@ export class CoreComponent implements OnInit, OnDestroy {
     this.stores = {
       environment: injector.get(EnvironmentStore),
       authentication: injector.get(AuthenticationStore),
+      context: injector.get(ContextStore),
       innovation: injector.get(InnovationStore)
     };
 

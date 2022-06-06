@@ -68,7 +68,7 @@ export class ActionAdvancedFilterComponent extends CoreComponent implements OnIn
 
     this.datasets.innovationStatus = Object.entries(INNOVATION_SECTION_ACTION_STATUS).
       map(([key, item]) => ({ label: item.label, value: key })).
-      filter(i => ['REQUESTED', 'IN_REVIEW', 'COMPLETED', 'DECLINED'].includes(i.value));
+      filter(i => ['REQUESTED', 'IN_REVIEW', 'COMPLETED', 'DECLINED', 'CANCELLED'].includes(i.value));
 
     this.datasets.innovationSection = INNOVATION_SECTIONS.reduce((sectionGroupAcc: { value: string, label: string }[], sectionGroup, i) => {
       return [

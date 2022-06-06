@@ -1,4 +1,4 @@
-import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 import { areasItems, careSettingsItems, categoriesItems, clinicalAreasItems, hasFinalProductItems, mainCategoryItems, mainPurposeItems, supportTypesItems } from './catalogs.config';
@@ -40,9 +40,6 @@ type InboundPayloadType = {
   supportTypes: ('ADOPTION' | 'ASSESSMENT' | 'PRODUCT_MIGRATION' | 'CLINICAL_TESTS' | 'COMMERCIAL' | 'PROCUREMENT' | 'DEVELOPMENT' | 'EVIDENCE_EVALUATION' | 'FUNDING' | 'INFORMATION')[];
   moreSupportDescription: string;
 };
-
-// type StepPayloadType = InboundPayloadType;
-
 type StepPayloadType = {
   innovationName: string;
   description: string;
@@ -61,9 +58,7 @@ type StepPayloadType = {
   supportTypes: ('ADOPTION' | 'ASSESSMENT' | 'PRODUCT_MIGRATION' | 'CLINICAL_TESTS' | 'COMMERCIAL' | 'PROCUREMENT' | 'DEVELOPMENT' | 'EVIDENCE_EVALUATION' | 'FUNDING' | 'INFORMATION')[];
   moreSupportDescription: string;
 };
-
-type OutboundPayloadType = InboundPayloadType;
-
+type OutboundPayloadType = Partial<InboundPayloadType>;
 
 
 export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
@@ -182,7 +177,8 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
     ],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data),
+    showSummary: true
   })
 };
 
@@ -194,7 +190,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     location: locationItems.filter(item => !['', 'Based outside UK'].includes(item.value)).map(item => item.value).includes(data.countryName) ? data.countryName : 'Based outside UK',
     englandPostCode: data.postcode ? data.postcode : '',
     locationCountryName: data.countryName,
-    hasFinalProduct:  data.hasFinalProduct,
+    hasFinalProduct: data.hasFinalProduct,
     categories: data.categories,
     otherCategoryDescription: data.otherCategoryDescription,
     mainCategory: data.mainCategory,
@@ -217,7 +213,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     location: data.location || data.locationCountryName,
     postcode: data.englandPostCode,
     countryName: data.locationCountryName ? data.locationCountryName : data.location,
-    hasFinalProduct:  data.hasFinalProduct,
+    hasFinalProduct: data.hasFinalProduct,
     categories: data.categories,
     otherCategoryDescription: data.otherCategoryDescription,
     mainCategory: data.mainCategory,
@@ -233,7 +229,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 }
 
 
-function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
+function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   return [
     {
@@ -248,7 +244,7 @@ function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
     },
     {
       label: stepsLabels.l3,
-      value: `${data.locationCountryName || data.location}${data.englandPostCode ? ', ' + data.englandPostCode : ''}` ,
+      value: `${data.locationCountryName || data.location}${data.englandPostCode ? ', ' + data.englandPostCode : ''}`,
       editStepNumber: 3
     },
     {

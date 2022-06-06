@@ -1,4 +1,4 @@
-import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 
 
 // Types.
@@ -165,9 +165,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
 }
 
-function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): SummaryParsingType[] {
+function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): WizardSummaryType[] {
 
-  const toReturn: SummaryParsingType[] = [];
+  const toReturn: WizardSummaryType[] = [];
   const organisationAcronym = steps.find(s => s.parameters[0].id === 'organisationAcronym')?.parameters[0].items;
   let lastMarkStep;
   if (data.type === 'ASSESSMENT'){

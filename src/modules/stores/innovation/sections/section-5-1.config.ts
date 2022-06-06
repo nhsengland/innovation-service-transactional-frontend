@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
 import { carePathwayItems, hasUKPathwayKnowledgeItems, innovationPathwayKnowledgeItems } from './catalogs.config';
@@ -28,8 +28,16 @@ type InboundPayloadType = {
 // [key: string] is needed to support subGroupName_${number} properties.
 type StepPayloadType = InboundPayloadType & { [key: string]: null | 'ONLY_OPTION' | 'BETTER_OPTION' | 'EQUIVALENT_OPTION' | 'FIT_LESS_COSTS' | 'NO_KNOWLEDGE' };
 
-type OutboundPayloadType = InboundPayloadType;
-
+type OutboundPayloadType = {
+  hasUKPathwayKnowledge?: null | 'YES' | 'NO' | 'NOT_RELEVANT';
+  innovationPathwayKnowledge?: null | 'PATHWAY_EXISTS_AND_CHANGED' | 'PATHWAY_EXISTS_AND_FITS' | 'NO_PATHWAY'
+  potentialPathway?: null | string;
+  subgroups?: {
+    id: string;
+    name: string;
+    carePathway: null | 'ONLY_OPTION' | 'BETTER_OPTION' | 'EQUIVALENT_OPTION' | 'FIT_LESS_COSTS' | 'NO_KNOWLEDGE';
+  }[];
+};
 
 
 export const SECTION_5_1: InnovationSectionConfigType['sections'][0] = {
@@ -48,16 +56,17 @@ export const SECTION_5_1: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+    runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data),
+    showSummary: true
   })
 };
 
 
 
-function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
+function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(1);
 
@@ -134,7 +143,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   if (['NO', 'NOT_RELEVANT'].includes(parsedData.hasUKPathwayKnowledge || 'NO')) {
     parsedData.innovationPathwayKnowledge = null;
     parsedData.potentialPathway = null;
-    parsedData.subgroups = parsedData.subgroups.map(item => ({
+    parsedData.subgroups = parsedData.subgroups?.map(item => ({
       id: item.id, name: item.name, carePathway: null
     }));
   }
@@ -146,9 +155,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 }
 
 
-function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
+function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
-  const toReturn: SummaryParsingType[] = [];
+  const toReturn: WizardSummaryType[] = [];
 
   toReturn.push({
     label: stepsLabels.l1,

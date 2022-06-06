@@ -11,10 +11,12 @@ import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { PageAccountManageInnovationsArchivalComponent } from './manage-innovations-archival.component';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+
 
 describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArchivalComponent', () => {
 
@@ -22,6 +24,7 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
   let routerSpy: jasmine.Spy;
 
   let authenticationStore: AuthenticationStore;
+  let innovationsService: InnovationsService;
   let innovatorService: InnovatorService;
 
   let component: PageAccountManageInnovationsArchivalComponent;
@@ -44,6 +47,7 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
     routerSpy = spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
+    innovationsService = TestBed.inject(InnovationsService);
     innovatorService = TestBed.inject(InnovatorService);
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
@@ -60,12 +64,15 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
 
   it('should have initial information loaded', () => {
 
+    innovationsService.getInnovationsList = () => of([
+      { id: 'innovationId01', name: 'Innovation Name 01' }
+    ]);
     innovatorService.getInnovationTransfers = () => of([
       { id: 'TransferId01', email: 'some@email.com', innovation: { id: 'InnoNew01', name: 'Innovation name 01' } },
       { id: 'TransferId02', email: 'some@email.com', innovation: { id: 'InnoNew02', name: 'Innovation name 02' } }
     ]);
 
-    const expected = [{ label: 'Test innovation', value: 'Inno01' }];
+    const expected = [{ label: 'Innovation Name 01', value: 'innovationId01' }];
 
     fixture = TestBed.createComponent(PageAccountManageInnovationsArchivalComponent);
     component = fixture.componentInstance;
@@ -77,6 +84,7 @@ describe('Shared/Pages/Account/ManageInnovations/PageAccountManageInnovationsArc
 
   it('should NOT have initial information loaded', () => {
 
+    innovationsService.getInnovationsList = () => throwError('error');
     innovatorService.getInnovationTransfers = () => throwError('error');
 
     const expected = { type: 'ERROR', title: 'Unable to fetch innovations transfers', message: 'Please, try again or contact us for further help' };

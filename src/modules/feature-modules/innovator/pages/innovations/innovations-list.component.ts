@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/models';
 
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+
 
 @Component({
   selector: 'app-innovator-pages-innovations-list',
@@ -13,17 +15,16 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
   alert: AlertType = { type: null };
 
-  innovations: { id: string, name: string }[];
+  innovations: { id: string, name: string }[] = [];
 
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private innovationsService: InnovationsService,
   ) {
 
     super();
     this.setPageTitle('Choose innovation');
-
-    this.innovations = this.stores.authentication.getUserInfo().innovations;
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'innovationCreationSuccess':
@@ -35,6 +36,18 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       default:
         break;
     }
+
+  }
+
+
+  ngOnInit(): void {
+
+    this.innovationsService.getInnovationsList().subscribe(
+      response => {
+
+        this.innovations = response;
+
+      });
 
   }
 

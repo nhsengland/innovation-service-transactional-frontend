@@ -6,7 +6,7 @@
     "start:dev:spa": "ng serve --host 0.0.0.0",
     "start:dev:ssr": "ng run app:serve-ssr",
     "build:spa": "ng build --prod",
-    "test": "./node_modules/.bin/jest --runInBand --coverage --silent",
+    "test": "./node_modules/.bin/jest --coverage --silent",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "e2e": "ng e2e",

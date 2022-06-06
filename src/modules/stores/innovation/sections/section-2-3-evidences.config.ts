@@ -1,4 +1,4 @@
-import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, FormEngineParameterModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
 
 
 // Labels.
@@ -67,15 +67,16 @@ export const SECTION_2_EVIDENCES = new WizardEngineModel({
       }]
     })
   ],
-  runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+  runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-  summaryParsing: (data: SummaryPayloadType) => summaryParsing(data)
+  summaryParsing: (data: SummaryPayloadType) => summaryParsing(data),
+  showSummary: true
 });
 
 
 
-function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
+function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(1);
 
@@ -176,9 +177,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 }
 
 
-function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
+function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
 
-  const toReturn: SummaryParsingType[] = [];
+  const toReturn: WizardSummaryType[] = [];
 
   toReturn.push({
     label: stepsLabels.l1,

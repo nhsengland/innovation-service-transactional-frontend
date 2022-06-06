@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { FormEngineModel, FormEngineParameterModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, FormEngineParameterModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
 import { environmentalBenefitItems, generalBenefitItems, hasBenefitsItems, subgroupBenefitItems } from './catalogs.config';
@@ -55,16 +55,17 @@ export const SECTION_2_2: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+    runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data),
+    showSummary: true
   })
 };
 
 
 
-function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
+function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(1);
 
@@ -98,6 +99,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
           id: `subgroupBenefits_${i}`,
           dataType: 'checkbox-array',
           label: `What benefits does your innovation create for patients or citizens of ${item.name}?`,
+          description: 'Choose up to 3 benefits',
           validations: {
             isRequired: [true, 'Choose at least one benefit'],
             max: [3, 'Choose between 1 and 3 benefit']
@@ -116,6 +118,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'generalBenefits',
         dataType: 'checkbox-array',
         label: stepsLabels.l3,
+        description: 'Choose up to 3 benefits',
         validations: {
           isRequired: [true, 'Choose at least one benefit'],
           max: [3, 'Choose between 1 and 3 benefit']
@@ -129,6 +132,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         id: 'environmentalBenefits',
         dataType: 'checkbox-array',
         label: stepsLabels.l4,
+        description: 'Choose up to 3 benefits',
         validations: {
           isRequired: [true, 'Choose at least one environmental benefit'],
           max: [3, 'Choose between 1 and 3 environmental benefit']
@@ -189,9 +193,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 }
 
 
-function summaryParsing(data: StepPayloadType): SummaryParsingType[] {
+function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
-  const toReturn: SummaryParsingType[] = [];
+  const toReturn: WizardSummaryType[] = [];
 
   toReturn.push({
     label: stepsLabels.l1,

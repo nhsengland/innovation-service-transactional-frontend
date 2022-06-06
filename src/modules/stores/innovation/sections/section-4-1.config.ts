@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardStepType, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
 import { hasRegulationKnowledgeItems, standardsHasMetItems, standardsTypeItems } from './catalogs.config';
@@ -31,7 +31,17 @@ type StepPayloadType = Omit<InboundPayloadType, 'files'>
   & { files: { id: string; name: string; url: string; }[] }
   & { [key: string]: null | string };
 
-type OutboundPayloadType = Omit<InboundPayloadType, 'files'> & { files: string[] };
+type OutboundPayloadType = Partial<Omit<InboundPayloadType, 'files'> & { files: string[] }>;
+// type OutboundPayloadType = {
+//   hasRegulationKnowledge?: null | 'YES_ALL' | 'YES_SOME' | 'NO' | 'NOT_RELEVANT';
+//   standards?: {
+//     id: null | string;
+//     type: null | 'CE_UKCA_NON_MEDICAL' | 'CE_UKCA_CLASS_I' | 'CE_UKCA_CLASS_II_A' | 'CE_UKCA_CLASS_II_B' | 'CE_UKCA_CLASS_III' | 'IVD_GENERAL' | 'IVD_SELF_TEST' | 'IVD_ANNEX_LIST_A' | 'IVD_ANNEX_LIST_B' | 'MARKETING' | 'CQC' | 'DTAC' | 'OTHER';
+//     hasMet: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET';
+//   }[];
+//   otherRegulationDescription?: null | string;
+//   files?: string[];
+// };
 
 type SummaryPayloadType = Omit<InboundPayloadType, 'files'>
   & { standardsType: string[] }
@@ -56,16 +66,17 @@ export const SECTION_4_1: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+    runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data),
+    showSummary: true
   })
 };
 
 
 
-function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
+function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(1);
 
@@ -87,8 +98,11 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
   Object.keys(currentValues).filter(key => key.startsWith('standardHasMet_')).forEach((key) => { delete currentValues[key]; });
 
-  steps.push(
-    new FormEngineModel({
+  steps.push({
+
+    saveStrategy: 'updateAndWait',
+
+    ...new FormEngineModel({
       parameters: [{
         id: 'standardsType',
         dataType: 'checkbox-array',
@@ -97,7 +111,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         items: standardsTypeItems
       }]
     })
-  );
+  });
 
   currentValues.standards = (currentValues.standardsType || []).map(s => {
     return currentValues.standards.find(item => item.type === s) || { id: null, type: s, hasMet: null } as InboundPayloadType['standards'][0];
@@ -154,7 +168,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     hasRegulationKnowledge: data.hasRegulationKnowledge,
     standards: data.standards,
     otherRegulationDescription: data.otherRegulationDescription,
-    files: data.files.map(item => item.id)
+    files: data.files?.map(item => item.id)
   });
 
   if (['NO', 'NOT_RELEVANT'].includes(parsedData.hasRegulationKnowledge || 'NO')) {
@@ -168,9 +182,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 }
 
 
-function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
+function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
 
-  const toReturn: SummaryParsingType[] = [];
+  const toReturn: WizardSummaryType[] = [];
 
   toReturn.push({
     label: stepsLabels.l1,

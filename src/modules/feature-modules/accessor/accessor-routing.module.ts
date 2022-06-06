@@ -25,7 +25,7 @@ import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/acco
 import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details/manage-details-edit.component';
 import { PageAccountEmailNotificationsComponent } from '@shared-module/pages/account/email-notifications/email-notifications.component';
 
-import { InnovationSectionViewComponent } from '@shared-module/pages/innovation/section-view.component';
+import { InnovationSectionInfoComponent } from '@shared-module/pages/innovation/section-info.component';
 import { InnovationSectionEvidenceViewComponent } from '@shared-module/pages/innovation/evidence-view.component';
 import { PageActionStatusListComponent } from '@shared-module/pages/innovation/action-status-list.component';
 import { PageInnovationActivityLogComponent } from '@shared-module/pages/innovation/innovation-activity-log.component';
@@ -33,6 +33,7 @@ import { PageInnovationCommentsListComponent } from '@shared-module/pages/innova
 import { PageInnovationCommentsNewComponent } from '@shared-module/pages/innovation/comments/comments-new.component';
 import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/innovation-record.component';
 import { PageInnovationSupportStatusListComponent } from '@shared-module/pages/innovation/innovation-support-status-list.component';
+import { PageTermsOfUseAcceptanceComponent } from '@shared-module/pages/terms-of-use/terms-of-use-acceptance.component';
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
@@ -45,6 +46,12 @@ const routes: Routes = [
     path: '',
     pathMatch: 'full',
     redirectTo: 'dashboard'
+  },
+
+  {
+    path: 'terms-of-use',
+    pathMatch: 'full',
+    component: PageTermsOfUseAcceptanceComponent
   },
 
   {
@@ -126,7 +133,7 @@ const routes: Routes = [
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } }
               },
               {
-                path: 'record/sections/:sectionId', pathMatch: 'full', component: InnovationSectionViewComponent,
+                path: 'record/sections/:sectionId', pathMatch: 'full', component: InnovationSectionInfoComponent,
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/record', label: 'Innovation record' } } }
               },
               {

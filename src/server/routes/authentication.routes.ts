@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 import * as dotenv from 'dotenv';
 import * as express from 'express';
@@ -5,7 +6,7 @@ import { Router } from 'express';
 import * as passport from 'passport';
 import { IOIDCStrategyOptionWithoutRequest, IProfile, OIDCStrategy, VerifyCallback } from 'passport-azure-ad';
 import { getAppInsightsClient } from 'src/globals';
-import { BASE_PATH } from '../config/constants.config';
+import { ENVIRONMENT } from '../config/constants.config';
 
 dotenv.config();
 
@@ -111,7 +112,7 @@ passport.serializeUser((user, next) => { next(null, user); });
 passport.deserializeUser((obj: any, next) => { next(null, obj); });
 
 // Authentication routes.
-authenticationRouter.head(`${BASE_PATH}/session`, (req, res) => {
+authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
   const client = getAppInsightsClient(req);
   client.trackTrace({
     message: '/session called',
@@ -139,7 +140,7 @@ authenticationRouter.head(`${BASE_PATH}/session`, (req, res) => {
   }
 });
 
-authenticationRouter.get(`${BASE_PATH}/auth/user`, (req, res) => {
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/auth/user`, (req, res) => {
   const user: IProfile = req.user || {};
 
   if (req.isAuthenticated() && user.oid) {
@@ -151,20 +152,42 @@ authenticationRouter.get(`${BASE_PATH}/auth/user`, (req, res) => {
 });
 
 // MS Azure OpenId Connect strategy (passport) and callbacks handling.
-authenticationRouter.get(`${BASE_PATH}/signup`, (req, res) => {
-  const azSignupUri = `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&prompt=login`
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup`, (req, res) => {
+  const azSignupUri = `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&response_mode=query&prompt=login`
     + `&p=${OAUTH_CONFIGURATION.signupPolicy}` // add policy information
     + `&client_id=${OAUTH_CONFIGURATION.clientID}` // add client id
     + `&redirect_uri=${encodeURIComponent(OAUTH_CONFIGURATION.signupRedirectUrl)}` // add redirect uri
+    + `&state=${req.query.surveyId || ''}` // add survey id to state
     + `&survey_id=${req.query.surveyId || ''}`; // add survey id
+
   res.redirect(azSignupUri);
 });
-authenticationRouter.get(`${BASE_PATH}/signup/callback`, (req, res) => {
-  res.redirect(`${BASE_PATH}/auth/signup/confirmation`);
+
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) => {
+  const query = req.query;
+  const state = query.state || '';
+  const idToken = query.id_token || '';
+
+  if (state && idToken) {
+    const body = {
+      surveyId: state,
+      idToken
+    };
+
+    axios.post(`${ENVIRONMENT.API_URL}/api/me`, body)
+      .then((response: any) => {
+        res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`);
+      })
+      .catch((error: any) => {
+        console.error(`Error when attempting to save the user: ${ENVIRONMENT.API_URL}/api/me. Error: ${error}`);
+        // TODO : error handling if we stop using AZ AD B2C
+        res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`);
+      });
+  }
 });
 
 // Login endpoint - AD OpenIdConnect
-authenticationRouter.use(`${BASE_PATH}/signin`, (req, res, next) => {
+authenticationRouter.use(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res, next) => {
   const client = getAppInsightsClient(req);
 
   passport.authenticate('signInStrategy', (err, user, info) => {
@@ -190,7 +213,7 @@ authenticationRouter.use(`${BASE_PATH}/signin`, (req, res, next) => {
         }
       });
 
-      return res.redirect(`${BASE_PATH}/signin`);
+      return res.redirect(`${ENVIRONMENT.BASE_PATH}/signin`);
     }
 
     req.login(user, (err) => {
@@ -207,16 +230,16 @@ authenticationRouter.use(`${BASE_PATH}/signin`, (req, res, next) => {
         return next(err);
       }
 
-      return res.redirect(`${BASE_PATH}/dashboard`);
+      return res.redirect(`${ENVIRONMENT.BASE_PATH}/dashboard`);
     });
   })(req, res, next);
 });
 
-authenticationRouter.post(`${BASE_PATH}/signin/callback`, (req, res) => {
-  res.redirect(`${BASE_PATH}/dashboard`);
+authenticationRouter.post(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) => {
+  res.redirect(`${ENVIRONMENT.BASE_PATH}/dashboard`);
 });
 
-authenticationRouter.get(`${BASE_PATH}/signout`, (req, res) => {
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, (req, res) => {
 
   const user: IProfile = req.user || {};
   const oid: string = user.oid || '';
@@ -236,7 +259,7 @@ authenticationRouter.get(`${BASE_PATH}/signout`, (req, res) => {
 });
 
 // Change password endpoint - AD OpenIdConnect
-authenticationRouter.get(`${BASE_PATH}/change-password`, (req, res) => {
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/change-password`, (req, res) => {
   const azChangePwUri = `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&prompt=login`
     + `&p=${OAUTH_CONFIGURATION.changePwPolicy}` // add policy information
     + `&client_id=${OAUTH_CONFIGURATION.clientID}` // add client id

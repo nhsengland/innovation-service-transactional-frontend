@@ -17,9 +17,9 @@ import { InnovatorService } from '../../services/innovator.service';
 })
 export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
 
-  alert: AlertType = { type: null };
-
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
+
+  alert: AlertType = { type: null };
 
   wizard: WizardEngineModel = new WizardEngineModel({});
 

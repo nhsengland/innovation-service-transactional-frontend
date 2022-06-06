@@ -3,19 +3,20 @@
     <div class="nhsuk-grid-column-two-thirds">
       <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0"> {{ innovation.name }} </p>
     </div>
-    <div *ngIf="innovation.assessment.id" class="nhsuk-grid-column-one-third text-align-right">
-      <a routerLink="/{{ module }}/innovations/{{ innovationId }}/assessments/{{ innovation.assessment.id }}">
+    <div *ngIf="innovation.assessment?.id" class="nhsuk-grid-column-one-third text-align-right">
+      <a routerLink="/{{ module }}/innovations/{{ innovationId }}/assessments/{{ innovation.assessment?.id }}">
         View needs assessment
       </a>
     </div>
-  </div>  
+  </div>
   <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
 </ng-container>
-<div *ngIf="innovation.lockedInnovatorValidation?.displayIsInnovatorLocked" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+
+<div *ngIf="!innovation.owner.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
   <div class="nhsuk-heading-m nhsuk-warning-callout__label">
     <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
   </div>
-  <p> Please Note that the Innovator {{ innovation.lockedInnovatorValidation?.innovatorName }} account has been locked by the Admin.</p>
+  <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
 </div>
 
 <div class="nhsuk-grid-row">
@@ -76,7 +77,8 @@
 
               <p class="nhsuk-u-margin-0" style="word-wrap: break-word; overflow-wrap: break-word; hyphens: auto;">
                 {{ comment.message }}
-                <span *ngIf="comment.updatedAt && comment.updatedAt != comment.createdAt" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2"> (last edited at {{ comment.updatedAt | date: ('app.date_formats.long_date_time' | translate) }})</span>
+                <span *ngIf="comment.updatedAt && comment.updatedAt != comment.createdAt" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2"> (last edited at
+                  {{ comment.updatedAt | date: ('app.date_formats.long_date_time' | translate) }})</span>
               </p>
               <a *ngIf="comment.isEditable && (comment.user.id === userId)" routerLink="/{{ module }}/innovations/{{ innovationId }}/comments/{{ comment.id }}" class="nhsuk-body-s nhsuk-u-margin-0 nhsuk-u-margin-top-2 d-inline-block">
                 Edit this comment
@@ -117,7 +119,8 @@
                 </div>
                 <p class="nhsuk-u-margin-0" style="word-wrap: break-word; overflow-wrap: break-word; hyphens: auto;">
                   {{ reply.message }}
-                  <span *ngIf="reply.updatedAt && (reply.updatedAt != reply.createdAt)" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2">(last edited at {{ reply.updatedAt | date: ('app.date_formats.long_date_time' | translate) }})</span>
+                  <span *ngIf="reply.updatedAt && (reply.updatedAt != reply.createdAt)" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2">(last edited at
+                    {{ reply.updatedAt | date: ('app.date_formats.long_date_time' | translate) }})</span>
                 </p>
                 <a *ngIf="reply.isEditable && reply.user.id === userId" routerLink="/{{ module }}/innovations/{{ innovationId }}/comments/{{ comment.id }}/replies/{{ reply.id }}" class="nhsuk-body-s nhsuk-u-margin-bottom-0 d-inline-block">
                   Edit this reply

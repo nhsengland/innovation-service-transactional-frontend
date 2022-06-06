@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { FormEngineModel, SummaryParsingType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
 import { hasTestsItems } from './catalogs.config';
@@ -18,7 +18,7 @@ const stepsLabels = {
 type InboundPayloadType = {
   hasTests: null | 'YES' | 'IN_PROCESS' | 'NOT_YET';
   userTests: {
-    id: string;
+    id: null | string;
     kind: string;
     feedback: null | string;
   }[];
@@ -52,16 +52,17 @@ export const SECTION_5_2: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
-    runtimeRules: [(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+    runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-    summaryParsing: (data: SummaryPayloadType) => summaryParsing(data)
+    summaryParsing: (data: SummaryPayloadType) => summaryParsing(data),
+    showSummary: true
   })
 };
 
 
 
-function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
+function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(1);
 
@@ -81,8 +82,11 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
 
   Object.keys(currentValues).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => { delete currentValues[key]; });
 
-  steps.push(
-    new FormEngineModel({
+  steps.push({
+
+    saveStrategy: 'updateAndWait',
+
+    ...new FormEngineModel({
       parameters: [{
         id: 'userTests',
         dataType: 'fields-group',
@@ -99,7 +103,7 @@ function runtimeRules(steps: FormEngineModel[], currentValues: StepPayloadType, 
         }
       }]
     })
-  );
+  });
 
   currentValues.userTests.forEach((item, i) => {
     steps.push(
@@ -149,7 +153,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   const parsedData = cloneDeep({
     hasTests: data.hasTests,
     userTests: data.userTests,
-    files: data.files.map(item => item.id)
+    files: data.files?.map(item => item.id)
   });
 
   if (['NOT_YET'].includes(parsedData.hasTests || 'NOT_YET')) {
@@ -162,9 +166,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 }
 
 
-function summaryParsing(data: SummaryPayloadType): SummaryParsingType[] {
+function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
 
-  const toReturn: SummaryParsingType[] = [];
+  const toReturn: WizardSummaryType[] = [];
 
   toReturn.push({
     label: stepsLabels.l1,

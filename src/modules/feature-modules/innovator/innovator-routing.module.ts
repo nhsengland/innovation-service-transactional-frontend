@@ -29,7 +29,7 @@ import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/acco
 import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details/manage-details-edit.component';
 import { PageAccountEmailNotificationsComponent } from '@shared-module/pages/account/email-notifications/email-notifications.component';
 
-import { InnovationSectionViewComponent } from '@shared-module/pages/innovation/section-view.component';
+import { InnovationSectionInfoComponent } from '@shared-module/pages/innovation/section-info.component';
 import { InnovationSectionEvidenceViewComponent } from '@shared-module/pages/innovation/evidence-view.component';
 import { PageActionStatusListComponent } from '@shared-module/pages/innovation/action-status-list.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/innovation-activity-log.component';
@@ -37,7 +37,7 @@ import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/i
 import { PageInnovationCommentsListComponent } from '@shared-module/pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from '@shared-module/pages/innovation/comments/comments-new.component';
 import { PageInnovationSupportStatusListComponent } from '@shared-module/pages/innovation/innovation-support-status-list.component';
-
+import { PageTermsOfUseAcceptanceComponent } from '@shared-module/pages/terms-of-use/terms-of-use-acceptance.component';
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
@@ -56,6 +56,12 @@ const routes: Routes = [
   },
 
   {
+    path: 'terms-of-use',
+    pathMatch: 'full',
+    component: PageTermsOfUseAcceptanceComponent
+  },
+
+  {
     canActivateChild: [FirstTimeSigninGuard],
     path: '',
     component: InnovatorLayoutComponent,
@@ -67,6 +73,7 @@ const routes: Routes = [
         pathMatch: 'full',
         component: FirstTimeSigninComponent
       },
+
 
       {
         path: 'innovation-transfer-acceptance',
@@ -154,7 +161,7 @@ const routes: Routes = [
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', showInnovationHeader: true } }
               },
               {
-                path: 'record/sections/:sectionId', pathMatch: 'full', component: InnovationSectionViewComponent,
+                path: 'record/sections/:sectionId', pathMatch: 'full', component: InnovationSectionInfoComponent,
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/record', label: 'Innovation record' } } }
               },
               { path: 'record/sections/:sectionId/edit', pathMatch: 'full', redirectTo: 'record/sections/:sectionId/edit/1' },

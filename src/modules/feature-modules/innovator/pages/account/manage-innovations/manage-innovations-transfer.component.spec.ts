@@ -11,6 +11,7 @@ import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { PageAccountManageInnovationsTransferComponent } from './manage-innovations-transfer.component';
 
@@ -23,6 +24,7 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountMa
   let routerSpy: jasmine.Spy;
 
   let authenticationStore: AuthenticationStore;
+  let innovationsService: InnovationsService;
   let innovatorService: InnovatorService;
 
   let component: PageAccountManageInnovationsTransferComponent;
@@ -45,9 +47,8 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountMa
     routerSpy = spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
+    innovationsService = TestBed.inject(InnovationsService);
     innovatorService = TestBed.inject(InnovatorService);
-
-    authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
 
   });
 
@@ -60,13 +61,17 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountMa
 
   it('should have initial information loaded', () => {
 
+    innovationsService.getInnovationsList = () => of([
+      { id: 'innovationId01', name: 'Innovation Name 01' }
+    ]);
+
     const responseMock = [
       { id: 'TransferId01', email: 'some@email.com', innovation: { id: 'InnoNew01', name: 'Innovation name 01' } },
       { id: 'TransferId02', email: 'some@email.com', innovation: { id: 'InnoNew02', name: 'Innovation name 02' } }
     ];
     innovatorService.getInnovationTransfers = () => of(responseMock);
 
-    const expected = [{ label: 'Test innovation', value: 'Inno01' }];
+    const expected = [{ label: 'Innovation Name 01', value: 'innovationId01' }];
 
     fixture = TestBed.createComponent(PageAccountManageInnovationsTransferComponent);
     component = fixture.componentInstance;
@@ -79,6 +84,7 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountMa
 
   it('should NOT have initial information loaded', () => {
 
+    innovationsService.getInnovationsList = () => throwError('error');
     innovatorService.getInnovationTransfers = () => throwError('error');
 
     const expected = {

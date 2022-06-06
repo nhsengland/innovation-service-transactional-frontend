@@ -64,6 +64,10 @@ export class FormFileUploadComponent implements OnInit {
 
   ngOnInit(): void {
 
+    if (!this.config?.httpUploadUrl) {
+      console.error('No httpUploadUrl provided for file upload.');
+    }
+
     this.id = this.id || RandomGeneratorHelper.generateRandom();
 
     this.dzConfig = {

@@ -13,6 +13,7 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 import { InnovationOverviewComponent } from './overview.component';
 
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/shared/enums';
 
 
 describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () => {
@@ -54,12 +55,15 @@ describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () =>
   it('should have innovation information loaded with payload 01', () => {
 
     accessorService.getInnovationInfo = () => of({
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: '', categories: ['MEDICAL_DEVICE'], otherCategoryDescription: '' },
+      summary: {
+        id: '01', name: 'Innovation 01', status: InnovationStatusEnum.CREATED, description: 'A description', company: 'User company', companySize: '1 to 5 employees', countryName: 'England',
+        postCode: '', categories: ['MEDICAL_DEVICE'], otherCategoryDescription: ''
+      },
       contact: { name: 'A name' },
       assessment: { id: '01' },
-      support: { id: '01', status: 'WAITING' },
+      support: { id: '01', status: InnovationSupportStatusEnum.WAITING },
       notifications: {},
-      lockedInnovatorValidation: { displayIsInnovatorLocked : false, innovatorName : 'test'}
+      lockedInnovatorValidation: { displayIsInnovatorLocked: false, innovatorName: 'test' }
     });
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);
@@ -73,11 +77,14 @@ describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () =>
   it('should have innovation information loaded with payload 02', () => {
 
     accessorService.getInnovationInfo = () => of({
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['MEDICAL_DEVICE', 'OTHER', 'INVALID'], otherCategoryDescription: 'Other category' },
+      summary: {
+        id: '01', name: 'Innovation 01', status: InnovationStatusEnum.CREATED, description: 'A description', company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01',
+        categories: ['MEDICAL_DEVICE', 'OTHER', 'INVALID'], otherCategoryDescription: 'Other category'
+      },
       contact: { name: 'A name' },
       assessment: { id: '01' },
       notifications: {},
-      lockedInnovatorValidation: { displayIsInnovatorLocked : true, innovatorName : 'test'}
+      lockedInnovatorValidation: { displayIsInnovatorLocked: true, innovatorName: 'test' }
     });
 
     fixture = TestBed.createComponent(InnovationOverviewComponent);

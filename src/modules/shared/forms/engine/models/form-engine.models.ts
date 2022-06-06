@@ -1,5 +1,7 @@
-import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn } from '@angular/forms';
+
 import { FileTypes } from '../types/form-engine.types';
+
 
 export class FormEngineModel {
 

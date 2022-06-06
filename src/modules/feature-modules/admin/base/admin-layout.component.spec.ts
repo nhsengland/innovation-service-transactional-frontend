@@ -102,7 +102,6 @@ describe('FeatureModules/Admin/Base/AdminLayoutComponent', () => {
 
     const expected = {
       leftItems: [
-        { title: 'Home', url: '/admin/dashboard' },
         { title: 'Service users', url: '/admin/service-users' },
         {
           title: 'Management',
