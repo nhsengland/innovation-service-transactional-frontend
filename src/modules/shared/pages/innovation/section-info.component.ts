@@ -133,7 +133,7 @@ export class InnovationSectionInfoComponent extends CoreComponent implements OnI
         this.section.status = { id: response.section.status, label: INNOVATION_SECTION_STATUS[response.section.status]?.label || '' };
         this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
 
-        this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data));
+        this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data)).runRules();
 
         const validInformation = this.section.wizard.validateData();
         this.section.showSubmitButton = validInformation.valid && ['DRAFT'].includes(this.section.status.id);
