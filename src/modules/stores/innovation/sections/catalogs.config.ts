@@ -122,7 +122,7 @@ export const hasBenefitsItems = [
   { value: 'NOT_YET', label: 'Not yet' },
   { value: 'NOT_SURE', label: 'Not sure' }
 ];
-export const subgroupBenefitItems = [
+export const patientsCitizensBenefitItems = [
   { value: 'REDUCE_MORTALITY', label: 'Reduces mortality' },
   { value: 'REDUCE_FURTHER_TREATMENT', label: 'Reduces need for further treatment' },
   { value: 'REDUCE_ADVERSE_EVENTS', label: 'Reduces adverse events' },
@@ -133,7 +133,12 @@ export const subgroupBenefitItems = [
   { value: 'ENABLES_NON_INVASIVELY_TEST', label: 'Enables a test, procedure or treatment to be done non-invasively' },
   { value: 'INCREASES_SELF_MANAGEMENT', label: 'Increases self-management' },
   { value: 'INCREASES_LIFE_QUALITY', label: 'Increases quality of life' },
-  { value: 'ENABLES_SHARED_CARE', label: 'Enables shared care' }
+  { value: 'ENABLES_SHARED_CARE', label: 'Enables shared care' },
+  {
+    value: 'OTHER',
+    label: 'Other',
+    conditional: new FormEngineParameterModel({ id: 'otherPatientsCitizensBenefit', dataType: 'text', label: 'Other patients or citizens benefit', validations: { isRequired: [true, 'Other patients or citizens benefit is required'] } })
+  }
 ];
 export const generalBenefitItems = [
   { value: 'REDUCE_LENGTH_STAY', label: 'Reduces the length of stay or enables earlier discharge' },
@@ -162,7 +167,8 @@ export const environmentalBenefitItems = [
   { value: 'LOWER_ENVIRONMENTAL_IMPACT', label: 'Lower environmental impact (e.g. less travel, better use of NHS resources)' },
   { value: 'OPTIMIZES_FINITE_RESOURCE_USE', label: 'Reduces or optimizes finite resource use (e.g. water, metals)' },
   { value: 'USES_RECYCLED_MATERIALS', label: 'Can be readily recycled or uses recycled materials' },
-  { value: 'OTHER',
+  {
+    value: 'OTHER',
     label: 'Other',
     conditional: new FormEngineParameterModel({ id: 'otherEnvironmentalBenefit', dataType: 'text', label: 'Other environmental sustainability benefit', validations: { isRequired: [true, 'Other environmental sustainability benefit is required'] } })
   }
