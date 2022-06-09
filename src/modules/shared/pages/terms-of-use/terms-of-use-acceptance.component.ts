@@ -39,10 +39,10 @@ export class PageTermsOfUseAcceptanceComponent extends CoreComponent implements 
     };
 
     if (this.stores.authentication.getUserType() === 'INNOVATOR') {
-      this.policyURL = `${this.baseUrl}/terms-of-use/data-inputter`;
+      this.policyURL = `${this.baseUrl}/terms-of-use/innovator-terms-of-use`;
     }
     else {
-      this.policyURL = `${this.baseUrl}/terms-of-use/accessors`;
+      this.policyURL = `${this.baseUrl}/terms-of-use/support-organisation-terms-of-use`;
     }
 
   }

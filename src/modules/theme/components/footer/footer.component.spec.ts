@@ -29,6 +29,7 @@ describe('Theme/Components/Footer/FooterComponent', () => {
     });
   });
 
+
   it('should create the footer component', () => {
     fixture = TestBed.createComponent(FooterComponent);
     component = fixture.componentInstance;
@@ -67,7 +68,6 @@ describe('Theme/Components/Footer/FooterComponent', () => {
     expect(element.querySelectorAll('a.nhsuk-footer__list-item-link')[2].textContent).toEqual('Cookies');
   });
 
-
   it('should render Privacy Policy link', () => {
     fixture = TestBed.createComponent(FooterComponent);
     fixture.detectChanges();
@@ -81,7 +81,7 @@ describe('Theme/Components/Footer/FooterComponent', () => {
     fixture.detectChanges();
     const element = fixture.nativeElement;
 
-    expect(element.querySelectorAll('a.nhsuk-footer__list-item-link')[4].textContent).toEqual('Terms and conditions');
+    expect(element.querySelectorAll('a.nhsuk-footer__list-item-link')[4].textContent).toEqual('Terms of use');
   });
 
   it('should render copyright', () => {
