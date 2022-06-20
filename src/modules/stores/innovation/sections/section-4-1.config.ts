@@ -209,12 +209,12 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
     });
 
     const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
-    const StepNumber: number = toReturn.length + 1;
+    const stepNumber = toReturn.length + 1;
     allFiles.forEach((item, i) => {
       toReturn.push({
         label: `Attachment ${i + 1}`,
         value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-        editStepNumber: StepNumber,
+        editStepNumber: stepNumber,
         allowHTML: true
       });
     });

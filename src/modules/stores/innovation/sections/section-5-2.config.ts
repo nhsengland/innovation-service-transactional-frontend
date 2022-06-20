@@ -184,7 +184,7 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
       editStepNumber: 2
     });
 
-    data.userTests.forEach((item, i) => {
+    data.userTests.forEach(item => {
       toReturn.push({
         label: `Please describe the testing and feedback for ${item.kind}`,
         value: item.feedback,
@@ -193,11 +193,12 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
     });
 
     const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
+    const stepNumber = toReturn.length + 1;
     allFiles.forEach((item, i) => {
       toReturn.push({
         label: `Attachment ${i + 1}`,
         value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-        editStepNumber: toReturn.length + 1,
+        editStepNumber: stepNumber,
         allowHTML: true
       });
     });
