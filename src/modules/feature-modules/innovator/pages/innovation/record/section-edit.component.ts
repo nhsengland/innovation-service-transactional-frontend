@@ -88,6 +88,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
 
+  onGotoStep(stepNumber: number): void {
+
+    this.wizard.gotoStep(stepNumber);
+    this.setPageTitle(this.wizard.currentStepTitle());
+    this.setUploadConfiguration();
+
+  }
 
   onSubmitStep(action: 'previous' | 'next'): void {
 
