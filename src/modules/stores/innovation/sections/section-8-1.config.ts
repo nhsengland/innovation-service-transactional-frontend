@@ -243,11 +243,12 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   });
 
   const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
+  const stepNumber = toReturn.length + 1;
   allFiles.forEach((item, i) => {
     toReturn.push({
       label: `Attachment ${i + 1}`,
       value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-      editStepNumber: toReturn.length + 1,
+      editStepNumber: stepNumber,
       allowHTML: true
     });
   });

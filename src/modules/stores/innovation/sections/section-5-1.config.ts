@@ -1,4 +1,3 @@
-import { cloneDeep } from 'lodash';
 import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
 import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
 
@@ -9,35 +8,20 @@ import { carePathwayItems, hasUKPathwayKnowledgeItems, innovationPathwayKnowledg
 const stepsLabels = {
   l1: 'Do you know what the current care pathway (current practice) is across the UK?',
   l2: 'What is the current care pathway in relation to your innovation?',
-  l3: 'Please describe the potential care pathway with your innovation in use'
+  l3: 'Please describe the potential care pathway with your innovation in use.',
+  l4: 'Thinking about the current care pathway in the UK, which option best describes your innovation?'
 };
 
 
 // Types.
 type InboundPayloadType = {
   hasUKPathwayKnowledge: null | 'YES' | 'NO' | 'NOT_RELEVANT';
-  innovationPathwayKnowledge: null | 'PATHWAY_EXISTS_AND_CHANGED' | 'PATHWAY_EXISTS_AND_FITS' | 'NO_PATHWAY'
+  innovationPathwayKnowledge: null | 'PATHWAY_EXISTS_AND_CHANGED' | 'PATHWAY_EXISTS_AND_FITS' | 'NO_PATHWAY';
   potentialPathway: null | string;
-  subgroups: {
-    id: string;
-    name: string;
-    carePathway: null | 'ONLY_OPTION' | 'BETTER_OPTION' | 'EQUIVALENT_OPTION' | 'FIT_LESS_COSTS' | 'NO_KNOWLEDGE';
-  }[];
+  carePathway: null | 'ONLY_OPTION' | 'BETTER_OPTION' | 'EQUIVALENT_OPTION' | 'FIT_LESS_COSTS' | 'NO_KNOWLEDGE';
 };
-
-// [key: string] is needed to support subGroupName_${number} properties.
-type StepPayloadType = InboundPayloadType & { [key: string]: null | 'ONLY_OPTION' | 'BETTER_OPTION' | 'EQUIVALENT_OPTION' | 'FIT_LESS_COSTS' | 'NO_KNOWLEDGE' };
-
-type OutboundPayloadType = {
-  hasUKPathwayKnowledge?: null | 'YES' | 'NO' | 'NOT_RELEVANT';
-  innovationPathwayKnowledge?: null | 'PATHWAY_EXISTS_AND_CHANGED' | 'PATHWAY_EXISTS_AND_FITS' | 'NO_PATHWAY'
-  potentialPathway?: null | string;
-  subgroups?: {
-    id: string;
-    name: string;
-    carePathway: null | 'ONLY_OPTION' | 'BETTER_OPTION' | 'EQUIVALENT_OPTION' | 'FIT_LESS_COSTS' | 'NO_KNOWLEDGE';
-  }[];
-};
+type StepPayloadType = InboundPayloadType;
+type OutboundPayloadType = InboundPayloadType;
 
 
 export const SECTION_5_1: InnovationSectionConfigType['sections'][0] = {
@@ -65,7 +49,6 @@ export const SECTION_5_1: InnovationSectionConfigType['sections'][0] = {
 };
 
 
-
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(1);
@@ -73,17 +56,9 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   if (['NO', 'NOT_RELEVANT'].includes(currentValues.hasUKPathwayKnowledge || 'NO')) {
     currentValues.innovationPathwayKnowledge = null;
     currentValues.potentialPathway = null;
-    currentValues.subgroups = currentValues.subgroups.map(item => ({
-      id: item.id, name: item.name, carePathway: null
-    }));
-    Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => { delete currentValues[key]; });
+    currentValues.carePathway = null;
     return;
   }
-
-  Object.keys(currentValues).filter(key => key.startsWith('subGroupName_')).forEach((key) => {
-    currentValues.subgroups[Number(key.split('_')[1])].carePathway = currentValues[key];
-    delete currentValues[key];
-  });
 
   steps.push(
     new FormEngineModel({
@@ -104,53 +79,42 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         lengthLimit: 'medium',
         items: innovationPathwayKnowledgeItems
       }]
+    }),
+    new FormEngineModel({
+      parameters: [{
+        id: 'carePathway',
+        dataType: 'radio-group',
+        label: stepsLabels.l4,
+        description: 'If your innovation has more than one population or subgroup, please keep this in mind when choosing from the options below',
+        validations: { isRequired: [true, 'Choose one option'] },
+        items: carePathwayItems
+      }]
     })
   );
-
-  (currentValues.subgroups || []).forEach((item, i) => {
-    steps.push(
-      new FormEngineModel({
-        parameters: [{
-          id: `subGroupName_${i}`,
-          dataType: 'radio-group',
-          label: `Thinking about the current care pathway in the UK for ${item.name}, which option best describes your innovation?`,
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: carePathwayItems
-        }]
-      })
-    );
-    currentValues[`subGroupName_${i}`] = item.carePathway;
-  });
 
 }
 
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
-  const parsedData = cloneDeep(data) as StepPayloadType;
-
-  (parsedData.subgroups || []).forEach((item, i) => { parsedData[`subGroupName_${i}`] = item.carePathway; });
-
-  return parsedData;
+  return {
+    hasUKPathwayKnowledge: data.hasUKPathwayKnowledge,
+    innovationPathwayKnowledge: data.innovationPathwayKnowledge,
+    potentialPathway: data.potentialPathway,
+    carePathway: data.carePathway,
+  };
 
 }
 
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
-  const parsedData = cloneDeep(data);
-
-  if (['NO', 'NOT_RELEVANT'].includes(parsedData.hasUKPathwayKnowledge || 'NO')) {
-    parsedData.innovationPathwayKnowledge = null;
-    parsedData.potentialPathway = null;
-    parsedData.subgroups = parsedData.subgroups?.map(item => ({
-      id: item.id, name: item.name, carePathway: null
-    }));
-  }
-
-  Object.keys(parsedData).filter(key => key.startsWith('subGroupName_')).forEach((key) => { delete parsedData[key]; });
-
-  return parsedData;
+  return {
+    hasUKPathwayKnowledge: data.hasUKPathwayKnowledge,
+    innovationPathwayKnowledge: data.innovationPathwayKnowledge,
+    potentialPathway: data.potentialPathway,
+    carePathway: data.carePathway,
+  };
 
 }
 
@@ -177,16 +141,13 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
         label: stepsLabels.l3,
         value: data.potentialPathway,
         editStepNumber: 3
+      },
+      {
+        label: stepsLabels.l4,
+        value: carePathwayItems.find(item => item.value === data.carePathway)?.label,
+        editStepNumber: 4
       }
     );
-
-    data.subgroups?.forEach((subgroup, i) => {
-      toReturn.push({
-        label: `Thinking about the current care pathway in the UK for ${subgroup.name}, which option best describes your innovation?`,
-        value: carePathwayItems.find(item => item.value === subgroup.carePathway)?.label,
-        editStepNumber: toReturn.length + 1
-      });
-    });
 
   }
 
