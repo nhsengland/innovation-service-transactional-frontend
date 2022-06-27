@@ -179,30 +179,6 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
   }
 
-
-  // onDateOrderBy(order: 'ascending' | 'descending'): void {
-  //   this.currentDateOrderBy = order;
-  //   this.notificationsList.setOrderBy('createdAt', order);
-  //   this.getNotificationsList();
-  // }
-
-  // onShowHideClicked(activity: ActivitiesListType): void {
-
-  //   switch (activity.showHideStatus) {
-  //     case 'opened':
-  //       activity.showHideStatus = 'closed';
-  //       activity.showHideText = `Show details`;
-  //       break;
-  //     case 'closed':
-  //       activity.showHideStatus = 'opened';
-  //       activity.showHideText = `Hide details`;
-  //       break;
-  //     default:
-  //       break;
-  //   }
-
-  // }
-
   onPageChange(event: { pageNumber: number }): void {
     this.notificationsList.setPage(event.pageNumber);
     this.getNotificationsList();
