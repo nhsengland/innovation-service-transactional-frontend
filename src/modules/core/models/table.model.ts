@@ -30,23 +30,23 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
   // This variable is needed so angular lifecycle only refresh when something changes, when using this.getHeaderColumns() on a *ngFor.
   private cachedHeaderColumns: { key: string, label: string, align: string, orderable: boolean, orderDir: OrderDirectionType }[];
 
-  constructor(data: Omit<Partial<TableModel<T, F>>, 'visibleColumns'> & { visibleColumns?: { [key: string]: (string | { label: string; align?: AlignType; orderable?: boolean; }) } }) {
+  constructor(data?: Omit<Partial<TableModel<T, F>>, 'visibleColumns'> & { visibleColumns?: { [key: string]: (string | { label: string; align?: AlignType; orderable?: boolean; }) } }) {
 
-    this.dataSource = data.dataSource || [];
+    this.dataSource = data?.dataSource || [];
 
     this.visibleColumns = {};
-    this.setVisibleColumns(data.visibleColumns || {});
+    this.setVisibleColumns(data?.visibleColumns || {});
 
-    this.totalRows = data.totalRows || 0;
+    this.totalRows = data?.totalRows || 0;
 
-    this.page = data.page || 1;
-    this.pageSize = data.pageSize || 20;
-    this.pageSizeOptions = data.pageSizeOptions || [5, 10, 25];
+    this.page = data?.page || 1;
+    this.pageSize = data?.pageSize || 20;
+    this.pageSizeOptions = data?.pageSizeOptions || [5, 10, 25];
 
-    this.orderBy = data.orderBy || '';
-    this.orderDir = data.orderDir || 'none';
+    this.orderBy = data?.orderBy || '';
+    this.orderDir = data?.orderDir || 'none';
 
-    this.filters = data.filters || null;
+    this.filters = data?.filters || null;
 
     this.cachedHeaderColumns = [];
     this.setHeaderColumns();

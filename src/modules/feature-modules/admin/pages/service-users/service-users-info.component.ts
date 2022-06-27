@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType, LinkType } from '@app/base/models';
+import { AlertType, LinkType } from '@app/base/types';
 
-import { RoutingHelper } from '@modules/core';
+import { RoutingHelper } from '@app/base/helpers';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { forkJoin } from 'rxjs';
 

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormArray, FormControl, FormGroup, Validators } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 
 import { AccessorService } from '../../../services/accessor.service';
 

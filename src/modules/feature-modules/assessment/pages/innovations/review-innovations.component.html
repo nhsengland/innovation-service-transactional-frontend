@@ -1,17 +1,19 @@
 <section class="bg-color-white">
   <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
+
     <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
+
     <div class="app-tabs">
       <ul class="app-tabs__list" role="tablist" aria-label="Tabs">
         <li *ngFor="let tab of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
-          <div class="d-flex">
-            <a id="tab-{{ tab.key }}" [routerLink]="tab.link" [queryParams]="tab.queryParams" role="tab" class="nhsuk-u-padding-right-1" attr.aria-controls="content-{{ tab.key }}"
-              attr.aria-selected="{{ currentTab.key === tab.key ? 'true' : 'false' }}"> {{ tab.title }} </a>
-            <notification-tag *ngIf="tab.key !== 'IN_PROGRESS' && tab.notifications && tab.notifications > 0" [count]="tab.notifications"></notification-tag>
-          </div>
+          <a id="tab-{{ tab.key }}" [routerLink]="tab.link" [queryParams]="tab.queryParams" role="tab" class="nhsuk-u-padding-right-1" attr.aria-controls="content-{{ tab.key }}"
+            attr.aria-selected="{{ currentTab.key === tab.key ? 'true' : 'false' }}">
+            {{ tab.title }}
+          </a>
         </li>
       </ul>
     </div>
+
     <div class="nhsuk-grid-row">
       <div id="content-{{ currentTab.key }}" role="tabpanel" attr.aria-labelledby="tab-{{ currentTab.key }}" class="nhsuk-grid-column-full">
 
@@ -66,8 +68,8 @@
                           {{ item.name }}
                         </a>
                       </div>
-                      <notification-tag *ngIf="item.notifications.isNew !== true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" [count]="item.notifications.count"></notification-tag>
-                      <notification-tag *ngIf="item.notifications.isNew === true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" [isNew]="true"></notification-tag>
+                      <notification-tag *ngIf="item.notifications.isNew !== true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" [label]="item.notifications.count"></notification-tag>
+                      <notification-tag *ngIf="item.notifications.isNew === true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" label="new"></notification-tag>
                     </div>
                   </td>
 

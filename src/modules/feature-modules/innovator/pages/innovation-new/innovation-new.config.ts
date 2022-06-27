@@ -1,5 +1,5 @@
 import { FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
-import { locationItems } from '@stores-module/innovation/config/innovation-catalog.config';
+import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 
 
 // Types.

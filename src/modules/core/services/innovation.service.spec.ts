@@ -5,7 +5,7 @@ import { Injector } from '@angular/core';
 
 import { ENV } from '@tests/app.mocks';
 
-import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
+import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 
 import { InnovationService } from './innovation.service';
 
@@ -13,7 +13,7 @@ import { InnovationService } from './innovation.service';
 describe('Core/Services/InnovationService', () => {
 
   let httpMock: HttpTestingController;
-  let environmentStore: EnvironmentStore;
+  let envVariablesStore: EnvironmentVariablesStore;
   let service: InnovationService;
 
   beforeEach(() => {
@@ -30,7 +30,7 @@ describe('Core/Services/InnovationService', () => {
     AppInjector.setInjector(TestBed.inject(Injector));
 
     httpMock = TestBed.inject(HttpTestingController);
-    environmentStore = TestBed.inject(EnvironmentStore);
+    envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
     service = TestBed.inject(InnovationService);
 
   });
@@ -48,7 +48,7 @@ describe('Core/Services/InnovationService', () => {
 
     service.getInnovationTransfer('id01').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.APP_URL}/innovators/innovation-transfers/id01/check`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.APP_URL}/innovators/innovation-transfers/id01/check`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toBe(expected);

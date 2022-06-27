@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormGroup, FormControl } from '@app/base';
-import { AlertType, MappedObject } from '@app/base/models';
+import { AlertType, MappedObjectType } from '@app/base/types';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
 import { OrganisationsService, updateOrganisationDTO } from '@modules/shared/services/organisations.service';
 import { EDIT_ORGANISATIONS_QUESTIONS } from './organisations-edit.config';
@@ -99,7 +99,7 @@ export class PageAdminOrganisationEditComponent extends CoreComponent implements
   }
 
   onSubmitWizard(): void {
-    const body: MappedObject = this.wizard.runOutboundParsing();
+    const body: MappedObjectType = this.wizard.runOutboundParsing();
     this.securityConfirmation.code = this.form.get('code')!.value;
     this.submitBtnClicked = true;
 

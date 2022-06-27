@@ -1,4 +1,4 @@
-import { FormEngineParameterModel } from '@shared-module/forms';
+import { FormEngineParameterModel } from '@modules/shared/forms';
 
 
 export const locationItems = [

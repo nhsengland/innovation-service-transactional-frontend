@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateChild, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
-import { AuthenticationStore } from '@modules/stores';
+import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
 
 @Injectable()

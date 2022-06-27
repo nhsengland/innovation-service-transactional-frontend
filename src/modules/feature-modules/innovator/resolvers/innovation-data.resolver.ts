@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { NGXLogger } from 'ngx-logger';
 
-import { ContextStore } from '@modules/stores/context/context.store';
+import { EnvironmentStore } from '@modules/stores/environment/environment.store';
 import { InnovatorService } from '../services/innovator.service';
 
 import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
@@ -15,7 +15,7 @@ export class InnovationDataResolver implements Resolve<boolean | InnovationDataR
 
   constructor(
     private logger: NGXLogger,
-    private contextStore: ContextStore,
+    private environmentStore: EnvironmentStore,
     private innovatorService: InnovatorService
   ) { }
 
@@ -25,7 +25,7 @@ export class InnovationDataResolver implements Resolve<boolean | InnovationDataR
     return this.innovatorService.getInnovationInfo(route.params.innovationId).pipe(
       map(response => {
 
-        this.contextStore.setInnovation({
+        this.environmentStore.setInnovation({
           id: response.id,
           name: response.name,
           status: response.status,

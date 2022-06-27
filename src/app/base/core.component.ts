@@ -12,13 +12,13 @@ import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
 
 import { AppInjector } from '@modules/core/injectors/app-injector';
 
-import { EnvironmentStore } from '@modules/core/stores/environment.store';
+import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
-import { ContextStore } from '@modules/stores/context/context.store';
+import { EnvironmentStore } from '@modules/stores/environment/environment.store';
 import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 
+import { AlertType, MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { UtilsHelper } from './helpers';
-import { MappedObject } from './models';
 
 
 @Component({ template: '' })
@@ -31,20 +31,30 @@ export class CoreComponent implements OnInit, OnDestroy {
   private pageTitleHolder = '';
   private pageStatusHolder: 'LOADING' | 'READY' | 'ERROR' = 'LOADING';
 
+  private envVariablesStore: EnvironmentVariablesStore;
+
   protected titleService: Title;
   protected router: Router;
   protected http: HttpClient;
   protected translateService: TranslateService;
   protected logger: NGXLogger;
 
+  protected CONSTANTS: {
+    APP_URL: string;
+    APP_ASSETS_URL: string;
+    BASE_URL: string;
+    BASE_PATH: string;
+  };
+
   protected stores: {
-    environment: EnvironmentStore;
     authentication: AuthenticationStore;
-    context: ContextStore;
+    environment: EnvironmentStore;
     innovation: InnovationStore;
   };
 
   protected subscriptions: Subscription[] = [];
+
+  public alert: AlertType = { type: null };
 
   constructor() {
 
@@ -60,16 +70,24 @@ export class CoreComponent implements OnInit, OnDestroy {
       this.serverResponse = null;
     }
 
+    this.envVariablesStore = injector.get(EnvironmentVariablesStore);
+
     this.titleService = injector.get(Title);
     this.router = injector.get(Router);
     this.http = injector.get(HttpClient);
     this.translateService = injector.get(TranslateService);
     this.logger = injector.get(NGXLogger);
 
+    this.CONSTANTS = {
+      APP_URL: this.envVariablesStore.APP_URL,
+      APP_ASSETS_URL: this.envVariablesStore.APP_ASSETS_URL,
+      BASE_URL: this.envVariablesStore.BASE_URL,
+      BASE_PATH: this.envVariablesStore.BASE_PATH
+    };
+
     this.stores = {
-      environment: injector.get(EnvironmentStore),
       authentication: injector.get(AuthenticationStore),
-      context: injector.get(ContextStore),
+      environment: injector.get(EnvironmentStore),
       innovation: injector.get(InnovationStore)
     };
 
@@ -80,7 +98,7 @@ export class CoreComponent implements OnInit, OnDestroy {
   /* istanbul ignore next */
   get sResponse(): null | Response { return this.serverResponse; }
   /* istanbul ignore next */
-  get requestBody(): MappedObject { return this.serverRequest?.body || {}; }
+  get requestBody(): MappedObjectType { return this.serverRequest?.body || {}; }
   /* istanbul ignore next */
   get pageTitle(): string { return this.pageTitleHolder || ''; }
   /* istanbul ignore next */
@@ -120,6 +138,25 @@ export class CoreComponent implements OnInit, OnDestroy {
 
   }
 
+  setAlert(type: AlertType['type'], title: string, message?: string, setFocus?: boolean): void {
+    this.alert = { type, title, message, setFocus: !!setFocus };
+  }
+  setAlertSuccess(title?: string, message?: string): void {
+    this.setAlert(
+      'SUCCESS',
+      title || 'It appears that something went wrong!',
+      message || 'Please try again or contact us for further help',
+      true
+    );
+  }
+  setAlertError(title?: string, message?: string): void {
+    this.setAlert(
+      'ERROR',
+      title || 'It appears that something went wrong!',
+      message || 'Please try again or contact us for further help',
+      true
+    );
+  }
 
   focusBody(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -132,7 +169,9 @@ export class CoreComponent implements OnInit, OnDestroy {
   }
 
 
-  redirectTo(url: string, queryParams?: MappedObject): void {
+  userUrlBasePath(): string { return this.stores.authentication.userUrlBasePath(); }
+
+  redirectTo(url: string, queryParams?: MappedObjectType): void {
 
     if (this.isRunningOnBrowser()) {
       this.router.navigate([url], (queryParams ? { queryParams } : {}));
@@ -156,7 +195,7 @@ export class CoreComponent implements OnInit, OnDestroy {
     return this.isRunningOnBrowser() ? atob(s) : Buffer.from(s, 'base64').toString('binary');
   }
 
-  encodeUrlQueryParams(url: string, queryParams?: MappedObject): string {
+  encodeUrlQueryParams(url: string, queryParams?: MappedObjectType): string {
 
     url = `${url.split('?')[0]}`;
     url += Object.keys(queryParams || {}).length > 0 ? '?' : '';
@@ -179,9 +218,9 @@ export class CoreComponent implements OnInit, OnDestroy {
 
   }
 
-  decodeQueryParams(queryParams: MappedObject): MappedObject {
+  decodeQueryParams(queryParams: MappedObjectType): MappedObjectType {
 
-    const o: MappedObject = {};
+    const o: MappedObjectType = {};
 
     for (let [key, value] of Object.entries(queryParams)) {
 

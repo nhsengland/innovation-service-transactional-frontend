@@ -121,7 +121,7 @@ describe('FeatureModules/Admin/Base/AdminLayoutComponent', () => {
     fixture = TestBed.createComponent(AdminLayoutComponent);
     component = fixture.componentInstance;
 
-    expect(component.navigationMenuBar).toEqual(expected);
+    expect(component.headerMenuBar).toEqual(expected);
 
   });
 

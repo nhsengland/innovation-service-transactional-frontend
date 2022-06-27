@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
+import { HeaderNavigationBarItemType } from '@app/base/types';
 
 import { TermsOfUseService } from '@modules/shared/services/terms-of-use.service';
 
@@ -17,7 +18,8 @@ export class PageTermsOfUseAcceptanceComponent extends CoreComponent implements 
   baseUrl: string;
   appUrl: string;
   policyURL: string;
-  navigationMenuBar: { rightItems: { title: string, link: string, fullReload?: boolean }[] } = { rightItems: [] };
+
+  navigationMenuBar: { rightItems: HeaderNavigationBarItemType } = { rightItems: [] };
 
   termsOfUseVersion: { id: string, summary: string, name: string } = { id: '', summary: '', name: '' };
 
@@ -29,12 +31,12 @@ export class PageTermsOfUseAcceptanceComponent extends CoreComponent implements 
     super();
     this.setPageTitle('Terms of use update');
 
-    this.baseUrl = this.stores.environment.BASE_URL;
-    this.appUrl = this.stores.environment.APP_URL;
+    this.baseUrl = this.CONSTANTS.BASE_URL;
+    this.appUrl = this.CONSTANTS.APP_URL;
 
     this.navigationMenuBar = {
       rightItems: [
-        { title: 'Sign out', link: `${this.appUrl}/signout`, fullReload: true }
+        { key: 'signOut', label: 'Sign out', link: `${this.appUrl}/signout`, fullReload: true }
       ]
     };
 

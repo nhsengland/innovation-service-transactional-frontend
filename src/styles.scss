@@ -48,19 +48,6 @@ $service-manual-container-size: 1100px; // Container width variable.
   // --large-desktop: 61.875em; /* 990px */
 }
 
-.side-menu-flex {
-  display: flex;
-}
-.side-menu-flex :first-child {
-  width: max-content;
-}
-
-.side-menu-flex > * {
-  flex: 0 0 auto;
-  padding-left: 8px;
-}
-
-
 .d-block { display: block; }
 .d-flex { display: flex; }
 .d-inline-block { display: inline-block; }

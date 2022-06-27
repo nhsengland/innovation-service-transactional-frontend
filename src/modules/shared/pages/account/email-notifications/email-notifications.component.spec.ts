@@ -56,7 +56,7 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountManageNotifications
     const responseMock = [{ id: 'ACTION', isSubscribed: true },
     { id: 'SUPPORT', isSubscribed: false }];
 
-    notificationsService.getEmailNotificationTypes = () => of(responseMock);
+    notificationsService.getEmailNotificationsPreferences = () => of(responseMock);
 
     const expected = [{ id: 'ACTION', title: 'Actions', isSubscribed: true },
     { id: 'SUPPORT', title: 'Support status changes', isSubscribed: false }];
@@ -71,7 +71,7 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountManageNotifications
 
   it('should NOT have initial information loaded', () => {
 
-    notificationsService.getEmailNotificationTypes = () => throwError('error');
+    notificationsService.getEmailNotificationsPreferences = () => throwError('error');
 
     const expected = {
       type: 'ERROR',
@@ -89,7 +89,7 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountManageNotifications
 
   it('should run onUpdatePreference and call API with success', () => {
 
-    notificationsService.updateUserNotificationPreferences = () => of({ id: 'prefId', isSubscribed: true });
+    notificationsService.updateEmailNotificationsPreferences = () => of({ id: 'prefId', isSubscribed: true });
 
     const expected = {
       type: 'SUCCESS',
@@ -107,7 +107,7 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountManageNotifications
 
   it('should run onUpdatePreference and call API with error', () => {
 
-    notificationsService.updateUserNotificationPreferences = () => throwError('error');
+    notificationsService.updateEmailNotificationsPreferences = () => throwError('error');
 
     const expected = {
       type: 'ERROR',
@@ -126,7 +126,7 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountManageNotifications
 
   it('should run unsubscribeAllPreferences and call API with success', () => {
 
-    notificationsService.updateUserNotificationPreferences = () => of({ id: 'prefId', isSubscribed: true });
+    notificationsService.updateEmailNotificationsPreferences = () => of({ id: 'prefId', isSubscribed: true });
 
     const expected = {
       type: 'SUCCESS',

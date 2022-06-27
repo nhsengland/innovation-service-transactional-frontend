@@ -13,7 +13,7 @@ import { AssessmentModule } from '@modules/feature-modules/assessment/assessment
 import { InnovationAssessmentEditComponent } from './assessment-edit.component';
 
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
-import { OrganisationsService } from '@shared-module/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEditComponent', () => {

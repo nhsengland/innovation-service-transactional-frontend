@@ -11,15 +11,11 @@ import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 import { CoreModule, AppInjector } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { ActionAdvancedFilterComponent } from './actions-advanced-filter.component';
 
-import { OrganisationsService } from '@shared-module/services/organisations.service';
-import { AccessorService, getAdvanceActionsListEndpointInDTO } from '../../services/accessor.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { response } from 'express';
-
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { AccessorService } from '../../services/accessor.service';
 
 
 describe('FeatureModules/Accessor/Actions/FilterActionComponent', () => {

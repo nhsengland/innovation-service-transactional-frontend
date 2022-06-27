@@ -1,4 +1,4 @@
-import { FormEngineModel, FormEngineParameterModel } from '@shared-module/forms';
+import { FormEngineModel, FormEngineParameterModel } from '@modules/shared/forms';
 
 export const TRIAGE_INNOVATOR_PACK_QUESTIONS: { question: FormEngineModel, summary: { [key: string]: null | string } }[] = [
 

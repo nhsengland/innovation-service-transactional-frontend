@@ -3,10 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
-import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
+import { INNOVATION_STATUS, SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
 import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 
 
@@ -81,6 +81,18 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   ngOnInit(): void {
 
     this.notificationsService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING).subscribe();
+
+    switch (this.activatedRoute.snapshot.queryParams.alert) {
+      case 'innovationCreationSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: `You have successfully registered the innovation '${this.activatedRoute.snapshot.queryParams.name}'`
+        };
+        break;
+      default:
+        break;
+    }
+
 
     forkJoin([
       this.innovatorService.getInnovationInfo(this.innovationId),

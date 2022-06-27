@@ -6,8 +6,8 @@ import { FormEngineParameterModel } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
 
-import { NotificationsService } from '@modules/shared/services/notifications.service';
 import { AssessmentService, getInnovationsListEndpointOutDTO } from '../../services/assessment.service';
+
 
 @Component({
   selector: 'app-assessment-pages-review-innovations',
@@ -15,7 +15,7 @@ import { AssessmentService, getInnovationsListEndpointOutDTO } from '../../servi
 })
 export class ReviewInnovationsComponent extends CoreComponent implements OnInit {
 
-  tabs: { key: keyof typeof INNOVATION_STATUS, title: string, description: string, link: string, notifications?: number, queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' | 'NEEDS_ASSESSMENT' | 'IN_PROGRESS' } }[] = [];
+  tabs: { key: keyof typeof INNOVATION_STATUS, title: string, description: string, link: string, queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' | 'NEEDS_ASSESSMENT' | 'IN_PROGRESS' } }[] = [];
   currentTab: { key: string, status: string, description: string, overdueInnovations: number };
 
   form = new FormGroup({
@@ -30,8 +30,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private assessmentService: AssessmentService,
-    private notificationsService: NotificationsService
+    private assessmentService: AssessmentService
   ) {
 
     super();
@@ -101,14 +100,6 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   }
 
-  getTabsNotifications(): void {
-    this.notificationsService.innovationStatusNotifications().subscribe(
-      response => {
-        this.tabs.forEach(t => { t.notifications = response[t.key] || 0; });
-      }
-    );
-  }
-
 
   onRouteChange(queryParams: Params): void {
 
@@ -170,7 +161,6 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
     }
 
     this.getInnovationsList();
-    this.getTabsNotifications();
 
   }
 

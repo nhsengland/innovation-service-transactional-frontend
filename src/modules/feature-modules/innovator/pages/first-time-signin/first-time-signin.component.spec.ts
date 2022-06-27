@@ -15,7 +15,7 @@ import { FirstTimeSigninComponent } from './first-time-signin.component';
 
 import { InnovatorService } from '../../services/innovator.service';
 
-import { OrganisationsService } from '@shared-module/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {

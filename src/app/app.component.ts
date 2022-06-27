@@ -4,7 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 
-import { EnvironmentStore } from '@modules/core/stores/environment.store';
+import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { CookiesService } from '@modules/core/services/cookies.service';
 
 import { locale as enLanguage } from './config/translations/en';
@@ -22,7 +22,7 @@ export class AppComponent {
     @Inject(PLATFORM_ID) private platformId: object,
     public router: Router,
     private translateService: TranslateService,
-    private environmentStore: EnvironmentStore,
+    private environmentStore: EnvironmentVariablesStore,
     private cookiesService: CookiesService
   ) {
 

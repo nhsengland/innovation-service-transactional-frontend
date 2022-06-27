@@ -1,30 +1,32 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
+
+type LabelType = null | 'dot' | 'new' | number;
+
 
 @Component({
   selector: 'notification-tag',
   templateUrl: './notification-tag.component.html',
   styleUrls: ['./notification-tag.component.scss']
 })
-export class NotificationTagComponent implements OnInit {
+export class NotificationTagComponent {
 
-  @Input() count = 0;
-  @Input() isNew = false;
-  @Input() type: 'circle' | '' = '';
+  @Input()
+  // get label(): LabelType { return this.LABEL; }
+  set label(v: LabelType) {
 
-  label = '';
-
-
-  constructor() { }
-
-
-  ngOnInit(): void {
-
-    if (this.isNew) {
-      this.label = 'New';
+    if (!v) { // Includes 0!
+      this.visibleLabel = '';
+    } else if (Number.isInteger(Number(v))) {
+      this.visibleLabel = v < 99 ? v.toString() : '99+';
     } else {
-      this.label = this.count && this.count < 99 ? this.count.toString() : '99+';
+      this.visibleLabel = v.toString();
     }
 
   }
+
+  // private LABEL: LabelType = null;
+
+  visibleLabel = '';
 
 }

@@ -4,13 +4,13 @@ import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 import { FormEngineComponent, FileTypes, WizardEngineModel } from '@app/base/forms';
 
-import { UrlModel } from '@modules/core';
+import { UrlModel } from '@app/base/models';
 
-import { ContextInnovationType } from '@stores-module/context/context.models';
-import { InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
+import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
+import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
 
 
 @Component({
@@ -23,7 +23,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   alert: AlertType & { errorsList: { label: string, error: string }[] } = { type: null, errorsList: [] };
 
-  innovation: ContextInnovationType;
+  innovation: EnvironmentInnovationType;
   sectionId: InnovationSectionsIds;
   baseUrl: string;
 
@@ -39,7 +39,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     super();
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.stores.environment.getInnovation();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.baseUrl = `innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
@@ -74,7 +74,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     if (this.wizard.currentStep().parameters[0].dataType === 'file-upload') {
       this.wizard.currentStep().parameters[0].fileUploadConfig = {
-        httpUploadUrl: new UrlModel(this.stores.environment.APP_URL).addPath('upload').buildUrl(),
+        httpUploadUrl: new UrlModel(this.CONSTANTS.APP_URL).addPath('upload').buildUrl(),
         httpUploadBody: {
           context: this.sectionId,
           innovatorId: this.stores.authentication.getUserId(),
@@ -142,7 +142,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         // NOTE: This is a very specific operation that updates the context (store) innovation name.
         // If more exceptions appears, a wizard configurations should be considered.
         if (this.sectionId === 'INNOVATION_DESCRIPTION' && this.wizard.currentStepId === 1) {
-          this.stores.context.updateInnovation({ name: this.wizard.getAnswers().innovationName });
+          this.stores.environment.updateInnovation({ name: this.wizard.getAnswers().innovationName });
         }
         return of(true);
 

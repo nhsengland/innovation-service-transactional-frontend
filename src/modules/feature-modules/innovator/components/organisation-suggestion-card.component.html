@@ -7,20 +7,12 @@
           <strong>The needs assessment team</strong> has suggested one or more organisations that you're not sharing your data with.
           Consider updating your preferences for the best chance of receiving support.
         </p>
-        <div class="side-menu-flex">
-          <div>
-            <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">
-              Suggested organisations
-            </h2>
-          </div>
-          <div>
-            <notification-tag *ngIf="hasNewSuggestions" type="circle"></notification-tag>
-          </div>
+        <div class="d-flex">
+          <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3 nhsuk-u-padding-right-2"> Suggested organisations </h2>
+          <notification-tag label="dot" *ngIf="hasNewSuggestions"></notification-tag>
         </div>
         <ul class="nhsuk-list">
-          <li *ngFor="let item of assessments.organisations">
-            {{item}}
-          </li>
+          <li *ngFor="let item of assessments.organisations"> {{ item }} </li>
         </ul>
       </div>
     </div>
@@ -36,13 +28,9 @@
           <strong>{{accessors.suggestors}}</strong> has suggested one or more organisations that you're not sharing your data with.
           Consider updating your preferences for the best chance of receiving support.
         </p>
-        <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">
-          Suggested organisations
-        </h2>
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3"> Suggested organisations </h2>
         <ul class="nhsuk-list">
-          <li *ngFor="let item of accessors.organisations">
-            {{item}}
-          </li>
+          <li *ngFor="let item of accessors.organisations"> {{ item }} </li>
         </ul>
       </div>
     </div>

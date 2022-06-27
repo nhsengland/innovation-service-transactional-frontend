@@ -3,13 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
-import { OrganisationsService } from '@shared-module/services/organisations.service';
-// import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
+import { AlertType } from '@app/base/types';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
+
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
-import { RoutingHelper } from '@modules/core';
+import { RoutingHelper } from '@app/base/helpers';
 
 @Component({
   selector: 'app-assessment-pages-innovation-support-organisations-support-status-info',

@@ -3,7 +3,7 @@
   <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
     <p> {{ alert.message }} </p>
   </theme-alert>
-  
+
   <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
 
   <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
@@ -23,7 +23,7 @@
           <div class="nhsuk-card__content">
             <h2 class="nhsuk-card__heading nhsuk-heading-m d-flex">
               <a class="nhsuk-card__link nhsuk-u-padding-right-2" [routerLink]="item.link"> {{ item.title }} </a>
-              <notification-tag *ngIf="notifications && notifications.INNOVATION > 0" type="circle"></notification-tag>
+              <notification-tag label="dot" *ngIf="notifications && notifications.INNOVATION > 0"></notification-tag>
             </h2>
             <p class="nhsuk-card__description">{{ item.description }}</p>
           </div>

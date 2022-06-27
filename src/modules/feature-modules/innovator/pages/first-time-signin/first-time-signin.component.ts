@@ -2,12 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
 import { FIRST_TIME_SIGNIN_QUESTIONS } from './first-time-signin.config';
 
-import { OrganisationsService } from '@shared-module/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovatorService } from '../../services/innovator.service';
 
 

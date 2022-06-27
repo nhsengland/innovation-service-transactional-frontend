@@ -199,21 +199,6 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   });
 
-  it('should run getNotificationsGroupedByStatus()', () => {
-
-    activatedRoute.queryParams = of({ status: 'UNASSIGNED' });
-    authenticationStore.isQualifyingAccessorRole = () => true;
-
-    notificationsService.getAllUnreadNotificationsGroupedByStatus = () => of({ UNASSIGNED: 1, INVALID_KEY: 0 });
-
-    fixture = TestBed.createComponent(InnovationsReviewComponent);
-    component = fixture.componentInstance;
-
-    fixture.detectChanges();
-    expect(component.tabs.find(t => t.key === 'UNASSIGNED')?.notifications).toBe(1);
-
-  });
-
   it('should run onFormChange()', () => {
 
     fixture = TestBed.createComponent(InnovationsReviewComponent);

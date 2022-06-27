@@ -2,7 +2,7 @@ import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetec
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { RandomGeneratorHelper } from '@modules/core';
+import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
 import { ControlValueAccessorConnector } from '../base/control-value-accessor.connector';
 

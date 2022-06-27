@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 
 import { AssessmentService, getInnovationInfoEndpointDTO } from '../../../services/assessment.service';
 
-import { categoriesItems } from '@stores-module/innovation/sections/catalogs.config';
+import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 
 

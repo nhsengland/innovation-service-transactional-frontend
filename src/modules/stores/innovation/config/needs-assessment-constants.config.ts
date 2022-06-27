@@ -1,4 +1,4 @@
-import { FormEngineParameterModel } from '@shared-module/forms';
+import { FormEngineParameterModel } from '@modules/shared/forms';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 export const NEEDS_ASSESSMENT_QUESTIONS: {

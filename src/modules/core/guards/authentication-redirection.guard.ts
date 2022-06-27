@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 
-import { AuthenticationStore } from '../../stores';
+import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 
 
 const userTypePaths = {

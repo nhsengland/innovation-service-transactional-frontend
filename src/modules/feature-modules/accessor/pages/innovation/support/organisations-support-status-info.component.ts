@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
-import { OrganisationsService } from '@shared-module/services/organisations.service';
+import { AlertType } from '@app/base/types';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 import { AccessorService } from '../../../services/accessor.service';
 

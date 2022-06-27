@@ -3,6 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { TableModel } from '@app/base/models';
+import { NotificationValueType } from '@app/base/types';
 import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
@@ -20,7 +21,7 @@ type TabType = {
   showSuggestedOnlyFilter: boolean;
   link: string;
   queryParams: { status: keyof typeof INNOVATION_SUPPORT_STATUS; };
-  notifications?: number;
+  notifications: NotificationValueType;
 };
 
 
@@ -64,7 +65,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           numberDescription: 'innovations in active engagement',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'ENGAGING' }
+          link: '/accessor/innovations', queryParams: { status: 'ENGAGING' },
+          notifications: null
         },
         {
           key: 'COMPLETE',
@@ -73,7 +75,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           numberDescription: 'innovations with completed engagements',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'COMPLETE' }
+          link: '/accessor/innovations', queryParams: { status: 'COMPLETE' },
+          notifications: null
         }
       ];
 
@@ -89,7 +92,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           numberDescription: 'unassigned innovations',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: true,
-          link: '/accessor/innovations', queryParams: { status: 'UNASSIGNED' }
+          link: '/accessor/innovations', queryParams: { status: 'UNASSIGNED' },
+          notifications: null
         },
         {
           key: 'ENGAGING',
@@ -97,7 +101,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Innovations being supported, assessed or guided by your organisation.',
           showAssignedToMeFilter: true,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'ENGAGING' }
+          link: '/accessor/innovations', queryParams: { status: 'ENGAGING' },
+          notifications: null
         },
         {
           key: 'FURTHER_INFO_REQUIRED',
@@ -105,7 +110,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Further information is needed from the innovator to make a decision.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'FURTHER_INFO_REQUIRED' }
+          link: '/accessor/innovations', queryParams: { status: 'FURTHER_INFO_REQUIRED' },
+          notifications: null
         },
         {
           key: 'WAITING',
@@ -113,7 +119,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Waiting for an internal decision to progress.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'WAITING' }
+          link: '/accessor/innovations', queryParams: { status: 'WAITING' },
+          notifications: null
         },
         {
           key: 'NOT_YET',
@@ -121,7 +128,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Innovations not yet ready for your support offer.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'NOT_YET' }
+          link: '/accessor/innovations', queryParams: { status: 'NOT_YET' },
+          notifications: null
         },
         {
           key: 'UNSUITABLE',
@@ -129,7 +137,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Your organisation has no suitable offer for these innovations.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'UNSUITABLE' }
+          link: '/accessor/innovations', queryParams: { status: 'UNSUITABLE' },
+          notifications: null
         },
         {
           key: 'COMPLETE',
@@ -137,7 +146,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Your organisation has completed an engagement with these innovations.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'COMPLETE' }
+          link: '/accessor/innovations', queryParams: { status: 'COMPLETE' },
+          notifications: null
         }
       ];
     }
@@ -149,7 +159,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       showAssignedToMeFilter: false,
       showSuggestedOnlyFilter: false,
       link: '',
-      queryParams: { status: 'UNASSIGNED' }
+      queryParams: { status: 'UNASSIGNED' },
+      notifications: null
     };
 
     this.innovationsList = new TableModel({});
@@ -181,16 +192,6 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       }
     );
 
-  }
-
-  getNotificationsGroupedByStatus(): void {
-    this.notificationsService.getAllUnreadNotificationsGroupedByStatus('SUPPORT_STATUS').subscribe(
-      response => {
-        for (const t of this.tabs) {
-          t.notifications = response[t.key] || 0;
-        }
-      }
-    );
   }
 
   prepareInnovationsList(status: keyof typeof INNOVATION_SUPPORT_STATUS): void {
@@ -273,7 +274,6 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
     this.prepareInnovationsList(this.currentTab.key);
     this.getInnovationsList();
-    this.getNotificationsGroupedByStatus();
 
   }
 

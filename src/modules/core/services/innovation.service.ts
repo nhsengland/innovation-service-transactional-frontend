@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import { EnvironmentStore } from '../stores/environment.store';
+import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
 
 import { UrlModel } from '../models/url.model';
 
@@ -15,7 +15,7 @@ export class InnovationService {
 
   constructor(
     private http: HttpClient,
-    private environmentStore: EnvironmentStore
+    private environmentStore: EnvironmentVariablesStore
   ) {
     this.APP_URL = this.environmentStore.APP_URL;
   }

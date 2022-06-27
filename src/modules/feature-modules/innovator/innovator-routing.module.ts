@@ -4,11 +4,15 @@ import { RouterModule, Routes } from '@angular/router';
 import { InnovatorLayoutComponent } from './base/innovator-layout.component';
 
 // Pages.
-import { PageAccountManageInnovationsInfoComponent } from './pages/account/manage-innovations/manage-innovations-info.component';
-import { PageAccountManageInnovationsTransferComponent } from './pages/account/manage-innovations/manage-innovations-transfer.component';
-import { PageAccountManageInnovationsArchivalComponent } from './pages/account/manage-innovations/manage-innovations-archival.component';
+// // Innovator module.
+import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
+import { PageAccountInfoComponent } from './pages/account/account-info.component';
+import { PageAccountInnovationsArchivalComponent } from './pages/account/innovations-archival.component';
+import { PageAccountInnovationsInfoComponent } from './pages/account/innovations-info.component';
+import { PageAccountInnovationsTransferComponent } from './pages/account/innovations-transfer.component';
 
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
+
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
@@ -21,23 +25,21 @@ import { InnovationSectionEvidenceEditComponent } from './pages/innovation/recor
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
 import { InnovationTransferAcceptanceComponent } from './pages/innovation-transfer-acceptance/innovation-transfer-acceptance.component';
-import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
-import { PageAccountManageAccountInfoComponent } from './pages/account/manage-account/manage-account-info.component';
-import { PageAccountManageUserAccountComponent } from './pages/account/manage-account/manage-account-delete.component';
 
-import { PageAccountManageDetailsInfoComponent } from '@shared-module/pages/account/manage-details/manage-details-info.component';
-import { PageAccountManageDetailsEditComponent } from '@shared-module/pages/account/manage-details/manage-details-edit.component';
-import { PageAccountEmailNotificationsComponent } from '@shared-module/pages/account/email-notifications/email-notifications.component';
-
-import { InnovationSectionInfoComponent } from '@shared-module/pages/innovation/section-info.component';
-import { InnovationSectionEvidenceViewComponent } from '@shared-module/pages/innovation/evidence-view.component';
-import { PageActionStatusListComponent } from '@shared-module/pages/innovation/action-status-list.component';
-import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/innovation-activity-log.component';
-import { PageInnovationRecordComponent } from '@shared-module/pages/innovation/innovation-record.component';
-import { PageInnovationCommentsListComponent } from '@shared-module/pages/innovation/comments/comments-list.component';
-import { PageInnovationCommentsNewComponent } from '@shared-module/pages/innovation/comments/comments-new.component';
-import { PageInnovationSupportStatusListComponent } from '@shared-module/pages/innovation/innovation-support-status-list.component';
-import { PageTermsOfUseAcceptanceComponent } from '@shared-module/pages/terms-of-use/terms-of-use-acceptance.component';
+// // Shared module.
+import { PageAccountEmailNotificationsComponent } from '@modules/shared/pages/account/email-notifications/email-notifications.component';
+import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
+import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
+import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/actions/action-status-list.component';
+import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
+import { PageInnovationCommentsListComponent } from '@modules/shared/pages/innovation/comments/comments-list.component';
+import { PageInnovationCommentsNewComponent } from '@modules/shared/pages/innovation/comments/comments-new.component';
+import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
+import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
+import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
+import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/innovation-support-status-list.component';
+import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
+import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
@@ -83,11 +85,9 @@ const routes: Routes = [
         ]
       },
 
-      {
-        path: 'dashboard',
-        pathMatch: 'full',
-        component: DashboardComponent
-      },
+      { path: 'dashboard', pathMatch: 'full', component: PageDashboardComponent },
+
+      { path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent },
 
       {
         path: 'account',
@@ -112,15 +112,15 @@ const routes: Routes = [
             path: 'manage-innovations',
             children: [
               {
-                path: '', pathMatch: 'full', component: PageAccountManageInnovationsInfoComponent,
+                path: '', pathMatch: 'full', component: PageAccountInnovationsInfoComponent,
                 data: { layoutOptions: { type: 'userAccountMenu' } }
               },
               {
-                path: 'transfer', pathMatch: 'full', component: PageAccountManageInnovationsTransferComponent,
+                path: 'transfer', pathMatch: 'full', component: PageAccountInnovationsTransferComponent,
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'account/manage-innovations', label: 'Manage innovations' } } }
               },
               {
-                path: 'archive', pathMatch: 'full', component: PageAccountManageInnovationsArchivalComponent,
+                path: 'archive', pathMatch: 'full', component: PageAccountInnovationsArchivalComponent,
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'account/manage-innovations', label: 'Manage innovations' } } }
               }
             ]
@@ -129,11 +129,11 @@ const routes: Routes = [
             path: 'manage-account',
             children: [
               {
-                path: '', pathMatch: 'full', component: PageAccountManageAccountInfoComponent,
+                path: '', pathMatch: 'full', component: PageAccountInfoComponent,
                 data: { layoutOptions: { type: 'userAccountMenu' } }
               },
               {
-                path: 'delete', pathMatch: 'full', component: PageAccountManageUserAccountComponent,
+                path: 'delete', pathMatch: 'full', component: PageAccountDeleteComponent,
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'account/manage-account', label: 'Manage account' } } }
               }]
           }
@@ -143,7 +143,8 @@ const routes: Routes = [
       {
         path: 'innovations',
         children: [
-          { path: '', pathMatch: 'full', component: InnovationsListComponent },
+          { path: '', pathMatch: 'full', redirectTo: '../dashboard' },
+
           { path: 'new', pathMatch: 'full', component: InnovationNewComponent },
           {
             path: ':innovationId',
@@ -161,7 +162,7 @@ const routes: Routes = [
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', showInnovationHeader: true } }
               },
               {
-                path: 'record/sections/:sectionId', pathMatch: 'full', component: InnovationSectionInfoComponent,
+                path: 'record/sections/:sectionId', pathMatch: 'full', component: PageInnovationSectionInfoComponent,
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/record', label: 'Innovation record' } } }
               },
               { path: 'record/sections/:sectionId/edit', pathMatch: 'full', redirectTo: 'record/sections/:sectionId/edit/1' },
@@ -170,7 +171,7 @@ const routes: Routes = [
               { path: 'record/sections/:sectionId/evidence/new', pathMatch: 'full', redirectTo: 'record/sections/:sectionId/evidence/new/1' },
               { path: 'record/sections/:sectionId/evidence/new/:questionId', pathMatch: 'full', component: InnovationSectionEvidenceEditComponent },
               {
-                path: 'record/sections/:sectionId/evidence/:evidenceId', pathMatch: 'full', component: InnovationSectionEvidenceViewComponent,
+                path: 'record/sections/:sectionId/evidence/:evidenceId', pathMatch: 'full', component: PageInnovationSectionEvidenceInfoComponent,
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/record/sections/:sectionId', label: 'Innovation section' } } }
               },
               { path: 'record/sections/:sectionId/evidence/:evidenceId/edit', pathMatch: 'full', redirectTo: 'record/sections/:sectionId/evidence/:evidenceId/edit/1' },
@@ -197,11 +198,7 @@ const routes: Routes = [
                 resolve: { innovationData: InnovationDataResolver },
                 data: { layoutOptions: { type: 'innovationLeftAsideMenu', showInnovationHeader: true } },
                 children: [
-                  {
-                    path: '',
-                    pathMatch: 'full',
-                    component: PageInnovationCommentsListComponent,
-                  },
+                  { path: '', pathMatch: 'full', component: PageInnovationCommentsListComponent },
                   {
                     path: 'new', pathMatch: 'full', component: PageInnovationCommentsNewComponent,
                     data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/comments', label: 'Go back' } } }
@@ -228,10 +225,8 @@ const routes: Routes = [
                 path: 'support/statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/support', label: 'Go back' } } }
               },
-              {
-                path: 'assessments/:assessmentId', pathMatch: 'full', component: InnovatorNeedsAssessmentOverviewComponent,
-                // data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/innovations/:innovationId', label: 'Go back' } } }
-              }
+
+              { path: 'assessments/:assessmentId', pathMatch: 'full', component: InnovatorNeedsAssessmentOverviewComponent }
             ]
           }
         ]

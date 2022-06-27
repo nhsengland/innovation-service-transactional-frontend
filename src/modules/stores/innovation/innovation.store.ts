@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 
-import { MappedObject } from '@modules/core/interfaces/base.interfaces';
+import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { APIQueryParamsType } from '@modules/core/models/table.model';
 
 import { Store } from '../store.class';
@@ -95,15 +95,15 @@ export class InnovationStore extends Store<InnovationModel> {
 
   }
 
-  getSectionInfo$(module: UserModulesType, innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
+  getSectionInfo$(module: UserModulesType, innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObjectType }> {
     return this.innovationsService.getSectionInfo(module, innovationId, section);
   }
 
-  updateSectionInfo$(innovationId: string, section: string, data: MappedObject): Observable<MappedObject> {
+  updateSectionInfo$(innovationId: string, section: string, data: MappedObjectType): Observable<MappedObjectType> {
     return this.innovationsService.updateSectionInfo(innovationId, section, data);
   }
 
-  submitSections$(innovationId: string, sections: string[]): Observable<MappedObject> {
+  submitSections$(innovationId: string, sections: string[]): Observable<MappedObjectType> {
     return this.innovationsService.submitSections(innovationId, sections);
   }
 
@@ -111,7 +111,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.getSectionEvidenceInfo(module, innovationId, evidenceId);
   }
 
-  upsertSectionEvidenceInfo$(innovationId: string, data: MappedObject, evidenceId?: string): Observable<MappedObject> {
+  upsertSectionEvidenceInfo$(innovationId: string, data: MappedObjectType, evidenceId?: string): Observable<MappedObjectType> {
     return this.innovationsService.upsertSectionEvidenceInfo(innovationId, data, evidenceId);
   }
 

@@ -3,15 +3,17 @@ import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-
-import { RoutingHelper } from '@modules/core';
+import { HeaderNavigationBarItemType } from '@app/base/types';
+import { RoutingHelper } from '@app/base/helpers';
 
 import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
+
 
 type RouteDataLayoutOptionsType = {
   type: null | 'userAccountMenu' | 'innovationLeftAsideMenu' | 'emptyLeftAside';
   backLink?: null | { url: string, label: string };
 };
+
 
 @Component({
   selector: 'app-accessor-layout',
@@ -22,14 +24,20 @@ export class AccessorLayoutComponent extends CoreComponent {
   layoutOptions: RouteDataLayoutOptionsType = { type: null };
 
   navigationMenuBar: {
-    leftItems: { title: string, link: string, fullReload?: boolean }[],
-    rightItems: { title: string, link: string, fullReload?: boolean, key: keyof typeof NotificationContextType | '' }[]
-  } = { leftItems: [], rightItems: [] };
+    leftItems: HeaderNavigationBarItemType,
+    rightItems: HeaderNavigationBarItemType,
+    notifications: { notifications: number }
+  } = { leftItems: [], rightItems: [], notifications: { notifications: 0 } };
 
-  leftSideBar: { title: string, link: string, key?: string }[] = [];
+  leftSideBar: { key: string, title: string, link: string }[] = [];
+  leftSideBarNotifications: { [key: string]: number } = {
+    ACTION: 0,
+    COMMENT: 0,
+    INNOVATION: 0,
+    SUPPORT: 0,
+    DATA_SHARING: 0,
+  };
 
-  notifications: { [key: string]: number };
-  mainMenuNotifications: { [key: string]: number };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -38,31 +46,26 @@ export class AccessorLayoutComponent extends CoreComponent {
 
     super();
 
-    this.navigationMenuBar = {
-      leftItems: [
-        { title: 'Home', link: '/accessor/dashboard' }
-      ],
-      rightItems: [
-        { title: 'Innovations', link: '/accessor/innovations', key: NotificationContextType.INNOVATION },
-        { title: 'Actions', link: '/accessor/actions', key: NotificationContextType.ACTION },
-        { title: 'Account', link: '/accessor/account', key: '' },
-        { title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true, key: '' }
-      ]
-    };
+    this.navigationMenuBar.leftItems = [
+      { key: 'home', label: 'Home', link: '/accessor/dashboard' }
+    ];
+    this.navigationMenuBar.rightItems = [
+      { key: 'innovations', label: 'Innovations', link: '/accessor/innovations' },
+      { key: 'notifications', label: 'Notifications', link: '/innovator/notifications' },
+      { key: 'actions', label: 'Actions', link: '/accessor/actions', },
+      { key: 'account', label: 'Account', link: '/accessor/account' },
+      { key: 'signOut', label: 'Sign out', link: `${this.CONSTANTS.APP_URL}/signout`, fullReload: true }
+    ];
 
     this.subscriptions.push(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
+
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e)),
+
+      this.stores.environment.notifications$().subscribe(e => {
+        this.navigationMenuBar.notifications = { notifications: e.UNREAD }; // We need to reassign the variable so that the component reacts to it.
+      })
+
     );
-
-    this.notifications = {
-      ACTION: 0,
-      COMMENT: 0,
-      INNOVATION: 0,
-      SUPPORT: 0,
-      DATA_SHARING: 0,
-    };
-
-    this.mainMenuNotifications = {};
 
   }
 
@@ -71,24 +74,6 @@ export class AccessorLayoutComponent extends CoreComponent {
 
     const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
-
-    if (this.stores.authentication.isValidUser()) {
-
-      this.notificationsService.getAllUnreadNotificationsGroupedByContext().subscribe(
-        response => {
-          this.mainMenuNotifications = response;
-        }
-      );
-
-      if (currentRouteInnovationId) {
-        this.notificationsService.getAllUnreadNotificationsGroupedByContext(currentRouteInnovationId).subscribe(
-          response => {
-            this.notifications = response;
-          }
-        );
-      }
-
-    }
 
     this.layoutOptions = {
       type: routeData.type || null,
@@ -99,20 +84,20 @@ export class AccessorLayoutComponent extends CoreComponent {
 
       case 'userAccountMenu':
         this.leftSideBar = [
-          { title: 'Your details', link: `/accessor/account/manage-details` },
-          { title: 'Email notifications', link: `/accessor/account/email-notifications` },
-          { title: 'Manage account', link: `/accessor/account/manage-account` }
+          { key: 'YourDetails', title: 'Your details', link: `/accessor/account/manage-details` },
+          { key: 'EmailNotifications', title: 'Email notifications', link: `/accessor/account/email-notifications` },
+          { key: 'ManageAccount', title: 'Manage account', link: `/accessor/account/manage-account` }
         ];
         break;
 
       case 'innovationLeftAsideMenu':
         this.leftSideBar = [
-          { title: 'Overview', link: `/accessor/innovations/${currentRouteInnovationId}/overview` },
-          { title: 'Innovation record', link: `/accessor/innovations/${currentRouteInnovationId}/record` },
-          { title: 'Action tracker', link: `/accessor/innovations/${currentRouteInnovationId}/action-tracker`, key: NotificationContextType.ACTION },
-          { title: 'Comments', link: `/accessor/innovations/${currentRouteInnovationId}/comments`, key: NotificationContextType.COMMENT },
-          { title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support`, key: NotificationContextType.SUPPORT },
-          { title: 'Activity log', link: `/accessor/innovations/${currentRouteInnovationId}/activity-log` }
+          { key: 'Overview', title: 'Overview', link: `/accessor/innovations/${currentRouteInnovationId}/overview` },
+          { key: 'InnovationRecord', title: 'Innovation record', link: `/accessor/innovations/${currentRouteInnovationId}/record` },
+          { key: NotificationContextType.ACTION, title: 'Action tracker', link: `/accessor/innovations/${currentRouteInnovationId}/action-tracker` },
+          { key: NotificationContextType.COMMENT, title: 'Comments', link: `/accessor/innovations/${currentRouteInnovationId}/comments` },
+          { key: NotificationContextType.SUPPORT, title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support` },
+          { key: 'ActivityLog', title: 'Activity log', link: `/accessor/innovations/${currentRouteInnovationId}/activity-log` }
         ];
         break;
 

@@ -5,7 +5,7 @@ import { ENV } from '@tests/app.mocks';
 
 import { Injector } from '@angular/core';
 
-import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
+import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { InnovatorService } from './innovator.service';
@@ -16,7 +16,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
 
   let httpMock: HttpTestingController;
 
-  let environmentStore: EnvironmentStore;
+  let envVariablesStore: EnvironmentVariablesStore;
   let authenticationStore: AuthenticationStore;
   let service: InnovatorService;
 
@@ -37,7 +37,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
 
     httpMock = TestBed.inject(HttpTestingController);
 
-    environmentStore = TestBed.inject(EnvironmentStore);
+    envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
     authenticationStore = TestBed.inject(AuthenticationStore);
     service = TestBed.inject(InnovatorService);
 
@@ -71,7 +71,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.submitFirstTimeSigninInfo('FIRST_TIME_SIGNIN', payload).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
     expect(response).toEqual(expected);
@@ -99,7 +99,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.submitFirstTimeSigninInfo('FIRST_TIME_SIGNIN', payload).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
     expect(response).toEqual(expected);
@@ -119,7 +119,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.submitFirstTimeSigninInfo('TRANSFER', payload).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
     expect(response).toEqual(expected);
@@ -139,7 +139,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.submitFirstTimeSigninInfo('INVALID' as any, payload).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
     expect(response).toEqual(expected);
@@ -161,7 +161,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.createInnovation(payload).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/UserId01/innovations`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
     expect(response).toEqual(expected);
@@ -177,7 +177,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.getInnovationInfo(payload).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/UserId01/innovations/Inno01`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -224,7 +224,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.getInnovationSupports('Inno01', true).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/UserId01/innovations/Inno01/supports?full=true`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/supports?full=true`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response.length).toBe(3);
@@ -273,7 +273,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.getInnovationActionsList('Inno01').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/UserId01/innovations/Inno01/actions`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/actions`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -305,7 +305,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.getInnovationActionInfo('Inno01', 'ActionId01').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/UserId01/innovations/Inno01/actions/ActionId01`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/actions/ActionId01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -320,7 +320,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.declineAction('Inno01', 'ActionId01', { some: 'parameters' }).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/UserId01/innovations/Inno01/actions/ActionId01`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/actions/ActionId01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PUT');
     expect(response).toEqual(expected);
@@ -338,7 +338,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.getInnovationShares('Inno01').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/UserId01/innovations/Inno01/shares`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/shares`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -353,7 +353,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.submitOrganisationSharing('Inno01', { some: 'parameters' }).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/UserId01/innovations/Inno01/shares`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/shares`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PUT');
     expect(response).toEqual(expected);
@@ -426,7 +426,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.getInnovationNeedsAssessment('Inno01', 'AssessmentId01').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/UserId01/innovations/Inno01/assessments/AssessmentId01`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/assessments/AssessmentId01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -444,7 +444,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.getInnovationTransfers().subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/innovation-transfers`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/innovation-transfers`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -462,7 +462,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.getInnovationTransfers(true).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/innovation-transfers?assignedToMe=true`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/innovation-transfers?assignedToMe=true`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -477,7 +477,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.transferInnovation({ innovationId: 'Inno01', email: 'some@email.com' }).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/innovation-transfers`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/innovation-transfers`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
     expect(response).toEqual(expected);
@@ -492,7 +492,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.updateTransferInnovation('transferId01', 'COMPLETED').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/innovation-transfers/transferId01`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/innovation-transfers/transferId01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PATCH');
     expect(response).toEqual(expected);
@@ -507,7 +507,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.archiveInnovation('Inno01', 'Some reason').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/UserId01/innovations/Inno01/archive`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/archive`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PATCH');
     expect(response).toEqual(expected);
@@ -522,7 +522,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.deleteUserAccount({ reason: 'Some reason'}).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/UserId01/delete`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/delete`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PATCH');
     expect(response).toEqual(expected);

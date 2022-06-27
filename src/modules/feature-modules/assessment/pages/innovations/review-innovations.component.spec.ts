@@ -170,18 +170,18 @@ describe('FeatureModules/Assessment/Innovations/ReviewInnovationsComponent', () 
 
   });
 
-  it('should run getTabsNotifications()', () => {
+  // it('should run getTabsNotifications()', () => {
 
-    notificationsService.innovationStatusNotifications = () => of({ WAITING_NEEDS_ASSESSMENT: 1, INVALID_KEY: 0 });
+  //   notificationsService.innovationStatusNotifications = () => of({ WAITING_NEEDS_ASSESSMENT: 1, INVALID_KEY: 0 });
 
-    fixture = TestBed.createComponent(ReviewInnovationsComponent);
-    component = fixture.componentInstance;
+  //   fixture = TestBed.createComponent(ReviewInnovationsComponent);
+  //   component = fixture.componentInstance;
 
-    fixture.detectChanges();
-    component.getTabsNotifications();
-    expect(component.tabs.find(t => t.key === 'WAITING_NEEDS_ASSESSMENT')?.notifications).toBe(1);
+  //   fixture.detectChanges();
+  //   component.getTabsNotifications();
+  //   expect(component.tabs.find(t => t.key === 'WAITING_NEEDS_ASSESSMENT')?.notifications).toBe(1);
 
-  });
+  // });
 
   it('should run onFormChange()', () => {
 

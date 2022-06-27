@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-
-import { MenuBarItemType } from '@modules/theme/components/header/header.component';
+import { HeaderMenuBarItemType } from '@app/base/types';
 
 
 @Component({
@@ -11,9 +10,9 @@ import { MenuBarItemType } from '@modules/theme/components/header/header.compone
 })
 export class TriageInnovatorPackLayoutComponent extends CoreComponent {
 
-  navigationMenuBar: {
-    leftItems: MenuBarItemType[];
-    rightItems: MenuBarItemType[];
+  headerMenuBar: {
+    leftItems: HeaderMenuBarItemType[];
+    rightItems: HeaderMenuBarItemType[];
   } = { leftItems: [], rightItems: [] };
 
 
@@ -21,7 +20,7 @@ export class TriageInnovatorPackLayoutComponent extends CoreComponent {
 
     super();
 
-    this.navigationMenuBar = {
+    this.headerMenuBar = {
       leftItems: [
         { title: 'Find support', url: `/triage-innovator-pack` },
         { title: 'Innovation guides', url: `/innovation-guides`, fullReload: true },
@@ -29,7 +28,7 @@ export class TriageInnovatorPackLayoutComponent extends CoreComponent {
         { title: 'About the service', url: `/about-the-service`, fullReload: true }
       ],
       rightItems: [
-        { title: 'My dashboard', url: `${this.stores.environment.APP_URL}/dashboard`, fullReload: true }
+        { title: 'My dashboard', url: `${this.CONSTANTS.APP_URL}/dashboard`, fullReload: true }
       ]
     };
 

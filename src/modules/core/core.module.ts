@@ -14,7 +14,7 @@ import { AuthenticationRedirectionGuard } from './guards/authentication-redirect
 import { InnovationTransferRedirectionGuard } from './guards/innovation-transfer-redirection.guard';
 
 // Stores.
-import { EnvironmentStore } from './stores/environment.store';
+import { EnvironmentVariablesStore } from './stores/environment-variables.store';
 
 // Services.
 import { CookiesService } from './services/cookies.service';
@@ -33,8 +33,8 @@ import { LoggerService } from './services/logger.service';
     // App base HREF definition.
     {
       provide: APP_BASE_HREF,
-      useFactory: (environmentStore: EnvironmentStore): string => environmentStore.ENV.BASE_PATH || '/',
-      deps: [EnvironmentStore]
+      useFactory: (environmentVariablesStore: EnvironmentVariablesStore): string => environmentVariablesStore.ENV.BASE_PATH || '/',
+      deps: [EnvironmentVariablesStore]
     },
 
     // Interceptors.
@@ -50,7 +50,7 @@ import { LoggerService } from './services/logger.service';
     InnovationTransferRedirectionGuard,
 
     // Stores.
-    EnvironmentStore,
+    EnvironmentVariablesStore,
 
     // Services.
     CookiesService,

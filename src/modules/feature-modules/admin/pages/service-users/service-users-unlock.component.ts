@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { AlertType } from '@app/base/models';
-import { RoutingHelper } from '@modules/core';
+import { AlertType } from '@app/base/types';
+import { RoutingHelper } from '@app/base/helpers';
 import { ServiceUsersService, getLockUserRulesOutDTO } from '../../services/service-users.service';
 
 

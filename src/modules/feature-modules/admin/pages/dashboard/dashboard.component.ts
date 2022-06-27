@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@modules/core';
+import { AlertType } from '@app/base/types';
 
 
 @Component({

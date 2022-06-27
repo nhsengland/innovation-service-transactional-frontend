@@ -7,7 +7,7 @@ import { map, catchError } from 'rxjs/operators';
 import { Response } from 'express';
 import { RESPONSE } from '@nguniversal/express-engine/tokens';
 
-import { AuthenticationStore } from '../../stores';
+import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 import { LoggerService, Severity } from '../services/logger.service';
 
 @Injectable()

@@ -1,4 +1,5 @@
 /* istanbul ignore file */
+
 // This component is just a test for the time being...
 // Example of usage on the end of this file.
 import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, forwardRef, Injector } from '@angular/core';
@@ -6,11 +7,12 @@ import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
+import { UtilsHelper } from '@app/base/helpers';
+
 import { ControlValueAccessorConnector } from '../base/control-value-accessor.connector';
 
 import { FormEngineParameterModel } from '../engine/models/form-engine.models';
-
-import { RandomGeneratorHelper, UtilsHelper } from '@modules/core';
 
 
 @Component({

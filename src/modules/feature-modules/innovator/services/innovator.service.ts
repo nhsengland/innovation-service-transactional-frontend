@@ -4,9 +4,10 @@ import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 
-import { MappedObject, UrlModel } from '@modules/core';
+import { UrlModel } from '@app/base/models';
+import { MappedObjectType } from '@app/base/types';
 
-import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { InnovationStatusEnum } from '@modules/shared/enums';
 
@@ -229,7 +230,7 @@ export class InnovatorService extends CoreService {
 
   }
 
-  declineAction(innovationId: string, actionId: string, body: MappedObject): Observable<{ id: string }> {
+  declineAction(innovationId: string, actionId: string, body: MappedObjectType): Observable<{ id: string }> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
@@ -249,7 +250,7 @@ export class InnovatorService extends CoreService {
 
   }
 
-  submitOrganisationSharing(innovationId: string, body: MappedObject): Observable<{ id: string }> {
+  submitOrganisationSharing(innovationId: string, body: MappedObjectType): Observable<{ id: string }> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/shares').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(

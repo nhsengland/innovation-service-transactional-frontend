@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent } from '@app/base/forms';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 
-import { OrganisationsService } from '@shared-module/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovatorService } from '../../services/innovator.service';
 
 import { NEW_INNOVATION_QUESTIONS } from './innovation-new.config';
@@ -73,11 +74,12 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
     };
 
     this.innovatorService.createInnovation(body).pipe(
-      concatMap(() => {
-        return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update innovations information.
+      concatMap(response => {
+        this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update innovations information.
+        return of(response);
       })
     ).subscribe(
-      () => this.redirectTo(`innovator/innovations`, { alert: 'innovationCreationSuccess', name: body.name }),
+      response => this.redirectTo(`innovator/innovations/${response.id}`, { alert: 'innovationCreationSuccess', name: body.name }),
       () => {
         this.alert = {
           type: 'ERROR',

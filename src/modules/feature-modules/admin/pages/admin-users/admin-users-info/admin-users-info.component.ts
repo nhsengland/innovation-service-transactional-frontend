@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType, LinkType } from '@app/base/models';
-import { RoutingHelper } from '@modules/core';
+import { AlertType, LinkType } from '@app/base/types';
+import { RoutingHelper } from '@app/base/helpers';
 import { ServiceUsersService } from '../../../services/service-users.service';
 
 @Component({

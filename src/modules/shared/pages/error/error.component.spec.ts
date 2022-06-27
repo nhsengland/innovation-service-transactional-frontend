@@ -6,7 +6,7 @@ import { Injector } from '@angular/core';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { SharedModule } from '@shared-module/shared.module';
+import { SharedModule } from '@modules/shared/shared.module';
 
 import { PageErrorComponent } from './error.component';
 

@@ -1,4 +1,4 @@
-import { MappedObject } from '@modules/core/interfaces/base.interfaces';
+import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { InnovationSectionConfigType, InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS } from './innovation.models';
 
 import { SECTION_1_1 } from './sections/section-1-1.config';
@@ -45,7 +45,7 @@ type AllSectionsInboundPayloadType = {
     actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
     updatedAt: string;
   },
-  data: MappedObject
+  data: MappedObjectType
 }[];
 
 export type AllSectionsOutboundPayloadType = {

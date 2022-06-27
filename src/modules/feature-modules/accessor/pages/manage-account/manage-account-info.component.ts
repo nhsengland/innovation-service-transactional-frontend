@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 
 @Component({
   selector: 'app-accessor-pages-manage-account-info',
@@ -9,7 +9,7 @@ import { AlertType } from '@app/base/models';
 export class PageAccessorAccountManageAccountInfoComponent extends CoreComponent implements OnInit {
 
   alert: AlertType = { type: null };
-  changePassword = `${this.stores.environment.APP_URL}/change-password`;
+  changePassword = `${this.CONSTANTS.APP_URL}/change-password`;
 
   user: {
     passwordResetOn: string

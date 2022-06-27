@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { CoreComponent, FormGroup, FormControl } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
