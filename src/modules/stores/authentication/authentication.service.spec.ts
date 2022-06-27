@@ -3,13 +3,13 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 
 import { ENV } from '@tests/app.mocks';
 
-import { CoreModule, EnvironmentStore } from '@modules/core';
+import { CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { AuthenticationService } from './authentication.service';
 
 describe('Stores/AuthenticationStore/AuthenticationService', () => {
 
   let httpMock: HttpTestingController;
-  let environmentStore: EnvironmentStore;
+  let envVaraiblesStore: EnvironmentVariablesStore;
   let service: AuthenticationService;
 
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
     });
 
     httpMock = TestBed.inject(HttpTestingController);
-    environmentStore = TestBed.inject(EnvironmentStore);
+    envVaraiblesStore = TestBed.inject(EnvironmentVariablesStore);
     service = TestBed.inject(AuthenticationService);
 
   });
@@ -43,7 +43,7 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
 
     service.verifyUserSession().subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.APP_URL}/session`);
+    const httpRequest = httpMock.expectOne(`${envVaraiblesStore.APP_URL}/session`);
     httpRequest.flush(responseMock);
 
     expect(httpRequest.request.method).toBe('HEAD');
@@ -58,7 +58,7 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
 
     service.verifyUserSession().subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.APP_URL}/session`);
+    const httpRequest = httpMock.expectOne(`${envVaraiblesStore.APP_URL}/session`);
     httpRequest.flush(responseMock, { status: 400, statusText: 'Bad Request' });
 
     expect(httpRequest.request.method).toBe('HEAD');
@@ -74,7 +74,7 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
 
     service.getUserInfo().subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/me`);
+    const httpRequest = httpMock.expectOne(`${envVaraiblesStore.API_URL}/me`);
     httpRequest.flush(responseMock);
 
     expect(httpRequest.request.method).toBe('GET');
@@ -90,7 +90,7 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
 
     service.verifyInnovator().subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/check`);
+    const httpRequest = httpMock.expectOne(`${envVaraiblesStore.API_URL}/innovators/check`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -105,7 +105,7 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
 
     service.verifyInnovator().subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/check`);
+    const httpRequest = httpMock.expectOne(`${envVaraiblesStore.API_URL}/innovators/check`);
     httpRequest.flush(responseMock, { status: 404, statusText: 'Not found' });
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -120,7 +120,7 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
 
     service.getInnovations('010101').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/010101/innovations`);
+    const httpRequest = httpMock.expectOne(`${envVaraiblesStore.API_URL}/innovators/010101/innovations`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -135,7 +135,7 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
 
     service.getInnovations('010101').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/innovators/010101/innovations`);
+    const httpRequest = httpMock.expectOne(`${envVaraiblesStore.API_URL}/innovators/010101/innovations`);
     httpRequest.flush(responseMock, { status: 404, statusText: 'Not found' });
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);

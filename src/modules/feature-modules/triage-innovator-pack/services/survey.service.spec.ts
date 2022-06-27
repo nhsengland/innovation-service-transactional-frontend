@@ -5,7 +5,7 @@ import { ENV } from '@tests/app.mocks';
 
 import { Injector } from '@angular/core';
 
-import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
+import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
 import { SurveyService } from './survey.service';
@@ -14,7 +14,7 @@ import { SurveyService } from './survey.service';
 describe('FeatureModules/TriageInnovatorPack/SurveyService', () => {
 
   let httpMock: HttpTestingController;
-  let environmentStore: EnvironmentStore;
+  let envVariablesStore: EnvironmentVariablesStore;
   let service: SurveyService;
 
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe('FeatureModules/TriageInnovatorPack/SurveyService', () => {
     AppInjector.setInjector(TestBed.inject(Injector));
 
     httpMock = TestBed.inject(HttpTestingController);
-    environmentStore = TestBed.inject(EnvironmentStore);
+    envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
     service = TestBed.inject(SurveyService);
 
   });
@@ -52,7 +52,7 @@ describe('FeatureModules/TriageInnovatorPack/SurveyService', () => {
 
     service.submitSurvey(payload).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.APP_URL}/survey`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.APP_URL}/survey`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
     expect(response).toEqual(expected);
@@ -67,7 +67,7 @@ describe('FeatureModules/TriageInnovatorPack/SurveyService', () => {
 
     service.submitSurvey(payload).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.APP_URL}/survey`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.APP_URL}/survey`);
     httpRequest.flush(responseMock, { status: 400, statusText: 'Bad Request' });
     expect(httpRequest.request.method).toBe('POST');
     expect(response.status).toEqual(400);

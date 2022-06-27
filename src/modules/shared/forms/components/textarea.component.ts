@@ -1,11 +1,11 @@
 import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, forwardRef, Injector } from '@angular/core';
 import { NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 
+import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
+
 import { ControlValueAccessorConnector } from '../base/control-value-accessor.connector';
 
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
-
-import { RandomGeneratorHelper } from '@modules/core';
 
 
 @Component({

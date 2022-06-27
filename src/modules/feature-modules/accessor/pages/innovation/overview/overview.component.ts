@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
-import { RoutingHelper } from '@modules/core';
+import { AlertType } from '@app/base/types';
+import { RoutingHelper } from '@app/base/helpers';
 import { INNOVATION_SUPPORT_STATUS, InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
-import { categoriesItems } from '@stores-module/innovation/sections/catalogs.config';
+import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 

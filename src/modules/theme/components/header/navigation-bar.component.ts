@@ -1,4 +1,8 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+
+
+export type HeaderNavigationBarItemType = Array<{ key: string, label: string, link: string, fullReload?: boolean }>;
+
 
 @Component({
   selector: 'theme-header-navigation-bar',
@@ -6,14 +10,10 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
   styleUrls: ['./navigation-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderNavigationBarComponent implements OnInit {
+export class HeaderNavigationBarComponent {
 
-  @Input() leftMenuItems: { title: string, link: string, fullReload?: boolean }[] = [];
-  @Input() rightMenuItems: { title: string, link: string, fullReload?: boolean }[] = [];
+  @Input() leftMenuItems: HeaderNavigationBarItemType = [];
+  @Input() rightMenuItems: HeaderNavigationBarItemType = [];
   @Input() notifications: { [key: string]: number } = {};
-
-  constructor() { }
-
-  ngOnInit(): void { }
 
 }

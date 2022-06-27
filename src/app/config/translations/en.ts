@@ -154,6 +154,23 @@ export const locale = {
               title: 'Action cancelled',
               message: `{{ totalActions }} actions for {{ sectionTitle }} section were changed to "Cancelled"`
             }
+          },
+          notification_context_types: {
+            INNOVATION: { title: 'Innovation' },
+            COMMENT: { title: 'Comment' },
+            ACTION: { title: 'Action' },
+            SUPPORT: { title: 'Support' }
+          },
+          notification_context_details: {
+            LOCK_USER: { title: 'LOCK_USER' },
+            COMMENT_CREATION: { title: 'COMMENT_CREATION' },
+            COMMENT_REPLY: { title: 'COMMENT_REPLY' },
+            ACTION_CREATION: { title: 'ACTION_CREATION' },
+            ACTION_UPDATE: { title: 'ACTION_UPDATE' },
+            NEEDS_ASSESSMENT_COMPLETED: { title: 'NEEDS_ASSESSMENT_COMPLETED' },
+            NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION: { title: 'NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION' },
+            INNOVATION_SUBMISSION: { title: 'INNOVATION_SUBMISSION' },
+            SUPPORT_STATUS_UPDATE: { title: 'SUPPORT_STATUS_UPDATE' },
           }
         },
         user: {

@@ -5,7 +5,7 @@ import { ENV } from '@tests/app.mocks';
 
 import { Injector } from '@angular/core';
 
-import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
+import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
 import { GetTermsOfUseLastVersionInfoDTO, TermsOfUseService } from './terms-of-use.service';
@@ -14,7 +14,7 @@ import { GetTermsOfUseLastVersionInfoDTO, TermsOfUseService } from './terms-of-u
 describe('Shared/Services/TermsOfUseService', () => {
 
   let httpMock: HttpTestingController;
-  let environmentStore: EnvironmentStore;
+  let envVariablesStore: EnvironmentVariablesStore;
   let service: TermsOfUseService;
 
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe('Shared/Services/TermsOfUseService', () => {
     AppInjector.setInjector(TestBed.inject(Injector));
 
     httpMock = TestBed.inject(HttpTestingController);
-    environmentStore = TestBed.inject(EnvironmentStore);
+    envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
     service = TestBed.inject(TermsOfUseService);
 
   });
@@ -51,7 +51,7 @@ describe('Shared/Services/TermsOfUseService', () => {
     let response: any = null;
     service.getTermsOfUseLastVersionInfo().subscribe(success => response = success, error => response = error);
 
-    const req = httpMock.expectOne(`${environmentStore.API_URL}/tou/me`);
+    const req = httpMock.expectOne(`${envVariablesStore.API_URL}/tou/me`);
     req.flush(responseMock);
     expect(req.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -66,7 +66,7 @@ describe('Shared/Services/TermsOfUseService', () => {
     let response: any = null;
     service.acceptTermsOfUseVersion('id1').subscribe(success => response = success, error => response = error);
 
-    const req = httpMock.expectOne(`${environmentStore.API_URL}/tou/id1/accept`);
+    const req = httpMock.expectOne(`${envVariablesStore.API_URL}/tou/id1/accept`);
     req.flush(responseMock);
     expect(req.request.method).toBe('PATCH');
     expect(response).toEqual(expected);

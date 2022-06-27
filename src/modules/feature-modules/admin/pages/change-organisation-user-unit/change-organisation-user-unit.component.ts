@@ -1,13 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { AlertType } from '@modules/core';
-import { getOrganisationUnitRulesOutDTO, ServiceUsersService } from '../../services/service-users.service';
-import { RoutingHelper } from '@modules/core';
-import { forkJoin } from 'rxjs';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { AlertType } from '@app/base/types';
+import { RoutingHelper } from '@app/base/helpers';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
+
+import { getOrganisationUnitRulesOutDTO, ServiceUsersService } from '../../services/service-users.service';
 import { CHANGE_ORGANISATION_USER_UNIT } from './change-organisation-user-unit.config';
 
 

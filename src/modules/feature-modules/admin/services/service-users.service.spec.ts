@@ -5,7 +5,7 @@ import { ENV } from '@tests/app.mocks';
 
 import { Injector } from '@angular/core';
 
-import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
+import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { StoresModule, AuthenticationStore, InnovationStore } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
@@ -18,7 +18,7 @@ describe('FeatureModules/Admin/Services/ServiceUsersService', () => {
 
   let httpMock: HttpTestingController;
 
-  let environmentStore: EnvironmentStore;
+  let envVariablesStore: EnvironmentVariablesStore;
   let authenticationStore: AuthenticationStore;
   let innovationStore: InnovationStore;
 
@@ -41,7 +41,7 @@ describe('FeatureModules/Admin/Services/ServiceUsersService', () => {
 
     httpMock = TestBed.inject(HttpTestingController);
 
-    environmentStore = TestBed.inject(EnvironmentStore);
+    envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
     authenticationStore = TestBed.inject(AuthenticationStore);
     innovationStore = TestBed.inject(InnovationStore);
 

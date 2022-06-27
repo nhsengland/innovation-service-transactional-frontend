@@ -4,8 +4,8 @@ import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 
-import { AlertType, MappedObject, UrlModel } from '@modules/core';
-import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
+import { UrlModel } from '@app/base/models';
+import { MappedObjectType } from '@app/base/types';
 
 
 export type getAccessorsOrganisationsDTO = {
@@ -89,7 +89,7 @@ export class OrganisationsService extends CoreService {
 
   }
 
-  updateOrganisation(body: MappedObject, securityConfirmation: { id: string, code: string }, orgId: string): Observable<updateOrganisationDTO> {
+  updateOrganisation(body: MappedObjectType, securityConfirmation: { id: string, code: string }, orgId: string): Observable<updateOrganisationDTO> {
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
     const url = new UrlModel(this.API_URL).addPath('user-admin/organisation/:orgId').setPathParams({ orgId }).setQueryParams(qp);
@@ -103,7 +103,7 @@ export class OrganisationsService extends CoreService {
 
   }
 
-  updateUnit(body: MappedObject, securityConfirmation: { id: string, code: string }, organisationUnitId: string): Observable<updateOrganisationDTO> {
+  updateUnit(body: MappedObjectType, securityConfirmation: { id: string, code: string }, organisationUnitId: string): Observable<updateOrganisationDTO> {
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
     const url = new UrlModel(this.API_URL).addPath('user-admin/organisation-units/:organisationUnitId').setPathParams({ organisationUnitId }).setQueryParams(qp);

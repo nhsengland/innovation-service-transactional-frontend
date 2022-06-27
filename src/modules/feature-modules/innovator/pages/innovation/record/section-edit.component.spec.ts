@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { InnovationStore, StoresModule, AuthenticationStore, ContextStore } from '@modules/stores';
+import { InnovationStore, StoresModule, AuthenticationStore, EnvironmentStore } from '@modules/stores';
 import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation/innovation.models';
 import { FormEngineComponent } from '@modules/shared/forms';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
@@ -23,7 +23,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
   let routerSpy: jasmine.Spy;
 
   let authenticationStore: AuthenticationStore;
-  let contextStore: ContextStore;
+  let environmentStore: EnvironmentStore;
   let innovationStore: InnovationStore;
 
   let component: InnovationSectionEditComponent;
@@ -47,11 +47,11 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
     routerSpy = spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-    contextStore = TestBed.inject(ContextStore);
+    environmentStore = TestBed.inject(EnvironmentStore);
     innovationStore = TestBed.inject(InnovationStore);
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
-    contextStore.getInnovation = () => CONTEXT_INNOVATION_INFO;
+    environmentStore.getInnovation = () => CONTEXT_INNOVATION_INFO;
 
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 1 };

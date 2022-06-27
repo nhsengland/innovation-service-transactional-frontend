@@ -15,7 +15,7 @@ import { InnovationDataSharingComponent } from './data-sharing.component';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
-import { OrganisationsService } from '@shared-module/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 describe('FeatureModules/Innovator/Pages/Innovation/DataSharingComponent', () => {

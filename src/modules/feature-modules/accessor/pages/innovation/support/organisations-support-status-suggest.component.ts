@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent, FormArray, FormControl, FormGroup, Validators } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 import { CustomValidators, FormEngineParameterModel } from '@modules/shared/forms';
-import { RoutingHelper } from '@modules/core';
+import { RoutingHelper } from '@app/base/helpers';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { AccessorService, SupportLogType } from '../../../services/accessor.service';

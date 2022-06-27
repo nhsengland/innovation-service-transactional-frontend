@@ -7,10 +7,14 @@ import { InnovatorRoutingModule } from './innovator-routing.module';
 import { InnovatorLayoutComponent } from './base/innovator-layout.component';
 
 // Pages.
-import { PageAccountManageInnovationsInfoComponent } from './pages/account/manage-innovations/manage-innovations-info.component';
-import { PageAccountManageInnovationsTransferComponent } from './pages/account/manage-innovations/manage-innovations-transfer.component';
-import { PageAccountManageInnovationsArchivalComponent } from './pages/account/manage-innovations/manage-innovations-archival.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
+import { PageAccountInfoComponent } from './pages/account/account-info.component';
+import { PageAccountInnovationsArchivalComponent } from './pages/account/innovations-archival.component';
+import { PageAccountInnovationsInfoComponent } from './pages/account/innovations-info.component';
+import { PageAccountInnovationsTransferComponent } from './pages/account/innovations-transfer.component';
+
+import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
+
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
@@ -23,10 +27,7 @@ import { InnovationSectionEvidenceEditComponent } from './pages/innovation/recor
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
 import { InnovationTransferAcceptanceComponent } from './pages/innovation-transfer-acceptance/innovation-transfer-acceptance.component';
-import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
 
-import { PageAccountManageAccountInfoComponent } from './pages/account/manage-account/manage-account-info.component';
-import { PageAccountManageUserAccountComponent } from './pages/account/manage-account/manage-account-delete.component';
 // Components.
 import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
 
@@ -51,10 +52,14 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovatorLayoutComponent,
 
     // Pages.
-    PageAccountManageInnovationsInfoComponent,
-    PageAccountManageInnovationsTransferComponent,
-    PageAccountManageInnovationsArchivalComponent,
-    DashboardComponent,
+    PageAccountDeleteComponent,
+    PageAccountInfoComponent,
+    PageAccountInnovationsArchivalComponent,
+    PageAccountInnovationsInfoComponent,
+    PageAccountInnovationsTransferComponent,
+
+    PageDashboardComponent,
+
     FirstTimeSigninComponent,
     InnovationActionTrackerDeclineComponent,
     InnovationActionTrackerInfoComponent,
@@ -67,9 +72,6 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovationSectionEditComponent,
     InnovationNewComponent,
     InnovationTransferAcceptanceComponent,
-    InnovationsListComponent,
-    PageAccountManageAccountInfoComponent,
-    PageAccountManageUserAccountComponent,
     // Components.
     OrganisationSuggestionsCardComponent
   ],

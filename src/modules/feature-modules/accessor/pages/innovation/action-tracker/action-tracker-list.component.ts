@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType, TableModel } from '@app/base/models';
-import { RoutingHelper } from '@modules/core';
+import { TableModel } from '@app/base/models';
+import { AlertType } from '@app/base/types';
+import { RoutingHelper } from '@app/base/helpers';
 
 import { AccessorService, getInnovationActionsListEndpointOutDTO } from '../../../services/accessor.service';
 

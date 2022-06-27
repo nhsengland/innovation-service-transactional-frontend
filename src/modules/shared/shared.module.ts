@@ -8,25 +8,28 @@ import { ThemeModule } from '@modules/theme/theme.module';
 import { FormsModule } from './forms/forms.module';
 
 // Pages.
-import { PageAccountDeleteAccountMessageComponent } from './pages/account/delete-account-message/delete-account-message.component';
+// // Account.
+import { PageAccountDeleteMessageComponent } from './pages/account/delete-message/delete-message.component';
 import { PageAccountEmailNotificationsComponent } from './pages/account/email-notifications/email-notifications.component';
 import { PageAccountManageDetailsInfoComponent } from './pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from './pages/account/manage-details/manage-details-edit.component';
-
-import { InnovationSectionInfoComponent } from './pages/innovation/section-info.component';
-import { InnovationSectionEvidenceViewComponent } from './pages/innovation/evidence-view.component';
-import { PageActionStatusListComponent } from './pages/innovation/action-status-list.component';
-import { PageInnovationActivityLogComponent } from './pages/innovation/innovation-activity-log.component';
-import { PageInnovationRecordComponent } from './pages/innovation/innovation-record.component';
+// // Error.
+import { PageErrorComponent } from './pages/error/error.component';
+import { PageNotFoundComponent } from './pages/error/not-found.component';
+// // Innovation.
+import { PageActionStatusListComponent } from './pages/innovation/actions/action-status-list.component';
+import { PageInnovationActivityLogComponent } from './pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationCommentsEditComponent } from './pages/innovation/comments/comments-edit.component';
 import { PageInnovationCommentsListComponent } from './pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from './pages/innovation/comments/comments-new.component';
-import { PageInnovationSupportStatusListComponent } from './pages/innovation/innovation-support-status-list.component';
-
-import { PageTermsOfUseAcceptanceComponent } from '@shared-module/pages/terms-of-use/terms-of-use-acceptance.component';
-
-import { PageErrorComponent } from './pages/error/error.component';
-import { PageNotFoundComponent } from './pages/not-found/not-found.component';
+import { PageInnovationRecordComponent } from './pages/innovation/record/innovation-record.component';
+import { PageInnovationSectionInfoComponent } from './pages/innovation/sections/section-info.component';
+import { PageInnovationSectionEvidenceInfoComponent } from './pages/innovation/sections/section-evidence-info.component';
+import { PageInnovationSupportStatusListComponent } from './pages/innovation/support/innovation-support-status-list.component';
+// // Notifications.
+import { PageNotificationsListComponent } from './pages/notifications/notifications-list.component';
+// // Terms of use.
+import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
 
 // Pipes.
 import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
@@ -49,24 +52,28 @@ import { TermsOfUseService } from './services/terms-of-use.service';
   ],
   declarations: [
     // Pages.
-    PageAccountDeleteAccountMessageComponent,
+    // // Account.
+    PageAccountDeleteMessageComponent,
     PageAccountEmailNotificationsComponent,
     PageAccountManageDetailsInfoComponent,
     PageAccountManageDetailsEditComponent,
-
-    InnovationSectionInfoComponent,
-    InnovationSectionEvidenceViewComponent,
-    PageInnovationActivityLogComponent,
-    PageInnovationRecordComponent,
-    PageActionStatusListComponent,
-    PageInnovationCommentsListComponent,
-    PageInnovationCommentsNewComponent,
-    PageInnovationCommentsEditComponent,
-    PageInnovationSupportStatusListComponent,
-    PageTermsOfUseAcceptanceComponent,
-
+    // // Error.
     PageErrorComponent,
     PageNotFoundComponent,
+    // // Innovation.
+    PageActionStatusListComponent,
+    PageInnovationActivityLogComponent,
+    PageInnovationCommentsEditComponent,
+    PageInnovationCommentsListComponent,
+    PageInnovationCommentsNewComponent,
+    PageInnovationRecordComponent,
+    PageInnovationSectionInfoComponent,
+    PageInnovationSectionEvidenceInfoComponent,
+    PageInnovationSupportStatusListComponent,
+    // // Notifications.
+    PageNotificationsListComponent,
+    // // Terms of use.
+    PageTermsOfUseAcceptanceComponent,
 
     // Pipes.
     PluralTranslatePipe

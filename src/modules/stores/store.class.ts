@@ -20,8 +20,8 @@ export class Store<T> {
   getStoreId(): string { return this.storeId; }
   setStoreId(s: string): void { this.storeId = s; }
 
-  setState(nextState: T): void {
-    this.stateBS.next(nextState);
+  setState(nextState?: T): void {
+    this.stateBS.next(nextState ?? this.state);
   }
 
   // getStorageState(storeId: string): T {

@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
@@ -17,6 +18,8 @@ import { InnovationStatusEnum } from '@modules/shared/enums';
 
 
 describe('FeatureModules/Innovator/DashboardComponent', () => {
+
+  let activatedRoute: ActivatedRoute;
 
   let innovationStore: InnovationStore;
   let innovatorService: InnovatorService;
@@ -36,6 +39,8 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
+
+    activatedRoute = TestBed.inject(ActivatedRoute);
 
     innovationStore = TestBed.inject(InnovationStore);
     innovatorService = TestBed.inject(InnovatorService);
@@ -69,6 +74,22 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
     expect(component.showNeedsAssessmentCompleteCard()).toBe(true);
 
   });
+
+
+  it('should show "innovationCreationSuccess" success', () => {
+
+    activatedRoute.snapshot.queryParams = { alert: 'innovationCreationSuccess', name: 'Innovation name' };
+
+    const expected = { type: 'SUCCESS', title: `You have successfully registered the innovation 'Innovation name'` };
+
+    fixture = TestBed.createComponent(InnovationOverviewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.alert).toEqual(expected);
+
+  });
+
 
   it('should have innovation information loaded with payload 01', () => {
 

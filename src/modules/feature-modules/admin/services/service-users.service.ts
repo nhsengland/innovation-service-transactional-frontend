@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
-import { Observable, of, throwError, timer } from 'rxjs';
-import { catchError, delay, map, switchMap, take } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { APIQueryParamsType, MappedObject, UrlModel } from '@modules/core';
-import { response } from 'express';
+import { UrlModel } from '@app/base/models';
+import { APIQueryParamsType, MappedObjectType } from '@app/base/types';
 
 
 export type getUserMinimalInfoDTO = {
@@ -22,7 +22,8 @@ export type getUserFullInfoDTO = {
   lockedAt: null | string;
   innovations: {
     id: string;
-    name: string; }[];
+    name: string;
+  }[];
   userOrganisations: {
     id: string;
     name: string;
@@ -247,7 +248,7 @@ export class ServiceUsersService extends CoreService {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/:userId/delete').setPathParams({ userId}).setQueryParams(qp);
+    const url = new UrlModel(this.API_URL).addPath('user-admin/:userId/delete').setPathParams({ userId }).setQueryParams(qp);
     return this.http.patch<{ id: string }>(url.buildUrl(), {}).pipe(
       take(1),
       map(response => response),
@@ -315,7 +316,7 @@ export class ServiceUsersService extends CoreService {
   }
 
 
-  changeOrganisationUserUnit(body: MappedObject, securityConfirmation: { id: string, code: string }, userId: string): Observable<any> {
+  changeOrganisationUserUnit(body: MappedObjectType, securityConfirmation: { id: string, code: string }, userId: string): Observable<any> {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
@@ -385,7 +386,7 @@ export class ServiceUsersService extends CoreService {
     );
   }
 
-  updateTermsById(id: string, data: MappedObject): Observable<any> {
+  updateTermsById(id: string, data: MappedObjectType): Observable<any> {
     const body = Object.assign({}, data);
 
     const url = new UrlModel(this.API_URL).addPath('user-admin/tou/:id').setPathParams({ id });

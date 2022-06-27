@@ -3,12 +3,12 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { CustomValidators, FormEngineHelper } from '@app/base/forms';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 
-import { ContextInnovationType } from '@modules/stores/context/context.models';
+import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
 import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 
-import { getInnovationCommentsDTO } from '@stores-module/innovation/innovation.models';
+import { getInnovationCommentsDTO } from '@modules/stores/innovation/innovation.models';
 
 
 @Component({
@@ -22,7 +22,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
   alert: AlertType = { type: null };
 
-  innovation: ContextInnovationType;
+  innovation: EnvironmentInnovationType;
   currentCreatedOrder: 'asc' | 'desc';
 
   lengthLimitCharacters = 2000;
@@ -41,7 +41,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
     this.setPageTitle('Comments');
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.stores.environment.getInnovation();
     this.currentCreatedOrder = 'desc';
     this.userId = this.stores.authentication.getUserId();
 

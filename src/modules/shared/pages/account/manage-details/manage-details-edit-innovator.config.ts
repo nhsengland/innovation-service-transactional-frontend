@@ -1,5 +1,5 @@
 
-import { AuthenticationModel } from '@modules/stores';
+import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 
 import { FormEngineModel, FormEngineParameterModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 

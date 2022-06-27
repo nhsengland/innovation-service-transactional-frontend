@@ -4,7 +4,7 @@ import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
-import { RoutingHelper } from '@modules/core';
+import { RoutingHelper } from '@app/base/helpers';
 
 import { WizardSummaryType } from '@modules/shared/forms';
 

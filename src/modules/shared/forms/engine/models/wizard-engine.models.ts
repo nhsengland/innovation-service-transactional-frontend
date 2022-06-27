@@ -1,5 +1,5 @@
 import { FormEngineHelper } from '../helpers/form-engine.helper';
-import { MappedObject } from '@modules/core/interfaces/base.interfaces';
+import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { FormEngineModel, FormEngineParameterModel } from './form-engine.models';
 
 
@@ -23,8 +23,8 @@ export class WizardEngineModel {
   currentAnswers: { [key: string]: any };
   showSummary: boolean;
   runtimeRules: ((steps: FormEngineModel[], currentValues: any, currentStep: number | 'summary') => void)[];
-  inboundParsing?: (data: any) => MappedObject;
-  outboundParsing?: (data: any) => MappedObject;
+  inboundParsing?: (data: any) => MappedObjectType;
+  outboundParsing?: (data: any) => MappedObjectType;
   summaryParsing?: (data: any, steps?: FormEngineModel[]) => WizardSummaryType[];
 
   private summary: WizardSummaryType[] = [];
@@ -40,21 +40,21 @@ export class WizardEngineModel {
     this.summaryParsing = data.summaryParsing;
   }
 
-  runRules(data?: MappedObject): this {
+  runRules(data?: MappedObjectType): this {
     this.runtimeRules.forEach(rule => rule(this.steps, data || this.currentAnswers, this.currentStepId));
     return this;
   }
 
-  runInboundParsing(data: MappedObject): MappedObject {
+  runInboundParsing(data: MappedObjectType): MappedObjectType {
     return this.inboundParsing ? this.inboundParsing(data) : data;
   }
 
-  runOutboundParsing(data?: MappedObject): MappedObject {
+  runOutboundParsing(data?: MappedObjectType): MappedObjectType {
     const v = data || this.currentAnswers;
     return this.outboundParsing ? this.outboundParsing(v) : v;
   }
 
-  runSummaryParsing(data?: MappedObject): WizardSummaryType[] {
+  runSummaryParsing(data?: MappedObjectType): WizardSummaryType[] {
 
     if (!this.summaryParsing) { return []; }
 

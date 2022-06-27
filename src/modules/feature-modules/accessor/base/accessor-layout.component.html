@@ -1,5 +1,5 @@
 <theme-header></theme-header>
-<theme-header-navigation-bar [leftMenuItems]="navigationMenuBar.leftItems" [rightMenuItems]="navigationMenuBar.rightItems" [notifications]="mainMenuNotifications"></theme-header-navigation-bar>
+<theme-header-navigation-bar [leftMenuItems]="navigationMenuBar.leftItems" [rightMenuItems]="navigationMenuBar.rightItems" [notifications]="navigationMenuBar.notifications"></theme-header-navigation-bar>
 
 <div class="nhsuk-width-container-fluid app-width-container-fluid overflow-x-hidden">
   <main id="maincontent" role="main" class="nhsuk-main-wrapper app-main-wrapper--no-padding">
@@ -45,13 +45,9 @@
 
               <ul class="nhsuk-list app-side-nav__list">
                 <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
-                  <div class="side-menu-flex">
-                    <div>
-                      <a class="app-side-nav__link" [routerLink]="item.link"> {{ item.title }} </a>
-                    </div>
-                    <div>
-                      <notification-tag *ngIf="notifications[item.key || ''] > 0" [count]="notifications[item.key || '']"></notification-tag>
-                    </div>
+                  <div class="d-flex">
+                    <a class="app-side-nav__link nhsuk-u-padding-right-1" [routerLink]="item.link"> {{ item.title }} </a>
+                    <notification-tag [label]="leftSideBarNotifications[item.key]"></notification-tag>
                   </div>
                 </li>
               </ul>
@@ -68,13 +64,9 @@
 
                 <ul class="nhsuk-list app-side-nav__list">
                   <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
-                    <div class="side-menu-flex">
-                      <div>
-                        <a class="app-side-nav__link" [routerLink]="item.link"> {{ item.title }} </a>
-                      </div>
-                      <div>
-                        <notification-tag *ngIf="notifications[item.key || ''] > 0" [count]="notifications[item.key || '']"></notification-tag>
-                      </div>
+                    <div class="d-flex">
+                      <a class="app-side-nav__link" [routerLink]="item.link"> {{ item.title }} </a>
+                      <notification-tag [label]="leftSideBarNotifications[item.key]"></notification-tag>
                     </div>
                   </li>
                 </ul>

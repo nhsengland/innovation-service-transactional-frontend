@@ -14,7 +14,7 @@ import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './orga
 
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 
-import { OrganisationsService } from '@shared-module/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisationsSupportStatusInfoComponent', () => {

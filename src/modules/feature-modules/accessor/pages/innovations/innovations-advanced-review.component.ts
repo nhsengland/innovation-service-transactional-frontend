@@ -23,10 +23,10 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
-  innovationsList: TableModel<
+  innovationsList = new TableModel<
     getAdvancedInnovationsListEndpointOutDTO['data'][0],
     { name: string, mainCategories: string[], locations: string[], engagingOrganisations: string[], supportStatuses: string[], assignedToMe: boolean, suggestedOnly: boolean }
-  >;
+  >({ pageSize: 10000 });
 
   form = new FormGroup({
     search: new FormControl(),
@@ -66,10 +66,6 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
 
     super();
     this.setPageTitle('Innovations');
-
-    this.innovationsList = new TableModel({
-      pageSize: 10000
-    });
 
     this.innovationsList.setVisibleColumns({
       name: { label: 'Innovation', orderable: true },

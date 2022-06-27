@@ -3,10 +3,11 @@ import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
+import { HeaderNavigationBarItemType } from '@app/base/types';
 
-import { RoutingHelper } from '@modules/core';
+import { RoutingHelper } from '@app/base/helpers';
 
-import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
+import { NotificationContextType } from '@modules/shared/services/notifications.service';
 
 
 type RouteDataLayoutOptionsType = {
@@ -25,65 +26,48 @@ export class InnovatorLayoutComponent extends CoreComponent {
   layoutOptions: RouteDataLayoutOptionsType = { type: null };
 
   navigationMenuBar: {
-    leftItems: { title: string, link: string, fullReload?: boolean }[];
-    rightItems: { title: string, link: string, fullReload?: boolean }[];
-  } = { leftItems: [], rightItems: [] };
+    leftItems: HeaderNavigationBarItemType,
+    rightItems: HeaderNavigationBarItemType,
+    notifications: { notifications: number }
+  } = { leftItems: [], rightItems: [], notifications: { notifications: 0 } };
 
   innovationHeaderBar: { id: string | null, name: string | null } = { id: null, name: null };
-
-  leftSideBar: { title: string, link: string, key?: string }[] = [];
-
-  notifications: { [key: string]: number };
-  mainMenuNotifications: { [key: string]: number };
+  leftSideBar: { key: string, title: string, link: string }[] = [];
+  leftSideBarNotifications: { [key: string]: number } = {
+    ACTION: 0,
+    COMMENT: 0,
+    INNOVATION: 0,
+    SUPPORT: 0,
+    DATA_SHARING: 0
+  };
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private notificationsService: NotificationsService
+    private activatedRoute: ActivatedRoute
   ) {
 
     super();
 
     this.subscriptions.push(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
+
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e)),
+
+      this.stores.environment.notifications$().subscribe(e => {
+        this.navigationMenuBar.notifications = { notifications: e.UNREAD }; // We need to reassign the variable so that the component reacts to it.
+      })
+
     );
-
-    this.notifications = {
-      ACTION: 0,
-      COMMENT: 0,
-      INNOVATION: 0,
-      SUPPORT: 0,
-      DATA_SHARING: 0,
-    };
-
-    this.mainMenuNotifications = {};
 
   }
 
 
   private onRouteChange(event: NavigationEnd): void {
 
+
+
     const routeData = RoutingHelper.getRouteData(this.activatedRoute);
     const routeDataLayoutOptions: RouteDataLayoutOptionsType = routeData.layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
-    const innovation = currentRouteInnovationId ? this.stores.context.getInnovation() : null;
-
-    if (this.stores.authentication.isValidUser()) {
-
-      this.notificationsService.getAllUnreadNotificationsGroupedByContext().subscribe(
-        response => {
-          this.mainMenuNotifications = response;
-        }
-      );
-
-      if (currentRouteInnovationId) {
-        this.notificationsService.getAllUnreadNotificationsGroupedByContext(currentRouteInnovationId).subscribe(
-          response => {
-            this.notifications = response;
-          }
-        );
-      }
-
-    }
+    const innovation = currentRouteInnovationId ? this.stores.environment.getInnovation() : null;
 
     this.layoutOptions = {
       type: routeDataLayoutOptions.type || null,
@@ -92,21 +76,20 @@ export class InnovatorLayoutComponent extends CoreComponent {
     };
 
     if (event.url.startsWith('/innovator/first-time-signin')) {
-      this.navigationMenuBar = {
-        leftItems: [],
-        rightItems: [{ title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true }]
-      };
+      this.navigationMenuBar.leftItems = [];
+      this.navigationMenuBar.rightItems = [{ key: 'signOut', label: 'Sign out', link: `${this.CONSTANTS.APP_URL}/signout`, fullReload: true }];
     } else {
-      this.navigationMenuBar = {
-        leftItems: [
-          { title: 'Home', link: '/innovator/dashboard' }
-        ],
-        rightItems: [
-          { title: 'Your innovations', link: '/innovator/innovations' },
-          { title: 'Your account', link: '/innovator/account' },
-          { title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true }
-        ]
-      };
+
+      this.stores.environment.updateUserUnreadNotifications();
+
+      this.navigationMenuBar.leftItems = [
+        { key: 'innovations', label: 'Your innovations', link: '/innovator/dashboard' }
+      ];
+      this.navigationMenuBar.rightItems = [
+        { key: 'notifications', label: 'Notifications', link: '/innovator/notifications' },
+        { key: 'yourAccount', label: 'Your account', link: '/innovator/account' },
+        { key: 'signOut', label: 'Sign out', link: `${this.CONSTANTS.APP_URL}/signout`, fullReload: true }
+      ];
     }
 
 
@@ -114,21 +97,21 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
       case 'userAccountMenu':
         this.leftSideBar = [
-          { title: 'Your details', link: `/innovator/account/manage-details` },
-          { title: 'Email notifications', link: `/innovator/account/email-notifications` },
-          { title: 'Manage innovations', link: `/innovator/account/manage-innovations` },
-          { title: 'Manage account', link: `/innovator/account/manage-account` }
+          { key: 'YourDetails', title: 'Your details', link: `/innovator/account/manage-details` },
+          { key: 'EmailNotifications', title: 'Email notifications', link: `/innovator/account/email-notifications` },
+          { key: 'ManageInnovations', title: 'Manage innovations', link: `/innovator/account/manage-innovations` },
+          { key: 'ManageAccount', title: 'Manage account', link: `/innovator/account/manage-account` }
         ];
         break;
 
       case 'innovationLeftAsideMenu':
         this.leftSideBar = [
-          { title: 'Overview', link: `/innovator/innovations/${currentRouteInnovationId}/overview` },
-          { title: 'Innovation record', link: `/innovator/innovations/${currentRouteInnovationId}/record` },
-          { title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker`, key: NotificationContextType.ACTION },
-          { title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments`, key: NotificationContextType.COMMENT },
-          { title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/support`, key: NotificationContextType.DATA_SHARING },
-          { title: 'Activity log', link: `/innovator/innovations/${currentRouteInnovationId}/activity-log` }
+          { key: 'Overview', title: 'Overview', link: `/innovator/innovations/${currentRouteInnovationId}/overview` },
+          { key: 'InnovationRecord', title: 'Innovation record', link: `/innovator/innovations/${currentRouteInnovationId}/record` },
+          { key: NotificationContextType.ACTION, title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker` },
+          { key: NotificationContextType.COMMENT, title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments` },
+          { key: NotificationContextType.DATA_SHARING, title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/support` },
+          { key: 'ActivityLog', title: 'Activity log', link: `/innovator/innovations/${currentRouteInnovationId}/activity-log` }
         ];
         break;
 

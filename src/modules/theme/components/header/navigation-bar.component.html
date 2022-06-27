@@ -12,18 +12,13 @@
 <ng-template #menuItemTemplate let-items="menuItems" let-position="position">
   <ng-container *ngFor="let item of items">
     <li *ngIf="!item.fullReload" class="nhsuk-breadcrumb__item" [ngClass]="{'right-menu-item': position === 'right'}" [routerLinkActive]="'selected'">
-      <div class="side-menu-flex">
-        <div>
-          <a class="nhsuk-breadcrumb__link" [routerLink]="item.link"> {{ item.title }} </a>
-        </div>
-        <div>
-          <notification-tag *ngIf="notifications[item.key || ''] > 0" [count]="notifications[item.key || '']"></notification-tag>
-        </div>
+      <div class="d-flex">
+        <a class="nhsuk-breadcrumb__link nhsuk-u-padding-right-1" [routerLink]="item.link"> {{ item.label }} </a>
+        <notification-tag [label]="notifications[item.key || '']"></notification-tag>
       </div>
-
     </li>
     <li *ngIf="item.fullReload" class="nhsuk-breadcrumb__item" [ngClass]="{'right-menu-item': position === 'right'}">
-      <a class="nhsuk-breadcrumb__link" [href]="item.link"> {{ item.title }} </a>
+      <a class="nhsuk-breadcrumb__link" [href]="item.link"> {{ item.label }} </a>
     </li>
   </ng-container>
 </ng-template>

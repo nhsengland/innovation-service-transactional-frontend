@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector } from '@angular/core';
 import { AbstractControl, ControlContainer, FormArray, FormControl } from '@angular/forms';
 
-import { RandomGeneratorHelper } from '@modules/core';
+import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 

@@ -7,13 +7,14 @@ import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
 
 import { ENV, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
-import { CoreModule, EnvironmentStore } from '@modules/core';
+import { CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { AuthenticationService } from '@modules/stores';
+
 
 describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
 
   let httpMock: HttpTestingController;
-  let environmentStore: EnvironmentStore;
+  let envVariablesStore: EnvironmentVariablesStore;
   let authenticationService: AuthenticationService;
 
   beforeEach(() => {
@@ -34,7 +35,7 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
     });
 
     httpMock = TestBed.inject(HttpTestingController);
-    environmentStore = TestBed.inject(EnvironmentStore);
+    envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
     authenticationService = TestBed.inject(AuthenticationService);
 
   });
@@ -51,7 +52,7 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
 
     authenticationService.verifyUserSession().subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.APP_URL}/session`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.APP_URL}/session`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('HEAD');
     expect(httpRequest.request.headers.has('Cookie')).toEqual(true);
@@ -62,12 +63,10 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
 
 
 
-
-
 describe('Core/Interceptors/ApiOutInterceptor running CLIENT side', () => {
 
   let httpMock: HttpTestingController;
-  let environmentStore: EnvironmentStore;
+  let environmentStore: EnvironmentVariablesStore;
   let authenticationService: AuthenticationService;
 
   beforeEach(() => {
@@ -87,7 +86,7 @@ describe('Core/Interceptors/ApiOutInterceptor running CLIENT side', () => {
     });
 
     httpMock = TestBed.inject(HttpTestingController);
-    environmentStore = TestBed.inject(EnvironmentStore);
+    environmentStore = TestBed.inject(EnvironmentVariablesStore);
     authenticationService = TestBed.inject(AuthenticationService);
 
   });

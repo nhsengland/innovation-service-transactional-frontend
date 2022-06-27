@@ -10,6 +10,7 @@ import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
+import { InnovatorOrganisationRoleEnum } from '@modules/stores/authentication/authentication.enums';
 
 import { PageAccountManageDetailsInfoComponent } from './manage-details-info.component';
 
@@ -51,11 +52,11 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsInfoCompone
     expect(component).toBeTruthy();
   });
 
-  it('should show "accountDetailsUpdateSuccess" warning', () => {
+  it('should show "accountDetailsUpdateSuccess" alert', () => {
 
     activatedRoute.snapshot.queryParams = { alert: 'accountDetailsUpdateSuccess' };
 
-    const expected = { type: 'WARNING', title: 'Your information has been saved' };
+    const expected = { type: 'SUCCESS', title: 'Your information has been saved' };
 
     fixture = TestBed.createComponent(PageAccountManageDetailsInfoComponent);
     component = fixture.componentInstance;
@@ -63,7 +64,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsInfoCompone
 
   });
 
-  it('should show "accountDetailsUpdateError" warning', () => {
+  it('should show "accountDetailsUpdateError" alert', () => {
 
     activatedRoute.snapshot.queryParams = { alert: 'accountDetailsUpdateError' };
 
@@ -97,7 +98,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsInfoCompone
 
     authenticationStore.getUserInfo = () => ({
       ...USER_INFO_INNOVATOR,
-      organisations: [{ id: 'org_id', isShadow: false, name: '', size: '', role: 'INNOVATOR_OWNER' }]
+      organisations: [{ id: 'org_id', isShadow: false, name: '', size: '', role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER }]
     });
 
     authenticationStore.isInnovatorType = () => true;

@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable, Observer, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
-import { MappedObject } from '@modules/core/interfaces/base.interfaces';
+import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 
 import { Store } from '../store.class';
 import { AuthenticationService, saveUserInfoDTO } from './authentication.service';
 
+import { UserRoleEnum, UserTypeEnum } from './authentication.enums';
 import { AuthenticationModel } from './authentication.models';
 
 
@@ -87,8 +88,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   isAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'ACCESSOR'; }
   isQualifyingAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'QUALIFYING_ACCESSOR'; }
 
-  isAdminRole(): boolean { return this.state.user?.roles.includes('ADMIN') || false; }
-  isServiceTeamRole(): boolean { return this.state.user?.roles.includes('SERVICE_TEAM') || false; }
+  isAdminRole(): boolean { return this.state.user?.roles.includes(UserRoleEnum.ADMIN) || false; }
+  isServiceTeamRole(): boolean { return this.state.user?.roles.includes(UserRoleEnum.SERVICE_TEAM) || false; }
 
   getUserId(): string { return this.state.user?.id || ''; }
   getUserType(): Required<AuthenticationModel>['user']['type'] {
@@ -103,7 +104,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     return this.state.user || { id: '', email: '', displayName: '', type: '', roles: [], organisations: [], passwordResetOn: '', phone: '' };
   }
 
-  saveUserInfo$(body: MappedObject): Observable<{ id: string }> {
+  saveUserInfo$(body: MappedObjectType): Observable<{ id: string }> {
     return this.authenticationService.saveUserInfo(body as saveUserInfoDTO);
   }
 
@@ -115,6 +116,16 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       case 'INNOVATOR': return 'Innovator';
       case 'ACCESSOR': return 'Accessor';
       case 'QUALIFYING_ACCESSOR': return 'Qualifying Accessor';
+      default: return '';
+    }
+  }
+
+  userUrlBasePath(): string {
+    switch (this.getUserType()) {
+      case UserTypeEnum.ADMIN: return 'admin';
+      case UserTypeEnum.ASSESSMENT: return 'assessments';
+      case UserTypeEnum.ACCESSOR: return 'accessors';
+      case UserTypeEnum.INNOVATOR: return 'innovators';
       default: return '';
     }
   }

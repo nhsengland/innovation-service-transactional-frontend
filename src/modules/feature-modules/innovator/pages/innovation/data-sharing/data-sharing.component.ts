@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
-import { InnovationService } from '@modules/stores';
+import { AlertType } from '@app/base/types';
+import { InnovationService } from '@modules/stores/innovation/innovation.service';
 import { INNOVATION_SUPPORT_STATUS, OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
@@ -61,7 +61,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
     this.setPageTitle('Data sharing and support');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.organisationInfoUrl = `${this.stores.environment.BASE_URL}/about-the-service/who-we-are`;
+    this.organisationInfoUrl = `${this.CONSTANTS.BASE_URL}/about-the-service/who-we-are`;
     this.shares = [];
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {

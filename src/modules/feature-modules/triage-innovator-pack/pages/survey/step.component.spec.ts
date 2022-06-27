@@ -9,11 +9,11 @@ import * as common from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
+import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { TriageInnovatorPackModule } from '@modules/feature-modules/triage-innovator-pack/triage-innovator-pack.module';
 
-import { FormEngineComponent } from '@shared-module/forms';
+import { FormEngineComponent } from '@modules/shared/forms';
 
 import { SurveyStepComponent } from './step.component';
 
@@ -26,7 +26,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
   let router: Router;
   let routerSpy: jasmine.Spy;
 
-  let environmentStore: EnvironmentStore;
+  let envVariablesironmentStore: EnvironmentVariablesStore;
   let surveyService: SurveyService;
 
   let component: SurveyStepComponent;
@@ -57,7 +57,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
     router = TestBed.inject(Router);
     routerSpy = spyOn(router, 'navigate');
 
-    environmentStore = TestBed.inject(EnvironmentStore);
+    envVariablesironmentStore = TestBed.inject(EnvironmentVariablesStore);
     surveyService = TestBed.inject(SurveyService);
 
     spyOn(AppInjector, 'getInjector').and.returnValue(TestBed.inject(InjectorMock));
@@ -68,7 +68,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 
   it('should be redirected because is not a valid step (running in server)', () => {
 
-    injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: environmentStore.ENV });
+    injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: envVariablesironmentStore.ENV });
     spyOn(common, 'isPlatformServer').and.returnValue(true);
     activatedRoute.snapshot.params = { id: 0 };
 
@@ -84,7 +84,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 
   // it('should be a question step (running in server)', () => {
 
-  //   injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: environmentStore.ENV });
+  //   injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
   //   spyOn(common, 'isPlatformServer').and.returnValue(true);
   //   activatedRoute.snapshot.params = { id: 1 };
   //   activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
@@ -104,7 +104,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 
   // it('should be summary step (running in server)', () => {
 
-  //   injectorSpy.and.returnValue(environmentStore);
+  //   injectorSpy.and.returnValue(EnvironmentVariablesStore);
   //   spyOn(common, 'isPlatformServer').and.returnValue(true);
   //   activatedRoute.snapshot.params = { id: 'summary' };
   //   activatedRoute.params = of({ id: 'summary' }); // Simulate activatedRoute.params subscription.
@@ -119,7 +119,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 
   // it('should stay on the same page when submitted information is NOT valid (running in server)', () => {
 
-  //   injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: environmentStore.ENV });
+  //   injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
   //   spyOn(common, 'isPlatformServer').and.returnValue(true);
   //   activatedRoute.snapshot.params = { id: 1 };
 
@@ -138,7 +138,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 
   // it('should redirect to next step when submitted information is valid (running in server)', () => {
 
-  //   injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: environmentStore.ENV });
+  //   injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
   //   spyOn(common, 'isPlatformServer').and.returnValue(true);
   //   activatedRoute.snapshot.params = { id: 1 };
 
@@ -158,7 +158,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 
   // it('should submit information to server and redirect to end page (running in server)', () => {
 
-  //   injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: environmentStore.ENV });
+  //   injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
   //   spyOn(common, 'isPlatformServer').and.returnValue(true);
   //   activatedRoute.snapshot.params = { id: 1 };
 
@@ -181,7 +181,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 
   // it('should redirect if a unknown action was provided (running in server)', () => {
 
-  //   injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: environmentStore.ENV });
+  //   injectorSpy.and.returnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
   //   spyOn(common, 'isPlatformServer').and.returnValue(true);
   //   activatedRoute.snapshot.params = { id: 1 };
 
@@ -209,7 +209,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
   let router: Router;
   let routerSpy: jasmine.Spy;
 
-  let environmentStore: EnvironmentStore;
+  // let envVariablesStore: EnvironmentVariablesStore;
   let surveyService: SurveyService;
 
   let component: SurveyStepComponent;
@@ -236,7 +236,7 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
     router = TestBed.inject(Router);
     routerSpy = spyOn(router, 'navigate');
 
-    environmentStore = TestBed.inject(EnvironmentStore);
+    // envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
     surveyService = TestBed.inject(SurveyService);
 
   });

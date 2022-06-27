@@ -4,7 +4,7 @@ import { NGXLogger } from 'ngx-logger';
 
 import { AppInjector } from '@modules/core/injectors/app-injector';
 
-import { EnvironmentStore } from '@modules/core/stores/environment.store';
+import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 
@@ -12,11 +12,12 @@ import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 @Injectable()
 export class CoreService {
 
+  private envVariablesStore: EnvironmentVariablesStore;
+
   protected http: HttpClient;
   protected logger: NGXLogger;
 
   protected stores: {
-    environment: EnvironmentStore;
     authentication: AuthenticationStore;
     innovation: InnovationStore;
   };
@@ -32,21 +33,24 @@ export class CoreService {
 
     const injector = AppInjector.getInjector();
 
+    this.envVariablesStore = injector.get(EnvironmentVariablesStore);
     this.http = injector.get(HttpClient);
     this.logger = injector.get(NGXLogger);
 
     this.stores = {
-      environment: injector.get(EnvironmentStore),
       authentication: injector.get(AuthenticationStore),
       innovation: injector.get(InnovationStore)
     };
 
-    this.APP_URL = this.stores.environment.APP_URL;
-    this.API_URL = this.stores.environment.API_URL;
-    this.API_ADMIN = this.stores.environment.API_ADMIN;
-    this.API_INNOVATIONS = this.stores.environment.API_INNOVATIONS;
-    this.API_USERS = this.stores.environment.API_USERS;
+    this.APP_URL = this.envVariablesStore.APP_URL;
+    this.API_URL = this.envVariablesStore.API_URL;
+    this.API_ADMIN = this.envVariablesStore.API_ADMIN;
+    this.API_INNOVATIONS = this.envVariablesStore.API_INNOVATIONS;
+    this.API_USERS = this.envVariablesStore.API_USERS;
 
   }
+
+
+  userUrlBasePath(): string { return this.stores.authentication.userUrlBasePath(); }
 
 }

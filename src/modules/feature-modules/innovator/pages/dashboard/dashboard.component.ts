@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin, Observable, of, Subscription } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { NotificationsService } from '@modules/shared/services/notifications.service';
@@ -15,7 +15,7 @@ import { getInnovationTransfersDTO, InnovatorService } from '../../services/inno
   selector: 'app-innovator-pages-dashboard',
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent extends CoreComponent implements OnInit {
+export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   alert: AlertType = { type: null };
 
@@ -27,7 +27,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   innovationTransfers: getInnovationTransfersDTO[] = [];
 
-  innovationGuidesUrl = `${this.stores.environment.BASE_URL}/innovation-guides`;
+  innovationGuidesUrl = `${this.CONSTANTS.BASE_URL}/innovation-guides`;
 
   constructor(
     private innovationsService: InnovationsService,
@@ -75,27 +75,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       this.user.innovations = innovationsList.map(item => ({ ...item, ...{ notifications: 0 } }));
       this.innovationTransfers = innovationsTransfers;
 
-      this.user.innovations.forEach((item) => {
-
-        this.notificationsService.getAllUnreadNotificationsGroupedByContext(item.id).subscribe(
-          response => {
-
-            item.notifications = Object.values(response).reduce((partialSum, a) => partialSum + a, 0);
-            this.setPageStatus('READY');
-
-          },
-          error => {
-            this.setPageStatus('READY');
-            this.alert = {
-              type: 'ERROR',
-              title: 'An error occurred',
-              message: 'Please try again or contact us for further help',
-              setFocus: true
-            };
-            this.logger.error('Error fetching innovations information', error);
-          }
-        );
-      });
+      this.setPageStatus('READY');
 
     },
       (error) => {

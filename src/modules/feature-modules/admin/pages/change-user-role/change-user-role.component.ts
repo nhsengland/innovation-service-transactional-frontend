@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { AlertType } from '@modules/core';
+import { AlertType } from '@app/base/types';
+import { RoutingHelper } from '@app/base/helpers';
+
 import { changeUserRoleDTO, getOrganisationRoleRulesOutDTO, orgnisationRole, ServiceUsersService } from '../../services/service-users.service';
-import { RoutingHelper } from '@modules/core';
-import { forkJoin } from 'rxjs';
-import { response } from 'express';
-import { AuthenticationStore } from '@modules/stores';
 
 
 @Component({

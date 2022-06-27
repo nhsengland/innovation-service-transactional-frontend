@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineHelper, FormEngineModel } from '@app/base/forms';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 
 import { TRIAGE_INNOVATOR_PACK_QUESTIONS } from '../../config/constants.config';
 
@@ -32,7 +32,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
       label: string,
       value: string,
       url: string,
-      // queryParams: MappedObject,
+      // queryParams: MappedObjectType,
       errorMessage: string | null
     }[];
     valid: boolean;
@@ -191,7 +191,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
       this.surveyService.submitSurvey(this.currentAnswers).subscribe(
         response => {
           this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/end`, { surveyId: response.id });
-          this.signupUrl = `${this.stores.environment.APP_URL}/signup?surveyId=${response.id}`;
+          this.signupUrl = `${this.CONSTANTS.APP_URL}/signup?surveyId=${response.id}`;
         },
         error => {
           this.redirectTo(`${this.getBaseUrl()}/triage-innovator-pack/survey/summary`);
@@ -242,7 +242,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
   }
 
   getBaseUrl(): string {
-    return (this.isRunningOnServer()) ? this.stores.environment.ENV.BASE_PATH : '';
+    return (this.isRunningOnServer()) ? this.CONSTANTS.BASE_PATH : '';
   }
 
   prepareSummaryData(): void {
@@ -332,8 +332,8 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
   }
 
 
-  // encodeQueryParams(queryParams: MappedObject): MappedObject {
-  //   const toReturn: MappedObject = {};
+  // encodeQueryParams(queryParams: MappedObjectType): MappedObjectType {
+  //   const toReturn: MappedObjectType = {};
   //   for (let [key, value] of Object.entries(queryParams || {})) {
   //     if (UtilsHelper.isEmpty(value)) { break; }
   //     if (typeof value === 'object') { value = JSON.stringify(value); }
