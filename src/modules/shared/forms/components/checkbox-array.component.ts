@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector, PLATFORM_ID, Output, EventEmitter } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { AbstractControl, ControlContainer, FormArray, FormControl } from '@angular/forms';
+import { AbstractControl, ControlContainer, UntypedFormArray, UntypedFormControl } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
@@ -34,7 +34,7 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
 
   // Form controls.
   get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
-  get fieldArrayControl(): FormArray { return this.parentFieldControl?.get(this.arrayName) as FormArray; }
+  get fieldArrayControl(): UntypedFormArray { return this.parentFieldControl?.get(this.arrayName) as UntypedFormArray; }
   get fieldArrayValues(): string[] { return this.fieldArrayControl.value as string[]; }
 
   // Accessibility.
@@ -45,7 +45,7 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
     return s || null;
   }
 
-  conditionalFormControl(f: string): FormControl { return this.parentFieldControl?.get(f) as FormControl; }
+  conditionalFormControl(f: string): UntypedFormControl { return this.parentFieldControl?.get(f) as UntypedFormControl; }
 
   isConditionalFieldVisible(conditionalFieldId: string): boolean {
     return (this.items || []).filter(item => this.fieldArrayValues.includes(item.value) && item.conditional?.id === conditionalFieldId).length > 0;
@@ -121,7 +121,7 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
     const valueIndex = (this.fieldArrayControl.value as string[]).indexOf(event.value);
 
     if (event.checked && valueIndex === -1) {
-      this.fieldArrayControl.push(new FormControl(event.value));
+      this.fieldArrayControl.push(new UntypedFormControl(event.value));
     }
 
     if (!event.checked && valueIndex > -1) {

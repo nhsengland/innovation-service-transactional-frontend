@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { FormArray, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 
 import { FormEngineHelper } from './helpers/form-engine.helper';
@@ -37,7 +37,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
   private formChangeSubscription = new Subscription();
   private loggerContext = 'Catalog::FormsModule::EngineComponent::';
 
-  form: FormGroup = new FormGroup({});
+  form: UntypedFormGroup = new UntypedFormGroup({});
 
   contentReady = false;
 
@@ -83,7 +83,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
 
   buildForm(): void {
 
-    this.form = new FormGroup({}); // This will ensure that previous information is cleared!
+    this.form = new UntypedFormGroup({}); // This will ensure that previous information is cleared!
 
     this.form = FormEngineHelper.buildForm(this.parameters, this.values);
 
@@ -101,11 +101,11 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
 
 
   addFieldGroupRow(parameter: FormEngineParameterModel, value?: { [key: string]: any }): void {
-    (this.form.get(parameter.id) as FormArray).push(FormEngineHelper.addFieldGroupRow(parameter, value));
+    (this.form.get(parameter.id) as UntypedFormArray).push(FormEngineHelper.addFieldGroupRow(parameter, value));
   }
 
   removeFieldGroupRow(parameterId: string, index: number): void {
-    (this.form.get(parameterId) as FormArray).removeAt(index);
+    (this.form.get(parameterId) as UntypedFormArray).removeAt(index);
   }
 
   trackFieldGroupRowsChanges(index: number, item: { [key: string]: any }): number {

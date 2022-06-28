@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, forwardRef, Injector, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { UntypedFormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
@@ -52,7 +52,7 @@ export class FormRadioGroupComponent extends ControlValueAccessorConnector imple
   }
 
   // Get hold of the control being used.
-  conditionalFormControl(f: string): FormControl { return this.parentFieldControl?.get(f) as FormControl; }
+  conditionalFormControl(f: string): UntypedFormControl { return this.parentFieldControl?.get(f) as UntypedFormControl; }
 
   isConditionalFieldVisible(conditionalFieldId: string): boolean {
     return (this.items || []).filter(item => item.value === this.fieldControl.value && item.conditional?.id === conditionalFieldId).length > 0;

@@ -3,7 +3,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, Input, OnInit } from '@angular/core';
-import { AbstractControl, ControlContainer, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, ControlContainer, UntypedFormArray, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 import { LoggerService, Severity } from '@modules/core/services/logger.service';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
@@ -48,7 +48,7 @@ export class FormFileUploadComponent implements OnInit {
 
   // Get hold of the control being used.
   get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
-  get fieldArrayControl(): FormArray { return this.parentFieldControl?.get(this.arrayName) as FormArray; }
+  get fieldArrayControl(): UntypedFormArray { return this.parentFieldControl?.get(this.arrayName) as UntypedFormArray; }
   get fieldArrayValues(): { id: string, name: string, url: string }[] { return this.fieldArrayControl.value as { id: string, name: string, url: string }[]; }
 
   constructor(
@@ -109,7 +109,7 @@ export class FormFileUploadComponent implements OnInit {
       this.uploadFile(file).subscribe(
         response => {
           this.files.push({ id: response.id, file });
-          this.fieldArrayControl.push(new FormGroup({ id: new FormControl(response.id), name: new FormControl(response.name), url: new FormControl(response.url) }));
+          this.fieldArrayControl.push(new UntypedFormGroup({ id: new UntypedFormControl(response.id), name: new UntypedFormControl(response.name), url: new UntypedFormControl(response.url) }));
           this.evaluateDropZoneTabIndex();
           this.setAuxMessageAndFocus(`${file.name} added.`);
           this.isLoadingFile = false;

@@ -1,4 +1,4 @@
-import { FormGroup, FormControl, ValidationErrors, FormArray, Validators, ValidatorFn, AsyncValidatorFn, AbstractControlOptions } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, ValidationErrors, UntypedFormArray, Validators, ValidatorFn, AsyncValidatorFn, AbstractControlOptions } from '@angular/forms';
 // import { sortBy } from 'lodash';
 
 import { FormEngineParameterModel } from '../models/form-engine.models';
@@ -7,11 +7,11 @@ import { CustomValidators } from '../../validators/custom-validators';
 
 export class FormEngineHelper {
 
-  static buildForm(parameters: FormEngineParameterModel[], values: { [key: string]: any } = {}): FormGroup {
+  static buildForm(parameters: FormEngineParameterModel[], values: { [key: string]: any } = {}): UntypedFormGroup {
 
     parameters = parameters.map(p => new FormEngineParameterModel(p)); // Making sure all defaults are present.
 
-    const form = new FormGroup({}, { updateOn: 'blur' });
+    const form = new UntypedFormGroup({}, { updateOn: 'blur' });
 
     // Build form structure.
     // parameters = sortBy(parameters, ['rank', 'label']); // TODO: Order fields by rank!
@@ -24,30 +24,30 @@ export class FormEngineHelper {
       switch (parameter.dataType) {
         case 'checkbox-array': // Creates an FormArray and pushes defaultValues into it.
         case 'grouped-checkbox-array': // Creates an FormArray and pushes defaultValues into it.
-          form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
-          (parameterValue as string[] || []).forEach(v => { (form.get(parameter.id) as FormArray).push(new FormControl(v)); });
+          form.addControl(parameter.id, new UntypedFormArray([], { updateOn: 'change' }));
+          (parameterValue as string[] || []).forEach(v => { (form.get(parameter.id) as UntypedFormArray).push(new UntypedFormControl(v)); });
           break;
 
         case 'checkbox-group': // Creates an FormGroup with one FormControl per item. Form will be something like: ParameterId = { ItemValue1: boolean, ItemValue2: boolean, ... }
-          form.addControl(parameter.id, new FormGroup({}, { updateOn: 'change' }));
+          form.addControl(parameter.id, new UntypedFormGroup({}, { updateOn: 'change' }));
           parameter.items?.forEach(item => {
             const itemValue = parameterValue ? (parameterValue as { [key: string]: boolean })[item.value] : false;
-            (form.get(parameter.id) as FormGroup).addControl(item.value, FormEngineHelper.createParameterFormControl(parameter, itemValue));
+            (form.get(parameter.id) as UntypedFormGroup).addControl(item.value, FormEngineHelper.createParameterFormControl(parameter, itemValue));
           });
           break;
 
         case 'fields-group':
-          form.addControl(parameter.id, new FormArray([]));
+          form.addControl(parameter.id, new UntypedFormArray([]));
 
           let arrayValue: { [key: string]: any }[];
           if (Array.isArray(parameterValue)) { arrayValue = parameterValue as { [key: string]: any }[]; }
           else { arrayValue = []; }
 
           if (arrayValue.length === 0) {
-            (form.get(parameter.id) as FormArray).push(FormEngineHelper.addFieldGroupRow(parameter));
+            (form.get(parameter.id) as UntypedFormArray).push(FormEngineHelper.addFieldGroupRow(parameter));
           } else {
             arrayValue.forEach((parameterValueRow, i) => {
-              (form.get(parameter.id) as FormArray).push(FormEngineHelper.addFieldGroupRow(parameter, parameterValueRow));
+              (form.get(parameter.id) as UntypedFormArray).push(FormEngineHelper.addFieldGroupRow(parameter, parameterValueRow));
             });
           }
           break;
@@ -58,9 +58,9 @@ export class FormEngineHelper {
           break;
 
         case 'file-upload': // Creates an FormArray and pushes defaultValues into it.
-          form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
+          form.addControl(parameter.id, new UntypedFormArray([], { updateOn: 'change' }));
           (parameterValue as { id: string, name: string, url: string }[] || []).forEach(v => {
-            (form.get(parameter.id) as FormArray).push(new FormGroup({ id: new FormControl(v.id), name: new FormControl(v.name), url: new FormControl(v.url) }));
+            (form.get(parameter.id) as UntypedFormArray).push(new UntypedFormGroup({ id: new UntypedFormControl(v.id), name: new UntypedFormControl(v.name), url: new UntypedFormControl(v.url) }));
           });
           break;
 
@@ -97,9 +97,9 @@ export class FormEngineHelper {
   }
 
 
-  static addFieldGroupRow(parameter: FormEngineParameterModel, value?: { [key: string]: any }): FormGroup {
+  static addFieldGroupRow(parameter: FormEngineParameterModel, value?: { [key: string]: any }): UntypedFormGroup {
 
-    const formGroup = new FormGroup({});
+    const formGroup = new UntypedFormGroup({});
 
     parameter.fieldsGroupConfig?.fields.forEach(field => {
       const newField = FormEngineHelper.createParameterFormControl(field, (value || {})[field.id]);
@@ -117,7 +117,7 @@ export class FormEngineHelper {
     return parameters.some(parameter => parameter.isVisible);
   }
 
-  static getFormValues(form: FormGroup, parameters: FormEngineParameterModel[]): { valid: boolean; data: { [key: string]: any } } {
+  static getFormValues(form: UntypedFormGroup, parameters: FormEngineParameterModel[]): { valid: boolean; data: { [key: string]: any } } {
 
     const returnForm: { valid: boolean; data: { [key: string]: any } } = { valid: form.valid, data: {} };
 
@@ -132,13 +132,13 @@ export class FormEngineHelper {
   }
 
 
-  static getErrors(form: FormGroup): { [key: string]: string | null } {
+  static getErrors(form: UntypedFormGroup): { [key: string]: string | null } {
 
     let result: { [key: string]: string | null } = {};
 
     Object.keys(form.controls).forEach(key => {
       const formProperty = form.get(key) || null;
-      if (formProperty instanceof FormGroup) {
+      if (formProperty instanceof UntypedFormGroup) {
         result = { ...result, ...FormEngineHelper.getErrors(formProperty) };
       }
       const controlErrors: ValidationErrors | null | undefined = formProperty?.errors;
@@ -178,8 +178,8 @@ export class FormEngineHelper {
   }
 
 
-  static createParameterFormControl(parameter: FormEngineParameterModel, value?: any, options?: AbstractControlOptions): FormControl {
-    return new FormControl({ value: (typeof value !== 'boolean' && !value && value !== 0 ? null : value), disabled: !parameter.isEditable }, options);
+  static createParameterFormControl(parameter: FormEngineParameterModel, value?: any, options?: AbstractControlOptions): UntypedFormControl {
+    return new UntypedFormControl({ value: (typeof value !== 'boolean' && !value && value !== 0 ? null : value), disabled: !parameter.isEditable }, options);
   }
 
   static getParameterValidators(parameter: FormEngineParameterModel): ValidatorFn[] {

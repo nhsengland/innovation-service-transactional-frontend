@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
+import { AbstractControl, ControlContainer, UntypedFormGroup } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
@@ -31,7 +31,7 @@ export class FormCheckboxGroupComponent implements OnInit, DoCheck {
 
   // Form controls.
   get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
-  get fieldGroupControl(): FormGroup { return this.parentFieldControl?.get(this.groupName) as FormGroup; }
+  get fieldGroupControl(): UntypedFormGroup { return this.parentFieldControl?.get(this.groupName) as UntypedFormGroup; }
 
   // Accessibility.
   get ariaDescribedBy(): null | string {

@@ -1,5 +1,5 @@
 import { Component, Injector, Input, ViewChild } from '@angular/core';
-import { AbstractControl, ControlContainer, ControlValueAccessor, FormControl, FormControlDirective } from '@angular/forms';
+import { AbstractControl, ControlContainer, ControlValueAccessor, UntypedFormControl, FormControlDirective } from '@angular/forms';
 
 @Component({ template: '' })
 // Next line exception disables rule: "ComponentClassName should end with the suffix Component"
@@ -8,7 +8,7 @@ export abstract class ControlValueAccessorConnector implements ControlValueAcces
 
   @ViewChild(FormControlDirective, { static: true }) formControlDirective?: FormControlDirective;
 
-  @Input() formControl?: FormControl;
+  @Input() formControl?: UntypedFormControl;
   @Input() controlName = '';
 
   // Return parent FormGroup (or FormArray) instance.
@@ -16,8 +16,8 @@ export abstract class ControlValueAccessorConnector implements ControlValueAcces
     return this.injector.get(ControlContainer).control;
   }
   // Return FormControl instance no matter formControl or controlName is given.
-  get fieldControl(): FormControl {
-    return this.formControl || this.parentFieldControl?.get(this.controlName) as FormControl;
+  get fieldControl(): UntypedFormControl {
+    return this.formControl || this.parentFieldControl?.get(this.controlName) as UntypedFormControl;
   }
 
   constructor(private injector: Injector) { }
