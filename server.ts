@@ -23,7 +23,7 @@ import pdfRouter from 'src/server/routes/pdf-generator.routes';
 
 import { AppServerModule } from './src/main.server';
 
-import 'zone.js/dist/zone-node';
+import 'zone.js/node';
 
 dotenv.config();
 
