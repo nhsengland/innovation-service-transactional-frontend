@@ -1,6 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
 
 import { hasTestsItems } from './catalogs.config';
 
@@ -37,7 +38,7 @@ type SummaryPayloadType = Omit<InboundPayloadType, 'files'>
 
 
 export const SECTION_5_2: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.TESTING_WITH_USERS,
+  id: InnovationSectionEnum.TESTING_WITH_USERS,
   title: 'Testing with users',
   wizard: new WizardEngineModel({
     steps: [

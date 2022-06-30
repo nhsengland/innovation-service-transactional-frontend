@@ -53,7 +53,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     this.setPageTitle('Notifications');
 
     this.notificationsList.setVisibleColumns({
-      innovationId: { label: 'Notification', orderable: false },
+      notification: { label: 'Notification', orderable: false },
       createdAt: { label: 'Date', orderable: true },
       action: { label: 'Action', align: 'right', orderable: false }
     }).setOrderBy('createdAt', 'descending');
@@ -71,6 +71,8 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
   }
 
 
+  // API methods.
+
   getNotificationsList(): void {
 
     this.setPageStatus('LOADING');
@@ -81,7 +83,46 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
         this.setPageStatus('READY');
       },
       error => {
-        this.setPageStatus('ERROR');
+        this.setAlertError();
+        this.setPageStatus('READY');
+        this.logger.error(error);
+      }
+    );
+
+  }
+
+  onDeleteNotification(notificationId: string): void {
+
+    this.clearAlert();
+    this.setPageStatus('LOADING');
+
+    this.notificationsService.deleteNotification(notificationId).subscribe(
+      () => {
+        this.setAlertSuccess('Notification successfully cleared.');
+        this.getNotificationsList();
+      },
+      error => {
+        this.setAlertError();
+        this.setPageStatus('READY');
+        this.logger.error(error);
+      }
+    );
+
+  }
+
+  onMarkAsReadAllNotifications(): void {
+
+    this.clearAlert();
+    this.setPageStatus('LOADING');
+
+    this.notificationsService.dismissAllUserNotifications().subscribe(
+      response => {
+        this.setAlertSuccess(`${response.affected || 'All'} notifications have been marked as read.`);
+        this.getNotificationsList();
+      },
+      error => {
+        this.setAlertError();
+        this.setPageStatus('READY');
         this.logger.error(error);
       }
     );
@@ -89,8 +130,11 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
   }
 
 
+  // Interaction methods.
+
   onFormChange(): void {
 
+    this.clearAlert();
     this.setPageStatus('LOADING');
 
     this.filters.forEach(filter => {
@@ -98,7 +142,6 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       filter.selected = this.datasets[filter.key].filter(i => f.includes(i.value));
     });
 
-    /* istanbul ignore next */
     this.anyFilterSelected = this.filters.filter(i => i.selected.length > 0).length > 0;
 
     this.notificationsList.setFilters({
@@ -139,47 +182,18 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
   }
 
-
   onTableOrder(column: string): void {
+
+    this.clearAlert();
+
     this.notificationsList.setOrderBy(column);
     this.getNotificationsList();
   }
 
-  onDeleteNotification(notificationId: string): void {
-
-    this.setPageStatus('LOADING');
-
-    this.notificationsService.deleteNotification(notificationId).subscribe(
-      response => {
-        this.setAlertSuccess('You have successfully changed your password.');
-        this.setPageStatus('READY');
-      },
-      error => {
-        this.setAlertError();
-        this.logger.error(error);
-      }
-    );
-
-  }
-
-  onMarkAsReadNotifications(): void {
-
-    this.setPageStatus('LOADING');
-
-    this.notificationsService.markAsReadAllNotifications().subscribe(
-      response => {
-        this.setAlertSuccess('All notifications have been marked as read.');
-        this.setPageStatus('READY');
-      },
-      error => {
-        this.setAlertError();
-        this.logger.error(error);
-      }
-    );
-
-  }
-
   onPageChange(event: { pageNumber: number }): void {
+
+    this.clearAlert();
+
     this.notificationsList.setPage(event.pageNumber);
     this.getNotificationsList();
   }

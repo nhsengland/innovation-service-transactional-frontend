@@ -11,8 +11,7 @@ import { StoresModule, InnovationStore, EnvironmentStore } from '@modules/stores
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { PageInnovationSectionInfoComponent } from './section-info.component';
-import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
-import { InnovationStatusEnum } from '@modules/shared/enums';
+import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
 
 import { CONTEXT_INNOVATION_INFO } from '@tests/data.mocks';
 
@@ -61,7 +60,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
   it('should show "sectionUpdateSuccess" warning', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'sectionUpdateSuccess' };
 
     const expected = { type: 'SUCCESS', title: 'Your answers have been confirmed for this section', message: 'Go to next section or return to the full innovation record' };
@@ -76,7 +75,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
   it('should show "sectionUpdateError" warning', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'sectionUpdateError' };
 
     const expected = { type: 'ERROR', title: 'An error occurred when saving your section', message: 'Please try again or contact us for further help.' };
@@ -90,7 +89,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
   it('should show "evidenceUpdateSuccess" warning', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'evidenceUpdateSuccess' };
 
     const expected = { type: 'SUCCESS', title: 'Your evidence has been saved', message: 'You need to submit this section for review to notify your supporting accessor(s).' };
@@ -104,7 +103,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
   it('should show "evidenceDeleteSuccess" warning', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'evidenceDeleteSuccess' };
 
     const expected = { type: 'WARNING', title: 'Your evidence has been deleted' };
@@ -118,7 +117,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
   it('should show "evidenceUpdateError" warning', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.queryParams = { alert: 'evidenceUpdateError' };
 
     const expected = { type: 'ERROR', title: 'An error occurred when saving your evidence', message: 'Please try again or contact us for further help.' };
@@ -132,7 +131,7 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
   it('should show NO warning', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS };
     activatedRoute.snapshot.queryParams = {};
 
     const expected = { type: null };
@@ -147,12 +146,12 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
   it('should have initial information loaded FOR an Innovator', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.INNOVATION_DESCRIPTION };
 
     const responseMock = {
       section: {
         id: 'someId',
-        section: InnovationSectionsIds,
+        section: InnovationSectionEnum,
         status: 'NOT_STARTED',
         actionStatus: '',
         updatedAt: '2020-01-01T00:00:00.000Z'
@@ -172,13 +171,13 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
   it('should display a message that section is in DRAFT', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.INNOVATION_DESCRIPTION };
     activatedRoute.snapshot.data = { module: 'accessor' };
 
     const responseMock = {
       section: {
         id: 'someId',
-        section: InnovationSectionsIds,
+        section: InnovationSectionEnum,
         status: 'DRAFT',
         actionStatus: '',
         updatedAt: '2020-01-01T00:00:00.000Z'
@@ -210,12 +209,12 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
   it('should submit and call api with success', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.INNOVATION_DESCRIPTION };
 
     const responseMock1 = {
       section: {
         id: 'someId',
-        section: InnovationSectionsIds,
+        section: InnovationSectionEnum,
         status: 'NOT_STARTED',
         actionStatus: '',
         updatedAt: '2020-01-01T00:00:00.000Z'
@@ -241,12 +240,12 @@ describe('Shared/Pages/Innovation/InnovationSectionViewComponent', () => {
 
   it('should submit and call api with error', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.INNOVATION_DESCRIPTION };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.INNOVATION_DESCRIPTION };
 
     const responseMock1 = {
       section: {
         id: 'someId',
-        section: InnovationSectionsIds,
+        section: InnovationSectionEnum,
         status: 'NOT_STARTED',
         actionStatus: '',
         updatedAt: '2020-01-01T00:00:00.000Z'

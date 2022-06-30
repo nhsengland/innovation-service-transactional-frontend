@@ -13,14 +13,15 @@ import { WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationService, UserModulesType, ActivityLogOutDTO, } from './innovation.service';
 
+import { INNOVATION_SECTIONS, getSectionTitle } from './innovation.config';
+import { ActivityLogItemsEnum, InnovationSectionEnum } from './innovation.enums';
 import {
   InnovationModel,
-  sectionType, InnovationSectionsIds, ActivityLogItemsEnum,
+  sectionType,
   INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS,
   SectionsSummaryModel, InnovationSectionConfigType,
   getInnovationEvidenceDTO, getInnovationCommentsDTO
 } from './innovation.models';
-import { INNOVATION_SECTIONS, getSectionTitle } from './innovation.config';
 
 
 @Injectable()
@@ -119,15 +120,15 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.deleteEvidence(innovationId, evidenceId);
   }
 
-  getSectionTitle(sectionId: InnovationSectionsIds): string {
+  getSectionTitle(sectionId: InnovationSectionEnum): string {
     return getSectionTitle(sectionId);
   }
 
-  getSection(sectionId: InnovationSectionsIds): InnovationSectionConfigType['sections'][0] | undefined {
+  getSection(sectionId: InnovationSectionEnum): InnovationSectionConfigType['sections'][0] | undefined {
     return cloneDeep(INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId));
   }
 
-  getSectionWizard(sectionId: InnovationSectionsIds): WizardEngineModel {
+  getSectionWizard(sectionId: InnovationSectionEnum): WizardEngineModel {
     return cloneDeep(
       INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId)?.wizard || new WizardEngineModel({})
     );

@@ -8,7 +8,7 @@ import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum, INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { InnovationActionTrackerDeclineComponent } from './action-tracker-decline.component';
@@ -61,7 +61,7 @@ describe('FeatureModules/Innovator/Innovation/InnovationActionTrackerEditCompone
       status: 'REQUESTED' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
       name: `Submit section name`,
       description: '',
-      section: InnovationSectionsIds.COST_OF_INNOVATION,
+      section: InnovationSectionEnum.COST_OF_INNOVATION,
       createdAt: '2021-04-16T09:23:49.396Z',
       createdBy: 'Accessor user'
     };

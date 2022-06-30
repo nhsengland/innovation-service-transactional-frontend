@@ -112,34 +112,4 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
 
   });
 
-  it('should run getInnovations() and return success', () => {
-
-    const responseMock = [{ id: 'id', name: 'John Doe' }];
-    const expected = [{ id: 'id', name: 'John Doe' }];
-    let response: any = null;
-
-    service.getInnovations('010101').subscribe(success => response = success, error => response = error);
-
-    const httpRequest = httpMock.expectOne(`${envVaraiblesStore.API_URL}/innovators/010101/innovations`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-  });
-
-  it('should run getInnovations() and return error', () => {
-
-    const responseMock = '';
-    const expected: any = [];
-    let response: any = null;
-
-    service.getInnovations('010101').subscribe(success => response = success, error => response = error);
-
-    const httpRequest = httpMock.expectOne(`${envVaraiblesStore.API_URL}/innovators/010101/innovations`);
-    httpRequest.flush(responseMock, { status: 404, statusText: 'Not found' });
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-  });
-
 });

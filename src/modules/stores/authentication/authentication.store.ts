@@ -42,23 +42,6 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           this.state.isValidUser = innovatorInfo.userExists;
           this.state.hasInnovationTransfers = innovatorInfo.hasInvites;
           return of(true);
-        }),
-        concatMap(() => {
-
-          if (this.state.user!.type !== 'INNOVATOR') {
-            return of(true); // Suppress error as this is only additional information.
-          }
-
-          return of(true);
-
-          // return this.authenticationService.getInnovations(this.state.user!.id).pipe(
-          //   map(innovations => {
-          //     if (this.state.user) { this.state.user.innovations = innovations; }
-          //     return true;
-          //   }),
-          //   catchError(() => of(true)) // Suppress error as this is only additional information.
-          // );
-
         })
       ).subscribe(
         () => {
@@ -123,9 +106,9 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   userUrlBasePath(): string {
     switch (this.getUserType()) {
       case UserTypeEnum.ADMIN: return 'admin';
-      case UserTypeEnum.ASSESSMENT: return 'assessments';
-      case UserTypeEnum.ACCESSOR: return 'accessors';
-      case UserTypeEnum.INNOVATOR: return 'innovators';
+      case UserTypeEnum.ASSESSMENT: return 'assessment';
+      case UserTypeEnum.ACCESSOR: return 'accessor';
+      case UserTypeEnum.INNOVATOR: return 'innovator';
       default: return '';
     }
   }

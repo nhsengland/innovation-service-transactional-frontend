@@ -7,9 +7,9 @@ import { TableModel } from '@app/base/models';
 
 import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
 
+import { ActivityLogTypesEnum, ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { ActivityLogOutDTO } from '@modules/stores/innovation/innovation.service';
 
-import { ActivityLogTypesEnum, ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation/innovation.models';
 
 type FilterKeysType = 'activityTypes';
 type ActivitiesListType = ActivityLogOutDTO['data'][0] & { showHideStatus: 'opened' | 'closed', showHideText: string };

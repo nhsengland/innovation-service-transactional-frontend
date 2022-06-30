@@ -11,7 +11,7 @@ import { StoresModule, InnovationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { PageInnovationSectionEvidenceInfoComponent } from './section-evidence-info.component';
-import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 
 describe('Shared/Pages/Innovation/PageInnovationSectionEvidenceInfoComponent', () => {
@@ -54,7 +54,7 @@ describe('Shared/Pages/Innovation/PageInnovationSectionEvidenceInfoComponent', (
 
   it('should have innovation information loaded', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS };
 
     const responseMock = {
       evidenceType: 'CLINICAL',
@@ -99,7 +99,7 @@ describe('Shared/Pages/Innovation/PageInnovationSectionEvidenceInfoComponent', (
 
   it('should delete evidence with success', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS };
     const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
     const responseMock = true;
@@ -116,7 +116,7 @@ describe('Shared/Pages/Innovation/PageInnovationSectionEvidenceInfoComponent', (
 
   it('should NOT delete evidence with API error', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS };
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS };
     const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
 
     innovationStore.deleteEvidence$ = () => throwError('error');

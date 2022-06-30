@@ -13,8 +13,6 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore, EnvironmentStore } from '@modules/stores';
 import { InnovatorModule } from '../innovator.module';
 
-import { NotificationContextType } from '@modules/shared/services/notifications.service';
-
 import { InnovatorLayoutComponent } from './innovator-layout.component';
 
 
@@ -145,9 +143,9 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
     const expected = [
       { key: 'Overview', title: 'Overview', link: `/innovator/innovations/innovation01/overview` },
       { key: 'InnovationRecord', title: 'Innovation record', link: `/innovator/innovations/innovation01/record` },
-      { key: NotificationContextType.ACTION, title: 'Action tracker', link: `/innovator/innovations/innovation01/action-tracker` },
-      { key: NotificationContextType.COMMENT, title: 'Comments', link: `/innovator/innovations/innovation01/comments` },
-      { key: NotificationContextType.DATA_SHARING, title: 'Data sharing and support', link: `/innovator/innovations/innovation01/support` },
+      { key: 'Action', title: 'Action tracker', link: `/innovator/innovations/innovation01/action-tracker` },
+      { key: 'Comment', title: 'Comments', link: `/innovator/innovations/innovation01/comments` },
+      { key: 'DataSharingAndSupport', title: 'Data sharing and support', link: `/innovator/innovations/innovation01/support` },
       { key: 'ActivityLog', title: 'Activity log', link: `/innovator/innovations/innovation01/activity-log` }
     ];
 

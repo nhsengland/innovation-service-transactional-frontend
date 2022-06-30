@@ -4,55 +4,15 @@ import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
-import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
-
 import { UrlModel } from '@modules/core/models/url.model';
 
+import { NotificationContextTypeEnum } from './environment.enums';
 
-// export type UserModulesType = '' | 'innovator' | 'accessor' | 'assessment';
 
-
-type getUserUnreadNotificationsDTO = {
+type InnovationNotificationsDTO = {
   count: number;
+  data: { [key in NotificationContextTypeEnum]: number };
 };
-
-
-// export type ActivityLogInDTO = {
-//   count: number;
-//   data: {
-//     date: string; // '2020-01-01T00:00:00.000Z',
-//     type: keyof ActivityLogItemsEnum;
-//     activity: ActivityLogItemsEnum;
-//     innovation: { id: string, name: string };
-//     params: {
-
-//       actionUserName: string;
-//       interveningUserName?: string;
-
-//       assessmentId?: string;
-//       sectionId?: InnovationSectionsIds;
-//       actionId?: string;
-//       innovationSupportStatus?: keyof typeof INNOVATION_SUPPORT_STATUS;
-
-//       organisations?: string[];
-//       organisationUnit?: string;
-//       comment?: { id: string; value: string; };
-//       totalActions?: number;
-
-//     };
-//   }[];
-// };
-// export type ActivityLogOutDTO = {
-//   count: number;
-//   data: (Omit<ActivityLogInDTO['data'][0], 'innovation' | 'params'>
-//     & {
-//       params: ActivityLogInDTO['data'][0]['params'] & {
-//         innovationName: string;
-//         sectionTitle: string;
-//       };
-//       link: null | { label: string; url: string; };
-//     })[]
-// };
 
 
 @Injectable()
@@ -62,33 +22,35 @@ export class EnvironmentService {
 
   constructor(
     private http: HttpClient,
-    private authenticationStore: AuthenticationStore,
     private envVariablesStore: EnvironmentVariablesStore
   ) { }
 
 
-  // private endpointModule(module: UserModulesType): string {
-  //   switch (module) {
-  //     case 'innovator':
-  //       return 'innovators';
-  //     case 'accessor':
-  //       return 'accessors';
-  //     case 'assessment':
-  //       return 'assessments';
-  //     default:
-  //       return '';
-  //   }
-  // }
+  getUserUnreadNotifications(): Observable<{ total: number }> {
 
+    // return of({ count: Math.floor(Math.random() * 120) });
 
-  getUserUnreadNotifications(): Observable<getUserUnreadNotificationsDTO> {
-
-    return of({ count: Math.floor(Math.random() * 120) });
-
-    const url = new UrlModel(this.API_URL).addPath('notifications');
-    return this.http.get<getUserUnreadNotificationsDTO>(url.buildUrl()).pipe(
+    const url = new UrlModel(this.API_URL).addPath('notifications/counters');
+    return this.http.get<{ total: number }>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
+    );
+
+  }
+
+  dismissNotification(type: NotificationContextTypeEnum, id: string): Observable<{ affected: number }> {
+
+    const url = new UrlModel(this.API_URL).addPath('notifications/dismiss');
+    return this.http.patch<{ affected: number }>(url.buildUrl(), { context: { type, id } }).pipe(take(1), map(response => response)
+    );
+
+  }
+
+
+  getInnovationNotifications(innovationId: string): Observable<InnovationNotificationsDTO> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/notifications').setPathParams({ innovationId });
+    return this.http.get<InnovationNotificationsDTO>(url.buildUrl()).pipe(take(1), map(response => response)
     );
 
   }

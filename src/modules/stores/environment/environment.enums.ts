@@ -1,9 +1,12 @@
 export enum NotificationContextTypeEnum {
+  NEEDS_ASSESSMENT = 'NEEDS_ASSESSMENT',
   INNOVATION = 'INNOVATION',
-  COMMENT = 'COMMENT',
+  SUPPORT = 'SUPPORT',
   ACTION = 'ACTION',
-  SUPPORT = 'SUPPORT'
+  COMMENT = 'COMMENT'
+  // DATA_SHARING = 'DATA_SHARING'
 }
+
 export enum NotificationContextDetailEnum {
   LOCK_USER = 'LOCK_USER',
   COMMENT_CREATION = 'COMMENT_CREATION',
@@ -15,15 +18,3 @@ export enum NotificationContextDetailEnum {
   INNOVATION_SUBMISSION = 'INNOVATION_SUBMISSION',
   SUPPORT_STATUS_UPDATE = 'SUPPORT_STATUS_UPDATE'
 }
-
-// export const NOTIFICATION_ITEMS: { [key in NotificationContextDetailEnum]: { type: NotificationContextTypeEnum } } = Object.freeze({
-//   LOCK_USER: { type: NotificationContextTypeEnum.INNOVATION },
-//   COMMENT_CREATION: { type: NotificationContextTypeEnum.COMMENT },
-//   COMMENT_REPLY: { type: NotificationContextTypeEnum.COMMENT },
-//   ACTION_CREATION: { type: NotificationContextTypeEnum.ACTION },
-//   ACTION_UPDATE: { type: NotificationContextTypeEnum.ACTION },
-//   NEEDS_ASSESSMENT_COMPLETED: { type: NotificationContextTypeEnum.INNOVATION },
-//   NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION: { type: NotificationContextTypeEnum.INNOVATION },
-//   INNOVATION_SUBMISSION: { type: NotificationContextTypeEnum.INNOVATION },
-//   SUPPORT_STATUS_UPDATE: { type: NotificationContextTypeEnum.SUPPORT }
-// });

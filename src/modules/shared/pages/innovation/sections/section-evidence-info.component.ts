@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/types';
 import { WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 
-import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-section-evidence-info',
@@ -17,7 +17,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
 
   module: '' | 'innovator' | 'accessor' = '';
   innovationId: string;
-  sectionId: InnovationSectionsIds;
+  sectionId: InnovationSectionEnum;
   evidence: {
     id: string;
     title: string;

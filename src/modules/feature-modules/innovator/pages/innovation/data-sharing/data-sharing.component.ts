@@ -9,8 +9,7 @@ import { INNOVATION_SUPPORT_STATUS, OrganisationSuggestionModel } from '@modules
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
-
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 @Component({
@@ -85,7 +84,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    this.notificationsService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING).subscribe();
+    // this.notificationsService.dismissNotification(NotificationContextTypeEnum.DATA_SHARING, this.innovationId).subscribe();
 
     forkJoin([
       this.organisationsService.getOrganisationUnits(),

@@ -6,8 +6,7 @@ import { AlertType } from '@app/base/types';
 import { RoutingHelper } from '@app/base/helpers';
 import { INNOVATION_SUPPORT_STATUS, InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
-
-import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
+import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -36,8 +35,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService,
-    private notificationsService: NotificationsService,
+    private accessorService: AccessorService
   ) {
 
     super();
@@ -81,7 +79,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }
     );
 
-    this.notificationsService.dismissNotification(this.innovationId, NotificationContextType.INNOVATION).subscribe();
+    this.stores.environment.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+
   }
 
 }

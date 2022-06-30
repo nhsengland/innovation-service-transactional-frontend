@@ -7,16 +7,14 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { MappedObjectType } from '@app/base/types';
 
-import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
-
-import { InnovationStatusEnum } from '@modules/shared/enums';
+import { InnovationSectionEnum, InnovationStatusEnum, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 
 
 type getInnovationActionsListEndpointInDTO = {
   id: string;
   displayId: string;
   status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-  section: InnovationSectionsIds;
+  section: InnovationSectionEnum;
   createdAt: string; // '2021-04-16T09:23:49.396Z',
   notifications: {
     count: number
@@ -46,7 +44,7 @@ export type getInnovationActionInfoInDTO = {
   displayId: string;
   status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
   description: string;
-  section: InnovationSectionsIds;
+  section: InnovationSectionEnum;
   createdAt: string; // '2021-04-16T09:23:49.396Z',
   createdBy: { id: string; name: string; };
 };

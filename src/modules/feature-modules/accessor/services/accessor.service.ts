@@ -6,9 +6,9 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, MappedObjectType } from '@app/base/types';
 
-import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
+
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/shared/enums';
 
 
 export enum SupportLogType {
@@ -71,7 +71,7 @@ export type getAdvanceActionsListEndpointInDTO = {
     id: string;
     displayId: string;
     status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-    section: InnovationSectionsIds;
+    section: InnovationSectionEnum;
     createdAt: string; // '2021-04-16T09:23:49.396Z',
     updatedAt: string; // '2021-04-16T09:23:49.396Z',
     innovation: {
@@ -121,7 +121,7 @@ type getInnovationActionsListEndpointInDTO = {
   id: string;
   displayId: string;
   status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-  section: InnovationSectionsIds;
+  section: InnovationSectionEnum;
   createdAt: string; // '2021-04-16T09:23:49.396Z',
   notifications: {
     count: number,
@@ -138,7 +138,7 @@ export type getInnovationActionInfoInDTO = {
   displayId: string;
   status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
   description: string;
-  section: InnovationSectionsIds;
+  section: InnovationSectionEnum;
   createdAt: string; // '2021-04-16T09:23:49.396Z',
   createdBy: { id: string; name: string; };
 };
@@ -150,7 +150,7 @@ export type getActionsListEndpointInDTO = {
     id: string;
     displayId: string;
     status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-    section: InnovationSectionsIds;
+    section: InnovationSectionEnum;
     createdAt: string; // '2021-04-16T09:23:49.396Z',
     updatedAt: string; // '2021-04-16T09:23:49.396Z',
     innovation: {

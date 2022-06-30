@@ -56,7 +56,7 @@
                 <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
                   <div class="d-flex">
                     <a class="app-side-nav__link nhsuk-u-padding-right-1" [routerLink]="item.link"> {{ item.title }} </a>
-                    <notification-tag [label]="leftSideBarNotifications[item.key]"></notification-tag>
+                    <notification-tag [label]="item.notifications || null"></notification-tag>
                   </div>
                 </li>
               </ul>
@@ -75,7 +75,7 @@
                   <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
                     <div class="d-flex">
                       <a class="app-side-nav__link nhsuk-u-padding-right-1" [routerLink]="item.link"> {{ item.title }} </a>
-                      <notification-tag [label]="leftSideBarNotifications[item.key]"></notification-tag>
+                      <notification-tag [label]="item.notifications || null"></notification-tag>
                     </div>
                   </li>
                 </ul>

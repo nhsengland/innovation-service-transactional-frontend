@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { NGXLogger } from 'ngx-logger';
 
-import { InnovationStatusEnum } from '@modules/shared/enums/innovation.enums';
 
 import { Store } from '../store.class';
 import { ContextModel } from './environment.models';
 import { EnvironmentService } from './environment.service';
 import { EnvironmentInnovationType } from './environment.types';
-import { map } from 'rxjs/operators';
+import { InnovationStatusEnum } from '../innovation/innovation.enums';
+
+import { NotificationContextTypeEnum } from './environment.enums';
 
 
 @Injectable()
@@ -20,6 +22,7 @@ export class EnvironmentStore extends Store<ContextModel> {
   ) { super('STORE::Environment', new ContextModel()); }
 
 
+  innovation$(): Observable<ContextModel['innovation']> { return this.state$.pipe(map(item => item.innovation)); }
   notifications$(): Observable<ContextModel['notifications']> { return this.state$.pipe(map(item => item.notifications)); }
 
 
@@ -28,11 +31,35 @@ export class EnvironmentStore extends Store<ContextModel> {
 
     this.environmentService.getUserUnreadNotifications().subscribe(
       response => {
-        this.state.notifications.UNREAD = response.count;
+        this.state.notifications.UNREAD = response.total;
         this.setState();
       },
       error => this.logger.error('Error obtaining user unread notifications', error)
     );
+
+  }
+
+  dismissNotification(contextType: NotificationContextTypeEnum, contextId: string): void {
+
+    this.environmentService.dismissNotification(contextType, contextId).subscribe(
+      () => this.updateUserUnreadNotifications(),
+      error => this.logger.error('Error dismissing all user notifications', error)
+    );
+
+  }
+
+  updateInnovationNotifications(): void {
+
+    if (this.state.innovation?.id) {
+
+      this.environmentService.getInnovationNotifications(this.state.innovation.id).subscribe(
+        response => {
+          this.state.innovation!.notifications = response.data;
+          this.setState();
+        },
+        error => this.logger.error('Error obtaining innovation notifications', error)
+      );
+    }
 
   }
 

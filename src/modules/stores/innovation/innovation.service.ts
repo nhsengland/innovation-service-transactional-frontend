@@ -9,8 +9,9 @@ import { APIQueryParamsType } from '@modules/core/models/table.model';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
+import { ActivityLogItemsEnum, InnovationSectionEnum } from './innovation.enums';
 import {
-  sectionType, InnovationSectionsIds, ActivityLogItemsEnum,
+  sectionType,
   INNOVATION_STATUS, ACTIVITY_LOG_ITEMS, INNOVATION_SUPPORT_STATUS,
   getInnovationSectionsDTO, getInnovationEvidenceDTO, getInnovationCommentsDTO, OrganisationSuggestionModel
 } from './innovation.models';
@@ -36,7 +37,7 @@ export type ActivityLogInDTO = {
       interveningUserName?: string;
 
       assessmentId?: string;
-      sectionId?: InnovationSectionsIds;
+      sectionId?: InnovationSectionEnum;
       actionId?: string;
       innovationSupportStatus?: keyof typeof INNOVATION_SUPPORT_STATUS;
 

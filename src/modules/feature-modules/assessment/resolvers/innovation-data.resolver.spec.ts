@@ -9,7 +9,7 @@ import { of, throwError } from 'rxjs';
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
-import { InnovationStatusEnum } from '@modules/shared/enums';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 import { AssessmentService } from '../services/assessment.service';
 

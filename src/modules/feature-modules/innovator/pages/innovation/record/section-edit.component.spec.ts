@@ -8,7 +8,7 @@ import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { InnovationStore, StoresModule, AuthenticationStore, EnvironmentStore } from '@modules/stores';
-import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
 import { FormEngineComponent } from '@modules/shared/forms';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
@@ -54,14 +54,14 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
     environmentStore.getInnovation = () => CONTEXT_INNOVATION_INFO;
 
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 1 };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 1 });
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.REGULATIONS_AND_STANDARDS, questionId: 1 };
+    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionEnum.REGULATIONS_AND_STANDARDS, questionId: 1 });
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
 
     innovationStore.getSectionInfo$ = () => of({
       section: {
         id: '',
-        section: InnovationSectionsIds.REGULATIONS_AND_STANDARDS,
+        section: InnovationSectionEnum.REGULATIONS_AND_STANDARDS,
         status: 'DRAFT' as keyof typeof INNOVATION_SECTION_STATUS,
         actionStatus: '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
         updatedAt: '2020-01-01T00:00:00.000Z',
@@ -85,8 +85,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
 
   it('should have initial information loaded', fakeAsync(() => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 3 };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.REGULATIONS_AND_STANDARDS, questionId: 3 });
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.REGULATIONS_AND_STANDARDS, questionId: 3 };
+    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionEnum.REGULATIONS_AND_STANDARDS, questionId: 3 });
 
     fixture = TestBed.createComponent(InnovationSectionEditComponent);
     component = fixture.componentInstance;

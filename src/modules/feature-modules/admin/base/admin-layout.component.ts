@@ -29,7 +29,8 @@ export class AdminLayoutComponent extends CoreComponent {
 
   innovationHeaderBar: { id: string | null, name: string | null } = { id: null, name: null };
 
-  leftSideBar: { title: string, link: string, key?: string }[] = [];
+  leftSideBar: { key: string, title: string, link: string }[] = [];
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -80,8 +81,8 @@ export class AdminLayoutComponent extends CoreComponent {
 
       case 'userAccountMenu':
         this.leftSideBar = [
-          { title: 'Your details', link: `/admin/account/manage-details` },
-          { title: 'Manage account', link: `/admin/account/manage-account` }
+          { key: 'YourDetails', title: 'Your details', link: `/admin/account/manage-details` },
+          { key: 'ManageAccount', title: 'Manage account', link: `/admin/account/manage-account` }
         ];
         break;
 
@@ -89,6 +90,7 @@ export class AdminLayoutComponent extends CoreComponent {
       default:
         this.leftSideBar = [];
         break;
+
     }
 
   }

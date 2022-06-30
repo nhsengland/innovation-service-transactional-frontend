@@ -7,8 +7,6 @@ import { HeaderNavigationBarItemType } from '@app/base/types';
 
 import { RoutingHelper } from '@app/base/helpers';
 
-import { NotificationContextType } from '@modules/shared/services/notifications.service';
-
 
 type RouteDataLayoutOptionsType = {
   type: null | 'userAccountMenu' | 'innovationLeftAsideMenu' | 'emptyLeftAside';
@@ -32,14 +30,8 @@ export class InnovatorLayoutComponent extends CoreComponent {
   } = { leftItems: [], rightItems: [], notifications: { notifications: 0 } };
 
   innovationHeaderBar: { id: string | null, name: string | null } = { id: null, name: null };
-  leftSideBar: { key: string, title: string, link: string }[] = [];
-  leftSideBarNotifications: { [key: string]: number } = {
-    ACTION: 0,
-    COMMENT: 0,
-    INNOVATION: 0,
-    SUPPORT: 0,
-    DATA_SHARING: 0
-  };
+  leftSideBar: { key: string, title: string, link: string, notifications?: number }[] = [];
+
 
   constructor(
     private activatedRoute: ActivatedRoute
@@ -53,6 +45,13 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
       this.stores.environment.notifications$().subscribe(e => {
         this.navigationMenuBar.notifications = { notifications: e.UNREAD }; // We need to reassign the variable so that the component reacts to it.
+      }),
+
+      this.stores.environment.innovation$().subscribe(e => {
+        Object.entries(e?.notifications || {}).forEach(([key, value]) => {
+          const leftSideMenu = this.leftSideBar.find(item => item.key === key);
+          if (leftSideMenu) { leftSideMenu.notifications = value; }
+        });
       })
 
     );
@@ -61,8 +60,6 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
 
   private onRouteChange(event: NavigationEnd): void {
-
-
 
     const routeData = RoutingHelper.getRouteData(this.activatedRoute);
     const routeDataLayoutOptions: RouteDataLayoutOptionsType = routeData.layoutOptions || {};
@@ -108,11 +105,12 @@ export class InnovatorLayoutComponent extends CoreComponent {
         this.leftSideBar = [
           { key: 'Overview', title: 'Overview', link: `/innovator/innovations/${currentRouteInnovationId}/overview` },
           { key: 'InnovationRecord', title: 'Innovation record', link: `/innovator/innovations/${currentRouteInnovationId}/record` },
-          { key: NotificationContextType.ACTION, title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker` },
-          { key: NotificationContextType.COMMENT, title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments` },
-          { key: NotificationContextType.DATA_SHARING, title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/support` },
+          { key: 'Action', title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker` },
+          { key: 'Comment', title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments` },
+          { key: 'DataSharingAndSupport', title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/support` },
           { key: 'ActivityLog', title: 'Activity log', link: `/innovator/innovations/${currentRouteInnovationId}/activity-log` }
         ];
+        this.stores.environment.updateInnovationNotifications();
         break;
 
       case 'emptyLeftAside':

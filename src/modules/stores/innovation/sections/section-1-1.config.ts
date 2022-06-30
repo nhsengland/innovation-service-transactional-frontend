@@ -1,7 +1,9 @@
 import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
-import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
+
 import { areasItems, careSettingsItems, categoriesItems, clinicalAreasItems, hasFinalProductItems, mainCategoryItems, mainPurposeItems, supportTypesItems } from './catalogs.config';
+import { locationItems } from '../config/innovation-catalog.config';
 
 
 // Labels.
@@ -62,7 +64,7 @@ type OutboundPayloadType = Partial<InboundPayloadType>;
 
 
 export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.INNOVATION_DESCRIPTION,
+  id: InnovationSectionEnum.INNOVATION_DESCRIPTION,
   title: 'Description of innovation',
   wizard: new WizardEngineModel({
     steps: [

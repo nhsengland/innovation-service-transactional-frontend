@@ -1,5 +1,6 @@
 import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
 
 import { hasCostKnowledgeItems, patientRangeItems } from './catalogs.config';
 
@@ -28,7 +29,7 @@ type OutboundPayloadType = Omit<InboundPayloadType, 'impactPatients'>;
 
 
 export const SECTION_6_1: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.COST_OF_INNOVATION,
+  id: InnovationSectionEnum.COST_OF_INNOVATION,
   title: 'Cost of your innovation',
   wizard: new WizardEngineModel({
     steps: [

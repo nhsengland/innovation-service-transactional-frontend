@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineModel, FileTypes } from '@app/base/forms';
 import { UrlModel } from '@app/base/models';
 import { WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
-import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-evidence-edit',
@@ -16,7 +16,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   innovationId: string;
-  sectionId: InnovationSectionsIds;
+  sectionId: InnovationSectionEnum;
   evidenceId: string;
 
   wizard: WizardEngineModel;

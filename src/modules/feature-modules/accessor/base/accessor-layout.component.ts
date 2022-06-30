@@ -6,8 +6,6 @@ import { CoreComponent } from '@app/base';
 import { HeaderNavigationBarItemType } from '@app/base/types';
 import { RoutingHelper } from '@app/base/helpers';
 
-import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
-
 
 type RouteDataLayoutOptionsType = {
   type: null | 'userAccountMenu' | 'innovationLeftAsideMenu' | 'emptyLeftAside';
@@ -29,19 +27,11 @@ export class AccessorLayoutComponent extends CoreComponent {
     notifications: { notifications: number }
   } = { leftItems: [], rightItems: [], notifications: { notifications: 0 } };
 
-  leftSideBar: { key: string, title: string, link: string }[] = [];
-  leftSideBarNotifications: { [key: string]: number } = {
-    ACTION: 0,
-    COMMENT: 0,
-    INNOVATION: 0,
-    SUPPORT: 0,
-    DATA_SHARING: 0,
-  };
+  leftSideBar: { key: string, title: string, link: string, notifications?: number }[] = [];
 
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private notificationsService: NotificationsService,
+    private activatedRoute: ActivatedRoute
   ) {
 
     super();
@@ -51,7 +41,7 @@ export class AccessorLayoutComponent extends CoreComponent {
     ];
     this.navigationMenuBar.rightItems = [
       { key: 'innovations', label: 'Innovations', link: '/accessor/innovations' },
-      { key: 'notifications', label: 'Notifications', link: '/innovator/notifications' },
+      { key: 'notifications', label: 'Notifications', link: '/accessor/notifications' },
       { key: 'actions', label: 'Actions', link: '/accessor/actions', },
       { key: 'account', label: 'Account', link: '/accessor/account' },
       { key: 'signOut', label: 'Sign out', link: `${this.CONSTANTS.APP_URL}/signout`, fullReload: true }
@@ -63,6 +53,13 @@ export class AccessorLayoutComponent extends CoreComponent {
 
       this.stores.environment.notifications$().subscribe(e => {
         this.navigationMenuBar.notifications = { notifications: e.UNREAD }; // We need to reassign the variable so that the component reacts to it.
+      }),
+
+      this.stores.environment.innovation$().subscribe(e => {
+        Object.entries(e?.notifications || {}).forEach(([key, value]) => {
+          const leftSideMenu = this.leftSideBar.find(item => item.key === key);
+          if (leftSideMenu) { leftSideMenu.notifications = value; }
+        });
       })
 
     );
@@ -71,6 +68,8 @@ export class AccessorLayoutComponent extends CoreComponent {
 
 
   private onRouteChange(event: NavigationEnd): void {
+
+    this.stores.environment.updateUserUnreadNotifications();
 
     const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
@@ -94,11 +93,12 @@ export class AccessorLayoutComponent extends CoreComponent {
         this.leftSideBar = [
           { key: 'Overview', title: 'Overview', link: `/accessor/innovations/${currentRouteInnovationId}/overview` },
           { key: 'InnovationRecord', title: 'Innovation record', link: `/accessor/innovations/${currentRouteInnovationId}/record` },
-          { key: NotificationContextType.ACTION, title: 'Action tracker', link: `/accessor/innovations/${currentRouteInnovationId}/action-tracker` },
-          { key: NotificationContextType.COMMENT, title: 'Comments', link: `/accessor/innovations/${currentRouteInnovationId}/comments` },
-          { key: NotificationContextType.SUPPORT, title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support` },
+          { key: 'Action', title: 'Action tracker', link: `/accessor/innovations/${currentRouteInnovationId}/action-tracker` },
+          { key: 'Comments', title: 'Comments', link: `/accessor/innovations/${currentRouteInnovationId}/comments` },
+          { key: 'Support', title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support` },
           { key: 'ActivityLog', title: 'Activity log', link: `/accessor/innovations/${currentRouteInnovationId}/activity-log` }
         ];
+        this.stores.environment.updateInnovationNotifications();
         break;
 
       case 'emptyLeftAside':

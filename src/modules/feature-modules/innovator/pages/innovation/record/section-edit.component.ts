@@ -10,7 +10,7 @@ import { FormEngineComponent, FileTypes, WizardEngineModel } from '@app/base/for
 import { UrlModel } from '@app/base/models';
 
 import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
-import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -24,7 +24,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   alert: AlertType & { errorsList: { label: string, error: string }[] } = { type: null, errorsList: [] };
 
   innovation: EnvironmentInnovationType;
-  sectionId: InnovationSectionsIds;
+  sectionId: InnovationSectionEnum;
   baseUrl: string;
 
   wizard: WizardEngineModel;

@@ -8,12 +8,12 @@ import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { InnovationOverviewComponent } from './overview.component';
 
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/shared/enums';
 
 
 describe('FeatureModules/Accessor/Innovation/InnovationOverviewComponent', () => {

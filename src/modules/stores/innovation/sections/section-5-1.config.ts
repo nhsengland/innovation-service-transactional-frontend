@@ -1,5 +1,6 @@
 import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
 
 import { carePathwayItems, hasUKPathwayKnowledgeItems, innovationPathwayKnowledgeItems } from './catalogs.config';
 
@@ -25,7 +26,7 @@ type OutboundPayloadType = InboundPayloadType;
 
 
 export const SECTION_5_1: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.CURRENT_CARE_PATHWAY,
+  id: InnovationSectionEnum.CURRENT_CARE_PATHWAY,
   title: 'Current care pathway',
   wizard: new WizardEngineModel({
     steps: [

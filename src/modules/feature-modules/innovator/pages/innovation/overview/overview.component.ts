@@ -6,8 +6,8 @@ import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/types';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
+import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
-import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
@@ -66,8 +66,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService,
-    private notificationsService: NotificationsService
+    private innovatorService: InnovatorService
   ) {
 
     super();
@@ -80,7 +79,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    this.notificationsService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING).subscribe();
+    this.stores.environment.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'innovationCreationSuccess':

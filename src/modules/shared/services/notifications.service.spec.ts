@@ -5,10 +5,13 @@ import { ENV } from '@tests/app.mocks';
 
 import { Injector } from '@angular/core';
 
+import { TableModel } from '@app/base/models';
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
-import { NotificationsService } from './notifications.service';
+import { NotificationsListInDTO, NotificationsListOutDTO, NotificationsService } from './notifications.service';
+import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
+import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
 
 
 describe('Shared/Services/NotificationsService', () => {
@@ -44,82 +47,242 @@ describe('Shared/Services/NotificationsService', () => {
     httpMock.verify();
   });
 
+  it('should run getNotificationsList() WITHOUT filters, WITH payload 01 and return SUCCESS', () => {
 
-  // it('should run innovationStatusNotifications() and return success', () => {
+    const responseMock: NotificationsListInDTO = {
+      count: 20,
+      data: [{
+        id: 'Notification001',
+        innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
+        contextType: NotificationContextTypeEnum.NEEDS_ASSESSMENT, contextDetail: NotificationContextDetailEnum.NEEDS_ASSESSMENT_COMPLETED, contextId: 'NeedsAssessment001',
+        createdAt: '2020-01-01T00:00:00.000Z', createdBy: 'User name', readAt: null,
+        params: null
+      }]
+    };
 
-  //   const responseMock = { IN_PROGRESS: 1, NEEDS_ASSESSMENT: 2, WAITING_NEEDS_ASSESSMENT: 3 };
+    const expected: NotificationsListOutDTO = {
+      count: responseMock.count,
+      data: responseMock.data.map(item => ({
+        id: 'Notification001',
+        contextType: item.contextType, contextDetail: item.contextDetail, contextId: item.contextId,
+        createdAt: item.createdAt, createdBy: item.createdBy, readAt: item.readAt,
+        link: { label: 'Click to go to innovation assessment', url: '//innovations/Innovation001/assessments/NeedsAssessment001' },
+        params: { innovationId: item.innovation.id, innovationName: item.innovation.name, innovationStatus: item.innovation.status }
+      }))
+    };
+
+    let response: any = null;
+
+    const tableList = new TableModel<
+      NotificationsListOutDTO['data'][0],
+      { contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }
+    >();
+
+    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&unreadOnly=false`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run getNotificationsList() WITHOUT filters, WITH payload 02 and return SUCCESS', () => {
+
+    const responseMock: NotificationsListInDTO = {
+      count: 20,
+      data: [{
+        id: 'Notification001',
+        innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
+        contextType: NotificationContextTypeEnum.INNOVATION, contextDetail: NotificationContextDetailEnum.INNOVATION_SUBMISSION, contextId: 'Innovation001',
+        createdAt: '2020-01-01T00:00:00.000Z', createdBy: 'User name', readAt: null,
+        params: {}
+      }]
+    };
+
+    const expected: NotificationsListOutDTO = {
+      count: responseMock.count,
+      data: responseMock.data.map(item => ({
+        id: 'Notification001',
+        contextType: item.contextType, contextDetail: item.contextDetail, contextId: item.contextId,
+        createdAt: item.createdAt, createdBy: item.createdBy, readAt: item.readAt,
+        link: { label: 'Click to go to innovation', url: '//innovations/Innovation001/overview' },
+        params: { innovationId: item.innovation.id, innovationName: item.innovation.name, innovationStatus: item.innovation.status }
+      }))
+    };
+
+    let response: any = null;
+
+    const tableList = new TableModel<
+      NotificationsListOutDTO['data'][0],
+      { contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }
+    >();
+
+    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&unreadOnly=false`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run getNotificationsList() WITHOUT filters, WITH payload 03 and return SUCCESS', () => {
+
+    const responseMock: NotificationsListInDTO = {
+      count: 20,
+      data: [{
+        id: 'Notification001',
+        innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
+        contextType: NotificationContextTypeEnum.ACTION, contextDetail: NotificationContextDetailEnum.ACTION_CREATION, contextId: 'Action001',
+        createdAt: '2020-01-01T00:00:00.000Z', createdBy: 'User name', readAt: null,
+        params: {
+          section: InnovationSectionEnum.INNOVATION_DESCRIPTION
+        }
+      }]
+    };
+
+    const expected: NotificationsListOutDTO = {
+      count: responseMock.count,
+      data: responseMock.data.map(item => ({
+        id: 'Notification001',
+        contextType: item.contextType, contextDetail: item.contextDetail, contextId: item.contextId,
+        createdAt: item.createdAt, createdBy: item.createdBy, readAt: item.readAt,
+        link: { label: 'Click to go to action', url: '//innovations/Innovation001/action-tracker/Action001' },
+        params: {
+          innovationId: item.innovation.id, innovationName: item.innovation.name, innovationStatus: item.innovation.status,
+          section: item.params?.section,
+          sectionNumber: '1.1'
+        }
+      }))
+    };
+
+    let response: any = null;
+
+    const tableList = new TableModel<
+      NotificationsListOutDTO['data'][0],
+      { contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }
+    >();
+
+    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&unreadOnly=false`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  it('should run getNotificationsList() WITHOUT filters, WITH payload 04 and return SUCCESS', () => {
+
+    const responseMock: NotificationsListInDTO = {
+      count: 20,
+      data: [{
+        id: 'Notification001',
+        innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
+        contextType: NotificationContextTypeEnum.COMMENT, contextDetail: NotificationContextDetailEnum.COMMENT_CREATION, contextId: 'Comment001',
+        createdAt: '2020-01-01T00:00:00.000Z', createdBy: 'User name', readAt: null,
+        params: null
+      }]
+    };
+
+    const expected: NotificationsListOutDTO = {
+      count: responseMock.count,
+      data: responseMock.data.map(item => ({
+        id: 'Notification001',
+        contextType: item.contextType, contextDetail: item.contextDetail, contextId: item.contextId,
+        createdAt: item.createdAt, createdBy: item.createdBy, readAt: item.readAt,
+        link: { label: 'Click to go to comment', url: '//innovations/Innovation001/comments' },
+        params: { innovationId: item.innovation.id, innovationName: item.innovation.name, innovationStatus: item.innovation.status }
+      }))
+    };
+
+    let response: any = null;
+
+    const tableList = new TableModel<
+      NotificationsListOutDTO['data'][0],
+      { contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }
+    >();
+
+    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&unreadOnly=false`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+
+  it('should run getNotificationsList() WITH filters and return SUCCESS', () => {
+
+    const responseMock: NotificationsListInDTO = { count: 0, data: [] };
+
+    const expected: NotificationsListOutDTO = {
+      count: responseMock.count,
+      data: []
+    };
+
+    let response: any = null;
+
+    const tableList = new TableModel<
+      NotificationsListOutDTO['data'][0],
+      { contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }
+    >().setFilters({ contextTypes: [NotificationContextTypeEnum.INNOVATION], unreadOnly: true });
+
+    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&contextTypes=INNOVATION&unreadOnly=true`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
+
+  });
+
+  // it('should run markAsReadAllNotifications() and return SUCCESS', () => {
+
+  //   const responseMock = null;
   //   const expected = responseMock;
 
   //   let response: any = null;
-  //   service.innovationStatusNotifications().subscribe(success => response = success, error => response = error);
+  //   service.markAsReadAllNotifications().subscribe(success => response = success, error => response = error);
 
-  //   const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications/status?scope=INNOVATION_STATUS`);
+  //   const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications`);
   //   httpRequest.flush(responseMock);
-  //   expect(httpRequest.request.method).toBe('GET');
+  //   expect(httpRequest.request.method).toBe('PATCH');
   //   expect(response).toEqual(expected);
 
   // });
 
-  it('should run dismissNotification() and return success', () => {
+  it('should run dismissAllUserNotifications() and return SUCCESS', () => {
 
-    const responseMock = { affected: 1, updated: [] };
+    const responseMock = { affected: 10 };
     const expected = responseMock;
 
     let response: any = null;
-    service.dismissNotification('Some string', 'Another string').subscribe(success => response = success, error => response = error);
+    service.dismissAllUserNotifications().subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications/dismiss`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PATCH');
     expect(response).toEqual(expected);
 
   });
 
-  // it('should run getAllUnreadNotificationsGroupedByContext() WITH innovationId and return success', () => {
+  it('should run deleteNotification() and return SUCCESS', () => {
 
-  //   const responseMock = { some: 'key' };
-  //   const expected = responseMock;
+    const responseMock = { id: 'Notification001' };
+    const expected = responseMock;
 
-  //   let response: any = null;
-  //   service.getAllUnreadNotificationsGroupedByContext('Inno01').subscribe(success => response = success, error => response = error);
+    let response: any = null;
+    service.deleteNotification('Notification001').subscribe(success => response = success, error => response = error);
 
-  //   const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications/context?innovationId=Inno01`);
-  //   httpRequest.flush(responseMock);
-  //   expect(httpRequest.request.method).toBe('GET');
-  //   expect(response).toEqual(expected);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications/${responseMock.id}`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('DELETE');
+    expect(response).toEqual(expected);
 
-  // });
-
-  // it('should run getAllUnreadNotificationsGroupedByContext() WITHOUT innovationId and return success', () => {
-
-  //   const responseMock = { some: 'key' };
-  //   const expected = responseMock;
-
-  //   let response: any = null;
-  //   service.getAllUnreadNotificationsGroupedByContext().subscribe(success => response = success, error => response = error);
-
-  //   const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications/context`);
-  //   httpRequest.flush(responseMock);
-  //   expect(httpRequest.request.method).toBe('GET');
-  //   expect(response).toEqual(expected);
-
-  // });
-
-  // it('should run getAllUnreadNotificationsGroupedByStatus() and return success', () => {
-
-  //   const responseMock = { some: 'key' };
-  //   const expected = responseMock;
-
-  //   let response: any = null;
-  //   service.getAllUnreadNotificationsGroupedByStatus('SUPPORT_STATUS').subscribe(success => response = success, error => response = error);
-
-  //   const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications/status?scope=SUPPORT_STATUS`);
-  //   httpRequest.flush(responseMock);
-  //   expect(httpRequest.request.method).toBe('GET');
-  //   expect(response).toEqual(expected);
-
-  // });
-
+  });
 
   it('should run getEmailNotificationTypes() and return success', () => {
 

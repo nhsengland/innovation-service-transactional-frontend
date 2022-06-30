@@ -156,21 +156,22 @@ export const locale = {
             }
           },
           notification_context_types: {
+            NEEDS_ASSESSMENT: { title: 'Needs Assessment' },
             INNOVATION: { title: 'Innovation' },
             COMMENT: { title: 'Comment' },
             ACTION: { title: 'Action' },
             SUPPORT: { title: 'Support' }
           },
           notification_context_details: {
-            LOCK_USER: { title: 'LOCK_USER' },
-            COMMENT_CREATION: { title: 'COMMENT_CREATION' },
-            COMMENT_REPLY: { title: 'COMMENT_REPLY' },
-            ACTION_CREATION: { title: 'ACTION_CREATION' },
-            ACTION_UPDATE: { title: 'ACTION_UPDATE' },
-            NEEDS_ASSESSMENT_COMPLETED: { title: 'NEEDS_ASSESSMENT_COMPLETED' },
-            NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION: { title: 'NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION' },
-            INNOVATION_SUBMISSION: { title: 'INNOVATION_SUBMISSION' },
-            SUPPORT_STATUS_UPDATE: { title: 'SUPPORT_STATUS_UPDATE' },
+            LOCK_USER: { title: `Innovaton "{{ innovationName }}" owner has been locked` },
+            COMMENT_CREATION: { title: `New comment for innovation "{{ innovationName }}"` },
+            COMMENT_REPLY: { title: `New comment reply for innovation "{{ innovationName }}"` },
+            ACTION_CREATION: { title: `New action for section {{ sectionNumber }} on innovation "{{ innovationName }}"` },
+            ACTION_UPDATE: { title: `Action {{ actionCode }} status updated to {{ actionStatus }} on innovation "{{ innovationName }}"` },
+            NEEDS_ASSESSMENT_COMPLETED: { title: `Innovation "{{ innovationName }}" is available for support` },
+            NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION: { title: `Assessment team suggested one or more organisations for you to share your innovation` },
+            INNOVATION_SUBMISSION: { title: `Innovation "{{ innovationName }}" is available for review` },
+            SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatus }}"` }
           }
         },
         user: {
