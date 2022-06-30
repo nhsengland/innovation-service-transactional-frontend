@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { TranslateService } from '@ngx-translate/core';
 import { NGXLogger } from 'ngx-logger';
 
 import { AppInjector } from '@modules/core/injectors/app-injector';
@@ -15,6 +16,7 @@ export class CoreService {
   private envVariablesStore: EnvironmentVariablesStore;
 
   protected http: HttpClient;
+  protected translateService: TranslateService;
   protected logger: NGXLogger;
 
   protected stores: {
@@ -35,6 +37,7 @@ export class CoreService {
 
     this.envVariablesStore = injector.get(EnvironmentVariablesStore);
     this.http = injector.get(HttpClient);
+    this.translateService = injector.get(TranslateService);
     this.logger = injector.get(NGXLogger);
 
     this.stores = {
@@ -52,5 +55,9 @@ export class CoreService {
 
 
   userUrlBasePath(): string { return this.stores.authentication.userUrlBasePath(); }
+
+  translate(translation: string, params?: object): string {
+    return this.translateService.instant(translation, params);
+  }
 
 }

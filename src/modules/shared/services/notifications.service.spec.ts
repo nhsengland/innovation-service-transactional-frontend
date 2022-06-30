@@ -11,7 +11,7 @@ import { StoresModule } from '@modules/stores';
 
 import { NotificationsListInDTO, NotificationsListOutDTO, NotificationsService } from './notifications.service';
 import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
-import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 describe('Shared/Services/NotificationsService', () => {
@@ -137,7 +137,9 @@ describe('Shared/Services/NotificationsService', () => {
         contextType: NotificationContextTypeEnum.ACTION, contextDetail: NotificationContextDetailEnum.ACTION_CREATION, contextId: 'Action001',
         createdAt: '2020-01-01T00:00:00.000Z', createdBy: 'User name', readAt: null,
         params: {
-          section: InnovationSectionEnum.INNOVATION_DESCRIPTION
+          section: InnovationSectionEnum.INNOVATION_DESCRIPTION,
+          actionStatus: InnovationActionStatusEnum.REQUESTED,
+          supportStatus: InnovationSupportStatusEnum.ENGAGING
         }
       }]
     };
@@ -152,7 +154,11 @@ describe('Shared/Services/NotificationsService', () => {
         params: {
           innovationId: item.innovation.id, innovationName: item.innovation.name, innovationStatus: item.innovation.status,
           section: item.params?.section,
-          sectionNumber: '1.1'
+          sectionNumber: '1.1',
+          actionStatus: item.params?.actionStatus,
+          actionStatusName: 'shared.catalog.innovation.action_status.REQUESTED.name',
+          supportStatus: item.params?.supportStatus,
+          supportStatusName: 'shared.catalog.innovation.support_status.ENGAGING.name'
         }
       }))
     };
