@@ -1,5 +1,5 @@
 <section class="bg-color-white">
-  <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
+  <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5">
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
@@ -70,7 +70,7 @@
 
           <div class="d-flex align-items-center justify-content-space-between  nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
             <div class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-0"> {{ notificationsList.getTotalRowsNumber() }} notifications found </div>
-            <a href="javascript:void(0)" (click)="onMarkAsReadNotifications()" class="nhsuk-body-s nhsuk-u-margin-bottom-0">
+            <a href="javascript:void(0)" (click)="onMarkAsReadAllNotifications()" class="nhsuk-body-s nhsuk-u-margin-bottom-0">
               Mark all as read
             </a>
           </div>
@@ -97,11 +97,16 @@
 
               <tbody class="nhsuk-table__body">
                 <tr *ngFor="let item of notificationsList.getRecords()" class="nhsuk-table__row">
-                  <td class="nhsuk-table__cell">
+                  <td class="nhsuk-table__cell nhsuk-body-s">
                     <span class="nhsuk-table-responsive__heading">{{ notificationsList.getColumnLabel('notification') }}</span>
-                    <a routerLink="/accessor/innovations" attr.aria-label="View TODO: CHECK TEXT HERE">
+                    <span *ngIf="!item.link" class="nhsuk-table-responsive__text">
                       {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }}
+                    </span>
+                    <a *ngIf="item.link" [routerLink]="item.link.url">
+                      {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }}
+                      <span class="nhsuk-u-visually-hidden"> {{ item.link.label }} </span>
                     </a>
+                    <notification-tag label="dot" *ngIf="item.readAt === null"></notification-tag>
                   </td>
                   <td class="nhsuk-table__cell">
                     <span class="nhsuk-table-responsive__heading">{{ notificationsList.getColumnLabel('createdAt') }}</span>
@@ -110,7 +115,7 @@
                   <td class="nhsuk-table__cell nhsuk-body-s text-align-right">
                     <span class="nhsuk-table-responsive__heading">Action</span>
                     <a href="javascript:void(0)" (click)="onDeleteNotification(item.id)">
-                      Delete <span class="nhsuk-u-visually-hidden"> notification {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }} </span>
+                      Clear <span class="nhsuk-u-visually-hidden"> notification {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }} </span>
                     </a>
                   </td>
                 </tr>

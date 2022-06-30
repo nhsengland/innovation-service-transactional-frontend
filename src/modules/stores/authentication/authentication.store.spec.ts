@@ -38,7 +38,6 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     authenticationService.verifyUserSession = () => of(true);
     authenticationService.getUserInfo = () => of({ id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: UserTypeEnum.INNOVATOR, roles: [], organisations: [], passwordResetOn: '', phone: '' });
     authenticationService.verifyInnovator = () => of({ userExists: true, hasInvites: false });
-    authenticationService.getInnovations = () => of([{ id: 'abc123zxc', name: 'HealthyApp' }]);
     authenticationService.userTermsOfUseInfo = () => of({ id: 'abc123zxc', name: 'HealthyApp', summary: '', isAccepted: true });
 
     const expectedResponse = true;
@@ -64,7 +63,6 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     authenticationService.verifyUserSession = () => of(true);
     authenticationService.getUserInfo = () => of({ id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: UserTypeEnum.INNOVATOR, roles: [], organisations: [], passwordResetOn: '', phone: '' });
     authenticationService.verifyInnovator = () => of({ userExists: false, hasInvites: false });
-    authenticationService.getInnovations = () => of([]);
     authenticationService.userTermsOfUseInfo = () => of(null);
 
     const expectedResponse = true;

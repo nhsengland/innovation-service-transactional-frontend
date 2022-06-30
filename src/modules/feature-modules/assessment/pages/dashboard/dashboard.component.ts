@@ -3,8 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { NotificationsService } from '@modules/shared/services/notifications.service';
-
 
 @Component({
   selector: 'app-assessment-pages-dashboard',
@@ -24,17 +22,9 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     description: 'Find, review and create a needs assessment for all incoming innovations'
   }];
 
-  notifications = {
-    ACTION: 0,
-    COMMENT: 0,
-    INNOVATION: 0,
-    SUPPORT: 0,
-    DATA_SHARING: 0
-  };
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    // private notificationsService: NotificationsService
+    private activatedRoute: ActivatedRoute
   ) {
 
     super();
@@ -59,25 +49,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
     }
 
-    // this.notificationsService.getAllUnreadNotificationsGroupedByContext().subscribe(
-    //   response => {
-
-    //     this.notifications = {
-    //       ACTION: response.ACTION ?? 0,
-    //       COMMENT: response.COMMENT ?? 0,
-    //       INNOVATION: response.INNOVATION ?? 0,
-    //       SUPPORT: response.SUPPORT ?? 0,
-    //       DATA_SHARING: response.DATA_SHARING ?? 0
-    //     };
-
-    //     this.setPageStatus('READY');
-
-    //   },
-    //   error => {
-    //     this.setPageStatus('READY');
-    //     this.logger.error('Error fetching innovations transfer information', error);
-    //   }
-    // );
+    this.setPageStatus('READY');
 
   }
 

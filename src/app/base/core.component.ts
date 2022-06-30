@@ -138,16 +138,12 @@ export class CoreComponent implements OnInit, OnDestroy {
 
   }
 
+  clearAlert(): void { this.alert = { type: null }; }
   setAlert(type: AlertType['type'], title: string, message?: string, setFocus?: boolean): void {
     this.alert = { type, title, message, setFocus: !!setFocus };
   }
   setAlertSuccess(title?: string, message?: string): void {
-    this.setAlert(
-      'SUCCESS',
-      title || 'It appears that something went wrong!',
-      message || 'Please try again or contact us for further help',
-      true
-    );
+    this.setAlert('SUCCESS', title || 'Operation was successful', message, true);
   }
   setAlertError(title?: string, message?: string): void {
     this.setAlert(

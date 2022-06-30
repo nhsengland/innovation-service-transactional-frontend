@@ -29,11 +29,6 @@ type getUserInfoInDTO = {
 type getUserInfoOutDTO = Required<getUserInfoInDTO>;
 
 
-type getUserInnovationsDto = {
-  id: string;
-  name: string;
-};
-
 export type saveUserInfoDTO = {
   displayName: string;
   mobilePhone?: string;
@@ -108,17 +103,6 @@ export class AuthenticationService {
       take(1),
       map(response => response),
       catchError(() => of({ userExists: false, hasInvites: false }))
-    );
-
-  }
-
-  getInnovations(userId: string): Observable<getUserInnovationsDto[]> {
-
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations').setPathParams({ userId });
-    return this.http.get<getUserInnovationsDto[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response),
-      catchError(() => of([])) // On error, just return no innovation at all.
     );
 
   }

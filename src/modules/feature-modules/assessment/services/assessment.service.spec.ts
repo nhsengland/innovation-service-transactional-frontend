@@ -11,7 +11,7 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
 import { TableModel } from '@app/base/models';
 
-import { InnovationStatusEnum } from '@modules/shared/enums';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 import {
   AssessmentService,

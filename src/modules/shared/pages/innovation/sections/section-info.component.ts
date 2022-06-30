@@ -10,7 +10,7 @@ import { EnvironmentInnovationType } from '@modules/stores/environment/environme
 
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
-import { InnovationSectionsIds, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
 
 
 @Component({
@@ -25,7 +25,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   innovation: EnvironmentInnovationType;
 
   section: {
-    id: InnovationSectionsIds;
+    id: InnovationSectionEnum;
     nextSectionId: null | string,
     title: string;
     status: { id: keyof typeof INNOVATION_SECTION_STATUS, label: string };

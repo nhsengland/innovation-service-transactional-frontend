@@ -10,7 +10,6 @@ import { ENV } from '@tests/app.mocks';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { AccessorModule } from '../accessor.module';
-import { NotificationContextType } from '@modules/shared/services/notifications.service';
 
 import { AccessorLayoutComponent } from './accessor-layout.component';
 
@@ -63,7 +62,7 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
       ],
       rightItems: [
         { key: 'innovations', label: 'Innovations', link: '/accessor/innovations' },
-        { key: 'notifications', label: 'Notifications', link: '/innovator/notifications' },
+        { key: 'notifications', label: 'Notifications', link: '/accessor/notifications' },
         { key: 'actions', label: 'Actions', link: '/accessor/actions', },
         { key: 'account', label: 'Account', link: '/accessor/account' },
         { key: 'signOut', label: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
@@ -119,9 +118,9 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
     const expected = [
       { key: 'Overview', title: 'Overview', link: `/accessor/innovations/innovation01/overview` },
       { key: 'InnovationRecord', title: 'Innovation record', link: `/accessor/innovations/innovation01/record` },
-      { key: NotificationContextType.ACTION, title: 'Action tracker', link: `/accessor/innovations/innovation01/action-tracker` },
-      { key: NotificationContextType.COMMENT, title: 'Comments', link: `/accessor/innovations/innovation01/comments` },
-      { key: NotificationContextType.SUPPORT, title: 'Support status', link: `/accessor/innovations/innovation01/support` },
+      { key: 'Action', title: 'Action tracker', link: `/accessor/innovations/innovation01/action-tracker` },
+      { key: 'Comments', title: 'Comments', link: `/accessor/innovations/innovation01/comments` },
+      { key: 'Support', title: 'Support status', link: `/accessor/innovations/innovation01/support` },
       { key: 'ActivityLog', title: 'Activity log', link: `/accessor/innovations/innovation01/activity-log` }
     ];
 

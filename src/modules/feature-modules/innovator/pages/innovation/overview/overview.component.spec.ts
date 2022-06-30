@@ -8,13 +8,12 @@ import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule, InnovationStore } from '@modules/stores';
-import { InnovationSectionsIds, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { InnovationOverviewComponent } from './overview.component';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { InnovationStatusEnum } from '@modules/shared/enums';
 
 
 describe('FeatureModules/Innovator/DashboardComponent', () => {
@@ -119,7 +118,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
       sections: [{
         title: '',
         sections: [{
-          id: InnovationSectionsIds.INNOVATION_DESCRIPTION,
+          id: InnovationSectionEnum.INNOVATION_DESCRIPTION,
           title: '',
           status: 'NOT_STARTED' as keyof typeof INNOVATION_SECTION_STATUS,
           actionStatus: 'STARTED' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
@@ -169,7 +168,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
       sections: [{
         title: '',
         sections: [{
-          id: InnovationSectionsIds.INNOVATION_DESCRIPTION,
+          id: InnovationSectionEnum.INNOVATION_DESCRIPTION,
           title: '',
           status: 'NOT_STARTED' as keyof typeof INNOVATION_SECTION_STATUS,
           actionStatus: 'STARTED' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,

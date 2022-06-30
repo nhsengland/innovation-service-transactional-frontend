@@ -8,7 +8,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 import { EnvironmentStore } from './environment.store';
 import { EnvironmentService } from './environment.service';
 
-import { InnovationStatusEnum } from '@modules/shared/enums';
+import { InnovationStatusEnum } from '../innovation/innovation.enums';
 
 
 describe('Stores/Context/ContextStore', () => {

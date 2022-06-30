@@ -1,5 +1,6 @@
 import { FormEngineModel, FormEngineParameterModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
 
 import { hasFundindItems, hasRevenueModelItems, revenuesItems } from './catalogs.config';
 
@@ -31,7 +32,7 @@ type StepPayloadType = InboundPayloadType;
 
 
 export const SECTION_7_1: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.REVENUE_MODEL,
+  id: InnovationSectionEnum.REVENUE_MODEL,
   title: 'Revenue model',
   wizard: new WizardEngineModel({
     steps: [

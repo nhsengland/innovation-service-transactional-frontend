@@ -8,7 +8,7 @@ import { AuthenticationStore, AuthenticationService } from '@modules/stores';
 
 import { InnovationService } from './innovation.service';
 
-import { InnovationSectionsIds } from './innovation.models';
+import { InnovationSectionEnum } from './innovation.enums';
 
 describe('Stores/Innovation/InnovationService', () => {
 
@@ -143,12 +143,12 @@ describe('Stores/Innovation/InnovationService', () => {
   it('should run getInnovationSections() from "innovator" module and return success', () => {
 
     const responseMock = [
-      { code: InnovationSectionsIds.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
-      { code: InnovationSectionsIds.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW' }
+      { code: InnovationSectionEnum.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
+      { code: InnovationSectionEnum.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW' }
     ];
     const expected = [
-      { code: InnovationSectionsIds.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
-      { code: InnovationSectionsIds.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW' }
+      { code: InnovationSectionEnum.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
+      { code: InnovationSectionEnum.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW' }
     ];
     let response: any = null;
 
@@ -165,12 +165,12 @@ describe('Stores/Innovation/InnovationService', () => {
   it('should run getInnovationSections() from "accessor" module and return success', () => {
 
     const responseMock = [
-      { code: InnovationSectionsIds.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
-      { code: InnovationSectionsIds.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW' }
+      { code: InnovationSectionEnum.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
+      { code: InnovationSectionEnum.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW' }
     ];
     const expected = [
-      { code: InnovationSectionsIds.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
-      { code: InnovationSectionsIds.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW' }
+      { code: InnovationSectionEnum.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
+      { code: InnovationSectionEnum.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW' }
     ];
     let response: any = null;
 
@@ -208,9 +208,9 @@ describe('Stores/Innovation/InnovationService', () => {
     const expected = { answer01: 'answer 01', answer02: 'answer 0' };
     let response: any = null;
 
-    service.getSectionInfo('innovator', 'Inno01', InnovationSectionsIds.INNOVATION_DESCRIPTION).subscribe(success => response = success, error => response = error);
+    service.getSectionInfo('innovator', 'Inno01', InnovationSectionEnum.INNOVATION_DESCRIPTION).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators//innovations/Inno01/sections?section=${InnovationSectionsIds.INNOVATION_DESCRIPTION}`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators//innovations/Inno01/sections?section=${InnovationSectionEnum.INNOVATION_DESCRIPTION}`);
     httpRequest.flush(responseMock);
 
     expect(httpRequest.request.method).toBe('GET');
@@ -224,9 +224,9 @@ describe('Stores/Innovation/InnovationService', () => {
     const expected = { answer01: 'answer 01', answer02: 'answer 0' };
     let response: any = null;
 
-    service.getSectionInfo('accessor', 'Inno01', InnovationSectionsIds.INNOVATION_DESCRIPTION).subscribe(success => response = success, error => response = error);
+    service.getSectionInfo('accessor', 'Inno01', InnovationSectionEnum.INNOVATION_DESCRIPTION).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors//innovations/Inno01/sections?section=${InnovationSectionsIds.INNOVATION_DESCRIPTION}`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors//innovations/Inno01/sections?section=${InnovationSectionEnum.INNOVATION_DESCRIPTION}`);
     httpRequest.flush(responseMock);
 
     expect(httpRequest.request.method).toBe('GET');
@@ -240,9 +240,9 @@ describe('Stores/Innovation/InnovationService', () => {
     const expected = false;
     let response: any = {};
 
-    service.getSectionInfo('', 'Inno01', InnovationSectionsIds.INNOVATION_DESCRIPTION).subscribe(success => response = success, error => response = error);
+    service.getSectionInfo('', 'Inno01', InnovationSectionEnum.INNOVATION_DESCRIPTION).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}///innovations/Inno01/sections?section=${InnovationSectionsIds.INNOVATION_DESCRIPTION}`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}///innovations/Inno01/sections?section=${InnovationSectionEnum.INNOVATION_DESCRIPTION}`);
     httpRequest.flush(responseMock, { status: 400, statusText: 'Bad Request' });
 
     expect(httpRequest.request.method).toBe('GET');
@@ -258,7 +258,7 @@ describe('Stores/Innovation/InnovationService', () => {
     const expected = { section: { id: 'id' }, data: { some: 'data' } };
     let response: any = null;
 
-    service.updateSectionInfo('Inno01', InnovationSectionsIds.INNOVATION_DESCRIPTION, { some: 'data' }).subscribe(success => response = success, error => response = error);
+    service.updateSectionInfo('Inno01', InnovationSectionEnum.INNOVATION_DESCRIPTION, { some: 'data' }).subscribe(success => response = success, error => response = error);
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators//innovations/Inno01/sections`);
     httpRequest.flush(responseMock);
@@ -274,7 +274,7 @@ describe('Stores/Innovation/InnovationService', () => {
     const expected = false;
     let response: any = {};
 
-    service.updateSectionInfo('Inno01', InnovationSectionsIds.INNOVATION_DESCRIPTION, { some: 'data' }).subscribe(success => response = success, error => response = error);
+    service.updateSectionInfo('Inno01', InnovationSectionEnum.INNOVATION_DESCRIPTION, { some: 'data' }).subscribe(success => response = success, error => response = error);
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators//innovations/Inno01/sections`);
     httpRequest.flush(responseMock, { status: 400, statusText: 'Bad Request' });
@@ -484,7 +484,7 @@ describe('Stores/Innovation/InnovationService', () => {
     //     params: {
     //       innovationName: 'Healthy App',
     //       actionUserName: 'This guy',
-    //       sectionId: InnovationSectionsIds.COST_OF_INNOVATION,
+    //       sectionId: InnovationSectionEnum.COST_OF_INNOVATION,
     //       sectionName: 'the section name TODO!!!!!'
     //     },
     //     link: null
@@ -494,10 +494,10 @@ describe('Stores/Innovation/InnovationService', () => {
     //     params: {
     //       innovationName: 'Healthy App',
     //       actionUserName: 'This guy',
-    //       sectionId: InnovationSectionsIds.COST_OF_INNOVATION,
+    //       sectionId: InnovationSectionEnum.COST_OF_INNOVATION,
     //       sectionName: 'the section name TODO!!!!!',
     //     },
-    //     link: { label: 'Go to section', url: `/innovator/innovations/Inno01/record/section/${InnovationSectionsIds.COST_OF_INNOVATION}` }
+    //     link: { label: 'Go to section', url: `/innovator/innovations/Inno01/record/section/${InnovationSectionEnum.COST_OF_INNOVATION}` }
     //   },
     //   {
     //     date: '2020-01-01T00:00:00.000Z', type: 'INNOVATION_MANAGEMENT' as keyof ActivityLogTypesEnum, activity: ActivityLogItemsEnum.INNOVATION_SUBMISSION,

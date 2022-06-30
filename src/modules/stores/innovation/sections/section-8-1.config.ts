@@ -1,6 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
 
 import { hasDeployPlanItems, hasResourcesToScaleItems } from './catalogs.config';
 
@@ -39,7 +40,7 @@ type OutboundPayloadType = Omit<InboundPayloadType, 'files'> & { files: string[]
 
 
 export const SECTION_8_1: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.IMPLEMENTATION_PLAN,
+  id: InnovationSectionEnum.IMPLEMENTATION_PLAN,
   title: 'Implementation plan and deployment',
   wizard: new WizardEngineModel({
     steps: [

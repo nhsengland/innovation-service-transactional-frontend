@@ -1,5 +1,6 @@
 import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
 
 import { costComparisonItems, hasCostKnowledgeItems } from './catalogs.config';
 
@@ -23,7 +24,7 @@ type OutboundPayloadType = InboundPayloadType;
 
 
 export const SECTION_6_2: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.COMPARATIVE_COST_BENEFIT,
+  id: InnovationSectionEnum.COMPARATIVE_COST_BENEFIT,
   title: 'Comparative cost benefit',
   wizard: new WizardEngineModel({
     steps: [

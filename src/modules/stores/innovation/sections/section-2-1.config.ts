@@ -1,6 +1,8 @@
 import { cloneDeep } from 'lodash';
 import { FormEngineModel, WizardStepType, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
+
 import { innovationImpactItems } from './catalogs.config';
 
 
@@ -30,7 +32,7 @@ type StepPayloadType = InboundPayloadType & { impacts?: null | ('PATIENTS' | 'CL
 type OutboundPayloadType = InboundPayloadType;
 
 export const SECTION_2_1: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.UNDERSTANDING_OF_NEEDS,
+  id: InnovationSectionEnum.UNDERSTANDING_OF_NEEDS,
   title: 'Detailed understanding of needs',
   wizard: new WizardEngineModel({
     steps: [

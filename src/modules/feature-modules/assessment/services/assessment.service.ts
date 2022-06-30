@@ -6,9 +6,10 @@ import { CoreService } from '@app/base';
 import { APIQueryParamsType, MappedObjectType } from '@app/base/types';
 import { UrlModel } from '@app/base/models';
 import { DatesHelper } from '@app/base/helpers';
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+
+import { InnovationStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
+
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationStatusEnum } from '@modules/shared/enums';
 
 
 export enum SupportLogType {

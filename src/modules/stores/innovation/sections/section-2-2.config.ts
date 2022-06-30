@@ -1,5 +1,6 @@
 import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
 
 import { environmentalBenefitItems, generalBenefitItems, hasBenefitsItems, patientsCitizensBenefitItems } from './catalogs.config';
 
@@ -33,7 +34,7 @@ type OutboundPayloadType = Omit<InboundPayloadType, 'impactPatients'>;
 
 
 export const SECTION_2_2: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.UNDERSTANDING_OF_BENEFITS,
+  id: InnovationSectionEnum.UNDERSTANDING_OF_BENEFITS,
   title: 'Detailed understanding of benefits',
   wizard: new WizardEngineModel({
     steps: [

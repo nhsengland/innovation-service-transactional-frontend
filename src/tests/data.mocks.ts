@@ -1,7 +1,7 @@
-import { InnovationStatusEnum } from '@modules/shared/enums';
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum, UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 
 export const USER_INFO_ACCESSOR: Required<AuthenticationModel>['user'] = {

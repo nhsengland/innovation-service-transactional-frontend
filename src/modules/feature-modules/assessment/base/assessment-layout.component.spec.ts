@@ -9,13 +9,14 @@ import { ENV } from '@tests/app.mocks';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore, EnvironmentStore } from '@modules/stores';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
+
 import { AssessmentModule } from '../assessment.module';
 
 import { AssessmentLayoutComponent } from './assessment-layout.component';
 
-import { NotificationsService } from '@modules/shared/services/notifications.service';
 import { CONTEXT_INNOVATION_INFO } from '@tests/data.mocks';
-import { InnovationStatusEnum } from '@modules/shared/enums';
 
 
 describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
@@ -71,7 +72,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
       ],
       rightItems: [
         { key: 'innovations', label: 'Innovations', link: '/assessment/innovations' },
-        { key: 'notifications', label: 'Notifications', link: '/innovator/notifications' },
+        { key: 'notifications', label: 'Notifications', link: '/assessment/notifications' },
         { key: 'account', label: 'Account', link: '/assessment/account' },
         { key: 'signOut', label: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
       ],

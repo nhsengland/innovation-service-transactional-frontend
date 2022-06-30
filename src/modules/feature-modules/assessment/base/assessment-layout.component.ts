@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 import { HeaderNavigationBarItemType } from '@app/base/types';
 import { RoutingHelper } from '@app/base/helpers';
 
-import { InnovationStatusEnum } from '@modules/shared/enums';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 
 type RouteDataLayoutOptionsType = {
@@ -40,7 +40,7 @@ export class AssessmentLayoutComponent extends CoreComponent {
     this.navigationMenuBar.leftItems = [{ key: 'home', label: 'Home', link: '/assessment/dashboard' }];
     this.navigationMenuBar.rightItems = [
       { key: 'innovations', label: 'Innovations', link: '/assessment/innovations' },
-      { key: 'notifications', label: 'Notifications', link: '/innovator/notifications' },
+      { key: 'notifications', label: 'Notifications', link: '/assessment/notifications' },
       { key: 'account', label: 'Account', link: '/assessment/account' },
       { key: 'signOut', label: 'Sign out', link: `${this.CONSTANTS.APP_URL}/signout`, fullReload: true }
     ];

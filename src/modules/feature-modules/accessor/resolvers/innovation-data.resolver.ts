@@ -5,10 +5,10 @@ import { catchError, map } from 'rxjs/operators';
 import { NGXLogger } from 'ngx-logger';
 
 import { EnvironmentStore } from '@modules/stores/environment/environment.store';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 import { AccessorService } from '../services/accessor.service';
-import { InnovationSupportStatusEnum } from '@modules/shared/enums';
 
 
 @Injectable()

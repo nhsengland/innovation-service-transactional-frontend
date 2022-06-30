@@ -1,4 +1,5 @@
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/shared/enums';
+import { NotificationContextTypeEnum } from './environment.enums';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '../innovation/innovation.enums';
 
 
 export type EnvironmentInnovationType = {
@@ -13,5 +14,6 @@ export type EnvironmentInnovationType = {
   support?: {
     id: string;
     status: InnovationSupportStatusEnum;
-  }
+  },
+  notifications?: { [key in NotificationContextTypeEnum]: number };
 };

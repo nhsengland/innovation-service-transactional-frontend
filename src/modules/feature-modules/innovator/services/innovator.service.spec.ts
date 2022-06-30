@@ -9,7 +9,7 @@ import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/cor
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { InnovatorService } from './innovator.service';
-import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 
 describe('FeatureModules/Innovator/InnovatorService', () => {
@@ -238,7 +238,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
         id: 'C2B7433E-F36B-1410-8103-0032FE5B194B',
         displayId: 'C2B7433E-F36B-1410-8103-0032FE5B194B',
         status: 'CONTINUE',
-        section: InnovationSectionsIds.INNOVATION_DESCRIPTION,
+        section: InnovationSectionEnum.INNOVATION_DESCRIPTION,
         createdAt: '2020-01-01T00:00:00.000Z',
         notifications: { count: 0 }
       },
@@ -246,7 +246,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
         id: '52CF433E-F36B-1410-8103-0032FE5B194B',
         displayId: '52CF433E-F36B-1410-8103-0032FE5B194B',
         status: 'STARTED',
-        section: InnovationSectionsIds.INNOVATION_DESCRIPTION,
+        section: InnovationSectionEnum.INNOVATION_DESCRIPTION,
         createdAt: '2020-01-01T00:00:00.000Z',
         notifications: { count: 0 }
       },
@@ -254,7 +254,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
         id: '59CF433E-F36B-1410-8103-0032FE5B194B',
         displayId: '59CF433E-F36B-1410-8103-0032FE5B194B',
         status: 'COMPLETED',
-        section: InnovationSectionsIds.INNOVATION_DESCRIPTION,
+        section: InnovationSectionEnum.INNOVATION_DESCRIPTION,
         createdAt: '2020-01-01T00:00:00.000Z',
         notifications: { count: 0 }
       }
@@ -287,7 +287,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
       displayId: 'C2B7433E-F36B-1410-8103-0032FE5B194B',
       status: 'CONTINUE',
       description: '',
-      section: InnovationSectionsIds.INNOVATION_DESCRIPTION,
+      section: InnovationSectionEnum.INNOVATION_DESCRIPTION,
       createdAt: '2020-01-01T00:00:00.000Z',
       createdBy: 'User Name'
     };

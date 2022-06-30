@@ -1,6 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { FormEngineModel, WizardStepType, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
 
 import { hasRegulationKnowledgeItems, standardsHasMetItems, standardsTypeItems } from './catalogs.config';
 
@@ -51,7 +52,7 @@ type SummaryPayloadType = Omit<InboundPayloadType, 'files'>
 
 
 export const SECTION_4_1: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.REGULATIONS_AND_STANDARDS,
+  id: InnovationSectionEnum.REGULATIONS_AND_STANDARDS,
   title: 'Standards and certifications',
   wizard: new WizardEngineModel({
     steps: [

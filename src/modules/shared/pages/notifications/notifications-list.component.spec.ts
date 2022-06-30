@@ -3,25 +3,23 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { FormArray, FormControl } from '@angular/forms';
+import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
 
-import { NotificationContextType } from '@modules/shared/services/notifications.service';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { PageNotificationsListComponent } from './notifications-list.component';
 
 
 describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
 
-  let activatedRoute: ActivatedRoute;
-
-  let organisationsService: OrganisationsService;
-
+  let notificationsService: NotificationsService;
 
   let component: PageNotificationsListComponent;
   let fixture: ComponentFixture<PageNotificationsListComponent>;
@@ -39,43 +37,135 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
-    activatedRoute = TestBed.inject(ActivatedRoute);
+    notificationsService = TestBed.inject(NotificationsService);
 
-    // authenticationStore = TestBed.inject(AuthenticationStore);
-    organisationsService = TestBed.inject(OrganisationsService);
-
-    // authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
-
-    // activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', assessment: {} } };
-    //     activatedRoute.snapshot.queryParams = { alert: 'actionCreationSuccess' };
-
+    notificationsService.getNotificationsList = () => of({
+      count: 20,
+      data: [{
+        id: 'Notification001',
+        innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
+        contextType: NotificationContextTypeEnum.INNOVATION,
+        contextDetail: NotificationContextDetailEnum.INNOVATION_SUBMISSION,
+        contextId: 'Innovation001',
+        createdAt: '2020-01-01T00:00:00.000Z',
+        createdBy: 'User001',
+        readAt: null,
+        params: null,
+        link: null
+      }]
+    });
 
   });
 
   it('should create the component', () => {
+
     fixture = TestBed.createComponent(PageNotificationsListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
     expect(component).toBeTruthy();
   });
 
 
-  it('should run selectedFilters and return empty', () => {
+  it('should start successfully with list of innovations', () => {
+
     fixture = TestBed.createComponent(PageNotificationsListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.selectedFilters).toEqual([]);
+
+    expect(component.notificationsList.getTotalRowsNumber()).toBe(20);
+
   });
 
-  it('should run selectedFilters and return values', fakeAsync(() => {
+  it('should start with error alert', () => {
+
+    notificationsService.getNotificationsList = () => throwError(false);
+
     fixture = TestBed.createComponent(PageNotificationsListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    (component.form.get('contextTypes') as FormArray).push(new FormControl(NotificationContextType.INNOVATION));
+    expect(component.alert.type).toBe('ERROR');
+
+  });
+
+
+  it('should run onDeleteNotification() and return SUCCESS', () => {
+
+    notificationsService.deleteNotification = () => of({ id: 'Notification001' });
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.onDeleteNotification('Notification001');
+    expect(component.pageStatus).toBe('READY');
+
+  });
+
+  it('should run onDeleteNotification() and return ERROR', () => {
+
+    notificationsService.deleteNotification = () => throwError(false);
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.onDeleteNotification('Notification001');
+    expect(component.alert.type).toBe('ERROR');
+
+  });
+
+  it('should run onMarkAsReadNotifications() and return SUCCESS with 0 records affected', () => {
+
+    notificationsService.dismissAllUserNotifications = () => of({ affected: 0 });
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.onMarkAsReadAllNotifications();
+    expect(component.alert.title).toBe('All notifications have been marked as read.');
+
+  });
+
+  it('should run onMarkAsReadNotifications() and return SUCCESS with < 0 records affected', () => {
+
+    notificationsService.dismissAllUserNotifications = () => of({ affected: 10 });
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.onMarkAsReadAllNotifications();
+    expect(component.alert.title).toBe('10 notifications have been marked as read.');
+
+  });
+
+  it('should run onMarkAsReadNotifications() and return ERROR', () => {
+
+    notificationsService.dismissAllUserNotifications = () => throwError(false);
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.onMarkAsReadAllNotifications();
+    expect(component.alert.type).toBe('ERROR');
+
+  });
+
+
+  it('should return notifications when changing filters', fakeAsync(() => {
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    (component.form.get('contextTypes') as FormArray).push(new FormControl(NotificationContextTypeEnum.INNOVATION));
     tick(500); // Needed because of the debounce on the form.
 
+    expect(component.notificationsList.getTotalRowsNumber()).toBe(20);
     expect(component.selectedFilters).toEqual([{
       key: 'contextTypes',
       title: 'Types',
@@ -84,6 +174,103 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
     }]);
 
   }));
+
+
+  it('should run onOpenCloseFilter() and do nothing with an invalid key', () => {
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    component.filters[0].showHideStatus = 'closed' as any;
+
+    component.onOpenCloseFilter('invalidKey' as any);
+    expect(component.filters[0].showHideStatus).toBe('closed');
+
+  });
+  it('should run onOpenCloseFilter() and do nothing with an invalid status', () => {
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    component.filters[0].showHideStatus = 'invalid status' as any;
+
+    component.onOpenCloseFilter('contextTypes');
+    expect(component.filters[0].showHideStatus).toBe('invalid status');
+
+  });
+
+
+  it('should run onOpenCloseFilter() and close the filter', () => {
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    component.filters[0].showHideStatus = 'opened';
+
+    component.onOpenCloseFilter('contextTypes');
+    expect(component.filters[0].showHideStatus).toBe('closed');
+
+  });
+
+  it('should run onOpenCloseFilter() and open the filter', () => {
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    component.filters[0].showHideStatus = 'closed';
+
+    component.onOpenCloseFilter('contextTypes');
+    expect(component.filters[0].showHideStatus).toBe('opened');
+
+  });
+
+  it('should run onRemoveFilter() with a invalid value', () => {
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    (component.form.get('contextTypes') as FormArray).push(new FormControl(NotificationContextTypeEnum.INNOVATION));
+
+    component.onRemoveFilter('contextTypes', 'INVALID VALUE');
+    expect((component.form.get('contextTypes') as FormArray).length).toBe(1);
+
+  });
+
+  it('should run onRemoveFilter()', () => {
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    (component.form.get('contextTypes') as FormArray).push(new FormControl(NotificationContextTypeEnum.INNOVATION));
+
+    component.onRemoveFilter('contextTypes', 'INNOVATION');
+    expect((component.form.get('contextTypes') as FormArray).length).toBe(0);
+
+  });
+
+  it('should run onTableOrder()', () => {
+
+    // notificationsService.getNotificationsList = () => of({ count: 0, data: [] });
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+    component.onTableOrder('createdAt');
+    expect(component.notificationsList.orderBy).toBe('createdAt');
+    expect(component.notificationsList.orderDir).toBe('ascending');
+
+  });
+
+  it('should run onPageChange()', () => {
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.onPageChange({ pageNumber: 2 });
+    expect(component.notificationsList.page).toBe(2);
+
+  });
+
 
 
 
