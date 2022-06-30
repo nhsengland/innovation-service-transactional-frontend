@@ -49,6 +49,8 @@ export type NotificationsListOutDTO = {
         innovationName: string;
         innovationStatus: string;
         sectionNumber?: string;
+        actionStatusName?: string;
+        supportStatusName?: string;
       } & NotificationsListInDTO['data'][0]['params'];
     }
   )[]
@@ -114,7 +116,9 @@ export class NotificationsService extends CoreService {
               innovationId: item.innovation.id,
               innovationName: item.innovation.name,
               innovationStatus: item.innovation.status,
-              sectionNumber: item.params?.section ? getSectionNumber(item.params.section) : undefined
+              sectionNumber: item.params?.section ? getSectionNumber(item.params.section) : undefined,
+              actionStatusName: item.params?.actionStatus ? this.translate(`shared.catalog.innovation.action_status.${item.params?.actionStatus}.name`) : undefined,
+              supportStatusName: item.params?.supportStatus ? this.translate(`shared.catalog.innovation.support_status.${item.params?.supportStatus}.name`) : undefined,
             },
             link
           };
