@@ -79,7 +79,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'innovationCreationSuccess':
         this.alert = {
@@ -97,7 +96,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.stores.innovation.getSectionsSummary$('innovator', this.innovationId),
       this.innovatorService.getInnovationSupports(this.innovationId, true),
     ]).subscribe(([innovationInfo, sectionSummary, innovationSupports]) => {
-      
+
       this.stores.environment.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
 
       if (innovationSupports.length === 1) {
@@ -107,12 +106,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.submittedAt = innovationInfo.submittedAt || '';
       this.needsAssessmentCompleted = !this.isInAssessmentStatus();
       this.assessmentId = innovationInfo.assessment?.id;
-      
+
       this.actionSummary = {
         requested: innovationInfo.actions.requestedCount,
         review: innovationInfo.actions.inReviewCount
       };
-      
+
       this.innovationStatus = sectionSummary.innovation.status;
       this.innovationSections = sectionSummary.sections;
 
