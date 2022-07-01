@@ -58,6 +58,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           { label: 'Phone number', value: response.contact.phone || '' }
         ];
 
+        this.stores.environment.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+
         this.setPageStatus('READY');
 
       },
@@ -70,8 +72,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         };
       }
     );
-
-    this.stores.environment.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
 
   }
 

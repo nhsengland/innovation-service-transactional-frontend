@@ -66,6 +66,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           { label: 'Categories', value: response.summary.categories.map(v => v === 'OTHER' ? response.summary.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
         ];
 
+        this.stores.environment.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+
+        if (response.support?.id) {
+          this.stores.environment.dismissNotification(NotificationContextTypeEnum.SUPPORT, response.support.id);
+        }
+
         this.setPageStatus('READY');
 
       },
@@ -79,7 +85,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }
     );
 
-    this.stores.environment.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
 
   }
 
