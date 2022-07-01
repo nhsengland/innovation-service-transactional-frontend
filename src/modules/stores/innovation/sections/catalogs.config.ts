@@ -134,11 +134,11 @@ export const patientsCitizensBenefitItems = [
   { value: 'INCREASES_SELF_MANAGEMENT', label: 'Increases self-management' },
   { value: 'INCREASES_LIFE_QUALITY', label: 'Increases quality of life' },
   { value: 'ENABLES_SHARED_CARE', label: 'Enables shared care' },
-  {
-    value: 'OTHER',
-    label: 'Other',
-    conditional: new FormEngineParameterModel({ id: 'otherPatientsCitizensBenefit', dataType: 'text', label: 'Other patients or citizens benefit', validations: { isRequired: [true, 'Other patients or citizens benefit is required'] } })
-  }
+  // {
+  //   value: 'OTHER',
+  //   label: 'Other',
+  //   conditional: new FormEngineParameterModel({ id: 'otherPatientsCitizensBenefit', dataType: 'text', label: 'Other patients or citizens benefit', validations: { isRequired: [true, 'Other patients or citizens benefit is required'] } })
+  // }
 ];
 export const generalBenefitItems = [
   { value: 'REDUCE_LENGTH_STAY', label: 'Reduces the length of stay or enables earlier discharge' },
