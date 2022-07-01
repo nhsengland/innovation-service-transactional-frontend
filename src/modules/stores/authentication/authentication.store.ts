@@ -62,6 +62,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
   isSignIn(): boolean { return this.state.isSignIn; }
   isValidUser(): boolean { return this.state.isValidUser || false; }
+  isTermsOfUseAccepted(): boolean { return this.state.isTermsOfUseAccepted ?? false; }
   hasInnovationTransfers(): boolean { return this.state.hasInnovationTransfers || false; }
 
   isInnovatorType(): boolean { return this.state.user?.type === 'INNOVATOR'; }
@@ -112,7 +113,5 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       default: return '';
     }
   }
-
-  getUserTermsOfUseInfo(): boolean { return this.state.isTermsOfUseAccepted ?? false; }
 
 }
