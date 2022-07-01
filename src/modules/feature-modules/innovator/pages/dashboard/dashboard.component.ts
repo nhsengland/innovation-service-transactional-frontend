@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { AlertType } from '@app/base/types';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { getInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
 
@@ -31,7 +30,6 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   constructor(
     private innovationsService: InnovationsService,
-    private notificationsService: NotificationsService,
     private innovatorService: InnovatorService,
     private activatedRoute: ActivatedRoute
   ) {
@@ -63,11 +61,11 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   }
 
 
-  getPageInformation(): any {
+  getPageInformation(): void {
 
     this.setPageStatus('LOADING');
 
-    return forkJoin([
+    forkJoin([
       this.innovationsService.getInnovationsList(),
       this.innovatorService.getInnovationTransfers(true),
     ]).subscribe(([innovationsList, innovationsTransfers]) => {
@@ -92,7 +90,10 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
     this.innovatorService.updateTransferInnovation(transferId, (accept ? 'COMPLETED' : 'DECLINED')).pipe(
       concatMap(() => this.stores.authentication.initializeAuthentication$()), // Initialize authentication in order to update First Time SignIn information.
-      concatMap(() => this.getPageInformation())
+      concatMap(() => {
+        this.getPageInformation();
+        return of(true);
+      })
     ).subscribe(
       () => {
         this.alert = {
