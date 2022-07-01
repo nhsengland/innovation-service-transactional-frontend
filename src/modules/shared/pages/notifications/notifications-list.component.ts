@@ -8,6 +8,7 @@ import { NotificationContextTypeEnum } from '@modules/stores/environment/environ
 
 import { NotificationsListOutDTO, NotificationsService } from '@modules/shared/services/notifications.service';
 
+
 type FilterKeysType = 'contextTypes';
 type FiltersType = { key: FilterKeysType, title: string, showHideStatus: 'opened' | 'closed', selected: { label: string, value: string }[] };
 
@@ -32,10 +33,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
   filters: FiltersType[] = [{ key: 'contextTypes', title: 'Types', showHideStatus: 'opened', selected: [] }];
 
   datasets: { [key in FilterKeysType]: { label: string, value: string }[] } = {
-    contextTypes: Object.values(NotificationContextTypeEnum).map(item => ({
-      label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.title`),
-      value: item
-    }))
+    contextTypes: []
   };
 
 
@@ -57,6 +55,12 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       createdAt: { label: 'Date', orderable: true },
       action: { label: 'Action', align: 'right', orderable: false }
     }).setOrderBy('createdAt', 'descending');
+
+    const contextTypesSubset = this.stores.authentication.isAssessmentType() ? [NotificationContextTypeEnum.NEEDS_ASSESSMENT, NotificationContextTypeEnum.SUPPORT] : Object.values(NotificationContextTypeEnum);
+    this.datasets.contextTypes = contextTypesSubset.map(item => ({
+      label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.title`),
+      value: item
+    }));
 
   }
 

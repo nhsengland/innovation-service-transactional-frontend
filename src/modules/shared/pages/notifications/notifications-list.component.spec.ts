@@ -7,7 +7,7 @@ import { FormArray, FormControl } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
@@ -18,6 +18,8 @@ import { PageNotificationsListComponent } from './notifications-list.component';
 
 
 describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
+
+  let authenticationStore: AuthenticationStore;
 
   let notificationsService: NotificationsService;
 
@@ -36,6 +38,8 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
+
+    authenticationStore = TestBed.inject(AuthenticationStore);
 
     notificationsService = TestBed.inject(NotificationsService);
 
@@ -66,8 +70,31 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should start successfully with list of innovations for an NEEDS ASSESSMENT user type', () => {
 
-  it('should start successfully with list of innovations', () => {
+    authenticationStore.isAssessmentType = () => true;
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.datasets.contextTypes.length).toBe(2);
+    expect(component.notificationsList.getTotalRowsNumber()).toBe(20);
+
+  });
+
+  it('should start successfully with list of innovations for an INNOVATOR user type', () => {
+
+    fixture = TestBed.createComponent(PageNotificationsListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.datasets.contextTypes.length).toBe(5);
+    expect(component.notificationsList.getTotalRowsNumber()).toBe(20);
+
+  });
+
+  it('should start successfully with list of innovations for an NEEDS ASSESSMENT user type', () => {
 
     fixture = TestBed.createComponent(PageNotificationsListComponent);
     component = fixture.componentInstance;
@@ -248,8 +275,6 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
 
   it('should run onTableOrder()', () => {
 
-    // notificationsService.getNotificationsList = () => of({ count: 0, data: [] });
-
     fixture = TestBed.createComponent(PageNotificationsListComponent);
     component = fixture.componentInstance;
 
@@ -270,9 +295,5 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
     expect(component.notificationsList.page).toBe(2);
 
   });
-
-
-
-
 
 });
