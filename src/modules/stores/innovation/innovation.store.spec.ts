@@ -9,7 +9,7 @@ import { AuthenticationStore, AuthenticationService } from '@modules/stores';
 import { InnovationStore } from './innovation.store';
 import { InnovationService } from './innovation.service';
 
-import { InnovationSectionsIds } from './innovation.models';
+import { InnovationSectionEnum } from './innovation.enums';
 
 
 describe('Stores/Innovation/InnovationStore', () => {
@@ -43,10 +43,10 @@ describe('Stores/Innovation/InnovationStore', () => {
       name: 'innovationName',
       title: 'About your product or service',
       sections: [
-        { section: InnovationSectionsIds.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
-        { section: InnovationSectionsIds.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW' },
-        { section: InnovationSectionsIds.UNDERSTANDING_OF_NEEDS, status: 'SUBMITTED', actionStatus: '' },
-        { section: InnovationSectionsIds.UNDERSTANDING_OF_BENEFITS, status: 'UNKNOWN', actionStatus: '' }
+        { section: InnovationSectionEnum.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
+        { section: InnovationSectionEnum.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW' },
+        { section: InnovationSectionEnum.UNDERSTANDING_OF_NEEDS, status: 'SUBMITTED', actionStatus: '' },
+        { section: InnovationSectionEnum.UNDERSTANDING_OF_BENEFITS, status: 'UNKNOWN', actionStatus: '' }
       ]
     }));
 
@@ -54,10 +54,10 @@ describe('Stores/Innovation/InnovationStore', () => {
       {
         title: 'About your product or service',
         sections: [
-          { id: InnovationSectionsIds.INNOVATION_DESCRIPTION, title: 'Description of innovation', status: 'DRAFT', actionStatus: 'REQUESTED', isCompleted: false },
-          { id: InnovationSectionsIds.VALUE_PROPOSITION, title: 'Value proposition', status: 'NOT_STARTED', actionStatus: 'IN_REVIEW', isCompleted: false },
-          { id: InnovationSectionsIds.UNDERSTANDING_OF_NEEDS, title: 'Detailed understanding of needs', status: 'SUBMITTED', actionStatus: '', isCompleted: true },
-          { id: InnovationSectionsIds.UNDERSTANDING_OF_BENEFITS, title: 'Detailed understanding of benefits', status: 'UNKNOWN', actionStatus: '', isCompleted: false }
+          { id: InnovationSectionEnum.INNOVATION_DESCRIPTION, title: 'Description of innovation', status: 'DRAFT', actionStatus: 'REQUESTED', isCompleted: false },
+          { id: InnovationSectionEnum.VALUE_PROPOSITION, title: 'Value proposition', status: 'NOT_STARTED', actionStatus: 'IN_REVIEW', isCompleted: false },
+          { id: InnovationSectionEnum.UNDERSTANDING_OF_NEEDS, title: 'Detailed understanding of needs', status: 'SUBMITTED', actionStatus: '', isCompleted: true },
+          { id: InnovationSectionEnum.UNDERSTANDING_OF_BENEFITS, title: 'Detailed understanding of benefits', status: 'UNKNOWN', actionStatus: '', isCompleted: false }
         ]
       }
     ];

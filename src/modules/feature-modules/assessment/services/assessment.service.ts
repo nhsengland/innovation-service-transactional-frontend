@@ -3,16 +3,18 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
+import { APIQueryParamsType, MappedObjectType } from '@app/base/types';
+import { UrlModel } from '@app/base/models';
+import { DatesHelper } from '@app/base/helpers';
 
-import { APIQueryParamsType, DatesHelper, MappedObject, UrlModel } from '@modules/core';
+import { InnovationStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 
-import { INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationStatusEnum } from '@modules/shared/enums';
+
 
 export enum SupportLogType {
   ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
-  STATUS_UPDATE = 'STATUS_UPDATE',
+  STATUS_UPDATE = 'STATUS_UPDATE'
 }
 
 export type getInnovationsListEndpointInDTO = {
@@ -105,7 +107,7 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
 
 export type getInnovationNeedsAssessmentEndpointOutDTO = {
   innovation: { id: string; name: string; };
-  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation'> & { hasBeenSubmitted: boolean}
+  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation'> & { hasBeenSubmitted: boolean };
 };
 
 export type getSupportLogInDTO = {
@@ -178,8 +180,8 @@ export class AssessmentService extends CoreService {
           },
           organisations: item.organisations,
           isOverdue: DatesHelper.dateDiff(item.submittedAt, Date()) >= 7,
-          notifications: item.notifications,
-        })),
+          notifications: item.notifications
+        }))
       }))
     );
 
@@ -265,7 +267,7 @@ export class AssessmentService extends CoreService {
     );
   }
 
-  createInnovationNeedsAssessment(innovationId: string, data: MappedObject): Observable<{ id: string }> {
+  createInnovationNeedsAssessment(innovationId: string, data: MappedObjectType): Observable<{ id: string }> {
 
     const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId/assessments').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), data).pipe(
@@ -275,7 +277,7 @@ export class AssessmentService extends CoreService {
 
   }
 
-  updateInnovationNeedsAssessment(innovationId: string, assessmentId: string, isSubmission: boolean, data: MappedObject): Observable<{ id: string }> {
+  updateInnovationNeedsAssessment(innovationId: string, assessmentId: string, isSubmission: boolean, data: MappedObjectType): Observable<{ id: string }> {
 
     const body = Object.assign({}, data);
 

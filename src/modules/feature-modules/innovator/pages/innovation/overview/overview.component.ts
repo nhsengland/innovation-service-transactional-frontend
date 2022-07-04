@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
-import { INNOVATION_STATUS, SectionsSummaryModel } from '@stores-module/innovation/innovation.models';
-import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
+import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
+import { INNOVATION_STATUS, SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
 
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
@@ -66,8 +66,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService,
-    private notificationsService: NotificationsService
+    private innovatorService: InnovatorService
   ) {
 
     super();
@@ -80,13 +79,29 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    this.notificationsService.dismissNotification(this.innovationId, NotificationContextType.DATA_SHARING).subscribe();
+    switch (this.activatedRoute.snapshot.queryParams.alert) {
+      case 'innovationCreationSuccess':
+        this.alert = {
+          type: 'SUCCESS',
+          title: `You have successfully registered the innovation '${this.activatedRoute.snapshot.queryParams.name}'`
+        };
+        break;
+      default:
+        break;
+    }
+
 
     forkJoin([
       this.innovatorService.getInnovationInfo(this.innovationId),
       this.stores.innovation.getSectionsSummary$('innovator', this.innovationId),
       this.innovatorService.getInnovationSupports(this.innovationId, true),
     ]).subscribe(([innovationInfo, sectionSummary, innovationSupports]) => {
+
+      this.stores.environment.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+
+      if (innovationSupports.length === 1) {
+        this.stores.environment.dismissNotification(NotificationContextTypeEnum.SUPPORT, innovationSupports[0].id);
+      }
 
       this.submittedAt = innovationInfo.submittedAt || '';
       this.needsAssessmentCompleted = !this.isInAssessmentStatus();

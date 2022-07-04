@@ -8,7 +8,7 @@ import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum } from '@modules/stores/innovation';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { InnovationActionTrackerInfoComponent } from './action-tracker-info.component';
@@ -88,7 +88,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
       status: 'REQUESTED',
       name: 'Submit section 01',
       description: 'some description',
-      section: InnovationSectionsIds.COST_OF_INNOVATION,
+      section: InnovationSectionEnum.COST_OF_INNOVATION,
       createdAt: '2020-01-01T00:00:00.000Z',
       createdBy: 'Innovation user'
     };

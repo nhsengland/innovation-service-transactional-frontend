@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 
-import { MappedObject } from '@modules/core/interfaces/base.interfaces';
+import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { APIQueryParamsType } from '@modules/core/models/table.model';
 
 import { Store } from '../store.class';
@@ -13,14 +13,15 @@ import { WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationService, UserModulesType, ActivityLogOutDTO, } from './innovation.service';
 
+import { INNOVATION_SECTIONS, getSectionTitle } from './innovation.config';
+import { ActivityLogItemsEnum, InnovationSectionEnum } from './innovation.enums';
 import {
   InnovationModel,
-  sectionType, InnovationSectionsIds, ActivityLogItemsEnum,
+  sectionType,
   INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS,
   SectionsSummaryModel, InnovationSectionConfigType,
   getInnovationEvidenceDTO, getInnovationCommentsDTO
 } from './innovation.models';
-import { INNOVATION_SECTIONS, getSectionTitle } from './innovation.config';
 
 
 @Injectable()
@@ -95,15 +96,15 @@ export class InnovationStore extends Store<InnovationModel> {
 
   }
 
-  getSectionInfo$(module: UserModulesType, innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
+  getSectionInfo$(module: UserModulesType, innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObjectType }> {
     return this.innovationsService.getSectionInfo(module, innovationId, section);
   }
 
-  updateSectionInfo$(innovationId: string, section: string, data: MappedObject): Observable<MappedObject> {
+  updateSectionInfo$(innovationId: string, section: string, data: MappedObjectType): Observable<MappedObjectType> {
     return this.innovationsService.updateSectionInfo(innovationId, section, data);
   }
 
-  submitSections$(innovationId: string, sections: string[]): Observable<MappedObject> {
+  submitSections$(innovationId: string, sections: string[]): Observable<MappedObjectType> {
     return this.innovationsService.submitSections(innovationId, sections);
   }
 
@@ -111,7 +112,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.getSectionEvidenceInfo(module, innovationId, evidenceId);
   }
 
-  upsertSectionEvidenceInfo$(innovationId: string, data: MappedObject, evidenceId?: string): Observable<MappedObject> {
+  upsertSectionEvidenceInfo$(innovationId: string, data: MappedObjectType, evidenceId?: string): Observable<MappedObjectType> {
     return this.innovationsService.upsertSectionEvidenceInfo(innovationId, data, evidenceId);
   }
 
@@ -119,15 +120,15 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.deleteEvidence(innovationId, evidenceId);
   }
 
-  getSectionTitle(sectionId: InnovationSectionsIds): string {
+  getSectionTitle(sectionId: InnovationSectionEnum): string {
     return getSectionTitle(sectionId);
   }
 
-  getSection(sectionId: InnovationSectionsIds): InnovationSectionConfigType['sections'][0] | undefined {
+  getSection(sectionId: InnovationSectionEnum): InnovationSectionConfigType['sections'][0] | undefined {
     return cloneDeep(INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId));
   }
 
-  getSectionWizard(sectionId: InnovationSectionsIds): WizardEngineModel {
+  getSectionWizard(sectionId: InnovationSectionEnum): WizardEngineModel {
     return cloneDeep(
       INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId)?.wizard || new WizardEngineModel({})
     );

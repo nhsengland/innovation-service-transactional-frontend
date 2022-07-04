@@ -2,11 +2,12 @@ import { Component, Input, OnInit, DoCheck, OnDestroy, ChangeDetectionStrategy, 
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
+import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
+
 import { ControlValueAccessorConnector } from '../base/control-value-accessor.connector';
 
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
-import { RandomGeneratorHelper } from '@modules/core';
 
 @Component({
   selector: 'theme-form-input',

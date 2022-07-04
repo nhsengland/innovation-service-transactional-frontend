@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 
-import { AuthenticationStore } from '../../stores';
+import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 
 
 const userTypePaths = {
@@ -21,21 +21,19 @@ export class AuthenticationRedirectionGuard implements CanActivate {
     private authentication: AuthenticationStore
   ) { }
 
-  canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): boolean {
+  canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
     const pathSegment = activatedRouteSnapshot.routeConfig?.path || '';
     const userType = this.authentication.getUserType() || '';
 
-    const userTOUInfo = this.authentication.getUserTermsOfUseInfo();
+    if (!state.url.endsWith('terms-of-use') && userType !== 'ADMIN' && this.authentication.isValidUser() && !this.authentication.isTermsOfUseAccepted()) {
+      const path = userTypePaths[userType] + '/terms-of-use';
+      this.router.navigateByUrl(path);
+      return false;
+    }
 
     if (pathSegment === 'dashboard') {
-      if (userType !== 'ADMIN' && !userTOUInfo) {
-        const path = userTypePaths[userType] + '/terms-of-use';
-        this.router.navigateByUrl(path);
-      }
-      else {
-        this.router.navigateByUrl(userTypePaths[userType]);
-      }
+      this.router.navigateByUrl(userTypePaths[userType]);
       return false;
     }
 

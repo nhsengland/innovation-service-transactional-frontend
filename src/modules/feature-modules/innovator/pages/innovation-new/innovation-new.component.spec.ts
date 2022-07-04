@@ -16,7 +16,7 @@ import { FormEngineComponent } from '@modules/shared/forms';
 import { InnovationNewComponent } from './innovation-new.component';
 
 import { InnovatorService } from '../../services/innovator.service';
-import { OrganisationsService } from '@shared-module/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', () => {
@@ -117,7 +117,7 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
   it('should run submitWizard and call api with success', () => {
 
-    innovatorService.createInnovation = () => of({ id: 'innovationId' });
+    innovatorService.createInnovation = () => of({ id: 'Inno01' });
     authenticationStore.initializeAuthentication$ = () => of(true);
 
     fixture = TestBed.createComponent(InnovationNewComponent);
@@ -125,7 +125,7 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
     fixture.detectChanges();
 
     component.submitWizard();
-    expect(routerSpy).toHaveBeenCalledWith(['innovator/innovations'], { queryParams: { alert: 'innovationCreationSuccess', name: '' } });
+    expect(routerSpy).toHaveBeenCalledWith(['innovator/innovations/Inno01'], { queryParams: { alert: 'innovationCreationSuccess', name: '' } });
 
   });
 

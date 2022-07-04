@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
-import { RoutingHelper } from '@modules/core';
+import { AlertType } from '@app/base/types';
+import { RoutingHelper } from '@app/base/helpers';
 import { INNOVATION_SUPPORT_STATUS, InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
-import { categoriesItems } from '@stores-module/innovation/sections/catalogs.config';
-
-import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
+import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -36,8 +35,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService,
-    private notificationsService: NotificationsService,
+    private accessorService: AccessorService
   ) {
 
     super();
@@ -68,6 +66,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           { label: 'Categories', value: response.summary.categories.map(v => v === 'OTHER' ? response.summary.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
         ];
 
+        this.stores.environment.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+
+        if (response.support?.id) {
+          this.stores.environment.dismissNotification(NotificationContextTypeEnum.SUPPORT, response.support.id);
+        }
+
         this.setPageStatus('READY');
 
       },
@@ -81,7 +85,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }
     );
 
-    this.notificationsService.dismissNotification(this.innovationId, NotificationContextType.INNOVATION).subscribe();
+
   }
 
 }

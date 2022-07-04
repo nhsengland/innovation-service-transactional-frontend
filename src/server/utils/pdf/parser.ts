@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { MappedObject } from '@modules/core';
+import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { getInnovationInfoEndpointDTO, sectionType } from '@modules/stores/innovation/innovation.models';
 import { AllSectionsOutboundPayloadType, getAllSectionsSummary } from '@modules/stores/innovation/innovation.config';
 
@@ -9,11 +9,11 @@ import { PDFGenerator } from './PDFGenerator';
 import { PDFGeneratorInnovationNotFoundError, PDFGeneratorParserError, PDFGeneratorSectionsNotFoundError } from '../errors';
 
 
-export const getSections = async (innovationId: string, userId: string, config: any): Promise<{ section: sectionType, data: MappedObject }[]> => {
+export const getSections = async (innovationId: string, userId: string, config: any): Promise<{ section: sectionType, data: MappedObjectType }[]> => {
   const url = `${ENVIRONMENT.API_URL}/api/innovators/${userId}/innovations/${innovationId}/sections`;
   const response = await axios.get<{
     section: sectionType;
-    data: MappedObject
+    data: MappedObjectType
   }[]>(url, config);
   return response.data;
 };
@@ -28,7 +28,7 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
 
   let content: AllSectionsOutboundPayloadType;
   let innovation: getInnovationInfoEndpointDTO;
-  let sections: { section: sectionType, data: MappedObject }[];
+  let sections: { section: sectionType, data: MappedObjectType }[];
 
   const generator = new PDFGenerator();
 

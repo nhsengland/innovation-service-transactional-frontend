@@ -1,5 +1,6 @@
-import { MappedObject } from '@modules/core/interfaces/base.interfaces';
-import { InnovationSectionConfigType, InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS } from './innovation.models';
+import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
+import { InnovationSectionEnum } from './innovation.enums';
+import { InnovationSectionConfigType, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS } from './innovation.models';
 
 import { SECTION_1_1 } from './sections/section-1-1.config';
 import { SECTION_1_2 } from './sections/section-1-2.config';
@@ -40,12 +41,12 @@ export const INNOVATION_SECTIONS: InnovationSectionConfigType[] = [
 type AllSectionsInboundPayloadType = {
   section: {
     id: null | string;
-    section: InnovationSectionsIds;
+    section: InnovationSectionEnum;
     status: keyof typeof INNOVATION_SECTION_STATUS;
     actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
     updatedAt: string;
   },
-  data: MappedObject
+  data: MappedObjectType
 }[];
 
 export type AllSectionsOutboundPayloadType = {
@@ -57,7 +58,20 @@ export type AllSectionsOutboundPayloadType = {
 }[];
 
 
-export function getSectionTitle(sectionId: null | InnovationSectionsIds): string {
+
+export function getSectionNumber(sectionId: InnovationSectionEnum): string {
+
+  const groupNumber = INNOVATION_SECTIONS.findIndex(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId));
+  if (groupNumber === -1) { return ''; }
+
+  const sectionNumber = INNOVATION_SECTIONS[groupNumber].sections.findIndex(section => section.id === sectionId);
+  if (sectionNumber === -1) { return ''; }
+
+  return `${groupNumber + 1}.${sectionNumber + 1}`;
+
+}
+
+export function getSectionTitle(sectionId: null | InnovationSectionEnum): string {
 
   if (!sectionId) { return ''; }
 

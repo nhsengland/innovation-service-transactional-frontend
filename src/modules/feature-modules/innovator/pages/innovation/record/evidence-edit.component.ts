@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineModel, FileTypes } from '@app/base/forms';
-import { UrlModel } from '@modules/core';
+import { UrlModel } from '@app/base/models';
 import { WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
-import { InnovationSectionsIds } from '@stores-module/innovation/innovation.models';
+import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-evidence-edit',
@@ -16,7 +16,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   innovationId: string;
-  sectionId: InnovationSectionsIds;
+  sectionId: InnovationSectionEnum;
   evidenceId: string;
 
   wizard: WizardEngineModel;
@@ -114,7 +114,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
 
         if (this.currentStep.parameters[0].dataType === 'file-upload') {
           this.currentStep.parameters[0].fileUploadConfig = {
-            httpUploadUrl: new UrlModel(this.stores.environment.APP_URL).addPath('upload').buildUrl(),
+            httpUploadUrl: new UrlModel(this.CONSTANTS.APP_URL).addPath('upload').buildUrl(),
             httpUploadBody: {
               context: this.sectionId,
               innovatorId: this.stores.authentication.getUserId(),

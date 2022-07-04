@@ -1,3 +1,5 @@
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum, UserTypeEnum } from './authentication.enums';
+
 export class AuthenticationModel {
 
   isSignIn: boolean;
@@ -11,13 +13,13 @@ export class AuthenticationModel {
     email: string;
     displayName: string;
     phone: string;
-    type: '' | 'ADMIN' | 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
-    roles: ('ADMIN' | 'SERVICE_TEAM')[];
+    type: '' | UserTypeEnum;
+    roles: UserRoleEnum[];
     organisations: {
       id: string;
       name: string;
       size: null | string;
-      role: 'INNOVATOR_OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
+      role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum;
       isShadow: boolean;
       organisationUnits?: {
         id: string;

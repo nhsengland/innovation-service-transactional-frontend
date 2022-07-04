@@ -4,7 +4,7 @@ import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 
-import { UrlModel } from '@modules/core';
+import { UrlModel } from '@app/base/models';
 
 
 type getInnovationDTO = {

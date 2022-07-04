@@ -13,7 +13,7 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 import { InnovationActionTrackerListComponent } from './action-tracker-list.component';
 
 import { AccessorService, getInnovationActionsListEndpointOutDTO } from '@modules/feature-modules/accessor/services/accessor.service';
-import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 
 describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerListComponent', () => {
@@ -57,8 +57,8 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerListComponen
   it('should have initial information loaded', () => {
 
     const responseMock: getInnovationActionsListEndpointOutDTO = {
-      openedActions: [{ id: 'ID01', displayId: '', status: 'REQUESTED', name: 'Submit section X', section: InnovationSectionsIds.COST_OF_INNOVATION, createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 1, hasNew: false } }],
-      closedActions: [{ id: 'ID01', displayId: '', status: 'REQUESTED', name: 'Submit section X', section: InnovationSectionsIds.COST_OF_INNOVATION, createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 0, hasNew: false }}]
+      openedActions: [{ id: 'ID01', displayId: '', status: 'REQUESTED', name: 'Submit section X', section: InnovationSectionEnum.COST_OF_INNOVATION, createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 1, hasNew: false } }],
+      closedActions: [{ id: 'ID01', displayId: '', status: 'REQUESTED', name: 'Submit section X', section: InnovationSectionEnum.COST_OF_INNOVATION, createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 0, hasNew: false }}]
     };
     accessorService.getInnovationActionsList = () => of(responseMock);
     const expected = responseMock.openedActions;

@@ -10,7 +10,7 @@ import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { FormEngineComponent } from '@modules/shared/forms';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
-import { InnovationStatusEnum } from '@modules/shared/enums';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 import { InnovationAssessmentNewComponent } from './assessment-new.component';
 

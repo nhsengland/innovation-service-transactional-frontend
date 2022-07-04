@@ -2,7 +2,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
 
-import { EnvironmentStore } from '../stores/environment.store';
+import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
 
 
 type CookiesConsentType = {
@@ -27,7 +27,7 @@ export class CookiesService {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private coockieService: CookieService,
-    private environment: EnvironmentStore
+    private environment: EnvironmentVariablesStore
   ) { }
 
 

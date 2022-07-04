@@ -5,13 +5,13 @@ import { ENV } from '@tests/app.mocks';
 
 import { Injector } from '@angular/core';
 
-import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
+import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
 import { TableModel } from '@app/base/models';
 
-import { InnovationStatusEnum } from '@modules/shared/enums';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 import {
   AssessmentService,
@@ -24,7 +24,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
   let httpMock: HttpTestingController;
 
-  let environmentStore: EnvironmentStore;
+  let envVariablesStore: EnvironmentVariablesStore;
   let authenticationStore: AuthenticationStore;
 
   let service: AssessmentService;
@@ -46,7 +46,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
     httpMock = TestBed.inject(HttpTestingController);
 
-    environmentStore = TestBed.inject(EnvironmentStore);
+    envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
     authenticationStore = TestBed.inject(AuthenticationStore);
 
     service = TestBed.inject(AssessmentService);
@@ -70,7 +70,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations?take=20&skip=0&status=`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations?take=20&skip=0&status=`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -137,7 +137,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations?take=20&skip=0&status=ASSESSMENT`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations?take=20&skip=0&status=ASSESSMENT`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -158,7 +158,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.getInnovationInfo('inno01').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/inno01`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -234,7 +234,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.getInnovationNeedsAssessment('inno01', 'assess01').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -268,7 +268,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.getSupportLog('Inno01').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -307,7 +307,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.getSupportLog('Inno01').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -340,7 +340,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.getSupportLog('Inno01').subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -355,7 +355,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.createInnovationNeedsAssessment('inno01', { some: 'data' }).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/inno01/assessments`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/assessments`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
     expect(response).toEqual(expected);
@@ -370,7 +370,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.updateInnovationNeedsAssessment('inno01', 'assess01', true, { some: 'data' }).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PUT');
     expect(response).toEqual(expected);
@@ -385,7 +385,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.updateInnovationNeedsAssessment('inno01', 'assess01', false, { some: 'data' }).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PUT');
     expect(response).toEqual(expected);
@@ -407,7 +407,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.getInnovationSupports('inno01', false).subscribe(success => response = success, error => response = error);
 
-    const httpRequest = httpMock.expectOne(`${environmentStore.API_URL}/assessments/UserId01/innovations/inno01/supports?full=false`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/supports?full=false`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);

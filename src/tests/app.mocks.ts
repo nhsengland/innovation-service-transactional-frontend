@@ -1,4 +1,4 @@
-import { Component, Injector } from '@angular/core';
+import { Component, Injectable, Injector } from '@angular/core';
 
 
 export const ENV = {
@@ -31,6 +31,7 @@ export class LocalStorageMock {
 export class EmptyMockComponent { }
 
 
+@Injectable()
 export class InjectorMock extends Injector {
   get(token: any, notFoundValue?: any, flags?: any): object {
     return {};

@@ -1,5 +1,7 @@
+import { cloneDeep } from 'lodash';
 import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
 
 import { costComparisonItems, hasCostKnowledgeItems } from './catalogs.config';
 
@@ -17,13 +19,21 @@ type InboundPayloadType = {
   hasCostSavingKnowledge: null | 'DETAILED_ESTIMATE' | 'ROUGH_IDEA' | 'NO';
   hasCostCareKnowledge: null | 'DETAILED_ESTIMATE' | 'ROUGH_IDEA' | 'NO';
   costComparison: null | 'CHEAPER' | 'COSTS_MORE_WITH_SAVINGS' | 'COSTS_MORE' | 'NOT_SURE';
+  subgroups: {
+    id: string;
+    name: string;
+    costComparison: null | 'CHEAPER' | 'COSTS_MORE_WITH_SAVINGS' | 'COSTS_MORE' | 'NOT_SURE';
+  }[];
 };
-type StepPayloadType = InboundPayloadType;
+// [key: string] is needed to support subGroupName_${number} properties.
+type StepPayloadType = InboundPayloadType & { [key: string]: null | string };
+
 type OutboundPayloadType = InboundPayloadType;
 
 
+
 export const SECTION_6_2: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.COMPARATIVE_COST_BENEFIT,
+  id: InnovationSectionEnum.COMPARATIVE_COST_BENEFIT,
   title: 'Comparative cost benefit',
   wizard: new WizardEngineModel({
     steps: [
@@ -57,38 +67,69 @@ export const SECTION_6_2: InnovationSectionConfigType['sections'][0] = {
 };
 
 
+
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(2);
 
   if (['NO'].includes(currentValues.hasCostCareKnowledge || 'NO')) {
+    currentValues.subgroups = currentValues.subgroups.map(item => ({ id: item.id, name: item.name, costComparison: null }));
     currentValues.costComparison = null;
+    Object.keys(currentValues).filter(key => key.startsWith('subGroupCostComparison_')).forEach((key) => { delete currentValues[key]; });
     return;
   }
 
-  steps.push(
-    new FormEngineModel({
-      parameters: [{
-        id: 'costComparison',
-        dataType: 'radio-group',
-        label: stepsLabels.l3,
-        description: 'If your innovation has more than one population or subgroup, please keep this in mind when choosing from the options below.',
-        validations: { isRequired: [true, 'Choose one option'] },
-        items: costComparisonItems
-      }]
-    })
-  );
+  Object.keys(currentValues).filter(key => key.startsWith('subGroupCostComparison_')).forEach((key) => {
+    currentValues.subgroups[Number(key.split('_')[1])].costComparison = currentValues[key] as any;
+    delete currentValues[key];
+  });
+
+
+  if (currentValues.subgroups.length === 0) {
+
+    steps.push(
+      new FormEngineModel({
+        parameters: [{
+          id: 'costComparison',
+          dataType: 'radio-group',
+          label: stepsLabels.l3,
+          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about comparative cost benefit.',
+          validations: { isRequired: [true, 'Choose one option'] },
+          items: costComparisonItems
+        }]
+      })
+    );
+
+  } else {
+
+    (currentValues.subgroups || []).forEach((item, i) => {
+      steps.push(
+        new FormEngineModel({
+          parameters: [{
+            id: `subGroupCostComparison_${i}`,
+            dataType: 'radio-group',
+            label: `What are the costs associated with use of your innovation, compared to current practice in the UK for ${item.name}?`,
+            description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about comparative cost benefit.',
+            validations: { isRequired: [true, 'Choose one option'] },
+            items: costComparisonItems
+          }]
+        })
+      );
+      currentValues[`subGroupCostComparison_${i}`] = item.costComparison;
+    });
+
+  }
 
 }
 
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
-  return {
-    hasCostSavingKnowledge: data.hasCostSavingKnowledge,
-    hasCostCareKnowledge: data.hasCostCareKnowledge,
-    costComparison: data.costComparison
-  };
+  const parsedData = cloneDeep(data) as StepPayloadType;
+
+  (parsedData.subgroups || []).forEach((item, i) => { parsedData[`subGroupCostComparison_${i}`] = item.costComparison; });
+
+  return parsedData;
 
 }
 
@@ -98,7 +139,8 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     hasCostSavingKnowledge: data.hasCostSavingKnowledge,
     hasCostCareKnowledge: data.hasCostCareKnowledge,
-    costComparison: data.costComparison
+    costComparison: data.costComparison,
+    subgroups: data.subgroups
   };
 
 }
@@ -122,12 +164,25 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   if (!['NO'].includes(data.hasCostCareKnowledge || 'NO')) {
 
-    toReturn.push({
-      label: stepsLabels.l3,
-      value: costComparisonItems.find(item => item.value === data.costComparison)?.label,
-      editStepNumber: 3
-    });
+    if (data.subgroups.length === 0) {
 
+      toReturn.push({
+        label: stepsLabels.l3,
+        value: costComparisonItems.find(item => item.value === data.costComparison)?.label,
+        editStepNumber: toReturn.length + 1
+      });
+
+    } else {
+
+      data.subgroups?.forEach(subgroup => {
+        toReturn.push({
+          label: `What are the costs associated with use of your innovation, compared to current practice in the UK for ${subgroup.name}?`,
+          value: costComparisonItems.find(item => item.value === subgroup.costComparison)?.label,
+          editStepNumber: toReturn.length + 1
+        });
+      });
+
+    }
   }
 
   return toReturn;

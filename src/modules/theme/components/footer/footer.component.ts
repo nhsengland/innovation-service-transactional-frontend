@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { EnvironmentStore } from '@modules/core/stores/environment.store';
+import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
 @Component({
@@ -12,8 +12,8 @@ export class FooterComponent {
   applySignOutTimeout: boolean;
 
   constructor(
-    private environmentStore: EnvironmentStore,
-    private authenticationStore: AuthenticationStore
+    private authenticationStore: AuthenticationStore,
+    private envVariablesStore: EnvironmentVariablesStore
   ) {
 
     // This can be done on the contructor as all sign in/out, refreshes the entire app.
@@ -25,7 +25,7 @@ export class FooterComponent {
   onTimeout(): void {
 
     /* istanbul ignore next */
-    window.location.assign(`${this.environmentStore.APP_URL}/signout`); // Full reload is needed to hit SSR.
+    window.location.assign(`${this.envVariablesStore.APP_URL}/signout`); // Full reload is needed to hit SSR.
 
   }
 

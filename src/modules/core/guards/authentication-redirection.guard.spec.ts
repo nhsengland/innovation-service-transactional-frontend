@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 import { EmptyMockComponent } from '@tests/app.mocks';
 
@@ -10,6 +10,7 @@ import { CoreModule } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 
 import { AuthenticationRedirectionGuard } from './authentication-redirection.guard';
+import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
 
 
 describe('Core/Guards/AuthenticationRedirectionGuard', () => {
@@ -43,58 +44,68 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
   });
 
   it('should deny access and redirect when user type is empty or path is empty', () => {
-    const routeMock: Partial<ActivatedRouteSnapshot> = { };
+    const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = {};
+    const routerStateSnapshopMock: Partial<RouterStateSnapshot> = { url: '' };
     authenticationStore.getUserType = () => '';
-    expect(guard.canActivate(routeMock as any)).toBe(false);
+    expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(false);
   });
 
   it('should deny access and redirect when user type is ASSESSMENT', () => {
-    const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'dashboard' } };
-    authenticationStore.getUserType = () => 'ASSESSMENT';
-    expect(guard.canActivate(routeMock as any)).toBe(false);
+    const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'dashboard' } };
+    const routerStateSnapshopMock: Partial<RouterStateSnapshot> = { url: '' };
+    authenticationStore.getUserType = () => UserTypeEnum.ASSESSMENT;
+    expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(false);
   });
   it('should deny access and redirect when user type is ACCESSOR', () => {
-    const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'dashboard' } };
-    authenticationStore.getUserType = () => 'ACCESSOR';
-    expect(guard.canActivate(routeMock as any)).toBe(false);
+    const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'dashboard' } };
+    const routerStateSnapshopMock: Partial<RouterStateSnapshot> = { url: '' };
+    authenticationStore.getUserType = () => UserTypeEnum.ACCESSOR;
+    expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(false);
   });
   it('should deny access and redirect when user type is INNOVATOR', () => {
-    const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'dashboard' } };
-    authenticationStore.getUserType = () => 'INNOVATOR';
-    expect(guard.canActivate(routeMock as any)).toBe(false);
+    const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'dashboard' } };
+    const routerStateSnapshopMock: Partial<RouterStateSnapshot> = { url: '' };
+    authenticationStore.getUserType = () => UserTypeEnum.INNOVATOR;
+    expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(false);
   });
   it('should deny access and redirect when user type is ADMIN', () => {
-    const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'dashboard' } };
-    authenticationStore.getUserType = () => 'ADMIN';
-    expect(guard.canActivate(routeMock as any)).toBe(false);
+    const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'dashboard' } };
+    const routerStateSnapshopMock: Partial<RouterStateSnapshot> = { url: '' };
+    authenticationStore.getUserType = () => UserTypeEnum.ADMIN;
+    expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(false);
   });
 
 
   it('should deny access and redirect when user type is ASSESSMENT', () => {
-    const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovator' } };
-    authenticationStore.getUserType = () => 'ASSESSMENT';
-    expect(guard.canActivate(routeMock as any)).toBe(false);
+    const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovator' } };
+    const routerStateSnapshopMock: Partial<RouterStateSnapshot> = { url: '' };
+    authenticationStore.getUserType = () => UserTypeEnum.ASSESSMENT;
+    expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(false);
   });
   it('should deny access and redirect when user type is ACCESSOR', () => {
-    const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovator' } };
-    authenticationStore.getUserType = () => 'ACCESSOR';
-    expect(guard.canActivate(routeMock as any)).toBe(false);
+    const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovator' } };
+    const routerStateSnapshopMock: Partial<RouterStateSnapshot> = { url: '' };
+    authenticationStore.getUserType = () => UserTypeEnum.ACCESSOR;
+    expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(false);
   });
   it('should deny access and redirect when user type is INNOVATOR', () => {
-    const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'accessor' } };
-    authenticationStore.getUserType = () => 'INNOVATOR';
-    expect(guard.canActivate(routeMock as any)).toBe(false);
+    const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'accessor' } };
+    const routerStateSnapshopMock: Partial<RouterStateSnapshot> = { url: '' };
+    authenticationStore.getUserType = () => UserTypeEnum.INNOVATOR;
+    expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(false);
   });
   it('should deny access and redirect when user type is ADMIN', () => {
-    const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovator' } };
-    authenticationStore.getUserType = () => 'ADMIN';
-    expect(guard.canActivate(routeMock as any)).toBe(false);
+    const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovator' } };
+    const routerStateSnapshopMock: Partial<RouterStateSnapshot> = { url: '' };
+    authenticationStore.getUserType = () => UserTypeEnum.ADMIN;
+    expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(false);
   });
 
   it('should allow access when user type is INNOVATOR', () => {
-    const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovator' } };
-    authenticationStore.getUserType = () => 'INNOVATOR';
-    expect(guard.canActivate(routeMock as any)).toBe(true);
+    const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovator' } };
+    const routerStateSnapshopMock: Partial<RouterStateSnapshot> = { url: '' };
+    authenticationStore.getUserType = () => UserTypeEnum.INNOVATOR;
+    expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(true);
   });
 
 });

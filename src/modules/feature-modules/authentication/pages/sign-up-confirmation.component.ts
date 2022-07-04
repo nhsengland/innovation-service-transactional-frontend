@@ -9,7 +9,7 @@ import { CoreComponent } from '@app/base';
 })
 export class SignUpConfirmationComponent extends CoreComponent {
 
-  proceedLink = `${this.stores.environment.APP_URL}/dashboard`;
+  proceedLink = `${this.CONSTANTS.APP_URL}/dashboard`;
 
   constructor() {
 

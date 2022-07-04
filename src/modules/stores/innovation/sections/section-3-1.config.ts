@@ -1,5 +1,6 @@
 import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
 
 import { hasMarketResearchItems } from './catalogs.config';
 
@@ -22,7 +23,7 @@ type StepPayloadType = InboundPayloadType;
 
 
 export const SECTION_3_1: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.MARKET_RESEARCH,
+  id: InnovationSectionEnum.MARKET_RESEARCH,
   title: 'Market research',
   wizard: new WizardEngineModel({
     steps: [

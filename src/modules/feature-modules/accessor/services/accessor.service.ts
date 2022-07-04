@@ -3,11 +3,12 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { MappedObject, UrlModel, APIQueryParamsType } from '@modules/core';
+import { UrlModel } from '@app/base/models';
+import { APIQueryParamsType, MappedObjectType } from '@app/base/types';
 
-import { InnovationSectionsIds, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
+
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/shared/enums';
 
 
 export enum SupportLogType {
@@ -70,7 +71,7 @@ export type getAdvanceActionsListEndpointInDTO = {
     id: string;
     displayId: string;
     status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-    section: InnovationSectionsIds;
+    section: InnovationSectionEnum;
     createdAt: string; // '2021-04-16T09:23:49.396Z',
     updatedAt: string; // '2021-04-16T09:23:49.396Z',
     innovation: {
@@ -120,7 +121,7 @@ type getInnovationActionsListEndpointInDTO = {
   id: string;
   displayId: string;
   status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-  section: InnovationSectionsIds;
+  section: InnovationSectionEnum;
   createdAt: string; // '2021-04-16T09:23:49.396Z',
   notifications: {
     count: number,
@@ -137,7 +138,7 @@ export type getInnovationActionInfoInDTO = {
   displayId: string;
   status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
   description: string;
-  section: InnovationSectionsIds;
+  section: InnovationSectionEnum;
   createdAt: string; // '2021-04-16T09:23:49.396Z',
   createdBy: { id: string; name: string; };
 };
@@ -149,7 +150,7 @@ export type getActionsListEndpointInDTO = {
     id: string;
     displayId: string;
     status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-    section: InnovationSectionsIds;
+    section: InnovationSectionEnum;
     createdAt: string; // '2021-04-16T09:23:49.396Z',
     updatedAt: string; // '2021-04-16T09:23:49.396Z',
     innovation: {
@@ -406,7 +407,7 @@ export class AccessorService extends CoreService {
 
   }
 
-  createAction(innovationId: string, body: MappedObject): Observable<{ id: string }> {
+  createAction(innovationId: string, body: MappedObjectType): Observable<{ id: string }> {
 
     const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
@@ -416,7 +417,7 @@ export class AccessorService extends CoreService {
 
   }
 
-  updateAction(innovationId: string, actionId: string, body: MappedObject): Observable<{ id: string }> {
+  updateAction(innovationId: string, actionId: string, body: MappedObjectType): Observable<{ id: string }> {
 
     const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
@@ -494,7 +495,7 @@ export class AccessorService extends CoreService {
     );
   }
 
-  saveSupportStatus(innovationId: string, body: MappedObject, supportId?: string): Observable<{ id: string }> {
+  saveSupportStatus(innovationId: string, body: MappedObjectType, supportId?: string): Observable<{ id: string }> {
 
     if (!supportId) {
 

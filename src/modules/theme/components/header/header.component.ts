@@ -7,7 +7,7 @@ import { filter } from 'rxjs/operators';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { CookiesService } from '@modules/core/services/cookies.service';
 
-export type MenuBarItemType = {
+export type HeaderMenuBarItemType = {
   title: string;
   url?: string;
   description?: string;
@@ -24,8 +24,8 @@ export type MenuBarItemType = {
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() showUserInformation = false;
-  @Input() leftMenuBarItems: MenuBarItemType[] = [];
-  @Input() rightMenuBarItems: MenuBarItemType[] = [];
+  @Input() leftMenuBarItems: HeaderMenuBarItemType[] = [];
+  @Input() rightMenuBarItems: HeaderMenuBarItemType[] = [];
 
   @ViewChild('headerNavigationElement', { read: ElementRef, static: false }) headerNavigationElement?: ElementRef;
 
@@ -38,8 +38,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   menuBarItems: {
     isChildrenOpened: boolean,
-    left: MenuBarItemType[],
-    right: MenuBarItemType[]
+    left: HeaderMenuBarItemType[],
+    right: HeaderMenuBarItemType[]
   } = { isChildrenOpened: false, left: [], right: [] };
 
 
@@ -148,7 +148,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  onHeaderMenuClick(menuItem: MenuBarItemType): void {
+  onHeaderMenuClick(menuItem: HeaderMenuBarItemType): void {
 
     [...this.menuBarItems.left, ...this.menuBarItems.right].forEach(i => i.isOpen = (menuItem.title !== i.title && i.isOpen) ? false : i.isOpen);
 

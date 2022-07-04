@@ -3,10 +3,10 @@ import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
+import { HeaderNavigationBarItemType } from '@app/base/types';
+import { RoutingHelper } from '@app/base/helpers';
 
-import { RoutingHelper } from '@modules/core';
-import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
-import { InnovationStatusEnum } from '@modules/shared/enums';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 
 type RouteDataLayoutOptionsType = {
@@ -24,53 +24,46 @@ export class AssessmentLayoutComponent extends CoreComponent {
   layoutOptions: RouteDataLayoutOptionsType = { type: null };
 
   navigationMenuBar: {
-    leftItems: { title: string, link: string, fullReload?: boolean }[],
-    rightItems: { title: string, link: string, key?: string, fullReload?: boolean }[]
-  } = { leftItems: [], rightItems: [] };
+    leftItems: HeaderNavigationBarItemType,
+    rightItems: HeaderNavigationBarItemType,
+    notifications: { notifications: number }
+  } = { leftItems: [], rightItems: [], notifications: { notifications: 0 } };
 
   leftSideBar: { title: string, link: string }[] = [];
-  mainMenuNotifications: { [key: string]: number } = {};
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private notificationsService: NotificationsService,
+    private activatedRoute: ActivatedRoute
   ) {
 
     super();
 
-    this.navigationMenuBar = {
-      leftItems: [
-        { title: 'Home', link: '/assessment/dashboard' }
-      ],
-      rightItems: [
-        { title: 'Innovations', link: '/assessment/innovations', key: NotificationContextType.INNOVATION },
-        { title: 'Account', link: '/assessment/account' },
-        { title: 'Sign out', link: `${this.stores.environment.APP_URL}/signout`, fullReload: true }
-      ]
-    };
+    this.navigationMenuBar.leftItems = [{ key: 'home', label: 'Home', link: '/assessment/dashboard' }];
+    this.navigationMenuBar.rightItems = [
+      { key: 'innovations', label: 'Innovations', link: '/assessment/innovations' },
+      { key: 'notifications', label: 'Notifications', link: '/assessment/notifications' },
+      { key: 'account', label: 'Account', link: '/assessment/account' },
+      { key: 'signOut', label: 'Sign out', link: `${this.CONSTANTS.APP_URL}/signout`, fullReload: true }
+    ];
 
     this.subscriptions.push(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
+
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e)),
+
+      this.stores.environment.notifications$().subscribe(e => {
+        this.navigationMenuBar.notifications = { notifications: e.UNREAD }; // We need to reassign the variable so that the component reacts to it.
+      })
+
     );
 
   }
 
   private onRouteChange(event: NavigationEnd): void {
 
+    this.stores.environment.updateUserUnreadNotifications();
+
     const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
-    const innovation = currentRouteInnovationId ? this.stores.context.getInnovation() : null;
-
-
-    if (this.stores.authentication.isValidUser()) {
-
-      this.notificationsService.getAllUnreadNotificationsGroupedByContext().subscribe(
-        response => {
-          this.mainMenuNotifications = response;
-        }
-      );
-
-    }
+    const innovation = currentRouteInnovationId ? this.stores.environment.getInnovation() : null;
 
     this.layoutOptions = {
       type: routeData.type || null,

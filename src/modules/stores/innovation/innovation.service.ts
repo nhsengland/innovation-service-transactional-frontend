@@ -6,17 +6,18 @@ import { cloneDeep } from 'lodash';
 
 import { APIQueryParamsType } from '@modules/core/models/table.model';
 
-import { EnvironmentStore } from '@modules/core/stores/environment.store';
+import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
+import { ActivityLogItemsEnum, InnovationSectionEnum } from './innovation.enums';
 import {
-  sectionType, InnovationSectionsIds, ActivityLogItemsEnum,
+  sectionType,
   INNOVATION_STATUS, ACTIVITY_LOG_ITEMS, INNOVATION_SUPPORT_STATUS,
   getInnovationSectionsDTO, getInnovationEvidenceDTO, getInnovationCommentsDTO, OrganisationSuggestionModel
 } from './innovation.models';
 
 import { UrlModel } from '@modules/core/models/url.model';
-import { MappedObject } from '@modules/core/interfaces/base.interfaces';
+import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { getSectionTitle } from './innovation.config';
 
 
@@ -36,7 +37,7 @@ export type ActivityLogInDTO = {
       interveningUserName?: string;
 
       assessmentId?: string;
-      sectionId?: InnovationSectionsIds;
+      sectionId?: InnovationSectionEnum;
       actionId?: string;
       innovationSupportStatus?: keyof typeof INNOVATION_SUPPORT_STATUS;
 
@@ -64,12 +65,12 @@ export type ActivityLogOutDTO = {
 @Injectable()
 export class InnovationService {
 
-  private API_URL = this.environmentStore.API_URL;
+  private API_URL = this.envVariablesStore.API_URL;
 
   constructor(
     private http: HttpClient,
-    private environmentStore: EnvironmentStore,
-    private authenticationStore: AuthenticationStore
+    private authenticationStore: AuthenticationStore,
+    private envVariablesStore: EnvironmentVariablesStore
   ) { }
 
 
@@ -183,14 +184,14 @@ export class InnovationService {
   }
 
 
-  getSectionInfo(module: UserModulesType, innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObject }> {
+  getSectionInfo(module: UserModulesType, innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObjectType }> {
 
     const endpointModule = this.endpointModule(module);
 
     const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/sections').setPathParams({ endpointModule, userId: this.authenticationStore.getUserId(), innovationId }).setQueryParams({ section });
     return this.http.get<{
       section: sectionType;
-      data: MappedObject
+      data: MappedObjectType
     }>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
@@ -198,7 +199,7 @@ export class InnovationService {
   }
 
 
-  updateSectionInfo(innovationId: string, section: string, data: MappedObject): Observable<MappedObject> {
+  updateSectionInfo(innovationId: string, section: string, data: MappedObjectType): Observable<MappedObjectType> {
 
     const body = {
       section,
@@ -206,7 +207,7 @@ export class InnovationService {
     };
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/sections').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
-    return this.http.put<MappedObject>(url.buildUrl(), body).pipe(
+    return this.http.put<MappedObjectType>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
     );
@@ -235,18 +236,18 @@ export class InnovationService {
   }
 
 
-  upsertSectionEvidenceInfo(innovationId: string, data: MappedObject, evidenceId?: string): Observable<MappedObject> {
+  upsertSectionEvidenceInfo(innovationId: string, data: MappedObjectType, evidenceId?: string): Observable<MappedObjectType> {
 
     if (evidenceId) {
       const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/evidence/:evidenceId').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, evidenceId });
-      return this.http.put<MappedObject>(url.buildUrl(), { ...{ id: evidenceId }, ...data }).pipe(
+      return this.http.put<MappedObjectType>(url.buildUrl(), { ...{ id: evidenceId }, ...data }).pipe(
         take(1),
         map(response => response)
       );
 
     } else {
       const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/evidence').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
-      return this.http.post<MappedObject>(url.buildUrl(), data).pipe(
+      return this.http.post<MappedObjectType>(url.buildUrl(), data).pipe(
         take(1),
         map(response => response)
       );
@@ -259,7 +260,7 @@ export class InnovationService {
   deleteEvidence(innovationId: string, evidenceId: string): Observable<boolean> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/evidence/:evidenceId').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, evidenceId });
-    return this.http.delete<MappedObject>(url.buildUrl()).pipe(
+    return this.http.delete<MappedObjectType>(url.buildUrl()).pipe(
       take(1),
       map(response => !!response),
       catchError(() => of(false))

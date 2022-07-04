@@ -1,9 +1,14 @@
-<ng-container *ngIf="type === 'circle'; else notificationBadge">
-  <svg height="18" width="10">
-    <circle cx="5" cy="5" r="5" fill="#d4351c" />
-  </svg>
+<ng-container *ngIf="visibleLabel">
+
+  <ng-container *ngIf="visibleLabel === 'dot'; else notificationBadge">
+    <svg height="18" width="10">
+      <circle cx="5" cy="5" r="5" fill="#d4351c" />
+    </svg>
+  </ng-container>
+
 </ng-container>
 
+
 <ng-template #notificationBadge>
-  <div class="app-notification-badge">{{ label }}</div>
+  <div class="app-notification-badge">{{ visibleLabel | titlecase }}</div>
 </ng-template>

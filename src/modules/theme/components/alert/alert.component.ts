@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, PLATFORM_ID, Inject, ChangeDetectionStrategy, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
-import { RandomGeneratorHelper } from '@modules/core';
+import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
 
 @Component({

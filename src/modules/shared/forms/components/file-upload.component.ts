@@ -4,7 +4,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, ControlContainer, FormArray, FormControl, FormGroup } from '@angular/forms';
-import { RandomGeneratorHelper } from '@modules/core';
+import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 import { LoggerService, Severity } from '@modules/core/services/logger.service';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { Observable, of } from 'rxjs';

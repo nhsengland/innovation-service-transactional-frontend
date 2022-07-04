@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 
-import { EMAIL_NOTIFICATION_TYPE, NotificationsService } from '@modules/shared/services/notifications.service';
+import { EMAIL_PREFERENCES_TYPES, NotificationsService } from '@modules/shared/services/notifications.service';
 
 export type EmailNotificationType = {
   id: string;
@@ -45,9 +45,9 @@ export class PageAccountEmailNotificationsComponent extends CoreComponent implem
 
     this.setPageStatus('LOADING');
 
-    this.notificationsService.getEmailNotificationTypes().subscribe(
+    this.notificationsService.getEmailNotificationsPreferences().subscribe(
       response => {
-        const notificationTypes = Object.entries(EMAIL_NOTIFICATION_TYPE).map(([key, item]) => (
+        const notificationTypes = Object.entries(EMAIL_PREFERENCES_TYPES).map(([key, item]) => (
           { id: key, title: item.title }
         ));
         const applicableTypes = notificationTypes.filter(n => response.find(r => r.id === n.id));
@@ -95,7 +95,7 @@ export class PageAccountEmailNotificationsComponent extends CoreComponent implem
 
   private updateNotificationPreferences(preference: { notificationType: string; isSubscribed: boolean; }[]): void {
 
-    this.notificationsService.updateUserNotificationPreferences(preference).subscribe(
+    this.notificationsService.updateEmailNotificationsPreferences(preference).subscribe(
       () => {
         this.getEmailNotificationTypes();
         this.alert = {

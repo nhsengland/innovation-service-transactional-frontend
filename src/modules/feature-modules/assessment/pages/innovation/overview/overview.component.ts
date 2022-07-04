@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 
 import { AssessmentService, getInnovationInfoEndpointDTO } from '../../../services/assessment.service';
 
-import { categoriesItems } from '@stores-module/innovation/sections/catalogs.config';
-import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
+import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
 
 
 @Component({
@@ -27,8 +27,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private assessmentService: AssessmentService,
-    private notificationsService: NotificationsService
+    private assessmentService: AssessmentService
   ) {
 
     super();
@@ -59,6 +58,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           { label: 'Phone number', value: response.contact.phone || '' }
         ];
 
+        this.stores.environment.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+
         this.setPageStatus('READY');
 
       },
@@ -72,7 +73,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }
     );
 
-    this.notificationsService.dismissNotification(this.innovationId, NotificationContextType.INNOVATION).subscribe();
   }
 
 }

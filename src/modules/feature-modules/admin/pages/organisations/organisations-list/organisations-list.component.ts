@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 @Component({

@@ -15,7 +15,7 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation
 
 import { InnovationsAdvancedReviewComponent } from './innovations-advanced-review.component';
 
-import { OrganisationsService } from '@shared-module/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { AccessorService } from '../../services/accessor.service';
 
 

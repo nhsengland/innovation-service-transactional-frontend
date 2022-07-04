@@ -4,7 +4,7 @@ import { Injectable, ErrorHandler } from '@angular/core';
 import { AxiosInstance } from 'axios';
 import axios from 'axios';
 
-import { EnvironmentStore } from '../stores/environment.store';
+import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
 
 
 export enum Severity {
@@ -28,7 +28,7 @@ export class LoggerService {
 
   constructor(
     private errorHandler: ErrorHandler,
-    private environmentStore: EnvironmentStore
+    private envVariablesStore: EnvironmentVariablesStore
   ) {
 
     this.client = axios.create({
@@ -44,7 +44,7 @@ export class LoggerService {
 
       await this.client.request({
         method: 'POST',
-        url: `${this.environmentStore.APP_URL}/insights`,
+        url: `${this.envVariablesStore.APP_URL}/insights`,
         data: {
           type: 'trace',
           message,

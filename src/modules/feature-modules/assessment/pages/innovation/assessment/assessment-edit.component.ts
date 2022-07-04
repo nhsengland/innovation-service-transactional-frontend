@@ -3,12 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
-import { MappedObject } from '@modules/core';
+import { AlertType, MappedObjectType } from '@app/base/types';
 import { FormEngineComponent, FormEngineParameterModel } from '@modules/shared/forms';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
-import { OrganisationsService } from '@shared-module/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 import { AssessmentService } from '../../../services/assessment.service';
 
@@ -144,7 +143,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     // This section is not easy to test. TOIMPROVE: Include this code on unit test.
     (this.formEngineComponent?.toArray() || []).forEach(engine => /* istanbul ignore next */ {
 
-      let formData: MappedObject;
+      let formData: MappedObjectType;
 
       if (action === 'saveAsDraft') {
         formData = engine.getFormValues(false);

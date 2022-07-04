@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 
-import { NotificationContextType, NotificationsService } from '@modules/shared/services/notifications.service';
+import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { AccessorService, getInnovationActionInfoOutDTO } from '../../../services/accessor.service';
@@ -32,8 +32,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService,
-    private notificationsService: NotificationsService,
+    private accessorService: AccessorService
   ) {
 
     super();
@@ -87,7 +86,8 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
       }
     );
 
-    this.notificationsService.dismissNotification(this.actionId, NotificationContextType.ACTION).subscribe();
+    this.stores.environment.dismissNotification(NotificationContextTypeEnum.ACTION, this.actionId);
+
   }
 
 }

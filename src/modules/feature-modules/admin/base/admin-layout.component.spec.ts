@@ -85,8 +85,8 @@ describe('FeatureModules/Admin/Base/AdminLayoutComponent', () => {
     activatedRoute.snapshot.data = { module: 'admin', layoutOptions: { type: 'userAccountMenu' } };
 
     const expected = [
-      { title: 'Your details', link: `/admin/account/manage-details` },
-      { title: 'Manage account', link: `/admin/account/manage-account` }
+      { key: 'YourDetails', title: 'Your details', link: `/admin/account/manage-details` },
+      { key: 'ManageAccount', title: 'Manage account', link: `/admin/account/manage-account` }
     ];
 
     fixture = TestBed.createComponent(AdminLayoutComponent);
@@ -121,7 +121,7 @@ describe('FeatureModules/Admin/Base/AdminLayoutComponent', () => {
     fixture = TestBed.createComponent(AdminLayoutComponent);
     component = fixture.componentInstance;
 
-    expect(component.navigationMenuBar).toEqual(expected);
+    expect(component.headerMenuBar).toEqual(expected);
 
   });
 

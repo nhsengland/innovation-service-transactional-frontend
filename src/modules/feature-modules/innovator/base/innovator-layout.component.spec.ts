@@ -10,12 +10,10 @@ import { ENV } from '@tests/app.mocks';
 import { CONTEXT_INNOVATION_INFO, USER_INFO_INNOVATOR } from '@tests/data.mocks';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore, ContextStore } from '@modules/stores';
+import { StoresModule, AuthenticationStore, EnvironmentStore } from '@modules/stores';
 import { InnovatorModule } from '../innovator.module';
 
 import { InnovatorLayoutComponent } from './innovator-layout.component';
-
-import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
@@ -24,9 +22,7 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
   let router: Router;
 
   let authenticationStore: AuthenticationStore;
-  let contextStore: ContextStore;
-
-  let notificationsService: NotificationsService;
+  let environmentStore: EnvironmentStore;
 
   let component: InnovatorLayoutComponent;
   let fixture: ComponentFixture<InnovatorLayoutComponent>;
@@ -51,8 +47,7 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
     router = TestBed.inject(Router);
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-    contextStore = TestBed.inject(ContextStore);
-    notificationsService = TestBed.inject(NotificationsService);
+    environmentStore = TestBed.inject(EnvironmentStore);
 
   });
 
@@ -64,48 +59,12 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have notifications', () => {
-
-    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-
-    authenticationStore.isValidUser = () => true;
-    notificationsService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
-
-    fixture = TestBed.createComponent(InnovatorLayoutComponent);
-    component = fixture.componentInstance;
-
-    (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
-    expect(component.mainMenuNotifications).toEqual({ INNOVATION: 1 });
-    expect(component.notifications).toEqual({ INNOVATION: 1 });
-
-  });
-
-  it('should have navigationMenuBar values when route is NOT first-time-signin', () => {
-
-    const expected = {
-      leftItems: [
-        { title: 'Home', link: '/innovator/dashboard' }
-      ],
-      rightItems: [
-        { title: 'Your innovations', link: '/innovator/innovations' },
-        { title: 'Your account', link: '/innovator/account' },
-        { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
-      ]
-    };
-
-    fixture = TestBed.createComponent(InnovatorLayoutComponent);
-    component = fixture.componentInstance;
-
-    (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
-    expect(component.navigationMenuBar).toEqual(expected);
-
-  });
-
   it('should have navigationMenuBar values when route is first-time-signin', () => {
 
     const expected = {
       leftItems: [],
-      rightItems: [{ title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }]
+      rightItems: [{ key: 'signOut', label: 'Sign out', link: `http://demo.com/signout`, fullReload: true }],
+      notifications: { notifications: 0 }
     };
 
     fixture = TestBed.createComponent(InnovatorLayoutComponent);
@@ -117,6 +76,29 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
 
   });
 
+  it('should have navigationMenuBar values when route is NOT first-time-signin', () => {
+
+    environmentStore.notifications$ = () => of({ UNREAD: 20 });
+
+    const expected = {
+      leftItems: [
+        { key: 'innovations', label: 'Your innovations', link: '/innovator/dashboard' }
+      ],
+      rightItems: [
+        { key: 'notifications', label: 'Notifications', link: '/innovator/notifications' },
+        { key: 'yourAccount', label: 'Your account', link: '/innovator/account' },
+        { key: 'signOut', label: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
+      ],
+      notifications: { notifications: 20 }
+    };
+
+    fixture = TestBed.createComponent(InnovatorLayoutComponent);
+    component = fixture.componentInstance;
+
+    (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
+    expect(component.navigationMenuBar).toEqual(expected);
+
+  });
 
   it('should have leftSideBar with no values', () => {
 
@@ -139,10 +121,10 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
     activatedRoute.snapshot.data = { layoutOptions: { type: 'userAccountMenu' } };
 
     const expected = [
-      { title: 'Your details', link: `/innovator/account/manage-details` },
-      { title: 'Email notifications', link: `/innovator/account/email-notifications` },
-      { title: 'Manage innovations', link: `/innovator/account/manage-innovations` },
-      { title: 'Manage account', link: `/innovator/account/manage-account` }
+      { key: 'YourDetails', title: 'Your details', link: `/innovator/account/manage-details` },
+      { key: 'EmailNotifications', title: 'Email notifications', link: `/innovator/account/email-notifications` },
+      { key: 'ManageInnovations', title: 'Manage innovations', link: `/innovator/account/manage-innovations` },
+      { key: 'ManageAccount', title: 'Manage account', link: `/innovator/account/manage-account` }
     ];
 
     fixture = TestBed.createComponent(InnovatorLayoutComponent);
@@ -159,12 +141,12 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
     activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' } };
 
     const expected = [
-      { title: 'Overview', link: `/innovator/innovations/innovation01/overview` },
-      { title: 'Innovation record', link: `/innovator/innovations/innovation01/record` },
-      { title: 'Action tracker', link: `/innovator/innovations/innovation01/action-tracker`, key: 'ACTION' },
-      { title: 'Comments', link: `/innovator/innovations/innovation01/comments`, key: 'COMMENT' },
-      { title: 'Data sharing and support', link: `/innovator/innovations/innovation01/support`, key: 'DATA_SHARING' },
-      { title: 'Activity log', link: `/innovator/innovations/innovation01/activity-log` }
+      { key: 'Overview', title: 'Overview', link: `/innovator/innovations/innovation01/overview` },
+      { key: 'InnovationRecord', title: 'Innovation record', link: `/innovator/innovations/innovation01/record` },
+      { key: 'Action', title: 'Action tracker', link: `/innovator/innovations/innovation01/action-tracker` },
+      { key: 'Comment', title: 'Comments', link: `/innovator/innovations/innovation01/comments` },
+      { key: 'DataSharingAndSupport', title: 'Data sharing and support', link: `/innovator/innovations/innovation01/support` },
+      { key: 'ActivityLog', title: 'Activity log', link: `/innovator/innovations/innovation01/activity-log` }
     ];
 
     fixture = TestBed.createComponent(InnovatorLayoutComponent);
@@ -190,30 +172,13 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
 
   });
 
-  // it('should show innovationHeaderBar with EMPTY innovation name', () => {
-
-  //   activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-  //   activatedRoute.snapshot.data = { layoutOptions: { showInnovationHeader: true } };
-
-  //   contextStore.getInnovation = () => ({ ...CONTEXT_INNOVATION_INFO, name: '' });
-
-  //   const expected = { id: 'Inno01', name: null };
-
-  //   fixture = TestBed.createComponent(InnovatorLayoutComponent);
-  //   component = fixture.componentInstance;
-
-  //   (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
-  //   expect(component.innovationHeaderBar).toEqual(expected);
-
-  // });
-
   it('should show innovationHeaderBar with ALL information', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
     activatedRoute.snapshot.data = { layoutOptions: { showInnovationHeader: true } };
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
-    contextStore.getInnovation = () => CONTEXT_INNOVATION_INFO;
+    environmentStore.getInnovation = () => CONTEXT_INNOVATION_INFO;
 
     const expected = { id: 'Inno01', name: 'Test innovation' };
 

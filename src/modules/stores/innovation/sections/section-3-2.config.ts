@@ -1,5 +1,6 @@
 import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
 
 import { hasOtherIntellectualItems, hasPatentsItems } from './catalogs.config';
 
@@ -21,7 +22,7 @@ type StepPayloadType = InboundPayloadType;
 
 
 export const SECTION_3_2: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.INTELLECTUAL_PROPERTY,
+  id: InnovationSectionEnum.INTELLECTUAL_PROPERTY,
   title: 'Intellectual property',
   wizard: new WizardEngineModel({
     steps: [

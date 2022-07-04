@@ -8,7 +8,7 @@ import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { InnovationStore, StoresModule } from '@modules/stores';
-import { InnovationSectionsIds } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum } from '@modules/stores/innovation';
 import { FormEngineComponent } from '@modules/shared/forms';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
@@ -46,8 +46,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
     innovationStore = TestBed.inject(InnovationStore);
 
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, questionId: 1 };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, questionId: 1 }); // Simulate activatedRoute.params subscription.
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 1 };
+    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 1 }); // Simulate activatedRoute.params subscription.
 
     innovationStore.getSectionEvidence$ = () => of({
       evidenceType: 'CLINICAL',
@@ -78,8 +78,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
   it('should run isEdition()', () => {
 
-    activatedRoute.snapshot.params = { sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 1 };
-    activatedRoute.params = of({ sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 1 }); // Simulate activatedRoute.params subscription.
+    activatedRoute.snapshot.params = { sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 1 };
+    activatedRoute.params = of({ sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 1 }); // Simulate activatedRoute.params subscription.
 
     fixture = TestBed.createComponent(InnovationSectionEvidenceEditComponent);
     component = fixture.componentInstance;
@@ -100,8 +100,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
   it('should run isSummaryStep()', () => {
 
-    activatedRoute.snapshot.params = { sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, questionId: 'summary' };
-    activatedRoute.params = of({ sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, questionId: 'summary' }); // Simulate activatedRoute.params subscription.
+    activatedRoute.snapshot.params = { sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 'summary' };
+    activatedRoute.params = of({ sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 'summary' }); // Simulate activatedRoute.params subscription.
 
     fixture = TestBed.createComponent(InnovationSectionEvidenceEditComponent);
     component = fixture.componentInstance;
@@ -123,8 +123,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
   it('should have initial information when EDITING a evidence', () => {
 
-    activatedRoute.snapshot.params = { sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 4 };
-    activatedRoute.params = of({ sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 4 }); // Simulate activatedRoute.params subscription.
+    activatedRoute.snapshot.params = { sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 4 };
+    activatedRoute.params = of({ sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 4 }); // Simulate activatedRoute.params subscription.
 
     fixture = TestBed.createComponent(InnovationSectionEvidenceEditComponent);
     component = fixture.componentInstance;
@@ -142,8 +142,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
   it('should NOT have initial information when EDITING a evidence with API error', () => {
 
-    activatedRoute.snapshot.params = { sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 1 };
-    activatedRoute.params = of({ sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 1 }); // Simulate activatedRoute.params subscription.
+    activatedRoute.snapshot.params = { sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 1 };
+    activatedRoute.params = of({ sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 1 }); // Simulate activatedRoute.params subscription.
 
     innovationStore.getSectionEvidence$ = () => throwError('error');
 
@@ -232,8 +232,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
   it('should run getNavigationUrl() for first step when pressing PREVIOUS and evidence EDITING', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 1 };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 1 }); // Simulate activatedRoute.params subscription.
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 1 };
+    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 1 }); // Simulate activatedRoute.params subscription.
 
     fixture = TestBed.createComponent(InnovationSectionEvidenceEditComponent);
     component = fixture.componentInstance;
@@ -246,8 +246,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
   it('should run getNavigationUrl() for summary step when pressing PREVIOUS', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, questionId: 'summary' };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, questionId: 'summary' }); // Simulate activatedRoute.params subscription.
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 'summary' };
+    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 'summary' }); // Simulate activatedRoute.params subscription.
 
     fixture = TestBed.createComponent(InnovationSectionEvidenceEditComponent);
     component = fixture.componentInstance;
@@ -259,8 +259,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
   it('should run getNavigationUrl() for a question step when pressiong PREVIOUS', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, questionId: 2 };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, questionId: 2 }); // Simulate activatedRoute.params subscription.
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 2 };
+    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 2 }); // Simulate activatedRoute.params subscription.
 
     fixture = TestBed.createComponent(InnovationSectionEvidenceEditComponent);
     component = fixture.componentInstance;
@@ -272,8 +272,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
   it('should run getNavigationUrl() for summary step when pressing NEXT and evidence CREATION', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, questionId: 'summary' };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, questionId: 'summary' }); // Simulate activatedRoute.params subscription.
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 'summary' };
+    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 'summary' }); // Simulate activatedRoute.params subscription.
 
     fixture = TestBed.createComponent(InnovationSectionEvidenceEditComponent);
     component = fixture.componentInstance;
@@ -285,8 +285,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
   it('should run getNavigationUrl() for summary step when pressing NEXT and evidence EDITING', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 'summary' };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 'summary' }); // Simulate activatedRoute.params subscription.
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 'summary' };
+    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 'summary' }); // Simulate activatedRoute.params subscription.
 
     fixture = TestBed.createComponent(InnovationSectionEvidenceEditComponent);
     component = fixture.componentInstance;
@@ -298,8 +298,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
   it('should run getNavigationUrl() for last step when pressing NEXT and evidence CREATION', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, questionId: 3 };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, questionId: 3 }); // Simulate activatedRoute.params subscription.
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 3 };
+    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 3 }); // Simulate activatedRoute.params subscription.
 
     fixture = TestBed.createComponent(InnovationSectionEvidenceEditComponent);
     component = fixture.componentInstance;
@@ -311,8 +311,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
   it('should run getNavigationUrl() for last step when pressing NEXT and evidence EDITING', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 4 };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 4 }); // Simulate activatedRoute.params subscription.
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 4 };
+    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 4 }); // Simulate activatedRoute.params subscription.
 
     fixture = TestBed.createComponent(InnovationSectionEvidenceEditComponent);
     component = fixture.componentInstance;
@@ -324,8 +324,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
   it('should run getNavigationUrl() for a question step when pressiong NEXT and evidence CREATION', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, questionId: 2 };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, questionId: 2 }); // Simulate activatedRoute.params subscription.
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 2 };
+    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 2 }); // Simulate activatedRoute.params subscription.
 
     fixture = TestBed.createComponent(InnovationSectionEvidenceEditComponent);
     component = fixture.componentInstance;
@@ -337,8 +337,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
 
   it('should run getNavigationUrl() for a question step when pressiong NEXT and evidence EDITING', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 2 };
-    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 2 }); // Simulate activatedRoute.params subscription.
+    activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 2 };
+    activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, evidenceId: 'evidenceId01', questionId: 2 }); // Simulate activatedRoute.params subscription.
 
     fixture = TestBed.createComponent(InnovationSectionEvidenceEditComponent);
     component = fixture.componentInstance;

@@ -8,8 +8,8 @@ import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/shared/enums';
 
 import { InnovationDataResolver } from './innovation-data.resolver';
 

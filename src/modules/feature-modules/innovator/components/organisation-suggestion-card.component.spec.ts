@@ -92,8 +92,6 @@ describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
 
   it('should create the component', () => {
 
-    notificationsService.notifications = { DATA_SHARING: 1 };
-
     hostComponent.suggestions =
     {
       assessment: {

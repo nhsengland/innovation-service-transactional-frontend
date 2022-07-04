@@ -13,7 +13,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageAdminOrganisationEditComponent } from './organisations-edit.component';
 
-import { OrganisationsService } from '@shared-module/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 

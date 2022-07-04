@@ -3,20 +3,23 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { AuthenticationStore } from './authentication/authentication.store';
 import { AuthenticationService } from './authentication/authentication.service';
 
+import { EnvironmentStore } from './environment/environment.store';
+import { EnvironmentService } from './environment/environment.service';
+
 import { InnovationStore } from './innovation/innovation.store';
 import { InnovationService } from './innovation/innovation.service';
-
-import { ContextStore } from './context/context.store';
-
 
 
 @NgModule({
   providers: [
     AuthenticationStore,
     AuthenticationService,
+
+    EnvironmentStore,
+    EnvironmentService,
+
     InnovationStore,
-    InnovationService,
-    ContextStore
+    InnovationService
   ]
 })
 export class StoresModule {

@@ -3,9 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
-import { EnvironmentStore } from '@modules/core/stores/environment.store';
+import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
 import { UrlModel } from '@modules/core/models/url.model';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum, UserTypeEnum } from './authentication.enums';
 
 
 type getUserInfoInDTO = {
@@ -13,13 +14,13 @@ type getUserInfoInDTO = {
   email: string;
   displayName: string;
   phone: string;
-  type: 'ADMIN' | 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
-  roles: ('ADMIN' | 'SERVICE_TEAM')[];
+  type: UserTypeEnum;
+  roles: UserRoleEnum[];
   organisations: {
     id: string;
     name: string;
     size: null | string;
-    role: 'INNOVATOR_OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
+    role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum;
     isShadow: boolean;
     organisationUnits: { id: string; name: string; }[];
   }[];
@@ -27,11 +28,6 @@ type getUserInfoInDTO = {
 };
 type getUserInfoOutDTO = Required<getUserInfoInDTO>;
 
-
-type getUserInnovationsDto = {
-  id: string;
-  name: string;
-};
 
 export type saveUserInfoDTO = {
   displayName: string;
@@ -51,12 +47,12 @@ export type GetTermsOfUseLastVersionInfoDTO = {
 @Injectable()
 export class AuthenticationService {
 
-  private APP_URL = this.environmentStore.APP_URL;
-  private API_URL = this.environmentStore.API_URL;
+  private APP_URL = this.envVariablesStore.APP_URL;
+  private API_URL = this.envVariablesStore.API_URL;
 
   constructor(
     private http: HttpClient,
-    private environmentStore: EnvironmentStore
+    private envVariablesStore: EnvironmentVariablesStore
   ) { }
 
 
@@ -107,17 +103,6 @@ export class AuthenticationService {
       take(1),
       map(response => response),
       catchError(() => of({ userExists: false, hasInvites: false }))
-    );
-
-  }
-
-  getInnovations(userId: string): Observable<getUserInnovationsDto[]> {
-
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations').setPathParams({ userId });
-    return this.http.get<getUserInnovationsDto[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response),
-      catchError(() => of([])) // On error, just return no innovation at all.
     );
 
   }

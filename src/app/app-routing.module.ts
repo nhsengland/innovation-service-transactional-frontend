@@ -5,9 +5,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
 
 // Pages.
-import { PageAccountDeleteAccountMessageComponent } from '@shared-module/pages/account/delete-account-message/delete-account-message.component';
-import { PageErrorComponent } from '@shared-module/pages/error/error.component';
-import { PageNotFoundComponent } from '@shared-module/pages/not-found/not-found.component';
+import { PageAccountDeleteMessageComponent } from '@modules/shared/pages/account/delete-message/delete-message.component';
+import { PageErrorComponent } from '@modules/shared/pages/error/error.component';
+import { PageNotFoundComponent } from '@modules/shared/pages/error/not-found.component';
 
 // Guards.
 import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
@@ -24,7 +24,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'auth', loadChildren: () => import('@feature-modules/authentication/authentication.module').then(m => m.AuthenticationModule)
+    path: 'auth', loadChildren: () => import('@modules/feature-modules/authentication/authentication.module').then(m => m.AuthenticationModule)
   },
 
   {
@@ -35,11 +35,11 @@ const routes: Routes = [
   },
 
   {
-    path: 'triage-innovator-pack', loadChildren: () => import('@feature-modules/triage-innovator-pack/triage-innovator-pack.module').then(m => m.TriageInnovatorPackModule)
+    path: 'triage-innovator-pack', loadChildren: () => import('@modules/feature-modules/triage-innovator-pack/triage-innovator-pack.module').then(m => m.TriageInnovatorPackModule)
   },
 
   {
-    path: 'policies', loadChildren: () => import('@feature-modules/policies/policies.module').then(m => m.PoliciesModule)
+    path: 'policies', loadChildren: () => import('@modules/feature-modules/policies/policies.module').then(m => m.PoliciesModule)
   },
 
   {
@@ -54,19 +54,19 @@ const routes: Routes = [
       },
       {
         canActivate: [AuthenticationRedirectionGuard],
-        path: 'admin', loadChildren: () => import('@feature-modules/admin/admin.module').then(m => m.AdminModule)
+        path: 'admin', loadChildren: () => import('@modules/feature-modules/admin/admin.module').then(m => m.AdminModule)
       },
       {
         canActivate: [AuthenticationRedirectionGuard],
-        path: 'assessment', loadChildren: () => import('@feature-modules/assessment/assessment.module').then(m => m.AssessmentModule)
+        path: 'assessment', loadChildren: () => import('@modules/feature-modules/assessment/assessment.module').then(m => m.AssessmentModule)
       },
       {
         canActivate: [AuthenticationRedirectionGuard],
-        path: 'innovator', loadChildren: () => import('@feature-modules/innovator/innovator.module').then(m => m.InnovatorModule)
+        path: 'innovator', loadChildren: () => import('@modules/feature-modules/innovator/innovator.module').then(m => m.InnovatorModule)
       },
       {
         canActivate: [AuthenticationRedirectionGuard],
-        path: 'accessor', loadChildren: () => import('@feature-modules/accessor/accessor.module').then(m => m.AccessorModule)
+        path: 'accessor', loadChildren: () => import('@modules/feature-modules/accessor/accessor.module').then(m => m.AccessorModule)
       }
     ]
   },
@@ -74,7 +74,7 @@ const routes: Routes = [
   {
     path: 'delete-account-message',
     component: BaseLayoutComponent,
-    children: [{ path: '', pathMatch: 'full', component: PageAccountDeleteAccountMessageComponent }]
+    children: [{ path: '', pathMatch: 'full', component: PageAccountDeleteMessageComponent }]
   },
 
   {

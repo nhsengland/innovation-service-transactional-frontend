@@ -1,5 +1,6 @@
 import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
 
 import { hasProblemTackleKnowledgeItems } from './catalogs.config';
 
@@ -26,7 +27,7 @@ type StepPayloadType = InboundPayloadType;
 
 
 export const SECTION_1_2: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.VALUE_PROPOSITION,
+  id: InnovationSectionEnum.VALUE_PROPOSITION,
   title: 'Value proposition',
   wizard: new WizardEngineModel({
     steps: [

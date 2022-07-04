@@ -5,7 +5,7 @@ import { ENV } from '@tests/app.mocks';
 
 import { Injector } from '@angular/core';
 
-import { AppInjector, CoreModule, EnvironmentStore } from '@modules/core';
+import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
 import { OrganisationsService } from './organisations.service';
@@ -13,7 +13,7 @@ import { OrganisationsService } from './organisations.service';
 describe('Shared/Services/OrganisationsService', () => {
 
   let httpMock: HttpTestingController;
-  let environmentStore: EnvironmentStore;
+  let envVariablesStore: EnvironmentVariablesStore;
   let service: OrganisationsService;
 
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe('Shared/Services/OrganisationsService', () => {
     AppInjector.setInjector(TestBed.inject(Injector));
 
     httpMock = TestBed.inject(HttpTestingController);
-    environmentStore = TestBed.inject(EnvironmentStore);
+    envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
     service = TestBed.inject(OrganisationsService);
 
   });
@@ -50,7 +50,7 @@ describe('Shared/Services/OrganisationsService', () => {
 
     service.getAccessorsOrganisations().subscribe(success => response = success, error => response = error);
 
-    const req = httpMock.expectOne(`${environmentStore.API_URL}/organisations?type=ACCESSOR`);
+    const req = httpMock.expectOne(`${envVariablesStore.API_URL}/organisations?type=ACCESSOR`);
     req.flush(responseMock);
     expect(req.request.method).toBe('GET');
     expect(response).toEqual(expected);

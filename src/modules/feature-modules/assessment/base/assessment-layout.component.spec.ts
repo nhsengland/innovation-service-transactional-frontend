@@ -4,19 +4,19 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { of } from 'rxjs';
 
 import { ENV } from '@tests/app.mocks';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore, ContextStore } from '@modules/stores';
+import { StoresModule, AuthenticationStore, EnvironmentStore } from '@modules/stores';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
+
 import { AssessmentModule } from '../assessment.module';
 
 import { AssessmentLayoutComponent } from './assessment-layout.component';
 
-import { NotificationsService } from '@modules/shared/services/notifications.service';
 import { CONTEXT_INNOVATION_INFO } from '@tests/data.mocks';
-import { InnovationStatusEnum } from '@modules/shared/enums';
 
 
 describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
@@ -25,7 +25,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
   let router: Router;
 
   let authenticationStore: AuthenticationStore;
-  let contextStore: ContextStore;
+  let environmentStore: EnvironmentStore;
   let notificationsService: NotificationsService;
 
   let component: AssessmentLayoutComponent;
@@ -51,7 +51,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     router = TestBed.inject(Router);
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-    contextStore = TestBed.inject(ContextStore);
+    environmentStore = TestBed.inject(EnvironmentStore);
     notificationsService = TestBed.inject(NotificationsService);
 
   });
@@ -68,13 +68,15 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
 
     const expected = {
       leftItems: [
-        { title: 'Home', link: '/assessment/dashboard' }
+        { key: 'home', label: 'Home', link: '/assessment/dashboard' }
       ],
       rightItems: [
-        { title: 'Innovations', link: '/assessment/innovations', key: 'INNOVATION' },
-        { title: 'Account', link: '/assessment/account' },
-        { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
-      ]
+        { key: 'innovations', label: 'Innovations', link: '/assessment/innovations' },
+        { key: 'notifications', label: 'Notifications', link: '/assessment/notifications' },
+        { key: 'account', label: 'Account', link: '/assessment/account' },
+        { key: 'signOut', label: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
+      ],
+      notifications: { notifications: 0 }
     };
 
     fixture = TestBed.createComponent(AssessmentLayoutComponent);
@@ -83,22 +85,6 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     expect(component.navigationMenuBar).toEqual(expected);
 
   });
-
-  it('should have notifications', () => {
-
-    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-
-    authenticationStore.isValidUser = () => true;
-    notificationsService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
-
-    fixture = TestBed.createComponent(AssessmentLayoutComponent);
-    component = fixture.componentInstance;
-
-    (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
-    expect(component.mainMenuNotifications).toEqual({ INNOVATION: 1 });
-
-  });
-
 
   it('should have leftSideBar with no values', () => {
 
@@ -137,7 +123,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'innovation01', status: '' };
     activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' } };
 
-    contextStore.getInnovation = () => ({ ...CONTEXT_INNOVATION_INFO, status: InnovationStatusEnum.IN_PROGRESS });
+    environmentStore.getInnovation = () => ({ ...CONTEXT_INNOVATION_INFO, status: InnovationStatusEnum.IN_PROGRESS });
 
     const expected = [
       { title: 'Overview', link: `/assessment/innovations/innovation01/overview` },
@@ -160,7 +146,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     activatedRoute.snapshot.params = { innovationId: 'innovation01', status: '' };
     activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' }, innovationData: { status: '' } };
 
-    contextStore.getInnovation = () => ({ ...CONTEXT_INNOVATION_INFO, status: InnovationStatusEnum.CREATED });
+    environmentStore.getInnovation = () => ({ ...CONTEXT_INNOVATION_INFO, status: InnovationStatusEnum.CREATED });
 
     const expected = [
       { title: 'Overview', link: `/assessment/innovations/innovation01/overview` },

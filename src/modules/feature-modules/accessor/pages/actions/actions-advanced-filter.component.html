@@ -25,8 +25,7 @@
 
           <ng-container *ngFor="let filter of filters">
 
-            <a href="javascript:void(0)" (click)="onOpenCloseFilter(filter.key)"
-              class="d-flex align-items-center nhsuk-u-font-size-19 text-decoration-none nhsuk-u-margin-bottom-0"
+            <a href="javascript:void(0)" (click)="onOpenCloseFilter(filter.key)" class="d-flex align-items-center nhsuk-u-font-size-19 text-decoration-none nhsuk-u-margin-bottom-0"
               [attr.aria-expanded]="filter.showHideStatus === 'opened' ? 'true' : 'false'">
               <ng-container *ngTemplateOutlet="filterIcon; context: { showHideStatus: filter.showHideStatus }"></ng-container>
               <span class="nhsuk-u-padding-left-2"> {{ filter.title }} <span class="nhsuk-u-visually-hidden"> filter section </span></span>
@@ -100,8 +99,7 @@
               <tr class="">
                 <th *ngFor="let item of actionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                   <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-                  <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label
-                    }}</button>
+                  <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
                 </th>
               </tr>
             </thead>
@@ -109,17 +107,14 @@
             <tbody class="nhsuk-table__body">
               <tr *ngFor="let item of actionsList.getRecords()" class="nhsuk-table__row">
                 <td class="nhsuk-table__cell">
-                  <div class="side-menu-flex">
-                    <div>
+                  <div class="d-flex">
+                    <div class="nhsuk-u-padding-right-1">
                       <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('section') }}</span>
                       <a routerLink="/accessor/innovations/{{ item.innovation.id }}/action-tracker/{{ item.id }}" attr.aria-label="View action named {{ item.name }} for innovation {{ item.innovation.name }}">
                         {{ item.name }}
                       </a>
                     </div>
-                    <div>
-                      <notification-tag *ngIf="item.notifications && item.notifications.count > 0" type="circle">
-                      </notification-tag>
-                    </div>
+                    <notification-tag label="dot" *ngIf="item.notifications && item.notifications.count > 0"></notification-tag>
                   </div>
                 </td>
                 <td class="nhsuk-table__cell">

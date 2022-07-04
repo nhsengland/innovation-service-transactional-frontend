@@ -13,10 +13,9 @@ import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { DashboardComponent } from './dashboard.component';
+import { PageDashboardComponent } from './dashboard.component';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
@@ -24,10 +23,9 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
   let authenticationStore: AuthenticationStore;
   let innovationsService: InnovationsService;
   let innovatorService: InnovatorService;
-  let notificationsService: NotificationsService;
 
-  let component: DashboardComponent;
-  let fixture: ComponentFixture<DashboardComponent>;
+  let component: PageDashboardComponent;
+  let fixture: ComponentFixture<PageDashboardComponent>;
   let activatedRoute: ActivatedRoute;
 
   beforeEach(() => {
@@ -46,7 +44,6 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
     authenticationStore = TestBed.inject(AuthenticationStore);
     innovationsService = TestBed.inject(InnovationsService);
     innovatorService = TestBed.inject(InnovatorService);
-    notificationsService = TestBed.inject(NotificationsService);
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
 
@@ -55,7 +52,7 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
   });
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(DashboardComponent);
+    fixture = TestBed.createComponent(PageDashboardComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
@@ -74,7 +71,7 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
 
     const expected = responseMock;
 
-    fixture = TestBed.createComponent(DashboardComponent);
+    fixture = TestBed.createComponent(PageDashboardComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -92,7 +89,7 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
       type: null
     };
 
-    fixture = TestBed.createComponent(DashboardComponent);
+    fixture = TestBed.createComponent(PageDashboardComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -100,51 +97,10 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
 
   });
 
-  it('should have notifications with API success', () => {
-    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-
-    // authenticationStore.isValidUser = () => true;
-    notificationsService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
-
-    fixture = TestBed.createComponent(DashboardComponent);
-    component = fixture.componentInstance;
-
-    fixture.detectChanges();
-    notificationsService.getAllUnreadNotificationsGroupedByContext(activatedRoute.snapshot.params.innovationId).subscribe(
-      response => expect(response).toEqual({ INNOVATION: 1 })
-    );
-  });
-
-  it('should NOT have notifications with API error', () => {
-
-    innovationsService.getInnovationsList = () => of([
-      { id: 'innovationId01', name: 'Innovation Name 01' }
-    ]);
-    const responseMock = [
-      { id: 'TransferId01', email: 'some@email.com', innovation: { id: 'Inno01', name: 'Innovation name 01' } },
-      { id: 'TransferId02', email: 'some@email.com', innovation: { id: 'Inno02', name: 'Innovation name 02' } }
-    ];
-    innovatorService.getInnovationTransfers = () => of(responseMock);
-
-    notificationsService.getAllUnreadNotificationsGroupedByContext = () => throwError('error');
-
-    const error = {
-      type: 'ERROR',
-      title: 'An error occurred',
-      message: 'Please try again or contact us for further help',
-      setFocus: true
-    };
-
-    fixture = TestBed.createComponent(DashboardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    expect(component.alert).toEqual(error);
-  });
-
   it('should have alert when password changed', () => {
     activatedRoute.snapshot.queryParams = { alert: 'xxxx' };
 
-    fixture = TestBed.createComponent(DashboardComponent);
+    fixture = TestBed.createComponent(PageDashboardComponent);
     component = fixture.componentInstance;
     component.user.passwordResetOn = new Date(new Date().getTime() - 2 * 60000).toString();
 
@@ -224,7 +180,7 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
       setFocus: true
     };
 
-    fixture = TestBed.createComponent(DashboardComponent);
+    fixture = TestBed.createComponent(PageDashboardComponent);
     component = fixture.componentInstance;
 
     component.onSubmitTransferResponse('TransferId01', true);

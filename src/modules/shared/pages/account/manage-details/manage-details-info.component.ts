@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/models';
+import { AlertType } from '@app/base/types';
 
 
 @Component({
@@ -30,7 +30,7 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'accountDetailsUpdateSuccess':
         this.alert = {
-          type: 'WARNING',
+          type: 'SUCCESS',
           title: 'Your information has been saved'
         };
         break;

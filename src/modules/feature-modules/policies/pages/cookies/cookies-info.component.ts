@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 
-import { COOKIES_USED } from '@feature-modules/policies/config/constants.config';
+import { COOKIES_USED } from '../../config/constants.config';
 
 
 @Component({

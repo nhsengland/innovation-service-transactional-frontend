@@ -1,5 +1,7 @@
-import { InnovationSupportStatusEnum } from '@modules/shared/enums';
 import { WizardEngineModel } from '@modules/shared/forms';
+
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum, InnovationSupportStatusEnum } from './innovation.enums';
+
 
 // Store state model.
 export class InnovationModel { constructor() { } }
@@ -9,30 +11,155 @@ export class InnovationModel { constructor() { } }
 export type InnovationSectionConfigType = {
   title: string;
   sections: {
-    id: InnovationSectionsIds;
+    id: InnovationSectionEnum;
     title: string;
     wizard: WizardEngineModel;
     evidences?: WizardEngineModel;
   }[];
 };
 
-export enum InnovationSectionsIds {
-  INNOVATION_DESCRIPTION = 'INNOVATION_DESCRIPTION',
-  VALUE_PROPOSITION = 'VALUE_PROPOSITION',
-  UNDERSTANDING_OF_NEEDS = 'UNDERSTANDING_OF_NEEDS',
-  UNDERSTANDING_OF_BENEFITS = 'UNDERSTANDING_OF_BENEFITS',
-  EVIDENCE_OF_EFFECTIVENESS = 'EVIDENCE_OF_EFFECTIVENESS',
-  MARKET_RESEARCH = 'MARKET_RESEARCH',
-  INTELLECTUAL_PROPERTY = 'INTELLECTUAL_PROPERTY',
-  REGULATIONS_AND_STANDARDS = 'REGULATIONS_AND_STANDARDS',
-  CURRENT_CARE_PATHWAY = 'CURRENT_CARE_PATHWAY',
-  TESTING_WITH_USERS = 'TESTING_WITH_USERS',
-  COST_OF_INNOVATION = 'COST_OF_INNOVATION',
-  COMPARATIVE_COST_BENEFIT = 'COMPARATIVE_COST_BENEFIT',
-  REVENUE_MODEL = 'REVENUE_MODEL',
-  IMPLEMENTATION_PLAN = 'IMPLEMENTATION_PLAN',
-}
+export type InnovationDataResolverType = {
+  id: string;
+  name: string;
+  status: keyof typeof INNOVATION_STATUS;
+  assessment: {
+    id: undefined | string;
+  };
+  support?: {
+    id: undefined | string;
+    status: InnovationSupportStatusEnum;
+  };
+  lockedInnovatorValidation?: {
+    displayIsInnovatorLocked: boolean;
+    innovatorName?: string;
+  };
+  owner: {
+    isActive: boolean;
+    name: string;
+  }
+};
 
+export type sectionType = {
+  id: null | string;
+  section: InnovationSectionEnum;
+  status: keyof typeof INNOVATION_SECTION_STATUS;
+  actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
+  updatedAt: string;
+};
+
+export type getInnovationInfoEndpointDTO = {
+  id: string;
+  name: string;
+  company: string;
+  description: string;
+  countryName: string;
+  postcode: string;
+  actions: string[];
+  comments: string[];
+};
+
+export type getInnovationInfoResponse = {
+  id: string;
+  name: string;
+  company: string;
+  location: string;
+  description: string;
+  openActionsNumber: number;
+  openCommentsNumber: number;
+};
+
+export type getInnovationSectionsDTO = {
+  id: string;
+  name: string;
+  status: keyof typeof INNOVATION_STATUS;
+  submittedAt: string | undefined;
+  sections: sectionType[];
+};
+
+
+export type getInnovationEvidenceDTO = {
+  evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER',
+  clinicalEvidenceType: string,
+  description: string,
+  summary: string
+  files: { id: string; displayFileName: string; url: string }[];
+};
+
+export type getInnovationCommentsDTO = {
+  id: string;
+  message: string;
+  createdAt: string;
+  updatedAt: string;
+  isEditable: boolean;
+  user: {
+    id: string;
+    type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
+    name: string;
+    organisationUnit?: { id: string; name: string; };
+  };
+  notifications?: { count: number }
+  replies: {
+    id: string;
+    message: string;
+    createdAt: string;
+    updatedAt: string;
+    isEditable: boolean;
+    user: {
+      id: string;
+      type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
+      name: string;
+      organisationUnit?: { id: string; name: string; };
+    };
+    notifications?: { count: number };
+  }[];
+};
+
+export type SectionsSummaryModel = {
+  title: string;
+  sections: {
+    id: InnovationSectionEnum;
+    title: string;
+    status: keyof typeof INNOVATION_SECTION_STATUS;
+    actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
+    isCompleted: boolean;
+  }[]
+};
+
+export type OrganisationModel = {
+  id: string;
+  name: string;
+  acronym: string;
+  organisationUnits?: OrganisationUnitModel[];
+};
+
+export type OrganisationUnitModel = {
+  id: string;
+  name: string;
+  acronym: string;
+};
+
+export type AssessmentSuggestionModel = {
+  id: string;
+  suggestedOrganisations: OrganisationModel[];
+};
+
+export type AccessorSuggestionModel = {
+  organisationUnit: {
+    id: string;
+    name: string;
+    acronym: string;
+    organisation: OrganisationModel,
+  };
+  suggestedOrganisations: OrganisationModel[];
+};
+
+export type OrganisationSuggestionModel = {
+  assessment: AssessmentSuggestionModel;
+  accessors: AccessorSuggestionModel[];
+};
+
+
+// Constants.
 export const INNOVATION_STATUS = {
   '': null,
   CREATED: { label: 'Created', cssClass: 'nhsuk-tag--wellow' },
@@ -147,35 +274,6 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
 };
 
 
-export enum ActivityLogTypesEnum {
-  INNOVATION_MANAGEMENT = 'INNOVATION_MANAGEMENT',
-  INNOVATION_RECORD = 'INNOVATION_RECORD',
-  NEEDS_ASSESSMENT = 'NEEDS_ASSESSMENT',
-  SUPPORT = 'SUPPORT',
-  COMMENTS = 'COMMENTS',
-  ACTIONS = 'ACTIONS'
-}
-
-export enum ActivityLogItemsEnum {
-  INNOVATION_CREATION = 'INNOVATION_CREATION',
-  OWNERSHIP_TRANSFER = 'OWNERSHIP_TRANSFER',
-  SHARING_PREFERENCES_UPDATE = 'SHARING_PREFERENCES_UPDATE',
-  SECTION_DRAFT_UPDATE = 'SECTION_DRAFT_UPDATE',
-  SECTION_SUBMISSION = 'SECTION_SUBMISSION',
-  INNOVATION_SUBMISSION = 'INNOVATION_SUBMISSION',
-  NEEDS_ASSESSMENT_START = 'NEEDS_ASSESSMENT_START',
-  NEEDS_ASSESSMENT_COMPLETED = 'NEEDS_ASSESSMENT_COMPLETED',
-  ORGANISATION_SUGGESTION = 'ORGANISATION_SUGGESTION',
-  SUPPORT_STATUS_UPDATE = 'SUPPORT_STATUS_UPDATE',
-  COMMENT_CREATION = 'COMMENT_CREATION',
-  ACTION_CREATION = 'ACTION_CREATION',
-  ACTION_STATUS_IN_REVIEW_UPDATE = 'ACTION_STATUS_IN_REVIEW_UPDATE',
-  ACTION_STATUS_DECLINED_UPDATE = 'ACTION_STATUS_DECLINED_UPDATE',
-  ACTION_STATUS_COMPLETED_UPDATE = 'ACTION_STATUS_COMPLETED_UPDATE',
-  ACTION_STATUS_CANCELLED_UPDATE = 'ACTION_STATUS_CANCELLED_UPDATE'
-}
-
-
 export const ACTIVITY_LOG_ITEMS: {
   [key in ActivityLogItemsEnum]: {
     type: ActivityLogTypesEnum;
@@ -268,148 +366,4 @@ export const ACTIVITY_LOG_ITEMS: {
     details: null,
     link: null
   },
-};
-
-
-export type InnovationDataResolverType = {
-  id: string;
-  name: string;
-  status: keyof typeof INNOVATION_STATUS;
-  assessment: {
-    id: undefined | string;
-  };
-  support?: {
-    id: undefined | string;
-    status: InnovationSupportStatusEnum;
-  };
-  lockedInnovatorValidation?: {
-    displayIsInnovatorLocked: boolean;
-    innovatorName?: string;
-  };
-  owner: {
-    isActive: boolean;
-    name: string;
-  }
-};
-
-
-
-export type sectionType = {
-  id: null | string;
-  section: InnovationSectionsIds;
-  status: keyof typeof INNOVATION_SECTION_STATUS;
-  actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-  updatedAt: string;
-};
-
-export type getInnovationInfoEndpointDTO = {
-  id: string;
-  name: string;
-  company: string;
-  description: string;
-  countryName: string;
-  postcode: string;
-  actions: string[];
-  comments: string[];
-};
-
-export type getInnovationInfoResponse = {
-  id: string;
-  name: string;
-  company: string;
-  location: string;
-  description: string;
-  openActionsNumber: number;
-  openCommentsNumber: number;
-};
-
-export type getInnovationSectionsDTO = {
-  id: string;
-  name: string;
-  status: keyof typeof INNOVATION_STATUS;
-  submittedAt: string | undefined;
-  sections: sectionType[];
-};
-
-
-export type getInnovationEvidenceDTO = {
-  evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER',
-  clinicalEvidenceType: string,
-  description: string,
-  summary: string
-  files: { id: string; displayFileName: string; url: string }[];
-};
-
-export type getInnovationCommentsDTO = {
-  id: string;
-  message: string;
-  createdAt: string;
-  updatedAt: string;
-  isEditable: boolean;
-  user: {
-    id: string;
-    type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
-    name: string;
-    organisationUnit?: { id: string; name: string; };
-  };
-  notifications?: { count: number }
-  replies: {
-    id: string;
-    message: string;
-    createdAt: string;
-    updatedAt: string;
-    isEditable: boolean;
-    user: {
-      id: string;
-      type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
-      name: string;
-      organisationUnit?: { id: string; name: string; };
-    };
-    notifications?: { count: number };
-  }[];
-};
-
-
-export type SectionsSummaryModel = {
-  title: string;
-  sections: {
-    id: InnovationSectionsIds;
-    title: string;
-    status: keyof typeof INNOVATION_SECTION_STATUS;
-    actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-    isCompleted: boolean;
-  }[]
-};
-
-export type OrganisationModel = {
-  id: string;
-  name: string;
-  acronym: string;
-  organisationUnits?: OrganisationUnitModel[];
-};
-
-export type OrganisationUnitModel = {
-  id: string;
-  name: string;
-  acronym: string;
-};
-
-export type AssessmentSuggestionModel = {
-  id: string;
-  suggestedOrganisations: OrganisationModel[];
-};
-
-export type AccessorSuggestionModel = {
-  organisationUnit: {
-    id: string;
-    name: string;
-    acronym: string;
-    organisation: OrganisationModel,
-  };
-  suggestedOrganisations: OrganisationModel[];
-};
-
-export type OrganisationSuggestionModel = {
-  assessment: AssessmentSuggestionModel;
-  accessors: AccessorSuggestionModel[];
 };

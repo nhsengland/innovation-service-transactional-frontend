@@ -3,20 +3,22 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule, InnovationStore } from '@modules/stores';
-import { InnovationSectionsIds, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionEnum, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { InnovationOverviewComponent } from './overview.component';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { InnovationStatusEnum } from '@modules/shared/enums';
 
 
 describe('FeatureModules/Innovator/DashboardComponent', () => {
+
+  let activatedRoute: ActivatedRoute;
 
   let innovationStore: InnovationStore;
   let innovatorService: InnovatorService;
@@ -36,6 +38,8 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
+
+    activatedRoute = TestBed.inject(ActivatedRoute);
 
     innovationStore = TestBed.inject(InnovationStore);
     innovatorService = TestBed.inject(InnovatorService);
@@ -70,6 +74,22 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
   });
 
+
+  it('should show "innovationCreationSuccess" success', () => {
+
+    activatedRoute.snapshot.queryParams = { alert: 'innovationCreationSuccess', name: 'Innovation name' };
+
+    const expected = { type: 'SUCCESS', title: `You have successfully registered the innovation 'Innovation name'` };
+
+    fixture = TestBed.createComponent(InnovationOverviewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.alert).toEqual(expected);
+
+  });
+
+
   it('should have innovation information loaded with payload 01', () => {
 
     const responseMock = {
@@ -98,7 +118,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
       sections: [{
         title: '',
         sections: [{
-          id: InnovationSectionsIds.INNOVATION_DESCRIPTION,
+          id: InnovationSectionEnum.INNOVATION_DESCRIPTION,
           title: '',
           status: 'NOT_STARTED' as keyof typeof INNOVATION_SECTION_STATUS,
           actionStatus: 'STARTED' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
@@ -148,7 +168,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
       sections: [{
         title: '',
         sections: [{
-          id: InnovationSectionsIds.INNOVATION_DESCRIPTION,
+          id: InnovationSectionEnum.INNOVATION_DESCRIPTION,
           title: '',
           status: 'NOT_STARTED' as keyof typeof INNOVATION_SECTION_STATUS,
           actionStatus: 'STARTED' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,

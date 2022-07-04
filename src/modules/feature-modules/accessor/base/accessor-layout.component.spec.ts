@@ -4,7 +4,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { of } from 'rxjs';
 
 import { ENV } from '@tests/app.mocks';
 
@@ -14,8 +13,6 @@ import { AccessorModule } from '../accessor.module';
 
 import { AccessorLayoutComponent } from './accessor-layout.component';
 
-import { NotificationsService } from '@modules/shared/services/notifications.service';
-
 
 describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
 
@@ -23,7 +20,6 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
   let router: Router;
 
   let authenticationStore: AuthenticationStore;
-  let notificationsService: NotificationsService;
 
   let component: AccessorLayoutComponent;
   let fixture: ComponentFixture<AccessorLayoutComponent>;
@@ -48,7 +44,6 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
     router = TestBed.inject(Router);
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-    notificationsService = TestBed.inject(NotificationsService);
 
   });
 
@@ -63,36 +58,22 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
 
     const expected = {
       leftItems: [
-        { title: 'Home', link: '/accessor/dashboard' }
+        { key: 'home', label: 'Home', link: '/accessor/dashboard' }
       ],
       rightItems: [
-        { title: 'Innovations', link: '/accessor/innovations', key: 'INNOVATION' },
-        { title: 'Actions', link: '/accessor/actions', key: 'ACTION' },
-        { title: 'Account', link: '/accessor/account', key: '' },
-        { title: 'Sign out', link: `http://demo.com/signout`, fullReload: true, key: '' }
-      ]
+        { key: 'innovations', label: 'Innovations', link: '/accessor/innovations' },
+        { key: 'notifications', label: 'Notifications', link: '/accessor/notifications' },
+        { key: 'actions', label: 'Actions', link: '/accessor/actions', },
+        { key: 'account', label: 'Account', link: '/accessor/account' },
+        { key: 'signOut', label: 'Sign out', link: `http://demo.com/signout`, fullReload: true }
+      ],
+      notifications: { notifications: 0 }
     };
 
     fixture = TestBed.createComponent(AccessorLayoutComponent);
     component = fixture.componentInstance;
 
     expect(component.navigationMenuBar).toEqual(expected);
-
-  });
-
-  it('should have notifications', () => {
-
-    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-
-    authenticationStore.isValidUser = () => true;
-    notificationsService.getAllUnreadNotificationsGroupedByContext = () => of({ INNOVATION: 1 });
-
-    fixture = TestBed.createComponent(AccessorLayoutComponent);
-    component = fixture.componentInstance;
-
-    (component as any).onRouteChange(new NavigationEnd(0, '/', '/'));
-    expect(component.mainMenuNotifications).toEqual({ INNOVATION: 1 });
-    expect(component.notifications).toEqual({ INNOVATION: 1 });
 
   });
 
@@ -116,9 +97,9 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
     activatedRoute.snapshot.data = { layoutOptions: { type: 'userAccountMenu' } };
 
     const expected = [
-      { title: 'Your details', link: `/accessor/account/manage-details` },
-      { title: 'Email notifications', link: `/accessor/account/email-notifications` },
-      { title: 'Manage account', link: `/accessor/account/manage-account` }
+      { key: 'YourDetails', title: 'Your details', link: `/accessor/account/manage-details` },
+      { key: 'EmailNotifications', title: 'Email notifications', link: `/accessor/account/email-notifications` },
+      { key: 'ManageAccount', title: 'Manage account', link: `/accessor/account/manage-account` }
     ];
 
     fixture = TestBed.createComponent(AccessorLayoutComponent);
@@ -135,12 +116,12 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
     activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' } };
 
     const expected = [
-      { title: 'Overview', link: `/accessor/innovations/innovation01/overview` },
-      { title: 'Innovation record', link: `/accessor/innovations/innovation01/record` },
-      { title: 'Action tracker', link: `/accessor/innovations/innovation01/action-tracker`, key: 'ACTION' },
-      { title: 'Comments', link: `/accessor/innovations/innovation01/comments`, key: 'COMMENT' },
-      { title: 'Support status', link: `/accessor/innovations/innovation01/support`, key: 'SUPPORT' },
-      { title: 'Activity log', link: `/accessor/innovations/innovation01/activity-log` }
+      { key: 'Overview', title: 'Overview', link: `/accessor/innovations/innovation01/overview` },
+      { key: 'InnovationRecord', title: 'Innovation record', link: `/accessor/innovations/innovation01/record` },
+      { key: 'Action', title: 'Action tracker', link: `/accessor/innovations/innovation01/action-tracker` },
+      { key: 'Comments', title: 'Comments', link: `/accessor/innovations/innovation01/comments` },
+      { key: 'Support', title: 'Support status', link: `/accessor/innovations/innovation01/support` },
+      { key: 'ActivityLog', title: 'Activity log', link: `/accessor/innovations/innovation01/activity-log` }
     ];
 
     fixture = TestBed.createComponent(AccessorLayoutComponent);

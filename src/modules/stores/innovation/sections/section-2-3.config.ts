@@ -1,5 +1,6 @@
 import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
-import { InnovationSectionConfigType, InnovationSectionsIds } from '../innovation.models';
+import { InnovationSectionEnum } from '../innovation.enums';
+import { InnovationSectionConfigType } from '../innovation.models';
 
 import { hasEvidenceItems } from './catalogs.config';
 
@@ -33,7 +34,7 @@ type OutboundPayloadType = {
 
 
 export const SECTION_2_3: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionsIds.EVIDENCE_OF_EFFECTIVENESS,
+  id: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS,
   title: 'Evidence of effectiveness',
   wizard: new WizardEngineModel({
     steps: [
