@@ -78,7 +78,7 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    expect(component.datasets.contextTypes.length).toBe(2);
+    expect(component.datasets.contextTypes.length).toBe(3);
     expect(component.notificationsList.getTotalRowsNumber()).toBe(20);
 
   });
