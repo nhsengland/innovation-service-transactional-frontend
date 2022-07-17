@@ -85,7 +85,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           id: 'patientsCitizensBenefits',
           dataType: 'checkbox-array',
           label: stepsLabels.l2,
-          description: 'If your innovation has more than one population or subgroup, please keep this in mind when choosing from the options below',
+          description: 'If your innovation has more than one population or subgroup, please keep this in mind when choosing from the options below.',
           validations: { isRequired: [true, 'Choose at least one benefit'] },
           items: patientsCitizensBenefitItems
         }]
@@ -120,7 +120,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'accessibilityImpactDetails',
         dataType: 'textarea',
         label: stepsLabels.l5,
-        validations: { isRequired: [true, 'Accessibility impact details are required'] },
+        validations: { isRequired: [true, 'Details are required'] },
         lengthLimit: 'medium'
       }]
     }),
@@ -129,7 +129,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'accessibilityStepsDetails',
         dataType: 'textarea',
         label: stepsLabels.l6,
-        validations: { isRequired: [true, 'Accessibility steps details are required'] },
+        validations: { isRequired: [true, 'Details are required'] },
         lengthLimit: 'medium'
       }]
     })
