@@ -6,6 +6,9 @@ import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.he
 
 import { ControlValueAccessorConnector } from '../base/control-value-accessor.connector';
 
+import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
+
+
 @Component({
   selector: 'theme-form-checkbox',
   templateUrl: './checkbox.component.html',
@@ -24,6 +27,7 @@ export class FormCheckboxComponent extends ControlValueAccessorConnector impleme
   @Input() size?: 'small' | 'normal';
 
   hasError = false;
+  error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
   cssClass = '';
 
   isRunningOnBrowser: boolean;
@@ -54,6 +58,7 @@ export class FormCheckboxComponent extends ControlValueAccessorConnector impleme
   ngDoCheck(): void {
 
     this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
+    this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : { message: '', params: {} };
     this.cdr.detectChanges();
 
   }

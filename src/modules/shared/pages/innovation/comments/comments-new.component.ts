@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
-import { AlertType } from '@app/base/types';
 
 
 @Component({
@@ -14,8 +13,6 @@ export class PageInnovationCommentsNewComponent extends CoreComponent {
 
   module: '' | 'innovator' | 'accessor' = '';
   innovationId: string;
-
-  alert: AlertType = { type: null };
 
   form = new FormGroup({
     comment: new FormControl('', CustomValidators.required('A comment is required'))

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { AlertType } from '@app/base/types';
 
 import { RoutingHelper } from '@app/base/helpers';
 import { forkJoin } from 'rxjs';
@@ -15,8 +14,6 @@ import { ServiceUsersService, getLockUserRulesOutDTO } from '../../services/serv
   templateUrl: './service-users-lock.component.html'
 })
 export class PageServiceUsersLockComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   user: { id: string, name: string };
 

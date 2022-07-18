@@ -61,29 +61,6 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
     expect(component).toBeTruthy();
   });
 
-  it('should be a valid step 1', () => {
-
-    activatedRoute.snapshot.params = { stepId: 1 };
-
-    fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusSuggestComponent);
-    component = fixture.componentInstance;
-
-    fixture.detectChanges();
-    expect(component.isValidStepId()).toBe(true);
-
-  });
-
-  it('should redirected because is not a valid step', () => {
-
-    activatedRoute.snapshot.params = { stepId: 10 }; // Invalid stepId.
-
-    fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusSuggestComponent);
-    component = fixture.componentInstance;
-
-    fixture.detectChanges();
-    expect(routerSpy).toHaveBeenCalledWith(['/not-found'], {});
-
-  });
 
   it('should have initial information loaded with payload 01', () => {
 
@@ -249,17 +226,6 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
   });
 
-  // it('should run onSubmit() with UNDEFINED "confirm" form field', () => {
-
-  //   fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusSuggestComponent);
-  //   component = fixture.componentInstance;
-  //   component.form.removeControl('confirm');
-
-  //   component.onSubmit();
-  //   expect(component.form.valid).toEqual(false);
-
-  // });
-
   it('should run onSubmitStep() with INVALID form', () => {
 
     fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusSuggestComponent);
@@ -291,7 +257,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
     const expected = {
       type: 'ERROR',
-      title: 'An error occurred when creating an action',
+      title: 'An error occurred when saving information',
       message: 'Please try again or contact us for further help',
       setFocus: true
     };

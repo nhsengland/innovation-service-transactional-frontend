@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 
 
 @Component({
@@ -12,8 +11,6 @@ import { AlertType } from '@app/base/types';
 export class PageAccountManageDetailsInfoComponent extends CoreComponent implements OnInit {
 
   module: '' | 'innovator' | 'accessor' | 'assessment' = '';
-
-  alert: AlertType = { type: null };
 
   summaryList: { label: string; value: null | string; editStepNumber?: number; }[] = [];
 

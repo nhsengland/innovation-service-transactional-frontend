@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 import { TableModel } from '@app/base/models';
 
@@ -12,7 +11,6 @@ import { TableModel } from '@app/base/models';
 })
 export class PageAdminTermsOfUseListComponent extends CoreComponent implements OnInit {
 
-  alert: AlertType = { type: null };
   terms: TableModel<{
     id: string,
     name: string,

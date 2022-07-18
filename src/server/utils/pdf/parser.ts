@@ -35,19 +35,19 @@ export const generatePDF = async (innovationId: string, userId: string, config: 
   try {
     innovation = await getInnovation(userId, innovationId, config);
   }
-  catch (error) {
+  catch (error: any) {
     throw new PDFGeneratorInnovationNotFoundError(error);
   }
 
   try {
     sections = await getSections(innovationId, userId, config);
-  } catch (error) {
+  } catch (error: any) {
     throw new PDFGeneratorSectionsNotFoundError(error);
   }
 
   try {
     content = getAllSectionsSummary(sections);
-  } catch (error) {
+  } catch (error: any) {
     throw new PDFGeneratorParserError(error);
   }
   generator

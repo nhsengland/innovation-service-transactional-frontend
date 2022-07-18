@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 
 import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
@@ -18,8 +17,6 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
   innovationId: string;
   actionId: string;
-
-  alert: AlertType = { type: null };
 
   actionName: string;
   actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;

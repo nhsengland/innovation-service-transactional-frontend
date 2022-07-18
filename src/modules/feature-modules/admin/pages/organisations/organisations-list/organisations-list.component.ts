@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
+
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 @Component({
@@ -8,8 +8,6 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
   templateUrl: './organisations-list.component.html'
 })
 export class PageListOrganisationsAndUnitsComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   organisations: {
     info: {

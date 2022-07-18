@@ -12,5 +12,11 @@
     <label for="{{ id }}" class="nhsuk-label nhsuk-checkboxes__label">{{ label }}</label>
     <div *ngIf="description" class="nhsuk-hint nhsuk-checkboxes__hint">{{ description }}</div>
 
+    <ng-container *ngIf="hasError">
+      <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
+        <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }}
+      </span>
+    </ng-container>
+
   </div>
 </div>

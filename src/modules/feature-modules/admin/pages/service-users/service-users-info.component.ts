@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType, LinkType } from '@app/base/types';
+import { LinkType } from '@app/base/types';
 
 import { RoutingHelper } from '@app/base/helpers';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
@@ -16,8 +16,6 @@ import { ServiceUsersService, orgnisationRole } from '../../services/service-use
   templateUrl: './service-users-info.component.html'
 })
 export class PageServiceUsersInfoComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   user: { id: string, name: string };
 
@@ -96,64 +94,64 @@ export class PageServiceUsersInfoComponent extends CoreComponent implements OnIn
     ]).subscribe(([response, organisations]) => {
       this.userInfoType = response.type;
       this.titleActions = [
-          {
-            type: 'link',
-            label: !response.lockedAt ? 'Lock user' : 'Unlock user',
-            url: `/admin/service-users/${this.user.id}/${!response.lockedAt ? 'lock' : 'unlock'}`
-          },
-        ];
+        {
+          type: 'link',
+          label: !response.lockedAt ? 'Lock user' : 'Unlock user',
+          url: `/admin/service-users/${this.user.id}/${!response.lockedAt ? 'lock' : 'unlock'}`
+        },
+      ];
 
       if (
-          response.userOrganisations.length > 0 &&
-          (response.userOrganisations[0].role === orgnisationRole.ACCESSOR ||
+        response.userOrganisations.length > 0 &&
+        (response.userOrganisations[0].role === orgnisationRole.ACCESSOR ||
           response.userOrganisations[0].role === orgnisationRole.QUALIFYING_ACCESSOR) && !response.lockedAt
-        ) {
-          this.titleActions.push({
-            type: 'link',
-            label: 'Change role',
-            url: `/admin/service-users/${this.user.id}/change-role`
-          });
+      ) {
+        this.titleActions.push({
+          type: 'link',
+          label: 'Change role',
+          url: `/admin/service-users/${this.user.id}/change-role`
+        });
 
-          this.unitLength = organisations.filter(org => (response.userOrganisations[0].id === org.id))[0].organisationUnits.length;
-        }
+        this.unitLength = organisations.filter(org => (response.userOrganisations[0].id === org.id))[0].organisationUnits.length;
+      }
 
-      if (response.type === orgnisationRole.ACCESSOR  && response.userOrganisations.length > 0) {
-          this.sections.userInfo = [
-            { label: 'Name', value: response.displayName },
-            { label: 'Type', value: 'Authorised person' },
-            { label: 'Role', value: this.stores.authentication.getRoleDescription(response.userOrganisations[0].role) },
-            { label: 'Email address', value: response.email },
-            { label: 'Phone number', value: response.phone ? response.phone : ' NA' },
-            { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }
+      if (response.type === orgnisationRole.ACCESSOR && response.userOrganisations.length > 0) {
+        this.sections.userInfo = [
+          { label: 'Name', value: response.displayName },
+          { label: 'Type', value: 'Authorised person' },
+          { label: 'Role', value: this.stores.authentication.getRoleDescription(response.userOrganisations[0].role) },
+          { label: 'Email address', value: response.email },
+          { label: 'Phone number', value: response.phone ? response.phone : ' NA' },
+          { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }
+        ];
+      }
+      else {
+        this.sections.userInfo = [
+          { label: 'Name', value: response.displayName },
+          { label: 'Type', value: this.stores.authentication.getRoleDescription(response.type) },
+          { label: 'Email address', value: response.email },
+          { label: 'Phone number', value: response.phone ? response.phone : ' NA' },
+          { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }
+        ];
+      }
+
+      if (response.type === 'INNOVATOR') {
+        this.sections.innovations = response.innovations.map(x => x.name);
+        if (response.userOrganisations.length > 0 && !response.userOrganisations[0].isShadow) {
+          this.sections.userInfo = [...this.sections.userInfo,
+          { label: 'Company name', value: response.userOrganisations[0].name },
+          { label: 'Company size', value: response.userOrganisations[0].size }
           ];
         }
-        else {
-          this.sections.userInfo = [
-            { label: 'Name', value: response.displayName },
-            { label: 'Type', value: this.stores.authentication.getRoleDescription(response.type) },
-            { label: 'Email address', value: response.email },
-            { label: 'Phone number', value: response.phone ? response.phone : ' NA' },
-            { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }
-          ];
-        }
-
-      if (response.type === 'INNOVATOR'){
-          this.sections.innovations = response.innovations.map(x => x.name);
-          if (response.userOrganisations.length > 0 && !response.userOrganisations[0].isShadow) {
-            this.sections.userInfo = [...this.sections.userInfo,
-              { label: 'Company name', value: response.userOrganisations[0].name },
-              { label: 'Company size', value: response.userOrganisations[0].size }
-            ];
-          }
-        }
+      }
 
       if (response.type === orgnisationRole.ACCESSOR) {
-          this.sections.organisation = response.userOrganisations;
-        }
+        this.sections.organisation = response.userOrganisations;
+      }
 
       this.setPageStatus('READY');
 
-      },
+    },
       error => {
         this.setPageStatus('ERROR');
         this.alert = {

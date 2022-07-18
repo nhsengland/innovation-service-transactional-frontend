@@ -148,7 +148,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       filter.selected = this.datasets[filter.key].filter(i => f.includes(i.value));
     });
 
-    this.anyFilterSelected = this.filters.filter(i => i.selected.length > 0).length > 0;
+    this.anyFilterSelected = this.form.get('unreadOnly')!.value || this.filters.filter(i => i.selected.length > 0).length > 0;
 
     this.notificationsList.setFilters({
       contextTypes: this.form.get('contextTypes')!.value,

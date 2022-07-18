@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 
 import { AssessmentService, getInnovationInfoEndpointDTO } from '../../../services/assessment.service';
 
@@ -15,8 +14,6 @@ import { NotificationContextTypeEnum } from '@modules/stores/environment/environ
   templateUrl: './overview.component.html'
 })
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   innovationId: string;
   innovation: getInnovationInfoEndpointDTO | undefined;

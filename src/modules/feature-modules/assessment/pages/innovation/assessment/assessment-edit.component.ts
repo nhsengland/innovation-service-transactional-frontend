@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { AlertType, MappedObjectType } from '@app/base/types';
+import { MappedObjectType } from '@app/base/types';
 import { FormEngineComponent, FormEngineParameterModel } from '@modules/shared/forms';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
@@ -24,8 +24,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   innovationName: string;
   assessmentId: string;
   stepId: number;
-
-  alert: AlertType = { type: null };
 
   form: {
     sections: {

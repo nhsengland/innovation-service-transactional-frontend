@@ -4,7 +4,6 @@ import { forkJoin, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
@@ -15,8 +14,6 @@ import { getInnovationTransfersDTO, InnovatorService } from '../../services/inno
   templateUrl: './dashboard.component.html'
 })
 export class PageDashboardComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   user: {
     displayName: string,

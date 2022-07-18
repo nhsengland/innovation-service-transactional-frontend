@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent, FormArray, FormControl, FormGroup } from '@app/base';
-import { AlertType } from '@app/base/types';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
@@ -14,8 +13,6 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
   templateUrl: './data-sharing-change.component.html'
 })
 export class InnovationDataSharingChangeComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   innovationId: string;
   organisationsList: { value: string, label: string }[];
