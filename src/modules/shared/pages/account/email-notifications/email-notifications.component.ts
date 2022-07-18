@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 
 import { EMAIL_PREFERENCES_TYPES, NotificationsService } from '@modules/shared/services/notifications.service';
 
@@ -11,6 +10,7 @@ export type EmailNotificationType = {
   isSubscribed: boolean;
 };
 
+
 @Component({
   selector: 'shared-pages-account-email-notifications',
   templateUrl: './email-notifications.component.html'
@@ -19,8 +19,6 @@ export type EmailNotificationType = {
 export class PageAccountEmailNotificationsComponent extends CoreComponent implements OnInit {
 
   module: '' | 'innovator' | 'accessor' | 'assessment' = '';
-
-  alert: AlertType = { type: null };
 
   notificationTypeList: EmailNotificationType[] = [];
 

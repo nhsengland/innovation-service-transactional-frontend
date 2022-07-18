@@ -3,7 +3,6 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { CustomValidators, FormEngineHelper } from '@app/base/forms';
-import { AlertType } from '@app/base/types';
 
 import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
 import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
@@ -19,8 +18,6 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
   module: '' | 'innovator' | 'accessor' | 'assessment' = '';
   innovationId: string;
-
-  alert: AlertType = { type: null };
 
   innovation: EnvironmentInnovationType;
   currentCreatedOrder: 'asc' | 'desc';

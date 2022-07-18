@@ -4,7 +4,6 @@ import { forkJoin, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { getInnovationTransfersDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
@@ -15,8 +14,6 @@ import { getInnovationTransfersDTO, InnovatorService } from '@modules/feature-mo
   templateUrl: './innovations-info.component.html'
 })
 export class PageAccountInnovationsInfoComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   haveAnyActiveInnovation = false;
   innovationTransfers: getInnovationTransfersDTO[] = [];

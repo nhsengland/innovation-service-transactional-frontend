@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
-import { AlertType } from '@app/base/types';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
@@ -11,9 +10,7 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
   selector: 'shared-pages-account-account-delete',
   templateUrl: './account-delete.component.html'
 })
-export class PageAccountDeleteComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
+export class PageAccountDeleteComponent extends CoreComponent {
 
   stepNumber: 1 | 2 = 1;
 

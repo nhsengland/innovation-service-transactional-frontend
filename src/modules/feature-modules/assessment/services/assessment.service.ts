@@ -7,7 +7,7 @@ import { APIQueryParamsType, MappedObjectType } from '@app/base/types';
 import { UrlModel } from '@app/base/models';
 import { DatesHelper } from '@app/base/helpers';
 
-import { InnovationStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
+import { InnovationStatusEnum, InnovationSupportStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 
@@ -131,7 +131,7 @@ export type getSupportLogOutDTO = getSupportLogInDTO & { logTitle: string; sugge
 
 export type getInnovationSupportsDTO = {
   id: string;
-  status: keyof typeof INNOVATION_SUPPORT_STATUS;
+  status: InnovationSupportStatusEnum;
   organisationUnit: {
     id: string;
     name: string;

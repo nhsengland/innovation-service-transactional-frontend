@@ -28,7 +28,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
   INNOVATION_SUPPORT_STATUS = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   ACTIVITY_LOG_ITEMS = ACTIVITY_LOG_ITEMS;
 
-  activitiesList: TableModel<ActivitiesListType, { activityTypes: keyof ActivityLogTypesEnum }>;
+  activitiesList = new TableModel<ActivitiesListType, { activityTypes: ActivityLogTypesEnum }>();
 
   currentDateOrderBy: 'ascending' | 'descending';
 
@@ -64,7 +64,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovation = this.stores.environment.getInnovation();
 
-    this.activitiesList = new TableModel({ orderBy: 'createdAt', orderDir: 'descending' });
+    this.activitiesList.setOrderBy('createdAt', 'descending');
     this.currentDateOrderBy = 'descending';
 
   }

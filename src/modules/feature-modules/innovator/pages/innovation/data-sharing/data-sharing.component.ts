@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
+
 import { InnovationService } from '@modules/stores/innovation/innovation.service';
 import { INNOVATION_SUPPORT_STATUS, OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
 
@@ -19,8 +19,6 @@ import { NotificationsService } from '@modules/shared/services/notifications.ser
 export class InnovationDataSharingComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-
-  alert: AlertType = { type: null };
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 

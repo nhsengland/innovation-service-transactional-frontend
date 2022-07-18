@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType, LinkType } from '@app/base/types';
+import { LinkType } from '@app/base/types';
 import { RoutingHelper } from '@app/base/helpers';
 import { ServiceUsersService } from '../../../services/service-users.service';
 
@@ -11,7 +11,6 @@ import { ServiceUsersService } from '../../../services/service-users.service';
   templateUrl: './admin-users-info.component.html'
 })
 export class PageAdminUsersInfoComponent extends CoreComponent implements OnInit {
-  alert: AlertType = { type: null };
 
   user: { id: string, name: string };
 
@@ -57,7 +56,7 @@ export class PageAdminUsersInfoComponent extends CoreComponent implements OnInit
           this.titleActions = [
             {
               type: 'link',
-              label:  'Delete user',
+              label: 'Delete user',
               url: `/admin/administration-users/${this.user.id}/delete`
             },
           ];

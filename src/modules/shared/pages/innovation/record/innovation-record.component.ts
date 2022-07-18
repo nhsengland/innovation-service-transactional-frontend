@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
 import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
@@ -23,7 +22,6 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   pdfDocumentUrl = '';
 
   innovation: EnvironmentInnovationType;
-  alert: AlertType = { type: null };
 
   innovationId: string;
   innovationName: string;

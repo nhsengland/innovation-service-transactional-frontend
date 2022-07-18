@@ -1,17 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
-
 
 @Component({
   selector: 'app-admin-pages-dashboard',
   templateUrl: './dashboard.component.html'
 })
 export class PageDashboardComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
-
 
   constructor() {
 

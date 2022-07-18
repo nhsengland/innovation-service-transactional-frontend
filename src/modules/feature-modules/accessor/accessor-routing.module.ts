@@ -200,14 +200,8 @@ const routes: Routes = [
                 data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Go back' } } }
               },
               {
-                path: 'support/organisations/suggest',
-                children: [
-                  { path: '', pathMatch: 'full', redirectTo: '1' },
-                  {
-                    path: ':stepId', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent,
-                    data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Back to innovation' } } }
-                  }
-                ]
+                path: 'support/organisations/suggest', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent,
+                data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Back to innovation' } } }
               },
               {
                 path: 'support/:supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent,

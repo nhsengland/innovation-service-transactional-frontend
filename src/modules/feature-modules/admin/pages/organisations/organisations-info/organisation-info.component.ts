@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 
 import { OrganisationsService, organisationUsersOutDTO } from '@modules/shared/services/organisations.service';
 
@@ -13,7 +12,6 @@ import { OrganisationsService, organisationUsersOutDTO } from '@modules/shared/s
 })
 export class PageAdminOrganisationInfoComponent extends CoreComponent implements OnInit {
 
-  alert: AlertType = { type: null };
   orgId: string;
 
   organisation: {

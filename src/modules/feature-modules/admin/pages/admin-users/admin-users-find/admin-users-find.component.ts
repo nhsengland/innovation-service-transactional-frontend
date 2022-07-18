@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { LinkType , AlertType} from '@app/base/types';
+import { LinkType } from '@app/base/types';
 
 import { searchUserEndpointOutDTO, ServiceUsersService } from '../../../services/service-users.service';
 
@@ -24,7 +24,6 @@ export class PageAdminUsersFindComponent extends CoreComponent implements OnInit
 
   usersList: searchUserEndpointOutDTO[] = [];
 
-  alert: AlertType = { type: null };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -54,7 +53,7 @@ export class PageAdminUsersFindComponent extends CoreComponent implements OnInit
 
   onSubmit(): void {
 
-    this.alert = { type: null};
+    this.alert = { type: null };
     this.setPageStatus('LOADING');
     this.formSubmitted = true;
 

@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
-import { AlertType } from '@app/base/types';
 
 import { AccessorService, getActionsListEndpointOutDTO } from '../../services/accessor.service';
 
@@ -12,8 +11,6 @@ import { AccessorService, getActionsListEndpointOutDTO } from '../../services/ac
   templateUrl: './actions-list.component.html'
 })
 export class ActionsListComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   tabs: { key: string, title: string, link: string, queryParams: { openActions: 'true' | 'false' } }[] = [];
   currentTab: { index: number, key: string, contentTitle: string, description: string };

@@ -1,13 +1,15 @@
+import 'zone.js/dist/zone-node';
+
 import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 
-import coockieParser from 'cookie-parser';
-import csurf from 'csurf';
-import dotenv from 'dotenv';
-import express from 'express';
-import session from 'express-session';
-import fs from 'fs';
-import helmet from 'helmet';
+import * as coockieParser from 'cookie-parser';
+import * as csurf from 'csurf';
+import * as dotenv from 'dotenv';
+import * as express from 'express';
+import * as session from 'express-session';
+import * as fs from 'fs';
+import * as helmet from 'helmet';
 import { join } from 'path';
 
 import { initAppInsights } from 'src/globals';
@@ -23,7 +25,6 @@ import pdfRouter from 'src/server/routes/pdf-generator.routes';
 
 import { AppServerModule } from './src/main.server';
 
-import 'zone.js/dist/zone-node';
 
 dotenv.config();
 
@@ -157,6 +158,7 @@ function run(): void {
   const server = app();
   server.listen(port, () => { console.log(`Node Express server listening on http://localhost:${port}`); });
 }
+
 /* tslint:enable:no-string-literal */
 // Webpack will replace 'require' with '__webpack_require__'
 // '__non_webpack_require__' is a proxy to Node 'require'

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 import { WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationSectionEnum } from '@modules/stores/innovation';
@@ -12,8 +11,6 @@ import { InnovationSectionEnum } from '@modules/stores/innovation';
   templateUrl: './section-evidence-info.component.html'
 })
 export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   module: '' | 'innovator' | 'accessor' = '';
   innovationId: string;

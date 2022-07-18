@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { Component, PLATFORM_ID, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Router } from '@angular/router';
@@ -22,7 +22,7 @@ import { UtilsHelper } from './helpers';
 
 
 @Component({ template: '' })
-export class CoreComponent implements OnInit, OnDestroy {
+export class CoreComponent implements OnDestroy {
 
   private platformId: object;
   private serverRequest: Request | null;
@@ -104,8 +104,6 @@ export class CoreComponent implements OnInit, OnDestroy {
   /* istanbul ignore next */
   get pageStatus(): string { return this.pageStatusHolder; }
 
-
-  ngOnInit(): void { }
 
   isRunningOnBrowser(): boolean {
     return isPlatformBrowser(this.platformId);

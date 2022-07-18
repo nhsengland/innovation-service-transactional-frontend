@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 import { HeaderNavigationBarItemType } from '@app/base/types';
 
 import { TermsOfUseService } from '@modules/shared/services/terms-of-use.service';
@@ -12,8 +11,6 @@ import { TermsOfUseService } from '@modules/shared/services/terms-of-use.service
   templateUrl: './terms-of-use-acceptance.component.html'
 })
 export class PageTermsOfUseAcceptanceComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   baseUrl: string;
   appUrl: string;

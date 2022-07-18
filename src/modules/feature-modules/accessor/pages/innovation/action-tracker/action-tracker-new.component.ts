@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
-import { AlertType } from '@app/base/types';
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
 import { AccessorService } from '../../../services/accessor.service';
@@ -16,8 +15,6 @@ import { AccessorService } from '../../../services/accessor.service';
 export class InnovationActionTrackerNewComponent extends CoreComponent {
 
   innovationId: string;
-
-  alert: AlertType = { type: null };
 
   sectionItems: { value: string, label: string }[] = [];
 

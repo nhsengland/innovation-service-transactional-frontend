@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormGroup, FormControl } from '@app/base';
-import { AlertType, MappedObjectType } from '@app/base/types';
+import { MappedObjectType } from '@app/base/types';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
 import { OrganisationsService, updateOrganisationDTO } from '@modules/shared/services/organisations.service';
 import { EDIT_ORGANISATIONS_QUESTIONS } from './organisations-edit.config';
@@ -18,7 +18,6 @@ export class PageAdminOrganisationEditComponent extends CoreComponent implements
   unitId: string;
   submitBtnClicked = false;
   securityConfirmation = { id: '', code: '' };
-  alert: AlertType = { type: null };
 
   module: 'Organisation' | 'Unit';
   pageStep: 'RULES_LIST' | 'CODE_REQUEST' | 'SUCCESS' = 'RULES_LIST';
@@ -48,7 +47,7 @@ export class PageAdminOrganisationEditComponent extends CoreComponent implements
         this.wizard = new WizardEngineModel(EDIT_ORGANISATION_UNIT_QUESTIONS);
         break;
       default:
-      break;
+        break;
     }
 
     this.setPageTitle(`Edit ${this.module}`);
@@ -109,7 +108,7 @@ export class PageAdminOrganisationEditComponent extends CoreComponent implements
           response => {
             (response.id) ?
               this.redirectTo(`admin/organisations/${response.id}`, { alert: 'updateOrganisationSuccess' })
-                : this.alert = { type: response.status as 'ERROR', title: response.error };
+              : this.alert = { type: response.status as 'ERROR', title: response.error };
           },
           error => this.errorResponse(error)
         );
@@ -118,14 +117,14 @@ export class PageAdminOrganisationEditComponent extends CoreComponent implements
         this.organisationsService.updateUnit(body, this.securityConfirmation, this.unitId).subscribe(
           response => {
             (response.id) ?
-            this.redirectTo(`admin/organisations/${this.orgId}`, { alert: 'updateUnitSuccess' })
+              this.redirectTo(`admin/organisations/${this.orgId}`, { alert: 'updateUnitSuccess' })
               : this.alert = { type: response.status as 'ERROR', title: response.error };
           },
           error => this.errorResponse(error)
         );
         break;
       default:
-      break;
+        break;
     }
 
   }

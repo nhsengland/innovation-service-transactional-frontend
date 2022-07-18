@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 import { RoutingHelper } from '@app/base/helpers';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
@@ -20,8 +19,6 @@ import { AccessorService } from '../../../services/accessor.service';
   templateUrl: './needs-assessment-overview.component.html'
 })
 export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   innovationId: string;
   assessmentId: string;

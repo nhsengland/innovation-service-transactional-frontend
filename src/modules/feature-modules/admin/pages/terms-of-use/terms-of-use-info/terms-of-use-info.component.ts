@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
+
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 
@@ -11,7 +12,6 @@ import { ServiceUsersService } from '@modules/feature-modules/admin/services/ser
 })
 export class PageAdminTermsOfUseInfoComponent extends CoreComponent implements OnInit {
 
-  alert: AlertType = { type: null };
   id: string;
   tou: {
     summary: string,

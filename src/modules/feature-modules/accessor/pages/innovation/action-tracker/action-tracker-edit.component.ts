@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { CustomValidators, FormEngineHelper } from '@app/base/forms';
-import { AlertType } from '@app/base/types';
+
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { AccessorService } from '../../../services/accessor.service';
@@ -14,8 +14,6 @@ import { AccessorService } from '../../../services/accessor.service';
   templateUrl: './action-tracker-edit.component.html'
 })
 export class InnovationActionTrackerEditComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   innovationId: string;
   actionId: string;

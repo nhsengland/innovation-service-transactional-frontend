@@ -4,8 +4,8 @@
     <div class="nhsuk-grid-column-two-thirds">
       <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
         <p> {{ alert.message }} </p>
-        <ul *ngIf="alert.errorsList.length > 0" class="nhsuk-list nhsuk-error-summary__list">
-          <li *ngFor="let item of alert.errorsList">{{ item.label }}<br />({{ item.error | translate }})</li>
+        <ul *ngIf="alertErrorsList.length > 0" class="nhsuk-list nhsuk-error-summary__list">
+          <li *ngFor="let item of alertErrorsList">{{ item.label }}<br />({{ item.error | translate }})</li>
         </ul>
       </theme-alert>
     </div>

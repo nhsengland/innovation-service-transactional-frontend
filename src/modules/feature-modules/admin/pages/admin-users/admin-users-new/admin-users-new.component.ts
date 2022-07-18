@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { CoreComponent, FormGroup, FormControl } from '@app/base';
-import { AlertType } from '@app/base/types';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 import { CREATE_NEW_USER_QUESTIONS } from './admin-users-new.config';
@@ -17,8 +15,6 @@ import { CREATE_NEW_USER_QUESTIONS } from './admin-users-new.config';
 export class PageAdminUsersNewComponent extends CoreComponent implements OnInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
-
-  alert: AlertType = { type: null };
 
   wizard: WizardEngineModel = new WizardEngineModel(CREATE_NEW_USER_QUESTIONS);
 
@@ -33,7 +29,6 @@ export class PageAdminUsersNewComponent extends CoreComponent implements OnInit 
   }, { updateOn: 'blur' });
 
   constructor(
-    private organisationsService: OrganisationsService,
     private serviceUsersService: ServiceUsersService
   ) {
 

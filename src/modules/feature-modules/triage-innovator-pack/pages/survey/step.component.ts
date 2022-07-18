@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineHelper, FormEngineModel } from '@app/base/forms';
-import { AlertType } from '@app/base/types';
 
 import { TRIAGE_INNOVATOR_PACK_QUESTIONS } from '../../config/constants.config';
 
@@ -16,8 +15,6 @@ import { SurveyService } from '../../services/survey.service';
 export class SurveyStepComponent extends CoreComponent implements OnInit, AfterViewInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
-
-  alert: AlertType = { type: null };
 
   stepsData: FormEngineModel[] = [];
   currentStep: {

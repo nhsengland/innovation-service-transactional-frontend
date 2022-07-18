@@ -3,7 +3,6 @@ import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 
 import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
@@ -18,8 +17,6 @@ import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/store
   templateUrl: './section-info.component.html'
 })
 export class PageInnovationSectionInfoComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   module: '' | 'innovator' | 'accessor' = '';
   innovation: EnvironmentInnovationType;

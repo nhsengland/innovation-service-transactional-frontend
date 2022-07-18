@@ -8,11 +8,10 @@ import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-// import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
-import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './organisations-support-status-info.component';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
-// import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
+import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './organisations-support-status-info.component';
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
@@ -85,7 +84,7 @@ describe('FeatureModules/Assessment/Innovation/Support/InnovationSupportOrganisa
     }]);
 
     assessmentService.getInnovationSupports = () => of([{
-      id: 'SupportId01', status: 'ENGAGING',
+      id: 'SupportId01', status: InnovationSupportStatusEnum.ENGAGING,
       organisationUnit: {
         id: 'orgId', name: 'Org Unit name',
         organisation: { id: 'orgId', name: 'Org name', acronym: 'ORG' }
@@ -115,7 +114,7 @@ describe('FeatureModules/Assessment/Innovation/Support/InnovationSupportOrganisa
     }]);
 
     assessmentService.getInnovationSupports = () => of([{
-      id: 'SupportId01', status: 'ENGAGING',
+      id: 'SupportId01', status: InnovationSupportStatusEnum.ENGAGING,
       organisationUnit: {
         id: 'UnknownOrgUnitId', name: 'Org Unit name',
         organisation: { id: 'orgId', name: 'Org name', acronym: 'ORG' }
@@ -149,14 +148,14 @@ describe('FeatureModules/Assessment/Innovation/Support/InnovationSupportOrganisa
 
     assessmentService.getInnovationSupports = () => of([
       {
-        id: 'SupportId01', status: 'ENGAGING',
+        id: 'SupportId01', status: InnovationSupportStatusEnum.ENGAGING,
         organisationUnit: {
           id: 'orgUnitId01', name: 'Org Unit name',
           organisation: { id: 'orgId', name: 'Org name', acronym: 'ORG' }
         }
       },
       {
-        id: 'SupportId02', status: 'ENGAGING',
+        id: 'SupportId02', status: InnovationSupportStatusEnum.ENGAGING,
         organisationUnit: {
           id: 'UnknownOrgUnitId', name: 'Org Unit name',
           organisation: { id: 'orgId', name: 'Org name', acronym: 'ORG' }

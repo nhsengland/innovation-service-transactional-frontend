@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { AlertType } from '@app/base/types';
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
-import { Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Validators } from '@angular/forms';
+
+import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { CustomValidators } from '@modules/shared/forms';
+
+import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 
 @Component({
@@ -13,7 +14,6 @@ import { CustomValidators } from '@modules/shared/forms';
 })
 export class PageAdminTermsOfUseNewComponent extends CoreComponent implements OnInit {
 
-  alert: AlertType = { type: null };
   typeItems: { value: string, label: string }[] = [
     { label: 'Support organisation', value: 'SUPPORT_ORGANISATION' },
     { label: 'Innovations', value: 'INNOVATOR' }
@@ -59,7 +59,7 @@ export class PageAdminTermsOfUseNewComponent extends CoreComponent implements On
           this.setPageStatus('ERROR');
           this.errorResponse();
         }
-     );
+      );
     }
     this.setPageStatus('READY');
   }
@@ -85,7 +85,7 @@ export class PageAdminTermsOfUseNewComponent extends CoreComponent implements On
 
       case 'Edit':
         this.userService.updateTermsById(this.id, body).subscribe(
-          () =>  this.redirectTo(`admin/terms-conditions`, { alert: 'versionUpdatedSuccess' }),
+          () => this.redirectTo(`admin/terms-conditions`, { alert: 'versionUpdatedSuccess' }),
           (error: { code: string }) => this.errorResponse(error.code)
         );
         break;

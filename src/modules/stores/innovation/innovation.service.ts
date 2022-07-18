@@ -9,7 +9,7 @@ import { APIQueryParamsType } from '@modules/core/models/table.model';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
-import { ActivityLogItemsEnum, InnovationSectionEnum } from './innovation.enums';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum } from './innovation.enums';
 import {
   sectionType,
   INNOVATION_STATUS, ACTIVITY_LOG_ITEMS, INNOVATION_SUPPORT_STATUS,
@@ -116,7 +116,7 @@ export class InnovationService {
 
   }
 
-  getInnovationActivityLog(module: UserModulesType, innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: keyof ActivityLogItemsEnum }>): Observable<ActivityLogOutDTO> {
+  getInnovationActivityLog(module: UserModulesType, innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum }>): Observable<ActivityLogOutDTO> {
 
     const endpointModule = this.endpointModule(module);
     const { filters, ...qParams } = queryParams;

@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { CustomValidators } from '@app/base/forms';
-import { AlertType } from '@app/base/types';
 
 import { InnovatorService } from '../../../services/innovator.service';
 
@@ -16,8 +14,6 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
 
   innovationId: string;
   actionId: string;
-
-  alert: AlertType = { type: null };
 
   actionDisplayId: string;
 

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 
 
 @Component({
@@ -10,7 +9,7 @@ import { AlertType } from '@app/base/types';
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent extends CoreComponent implements OnInit {
-  alert: AlertType = { type: null };
+
   user: {
     displayName: string;
     organisation: string;
