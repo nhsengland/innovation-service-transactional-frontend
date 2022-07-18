@@ -88,7 +88,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'carePathway',
         dataType: 'radio-group',
         label: stepsLabels.l4,
-        description: 'If your innovation has more than one population or subgroup, please keep this in mind when choosing from the options below',
+        description: 'If your innovation has more than one population or subgroup, please keep this in mind when choosing from the options below.',
         validations: { isRequired: [true, 'Choose one option'] },
         items: carePathwayItems
       }]

@@ -8,7 +8,7 @@ const stepsLabels = {
   l2: 'What\'s the cost of your innovation?',
   l3: 'Roughly how many patients would be eligible for your innovation?',
   l4: 'How many units of your innovation would you expect to sell per year in the UK?',
-  l5: 'Approximately how long is each unit of your innovation intended to be in use?'
+  l5: 'Approximately how long do you expect each unit of your innovation to be in use?'
 };
 
 
@@ -35,7 +35,7 @@ export const SECTION_6_1: InnovationSectionConfigType['sections'][0] = {
           id: 'hasCostKnowledge',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: 'By cost, we mean the cost to the NHS or any care organisation that would implement your innovation.',
+          description: 'This section asks for information that organisations will want to know to calculate cost effectiveness. By cost, we mean the cost to the NHS or any care organisation that would implement your innovation.',
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasCostKnowledgeItems
         }]
@@ -68,7 +68,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'costDescription',
         dataType: 'textarea',
         label: stepsLabels.l2,
-        description: 'If your innovation has more than one population or subgroup, please be as scpecific as possible in the description text area below.',
+        description: 'If your innovation has more than one population or subgroup, please be as specific as possible in the description text area below.',
         validations: { isRequired: [true, 'Description is required'] },
         lengthLimit: 'medium'
       }]
@@ -99,7 +99,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         dataType: 'textarea',
         label: stepsLabels.l4,
         description: 'If your innovation has more than one population or subgroup, please be as scpecific as possible in the description text area below.',
-        validations: { isRequired: [true, 'Sell expectations description is required'] },
+        validations: { isRequired: [true, 'Description is required'] },
         lengthLimit: 'medium'
       }]
     })
@@ -112,7 +112,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         dataType: 'textarea',
         label: stepsLabels.l5,
         description: 'If your innovation has more than one population or subgroup, please be as scpecific as possible in the description text area below.',
-        validations: { isRequired: [true, 'Usage expectations description is required'] },
+        validations: { isRequired: [true, 'Description is required'] },
         lengthLimit: 'medium'
       }]
     })
