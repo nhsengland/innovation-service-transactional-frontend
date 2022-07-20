@@ -103,7 +103,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
       },
       () => {
         this.setPageStatus('ERROR');
-        this.setAlertError('Unable to fetch innovation record information');
+        this.setAlertError('Unable to fetch innovation record information', 'Please try again or contact us for further help');
       }
     );
   }

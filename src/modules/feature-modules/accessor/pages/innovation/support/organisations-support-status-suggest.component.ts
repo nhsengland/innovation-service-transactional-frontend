@@ -100,7 +100,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       },
       () => {
         this.setPageStatus('ERROR');
-        this.setAlertError('Unable to fetch information');
+        this.setAlertDataLoadError();
       }
     );
 
@@ -158,7 +158,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       () => this.redirectTo(`/accessor/innovations/${this.innovation.id}/support`, { alert: 'supportOrganisationSuggestSuccess' }),
       () => {
         this.submitButton = { isActive: true, label: 'Confirm and notify organisations' };
-        this.setAlertError('An error occurred when saving information');
+        this.setAlertDataSaveError();
       }
     );
 

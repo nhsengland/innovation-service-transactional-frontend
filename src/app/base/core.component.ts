@@ -140,17 +140,11 @@ export class CoreComponent implements OnDestroy {
   setAlert(type: AlertType['type'], title: string, message?: string, setFocus?: boolean): void {
     this.alert = { type, title, message, setFocus: !!setFocus };
   }
-  setAlertSuccess(title?: string, message?: string): void {
-    this.setAlert('SUCCESS', title || 'Operation was successful', message, true);
-  }
-  setAlertError(title?: string, message?: string): void {
-    this.setAlert(
-      'ERROR',
-      title || 'It appears that something went wrong!',
-      message || 'Please try again or contact us for further help',
-      true
-    );
-  }
+  setAlertSuccess(title?: string, message?: string): void { this.setAlert('SUCCESS', title || 'Operation was successful', message, true); }
+  setAlertError(title: string, message?: string): void { this.setAlert('ERROR', title, message, true); }
+  setAlertDataLoadError(): void { this.setAlert('ERROR', 'Unable to fetch information', 'Please try again or contact us for further help', true); }
+  setAlertDataSaveError(): void { this.setAlert('ERROR', 'An error occurred when saving information', 'Please try again or contact us for further help', true); }
+  setAlertUnknownError(): void { this.setAlert('ERROR', 'It appears that something went wrong!', 'Please try again or contact us for further help', true); }
 
   focusBody(): void {
     if (isPlatformBrowser(this.platformId)) {

@@ -87,7 +87,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
         this.setPageStatus('READY');
       },
       error => {
-        this.setAlertError();
+        this.setAlertDataLoadError();
         this.setPageStatus('READY');
         this.logger.error(error);
       }
@@ -107,7 +107,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
         this.getNotificationsList();
       },
       error => {
-        this.setAlertError();
+        this.setAlertDataSaveError();
         this.setPageStatus('READY');
         this.logger.error(error);
       }
@@ -127,7 +127,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
         this.getNotificationsList();
       },
       error => {
-        this.setAlertError();
+        this.setAlertDataSaveError();
         this.setPageStatus('READY');
         this.logger.error(error);
       }
