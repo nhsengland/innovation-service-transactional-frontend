@@ -19,13 +19,13 @@
     </span>
   </ng-container>
 
-  <ng-container *ngIf="(fieldArrayControl.value || []).length > 0">
-    <div class="nhsuk-heading-s nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-0"> You have chosen {{ fieldArrayControl.value.length  }} {{ fieldArrayControl.value.length | i18nPlural: {'=1': 'item', 'other': 'items'}  }} </div>
+  <ng-container *ngIf="chosenItems.length > 0">
+    <div class="nhsuk-heading-s nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-0"> You have chosen {{ chosenItems.length  }} {{ chosenItems.length | i18nPlural: {'=1': 'item', 'other': 'items'}  }} </div>
     <dl class="nhsuk-summary-list">
-      <div *ngFor="let item of fieldArrayControl.value" class="nhsuk-summary-list__row">
-        <dt class="nhsuk-summary-list__value"> {{ item }} </dt>
+      <div *ngFor="let item of chosenItems" class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__value"> {{ item.label }} </dt>
         <dd class="nhsuk-summary-list__actions">
-          <a href="javascript:void(0)" (click)="onRemoveItem(item)"> Delete <span class="nhsuk-u-visually-hidden"> {{ item }} </span></a>
+          <a href="javascript:void(0)" (click)="onRemoveItem(item.value)"> Delete <span class="nhsuk-u-visually-hidden"> {{ item.label }} </span></a>
         </dd>
       </div>
     </dl>

@@ -29,6 +29,7 @@ export class FormInputAutocompleteArrayComponent implements OnInit, DoCheck {
   @Input() pageUniqueField = true;
 
   searchableItems: { value: string, label: string, isVisible: boolean }[] = [];
+  chosenItems: { value: string, label: string }[] = [];
   filteredItems$: Observable<{ value: string, label: string }[]> = of([]);
 
   hasError = false;
@@ -71,6 +72,11 @@ export class FormInputAutocompleteArrayComponent implements OnInit, DoCheck {
       isVisible: !this.fieldArrayControl.value.includes(item.value)
     }));
 
+    this.chosenItems = (this.fieldArrayControl.value as string[]).map(value => ({
+      value,
+      label: this.searchableItems.find(item => item.value === value)?.label || ''
+    }));
+
     this.filteredItems$ = this.searchFieldControl.valueChanges.pipe(
       map(value => this._filter(value))
     );
@@ -91,14 +97,12 @@ export class FormInputAutocompleteArrayComponent implements OnInit, DoCheck {
     event.preventDefault();
     const eventValue = (event.target as HTMLInputElement).value;
 
-    // this.hasError = (this.fieldArrayControl.invalid && (this.fieldArrayControl.touched || this.fieldArrayControl.dirty));
-    // this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldArrayControl.errors) : { message: '', params: {} };
-
-    const searchableItemsItem = this.searchableItems.find(item => item.value === eventValue);
+    const searchableItemsItem = this.searchableItems.find(item => item.label === eventValue);
 
     if (searchableItemsItem) {
       this.fieldArrayControl.push(new FormControl(searchableItemsItem.value));
       searchableItemsItem.isVisible = false;
+      this.chosenItems.push({ value: searchableItemsItem.value, label: searchableItemsItem.label });
       this.searchFieldControl.setValue('');
     }
 
@@ -110,10 +114,12 @@ export class FormInputAutocompleteArrayComponent implements OnInit, DoCheck {
 
     const fieldControlIndex = this.fieldArrayControl.controls.findIndex(item => item.value === value);
     const searchableItemsItem = this.searchableItems.find(item => item.value === value);
+    const chosenItemsIndex = this.chosenItems.findIndex(item => item.value === value);
 
-    if (fieldControlIndex > -1 && searchableItemsItem) {
+    if (fieldControlIndex > -1 && searchableItemsItem && chosenItemsIndex > -1) {
       this.fieldArrayControl.removeAt(fieldControlIndex);
       searchableItemsItem.isVisible = true;
+      this.chosenItems.splice(chosenItemsIndex, 1);
       this.searchFieldControl.setValue('');
     } else {
       console.log('Error when removing item.');
