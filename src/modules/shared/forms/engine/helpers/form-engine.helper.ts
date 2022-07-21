@@ -22,8 +22,11 @@ export class FormEngineHelper {
       const additionalFields = parameter.additional || [];
 
       switch (parameter.dataType) {
-        case 'checkbox-array': // Creates an FormArray and pushes defaultValues into it.
-        case 'grouped-checkbox-array': // Creates an FormArray and pushes defaultValues into it.
+
+        // Creates an FormArray and pushes defaultValues into it.
+        case 'autocomplete-array':
+        case 'checkbox-array':
+        case 'grouped-checkbox-array':
           form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
           (parameterValue as string[] || []).forEach(v => { (form.get(parameter.id) as FormArray).push(new FormControl(v)); });
           break;
@@ -52,7 +55,7 @@ export class FormEngineHelper {
           }
           break;
 
-        case 'autocomplete':
+        // case 'autocomplete-value':
         case 'radio-group':
           form.addControl(parameter.id, FormEngineHelper.createParameterFormControl(parameter, parameterValue, { updateOn: 'change' }));
           break;
@@ -122,10 +125,7 @@ export class FormEngineHelper {
     const returnForm: { valid: boolean; data: { [key: string]: any } } = { valid: form.valid, data: {} };
 
     Object.keys(form.getRawValue()).forEach(key => { // getRawValues is needed to return also disabled fields!
-      // const parameter = parameters.find(p => p.id === key);
-      // if (parameter) {
       returnForm.data[key] = form.getRawValue()[key];
-      // }
     });
 
     return returnForm;
@@ -193,6 +193,7 @@ export class FormEngineHelper {
       if (validation[0]) {
 
         switch (parameter.dataType) {
+          case 'autocomplete-array':
           case 'checkbox-array':
             validators.push(CustomValidators.requiredCheckboxArray(validation[1]));
             break;
@@ -220,6 +221,7 @@ export class FormEngineHelper {
       if (validation[0]) {
 
         switch (parameter.dataType) {
+          case 'autocomplete-array':
           case 'checkbox-array':
             validators.push(CustomValidators.minCheckboxArray(validation[0] as number, validation[1] as string));
             break;
@@ -239,6 +241,7 @@ export class FormEngineHelper {
       if (validation[0]) {
 
         switch (parameter.dataType) {
+          case 'autocomplete-array':
           case 'checkbox-array':
             validators.push(CustomValidators.maxCheckboxArray(validation[0] as number, validation[1] as string));
             break;

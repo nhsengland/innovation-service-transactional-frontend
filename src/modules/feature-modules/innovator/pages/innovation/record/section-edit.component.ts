@@ -90,6 +90,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   onGotoStep(stepNumber: number): void {
 
     this.wizard.gotoStep(stepNumber);
+    this.clearAlert();
     this.setPageTitle(this.wizard.currentStepTitle());
     this.setUploadConfiguration();
 
@@ -179,11 +180,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
             this.submitButton.isActive = validInformation.valid;
             if (!validInformation.valid) {
-              this.alert = {
-                type: 'ERROR',
-                title: `Please verify what's missing with your answers`,
-              };
               this.alertErrorsList = validInformation.errors;
+              this.setAlertError(`Please verify what's missing with your answers`);
             }
 
           }
@@ -194,12 +192,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         () => {
 
           this.saveButton = { isActive: true, label: 'Save and continue' };
-          this.alert = {
-            type: 'ERROR',
-            title: 'An error has ocurred when saving information',
-            message: 'Please try again or contact us for further help'
-          };
           this.alertErrorsList = [];
+          this.setAlertDataSaveError();
 
         });
 

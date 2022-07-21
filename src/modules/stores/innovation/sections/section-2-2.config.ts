@@ -105,7 +105,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
       }]
     }),
     new FormEngineModel({
-
       parameters: [{
         id: 'environmentalBenefits',
         dataType: 'checkbox-array',

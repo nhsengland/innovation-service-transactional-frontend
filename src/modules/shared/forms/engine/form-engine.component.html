@@ -20,8 +20,8 @@
           <theme-form-input type="password" [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
         </div>
 
-        <div *ngSwitchCase="'autocomplete'">
-          <theme-form-input-autocomplete [controlName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items" [pageUniqueField]="onlyOneField"></theme-form-input-autocomplete>
+        <div *ngSwitchCase="'autocomplete-array'">
+          <theme-form-input-autocomplete-array [arrayName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items" [pageUniqueField]="onlyOneField"></theme-form-input-autocomplete-array>
         </div>
 
         <div *ngSwitchCase="'radio-group'">
