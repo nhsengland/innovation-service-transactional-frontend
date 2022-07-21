@@ -3,6 +3,7 @@
 
 import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector } from '@angular/core';
 import { AbstractControl, ControlContainer, FormArray, FormControl } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -92,11 +93,9 @@ export class FormInputAutocompleteArrayComponent implements OnInit, DoCheck {
   }
 
 
-  onAddItem(event: Event): void {
+  onAddItem(event: MatAutocompleteSelectedEvent): void {
 
-    event.preventDefault();
-    const eventValue = (event.target as HTMLInputElement).value;
-
+    const eventValue = event.option.value;
     const searchableItemsItem = this.searchableItems.find(item => item.label === eventValue);
 
     if (searchableItemsItem) {

@@ -60,7 +60,10 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   // PATIENTS.
   if (!currentValues.impacts?.includes('PATIENTS')) { // Removes all subgroups if no PATIENTS has been selected.
     currentValues.subgroups = [];
+    currentValues.diseasesConditionsImpact = null;
   } else {
+
+    currentValues.subgroups = currentValues.subgroups.filter(group => group.id || group.name); // This will prevent empty subgroups when user go back (where validations are not triggered).
 
     steps.push(
 
@@ -99,7 +102,9 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   }
 
   // CLINICIANS.
-  if (currentValues.impacts?.includes('CLINICIANS')) {
+  if (!currentValues.impacts?.includes('CLINICIANS')) {
+    currentValues.cliniciansImpactDetails = null;
+  } else {
     steps.push(
       new FormEngineModel({
         parameters: [{
@@ -160,7 +165,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
     toReturn.push({
       label: stepsLabels.l2,
-      value: data.diseasesConditionsImpact?.map(item => item).join('\n'),
+      value: data.diseasesConditionsImpact?.map(impact => innovationDiseasesConditionsImpactItems.find(item => item.value === impact)?.label).join('\n'),
       editStepNumber: toReturn.length + 1
     });
 

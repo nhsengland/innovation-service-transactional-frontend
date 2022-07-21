@@ -31,9 +31,9 @@
     </dl>
   </ng-container>
 
-  <input type="text" matInput [formControl]="searchFieldControl" [id]="id" name="search" type="text" [value]="searchFieldControl.value" class="nhsuk-input" [matAutocomplete]="auto" (keyup.enter)="onAddItem($event)">
+  <input type="text" matInput [formControl]="searchFieldControl" [id]="id" name="search" type="text" [value]="searchFieldControl.value" class="nhsuk-input" [matAutocomplete]="auto" (keydown.enter)="$event.preventDefault()">
 
-  <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
+  <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption (optionSelected)="onAddItem($event)">
     <ng-container *ngIf="filteredItems$ | async as filteredItems">
       <mat-option *ngIf="filteredItems.length === 0 && searchFieldControl.value?.length > 1" disabled class="mat-option--no-results">
         No result matches your search. Please, refine your search.
