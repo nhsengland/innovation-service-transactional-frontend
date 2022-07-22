@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
-import { AlertType } from '@app/base/types';
 import { RoutingHelper } from '@app/base/helpers';
 
 import { AccessorService, getInnovationActionsListEndpointOutDTO } from '../../../services/accessor.service';
@@ -16,8 +15,6 @@ import { InnovationDataResolverType } from '@modules/stores/innovation/innovatio
   templateUrl: './action-tracker-list.component.html'
 })
 export class InnovationActionTrackerListComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   innovationId: string;
   innovation: InnovationDataResolverType;

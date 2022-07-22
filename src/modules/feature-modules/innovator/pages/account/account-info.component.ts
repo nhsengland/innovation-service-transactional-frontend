@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
@@ -11,9 +10,8 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
   selector: 'shared-pages-account-account-info',
   templateUrl: './account-info.component.html'
 })
-export class PageAccountInfoComponent extends CoreComponent implements OnInit {
+export class PageAccountInfoComponent extends CoreComponent {
 
-  alert: AlertType = { type: null };
   changePassword = `${this.CONSTANTS.APP_URL}/change-password`;
 
   user: {

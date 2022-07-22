@@ -1,5 +1,4 @@
-import { cloneDeep } from 'lodash';
-import { FormEngineModel, FormEngineParameterModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
+import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
@@ -9,6 +8,7 @@ import { environmentalBenefitItems, generalBenefitItems, hasBenefitsItems, patie
 // Labels.
 const stepsLabels = {
   l1: 'Have you identified the specific benefits that your innovation would bring?',
+  l2: 'What benefits does your innovation create for patients or citizens?',
   l3: 'What benefits does your innovation create for the NHS or social care?',
   l4: 'What environmental sustainability benefits does your innovation create?',
   l5: 'Please explain how you have considered accessibility and the impact of your innovation on health inequalities.',
@@ -18,13 +18,10 @@ const stepsLabels = {
 
 // Types.
 type InboundPayloadType = {
+  impactPatients: boolean;
   hasBenefits: null | 'YES' | 'NO' | 'NOT_SURE';
-  subgroups: {
-    id: string;
-    name: string;
-    benefits: ('REDUCE_MORTALITY' | 'REDUCE_FURTHER_TREATMENT' | 'REDUCE_ADVERSE_EVENTS' | 'ENABLE_EARLIER_DIAGNOSIS' | 'REDUCE_RISKS' | 'PREVENTS_CONDITION_OCCURRING' | 'AVOIDS_UNNECESSARY_TREATMENT' | 'ENABLES_NON_INVASIVELY_TEST' | 'INCREASES_SELF_MANAGEMENT' | 'INCREASES_LIFE_QUALITY' | 'ENABLES_SHARED_CARE' | 'OTHER')[];
-    otherBenefit: null | string;
-  }[];
+  patientsCitizensBenefits: null | ('REDUCE_MORTALITY' | 'REDUCE_FURTHER_TREATMENT' | 'REDUCE_ADVERSE_EVENTS' | 'ENABLE_EARLIER_DIAGNOSIS' | 'REDUCE_RISKS' | 'PREVENTS_CONDITION_OCCURRING' | 'AVOIDS_UNNECESSARY_TREATMENT' | 'ENABLES_NON_INVASIVELY_TEST' | 'INCREASES_SELF_MANAGEMENT' | 'INCREASES_LIFE_QUALITY' | 'ENABLES_SHARED_CARE' | 'OTHER')[];
+  otherPatientsCitizensBenefit: null | string;
   generalBenefits: null | ('REDUCE_LENGTH_STAY' | 'REDUCE_CRITICAL_CARE' | 'REDUCE_EMERGENCY_ADMISSIONS' | 'CHANGES_DELIVERY_SECONDARY_TO_PRIMARY' | 'CHANGES_DELIVERY_INPATIENT_TO_DAY_CASE' | 'INCREASES_COMPLIANCE' | 'IMPROVES_COORDINATION' | 'REDUCES_REFERRALS' | 'LESS_TIME' | 'FEWER_STAFF' | 'FEWER_APPOINTMENTS' | 'COST_SAVING' | 'INCREASES_EFFICIENCY' | 'IMPROVES_PERFORMANCE' | 'OTHER')[];
   otherGeneralBenefit: null | string;
   environmentalBenefits: null | ('NO_SIGNIFICANT_BENEFITS' | 'LESS_ENERGY' | 'LESS_RAW_MATERIALS' | 'REDUCES_GAS_EMISSIONS' | 'REDUCES_PLASTICS_USE' | 'MINIMISES_WASTE' | 'LOWER_ENVIRONMENTAL_IMPACT' | 'OPTIMIZES_FINITE_RESOURCE_USE' | 'USES_RECYCLED_MATERIALS' | 'OTHER')[];
@@ -33,12 +30,8 @@ type InboundPayloadType = {
   accessibilityStepsDetails: null | string;
 };
 
-// [key: string] is needed to support subgroups_${number} properties.
-type StepPayloadType = InboundPayloadType & { [key: string]: null | string[] | string };
-
-type OutboundPayloadType = InboundPayloadType;
-
-
+type StepPayloadType = InboundPayloadType;
+type OutboundPayloadType = Omit<InboundPayloadType, 'impactPatients'>;
 
 export const SECTION_2_2: InnovationSectionConfigType['sections'][0] = {
   id: InnovationSectionEnum.UNDERSTANDING_OF_BENEFITS,
@@ -71,47 +64,34 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   steps.splice(1);
 
   if (['NOT_YET', 'NOT_SURE'].includes(currentValues.hasBenefits || 'NOT_YET')) {
-    currentValues.subgroups = currentValues.subgroups.map(item => ({ id: item.id, name: item.name, benefits: [], otherBenefit: null }));
+    currentValues.patientsCitizensBenefits = null;
+    currentValues.otherPatientsCitizensBenefit = null;
     currentValues.generalBenefits = null;
     currentValues.otherGeneralBenefit = null;
     currentValues.environmentalBenefits = null;
     currentValues.otherEnvironmentalBenefit = null;
     currentValues.accessibilityImpactDetails = null;
     currentValues.accessibilityStepsDetails = null;
-    Object.keys(currentValues).filter(key => key.startsWith('subgroupBenefits_')).forEach((key) => { delete currentValues[key]; });
-    Object.keys(currentValues).filter(key => key.startsWith('subgroupOtherBenefit_')).forEach((key) => { delete currentValues[key]; });
     return;
   }
 
-  Object.keys(currentValues).filter(key => key.startsWith('subgroupBenefits_')).forEach((key) => {
-    currentValues.subgroups[Number(key.split('_')[1])].benefits = currentValues[key] as InboundPayloadType['subgroups'][0]['benefits'];
-    delete currentValues[key];
-  });
-  Object.keys(currentValues).filter(key => key.startsWith('subgroupOtherBenefit_')).forEach((key) => {
-    currentValues.subgroups[Number(key.split('_')[1])].otherBenefit = currentValues[key] as string;
-    delete currentValues[key];
-  });
-
-
-  currentValues.subgroups.forEach((item, i) => {
+  if (!currentValues.impactPatients) {
+    currentValues.patientsCitizensBenefits = null;
+    currentValues.otherPatientsCitizensBenefit = null;
+  } else {
     steps.push(
       new FormEngineModel({
         parameters: [{
-          id: `subgroupBenefits_${i}`,
+          id: 'patientsCitizensBenefits',
           dataType: 'checkbox-array',
-          label: `What benefits does your innovation create for patients or citizens of ${item.name}?`,
-          description: 'Choose up to 3 benefits',
-          validations: {
-            isRequired: [true, 'Choose at least one benefit'],
-            max: [3, 'Choose between 1 and 3 benefit']
-          },
-          items: [...patientsCitizensBenefitItems, ...[{ value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: `subgroupOtherBenefit_${i}`, dataType: 'text', label: 'Other benefits for patients or citizens', validations: { isRequired: [true, 'Other description is required'] } }) }]]
+          label: stepsLabels.l2,
+          description: 'If your innovation has more than one population or subgroup, please keep this in mind when choosing from the options below.',
+          validations: { isRequired: [true, 'Choose at least one benefit'] },
+          items: patientsCitizensBenefitItems
         }]
       })
     );
-    currentValues[`subgroupBenefits_${i}`] = item.benefits;
-    currentValues[`subgroupOtherBenefit_${i}`] = item.otherBenefit;
-  });
+  }
 
   steps.push(
     new FormEngineModel({
@@ -120,24 +100,17 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         dataType: 'checkbox-array',
         label: stepsLabels.l3,
         description: 'Choose up to 3 benefits',
-        validations: {
-          isRequired: [true, 'Choose at least one benefit'],
-          max: [3, 'Choose between 1 and 3 benefit']
-        },
+        validations: { isRequired: [true, 'Choose at least one benefit'], max: [3, 'Choose between 1 and 3 benefit'] },
         items: generalBenefitItems
       }]
     }),
     new FormEngineModel({
-
       parameters: [{
         id: 'environmentalBenefits',
         dataType: 'checkbox-array',
         label: stepsLabels.l4,
         description: 'Choose up to 3 benefits',
-        validations: {
-          isRequired: [true, 'Choose at least one environmental benefit'],
-          max: [3, 'Choose between 1 and 3 environmental benefit']
-        },
+        validations: { isRequired: [true, 'Choose at least one environmental benefit'], max: [3, 'Choose between 1 and 3 environmental benefit'] },
         items: environmentalBenefitItems
       }]
     }),
@@ -146,7 +119,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'accessibilityImpactDetails',
         dataType: 'textarea',
         label: stepsLabels.l5,
-        validations: { isRequired: [true, 'Accessibility impact details are required'] },
+        validations: { isRequired: [true, 'Details are required'] },
         lengthLimit: 'medium'
       }]
     }),
@@ -155,7 +128,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'accessibilityStepsDetails',
         dataType: 'textarea',
         label: stepsLabels.l6,
-        validations: { isRequired: [true, 'Accessibility steps details are required'] },
+        validations: { isRequired: [true, 'Details are required'] },
         lengthLimit: 'medium'
       }]
     })
@@ -166,14 +139,18 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
-  const parsedData = cloneDeep(data) as StepPayloadType;
-
-  parsedData.subgroups.forEach((item, i) => {
-    parsedData[`subgroupBenefits_${i}`] = item.benefits;
-    parsedData[`subgroupOtherBenefit_${i}`] = item.otherBenefit;
-  });
-
-  return parsedData;
+  return {
+    impactPatients: data.impactPatients,
+    hasBenefits: data.hasBenefits,
+    patientsCitizensBenefits: data.patientsCitizensBenefits,
+    otherPatientsCitizensBenefit: data.otherPatientsCitizensBenefit,
+    generalBenefits: data.generalBenefits,
+    otherGeneralBenefit: data.otherGeneralBenefit,
+    environmentalBenefits: data.environmentalBenefits,
+    otherEnvironmentalBenefit: data.otherEnvironmentalBenefit,
+    accessibilityImpactDetails: data.accessibilityImpactDetails,
+    accessibilityStepsDetails: data.accessibilityStepsDetails,
+  };
 
 }
 
@@ -182,7 +159,8 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
     hasBenefits: data.hasBenefits,
-    subgroups: data.subgroups,
+    patientsCitizensBenefits: data.patientsCitizensBenefits,
+    otherPatientsCitizensBenefit: data.otherPatientsCitizensBenefit,
     generalBenefits: data.generalBenefits,
     otherGeneralBenefit: data.otherGeneralBenefit,
     environmentalBenefits: data.environmentalBenefits,
@@ -205,14 +183,13 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   });
 
   if (['YES'].includes(data.hasBenefits || 'NOT_YET')) {
-
-    data.subgroups?.forEach((subGroup, i) => {
+    if (data.impactPatients) {
       toReturn.push({
-        label: `Group ${subGroup.name} benefit`,
-        value: subGroup.benefits.map(benefit => benefit === 'OTHER' ? subGroup.otherBenefit : patientsCitizensBenefitItems.find(item => item.value === benefit)?.label).join('\n'),
+        label: stepsLabels.l2,
+        value: data.patientsCitizensBenefits?.map(benefit => benefit === 'OTHER' ? data.otherPatientsCitizensBenefit : patientsCitizensBenefitItems.find(item => item.value === benefit)?.label).join('\n'),
         editStepNumber: toReturn.length + 1
       });
-    });
+    }
 
     toReturn.push({
       label: stepsLabels.l3,

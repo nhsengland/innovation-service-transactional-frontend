@@ -3,21 +3,19 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
-
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
-import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
-import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
 import { RoutingHelper } from '@app/base/helpers';
+
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
+
+import { InnovationDataResolverType, InnovationSupportStatusEnum } from '@modules/stores/innovation';
+
 
 @Component({
   selector: 'app-assessment-pages-innovation-support-organisations-support-status-info',
   templateUrl: './organisations-support-status-info.component.html'
 })
 export class InnovationSupportOrganisationsSupportStatusInfoComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   innovationId: string;
 
@@ -30,12 +28,12 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
       id: string;
       name: string;
       acronym: string;
-      status?: keyof typeof INNOVATION_SUPPORT_STATUS;
+      status?: InnovationSupportStatusEnum;
       organisationUnits: {
         id: string;
         name: string;
         acronym: string;
-        status: keyof typeof INNOVATION_SUPPORT_STATUS;
+        status: InnovationSupportStatusEnum;
       }[];
     };
     showHideStatus: 'hidden' | 'opened' | 'closed';
@@ -43,7 +41,6 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
     showHideDescription: null | string;
   }[] = [];
 
-  // isQualifyingAccessorRole = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -56,59 +53,57 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+
   }
 
 
   ngOnInit(): void {
 
-    this.setPageStatus('READY');
     forkJoin([
       this.organisationsService.getOrganisationUnits(),
       this.assessmentService.getInnovationSupports(this.innovationId, false),
-    ]).subscribe(([organisationUnits, organisationUnitsSupportStatus]) => {
-      this.organisations = organisationUnits.map(organisation => {
-        if (organisation.organisationUnits.length === 1) {
-          return {
-            info: {
-              id: organisation.id,
-              name: organisation.name,
-              acronym: organisation.acronym,
-              organisationUnits: [],
-              status: organisationUnitsSupportStatus.find(o => o.organisationUnit.organisation.id === organisation.id)?.status || 'UNASSIGNED'
-            },
-            showHideStatus: 'hidden',
-            showHideText: null,
-            showHideDescription: null
-          };
-        } else {
-          return {
-            info: {
-              id: organisation.id,
-              name: organisation.name,
-              acronym: organisation.acronym,
-              organisationUnits: organisation.organisationUnits.map(org => ({
-                ...org,
-                status: organisationUnitsSupportStatus.find(o => o.organisationUnit.id === org.id)?.status || 'UNASSIGNED'
-              }))
-            },
-            showHideStatus: 'closed',
-            showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
-            showHideDescription: `that belong to the ${organisation.name}`
-          };
-        }
+    ]).subscribe(
+      ([organisationUnits, organisationUnitsSupportStatus]) => {
 
-      });
+        this.organisations = organisationUnits.map(organisation => {
+          if (organisation.organisationUnits.length === 1) {
+            return {
+              info: {
+                id: organisation.id,
+                name: organisation.name,
+                acronym: organisation.acronym,
+                organisationUnits: [],
+                status: organisationUnitsSupportStatus.find(o => o.organisationUnit.organisation.id === organisation.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
+              },
+              showHideStatus: 'hidden',
+              showHideText: null,
+              showHideDescription: null
+            };
+          } else {
+            return {
+              info: {
+                id: organisation.id,
+                name: organisation.name,
+                acronym: organisation.acronym,
+                organisationUnits: organisation.organisationUnits.map(org => ({
+                  ...org,
+                  status: organisationUnitsSupportStatus.find(o => o.organisationUnit.id === org.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
+                }))
+              },
+              showHideStatus: 'closed',
+              showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
+              showHideDescription: `that belong to the ${organisation.name}`
+            };
+          }
 
-      this.setPageStatus('READY');
+        });
 
-    },
+        this.setPageStatus('READY');
+
+      },
       () => {
         this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch innovation record information',
-          message: 'Please try again or contact us for further help'
-        };
+        this.setAlertError('Unable to fetch innovation record information', 'Please try again or contact us for further help');
       }
     );
   }

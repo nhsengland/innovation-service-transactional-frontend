@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
+
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
@@ -18,8 +18,6 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
   templateUrl: './overview.component.html'
 })
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   innovationId: string;
   innovationStatus: keyof typeof INNOVATION_STATUS = '';

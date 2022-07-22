@@ -1,22 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
+
 
 @Component({
   selector: 'app-accessor-pages-manage-account-info',
   templateUrl: './manage-account-info.component.html'
 })
-export class PageAccessorAccountManageAccountInfoComponent extends CoreComponent implements OnInit {
+export class PageAccessorAccountManageAccountInfoComponent extends CoreComponent {
 
-  alert: AlertType = { type: null };
   changePassword = `${this.CONSTANTS.APP_URL}/change-password`;
 
   user: {
     passwordResetOn: string
   };
-  constructor(
 
-  ) {
+  constructor() {
 
     super();
     this.setPageTitle('Manage account');
@@ -25,6 +23,7 @@ export class PageAccessorAccountManageAccountInfoComponent extends CoreComponent
     this.user = {
       passwordResetOn: user.passwordResetOn
     };
+
   }
 
 }

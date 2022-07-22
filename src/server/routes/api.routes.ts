@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import https from 'https';
+import * as https from 'https';
 import * as express from 'express';
 import { IProfile } from 'passport-azure-ad';
 

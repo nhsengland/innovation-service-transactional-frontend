@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
 import { FIRST_TIME_SIGNIN_QUESTIONS } from './first-time-signin.config';
@@ -18,8 +17,6 @@ import { InnovatorService } from '../../services/innovator.service';
 export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
-
-  alert: AlertType = { type: null };
 
   wizard: WizardEngineModel = new WizardEngineModel({});
 

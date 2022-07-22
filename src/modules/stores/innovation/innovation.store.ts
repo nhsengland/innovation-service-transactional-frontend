@@ -14,7 +14,7 @@ import { WizardEngineModel } from '@modules/shared/forms';
 import { InnovationService, UserModulesType, ActivityLogOutDTO, } from './innovation.service';
 
 import { INNOVATION_SECTIONS, getSectionTitle } from './innovation.config';
-import { ActivityLogItemsEnum, InnovationSectionEnum } from './innovation.enums';
+import { ActivityLogTypesEnum, InnovationSectionEnum } from './innovation.enums';
 import {
   InnovationModel,
   sectionType,
@@ -50,7 +50,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitInnovation(innovationId);
   }
 
-  getActivityLog$(module: UserModulesType, innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: keyof ActivityLogItemsEnum }>): Observable<ActivityLogOutDTO> {
+  getActivityLog$(module: UserModulesType, innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum }>): Observable<ActivityLogOutDTO> {
     return this.innovationsService.getInnovationActivityLog(module, innovationId, queryParams);
   }
 

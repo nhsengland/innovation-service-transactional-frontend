@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { Component, PLATFORM_ID, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Router } from '@angular/router';
@@ -22,7 +22,7 @@ import { UtilsHelper } from './helpers';
 
 
 @Component({ template: '' })
-export class CoreComponent implements OnInit, OnDestroy {
+export class CoreComponent implements OnDestroy {
 
   private platformId: object;
   private serverRequest: Request | null;
@@ -105,8 +105,6 @@ export class CoreComponent implements OnInit, OnDestroy {
   get pageStatus(): string { return this.pageStatusHolder; }
 
 
-  ngOnInit(): void { }
-
   isRunningOnBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
   }
@@ -142,17 +140,11 @@ export class CoreComponent implements OnInit, OnDestroy {
   setAlert(type: AlertType['type'], title: string, message?: string, setFocus?: boolean): void {
     this.alert = { type, title, message, setFocus: !!setFocus };
   }
-  setAlertSuccess(title?: string, message?: string): void {
-    this.setAlert('SUCCESS', title || 'Operation was successful', message, true);
-  }
-  setAlertError(title?: string, message?: string): void {
-    this.setAlert(
-      'ERROR',
-      title || 'It appears that something went wrong!',
-      message || 'Please try again or contact us for further help',
-      true
-    );
-  }
+  setAlertSuccess(title?: string, message?: string): void { this.setAlert('SUCCESS', title || 'Operation was successful', message, true); }
+  setAlertError(title: string, message?: string): void { this.setAlert('ERROR', title, message, true); }
+  setAlertDataLoadError(): void { this.setAlert('ERROR', 'Unable to fetch information', 'Please try again or contact us for further help', true); }
+  setAlertDataSaveError(): void { this.setAlert('ERROR', 'An error occurred when saving information', 'Please try again or contact us for further help', true); }
+  setAlertUnknownError(): void { this.setAlert('ERROR', 'It appears that something went wrong!', 'Please try again or contact us for further help', true); }
 
   focusBody(): void {
     if (isPlatformBrowser(this.platformId)) {

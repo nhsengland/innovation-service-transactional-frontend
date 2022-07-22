@@ -3,7 +3,6 @@ import { forkJoin } from 'rxjs';
 
 import { CoreComponent, FormControl, FormGroup, Validators } from '@app/base';
 import { FormEngineParameterModel, CustomValidators } from '@app/base/forms';
-import { AlertType } from '@app/base/types';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
@@ -16,7 +15,6 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
 export class PageAccountInnovationsTransferComponent extends CoreComponent implements OnInit {
 
   stepNumber: 1 | 2 = 1;
-  alert: AlertType = { type: null };
 
   form = new FormGroup({
     innovation: new FormControl('', { validators: CustomValidators.required('Please choose an innovation'), updateOn: 'change' }),

@@ -1,6 +1,6 @@
 import { jsPDF } from 'jspdf';
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import { resolve } from 'path';
 
 export class PDFGenerator {
 
@@ -14,10 +14,10 @@ export class PDFGenerator {
   private pointPerInch = 72;
 
 
-  private options: {margin: number, top: number, lineSpacing: number, maxLen: number};
+  private options: { margin: number, top: number, lineSpacing: number, maxLen: number };
 
   currentPage = 0;
-  constructor(opts?: {margin: number, top: number, lineSpacing: number, maxLen: number}) {
+  constructor(opts?: { margin: number, top: number, lineSpacing: number, maxLen: number }) {
     opts = opts || {
       margin: 0.59,
       top: 0.58,
@@ -29,7 +29,7 @@ export class PDFGenerator {
 
     const doc = new jsPDF({
       unit: 'in',
-    }).setProperties({title: 'Innovation Record Export'});
+    }).setProperties({ title: 'Innovation Record Export' });
 
     doc.setLineHeightFactor(this.lineHeight);
 
@@ -88,8 +88,8 @@ export class PDFGenerator {
     const oneLineHeight = ((fontSize || 24) * this.lineHeight) / this.pointPerInch;
 
     const t = this.doc
-    .setFont('helvetica')
-    .splitTextToSize(text, this.maxLineWidth);
+      .setFont('helvetica')
+      .splitTextToSize(text, this.maxLineWidth);
 
     // check if current text of block will overflow the page vertically
     const blockHeight = (t.length * oneLineHeight) + 0.29;
@@ -124,7 +124,7 @@ export class PDFGenerator {
         const excluded = tempT.slice(length);
 
         // calculate the new text height
-        const tempHeight = (range.length * oneLineHeight ) + 0.29;
+        const tempHeight = (range.length * oneLineHeight) + 0.29;
 
         // check if the current position plus the text height is still higher than 90% of the document size
         if (this.currentPosition + tempHeight < this.documentHeight * 0.90) {
@@ -133,13 +133,13 @@ export class PDFGenerator {
           parts.push(range);
 
           // calculate the position of the part
-          const tempPosition =  this.currentPosition + (tempHeight + 0.19);
+          const tempPosition = this.currentPosition + (tempHeight + 0.19);
 
           // calculate the height of the excluded lines array
           const excludedHeigth = (excluded.length * oneLineHeight) + 0.29;
 
           // if the virtual position of the part plus the excluded text heigh is higher than 90% of the document height
-          if (tempPosition + excludedHeigth > this.documentHeight * 0.90 ) {
+          if (tempPosition + excludedHeigth > this.documentHeight * 0.90) {
 
             // the new temporary array is now the excluded lines because they also overflow 90% of a document height
             tempT = [...excluded];
@@ -169,7 +169,7 @@ export class PDFGenerator {
 
     for (const element of parts) {
       this.doc.text(element, this.margin, this.currentPosition);
-      const tempHeight = (element.length * oneLineHeight ) + 0.29;
+      const tempHeight = (element.length * oneLineHeight) + 0.29;
       this.currentPosition += (tempHeight + 0.19);
 
 
@@ -191,7 +191,7 @@ export class PDFGenerator {
   }
 
   addLogo(): PDFGenerator {
-    const imagePath = `${path.resolve('./src/assets/images/nhs-logo.png')}`;
+    const imagePath = `${resolve('./src/assets/images/nhs-logo.png')}`;
     const png = fs.readFileSync(imagePath);
     const imgStr = Buffer.from(png).toString('base64');
     this.doc.addImage(imgStr, 'png', this.pageWidth - 3, this.margin, 1.75, .75);
@@ -217,58 +217,38 @@ export class PDFGenerator {
     return this;
   }
 
-  hero( innovationName: string ): PDFGenerator {
+  hero(innovationName: string): PDFGenerator {
     this.currentPosition = (this.documentHeight / 2) - 3.2;
-    this
-      .addText('Innovation record export', 48, {color : '#005eb7'})
-      .addVerticalSpace(0.19);
-    this
-      .addText(innovationName, 24, {color : '#005eb7'})
-      .addVerticalSpace(0.39);
-    this
-      .addText('NHS Innovation service', 18, {color: '#585858'});
-      // .addVerticalSpace(0.19);
+    this.addText('Innovation record export', 48, { color: '#005eb7' }).addVerticalSpace(0.19);
+    this.addText(innovationName, 24, { color: '#005eb7' }).addVerticalSpace(0.39);
+    this.addText('NHS Innovation service', 18, { color: '#585858' });
 
     const d = new Date();
+    const date = [d.getDate(), d.toLocaleDateString('en-GB', { month: 'long' }), d.getFullYear()].join(' ') + ' at ' + [d.getHours(), d.getMinutes()].join(':');
 
-    const date = [d.getDate(), d.toLocaleDateString('en-GB', {month: 'long'}), d.getFullYear()].join(' ') + ' at ' + [d.getHours(), d.getMinutes()].join(':');
-
-    this
-      .addText(`Exported: ${date}`, 18, {color: '#585858'});
+    this.addText(`Exported: ${date}`, 18, { color: '#585858' });
 
     return this;
   }
 
-  h1( text: string ): PDFGenerator {
-
-    this
-      .addBoldText(text, 30,  {color : '#005eb7'})
-      .addVerticalSpace(0.29);
-
+  h1(text: string): PDFGenerator {
+    this.addBoldText(text, 30, { color: '#005eb7' }).addVerticalSpace(0.29);
     return this;
   }
 
-  h2( text: string ): PDFGenerator {
-
-    this
-      .addBoldText(text, 18, {color: '#212b31'})
-      .addVerticalSpace(0.19);
+  h2(text: string): PDFGenerator {
+    this.addBoldText(text, 18, { color: '#212b31' }).addVerticalSpace(0.19);
     return this;
   }
 
-  h3( text: string ): PDFGenerator {
-
-    this
-      .addBoldText(text, 14, {color: '#212b31'});
-
+  h3(text: string): PDFGenerator {
+    this.addBoldText(text, 14, { color: '#212b31' });
     return this;
   }
 
-  p( text: string ): PDFGenerator {
-
-    this
-      .addText(text, 10, {color: '#212b31'});
-
+  p(text: string): PDFGenerator {
+    this.addText(text, 10, { color: '#212b31' });
     return this;
   }
+
 }

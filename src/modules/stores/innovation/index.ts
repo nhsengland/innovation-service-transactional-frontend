@@ -14,9 +14,14 @@ export {
   ActivityLogItemsEnum
 } from './innovation.enums';
 
+// Types.
+export { InnovationDataResolverType } from './innovation.models';
+
 // Constants.
-export { ACTIVITY_LOG_ITEMS } from './innovation.models';
-export { INNOVATION_STATUS } from './innovation.models';
-export { INNOVATION_SUPPORT_STATUS } from './innovation.models';
-export { INNOVATION_SECTION_STATUS } from './innovation.models';
-export { INNOVATION_SECTION_ACTION_STATUS } from './innovation.models';
+export {
+  ACTIVITY_LOG_ITEMS,
+  INNOVATION_STATUS,
+  INNOVATION_SUPPORT_STATUS,
+  INNOVATION_SECTION_STATUS,
+  INNOVATION_SECTION_ACTION_STATUS
+} from './innovation.models';

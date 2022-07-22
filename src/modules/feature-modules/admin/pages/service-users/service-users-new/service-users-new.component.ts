@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { CoreComponent, FormGroup, FormControl } from '@app/base';
-import { AlertType } from '@app/base/types';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
@@ -17,8 +16,6 @@ import { CREATE_NEW_USER_QUESTIONS } from './service-users-new.config';
 export class PageServiceUsersNewComponent extends CoreComponent implements OnInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
-
-  alert: AlertType = { type: null };
 
   wizard: WizardEngineModel = new WizardEngineModel(CREATE_NEW_USER_QUESTIONS);
 

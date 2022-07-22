@@ -4,7 +4,6 @@ import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { FormEngineParameterModel, CustomValidators } from '@app/base/forms';
-import { AlertType } from '@app/base/types';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
@@ -15,8 +14,6 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
   templateUrl: './innovations-archival.component.html'
 })
 export class PageAccountInnovationsArchivalComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   stepNumber: 1 | 2 | 3 = 1;
 

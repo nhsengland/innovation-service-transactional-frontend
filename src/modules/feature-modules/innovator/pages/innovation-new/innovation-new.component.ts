@@ -5,7 +5,6 @@ import { cloneDeep } from 'lodash';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent } from '@app/base/forms';
-import { AlertType } from '@app/base/types';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovatorService } from '../../services/innovator.service';
@@ -20,8 +19,6 @@ import { NEW_INNOVATION_QUESTIONS } from './innovation-new.config';
 export class InnovationNewComponent extends CoreComponent implements OnInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
-
-  alert: AlertType = { type: null };
 
   wizard = cloneDeep(NEW_INNOVATION_QUESTIONS);
 

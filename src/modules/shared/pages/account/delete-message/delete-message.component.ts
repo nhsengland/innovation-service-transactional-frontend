@@ -2,17 +2,12 @@ import { Component } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 
-import { AlertType } from '@app/base/types';
-
 
 @Component({
   selector: 'shared-pages-account-delete-message',
   templateUrl: './delete-message.component.html'
 })
 export class PageAccountDeleteMessageComponent extends CoreComponent {
-
-  alert: AlertType = { type: null };
-
 
   constructor() {
 

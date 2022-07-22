@@ -130,7 +130,7 @@ const routes: Routes = [
               },
               {
                 path: 'support', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusInfoComponent,
-                data: { layoutOptions: { type: 'innoationLeftAsideMenu', backLink: { url: '/assessment/innovations', label: 'Innovations' } } }
+                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/assessment/innovations', label: 'Innovations' } } }
               },
               {
                 path: 'support/statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,

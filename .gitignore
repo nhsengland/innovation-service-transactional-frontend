@@ -49,7 +49,7 @@ speed-measure-plugin.json
 /libpeerconnection.log
 testem.log
 /typings
-.env
 
 # Environments
+.env
 /src/environment.js

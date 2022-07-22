@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent, FormArray, FormControl, FormGroup, Validators } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
-import { AlertType } from '@app/base/types';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -17,8 +16,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   innovationId: string;
   supportId: string;
   stepNumber: number;
-
-  alert: AlertType = { type: null };
 
   accessorsList: { value: string, label: string }[];
   selectedAccessors: any[];

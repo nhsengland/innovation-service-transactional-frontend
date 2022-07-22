@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 import { RoutingHelper } from '@app/base/helpers';
+
 import { INNOVATION_SUPPORT_STATUS, InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
@@ -16,8 +16,6 @@ import { AccessorService } from '../../../services/accessor.service';
   templateUrl: './overview.component.html'
 })
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   innovationId: string;
   innovation: InnovationDataResolverType;

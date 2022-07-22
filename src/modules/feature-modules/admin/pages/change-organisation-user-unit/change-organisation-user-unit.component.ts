@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { AlertType } from '@app/base/types';
 import { RoutingHelper } from '@app/base/helpers';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
@@ -18,7 +17,6 @@ import { CHANGE_ORGANISATION_USER_UNIT } from './change-organisation-user-unit.c
 })
 export class PageServiceChangeOrganisationUserUnitComponent extends CoreComponent implements OnInit {
 
-  alert: AlertType = { type: null };
   user: { id: string, name: string, role?: string; };
   pageStep: 'CODE_REQUEST' | 'SUCCESS' | 'RULES_LIST' | 'UNIT_LIST' = 'RULES_LIST';
   rulesList: getOrganisationUnitRulesOutDTO[] = [];
@@ -79,14 +77,14 @@ export class PageServiceChangeOrganisationUserUnitComponent extends CoreComponen
       this.wizard.gotoStep(1).setAnswers(this.wizard.runInboundParsing({ organisation: this.organisation, assignedUnit: this.oldOrganisationUnits })).runRules();
       this.setPageStatus('READY');
     },
-    () => {
-      this.setPageStatus('ERROR');
-      this.alert = {
-        type: 'ERROR',
-        title: 'Unable to fetch the necessary information',
-        message: 'Please try again or contact us for further help'
-      };
-    });
+      () => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch the necessary information',
+          message: 'Please try again or contact us for further help'
+        };
+      });
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {

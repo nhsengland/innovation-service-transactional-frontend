@@ -87,7 +87,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
         this.setPageStatus('READY');
       },
       error => {
-        this.setAlertError();
+        this.setAlertDataLoadError();
         this.setPageStatus('READY');
         this.logger.error(error);
       }
@@ -107,7 +107,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
         this.getNotificationsList();
       },
       error => {
-        this.setAlertError();
+        this.setAlertDataSaveError();
         this.setPageStatus('READY');
         this.logger.error(error);
       }
@@ -127,7 +127,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
         this.getNotificationsList();
       },
       error => {
-        this.setAlertError();
+        this.setAlertDataSaveError();
         this.setPageStatus('READY');
         this.logger.error(error);
       }
@@ -148,7 +148,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       filter.selected = this.datasets[filter.key].filter(i => f.includes(i.value));
     });
 
-    this.anyFilterSelected = this.filters.filter(i => i.selected.length > 0).length > 0;
+    this.anyFilterSelected = this.form.get('unreadOnly')!.value || this.filters.filter(i => i.selected.length > 0).length > 0;
 
     this.notificationsList.setFilters({
       contextTypes: this.form.get('contextTypes')!.value,

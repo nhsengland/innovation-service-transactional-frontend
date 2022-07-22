@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
+
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 import { AccessorService } from '../../../services/accessor.service';
@@ -15,8 +15,6 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation
   templateUrl: './organisations-support-status-info.component.html'
 })
 export class InnovationSupportOrganisationsSupportStatusInfoComponent extends CoreComponent implements OnInit {
-
-  alert: AlertType = { type: null };
 
   innovationId: string;
 

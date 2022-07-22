@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 import { FormEngineComponent, FormEngineParameterModel } from '@modules/shared/forms';
 
 import { AssessmentService } from '../../../services/assessment.service';
@@ -18,8 +17,6 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
 
   innovationId: string;
   innovationName: string;
-
-  alert: AlertType = { type: null };
 
   formParameters: FormEngineParameterModel[];
   formAnswers: { [key: string]: any };

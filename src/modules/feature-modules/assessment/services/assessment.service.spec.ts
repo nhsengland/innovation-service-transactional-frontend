@@ -11,7 +11,7 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
 import { TableModel } from '@app/base/models';
 
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import {
   AssessmentService,
@@ -395,7 +395,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
   it('should run getInnovationSupports() and return success', () => {
 
     const responseMock: getInnovationSupportsDTO = {
-      id: '01', status: 'CREATED' as keyof typeof INNOVATION_SUPPORT_STATUS,
+      id: '01', status: InnovationSupportStatusEnum.ENGAGING,
       organisationUnit: {
         id: 'unit01', name: 'Unit 01',
         organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }

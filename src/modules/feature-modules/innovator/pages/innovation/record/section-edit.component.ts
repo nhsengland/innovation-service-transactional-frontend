@@ -4,7 +4,6 @@ import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
 import { FormEngineComponent, FileTypes, WizardEngineModel } from '@app/base/forms';
 
 import { UrlModel } from '@app/base/models';
@@ -21,7 +20,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
-  alert: AlertType & { errorsList: { label: string, error: string }[] } = { type: null, errorsList: [] };
+  alertErrorsList: { label: string, error: string }[] = [];
 
   innovation: EnvironmentInnovationType;
   sectionId: InnovationSectionEnum;
@@ -91,6 +90,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   onGotoStep(stepNumber: number): void {
 
     this.wizard.gotoStep(stepNumber);
+    this.clearAlert();
     this.setPageTitle(this.wizard.currentStepTitle());
     this.setUploadConfiguration();
 
@@ -98,7 +98,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   onSubmitStep(action: 'previous' | 'next'): void {
 
-    this.alert = { type: null, errorsList: [] };
+    this.alertErrorsList = [];
 
     const formData = this.formEngineComponent?.getFormValues();
 
@@ -180,12 +180,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
             this.submitButton.isActive = validInformation.valid;
             if (!validInformation.valid) {
-              this.alert = {
-                type: 'ERROR',
-                title: `Please verify what's missing with your answers`,
-                errorsList: validInformation.errors
-              };
-
+              this.alertErrorsList = validInformation.errors;
+              this.setAlertError(`Please verify what's missing with your answers`);
             }
 
           }
@@ -196,12 +192,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         () => {
 
           this.saveButton = { isActive: true, label: 'Save and continue' };
-          this.alert = {
-            type: 'ERROR',
-            title: 'An error has ocurred when saving information',
-            message: 'Please try again or contact us for further help',
-            errorsList: []
-          };
+          this.alertErrorsList = [];
+          this.setAlertDataSaveError();
 
         });
 

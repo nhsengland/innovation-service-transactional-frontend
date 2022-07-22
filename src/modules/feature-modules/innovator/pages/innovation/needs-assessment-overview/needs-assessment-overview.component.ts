@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AlertType } from '@app/base/types';
+
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
@@ -21,8 +21,6 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
   innovationId: string;
   assessmentId: string;
   innovation: EnvironmentInnovationType;
-
-  alert: AlertType = { type: null };
 
   assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
 
