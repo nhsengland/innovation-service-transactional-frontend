@@ -1,0 +1,27 @@
+<div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+  <div class="nhsuk-grid-column-full">
+
+    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+      <p> {{ alert.message }} </p>
+    </theme-alert>
+
+    <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
+
+    <dl class="nhsuk-summary-list">
+      <div *ngFor="let item of notificationTypeList" class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key"> {{ 'shared.catalog.innovation.notification_context_types.' + item.type + '.title.plural' | translate }} </dt>
+        <dd class="nhsuk-summary-list__value text-pre-wrap"> {{ 'shared.catalog.innovation.email_notification_preferences.' + item.preference | translate  }} </dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a routerLink="edit/{{ item.type }}"> Change </a>
+        </dd>
+      </div>
+    </dl>
+
+    <div *ngIf="isAnySubscribed" class="nhsuk-inset-text"><span class="nhsuk-u-visually-hidden">Information:</span>
+      <p class="nhsuk-u-margin-0">
+        <a href="javascript:void(0)" (click)="unsubscribeAllNotifications()"> Unsubscribe from everything </a>
+      </p>
+    </div>
+
+  </div>
+</div>

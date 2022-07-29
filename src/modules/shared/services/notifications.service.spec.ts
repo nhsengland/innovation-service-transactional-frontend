@@ -9,7 +9,7 @@ import { TableModel } from '@app/base/models';
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
-import { NotificationsListInDTO, NotificationsListOutDTO, NotificationsService } from './notifications.service';
+import { EmailNotificationsPreferencesEnum, EmailNotificationsTypeEnum, NotificationsListInDTO, NotificationsListOutDTO, NotificationsService } from './notifications.service';
 import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
 import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
@@ -245,21 +245,6 @@ describe('Shared/Services/NotificationsService', () => {
 
   });
 
-  // it('should run markAsReadAllNotifications() and return SUCCESS', () => {
-
-  //   const responseMock = null;
-  //   const expected = responseMock;
-
-  //   let response: any = null;
-  //   service.markAsReadAllNotifications().subscribe(success => response = success, error => response = error);
-
-  //   const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications`);
-  //   httpRequest.flush(responseMock);
-  //   expect(httpRequest.request.method).toBe('PATCH');
-  //   expect(response).toEqual(expected);
-
-  // });
-
   it('should run dismissAllUserNotifications() and return SUCCESS', () => {
 
     const responseMock = { affected: 10 };
@@ -290,33 +275,37 @@ describe('Shared/Services/NotificationsService', () => {
 
   });
 
-  it('should run getEmailNotificationTypes() and return success', () => {
+  it('should run getEmailNotificationsPreferences() and return success', () => {
 
-    const responseMock = [{ id: 'Action', isSubscribed: true }, { id: 'SupportStatusChange', isSubscribed: false }];
+    const responseMock = [
+      { notificationType: EmailNotificationsTypeEnum.ACTION, preference: EmailNotificationsPreferencesEnum.INSTANTLY },
+      { notificationType: EmailNotificationsTypeEnum.COMMENT, preference: EmailNotificationsPreferencesEnum.NEVER },
+      { notificationType: EmailNotificationsTypeEnum.SUPPORT, preference: EmailNotificationsPreferencesEnum.DAILY }
+    ];
     const expected = responseMock;
 
     let response: any = null;
     service.getEmailNotificationsPreferences().subscribe(success => response = success, error => response = error);
 
-    const req = httpMock.expectOne(`${envVariablesStore.API_URL}/email-notifications`);
-    req.flush(responseMock);
-    expect(req.request.method).toBe('GET');
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/email-notifications`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
 
   });
 
   it('should run updateUserNotificationPreferences() and return success', () => {
 
-    const payload = [{ id: 'Action', isSubscribed: false }];
-    const responseMock = { id: 'id' };
-    const expected = { id: 'id' };
+    const payload = [{ notificationType: EmailNotificationsTypeEnum.ACTION, preference: EmailNotificationsPreferencesEnum.INSTANTLY }];
+    const responseMock = true;
+    const expected = true;
 
     let response: any = null;
     service.updateEmailNotificationsPreferences(payload).subscribe(success => response = success, error => response = error);
 
-    const req = httpMock.expectOne(`${envVariablesStore.API_URL}/email-notifications`);
-    req.flush(responseMock);
-    expect(req.request.method).toBe('PUT');
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/email-notifications`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('PUT');
     expect(response).toEqual(expected);
 
   });

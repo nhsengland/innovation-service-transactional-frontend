@@ -19,6 +19,8 @@ type FiltersType = { key: FilterKeysType, title: string, showHideStatus: 'opened
 })
 export class PageNotificationsListComponent extends CoreComponent implements OnInit {
 
+  emailNotificationPreferencesLink = '';
+
   notificationsList = new TableModel<
     NotificationsListOutDTO['data'][0],
     { contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }
@@ -50,6 +52,10 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     super();
     this.setPageTitle('Notifications');
 
+    if (['ACCESSOR', 'INNOVATOR'].includes(this.stores.authentication.getUserType())) {
+      this.emailNotificationPreferencesLink = `/${this.stores.authentication.userUrlBasePath()}/account/email-notifications`;
+    }
+
     this.notificationsList.setVisibleColumns({
       notification: { label: 'Notification', orderable: false },
       createdAt: { label: 'Date', orderable: true },
@@ -58,7 +64,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
     const contextTypesSubset = this.stores.authentication.isAssessmentType() ? [NotificationContextTypeEnum.NEEDS_ASSESSMENT, NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT] : Object.values(NotificationContextTypeEnum);
     this.datasets.contextTypes = contextTypesSubset.map(item => ({
-      label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.title`),
+      label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.title.plural`),
       value: item
     }));
 

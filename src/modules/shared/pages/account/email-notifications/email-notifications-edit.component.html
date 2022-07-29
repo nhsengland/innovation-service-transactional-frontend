@@ -1,0 +1,21 @@
+<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+        <p> {{ alert.message }} </p>
+      </theme-alert>
+
+      <form [formGroup]="form">
+        <theme-form-radio-group controlName="notificationPreference" [label]="notificationPreferences.question" [items]="notificationPreferences.items"></theme-form-radio-group>
+        <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmit()">Change preferences</button>
+        <div class="nhsuk-u-padding-bottom-5">
+          <a routerLink="{{ notificationListLink }}"> Cancel </a>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+</div>

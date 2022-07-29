@@ -3,15 +3,15 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 
 import { PageDashboardComponent } from './dashboard.component';
-import { ActivatedRoute } from '@angular/router';
 
-import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
 
 

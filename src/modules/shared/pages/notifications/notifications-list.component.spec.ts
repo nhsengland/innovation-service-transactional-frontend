@@ -197,7 +197,7 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
       key: 'contextTypes',
       title: 'Types',
       showHideStatus: 'opened',
-      selected: [{ label: 'shared.catalog.innovation.notification_context_types.INNOVATION.title', value: 'INNOVATION' }]
+      selected: [{ label: 'shared.catalog.innovation.notification_context_types.INNOVATION.title.plural', value: 'INNOVATION' }]
     }]);
 
   }));
