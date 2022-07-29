@@ -4,7 +4,6 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { CoreComponent, FormControl, FormGroup } from '@app/base';
 import { TableModel } from '@app/base/models';
 import { NotificationValueType } from '@app/base/types';
-import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
@@ -47,8 +46,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService,
-    private notificationsService: NotificationsService,
+    private accessorService: AccessorService
   ) {
 
     super();

@@ -164,12 +164,29 @@ export const locale = {
               message: `{{ totalActions }} actions for {{ sectionTitle }} section were changed to "Cancelled"`
             }
           },
+
+          email_notification_preferences: {
+            NEVER: 'You do not get updates',
+            INSTANTLY: 'You get instant updates',
+            DAILY: 'You get daily summary updates'
+          },
+
           notification_context_types: {
-            NEEDS_ASSESSMENT: { title: 'Needs Assessment' },
-            INNOVATION: { title: 'Innovation' },
-            COMMENT: { title: 'Comment' },
-            ACTION: { title: 'Action' },
-            SUPPORT: { title: 'Support' }
+            NEEDS_ASSESSMENT: {
+              title: { singular: 'Needs Assessment', plural: 'Needs Assessment' }
+            },
+            INNOVATION: {
+              title: { singular: 'Innovation', plural: 'Innovations' }
+            },
+            COMMENT: {
+              title: { singular: 'Comment', plural: 'Comments' }
+            },
+            ACTION: {
+              title: { singular: 'Action', plural: 'Actions' }
+            },
+            SUPPORT: {
+              title: { singular: 'Support', plural: 'Supports' }
+             }
           },
           notification_context_details: {
             LOCK_USER: { title: `Innovaton "{{ innovationName }}" owner has been locked` },
@@ -177,7 +194,7 @@ export const locale = {
             COMMENT_REPLY: { title: `New comment reply for innovation "{{ innovationName }}"` },
             ACTION_CREATION: { title: `New action for section {{ sectionNumber }} on innovation "{{ innovationName }}"` },
             ACTION_UPDATE: { title: `Action {{ actionCode }} status updated to "{{ actionStatusName }}" on innovation "{{ innovationName }}"` },
-            NEEDS_ASSESSMENT_COMPLETED: { title: `Innovation "{{ innovationName }}" is available for support` },
+            NEEDS_ASSESSMENT_COMPLETED: { title: `Innovation "{{ innovationName }}" was suggested by needs assessment` },
             NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION: { title: `Assessment team suggested one or more organisations for you to share your innovation` },
             INNOVATION_SUBMISSION: { title: `Innovation "{{ innovationName }}" is available for review` },
             SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}"` }

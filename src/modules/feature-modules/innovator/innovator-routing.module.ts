@@ -27,7 +27,8 @@ import { InnovationNewComponent } from './pages/innovation-new/innovation-new.co
 import { InnovationTransferAcceptanceComponent } from './pages/innovation-transfer-acceptance/innovation-transfer-acceptance.component';
 
 // // Shared module.
-import { PageAccountEmailNotificationsComponent } from '@modules/shared/pages/account/email-notifications/email-notifications.component';
+import { PageAccountEmailNotificationsEditComponent } from '@modules/shared/pages/account/email-notifications/email-notifications-edit.component';
+import { PageAccountEmailNotificationsListComponent } from '@modules/shared/pages/account/email-notifications/email-notifications-list.component';
 import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
 import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/actions/action-status-list.component';
@@ -76,7 +77,6 @@ const routes: Routes = [
         component: FirstTimeSigninComponent
       },
 
-
       {
         path: 'innovation-transfer-acceptance',
         children: [
@@ -105,8 +105,14 @@ const routes: Routes = [
             ]
           },
           {
-            path: 'email-notifications', pathMatch: 'full', component: PageAccountEmailNotificationsComponent,
-            data: { layoutOptions: { type: 'userAccountMenu' } }
+            path: 'email-notifications',
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAccountEmailNotificationsListComponent,
+                data: { layoutOptions: { type: 'userAccountMenu' } }
+              },
+              { path: 'edit/:notificationType', pathMatch: 'full', component: PageAccountEmailNotificationsEditComponent }
+            ]
           },
           {
             path: 'manage-innovations',

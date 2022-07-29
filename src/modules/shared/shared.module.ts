@@ -10,7 +10,8 @@ import { FormsModule } from './forms/forms.module';
 // Pages.
 // // Account.
 import { PageAccountDeleteMessageComponent } from './pages/account/delete-message/delete-message.component';
-import { PageAccountEmailNotificationsComponent } from './pages/account/email-notifications/email-notifications.component';
+import { PageAccountEmailNotificationsEditComponent } from './pages/account/email-notifications/email-notifications-edit.component';
+import { PageAccountEmailNotificationsListComponent } from './pages/account/email-notifications/email-notifications-list.component';
 import { PageAccountManageDetailsInfoComponent } from './pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from './pages/account/manage-details/manage-details-edit.component';
 // // Error.
@@ -54,7 +55,8 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     // Pages.
     // // Account.
     PageAccountDeleteMessageComponent,
-    PageAccountEmailNotificationsComponent,
+    PageAccountEmailNotificationsEditComponent,
+    PageAccountEmailNotificationsListComponent,
     PageAccountManageDetailsInfoComponent,
     PageAccountManageDetailsEditComponent,
     // // Error.
