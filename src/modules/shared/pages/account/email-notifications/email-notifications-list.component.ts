@@ -53,7 +53,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
         this.notificationTypeList = response.map(item => ({
           type: item.notificationType,
           preference: item.preference
-        }));
+        })).sort((a, b) => a.type.localeCompare(b.type)); // Sort by type.
 
         this.isAnySubscribed = this.notificationTypeList.some(item => item.preference !== EmailNotificationsPreferencesEnum.NEVER);
 

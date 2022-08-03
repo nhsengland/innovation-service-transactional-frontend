@@ -166,9 +166,18 @@ export const locale = {
           },
 
           email_notification_preferences: {
-            NEVER: 'You do not get updates',
-            INSTANTLY: 'You get instant updates',
-            DAILY: 'You get daily summary updates'
+            NEVER: {
+              me: 'Never send me notifications',
+              you: 'You do not get updates',
+            },
+            INSTANTLY: {
+              me: 'Send me instant updates',
+              you: 'You get instant updates',
+            },
+            DAILY: {
+              me: 'Send me daily summary updates',
+              you: 'You get daily summary updates'
+            }
           },
 
           notification_context_types: {
@@ -185,8 +194,8 @@ export const locale = {
               title: { singular: 'Action', plural: 'Actions' }
             },
             SUPPORT: {
-              title: { singular: 'Support', plural: 'Supports' }
-             }
+              title: { singular: 'Support status change', plural: 'Support status changes' }
+            }
           },
           notification_context_details: {
             LOCK_USER: { title: `Innovaton "{{ innovationName }}" owner has been locked` },
