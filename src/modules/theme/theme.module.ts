@@ -26,6 +26,7 @@ import { NotificationTagComponent } from './components/notification-tag/notifica
 import { PageTitleComponent } from './components/page-title/page-title.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
+import { TagComponent } from './components/tag/tag.component';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     NotificationTagComponent,
     PageTitleComponent,
     PaginationComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    TagComponent
   ],
   providers: [],
   exports: [
@@ -84,7 +86,8 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     NotificationTagComponent,
     PageTitleComponent,
     PaginationComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    TagComponent
   ]
 })
 export class ThemeModule { }

@@ -59,7 +59,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
   it('should have initial information loaded with payload 01 (Organisations with NO organisations units)', () => {
 
-    organisationsService.getOrganisationUnits = () => of([{ id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [] }]);
+    organisationsService.getOrganisationsListWithUnits = () => of([{ id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [] }]);
     accessorService.getInnovationSupports = () => of([]);
 
     const expected = {
@@ -79,7 +79,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
   it('should have initial information loaded with payload 02 (Organisations with ONE organisation unit AND mathing organisation support)', () => {
 
-    organisationsService.getOrganisationUnits = () => of([{
+    organisationsService.getOrganisationsListWithUnits = () => of([{
       id: 'orgId', name: 'Org name', acronym: 'ORG',
       organisationUnits: [{ id: 'orgUnitId', name: 'Org Unit name', acronym: 'ORGu' }]
     }]);
@@ -109,7 +109,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
   it('should have initial information loaded with payload 03 (Organisations with ONE organisation unit AND NO mathing organisation support)', () => {
 
-    organisationsService.getOrganisationUnits = () => of([{
+    organisationsService.getOrganisationsListWithUnits = () => of([{
       id: 'orgId', name: 'Org name', acronym: 'ORG',
       organisationUnits: [{ id: 'orgUnitId', name: 'Org Unit name', acronym: 'ORGu' }]
     }]);
@@ -139,7 +139,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
   it('should have initial information loaded with payload 04 (Organisations with MORE THAN ONE organisation unit)', () => {
 
-    organisationsService.getOrganisationUnits = () => of([{
+    organisationsService.getOrganisationsListWithUnits = () => of([{
       id: 'orgId', name: 'Org name', acronym: 'ORG',
       organisationUnits: [
         { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01' },
@@ -187,7 +187,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
   it('should NOT have initial information loaded', () => {
 
-    organisationsService.getOrganisationUnits = () => throwError('error');
+    organisationsService.getOrganisationsListWithUnits = () => throwError('error');
     accessorService.getInnovationSupports = () => throwError('error');
 
     fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);

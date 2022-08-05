@@ -1,0 +1,146 @@
+<theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+  <p> {{ alert.message }} </p>
+</theme-alert>
+
+<theme-page-title [title]="pageTitle"></theme-page-title>
+
+<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+<div aria-live="polite" *ngIf="pageStatus === 'READY'">
+
+  <section>
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3 border-bottom-neutral">Organisation</h2>
+      </div>
+    </div>
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+        <dl class="nhsuk-summary-list">
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Name</dt>
+            <dd class="nhsuk-summary-list__value">{{ organisation.name }} <span class="nhsuk-hint nhsuk-u-margin-bottom-0"> ({{organisation.acronym }}) </span></dd>
+            <dd class="nhsuk-summary-list__actions">
+              <a routerLink="edit"> Change <span class="nhsuk-u-visually-hidden"> {{ organisation.name | lowercase }} information</span></a>
+            </dd>
+          </div>
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Status</dt>
+            <dd class="nhsuk-summary-list__value">
+              <theme-tag type="{{ organisation.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ organisation.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+            </dd>
+          </div>
+          <!-- <div *ngIf="organisation.isActive" class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Inactivate</dt>
+            <dd class="nhsuk-summary-list__value">To </dd>
+            <dd class="nhsuk-summary-list__actions">
+              <button type="button" routerLink="edit" class="nhsuk-button  nhsuk-u-margin-0"> Inactivate </button>
+            </dd>
+          </div>
+          <div *ngIf="!organisation.isActive" class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Activate</dt>
+            <dd class="nhsuk-summary-list__value">To activate this organisation you need to add at least one qualifying accessor (QA) user to the attached units</dd>
+            <dd class="nhsuk-summary-list__actions">
+              <button type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-0"> Activate </button>
+            </dd>
+          </div> -->
+        </dl>
+      </div>
+    </div>
+
+  </section>
+
+
+  <section *ngIf="organisation.organisationUnits.length === 1">
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3 border-bottom-neutral">Users</h2>
+      </div>
+    </div>
+
+    <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+      <div class="nhsuk-grid-column-two-thirds">
+        <dl class="nhsuk-u-margin-0 nhsuk-u-font-size-19">
+
+          <theme-spinner *ngIf="organisation.organisationUnits[0].isLoading" cssClass="nhsuk-u-margin-9" message="Loading users. Please wait..."></theme-spinner>
+
+          <ng-container *ngIf="organisation.organisationUnits[0].showHideStatus === 'opened' && organisation.organisationUnits[0].isLoading === false">
+            <dl class="nhsuk-u-margin-0">
+              <dt *ngFor="let user of organisation.organisationUnits[0].users; let first = first; let last = last" class="nhsuk-u-padding-3 nhsuk-u-margin-0 border-left-inset-neutral" [ngClass]="{ 'top-border-separator': !first }">
+                {{ user.name }} ({{ user.roleDescription }})
+              </dt>
+            </dl>
+          </ng-container>
+
+          <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible" />
+
+        </dl>
+      </div>
+    </div>
+
+  </section>
+
+
+  <section *ngIf="organisation.organisationUnits.length > 1">
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3 border-bottom-neutral">Units</h2>
+      </div>
+    </div>
+
+    <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+      <div class="nhsuk-grid-column-two-thirds">
+
+        <dl class="nhsuk-u-margin-0 nhsuk-u-font-size-19">
+          <ng-container *ngFor="let unit of organisation.organisationUnits">
+
+            <div class="d-flex">
+              <dt class="mr-auto">
+                {{ unit.name }}
+                <div class="nhsuk-hint nhsuk-u-margin-bottom-0"> ({{ unit.acronym }}) </div>
+              </dt>
+              <dd class="width-20 nhsuk-u-margin-0">
+                <theme-tag type="{{ unit.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ unit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+                <br />
+                {{ unit.usersNumber }} users
+              </dd>
+              <dd class="width-20 nhsuk-u-margin-0">
+                <ul class="nhsuk-list text-align-right nhsuk-u-margin-0">
+                  <li>
+                    <a routerLink="unit/{{ unit.id }}/edit"> Change <span class="nhsuk-u-visually-hidden"> {{ unit.name | lowercase }} information</span></a>
+                  </li>
+                  <li>
+                    <a routerLink="unit/{{ unit.id }}/{{ unit.isActive ? 'inactivate' : 'activate' }}" class="nhsuk-button nhsuk-u-margin-0"> {{ unit.isActive ? 'Inactivate' : 'Activate' }} </a>
+                  </li>
+                  <li *ngIf="unit.usersNumber > 0">
+                    <a href="javascript:void(0)" (click)="onShowHideClicked(unit.id)">{{ unit.showHideText }}<span class="nhsuk-u-visually-hidden">{{ unit.showHideDescription }}</span></a>
+                  </li>
+                </ul>
+              </dd>
+            </div>
+
+            <theme-spinner *ngIf="unit.isLoading" cssClass="nhsuk-u-margin-9" message="Loading users. Please wait..."></theme-spinner>
+
+            <ng-container *ngIf="unit.showHideStatus === 'opened' && unit.isLoading === false">
+              <dl class="nhsuk-u-margin-0">
+                <dt *ngFor="let user of unit.users; let first = first; let last = last" class="nhsuk-u-padding-3 nhsuk-u-margin-0 border-left-inset-neutral" [ngClass]="{ 'top-border-separator': !first }">
+                  {{ user.name }} ({{ user.roleDescription }})
+                </dt>
+              </dl>
+            </ng-container>
+
+            <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible" />
+
+          </ng-container>
+        </dl>
+
+      </div>
+    </div>
+
+  </section>
+
+</div>

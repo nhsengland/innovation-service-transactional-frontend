@@ -72,7 +72,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   ngOnInit(): void {
 
     forkJoin([
-      this.organisationsService.getOrganisationUnits(),
+      this.organisationsService.getOrganisationsListWithUnits(),
       this.assessmentService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId)
     ]).subscribe(([organisationUnits, innovationNeedsAssessment]) => {
 

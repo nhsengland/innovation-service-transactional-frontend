@@ -70,7 +70,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
 
   it('should run getInnovationNeedsAssessment() with success', () => {
 
-    organisationsService.getOrganisationUnits = () => of([{ id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [] }]);
+    organisationsService.getOrganisationsListWithUnits = () => of([{ id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [] }]);
     assessmentService.getInnovationNeedsAssessment = () => of({
       innovation: { id: '01', name: 'Innovation 01' },
       assessment: {
