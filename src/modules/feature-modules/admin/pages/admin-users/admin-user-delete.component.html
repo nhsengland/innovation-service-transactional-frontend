@@ -1,0 +1,29 @@
+<div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
+
+    <form [formGroup]="form">
+
+      <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+        <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+          <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
+        </div>
+        <p> This action is irreversible once the admin user is deleted.</p>
+      </div>
+
+      <theme-form-input controlName="confirmation" label="Are you sure that you want to delete?" description="To confirm, please type the following: delete the administrator" [pageUniqueField]="false"></theme-form-input>
+
+      <ng-container *ngIf="pageStep === 'CODE_REQUEST'">
+        <theme-form-input controlName="code" label="Enter the confirmation code" [pageUniqueField]="false"></theme-form-input>
+      </ng-container>
+      <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3" (click)="onSubmitForm()" [disabled]="submitBtnClicked"> Delete account </button>
+
+      <div class="nhsuk-u-padding-bottom-5">
+        <a routerLink="/admin/administration-users/{{user.id}}"> Cancel </a>
+      </div>
+
+    </form>
+
+  </div>
+</div>

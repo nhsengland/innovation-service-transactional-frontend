@@ -41,13 +41,13 @@ describe('FeatureModules/Admin/Resolvers/OrganisationDataResolver', () => {
 
   it('should load resolver information', () => {
 
-    const routeMock: Partial<ActivatedRouteSnapshot> = { params: { orgId: 'orgId01' } };
+    const routeMock: Partial<ActivatedRouteSnapshot> = { params: { organisationId: 'orgId01' } };
     const organisationsResponseMock = {
       id: 'orgId01', name: 'Org name 01', acronym: 'ORG01',
       organisationUnits: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01' }]
     };
 
-    orgnisationService.getOrganisation = () => of(organisationsResponseMock as any);
+    orgnisationService.getOrganisationInfo = () => of(organisationsResponseMock as any);
 
     let response: any = null;
     const expected = { id: 'orgId01', name: 'Org name 01' };
@@ -60,9 +60,9 @@ describe('FeatureModules/Admin/Resolvers/OrganisationDataResolver', () => {
 
   it('should NOT load resolver information data', () => {
 
-    const routeMock: Partial<ActivatedRouteSnapshot> = { params: { orgId: 'orgId01' } };
+    const routeMock: Partial<ActivatedRouteSnapshot> = { params: { organisationId: 'orgId01' } };
 
-    orgnisationService.getOrganisation = () => throwError('error');
+    orgnisationService.getOrganisationInfo = () => throwError('error');
 
     let response: any = null;
 

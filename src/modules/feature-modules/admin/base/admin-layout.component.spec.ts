@@ -3,6 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
+import { ActivatedRoute, NavigationEnd } from '@angular/router';
 
 import { ENV } from '@tests/app.mocks';
 
@@ -11,8 +12,6 @@ import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { AdminModule } from '../admin.module';
 
 import { AdminLayoutComponent } from './admin-layout.component';
-import { ActivatedRoute, NavigationEnd } from '@angular/router';
-
 
 
 describe('FeatureModules/Admin/Base/AdminLayoutComponent', () => {

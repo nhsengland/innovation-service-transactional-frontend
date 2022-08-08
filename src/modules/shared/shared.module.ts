@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { DynamicModule } from 'ng-dynamic-component';
 
 // Modules.
 import { ThemeModule } from '@modules/theme/theme.module';
@@ -32,6 +33,9 @@ import { PageNotificationsListComponent } from './pages/notifications/notificati
 // // Terms of use.
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
 
+// Wizard.
+import { WizardSummaryWithConfirmStepComponent } from './wizards/steps/summary-with-confirm-step.component';
+
 // Pipes.
 import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
 
@@ -46,6 +50,7 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     RouterModule,
     CommonModule,
     TranslateModule.forChild(),
+    DynamicModule,
 
     // Modules.
     ThemeModule,
@@ -77,6 +82,9 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     // // Terms of use.
     PageTermsOfUseAcceptanceComponent,
 
+    // Wizard.
+    WizardSummaryWithConfirmStepComponent,
+
     // Pipes.
     PluralTranslatePipe
   ],
@@ -89,6 +97,7 @@ import { TermsOfUseService } from './services/terms-of-use.service';
   exports: [
     CommonModule,
     TranslateModule,
+    DynamicModule,
 
     // Modules.
     FormsModule,

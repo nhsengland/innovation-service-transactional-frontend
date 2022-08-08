@@ -82,7 +82,7 @@ describe('FeatureModules/Innovator/Pages/Innovation/DataSharingComponent', () =>
 
   it('should have initial information loaded with payload 01 (Organisations with NO organisations units)', () => {
 
-    organisationsService.getOrganisationUnits = () => of([{ id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [] }]);
+    organisationsService.getOrganisationsListWithUnits = () => of([{ id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [] }]);
     innovatorService.getInnovationShares = () => of([]);
     innovatorService.getInnovationSupports = () => of([]);
     innovationService.getInnovationOrganisationSuggestions = () => of({
@@ -108,7 +108,7 @@ describe('FeatureModules/Innovator/Pages/Innovation/DataSharingComponent', () =>
 
   it('should have initial information loaded with payload 02 (Organisations with ONE organisation unit AND mathing organisation share)', () => {
 
-    organisationsService.getOrganisationUnits = () => of([{
+    organisationsService.getOrganisationsListWithUnits = () => of([{
       id: 'orgId', name: 'Org name', acronym: 'ORG',
       organisationUnits: [{ id: 'orgUnitId', name: 'Org Unit name', acronym: 'ORGu' }]
     }]);
@@ -148,7 +148,7 @@ describe('FeatureModules/Innovator/Pages/Innovation/DataSharingComponent', () =>
 
   it('should have initial information loaded with payload 03 (Organisations with ONE organisation unit AND NO mathing organisation share)', () => {
 
-    organisationsService.getOrganisationUnits = () => of([{
+    organisationsService.getOrganisationsListWithUnits = () => of([{
       id: 'orgId', name: 'Org name', acronym: 'ORG',
       organisationUnits: [{ id: 'orgUnitId', name: 'Org Unit name', acronym: 'ORGu' }]
     }]);
@@ -186,7 +186,7 @@ describe('FeatureModules/Innovator/Pages/Innovation/DataSharingComponent', () =>
 
   it('should have initial information loaded with payload 04 (Organisations with MORE THAN ONE organisation unit)', () => {
 
-    organisationsService.getOrganisationUnits = () => of([{
+    organisationsService.getOrganisationsListWithUnits = () => of([{
       id: 'orgId', name: 'Org name', acronym: 'ORG',
       organisationUnits: [
         { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01' },
@@ -244,7 +244,7 @@ describe('FeatureModules/Innovator/Pages/Innovation/DataSharingComponent', () =>
 
   it('should NOT load initial data', () => {
 
-    organisationsService.getOrganisationUnits = () => throwError(false);
+    organisationsService.getOrganisationsListWithUnits = () => throwError(false);
     innovatorService.getInnovationShares = () => throwError(false);
     innovatorService.getInnovationSupports = () => throwError(false);
     innovationService.getInnovationOrganisationSuggestions = () => throwError(false);

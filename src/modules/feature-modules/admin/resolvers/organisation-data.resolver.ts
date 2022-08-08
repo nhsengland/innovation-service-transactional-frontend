@@ -18,7 +18,7 @@ export class OrganisationDataResolver implements Resolve<any> {
 
   resolve(route: ActivatedRouteSnapshot): Observable<any> {
 
-    return this.organisationsService.getOrganisation(route.params.orgId).pipe(
+    return this.organisationsService.getOrganisationInfo(route.params.organisationId).pipe(
       map(
         response => ({ id: response.id, name: response.name }),
         catchError(error => {
