@@ -9,7 +9,7 @@ import { of, throwError } from 'rxjs';
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
 import { OrganisationDataResolver } from './organisation-data.resolver';
 
 

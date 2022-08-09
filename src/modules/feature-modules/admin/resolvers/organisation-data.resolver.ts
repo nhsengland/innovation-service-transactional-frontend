@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { NGXLogger } from 'ngx-logger';
 
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
 
 
 @Injectable()

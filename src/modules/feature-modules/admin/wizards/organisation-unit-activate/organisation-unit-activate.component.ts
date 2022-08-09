@@ -5,10 +5,8 @@ import { CoreComponent } from '@app/base';
 import { WizardModel, WizardStepModel } from '@app/base/models';
 import { MappedObjectType, WizardStepEventType } from '@app/base/types';
 
-import { WizardOrganisationUnitInactivateUsersStepComponent } from './steps/users-step.component';
+import { WizardOrganisationUnitActivateUsersStepComponent } from './steps/users-step.component';
 import { UsersStepInputType, UsersStepOutputType } from './steps/users-step.types';
-import { WizardOrganisationUnitInactivateInnovationsStepComponent } from './steps/innovations-step.component';
-import { InnovationsStepInputType, InnovationsStepOutputType } from './steps/innovations-step.types';
 import { SummaryWithConfirmStepInputType, SummaryWithConfirmStepOutputType } from '@modules/shared/wizards/steps/summary-with-confirm-step.types';
 import { WizardSummaryWithConfirmStepComponent } from '@modules/shared/wizards/steps/summary-with-confirm-step.component';
 
@@ -16,16 +14,15 @@ import { OrganisationsService } from '@modules/feature-modules/admin/services/or
 
 
 @Component({
-  selector: 'app-admin-pages-organisations-organisation-unit-inactivate',
-  templateUrl: './organisation-unit-inactivate.component.html'
+  selector: 'app-admin-pages-organisations-organisation-unit-activate',
+  templateUrl: './organisation-unit-activate.component.html'
 })
-export class WizardOrganisationUnitInactivateComponent extends CoreComponent implements OnInit {
+export class WizardOrganisationUnitActivateComponent extends CoreComponent implements OnInit {
 
   wizard = new WizardModel<{
     organisation: { id: string },
     organisationUnit: { id: string, name: string },
-    usersStep: { agree: boolean, count: number },
-    innovationsStep: { agree: boolean, count: number }
+    usersStep: { agree: boolean, users: { id: string, name: string, organisationRole: string }[] }
   }>({});
 
 
@@ -40,8 +37,7 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
     this.wizard.data = {
       organisation: { id: this.activatedRoute.snapshot.params.organisationId },
       organisationUnit: { id: this.activatedRoute.snapshot.params.organisationUnitId, name: '' },
-      usersStep: { agree: false, count: 0 },
-      innovationsStep: { agree: false, count: 0 }
+      usersStep: { agree: false, users: [] },
     };
 
   }
@@ -57,32 +53,17 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
           addStep(
             new WizardStepModel<UsersStepInputType, UsersStepOutputType>({
               id: 'usersStep',
-              title: 'Users attached',
-              component: WizardOrganisationUnitInactivateUsersStepComponent,
+              title: 'Activate unit',
+              component: WizardOrganisationUnitActivateUsersStepComponent,
               data: {
                 organisation: this.wizard.data.organisation,
                 organisationUnit: this.wizard.data.organisationUnit,
-                agreeUsers: false
+                agreeUsers: false,
+                users: []
               },
               outputs: {
                 previousStepEvent: data => this.onPreviousStep(data),
-                nextStepEvent: data => this.onNextStep(data, this.onUsersStepOut, this.onInnovationsStepIn)
-              }
-            })
-          )
-          .addStep(
-            new WizardStepModel<InnovationsStepInputType, InnovationsStepOutputType>({
-              id: 'innovationsStep',
-              title: 'Innovations attached',
-              component: WizardOrganisationUnitInactivateInnovationsStepComponent,
-              data: {
-                organisation: this.wizard.data.organisation,
-                organisationUnit: this.wizard.data.organisationUnit,
-                agreeInnovations: false
-              },
-              outputs: {
-                previousStepEvent: data => this.onPreviousStep(data, this.onInnovationsStepOut, this.onUsersStepIn),
-                nextStepEvent: data => this.onNextStep(data, this.onInnovationsStepOut, this.onSummaryStepIn),
+                nextStepEvent: data => this.onNextStep(data, this.onUsersStepOut, this.onSummaryStepIn)
               }
             })
           )
@@ -97,7 +78,7 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
                 submitButton: { label: '', active: true }
               },
               outputs: {
-                previousStepEvent: data => this.onPreviousStep(data, this.onSummaryStepOut, this.onInnovationsStepIn),
+                previousStepEvent: data => this.onPreviousStep(data, this.onSummaryStepOut, this.onUsersStepIn),
                 submitEvent: data => this.onSubmit(data)
               }
             })
@@ -144,38 +125,25 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
     this.wizard.setStepData<UsersStepInputType>('usersStep', {
       organisation: this.wizard.data.organisation,
       organisationUnit: this.wizard.data.organisationUnit,
-      agreeUsers: this.wizard.data.usersStep.agree
+      agreeUsers: this.wizard.data.usersStep.agree,
+      users: this.wizard.data.usersStep.users
     });
   }
   onUsersStepOut(stepData: WizardStepEventType<UsersStepOutputType>): void {
     this.wizard.data.usersStep = {
       agree: stepData.data.agreeUsers,
-      count: stepData.data.usersCount
-    };
-  }
-
-  onInnovationsStepIn(): void {
-    this.wizard.setStepData<InnovationsStepInputType>('innovationsStep', {
-      organisation: this.wizard.data.organisation,
-      organisationUnit: this.wizard.data.organisationUnit,
-      agreeInnovations: this.wizard.data.innovationsStep.agree
-    });
-  }
-  onInnovationsStepOut(stepData: WizardStepEventType<InnovationsStepOutputType>): void {
-    this.wizard.data.innovationsStep = {
-      agree: stepData.data.agreeInnovations,
-      count: stepData.data.innovationsCount
+      users: stepData.data.users
     };
   }
 
   onSummaryStepIn(): void {
     this.wizard.setStepData<SummaryWithConfirmStepInputType>('summaryStep', {
       summary: [
-        { label: 'Users locked', value: this.wizard.data.usersStep.count.toString() },
-        { label: 'Innovations inactivated', value: this.wizard.data.innovationsStep.count.toString() }
+        { label: 'Unit', value: this.wizard.data.organisationUnit.name },
+        { label: 'Users', value: this.wizard.data.usersStep.users.map(item => `${item.name} (${item.organisationRole})`).join('\n') }
       ],
-      confirmCheckbox: { label: 'I understand that if this is the only unit attached to my organisation, when this unit is inactivated, the organisation will also be inactivated and both will not be seen on the Innovation Service platform' },
-      submitButton: { label: 'Confirm inactivation', active: true }
+      confirmCheckbox: { label: 'I confirm that once the organisation unit is activated, it will be seen on the Innovation Service platform' },
+      submitButton: { label: 'Confirm activation', active: true }
     });
   }
   onSummaryStepOut(stepData: WizardStepEventType<SummaryWithConfirmStepOutputType>): void { }
@@ -185,8 +153,12 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
 
     if (!stepData.data.confirm) { return; } // Just a sanity check. Should never happen.
 
-    this.organisationsService.inactivateOrganisationUnit(this.wizard.data.organisation.id, this.wizard.data.organisationUnit.id).subscribe(
-      () => this.redirectTo(`/admin/organisations/${this.wizard.data.organisation.id}`, { alert: 'organisationUnitInactivateSuccess' }),
+    this.organisationsService.activateOrganisationUnit(
+      this.wizard.data.organisation.id,
+      this.wizard.data.organisationUnit.id,
+      this.wizard.data.usersStep.users.map(item => item.id)
+    ).subscribe(
+      () => this.redirectTo(`/admin/organisations/${this.wizard.data.organisation.id}`, { alert: 'organisationUnitActivateSuccess' }),
       () => {
         this.onSummaryStepIn();
         this.setAlertUnknownError();

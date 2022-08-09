@@ -13,7 +13,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageOrganisationEditComponent } from './organisation-edit.component';
 
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 
@@ -73,7 +73,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     activatedRoute.snapshot.params = { organisationId: 'orgId' };
     organisationsService.getOrganisationInfo = () => of({
       id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true,
-      organisationUnits: [{ id: 'orgUnitId', name: 'Org Unit name', acronym: 'ORGu', isActive: true, usersNumber: 10 }]
+      organisationUnits: [{ id: 'orgUnitId', name: 'Org Unit name', acronym: 'ORGu', isActive: true, userCount: 10 }]
     });
 
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
@@ -169,8 +169,8 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
 
   });
   it('should run onSubmitWizard() with API success when updating unit', () => {
+    activatedRoute.snapshot.params = { organisationId: 'Org01', organisationUnitId: 'Unit01' };
     activatedRoute.snapshot.data = { module: 'Unit' };
-    activatedRoute.snapshot.params = { organisationId: 'Org01', unitId: 'Unit01' };
     authenticationStore.initializeAuthentication$ = () => of(true);
     organisationsService.updateUnit = () => of({ id: 'Unit01', status: 'OK' });
 
@@ -184,8 +184,8 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
   });
 
   it('should run onSubmitWizard() with API error, returning SLS ID when updating organisation', () => {
-    activatedRoute.snapshot.data = { module: 'Organisation' };
     activatedRoute.snapshot.params = { organisationId: 'Org01' };
+    activatedRoute.snapshot.data = { module: 'Organisation' };
     authenticationStore.initializeAuthentication$ = () => of(true);
 
     organisationsService.updateOrganisation = () => throwError({ id: '123456ABCDFG' });
@@ -200,8 +200,8 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
   });
 
   it('should run onSubmitWizard() with API error, returning SLS ID when updating unt', () => {
+    activatedRoute.snapshot.params = { organisationId: 'Org01', organisationUnitId: 'Unit01' };
     activatedRoute.snapshot.data = { module: 'Unit' };
-    activatedRoute.snapshot.params = { organisationId: 'Org01', unitId: 'Unit01' };
     authenticationStore.initializeAuthentication$ = () => of(true);
 
     organisationsService.updateUnit = () => throwError({ id: '123456ABCDFG' });
@@ -215,8 +215,8 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
 
   });
   it('should run onSubmitWizard() with API error when updating organisation', () => {
-    activatedRoute.snapshot.data = { module: 'Organisation' };
     activatedRoute.snapshot.params = { organisationId: 'Org01' };
+    activatedRoute.snapshot.data = { module: 'Organisation' };
     organisationsService.updateOrganisation = () => throwError('error');
 
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
@@ -228,8 +228,8 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
 
   });
   it('should run onSubmitWizard() with API error when updating unit', () => {
+    activatedRoute.snapshot.params = { organisationId: 'Org01', organisationUnitId: 'Unit01' };
     activatedRoute.snapshot.data = { module: 'Unit' };
-    activatedRoute.snapshot.params = { organisationId: 'Org01', unitId: 'Unit01' };
     organisationsService.updateUnit = () => throwError('error');
 
     fixture = TestBed.createComponent(PageOrganisationEditComponent);

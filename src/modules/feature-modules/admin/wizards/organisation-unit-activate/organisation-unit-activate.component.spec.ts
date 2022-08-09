@@ -9,16 +9,15 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
-import { WizardOrganisationUnitInactivateComponent } from './organisation-unit-inactivate.component';
-import { WizardOrganisationUnitInactivateUsersStepComponent } from './steps/users-step.component';
-import { WizardOrganisationUnitInactivateInnovationsStepComponent } from './steps/innovations-step.component';
+import { WizardOrganisationUnitActivateComponent } from './organisation-unit-activate.component';
+import { WizardOrganisationUnitActivateUsersStepComponent } from './steps/users-step.component';
 import { WizardSummaryWithConfirmStepComponent } from '@modules/shared/wizards/steps/summary-with-confirm-step.component';
 
 
-describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitInactivateComponent', () => {
+describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitActivateComponent', () => {
 
-  let component: WizardOrganisationUnitInactivateComponent;
-  let fixture: ComponentFixture<WizardOrganisationUnitInactivateComponent>;
+  let component: WizardOrganisationUnitActivateComponent;
+  let fixture: ComponentFixture<WizardOrganisationUnitActivateComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -32,8 +31,7 @@ describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitInactivateComponen
     }).overrideModule(BrowserDynamicTestingModule, {
       set: {
         entryComponents: [
-          WizardOrganisationUnitInactivateUsersStepComponent,
-          WizardOrganisationUnitInactivateInnovationsStepComponent,
+          WizardOrganisationUnitActivateUsersStepComponent,
           WizardSummaryWithConfirmStepComponent
         ]
       }
@@ -45,7 +43,7 @@ describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitInactivateComponen
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(WizardOrganisationUnitInactivateComponent);
+    fixture = TestBed.createComponent(WizardOrganisationUnitActivateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();

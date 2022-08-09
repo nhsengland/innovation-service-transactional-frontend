@@ -12,7 +12,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageOrganisationInfoComponent } from './organisation-info.component';
 
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
 import { AccessorOrganisationRoleEnum } from '@modules/stores/authentication/authentication.enums';
 
 
@@ -64,7 +64,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
 
     organisationsService.getOrganisationInfo = () => of({
       id: 'OrgId', name: 'Org name', acronym: 'ORG', isActive: true,
-      organisationUnits: [{ id: 'OrgUnitId', name: 'Org Unit name', acronym: 'ORGu', isActive: true, usersNumber: 10 }]
+      organisationUnits: [{ id: 'OrgUnitId', name: 'Org Unit name', acronym: 'ORGu', isActive: true, userCount: 10 }]
     });
 
     fixture = TestBed.createComponent(PageOrganisationInfoComponent);
@@ -109,7 +109,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
           name: 'Unit name',
           acronym: 'UNT',
           isActive: true,
-          usersNumber: 10,
+          userCount: 10,
           showHideStatus: 'closed',
           showHideText: 'Hide users',
           showHideDescription: 'that belong to the Org name',
@@ -137,7 +137,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
           name: 'Unit name',
           acronym: 'UNT',
           isActive: true,
-          usersNumber: 10,
+          userCount: 10,
           showHideStatus: 'closed',
           showHideText: 'show users',
           showHideDescription: 'that belong to the Org name',
@@ -168,7 +168,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
           name: 'Unit name',
           acronym: 'UNT',
           isActive: true,
-          usersNumber: 10,
+          userCount: 10,
           showHideStatus: 'closed',
           showHideText: 'show users',
           showHideDescription: 'that belong to the Org name',
@@ -197,7 +197,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
           name: 'Unit name',
           acronym: 'UNT',
           isActive: true,
-          usersNumber: 10,
+          userCount: 10,
           showHideStatus: 'opened',
           showHideText: 'Hide users',
           showHideDescription: 'that belong to the Org name',
@@ -225,7 +225,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
           name: 'Unit name',
           acronym: 'UNT',
           isActive: true,
-          usersNumber: 10,
+          userCount: 10,
           showHideStatus: 'hidden',
           showHideText: 'Hide users',
           showHideDescription: 'that belong to the Org name',

@@ -6,31 +6,25 @@ import { ENV } from '@tests/app.mocks';
 import { Injector } from '@angular/core';
 
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
-import { StoresModule, AuthenticationStore, InnovationStore } from '@modules/stores';
-import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { StoresModule } from '@modules/stores';
 
-import { ServiceUsersService } from './service-users.service';
+import { OrganisationsService } from './organisations.service';
 
-
-describe('FeatureModules/Admin/Services/ServiceUsersService', () => {
+describe('FeatureModules/Admin/Services/OrganisationsService', () => {
 
   let httpMock: HttpTestingController;
-
   let envVariablesStore: EnvironmentVariablesStore;
-  let authenticationStore: AuthenticationStore;
-  let innovationStore: InnovationStore;
-
-  let service: ServiceUsersService;
+  let service: OrganisationsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         CoreModule,
-        StoresModule,
-        AdminModule
+        StoresModule
       ],
       providers: [
+        OrganisationsService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
@@ -38,14 +32,8 @@ describe('FeatureModules/Admin/Services/ServiceUsersService', () => {
     AppInjector.setInjector(TestBed.inject(Injector));
 
     httpMock = TestBed.inject(HttpTestingController);
-
     envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
-    authenticationStore = TestBed.inject(AuthenticationStore);
-    innovationStore = TestBed.inject(InnovationStore);
-
-    service = TestBed.inject(ServiceUsersService);
-
-    authenticationStore.getUserId = () => 'UserId01';
+    service = TestBed.inject(OrganisationsService);
 
   });
 
@@ -70,5 +58,6 @@ describe('FeatureModules/Admin/Services/ServiceUsersService', () => {
     expect(1).toEqual(1);
 
   });
+
 
 });

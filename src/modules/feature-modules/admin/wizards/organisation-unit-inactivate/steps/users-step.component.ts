@@ -8,7 +8,7 @@ import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 
 import { UsersStepInputType, UsersStepOutputType } from './users-step.types';
 
-import { GetOrganisationUnitUsersOutDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
+import { GetOrganisationUnitUsersOutDTO, OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
 
 
 @Component({
@@ -30,7 +30,7 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
 
   // submitButton = { isActive: true, label: 'Confirm and notify organisations' };
 
-  tableList = new TableModel<GetOrganisationUnitUsersOutDTO['data'][0], {}>();
+  tableList = new TableModel<GetOrganisationUnitUsersOutDTO['data'][0], { onlyActive: boolean }>();
 
   form = new FormGroup({
     agreeUsers: new FormControl(false, CustomValidators.required('You need to confirm to proceed'))
@@ -49,7 +49,7 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
 
     this.tableList.setVisibleColumns({
       userAccount: { label: 'User account', orderable: false }
-    });
+    }).setFilters({ onlyActive: true });
 
     this.form.get('agreeUsers')!.setValue(this.data.agreeUsers);
 
@@ -87,8 +87,6 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
   verifyOutputData(): boolean {
 
     if (!this.form.get('agreeUsers')!.value) {
-
-      // this.form.get('organisationUnits')!.setErrors({ customError: true, message: 'You need to choose at least one organisationn or one unit to suggest' });
       this.form.markAllAsTouched();
       return false;
     }
