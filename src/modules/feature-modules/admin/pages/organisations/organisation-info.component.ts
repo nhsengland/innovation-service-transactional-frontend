@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { OrganisationsService, organisationUsersOutDTO } from '@modules/shared/services/organisations.service';
+import { OrganisationsService, organisationUsersOutDTO } from '@modules/feature-modules/admin/services/organisations.service';
 
 
 @Component({
@@ -24,7 +24,7 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
       name: string,
       acronym: string,
       isActive: boolean,
-      usersNumber: number,
+      userCount: number,
       users: organisationUsersOutDTO[],
       showHideStatus: 'hidden' | 'opened' | 'closed',
       showHideText: null | string,
@@ -49,6 +49,9 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
         break;
       case 'updateUnitSuccess':
         this.setAlertSuccess('You\'ve successfully updated the organisation unit.');
+        break;
+      case 'organisationUnitActivateSuccess':
+        this.setAlertSuccess('You\'ve successfully activated the organisation unit.');
         break;
       case 'organisationUnitInactivateSuccess':
         this.setAlertSuccess('You\'ve successfully inactivated the organisation unit.');

@@ -35,11 +35,14 @@ import { PageTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-l
 import { PageTermsOfUseNewComponent } from './pages/terms-of-use/terms-of-use-new.component';
 
 // Wizards.
+import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-unit-activate/organisation-unit-activate.component';
+import { WizardOrganisationUnitActivateUsersStepComponent } from './wizards/organisation-unit-activate/steps/users-step.component';
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
 import { WizardOrganisationUnitInactivateUsersStepComponent } from './wizards/organisation-unit-inactivate/steps/users-step.component';
 import { WizardOrganisationUnitInactivateInnovationsStepComponent } from './wizards/organisation-unit-inactivate/steps/innovations-step.component';
 
 // Services.
+import { OrganisationsService } from './services/organisations.service';
 import { ServiceUsersService } from './services/service-users.service';
 
 // Resolvers.
@@ -83,12 +86,15 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageTermsOfUseNewComponent,
 
     // Wizards.
+    WizardOrganisationUnitActivateComponent,
+    WizardOrganisationUnitActivateUsersStepComponent,
     WizardOrganisationUnitInactivateComponent,
     WizardOrganisationUnitInactivateUsersStepComponent,
     WizardOrganisationUnitInactivateInnovationsStepComponent
   ],
   providers: [
     // Services.
+    OrganisationsService,
     ServiceUsersService,
 
     // Resolvers.

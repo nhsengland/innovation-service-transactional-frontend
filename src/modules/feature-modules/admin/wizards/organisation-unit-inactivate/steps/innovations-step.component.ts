@@ -5,7 +5,7 @@ import { TableModel } from '@app/base/models';
 import { CustomValidators } from '@app/base/forms';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 
-import { GetOrganisationUnitInnovationsListDTO, OrganisationsService, organisationUsersOutDTO } from '@modules/shared/services/organisations.service';
+import { GetOrganisationUnitInnovationsListDTO, OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
 
 import { InnovationsStepInputType, InnovationsStepOutputType } from './innovations-step.types';
 

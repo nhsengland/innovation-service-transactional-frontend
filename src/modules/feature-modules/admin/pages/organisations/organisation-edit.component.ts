@@ -5,7 +5,7 @@ import { CoreComponent, FormGroup, FormControl } from '@app/base';
 import { MappedObjectType } from '@app/base/types';
 
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
-import { OrganisationsService, updateOrganisationDTO } from '@modules/shared/services/organisations.service';
+import { OrganisationsService, updateOrganisationDTO } from '@modules/feature-modules/admin/services/organisations.service';
 
 import { EDIT_ORGANISATIONS_QUESTIONS } from './organisation-edit.config';
 import { EDIT_ORGANISATION_UNIT_QUESTIONS } from './organisation-edit-unit.config';
@@ -40,7 +40,7 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
     super();
     this.module = this.activatedRoute.snapshot.data.module;
     this.organisationId = this.activatedRoute.snapshot.params.organisationId;
-    this.unitId = this.activatedRoute.snapshot.params.unitId;
+    this.unitId = this.activatedRoute.snapshot.params.organisationUnitId;
 
     switch (this.module) {
       case 'Organisation':

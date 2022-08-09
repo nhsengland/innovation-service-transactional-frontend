@@ -106,7 +106,7 @@
               <dd class="width-20 nhsuk-u-margin-0">
                 <theme-tag type="{{ unit.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ unit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
                 <br />
-                {{ unit.usersNumber }} users
+                {{ unit.userCount }} users
               </dd>
               <dd class="width-20 nhsuk-u-margin-0">
                 <ul class="nhsuk-list text-align-right nhsuk-u-margin-0">
@@ -116,7 +116,7 @@
                   <li>
                     <a routerLink="unit/{{ unit.id }}/{{ unit.isActive ? 'inactivate' : 'activate' }}" class="nhsuk-button nhsuk-u-margin-0"> {{ unit.isActive ? 'Inactivate' : 'Activate' }} </a>
                   </li>
-                  <li *ngIf="unit.usersNumber > 0">
+                  <li *ngIf="unit.userCount > 0">
                     <a href="javascript:void(0)" (click)="onShowHideClicked(unit.id)">{{ unit.showHideText }}<span class="nhsuk-u-visually-hidden">{{ unit.showHideDescription }}</span></a>
                   </li>
                 </ul>

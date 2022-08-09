@@ -35,6 +35,7 @@ import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/acc
 import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
 
 // Wizards.
+import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-unit-activate/organisation-unit-activate.component';
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
 
 // Resolvers.
@@ -77,12 +78,11 @@ const routes: Routes = [
                 data: { module: 'Organisation' }
               },
               {
-                path: 'unit/:unitId/edit', pathMatch: 'full', component: PageOrganisationEditComponent,
+                path: 'unit/:organisationUnitId/edit', pathMatch: 'full', component: PageOrganisationEditComponent,
                 data: { module: 'Unit' }
               },
-              {
-                path: 'unit/:unitId/inactivate', pathMatch: 'full', component: WizardOrganisationUnitInactivateComponent
-              }
+              { path: 'unit/:organisationUnitId/activate', pathMatch: 'full', component: WizardOrganisationUnitActivateComponent },
+              { path: 'unit/:organisationUnitId/inactivate', pathMatch: 'full', component: WizardOrganisationUnitInactivateComponent }
             ]
           }
         ]
