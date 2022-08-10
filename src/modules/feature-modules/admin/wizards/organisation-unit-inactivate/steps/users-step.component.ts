@@ -50,7 +50,7 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
   ngOnInit(): void {
 
     this.tableList.setVisibleColumns({
-      userAccount: { label: 'User account', orderable: false }
+      userAccount: { label: 'User details', orderable: false }
     }).setFilters({ onlyActive: true });
 
     this.form.get('agreeUsers')!.setValue(this.data.agreeUsers);

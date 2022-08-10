@@ -29,7 +29,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
 
 
   innovationStatusCounters: GetOrganisationUnitInnovationsListDTO['innovationsByStatus'] = [];
-  tableList = new TableModel<GetOrganisationUnitInnovationsListDTO['innovationsList'][0], {}>({
+  tableList = new TableModel<GetOrganisationUnitInnovationsListDTO['innovationsList'][0], { onlyOpen: boolean }>({
     pageSize: 10
   });
 
@@ -51,7 +51,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
     this.tableList.setVisibleColumns({
       innovation: { label: 'Innovation', orderable: false },
       status: { label: 'Status', orderable: false }
-    });
+    }).setFilters({ onlyOpen: true });
 
     this.form.get('agreeInnovations')!.setValue(this.data.agreeInnovations);
 

@@ -49,6 +49,7 @@
         <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
         <div *ngIf="pageStatus === 'READY'" aria-live="polite">
+
           <p class="nhsuk-u-margin-bottom-0">{{ actionsList.getTotalRowsNumber() }} records found</p>
 
           <dl class="nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1 nhsuk-u-padding-2 bg-color-grey">
@@ -92,6 +93,7 @@
             <li> searching for something less specific </li>
           </ul>
         </ng-container>
+
         <ng-container *ngIf="pageStatus === 'READY' && actionsList.getTotalRowsNumber() > 0">
           <table class="nhsuk-table-responsive app-sortable-table">
             <caption class="nhsuk-u-visually-hidden"> Action list </caption>
@@ -136,14 +138,16 @@
             </tbody>
           </table>
 
-          <pagination [currentPage]="actionsList.page" [pageSize]="actionsList.pageSize" [totalRows]="actionsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
+          <div class="nhsuk-u-padding-bottom-4">
+            <theme-pagination [currentPage]="actionsList.page" [pageSize]="actionsList.pageSize" [totalRows]="actionsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+          </div>
+
         </ng-container>
       </div>
     </div>
 
   </div>
 </section>
-
 
 
 <ng-template #filterIcon let-showHideStatus="showHideStatus">

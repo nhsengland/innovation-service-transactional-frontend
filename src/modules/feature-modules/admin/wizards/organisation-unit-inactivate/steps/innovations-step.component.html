@@ -30,7 +30,8 @@
         <dd class="nhsuk-summary-list__value">
           <ul class="nhsuk-list">
             <li *ngFor="let item of innovationStatusCounters">
-              <theme-tag type="{{ item.status === 'ENGAGING' ? 'SUCCESS' : 'WHITE' }}" label="{{ item.count }} {{ 'shared.catalog.innovation.support_status.' + item.status + '.name' | translate }}"></theme-tag>
+              <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + item.status + '.cssColorClass' | translate }}" label="{{ item.count }} {{ 'shared.catalog.innovation.support_status.' + item.status + '.name' | translate }}">
+              </theme-tag>
             </li>
           </ul>
         </dd>
@@ -64,24 +65,24 @@
             </td>
             <td class="nhsuk-table__cell">
               <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('status') }}</span>
-              <theme-tag type="{{ item.status === 'ENGAGING' ? 'SUCCESS' : 'WHITE' }}" label="{{ 'shared.catalog.innovation.support_status.' + item.status + '.name' | translate }}"></theme-tag>
+              <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + item.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + item.status + '.name' | translate }}"></theme-tag>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <pagination [currentPage]="tableList.page" [pageSize]="tableList.pageSize" [totalRows]="tableList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
+    <theme-pagination [currentPage]="tableList.page" [pageSize]="tableList.pageSize" [totalRows]="tableList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
 
   </div>
 
-  <div class="nhsuk-grid-column-three-quarters">
+  <div class="nhsuk-grid-column-three-quarters nhsuk-u-padding-top-4">
 
     <form [formGroup]="form" (ngSubmit)="onNextStep()">
       <theme-form-checkbox controlName="agreeInnovations"
         label="I understand that these innovations will be sent a message about ending support from this unit, their support status will be changed to 'completed' and actions opened will be changed to 'cancelled', if I confirm inactivation"
         size="small"></theme-form-checkbox>
-      <button type="submit" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3">Continue</button>
+      <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
     </form>
 
   </div>

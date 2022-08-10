@@ -167,7 +167,7 @@ export class OrganisationsService extends CoreService {
 
   }
 
-  getOrganisationUnitInnovationsList(organisationId: string, organisationUnitId: string, queryParams: APIQueryParamsType<{}>): Observable<GetOrganisationUnitInnovationsListDTO> {
+  getOrganisationUnitInnovationsList(organisationId: string, organisationUnitId: string, queryParams: APIQueryParamsType<{ onlyOpen: boolean }>): Observable<GetOrganisationUnitInnovationsListDTO> {
 
     // return of({
     //   count: 24,
@@ -183,7 +183,10 @@ export class OrganisationsService extends CoreService {
 
 
     const { filters, ...qParams } = queryParams;
-    const qp = { ...qParams };
+    const qp = {
+      ...qParams,
+      onlyOpen: filters.onlyOpen ? 'true' : 'false'
+    };
 
     const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId/innovations').setPathParams({ organisationId, organisationUnitId }).setQueryParams(qp);
     return this.http.get<GetOrganisationUnitInnovationsListDTO>(url.buildUrl()).pipe(take(1),

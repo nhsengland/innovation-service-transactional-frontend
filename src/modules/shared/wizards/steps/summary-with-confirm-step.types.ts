@@ -1,6 +1,6 @@
 export type SummaryWithConfirmStepInputType = {
 
-  summary: { label: string, value: string }[];
+  summary: { label: string, value?: string }[];
   confirmCheckbox: { label: string };
   submitButton: { label: string, active: boolean };
 
