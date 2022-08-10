@@ -24,6 +24,10 @@ import { PageInnovationActivityLogComponent } from './pages/innovation/activity-
 import { PageInnovationCommentsEditComponent } from './pages/innovation/comments/comments-edit.component';
 import { PageInnovationCommentsListComponent } from './pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from './pages/innovation/comments/comments-new.component';
+import { PageInnovationMessagesEditComponent } from './pages/innovation/messages/messages-edit.component';
+import { PageInnovationMessagesNewComponent } from './pages/innovation/messages/messages-new.component';
+import { PageInnovationThreadMessagesListComponent } from './pages/innovation/messages/thread-messages-list.component';
+import { PageInnovationThreadsListComponent } from './pages/innovation/messages/threads-list.component';
 import { PageInnovationRecordComponent } from './pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionInfoComponent } from './pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from './pages/innovation/sections/section-evidence-info.component';
@@ -33,7 +37,7 @@ import { PageNotificationsListComponent } from './pages/notifications/notificati
 // // Terms of use.
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
 
-// Wizard.
+// Wizards.
 import { WizardSummaryWithConfirmStepComponent } from './wizards/steps/summary-with-confirm-step.component';
 
 // Pipes.
@@ -73,6 +77,10 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     PageInnovationCommentsEditComponent,
     PageInnovationCommentsListComponent,
     PageInnovationCommentsNewComponent,
+    PageInnovationMessagesEditComponent,
+    PageInnovationMessagesNewComponent,
+    PageInnovationThreadMessagesListComponent,
+    PageInnovationThreadsListComponent,
     PageInnovationRecordComponent,
     PageInnovationSectionInfoComponent,
     PageInnovationSectionEvidenceInfoComponent,

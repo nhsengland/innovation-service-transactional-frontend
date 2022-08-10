@@ -95,6 +95,7 @@ export class AccessorLayoutComponent extends CoreComponent {
           { key: 'InnovationRecord', title: 'Innovation record', link: `/accessor/innovations/${currentRouteInnovationId}/record` },
           { key: 'Action', title: 'Action tracker', link: `/accessor/innovations/${currentRouteInnovationId}/action-tracker` },
           { key: 'Comments', title: 'Comments', link: `/accessor/innovations/${currentRouteInnovationId}/comments` },
+          { key: 'Messages', title: 'Messages', link: `/accessor/innovations/${currentRouteInnovationId}/threads` },
           { key: 'Support', title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support` },
           { key: 'ActivityLog', title: 'Activity log', link: `/accessor/innovations/${currentRouteInnovationId}/activity-log` }
         ];

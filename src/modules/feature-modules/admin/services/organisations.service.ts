@@ -24,12 +24,34 @@ export type GetOrganisationInfoDTO = {
   }[];
 };
 
+export type updateOrganisationDTO = {
+  id: string;
+  status: string;
+  error?: string;
+};
+
 export type GetOrganisationUnitInfoDTO = {
   id: string;
   name: string;
   acronym: string;
   isActive: boolean;
   userCount: number;
+};
+
+export type GetOrganisationUnitUsersInDTO = {
+  count: number;
+  data: {
+    id: string;
+    name: string;
+    email: string;
+    organisationRole: AccessorOrganisationRoleEnum;
+    isActive: boolean;
+    lockedAt: null | DateISOType;
+  }[];
+};
+export type GetOrganisationUnitUsersOutDTO = {
+  count: number;
+  data: (GetOrganisationUnitUsersInDTO['data'][0] & { organisationRoleDescription: string })[];
 };
 
 export type GetOrganisationUnitInnovationsListDTO = {
@@ -43,28 +65,6 @@ export type GetOrganisationUnitInnovationsListDTO = {
     name: string,
     status: InnovationSupportStatusEnum
   }[];
-};
-
-export type updateOrganisationDTO = {
-  id: string;
-  status: string;
-  error?: string;
-};
-
-export type GetOrganisationUnitUsersInDTO = {
-  count: number;
-  data: {
-    id: string;
-    name: string;
-    email: string;
-    organisationRole: AccessorOrganisationRoleEnum;
-    isActive: boolean;
-    lockedAt?: DateISOType;
-  }[];
-};
-export type GetOrganisationUnitUsersOutDTO = {
-  count: number;
-  data: (GetOrganisationUnitUsersInDTO['data'][0] & { organisationRoleDescription: string })[];
 };
 
 export type organisationUsersInDTO = {
@@ -83,25 +83,25 @@ export class OrganisationsService extends CoreService {
 
   getOrganisationInfo(organisationId: string): Observable<GetOrganisationInfoDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('organisations/:organisationId').setPathParams({ organisationId });
-    return this.http.get<GetOrganisationInfoDTO>(url.buildUrl()).pipe(take(1),
-      map(response => ({
-        id: response.id, name: response.name, acronym: response.acronym, isActive: true,
-        organisationUnits: response.organisationUnits.map(item => ({
-          id: item.id, name: item.name, acronym: item.acronym, isActive: false, userCount: 10
-        }))
-      }))
-    );
-
-    // const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId').setPathParams({ organisationId });
+    // const url = new UrlModel(this.API_URL).addPath('organisations/:organisationId').setPathParams({ organisationId });
     // return this.http.get<GetOrganisationInfoDTO>(url.buildUrl()).pipe(take(1),
     //   map(response => ({
-    //     id: response.id, name: response.name, acronym: response.acronym, isActive: response.isActive,
+    //     id: response.id, name: response.name, acronym: response.acronym, isActive: true,
     //     organisationUnits: response.organisationUnits.map(item => ({
-    //       id: item.id, name: item.name, acronym: item.acronym, isActive: true, userCount: item.userCount
+    //       id: item.id, name: item.name, acronym: item.acronym, isActive: false, userCount: 10
     //     }))
     //   }))
     // );
+
+    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId').setPathParams({ organisationId });
+    return this.http.get<GetOrganisationInfoDTO>(url.buildUrl()).pipe(take(1),
+      map(response => ({
+        id: response.id, name: response.name, acronym: response.acronym, isActive: response.isActive,
+        organisationUnits: response.organisationUnits.map(item => ({
+          id: item.id, name: item.name, acronym: item.acronym, isActive: true, userCount: item.userCount
+        }))
+      }))
+    );
 
   }
 
@@ -123,63 +123,63 @@ export class OrganisationsService extends CoreService {
 
   getOrganisationUnitInfo(organisationUnitId: string): Observable<GetOrganisationUnitInfoDTO> {
 
-    return of({ id: 'Unit01', name: 'Unit name', acronym: 'AAC', isActive: true, userCount: 10 });
+    // return of({ id: 'Unit01', name: 'Unit name', acronym: 'AAC', isActive: true, userCount: 10 });
 
-    // const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId').setPathParams({ organisationUnitId });
-    // return this.http.get<GetOrganisationUnitInfoDTO>(url.buildUrl()).pipe(take(1),
-    //   map(response => response)
-    // );
+    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId').setPathParams({ organisationUnitId });
+    return this.http.get<GetOrganisationUnitInfoDTO>(url.buildUrl()).pipe(take(1),
+      map(response => response)
+    );
 
   }
 
   getOrganisationUnitUsers(organisationId: string, organisationUnitId: string, queryParams: APIQueryParamsType<{ onlyActive: boolean }>): Observable<GetOrganisationUnitUsersOutDTO> {
 
-    return of({
-      count: 50,
-      data: [
-        {
-          id: 'Id01', name: 'User name 01', email: 'user01@email.com',
-          organisationRole: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, organisationRoleDescription: this.stores.authentication.getRoleDescription(AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR),
-          isActive: true, lockedAt: '2020-01-01T00:00:00.000Z'
-        },
-        {
-          id: 'Id02', name: 'User name 02', email: 'user02@email.com',
-          organisationRole: AccessorOrganisationRoleEnum.ACCESSOR, organisationRoleDescription: this.stores.authentication.getRoleDescription(AccessorOrganisationRoleEnum.ACCESSOR),
-          isActive: true, lockedAt: '2020-01-01T00:00:00.000Z'
-        }
-      ]
-    });
+    // return of({
+    //   count: 50,
+    //   data: [
+    //     {
+    //       id: 'Id01', name: 'User name 01', email: 'user01@email.com',
+    //       organisationRole: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, organisationRoleDescription: this.stores.authentication.getRoleDescription(AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR),
+    //       isActive: true, lockedAt: '2020-01-01T00:00:00.000Z'
+    //     },
+    //     {
+    //       id: 'Id02', name: 'User name 02', email: 'user02@email.com',
+    //       organisationRole: AccessorOrganisationRoleEnum.ACCESSOR, organisationRoleDescription: this.stores.authentication.getRoleDescription(AccessorOrganisationRoleEnum.ACCESSOR),
+    //       isActive: true, lockedAt: '2020-01-01T00:00:00.000Z'
+    //     }
+    //   ]
+    // });
 
-    // const { filters, ...qParams } = queryParams;
-    // const qp = {
-    //   ...qParams,
-    //   onlyActive: filters.onlyActive ? 'true' : 'false'
-    // };
+    const { filters, ...qParams } = queryParams;
+    const qp = {
+      ...qParams,
+      onlyActive: filters.onlyActive ? 'true' : 'false'
+    };
 
-    // const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId/users').setPathParams({ organisationId, organisationUnitId }).setQueryParams(qp);
-    // return this.http.get<GetOrganisationUnitUsersInDTO>(url.buildUrl()).pipe(
-    //   take(1),
-    //   map(response => ({
-    //     count: response.count,
-    //     data: response.data.map(user => ({ ...user, organisationRoleDescription: this.stores.authentication.getRoleDescription(user.organisationRole) }))
-    //   }))
-    // );
+    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId/users').setPathParams({ organisationId, organisationUnitId }).setQueryParams(qp);
+    return this.http.get<GetOrganisationUnitUsersInDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => ({
+        count: response.count,
+        data: response.data.map(user => ({ ...user, organisationRoleDescription: this.stores.authentication.getRoleDescription(user.organisationRole) }))
+      }))
+    );
 
   }
 
   getOrganisationUnitInnovationsList(organisationId: string, organisationUnitId: string, queryParams: APIQueryParamsType<{}>): Observable<GetOrganisationUnitInnovationsListDTO> {
 
-    return of({
-      count: 24,
-      innovationsByStatus: [
-        { status: InnovationSupportStatusEnum.ENGAGING, count: 20 },
-        { status: InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED, count: 40 }
-      ],
-      innovationsList: [
-        { id: 'Inno01', name: 'Innovation 01', status: InnovationSupportStatusEnum.ENGAGING },
-        { id: 'Inno02', name: 'Innovation 02', status: InnovationSupportStatusEnum.COMPLETE }
-      ]
-    });
+    // return of({
+    //   count: 24,
+    //   innovationsByStatus: [
+    //     { status: InnovationSupportStatusEnum.ENGAGING, count: 20 },
+    //     { status: InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED, count: 40 }
+    //   ],
+    //   innovationsList: [
+    //     { id: 'Inno01', name: 'Innovation 01', status: InnovationSupportStatusEnum.ENGAGING },
+    //     { id: 'Inno02', name: 'Innovation 02', status: InnovationSupportStatusEnum.COMPLETE }
+    //   ]
+    // });
 
 
     const { filters, ...qParams } = queryParams;
@@ -203,6 +203,7 @@ export class OrganisationsService extends CoreService {
   }
 
   updateUnit(body: MappedObjectType, securityConfirmation: { id: string, code: string }, organisationUnitId: string): Observable<updateOrganisationDTO> {
+
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
     const url = new UrlModel(this.API_URL).addPath('user-admin/organisation-units/:organisationUnitId').setPathParams({ organisationUnitId }).setQueryParams(qp);
@@ -218,7 +219,7 @@ export class OrganisationsService extends CoreService {
 
   activateOrganisationUnit(organisationId: string, organisationUnitId: string, userIds: string[]): Observable<boolean> {
 
-    return of(true);
+    // return of(true);
     // return throwError('error');
 
     const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId/activate').setPathParams({ organisationId, organisationUnitId });
@@ -231,11 +232,11 @@ export class OrganisationsService extends CoreService {
 
   inactivateOrganisationUnit(organisationId: string, organisationUnitId: string): Observable<boolean> {
 
-    return of(true);
+    // return of(true);
     // return throwError('error');
 
     const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId/inactivate').setPathParams({ organisationId, organisationUnitId });
-    return this.http.patch<{}>(url.buildUrl(), { organisationUnitIds: [organisationUnitId] }).pipe(
+    return this.http.patch<{}>(url.buildUrl(), { organisationUnitId }).pipe(
       take(1),
       map(response => true)
     );

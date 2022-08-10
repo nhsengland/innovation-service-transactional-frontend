@@ -29,7 +29,9 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
 
 
   innovationStatusCounters: GetOrganisationUnitInnovationsListDTO['innovationsByStatus'] = [];
-  tableList = new TableModel<GetOrganisationUnitInnovationsListDTO['innovationsList'][0], {}>();
+  tableList = new TableModel<GetOrganisationUnitInnovationsListDTO['innovationsList'][0], {}>({
+    pageSize: 10
+  });
 
   form = new FormGroup({
     agreeInnovations: new FormControl(false, CustomValidators.required('You need to confirm to proceed'))

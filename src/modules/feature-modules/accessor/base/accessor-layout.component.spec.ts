@@ -120,6 +120,7 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
       { key: 'InnovationRecord', title: 'Innovation record', link: `/accessor/innovations/innovation01/record` },
       { key: 'Action', title: 'Action tracker', link: `/accessor/innovations/innovation01/action-tracker` },
       { key: 'Comments', title: 'Comments', link: `/accessor/innovations/innovation01/comments` },
+      { key: 'Messages', title: 'Messages', link: `/accessor/innovations/innovation01/threads` },
       { key: 'Support', title: 'Support status', link: `/accessor/innovations/innovation01/support` },
       { key: 'ActivityLog', title: 'Activity log', link: `/accessor/innovations/innovation01/activity-log` }
     ];
