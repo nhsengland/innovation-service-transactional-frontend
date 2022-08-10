@@ -10,17 +10,17 @@ import { AppInjector, CoreModule } from '@modules/core';
 import { InnovationStore, StoresModule } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
 
-import { PageInnovationMessagesNewComponent } from './messages-new.component';
+import { PageInnovationThreadNewComponent } from './thread-new.component';
 
 
-describe('Shared/Pages/Innovation/Messages/PageInnovationMessagesNewComponent', () => {
+describe('Shared/Pages/Innovation/Messages/PageInnovationThreadNewComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
   let innovationStore: InnovationStore;
 
-  let component: PageInnovationMessagesNewComponent;
-  let fixture: ComponentFixture<PageInnovationMessagesNewComponent>;
+  let component: PageInnovationThreadNewComponent;
+  let fixture: ComponentFixture<PageInnovationThreadNewComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -46,7 +46,7 @@ describe('Shared/Pages/Innovation/Messages/PageInnovationMessagesNewComponent', 
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(PageInnovationMessagesNewComponent);
+    fixture = TestBed.createComponent(PageInnovationThreadNewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
@@ -56,7 +56,7 @@ describe('Shared/Pages/Innovation/Messages/PageInnovationMessagesNewComponent', 
 
   // it('should run onSubmit() with invalid form', () => {
 
-  //   fixture = TestBed.createComponent(PageInnovationMessagesNewComponent);
+  //   fixture = TestBed.createComponent(PageInnovationThreadNewComponent);
   //   component = fixture.componentInstance;
 
   //   component.onSubmit();
@@ -73,7 +73,7 @@ describe('Shared/Pages/Innovation/Messages/PageInnovationMessagesNewComponent', 
   //   const responseMock = { id: 'commentId' };
   //   innovationStore.createInnovationComment$ = () => of(responseMock as any);
 
-  //   fixture = TestBed.createComponent(PageInnovationMessagesNewComponent);
+  //   fixture = TestBed.createComponent(PageInnovationThreadNewComponent);
   //   component = fixture.componentInstance;
 
   //   component.form.get('comment')?.setValue('A comment');
@@ -97,7 +97,7 @@ describe('Shared/Pages/Innovation/Messages/PageInnovationMessagesNewComponent', 
   //     setFocus: true
   //   };
 
-  //   fixture = TestBed.createComponent(PageInnovationMessagesNewComponent);
+  //   fixture = TestBed.createComponent(PageInnovationThreadNewComponent);
   //   component = fixture.componentInstance;
 
   //   component.form.get('comment')?.setValue('A comment');

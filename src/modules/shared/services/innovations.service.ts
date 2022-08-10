@@ -40,6 +40,12 @@ export type GetThreadInfoDTO = {
   createdBy: { id: string, name: string, type: UserTypeEnum }
 };
 
+export type GetThreadMessageInfoDTO = {
+  id: string;
+  message: string;
+  createdAt: DateISOType;
+};
+
 export type GetThreadMessagesListInDTO = {
   count: number;
   messages: {
@@ -53,7 +59,7 @@ export type GetThreadMessagesListInDTO = {
       organisation?: { id: string, name: string, acronym: string };
       organisationUnit?: { id: string, name: string, acronym: string };
     };
-    updatedAt: DateISOType;
+    updatedAt: null | DateISOType;
     isNew: boolean;
     isEditable: boolean;
   }[];
@@ -158,26 +164,48 @@ export class InnovationsService extends CoreService {
 
   }
 
+  getThreadMessageInfo(innovationId: string, threadId: string, messageId: string): Observable<GetThreadMessageInfoDTO> {
+
+    return of({
+      id: 'T01', message: 'Some message 01',
+      createdAt: '2020-01-01T00:00:00.000Z'
+    });
+
+    const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId/messages/:messageId')
+      .setPathParams({
+        module: this.stores.authentication.userUrlBasePath(),
+        userId: this.stores.authentication.getUserId(),
+        innovationId,
+        threadId,
+        messageId
+      });
+
+    return this.http.get<GetThreadMessageInfoDTO>(url.buildUrl()).pipe(take(1),
+      map(response => response)
+    );
+
+  }
+
   getThreadMessagesList(innovationId: string, threadId: string, queryParams: APIQueryParamsType<{}>): Observable<GetThreadMessagesListOutDTO> {
 
     return of({
       count: 5,
       messages: [
         {
-          id: 'T01', message: 'Some title 01',
+          id: 'M01', message: 'Some title 01',
           createdAt: '2020-01-01T00:00:00.000Z',
           createdBy: {
-            id: '',
+            id: '5FDE0B71-BD0D-4C88-98E6-51399BB7B4AD',
             name: 'LM01',
-            type: UserTypeEnum.ASSESSMENT,
+            type: UserTypeEnum.INNOVATOR,
             typeDescription: 'Needs assessment',
           },
-          updatedAt: '2020-01-01T00:00:00.000Z',
+          updatedAt: null,
           isNew: true,
           isEditable: true
         },
         {
-          id: 'T02', message: 'Some title 02',
+          id: 'M02', message: 'Some title 02',
           createdAt: '2020-01-01T00:00:00.000Z',
           createdBy: {
             id: '',
@@ -187,7 +215,7 @@ export class InnovationsService extends CoreService {
             organisation: { id: 'sadf', name: 'OrgName', acronym: 'aA' },
             organisationUnit: { id: 'sdf', name: 'Unit Name', acronym: 'dsa' }
           },
-          updatedAt: '2020-01-01T00:00:00.000Z',
+          updatedAt: '2020-01-02T00:00:00.000Z',
           isNew: false,
           isEditable: false,
         }

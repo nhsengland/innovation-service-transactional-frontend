@@ -4,7 +4,7 @@
       <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0"> {{ innovation.name }} </p>
     </div>
     <div *ngIf="innovation.assessment?.id" class="nhsuk-grid-column-one-third text-align-right">
-      <a routerLink="/accessor/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id }}">
+      <a routerLink="../assessments/{{ innovation.assessment?.id }}">
         View needs assessment
       </a>
     </div>
@@ -36,7 +36,7 @@
       <p *ngIf="isNotInnovator()">Messages is the space to engage in conversations with the innovator and with other organisations supporting this innovation.</p>
 
       <p *ngIf="isInnovator()">
-        When you start a new conversation, <a routerLink="{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/data-sharing">everyone who is currently supporting your innovation</a>
+        When you start a new conversation, <a routerLink="../support">everyone who is currently supporting your innovation</a>
         will be notified. They can then view ans reply to your messages.
       </p>
       <p *ngIf="isNotInnovator()">When you start a new conversation, all engaging organisation units and the needs assessment team can see and reply to messages, but only the innovator will be notified.</p>

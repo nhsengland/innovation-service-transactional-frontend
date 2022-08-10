@@ -30,7 +30,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   isInnovator(): boolean { return this.stores.authentication.isInnovatorType(); }
   isNotInnovator(): boolean { return !this.stores.authentication.isInnovatorType(); }
   isAccessor(): boolean { return this.stores.authentication.isAccessorType(); }
-  isInnovationSubmitted(): boolean { return this.innovation.status !== 'CREATED'; }
 
 
   constructor(
@@ -46,32 +45,18 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
       urlBasePath: this.stores.authentication.userUrlBasePath()
     };
 
-    console.log(this.stores.authentication.getUserId());
     this.innovation = this.stores.environment.getInnovation();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
 
-    // switch (this.activatedRoute.snapshot.queryParams.alert) {
-    //   case 'commentCreationSuccess':
-    //     this.alert = {
-    //       type: 'SUCCESS',
-    //       title: 'You have successfully created a comment',
-    //       message: 'Everyone who is currently engaging with your innovation will be notified.'
-    //     };
-    //     break;
-    //   case 'commentEditSuccess':
-    //     this.alert = {
-    //       type: 'SUCCESS',
-    //       title: 'You have successfully updated a comment',
-    //       message: 'Everyone who is currently engaging with your innovation will be notified.'
-    //     };
-    //     break;
-    //   default:
-    //     break;
-    // }
+    switch (this.activatedRoute.snapshot.queryParams.alert) {
+      case 'messageEditSuccess':
+        this.setAlertSuccess('You have successfully updated a message', 'Everyone who is currently engaging with your innovation will be notified.');
+        break;
+      default:
+        break;
+    }
 
   }
-
-
 
 
   ngOnInit(): void {
@@ -117,16 +102,9 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     const messageField = this.form.get('message')!;
 
     if (!messageField.value) {
-
       messageField.setErrors({ customError: true, message: 'A message is required' });
-
-      // setTimeout(() => {
-      //   const e = document.getElementById(`comment-${commentId}`);
-      //   if (e) { e.focus(); }
-      // });
       messageField.markAsTouched();
       return;
-
     }
 
     this.setPageStatus('LOADING');
