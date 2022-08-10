@@ -1,0 +1,116 @@
+<ng-container *ngIf="isAccessor()">
+  <div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
+    <div class="nhsuk-grid-column-two-thirds">
+      <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0"> {{ innovation.name }} </p>
+    </div>
+    <div *ngIf="innovation.assessment?.id" class="nhsuk-grid-column-one-third text-align-right">
+      <a routerLink="/accessor/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id }}">
+        View needs assessment
+      </a>
+    </div>
+  </div>
+  <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
+</ng-container>
+
+<div *ngIf="isNotInnovator() && !innovation.owner.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+  <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+    <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
+  </div>
+  <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
+</div>
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+      <p> {{ alert.message }} </p>
+    </theme-alert>
+
+    <h1 class="nhsuk-u-margin-bottom-5"> {{ pageTitle }} </h1>
+
+    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+    <ng-container *ngIf="pageStatus === 'READY'">
+
+      <p *ngIf="isInnovator()">Messages is your space to ask support questions and discuss your innovation with the organisations that are supporting you.</p>
+      <p *ngIf="isNotInnovator()">Messages is the space to engage in conversations with the innovator and with other organisations supporting this innovation.</p>
+
+      <p *ngIf="isInnovator()">
+        When you start a new conversation, <a routerLink="{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/data-sharing">everyone who is currently supporting your innovation</a>
+        will be notified. They can then view ans reply to your messages.
+      </p>
+      <p *ngIf="isNotInnovator()">When you start a new conversation, all engaging organisation units and the needs assessment team can see and reply to messages, but only the innovator will be notified.</p>
+
+      <button class="nhsuk-button" [disabled]="!isInnovationSubmitted()" routerLink="new"> Start a new conversation </button>
+      <p *ngIf="!isInnovationSubmitted()">Your must submit your record before you can start a new conversation.</p>
+
+
+      <p class="nhsuk-body-s nhsuk-u-margin-bottom-1">Showing {{ tableList.getVisibleRowsNumber() }} conversations of {{ tableList.getTotalRowsNumber() }}</p>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
+
+      <p *ngIf="tableList.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-4">There are no conversations.</p>
+
+      <div *ngIf="tableList.getTotalRowsNumber() > 0" class="bg-color-white">
+        <table class="nhsuk-table-responsive app-sortable-table app-table-inside-card">
+          <caption class="nhsuk-u-visually-hidden"> Conversations list </caption>
+          <thead class="nhsuk-table__head">
+            <tr>
+              <th *ngFor="let item of tableList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+                <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr *ngFor="let item of tableList.getRecords()" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('subject') }}</span>
+                <div>
+                  <a routerLink="{{ item.id }}" attr.aria-label="View {{ item.subject }} conversation"> {{ item.subject }} </a>
+                  <notification-tag label="dot" *ngIf="item.isNew"></notification-tag>
+                </div>
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('repliesNumber') }}</span>
+                {{ item.repliesNumber }} messages
+              </td>
+              <td class="nhsuk-table__cell text-align-right">
+                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('createdAt') }}</span>
+
+                <p class="nhsuk-body-s nhsuk-u-margin-0">{{ item.createdAt | date: ('app.date_formats.short_date_time' | translate) }}</p>
+                <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">
+
+                  <ng-container *ngIf="item.lastMessage.createdBy.id === selfUser.id; else notSelfUser">
+                    {{ item.lastMessage.createdBy.name }} (me)
+                  </ng-container>
+
+                  <ng-template #notSelfUser>
+                    <ng-container [ngSwitch]="item.lastMessage.createdBy.type">
+                      <ng-container *ngSwitchCase="'ASSESSMENT'">
+                        {{ item.lastMessage.createdBy.name }} (Assessment team)
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'ACCESSOR'">
+                        {{ item.lastMessage.createdBy.name }}, {{ item.lastMessage.createdBy.organisationUnit?.acronym }}
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'INNOVATOR'">
+                        {{ item.lastMessage.createdBy.name }} (innovator)
+                      </ng-container>
+                    </ng-container>
+                  </ng-template>
+
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <pagination [currentPage]="tableList.page" [pageSize]="tableList.pageSize" [totalRows]="tableList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
+
+
+
+    </ng-container>
+
+  </div>
+</div>

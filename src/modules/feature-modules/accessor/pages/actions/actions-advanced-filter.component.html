@@ -96,7 +96,7 @@
           <table class="nhsuk-table-responsive app-sortable-table">
             <caption class="nhsuk-u-visually-hidden"> Action list </caption>
             <thead class="nhsuk-table__head">
-              <tr class="">
+              <tr>
                 <th *ngFor="let item of actionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                   <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
                   <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>

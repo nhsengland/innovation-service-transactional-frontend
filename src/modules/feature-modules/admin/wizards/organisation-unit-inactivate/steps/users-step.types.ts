@@ -9,6 +9,6 @@ export type UsersStepInputType = {
 export type UsersStepOutputType = {
 
   agreeUsers: boolean;
-  usersCount: number;
+  userCount: number;
 
 };

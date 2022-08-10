@@ -7,23 +7,28 @@ import { AccessorRoutingModule } from './accessor-routing.module';
 import { AccessorLayoutComponent } from './base/accessor-layout.component';
 
 // Pages.
+// // Account.
+import { PageAccessorAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
+// // Actions.
+import { ActionAdvancedFilterComponent } from './pages/actions/actions-advanced-filter.component';
 import { ActionsListComponent } from './pages/actions/actions-list.component';
+// // Dashboard.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { InnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
-import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
-import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
-import { InnovationActionTrackerListComponent } from './pages/innovation/action-tracker/action-tracker-list.component';
-import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
-import { InnovationActionTrackerNewComponent } from './pages/innovation/action-tracker/action-tracker-new.component';
+// // Innovation.
 import { InnovationActionTrackerEditComponent } from './pages/innovation/action-tracker/action-tracker-edit.component';
+import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
+import { InnovationActionTrackerListComponent } from './pages/innovation/action-tracker/action-tracker-list.component';
+import { InnovationActionTrackerNewComponent } from './pages/innovation/action-tracker/action-tracker-new.component';
+import { InnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
 import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
-
+import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './pages/innovation/support/organisations-support-status-info.component';
 import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './pages/innovation/support/organisations-support-status-suggest.component';
-import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
-import { ActionAdvancedFilterComponent } from './pages/actions/actions-advanced-filter.component';
-import { PageAccessorAccountManageAccountInfoComponent } from './pages/manage-account/manage-account-info.component';
+import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
+import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
+
+
 // Services.
 import { AccessorService } from './services/accessor.service';
 
@@ -36,30 +41,33 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     AccessorLayoutComponent,
 
     // Pages.
+    // // Account.
+    PageAccessorAccountManageAccountInfoComponent,
+    // // Actions.
+    ActionAdvancedFilterComponent,
     ActionsListComponent,
+    // // Dashboard.
     DashboardComponent,
-    InnovationsAdvancedReviewComponent,
-    InnovationsReviewComponent,
-    InnovationOverviewComponent,
-    InnovationActionTrackerListComponent,
-    InnovationActionTrackerInfoComponent,
-    InnovationActionTrackerNewComponent,
+    // // Innovation.
     InnovationActionTrackerEditComponent,
+    InnovationActionTrackerInfoComponent,
+    InnovationActionTrackerListComponent,
+    InnovationActionTrackerNewComponent,
+    InnovationsAdvancedReviewComponent,
     InnovationNeedsAssessmentOverviewComponent,
-
+    InnovationOverviewComponent,
     InnovationSupportOrganisationsSupportStatusInfoComponent,
     InnovationSupportOrganisationsSupportStatusSuggestComponent,
-    InnovationSupportUpdateComponent,
     InnovationSupportInfoComponent,
-    ActionAdvancedFilterComponent,
-    PageAccessorAccountManageAccountInfoComponent
+    InnovationSupportUpdateComponent,
+    InnovationsReviewComponent
   ],
   providers: [
     // Services.
     AccessorService,
 
     // Resolvers.
-    InnovationDataResolver,
-  ],
+    InnovationDataResolver
+  ]
 })
-export class AccessorModule {}
+export class AccessorModule { }

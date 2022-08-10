@@ -30,7 +30,9 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
 
   // submitButton = { isActive: true, label: 'Confirm and notify organisations' };
 
-  tableList = new TableModel<GetOrganisationUnitUsersOutDTO['data'][0], { onlyActive: boolean }>();
+  tableList = new TableModel<GetOrganisationUnitUsersOutDTO['data'][0], { onlyActive: boolean }>({
+    pageSize: 10
+  });
 
   form = new FormGroup({
     agreeUsers: new FormControl(false, CustomValidators.required('You need to confirm to proceed'))
@@ -100,7 +102,7 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
     this.previousStepEvent.emit({
       isComplete: true, data: {
         agreeUsers: this.form.get('agreeUsers')!.value,
-        usersCount: this.tableList.getTotalRowsNumber()
+        userCount: this.tableList.getTotalRowsNumber()
       }
     });
   }
@@ -113,7 +115,7 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
       this.nextStepEvent.emit({
         isComplete: true, data: {
           agreeUsers: true,
-          usersCount: this.tableList.getTotalRowsNumber()
+          userCount: this.tableList.getTotalRowsNumber()
         }
       });
     }

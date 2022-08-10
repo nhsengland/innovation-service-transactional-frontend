@@ -150,7 +150,7 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
   onUsersStepOut(stepData: WizardStepEventType<UsersStepOutputType>): void {
     this.wizard.data.usersStep = {
       agree: stepData.data.agreeUsers,
-      count: stepData.data.usersCount
+      count: stepData.data.userCount
     };
   }
 

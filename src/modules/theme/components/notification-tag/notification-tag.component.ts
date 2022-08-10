@@ -12,7 +12,7 @@ type LabelType = null | 'dot' | 'new' | number;
 export class NotificationTagComponent {
 
   @Input()
-  // get label(): LabelType { return this.LABEL; }
+  // get label(): string { return this.visibleLabel; }
   set label(v: LabelType) {
 
     if (!v) { // Includes 0!
@@ -24,8 +24,6 @@ export class NotificationTagComponent {
     }
 
   }
-
-  // private LABEL: LabelType = null;
 
   visibleLabel = '';
 
