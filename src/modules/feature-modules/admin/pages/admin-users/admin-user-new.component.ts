@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { CoreComponent, FormGroup, FormControl } from '@app/base';
-import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
+import { CoreComponent } from '@app/base';
+import { FormControl, FormEngineComponent, FormGroup, WizardEngineModel } from '@app/base/forms';
 
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 

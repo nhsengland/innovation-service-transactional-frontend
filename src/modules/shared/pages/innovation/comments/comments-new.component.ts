@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { CustomValidators } from '@app/base/forms';
+import { CoreComponent } from '@app/base';
+import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
 
 
 @Component({

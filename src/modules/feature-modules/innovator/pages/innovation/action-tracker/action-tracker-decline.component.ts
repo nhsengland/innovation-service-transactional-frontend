@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CoreComponent } from '@app/base';
+import { FormControl, FormGroup } from '@app/base/forms';
 
 import { InnovatorService } from '../../../services/innovator.service';
 

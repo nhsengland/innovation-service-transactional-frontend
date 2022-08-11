@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormGroup, FormControl } from '@app/base';
+import { CoreComponent } from '@app/base';
+import { FormControl, FormGroup } from '@app/base/forms';
 import { MappedObjectType } from '@app/base/types';
 
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';

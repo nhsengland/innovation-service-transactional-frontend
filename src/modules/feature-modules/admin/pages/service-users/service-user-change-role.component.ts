@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CoreComponent } from '@app/base';
+import { FormControl, FormGroup } from '@app/base/forms';
 import { RoutingHelper } from '@app/base/helpers';
 
 import { changeUserRoleDTO, getOrganisationRoleRulesOutDTO, orgnisationRole, ServiceUsersService } from '../../services/service-users.service';

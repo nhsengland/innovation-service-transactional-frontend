@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 
-import { CoreComponent, FormArray, FormGroup } from '@app/base';
+import { CoreComponent } from '@app/base';
+import { FormArray, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
 import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';

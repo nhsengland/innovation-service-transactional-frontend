@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CoreComponent } from '@app/base';
+import { FormControl, FormGroup } from '@app/base/forms';
 
 import { RoutingHelper } from '@app/base/helpers';
 import { forkJoin } from 'rxjs';
@@ -47,39 +48,37 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
   ngOnInit(): void {
     forkJoin([
       this.serviceUsersService.getUserFullInfo(this.user.id),
-    this.serviceUsersService.getLockUserRules(this.user.id)]).subscribe(
-      ([userInfo, response]) => {
-        this.setPageStatus('READY');
-        if (userInfo.type === 'INNOVATOR')
-        {
-          this.userType = this.stores.authentication.getRoleDescription(userInfo.type);
-          this.pageType = 'LOCK_USER';
-        }
-        else
-        {
-          this.pageType = 'RULES';
-          this.rulesList = response;
-          if (userInfo.type === 'ACCESSOR' && userInfo.userOrganisations.length > 0) {
-            this.userType = this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role);
+      this.serviceUsersService.getLockUserRules(this.user.id)]).subscribe(
+        ([userInfo, response]) => {
+          this.setPageStatus('READY');
+          if (userInfo.type === 'INNOVATOR') {
+            this.userType = this.stores.authentication.getRoleDescription(userInfo.type);
+            this.pageType = 'LOCK_USER';
           }
           else {
-            this.userType = this.stores.authentication.getRoleDescription(userInfo.type);
+            this.pageType = 'RULES';
+            this.rulesList = response;
+            if (userInfo.type === 'ACCESSOR' && userInfo.userOrganisations.length > 0) {
+              this.userType = this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role);
+            }
+            else {
+              this.userType = this.stores.authentication.getRoleDescription(userInfo.type);
+            }
           }
+        },
+        () => {
+          this.setPageStatus('ERROR');
+          this.alert = {
+            type: 'ERROR',
+            title: 'Unable to fetch the necessary information',
+            message: 'Please try again or contact us for further help'
+          };
         }
-      },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch the necessary information',
-          message: 'Please try again or contact us for further help'
-        };
-      }
-    );
+      );
 
   }
 
-  nextStep(): void{
+  nextStep(): void {
     this.pageType = 'LOCK_USER';
   }
 

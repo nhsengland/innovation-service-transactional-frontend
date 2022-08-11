@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Validators } from '@angular/forms';
 
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { CustomValidators } from '@modules/shared/forms';
+import { CoreComponent } from '@app/base';
+import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
 
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 

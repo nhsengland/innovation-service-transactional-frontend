@@ -10,7 +10,7 @@ import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageOrganisationsListComponent } from './organisations-list.component';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
 
 
 describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponent', () => {
@@ -48,10 +48,10 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponen
 
   it('should have initial information loaded with payload 01 (Organisations with NO organisations units)', () => {
 
-    organisationsService.getOrganisationsListWithUnits = () => of([{ id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [] }]);
+    organisationsService.getOrganisationsList = () => of([{ id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true, organisationUnits: [] }]);
 
     const expected = {
-      info: { id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [] },
+      info: { id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true, organisationUnits: [] },
       showHideStatus: 'closed',
       showHideText: null,
       showHideDescription: 'that belong to the Org name'
@@ -68,20 +68,20 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponen
 
   it('should have initial information loaded with payload 02 (Organisations with MORE THAN ONE organisation unit)', () => {
 
-    organisationsService.getOrganisationsListWithUnits = () => of([{
-      id: 'orgId', name: 'Org name', acronym: 'ORG',
+    organisationsService.getOrganisationsList = () => of([{
+      id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true,
       organisationUnits: [
-        { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01' },
-        { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02' }
+        { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', isActive: true },
+        { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02', isActive: true }
       ]
     }]);
 
     const expected = {
       info: {
-        id: 'orgId', name: 'Org name', acronym: 'ORG',
+        id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true,
         organisationUnits: [
-          { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01' },
-          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02' }
+          { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', isActive: true },
+          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02', isActive: true }
         ]
       },
       showHideStatus: 'closed',
@@ -100,13 +100,13 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponen
 
   it('should have initial information loaded with payload 03 (Organisations with ONE organisation unit)', () => {
 
-    organisationsService.getOrganisationsListWithUnits = () => of([{
-      id: 'orgId', name: 'Org name', acronym: 'ORG',
-      organisationUnits: [{ id: 'orgUnitId', name: 'Org Unit name', acronym: 'ORGu' }]
+    organisationsService.getOrganisationsList = () => of([{
+      id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true,
+      organisationUnits: [{ id: 'orgUnitId', name: 'Org Unit name', acronym: 'ORGu', isActive: true }]
     }]);
 
     const expected = {
-      info: { id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [] },
+      info: { id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true, organisationUnits: [] },
       showHideStatus: 'hidden',
       showHideText: null,
       showHideDescription: null
@@ -123,7 +123,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponen
 
   it('should NOT load initial data', () => {
 
-    organisationsService.getOrganisationsListWithUnits = () => throwError(false);
+    organisationsService.getOrganisationsList = () => throwError(false);
 
     const expected = {
       type: 'ERROR',
@@ -145,7 +145,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponen
     component = fixture.componentInstance;
     component.organisations = [{
       info: {
-        id: 'orgId', name: 'Org name', acronym: 'ORG',
+        id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true,
         organisationUnits: []
       },
       showHideStatus: 'opened',
@@ -164,7 +164,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponen
     component = fixture.componentInstance;
     component.organisations = [{
       info: {
-        id: 'orgId', name: 'Org name', acronym: 'ORG',
+        id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true,
         organisationUnits: []
       },
       showHideStatus: 'opened',
@@ -183,7 +183,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponen
     component = fixture.componentInstance;
     component.organisations = [{
       info: {
-        id: 'orgId', name: 'Org name', acronym: 'ORG',
+        id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true,
         organisationUnits: []
       },
       showHideStatus: 'closed',

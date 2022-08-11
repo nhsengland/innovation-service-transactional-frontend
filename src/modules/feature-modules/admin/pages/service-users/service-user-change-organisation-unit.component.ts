@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CoreComponent } from '@app/base';
+import { FormControl, FormGroup } from '@app/base/forms';
 import { RoutingHelper } from '@app/base/helpers';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';

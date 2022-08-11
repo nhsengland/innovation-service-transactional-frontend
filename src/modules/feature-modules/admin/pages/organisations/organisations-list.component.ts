@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
 
 @Component({
   selector: 'app-admin-pages-organisations-organisations-list',
@@ -14,10 +14,12 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
       id: string;
       name: string;
       acronym: string;
+      isActive: boolean;
       organisationUnits: {
         id: string;
         name: string;
         acronym: string;
+        isActive: boolean;
       }[];
     };
     showHideStatus: 'hidden' | 'opened' | 'closed';
@@ -36,7 +38,7 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    this.organisationsService.getOrganisationsListWithUnits().subscribe(organisationUnits => {
+    this.organisationsService.getOrganisationsList({ onlyActive: false }).subscribe(organisationUnits => {
 
       this.organisations = organisationUnits.map(organisation => {
 
@@ -46,6 +48,7 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
               id: organisation.id,
               name: organisation.name,
               acronym: organisation.acronym,
+              isActive: organisation.isActive,
               organisationUnits: [],
             },
             showHideStatus: 'hidden',
@@ -58,9 +61,8 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
               id: organisation.id,
               name: organisation.name,
               acronym: organisation.acronym,
-              organisationUnits: organisation.organisationUnits.map(org => ({
-                ...org,
-              }))
+              isActive: organisation.isActive,
+              organisationUnits: organisation.organisationUnits
             },
             showHideStatus: 'closed',
             showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
