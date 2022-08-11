@@ -10,6 +10,14 @@ import { AccessorOrganisationRoleEnum } from '@modules/stores/authentication/aut
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
+export type GetOrganisationsListDTO = {
+  id: string;
+  name: string;
+  acronym: string;
+  isActive: boolean;
+  organisationUnits: { id: string; name: string; acronym: string; isActive: boolean }[];
+};
+
 export type GetOrganisationInfoDTO = {
   id: string;
   name: string;
@@ -80,6 +88,25 @@ export class OrganisationsService extends CoreService {
 
   constructor() { super(); }
 
+  getOrganisationsList(filters: { onlyActive: boolean }): Observable<GetOrganisationsListDTO[]> {
+
+    // const url = new UrlModel(this.API_URL).addPath('organisation-units'); // user-admin/organisations only active
+    // return this.http.get<GetOrganisationsListDTO[]>(url.buildUrl()).pipe(take(1),
+    //   map(item => item.map(response => ({
+    //     id: response.id, name: response.name, acronym: response.acronym, isActive: true,
+    //     organisationUnits: response.organisationUnits.map(item => ({
+    //       id: item.id, name: item.name, acronym: item.acronym, isActive: false
+    //     }))
+    //   }))
+    //   ));
+
+    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations').setQueryParams(filters);
+    return this.http.get<GetOrganisationsListDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
 
   getOrganisationInfo(organisationId: string): Observable<GetOrganisationInfoDTO> {
 
@@ -98,7 +125,7 @@ export class OrganisationsService extends CoreService {
       map(response => ({
         id: response.id, name: response.name, acronym: response.acronym, isActive: response.isActive,
         organisationUnits: response.organisationUnits.map(item => ({
-          id: item.id, name: item.name, acronym: item.acronym, isActive: true, userCount: item.userCount
+          id: item.id, name: item.name, acronym: item.acronym, isActive: item.isActive, userCount: item.userCount
         }))
       }))
     );

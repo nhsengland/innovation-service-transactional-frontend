@@ -14,16 +14,18 @@
       <div class="nhsuk-u-padding-bottom-5">
 
         <div class="d-flex nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
-          <div class=""> Organisation </div>
-          <div class=""> Acronym</div>
+          <div> Organisation </div>
+          <div> Acronym</div>
         </div>
 
         <dl class="nhsuk-u-margin-0">
           <ng-container *ngFor="let organisation of organisations">
 
             <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'bottom-border-separator': organisation.showHideStatus !== 'opened'}">
-              <dt class="nhsuk-u-font-weight-normal mr-auto"> {{ organisation.info.name }} </dt>
-              <dd class="width-20 nhsuk-u-margin-0"> ({{ organisation.info.acronym }}) </dd>
+              <dt class="nhsuk-u-font-weight-normal mr-auto"> {{ organisation.info.name }} ({{ organisation.info.acronym }})</dt>
+              <dd class="width-20 nhsuk-u-margin-0">
+                <theme-tag type="{{ organisation.info.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ organisation.info.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+              </dd>
               <dd class="width-20 nhsuk-u-margin-0">
                 <ul class="nhsuk-list text-align-right nhsuk-u-margin-0">
                   <li>
@@ -42,8 +44,10 @@
               <dl class="nhsuk-u-margin-0">
                 <div *ngFor="let organisationUnit of organisation.info.organisationUnits; let i = index;" class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
                   <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'top-border-separator': i === 0}">
-                    <dt class="">{{ organisationUnit.name }}</dt>
-                    <dd class="nhsuk-u-margin-0">{{ organisationUnit.acronym }}</dd>
+                    <dt class="">{{ organisationUnit.name }} ({{ organisationUnit.acronym }})</dt>
+                    <dd>
+                      <theme-tag type="{{ organisationUnit.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ organisationUnit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+                    </dd>
                   </div>
                 </div>
               </dl>

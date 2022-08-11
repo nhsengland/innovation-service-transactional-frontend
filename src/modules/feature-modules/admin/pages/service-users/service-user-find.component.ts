@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
+import { CoreComponent } from '@app/base';
+import { FormControl, FormGroup } from '@app/base/forms';
 import { LinkType } from '@app/base/types';
 
 import { searchUserEndpointOutDTO, ServiceUsersService } from '../../services/service-users.service';

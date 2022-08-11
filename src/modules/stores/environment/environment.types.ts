@@ -15,5 +15,5 @@ export type EnvironmentInnovationType = {
     id: string;
     status: InnovationSupportStatusEnum;
   },
-  notifications?: { [key in NotificationContextTypeEnum]: number };
+  notifications?: { [key in NotificationContextTypeEnum]?: number };
 };

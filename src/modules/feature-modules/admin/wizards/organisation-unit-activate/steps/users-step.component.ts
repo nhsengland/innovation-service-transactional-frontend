@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { CoreComponent, FormArray, FormControl, FormGroup } from '@app/base';
+import { CoreComponent } from '@app/base';
+import { CustomValidators, FormArray, FormControl, FormGroup, FormEngineHelper } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
-import { CustomValidators, FormEngineHelper } from '@app/base/forms';
 import { MappedObjectType, WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 
 import { UsersStepInputType, UsersStepOutputType } from './users-step.types';

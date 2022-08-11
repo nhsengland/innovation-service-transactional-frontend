@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { FormEngineParameterModel, CustomValidators } from '@app/base/forms';
+import { CoreComponent } from '@app/base';
+import { CustomValidators, FormControl, FormGroup, FormEngineParameterModel } from '@app/base/forms';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { CustomValidators } from '@app/base/forms';
+import { CoreComponent } from '@app/base';
+import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 

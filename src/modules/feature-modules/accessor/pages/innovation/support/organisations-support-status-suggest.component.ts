@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
-import { CoreComponent, FormArray, FormControl, FormGroup } from '@app/base';
+import { CoreComponent } from '@app/base';
+import { CustomValidators, FormArray, FormControl, FormGroup, FormEngineParameterModel } from '@app/base/forms';
 import { RoutingHelper } from '@app/base/helpers';
-
-import { CustomValidators, FormEngineParameterModel } from '@modules/shared/forms';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { AccessorService, SupportLogType } from '../../../services/accessor.service';

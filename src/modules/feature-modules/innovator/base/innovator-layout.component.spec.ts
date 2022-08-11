@@ -14,6 +14,8 @@ import { StoresModule, AuthenticationStore, EnvironmentStore } from '@modules/st
 import { InnovatorModule } from '../innovator.module';
 
 import { InnovatorLayoutComponent } from './innovator-layout.component';
+import { NotificationContextTypeEnum } from '@app/base/enums';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 
 describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
@@ -121,10 +123,10 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
     activatedRoute.snapshot.data = { layoutOptions: { type: 'userAccountMenu' } };
 
     const expected = [
-      { key: 'YourDetails', title: 'Your details', link: `/innovator/account/manage-details` },
-      { key: 'EmailNotifications', title: 'Email notifications', link: `/innovator/account/email-notifications` },
-      { key: 'ManageInnovations', title: 'Manage innovations', link: `/innovator/account/manage-innovations` },
-      { key: 'ManageAccount', title: 'Manage account', link: `/innovator/account/manage-account` }
+      { title: 'Your details', link: `/innovator/account/manage-details` },
+      { title: 'Email notifications', link: `/innovator/account/email-notifications` },
+      { title: 'Manage innovations', link: `/innovator/account/manage-innovations` },
+      { title: 'Manage account', link: `/innovator/account/manage-account` }
     ];
 
     fixture = TestBed.createComponent(InnovatorLayoutComponent);
@@ -141,13 +143,13 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
     activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' } };
 
     const expected = [
-      { key: 'Overview', title: 'Overview', link: `/innovator/innovations/innovation01/overview` },
-      { key: 'InnovationRecord', title: 'Innovation record', link: `/innovator/innovations/innovation01/record` },
-      { key: 'Action', title: 'Action tracker', link: `/innovator/innovations/innovation01/action-tracker` },
-      { key: 'Comment', title: 'Comments', link: `/innovator/innovations/innovation01/comments` },
-      { key: 'Messages', title: 'Messages', link: `/innovator/innovations/innovation01/threads` },
-      { key: 'DataSharingAndSupport', title: 'Data sharing and support', link: `/innovator/innovations/innovation01/support` },
-      { key: 'ActivityLog', title: 'Activity log', link: `/innovator/innovations/innovation01/activity-log` }
+      { title: 'Overview', link: `/innovator/innovations/innovation01/overview` },
+      { title: 'Innovation record', link: `/innovator/innovations/innovation01/record` },
+      { title: 'Action tracker', link: `/innovator/innovations/innovation01/action-tracker`, notificationKey: NotificationContextTypeEnum.ACTION },
+      { title: 'Comments', link: `/innovator/innovations/innovation01/comments`, notificationKey: NotificationContextTypeEnum.COMMENT },
+      { title: 'Messages', link: `/innovator/innovations/innovation01/threads` },
+      { title: 'Data sharing and support', link: `/innovator/innovations/innovation01/support` },
+      { title: 'Activity log', link: `/innovator/innovations/innovation01/activity-log` }
     ];
 
     fixture = TestBed.createComponent(InnovatorLayoutComponent);

@@ -3,6 +3,7 @@ import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
+import { NotificationContextTypeEnum } from '@app/base/enums';
 import { HeaderNavigationBarItemType } from '@app/base/types';
 
 import { RoutingHelper } from '@app/base/helpers';
@@ -30,7 +31,7 @@ export class InnovatorLayoutComponent extends CoreComponent {
   } = { leftItems: [], rightItems: [], notifications: { notifications: 0 } };
 
   innovationHeaderBar: { id: string | null, name: string | null } = { id: null, name: null };
-  leftSideBar: { key: string, title: string, link: string, notifications?: number }[] = [];
+  leftSideBar: { title: string, link: string, notificationKey?: string, notifications?: number }[] = [];
 
 
   constructor(
@@ -49,7 +50,7 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
       this.stores.environment.innovation$().subscribe(e => {
         Object.entries(e?.notifications || {}).forEach(([key, value]) => {
-          const leftSideMenu = this.leftSideBar.find(item => item.key === key);
+          const leftSideMenu = this.leftSideBar.find(item => item.notificationKey === key);
           if (leftSideMenu) { leftSideMenu.notifications = value; }
         });
       })
@@ -94,22 +95,22 @@ export class InnovatorLayoutComponent extends CoreComponent {
 
       case 'userAccountMenu':
         this.leftSideBar = [
-          { key: 'YourDetails', title: 'Your details', link: `/innovator/account/manage-details` },
-          { key: 'EmailNotifications', title: 'Email notifications', link: `/innovator/account/email-notifications` },
-          { key: 'ManageInnovations', title: 'Manage innovations', link: `/innovator/account/manage-innovations` },
-          { key: 'ManageAccount', title: 'Manage account', link: `/innovator/account/manage-account` }
+          { title: 'Your details', link: `/innovator/account/manage-details` },
+          { title: 'Email notifications', link: `/innovator/account/email-notifications` },
+          { title: 'Manage innovations', link: `/innovator/account/manage-innovations` },
+          { title: 'Manage account', link: `/innovator/account/manage-account` }
         ];
         break;
 
       case 'innovationLeftAsideMenu':
         this.leftSideBar = [
-          { key: 'Overview', title: 'Overview', link: `/innovator/innovations/${currentRouteInnovationId}/overview` },
-          { key: 'InnovationRecord', title: 'Innovation record', link: `/innovator/innovations/${currentRouteInnovationId}/record` },
-          { key: 'Action', title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker` },
-          { key: 'Comment', title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments` },
-          { key: 'Messages', title: 'Messages', link: `/innovator/innovations/${currentRouteInnovationId}/threads` },
-          { key: 'DataSharingAndSupport', title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/support` },
-          { key: 'ActivityLog', title: 'Activity log', link: `/innovator/innovations/${currentRouteInnovationId}/activity-log` }
+          { title: 'Overview', link: `/innovator/innovations/${currentRouteInnovationId}/overview` },
+          { title: 'Innovation record', link: `/innovator/innovations/${currentRouteInnovationId}/record` },
+          { title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker`, notificationKey: NotificationContextTypeEnum.ACTION },
+          { title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments`, notificationKey: NotificationContextTypeEnum.COMMENT },
+          { title: 'Messages', link: `/innovator/innovations/${currentRouteInnovationId}/threads` },
+          { title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/support` },
+          { title: 'Activity log', link: `/innovator/innovations/${currentRouteInnovationId}/activity-log` }
         ];
         this.stores.environment.updateInnovationNotifications();
         break;

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 
-import { CoreComponent, FormArray, FormControl, FormGroup } from '@app/base';
+import { CoreComponent } from '@app/base';
+import { FormArray, FormControl, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
 import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';

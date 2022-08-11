@@ -30,7 +30,7 @@ export class OrganisationsService extends CoreService {
 
   getOrganisationsListWithUnits(): Observable<getOrganisationUnitsDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('organisation-units');
+    const url = new UrlModel(this.API_URL).addPath('organisation-units'); // user-admin/organisations only active
     return this.http.get<getOrganisationUnitsDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response)

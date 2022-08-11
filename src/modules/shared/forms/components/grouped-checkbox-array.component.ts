@@ -25,7 +25,15 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
     this.filteredGI = (value || []).map(groupItem => {
       if (groupItem.items.length === 1) {
         return {
-          gItem: { ...groupItem.items[0], ...{ items: [] } },
+          gItem: {
+            // TODO:
+            // When there's only one child, this is overriding the parente with the child information.
+            // It's NOT this component responsibility to do this!
+            // Change this behavior when possible.
+            ...groupItem.items[0],
+            label: groupItem.label,
+            items: []
+          },
           showHideStatus: 'hidden',
           showHideText: null,
           showHideDescription: null,
