@@ -127,7 +127,9 @@
               </tbody>
             </table>
 
-            <pagination [currentPage]="notificationsList.page" [pageSize]="notificationsList.pageSize" [totalRows]="notificationsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
+            <div class="nhsuk-u-padding-bottom-4">
+              <theme-pagination [currentPage]="notificationsList.page" [pageSize]="notificationsList.pageSize" [totalRows]="notificationsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+            </div>
 
           </ng-container>
 

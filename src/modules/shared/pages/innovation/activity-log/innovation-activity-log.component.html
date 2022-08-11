@@ -153,7 +153,9 @@
 
             </div>
 
-            <pagination [currentPage]="activitiesList.page" [pageSize]="activitiesList.pageSize" [totalRows]="activitiesList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
+            <div class="nhsuk-u-padding-bottom-4">
+              <theme-pagination [currentPage]="activitiesList.page" [pageSize]="activitiesList.pageSize" [totalRows]="activitiesList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+            </div>
 
           </ng-container>
 

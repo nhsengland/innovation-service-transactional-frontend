@@ -209,14 +209,14 @@ export const locale = {
             SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}"` }
           },
           support_status: {
-            ENGAGING: { name: 'Engaging' },
-            FURTHER_INFO_REQUIRED: { name: 'Further info required' },
-            WAITING: { name: 'Waiting' },
-            NOT_YET: { name: 'Not yet' },
-            UNASSIGNED: { name: 'Unassigned' },
-            UNSUITABLE: { name: 'Unsuitable' },
-            WITHDRAWN: { name: 'Withdrawn' },
-            COMPLETE: { name: 'Complete' }
+            ENGAGING: { name: 'Engaging', cssColorClass: 'nhsuk-tag--green' },
+            FURTHER_INFO_REQUIRED: { name: 'Further info', cssColorClass: 'nhsuk-tag--white' },
+            WAITING: { name: 'Waiting', cssColorClass: 'nhsuk-tag--yellow' },
+            NOT_YET: { name: 'Not yet', cssColorClass: 'nhsuk-tag--blue' },
+            UNASSIGNED: { name: 'Unassigned', cssColorClass: 'nhsuk-tag--red' },
+            UNSUITABLE: { name: 'Unsuitable', cssColorClass: 'nhsuk-tag--red' },
+            WITHDRAWN: { name: 'Withdrawn', cssColorClass: 'nhsuk-tag--red' },
+            COMPLETE: { name: 'Completed', cssColorClass: 'nhsuk-tag--dark-grey' }
           }
         },
         user: {

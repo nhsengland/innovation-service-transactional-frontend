@@ -4,12 +4,11 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } 
 @Component({
   selector: 'theme-tag',
   templateUrl: './tag.component.html',
-  styleUrls: ['./tag.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TagComponent implements OnInit {
 
-  @Input() type: null | string = null;
+  @Input() type: null | string = null; // This accepts a specific type, or the CSS class.
   @Input() label = '';
 
   cssClass = '';
@@ -33,11 +32,12 @@ export class TagComponent implements OnInit {
         this.cssClass = 'nhsuk-tag--red'; break;
       case 'NEUTRAL':
         this.cssClass = 'nhsuk-tag--grey'; break;
+      case 'STRONG_NEUTRAL':
+        this.cssClass = 'nhsuk-tag--dark-grey'; break;
       case 'WHITE':
         this.cssClass = 'nhsuk-tag--white'; break;
       default:
-        this.cssClass = ''; break; // Default is blue.
-        break;
+        this.cssClass = this.type || ''; break; // Default is blue.
     }
 
     this.cdr.detectChanges();

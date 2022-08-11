@@ -24,9 +24,9 @@ import { PageInnovationActivityLogComponent } from './pages/innovation/activity-
 import { PageInnovationCommentsEditComponent } from './pages/innovation/comments/comments-edit.component';
 import { PageInnovationCommentsListComponent } from './pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from './pages/innovation/comments/comments-new.component';
-import { PageInnovationMessagesEditComponent } from './pages/innovation/messages/messages-edit.component';
-import { PageInnovationMessagesNewComponent } from './pages/innovation/messages/messages-new.component';
+import { PageInnovationThreadMessageEditComponent } from './pages/innovation/messages/thread-message-edit.component';
 import { PageInnovationThreadMessagesListComponent } from './pages/innovation/messages/thread-messages-list.component';
+import { PageInnovationThreadNewComponent } from './pages/innovation/messages/thread-new.component';
 import { PageInnovationThreadsListComponent } from './pages/innovation/messages/threads-list.component';
 import { PageInnovationRecordComponent } from './pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionInfoComponent } from './pages/innovation/sections/section-info.component';
@@ -77,9 +77,9 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     PageInnovationCommentsEditComponent,
     PageInnovationCommentsListComponent,
     PageInnovationCommentsNewComponent,
-    PageInnovationMessagesEditComponent,
-    PageInnovationMessagesNewComponent,
+    PageInnovationThreadMessageEditComponent,
     PageInnovationThreadMessagesListComponent,
+    PageInnovationThreadNewComponent,
     PageInnovationThreadsListComponent,
     PageInnovationRecordComponent,
     PageInnovationSectionInfoComponent,

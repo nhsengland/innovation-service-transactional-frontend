@@ -16,10 +16,7 @@
     <dl class="nhsuk-summary-list">
       <div *ngFor="let item of data.summary" class="nhsuk-summary-list__row">
         <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-        <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
-        <!-- <dd class="nhsuk-summary-list__actions">
-          <a href="javascript:void(0)" (click)="onGotoStep(item.editStepNumber || 1)"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
-        </dd> -->
+        <dd *ngIf="item.value" class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
       </div>
     </dl>
 

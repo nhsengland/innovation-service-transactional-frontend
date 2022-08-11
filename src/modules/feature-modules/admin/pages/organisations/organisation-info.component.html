@@ -114,7 +114,7 @@
                     <a routerLink="unit/{{ unit.id }}/edit"> Change <span class="nhsuk-u-visually-hidden"> {{ unit.name | lowercase }} information</span></a>
                   </li>
                   <li>
-                    <a routerLink="unit/{{ unit.id }}/{{ unit.isActive ? 'inactivate' : 'activate' }}" class="nhsuk-button nhsuk-u-margin-0"> {{ unit.isActive ? 'Inactivate' : 'Activate' }} </a>
+                    <a routerLink="unit/{{ unit.id }}/{{ unit.isActive ? 'inactivate' : 'activate' }}"> {{ unit.isActive ? 'Inactivate' : 'Activate' }} unit</a>
                   </li>
                   <li *ngIf="unit.userCount > 0">
                     <a href="javascript:void(0)" (click)="onShowHideClicked(unit.id)">{{ unit.showHideText }}<span class="nhsuk-u-visually-hidden">{{ unit.showHideDescription }}</span></a>

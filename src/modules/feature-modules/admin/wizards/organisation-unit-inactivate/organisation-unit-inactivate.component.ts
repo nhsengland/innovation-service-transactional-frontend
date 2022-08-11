@@ -97,7 +97,7 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
                 submitButton: { label: '', active: true }
               },
               outputs: {
-                previousStepEvent: data => this.onPreviousStep(data, this.onSummaryStepOut, this.onInnovationsStepIn),
+                previousStepEvent: data => this.onPreviousStep(data, this.onInnovationsStepIn),
                 submitEvent: data => this.onSubmit(data)
               }
             })
@@ -171,14 +171,13 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
   onSummaryStepIn(): void {
     this.wizard.setStepData<SummaryWithConfirmStepInputType>('summaryStep', {
       summary: [
-        { label: 'Users locked', value: this.wizard.data.usersStep.count.toString() },
-        { label: 'Innovations inactivated', value: this.wizard.data.innovationsStep.count.toString() }
+        { label: `${this.wizard.data.usersStep.count.toString()} users will be locked` },
+        { label: `${this.wizard.data.innovationsStep.count.toString()} innovations supports will be completed` }
       ],
-      confirmCheckbox: { label: 'I understand that if this is the only unit attached to my organisation, when this unit is inactivated, the organisation will also be inactivated and both will not be seen on the Innovation Service platform' },
+      confirmCheckbox: { label: 'I understand that this is the only unit attached to my organisation, when this unit is inactivated, the organisation will also be inactivated and both will not be seen on the Innovation Service platform' },
       submitButton: { label: 'Confirm inactivation', active: true }
     });
   }
-  onSummaryStepOut(stepData: WizardStepEventType<SummaryWithConfirmStepOutputType>): void { }
 
 
   onSubmit(stepData: WizardStepEventType<SummaryWithConfirmStepOutputType>): void {

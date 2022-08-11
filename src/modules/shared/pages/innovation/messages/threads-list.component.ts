@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
@@ -14,7 +15,7 @@ import { GetThreadsListDTO, InnovationsService } from '@modules/shared/services/
 })
 export class PageInnovationThreadsListComponent extends CoreComponent implements OnInit {
 
-  selfUser: { id: string, urlBasePath: string };
+  selfUser: { id: string };
   innovation: EnvironmentInnovationType;
   tableList = new TableModel<GetThreadsListDTO['threads'][0]>();
 
@@ -25,47 +26,32 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
 
     super();
     this.setPageTitle('Messages');
 
-    this.selfUser = {
-      id: this.stores.authentication.getUserId(),
-      urlBasePath: this.stores.authentication.userUrlBasePath()
-    };
+    this.selfUser = { id: this.stores.authentication.getUserId() };
 
     this.innovation = this.stores.environment.getInnovation();
 
-    // switch (this.activatedRoute.snapshot.queryParams.alert) {
-    //   case 'commentCreationSuccess':
-    //     this.alert = {
-    //       type: 'SUCCESS',
-    //       title: 'You have successfully created a comment',
-    //       message: 'Everyone who is currently engaging with your innovation will be notified.'
-    //     };
-    //     break;
-    //   case 'commentEditSuccess':
-    //     this.alert = {
-    //       type: 'SUCCESS',
-    //       title: 'You have successfully updated a comment',
-    //       message: 'Everyone who is currently engaging with your innovation will be notified.'
-    //     };
-    //     break;
-    //   default:
-    //     break;
-    // }
+    switch (this.activatedRoute.snapshot.queryParams.alert) {
+      case 'threadCreationSuccess':
+        this.setAlertSuccess('You have successfully created a new conversation');
+        break;
+      default:
+        break;
+    }
 
   }
-
-
 
 
   ngOnInit(): void {
 
     this.tableList.setVisibleColumns({
-      subject: { label: 'Subject', orderable: false },
+      subject: { label: 'Subject', orderable: true },
       repliesNumber: { label: 'Nº messages', orderable: true },
       createdAt: { label: 'Received at', align: 'right', orderable: true }
     }).setOrderBy('createdAt', 'descending');

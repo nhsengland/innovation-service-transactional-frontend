@@ -37,9 +37,9 @@ import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innova
 import { PageInnovationCommentsEditComponent } from '@modules/shared/pages/innovation/comments/comments-edit.component';
 import { PageInnovationCommentsListComponent } from '@modules/shared/pages/innovation/comments/comments-list.component';
 import { PageInnovationCommentsNewComponent } from '@modules/shared/pages/innovation/comments/comments-new.component';
-import { PageInnovationMessagesEditComponent } from '@modules/shared/pages/innovation/messages/messages-edit.component';
-import { PageInnovationMessagesNewComponent } from '@modules/shared/pages/innovation/messages/messages-new.component';
+import { PageInnovationThreadMessageEditComponent } from '@modules/shared/pages/innovation/messages/thread-message-edit.component';
 import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages/innovation/messages/thread-messages-list.component';
+import { PageInnovationThreadNewComponent } from '@modules/shared/pages/innovation/messages/thread-new.component';
 import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innovation/messages/threads-list.component';
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
@@ -179,24 +179,24 @@ const routes: Routes = [
               },
               {
                 path: 'threads',
-                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } },
+                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: 'innovations', label: 'Innovations' } } },
                 children: [
                   { path: '', pathMatch: 'full', component: PageInnovationThreadsListComponent },
                   {
-                    path: 'new', pathMatch: 'full', component: PageInnovationMessagesNewComponent,
-                    data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/threads', label: 'Go back' } } }
+                    path: 'new', pathMatch: 'full', component: PageInnovationThreadNewComponent,
+                    data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/threads', label: 'Go back' } } }
                   },
                   {
                     path: ':threadId',
                     children: [
                       {
                         path: '', pathMatch: 'full', component: PageInnovationThreadMessagesListComponent,
-                        data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/threads', label: 'Back to messages' } } }
+                        data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/threads', label: 'Back to messages' } } }
                       },
-                      // {
-                      //   path: ':commentId/replies/:replyId', pathMatch: 'full', component: PageInnovationCommentsEditComponent,
-                      //   data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/comments', label: 'Go back' } }, subModule: 'reply' }
-                      // }
+                      {
+                        path: 'messages/:messageId', pathMatch: 'full', component: PageInnovationThreadMessageEditComponent,
+                        data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: 'innovations/:innovationId/threads/:threadId', label: 'Go back' } } }
+                      }
                     ]
                   }
                 ]

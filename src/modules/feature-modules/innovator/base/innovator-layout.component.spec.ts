@@ -145,6 +145,7 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
       { key: 'InnovationRecord', title: 'Innovation record', link: `/innovator/innovations/innovation01/record` },
       { key: 'Action', title: 'Action tracker', link: `/innovator/innovations/innovation01/action-tracker` },
       { key: 'Comment', title: 'Comments', link: `/innovator/innovations/innovation01/comments` },
+      { key: 'Messages', title: 'Messages', link: `/innovator/innovations/innovation01/threads` },
       { key: 'DataSharingAndSupport', title: 'Data sharing and support', link: `/innovator/innovations/innovation01/support` },
       { key: 'ActivityLog', title: 'Activity log', link: `/innovator/innovations/innovation01/activity-log` }
     ];

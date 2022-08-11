@@ -1,0 +1,32 @@
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+
+    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+      <p> {{ alert.message }} </p>
+    </theme-alert>
+
+    <h1 class="nhsuk-u-margin-bottom-3"> {{ pageTitle }} </h1>
+
+  </div>
+</div>
+
+<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+<ng-container *ngIf="pageStatus === 'READY'">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <theme-form-textarea controlName="message" label="Edit your message" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3">Update message</button>
+      </form>
+
+      <div class="nhsuk-u-padding-bottom-5">
+        <a routerLink="../..">Cancel</a>
+      </div>
+
+    </div>
+  </div>
+
+</ng-container>
