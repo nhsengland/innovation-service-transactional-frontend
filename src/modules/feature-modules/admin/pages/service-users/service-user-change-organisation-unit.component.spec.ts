@@ -6,13 +6,14 @@ import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
+import { AccessorOrganisationRoleEnum } from '@app/base/enums';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageServiceUserChangeOrganisationUnitComponent } from './service-user-change-organisation-unit.component';
 
-import { changeUserTypeDTO, getOrganisationUnitRulesOutDTO, orgnisationRole, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { changeUserTypeDTO, getOrganisationUnitRulesOutDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { FormEngineComponent } from '@modules/shared/forms';
 
@@ -60,7 +61,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{id: 'inn1', name: 'innovation'}],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: orgnisationRole.QUALIFYING_ACCESSOR, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: '2' }] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: '2' }] }
       ]
     });
     organisationsService.getOrganisationsListWithUnits = () => of([

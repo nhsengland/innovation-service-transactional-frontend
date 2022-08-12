@@ -6,6 +6,7 @@ import { catchError, map, take } from 'rxjs/operators';
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, MappedObjectType } from '@app/base/types';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
 
 
 export type getUserMinimalInfoDTO = {
@@ -116,12 +117,6 @@ export type lockUserEndpointDTO = {
   status: string;
 };
 
-export enum orgnisationRole {
-  ACCESSOR = 'ACCESSOR',
-  QUALIFYING_ACCESSOR = 'QUALIFYING_ACCESSOR',
-  INNOVATOR_OWNER = 'INNOVATOR_OWNER'
-}
-
 export type searchUserEndpointInDTO = {
   id: string;
   displayName: string;
@@ -144,7 +139,7 @@ export type searchUserEndpointOutDTO = searchUserEndpointInDTO & { typeLabel: st
 
 export type changeUserRoleDTO = {
   userId: string,
-  role: orgnisationRole | null,
+  role: null | InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
   securityConfirmation: {
     id: string,
     code: string

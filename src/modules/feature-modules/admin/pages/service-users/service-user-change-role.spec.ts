@@ -6,13 +6,14 @@ import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
+import { AccessorOrganisationRoleEnum } from '@app/base/enums';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageServiceUserChangeRoleComponent } from './service-user-change-role.component';
 
-import { changeUserTypeDTO, getOrganisationRoleRulesOutDTO, orgnisationRole, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { changeUserTypeDTO, getOrganisationRoleRulesOutDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleComponent', () => {
@@ -86,7 +87,6 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
 
     fixture.detectChanges();
     expect(component.rulesList).toEqual(expected);
-    // expect(component.role).toBe(orgnisationRole.QUALIFYING_ACCESSOR);
 
   });
 
@@ -107,7 +107,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{id: 'inn1', name: 'innovation'}],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: orgnisationRole.QUALIFYING_ACCESSOR, units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [] }
       ]
     });
     serviceUsersService.getUserRoleRules = () => of(responseMock);
@@ -117,7 +117,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
     component = fixture.componentInstance;
 
     fixture.detectChanges();
-    expect(component.role).toBe(orgnisationRole.ACCESSOR);
+    expect(component.role).toBe(AccessorOrganisationRoleEnum.ACCESSOR);
 
   });
 

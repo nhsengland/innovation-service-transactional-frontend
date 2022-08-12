@@ -6,13 +6,14 @@ import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
+import { AccessorOrganisationRoleEnum } from '@app/base/enums';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageServiceUserLockComponent } from './service-user-lock.component';
 
-import { getLockUserRulesOutDTO, lockUserEndpointDTO, ServiceUsersService, orgnisationRole } from '@modules/feature-modules/admin/services/service-users.service';
+import { getLockUserRulesOutDTO, lockUserEndpointDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserLockComponent', () => {
@@ -85,9 +86,9 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserLockComponent',
       phone: '12345',
       type: 'ACCESSOR',
       lockedAt: '2020-01-01T00:00:00.000Z',
-      innovations: [{id: 'inn1', name: 'innovation'}],
+      innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: orgnisationRole.QUALIFYING_ACCESSOR, units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [] }
       ]
     });
 
@@ -129,9 +130,9 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserLockComponent',
       phone: '12345',
       type: 'INNOVATOR',
       lockedAt: '2020-01-01T00:00:00.000Z',
-      innovations: [{id: 'inn1', name: 'innovation'}],
+      innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: orgnisationRole.QUALIFYING_ACCESSOR, units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [] }
       ]
     });
 
@@ -174,7 +175,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserLockComponent',
       phone: '12345',
       type: 'ACCESSOR',
       lockedAt: '2020-01-01T00:00:00.000Z',
-      innovations: [{id: 'inn1', name: 'innovation'}],
+      innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
 
       ]

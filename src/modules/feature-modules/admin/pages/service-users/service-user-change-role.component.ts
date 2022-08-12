@@ -6,7 +6,8 @@ import { CoreComponent } from '@app/base';
 import { FormControl, FormGroup } from '@app/base/forms';
 import { RoutingHelper } from '@app/base/helpers';
 
-import { changeUserRoleDTO, getOrganisationRoleRulesOutDTO, orgnisationRole, ServiceUsersService } from '../../services/service-users.service';
+import { changeUserRoleDTO, getOrganisationRoleRulesOutDTO, ServiceUsersService } from '../../services/service-users.service';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
 
   user: { id: string, name: string };
 
-  role: orgnisationRole | null;
+  role: null | InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum;
 
   roleName: string | null;
 
@@ -55,7 +56,7 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
 
         this.rulesList = rules;
 
-        this.role = (userInfo.userOrganisations.map(org => org.role)[0] === orgnisationRole.QUALIFYING_ACCESSOR) ? orgnisationRole.ACCESSOR : orgnisationRole.QUALIFYING_ACCESSOR;
+        this.role = (userInfo.userOrganisations.map(org => org.role)[0] === AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR) ? AccessorOrganisationRoleEnum.ACCESSOR : AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR;
 
         this.roleName = this.stores.authentication.getRoleDescription(this.role);
 
