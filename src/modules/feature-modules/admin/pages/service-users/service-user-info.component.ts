@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { LinkType } from '@app/base/types';
-
+import { AccessorOrganisationRoleEnum } from '@app/base/enums';
 import { RoutingHelper } from '@app/base/helpers';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { forkJoin } from 'rxjs';
 
-import { ServiceUsersService, orgnisationRole } from '../../services/service-users.service';
+import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 
 @Component({
@@ -90,21 +90,29 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
   ngOnInit(): void {
     forkJoin([
       this.serviceUsersService.getUserFullInfo(this.user.id),
-      this.organisationService.getOrganisationsListWithUnits()
+      this.organisationService.getOrganisationsList({ onlyActive: false })
     ]).subscribe(([response, organisations]) => {
+
       this.userInfoType = response.type;
-      this.titleActions = [
-        {
-          type: 'link',
-          label: !response.lockedAt ? 'Lock user' : 'Unlock user',
-          url: `/admin/service-users/${this.user.id}/${!response.lockedAt ? 'lock' : 'unlock'}`
-        },
-      ];
+
+      const isUserOrganisationUnitActive = organisations
+        .flatMap(org => org.organisationUnits.map(unit => ({ id: unit.id, isActive: unit.isActive })))
+        .find(unit => unit.id === response.userOrganisations[0]?.units[0]?.id)?.isActive;
+
+      if (isUserOrganisationUnitActive || (!isUserOrganisationUnitActive && !response.lockedAt)) {
+        this.titleActions = [
+          {
+            type: 'link',
+            label: !response.lockedAt ? 'Lock user' : 'Unlock user',
+            url: `/admin/service-users/${this.user.id}/${!response.lockedAt ? 'lock' : 'unlock'}`
+          },
+        ];
+      }
 
       if (
         response.userOrganisations.length > 0 &&
-        (response.userOrganisations[0].role === orgnisationRole.ACCESSOR ||
-          response.userOrganisations[0].role === orgnisationRole.QUALIFYING_ACCESSOR) && !response.lockedAt
+        (response.userOrganisations[0].role === AccessorOrganisationRoleEnum.ACCESSOR || response.userOrganisations[0].role === AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR) &&
+        !response.lockedAt
       ) {
         this.titleActions.push({
           type: 'link',
@@ -115,7 +123,7 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
         this.unitLength = organisations.filter(org => (response.userOrganisations[0].id === org.id))[0].organisationUnits.length;
       }
 
-      if (response.type === orgnisationRole.ACCESSOR && response.userOrganisations.length > 0) {
+      if (response.type === AccessorOrganisationRoleEnum.ACCESSOR && response.userOrganisations.length > 0) {
         this.sections.userInfo = [
           { label: 'Name', value: response.displayName },
           { label: 'Type', value: 'Authorised person' },
@@ -145,7 +153,7 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
         }
       }
 
-      if (response.type === orgnisationRole.ACCESSOR) {
+      if (response.type === AccessorOrganisationRoleEnum.ACCESSOR) {
         this.sections.organisation = response.userOrganisations;
       }
 

@@ -13,7 +13,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { PageServiceUserInfoComponent } from './service-user-info.component';
 
 import { getUserFullInfoDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent', () => {
@@ -127,7 +127,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
       phone: null,
       type: 'ACCESSOR',
       lockedAt: null,
-      innovations: [{id: 'inn1', name: 'innovation'}],
+      innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
         { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: 'QUALIFYING_ACCESSOR', units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: '2' }] }
       ]
@@ -135,20 +135,20 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
 
     serviceUsersService.getUserFullInfo = () => of(responseMock);
 
-    organisationsService.getOrganisationsListWithUnits = () => of([
+    organisationsService.getOrganisationsList = () => of([
       {
-        id: 'Org01', name: 'Org name 01', acronym: 'ORG01',
+        id: 'Org01', name: 'Org name 01', acronym: 'ORG01', isActive: true,
         organisationUnits: [
-          { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01' },
-          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02' },
-          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03' }
+          { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', isActive: true },
+          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02', isActive: true },
+          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03', isActive: true }
         ]
       },
       {
-        id: 'Org02', name: 'Org name 02', acronym: 'ORG02',
+        id: 'Org02', name: 'Org name 02', acronym: 'ORG02', isActive: true,
         organisationUnits: [
-          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02' },
-          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03' }
+          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02', isActive: true },
+          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03', isActive: true }
         ]
       }
     ]);
@@ -171,7 +171,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
       phone: '12345',
       type: 'INNOVATOR',
       lockedAt: '2020-01-01T00:00:00.000Z',
-      innovations: [{id: 'inn1', name: 'innovation'}],
+      innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
         { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: 'INNOVATOR_OWNER', units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: '2' }] }
       ]
@@ -179,20 +179,20 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
 
     serviceUsersService.getUserFullInfo = () => of(responseMock);
 
-    organisationsService.getOrganisationsListWithUnits = () => of([
+    organisationsService.getOrganisationsList = () => of([
       {
-        id: 'Org01', name: 'Org name 01', acronym: 'ORG01',
+        id: 'Org01', name: 'Org name 01', acronym: 'ORG01', isActive: true,
         organisationUnits: [
-          { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01' },
-          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02' },
-          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03' }
+          { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', isActive: true },
+          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02', isActive: true },
+          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03', isActive: true }
         ]
       },
       {
-        id: 'Org02', name: 'Org name 02', acronym: 'ORG02',
+        id: 'Org02', name: 'Org name 02', acronym: 'ORG02', isActive: true,
         organisationUnits: [
-          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02' },
-          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03' }
+          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02', isActive: true },
+          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03', isActive: true }
         ]
       }
     ]);
@@ -218,26 +218,26 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
       phone: '12345',
       type: 'INNOVATOR',
       lockedAt: null,
-      innovations: [{id: 'inn1', name: 'innovation'}],
+      innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
         { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: 'INNOVATOR_OWNER', units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: '2' }] }
       ]
     };
     serviceUsersService.getUserFullInfo = () => of(responseMock);
-    organisationsService.getOrganisationsListWithUnits = () => of([
+    organisationsService.getOrganisationsList = () => of([
       {
-        id: 'Org01', name: 'Org name 01', acronym: 'ORG01',
+        id: 'Org01', name: 'Org name 01', acronym: 'ORG01', isActive: true,
         organisationUnits: [
-          { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01' },
-          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02' },
-          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03' }
+          { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', isActive: true },
+          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02', isActive: true },
+          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03', isActive: true }
         ]
       },
       {
-        id: 'Org02', name: 'Org name 02', acronym: 'ORG02',
+        id: 'Org02', name: 'Org name 02', acronym: 'ORG02', isActive: true,
         organisationUnits: [
-          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02' },
-          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03' }
+          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02', isActive: true },
+          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03', isActive: true }
         ]
       }
     ]);
