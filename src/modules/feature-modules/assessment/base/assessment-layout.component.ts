@@ -84,7 +84,7 @@ export class AssessmentLayoutComponent extends CoreComponent {
           { title: 'Overview', link: `/assessment/innovations/${currentRouteInnovationId}/overview` },
           { title: 'Innovation record', link: `/assessment/innovations/${currentRouteInnovationId}/record` },
           { title: 'Comments', link: `/assessment/innovations/${currentRouteInnovationId}/comments` },
-          { title: 'Messages', link: `/assessment/innovations/${currentRouteInnovationId}/threads` }
+          // { title: 'Messages', link: `/assessment/innovations/${currentRouteInnovationId}/threads` }
         ];
         if (innovation?.status === InnovationStatusEnum.IN_PROGRESS) {
           this.leftSideBar.push({ title: 'Support status', link: `/assessment/innovations/${currentRouteInnovationId}/support` });
