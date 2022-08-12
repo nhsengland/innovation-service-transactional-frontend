@@ -117,7 +117,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
       if (item.items.length === 1) {
         chosenUnitsValues.push(item.items[0].value);
-        return { organisation: item.items[0].label, units: [] };
+        return { organisation: item.label, units: [] };
       }
       else {
         chosenUnitsValues = [...chosenUnitsValues, ...units.map(u => u.value)];

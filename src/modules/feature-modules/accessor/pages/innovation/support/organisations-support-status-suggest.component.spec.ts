@@ -197,7 +197,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
     }];
     (component.form.get('organisationUnits') as FormArray)?.push(new FormControl('orgUnitId01'));
 
-    const expected = { list: [{ organisation: 'Org Unit name 01', units: [] }], values: ['orgUnitId01'] };
+    const expected = { list: [{ organisation: 'Org name', units: [] }], values: ['orgUnitId01'] };
 
     component.onSubmitStep();
     expect(component.chosenUnits).toEqual(expected);
