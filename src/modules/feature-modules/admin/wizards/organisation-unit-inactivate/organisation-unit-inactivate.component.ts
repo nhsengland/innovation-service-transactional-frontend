@@ -172,9 +172,9 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
     this.wizard.setStepData<SummaryWithConfirmStepInputType>('summaryStep', {
       summary: [
         { label: `${this.wizard.data.usersStep.count.toString()} users will be locked` },
-        { label: `${this.wizard.data.innovationsStep.count.toString()} innovations supports will be completed` }
+        { label: `${this.wizard.data.innovationsStep.count.toString()} innovation supports will be completed` }
       ],
-      confirmCheckbox: { label: 'I understand that this is the only unit attached to my organisation, when this unit is inactivated, the organisation will also be inactivated and both will not be seen on the Innovation Service platform' },
+      confirmCheckbox: { label: `I understand that when this unit is inactivated, if the organisation has no more units, it will also be inactivated and not be seen on the Innovation Service platform` },
       submitButton: { label: 'Confirm inactivation', active: true }
     });
   }

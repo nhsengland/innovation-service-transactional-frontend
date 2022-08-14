@@ -4,7 +4,7 @@ import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { LinkType } from '@app/base/types';
-import { AccessorOrganisationRoleEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
 import { RoutingHelper } from '@app/base/helpers';
 
 import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
@@ -26,7 +26,6 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
   sections: {
     userInfo: { label: string; value: null | string; }[];
     innovations: string[];
-    // organisation: { label: string; value: null | string; }[];
     organisation: {
       id: string; name: string; role: null | string;
       units: { id: string; name: string; supportCount: null | string; }[];
@@ -95,19 +94,22 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
 
       this.userInfoType = response.type;
 
-      const isUserOrganisationUnitActive = organisations
-        .flatMap(org => org.organisationUnits.map(unit => ({ id: unit.id, isActive: unit.isActive })))
-        .find(unit => unit.id === response.userOrganisations[0]?.units[0]?.id)?.isActive;
+      if (response.type === UserTypeEnum.INNOVATOR) {
 
-      if (isUserOrganisationUnitActive || (!isUserOrganisationUnitActive && !response.lockedAt)) {
-        this.titleActions = [
-          {
-            type: 'link',
-            label: !response.lockedAt ? 'Lock user' : 'Unlock user',
-            url: `/admin/service-users/${this.user.id}/${!response.lockedAt ? 'lock' : 'unlock'}`
-          },
-        ];
+        this.titleActions = [{ type: 'link', label: !response.lockedAt ? 'Lock user' : 'Unlock user', url: `/admin/service-users/${this.user.id}/${!response.lockedAt ? 'lock' : 'unlock'}` }];
+
+      } else {
+
+        const isUserOrganisationUnitActive = organisations
+          .flatMap(org => org.organisationUnits.map(unit => ({ id: unit.id, isActive: unit.isActive })))
+          .find(unit => unit.id === response.userOrganisations[0]?.units[0]?.id)?.isActive;
+
+        if (isUserOrganisationUnitActive || (!isUserOrganisationUnitActive && !response.lockedAt)) {
+          this.titleActions = [{ type: 'link', label: !response.lockedAt ? 'Lock user' : 'Unlock user', url: `/admin/service-users/${this.user.id}/${!response.lockedAt ? 'lock' : 'unlock'}` }];
+        }
+
       }
+
 
       if (
         response.userOrganisations.length > 0 &&
