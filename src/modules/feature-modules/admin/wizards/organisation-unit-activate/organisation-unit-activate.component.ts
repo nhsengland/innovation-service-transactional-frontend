@@ -140,7 +140,7 @@ export class WizardOrganisationUnitActivateComponent extends CoreComponent imple
     this.wizard.setStepData<SummaryWithConfirmStepInputType>('summaryStep', {
       summary: [
         { label: 'Unit', value: this.wizard.data.organisationUnit.name },
-        { label: 'Users', value: this.wizard.data.usersStep.users.map(item => `${item.name} (${item.organisationRole})`).join('\n') }
+        { label: 'Users', value: this.wizard.data.usersStep.users.map(item => `${item.name} (${this.stores.authentication.getRoleDescription(item.organisationRole)})`).join('\n') }
       ],
       confirmCheckbox: { label: 'I confirm that once the organisation unit is activated, it will be seen on the Innovation Service platform' },
       submitButton: { label: 'Confirm activation', active: true }

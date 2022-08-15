@@ -102,7 +102,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     }
   }
 
-  getRoleDescription(role: 'ADMIN' | 'INNOVATOR_OWNER' | 'ASSESSMENT' | 'INNOVATOR' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR'): string {
+  getRoleDescription(role: string): string {
     switch (role) {
       case 'ADMIN': return 'Administrator';
       case 'INNOVATOR_OWNER': return 'Owner';
