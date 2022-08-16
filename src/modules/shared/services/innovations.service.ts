@@ -129,7 +129,7 @@ export class InnovationsService extends CoreService {
 
     const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads')
       .setPathParams({
-        module: this.stores.authentication.userUrlBasePath(),
+        module: this.apiUserBasePath(),
         userId: this.stores.authentication.getUserId(),
         innovationId
       }).setQueryParams(qp);
@@ -152,7 +152,7 @@ export class InnovationsService extends CoreService {
 
     const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId')
       .setPathParams({
-        module: this.stores.authentication.userUrlBasePath(),
+        module: this.apiUserBasePath(),
         userId: this.stores.authentication.getUserId(),
         innovationId,
         threadId
@@ -173,7 +173,7 @@ export class InnovationsService extends CoreService {
 
     const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId/messages/:messageId')
       .setPathParams({
-        module: this.stores.authentication.userUrlBasePath(),
+        module: this.apiUserBasePath(),
         userId: this.stores.authentication.getUserId(),
         innovationId,
         threadId,
@@ -226,7 +226,7 @@ export class InnovationsService extends CoreService {
 
     const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId/messages')
       .setPathParams({
-        module: this.stores.authentication.userUrlBasePath(),
+        module: this.apiUserBasePath(),
         userId: this.stores.authentication.getUserId(),
         innovationId,
         threadId
@@ -251,7 +251,7 @@ export class InnovationsService extends CoreService {
 
     const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads')
       .setPathParams({
-        module: this.stores.authentication.userUrlBasePath(),
+        module: this.apiUserBasePath(),
         userId: this.stores.authentication.getUserId(),
         innovationId
       });
@@ -267,7 +267,7 @@ export class InnovationsService extends CoreService {
 
     const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId')
       .setPathParams({
-        module: this.stores.authentication.userUrlBasePath(),
+        module: this.apiUserBasePath(),
         userId: this.stores.authentication.getUserId(),
         innovationId,
         threadId
@@ -284,7 +284,7 @@ export class InnovationsService extends CoreService {
 
     const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId/messages/:messageId')
       .setPathParams({
-        module: this.stores.authentication.userUrlBasePath(),
+        module: this.apiUserBasePath(),
         userId: this.stores.authentication.getUserId(),
         innovationId,
         threadId,
