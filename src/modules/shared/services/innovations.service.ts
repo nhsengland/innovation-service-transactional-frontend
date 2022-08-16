@@ -89,41 +89,41 @@ export class InnovationsService extends CoreService {
   // Threads and messages methods.
   getThreadsList(innovationId: string, queryParams: APIQueryParamsType<{}>): Observable<GetThreadsListDTO> {
 
-    return of({
-      count: 50,
-      threads: [
-        {
-          id: 'T01', subject: 'Some title 01', repliesNumber: 5,
-          createdAt: '2020-01-01T00:00:00.000Z', createdBy: { id: 'U01', name: 'User 01', type: UserTypeEnum.INNOVATOR },
-          isNew: true,
-          lastMessage: {
-            id: 'LastMessageId',
-            createdAt: '2020-01-01T00:00:00.000Z',
-            createdBy: {
-              id: '',
-              name: 'LM01',
-              type: UserTypeEnum.ASSESSMENT
-            }
-          }
-        },
-        {
-          id: 'T02', subject: 'Some title 02', repliesNumber: 10,
-          createdAt: '2020-01-01T00:00:00.000Z', createdBy: { id: 'U01', name: 'User 02', type: UserTypeEnum.INNOVATOR },
-          isNew: false,
-          lastMessage: {
-            id: 'LastMessageId',
-            createdAt: '2020-01-01T00:00:00.000Z',
-            createdBy: {
-              id: '',
-              name: 'LM02',
-              type: UserTypeEnum.ACCESSOR,
-              organisation: { id: 'sadf', name: 'OrgName', acronym: 'aA' },
-              organisationUnit: { id: 'sdf', name: 'Unit Name', acronym: 'dsa' }
-            }
-          }
-        }
-      ]
-    });
+    // return of({
+    //   count: 50,
+    //   threads: [
+    //     {
+    //       id: 'T01', subject: 'Some title 01', repliesNumber: 5,
+    //       createdAt: '2020-01-01T00:00:00.000Z', createdBy: { id: 'U01', name: 'User 01', type: UserTypeEnum.INNOVATOR },
+    //       isNew: true,
+    //       lastMessage: {
+    //         id: 'LastMessageId',
+    //         createdAt: '2020-01-01T00:00:00.000Z',
+    //         createdBy: {
+    //           id: '',
+    //           name: 'LM01',
+    //           type: UserTypeEnum.ASSESSMENT
+    //         }
+    //       }
+    //     },
+    //     {
+    //       id: 'T02', subject: 'Some title 02', repliesNumber: 10,
+    //       createdAt: '2020-01-01T00:00:00.000Z', createdBy: { id: 'U01', name: 'User 02', type: UserTypeEnum.INNOVATOR },
+    //       isNew: false,
+    //       lastMessage: {
+    //         id: 'LastMessageId',
+    //         createdAt: '2020-01-01T00:00:00.000Z',
+    //         createdBy: {
+    //           id: '',
+    //           name: 'LM02',
+    //           type: UserTypeEnum.ACCESSOR,
+    //           organisation: { id: 'sadf', name: 'OrgName', acronym: 'aA' },
+    //           organisationUnit: { id: 'sdf', name: 'Unit Name', acronym: 'dsa' }
+    //         }
+    //       }
+    //     }
+    //   ]
+    // });
 
     const { filters, ...qp } = queryParams;
 
@@ -145,10 +145,10 @@ export class InnovationsService extends CoreService {
 
   getThreadInfo(innovationId: string, threadId: string): Observable<GetThreadInfoDTO> {
 
-    return of({
-      id: 'T01', subject: 'Some title 01',
-      createdAt: '2020-01-01T00:00:00.000Z', createdBy: { id: '', name: 'LM01', type: UserTypeEnum.ASSESSMENT }
-    });
+    // return of({
+    //   id: 'T01', subject: 'Some title 01',
+    //   createdAt: '2020-01-01T00:00:00.000Z', createdBy: { id: '', name: 'LM01', type: UserTypeEnum.ASSESSMENT }
+    // });
 
     const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId')
       .setPathParams({
@@ -166,10 +166,10 @@ export class InnovationsService extends CoreService {
 
   getThreadMessageInfo(innovationId: string, threadId: string, messageId: string): Observable<GetThreadMessageInfoDTO> {
 
-    return of({
-      id: 'T01', message: 'Some message 01',
-      createdAt: '2020-01-01T00:00:00.000Z'
-    });
+    // return of({
+    //   id: 'T01', message: 'Some message 01',
+    //   createdAt: '2020-01-01T00:00:00.000Z'
+    // });
 
     const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId/messages/:messageId')
       .setPathParams({
@@ -188,39 +188,39 @@ export class InnovationsService extends CoreService {
 
   getThreadMessagesList(innovationId: string, threadId: string, queryParams: APIQueryParamsType<{}>): Observable<GetThreadMessagesListOutDTO> {
 
-    return of({
-      count: 5,
-      messages: [
-        {
-          id: 'M01', message: 'Some title 01',
-          createdAt: '2020-01-01T00:00:00.000Z',
-          createdBy: {
-            id: '5FDE0B71-BD0D-4C88-98E6-51399BB7B4AD',
-            name: 'LM01',
-            type: UserTypeEnum.INNOVATOR,
-            typeDescription: 'Needs assessment',
-          },
-          updatedAt: null,
-          isNew: true,
-          isEditable: true
-        },
-        {
-          id: 'M02', message: 'Some title 02',
-          createdAt: '2020-01-01T00:00:00.000Z',
-          createdBy: {
-            id: '',
-            name: 'LM02',
-            type: UserTypeEnum.ACCESSOR,
-            typeDescription: 'Support assessment',
-            organisation: { id: 'sadf', name: 'OrgName', acronym: 'aA' },
-            organisationUnit: { id: 'sdf', name: 'Unit Name', acronym: 'dsa' }
-          },
-          updatedAt: '2020-01-02T00:00:00.000Z',
-          isNew: false,
-          isEditable: false,
-        }
-      ]
-    });
+    // return of({
+    //   count: 5,
+    //   messages: [
+    //     {
+    //       id: 'M01', message: 'Some title 01',
+    //       createdAt: '2020-01-01T00:00:00.000Z',
+    //       createdBy: {
+    //         id: '5FDE0B71-BD0D-4C88-98E6-51399BB7B4AD',
+    //         name: 'LM01',
+    //         type: UserTypeEnum.INNOVATOR,
+    //         typeDescription: 'Needs assessment',
+    //       },
+    //       updatedAt: null,
+    //       isNew: true,
+    //       isEditable: true
+    //     },
+    //     {
+    //       id: 'M02', message: 'Some title 02',
+    //       createdAt: '2020-01-01T00:00:00.000Z',
+    //       createdBy: {
+    //         id: '',
+    //         name: 'LM02',
+    //         type: UserTypeEnum.ACCESSOR,
+    //         typeDescription: 'Support assessment',
+    //         organisation: { id: 'sadf', name: 'OrgName', acronym: 'aA' },
+    //         organisationUnit: { id: 'sdf', name: 'Unit Name', acronym: 'dsa' }
+    //       },
+    //       updatedAt: '2020-01-02T00:00:00.000Z',
+    //       isNew: false,
+    //       isEditable: false,
+    //     }
+    //   ]
+    // });
 
     const { filters, ...qp } = queryParams;
 
@@ -246,7 +246,7 @@ export class InnovationsService extends CoreService {
 
   createThread(innovationId: string, body: { subject: string, message: string }): Observable<{ id: string }> {
 
-    return of({ id: 'sfsdfa' });
+    // return of({ id: 'sfsdfa' });
     // return throwError('error');
 
     const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads')
@@ -262,7 +262,7 @@ export class InnovationsService extends CoreService {
 
   createThreadMessage(innovationId: string, threadId: string, body: { message: string }): Observable<{ id: string }> {
 
-    return of({ id: 'sfsdfa' });
+    // return of({ id: 'sfsdfa' });
     // return throwError('error');
 
     const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId')
@@ -279,7 +279,7 @@ export class InnovationsService extends CoreService {
 
   editThreadMessage(innovationId: string, threadId: string, messageId: string, body: { message: string }): Observable<{ id: string }> {
 
-    return of({ id: 'sfsdfa' });
+    // return of({ id: 'sfsdfa' });
     // return throwError('error');
 
     const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId/messages/:messageId')
