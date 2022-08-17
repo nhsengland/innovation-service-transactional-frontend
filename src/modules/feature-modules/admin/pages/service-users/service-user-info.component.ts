@@ -94,7 +94,7 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
 
       this.userInfoType = response.type;
 
-      if (response.type === UserTypeEnum.INNOVATOR) {
+      if ([UserTypeEnum.ASSESSMENT, UserTypeEnum.INNOVATOR].includes(response.type)) {
 
         this.titleActions = [{ type: 'link', label: !response.lockedAt ? 'Lock user' : 'Unlock user', url: `/admin/service-users/${this.user.id}/${!response.lockedAt ? 'lock' : 'unlock'}` }];
 
@@ -125,7 +125,7 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
         this.unitLength = organisations.filter(org => (response.userOrganisations[0].id === org.id))[0].organisationUnits.length;
       }
 
-      if (response.type === AccessorOrganisationRoleEnum.ACCESSOR && response.userOrganisations.length > 0) {
+      if (response.type === UserTypeEnum.ACCESSOR && response.userOrganisations.length > 0) {
         this.sections.userInfo = [
           { label: 'Name', value: response.displayName },
           { label: 'Type', value: 'Authorised person' },
@@ -155,7 +155,7 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
         }
       }
 
-      if (response.type === AccessorOrganisationRoleEnum.ACCESSOR) {
+      if (response.type === UserTypeEnum.ACCESSOR) {
         this.sections.organisation = response.userOrganisations;
       }
 
