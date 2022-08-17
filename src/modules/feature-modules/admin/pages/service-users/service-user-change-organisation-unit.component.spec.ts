@@ -6,7 +6,7 @@ import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { AccessorOrganisationRoleEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
@@ -57,13 +57,14 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
       email: 'user@email.com',
       displayName: 'User name',
       phone: '12345',
-      type: 'ACCESSOR',
+      type: UserTypeEnum.ACCESSOR,
       lockedAt: '2020-01-01T00:00:00.000Z',
-      innovations: [{id: 'inn1', name: 'innovation'}],
+      innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
         { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: '2' }] }
       ]
     });
+
     organisationsService.getOrganisationsListWithUnits = () => of([
       {
         id: 'Org01', name: 'Org name 01', acronym: 'ORG01',
@@ -83,23 +84,12 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
     ]);
 
     const responseMock: getOrganisationUnitRulesOutDTO[] = [
-      {
-        key: 'lastAccessorUserOnOrganisation', valid: true,
-        meta: {}
-      },
-      {
-        key: 'lastAccessorUserOnOrganisationUnit', valid: true,
-        meta: {}
-      },
-      {
-        key: 'lastAccessorFromUnitProvidingSupport', valid: true,
-        meta: {}
-      }
+      { key: 'lastAccessorUserOnOrganisation', valid: true, meta: {} },
+      { key: 'lastAccessorUserOnOrganisationUnit', valid: true, meta: {} },
+      { key: 'lastAccessorFromUnitProvidingSupport', valid: true, meta: {} }
     ];
 
     serviceUsersService.getOrgnisationUnitRules = () => of(responseMock);
-
-
 
   });
 
