@@ -108,7 +108,7 @@ export class InnovatorLayoutComponent extends CoreComponent {
           { title: 'Innovation record', link: `/innovator/innovations/${currentRouteInnovationId}/record` },
           { title: 'Action tracker', link: `/innovator/innovations/${currentRouteInnovationId}/action-tracker`, notificationKey: NotificationContextTypeEnum.ACTION },
           { title: 'Comments', link: `/innovator/innovations/${currentRouteInnovationId}/comments`, notificationKey: NotificationContextTypeEnum.COMMENT },
-          // { title: 'Messages', link: `/innovator/innovations/${currentRouteInnovationId}/threads` },
+          { title: 'Messages', link: `/innovator/innovations/${currentRouteInnovationId}/threads` },
           { title: 'Data sharing and support', link: `/innovator/innovations/${currentRouteInnovationId}/support` },
           { title: 'Activity log', link: `/innovator/innovations/${currentRouteInnovationId}/activity-log` }
         ];

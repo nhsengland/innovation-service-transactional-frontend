@@ -7,6 +7,7 @@ import { AppInjector } from '@modules/core/injectors/app-injector';
 
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
+import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
 import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 
 
@@ -53,6 +54,18 @@ export class CoreService {
 
   }
 
+
+  apiUserBasePath(): string {
+
+    switch (this.stores.authentication.getUserType()) {
+      case UserTypeEnum.ADMIN: return 'user-admin';
+      case UserTypeEnum.ASSESSMENT: return 'assessments';
+      case UserTypeEnum.ACCESSOR: return 'accessors';
+      case UserTypeEnum.INNOVATOR: return 'innovators';
+      default: return '';
+    }
+
+  }
 
   userUrlBasePath(): string { return this.stores.authentication.userUrlBasePath(); }
 

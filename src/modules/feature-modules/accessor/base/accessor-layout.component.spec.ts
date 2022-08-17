@@ -124,7 +124,7 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
       { title: 'Innovation record', link: `/accessor/innovations/innovation01/record` },
       { title: 'Action tracker', link: `/accessor/innovations/innovation01/action-tracker`, notificationKey: NotificationContextTypeEnum.ACTION },
       { title: 'Comments', link: `/accessor/innovations/innovation01/comments`, notificationKey: NotificationContextTypeEnum.COMMENT },
-      // { title: 'Messages', link: `/accessor/innovations/innovation01/threads` },
+      { title: 'Messages', link: `/accessor/innovations/innovation01/threads` },
       { title: 'Support status', link: `/accessor/innovations/innovation01/support` },
       { title: 'Activity log', link: `/accessor/innovations/innovation01/activity-log` }
     ];
