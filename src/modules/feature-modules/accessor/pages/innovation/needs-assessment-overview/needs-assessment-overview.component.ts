@@ -59,9 +59,9 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   ngOnInit(): void {
 
     forkJoin([
-      this.accessorService.getSupportLog(this.innovationId),
-      this.accessorService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId)
-    ]).subscribe(([supportLog, needsAssessmentInfo]) => {
+      this.accessorService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
+      this.accessorService.getSupportLog(this.innovationId)
+    ]).subscribe(([needsAssessmentInfo, supportLog]) => {
 
       this.logHistory = supportLog;
 

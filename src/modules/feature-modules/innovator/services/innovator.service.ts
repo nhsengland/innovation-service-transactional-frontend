@@ -7,7 +7,7 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { MappedObjectType } from '@app/base/types';
 
-import { InnovationSectionEnum, InnovationStatusEnum, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
+import { InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 
 
 type getInnovationActionsListEndpointInDTO = {
@@ -92,7 +92,7 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
   hasScaleResource: null | string;
   hasScaleResourceComment: null | string;
   summary: null | string;
-  organisations: { id: string; name: string; acronym: null | string; organisationUnits: {id: string; name: string; acronym: string; }[]; }[];
+  organisations: { id: string; name: string; acronym: null | string; organisationUnits: { id: string; name: string; acronym: string; }[]; }[];
   assignToName: string;
   finishedAt: null | string;
   updatedBy: null | string;
@@ -111,6 +111,24 @@ export type getInnovationNeedsAssessmentEndpointOutDTO = {
     }[];
   }
 };
+
+export type GetSupportLogListInDTO = {
+  id: string;
+  type: 'ACCESSOR_SUGGESTION' | 'STATUS_UPDATE',
+  description: string;
+  createdBy: string;
+  createdAt: string;
+  innovationSupportStatus: InnovationSupportStatusEnum;
+  organisationUnit: {
+    id: string; name: string; acronym: string;
+    organisation: { id: string; name: string; acronym: string; };
+  };
+  suggestedOrganisationUnits?: {
+    id: string; name: string; acronym: string;
+    organisation: { id: string; name: string; acronym: string; };
+  }[];
+};
+export type GetSupportLogListOutDTO = GetSupportLogListInDTO & { logTitle: string; suggestedOrganisationUnitsNames: string[]; };
 
 export type getInnovationTransfersDTO = {
   id: string;
@@ -294,6 +312,36 @@ export class InnovatorService extends CoreService {
       }))
     );
 
+  }
+
+  getSupportLogList(innovationId: string): Observable<GetSupportLogListOutDTO[]> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/support-logs').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    return this.http.get<GetSupportLogListInDTO[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response.map(item => {
+
+        let logTitle = '';
+
+        switch (item.type) {
+          case 'ACCESSOR_SUGGESTION':
+            logTitle = 'Suggested organisations';
+            break;
+          case 'STATUS_UPDATE':
+            logTitle = 'Updated support status';
+            break;
+          default:
+            break;
+        }
+
+        return {
+          ...item,
+          logTitle,
+          suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits || []).map(o => o.name)
+        };
+
+      }))
+    );
   }
 
 
