@@ -52,7 +52,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
     this.tableList.setVisibleColumns({
       subject: { label: 'Subject', orderable: true },
-      repliesNumber: { label: 'Nº messages', orderable: true },
+      messageCount: { label: 'Nº messages', orderable: true },
       createdAt: { label: 'Received at', align: 'right', orderable: true }
     }).setOrderBy('createdAt', 'descending');
 
