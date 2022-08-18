@@ -74,7 +74,7 @@
             </td>
             <td class="nhsuk-table__cell text-align-right">
               <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('status') }}</span>
-              <strong class="nhsuk-tag" [ngClass]="innovationSectionActionStatus[item.status]?.cssClass || ''">{{ innovationSectionActionStatus[item.status]?.label || '' }}</strong>
+              <theme-tag type="{{ 'shared.catalog.innovation.action_status.' + item.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.action_status.' + item.status + '.name' | translate }}"></theme-tag>
             </td>
           </tr>
         </tbody>
@@ -125,7 +125,7 @@
                 </td>
                 <td class="nhsuk-table__cell text-align-right">
                   <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('status') }} </span>
-                  <strong class="nhsuk-tag" [ngClass]="innovationSectionActionStatus[item.status]?.cssClass || ''">{{ innovationSectionActionStatus[item.status]?.label || '' }}</strong>
+                  <theme-tag type="{{ 'shared.catalog.innovation.action_status.' + item.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.action_status.' + item.status + '.name' | translate }}"></theme-tag>
                 </td>
               </tr>
             </tbody>

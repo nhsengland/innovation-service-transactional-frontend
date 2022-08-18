@@ -9,7 +9,7 @@ import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/cor
 import { StoresModule, AuthenticationStore, InnovationStore } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
-import { InnovationSectionEnum } from '@modules/stores/innovation';
+import { InnovationActionStatusEnum, InnovationSectionEnum } from '@modules/stores/innovation';
 import { TableModel } from '@app/base/models';
 
 import {
@@ -236,20 +236,20 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
   it('should run getInnovationActionsList() with payload 01 and return success', () => {
 
     const responseMock = [
-      { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: 'REQUESTED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
-      { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: 'STARTED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
-      { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
-      { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' }
+      { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.REQUESTED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
+      { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.STARTED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
+      { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.COMPLETED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
+      { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.CANCELLED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' }
     ];
 
     const expected = {
       openedActions: [
-        { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: 'REQUESTED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
-        { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: 'STARTED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' }
+        { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.REQUESTED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
+        { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.STARTED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' }
       ],
       closedActions: [
-        { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
-        { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: 'COMPLETED', name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' }
+        { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.COMPLETED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
+        { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.CANCELLED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' }
       ]
     };
 
