@@ -1,6 +1,7 @@
 export const locale = {
   lang: 'en',
   data: {
+
     // Global app/configuration translations.
     app: {
       title: 'NHS Innovation Service',
@@ -64,13 +65,14 @@ export const locale = {
       catalog: {
         innovation: {
           action_status: {
-            REQUESTED: { name: 'Requested' },
-            STARTED: { name: 'Started' },
-            CONTINUE: { name: 'Continue' },
-            IN_REVIEW: { name: 'In review' },
-            DELETED: { name: 'Deleted' },
-            DECLINED: { name: 'Declined' },
-            COMPLETED: { name: 'Completed' }
+            REQUESTED: { name: 'Requested', cssColorClass: 'nhsuk-tag--blue' },
+            STARTED: { name: 'Started', cssColorClass: 'nhsuk-tag--green' },
+            CONTINUE: { name: 'Continue', cssColorClass: 'nhsuk-tag--blue' },
+            IN_REVIEW: { name: 'In review', cssColorClass: 'nhsuk-tag--yellow' },
+            DELETED: { name: 'Deleted', cssColorClass: 'nhsuk-tag--grey' },
+            DECLINED: { name: 'Declined', cssColorClass: 'nhsuk-tag--grey' },
+            COMPLETED: { name: 'Completed', cssColorClass: 'nhsuk-tag--green' },
+            CANCELLED: { name: 'Cancelled', cssColorClass: 'nhsuk-tag--red' }
           },
           activity_log_groups: {
             INNOVATION_MANAGEMENT: {

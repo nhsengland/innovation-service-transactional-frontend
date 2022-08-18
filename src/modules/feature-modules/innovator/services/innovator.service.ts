@@ -7,13 +7,13 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { MappedObjectType } from '@app/base/types';
 
-import { InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
+import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 
 
 type getInnovationActionsListEndpointInDTO = {
   id: string;
   displayId: string;
-  status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
+  status: InnovationActionStatusEnum;
   section: InnovationSectionEnum;
   createdAt: string; // '2021-04-16T09:23:49.396Z',
   notifications: {
@@ -219,8 +219,12 @@ export class InnovatorService extends CoreService {
       take(1),
       map(response => {
         return {
-          openedActions: response.filter(item => ['REQUESTED', 'STARTED', 'CONTINUE', 'IN_REVIEW'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'` } })),
-          closedActions: response.filter(item => ['DELETED', 'DECLINED', 'COMPLETED'].includes(item.status)).map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'` } })),
+          openedActions: response.filter(item => [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.STARTED, InnovationActionStatusEnum.CONTINUE, InnovationActionStatusEnum.IN_REVIEW].includes(item.status)).map(item => ({
+            ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'` }
+          })),
+          closedActions: response.filter(item => [InnovationActionStatusEnum.DELETED, InnovationActionStatusEnum.DECLINED, InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.CANCELLED].includes(item.status)).map(item => ({
+            ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'` }
+          })),
         };
       })
     );
