@@ -117,7 +117,7 @@
                     <a routerLink="unit/{{ unit.id }}/{{ unit.isActive ? 'inactivate' : 'activate' }}"> {{ unit.isActive ? 'Inactivate' : 'Activate' }} unit</a>
                   </li>
                   <li *ngIf="unit.userCount > 0">
-                    <a href="javascript:void(0)" (click)="onShowHideClicked(unit.id)">{{ unit.showHideText }}<span class="nhsuk-u-visually-hidden">{{ unit.showHideDescription }}</span></a>
+                    <a href="javascript:void(0)" (click)="onUnitUsersShowHideClicked(organisation.id, unit.id)">{{ unit.showHideText }}<span class="nhsuk-u-visually-hidden">{{ unit.showHideDescription }}</span></a>
                   </li>
                 </ul>
               </dd>

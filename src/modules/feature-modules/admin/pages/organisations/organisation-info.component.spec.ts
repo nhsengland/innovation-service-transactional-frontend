@@ -120,7 +120,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
 
     };
 
-    component.onShowHideClicked('invalidOrg');
+    component.onUnitUsersShowHideClicked('orgId01', 'invalidOrg');
     expect(component.organisation.organisationUnits[0].showHideStatus).toEqual('closed');
 
   });
@@ -147,11 +147,16 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
       ]
 
     };
-    organisationsService.getUsersByUnitId = () => of([
-      { id: 'user01', name: 'user01', role: AccessorOrganisationRoleEnum.ACCESSOR, roleDescription: 'Accessor' }
-    ]);
+    organisationsService.getOrganisationUnitUsers = () => of({
+      count: 10,
+      data: [{
+        id: 'user01', name: 'user01', email: 'some@email.com',
+        organisationRole: AccessorOrganisationRoleEnum.ACCESSOR, organisationRoleDescription: 'Accessor',
+        isActive: true, lockedAt: null
+      }]
+    });
 
-    component.onShowHideClicked('Unit01');
+    component.onUnitUsersShowHideClicked('orgId01', 'Unit01');
     expect(component.organisation.organisationUnits[0].showHideStatus).toEqual('opened');
 
   });
@@ -178,9 +183,9 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
       ]
 
     };
-    organisationsService.getUsersByUnitId = () => throwError('error');
+    organisationsService.getOrganisationUnitUsers = () => throwError('error');
 
-    component.onShowHideClicked('Unit01');
+    component.onUnitUsersShowHideClicked('orgId01', 'Unit01');
     expect(component.alert.type).toEqual('ERROR');
 
   });
@@ -208,7 +213,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
 
     };
 
-    component.onShowHideClicked('Unit01');
+    component.onUnitUsersShowHideClicked('orgId01', 'Unit01');
     expect(component.organisation.organisationUnits[0].showHideStatus).toEqual('closed');
 
   });
@@ -236,7 +241,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
 
     };
 
-    component.onShowHideClicked('Unit01');
+    component.onUnitUsersShowHideClicked('orgId01', 'Unit01');
     expect(component.organisation.organisationUnits[0].showHideStatus).toEqual('hidden');
 
   });

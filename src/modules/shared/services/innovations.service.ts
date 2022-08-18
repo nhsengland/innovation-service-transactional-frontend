@@ -15,7 +15,7 @@ export type GetThreadsListDTO = {
   threads: {
     id: string;
     subject: string;
-    repliesNumber: number;
+    messageCount: number;
     createdAt: DateISOType;
     createdBy: { id: string, name: string, type: UserTypeEnum }
     isNew: boolean;
@@ -93,7 +93,7 @@ export class InnovationsService extends CoreService {
     //   count: 50,
     //   threads: [
     //     {
-    //       id: 'T01', subject: 'Some title 01', repliesNumber: 5,
+    //       id: 'T01', subject: 'Some title 01', messageCount: 5,
     //       createdAt: '2020-01-01T00:00:00.000Z', createdBy: { id: 'U01', name: 'User 01', type: UserTypeEnum.INNOVATOR },
     //       isNew: true,
     //       lastMessage: {
@@ -107,7 +107,7 @@ export class InnovationsService extends CoreService {
     //       }
     //     },
     //     {
-    //       id: 'T02', subject: 'Some title 02', repliesNumber: 10,
+    //       id: 'T02', subject: 'Some title 02', messageCount: 10,
     //       createdAt: '2020-01-01T00:00:00.000Z', createdBy: { id: 'U01', name: 'User 02', type: UserTypeEnum.INNOVATOR },
     //       isNew: false,
     //       lastMessage: {
