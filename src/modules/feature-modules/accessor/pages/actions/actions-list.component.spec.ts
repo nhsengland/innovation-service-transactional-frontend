@@ -8,7 +8,7 @@ import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { InnovationSectionEnum } from '@modules/stores/innovation';
+import { InnovationActionStatusEnum, InnovationSectionEnum } from '@modules/stores/innovation';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { ActionsListComponent } from './actions-list.component';
@@ -74,11 +74,11 @@ describe('FeatureModules/Accessor/Actions/ActionsListComponent', () => {
       count: 2,
       data: [
         {
-          id: '01', displayId: 'dId01', status: 'REQUESTED', section: InnovationSectionEnum.INNOVATION_DESCRIPTION, createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396',
+          id: '01', displayId: 'dId01', status: InnovationActionStatusEnum.REQUESTED, section: InnovationSectionEnum.INNOVATION_DESCRIPTION, createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396',
           innovation: { id: 'Inno01', name: 'Innovation 01' }
         },
         {
-          id: '02', displayId: 'dId02', status: 'STARTED', section: InnovationSectionEnum.INNOVATION_DESCRIPTION, createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396',
+          id: '02', displayId: 'dId02', status: InnovationActionStatusEnum.STARTED, section: InnovationSectionEnum.INNOVATION_DESCRIPTION, createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396',
           innovation: { id: 'Inno02', name: 'Innovation 02' }
         }
       ]

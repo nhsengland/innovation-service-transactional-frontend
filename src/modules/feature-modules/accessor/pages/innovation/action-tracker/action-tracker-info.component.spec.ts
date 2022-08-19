@@ -8,12 +8,12 @@ import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { InnovationSectionEnum } from '@modules/stores/innovation';
+import { InnovationActionStatusEnum, InnovationSectionEnum } from '@modules/stores/innovation';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { InnovationActionTrackerInfoComponent } from './action-tracker-info.component';
 
-import { AccessorService, getInnovationActionInfoOutDTO } from '@modules/feature-modules/accessor/services/accessor.service';
+import { AccessorService, GetInnovationActionInfoOutDTO } from '@modules/feature-modules/accessor/services/accessor.service';
 
 
 describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponent', () => {
@@ -56,11 +56,9 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
     activatedRoute.snapshot.params = { innovationId: 'Inno01', actionId: 'Action01' };
     activatedRoute.snapshot.queryParams = { alert: 'actionCreationSuccess' };
 
-    const expected = { type: 'SUCCESS', title: 'Action requested', message: 'The innovator has been notified of your action request.' };
-
     fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
     component = fixture.componentInstance;
-    expect(component.alert).toEqual(expected);
+    expect(component.alert.type).toEqual('SUCCESS');
 
   });
 
@@ -69,11 +67,9 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
     activatedRoute.snapshot.params = { innovationId: 'Inno01', actionId: 'Action01' };
     activatedRoute.snapshot.queryParams = { alert: 'actionUpdateSuccess', status: 'Completed' };
 
-    const expected = { type: 'SUCCESS', title: `You have updated the status of this action to 'Completed'`, message: 'The innovator will be notified of this status change' };
-
     fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
     component = fixture.componentInstance;
-    expect(component.alert).toEqual(expected);
+    expect(component.alert.type).toEqual('SUCCESS');
 
   });
 
@@ -82,10 +78,10 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01', actionId: 'Action01' };
 
-    const responseMock: getInnovationActionInfoOutDTO = {
+    const responseMock: GetInnovationActionInfoOutDTO = {
       id: 'ID01',
       displayId: '',
-      status: 'REQUESTED',
+      status: InnovationActionStatusEnum.REQUESTED,
       name: 'Submit section 01',
       description: 'some description',
       section: InnovationSectionEnum.COST_OF_INNOVATION,

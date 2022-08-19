@@ -4,9 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 
 import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
-import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
-import { AccessorService, getInnovationActionInfoOutDTO } from '../../../services/accessor.service';
+import { AccessorService, GetInnovationActionInfoOutDTO } from '../../../services/accessor.service';
 
 
 @Component({
@@ -18,13 +17,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
   innovationId: string;
   actionId: string;
 
-  actionName: string;
-  actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-  isQualifyingAccessorRole = false;
-
-  action?: getInnovationActionInfoOutDTO;
-
-  innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
+  action?: GetInnovationActionInfoOutDTO;
 
 
   constructor(
@@ -37,24 +30,14 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.actionId = this.activatedRoute.snapshot.params.actionId;
-    this.actionName = '';
-    this.actionStatus = '';
-    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
+
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'actionCreationSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'Action requested',
-          message: 'The innovator has been notified of your action request.'
-        };
+        this.setAlertSuccess('Action requested', 'The innovator has been notified of your action request.');
         break;
       case 'actionUpdateSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: `You have updated the status of this action to '${this.activatedRoute.snapshot.queryParams.status}'`,
-          message: 'The innovator will be notified of this status change'
-        };
+        this.setAlertSuccess(`You have updated the status of this action to '${this.activatedRoute.snapshot.queryParams.status}'`, 'The innovator will be notified of this status change');
         break;
       default:
         break;
@@ -73,13 +56,9 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
         this.setPageStatus('READY');
 
       },
-      error => {
+      () => {
         this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch action information',
-          message: 'Please try again or contact us for further help'
-        };
+        this.setAlertDataLoadError();
       }
     );
 
