@@ -8,12 +8,12 @@ import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { InnovationSectionEnum } from '@modules/stores/innovation';
+import { InnovationActionStatusEnum, InnovationSectionEnum } from '@modules/stores/innovation';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { InnovationActionTrackerEditComponent } from './action-tracker-edit.component';
 
-import { AccessorService, getInnovationActionInfoOutDTO } from '@modules/feature-modules/accessor/services/accessor.service';
+import { AccessorService, GetInnovationActionInfoOutDTO } from '@modules/feature-modules/accessor/services/accessor.service';
 
 
 describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponent', () => {
@@ -59,10 +59,10 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
 
-    const responseMock: getInnovationActionInfoOutDTO = {
+    const responseMock: GetInnovationActionInfoOutDTO = {
       id: 'ID01',
       displayId: '',
-      status: 'REQUESTED',
+      status: InnovationActionStatusEnum.REQUESTED,
       name: 'Submit section 01',
       description: 'some description',
       section: InnovationSectionEnum.COST_OF_INNOVATION,
@@ -92,28 +92,6 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
     expect(component.actionDisplayId).toBe('');
 
   });
-
-  it('should run onSubmitStep() with INVALID form', () => {
-
-    fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
-    component = fixture.componentInstance;
-
-    component.onSubmitStep();
-    expect(component.form.valid).toEqual(false);
-
-  });
-
-  it('should run onSubmitStep() with VALID form', () => {
-
-    fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
-    component = fixture.componentInstance;
-    component.form.get('status')?.setValue('A required value');
-
-    component.onSubmitStep();
-    expect(component.stepNumber).toBe(2);
-
-  });
-
 
   it('should run onSubmit() with invalid form', () => {
 
@@ -165,20 +143,13 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
 
     accessorService.updateAction = () => throwError('error');
 
-    const expected = {
-      type: 'ERROR',
-      title: 'An error occurred when creating an action',
-      message: 'Please try again or contact us for further help',
-      setFocus: true
-    };
-
     fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
     component = fixture.componentInstance;
     component.form.get('status')?.setValue('REQUESTED');
     component.form.get('comment')?.setValue('A required value');
 
     component.onSubmit();
-    expect(component.alert).toEqual(expected);
+    expect(component.alert.type).toEqual('ERROR');
 
   });
 

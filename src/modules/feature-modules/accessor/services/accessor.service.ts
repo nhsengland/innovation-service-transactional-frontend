@@ -4,7 +4,7 @@ import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
-import { APIQueryParamsType, MappedObjectType } from '@app/base/types';
+import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
 
 import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 
@@ -25,12 +25,12 @@ export type getInnovationsListEndpointInDTO = {
     otherMainCategoryDescription: string;
     countryName: string;
     postcode: string;
-    submittedAt: string; // '2021-04-16T09:23:49.396Z',
+    submittedAt: DateISOType;
     support: {
       id?: string;
       status: keyof typeof INNOVATION_SUPPORT_STATUS;
-      createdAt?: string; // '2021-04-16T09:23:49.396Z',
-      updatedAt?: string; // '2021-04-16T09:23:49.396Z'
+      createdAt?: DateISOType;
+      updatedAt?: DateISOType;
       accessors?: { id: string; name: string; }[];
     };
     organisations: string[];
@@ -55,7 +55,7 @@ export type getAdvancedInnovationsListEndpointInDTO = {
     otherMainCategoryDescription: string;
     countryName: string;
     postcode: string;
-    submittedAt: string; // '2021-04-16T09:23:49.396Z',
+    submittedAt: DateISOType;
     supportStatus: null | keyof typeof INNOVATION_SUPPORT_STATUS
   }[];
 };
@@ -72,8 +72,8 @@ export type getAdvanceActionsListEndpointInDTO = {
     displayId: string;
     status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
     section: InnovationSectionEnum;
-    createdAt: string; // '2021-04-16T09:23:49.396Z',
-    updatedAt: string; // '2021-04-16T09:23:49.396Z',
+    createdAt: DateISOType;
+    updatedAt: DateISOType;
     innovation: {
       id: string;
       name: string;
@@ -122,7 +122,7 @@ type getInnovationActionsListEndpointInDTO = {
   displayId: string;
   status: InnovationActionStatusEnum;
   section: InnovationSectionEnum;
-  createdAt: string; // '2021-04-16T09:23:49.396Z',
+  createdAt: DateISOType;
   notifications: {
     count: number,
     hasNew: boolean;
@@ -133,26 +133,26 @@ export type getInnovationActionsListEndpointOutDTO = {
   closedActions: (getInnovationActionsListEndpointInDTO & { name: string })[];
 };
 
-export type getInnovationActionInfoInDTO = {
+export type GetInnovationActionInfoInDTO = {
   id: string;
   displayId: string;
-  status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
+  status: InnovationActionStatusEnum;
   description: string;
   section: InnovationSectionEnum;
-  createdAt: string; // '2021-04-16T09:23:49.396Z',
+  createdAt: DateISOType;
   createdBy: { id: string; name: string; };
 };
-export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
+export type GetInnovationActionInfoOutDTO = Omit<GetInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
 
 export type getActionsListEndpointInDTO = {
   count: number;
   data: {
     id: string;
     displayId: string;
-    status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
+    status: InnovationActionStatusEnum;
     section: InnovationSectionEnum;
-    createdAt: string; // '2021-04-16T09:23:49.396Z',
-    updatedAt: string; // '2021-04-16T09:23:49.396Z',
+    createdAt: DateISOType;
+    updatedAt: DateISOType;
     innovation: {
       id: string;
       name: string;
@@ -223,7 +223,7 @@ export type getSupportLogInDTO = {
   type: SupportLogType;
   description: string;
   createdBy: string;
-  createdAt: string;
+  createdAt: DateISOType;
   innovationSupportStatus: keyof typeof INNOVATION_SUPPORT_STATUS;
   organisationUnit: {
     id: string; name: string; acronym: string;
@@ -346,10 +346,10 @@ export class AccessorService extends CoreService {
 
   }
 
-  getInnovationActionInfo(innovationId: string, actionId: string): Observable<getInnovationActionInfoOutDTO> {
+  getInnovationActionInfo(innovationId: string, actionId: string): Observable<GetInnovationActionInfoOutDTO> {
 
     const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
-    return this.http.get<getInnovationActionInfoInDTO>(url.buildUrl()).pipe(
+    return this.http.get<GetInnovationActionInfoInDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => ({
         id: response.id,
