@@ -24,9 +24,6 @@ describe('Shared/Pages/Innovation/PageActionStatusListComponent', () => {
         CoreModule,
         StoresModule,
         SharedModule
-      ],
-      declarations: [
-        PageActionStatusListComponent
       ]
     });
 
