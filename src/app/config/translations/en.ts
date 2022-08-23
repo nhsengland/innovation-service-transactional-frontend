@@ -123,14 +123,18 @@ export const locale = {
               title: 'Support',
               description: 'Organisations related activities'
             },
-            COMMENTS: {
-              title: 'Comments',
-              description: ''
-            },
             ACTIONS: {
               title: 'Actions',
               description: ''
             },
+            COMMENTS: {
+              title: 'Comments',
+              description: ''
+            },
+            THREAD: {
+              title: 'Messages',
+              description: ''
+            }
           },
           activity_log_items: {
             INNOVATION_CREATION: {
@@ -172,6 +176,14 @@ export const locale = {
             SUPPORT_STATUS_UPDATE: {
               title: 'Support status update',
               message: `{{ actionUserName }} changed the support status of {{ organisationUnit }}`
+            },
+            THREAD_CREATION: {
+              title: 'New conversation',
+              message: `{{ actionUserName }} created a new message with subject {{ thread.subject }}`
+            },
+            THREAD_MESSAGE_CREATION: {
+              title: 'New messages',
+              message: `{{ actionUserName }} created a new message under the conversation with subject {{ thread.subject }}`
             },
             COMMENT_CREATION: {
               title: 'Comment creation',
@@ -221,20 +233,25 @@ export const locale = {
             INNOVATION: {
               title: { singular: 'Innovation', plural: 'Innovations' }
             },
-            COMMENT: {
-              title: { singular: 'Comment', plural: 'Comments' }
-            },
+            // COMMENT: {
+            //   title: { singular: 'Comment', plural: 'Comments' }
+            // },
             ACTION: {
               title: { singular: 'Action', plural: 'Actions' }
             },
             SUPPORT: {
               title: { singular: 'Support status change', plural: 'Support status changes' }
+            },
+            THREAD: {
+              title: { singular: 'Message', plural: 'Messages' }
             }
           },
           notification_context_details: {
             LOCK_USER: { title: `Innovaton "{{ innovationName }}" owner has been locked` },
-            COMMENT_CREATION: { title: `New comment for innovation "{{ innovationName }}"` },
-            COMMENT_REPLY: { title: `New comment reply for innovation "{{ innovationName }}"` },
+            // COMMENT_CREATION: { title: `New comment for innovation "{{ innovationName }}"` },
+            // COMMENT_REPLY: { title: `New comment reply for innovation "{{ innovationName }}"` },
+            THREAD_CREATION: { title: `New conversation for innovation "{{ innovationName }}"` },
+            THREAD_MESSAGE_CREATION: { title: `New message for a conversation on innovation "{{ innovationName }}"` },
             ACTION_CREATION: { title: `New action for section {{ sectionNumber }} on innovation "{{ innovationName }}"` },
             ACTION_UPDATE: { title: `Action {{ actionCode }} status updated to "{{ actionStatusName }}" on innovation "{{ innovationName }}"` },
             NEEDS_ASSESSMENT_COMPLETED: { title: `Innovation "{{ innovationName }}" was suggested by needs assessment` },

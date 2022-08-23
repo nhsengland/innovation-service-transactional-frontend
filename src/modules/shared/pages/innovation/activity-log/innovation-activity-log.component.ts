@@ -26,7 +26,6 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
   module: '' | 'innovator' | 'accessor' | 'assessment' = '';
   innovation: EnvironmentInnovationType;
 
-  INNOVATION_SUPPORT_STATUS = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   ACTIVITY_LOG_ITEMS = ACTIVITY_LOG_ITEMS;
 
   activitiesList = new TableModel<ActivitiesListType, { activityTypes: ActivityLogTypesEnum }>();
@@ -85,7 +84,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
     this.setPageStatus('LOADING');
 
-    this.stores.innovation.getActivityLog$(this.module, this.innovation.id, this.activitiesList.getAPIQueryParams()).subscribe(
+    this.stores.innovation.getActivityLog$(this.innovation.id, this.activitiesList.getAPIQueryParams()).subscribe(
       response => {
 
         this.activitiesList.setData(

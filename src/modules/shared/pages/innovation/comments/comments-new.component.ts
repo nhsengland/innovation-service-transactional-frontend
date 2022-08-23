@@ -41,7 +41,7 @@ export class PageInnovationCommentsNewComponent extends CoreComponent {
 
     const body = { comment: this.form.get('comment')!.value };
 
-    this.stores.innovation.createInnovationComment$(this.module, this.innovationId, body).subscribe(
+    this.stores.innovation.createInnovationComment$(this.innovationId, body).subscribe(
       () => {
         this.redirectTo(`/${this.module}/innovations/${this.innovationId}/comments`, { alert: 'commentCreationSuccess' });
       },
