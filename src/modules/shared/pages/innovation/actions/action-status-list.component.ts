@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-
-import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -11,9 +10,14 @@ import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/inn
 })
 export class PageActionStatusListComponent extends CoreComponent {
 
-  visibleStatus: (keyof typeof INNOVATION_SECTION_ACTION_STATUS)[] = ['REQUESTED', 'IN_REVIEW', 'COMPLETED', 'DECLINED', 'CANCELLED'];
-
-  innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
+  visibleStatus: InnovationActionStatusEnum[] = [
+    InnovationActionStatusEnum.REQUESTED,
+    InnovationActionStatusEnum.IN_REVIEW,
+    InnovationActionStatusEnum.COMPLETED,
+    InnovationActionStatusEnum.DECLINED,
+    InnovationActionStatusEnum.CANCELLED,
+    InnovationActionStatusEnum.DELETED
+  ];
 
 
   constructor() {

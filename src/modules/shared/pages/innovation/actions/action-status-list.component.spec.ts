@@ -3,19 +3,15 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, InnovationStore } from '@modules/stores';
+import { StoresModule } from '@modules/stores';
+import { SharedModule } from '@modules/shared/shared.module';
 
 import { PageActionStatusListComponent } from './action-status-list.component';
 
 
 describe('Shared/Pages/Innovation/PageActionStatusListComponent', () => {
-
-  let activatedRoute: ActivatedRoute;
-
-  let innovationStore: InnovationStore;
 
   let component: PageActionStatusListComponent;
   let fixture: ComponentFixture<PageActionStatusListComponent>;
@@ -26,7 +22,8 @@ describe('Shared/Pages/Innovation/PageActionStatusListComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         CoreModule,
-        StoresModule
+        StoresModule,
+        SharedModule
       ],
       declarations: [
         PageActionStatusListComponent
@@ -35,11 +32,8 @@ describe('Shared/Pages/Innovation/PageActionStatusListComponent', () => {
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
-    activatedRoute = TestBed.inject(ActivatedRoute);
-
-    innovationStore = TestBed.inject(InnovationStore);
-
   });
+
 
   it('should create the component', () => {
 

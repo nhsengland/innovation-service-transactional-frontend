@@ -65,14 +65,46 @@ export const locale = {
       catalog: {
         innovation: {
           action_status: {
-            REQUESTED: { name: 'Requested', cssColorClass: 'nhsuk-tag--blue' },
-            STARTED: { name: 'Started', cssColorClass: 'nhsuk-tag--green' },
-            CONTINUE: { name: 'Continue', cssColorClass: 'nhsuk-tag--blue' },
-            IN_REVIEW: { name: 'In review', cssColorClass: 'nhsuk-tag--yellow' },
-            DELETED: { name: 'Deleted', cssColorClass: 'nhsuk-tag--grey' },
-            DECLINED: { name: 'Declined', cssColorClass: 'nhsuk-tag--grey' },
-            COMPLETED: { name: 'Completed', cssColorClass: 'nhsuk-tag--green' },
-            CANCELLED: { name: 'Cancelled', cssColorClass: 'nhsuk-tag--red' }
+            REQUESTED: {
+              name: 'Requested',
+              description: 'An accessor has requested that the innovation owner submit information to a specific section of their innovation record.',
+              cssColorClass: 'nhsuk-tag--blue'
+            },
+            STARTED: {
+              name: 'Started',
+              description: '',
+              cssColorClass: 'nhsuk-tag--green'
+            },
+            CONTINUE: {
+              name: 'Continue',
+              description: '',
+              cssColorClass: 'nhsuk-tag--blue'
+            },
+            IN_REVIEW: {
+              name: 'In review',
+              description: 'The innovation owner has submitted information requested by an accessor and are waiting for them to review it.',
+              cssColorClass: 'nhsuk-tag--yellow'
+            },
+            DELETED: {
+              name: 'Deleted',
+              description: 'The action is deleted as it\'s no longer relevant due to a change to the innovation or your account',
+              cssColorClass: 'nhsuk-tag--grey'
+            },
+            DECLINED: {
+              name: 'Declined',
+              description: 'The innovation owner has declined the action requested.',
+              cssColorClass: 'nhsuk-tag--grey'
+            },
+            COMPLETED: {
+              name: 'Completed',
+              description: 'An accessor has closed the action after reviewing the information.',
+              cssColorClass: 'nhsuk-tag--green'
+            },
+            CANCELLED: {
+              name: 'Cancelled',
+              description: 'An accessor has cancelled the action.',
+              cssColorClass: 'nhsuk-tag--red'
+            }
           },
           activity_log_groups: {
             INNOVATION_MANAGEMENT: {
