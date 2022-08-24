@@ -40,11 +40,13 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
   filters: FiltersType[] = [{ key: 'activityTypes', title: 'Activity Types', showHideStatus: 'opened', selected: [] }];
 
   datasets: { [key in FilterKeysType]: { label: string, value: string, description: string }[] } = {
-    activityTypes: Object.keys(ActivityLogTypesEnum).map(i => ({
-      label: this.translate(`shared.catalog.innovation.activity_log_groups.${i}.title`),
-      value: i,
-      description: this.translate(`shared.catalog.innovation.activity_log_groups.${i}.description`)
-    }))
+    activityTypes: Object.keys(ActivityLogTypesEnum)
+      .filter(item => item !== ActivityLogTypesEnum.COMMENTS)
+      .map(i => ({
+        label: this.translate(`shared.catalog.innovation.activity_log_groups.${i}.title`),
+        value: i,
+        description: this.translate(`shared.catalog.innovation.activity_log_groups.${i}.description`)
+      }))
   };
 
 

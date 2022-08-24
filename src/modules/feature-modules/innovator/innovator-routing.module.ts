@@ -210,7 +210,8 @@ const routes: Routes = [
               },
               {
                 path: 'threads',
-                data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: 'innovations', label: 'Innovations' } } },
+                resolve: { innovationData: InnovationDataResolver },
+                data: { layoutOptions: { type: 'innovationLeftAsideMenu', showInnovationHeader: true } },
                 children: [
                   { path: '', pathMatch: 'full', component: PageInnovationThreadsListComponent },
                   {

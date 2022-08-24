@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
+import { NotificationContextTypeEnum } from '@app/base/enums';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
@@ -48,7 +49,8 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
 
   ngOnInit(): void {
 
-
+    // Throw notification read dismiss.
+    this.stores.environment.dismissNotification(NotificationContextTypeEnum.NEEDS_ASSESSMENT, this.assessmentId);
 
     forkJoin([
       this.innovatorService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
