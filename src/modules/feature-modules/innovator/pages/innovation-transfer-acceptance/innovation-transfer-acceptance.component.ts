@@ -52,7 +52,7 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
       response => {
 
         if (response.length === 0) {
-          this.redirectTo('error');
+          this.redirectTo('error/generic');
           return;
         }
 
@@ -91,7 +91,7 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
         this.setPageStatus('READY');
 
       },
-      error => this.redirectTo('error')
+      error => this.redirectTo('error/generic')
     );
 
   }

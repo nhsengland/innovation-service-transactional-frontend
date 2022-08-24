@@ -9,11 +9,11 @@ export const locale = {
       date_formats: {
         full_date_time: 'EEEE, MMMM d, y \'at\' h:mm:ss a',
         long_date_time: 'd MMMM y \'at\' h:mm a',
-        short_date_time: 'M/d/yy \'at\' h:mm a',
+        short_date_time: 'd/M/yy \'at\' h:mm a',
         long_date: 'd MMMM y',
         short_date: 'd mm y',
         medium_time: 'h:mm:ss a',
-        short_seconds: 'M/d/yy, h:mm:ss a'
+        short_seconds: 'd/M/yy, h:mm:ss a'
       }
 
     },
@@ -33,14 +33,21 @@ export const locale = {
 
       shared_pages: {
         page_error: {
-          title: 'It appears that something went wrong!',
-          message: 'The operation you are trying to do is no longer available.',
-          action: 'Go back to home'
+          forbidden_innovation: {
+            title: 'It appears that something went wrong!',
+            message: 'You don\'t have access to the requested innovation. Changes in the innovation status may have caused this situation.',
+            button_label: 'Go back to home'
+          },
+          generic: {
+            title: 'It appears that something went wrong!',
+            message: 'The operation you are trying to do is no longer available.',
+            button_label: 'Go back to home'
+          }
         },
         page_not_found: {
           title: 'It appears that something went wrong!',
           message: 'Give us time while we investigate what happened that took you to here.',
-          action: 'Go back to home'
+          button_label: 'Go back to home'
         }
       }
 
@@ -233,9 +240,9 @@ export const locale = {
             INNOVATION: {
               title: { singular: 'Innovation', plural: 'Innovations' }
             },
-            // COMMENT: {
-            //   title: { singular: 'Comment', plural: 'Comments' }
-            // },
+            COMMENT: {
+              title: { singular: 'Message', plural: 'Messages' }
+            },
             ACTION: {
               title: { singular: 'Action', plural: 'Actions' }
             },
