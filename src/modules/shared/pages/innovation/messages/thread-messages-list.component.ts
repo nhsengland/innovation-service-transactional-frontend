@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
+import { NotificationContextTypeEnum } from '@app/base/enums';
 import { FormControl, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
@@ -22,7 +23,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   threadId: string;
 
   threadInfo: null | GetThreadInfoDTO = null;
-  messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0]>();
+  messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0]>({ pageSize: 10 });
 
   form = new FormGroup({
     message: new FormControl('')
@@ -76,9 +77,15 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
       this.innovationsService.getThreadInfo(this.innovation.id, this.threadId),
       this.innovationsService.getThreadMessagesList(this.innovation.id, this.threadId, this.messagesList.getAPIQueryParams())
     ]).subscribe(([threadInfo, threadMessages]) => {
+
       this.threadInfo = threadInfo;
       this.messagesList.setData(threadMessages.messages, threadMessages.count);
+
+      // Throw notification read dismiss.
+      this.stores.environment.dismissNotification(NotificationContextTypeEnum.THREAD, this.threadInfo.id);
+
       this.setPageStatus('READY');
+
     },
       () => {
         this.setPageStatus('ERROR');

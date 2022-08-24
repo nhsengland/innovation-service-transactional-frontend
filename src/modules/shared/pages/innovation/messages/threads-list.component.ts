@@ -17,7 +17,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
   selfUser: { id: string };
   innovation: EnvironmentInnovationType;
-  tableList = new TableModel<GetThreadsListDTO['threads'][0]>();
+  tableList = new TableModel<GetThreadsListDTO['threads'][0]>({ pageSize: 10 });
 
   isInnovator(): boolean { return this.stores.authentication.isInnovatorType(); }
   isNotInnovator(): boolean { return !this.stores.authentication.isInnovatorType(); }
@@ -53,7 +53,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
     this.tableList.setVisibleColumns({
       subject: { label: 'Subject', orderable: true },
       messageCount: { label: 'Nº messages', orderable: true },
-      createdAt: { label: 'Received at', align: 'right', orderable: true }
+      createdAt: { label: 'Latest received', align: 'right', orderable: true }
     }).setOrderBy('createdAt', 'descending');
 
     this.getThreadsList();

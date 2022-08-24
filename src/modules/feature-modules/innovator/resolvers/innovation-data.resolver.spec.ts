@@ -78,7 +78,7 @@ describe('FeatureModules/Innovator/Resolvers/InnovationDataResolver', () => {
     let response: any = null;
 
     resolver.resolve(routeMock as any).subscribe(success => response = success, error => response = error);
-    expect(response).toBe(false);
+    expect(response).toBe(null);
 
   });
 

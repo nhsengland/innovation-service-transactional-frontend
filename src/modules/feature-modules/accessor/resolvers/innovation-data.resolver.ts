@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { NGXLogger } from 'ngx-logger';
@@ -11,22 +11,27 @@ import { InnovationDataResolverType } from '@modules/stores/innovation/innovatio
 import { AccessorService } from '../services/accessor.service';
 
 
+/**
+ * Note: With the creation of the environment store, this can be changed to a guard in the future,
+ * as it is also assuming that responsability now (verifying access to the innovation).
+ */
 @Injectable()
-export class InnovationDataResolver implements Resolve<boolean | InnovationDataResolverType> {
+export class InnovationDataResolver implements Resolve<null | InnovationDataResolverType> {
 
   constructor(
+    private router: Router,
     private logger: NGXLogger,
-    private contextStore: EnvironmentStore,
+    private environmentStore: EnvironmentStore,
     private accessorService: AccessorService
   ) { }
 
 
-  resolve(route: ActivatedRouteSnapshot): Observable<boolean | InnovationDataResolverType> {
+  resolve(route: ActivatedRouteSnapshot): Observable<null | InnovationDataResolverType> {
 
     return this.accessorService.getInnovationInfo(route.params.innovationId).pipe(
       map(response => {
 
-        this.contextStore.setInnovation({
+        this.environmentStore.setInnovation({
           id: response.summary.id,
           name: response.summary.name,
           status: response.summary.status,
@@ -59,11 +64,17 @@ export class InnovationDataResolver implements Resolve<boolean | InnovationDataR
 
       }),
       catchError(error => {
+
+        this.environmentStore.clearInnovation();
+        this.router.navigateByUrl('error/forbidden-innovation');
+
         /* istanbul ignore next */
         this.logger.error('Error fetching data innovation data', error);
         /* istanbul ignore next */
-        return of(false);
+        return of(null);
+
       })
+
     );
 
   }

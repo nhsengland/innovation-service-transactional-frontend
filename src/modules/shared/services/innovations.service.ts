@@ -17,7 +17,6 @@ export type GetThreadsListDTO = {
     subject: string;
     messageCount: number;
     createdAt: DateISOType;
-    createdBy: { id: string, name: string, type: UserTypeEnum }
     isNew: boolean;
     lastMessage: {
       id: string;
@@ -26,7 +25,6 @@ export type GetThreadsListDTO = {
         id: string;
         name: string;
         type: UserTypeEnum;
-        organisation?: { id: string, name: string, acronym: string };
         organisationUnit?: { id: string, name: string, acronym: string };
       }
     }
@@ -94,7 +92,7 @@ export class InnovationsService extends CoreService {
     //   threads: [
     //     {
     //       id: 'T01', subject: 'Some title 01', messageCount: 5,
-    //       createdAt: '2020-01-01T00:00:00.000Z', createdBy: { id: 'U01', name: 'User 01', type: UserTypeEnum.INNOVATOR },
+    //       createdAt: '2020-01-01T00:00:00.000Z',
     //       isNew: true,
     //       lastMessage: {
     //         id: 'LastMessageId',
@@ -108,7 +106,7 @@ export class InnovationsService extends CoreService {
     //     },
     //     {
     //       id: 'T02', subject: 'Some title 02', messageCount: 10,
-    //       createdAt: '2020-01-01T00:00:00.000Z', createdBy: { id: 'U01', name: 'User 02', type: UserTypeEnum.INNOVATOR },
+    //       createdAt: '2020-01-01T00:00:00.000Z',
     //       isNew: false,
     //       lastMessage: {
     //         id: 'LastMessageId',
@@ -232,7 +230,7 @@ export class InnovationsService extends CoreService {
     // return of({ id: 'sfsdfa' });
     // return throwError('error');
 
-    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId').setPathParams({ innovationId, threadId });
+    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId/messages').setPathParams({ innovationId, threadId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
