@@ -63,7 +63,10 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       action: { label: 'Action', align: 'right', orderable: false }
     }).setOrderBy('createdAt', 'descending');
 
-    const contextTypesSubset = this.stores.authentication.isAssessmentType() ? [NotificationContextTypeEnum.NEEDS_ASSESSMENT, NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT] : Object.values(NotificationContextTypeEnum);
+    const contextTypesSubset = this.stores.authentication.isAssessmentType() ?
+      [NotificationContextTypeEnum.NEEDS_ASSESSMENT, NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT, NotificationContextTypeEnum.THREAD] :
+      Object.values(NotificationContextTypeEnum);
+
     this.datasets.contextTypes = contextTypesSubset.map(item => ({
       label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.title.plural`),
       value: item

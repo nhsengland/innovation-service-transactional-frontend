@@ -342,13 +342,13 @@ export const ACTIVITY_LOG_ITEMS: {
   },
 
   THREAD_CREATION: {
-    type: ActivityLogTypesEnum.THREAD,
-    details: 'COMMENT',
+    type: ActivityLogTypesEnum.THREADS,
+    details: null,
     link: 'THREAD'
   },
   THREAD_MESSAGE_CREATION: {
-    type: ActivityLogTypesEnum.THREAD,
-    details: 'COMMENT',
+    type: ActivityLogTypesEnum.THREADS,
+    details: null,
     link: 'THREAD'
   },
 

@@ -138,7 +138,7 @@ export const locale = {
               title: 'Comments',
               description: ''
             },
-            THREAD: {
+            THREADS: {
               title: 'Messages',
               description: ''
             }
