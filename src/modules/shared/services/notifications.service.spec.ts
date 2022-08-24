@@ -186,7 +186,7 @@ describe('Shared/Services/NotificationsService', () => {
       data: [{
         id: 'Notification001',
         innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
-        contextType: NotificationContextTypeEnum.COMMENT, contextDetail: NotificationContextDetailEnum.COMMENT_CREATION, contextId: 'Comment001',
+        contextType: NotificationContextTypeEnum.THREAD, contextDetail: NotificationContextDetailEnum.THREAD_CREATION, contextId: 'Thread001',
         createdAt: '2020-01-01T00:00:00.000Z', createdBy: 'User name', readAt: null,
         params: null
       }]
@@ -198,7 +198,7 @@ describe('Shared/Services/NotificationsService', () => {
         id: 'Notification001',
         contextType: item.contextType, contextDetail: item.contextDetail, contextId: item.contextId,
         createdAt: item.createdAt, createdBy: item.createdBy, readAt: item.readAt,
-        link: { label: 'Click to go to comment', url: '//innovations/Innovation001/comments' },
+        link: { label: 'Click to go to message', url: '//innovations/Innovation001/threads/Thread001' },
         params: { innovationId: item.innovation.id, innovationName: item.innovation.name, innovationStatus: item.innovation.status }
       }))
     };

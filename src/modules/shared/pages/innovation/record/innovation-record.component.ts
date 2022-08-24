@@ -71,7 +71,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionsSummary$(this.module, this.activatedRoute.snapshot.params.innovationId).subscribe(
+    this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe(
       response => {
 
         this.innovationName = response.innovation.name;
