@@ -25,7 +25,7 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
         <p class="nhsuk-body-s font-color-secondary">
-          Once sent, the innovator and other participants in this conversation will be notified. As well as the innovator, everyone who is supporting this innovation will be able to see and reply to your message.
+          Once sent, all participants in this conversation will be notified. As well as the innovator, everyone who is supporting this innovation will be able to see and reply to your message.
         </p>
         <button type="submit" class="nhsuk-button button-small nhsuk-u-margin-bottom-5">
           Send message <span class="nhsuk-u-visually-hidden"> for conversation with subject {{ threadInfo?.subject }} created at {{ threadInfo?.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </span>
