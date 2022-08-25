@@ -111,18 +111,25 @@ export class FormInputAutocompleteArrayComponent implements OnInit, DoCheck {
 
   onRemoveItem(value: string): void {
 
+    // Handle selected items array.
     const fieldControlIndex = this.fieldArrayControl.controls.findIndex(item => item.value === value);
-    const searchableItemsItem = this.searchableItems.find(item => item.value === value);
-    const chosenItemsIndex = this.chosenItems.findIndex(item => item.value === value);
-
-    if (fieldControlIndex > -1 && searchableItemsItem && chosenItemsIndex > -1) {
+    if (fieldControlIndex > -1) {
       this.fieldArrayControl.removeAt(fieldControlIndex);
-      searchableItemsItem.isVisible = true;
+    }
+    // Handle chosen items array.
+    const chosenItemsIndex = this.chosenItems.findIndex(item => item.value === value);
+    if (chosenItemsIndex > -1) {
       this.chosenItems.splice(chosenItemsIndex, 1);
-      this.searchFieldControl.setValue('');
+    }
+    // Handle searchable items array.
+    const searchableItemsItem = this.searchableItems.find(item => item.value === value);
+    if (searchableItemsItem) {
+      searchableItemsItem.isVisible = true;
     } else {
       console.log('Error when removing item.');
     }
+
+    this.searchFieldControl.setValue('');
 
   }
 

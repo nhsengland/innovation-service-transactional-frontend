@@ -9,9 +9,7 @@ import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/cor
 import { StoresModule, AuthenticationStore, InnovationStore } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
-import {
-  ServiceUsersService
-} from './service-users.service';
+import { ServiceUsersService } from './service-users.service';
 
 
 describe('FeatureModules/Admin/Services/ServiceUsersService', () => {
@@ -56,7 +54,7 @@ describe('FeatureModules/Admin/Services/ServiceUsersService', () => {
   });
 
 
-
+  // TODO: Add tests.
   it('should run aMethod() and return success', () => {
 
     const responseMock = {

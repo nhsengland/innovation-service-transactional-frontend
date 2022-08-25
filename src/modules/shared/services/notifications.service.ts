@@ -4,18 +4,23 @@ import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
-import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
+import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
 import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { getSectionNumber } from '@modules/stores/innovation/innovation.config';
 
 
-export const EMAIL_PREFERENCES_TYPES = {
-  ACTION: { title: 'Actions' },
-  COMMENT: { title: 'Comments' },
-  SUPPORT: { title: 'Support status changes' }
-};
+export enum EmailNotificationsTypeEnum { // Subset of NotificationContextTypeEnum.
+  ACTION = 'ACTION',
+  COMMENT = 'COMMENT',
+  SUPPORT = 'SUPPORT'
+}
+export enum EmailNotificationsPreferencesEnum {
+  NEVER = 'NEVER',
+  INSTANTLY = 'INSTANTLY',
+  DAILY = 'DAILY'
+}
 
 
 export type NotificationsListInDTO = {
@@ -35,6 +40,9 @@ export type NotificationsListInDTO = {
       actionStatus?: InnovationActionStatusEnum;
       supportStatus?: InnovationSupportStatusEnum;
       organisationUnitName?: string;
+      // Messages.
+      subject?: string;
+      messageId?: string;
     }
   }[];
 };
@@ -56,9 +64,9 @@ export type NotificationsListOutDTO = {
   )[]
 };
 
-type GetEmailNotificationsPreferencesDTO = {
-  id: string;
-  isSubscribed: boolean;
+type EmailNotificationPreferencesDTO = {
+  notificationType: EmailNotificationsTypeEnum,
+  preference: EmailNotificationsPreferencesEnum
 };
 
 
@@ -98,9 +106,12 @@ export class NotificationsService extends CoreService {
             case NotificationContextTypeEnum.ACTION:
               link = { label: 'Click to go to action', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/action-tracker/${item.contextId}` };
               break;
-            case NotificationContextTypeEnum.COMMENT:
-              link = { label: 'Click to go to comment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/comments` };
+            case NotificationContextTypeEnum.THREAD:
+              link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.contextId}` };
               break;
+            // case NotificationContextTypeEnum.COMMENT:
+            //   link = { label: 'Click to go to comment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/comments` };
+            //   break;
           }
 
           return {
@@ -144,23 +155,20 @@ export class NotificationsService extends CoreService {
   }
 
 
-  getEmailNotificationsPreferences(): Observable<GetEmailNotificationsPreferencesDTO[]> {
+  getEmailNotificationsPreferences(): Observable<EmailNotificationPreferencesDTO[]> {
 
     const url = new UrlModel(this.API_URL).addPath('email-notifications');
-    return this.http.get<GetEmailNotificationsPreferencesDTO[]>(url.buildUrl()).pipe(
+    return this.http.get<EmailNotificationPreferencesDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );
 
   }
 
-  updateEmailNotificationsPreferences(body: MappedObjectType): Observable<{ id: string }> {
+  updateEmailNotificationsPreferences(body: EmailNotificationPreferencesDTO[]): Observable<boolean> {
 
     const url = new UrlModel(this.API_URL).addPath('email-notifications');
-    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response)
-    );
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(() => true));
 
   }
 

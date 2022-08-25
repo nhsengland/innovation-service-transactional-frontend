@@ -92,7 +92,17 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     return this.authenticationService.saveUserInfo(body as saveUserInfoDTO);
   }
 
-  getRoleDescription(role: 'ADMIN' | 'INNOVATOR_OWNER' | 'ASSESSMENT' | 'INNOVATOR' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR'): string {
+  getUserTypeDescription(userType: UserTypeEnum): string {
+    switch (userType) {
+      case UserTypeEnum.ADMIN: return 'Administrator';
+      case UserTypeEnum.ASSESSMENT: return 'Needs assessment';
+      case UserTypeEnum.ACCESSOR: return 'Support assessment';
+      case UserTypeEnum.INNOVATOR: return 'Innovator';
+      default: return '';
+    }
+  }
+
+  getRoleDescription(role: string): string {
     switch (role) {
       case 'ADMIN': return 'Administrator';
       case 'INNOVATOR_OWNER': return 'Owner';

@@ -1,0 +1,84 @@
+<div class="nhsuk-back-link">
+  <a href="javascript:;" class="nhsuk-back-link__link" (click)="onPreviousStep()">
+    <theme-svg-icon type="back"></theme-svg-icon>
+    Go back
+  </a>
+</div>
+
+<h1 class="nhsuk-heading-l">{{ title }}</h1>
+
+<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+<div *ngIf="pageStatus === 'READY'" class="nhsuk-grid-row" aria-live="polite">
+
+  <div class="nhsuk-grid-column-three-quarters">
+
+    <p class="nhsuk-u-margin-0">Assign one or more users to <strong>{{ data.organisationUnit.name }}</strong> unit.</p>
+    <p>To activate this unit you need to add at least one Qualifying accessor.</p>
+
+    <ng-container *ngIf="usersArrayHasError">
+      <span id="user-checkboxes-error" class="nhsuk-error-message" role="alert">
+        <span class="nhsuk-u-visually-hidden">Error:</span> {{ usersArrayErrorMessage.message | translate }}
+      </span>
+    </ng-container>
+
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onNextStep()">
+
+    <div class="nhsuk-grid-column-three-quarters">
+
+      <p class="nhsuk-body-s nhsuk-u-margin-bottom-1">Showing {{ tableList.getTotalRowsNumber() }} users</p>
+
+      <p *ngIf="tableList.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-4">There are no matching results.</p>
+
+      <div *ngIf="tableList.getTotalRowsNumber() > 0" class="bg-color-white nhsuk-u-padding-3">
+
+        <table class="nhsuk-table-responsive app-sortable-table">
+          <caption class="nhsuk-u-visually-hidden"> Users list </caption>
+          <thead class="nhsuk-table__head">
+            <tr class="nhsuk-u-visually-hidden">
+              <th *ngFor="let item of tableList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+                <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr *ngFor="let item of tableList.getRecords()" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('name') }}</span>
+                <div class="nhsuk-checkboxes">
+                  <div class="nhsuk-checkboxes__item form-checkboxes-small">
+                    <input id="user-checkbox-{{ item.id }}" type="checkbox" formArrayName="users" [value]="item.id" [checked]="usersListCheckboxesIsChecked(item.id)" (change)="usersListCheckboxesOnChanged($event)"
+                      class=" nhsuk-checkboxes__input" />
+                    <label for="user-checkbox-{{ item.id }}" class="nhsuk-label nhsuk-checkboxes__label">{{ item.name }}</label>
+                  </div>
+                </div>
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('role') }}</span>
+                {{ item.organisationRoleDescription }}
+              </td>
+              <td class="nhsuk-table__cell text-align-right">
+                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('isActive') }}</span>
+                <theme-tag type="{{ item.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ item.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+                <div *ngIf="!item.isActive" class="nhsuk-body-s nhsuk-hint nhsuk-u-margin-0">
+                  Locked at {{ item.lockedAt | date: ('app.date_formats.long_date' | translate) }}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <div class="nhsuk-grid-column-three-quarters nhsuk-u-padding-top-5">
+      <theme-form-checkbox controlName="agreeUsers" label="I understand that these account's will be unlocked if I confirm activation" size="small"></theme-form-checkbox>
+      <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
+    </div>
+
+  </form>
+
+</div>

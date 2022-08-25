@@ -7,15 +7,17 @@ import { InnovatorRoutingModule } from './innovator-routing.module';
 import { InnovatorLayoutComponent } from './base/innovator-layout.component';
 
 // Pages.
+// // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
 import { PageAccountInfoComponent } from './pages/account/account-info.component';
 import { PageAccountInnovationsArchivalComponent } from './pages/account/innovations-archival.component';
 import { PageAccountInnovationsInfoComponent } from './pages/account/innovations-info.component';
 import { PageAccountInnovationsTransferComponent } from './pages/account/innovations-transfer.component';
-
+// // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
-
+// // First time signin.
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
+// // Innovation.
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
 import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
@@ -52,15 +54,17 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovatorLayoutComponent,
 
     // Pages.
+    // // Account.
     PageAccountDeleteComponent,
     PageAccountInfoComponent,
     PageAccountInnovationsArchivalComponent,
     PageAccountInnovationsInfoComponent,
     PageAccountInnovationsTransferComponent,
-
+    // // Dashboard.
     PageDashboardComponent,
-
+    // // First time signin.
     FirstTimeSigninComponent,
+    // // Innovation.
     InnovationActionTrackerDeclineComponent,
     InnovationActionTrackerInfoComponent,
     InnovationActionTrackerComponent,
@@ -72,6 +76,7 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovationSectionEditComponent,
     InnovationNewComponent,
     InnovationTransferAcceptanceComponent,
+
     // Components.
     OrganisationSuggestionsCardComponent
   ],

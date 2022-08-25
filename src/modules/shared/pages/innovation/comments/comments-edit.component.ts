@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { CustomValidators } from '@app/base/forms';
+import { CoreComponent } from '@app/base';
+import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
+
 
 @Component({
   selector: 'shared-pages-innovation-comments-comments-edit',
@@ -41,7 +42,7 @@ export class PageInnovationCommentsEditComponent extends CoreComponent implement
 
     this.setPageStatus('LOADING');
 
-    this.stores.innovation.getInnovationComments$(this.module, this.innovationId, this.currentCreatedOrder).subscribe(
+    this.stores.innovation.getInnovationComments$(this.innovationId, this.currentCreatedOrder).subscribe(
       response => {
 
         const comment = response.filter(c => c.id === this.commentId)[0];
@@ -56,7 +57,7 @@ export class PageInnovationCommentsEditComponent extends CoreComponent implement
           title: 'Unable to fetch comments information',
           message: 'Please try again or contact us for further help'
         };
-    });
+      });
   }
 
 
@@ -69,7 +70,7 @@ export class PageInnovationCommentsEditComponent extends CoreComponent implement
 
     const id = (this.subModule === 'comment') ? this.commentId : this.replyId;
 
-    this.stores.innovation.updateInnovationComment$(this.module, this.innovationId, this.form.value, id).subscribe(
+    this.stores.innovation.updateInnovationComment$(this.innovationId, this.form.value, id).subscribe(
       () => {
         this.redirectTo(`/${this.module}/innovations/${this.innovationId}/comments`, { alert: 'commentEditSuccess' });
       },
@@ -84,7 +85,7 @@ export class PageInnovationCommentsEditComponent extends CoreComponent implement
           setFocus: true
         };
 
-    });
+      });
 
   }
 

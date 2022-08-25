@@ -49,7 +49,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionInfo$('innovator', this.innovation.id, this.sectionId).subscribe(
+    this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe(
       response => {
 
         this.wizard.setAnswers(this.wizard.runInboundParsing(response.data)).runRules();
@@ -152,7 +152,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         const shouldRefreshInformation = this.wizard.currentStep().saveStrategy === 'updateAndWait';
 
         if (shouldRefreshInformation) {
-          return this.stores.innovation.getSectionInfo$('innovator', this.innovation.id, this.sectionId);
+          return this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId);
         } else {
           return of({ data: {} });
         }

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 
 @Component({
-  selector: 'app-admin-pages-dashboard',
+  selector: 'app-admin-pages-dashboard-dashboard',
   templateUrl: './dashboard.component.html'
 })
 export class PageDashboardComponent extends CoreComponent implements OnInit {

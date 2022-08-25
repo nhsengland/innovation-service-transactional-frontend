@@ -8,7 +8,9 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ENV } from '@tests/app.mocks';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
+
+import { NotificationContextTypeEnum } from '@app/base/enums';
+import { StoresModule, AuthenticationStore, EnvironmentStore } from '@modules/stores';
 import { AccessorModule } from '../accessor.module';
 
 import { AccessorLayoutComponent } from './accessor-layout.component';
@@ -20,6 +22,7 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
   let router: Router;
 
   let authenticationStore: AuthenticationStore;
+  let environmentStore: EnvironmentStore;
 
   let component: AccessorLayoutComponent;
   let fixture: ComponentFixture<AccessorLayoutComponent>;
@@ -44,6 +47,7 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
     router = TestBed.inject(Router);
 
     authenticationStore = TestBed.inject(AuthenticationStore);
+    environmentStore = TestBed.inject(EnvironmentStore);
 
   });
 
@@ -97,9 +101,9 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
     activatedRoute.snapshot.data = { layoutOptions: { type: 'userAccountMenu' } };
 
     const expected = [
-      { key: 'YourDetails', title: 'Your details', link: `/accessor/account/manage-details` },
-      { key: 'EmailNotifications', title: 'Email notifications', link: `/accessor/account/email-notifications` },
-      { key: 'ManageAccount', title: 'Manage account', link: `/accessor/account/manage-account` }
+      { title: 'Your details', link: `/accessor/account/manage-details` },
+      { title: 'Email notifications', link: `/accessor/account/email-notifications` },
+      { title: 'Manage account', link: `/accessor/account/manage-account` }
     ];
 
     fixture = TestBed.createComponent(AccessorLayoutComponent);
@@ -116,12 +120,13 @@ describe('FeatureModules/Accessor/AccessorLayoutComponent', () => {
     activatedRoute.snapshot.data = { layoutOptions: { type: 'innovationLeftAsideMenu' } };
 
     const expected = [
-      { key: 'Overview', title: 'Overview', link: `/accessor/innovations/innovation01/overview` },
-      { key: 'InnovationRecord', title: 'Innovation record', link: `/accessor/innovations/innovation01/record` },
-      { key: 'Action', title: 'Action tracker', link: `/accessor/innovations/innovation01/action-tracker` },
-      { key: 'Comments', title: 'Comments', link: `/accessor/innovations/innovation01/comments` },
-      { key: 'Support', title: 'Support status', link: `/accessor/innovations/innovation01/support` },
-      { key: 'ActivityLog', title: 'Activity log', link: `/accessor/innovations/innovation01/activity-log` }
+      { title: 'Overview', link: `/accessor/innovations/innovation01/overview` },
+      { title: 'Innovation record', link: `/accessor/innovations/innovation01/record` },
+      { title: 'Action tracker', link: `/accessor/innovations/innovation01/action-tracker`, notificationKey: NotificationContextTypeEnum.ACTION },
+      // { title: 'Comments', link: `/accessor/innovations/innovation01/comments` },
+      { title: 'Messages', link: `/accessor/innovations/innovation01/threads` },
+      { title: 'Support status', link: `/accessor/innovations/innovation01/support` },
+      { title: 'Activity log', link: `/accessor/innovations/innovation01/activity-log` }
     ];
 
     fixture = TestBed.createComponent(AccessorLayoutComponent);

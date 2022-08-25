@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
-import { CoreComponent, FormArray, FormControl, FormGroup } from '@app/base';
+import { CoreComponent } from '@app/base';
+import { CustomValidators, FormArray, FormControl, FormGroup, FormEngineParameterModel } from '@app/base/forms';
 import { RoutingHelper } from '@app/base/helpers';
-
-import { CustomValidators, FormEngineParameterModel } from '@modules/shared/forms';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { AccessorService, SupportLogType } from '../../../services/accessor.service';
@@ -55,7 +54,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   ngOnInit(): void {
 
     forkJoin([
-      this.organisationsService.getOrganisationUnits(),
+      this.organisationsService.getOrganisationsListWithUnits(),
       this.accessorService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment.id || ''),
       this.accessorService.getInnovationSupports(this.innovation.id, false)
     ]).subscribe(
@@ -118,7 +117,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
       if (item.items.length === 1) {
         chosenUnitsValues.push(item.items[0].value);
-        return { organisation: item.items[0].label, units: [] };
+        return { organisation: item.label, units: [] };
       }
       else {
         chosenUnitsValues = [...chosenUnitsValues, ...units.map(u => u.value)];

@@ -4,6 +4,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, MappedObjectType } from '@app/base/types';
 
@@ -18,7 +19,7 @@ export type getUserFullInfoDTO = {
   email: string;
   phone: null | string;
   displayName: string;
-  type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
+  type: UserTypeEnum;
   lockedAt: null | string;
   innovations: {
     id: string;
@@ -28,7 +29,7 @@ export type getUserFullInfoDTO = {
     id: string;
     name: string;
     size: null | string;
-    role: 'INNOVATOR_OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
+    role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum;
     isShadow: boolean;
     units: { id: string, name: string, acronym: string, supportCount: null | string }[]
   }[]
@@ -116,12 +117,6 @@ export type lockUserEndpointDTO = {
   status: string;
 };
 
-export enum orgnisationRole {
-  ACCESSOR = 'ACCESSOR',
-  QUALIFYING_ACCESSOR = 'QUALIFYING_ACCESSOR',
-  INNOVATOR_OWNER = 'INNOVATOR_OWNER'
-}
-
 export type searchUserEndpointInDTO = {
   id: string;
   displayName: string;
@@ -144,7 +139,7 @@ export type searchUserEndpointOutDTO = searchUserEndpointInDTO & { typeLabel: st
 
 export type changeUserRoleDTO = {
   userId: string,
-  role: orgnisationRole | null,
+  role: null | InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
   securityConfirmation: {
     id: string,
     code: string

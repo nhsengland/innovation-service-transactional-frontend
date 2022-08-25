@@ -1,0 +1,34 @@
+<div class="nhsuk-back-link">
+  <a href="javascript:;" class="nhsuk-back-link__link" (click)="onPreviousStep()">
+    <theme-svg-icon type="back"></theme-svg-icon>
+    Go back
+  </a>
+</div>
+
+<h1 class="nhsuk-heading-l">{{ title }}</h1>
+
+<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+<div *ngIf="pageStatus === 'READY'" class="nhsuk-grid-row" aria-live="polite">
+
+  <div class="nhsuk-grid-column-three-quarters">
+
+    <dl class="nhsuk-summary-list">
+      <div *ngFor="let item of data.summary" class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+        <dd *ngIf="item.value" class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+      </div>
+    </dl>
+
+  </div>
+
+  <div class="nhsuk-grid-column-three-quarters">
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <theme-form-checkbox controlName="confirm" [label]="data.confirmCheckbox.label" size="small"></theme-form-checkbox>
+      <button type="submit" [disabled]="!data.submitButton.active" class="nhsuk-button nhsuk-u-margin-top-3">{{ data.submitButton.label }}</button>
+    </form>
+
+  </div>
+
+</div>

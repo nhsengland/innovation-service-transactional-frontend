@@ -79,7 +79,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
         ]
       }
     ];
-    organisationsService.getOrganisationUnits = () => of(organisationsResponseMock);
+    organisationsService.getOrganisationsListWithUnits = () => of(organisationsResponseMock);
 
     accessorService.getInnovationNeedsAssessment = () => of({
       innovation: { id: '01', name: 'Innovation 01' },
@@ -144,7 +144,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
   it('should NOT have initial information loaded', () => {
 
-    organisationsService.getOrganisationUnits = () => throwError('error');
+    organisationsService.getOrganisationsListWithUnits = () => throwError('error');
     accessorService.getInnovationNeedsAssessment = () => throwError('error');
     accessorService.getInnovationSupports = () => throwError('error');
 
@@ -197,7 +197,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
     }];
     (component.form.get('organisationUnits') as FormArray)?.push(new FormControl('orgUnitId01'));
 
-    const expected = { list: [{ organisation: 'Org Unit name 01', units: [] }], values: ['orgUnitId01'] };
+    const expected = { list: [{ organisation: 'Org name', units: [] }], values: ['orgUnitId01'] };
 
     component.onSubmitStep();
     expect(component.chosenUnits).toEqual(expected);

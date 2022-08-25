@@ -85,10 +85,10 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
     // this.notificationsService.dismissNotification(NotificationContextTypeEnum.DATA_SHARING, this.innovationId).subscribe();
 
     forkJoin([
-      this.organisationsService.getOrganisationUnits(),
+      this.organisationsService.getOrganisationsListWithUnits(),
       this.innovatorService.getInnovationShares(this.innovationId),
       this.innovatorService.getInnovationSupports(this.innovationId, false),
-      this.innovationService.getInnovationOrganisationSuggestions('innovator', this.innovationId),
+      this.innovationService.getInnovationOrganisationSuggestions(this.innovationId),
     ]).subscribe(([organisationUnits, innovationShares, organisationUnitsSupportStatus, organisationSuggestions]) => {
 
       this.organisationSuggestions = organisationSuggestions;

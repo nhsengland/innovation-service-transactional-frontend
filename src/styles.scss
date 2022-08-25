@@ -85,14 +85,9 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 .width-auto { width: auto; }
 .width-15 { width: 15%; }
-.width-25 { width: 25%; } 
-.width-20 { width: 20%; } 
-.width-30 { width: 30%; }
-.width-45 { width: 45%; }
-.width-50 { width: 50%; }
+.width-20 { width: 20%; }
 .width-60 { width: 60%; }
 .width-75 { width: 75%; }
-.width-100 { width: 100%; }
 
 .overflow-hidden { overflow: hidden; }
 .overflow-x-hidden { overflow-x: hidden; }
@@ -434,6 +429,16 @@ $service-manual-container-size: 1100px; // Container width variable.
   }
 }
 
+.app-table-inside-card {
+
+  th:first-of-type { padding-left: 24px; }
+  th:last-of-type { padding-right: 24px; }
+
+  td { vertical-align: middle; }
+  td:first-of-type { padding-left: 24px; }
+  td:last-of-type { padding-right: 24px; }
+
+}
 
 .app-tabs {
   margin-bottom: 10px;

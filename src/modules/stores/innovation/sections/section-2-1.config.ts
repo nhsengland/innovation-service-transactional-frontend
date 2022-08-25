@@ -73,7 +73,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           dataType: 'autocomplete-array',
           label: stepsLabels.l2,
           description: 'Start typing to filter and choose from the available options',
-          validations: { isRequired: [true, 'You must choose at least one disease or condition'] },
+          validations: { isRequired: [true, 'You must choose at least one disease or condition'], max: [5, 'You can only choose up to 5 diseases or conditions'] },
           items: innovationDiseasesConditionsImpactItems
         }]
       }),

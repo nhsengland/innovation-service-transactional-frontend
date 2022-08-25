@@ -78,7 +78,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'error',
+    path: 'error/:errorType',
     component: BaseLayoutComponent,
     children: [{ path: '', pathMatch: 'full', component: PageErrorComponent }]
   },

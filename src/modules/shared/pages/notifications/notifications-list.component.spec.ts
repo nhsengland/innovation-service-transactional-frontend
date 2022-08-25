@@ -78,7 +78,7 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    expect(component.datasets.contextTypes.length).toBe(3);
+    expect(component.datasets.contextTypes.length).toBe(4);
     expect(component.notificationsList.getTotalRowsNumber()).toBe(20);
 
   });
@@ -197,7 +197,7 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
       key: 'contextTypes',
       title: 'Types',
       showHideStatus: 'opened',
-      selected: [{ label: 'shared.catalog.innovation.notification_context_types.INNOVATION.title', value: 'INNOVATION' }]
+      selected: [{ label: 'shared.catalog.innovation.notification_context_types.INNOVATION.title.plural', value: 'INNOVATION' }]
     }]);
 
   }));

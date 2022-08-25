@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 
-import { CoreComponent, FormArray, FormControl, FormGroup } from '@app/base';
+import { CoreComponent } from '@app/base';
+import { FormArray, FormControl, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
 import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
@@ -18,6 +19,8 @@ type FiltersType = { key: FilterKeysType, title: string, showHideStatus: 'opened
   templateUrl: './notifications-list.component.html'
 })
 export class PageNotificationsListComponent extends CoreComponent implements OnInit {
+
+  emailNotificationPreferencesLink = '';
 
   notificationsList = new TableModel<
     NotificationsListOutDTO['data'][0],
@@ -50,15 +53,22 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     super();
     this.setPageTitle('Notifications');
 
+    if (['ACCESSOR', 'INNOVATOR'].includes(this.stores.authentication.getUserType())) {
+      this.emailNotificationPreferencesLink = `/${this.stores.authentication.userUrlBasePath()}/account/email-notifications`;
+    }
+
     this.notificationsList.setVisibleColumns({
       notification: { label: 'Notification', orderable: false },
       createdAt: { label: 'Date', orderable: true },
       action: { label: 'Action', align: 'right', orderable: false }
     }).setOrderBy('createdAt', 'descending');
 
-    const contextTypesSubset = this.stores.authentication.isAssessmentType() ? [NotificationContextTypeEnum.NEEDS_ASSESSMENT, NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT] : Object.values(NotificationContextTypeEnum);
+    const contextTypesSubset = this.stores.authentication.isAssessmentType() ?
+      [NotificationContextTypeEnum.NEEDS_ASSESSMENT, NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT, NotificationContextTypeEnum.THREAD] :
+      Object.values(NotificationContextTypeEnum);
+
     this.datasets.contextTypes = contextTypesSubset.map(item => ({
-      label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.title`),
+      label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.title.plural`),
       value: item
     }));
 

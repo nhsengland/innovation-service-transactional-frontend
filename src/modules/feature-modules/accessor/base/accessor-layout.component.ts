@@ -3,6 +3,7 @@ import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
+import { NotificationContextTypeEnum } from '@app/base/enums';
 import { HeaderNavigationBarItemType } from '@app/base/types';
 import { RoutingHelper } from '@app/base/helpers';
 
@@ -27,7 +28,7 @@ export class AccessorLayoutComponent extends CoreComponent {
     notifications: { notifications: number }
   } = { leftItems: [], rightItems: [], notifications: { notifications: 0 } };
 
-  leftSideBar: { key: string, title: string, link: string, notifications?: number }[] = [];
+  leftSideBar: { title: string, link: string, notificationKey?: string, notifications?: number }[] = [];
 
 
   constructor(
@@ -57,7 +58,7 @@ export class AccessorLayoutComponent extends CoreComponent {
 
       this.stores.environment.innovation$().subscribe(e => {
         Object.entries(e?.notifications || {}).forEach(([key, value]) => {
-          const leftSideMenu = this.leftSideBar.find(item => item.key === key);
+          const leftSideMenu = this.leftSideBar.find(item => item.notificationKey === key);
           if (leftSideMenu) { leftSideMenu.notifications = value; }
         });
       })
@@ -83,20 +84,21 @@ export class AccessorLayoutComponent extends CoreComponent {
 
       case 'userAccountMenu':
         this.leftSideBar = [
-          { key: 'YourDetails', title: 'Your details', link: `/accessor/account/manage-details` },
-          { key: 'EmailNotifications', title: 'Email notifications', link: `/accessor/account/email-notifications` },
-          { key: 'ManageAccount', title: 'Manage account', link: `/accessor/account/manage-account` }
+          { title: 'Your details', link: `/accessor/account/manage-details` },
+          { title: 'Email notifications', link: `/accessor/account/email-notifications` },
+          { title: 'Manage account', link: `/accessor/account/manage-account` }
         ];
         break;
 
       case 'innovationLeftAsideMenu':
         this.leftSideBar = [
-          { key: 'Overview', title: 'Overview', link: `/accessor/innovations/${currentRouteInnovationId}/overview` },
-          { key: 'InnovationRecord', title: 'Innovation record', link: `/accessor/innovations/${currentRouteInnovationId}/record` },
-          { key: 'Action', title: 'Action tracker', link: `/accessor/innovations/${currentRouteInnovationId}/action-tracker` },
-          { key: 'Comments', title: 'Comments', link: `/accessor/innovations/${currentRouteInnovationId}/comments` },
-          { key: 'Support', title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support` },
-          { key: 'ActivityLog', title: 'Activity log', link: `/accessor/innovations/${currentRouteInnovationId}/activity-log` }
+          { title: 'Overview', link: `/accessor/innovations/${currentRouteInnovationId}/overview` },
+          { title: 'Innovation record', link: `/accessor/innovations/${currentRouteInnovationId}/record` },
+          { title: 'Action tracker', link: `/accessor/innovations/${currentRouteInnovationId}/action-tracker`, notificationKey: NotificationContextTypeEnum.ACTION },
+          // { title: 'Comments', link: `/accessor/innovations/${currentRouteInnovationId}/comments` },
+          { title: 'Messages', link: `/accessor/innovations/${currentRouteInnovationId}/threads` },
+          { title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support` },
+          { title: 'Activity log', link: `/accessor/innovations/${currentRouteInnovationId}/activity-log` }
         ];
         this.stores.environment.updateInnovationNotifications();
         break;

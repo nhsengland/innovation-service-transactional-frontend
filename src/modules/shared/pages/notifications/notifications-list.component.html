@@ -3,13 +3,18 @@
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
-
         <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
           <p> {{ alert.message }} </p>
         </theme-alert>
+      </div>
+    </div>
 
+    <div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
+      <div class="nhsuk-grid-column-one-half">
         <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
-
+      </div>
+      <div *ngIf="emailNotificationPreferencesLink" class="nhsuk-grid-column-one-half text-align-right">
+        <a [routerLink]="emailNotificationPreferencesLink"> Change your email notifications preferences </a>
       </div>
     </div>
 
@@ -122,7 +127,9 @@
               </tbody>
             </table>
 
-            <pagination [currentPage]="notificationsList.page" [pageSize]="notificationsList.pageSize" [totalRows]="notificationsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
+            <div class="nhsuk-u-padding-bottom-4">
+              <theme-pagination [currentPage]="notificationsList.page" [pageSize]="notificationsList.pageSize" [totalRows]="notificationsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+            </div>
 
           </ng-container>
 

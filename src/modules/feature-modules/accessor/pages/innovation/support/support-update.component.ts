@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormArray, FormControl, FormGroup, Validators } from '@app/base';
-import { CustomValidators } from '@app/base/forms';
+import { CoreComponent } from '@app/base';
+import { CustomValidators, FormArray, FormControl, FormGroup, Validators } from '@app/base/forms';
 
 import { AccessorService } from '../../../services/accessor.service';
 

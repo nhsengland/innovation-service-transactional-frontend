@@ -135,9 +135,9 @@
                     <dl class="nhsuk-summary-list nhsuk-u-margin-0 nhsuk-u-padding-top-2">
                       <dt class="nhsuk-summary-list__key nhsuk-body-s">Support status</dt>
                       <dd class="nhsuk-summary-list__value nhsuk-body-s">
-                        <strong class="nhsuk-tag" [ngClass]="INNOVATION_SUPPORT_STATUS[item.params.innovationSupportStatus || 'UNASSIGNED'].cssClass">
-                          {{ INNOVATION_SUPPORT_STATUS[item.params.innovationSupportStatus || 'UNASSIGNED'].label }}
-                        </strong>
+                        <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + item.params.innovationSupportStatus + '.cssColorClass' | translate }}"
+                          label="{{ 'shared.catalog.innovation.support_status.' + item.params.innovationSupportStatus + '.name' | translate }}">
+                        </theme-tag>
                         <p class="nhsuk-body-s nhsuk-u-padding-top-2 text-pre-wrap">{{ item.params.comment?.value }}</p>
                       </dd>
                     </dl>
@@ -153,7 +153,9 @@
 
             </div>
 
-            <pagination [currentPage]="activitiesList.page" [pageSize]="activitiesList.pageSize" [totalRows]="activitiesList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
+            <div class="nhsuk-u-padding-bottom-4">
+              <theme-pagination [currentPage]="activitiesList.page" [pageSize]="activitiesList.pageSize" [totalRows]="activitiesList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+            </div>
 
           </ng-container>
 

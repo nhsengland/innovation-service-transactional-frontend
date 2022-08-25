@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { CustomValidators } from '@app/base/forms';
+import { CoreComponent } from '@app/base';
+import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
 
 
 @Component({
@@ -41,7 +41,7 @@ export class PageInnovationCommentsNewComponent extends CoreComponent {
 
     const body = { comment: this.form.get('comment')!.value };
 
-    this.stores.innovation.createInnovationComment$(this.module, this.innovationId, body).subscribe(
+    this.stores.innovation.createInnovationComment$(this.innovationId, body).subscribe(
       () => {
         this.redirectTo(`/${this.module}/innovations/${this.innovationId}/comments`, { alert: 'commentCreationSuccess' });
       },

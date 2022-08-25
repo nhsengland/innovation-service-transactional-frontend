@@ -136,6 +136,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
 
   getRecords(): T[] { return this.dataSource; }
 
+  getVisibleRowsNumber(): number { return this.dataSource.length; }
   getTotalRowsNumber(): number { return this.totalRows; }
 
   getAPIQueryParams(): APIQueryParamsType<F> {

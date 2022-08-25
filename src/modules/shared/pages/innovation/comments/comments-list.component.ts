@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { CustomValidators, FormEngineHelper } from '@app/base/forms';
+import { CoreComponent } from '@app/base';
+import { CustomValidators, FormControl, FormGroup, FormEngineHelper } from '@app/base/forms';
 
 import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
 import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
@@ -82,7 +82,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
 
     this.setPageStatus('LOADING');
 
-    this.stores.innovation.getInnovationComments$(this.module, this.innovationId, this.currentCreatedOrder).subscribe(
+    this.stores.innovation.getInnovationComments$(this.innovationId, this.currentCreatedOrder).subscribe(
       response => {
         this.commentsList = response;
         this.commentsList.forEach(item => {
@@ -95,9 +95,9 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
         const repliesToDismiss = replies.filter(r => r.notifications && r.notifications?.count > 0).map(r => r.id);
 
         const toDismiss = [...commentsToDismiss, ...repliesToDismiss];
-        for (const comment of toDismiss) {
-          this.stores.environment.dismissNotification(NotificationContextTypeEnum.COMMENT, comment);
-        }
+        // for (const comment of toDismiss) {
+        //   this.stores.environment.dismissNotification(NotificationContextTypeEnum.COMMENT, comment);
+        // }
 
         this.setPageStatus('READY');
 
@@ -164,7 +164,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
       replyTo: commentId
     };
 
-    this.stores.innovation.createInnovationComment$(this.module, this.innovationId, body).subscribe(
+    this.stores.innovation.createInnovationComment$(this.innovationId, body).subscribe(
       () => {
 
         this.getCommentsList();

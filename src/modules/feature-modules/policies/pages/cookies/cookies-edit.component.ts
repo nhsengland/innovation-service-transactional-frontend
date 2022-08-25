@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
 
 import { CookiesService } from '@modules/core';
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { CustomValidators } from '@app/base/forms';
+import { CoreComponent, } from '@app/base';
+import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
 
 import { COOKIES_USED } from '../../config/constants.config';
 

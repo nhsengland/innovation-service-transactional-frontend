@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreComponent, FormControl, FormGroup } from '@app/base';
-import { CustomValidators, FormEngineHelper } from '@app/base/forms';
-
-import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { CoreComponent } from '@app/base';
+import { CustomValidators, FormControl, FormGroup, FormEngineHelper } from '@app/base/forms';
+import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -18,19 +17,17 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
   innovationId: string;
   actionId: string;
   actionDisplayId: string;
-  stepNumber: number;
-  isQualifyingAccessorRole = false;
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
-  statusItems: { value: keyof typeof INNOVATION_SECTION_ACTION_STATUS, label: string, description: string }[] = [
+  statusItems: { value: InnovationActionStatusEnum, label: string, description: string }[] = [
     {
-      value: 'COMPLETED',
+      value: InnovationActionStatusEnum.COMPLETED,
       label: 'Done',
       description: 'The information submitted is sufficient. This closes the action.'
     },
     {
-      value: 'REQUESTED',
+      value: InnovationActionStatusEnum.REQUESTED,
       label: 'Requested',
       description: 'The information submitted is not sufficient. This reopens the action.'
     }
@@ -38,8 +35,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
   statusError = '';
 
   form = new FormGroup({
-    status: new FormControl('', { validators: CustomValidators.required('Please choose a status'), updateOn: 'change' }),
-    comment: new FormControl('', CustomValidators.required('A comment is required'))
+    status: new FormControl('', { validators: CustomValidators.required('Please choose a status') })
   }, { updateOn: 'blur' });
 
 
@@ -54,14 +50,11 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
     this.actionDisplayId = '';
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.actionId = this.activatedRoute.snapshot.params.actionId;
-    this.stepNumber = 1;
 
   }
 
 
   ngOnInit(): void {
-
-    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
     this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
       response => {
@@ -71,28 +64,11 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
         this.setPageStatus('READY');
 
       },
-      error => {
+      () => {
         this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch actions information',
-          message: 'Please try again or contact us for further help'
-        };
+        this.setAlertDataLoadError();
       }
     );
-
-  }
-
-
-  onSubmitStep(): void {
-
-    if (!this.form.get('status')!.valid) {
-      this.form.get('status')!.markAsTouched();
-      this.statusError = FormEngineHelper.getValidationMessage({ required: this.form.get('status')!.errors!.required }).message;
-      return;
-    }
-
-    this.stepNumber = 2;
 
   }
 
@@ -100,13 +76,14 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
   onSubmit(): void {
 
     if (!this.form.valid) {
+      this.statusError = FormEngineHelper.getValidationMessage({ required: this.form.get('status')!.errors!.required }).message;
       this.form.markAllAsTouched();
       return;
     }
 
     this.accessorService.updateAction(this.innovationId, this.actionId, this.form.value).subscribe(
       response => {
-        const status: keyof typeof INNOVATION_SECTION_ACTION_STATUS = this.form.get('status')!.value;
+        const status = this.form.get('status')!.value as InnovationActionStatusEnum;
         this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionUpdateSuccess', status: this.statusItems.find(item => item.value === status)?.label });
       },
       () => {

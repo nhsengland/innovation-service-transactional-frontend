@@ -50,7 +50,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
 
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionEvidence$(this.module, this.innovationId, this.evidence.id).subscribe(
+    this.stores.innovation.getSectionEvidence$(this.innovationId, this.evidence.id).subscribe(
       response => {
 
         this.summaryList = this.wizard.runSummaryParsing(response);

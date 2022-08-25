@@ -58,7 +58,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
   ngOnInit(): void {
 
     forkJoin([
-      this.organisationsService.getOrganisationUnits(),
+      this.organisationsService.getOrganisationsListWithUnits(),
       this.accessorService.getInnovationSupports(this.innovationId, false),
     ]).subscribe(([organisationUnits, organisationUnitsSupportStatus]) => {
 

@@ -37,7 +37,7 @@
           <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-margin-top-3">
             <caption class="nhsuk-table__caption"> {{ currentTab.contentTitle }} </caption>
             <thead class="nhsuk-table__head">
-              <tr class="">
+              <tr>
                 <th *ngFor="let item of actionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                   <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
                   <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
@@ -75,7 +75,9 @@
             </tbody>
           </table>
 
-          <pagination [currentPage]="actionsList.page" [pageSize]="actionsList.pageSize" [totalRows]="actionsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></pagination>
+          <div class="nhsuk-u-padding-bottom-4">
+            <theme-pagination [currentPage]="actionsList.page" [pageSize]="actionsList.pageSize" [totalRows]="actionsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+          </div>
 
         </ng-container>
 

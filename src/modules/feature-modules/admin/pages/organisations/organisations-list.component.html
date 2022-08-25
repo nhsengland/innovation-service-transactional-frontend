@@ -1,0 +1,61 @@
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
+
+    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
+      <p> {{ alert.message }} </p>
+    </theme-alert>
+
+    <h1 class="nhsuk-u-margin-bottom"> {{ pageTitle }} </h1>
+
+    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+    <ng-container *ngIf="pageStatus === 'READY'">
+
+      <div class="nhsuk-u-padding-bottom-5">
+
+        <div class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
+          Organisation
+        </div>
+
+        <dl class="nhsuk-u-margin-0">
+          <ng-container *ngFor="let organisation of organisations">
+
+            <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'bottom-border-separator': organisation.showHideStatus !== 'opened'}">
+              <dt class="nhsuk-u-font-weight-normal mr-auto"> {{ organisation.info.name }} ({{ organisation.info.acronym }})</dt>
+              <dd class="width-20 nhsuk-u-margin-0">
+                <theme-tag type="{{ organisation.info.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ organisation.info.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+              </dd>
+              <dd class="width-20 nhsuk-u-margin-0">
+                <ul class="nhsuk-list text-align-right nhsuk-u-margin-0">
+                  <li>
+                    <a *ngIf="organisation.info.organisationUnits.length > 1" href="javascript:void(0)" (click)="onShowHideClicked(organisation.info.id)">
+                      {{ organisation.showHideText }} <span class="nhsuk-u-visually-hidden"> {{ organisation.showHideDescription }} </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a routerLink="{{organisation.info.id}}" title="View">View</a>
+                  </li>
+                </ul>
+              </dd>
+            </div>
+
+            <ng-container *ngIf="organisation.showHideStatus === 'opened'">
+              <dl class="nhsuk-u-margin-0">
+                <div *ngFor="let organisationUnit of organisation.info.organisationUnits; let i = index;" class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
+                  <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'top-border-separator': i === 0}">
+                    <dt class="">{{ organisationUnit.name }} ({{ organisationUnit.acronym }})</dt>
+                    <dd>
+                      <theme-tag type="{{ organisationUnit.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ organisationUnit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+                    </dd>
+                  </div>
+                </div>
+              </dl>
+            </ng-container>
+
+          </ng-container>
+        </dl>
+      </div>
+    </ng-container>
+
+  </div>
+</div>

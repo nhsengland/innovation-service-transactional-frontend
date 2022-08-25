@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
-import { CoreComponent, FormArray, FormControl, FormGroup } from '@app/base';
+import { CoreComponent } from '@app/base';
+import { FormArray, FormControl, FormGroup } from '@app/base/forms';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
