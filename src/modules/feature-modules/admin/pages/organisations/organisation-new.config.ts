@@ -1,12 +1,13 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel, FormEngineParameterModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+
 
 // Types.
 type organisationsListType = {
   acronym: string, name: string, units: { acronym: string, name: string }[]
-}[]
+}[];
 
-type InboundPayloadType = {
-  organisationsList: organisationsListType,
+export type InboundPayloadType = {
+  organisationsList: organisationsListType
 };
 
 type StepPayloadType = {
@@ -14,19 +15,17 @@ type StepPayloadType = {
   acronym: string,
   doAssociateUnits: 'YES' | 'NO',
   createUnitNumber: number,
-  units: { name: string, acronym: string }[],
   organisationsList: organisationsListType,
-}
-& {[key: string]: null | string | Array<string> | number | organisationsListType}
+  organisationNamesList: string[],
+  organisationUnitNamesList: string[],
+} & { [key: string]: null | number | string | string[] | organisationsListType };
 
-type OutboundPayloadType = {
+export type OutboundPayloadType = {
   name: string,
-  acronym: string
-  units: {
-    name: string,
-    acronym: string
-  }[];
+  acronym: string,
+  units: { name: string, acronym: string }[]
 };
+
 
 export let CREATE_NEW_ORGANISATION_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   showSummary: true,
@@ -35,10 +34,12 @@ export let CREATE_NEW_ORGANISATION_QUESTIONS: WizardEngineModel = new WizardEngi
       parameters: [{
         id: 'name',
         dataType: 'text',
-        label: 'Provide the organisation name.',
-        validations: { isRequired: [true, 'Name is required'],
-        pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
-        maxLength: 100 },
+        label: `What's the name of the new organisation?`,
+        validations: {
+          isRequired: [true, 'Name is required'],
+          pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
+          maxLength: 100
+        }
       }]
     }),
 
@@ -46,11 +47,12 @@ export let CREATE_NEW_ORGANISATION_QUESTIONS: WizardEngineModel = new WizardEngi
       parameters: [{
         id: 'acronym',
         dataType: 'text',
-        label: 'Provide the new organisation acronym.',
+        label: `What's the acronym of the new organisation?`,
         validations: {
           isRequired: [true, 'Acronym is required'],
           pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
-          maxLength: 10 },
+          maxLength: 10
+        }
       }]
     }),
 
@@ -58,10 +60,10 @@ export let CREATE_NEW_ORGANISATION_QUESTIONS: WizardEngineModel = new WizardEngi
       parameters: [{
         id: 'doAssociateUnits',
         dataType: 'radio-group',
-        label: 'Do you want to associate units to the organization you are creating?',
+        label: 'Do you want to associate units to this organisation?',
         validations: { isRequired: [true, 'Choose one option'] },
         items: [
-          { value: 'YES', label: 'Yes'},
+          { value: 'YES', label: 'Yes' },
           { value: 'NO', label: 'No' }
         ]
       }]
@@ -73,29 +75,20 @@ export let CREATE_NEW_ORGANISATION_QUESTIONS: WizardEngineModel = new WizardEngi
   summaryParsing: (data: StepPayloadType, steps?: FormEngineModel[]) => summaryParsing(data, steps || [])
 });
 
+
 function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary'): void {
 
-  console.log(data)
-
-  const currentUnitsName = Object.entries(data).filter(([key, value]) => {
-    return (key.startsWith(`unitName-`) && key != steps[(currentStep as number)-1].parameters[0].id)
-  }).map(([key, value]) => value as string)
-  const currentUnitsAcronym = Object.entries(data).filter(([key, value]) => {
-    return (key.startsWith('unitAcronym-') && key != steps[(currentStep as number)-1].parameters[0].id)
-  }).map(([key, value]) => value as string)
-
-  const unitsListNames = [...data.organisationsList.flatMap(o => o.units.map(u => u.name)), ...currentUnitsName]
-  const unitsListAcronym = [...data.organisationsList.flatMap(o => o.units.map(u => u.acronym)), ...currentUnitsAcronym]
+  const chosenUnitNames = Object.entries(data).filter(([key]) => key.startsWith(`unitName-`)).map(([_key, value]) => value as string);
+  const chosenUnitAcronyms = Object.entries(data).filter(([key]) => key.startsWith('unitAcronym-')).map(([_key, value]) => value as string);
 
   steps.splice(3);
 
-  if(data.doAssociateUnits === 'NO') {
-    data.units = []
-  }
 
-  else {
-    data.units = []
-    //data.units.push({name: '', acronym: ''}) //push object into array
+  if (data.doAssociateUnits === 'NO') {
+
+    Object.keys(data).filter(key => key.startsWith('unitName-') || key.startsWith('unitAcronym-')).forEach(key => { delete data[key]; });
+
+  } else {
 
     steps.push(
       new FormEngineModel({
@@ -111,41 +104,47 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
       })
     )
 
-    let index = 0
-    do {
+    for (let i = 1; i <= data.createUnitNumber; i++) {
+
       steps.push(
         new FormEngineModel({
           parameters: [{
-            id: `unitName-${index}`,
+            id: `unitName-${i}`,
             dataType: 'text',
-            label: `Provide the name for the unit number ${index + 1}`,
+            label: `Provide the name for unit number ${i}`,
             validations: {
               isRequired: [true, 'Unit name is required'],
               pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
               maxLength: 100,
-              existsIn: [unitsListNames, 'Unit name already exists']
+              existsIn: [ // Excludes current value from validation.
+                [...data.organisationNamesList, ...chosenUnitNames.filter(item => item !== data[`unitName-${i}`])],
+                'Unit name already exists'
+              ]
             }
           }]
         }),
         new FormEngineModel({
           parameters: [{
-            id: `unitAcronym-${index}`,
+            id: `unitAcronym-${i}`,
             dataType: 'text',
-            label: `Provide the acronym for unit number ${index + 1}`,
+            label: `Provide the acronym for unit number ${i}`,
             validations: {
               isRequired: [true, 'Unit acronym is required'],
               pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
               maxLength: 10,
-              existsIn: [unitsListAcronym, 'Unit acronym already exists']
-            },
+              existsIn: [ // Excludes current value from validation.
+                [...data.organisationUnitNamesList, ...chosenUnitAcronyms.filter(item => item !== data[`unitAcronym-${i}`])],
+                'Unit acronym already exists'
+              ]
+            }
           }]
-        }),
+        })
       );
-      index++
-    } while (index < data.createUnitNumber);
 
-    console.warn(data)
+    }
+
   }
+
 }
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
@@ -155,8 +154,9 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     acronym: '',
     doAssociateUnits: 'NO',
     createUnitNumber: 2,
-    units: [],
-    organisationsList: data.organisationsList
+    organisationsList: data.organisationsList,
+    organisationNamesList: data.organisationsList.flatMap(o => o.units.map(u => u.name)),
+    organisationUnitNamesList: data.organisationsList.flatMap(o => o.units.map(u => u.acronym))
   };
 }
 
@@ -165,27 +165,35 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     name: data.name,
     acronym: data.acronym,
-    units: data.units
+    units: Object.entries(data).filter(([key]) => key.startsWith(`unitName-`)).map(([key, value]) => ({
+      name: value as string,
+      acronym: data[key.replace('unitName-', 'unitAcronym-')] as string
+    }))
   };
 
 }
 
 function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): WizardSummaryType[] {
+
   const toReturn: WizardSummaryType[] = [];
 
   toReturn.push(
-    { label: 'Organisation Name', value: data.name, editStepNumber: 1 },
-    { label: 'Organisation Acronym', value: data.acronym, editStepNumber: 2 },
+    { label: 'Organisation', value: `${data.name} (${data.acronym})`, editStepNumber: 1 }
   );
 
-  if(data.doAssociateUnits === 'YES') {
+  if (data.doAssociateUnits === 'YES') {
 
-    Object.keys(data).filter(key => key.startsWith('unitName-')).forEach((key: string, index) => {
+    Object.keys(data).filter(key => key.startsWith('unitName-')).forEach((key, index) => {
       toReturn.push(
-        { label: `Unit ${index + 1}`, value: `${data[key]} (${data[key.replace('unitName-', 'unitAcronym-')]})`, editStepNumber: 5 + (index *2)}
+        {
+          label: `Unit ${index + 1}`,
+          value: `${data[key]} (${data[key.replace('unitName-', 'unitAcronym-')]})`, editStepNumber: 5 + (index * 2)
+        }
       );
     });
+
   }
 
   return toReturn;
+
 }
