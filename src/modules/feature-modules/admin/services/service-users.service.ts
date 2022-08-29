@@ -31,8 +31,8 @@ export type getUserFullInfoDTO = {
     size: null | string;
     role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum;
     isShadow: boolean;
-    units: { id: string, name: string, acronym: string, supportCount: null | string }[]
-  }[]
+    units: { id: string, name: string, acronym: string, supportCount: null | string }[];
+  }[];
 };
 
 

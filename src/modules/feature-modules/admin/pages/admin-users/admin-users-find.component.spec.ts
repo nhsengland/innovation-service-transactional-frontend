@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
@@ -15,6 +16,8 @@ import { searchUserEndpointOutDTO, ServiceUsersService } from '../../services/se
 
 
 describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserFindComponent', () => {
+
+  let activatedRoute: ActivatedRoute;
 
   let serviceUsersService: ServiceUsersService;
 
@@ -34,6 +37,8 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserFindComponent', () 
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
+    activatedRoute = TestBed.inject(ActivatedRoute);
+
     serviceUsersService = TestBed.inject(ServiceUsersService);
 
   });
@@ -44,6 +49,16 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserFindComponent', () 
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
+  });
+
+  it('should show "adminDeletedSuccess" alert', () => {
+
+    activatedRoute.snapshot.queryParams = { alert: 'adminDeletedSuccess' };
+
+    fixture = TestBed.createComponent(PageAdminUsersFindComponent);
+    component = fixture.componentInstance;
+    expect(component.alert.type).toBe('SUCCESS');
+
   });
 
   it('should call onSubmit() and return success', () => {

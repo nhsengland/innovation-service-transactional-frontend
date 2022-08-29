@@ -9,7 +9,7 @@ import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/cor
 import { StoresModule, AuthenticationStore, InnovationStore } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
-import { ServiceUsersService } from './service-users.service';
+import { getUserMinimalInfoDTO, ServiceUsersService } from './service-users.service';
 
 
 describe('FeatureModules/Admin/Services/ServiceUsersService', () => {
@@ -54,20 +54,18 @@ describe('FeatureModules/Admin/Services/ServiceUsersService', () => {
   });
 
 
-  // TODO: Add tests.
-  it('should run aMethod() and return success', () => {
+  it('should run getUserMinimalInfo() and return SUCCESS', () => {
 
-    const responseMock = {
-      data: []
-    };
+    const responseMock: getUserMinimalInfoDTO = { id: '_user01', displayName: 'User name 01' };
+    const expected = responseMock;
 
-    const expected = {
-      data: []
-    };
+    let response: any = null;
+    service.getUserMinimalInfo('_user01').subscribe(success => response = success, error => response = error);
 
-    // let response: any = null;
-
-    expect(1).toEqual(1);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/user-admin/users/_user01?model=minimal`);
+    httpRequest.flush(responseMock);
+    expect(httpRequest.request.method).toBe('GET');
+    expect(response).toEqual(expected);
 
   });
 
