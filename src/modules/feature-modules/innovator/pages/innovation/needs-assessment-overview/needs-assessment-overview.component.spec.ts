@@ -8,6 +8,7 @@ import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { InnovatorNeedsAssessmentOverviewComponent } from './needs-assessment-overview.component';
 
@@ -45,6 +46,21 @@ describe('FeatureModules/Innovator/Innovation/InnovatorNeedsAssessmentOverviewCo
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
+
+    innovatorService.getSupportLogList = () => of([{
+      id: 'support01',
+      type: 'STATUS_UPDATE',
+      description: 'description',
+      createdBy: 'A user',
+      createdAt: '2020-01-01T00:00:00.000Z',
+      innovationSupportStatus: InnovationSupportStatusEnum.ENGAGING,
+      organisationUnit: {
+        id: 'unit01', name: 'Unit 01', acronym: 'UN',
+        organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
+      },
+      logTitle: 'Updated  support status',
+      suggestedOrganisationUnitsNames: ['Unit 01']
+    }]);
 
   });
 

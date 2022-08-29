@@ -76,6 +76,10 @@ export class EnvironmentStore extends Store<ContextModel> {
     this.state.innovation = data;
     this.setState();
   }
+  clearInnovation(): void {
+    this.state.innovation = null;
+    this.setState();
+  }
 
   updateInnovation(data: Partial<EnvironmentInnovationType>): void {
 

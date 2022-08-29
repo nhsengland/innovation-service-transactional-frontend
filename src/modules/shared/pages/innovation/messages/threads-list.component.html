@@ -37,7 +37,7 @@
 
       <p *ngIf="isInnovator()">
         When you start a new conversation, <a routerLink="../support">everyone who is currently supporting your innovation</a>
-        will be notified. They can then view ans reply to your messages.
+        will be notified. They can then view and reply to your messages.
       </p>
       <p *ngIf="isNotInnovator()">When you start a new conversation, all engaging organisation units and the needs assessment team can see and reply to messages, but only the innovator will be notified.</p>
 
@@ -72,8 +72,8 @@
                 </div>
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('repliesNumber') }}</span>
-                {{ item.repliesNumber }} messages
+                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('messageCount') }}</span>
+                {{ item.messageCount }} messages
               </td>
               <td class="nhsuk-table__cell text-align-right">
                 <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('createdAt') }}</span>

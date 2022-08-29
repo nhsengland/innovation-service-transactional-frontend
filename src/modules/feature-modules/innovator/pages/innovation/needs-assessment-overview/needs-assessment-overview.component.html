@@ -7,16 +7,22 @@
         <p> {{ alert.message }} </p>
       </theme-alert>
 
-      <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+    </div>
+  </div>
 
-      <ng-container *ngIf="pageStatus === 'READY'">
+  <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+  <ng-container *ngIf="pageStatus === 'READY'">
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
 
         <div class="app-pane">
 
           <div class="app-pane__side-bar nhsuk-u-padding-top-3">
             <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
               <div class="nhsuk-back-link app-u-hide-mobile app-side-nav__back nhsuk-u-margin-bottom-4">
-                <a class="nhsuk-back-link__link" routerLink="/innovator/innovations">
+                <a class="nhsuk-back-link__link" routerLink="/innovator/innovations/{{ innovationId }}">
                   <theme-svg-icon type="back"></theme-svg-icon>
                   Go back
                 </a>
@@ -84,13 +90,13 @@
                 <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Suggested organisations</h2>
                 <div *ngFor="let organisation of assessment?.organisations">
                   <p class="nhsuk-u-margin-bottom-1"> {{ organisation.name }} </p>
-                    <div *ngFor="let unit of organisation?.organisationUnits" >
-                      <ul *ngIf="organisation.name != unit.name" class="nhsuk-list nhsuk-u-margin-left-3 nhsuk-u-margin-bottom-0 border-left-inset-neutral">
-                        <li class="d-flex nhsuk-u-margin-0 nhsuk-u-padding-left-3">                        
-                          <span class="app-task-list__task-name"> {{ unit.name }} </span>
-                        </li>
-                      </ul>
-                    </div>
+                  <div *ngFor="let unit of organisation?.organisationUnits">
+                    <ul *ngIf="organisation.name != unit.name" class="nhsuk-list nhsuk-u-margin-left-3 nhsuk-u-margin-bottom-0 border-left-inset-neutral">
+                      <li class="d-flex nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+                        <span class="app-task-list__task-name"> {{ unit.name }} </span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
 
                 <a routerLink="/innovator/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
@@ -101,9 +107,56 @@
 
         </div>
 
-      </ng-container>
-
+      </div>
     </div>
-  </div>
+
+    <div class="nhsuk-grid-row nhsuk-u-margin-top-5">
+      <div class="nhsuk-grid-column-full">
+
+        <div class="full-width-section bg-color-white">
+
+          <div class="nhsuk-grid-row nhsuk-u-padding-top-5">
+            <div class="nhsuk-grid-column-one-quarter"> &nbsp; </div>
+            <div class="nhsuk-grid-column-three-quarters">
+              <h2 class="nhsuk-heading-l">Support history</h2>
+            </div>
+          </div>
+          <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-3" />
+
+          <div *ngFor="let item of supportLogList" class="nhsuk-grid-row">
+
+            <div class="nhsuk-grid-column-one-quarter">
+              <p class="nhsuk-heading-xs nhsuk-u-margin-bottom-0"> {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }} </p>
+              <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0"> {{ item.createdBy }} </p>
+              <p class="nhsuk-hint"> {{ item.organisationUnit.name }} </p>
+            </div>
+
+            <div class="nhsuk-grid-column-three-quarters">
+              <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0"> {{ item.logTitle }} </p>
+              <ng-container [ngSwitch]="item.type">
+                <div *ngSwitchCase="'ACCESSOR_SUGGESTION'">
+                  <p *ngFor="let organisationUnit of item.suggestedOrganisationUnitsNames" class="nhsuk-u-margin-bottom-0"> {{ organisationUnit }} </p>
+                </div>
+                <div *ngSwitchCase="'STATUS_UPDATE'">
+                  <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + item.innovationSupportStatus + '.cssColorClass' | translate }}"
+                    label="{{ 'shared.catalog.innovation.support_status.' + item.innovationSupportStatus + '.name' | translate }}"></theme-tag>
+                </div>
+              </ng-container>
+              <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-4">Comment</p>
+              <p> {{ item.description }} </p>
+            </div>
+
+            <div class="nhsuk-grid-column-full">
+              <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-3" />
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </ng-container>
 
 </div>

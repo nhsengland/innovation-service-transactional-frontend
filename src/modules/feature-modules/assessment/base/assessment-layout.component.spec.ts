@@ -128,7 +128,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
     const expected = [
       { title: 'Overview', link: `/assessment/innovations/innovation01/overview` },
       { title: 'Innovation record', link: `/assessment/innovations/innovation01/record` },
-      { title: 'Comments', link: `/assessment/innovations/innovation01/comments` },
+      // { title: 'Comments', link: `/assessment/innovations/innovation01/comments` },
       { title: 'Messages', link: `/assessment/innovations/innovation01/threads` },
       { title: 'Support status', link: `/assessment/innovations/innovation01/support` },
       // { title: 'Action tracker', link: `/assessment/innovations/innovation01/action-tracker` },
@@ -154,7 +154,7 @@ describe('FeatureModules/Assessment/AssessmentLayoutComponent', () => {
       { title: 'Innovation record', link: `/assessment/innovations/innovation01/record` },
       // { title: 'Support status', link: `/assessment/innovations/innovation01/support` },
       // { title: 'Action tracker', link: `/assessment/innovations/innovation01/action-tracker` },
-      { title: 'Comments', link: `/assessment/innovations/innovation01/comments` },
+      // { title: 'Comments', link: `/assessment/innovations/innovation01/comments` },
       { title: 'Messages', link: `/assessment/innovations/innovation01/threads` },
       { title: 'Activity log', link: `/assessment/innovations/innovation01/activity-log` }
     ];

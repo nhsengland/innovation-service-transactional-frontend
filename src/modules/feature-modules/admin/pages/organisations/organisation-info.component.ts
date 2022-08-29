@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { TableModel } from '@app/base/models';
 
-import { OrganisationsService, organisationUsersOutDTO } from '@modules/feature-modules/admin/services/organisations.service';
+import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
   organisationId: string;
 
   organisation: {
-    id: null | string,
+    id: string,
     name: null | string,
     acronym: null | string,
     isActive: null | boolean,
@@ -25,13 +26,13 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
       acronym: string,
       isActive: boolean,
       userCount: number,
-      users: organisationUsersOutDTO[],
+      users: { name: string, roleDescription: string }[],
       showHideStatus: 'hidden' | 'opened' | 'closed',
       showHideText: null | string,
       showHideDescription: null | string,
       isLoading: boolean
     }[];
-  } = { id: null, name: null, acronym: null, isActive: null, organisationUnits: [] };
+  } = { id: '', name: null, acronym: null, isActive: null, organisationUnits: [] };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -67,27 +68,28 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
 
   ngOnInit(): void {
 
-    this.organisationsService.getOrganisationInfo(this.organisationId).subscribe(organisation => {
+    this.organisationsService.getOrganisationInfo(this.organisationId).subscribe(
+      organisation => {
 
-      this.organisation = {
-        ...organisation,
-        organisationUnits: organisation.organisationUnits.map(u => ({
-          ...u,
-          showHideStatus: 'closed',
-          showHideText: `Show users`,
-          showHideDescription: `that belong to the ${u.name}`,
-          isLoading: false,
-          users: []
-        }))
-      };
+        this.organisation = {
+          ...organisation,
+          organisationUnits: organisation.organisationUnits.map(u => ({
+            ...u,
+            showHideStatus: 'closed',
+            showHideText: `Show users`,
+            showHideDescription: `that belong to the ${u.name}`,
+            isLoading: false,
+            users: []
+          }))
+        };
 
-      if (this.organisation.organisationUnits.length === 1) {
-        this.onShowHideClicked(this.organisation.organisationUnits[0].id);
-      }
+        if (this.organisation.organisationUnits.length === 1) {
+          this.onUnitUsersShowHideClicked(this.organisation.id, this.organisation.organisationUnits[0].id);
+        }
 
-      this.setPageStatus('READY');
+        this.setPageStatus('READY');
 
-    },
+      },
       () => {
         this.setPageStatus('ERROR');
         this.setAlertDataLoadError();
@@ -96,9 +98,9 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
 
   }
 
-  onShowHideClicked(id: string): void {
+  onUnitUsersShowHideClicked(organisationId: string, organisationUnitId: string): void {
 
-    const unit = this.organisation.organisationUnits.find(item => item.id === id);
+    const unit = this.organisation.organisationUnits.find(item => item.id === organisationUnitId);
 
     if (unit?.showHideStatus === 'closed') { unit.isLoading = true; }
 
@@ -110,9 +112,10 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
         unit.isLoading = false;
         break;
       case 'closed':
-        this.organisationsService.getUsersByUnitId(id).subscribe(
+        const qp = new TableModel<{}, { onlyActive: boolean }>({ pageSize: 1000 }).setFilters({ onlyActive: true }).getAPIQueryParams();
+        this.organisationsService.getOrganisationUnitUsers(organisationId, organisationUnitId, qp).subscribe(
           response => {
-            unit.users = response;
+            unit.users = response.data.map(item => ({ name: item.name, roleDescription: item.organisationRoleDescription }));
             unit.showHideStatus = 'opened';
             unit.showHideText = `Hide users`;
             unit.showHideDescription = `that belong to the ${unit.name}`;

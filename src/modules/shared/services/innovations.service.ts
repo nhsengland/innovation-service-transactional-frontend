@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -15,9 +15,8 @@ export type GetThreadsListDTO = {
   threads: {
     id: string;
     subject: string;
-    repliesNumber: number;
+    messageCount: number;
     createdAt: DateISOType;
-    createdBy: { id: string, name: string, type: UserTypeEnum }
     isNew: boolean;
     lastMessage: {
       id: string;
@@ -26,7 +25,6 @@ export type GetThreadsListDTO = {
         id: string;
         name: string;
         type: UserTypeEnum;
-        organisation?: { id: string, name: string, acronym: string };
         organisationUnit?: { id: string, name: string, acronym: string };
       }
     }
@@ -93,8 +91,8 @@ export class InnovationsService extends CoreService {
     //   count: 50,
     //   threads: [
     //     {
-    //       id: 'T01', subject: 'Some title 01', repliesNumber: 5,
-    //       createdAt: '2020-01-01T00:00:00.000Z', createdBy: { id: 'U01', name: 'User 01', type: UserTypeEnum.INNOVATOR },
+    //       id: 'T01', subject: 'Some title 01', messageCount: 5,
+    //       createdAt: '2020-01-01T00:00:00.000Z',
     //       isNew: true,
     //       lastMessage: {
     //         id: 'LastMessageId',
@@ -107,8 +105,8 @@ export class InnovationsService extends CoreService {
     //       }
     //     },
     //     {
-    //       id: 'T02', subject: 'Some title 02', repliesNumber: 10,
-    //       createdAt: '2020-01-01T00:00:00.000Z', createdBy: { id: 'U01', name: 'User 02', type: UserTypeEnum.INNOVATOR },
+    //       id: 'T02', subject: 'Some title 02', messageCount: 10,
+    //       createdAt: '2020-01-01T00:00:00.000Z',
     //       isNew: false,
     //       lastMessage: {
     //         id: 'LastMessageId',
@@ -127,13 +125,7 @@ export class InnovationsService extends CoreService {
 
     const { filters, ...qp } = queryParams;
 
-    const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads')
-      .setPathParams({
-        module: this.apiUserBasePath(),
-        userId: this.stores.authentication.getUserId(),
-        innovationId
-      }).setQueryParams(qp);
-
+    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads').setPathParams({ innovationId }).setQueryParams(qp);
     return this.http.get<GetThreadsListDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         count: response.count,
@@ -150,14 +142,7 @@ export class InnovationsService extends CoreService {
     //   createdAt: '2020-01-01T00:00:00.000Z', createdBy: { id: '', name: 'LM01', type: UserTypeEnum.ASSESSMENT }
     // });
 
-    const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId')
-      .setPathParams({
-        module: this.apiUserBasePath(),
-        userId: this.stores.authentication.getUserId(),
-        innovationId,
-        threadId
-      });
-
+    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId').setPathParams({ innovationId, threadId });
     return this.http.get<GetThreadInfoDTO>(url.buildUrl()).pipe(take(1),
       map(response => response)
     );
@@ -171,14 +156,7 @@ export class InnovationsService extends CoreService {
     //   createdAt: '2020-01-01T00:00:00.000Z'
     // });
 
-    const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId/messages/:messageId')
-      .setPathParams({
-        module: this.apiUserBasePath(),
-        userId: this.stores.authentication.getUserId(),
-        innovationId,
-        threadId,
-        messageId
-      });
+    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId/messages/:messageId').setPathParams({ innovationId, threadId, messageId });
 
     return this.http.get<GetThreadMessageInfoDTO>(url.buildUrl()).pipe(take(1),
       map(response => response)
@@ -224,14 +202,7 @@ export class InnovationsService extends CoreService {
 
     const { filters, ...qp } = queryParams;
 
-    const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId/messages')
-      .setPathParams({
-        module: this.apiUserBasePath(),
-        userId: this.stores.authentication.getUserId(),
-        innovationId,
-        threadId
-      }).setQueryParams(qp);
-
+    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId/messages').setPathParams({ innovationId, threadId }).setQueryParams(qp);
     return this.http.get<GetThreadMessagesListInDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         count: response.count,
@@ -249,13 +220,7 @@ export class InnovationsService extends CoreService {
     // return of({ id: 'sfsdfa' });
     // return throwError('error');
 
-    const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads')
-      .setPathParams({
-        module: this.apiUserBasePath(),
-        userId: this.stores.authentication.getUserId(),
-        innovationId
-      });
-
+    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads').setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
@@ -265,14 +230,7 @@ export class InnovationsService extends CoreService {
     // return of({ id: 'sfsdfa' });
     // return throwError('error');
 
-    const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId')
-      .setPathParams({
-        module: this.apiUserBasePath(),
-        userId: this.stores.authentication.getUserId(),
-        innovationId,
-        threadId
-      });
-
+    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId/messages').setPathParams({ innovationId, threadId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
@@ -282,15 +240,7 @@ export class InnovationsService extends CoreService {
     // return of({ id: 'sfsdfa' });
     // return throwError('error');
 
-    const url = new UrlModel(this.API_URL).addPath(':module/:userId/innovations/:innovationId/threads/:threadId/messages/:messageId')
-      .setPathParams({
-        module: this.apiUserBasePath(),
-        userId: this.stores.authentication.getUserId(),
-        innovationId,
-        threadId,
-        messageId
-      });
-
+    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId/messages/:messageId').setPathParams({ innovationId, threadId, messageId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }

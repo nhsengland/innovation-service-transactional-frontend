@@ -124,7 +124,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     }
 
 
-    this.stores.innovation.getSectionInfo$(this.module, this.innovation.id, this.section.id).subscribe(
+    this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe(
       response => {
 
         this.section.status = { id: response.section.status, label: INNOVATION_SECTION_STATUS[response.section.status]?.label || '' };

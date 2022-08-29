@@ -26,7 +26,6 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
   module: '' | 'innovator' | 'accessor' | 'assessment' = '';
   innovation: EnvironmentInnovationType;
 
-  INNOVATION_SUPPORT_STATUS = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   ACTIVITY_LOG_ITEMS = ACTIVITY_LOG_ITEMS;
 
   activitiesList = new TableModel<ActivitiesListType, { activityTypes: ActivityLogTypesEnum }>();
@@ -41,11 +40,13 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
   filters: FiltersType[] = [{ key: 'activityTypes', title: 'Activity Types', showHideStatus: 'opened', selected: [] }];
 
   datasets: { [key in FilterKeysType]: { label: string, value: string, description: string }[] } = {
-    activityTypes: Object.keys(ActivityLogTypesEnum).map(i => ({
-      label: this.translate(`shared.catalog.innovation.activity_log_groups.${i}.title`),
-      value: i,
-      description: this.translate(`shared.catalog.innovation.activity_log_groups.${i}.description`)
-    }))
+    activityTypes: Object.keys(ActivityLogTypesEnum)
+      .filter(item => item !== ActivityLogTypesEnum.COMMENTS)
+      .map(i => ({
+        label: this.translate(`shared.catalog.innovation.activity_log_groups.${i}.title`),
+        value: i,
+        description: this.translate(`shared.catalog.innovation.activity_log_groups.${i}.description`)
+      }))
   };
 
 
@@ -85,7 +86,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
     this.setPageStatus('LOADING');
 
-    this.stores.innovation.getActivityLog$(this.module, this.innovation.id, this.activitiesList.getAPIQueryParams()).subscribe(
+    this.stores.innovation.getActivityLog$(this.innovation.id, this.activitiesList.getAPIQueryParams()).subscribe(
       response => {
 
         this.activitiesList.setData(

@@ -91,7 +91,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
     forkJoin([
       this.innovatorService.getInnovationInfo(this.innovationId),
-      this.stores.innovation.getSectionsSummary$('innovator', this.innovationId),
+      this.stores.innovation.getSectionsSummary$(this.innovationId),
       this.innovatorService.getInnovationSupports(this.innovationId, true),
     ]).subscribe(([innovationInfo, sectionSummary, innovationSupports]) => {
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
+import { CustomValidators, FormControl, FormGroup, Validators } from '@app/base/forms';
 
 import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
 
@@ -18,7 +18,7 @@ export class PageInnovationThreadNewComponent extends CoreComponent implements O
   innovation: EnvironmentInnovationType;
 
   form = new FormGroup({
-    subject: new FormControl('', CustomValidators.required('A subject is required')),
+    subject: new FormControl('', [CustomValidators.required('A subject is required'), Validators.maxLength(100)]),
     message: new FormControl('', CustomValidators.required('A message is required'))
   }, { updateOn: 'blur' });
 

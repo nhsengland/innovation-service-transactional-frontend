@@ -40,6 +40,9 @@ export type NotificationsListInDTO = {
       actionStatus?: InnovationActionStatusEnum;
       supportStatus?: InnovationSupportStatusEnum;
       organisationUnitName?: string;
+      // Messages.
+      subject?: string;
+      messageId?: string;
     }
   }[];
 };
@@ -103,9 +106,12 @@ export class NotificationsService extends CoreService {
             case NotificationContextTypeEnum.ACTION:
               link = { label: 'Click to go to action', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/action-tracker/${item.contextId}` };
               break;
-            case NotificationContextTypeEnum.COMMENT:
-              link = { label: 'Click to go to comment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/comments` };
+            case NotificationContextTypeEnum.THREAD:
+              link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.contextId}` };
               break;
+            // case NotificationContextTypeEnum.COMMENT:
+            //   link = { label: 'Click to go to comment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/comments` };
+            //   break;
           }
 
           return {

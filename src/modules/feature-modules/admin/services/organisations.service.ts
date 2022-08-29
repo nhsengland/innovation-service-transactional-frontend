@@ -75,13 +75,6 @@ export type GetOrganisationUnitInnovationsListDTO = {
   }[];
 };
 
-export type organisationUsersInDTO = {
-  id: string;
-  name: string;
-  role: AccessorOrganisationRoleEnum;
-};
-export type organisationUsersOutDTO = organisationUsersInDTO & { roleDescription: string };
-
 
 @Injectable()
 export class OrganisationsService extends CoreService {
@@ -218,16 +211,6 @@ export class OrganisationsService extends CoreService {
     const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId/innovations').setPathParams({ organisationId, organisationUnitId }).setQueryParams(qp);
     return this.http.get<GetOrganisationUnitInnovationsListDTO>(url.buildUrl()).pipe(take(1),
       map(response => response)
-    );
-
-  }
-
-  getUsersByUnitId(organisationUnitId: string): Observable<organisationUsersOutDTO[]> {
-
-    const url = new UrlModel(this.API_URL).addPath('organisations/:organisationUnitId/users').setPathParams({ organisationUnitId });
-    return this.http.get<organisationUsersInDTO[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response.map(user => ({ ...user, roleDescription: this.stores.authentication.getRoleDescription(user.role) })))
     );
 
   }

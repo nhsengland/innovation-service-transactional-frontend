@@ -3,13 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
+import { NotificationContextTypeEnum } from '@app/base/enums';
 import { RoutingHelper } from '@app/base/helpers';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { getInnovationNeedsAssessmentEndpointOutDTO, getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/accessor/services/accessor.service';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
-import { InnovationDataResolverType, OrganisationModel } from '@modules/stores/innovation/innovation.models';
+import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -58,10 +59,13 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
   ngOnInit(): void {
 
+    // Throw notification read dismiss.
+    this.stores.environment.dismissNotification(NotificationContextTypeEnum.NEEDS_ASSESSMENT, this.assessmentId);
+
     forkJoin([
-      this.accessorService.getSupportLog(this.innovationId),
-      this.accessorService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId)
-    ]).subscribe(([supportLog, needsAssessmentInfo]) => {
+      this.accessorService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
+      this.accessorService.getSupportLog(this.innovationId)
+    ]).subscribe(([needsAssessmentInfo, supportLog]) => {
 
       this.logHistory = supportLog;
 

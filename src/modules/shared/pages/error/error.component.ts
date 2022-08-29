@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
@@ -9,10 +10,31 @@ import { CoreComponent } from '@app/base';
 })
 export class PageErrorComponent extends CoreComponent {
 
-  constructor() {
+  errorType: 'generic' | 'forbidden_innovation';
+  message: string;
+  buttonLabel: string;
+
+
+  constructor(
+    private activatedRoute: ActivatedRoute,
+  ) {
 
     super();
-    this.setPageTitle('features.shared_pages.page_error.title');
+
+    switch (this.activatedRoute.snapshot.params.errorType) {
+      case 'forbidden-innovation':
+        this.errorType = 'forbidden_innovation';
+        break;
+
+      case 'generic':
+      default:
+        this.errorType = 'generic';
+        break;
+    }
+
+    this.setPageTitle(`features.shared_pages.page_error.${this.errorType}.title`);
+    this.message = `features.shared_pages.page_error.${this.errorType}.message`;
+    this.buttonLabel = `features.shared_pages.page_error.${this.errorType}.button_label`;
 
   }
 

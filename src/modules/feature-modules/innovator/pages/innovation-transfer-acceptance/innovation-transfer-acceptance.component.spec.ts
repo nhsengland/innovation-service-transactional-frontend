@@ -77,7 +77,7 @@ describe('FeatureModules/Innovator/Pages/InnovationTransferAcceptanceComponent',
     component = fixture.componentInstance;
 
     fixture.detectChanges();
-    expect(routerSpy).toHaveBeenCalledWith(['error'], {});
+    expect(routerSpy).toHaveBeenCalledWith(['error/generic'], {});
 
   });
 
@@ -105,7 +105,7 @@ describe('FeatureModules/Innovator/Pages/InnovationTransferAcceptanceComponent',
     component = fixture.componentInstance;
 
     fixture.detectChanges();
-    expect(routerSpy).toHaveBeenCalledWith(['error'], {});
+    expect(routerSpy).toHaveBeenCalledWith(['error/generic'], {});
 
   });
 

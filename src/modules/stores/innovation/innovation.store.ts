@@ -11,7 +11,7 @@ import { APIQueryParamsType } from '@modules/core/models/table.model';
 import { Store } from '../store.class';
 import { WizardEngineModel } from '@modules/shared/forms';
 
-import { InnovationService, UserModulesType, ActivityLogOutDTO, } from './innovation.service';
+import { InnovationService, ActivityLogOutDTO, } from './innovation.service';
 
 import { INNOVATION_SECTIONS, getSectionTitle } from './innovation.config';
 import { ActivityLogTypesEnum, InnovationSectionEnum } from './innovation.enums';
@@ -50,13 +50,13 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitInnovation(innovationId);
   }
 
-  getActivityLog$(module: UserModulesType, innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum }>): Observable<ActivityLogOutDTO> {
-    return this.innovationsService.getInnovationActivityLog(module, innovationId, queryParams);
+  getActivityLog$(innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum }>): Observable<ActivityLogOutDTO> {
+    return this.innovationsService.getInnovationActivityLog(innovationId, queryParams);
   }
 
-  getSectionsSummary$(module: UserModulesType, innovationId: string): Observable<{ innovation: { name: string, status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {
+  getSectionsSummary$(innovationId: string): Observable<{ innovation: { name: string, status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {
 
-    return this.innovationsService.getInnovationSections(module, innovationId).pipe(
+    return this.innovationsService.getInnovationSections(innovationId).pipe(
       map(response => ({
         innovation: {
           status: response.status,
@@ -96,8 +96,8 @@ export class InnovationStore extends Store<InnovationModel> {
 
   }
 
-  getSectionInfo$(module: UserModulesType, innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObjectType }> {
-    return this.innovationsService.getSectionInfo(module, innovationId, section);
+  getSectionInfo$(innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObjectType }> {
+    return this.innovationsService.getSectionInfo(innovationId, section);
   }
 
   updateSectionInfo$(innovationId: string, section: string, data: MappedObjectType): Observable<MappedObjectType> {
@@ -108,8 +108,8 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitSections(innovationId, sections);
   }
 
-  getSectionEvidence$(module: UserModulesType, innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
-    return this.innovationsService.getSectionEvidenceInfo(module, innovationId, evidenceId);
+  getSectionEvidence$(innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
+    return this.innovationsService.getSectionEvidenceInfo(innovationId, evidenceId);
   }
 
   upsertSectionEvidenceInfo$(innovationId: string, data: MappedObjectType, evidenceId?: string): Observable<MappedObjectType> {
@@ -136,16 +136,16 @@ export class InnovationStore extends Store<InnovationModel> {
 
 
   // Innovation comments methods.
-  getInnovationComments$(module: UserModulesType, innovationId: string, createdOrder: 'asc' | 'desc'): Observable<getInnovationCommentsDTO[]> {
-    return this.innovationsService.getInnovationComments(module, innovationId, createdOrder);
+  getInnovationComments$(innovationId: string, createdOrder: 'asc' | 'desc'): Observable<getInnovationCommentsDTO[]> {
+    return this.innovationsService.getInnovationComments(innovationId, createdOrder);
   }
 
-  createInnovationComment$(module: UserModulesType, innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
-    return this.innovationsService.createInnovationComment(module, innovationId, body);
+  createInnovationComment$( innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
+    return this.innovationsService.createInnovationComment(innovationId, body);
   }
 
-  updateInnovationComment$(module: UserModulesType, innovationId: string, body: { comment: string, replyTo?: string }, commentId: string): Observable<{ id: string }> {
-    return this.innovationsService.updateInnovationComment(module, innovationId, body, commentId);
+  updateInnovationComment$( innovationId: string, body: { comment: string, replyTo?: string }, commentId: string): Observable<{ id: string }> {
+    return this.innovationsService.updateInnovationComment(innovationId, body, commentId);
   }
 
 }

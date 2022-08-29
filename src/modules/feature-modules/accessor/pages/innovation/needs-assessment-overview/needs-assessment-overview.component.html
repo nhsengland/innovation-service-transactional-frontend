@@ -23,7 +23,7 @@
           <div class="app-pane__side-bar nhsuk-u-padding-top-3">
             <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
               <div class="nhsuk-back-link app-u-hide-mobile app-side-nav__back nhsuk-u-margin-bottom-4">
-                <a class="nhsuk-back-link__link" routerLink="/accessor/innovations">
+                <a class="nhsuk-back-link__link" routerLink="/accessor/innovations/{{ innovationId }}">
                   <theme-svg-icon type="back"></theme-svg-icon>
                   Go back
                 </a>
@@ -137,7 +137,8 @@
                   <p *ngFor="let organisationUnit of item.suggestedOrganisationUnitsNames" class="nhsuk-u-margin-bottom-0"> {{ organisationUnit }} </p>
                 </div>
                 <div *ngSwitchCase="supportLogType.STATUS_UPDATE">
-                  <strong class="nhsuk-tag" [ngClass]="innovationSupportStatus[item.innovationSupportStatus].cssClass">{{ innovationSupportStatus[item.innovationSupportStatus].label }}</strong>
+                  <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + item.innovationSupportStatus + '.cssColorClass' | translate }}"
+                    label="{{ 'shared.catalog.innovation.support_status.' + item.innovationSupportStatus + '.name' | translate }}"></theme-tag>
                 </div>
               </ng-container>
               <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-4">Comment</p>

@@ -71,7 +71,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
 
     } else {
 
-      this.stores.innovation.getSectionEvidence$('innovator', this.innovationId, this.evidenceId).subscribe(
+      this.stores.innovation.getSectionEvidence$(this.innovationId, this.evidenceId).subscribe(
         response => {
           this.currentAnswers = this.wizard.runInboundParsing(response);
           this.wizard.runRules(this.currentAnswers);

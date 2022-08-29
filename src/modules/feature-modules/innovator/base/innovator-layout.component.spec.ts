@@ -145,7 +145,7 @@ describe('FeatureModules/Innovator/InnovatorLayoutComponent', () => {
       { title: 'Overview', link: `/innovator/innovations/innovation01/overview` },
       { title: 'Innovation record', link: `/innovator/innovations/innovation01/record` },
       { title: 'Action tracker', link: `/innovator/innovations/innovation01/action-tracker`, notificationKey: NotificationContextTypeEnum.ACTION },
-      { title: 'Comments', link: `/innovator/innovations/innovation01/comments`, notificationKey: NotificationContextTypeEnum.COMMENT },
+      // { title: 'Comments', link: `/innovator/innovations/innovation01/comments` },
       { title: 'Messages', link: `/innovator/innovations/innovation01/threads` },
       { title: 'Data sharing and support', link: `/innovator/innovations/innovation01/support` },
       { title: 'Activity log', link: `/innovator/innovations/innovation01/activity-log` }

@@ -42,7 +42,7 @@ export class PageInnovationCommentsEditComponent extends CoreComponent implement
 
     this.setPageStatus('LOADING');
 
-    this.stores.innovation.getInnovationComments$(this.module, this.innovationId, this.currentCreatedOrder).subscribe(
+    this.stores.innovation.getInnovationComments$(this.innovationId, this.currentCreatedOrder).subscribe(
       response => {
 
         const comment = response.filter(c => c.id === this.commentId)[0];
@@ -70,7 +70,7 @@ export class PageInnovationCommentsEditComponent extends CoreComponent implement
 
     const id = (this.subModule === 'comment') ? this.commentId : this.replyId;
 
-    this.stores.innovation.updateInnovationComment$(this.module, this.innovationId, this.form.value, id).subscribe(
+    this.stores.innovation.updateInnovationComment$(this.innovationId, this.form.value, id).subscribe(
       () => {
         this.redirectTo(`/${this.module}/innovations/${this.innovationId}/comments`, { alert: 'commentEditSuccess' });
       },

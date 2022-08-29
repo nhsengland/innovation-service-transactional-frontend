@@ -278,7 +278,7 @@ export const ACTIVITY_LOG_ITEMS: {
   [key in ActivityLogItemsEnum]: {
     type: ActivityLogTypesEnum;
     details: null | 'ORGANISATIONS_LIST' | 'SUPPORT_STATUS_UPDATE' | 'COMMENT';
-    link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'ACTION';
+    link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'ACTION' | 'THREAD';
   }
 } = {
   INNOVATION_CREATION: {
@@ -341,6 +341,17 @@ export const ACTIVITY_LOG_ITEMS: {
     link: null
   },
 
+  THREAD_CREATION: {
+    type: ActivityLogTypesEnum.THREADS,
+    details: null,
+    link: 'THREAD'
+  },
+  THREAD_MESSAGE_CREATION: {
+    type: ActivityLogTypesEnum.THREADS,
+    details: null,
+    link: 'THREAD'
+  },
+
   ACTION_CREATION: {
     type: ActivityLogTypesEnum.ACTIONS,
     details: 'COMMENT',
@@ -365,5 +376,6 @@ export const ACTIVITY_LOG_ITEMS: {
     type: ActivityLogTypesEnum.ACTIONS,
     details: null,
     link: null
-  },
+  }
+
 };

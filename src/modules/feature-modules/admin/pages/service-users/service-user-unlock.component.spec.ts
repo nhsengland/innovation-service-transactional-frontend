@@ -6,6 +6,7 @@ import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
+import { InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
@@ -65,12 +66,12 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserUnlockComponent
       id: 'User01',
       email: 'user@email.com',
       displayName: 'User name',
-      type: 'INNOVATOR',
-      innovations: [{id: 'inn1', name: 'innovation'}],
+      type: UserTypeEnum.INNOVATOR,
+      innovations: [{ id: 'inn1', name: 'innovation' }],
       phone: '12345678',
       lockedAt: '2020-01-01T00:00:00.000Z',
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 15', isShadow: true, role: 'INNOVATOR_OWNER', units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 15', isShadow: true, role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER, units: [] }
       ]
     };
     serviceUsersService.getUserFullInfo = () => of(responseMock);
@@ -89,12 +90,12 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserUnlockComponent
       id: 'User01',
       email: 'user@email.com',
       displayName: 'User name',
-      type: 'INNOVATOR',
+      type: UserTypeEnum.INNOVATOR,
       phone: '124',
       lockedAt: null,
-      innovations: [{id: 'inn1', name: 'innovation'}],
+      innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: 'INNOVATOR_OWNER', units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER, units: [] }
       ]
     };
     serviceUsersService.getUserFullInfo = () => of(responseMock);

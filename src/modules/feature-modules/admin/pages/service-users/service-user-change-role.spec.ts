@@ -6,7 +6,7 @@ import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { AccessorOrganisationRoleEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
@@ -54,11 +54,11 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
       email: 'user@email.com',
       displayName: 'User name',
       phone: '12345',
-      type: 'ACCESSOR',
+      type: UserTypeEnum.ACCESSOR,
       lockedAt: '2020-01-01T00:00:00.000Z',
-      innovations: [{id: 'inn1', name: 'innovation'}],
+      innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: 'ACCESSOR', units: [] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: AccessorOrganisationRoleEnum.ACCESSOR, units: [] }
       ]
     });
   });
@@ -103,9 +103,9 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
       email: 'user@email.com',
       displayName: 'User name',
       phone: '12345',
-      type: 'ACCESSOR',
+      type: UserTypeEnum.ACCESSOR,
       lockedAt: '2020-01-01T00:00:00.000Z',
-      innovations: [{id: 'inn1', name: 'innovation'}],
+      innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
         { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [] }
       ]

@@ -4,9 +4,9 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, MappedObjectType } from '@app/base/types';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
 
 
 export type getUserMinimalInfoDTO = {
@@ -19,7 +19,7 @@ export type getUserFullInfoDTO = {
   email: string;
   phone: null | string;
   displayName: string;
-  type: 'ASSESSMENT' | 'ACCESSOR' | 'INNOVATOR';
+  type: UserTypeEnum;
   lockedAt: null | string;
   innovations: {
     id: string;
@@ -29,7 +29,7 @@ export type getUserFullInfoDTO = {
     id: string;
     name: string;
     size: null | string;
-    role: 'INNOVATOR_OWNER' | 'QUALIFYING_ACCESSOR' | 'ACCESSOR';
+    role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum;
     isShadow: boolean;
     units: { id: string, name: string, acronym: string, supportCount: null | string }[]
   }[]
