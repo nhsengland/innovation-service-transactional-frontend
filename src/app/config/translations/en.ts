@@ -285,7 +285,8 @@ export const locale = {
           max_length: 'Text cannot exceed {{ maxLength }} characters',
           password_mismatch: 'Passwords don\'t appear to match',
           password_regex: 'The password must contain at least minimum 8 characters: one uppercase, one lowercase, one number and one special character',
-          required: 'Required'
+          required: 'Required',
+          existsIn: 'Value already exists'
         }
       }
 

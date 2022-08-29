@@ -41,6 +41,7 @@ import { WizardOrganisationUnitInactivateComponent } from './wizards/organisatio
 // Resolvers.
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
+import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 
 
 const routes: Routes = [
@@ -62,6 +63,9 @@ const routes: Routes = [
           {
             path: '', pathMatch: 'full', component: PageOrganisationsListComponent,
             data: { breadcrumb: null },
+          },
+          {
+            path: 'new', pathMatch: 'full', component: PageOrganisationNewComponent,
           },
           {
             path: ':organisationId',

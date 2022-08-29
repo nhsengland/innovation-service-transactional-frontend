@@ -44,6 +44,9 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
     this.organisationId = this.activatedRoute.snapshot.params.organisationId;
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
+      case 'organisationCreationSuccess':
+        this.setAlertSuccess('You\'ve successfully created the organisation.');
+        break;
       case 'updateOrganisationSuccess':
         this.setAlertSuccess('You\'ve successfully updated the organisation.');
         break;

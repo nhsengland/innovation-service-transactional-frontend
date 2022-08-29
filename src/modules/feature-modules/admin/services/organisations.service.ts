@@ -273,4 +273,19 @@ export class OrganisationsService extends CoreService {
 
   }
 
+  createOrganisation(body: { [key: string]: any }, securityConfirmation: { id: string, code: string }): Observable<{ id: string }> {
+
+    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
+
+    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId').setQueryParams(qp);
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response),
+      catchError(error => throwError({
+        id: error.error.id
+      }))
+    );
+
+  }
+
 }

@@ -32,7 +32,7 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
   ) {
 
     super();
-    this.setPageTitle('Organisations list');
+    this.setPageTitle('Organisations');
 
   }
 
