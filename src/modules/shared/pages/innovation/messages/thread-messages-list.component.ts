@@ -124,9 +124,8 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
         messageField.setValue('');
         messageField.markAsPristine();
-        // this.form.get('message')!.markAsUntouched();
 
-        this.setAlertSuccess('You have successfully created a new message');
+        this.setAlertSuccess('You have successfully sent a message', 'The innovator and other participants in this conversation will be notified.');
 
         this.getThreadsList();
 

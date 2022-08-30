@@ -76,6 +76,12 @@ describe('Core/Models/TableModel', () => {
     expect(component).toEqual(expected);
   });
 
+  it('should set page to a new one', () => {
+    component = new TableModel<defaultDataSourceType>(defaultInit);
+    component.setPage(2);
+    expect(component.page).toBe(2);
+  });
+
   it('should set orderBy and orderDir to a specific column', () => {
     const expected = {
       ...defaultExpected, orderBy: 'c1', orderDir: 'descending',
@@ -155,6 +161,7 @@ describe('Core/Models/TableModel', () => {
     component.setData([{ c1: 'value', c2: 'value', c3: 'value' }], 50);
     expect(component).toEqual(expected);
     expect(component.getRecords()).toEqual(expected.dataSource);
+    expect(component.getVisibleRowsNumber()).toEqual(expected.dataSource.length);
     expect(component.getTotalRowsNumber()).toBe(expected.totalRows);
   });
 
