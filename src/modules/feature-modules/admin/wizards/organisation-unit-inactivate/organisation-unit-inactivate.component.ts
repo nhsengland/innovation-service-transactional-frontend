@@ -48,7 +48,7 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
 
   ngOnInit(): void {
 
-    this.organisationsService.getOrganisationUnitInfo(this.wizard.data.organisationUnit.id).subscribe(
+    this.organisationsService.getOrganisationUnitInfo(this.wizard.data.organisation.id, this.wizard.data.organisationUnit.id).subscribe(
       response => {
 
         this.wizard.data.organisationUnit.name = response.name;

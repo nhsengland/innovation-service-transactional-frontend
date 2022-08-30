@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { EmptyMockComponent, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { CoreComponent } from './core.component';
 
@@ -118,13 +118,12 @@ describe('App/Base/CoreComponent running SERVER side', () => {
 });
 
 
-
-
-
 describe('App/Base/CoreComponent running CLIENT side', () => {
 
   let router: Router;
   let routerSpy: jasmine.Spy;
+
+  let authenticationStore: AuthenticationStore;
 
   let component: CoreComponent;
   let fixture: ComponentFixture<CoreComponent>;
@@ -153,6 +152,8 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
 
     router = TestBed.inject(Router);
     routerSpy = spyOn(router, 'navigate');
+
+    authenticationStore = TestBed.inject(AuthenticationStore);
 
   });
 
@@ -200,6 +201,51 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
     expect(component.pageStatus).toBe('LOADING');
   });
 
+  it(`should run clearAlert()`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    component.setAlertSuccess('Something went OK');
+    component.clearAlert();
+    expect(component.alert).toEqual({ type: null });
+  });
+  it(`should run setAlert()`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    component.setAlert('SUCCESS', 'Something went OK');
+    expect(component.alert.type).toBe('SUCCESS');
+  });
+  it(`should run setAlertSuccess()`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    component.setAlertSuccess('Something went OK');
+    expect(component.alert.type).toBe('SUCCESS');
+  });
+  it(`should run setAlertError()`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    component.setAlertError('Something went NOK');
+    expect(component.alert.type).toBe('ERROR');
+  });
+  it(`should run setAlertDataLoadError()`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    component.setAlertDataLoadError();
+    expect(component.alert.type).toBe('ERROR');
+  });
+  it(`should run setAlertDataSaveError()`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    component.setAlertDataSaveError();
+    expect(component.alert.type).toBe('ERROR');
+  });
+  it(`should run setAlertUnknownError()`, () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    component.setAlertUnknownError();
+    expect(component.alert.type).toBe('ERROR');
+  });
+
+
   it(`should run focusBody()`, fakeAsync(() => {
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
@@ -207,6 +253,16 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
     tick(1000);
     expect(document.activeElement?.nodeName).toBe('BODY');
   }));
+
+  it(`should run userUrlBasePath()`, () => {
+
+    authenticationStore.userUrlBasePath = () => 'innovator';
+
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    expect(component.userUrlBasePath()).toBe('innovator');
+
+  });
 
   it(`should run redirectTo() WITHOUT QueryParams`, () => {
     fixture = TestBed.createComponent(CoreComponent);
@@ -259,6 +315,18 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
     component = fixture.componentInstance;
     const result = component.decodeQueryParams({ query_1: 'T25lIHZhbHVl' });
     expect(result).toEqual({ query_1: 'One value' });
+  });
+
+  it('should run translate()', () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    expect(component.translate('app.title')).toBe('app.title');
+  });
+
+  it('should run translationExists()', () => {
+    fixture = TestBed.createComponent(CoreComponent);
+    component = fixture.componentInstance;
+    expect(component.translationExists('app.title')).toBe(false);
   });
 
 });

@@ -42,7 +42,7 @@
       <p *ngIf="isNotInnovator()">When you start a new conversation, all engaging organisation units and the needs assessment team can see and reply to messages, but only the innovator will be notified.</p>
 
       <button class="nhsuk-button" [disabled]="!isInnovationSubmitted()" routerLink="new"> Start a new conversation </button>
-      <p *ngIf="!isInnovationSubmitted()">Your must submit your record before you can start a new conversation.</p>
+      <p *ngIf="!isInnovationSubmitted()">You must submit your innovation record before you can start a new conversation.</p>
 
 
       <p class="nhsuk-body-s nhsuk-u-margin-bottom-1">Showing {{ tableList.getVisibleRowsNumber() }} conversations of {{ tableList.getTotalRowsNumber() }}</p>

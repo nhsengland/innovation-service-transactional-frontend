@@ -31,8 +31,8 @@ export type getUserFullInfoDTO = {
     size: null | string;
     role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum;
     isShadow: boolean;
-    units: { id: string, name: string, acronym: string, supportCount: null | string }[]
-  }[]
+    units: { id: string, name: string, acronym: string, supportCount: null | string }[];
+  }[];
 };
 
 
@@ -119,21 +119,17 @@ export type lockUserEndpointDTO = {
 
 export type searchUserEndpointInDTO = {
   id: string;
-  displayName: string;
-  type: 'INNOVATOR' | 'ACCESSOR' | 'ASSESSMENT' | 'ADMIN',
   email: string;
+  displayName: string;
+  type: UserTypeEnum,
   lockedAt?: string;
-  userOrganisations?: [{
+  userOrganisations?: {
     id: string;
     name: string;
     acronym: string;
     role: string;
-    units?: [{
-      id: string;
-      name: string;
-      acronym: string;
-    }]
-  }]
+    units?: { id: string, name: string, acronym: string }[]
+  }[]
 };
 export type searchUserEndpointOutDTO = searchUserEndpointInDTO & { typeLabel: string };
 
@@ -264,22 +260,6 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-
-  // Validators.
-  userEmailValidator(): AsyncValidatorFn {
-
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-
-      const url = new UrlModel(this.API_URL).addPath('user-admin/users').setQueryParams({ email: control.value });
-      return this.http.head(url.buildUrl()).pipe(
-        take(1),
-        map(() => ({ customError: true, message: 'Email already exist' })),
-        catchError(() => of(null))
-      );
-
-    };
-  }
-
   getUserRoleRules(userId: string): Observable<getOrganisationRoleRulesOutDTO[]> {
 
     const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId });
@@ -389,6 +369,22 @@ export class ServiceUsersService extends CoreService {
       take(1),
       map(response => response)
     );
+  }
+
+
+  // Validators.
+  userEmailValidator(): AsyncValidatorFn {
+
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+
+      const url = new UrlModel(this.API_URL).addPath('user-admin/users').setQueryParams({ email: control.value });
+      return this.http.head(url.buildUrl()).pipe(
+        take(1),
+        map(() => ({ customError: true, message: 'Email already exist' })),
+        catchError(() => of(null))
+      );
+
+    };
   }
 
 }

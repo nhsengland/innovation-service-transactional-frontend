@@ -97,16 +97,6 @@ export class OrganisationsService extends CoreService {
 
   getOrganisationsList(filters: { onlyActive: boolean }): Observable<GetOrganisationsListDTO[]> {
 
-    // const url = new UrlModel(this.API_URL).addPath('organisation-units'); // user-admin/organisations only active
-    // return this.http.get<GetOrganisationsListDTO[]>(url.buildUrl()).pipe(take(1),
-    //   map(item => item.map(response => ({
-    //     id: response.id, name: response.name, acronym: response.acronym, isActive: true,
-    //     organisationUnits: response.organisationUnits.map(item => ({
-    //       id: item.id, name: item.name, acronym: item.acronym, isActive: false
-    //     }))
-    //   }))
-    //   ));
-
     const url = new UrlModel(this.API_URL).addPath('user-admin/organisations').setQueryParams(filters);
     return this.http.get<GetOrganisationsListDTO[]>(url.buildUrl()).pipe(
       take(1),
@@ -116,16 +106,6 @@ export class OrganisationsService extends CoreService {
   }
 
   getOrganisationInfo(organisationId: string): Observable<GetOrganisationInfoDTO> {
-
-    // const url = new UrlModel(this.API_URL).addPath('organisations/:organisationId').setPathParams({ organisationId });
-    // return this.http.get<GetOrganisationInfoDTO>(url.buildUrl()).pipe(take(1),
-    //   map(response => ({
-    //     id: response.id, name: response.name, acronym: response.acronym, isActive: true,
-    //     organisationUnits: response.organisationUnits.map(item => ({
-    //       id: item.id, name: item.name, acronym: item.acronym, isActive: false, userCount: 10
-    //     }))
-    //   }))
-    // );
 
     const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId').setPathParams({ organisationId });
     return this.http.get<GetOrganisationInfoDTO>(url.buildUrl()).pipe(take(1),
@@ -155,11 +135,9 @@ export class OrganisationsService extends CoreService {
   }
 
 
-  getOrganisationUnitInfo(organisationUnitId: string): Observable<GetOrganisationUnitInfoDTO> {
+  getOrganisationUnitInfo(organisationId: string, organisationUnitId: string): Observable<GetOrganisationUnitInfoDTO> {
 
-    // return of({ id: 'Unit01', name: 'Unit name', acronym: 'AAC', isActive: true, userCount: 10 });
-
-    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId').setPathParams({ organisationUnitId });
+    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId').setPathParams({ organisationId, organisationUnitId });
     return this.http.get<GetOrganisationUnitInfoDTO>(url.buildUrl()).pipe(take(1),
       map(response => response)
     );
@@ -167,22 +145,6 @@ export class OrganisationsService extends CoreService {
   }
 
   getOrganisationUnitUsers(organisationId: string, organisationUnitId: string, queryParams: APIQueryParamsType<{ onlyActive: boolean }>): Observable<GetOrganisationUnitUsersOutDTO> {
-
-    // return of({
-    //   count: 50,
-    //   data: [
-    //     {
-    //       id: 'Id01', name: 'User name 01', email: 'user01@email.com',
-    //       organisationRole: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, organisationRoleDescription: this.stores.authentication.getRoleDescription(AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR),
-    //       isActive: true, lockedAt: '2020-01-01T00:00:00.000Z'
-    //     },
-    //     {
-    //       id: 'Id02', name: 'User name 02', email: 'user02@email.com',
-    //       organisationRole: AccessorOrganisationRoleEnum.ACCESSOR, organisationRoleDescription: this.stores.authentication.getRoleDescription(AccessorOrganisationRoleEnum.ACCESSOR),
-    //       isActive: true, lockedAt: '2020-01-01T00:00:00.000Z'
-    //     }
-    //   ]
-    // });
 
     const { filters, ...qParams } = queryParams;
     const qp = {
@@ -202,19 +164,6 @@ export class OrganisationsService extends CoreService {
   }
 
   getOrganisationUnitInnovationsList(organisationId: string, organisationUnitId: string, queryParams: APIQueryParamsType<{ onlyOpen: boolean }>): Observable<GetOrganisationUnitInnovationsListDTO> {
-
-    // return of({
-    //   count: 24,
-    //   innovationsByStatus: [
-    //     { status: InnovationSupportStatusEnum.ENGAGING, count: 20 },
-    //     { status: InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED, count: 40 }
-    //   ],
-    //   innovationsList: [
-    //     { id: 'Inno01', name: 'Innovation 01', status: InnovationSupportStatusEnum.ENGAGING },
-    //     { id: 'Inno02', name: 'Innovation 02', status: InnovationSupportStatusEnum.COMPLETE }
-    //   ]
-    // });
-
 
     const { filters, ...qParams } = queryParams;
     const qp = {
