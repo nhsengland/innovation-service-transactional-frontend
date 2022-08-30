@@ -68,7 +68,7 @@ describe('FeatureModules/Admin/Services/OrganisationsService', () => {
     const responseMock: GetOrganisationInfoDTO = {
       id: '_org01', name: ' Org name 01', acronym: 'ORG01', isActive: true,
       organisationUnits: [{ id: '_orgUnitd01', name: 'Org unit name 01', acronym: 'ORGu01', isActive: true, userCount: 10 }]
-    }
+    };
     const expected = responseMock;
 
     let response: any = null;
