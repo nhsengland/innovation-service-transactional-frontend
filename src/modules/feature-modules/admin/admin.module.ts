@@ -18,6 +18,7 @@ import { PageAdminUserDeleteComponent } from './pages/admin-users/admin-user-del
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // Organisations.
+import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
@@ -69,6 +70,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     // // Dashboard.
     PageDashboardComponent,
     // // Organisations.
+    PageOrganisationNewComponent,
     PageOrganisationEditComponent,
     PageOrganisationInfoComponent,
     PageOrganisationsListComponent,

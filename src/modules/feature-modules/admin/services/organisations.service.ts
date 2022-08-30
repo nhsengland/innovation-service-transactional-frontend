@@ -75,6 +75,20 @@ export type GetOrganisationUnitInnovationsListDTO = {
   }[];
 };
 
+export type organisationUsersInDTO = {
+  id: string;
+  name: string;
+  role: AccessorOrganisationRoleEnum;
+};
+export type organisationUsersOutDTO = organisationUsersInDTO & { roleDescription: string };
+
+
+export type CreateOrganisationBodyDTO = {
+  name: string, acronym: string,
+  units: { name: string, acronym: string }[]
+};
+
+
 
 @Injectable()
 export class OrganisationsService extends CoreService {
@@ -201,6 +215,15 @@ export class OrganisationsService extends CoreService {
     return this.http.patch<{}>(url.buildUrl(), { organisationUnitId }).pipe(
       take(1),
       map(response => true)
+    );
+
+  }
+
+  createOrganisation(body: CreateOrganisationBodyDTO): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations');
+    return this.http.post<{ id: string }>(url.buildUrl(), { organisation: body }).pipe(take(1),
+      map(response => response)
     );
 
   }

@@ -12,6 +12,34 @@
     <ng-container *ngIf="pageStatus === 'READY'">
 
       <div class="nhsuk-u-padding-bottom-5">
+        <div class="nhsuk-action-link">
+          <a class="nhsuk-action-link__link" routerLink="/admin/organisations/new" title="New Organisation">
+            <svg class="nhsuk-icon nhsuk-icon__arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" width="36" height="36">
+              <path d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M12 2a10 10 0 0 0-9.95 9h11.64L9.74 7.05a1 1 0 0 1 1.41-1.41l5.66 5.65a1 1 0 0 1 0 1.42l-5.66 5.65a1 1 0 0 1-1.41 0 1 1 0 0 1 0-1.41L13.69 13H2.05A10 10 0 1 0 12 2z"></path>
+            </svg>
+            <span class="nhsuk-action-link__text">Create a new organisation</span>
+          </a>
+        </div>
+        <div>
+          <ul class="nhsuk-u-margin-left-2">
+            <li>You will need a unique organisation name</li>
+            <li>You will need a unique organisation acronym</li>
+            <li>You will be able to associate any units (if applicable)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="nhsuk-u-padding-bottom-5">
+
+        <div class="nhsuk-action-link">
+          <h2>All organisations</h2>
+        </div>
+        <div>
+          <ul class="nhsuk-u-margin-left-2">
+            <li>Click through in the table below to <strong>view or change an organisation's information</strong> or <strong>access its attached units</strong></li>
+          </ul>
+        </div>
 
         <div class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
           Organisation
