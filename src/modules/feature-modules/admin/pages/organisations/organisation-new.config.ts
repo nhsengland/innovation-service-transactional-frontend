@@ -78,8 +78,8 @@ export let CREATE_NEW_ORGANISATION_QUESTIONS: WizardEngineModel = new WizardEngi
 
 function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary'): void {
 
-  const chosenUnitNames = Object.entries(data).filter(([key]) => key.startsWith(`unitName-`)).map(([_key, value]) => value as string);
-  const chosenUnitAcronyms = Object.entries(data).filter(([key]) => key.startsWith('unitAcronym-')).map(([_key, value]) => value as string);
+  const chosenUnitNames = Object.entries(data).filter(([key]) => key.startsWith(`unitName-`)).map(([key, value]) => value as string);
+  const chosenUnitAcronyms = Object.entries(data).filter(([key]) => key.startsWith('unitAcronym-')).map(([key, value]) => value as string);
 
   steps.splice(3);
 
@@ -102,7 +102,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
           },
         }]
       })
-    )
+    );
 
     for (let i = 1; i <= data.createUnitNumber; i++) {
 

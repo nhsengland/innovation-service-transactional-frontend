@@ -37,7 +37,7 @@ export class PageOrganisationNewComponent extends CoreComponent implements OnIni
     this.setPageTitle('New Organisation');
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
     this.organisationsService.getOrganisationsList({ onlyActive: false }).subscribe(
       response => {
@@ -55,6 +55,7 @@ export class PageOrganisationNewComponent extends CoreComponent implements OnIni
         this.logger.error('Error fetching organisations units');
       });
 
+    this.setPageStatus('READY');
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
@@ -97,7 +98,7 @@ export class PageOrganisationNewComponent extends CoreComponent implements OnIni
       response => {
         this.redirectTo(`admin/organisations/${response.id}`, { alert: 'organisationCreationSuccess' });
       },
-      //error => this.errorResponse(error)
+      // error => this.errorResponse(error)
     );
 
   }

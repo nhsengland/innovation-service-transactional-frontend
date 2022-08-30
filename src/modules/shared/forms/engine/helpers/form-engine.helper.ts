@@ -257,7 +257,7 @@ export class FormEngineHelper {
       }
     }
 
-    if(parameter.validations?.existsIn) {
+    if (parameter.validations?.existsIn) {
       validation = (!Array.isArray(parameter.validations.existsIn) ? [parameter.validations.existsIn, null] : parameter.validations.existsIn as [string[], string]);
       if (validation[0]) {
         validators.push(CustomValidators.existsInValidator(validation[0] as string[], validation[1] as string));
