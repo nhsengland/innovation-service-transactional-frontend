@@ -80,6 +80,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
 
   const chosenUnitNames = Object.entries(data).filter(([key]) => key.startsWith(`unitName-`)).map(([key, value]) => value as string);
   const chosenUnitAcronyms = Object.entries(data).filter(([key]) => key.startsWith('unitAcronym-')).map(([key, value]) => value as string);
+  const unitsToCreate = Object.keys(data).filter(key => key.startsWith('unitName-'));
 
   steps.splice(3);
 
@@ -98,11 +99,17 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
           label: 'How many units do you want to create?',
           validations: {
             isRequired: [true, 'A number is required'],
-            min: [2, 'At least 2 units required']
+            min: [2, 'At least 2 units required'],
+            max: [5, 'Max 5 units on creation']
           },
         }]
       })
     );
+
+    for (let i = unitsToCreate.length; i > data.createUnitNumber; i--) {
+      delete data[`unitName-${i}`];
+      delete data[`unitAcronym-${i}`];
+    }
 
     for (let i = 1; i <= data.createUnitNumber; i++) {
 
