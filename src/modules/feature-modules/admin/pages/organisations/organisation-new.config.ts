@@ -100,7 +100,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
           validations: {
             isRequired: [true, 'A number is required'],
             min: [2, 'At least 2 units required'],
-            max: [5, 'Max 5 units on creation']
+            max: [10, 'Maximum 10 units on creation']
           },
         }]
       })
