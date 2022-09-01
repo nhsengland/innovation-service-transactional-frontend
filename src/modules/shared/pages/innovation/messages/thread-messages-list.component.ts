@@ -52,7 +52,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'messageEditSuccess':
-        this.setAlertSuccess('You have successfully updated a message', 'Everyone who is currently engaging with your innovation will be notified.');
+        this.setAlertSuccess('You have successfully updated a message');
         break;
       default:
         break;
@@ -125,7 +125,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         messageField.setValue('');
         messageField.markAsPristine();
 
-        this.setAlertSuccess('You have successfully sent a message', 'The innovator and other participants in this conversation will be notified.');
+        this.setAlertSuccess('You have successfully sent a message', 'All participants in this conversation will be notified.');
 
         this.getThreadsList();
 

@@ -7,6 +7,7 @@ import { TableModel } from '@app/base/models';
 import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
 
 import { GetThreadsListDTO, InnovationsService } from '@modules/shared/services/innovations.service';
+import { UserTypeEnum } from '@app/base/enums';
 
 
 @Component({
@@ -39,7 +40,11 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'threadCreationSuccess':
-        this.setAlertSuccess('You have successfully started a conversation', 'Everyone who is currently supporting your innovations will be notified.');
+        if (this.stores.authentication.getUserType() === UserTypeEnum.INNOVATOR) {
+          this.setAlertSuccess('You have successfully started a conversation', 'Everyone who is currently supporting your innovations will be notified.');
+        } else {
+          this.setAlertSuccess('You have successfully started a conversation', 'The innovator will be notified.');
+        }
         break;
       default:
         break;
