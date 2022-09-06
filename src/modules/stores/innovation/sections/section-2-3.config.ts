@@ -9,7 +9,7 @@ import { SECTION_2_EVIDENCES, clinicalEvidenceItems } from './section-2-3-eviden
 
 // Labels.
 const stepsLabels = {
-  l1: 'Do you have evidence of effectiveness for your innovation?'
+  l1: 'Do you have evidence to show the effectiveness of your innovation?'
 };
 
 
@@ -43,6 +43,7 @@ export const SECTION_2_3: InnovationSectionConfigType['sections'][0] = {
           id: 'hasEvidence',
           dataType: 'radio-group',
           label: stepsLabels.l1,
+          description: 'Evidence of effectiveness can include clinical and economic effectiveness as well as other proven benefits such as staff and system benefits. You\'ll be able to add several pieces of evidence one at a time. We\'ll ask about user testing and regulatory approval in later sections.',
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasEvidenceItems
         }]

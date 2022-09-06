@@ -100,7 +100,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'sellExpectations',
         dataType: 'textarea',
         label: stepsLabels.l4,
-        description: 'If your innovation has more than one population or subgroup, please be as scpecific as possible in the description text area below.',
+        description: 'If your innovation has more than one population or subgroup, please be as specific as possible in the description text area below.',
         validations: { isRequired: [true, 'Description is required'] },
         lengthLimit: 'medium'
       }]
@@ -113,7 +113,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'usageExpectations',
         dataType: 'textarea',
         label: stepsLabels.l5,
-        description: 'If your innovation has more than one population or subgroup, please be as scpecific as possible in the description text area below.',
+        description: 'If your innovation has more than one population or subgroup, please be as specific as possible in the description text area below.',
         validations: { isRequired: [true, 'Description is required'] },
         lengthLimit: 'medium'
       }]

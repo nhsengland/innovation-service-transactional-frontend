@@ -128,7 +128,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
             dataType: 'textarea',
             label: `What was the commercial basis for deployment in ${item.name}`,
             description: 'For example, did you provide your innovation for free or was it purchased?',
-            validations: { isRequired: [true, 'A description of what was the commercial basis for deployment is required'] },
+            validations: { isRequired: [true, 'A description is required'] },
             lengthLimit: 'medium'
           }]
         }),
@@ -137,7 +137,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
             id: `deploymentPlansOrgDeploymentAffect_${i}`,
             dataType: 'textarea',
             label: `How did the deployment of your innovation in ${item.name} affect the organisation?`,
-            validations: { isRequired: [true, 'A description of how affect the organisation is required'] },
+            description: 'For example, which job roles were affected and how was the care pathway redesigned?',
+            validations: { isRequired: [true, 'A description is required'] },
             lengthLimit: 'medium'
           }]
         })
@@ -163,7 +164,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'files',
         dataType: 'file-upload',
         label: stepsLabels.l7,
-        description: 'The files must be CSV, XLSX, DOCX or PDF, and should be of upto 9MB.',
+        description: 'The files must be CSV, XLSX, DOCX or PDF, and can be up to 9MB.',
         validations: { isRequired: [true, 'Upload at least one file'] }
       }]
     })

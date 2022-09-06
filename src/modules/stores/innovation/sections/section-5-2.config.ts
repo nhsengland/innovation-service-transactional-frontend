@@ -113,6 +113,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           id: `userTestFeedback_${i}`,
           dataType: 'textarea',
           label: `Please describe the testing and feedback for ${item.kind}`,
+          description: 'Please provide a brief summary of the method and key findings. You\'ll have the option to upload documents demonstrating your activities next',
           validations: { isRequired: [true, 'Description is required'] },
           lengthLimit: 'medium'
         }]
@@ -127,7 +128,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'files',
         dataType: 'file-upload',
         label: stepsLabels.l4,
-        description: 'The files must be CSV, XLSX, DOCX or PDF, and should be of upto 9MB.',
+        description: 'The files must be CSV, XLSX, DOCX or PDF, and can be up to 9MB.',
         validations: { isRequired: [true, 'Upload at least one file'] }
       }]
     })
