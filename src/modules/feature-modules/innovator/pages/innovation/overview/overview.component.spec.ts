@@ -122,6 +122,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
           title: '',
           status: 'NOT_STARTED' as keyof typeof INNOVATION_SECTION_STATUS,
           actionStatus: 'STARTED' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
+          actionCount: 0,
           isCompleted: true
         }]
       }]
@@ -172,6 +173,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
           title: '',
           status: 'NOT_STARTED' as keyof typeof INNOVATION_SECTION_STATUS,
           actionStatus: 'STARTED' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
+          actionCount: 0,
           isCompleted: true
         }]
       }]

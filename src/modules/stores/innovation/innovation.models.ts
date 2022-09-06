@@ -44,6 +44,7 @@ export type sectionType = {
   section: InnovationSectionEnum;
   status: keyof typeof INNOVATION_SECTION_STATUS;
   actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
+  actionCount: number;
   updatedAt: string;
 };
 
@@ -122,6 +123,7 @@ export type SectionsSummaryModel = {
     status: keyof typeof INNOVATION_SECTION_STATUS;
     actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
     isCompleted: boolean;
+    actionCount: number;
   }[]
 };
 
