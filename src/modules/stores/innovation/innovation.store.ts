@@ -65,12 +65,11 @@ export class InnovationStore extends Store<InnovationModel> {
         sections: INNOVATION_SECTIONS.map(item => ({
           title: item.title,
           sections: item.sections.map(ss => {
-            const sectionState = response.sections.find(a => a.section === ss.id) || { status: 'UNKNOWN', actionStatus: '', actionCount: 1 };
+            const sectionState = response.sections.find(a => a.section === ss.id) || { status: 'UNKNOWN', actionStatus: '', actionCount: 0 };
             return {
               id: ss.id,
               title: ss.title,
               status: sectionState.status,
-              actionStatus: sectionState.actionStatus,
               isCompleted: INNOVATION_SECTION_STATUS[sectionState.status]?.isCompleteState || false,
               actionCount: sectionState.actionCount
             };
