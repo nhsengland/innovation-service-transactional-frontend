@@ -194,8 +194,8 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
       });
     });
 
-    const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
     const stepNumber = toReturn.length + 1;
+    const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
     allFiles.forEach((item, i) => {
       toReturn.push({
         label: `Attachment ${i + 1}`,
@@ -204,6 +204,9 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
         allowHTML: true
       });
     });
+
+    // Add a button to the end of the list.
+    toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
 
   }
 

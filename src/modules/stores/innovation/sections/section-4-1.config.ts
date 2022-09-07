@@ -32,17 +32,7 @@ type StepPayloadType = Omit<InboundPayloadType, 'files'>
   & { files: { id: string; name: string; url: string; }[] }
   & { [key: string]: null | string };
 
-type OutboundPayloadType = Partial<Omit<InboundPayloadType, 'files'> & { files: string[] }>;
-// type OutboundPayloadType = {
-//   hasRegulationKnowledge?: null | 'YES_ALL' | 'YES_SOME' | 'NO' | 'NOT_RELEVANT';
-//   standards?: {
-//     id: null | string;
-//     type: null | 'CE_UKCA_NON_MEDICAL' | 'CE_UKCA_CLASS_I' | 'CE_UKCA_CLASS_II_A' | 'CE_UKCA_CLASS_II_B' | 'CE_UKCA_CLASS_III' | 'IVD_GENERAL' | 'IVD_SELF_TEST' | 'IVD_ANNEX_LIST_A' | 'IVD_ANNEX_LIST_B' | 'MARKETING' | 'CQC' | 'DTAC' | 'OTHER';
-//     hasMet: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET';
-//   }[];
-//   otherRegulationDescription?: null | string;
-//   files?: string[];
-// };
+type OutboundPayloadType = Omit<InboundPayloadType, 'files'> & { files: string[] };
 
 type SummaryPayloadType = Omit<InboundPayloadType, 'files'>
   & { standardsType: string[] }
@@ -209,8 +199,8 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
       });
     });
 
-    const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
     const stepNumber = toReturn.length + 1;
+    const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
     allFiles.forEach((item, i) => {
       toReturn.push({
         label: `Attachment ${i + 1}`,
@@ -219,6 +209,9 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
         allowHTML: true
       });
     });
+
+    // Add a button to the end of the list.
+    toReturn.push({ type: 'button', label: 'Add standards and certifications', editStepNumber: stepNumber });
 
   }
 

@@ -8,8 +8,9 @@ export type WizardStepType = FormEngineModel & {
 };
 
 export type WizardSummaryType = {
+  type?: 'keyValueLink' | 'button';
   label: string;
-  value: null | undefined | string;
+  value?: null | string;
   editStepNumber?: number;
   evidenceId?: string;
   allowHTML?: boolean;
