@@ -33,7 +33,6 @@ describe('PDF Parser Suite', () => {
           mainPurpose: 'MANAGE_CONDITION',
           categories: ['Category 1', 'Category 2'],
           areas: ['Area 1', 'Area 2'],
-          clinicalAreas: ['Clinical Area 1'],
           careSettings: ['Care settings 1'],
           supportTypes: ['Support type 1']
         }

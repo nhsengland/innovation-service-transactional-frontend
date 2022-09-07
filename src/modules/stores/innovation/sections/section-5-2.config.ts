@@ -113,6 +113,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           id: `userTestFeedback_${i}`,
           dataType: 'textarea',
           label: `Please describe the testing and feedback for ${item.kind}`,
+          description: 'Please provide a brief summary of the method and key findings. You\'ll have the option to upload documents demonstrating your activities next',
           validations: { isRequired: [true, 'Description is required'] },
           lengthLimit: 'medium'
         }]
@@ -127,7 +128,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'files',
         dataType: 'file-upload',
         label: stepsLabels.l4,
-        description: 'The files must be CSV, XLSX, DOCX or PDF, and should be of upto 9MB.',
+        description: 'The files must be CSV, XLSX, DOCX or PDF, and can be up to 9MB.',
         validations: { isRequired: [true, 'Upload at least one file'] }
       }]
     })
@@ -193,8 +194,8 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
       });
     });
 
-    const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
     const stepNumber = toReturn.length + 1;
+    const allFiles = (data.files || []).map((item: any) => ({ id: item.id, name: item.name || item.displayFileName, url: item.url }));
     allFiles.forEach((item, i) => {
       toReturn.push({
         label: `Attachment ${i + 1}`,
@@ -203,6 +204,9 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
         allowHTML: true
       });
     });
+
+    // Add a button to the end of the list.
+    toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
 
   }
 

@@ -72,7 +72,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           id: 'diseasesConditionsImpact',
           dataType: 'autocomplete-array',
           label: stepsLabels.l2,
-          description: 'Start typing to filter and choose from the available options',
+          description: 'Start typing to filter and choose from the available options up to 5 diseases or conditions',
           validations: { isRequired: [true, 'You must choose at least one disease or condition'], max: [5, 'You can only choose up to 5 diseases or conditions'] },
           items: innovationDiseasesConditionsImpactItems
         }]
@@ -111,6 +111,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           id: 'cliniciansImpactDetails',
           dataType: 'textarea',
           label: stepsLabels.l4,
+          description: 'For example, carers of people with functional disability following stroke, GP practice managers, liaison psychiatrists in emergency departments.',
           validations: { isRequired: [true, 'Specification is required'] },
           lengthLimit: 'medium'
         }]

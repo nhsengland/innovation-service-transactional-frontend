@@ -122,8 +122,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.innovationsService.createThreadMessage(this.innovation.id, this.threadId, body).subscribe(
       () => {
 
-        console.log('Message created');
-
         messageField.setValue('');
         messageField.markAsPristine();
 
