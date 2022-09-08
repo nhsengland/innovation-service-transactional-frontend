@@ -119,6 +119,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         break;
 
       default:
+        this.section.nextSectionId = this.getNextSectionId();
         this.alert = { type: null };
         break;
     }
