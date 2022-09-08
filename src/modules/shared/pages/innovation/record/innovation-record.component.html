@@ -91,9 +91,20 @@
                 </a>
               </span>
 
-              <strong *ngIf="section.actionStatus" class="nhsuk-tag app-task-list__tag" [ngClass]="innovationSectionActionStatus[section.actionStatus].cssClass">
-                {{ innovationSectionActionStatus[section.actionStatus].label }}
-              </strong>
+              <ng-container [ngSwitch]="module">
+                <ng-container *ngSwitchCase="'innovator'">
+                  <span *ngIf="section.actionCount >= 1" class="float-r">
+                    <theme-tag type="{{ 'shared.catalog.innovation.action_status.REQUESTED.cssColorClass' | translate }}"
+                               label="{{ section.actionCount + ' ' + ('dictionary.action' | pluralTranslate: section.actionCount | translate) + ' ' + ('shared.catalog.innovation.action_status.REQUESTED.name' | translate | lowercase) }}"></theme-tag>
+                  </span>
+                </ng-container>
+                <ng-container *ngSwitchCase="'accessor'">
+                  <span *ngIf="section.actionCount >= 1" class="float-r">
+                    <theme-tag type="{{ 'shared.catalog.innovation.action_status.IN_REVIEW.cssColorClass' | translate }}"
+                               label="{{ section.actionCount + ' ' + ('dictionary.action' | pluralTranslate: section.actionCount | translate) + ' ' + ('shared.catalog.innovation.action_status.IN_REVIEW.name' | translate | lowercase) }}"></theme-tag>
+                  </span>
+                </ng-container>
+              </ng-container>
 
             </li>
           </ol>

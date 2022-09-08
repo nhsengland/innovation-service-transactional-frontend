@@ -20,6 +20,12 @@ export const locale = {
 
     // Single words, ALWAYS lowercased.
     dictionary: {
+      action: {
+        _: 'action',
+        none: 'action',
+        singular: 'action',
+        plural: 'actions'
+      },
       yes: 'yes',
     },
 

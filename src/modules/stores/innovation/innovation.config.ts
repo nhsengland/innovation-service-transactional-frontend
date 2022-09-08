@@ -43,7 +43,6 @@ type AllSectionsInboundPayloadType = {
     id: null | string;
     section: InnovationSectionEnum;
     status: keyof typeof INNOVATION_SECTION_STATUS;
-    actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
     updatedAt: string;
   },
   data: MappedObjectType
