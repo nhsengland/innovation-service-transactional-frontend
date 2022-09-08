@@ -7,8 +7,10 @@ import { map, catchError } from 'rxjs/operators';
 import { Response } from 'express';
 import { RESPONSE } from '@nguniversal/express-engine/tokens';
 
+import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
 import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 import { LoggerService, Severity } from '../services/logger.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -16,6 +18,7 @@ export class AuthenticationGuard implements CanActivate {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     @Optional() @Inject(RESPONSE) private serverResponse: Response,
+    private environmentStore: EnvironmentVariablesStore,
     private authentication: AuthenticationStore,
     private loggerService: LoggerService
   ) { }
@@ -24,11 +27,13 @@ export class AuthenticationGuard implements CanActivate {
 
     return this.authentication.initializeAuthentication$().pipe(
       map(response => response),
-      catchError(e => {
+      catchError((e: HttpErrorResponse) => {
 
         this.loggerService.trackTrace('[AuthenticationGuard] Sign In Error', Severity.ERROR, { error: e });
 
-        const redirectUrl = '/transactional/signin';
+        // 401: User in not authenticated on identity provider.
+        // 4xx: User is authenticated, but has no permission. (Ex: user is blocked).
+        const redirectUrl = e.status === 401 ? `${this.environmentStore.APP_URL}/signin` : `${this.environmentStore.APP_URL}/signout?redirectUrl=${this.environmentStore.APP_URL}/error/unauthenticated`;
 
         if (isPlatformBrowser(this.platformId)) {
           window.location.assign(redirectUrl); // Full reload is needed to hit SSR.
@@ -40,6 +45,7 @@ export class AuthenticationGuard implements CanActivate {
         this.serverResponse.end();
         /* istanbul ignore next */
         return of(false);
+
       })
     );
 

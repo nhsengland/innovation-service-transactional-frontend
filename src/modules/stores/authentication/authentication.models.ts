@@ -12,7 +12,7 @@ export class AuthenticationModel {
     id: string;
     email: string;
     displayName: string;
-    phone: string;
+    phone: null | string;
     type: '' | UserTypeEnum;
     roles: UserRoleEnum[];
     organisations: {
