@@ -18,7 +18,7 @@
         </div>
       </h1>
 
-      <button *ngIf="section.nextSectionId" routerLink="../{{ section.nextSectionId }}" class="nhsuk-button nhsuk-u-margin-right-3"> Continue to next section </button>
+      <button *ngIf="section.nextSectionId && module === 'innovator'" routerLink="../{{ section.nextSectionId }}" class="nhsuk-button nhsuk-u-margin-right-3"> Continue to next section </button>
 
       <ng-container *ngIf="!section.isNotStarted">
 

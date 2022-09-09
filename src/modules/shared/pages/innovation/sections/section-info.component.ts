@@ -119,7 +119,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         break;
 
       default:
-        this.section.nextSectionId = this.getNextSectionId();
         this.alert = { type: null };
         break;
     }
@@ -130,6 +129,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
         this.section.status = { id: response.section.status, label: INNOVATION_SECTION_STATUS[response.section.status]?.label || '' };
         this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
+        this.section.nextSectionId = this.section.status.id === 'SUBMITTED' ? this.getNextSectionId() : null;
 
         this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data)).runRules();
 
