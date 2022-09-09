@@ -93,7 +93,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         dataType: 'fields-group',
         label: stepsLabels.l2,
         description: 'This can include any testing you\'ve done with people who would use your innovation, for example patients, nurses or administrative staff.',
-        // validations: { isRequired: true }
         fieldsGroupConfig: {
           fields: [
             { id: 'id', dataType: 'text', isVisible: false },
@@ -113,7 +112,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           id: `userTestFeedback_${i}`,
           dataType: 'textarea',
           label: `Please describe the testing and feedback for ${item.kind}`,
-          description: 'Please provide a brief summary of the method and key findings. You\'ll have the option to upload documents demonstrating your activities next',
+          description: 'Please provide a brief summary of the method and key findings. You\'ll have the option to upload documents demonstrating your activities next.',
           validations: { isRequired: [true, 'Description is required'] },
           lengthLimit: 'medium'
         }]

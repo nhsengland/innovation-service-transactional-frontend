@@ -48,6 +48,11 @@ export const locale = {
             title: 'It appears that something went wrong!',
             message: 'The operation you are trying to do is no longer available.',
             button_label: 'Go back to home'
+          },
+          unauthenticated: {
+            title: 'It appears that something went wrong!',
+            message: 'It seems that you don\'t have access to the service. Please contact us for further help.',
+            button_label: 'Go back to home'
           }
         },
         page_not_found: {
