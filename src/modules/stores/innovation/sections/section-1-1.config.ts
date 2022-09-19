@@ -1,4 +1,4 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardSummaryType, WizardEngineModel, FormEngineParameterModel } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
@@ -21,7 +21,6 @@ const stepsLabels = {
   l11: 'Please provide any further information about the support you are seeking from the NHS Innovation Service'
 };
 
-
 // Types.
 type InboundPayloadType = {
   name: string,
@@ -41,6 +40,7 @@ type InboundPayloadType = {
   supportTypes: ('ADOPTION' | 'ASSESSMENT' | 'PRODUCT_MIGRATION' | 'CLINICAL_TESTS' | 'COMMERCIAL' | 'PROCUREMENT' | 'DEVELOPMENT' | 'EVIDENCE_EVALUATION' | 'FUNDING' | 'INFORMATION')[],
   moreSupportDescription: string
 };
+
 type StepPayloadType = Omit<InboundPayloadType, 'name' | 'postcode' | 'countryName'> & {
   innovationName: string,
   englandPostCode: string,
@@ -97,69 +97,90 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
           validations: { isRequired: [true, 'Choose at least one category'] },
           items: categoriesItems
         }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'mainCategory',
-          dataType: 'radio-group',
-          label: stepsLabels.l6,
-          description: 'Your innovation may be a combination of various categories. Selecting the primary category will help us find the right people to support you.',
-          items: mainCategoryItems
-        }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'areas',
-          dataType: 'checkbox-array',
-          label: stepsLabels.l7,
-          description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-          items: areasItems
-        }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'careSettings',
-          dataType: 'checkbox-array',
-          label: stepsLabels.l8,
-          description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-          items: careSettingsItems
-        }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'mainPurpose',
-          dataType: 'radio-group',
-          label: stepsLabels.l9,
-          description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: mainPurposeItems
-        }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'supportTypes',
-          dataType: 'checkbox-array',
-          label: stepsLabels.l10,
-          description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the innovation service.',
-          validations: { isRequired: [true, 'Choose at least one type of support'] },
-          items: supportTypesItems
-        }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'moreSupportDescription',
-          dataType: 'textarea',
-          label: stepsLabels.l11,
-          lengthLimit: 'medium'
-        }]
       })
     ],
+    runtimeRules: [(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, data, currentStep)],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
     showSummary: true
   })
 };
+
+function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary'): void {
+
+  steps.splice(5);
+
+  if (data.categories.length === 1) {
+
+    data.mainCategory = data.categories[0];
+
+  } else {
+
+    const selectedCategories = categoriesItems.filter(category => data.categories.some(e => e === category.value));
+    steps.push(
+      new FormEngineModel({
+        parameters: [{
+          id: 'mainCategory',
+          dataType: 'radio-group',
+          label: stepsLabels.l6,
+          description: 'Your innovation may be a combination of various categories. Selecting the primary category will help us find the right people to support you.',
+          items: selectedCategories
+        }]
+      })
+    );
+
+  }
+
+  steps.push(
+    new FormEngineModel({
+      parameters: [{
+        id: 'areas',
+        dataType: 'checkbox-array',
+        label: stepsLabels.l7,
+        description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
+        items: areasItems
+      }]
+    }),
+    new FormEngineModel({
+      parameters: [{
+        id: 'careSettings',
+        dataType: 'checkbox-array',
+        label: stepsLabels.l8,
+        description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
+        items: careSettingsItems
+      }]
+    }),
+    new FormEngineModel({
+      parameters: [{
+        id: 'mainPurpose',
+        dataType: 'radio-group',
+        label: stepsLabels.l9,
+        description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
+        validations: { isRequired: [true, 'Choose one option'] },
+        items: mainPurposeItems
+      }]
+    }),
+    new FormEngineModel({
+      parameters: [{
+        id: 'supportTypes',
+        dataType: 'checkbox-array',
+        label: stepsLabels.l10,
+        description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the innovation service.',
+        validations: { isRequired: [true, 'Choose at least one type of support'] },
+        items: supportTypesItems
+      }]
+    }),
+    new FormEngineModel({
+      parameters: [{
+        id: 'moreSupportDescription',
+        dataType: 'textarea',
+        label: stepsLabels.l11,
+        lengthLimit: 'medium'
+      }]
+    })
+  );
+}
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
@@ -179,7 +200,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     otherCareSetting: data.otherCareSetting,
     mainPurpose: data.mainPurpose,
     supportTypes: data.supportTypes,
-    moreSupportDescription: data.moreSupportDescription
+    moreSupportDescription: data.moreSupportDescription,
   };
 
 }
@@ -207,10 +228,12 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
 }
 
-
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
-  return [
+  const toReturn: WizardSummaryType[] = [];
+  let stepIndex = 0;
+
+  toReturn.push(
     {
       label: stepsLabels.l1,
       value: data.innovationName,
@@ -235,37 +258,49 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       label: stepsLabels.l5,
       value: data.categories?.map(v => v === 'OTHER' ? data.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n'),
       editStepNumber: 5
-    },
-    {
-      label: stepsLabels.l6,
-      value: data.otherMainCategoryDescription || mainCategoryItems.find(item => item.value === data.mainCategory)?.label,
-      editStepNumber: 6
-    },
+    });
+
+  if (data.categories.length > 1) {
+    stepIndex = 1;
+    toReturn.push(
+      {
+        label: stepsLabels.l6,
+        value: data.otherMainCategoryDescription || mainCategoryItems.find(item => item.value === data.mainCategory)?.label,
+        editStepNumber: 6
+      },
+    );
+  } else {
+    stepIndex = 0;
+  }
+
+  toReturn.push(
     {
       label: stepsLabels.l7,
       value: data.areas?.map(v => areasItems.find(item => item.value === v)?.label).join('\n'),
-      editStepNumber: 7
+      editStepNumber: 6 + stepIndex
     },
     {
       label: stepsLabels.l8,
       value: data.careSettings?.map(v => careSettingsItems.find(item => item.value === v)?.label).join('\n'),
-      editStepNumber: 8
+      editStepNumber: 7 + stepIndex
     },
     {
       label: stepsLabels.l9,
       value: mainPurposeItems.find(item => item.value === data.mainPurpose)?.label,
-      editStepNumber: 9
+      editStepNumber: 8 + stepIndex
     },
     {
       label: stepsLabels.l10,
       value: data.supportTypes?.map(v => supportTypesItems.find(item => item.value === v)?.label).join('\n'),
-      editStepNumber: 10
+      editStepNumber: 9 + stepIndex
     },
     {
       label: stepsLabels.l11,
       value: data.moreSupportDescription,
-      editStepNumber: 11
+      editStepNumber: 10 + stepIndex
     }
-  ];
+  );
+
+  return toReturn;
 
 }
