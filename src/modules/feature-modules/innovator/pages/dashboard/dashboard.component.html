@@ -36,7 +36,7 @@
         <a routerLink="/innovator/innovations/{{ item.id }}" class="nhsuk-u-font-size-32 nhsuk-u-font-weight-bold nhsuk-u-padding-right-2">
           {{ item.name }} <span class="nhsuk-u-visually-hidden"> Access {{ item.name }} innovation </span>
         </a>
-        <notification-tag [label]="item.notifications"></notification-tag>
+        <theme-notification-tag [label]="item.notifications"></theme-notification-tag>
       </li>
     </ul>
 

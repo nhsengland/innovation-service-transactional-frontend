@@ -3,7 +3,7 @@ import { NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
-import { ControlValueAccessorConnector } from '../base/control-value-accessor.connector';
+import { ControlValueAccessorComponent } from '../base/control-value-accessor.connector';
 
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
@@ -18,7 +18,7 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
     multi: true
   }]
 })
-export class FormTextareaComponent extends ControlValueAccessorConnector implements OnInit, DoCheck {
+export class FormTextareaComponent extends ControlValueAccessorComponent implements OnInit, DoCheck {
 
   @Input() id?: string;
   @Input() type?: 'text' | 'number' | 'hidden' | 'password';

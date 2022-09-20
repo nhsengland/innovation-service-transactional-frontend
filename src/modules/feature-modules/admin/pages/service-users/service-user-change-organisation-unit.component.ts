@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
@@ -41,7 +42,7 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
   securityConfirmation = { id: '', code: '' };
 
   form = new FormGroup({
-    code: new FormControl('')
+    code: new UntypedFormControl('')
   }, { updateOn: 'blur' });
 
   wizard: WizardEngineModel = new WizardEngineModel(CHANGE_USER_ORGANISATION_UNIT);

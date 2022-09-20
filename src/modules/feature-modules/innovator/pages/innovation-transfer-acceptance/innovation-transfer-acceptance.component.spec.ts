@@ -24,7 +24,7 @@ describe('FeatureModules/Innovator/Pages/InnovationTransferAcceptanceComponent',
 
   let activatedRoute: ActivatedRoute;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
   let innovatorService: InnovatorService;
@@ -47,7 +47,7 @@ describe('FeatureModules/Innovator/Pages/InnovationTransferAcceptanceComponent',
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     innovatorService = TestBed.inject(InnovatorService);

@@ -4,7 +4,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
-import { ControlValueAccessorConnector } from '../base/control-value-accessor.connector';
+import { ControlValueAccessorComponent } from '../base/control-value-accessor.connector';
 
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
@@ -19,7 +19,7 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
     multi: true
   }]
 })
-export class FormCheckboxComponent extends ControlValueAccessorConnector implements OnInit, DoCheck {
+export class FormCheckboxComponent extends ControlValueAccessorComponent implements OnInit, DoCheck {
 
   @Input() id?: string;
   @Input() label?: string;

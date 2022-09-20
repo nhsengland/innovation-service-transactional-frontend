@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
@@ -22,10 +22,10 @@ export class PageTermsOfUseNewComponent extends CoreComponent implements OnInit 
   id: string;
 
   form = new FormGroup({
-    name: new FormControl('', [Validators.maxLength(500), CustomValidators.required('Please enter the name of terms of use')]),
-    touType: new FormControl('', [CustomValidators.required('Please select one of the options')]),
-    summary: new FormControl(''),
-    notifyUser: new FormControl(0, { updateOn: 'change' })
+    name: new UntypedFormControl('', [Validators.maxLength(500), CustomValidators.required('Please enter the name of terms of use')]),
+    touType: new UntypedFormControl('', [CustomValidators.required('Please select one of the options')]),
+    summary: new UntypedFormControl(''),
+    notifyUser: new UntypedFormControl(0, { updateOn: 'change' })
   }, { updateOn: 'blur' });
 
   constructor(
@@ -68,7 +68,7 @@ export class PageTermsOfUseNewComponent extends CoreComponent implements OnInit 
 
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
 
-    const body = this.form.value;
+    const body = this.form.value as any;
 
     if (this.form.value.notifyUser) { body.releasedAt = new Date(); }
 

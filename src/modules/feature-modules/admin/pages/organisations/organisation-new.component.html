@@ -33,7 +33,7 @@
             <div *ngFor="let item of wizard.getSummary(); let i = index;" class="nhsuk-summary-list__row">
               <dt class="nhsuk-summary-list__key">{{item.label}}</dt>
               <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
-              <dd *ngIf="item.label=='units'">Unit/s</dd>
+              <dd *ngIf="item.label === 'units'">Unit/s</dd>
               <dd class="nhsuk-summary-list__actions">
                 <a href="javascript:;" (click)="wizard.gotoStep(item.editStepNumber || 1)"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
               </dd>

@@ -21,7 +21,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
 
   let activatedRoute: ActivatedRoute;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let component: InnovationAssessmentNewComponent;
   let fixture: ComponentFixture<InnovationAssessmentNewComponent>;
@@ -43,7 +43,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     assessmentService = TestBed.inject(AssessmentService);
 

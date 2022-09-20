@@ -4,7 +4,7 @@ import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
-import { ControlValueAccessorConnector } from '../base/control-value-accessor.connector';
+import { ControlValueAccessorComponent } from '../base/control-value-accessor.connector';
 
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
@@ -23,7 +23,7 @@ import { FormEngineParameterModel } from '../engine/models/form-engine.models';
     multi: true
   }]
 })
-export class FormRadioGroupComponent extends ControlValueAccessorConnector implements OnInit, DoCheck {
+export class FormRadioGroupComponent extends ControlValueAccessorComponent implements OnInit, DoCheck {
 
   @Input() id?: string;
   @Input() label?: string;

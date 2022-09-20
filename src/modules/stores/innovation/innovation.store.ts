@@ -50,7 +50,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitInnovation(innovationId);
   }
 
-  getActivityLog$(innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum }>): Observable<ActivityLogOutDTO> {
+  getActivityLog$(innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum[] }>): Observable<ActivityLogOutDTO> {
     return this.innovationsService.getInnovationActivityLog(innovationId, queryParams);
   }
 

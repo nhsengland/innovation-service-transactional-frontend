@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
-import { ControlValueAccessorConnector } from '../base/control-value-accessor.connector';
+import { ControlValueAccessorComponent } from '../base/control-value-accessor.connector';
 
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
@@ -19,7 +19,7 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
     multi: true
   }]
 })
-export class FormInputComponent extends ControlValueAccessorConnector implements OnInit, DoCheck, OnDestroy {
+export class FormInputComponent extends ControlValueAccessorComponent implements OnInit, DoCheck, OnDestroy {
 
   @Input() id?: string;
   @Input() type?: 'text' | 'number' | 'hidden' | 'password';

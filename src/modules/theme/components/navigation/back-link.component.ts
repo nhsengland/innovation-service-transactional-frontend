@@ -1,15 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'theme-back-link',
   templateUrl: './back-link.component.html'
 })
-export class BackLinkComponent implements OnInit {
+export class BackLinkComponent {
 
   @Input() href = '';
 
   constructor() { }
-
-  ngOnInit(): void { }
 
 }

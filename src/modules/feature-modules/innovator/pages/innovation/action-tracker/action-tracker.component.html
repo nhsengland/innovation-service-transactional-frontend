@@ -41,7 +41,7 @@
                   <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('name') }} </span>
                   <a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/{{ item.id }}" attr.aria-label="View {{ item.name }} action"> {{ item.name }} </a>
                 </div>
-                <notification-tag label="dot" *ngIf="item.notifications.count > 0"></notification-tag>
+                <theme-notification-tag label="dot" *ngIf="item.notifications.count > 0"></theme-notification-tag>
               </div>
             </td>
             <td class="nhsuk-table__cell">
@@ -92,7 +92,7 @@
                       <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('name') }} </span>
                       <a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/{{ item.id }}" attr.aria-label="View {{ item.name }} action"> {{ item.name }} </a>
                     </div>
-                    <notification-tag label="dot" *ngIf="item.notifications.count > 0"></notification-tag>
+                    <theme-notification-tag label="dot" *ngIf="item.notifications.count > 0"></theme-notification-tag>
                   </div>
                 </td>
                 <td class="nhsuk-table__cell">

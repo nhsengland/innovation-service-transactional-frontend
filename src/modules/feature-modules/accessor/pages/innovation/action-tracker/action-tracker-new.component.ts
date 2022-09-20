@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -20,8 +21,8 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
   sectionItems: { value: string, label: string }[] = [];
 
   form = new FormGroup({
-    section: new FormControl('', { validators: CustomValidators.required('Choose at least one section'), updateOn: 'change' }),
-    description: new FormControl('', CustomValidators.required('A description is required'))
+    section: new UntypedFormControl('', { validators: CustomValidators.required('Choose at least one section'), updateOn: 'change' }),
+    description: new UntypedFormControl('', CustomValidators.required('A description is required'))
   }, { updateOn: 'blur' });
 
 

@@ -26,7 +26,7 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountEmailNotificationsE
 
   let activatedRoute: ActivatedRoute;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
   let notificationsService: NotificationsService;
@@ -49,7 +49,7 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountEmailNotificationsE
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     notificationsService = TestBed.inject(NotificationsService);

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
@@ -30,9 +31,9 @@ export class PageAccountDeleteComponent extends CoreComponent {
     this.user = { email: user.email };
 
     this.form = new FormGroup({
-      reason: new FormControl(''),
-      email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(this.user.email, 'The email is incorrect')]),
-      confirmation: new FormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('delete my account')]),
+      reason: new UntypedFormControl(''),
+      email: new UntypedFormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(this.user.email, 'The email is incorrect')]),
+      confirmation: new UntypedFormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('delete my account')]),
     }, { updateOn: 'blur' });
 
   }

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
 import { FormControl, FormEngineComponent, FormGroup, WizardEngineModel } from '@app/base/forms';
@@ -25,7 +26,7 @@ export class PageAdminUserNewComponent extends CoreComponent implements OnInit {
   securityConfirmation = { id: '', code: '' };
 
   form = new FormGroup({
-    code: new FormControl('')
+    code: new UntypedFormControl('')
   }, { updateOn: 'blur' });
 
   constructor(

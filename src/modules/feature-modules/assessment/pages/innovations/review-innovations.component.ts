@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -19,7 +20,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   currentTab: { key: string, status: string, description: string, overdueInnovations: number };
 
   form = new FormGroup({
-    supportFilter: new FormControl('UNASSIGNED')
+    supportFilter: new UntypedFormControl('UNASSIGNED')
   }, { updateOn: 'change' });
   formFilterItems: FormEngineParameterModel['items'] = [];
 

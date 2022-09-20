@@ -22,7 +22,7 @@ export class WizardModel<T> {
     return this;
   }
 
-  setStepData<T>(stepId: string, data: T): this {
+  setStepData<StepData>(stepId: string, data: StepData): this {
 
     const step = this.steps.find(s => s.id === stepId);
     if (step) { step.data = data; }

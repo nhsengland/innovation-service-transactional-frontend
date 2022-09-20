@@ -1,7 +1,6 @@
 # Compiled outputs
 /dist
 /tmp
-/out-tsc
 
 # Dependencies
 /node_modules
@@ -9,8 +8,6 @@
 # IDEs and Editors
 /.idea
 .project
-.classpath
-.c9/
 *.launch
 .settings/
 *.sublime-workspace
@@ -20,36 +17,23 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 .history/*
-.vscode
-launch.json
 
 # Tests
 coverage
 .nyc_output
 junit.xml
 
-# Logs
-logs
+# Logs and Cache
+/.angular/cache
+/.sass-cache
+/typings
 *.log
 npm-debug.log*
-yarn-debug.log*
 yarn-error.log*
 
 # System Files
 .DS_Store
 Thumbs.db
 
-# Profiling files
-chrome-profiler-events.json
-speed-measure-plugin.json
-
-# Misc
-/.sass-cache
-/connect.lock
-/libpeerconnection.log
-testem.log
-/typings
-
 # Environments
 .env
-/src/environment.js

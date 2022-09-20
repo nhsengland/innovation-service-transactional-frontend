@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
@@ -39,10 +40,10 @@ export class PageAccountInnovationsArchivalComponent extends CoreComponent imple
     };
 
     this.form = new FormGroup({
-      innovation: new FormControl('', { validators: CustomValidators.required('Please, choose an innovation'), updateOn: 'change' }),
-      reason: new FormControl(''),
-      email: new FormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')]),
-      confirmation: new FormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('archive my innovation')])
+      innovation: new UntypedFormControl('', { validators: CustomValidators.required('Please, choose an innovation'), updateOn: 'change' }),
+      reason: new UntypedFormControl(''),
+      email: new UntypedFormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')]),
+      confirmation: new UntypedFormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('archive my innovation')])
     }, { updateOn: 'blur' }
     );
   }

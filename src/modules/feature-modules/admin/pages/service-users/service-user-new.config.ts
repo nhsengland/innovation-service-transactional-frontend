@@ -91,13 +91,13 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
           dataType: 'radio-group',
           label: 'Which organisation is the new user associated to?',
           validations: { isRequired: [true, 'Organisation is required'] },
-          items: data != null && data.organisationsList != null ? data.organisationsList.map(o => ({ value: o.acronym, label: o.name })) : []
+          items: data !== null && data.organisationsList !== null ? data.organisationsList.map(o => ({ value: o.acronym, label: o.name })) : []
         }]
       })
     );
 
 
-    const selectedOrganisationUnits = data != null && data.organisationsList != null ? data.organisationsList.find(org => org.acronym === data.organisationAcronym)?.units.map(units => ({ value: units.acronym, label: units.name })) || [] : [];
+    const selectedOrganisationUnits = data !== null && data.organisationsList !== null ? data.organisationsList.find(org => org.acronym === data.organisationAcronym)?.units.map(units => ({ value: units.acronym, label: units.name })) || [] : [];
     if (selectedOrganisationUnits.length === 1) {
       data.organisationUnitAcronym = selectedOrganisationUnits[0].value;
     }

@@ -95,7 +95,7 @@ export class InnovationService {
 
   }
 
-  getInnovationActivityLog(innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum }>): Observable<ActivityLogOutDTO> {
+  getInnovationActivityLog(innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum[] }>): Observable<ActivityLogOutDTO> {
 
     const userUrlBasePath = this.authenticationStore.userUrlBasePath();
     const { filters, ...qParams } = queryParams;

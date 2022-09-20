@@ -1,4 +1,4 @@
-import { FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, UntypedFormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { CustomValidators } from './custom-validators';
 
 describe('CustomValidators', () => {
@@ -41,7 +41,7 @@ describe('CustomValidators', () => {
   describe('CustomValidators.requiredCheckboxArray()', () => {
 
     beforeAll(() => {
-      formArray = new FormArray([]);
+      formArray = new UntypedFormArray([]);
       validatorFn = CustomValidators.requiredCheckboxArray();
     });
 

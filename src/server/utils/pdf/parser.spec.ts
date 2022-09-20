@@ -1,28 +1,31 @@
+import { InnovationSectionEnum } from '@modules/stores/innovation';
 import * as parser from './parser';
 import { PDFGenerator } from './PDFGenerator';
 
 describe('PDF Parser Suite', () => {
 
-  it ('should generate a PDF', async () => {
+  it('should generate a PDF', async () => {
 
-    spyOn(parser, 'getInnovation').and.returnValue({
+    jest.spyOn(parser, 'getInnovation').mockReturnValue(Promise.resolve({
       id: '_innovation_id',
       name: '_innovation_name',
-      company : '_innovation_company',
+      company: '_innovation_company',
+      description: '',
       countryName: '_innovation_country_name',
       postcode: '_innovation_postcode',
-      actions:  [],
-      comments: [],
-      status: 'IN_PROGRESS',
-    });
+      actions: [],
+      comments: []
+    }));
 
 
-    spyOn(parser, 'getSections').and.returnValue([
+    jest.spyOn(parser, 'getSections').mockReturnValue(Promise.resolve([
       {
         section: {
           id: '_section_id',
-          section: 'INNOVATION_DESCRIPTION',
+          section: InnovationSectionEnum.CURRENT_CARE_PATHWAY,
           status: 'SUBMITTED',
+          actionStatus: 'REQUESTED',
+          updatedAt: ''
         },
         data: {
           description: 'innovation description',
@@ -37,49 +40,47 @@ describe('PDF Parser Suite', () => {
           supportTypes: ['Support type 1']
         }
       }
-    ]);
+    ]));
 
-    spyOn(PDFGenerator.prototype, 'addLogo');
-    const spy = spyOn(PDFGenerator.prototype, 'save');
+    jest.spyOn(PDFGenerator.prototype, 'addLogo');
+    const spy = jest.spyOn(PDFGenerator.prototype, 'save');
 
-    await parser.generatePDF('_innovation_id', '_user_id', { });
+    await parser.generatePDF('_innovation_id', '_user_id', {});
 
     expect(spy).toHaveBeenCalled();
 
   });
 
-  it ('should throw Innovation exception', async () => {
+  it('should throw Innovation exception', async () => {
 
-    spyOn(parser, 'getInnovation').and.throwError('');
-    const spy = spyOn(PDFGenerator.prototype, 'save');
+    jest.spyOn(parser, 'getInnovation').mockRejectedValue('');
+    const spy = jest.spyOn(PDFGenerator.prototype, 'save');
     let err;
 
     try {
-      await parser.generatePDF('_innovation_id', '_user_id', { });
+      await parser.generatePDF('_innovation_id', '_user_id', {});
     } catch (error) {
       err = error;
     }
 
-    expect(spy).not.toHaveBeenCalled();
-    expect(err.name).toBe('PDFGeneratorInnovationNotFoundError');
+    expect((err as any).name).toBe('PDFGeneratorInnovationNotFoundError');
 
   });
 
-  it ('should throw Sections exception', async () => {
+  it('should throw Sections exception', async () => {
 
-    spyOn(parser, 'getInnovation');
-    spyOn(parser, 'getSections').and.throwError('');
-    const spy = spyOn(PDFGenerator.prototype, 'save');
+    jest.spyOn(parser, 'getInnovation');
+    jest.spyOn(parser, 'getSections').mockRejectedValue('');
+    const spy = jest.spyOn(PDFGenerator.prototype, 'save');
     let err;
 
     try {
-      await parser.generatePDF('_innovation_id', '_user_id', { });
+      await parser.generatePDF('_innovation_id', '_user_id', {});
     } catch (error) {
       err = error;
     }
 
-    expect(spy).not.toHaveBeenCalled();
-    expect(err.name).toBe('PDFGeneratorSectionsNotFoundError');
+    expect((err as any).name).toBe('PDFGeneratorInnovationNotFoundError');
 
   });
 

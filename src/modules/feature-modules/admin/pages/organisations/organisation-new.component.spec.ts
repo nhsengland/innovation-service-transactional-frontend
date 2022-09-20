@@ -19,7 +19,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationNewComponent'
   let component: PageOrganisationNewComponent;
   let fixture: ComponentFixture<PageOrganisationNewComponent>;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
   let organisationsService: OrganisationsService;
@@ -39,7 +39,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationNewComponent'
     AppInjector.setInjector(TestBed.inject(Injector));
 
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     serviceUserService = TestBed.inject(ServiceUsersService);

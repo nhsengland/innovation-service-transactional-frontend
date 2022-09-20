@@ -20,7 +20,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
 
   let activatedRoute: ActivatedRoute;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
   let environmentStore: EnvironmentStore;
@@ -44,7 +44,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     environmentStore = TestBed.inject(EnvironmentStore);

@@ -68,7 +68,7 @@ describe('Shared/Pages/Innovation/Messages/PageInnovationThreadNewComponent', ()
   // it('should run onSubmit and call api with success', () => {
 
   //   activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-  //   const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+  //   const routerSpy = jest.spyOn(TestBed.inject(Router), 'navigate');
 
   //   const responseMock = { id: 'commentId' };
   //   innovationStore.createInnovationComment$ = () => of(responseMock as any);

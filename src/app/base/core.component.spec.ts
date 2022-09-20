@@ -121,7 +121,7 @@ describe('App/Base/CoreComponent running SERVER side', () => {
 describe('App/Base/CoreComponent running CLIENT side', () => {
 
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
 
@@ -151,7 +151,7 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
     AppInjector.setInjector(TestBed.inject(Injector));
 
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
 

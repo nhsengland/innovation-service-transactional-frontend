@@ -25,7 +25,6 @@ import pdfRouter from 'src/server/routes/pdf-generator.routes';
 
 import { AppServerModule } from './src/main.server';
 
-
 dotenv.config();
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -38,7 +37,7 @@ export function app(): express.Express {
   const distFolder = join(process.cwd(), ENVIRONMENT.VIEWS_PATH);
   const indexHtml = fs.existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
-  server.engine('html', ngExpressEngine({ bootstrap: AppServerModule })); // Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
+  server.engine('html', ngExpressEngine({ bootstrap: AppServerModule })); // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
 
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
@@ -55,15 +54,10 @@ export function app(): express.Express {
   // Helmet configuration.
   server.use(
     helmet.hidePoweredBy(),
-    helmet.hsts({
-      includeSubDomains: true,
-      preload: true,
-    }),
+    helmet.hsts({ includeSubDomains: true, preload: true }),
     // helmet.noSniff(),
     helmet.ieNoOpen(),
-    helmet.frameguard({
-      action: 'deny',
-    }),
+    helmet.frameguard({ action: 'deny' })
   );
 
   server.set('view engine', 'html');
@@ -88,6 +82,7 @@ export function app(): express.Express {
 
     res.status(200).send(response);
   });
+
 
   // Angular routing.
   // // Serve static files.
@@ -150,16 +145,16 @@ export function app(): express.Express {
   return server;
 }
 
+
 function run(): void {
 
-  const port = process.env.PORT || 4000;
+  const port = process.env['PORT'] || 4000;
 
   // Start up the Node server
   const server = app();
   server.listen(port, () => { console.log(`Node Express server listening on http://localhost:${port}`); });
 }
 
-/* tslint:enable:no-string-literal */
 // Webpack will replace 'require' with '__webpack_require__'
 // '__non_webpack_require__' is a proxy to Node 'require'
 // The below code is to ensure that the server is run only when not requiring the bundle.

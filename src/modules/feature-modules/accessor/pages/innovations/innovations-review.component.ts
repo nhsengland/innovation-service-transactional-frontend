@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -37,8 +38,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   currentTab: TabType;
 
   form = new FormGroup({
-    assignedToMe: new FormControl(false),
-    suggestedOnly: new FormControl(true)
+    assignedToMe: new UntypedFormControl(false),
+    suggestedOnly: new UntypedFormControl(true)
   }, { updateOn: 'change' });
 
   innovationsList: TableModel<(getInnovationsListEndpointOutDTO['data'][0])>;

@@ -21,7 +21,7 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
 describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalComponent', () => {
 
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
   let innovationsService: InnovationsService;
@@ -44,7 +44,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
     AppInjector.setInjector(TestBed.inject(Injector));
 
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     innovationsService = TestBed.inject(InnovationsService);

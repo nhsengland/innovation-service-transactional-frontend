@@ -22,7 +22,7 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', () => {
 
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
   let innovatorService: InnovatorService;
@@ -45,7 +45,7 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
     AppInjector.setInjector(TestBed.inject(Injector));
 
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     innovatorService = TestBed.inject(InnovatorService);
@@ -181,7 +181,7 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
     component.wizard.gotoStep(5);
     fixture.detectChanges();
 
-    const spy = spyOn(component, 'submitWizard');
+    const spy = jest.spyOn(component, 'submitWizard');
 
     component.navigateTo('next');
     expect(spy).toHaveBeenCalled();

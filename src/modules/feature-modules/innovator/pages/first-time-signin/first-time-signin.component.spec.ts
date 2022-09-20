@@ -21,7 +21,7 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
 
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
   let innovatorService: InnovatorService;
@@ -44,7 +44,7 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
     AppInjector.setInjector(TestBed.inject(Injector));
 
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     innovatorService = TestBed.inject(InnovatorService);

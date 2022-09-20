@@ -21,7 +21,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
   let activatedRoute: ActivatedRoute;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let accessorService: AccessorService;
   let organisationsService: OrganisationsService;
@@ -44,7 +44,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     accessorService = TestBed.inject(AccessorService);
     organisationsService = TestBed.inject(OrganisationsService);
