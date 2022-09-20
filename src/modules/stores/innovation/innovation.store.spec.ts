@@ -44,10 +44,10 @@ describe('Stores/Innovation/InnovationStore', () => {
       status: 'CREATED',
       submittedAt: '',
       sections: [
-        { id: null, section: InnovationSectionEnum.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED', updatedAt: '' },
-        { id: null, section: InnovationSectionEnum.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW', updatedAt: '' },
-        { id: null, section: InnovationSectionEnum.UNDERSTANDING_OF_NEEDS, status: 'SUBMITTED', actionStatus: '', updatedAt: '' },
-        { id: null, section: InnovationSectionEnum.UNDERSTANDING_OF_BENEFITS, status: 'UNKNOWN', actionStatus: '', updatedAt: '' }
+        { id: null, section: InnovationSectionEnum.INNOVATION_DESCRIPTION, status: 'DRAFT', actionCount: 0, updatedAt: '' },
+        { id: null, section: InnovationSectionEnum.VALUE_PROPOSITION, status: 'NOT_STARTED', actionCount: 0, updatedAt: '' },
+        { id: null, section: InnovationSectionEnum.UNDERSTANDING_OF_NEEDS, status: 'SUBMITTED', actionCount: 0, updatedAt: '' },
+        { id: null, section: InnovationSectionEnum.UNDERSTANDING_OF_BENEFITS, status: 'UNKNOWN', actionCount: 0, updatedAt: '' }
       ]
     });
 
