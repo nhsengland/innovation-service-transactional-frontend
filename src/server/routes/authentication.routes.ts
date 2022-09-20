@@ -260,8 +260,10 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, (req, res) => {
       + `&post_logout_redirect_uri=${encodeURIComponent(redirectUrl)}`; // add post logout redirect uri
 
     removeUserSessionByOid(oid);
-    req.logout();
-    res.redirect(azLogoutUri);
+    req.logout(() => {
+      // if (error) { return next(error); }
+      res.redirect(azLogoutUri);
+    });
 
   });
 

@@ -53,7 +53,7 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
     it('should redirect to the dashboard page', () => {
 
       const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'first-time-signin' } };
-      const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+      const routerSpy = jest.spyOn(TestBed.inject(Router), 'navigate');
       let expected: boolean | null = null;
 
       authenticationStore.isValidUser = () => true;
@@ -86,7 +86,7 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
     it('should redirect to the Innovation Transfer Acceptance WITH innovations transfer pending', () => {
 
       const routeMock: Partial<ActivatedRouteSnapshot> = {};
-      const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+      const routerSpy = jest.spyOn(TestBed.inject(Router), 'navigate');
       let expected: boolean | null = null;
 
       authenticationStore.isValidUser = () => false;
@@ -115,7 +115,7 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
     it('should redirect to the First Time SignIn WITHOUT any innovations transfer pending', () => {
 
       const routeMock: Partial<ActivatedRouteSnapshot> = {};
-      const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+      const routerSpy = jest.spyOn(TestBed.inject(Router), 'navigate');
       let expected: boolean | null = null;
 
       authenticationStore.isValidUser = () => false;

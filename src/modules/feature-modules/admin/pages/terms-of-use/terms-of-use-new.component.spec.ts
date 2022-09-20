@@ -22,7 +22,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
   let activatedRoute: ActivatedRoute;
   let userService: ServiceUsersService;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
 
   beforeEach(() => {
@@ -38,7 +38,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
 
     AppInjector.setInjector(TestBed.inject(Injector));
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
     activatedRoute = TestBed.inject(ActivatedRoute);
     userService = TestBed.inject(ServiceUsersService);
   });

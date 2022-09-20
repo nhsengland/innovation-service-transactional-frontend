@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector, PLATFORM_ID } from '@angular/core';
+import { Component, Input, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
 
@@ -14,7 +14,7 @@ import { FormEngineParameterModel } from '../engine/models/form-engine.models';
   templateUrl: './checkbox-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormCheckboxGroupComponent implements OnInit, DoCheck {
+export class FormCheckboxGroupComponent implements DoCheck {
 
   @Input() id?: string;
   @Input() groupName = '';
@@ -54,8 +54,6 @@ export class FormCheckboxGroupComponent implements OnInit, DoCheck {
 
   }
 
-
-  ngOnInit(): void { }
 
   ngDoCheck(): void {
 

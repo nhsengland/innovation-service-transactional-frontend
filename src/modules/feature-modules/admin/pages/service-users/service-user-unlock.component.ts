@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -23,7 +24,7 @@ export class PageServiceUserUnlockComponent extends CoreComponent implements OnI
   securityConfirmation = { id: '', code: '' };
 
   form = new FormGroup({
-    code: new FormControl('')
+    code: new UntypedFormControl('')
   }, { updateOn: 'blur' });
 
 

@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'theme-base-layout',
   templateUrl: './base-layout.component.html'
 })
-export class BaseLayoutComponent implements OnInit {
+export class BaseLayoutComponent {
 
   constructor() { }
-
-  ngOnInit(): void { }
 
 }

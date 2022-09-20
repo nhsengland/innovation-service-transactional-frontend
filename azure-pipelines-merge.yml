@@ -1,16 +1,11 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
-pool:
-  vmImage: ubuntu-latest
-
 trigger:
 - develop
 - master
 
 pr: none
+
+pool:
+  vmImage: ubuntu-latest
 
 name: InnovationServiceTransactionalFrontend_$(SourceBranchName)_1.0.0_$(Date:yyyyMMdd)_$(Rev:.r)
 
@@ -19,30 +14,30 @@ variables:
 
 steps:
 - task: NodeTool@0
+  displayName: 'Install Node 14'
   inputs:
-    versionSpec: '12.x'
-  displayName: 'Install Node.js'
+    versionSpec: '14.x'
 
-- task: Npm@1
+- task: CmdLine@2
+  displayName: 'Install dependencies'
   inputs:
-    command: 'custom'
-    customCommand: 'ci'
-  displayName: 'NPM CI'
-  
+    script: |
+      npm install
+      npm run postinstall
 
-- script: |
-    npm run lint
+- task: CmdLine@2
   displayName: 'Run Lint'
+  inputs:
+    script: 'npm run lint'
 
 - task: Npm@1
+  displayName: 'Run Tests'
   inputs:
     command: 'custom'
     customCommand: 'test -- --ci --reporters=jest-junit --reporters=default --coverage --coverageReporters=cobertura'
-  displayName: 'Run Tests'
-
 
 - task: PublishTestResults@2
-  displayName: 'Publish Unit Test Results'
+  displayName: 'Publish Unit Tests Results'
   inputs:
     testResultsFiles: junit.xml
     mergeTestResults: true
@@ -50,15 +45,15 @@ steps:
     failTaskOnFailedTests: true
 
 - task: PublishCodeCoverageResults@1
-  displayName: 'Publish Unit Test Coverage'
+  displayName: 'Publish Unit Tests Coverage'
   inputs:
     codeCoverageTool: Cobertura
     summaryFileLocation: coverage/cobertura-coverage.xml
 
-
-- script: |
-    npm run build:ssr
+- task: CmdLine@2
   displayName: 'Run Build'
+  inputs:
+    script: 'npm run build:ssr'
 
 - task: PublishPipelineArtifact@0
   inputs:

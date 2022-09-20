@@ -70,7 +70,7 @@ describe('Shared/Pages/Innovation/Messages/PageInnovationThreadMessageEditCompon
   //   activatedRoute.snapshot.params = { innovationId: 'Inno01' };
   //   activatedRoute.snapshot.data = { subModule: 'reply', module: 'innovator' };
   //   activatedRoute.queryParams = of({ createdOrder: 'desc' });
-  //   const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+  //   const routerSpy = jest.spyOn(TestBed.inject(Router), 'navigate');
 
   //   const responseMock = { id: 'commentId' };
   //   innovationStore.updateInnovationComment$ = () => of(responseMock as any);
@@ -90,7 +90,7 @@ describe('Shared/Pages/Innovation/Messages/PageInnovationThreadMessageEditCompon
   //   activatedRoute.snapshot.params = { innovationId: 'Inno01' };
   //   activatedRoute.snapshot.data = { subModule: 'comment', module: 'innovator' };
   //   activatedRoute.queryParams = of({ createdOrder: 'desc' });
-  //   const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+  //   const routerSpy = jest.spyOn(TestBed.inject(Router), 'navigate');
 
   //   const responseMock = { id: 'commentId' };
   //   innovationStore.updateInnovationComment$ = () => of(responseMock as any);

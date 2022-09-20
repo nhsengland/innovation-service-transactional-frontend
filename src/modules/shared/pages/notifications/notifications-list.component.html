@@ -111,7 +111,7 @@
                       {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }}
                       <span class="nhsuk-u-visually-hidden"> {{ item.link.label }} </span>
                     </a>
-                    <notification-tag label="dot" *ngIf="item.readAt === null"></notification-tag>
+                    <theme-notification-tag label="dot" *ngIf="item.readAt === null"></theme-notification-tag>
                   </td>
                   <td class="nhsuk-table__cell">
                     <span class="nhsuk-table-responsive__heading">{{ notificationsList.getColumnLabel('createdAt') }}</span>

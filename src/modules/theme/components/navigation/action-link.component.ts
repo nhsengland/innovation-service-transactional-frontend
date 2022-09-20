@@ -1,16 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'theme-action-link',
   templateUrl: './action-link.component.html'
 })
-export class ActionLinkComponent implements OnInit {
+export class ActionLinkComponent {
 
   @Input() href = '';
   @Input() text = '';
 
   constructor() { }
-
-  ngOnInit(): void { }
 
 }

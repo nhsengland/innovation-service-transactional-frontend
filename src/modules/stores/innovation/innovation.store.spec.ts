@@ -38,17 +38,18 @@ describe('Stores/Innovation/InnovationStore', () => {
 
   it('should run getSectionsSummary$() and return success', () => {
 
-    spyOn(innovationService, 'getInnovationSections').and.returnValue(of({
+    innovationService.getInnovationSections = () => of({
       id: 'innovationId',
       name: 'innovationName',
-      title: 'About your product or service',
+      status: 'CREATED',
+      submittedAt: '',
       sections: [
-        { section: InnovationSectionEnum.INNOVATION_DESCRIPTION, status: 'DRAFT', actionStatus: 'REQUESTED' },
-        { section: InnovationSectionEnum.VALUE_PROPOSITION, status: 'NOT_STARTED', actionStatus: 'IN_REVIEW' },
-        { section: InnovationSectionEnum.UNDERSTANDING_OF_NEEDS, status: 'SUBMITTED', actionStatus: '' },
-        { section: InnovationSectionEnum.UNDERSTANDING_OF_BENEFITS, status: 'UNKNOWN', actionStatus: '' }
+        { id: null, section: InnovationSectionEnum.INNOVATION_DESCRIPTION, status: 'DRAFT', actionCount: 0, updatedAt: '' },
+        { id: null, section: InnovationSectionEnum.VALUE_PROPOSITION, status: 'NOT_STARTED', actionCount: 0, updatedAt: '' },
+        { id: null, section: InnovationSectionEnum.UNDERSTANDING_OF_NEEDS, status: 'SUBMITTED', actionCount: 0, updatedAt: '' },
+        { id: null, section: InnovationSectionEnum.UNDERSTANDING_OF_BENEFITS, status: 'UNKNOWN', actionCount: 0, updatedAt: '' }
       ]
-    }));
+    });
 
     const expectedResponse = [
       {

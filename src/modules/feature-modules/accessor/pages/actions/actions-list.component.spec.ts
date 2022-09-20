@@ -20,7 +20,7 @@ describe('FeatureModules/Accessor/Actions/ActionsListComponent', () => {
 
   let activatedRoute: ActivatedRoute;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let component: ActionsListComponent;
   let fixture: ComponentFixture<ActionsListComponent>;
@@ -42,7 +42,7 @@ describe('FeatureModules/Accessor/Actions/ActionsListComponent', () => {
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     accessorService = TestBed.inject(AccessorService);
 

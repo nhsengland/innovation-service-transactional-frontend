@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -20,7 +21,7 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
 
 
   form = new FormGroup({
-    notificationPreference: new FormControl('', { validators: CustomValidators.required('Choose at least one section') })
+    notificationPreference: new UntypedFormControl('', { validators: CustomValidators.required('Choose at least one section') })
   }, { updateOn: 'blur' });
 
 

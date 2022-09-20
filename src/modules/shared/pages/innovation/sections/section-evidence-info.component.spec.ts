@@ -100,7 +100,7 @@ describe('Shared/Pages/Innovation/PageInnovationSectionEvidenceInfoComponent', (
   it('should delete evidence with success', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS };
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+    const routerSpy = jest.spyOn(TestBed.inject(Router), 'navigate');
 
     const responseMock = true;
     innovationStore.deleteEvidence$ = () => of(responseMock as any);
@@ -117,7 +117,7 @@ describe('Shared/Pages/Innovation/PageInnovationSectionEvidenceInfoComponent', (
   it('should NOT delete evidence with API error', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS };
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+    const routerSpy = jest.spyOn(TestBed.inject(Router), 'navigate');
 
     innovationStore.deleteEvidence$ = () => throwError('error');
 

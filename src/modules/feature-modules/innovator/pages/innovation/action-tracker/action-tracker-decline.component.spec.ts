@@ -103,7 +103,7 @@ describe('FeatureModules/Innovator/Innovation/InnovationActionTrackerEditCompone
   it('should run onSubmit and call api with success', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-    const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+    const routerSpy = jest.spyOn(TestBed.inject(Router), 'navigate');
 
     const responseMock = { id: 'actionId' };
     innovatorService.declineAction = () => of(responseMock as any);

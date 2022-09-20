@@ -68,8 +68,8 @@
                           {{ item.name }}
                         </a>
                       </div>
-                      <notification-tag *ngIf="item.notifications.isNew !== true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" [label]="item.notifications.count"></notification-tag>
-                      <notification-tag *ngIf="item.notifications.isNew === true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" label="new"></notification-tag>
+                      <theme-notification-tag *ngIf="item.notifications.isNew !== true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" [label]="item.notifications.count"></theme-notification-tag>
+                      <theme-notification-tag *ngIf="item.notifications.isNew === true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" label="new"></theme-notification-tag>
                     </div>
                   </td>
 

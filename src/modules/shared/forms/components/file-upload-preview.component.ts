@@ -5,7 +5,7 @@ import { NgxDropzonePreviewComponent } from 'ngx-dropzone';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
-  selector: 'file-upload-preview',
+  selector: 'theme-file-upload-preview',
   template: `
     <ng-content select="ngx-dropzone-label"></ng-content>
     <ngx-dropzone-remove-badge *ngIf="removable" (click)="_remove($event)"></ngx-dropzone-remove-badge>`,

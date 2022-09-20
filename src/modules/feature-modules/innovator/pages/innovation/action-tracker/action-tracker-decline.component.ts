@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -21,7 +22,7 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
   form = new FormGroup({
-    comment: new FormControl('')
+    comment: new UntypedFormControl('')
   }, { updateOn: 'blur' });
 
 

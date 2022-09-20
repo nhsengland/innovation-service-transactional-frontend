@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
+import { UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
 import { FormArray, FormControl, FormGroup } from '@app/base/forms';
@@ -24,7 +25,7 @@ export class ActionAdvancedFilterComponent extends CoreComponent implements OnIn
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
   form = new FormGroup({
-    search: new FormControl(),
+    search: new UntypedFormControl(),
     innovationStatus: new FormArray([]),
     innovationSection: new FormArray([])
   }, { updateOn: 'change' });

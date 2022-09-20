@@ -1,0 +1,34 @@
+{
+  "preset": "jest-preset-angular",
+  "roots": ["<rootDir>/src/"],
+  "testMatch": ["**/+(*.)+(spec).+(ts)"],
+  "setupFilesAfterEnv": ["<rootDir>/jest-angular.config.ts"],
+  "collectCoverage": true,
+  "coverageReporters": ["html", "text", "text-summary"],
+  "coverageDirectory": "./coverage",
+  "moduleNameMapper": {
+    "@app/(.*)": "<rootDir>/src/app/$1",
+    "@tests/(.*)": "<rootDir>/src/tests/$1",
+    "@modules/(.*)": "<rootDir>/src/modules/$1"
+  },
+  "collectCoverageFrom": [
+    "src/modules/**/*.(t|j)s",
+    "src/app/**/*.(t|j)s"
+  ],
+  "coveragePathIgnorePatterns": [
+    "index.ts",
+    ".config.ts",
+    ".interfaces.ts",
+    ".mock.ts",
+    ".models.ts",
+    ".module.ts"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "branches": 75,
+      "functions": 75,
+      "lines": 75,
+      "statements": 80
+    }
+  }
+}

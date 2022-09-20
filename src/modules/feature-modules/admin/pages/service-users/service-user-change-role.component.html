@@ -42,7 +42,7 @@
         <theme-form-input controlName="code" label="Enter the confirmation code" [pageUniqueField]="false"></theme-form-input>
       </ng-container>
 
-      <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" [disabled]="rulesList.length > 0 && !rulesList[0]?.valid">Change Role</button>
+      <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" [disabled]="rulesList.length > 0 && !rulesList[0].valid">Change Role</button>
 
     </form>
 

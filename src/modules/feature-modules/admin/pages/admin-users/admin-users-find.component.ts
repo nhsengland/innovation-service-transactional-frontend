@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -20,7 +21,7 @@ export class PageAdminUsersFindComponent extends CoreComponent implements OnInit
 
   formSubmitted = false;
   form = new FormGroup({
-    email: new FormControl('')
+    email: new UntypedFormControl('')
   }, { updateOn: 'change' }); // Needs to be 'change' to allow submtitting using the enter key.
 
   usersList: searchUserEndpointOutDTO[] = [];

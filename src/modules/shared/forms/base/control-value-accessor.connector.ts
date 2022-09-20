@@ -4,7 +4,7 @@ import { AbstractControl, ControlContainer, ControlValueAccessor, FormControl, F
 @Component({ template: '' })
 // Next line exception disables rule: "ComponentClassName should end with the suffix Component"
 // tslint:disable-next-line
-export abstract class ControlValueAccessorConnector implements ControlValueAccessor {
+export abstract class ControlValueAccessorComponent implements ControlValueAccessor {
 
   @ViewChild(FormControlDirective, { static: true }) formControlDirective?: FormControlDirective;
 

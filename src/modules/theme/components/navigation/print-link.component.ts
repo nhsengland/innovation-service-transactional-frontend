@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'theme-print-link',
@@ -6,12 +6,10 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./print-link.component.scss']
 
 })
-export class PrintLinkComponent implements OnInit {
+export class PrintLinkComponent {
 
   @Input() href = '';
 
   constructor() { }
-
-  ngOnInit(): void { }
 
 }

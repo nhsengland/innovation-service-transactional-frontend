@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -35,7 +36,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
   statusError = '';
 
   form = new FormGroup({
-    status: new FormControl('', { validators: CustomValidators.required('Please choose a status') })
+    status: new UntypedFormControl('', { validators: CustomValidators.required('Please choose a status') })
   }, { updateOn: 'blur' });
 
 

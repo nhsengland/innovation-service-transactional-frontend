@@ -17,7 +17,7 @@ describe('FeatureModules/Assessment/Pages/Account?ManageAccount/PageAssessmentAc
 
   let activatedRoute: ActivatedRoute;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
   let assessmentService: AssessmentService;
   let component: PageAssessmentAccountManageAccountInfoComponent;
   let fixture: ComponentFixture<PageAssessmentAccountManageAccountInfoComponent>;
@@ -36,7 +36,7 @@ describe('FeatureModules/Assessment/Pages/Account?ManageAccount/PageAssessmentAc
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     assessmentService = TestBed.inject(AssessmentService);
 

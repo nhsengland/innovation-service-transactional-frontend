@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormArray, UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
@@ -22,9 +23,9 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   innovation: InnovationDataResolverType;
 
   form = new FormGroup({
-    organisationUnits: new FormArray([]),
-    comment: new FormControl('', CustomValidators.required('A comment is required')),
-    confirm: new FormControl(false, CustomValidators.required('You need to confirm to proceed'))
+    organisationUnits: new UntypedFormArray([]),
+    comment: new UntypedFormControl('', CustomValidators.required('A comment is required')),
+    confirm: new UntypedFormControl(false, CustomValidators.required('You need to confirm to proceed'))
   }, { updateOn: 'blur' });
 
   groupedItems: Required<FormEngineParameterModel>['groupedItems'] = [];

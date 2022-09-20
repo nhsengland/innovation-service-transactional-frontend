@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -27,7 +28,7 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
   pageStep: 'RULES_LIST' | 'CODE_REQUEST' | 'SUCCESS' = 'RULES_LIST';
 
   form = new FormGroup({
-    code: new FormControl('')
+    code: new UntypedFormControl('')
   }, { updateOn: 'blur' });
 
   wizard: WizardEngineModel = new WizardEngineModel({});

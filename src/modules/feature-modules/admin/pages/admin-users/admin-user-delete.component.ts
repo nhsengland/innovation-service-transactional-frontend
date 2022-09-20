@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -34,9 +35,9 @@ export class PageAdminUserDeleteComponent extends CoreComponent {
     this.user = { id: this.activatedRoute.snapshot.params.userId };
 
     this.form = new FormGroup({
-      reason: new FormControl(''),
-      code: new FormControl(''),
-      confirmation: new FormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('delete the administrator')]),
+      reason: new UntypedFormControl(''),
+      code: new UntypedFormControl(''),
+      confirmation: new UntypedFormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('delete the administrator')]),
     }, { updateOn: 'blur' });
 
   }

@@ -68,7 +68,7 @@
                 <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('subject') }}</span>
                 <div>
                   <a routerLink="{{ item.id }}" attr.aria-label="View {{ item.subject }} conversation"> {{ item.subject }} </a>
-                  <notification-tag label="dot" *ngIf="item.isNew"></notification-tag>
+                  <theme-notification-tag label="dot" *ngIf="item.isNew"></theme-notification-tag>
                 </div>
               </td>
               <td class="nhsuk-table__cell">

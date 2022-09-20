@@ -26,7 +26,7 @@ export class LocalStorageMock {
 
 @Component({
   template: `<div></div>`,
-  selector: 'empty-component',
+  selector: 'app-empty-component',
 })
 export class EmptyMockComponent { }
 

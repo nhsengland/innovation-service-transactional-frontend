@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
@@ -34,7 +35,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
   });
 
   form = new FormGroup({
-    agreeInnovations: new FormControl(false, CustomValidators.required('You need to confirm to proceed'))
+    agreeInnovations: new UntypedFormControl(false, CustomValidators.required('You need to confirm to proceed'))
   }, { updateOn: 'blur' });
 
 

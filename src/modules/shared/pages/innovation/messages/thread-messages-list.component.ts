@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
@@ -26,7 +27,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0]>({ pageSize: 10 });
 
   form = new FormGroup({
-    message: new FormControl('')
+    message: new UntypedFormControl('')
   }, { updateOn: 'blur' });
 
   isInnovator(): boolean { return this.stores.authentication.isInnovatorType(); }
