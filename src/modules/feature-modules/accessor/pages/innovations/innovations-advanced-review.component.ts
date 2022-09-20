@@ -26,8 +26,7 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
 
   innovationsList = new TableModel<
     getAdvancedInnovationsListEndpointOutDTO['data'][0],
-    { name: string, mainCategories: string[], locations: string[], engagingOrganisations: string[], supportStatuses: string[], assignedToMe: boolean, suggestedOnly: boolean }
-  >({ pageSize: 10000 });
+    { name: string, mainCategories: string[], locations: string[], engagingOrganisations: string[], supportStatuses: string[], assignedToMe: boolean, suggestedOnly: boolean }>({pageSize: 20});
 
   form = new FormGroup({
     search: new FormControl(),
@@ -180,6 +179,13 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
     if (formFilterIndex > -1) {
       formFilter.removeAt(formFilterIndex);
     }
+
+  }
+
+  onPageChange(event: { pageNumber: number }): void {
+
+    this.innovationsList.setPage(event.pageNumber);
+    this.getInnovationsList();
 
   }
 
