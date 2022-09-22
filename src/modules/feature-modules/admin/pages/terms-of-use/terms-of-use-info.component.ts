@@ -13,39 +13,39 @@ import { ServiceUsersService } from '@modules/feature-modules/admin/services/ser
 export class PageTermsOfUseInfoComponent extends CoreComponent implements OnInit {
 
   id: string;
-  tou: {
-    summary: string,
-    name: string
-  } = { summary: '', name: '' };
+  tou: { summary: string, name: string } = { summary: '', name: '' };
 
   constructor(
-    private userService: ServiceUsersService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private userService: ServiceUsersService
   ) {
 
     super();
-    this.id = this.activatedRoute.snapshot.params.id;
+    this.id = this.activatedRoute.snapshot.params['id'];
+
   }
 
+
   ngOnInit(): void {
-    this.userService.getTermsById(this.id).subscribe(
-      response => {
+
+    this.userService.getTermsById(this.id).subscribe({
+      next: response => {
+
         this.tou = {
-          summary: response.summary,
+          summary: response.summary || 'This version was released without a summary of the changes',
           name: response.name
         };
+
         this.setPageTitle(this.tou.name);
         this.setPageStatus('READY');
+
       },
-      () => {
+      error: () => {
         this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch the necessary information',
-          message: 'Please try again or contact us for further help'
-        };
+        this.setAlertDataLoadError();
       }
-    );
+    });
+
   }
 
 }

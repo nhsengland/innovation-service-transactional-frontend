@@ -4,9 +4,9 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, TermsOfUseTypeEnum, UserTypeEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
-import { APIQueryParamsType, MappedObjectType } from '@app/base/types';
+import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
 
 
 export type getUserMinimalInfoDTO = {
@@ -153,6 +153,15 @@ export type getListOfTerms = {
     createdAt: string
   }[]
 };
+
+type GetListByIdDTO = {
+  id: string,
+  touType: TermsOfUseTypeEnum,
+  name: string,
+  summary: string,
+  createdAt: DateISOType,
+  releasedAt: null | DateISOType
+}
 
 @Injectable()
 export class ServiceUsersService extends CoreService {
@@ -352,13 +361,10 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  getTermsById(id: string): Observable<any> {
+  getTermsById(id: string): Observable<GetListByIdDTO> {
 
     const url = new UrlModel(this.API_URL).addPath('user-admin/tou/:id').setPathParams({ id });
-    return this.http.get<getLockUserRulesInDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
+    return this.http.get<GetListByIdDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
   updateTermsById(id: string, data: MappedObjectType): Observable<any> {
