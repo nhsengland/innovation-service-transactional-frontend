@@ -15,6 +15,8 @@ import { NotificationContextTypeEnum } from '@modules/stores/environment/environ
 })
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
 
+  module: '' | 'innovator' | 'accessor' | 'assessment' = '';
+
   innovationId: string;
   innovation: getInnovationInfoEndpointDTO | undefined;
 
@@ -30,14 +32,16 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     super();
     this.setPageTitle('Overview');
 
+    this.module = this.activatedRoute.snapshot.data.module;
+
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
   }
 
 
   ngOnInit(): void {
-    this.assessmentService.getInnovationInfo(this.innovationId).subscribe(
-      response => {
+    this.assessmentService.getInnovationInfo(this.innovationId).subscribe({
+      next: response => {
 
         this.innovation = response;
 
@@ -60,7 +64,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         this.setPageStatus('READY');
 
       },
-      error => {
+      error: () => {
         this.setPageStatus('ERROR');
         this.alert = {
           type: 'ERROR',
@@ -68,7 +72,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           message: 'Please try again or contact us for further help'
         };
       }
-    );
+    });
 
   }
 

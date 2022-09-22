@@ -16,9 +16,11 @@
     <div class="nhsuk-grid-column-two-thirds">
       <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation?.summary?.name }}</h1>
     </div>
-    <div *ngIf="innovation?.assessment?.id && innovation?.summary?.status === 'COMPLETE'" class="nhsuk-grid-column-one-third text-align-right">
-      <a routerLink="/assessment/innovations/{{ innovation?.summary?.id || '' }}/assessment/{{ innovation?.assessment?.id || '' }}"> View needs assessment </a>
-    </div>
+    <ng-container *ngIf="module === 'assessment'">
+      <div *ngIf="innovation?.assessment?.id && innovation?.summary?.status === 'IN_PROGRESS'" class="nhsuk-grid-column-one-third text-align-right">
+        <a routerLink="/assessment/innovations/{{ innovation?.summary?.id || '' }}/assessments/{{ innovation?.assessment?.id || '' }}"> View needs assessment </a>
+      </div>
+    </ng-container>
   </div>
 
   <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
@@ -54,7 +56,7 @@
       </dl>
       <a routerLink="/assessment/innovations/{{ innovation?.summary?.id }}/assessments/{{ innovation?.assessment?.id }}/edit" class="nhsuk-button"> Continue needs assessment </a>
     </ng-container>
-    <ng-container *ngSwitchCase="'COMPLETE'">
+    <ng-container *ngSwitchCase="'IN_PROGRESS'">
       <div class="d-flex">
         <theme-svg-icon type="success"></theme-svg-icon>
         <span class="nhsuk-u-margin-right-2"></span>

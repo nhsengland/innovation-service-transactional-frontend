@@ -71,8 +71,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe(
-      response => {
+    this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe({
+      next: response => {
 
         this.innovationName = response.innovation.name;
         this.innovationStatus = response.innovation.status;
@@ -97,7 +97,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         this.setPageStatus('READY');
 
       },
-      error => {
+      error: () => {
         this.setPageStatus('ERROR');
         this.alert = {
           type: 'ERROR',
@@ -105,15 +105,15 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
           message: 'Please try again or contact us for further help'
         };
       }
-    );
+    });
 
   }
 
 
   onSubmitInnovation(): void {
 
-    this.stores.innovation.submitInnovation$(this.innovationId).subscribe(
-      response => {
+    this.stores.innovation.submitInnovation$(this.innovationId).subscribe({
+      next: response => {
 
         this.innovationStatus = response.status;
 
@@ -125,7 +125,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         };
 
       },
-      () => {
+      error: () => {
         this.alert = {
           type: 'ERROR',
           title: 'An error occurred when submitting your innovation',
@@ -133,7 +133,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
           setFocus: true
         };
       }
-    );
+    });
 
   }
 

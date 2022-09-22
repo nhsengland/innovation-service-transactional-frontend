@@ -48,5 +48,6 @@ export const CONTEXT_INNOVATION_INFO: EnvironmentInnovationType = {
   id: 'innovationId01',
   name: 'Test innovation',
   status: InnovationStatusEnum.IN_PROGRESS,
-  owner: { name: 'User name 01', isActive: true }
+  owner: { name: 'User name 01', isActive: true },
+  assessment: { id: 'assessment01' }
 };
