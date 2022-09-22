@@ -126,9 +126,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 .min-width-767 { min-width: 767px }
 
 p.textarea-info-section {
-  white-space: pre-line;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  white-space: break-spaces;
   hyphens: auto;
 }
 
