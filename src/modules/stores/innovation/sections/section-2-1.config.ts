@@ -89,7 +89,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
             fieldsGroupConfig: {
               fields: [
                 { id: 'id', dataType: 'text', isVisible: false },
-                { id: 'name', dataType: 'text', label: 'Population or subgroup', validations: { isRequired: true } }
+                { id: 'name', dataType: 'text', label: 'Population or subgroup', validations: { isRequired: true, maxLength: 50 } }
               ],
               addNewLabel: 'Add new population or subgroup'
             }
