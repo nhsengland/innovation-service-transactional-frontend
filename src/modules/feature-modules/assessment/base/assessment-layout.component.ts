@@ -47,10 +47,16 @@ export class AssessmentLayoutComponent extends CoreComponent {
 
     this.subscriptions.push(
 
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e)),
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe({
+        next: e => {
+          this.onRouteChange(e)
+        }
+      }),
 
-      this.stores.environment.notifications$().subscribe(e => {
+      this.stores.environment.notifications$().subscribe({
+        next: e => {
         this.navigationMenuBar.notifications = { notifications: e.UNREAD }; // We need to reassign the variable so that the component reacts to it.
+        }
       })
 
     );
@@ -64,6 +70,7 @@ export class AssessmentLayoutComponent extends CoreComponent {
     const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
     const innovation = currentRouteInnovationId ? this.stores.environment.getInnovation() : null;
+    const currentAssessmentRouteId: string | undefined = innovation?.assessment?.id;
 
     this.layoutOptions = {
       type: routeData.type || null,
@@ -87,7 +94,10 @@ export class AssessmentLayoutComponent extends CoreComponent {
           { title: 'Messages', link: `/assessment/innovations/${currentRouteInnovationId}/threads` }
         ];
         if (innovation?.status === InnovationStatusEnum.IN_PROGRESS) {
-          this.leftSideBar.push({ title: 'Support status', link: `/assessment/innovations/${currentRouteInnovationId}/support` });
+          this.leftSideBar.push(
+            { title: 'Support status', link: `/assessment/innovations/${currentRouteInnovationId}/support` },
+            { title: 'Needs assessment', link: `/assessment/innovations/${currentRouteInnovationId}/assessments/${currentAssessmentRouteId}` }
+          );
         }
 
         this.leftSideBar.push({ title: 'Activity log', link: `/assessment/innovations/${currentRouteInnovationId}/activity-log` });
