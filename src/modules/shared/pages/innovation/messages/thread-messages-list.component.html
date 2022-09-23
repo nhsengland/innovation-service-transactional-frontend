@@ -49,8 +49,7 @@
           </p>
         </div>
 
-        <p class="textarea-info-section nhsuk-u-margin-bottom-2">
-          {{ message.message }}
+        <p class="textarea-info-section nhsuk-u-margin-bottom-2">{{ message.message }}
           <span *ngIf="message.updatedAt && message.updatedAt !== message.createdAt" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2">
             (last edited at {{ message.updatedAt | date: ('app.date_formats.long_date_time' | translate) }})
           </span>

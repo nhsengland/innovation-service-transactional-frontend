@@ -196,6 +196,7 @@ export class FormEngineHelper {
         switch (parameter.dataType) {
           case 'autocomplete-array':
           case 'checkbox-array':
+          case 'fields-group':
             validators.push(CustomValidators.requiredCheckboxArray(validation[1]));
             break;
           case 'checkbox-group':
@@ -224,6 +225,7 @@ export class FormEngineHelper {
         switch (parameter.dataType) {
           case 'autocomplete-array':
           case 'checkbox-array':
+          case 'fields-group':
             validators.push(CustomValidators.minCheckboxArray(validation[0] as number, validation[1] as string));
             break;
           // case 'checkbox-group':
@@ -244,6 +246,7 @@ export class FormEngineHelper {
         switch (parameter.dataType) {
           case 'autocomplete-array':
           case 'checkbox-array':
+          case 'fields-group':
             validators.push(CustomValidators.maxCheckboxArray(validation[0] as number, validation[1] as string));
             break;
           // case 'checkbox-group':
