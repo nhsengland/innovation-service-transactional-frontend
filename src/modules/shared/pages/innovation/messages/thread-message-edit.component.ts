@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
+import { CustomValidators, FormGroup } from '@app/base/forms';
 import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { UntypedFormControl } from '@angular/forms';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class PageInnovationThreadMessageEditComponent extends CoreComponent impl
   messageId: string;
 
   form = new FormGroup({
-    message: new FormControl('', CustomValidators.required('A message is required'))
+    message: new UntypedFormControl('', CustomValidators.required('A message is required'))
   });
 
 
@@ -66,7 +67,11 @@ export class PageInnovationThreadMessageEditComponent extends CoreComponent impl
       return;
     }
 
-    this.innovationsService.editThreadMessage(this.innovation.id, this.threadId, this.messageId, this.form.value).subscribe(
+    const body = {
+      message: this.form.get('message')?.value
+    };
+
+    this.innovationsService.editThreadMessage(this.innovation.id, this.threadId, this.messageId, body).subscribe(
       () => this.redirectTo(`/${this.selfUser.urlBasePath}/innovations/${this.innovation.id}/threads/${this.threadId}`, { alert: 'messageEditSuccess' }),
       () => this.setAlertUnknownError()
     );

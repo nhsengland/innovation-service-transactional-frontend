@@ -1,13 +1,13 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
     "types": [
-      "jest", // 1
-      "node"
+      "jest",
+      // "node"
     ],
-    "esModuleInterop": true, // 2
-    "emitDecoratorMetadata": true // 3
+    "esModuleInterop": true
   },
   "files": [
     "src/test.ts",

@@ -5,7 +5,7 @@ import { AccessorSuggestionModel, AssessmentSuggestionModel, OrganisationSuggest
 // import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 @Component({
-  selector: 'organisation-suggestions-card',
+  selector: 'app-organisation-suggestions-card',
   templateUrl: './organisation-suggestion-card.component.html',
   styleUrls: ['./organisation-suggestion-card.component.scss'],
 })

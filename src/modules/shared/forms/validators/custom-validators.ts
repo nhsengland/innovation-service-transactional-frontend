@@ -52,6 +52,13 @@ export class CustomValidators {
     };
   }
 
+  static existsInValidator(existsIn: string[], message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) { return null; }
+      return !existsIn.includes(control.value) ? null : { existsIn: (message ? { message } : true) };
+    };
+  }
+
   // May be used in the future.
   // static passwordFieldsMatchValidator(formGroup: FormGroup): ValidationErrors | null {
   //   return formGroup.controls.password.value === formGroup.controls.confirmPassword.value ? null : { passwordFieldsMatch: true };

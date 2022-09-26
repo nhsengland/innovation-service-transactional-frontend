@@ -60,6 +60,11 @@ const signInOptions: IOIDCStrategyOptionWithoutRequest = {
 };
 const userSessions: UserSession[] = [];
 
+export function getAccessTokenByOid(oid: string): string {
+  const userSessionIdx = userSessions.findIndex((u) => u.oid === oid);
+  return (userSessionIdx !== -1) ? userSessions[userSessionIdx].accessToken : '';
+}
+
 function findUserSessionByOid(oid: string, fn: ((...args: any[]) => void)): void {
   for (let i = 0, len = userSessions.length; i < len; i++) {
     const user = userSessions[i];
@@ -113,32 +118,33 @@ passport.deserializeUser((obj: any, next) => { next(null, obj); });
 
 // Authentication routes.
 authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
+
   const client = getAppInsightsClient(req);
-  client.trackTrace({
-    message: '/session called',
-    severity: SeverityLevel.Information,
-  });
+
+  client.trackTrace({ severity: SeverityLevel.Information, message: '/session called' });
 
   if (req.isAuthenticated()) {
+
     client.trackTrace({
-      message: '/session called and user is authenticated',
       severity: SeverityLevel.Information,
-      properties: {
-        data: req.user,
-      }
+      message: '/session called and user is authenticated',
+      properties: { data: req.user }
     });
     res.send('OK');
+
   } else {
+
     client.trackTrace({
-      message: '/session called and user is NOT authenticated',
       severity: SeverityLevel.Information,
-      properties: {
-        data: { session: req.session, sessionId: req.sessionID, headers: req.headers, path: req.path },
-      }
+      message: '/session called and user is NOT authenticated',
+      properties: { data: { session: req.session, sessionId: req.sessionID, headers: req.headers, path: req.path } }
     });
     res.status(401).send();
+
   }
+
 });
+
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/auth/user`, (req, res) => {
   const user: IProfile = req.user || {};
@@ -174,8 +180,9 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
       idToken
     };
 
+    // TODO: What's the use of this?
     axios.post(`${ENVIRONMENT.API_URL}/api/me`, body)
-      .then((response: any) => {
+      .then(() => {
         res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`);
       })
       .catch((error: any) => {
@@ -246,13 +253,17 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, (req, res) => {
 
   req.session.destroy(() => {
 
+    const redirectUrl = req.query.redirectUrl as string || OAUTH_CONFIGURATION.signoutRedirectUrl;
+
     const azLogoutUri = `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/oauth2/v2.0/logout`
       + `?p=${OAUTH_CONFIGURATION.signinPolicy}` // add policy information
-      + `&post_logout_redirect_uri=${encodeURIComponent(OAUTH_CONFIGURATION.signoutRedirectUrl)}`; // add post logout redirect uri
+      + `&post_logout_redirect_uri=${encodeURIComponent(redirectUrl)}`; // add post logout redirect uri
 
     removeUserSessionByOid(oid);
-    req.logout();
-    res.redirect(azLogoutUri);
+    req.logout(() => {
+      // if (error) { return next(error); }
+      res.redirect(azLogoutUri);
+    });
 
   });
 
@@ -267,9 +278,5 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/change-password`, (req, res) 
   res.redirect(azChangePwUri);
 });
 
-export function getAccessTokenByOid(oid: string): string {
-  const userSessionIdx = userSessions.findIndex((u) => u.oid === oid);
-  return (userSessionIdx !== -1) ? userSessions[userSessionIdx].accessToken : '';
-}
 
 export default authenticationRouter;

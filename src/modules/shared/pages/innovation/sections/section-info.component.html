@@ -18,7 +18,7 @@
         </div>
       </h1>
 
-      <button *ngIf="section.nextSectionId" routerLink="../{{ section.nextSectionId }}" class="nhsuk-button nhsuk-u-margin-right-3"> Continue to next section </button>
+      <button *ngIf="section.nextSectionId && module === 'innovator'" routerLink="../{{ section.nextSectionId }}" class="nhsuk-button nhsuk-u-margin-right-3"> Continue to next section </button>
 
       <ng-container *ngIf="!section.isNotStarted">
 
@@ -35,17 +35,31 @@
         <ng-container *ngIf="summaryList.length > 0">
           <h2 class="nhsuk-heading-m">{{ module === 'innovator' ? 'Your' : 'Submitted' }} answers</h2>
           <dl class="nhsuk-summary-list">
-            <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
-              <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-              <dd class="nhsuk-summary-list__value text-pre-wrap">
-                <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
-                <span *ngIf="!item.allowHTML">{{ item.value }}</span>
-              </dd>
-              <dd class="nhsuk-summary-list__actions">
-                <a *ngIf="module === 'innovator' && item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
-                <a *ngIf="item.evidenceId" routerLink="evidence/{{ item.evidenceId }}"> View <span class="nhsuk-u-visually-hidden"> evidence detail </span></a>
-              </dd>
-            </div>
+
+            <ng-container *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
+              <ng-container [ngSwitch]="item.type">
+                <ng-container *ngSwitchCase="'button'">
+                  <div class="width-max-content">
+                    <dt class="nhsuk-u-margin-top-5">
+                      <a routerLink="edit/{{ item.editStepNumber }}" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0">{{ item.label }}</a>
+                    </dt>
+                  </div>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  <div class="nhsuk-summary-list__row">
+                    <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+                    <dd class="nhsuk-summary-list__value text-pre-wrap">
+                      <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
+                      <span *ngIf="!item.allowHTML">{{ item.value }}</span>
+                    </dd>
+                    <dd class="nhsuk-summary-list__actions">
+                      <a *ngIf="module === 'innovator' && item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+                      <a *ngIf="item.evidenceId" routerLink="evidence/{{ item.evidenceId }}"> View <span class="nhsuk-u-visually-hidden"> evidence detail </span></a>
+                    </dd>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
           </dl>
         </ng-container>
 
@@ -63,6 +77,22 @@
 
       <ng-container *ngIf="module === 'accessor' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED')">
         <button routerLink="/accessor/innovations/{{ innovation.id }}/action-tracker/new" [queryParams]="{ section: section.id }" class="nhsuk-button"> Create action for this section </button>
+      </ng-container>
+
+      <ng-container *ngIf="module === 'assessment'" [ngSwitch]="innovation.status">
+
+        <ng-container *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'">
+          <button routerLink="/assessment/innovations/{{ innovation.id }}/assessments/new" class="nhsuk-button"> Start needs assessment </button>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'NEEDS_ASSESSMENT'">
+          <button routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id || '' }}/edit" class="nhsuk-button"> Continue needs assessment </button>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'IN_PROGRESS'">
+          <button routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id || '' }}" class="nhsuk-button"> View needs assessment </button>
+        </ng-container>
+
       </ng-container>
 
     </ng-container>

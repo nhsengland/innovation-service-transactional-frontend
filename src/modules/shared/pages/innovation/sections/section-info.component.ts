@@ -18,7 +18,7 @@ import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/store
 })
 export class PageInnovationSectionInfoComponent extends CoreComponent implements OnInit {
 
-  module: '' | 'innovator' | 'accessor' = '';
+  module: '' | 'innovator' | 'accessor' | 'assessment' = '';
   innovation: EnvironmentInnovationType;
 
   section: {
@@ -65,7 +65,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     // This router subscription is needed for the button to go to the next step.
     // As is it the same component, we can't use the routerLink directive alone.
     this.subscriptions.push(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.initializePage())
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe({
+        next: e => this.initializePage()
+      })
     );
 
   }
@@ -124,11 +126,12 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     }
 
 
-    this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe(
-      response => {
+    this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
+      next: response => {
 
         this.section.status = { id: response.section.status, label: INNOVATION_SECTION_STATUS[response.section.status]?.label || '' };
         this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
+        this.section.nextSectionId = this.section.status.id === 'SUBMITTED' ? this.getNextSectionId() : null;
 
         this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data)).runRules();
 
@@ -145,21 +148,22 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         this.setPageStatus('READY');
 
       },
-      () => {
+      error: () => {
         this.setPageStatus('ERROR');
         this.alert = {
           type: 'ERROR',
           title: 'Unable to fetch innovation section information',
           message: 'Please try again or contact us for further help'
         };
-      });
+      }
+    });
 
   }
 
   onSubmitSection(): void {
 
-    this.stores.innovation.submitSections$(this.innovation.id, [this.section.id]).subscribe(
-      () => {
+    this.stores.innovation.submitSections$(this.innovation.id, [this.section.id]).subscribe({
+      next: () => {
 
         this.section.status = { id: 'SUBMITTED', label: 'Submitted' };
         this.section.showSubmitButton = false;
@@ -167,7 +171,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         this.alert = { type: 'SUCCESS', title: 'Your answers have been confirmed for this section', message: this.section.nextSectionId ? 'Go to next section or return to the full innovation record' : undefined };
 
       },
-      () => {
+      error: () => {
 
         this.alert = {
           type: 'ERROR',
@@ -177,7 +181,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         };
 
       }
-    );
+    });
 
   }
 

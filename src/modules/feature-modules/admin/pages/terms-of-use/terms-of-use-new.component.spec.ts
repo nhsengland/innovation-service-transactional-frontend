@@ -13,6 +13,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { PageTermsOfUseNewComponent } from './terms-of-use-new.component';
 
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { TermsOfUseTypeEnum } from '@app/base/enums';
 
 
 describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () => {
@@ -22,7 +23,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
   let activatedRoute: ActivatedRoute;
   let userService: ServiceUsersService;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
 
   beforeEach(() => {
@@ -38,7 +39,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
 
     AppInjector.setInjector(TestBed.inject(Injector));
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
     activatedRoute = TestBed.inject(ActivatedRoute);
     userService = TestBed.inject(ServiceUsersService);
   });
@@ -69,14 +70,8 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
     fixture = TestBed.createComponent(PageTermsOfUseNewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    const expected = {
-      type: 'ERROR',
-      title: 'Unable to perform the necessary action',
-      message: 'Please try again or contact us for further help',
-      setFocus: true
-    };
 
-    expect(component.alert).toEqual(expected);
+    expect(component.alert.type).toBe('ERROR');
 
   });
 
@@ -115,14 +110,8 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
     component.form.get('notifyUser')?.setValue(0);
     fixture.detectChanges();
     component.onSubmit();
-    const expected = {
-      type: 'ERROR',
-      title: 'Unable to perform the necessary action',
-      message: 'Please try again or contact us for further help',
-      setFocus: true
-    };
 
-    expect(component.alert).toEqual(expected);
+    expect(component.alert.type).toBe('ERROR');
 
   });
   it('should throw unique key error while create a new version', () => {
@@ -137,13 +126,8 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
     component.form.get('notifyUser')?.setValue(0);
     fixture.detectChanges();
     component.onSubmit();
-    const expected = {
-      type: 'ERROR',
-      title: 'A version of the terms of use with this name already exists, please re-name this new version',
-      setFocus: true
-    };
 
-    expect(component.alert).toEqual(expected);
+    expect(component.alert.type).toBe('ERROR');
 
   });
   it('should edit existing version', () => {
@@ -152,7 +136,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
     userService.getTermsById = () => of({
       id: 'term 01',
       name: 'term',
-      touType: 'TEST',
+      touType: TermsOfUseTypeEnum.INNOVATOR,
       summary: 'TEST',
       releasedAt: '01-02-2022',
       createdAt: '12-01-2022'
@@ -160,7 +144,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
     userService.updateTermsById = () => of({
       id: 'term 01',
       name: 'termEdited',
-      touType: 'TEST',
+      touType: TermsOfUseTypeEnum.INNOVATOR,
       summary: 'TEST',
       releasedAt: '01-02-2022',
       createdAt: '12-01-2022'
@@ -178,7 +162,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
     userService.getTermsById = () => of({
       id: 'term 01',
       name: 'term',
-      touType: 'TEST',
+      touType: TermsOfUseTypeEnum.INNOVATOR,
       summary: 'TEST',
       releasedAt: '01-02-2022',
       createdAt: '12-01-2022'
@@ -193,13 +177,8 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
     component.form.get('notifyUser')?.setValue(0);
     fixture.detectChanges();
     component.onSubmit();
-    const expected = {
-      type: 'ERROR',
-      title: 'A version of the terms of use with this name already exists, please re-name this new version',
-      setFocus: true
-    };
-
-    expect(component.alert).toEqual(expected);
+ 
+    expect(component.alert.type).toBe('ERROR');
   });
   it('should throw default error while edit existing version', () => {
     activatedRoute.snapshot.params = { id: 'term 01' };
@@ -207,7 +186,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
     userService.getTermsById = () => of({
       id: 'term 01',
       name: 'term',
-      touType: 'TEST',
+      touType: TermsOfUseTypeEnum.INNOVATOR,
       summary: 'TEST',
       releasedAt: '01-02-2022',
       createdAt: '12-01-2022'
@@ -222,14 +201,8 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
     component.form.get('notifyUser')?.setValue(0);
     fixture.detectChanges();
     component.onSubmit();
-    const expected = {
-      type: 'ERROR',
-      title: 'Unable to perform the necessary action',
-      message: 'Please try again or contact us for further help',
-      setFocus: true
-    };
 
-    expect(component.alert).toEqual(expected);
+    expect(component.alert.type).toBe('ERROR');
   });
 
 
@@ -244,14 +217,9 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
     component.form.get('touType')?.setValue('TEST');
     component.form.get('summary')?.setValue('TEST');
     component.form.get('notifyUser')?.setValue(0);
-    const expected = {
-      type: 'ERROR',
-      title: 'Unable to perform the necessary action',
-      message: 'Please try again or contact us for further help',
-      setFocus: true
-    };
+
     component.onSubmit();
-    expect(component.alert).toEqual(expected);
+    expect(component.alert.type).toBe('ERROR');
 
   });
 

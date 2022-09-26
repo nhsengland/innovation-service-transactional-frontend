@@ -106,7 +106,7 @@ describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
     guard.canActivate().subscribe(response => { expected = response; });
 
     expect(expected).toBe(false);
-    expect(window.location.assign).toBeCalledWith('/transactional/signin');
+    expect(window.location.assign).toBeCalledWith('http:///signout?redirectUrl=http:///error/unauthenticated');
 
   });
 

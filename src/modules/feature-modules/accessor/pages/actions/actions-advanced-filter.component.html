@@ -116,7 +116,7 @@
                         {{ item.name }}
                       </a>
                     </div>
-                    <notification-tag label="dot" *ngIf="item.notifications && item.notifications.count > 0"></notification-tag>
+                    <theme-notification-tag label="dot" *ngIf="item.notifications && item.notifications.count > 0"></theme-notification-tag>
                   </div>
                 </td>
                 <td class="nhsuk-table__cell">
@@ -131,8 +131,8 @@
                 </td>
                 <td class="nhsuk-table__cell text-align-right">
                   <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('status') }}</span>
-                  <strong class="nhsuk-tag" [ngClass]="innovationSectionActionStatus[item.status]?.cssClass || ''">{{
-                    innovationSectionActionStatus[item.status]?.label || '' }}</strong>
+                  <strong class="nhsuk-tag" [ngClass]="innovationSectionActionStatus[item.status].cssClass || ''">{{
+                    innovationSectionActionStatus[item.status].label || '' }}</strong>
                 </td>
               </tr>
             </tbody>

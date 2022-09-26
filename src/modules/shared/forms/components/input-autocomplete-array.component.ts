@@ -49,7 +49,9 @@ export class FormInputAutocompleteArrayComponent implements OnInit, DoCheck {
   ) { }
 
 
-  private _filter(value: string): { value: string, label: string }[] {
+  private _filter(value: null | string): { value: string, label: string }[] {
+
+    value = value ?? '';
 
     if (value.length < 2) { return []; }
 

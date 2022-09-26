@@ -19,7 +19,7 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserDeleteComponent', (
 
   let authenticationStore: AuthenticationStore;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
   let component: PageAdminUserDeleteComponent;
   let fixture: ComponentFixture<PageAdminUserDeleteComponent>;
   let serviceUserService: ServiceUsersService;
@@ -38,7 +38,7 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserDeleteComponent', (
     AppInjector.setInjector(TestBed.inject(Injector));
 
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     serviceUserService = TestBed.inject(ServiceUsersService);

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -15,7 +16,7 @@ export class PageInnovationCommentsNewComponent extends CoreComponent {
   innovationId: string;
 
   form = new FormGroup({
-    comment: new FormControl('', CustomValidators.required('A comment is required'))
+    comment: new UntypedFormControl('', CustomValidators.required('A comment is required'))
   }, { updateOn: 'blur' });
 
 

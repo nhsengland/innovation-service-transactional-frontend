@@ -20,7 +20,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
 
   let activatedRoute: ActivatedRoute;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let accessorService: AccessorService;
 
@@ -42,7 +42,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     accessorService = TestBed.inject(AccessorService);
 
@@ -113,7 +113,6 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
     fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
     component = fixture.componentInstance;
     component.form.get('status')?.setValue('Invalid status');
-    component.form.get('comment')?.setValue('A required value');
 
     component.onSubmit();
     expect(routerSpy).toHaveBeenCalledWith(['/accessor/innovations/Inno01/action-tracker/actionId'], { queryParams: { alert: 'actionUpdateSuccess', status: undefined } });
@@ -130,7 +129,6 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
     fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
     component = fixture.componentInstance;
     component.form.get('status')?.setValue('REQUESTED');
-    component.form.get('comment')?.setValue('A required value');
 
     component.onSubmit();
     expect(routerSpy).toHaveBeenCalledWith(['/accessor/innovations/Inno01/action-tracker/actionId'], { queryParams: { alert: 'actionUpdateSuccess', status: 'Requested' } });
@@ -146,7 +144,6 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
     fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
     component = fixture.componentInstance;
     component.form.get('status')?.setValue('REQUESTED');
-    component.form.get('comment')?.setValue('A required value');
 
     component.onSubmit();
     expect(component.alert.type).toEqual('ERROR');

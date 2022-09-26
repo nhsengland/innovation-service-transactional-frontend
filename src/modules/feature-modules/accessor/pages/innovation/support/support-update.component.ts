@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormArray, UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormArray, FormControl, FormGroup, Validators } from '@app/base/forms';
+import { CustomValidators, FormArray, FormGroup, Validators } from '@app/base/forms';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -31,9 +32,9 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   currentStatus: { label: string, cssClass: string, description: string };
 
   form = new FormGroup({
-    status: new FormControl('', { validators: Validators.required, updateOn: 'change' }),
-    accessors: new FormArray([], { updateOn: 'change' }),
-    comment: new FormControl('', CustomValidators.required('A comment is required')),
+    status: new UntypedFormControl('', { validators: Validators.required, updateOn: 'change' }),
+    accessors: new UntypedFormArray([], { updateOn: 'change' }),
+    comment: new UntypedFormControl('', CustomValidators.required('A comment is required')),
   }, { updateOn: 'blur' });
 
 
@@ -75,7 +76,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           this.form.get('status')!.setValue(response.status);
 
           response.accessors.forEach(accessor => {
-            (this.form.get('accessors') as FormArray).push(new FormControl(accessor.id));
+            (this.form.get('accessors') as FormArray).push(new UntypedFormControl(accessor.id));
           });
 
           this.setPageStatus('READY');

@@ -13,6 +13,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { PageTermsOfUseInfoComponent } from './terms-of-use-info.component';
 
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { TermsOfUseTypeEnum } from '@app/base/enums';
 
 
 describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseInfoComponent', () => {
@@ -65,7 +66,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseInfoComponent', ()
       {
         id: 'term 01',
         name: 'term',
-        touType: 'TEST',
+        touType: TermsOfUseTypeEnum.INNOVATOR,
         summary: 'TEST',
         releasedAt: '01-02-2022',
         createdAt: '12-01-2022'

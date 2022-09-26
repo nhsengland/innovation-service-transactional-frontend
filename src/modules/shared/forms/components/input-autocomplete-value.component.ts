@@ -5,7 +5,7 @@
 // It is the same approach as the FormInputAutocompleteArrayComponent, but holds just 1 value.
 // It was NOT thouroughly tested!
 // Example of usage at the end of this file.
-import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, forwardRef, Injector } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, forwardRef, Injector } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { map } from 'rxjs/operators';
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 import { UtilsHelper } from '@app/base/helpers';
 
-import { ControlValueAccessorConnector } from '../base/control-value-accessor.connector';
+import { ControlValueAccessorComponent } from '../base/control-value-accessor.connector';
 
 import { FormEngineParameterModel } from '../engine/models/form-engine.models';
 
@@ -28,7 +28,7 @@ import { FormEngineParameterModel } from '../engine/models/form-engine.models';
     multi: true
   }]
 })
-export class FormInputAutocompleteValueComponent extends ControlValueAccessorConnector implements OnInit, DoCheck {
+export class FormInputAutocompleteValueComponent extends ControlValueAccessorComponent implements OnInit {
 
   @Input() id?: string;
   @Input() label?: string;
@@ -87,15 +87,6 @@ export class FormInputAutocompleteValueComponent extends ControlValueAccessorCon
 
 
   }
-
-  ngDoCheck(): void {
-
-    // this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
-    // this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : { message: '', params: {} };
-    // this.cdr.detectChanges();
-
-  }
-
 
   onInputBlur(): void {
 

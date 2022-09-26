@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormControl, FormGroup, Validators } from '@app/base/forms';
@@ -18,8 +19,8 @@ export class PageInnovationThreadNewComponent extends CoreComponent implements O
   innovation: EnvironmentInnovationType;
 
   form = new FormGroup({
-    subject: new FormControl('', [CustomValidators.required('A subject is required'), Validators.maxLength(100)]),
-    message: new FormControl('', CustomValidators.required('A message is required'))
+    subject: new UntypedFormControl('', [CustomValidators.required('A subject is required'), Validators.maxLength(100)]),
+    message: new UntypedFormControl('', CustomValidators.required('A message is required'))
   }, { updateOn: 'blur' });
 
   isInnovator(): boolean { return this.stores.authentication.isInnovatorType(); }
@@ -56,7 +57,12 @@ export class PageInnovationThreadNewComponent extends CoreComponent implements O
       return;
     }
 
-    this.innovationsService.createThread(this.innovation.id, this.form.value).subscribe(
+    const body = {
+      subject: this.form.get('subject')?.value,
+      message: this.form.get('message')?.value
+    };
+
+    this.innovationsService.createThread(this.innovation.id, body).subscribe(
       () => this.redirectTo(`/${this.selfUser.urlBasePath}/innovations/${this.innovation.id}/threads`, { alert: 'threadCreationSuccess' }),
       () => this.setAlertUnknownError()
     );

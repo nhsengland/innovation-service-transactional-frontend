@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
@@ -29,7 +30,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
   form = new FormGroup({
     contextTypes: new FormArray([]),
-    unreadOnly: new FormControl(false)
+    unreadOnly: new UntypedFormControl(false)
   }, { updateOn: 'change' });
 
   anyFilterSelected = false;

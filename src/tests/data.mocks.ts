@@ -23,13 +23,13 @@ export const USER_INFO_ACCESSOR: Required<AuthenticationModel>['user'] = {
 
 export const USER_INFO_INNOVATOR: Required<AuthenticationModel>['user'] = {
   id: '_id',
-  email: 'i@email.com',
+  email: 'some@email.com',
   displayName: 'Test innovator',
   type: UserTypeEnum.INNOVATOR,
-  roles: [],
-  organisations: [{ id: 'org_id', isShadow: true, name: '', size: '', role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER }],
+  phone: '212000000',
   passwordResetOn: '2020-01-01T00:00:00.000Z',
-  phone: '212000000'
+  roles: [],
+  organisations: [{ id: 'org_id', isShadow: true, name: '', size: '', role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER }]
 };
 
 export const USER_INFO_ADMIN: Required<AuthenticationModel>['user'] = {
@@ -48,5 +48,6 @@ export const CONTEXT_INNOVATION_INFO: EnvironmentInnovationType = {
   id: 'innovationId01',
   name: 'Test innovation',
   status: InnovationStatusEnum.IN_PROGRESS,
-  owner: { name: 'User name 01', isActive: true }
+  owner: { name: 'User name 01', isActive: true },
+  assessment: { id: 'assessment01' }
 };

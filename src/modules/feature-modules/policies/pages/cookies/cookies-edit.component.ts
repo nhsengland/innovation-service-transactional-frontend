@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
 
 import { CookiesService } from '@modules/core';
 import { CoreComponent, } from '@app/base';
-import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
+import { CustomValidators, FormGroup } from '@app/base/forms';
 
 import { COOKIES_USED } from '../../config/constants.config';
 
@@ -12,13 +13,13 @@ import { COOKIES_USED } from '../../config/constants.config';
   selector: 'app-policies-cookies-edit',
   templateUrl: './cookies-edit.component.html',
 })
-export class CookiesEditComponent extends CoreComponent implements OnInit {
+export class CookiesEditComponent extends CoreComponent {
 
   analyticsCookies = COOKIES_USED.analytics;
 
   form = new FormGroup({
-    _csrf: new FormControl(this.tokenExtractor.getToken()),
-    analytics: new FormControl('', CustomValidators.required('Choose one option'))
+    _csrf: new UntypedFormControl(this.tokenExtractor.getToken()),
+    analytics: new UntypedFormControl('', CustomValidators.required('Choose one option'))
   });
 
   analyticsItems = [
@@ -36,8 +37,6 @@ export class CookiesEditComponent extends CoreComponent implements OnInit {
 
     this.form.get('analytics')?.setValue(this.cookiesService.getConsentCookie().analytics ? 'true' : 'false');
   }
-
-  ngOnInit(): void { }
 
 
   onSubmit(): void {

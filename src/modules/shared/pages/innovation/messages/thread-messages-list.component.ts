@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
@@ -26,7 +27,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0]>({ pageSize: 10 });
 
   form = new FormGroup({
-    message: new FormControl('')
+    message: new UntypedFormControl('')
   }, { updateOn: 'blur' });
 
   isInnovator(): boolean { return this.stores.authentication.isInnovatorType(); }
@@ -52,7 +53,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'messageEditSuccess':
-        this.setAlertSuccess('You have successfully updated a message', 'Everyone who is currently engaging with your innovation will be notified.');
+        this.setAlertSuccess('You have successfully updated a message');
         break;
       default:
         break;
@@ -124,9 +125,8 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
         messageField.setValue('');
         messageField.markAsPristine();
-        // this.form.get('message')!.markAsUntouched();
 
-        this.setAlertSuccess('You have successfully created a new message');
+        this.setAlertSuccess('You have successfully sent a message', 'All participants in this conversation will be notified.');
 
         this.getThreadsList();
 

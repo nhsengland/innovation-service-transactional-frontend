@@ -50,7 +50,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitInnovation(innovationId);
   }
 
-  getActivityLog$(innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum }>): Observable<ActivityLogOutDTO> {
+  getActivityLog$(innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum[] }>): Observable<ActivityLogOutDTO> {
     return this.innovationsService.getInnovationActivityLog(innovationId, queryParams);
   }
 
@@ -65,13 +65,13 @@ export class InnovationStore extends Store<InnovationModel> {
         sections: INNOVATION_SECTIONS.map(item => ({
           title: item.title,
           sections: item.sections.map(ss => {
-            const sectionState = response.sections.find(a => a.section === ss.id) || { status: 'UNKNOWN', actionStatus: '' };
+            const sectionState = response.sections.find(a => a.section === ss.id) || { status: 'UNKNOWN', actionStatus: '', actionCount: 0 };
             return {
               id: ss.id,
               title: ss.title,
               status: sectionState.status,
-              actionStatus: sectionState.actionStatus,
-              isCompleted: INNOVATION_SECTION_STATUS[sectionState.status]?.isCompleteState || false
+              isCompleted: INNOVATION_SECTION_STATUS[sectionState.status]?.isCompleteState || false,
+              actionCount: sectionState.actionCount
             };
           })
         }))
@@ -87,7 +87,8 @@ export class InnovationStore extends Store<InnovationModel> {
               title: ss.title,
               status: 'UNKNOWN' as keyof typeof INNOVATION_SECTION_STATUS,
               actionStatus: '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
-              isCompleted: false
+              isCompleted: false,
+              actionCount: 0
             }))
           }))
         });

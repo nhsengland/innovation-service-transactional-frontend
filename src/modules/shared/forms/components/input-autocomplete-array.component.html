@@ -35,7 +35,7 @@
 
   <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption (optionSelected)="onAddItem($event)">
     <ng-container *ngIf="filteredItems$ | async as filteredItems">
-      <mat-option *ngIf="filteredItems.length === 0 && searchFieldControl.value?.length > 1" disabled class="mat-option--no-results">
+      <mat-option *ngIf="filteredItems.length === 0 && (searchFieldControl.value?.length ?? 0) > 1" disabled class="mat-option--no-results">
         No result matches your search. Please, refine your search.
       </mat-option>
       <mat-option *ngFor="let item of filteredItems" [value]="item.label"> {{ item.label }} </mat-option>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormArray, UntypedFormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
@@ -26,17 +27,16 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
 
   innovationsList = new TableModel<
     getAdvancedInnovationsListEndpointOutDTO['data'][0],
-    { name: string, mainCategories: string[], locations: string[], engagingOrganisations: string[], supportStatuses: string[], assignedToMe: boolean, suggestedOnly: boolean }
-  >({ pageSize: 10000 });
+    { name: string, mainCategories: string[], locations: string[], engagingOrganisations: string[], supportStatuses: string[], assignedToMe: boolean, suggestedOnly: boolean }>({pageSize: 20});
 
   form = new FormGroup({
-    search: new FormControl(),
-    mainCategories: new FormArray([]),
-    locations: new FormArray([]),
-    engagingOrganisations: new FormArray([]),
-    supportStatuses: new FormArray([]),
-    assignedToMe: new FormControl(false),
-    suggestedOnly: new FormControl(true)
+    search: new UntypedFormControl(),
+    mainCategories: new UntypedFormArray([]),
+    locations: new UntypedFormArray([]),
+    engagingOrganisations: new UntypedFormArray([]),
+    supportStatuses: new UntypedFormArray([]),
+    assignedToMe: new UntypedFormControl(false),
+    suggestedOnly: new UntypedFormControl(true)
   }, { updateOn: 'change' });
 
   anyFilterSelected = false;
@@ -180,6 +180,13 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
     if (formFilterIndex > -1) {
       formFilter.removeAt(formFilterIndex);
     }
+
+  }
+
+  onPageChange(event: { pageNumber: number }): void {
+
+    this.innovationsList.setPage(event.pageNumber);
+    this.getInnovationsList();
 
   }
 

@@ -40,43 +40,51 @@ export const mainCategoryItems = [
   { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherMainCategoryDescription', dataType: 'text', label: 'Other main category', validations: { isRequired: [true, 'Other main category description is required'] } }) }
 ];
 export const areasItems = [
+  { value: 'WORKFORCE', label: 'Workforce' },
+  { value: 'ECONOMIC_GROWTH', label: 'Economic growth' },
+  { value: 'EVIDENCE_GENERATION', label: 'Evidence generation' },
+  { value: 'TRANSFORMED_OUT_OF_HOSPITAL_CARE', label: 'Transformed \'out-of-hospital care\' and fully integrated community-based care' },
+  { value: 'REDUCIND_PRESSURE_EMERGENCY_HOSPITAL_SERVICES', label: 'Reducing pressure on emergency hospital services' },
+  { value: 'CONTROL_OVER_THEIR_OWN_HEALTH', label: 'Giving people more control over their own health and more personalised care' },
+  { value: 'DIGITALLY_ENABLING_PRIMARY_CARE', label: 'Digitally-enabling primary care and outpatient care' },
+  { value: 'CANCER', label: 'Cancer' },
+  { value: 'MENTAL_HEALTH', label: 'Mental Health' },
+  { value: 'CHILDREN_AND_YOUNG_PEOPLE', label: 'Children and young people' },
+  { value: 'LEARNING_DISABILITIES_AND_AUTISM', label: 'Learning disabilities and autism' },
+  { value: 'CARDIOVASCULAR_DISEASE', label: 'Cardiovascular disease' },
+  { value: 'STROKE_CARE', label: 'Stroke care' },
+  { value: 'DIABETES', label: 'Diabetes' },
+  { value: 'RESPIRATORY', label: 'Respiratory' },
+  { value: 'RESEARCH_INNOVATION_DRIVE_FUTURE_OUTCOMES', label: 'Research and innovation to drive future outcomes improvement' },
+  { value: 'GENOMICS', label: 'Genomics' },
+  { value: 'WIDER_SOCIAL_IMPACT', label: 'Wider social impact' },
+  { value: 'REDUCING_VARIATION_ACROSS_HEALTH_SYSTEM', label: 'Reducing variation across the health system' },
+  { value: 'FINANCIAL_PLANNING_ASSUMPTIONS', label: 'Financial and planning assumptions for systems' },
   { value: 'COVID_19', label: 'COVID-19' },
-  { value: 'DATA_ANALYTICS_AND_RESEARCH', label: 'Data, analytics and research' },
-  { value: 'DIGITALISING_SYSTEM', label: 'Digitalising the system' },
+  { value: 'DATA_ANALYTICS_AND_RESEARCH', label: 'Data Analytics & Research' },
   { value: 'IMPROVING_SYSTEM_FLOW', label: 'Improving system flow' },
   { value: 'INDEPENDENCE_AND_PREVENTION', label: 'Independence and prevention' },
   { value: 'OPERATIONAL_EXCELLENCE', label: 'Operational excellence' },
   { value: 'PATIENT_ACTIVATION_AND_SELF_CARE', label: 'Patient activation and self-care' },
   { value: 'PATIENT_SAFETY', label: 'Patient safety and quality improvement' },
-  { value: 'WORKFORCE_OPTIMISATION', label: 'Workforce resource optimisation' }
-];
-export const clinicalAreasItems = [
-  { value: 'ACUTE', label: 'Acute and emergency services' },
-  { value: 'AGEING', label: 'Ageing' },
-  { value: 'CANCER', label: 'Cancer' },
-  { value: 'CARDIO_ENDOCRINE_METABOLIC', label: 'Cardiovascular, endocrine & metabolic (cardiometabolic)' },
-  { value: 'CHILDREN_AND_YOUNG', label: 'Children and young people' },
-  { value: 'DISEASE_AGNOSTIC', label: 'Disease agnostic solution' },
-  { value: 'GASTRO_KDNEY_LIVER', label: 'Gastroenterology, kidney and liver' },
-  { value: 'INFECTION_INFLAMATION', label: 'Infection and inflammation' },
-  { value: 'MATERNITY_REPRODUCTIVE_HEALTH', label: 'Maternity and reproductive health' },
-  { value: 'MENTAL_HEALTH', label: 'Mental health' },
-  { value: 'NEUROLOGY', label: 'Neurology' },
-  { value: 'POPULATION_HEALTH', label: 'Population health' },
-  { value: 'RESPIRATORY', label: 'Respiratory' },
-  { value: 'UROLOGY', label: 'Urology' },
-  { value: 'WORKFORCE_AND_EDUCATION', label: 'Workforce and education' }
+  { value: 'GREATER_SUPPORT_AND_RESOURCE_PRIMARY_CARE', label: 'Greater support and resource for primary care' }
 ];
 export const careSettingsItems = [
-  { value: 'AMBULANCE_OR_PARAMEDIC', label: 'Ambulance or paramedic' },
-  { value: 'COMMUNITY', label: 'Community' },
-  { value: 'HOSPITAL_INPATIENT', label: 'Hospital - inpatient' },
-  { value: 'HOSPITAL_OUTPATIENT', label: 'Hospital - outpatient' },
+  { value: 'STP_ICS', label: 'STP / ICS' },
+  { value: 'CCGS', label: 'CCGs' },
+  { value: 'ACUTE_TRUSTS_INPATIENT', label: 'Acute Trusts - Inpatient' },
+  { value: 'ACUTE_TRUSTS_OUTPATIENT', label: 'Acute Trusts - Outpatient' },
+  { value: 'PRIMARY_CARE', label: 'Primary Care' },
   { value: 'MENTAL_HEALTH', label: 'Mental health' },
-  { value: 'PATIENT_HOME', label: 'Patient\'s home' },
+  { value: 'AMBULANCE', label: 'Ambulance' },
+  { value: 'SOCIAL_CARE', label: 'Social care' },
+  { value: 'INDUSTRY', label: 'Industry' },
+  { value: 'COMMUNITY', label: 'Community' },
+  { value: 'ACADEMIA', label: 'Academia' },
+  { value: 'DOMICILIARY_CARE', label: 'Domiciliary Care' },
   { value: 'PHARMACY', label: 'Pharmacy' },
-  { value: 'PRIMARY_CARE', label: 'Primary care' },
-  { value: 'SOCIAL_CARE', label: 'Social care' }
+  { value: 'URGENT_AND_EMERGENCY', label: 'Urgent & Emergency' },
+  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCareSetting', dataType: 'text', label: 'Other care setting', validations: { isRequired: [true, 'Other care setting description is required'] } }) }
 ];
 export const mainPurposeItems = [
   { value: 'PREVENT_CONDITION', label: 'Preventing a condition or symptom from happening or worsening' },

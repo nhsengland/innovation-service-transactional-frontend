@@ -20,6 +20,12 @@ export const locale = {
 
     // Single words, ALWAYS lowercased.
     dictionary: {
+      action: {
+        _: 'action',
+        none: 'action',
+        singular: 'action',
+        plural: 'actions'
+      },
       yes: 'yes',
     },
 
@@ -41,6 +47,11 @@ export const locale = {
           generic: {
             title: 'It appears that something went wrong!',
             message: 'The operation you are trying to do is no longer available.',
+            button_label: 'Go back to home'
+          },
+          unauthenticated: {
+            title: 'It appears that something went wrong!',
+            message: 'It seems that you don\'t have access to the service. Please contact us for further help.',
             button_label: 'Go back to home'
           }
         },
@@ -343,7 +354,8 @@ export const locale = {
           max_length: 'Text cannot exceed {{ maxLength }} characters',
           password_mismatch: 'Passwords don\'t appear to match',
           password_regex: 'The password must contain at least minimum 8 characters: one uppercase, one lowercase, one number and one special character',
-          required: 'Required'
+          required: 'Required',
+          existsIn: 'Value already exists'
         }
       }
 

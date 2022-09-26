@@ -58,7 +58,7 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, (req, res) => {
     const config = { headers: { Authorization: `Bearer ${accessToken}` } };
 
     const success = (response: any) => {
-      // console.info('RESPONSE', response.data);
+      // console.info('API CALL: ', req.url, response.data);
       res.status(response.status).send(response.data);
     };
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
 import { FormControl, FormGroup } from '@app/base/forms';
@@ -19,7 +20,7 @@ export class PageServiceUserFindComponent extends CoreComponent implements OnIni
 
   formSubmitted = false;
   form = new FormGroup({
-    email: new FormControl('')
+    email: new UntypedFormControl('')
   }, { updateOn: 'change' }); // Needs to be 'change' to allow submtitting using the enter key.
 
   usersList: searchUserEndpointOutDTO[] = [];

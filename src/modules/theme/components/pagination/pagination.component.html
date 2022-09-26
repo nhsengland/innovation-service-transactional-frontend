@@ -1,9 +1,9 @@
 <div *ngIf="totalRows > pageSize" class="pagination">
 
-  <a *ngIf="currentPage != 1" (click)="onPreviousPage()">« Prev</a>
+  <a *ngIf="currentPage !== 1" (click)="onPreviousPage()">« Prev</a>
 
   <a *ngFor="let page of getPages()" [ngClass]="{ active: currentPage === page }" (click)="onPageChange(page)">{{ page }}</a>
 
-  <a *ngIf="currentPage != getPages()?.length" (click)="onNextPage()">Next »</a>
+  <a *ngIf="currentPage !== getPages()?.length" (click)="onNextPage()">Next »</a>
 
 </div>

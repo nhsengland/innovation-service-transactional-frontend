@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -20,7 +21,7 @@ export class PageInnovationCommentsEditComponent extends CoreComponent implement
   replyId: string;
 
   form = new FormGroup({
-    comment: new FormControl('', CustomValidators.required('A message is required'))
+    comment: new UntypedFormControl('', CustomValidators.required('A message is required'))
   });
 
   constructor(
@@ -70,7 +71,11 @@ export class PageInnovationCommentsEditComponent extends CoreComponent implement
 
     const id = (this.subModule === 'comment') ? this.commentId : this.replyId;
 
-    this.stores.innovation.updateInnovationComment$(this.innovationId, this.form.value, id).subscribe(
+    const body = {
+      comment: this.form.get('comment')?.value
+    };
+
+    this.stores.innovation.updateInnovationComment$(this.innovationId, body, id).subscribe(
       () => {
         this.redirectTo(`/${this.module}/innovations/${this.innovationId}/comments`, { alert: 'commentEditSuccess' });
       },

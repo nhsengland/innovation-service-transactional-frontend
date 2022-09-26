@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { FormControl, FormGroup } from '@app/base/forms';
+import { FormGroup } from '@app/base/forms';
 
 import { RoutingHelper } from '@app/base/helpers';
 import { forkJoin } from 'rxjs';
@@ -25,7 +26,7 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
   securityConfirmation = { id: '', code: '' };
 
   form = new FormGroup({
-    code: new FormControl('')
+    code: new UntypedFormControl('')
   }, { updateOn: 'blur' });
 
   pageType: 'RULES' | 'LOCK_USER' = 'RULES';
@@ -48,33 +49,34 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
   ngOnInit(): void {
     forkJoin([
       this.serviceUsersService.getUserFullInfo(this.user.id),
-      this.serviceUsersService.getLockUserRules(this.user.id)]).subscribe(
-        ([userInfo, response]) => {
-          this.setPageStatus('READY');
-          if (userInfo.type === 'INNOVATOR') {
-            this.userType = this.stores.authentication.getRoleDescription(userInfo.type);
-            this.pageType = 'LOCK_USER';
+      this.serviceUsersService.getLockUserRules(this.user.id)
+    ]).subscribe(
+      ([userInfo, response]) => {
+        this.setPageStatus('READY');
+        if (userInfo.type === 'INNOVATOR') {
+          this.userType = this.stores.authentication.getRoleDescription(userInfo.type);
+          this.pageType = 'LOCK_USER';
+        }
+        else {
+          this.pageType = 'RULES';
+          this.rulesList = response;
+          if (userInfo.type === 'ACCESSOR' && userInfo.userOrganisations.length > 0) {
+            this.userType = this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role);
           }
           else {
-            this.pageType = 'RULES';
-            this.rulesList = response;
-            if (userInfo.type === 'ACCESSOR' && userInfo.userOrganisations.length > 0) {
-              this.userType = this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role);
-            }
-            else {
-              this.userType = this.stores.authentication.getRoleDescription(userInfo.type);
-            }
+            this.userType = this.stores.authentication.getRoleDescription(userInfo.type);
           }
-        },
-        () => {
-          this.setPageStatus('ERROR');
-          this.alert = {
-            type: 'ERROR',
-            title: 'Unable to fetch the necessary information',
-            message: 'Please try again or contact us for further help'
-          };
         }
-      );
+      },
+      () => {
+        this.setPageStatus('ERROR');
+        this.alert = {
+          type: 'ERROR',
+          title: 'Unable to fetch the necessary information',
+          message: 'Please try again or contact us for further help'
+        };
+      }
+    );
 
   }
 

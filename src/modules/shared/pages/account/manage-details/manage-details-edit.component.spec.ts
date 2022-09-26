@@ -147,7 +147,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
     fixture.detectChanges();
 
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
-    spyOn(component.formEngineComponent, 'getFormValues').and.returnValue({ valid: false, data: { value1: 'some value' } });
+    jest.spyOn(component.formEngineComponent, 'getFormValues').mockReturnValue({ valid: false, data: { value1: 'some value' } });
     component.onSubmitStep('next', new Event(''));
     fixture.detectChanges();
 
@@ -157,7 +157,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
 
   // it('should redirect when submitting a step', () => {
 
-  //   const routerSpy = spyOn(TestBed.inject(Router), 'navigate');
+  //   const routerSpy = jest.spyOn(TestBed.inject(Router), 'navigate');
 
   //   activatedRoute.snapshot.data = { module: 'innovator' };
   //   activatedRoute.snapshot.params = { stepId: 1 };
@@ -169,7 +169,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
   //   fixture.detectChanges();
 
   //   component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
-  //   spyOn(component.formEngineComponent, 'getFormValues').and.returnValue({ valid: true });
+  //   jest.spyOn(component.formEngineComponent, 'getFormValues').and.returnValue({ valid: true });
   //   component.onSubmitStep('next', new Event(''));
   //   fixture.detectChanges();
 

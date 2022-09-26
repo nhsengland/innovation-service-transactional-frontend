@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
@@ -17,9 +18,9 @@ export class PageAccountInnovationsTransferComponent extends CoreComponent imple
   stepNumber: 1 | 2 = 1;
 
   form = new FormGroup({
-    innovation: new FormControl('', { validators: CustomValidators.required('Please choose an innovation'), updateOn: 'change' }),
-    email: new FormControl('', [CustomValidators.required('An email is required'), Validators.email]),
-    confirmation: new FormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('transfer my innovation')]),
+    innovation: new UntypedFormControl('', { validators: CustomValidators.required('Please choose an innovation'), updateOn: 'change' }),
+    email: new UntypedFormControl('', [CustomValidators.required('An email is required'), Validators.email]),
+    confirmation: new UntypedFormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('transfer my innovation')]),
   }, { updateOn: 'blur' });
 
   formInnovationsItems: FormEngineParameterModel['items'] = [];

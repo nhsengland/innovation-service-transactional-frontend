@@ -5,11 +5,16 @@ import { LoggerTestingModule } from 'ngx-logger/testing';
 import { Injector } from '@angular/core';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
+
+import { UserTypeEnum } from './enums';
 
 import { CoreService } from './core.service';
 
+
 describe('App/Base/CoreService', () => {
+
+  let authenticationStore: AuthenticationStore;
 
   let service: CoreService;
 
@@ -28,13 +33,53 @@ describe('App/Base/CoreService', () => {
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
+    authenticationStore = TestBed.inject(AuthenticationStore);
+
     service = TestBed.inject(CoreService);
 
   });
 
 
   it('should create the service', () => {
+
     expect(service).toBeTruthy();
+
+  });
+
+  it(`should run apiUserBasePath() as Admin`, () => {
+    authenticationStore.getUserType = () => UserTypeEnum.ADMIN;
+    expect(service.apiUserBasePath()).toBe('user-admin');
+  });
+  it(`should run apiUserBasePath() as Admin`, () => {
+    authenticationStore.getUserType = () => UserTypeEnum.ASSESSMENT;
+    expect(service.apiUserBasePath()).toBe('assessments');
+  });
+  it(`should run apiUserBasePath() as Admin`, () => {
+    authenticationStore.getUserType = () => UserTypeEnum.ACCESSOR;
+    expect(service.apiUserBasePath()).toBe('accessors');
+  });
+  it(`should run apiUserBasePath() as Admin`, () => {
+    authenticationStore.getUserType = () => UserTypeEnum.INNOVATOR;
+    expect(service.apiUserBasePath()).toBe('innovators');
+  });
+  it(`should run apiUserBasePath() as Admin`, () => {
+    authenticationStore.getUserType = () => '';
+    expect(service.apiUserBasePath()).toBe('');
+  });
+
+
+  it(`should run userUrlBasePath()`, () => {
+
+    authenticationStore.userUrlBasePath = () => 'innovator';
+
+    expect(service.userUrlBasePath()).toBe('innovator');
+
+  });
+
+  it('should run translate()', () => {
+
+    expect(service.translate('app.title')).toBe('app.title');
+
   });
 
 });

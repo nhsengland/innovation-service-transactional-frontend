@@ -1,8 +1,8 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardSummaryType, WizardEngineModel, FormEngineParameterModel } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
-import { areasItems, careSettingsItems, categoriesItems, clinicalAreasItems, hasFinalProductItems, mainCategoryItems, mainPurposeItems, supportTypesItems } from './catalogs.config';
+import { areasItems, careSettingsItems, categoriesItems, hasFinalProductItems, mainCategoryItems, mainPurposeItems, supportTypesItems } from './catalogs.config';
 import { locationItems } from '../config/innovation-catalog.config';
 
 
@@ -12,55 +12,41 @@ const stepsLabels = {
   l2: 'Please provide a short description of your innovation',
   l3: 'Where are you developing your innovation?',
   l4: 'Do you have a working product, service or prototype?',
-  l5: 'Choose all categories that can be used to describe your innovation',
+  l5: 'Choose all the categories that can be used to describe your innovation',
   l6: 'If you had to select one primary category to describe your innovation, which one would it be?',
   l7: 'Is your innovation relevant to any of the following areas?',
-  l8: 'Which clinical areas does your innovation impact on?',
-  l9: 'In which care settings is your innovation relevant?',
-  l10: 'What\'s the main purpose of your innovation?',
-  l11: 'What type of support are you currently looking for?',
-  l12: 'Provide further information about what support you are seeking from the NHS Innovation Service.'
+  l8: 'In which care settings is your innovation relevant?',
+  l9: 'What\'s the main purpose of your innovation?',
+  l10: 'What type of support are you currently looking for?',
+  l11: 'Please provide any further information about the support you are seeking from the NHS Innovation Service'
 };
-
 
 // Types.
 type InboundPayloadType = {
-  name: string;
-  description: string;
-  location: string;
-  postcode: null | string;
-  countryName: string;
-  hasFinalProduct: null | 'YES' | 'NO';
-  categories: ('MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER')[];
-  otherCategoryDescription: string;
-  mainCategory: null | 'MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER';
-  otherMainCategoryDescription: string;
-  areas: ('COVID_19' | 'DATA_ANALYTICS_AND_RESEARCH' | 'DIGITALISING_SYSTEM' | 'IMPROVING_SYSTEM_FLOW' | 'INDEPENDENCE_AND_PREVENTION' | 'OPERATIONAL_EXCELLENCE' | 'PATIENT_ACTIVATION_AND_SELF_CARE' | 'PATIENT_SAFETY' | 'WORKFORCE_OPTIMISATION')[];
-  clinicalAreas: ('ACUTE' | 'AGEING' | 'CANCER' | 'CARDIO_ENDOCRINE_METABOLIC' | 'CHILDREN_AND_YOUNG' | 'DISEASE_AGNOSTIC' | 'GASTRO_KDNEY_LIVER' | 'INFECTION_INFLAMATION' | 'MATERNITY_REPRODUCTIVE_HEALTH' | 'MENTAL_HEALTH' | 'NEUROLOGY' | 'POPULATION_HEALTH' | 'RESPIRATORY' | 'UROLOGY' | 'WORKFORCE_AND_EDUCATION')[];
-  careSettings: ('AMBULANCE_OR_PARAMEDIC' | 'COMMUNITY' | 'HOSPITAL_INPATIENT' | 'HOSPITAL_OUTPATIENT' | 'MENTAL_HEALTH' | 'PATIENT_HOME' | 'PHARMACY' | 'PRIMARY_CARE' | 'SOCIAL_CARE')[];
-  mainPurpose: 'PREVENT_CONDITION' | 'PREDICT_CONDITION' | 'DIAGNOSE_CONDITION' | 'MONITOR_CONDITION' | 'PROVIDE_TREATMENT' | 'MANAGE_CONDITION' | 'ENABLING_CARE';
-  supportTypes: ('ADOPTION' | 'ASSESSMENT' | 'PRODUCT_MIGRATION' | 'CLINICAL_TESTS' | 'COMMERCIAL' | 'PROCUREMENT' | 'DEVELOPMENT' | 'EVIDENCE_EVALUATION' | 'FUNDING' | 'INFORMATION')[];
-  moreSupportDescription: string;
+  name: string,
+  description: string,
+  location: string,
+  postcode: null | string,
+  countryName: string,
+  hasFinalProduct: null | 'YES' | 'NO',
+  categories: ('MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER')[],
+  otherCategoryDescription: string,
+  mainCategory: null | 'MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER',
+  otherMainCategoryDescription: string,
+  areas: ('WORKFORCE' | 'ECONOMIC_GROWTH' | 'EVIDENCE_GENERATION' | 'TRANSFORMED_OUT_OF_HOSPITAL_CARE' | 'REDUCIND_PRESSURE_EMERGENCY_HOSPITAL_SERVICES' | 'CONTROL_OVER_THEIR_OWN_HEALTH' | 'DIGITALLY_ENABLING_PRIMARY_CARE' | 'CANCER' | 'MENTAL_HEALTH' | 'CHILDREN_AND_YOUNG_PEOPLE' | 'LEARNING_DISABILITIES_AND_AUTISM' | 'CARDIOVASCULAR_DISEASE' | 'STROKE_CARE' | 'DIABETES' | 'RESPIRATORY' | 'RESEARCH_INNOVATION_DRIVE_FUTURE_OUTCOMES' | 'GENOMICS' | 'WIDER_SOCIAL_IMPACT' | 'REDUCING_VARIATION_ACROSS_HEALTH_SYSTEM' | 'FINANCIAL_PLANNING_ASSUMPTIONS' | 'COVID_19' | 'DATA_ANALYTICS_AND_RESEARCH' | 'IMPROVING_SYSTEM_FLOW' | 'INDEPENDENCE_AND_PREVENTION' | 'OPERATIONAL_EXCELLENCE' | 'PATIENT_ACTIVATION_AND_SELF_CARE' | 'PATIENT_SAFETY' | 'GREATER_SUPPORT_AND_RESOURCE_PRIMARY_CARE')[],
+  careSettings: ('STP_ICS' | 'CCGS' | 'ACUTE_TRUSTS_INPATIENT' | 'ACUTE_TRUSTS_OUTPATIENT' | 'PRIMARY_CARE' | 'MENTAL_HEALTH' | 'AMBULANCE' | 'SOCIAL_CARE' | 'INDUSTRY' | 'COMMUNITY' | 'ACADEMIA' | 'DOMICILIARY_CARE' | 'PHARMACY' | 'URGENT_AND_EMERGENCY' | 'OTHER')[],
+  otherCareSetting: null | string,
+  mainPurpose: 'PREVENT_CONDITION' | 'PREDICT_CONDITION' | 'DIAGNOSE_CONDITION' | 'MONITOR_CONDITION' | 'PROVIDE_TREATMENT' | 'MANAGE_CONDITION' | 'ENABLING_CARE',
+  supportTypes: ('ADOPTION' | 'ASSESSMENT' | 'PRODUCT_MIGRATION' | 'CLINICAL_TESTS' | 'COMMERCIAL' | 'PROCUREMENT' | 'DEVELOPMENT' | 'EVIDENCE_EVALUATION' | 'FUNDING' | 'INFORMATION')[],
+  moreSupportDescription: string
 };
-type StepPayloadType = {
-  innovationName: string;
-  description: string;
-  location: string;
-  englandPostCode: null | string;
-  locationCountryName: string;
-  hasFinalProduct: null | 'YES' | 'NO';
-  categories: ('MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER')[];
-  otherCategoryDescription: string;
-  mainCategory: null | 'MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER';
-  otherMainCategoryDescription: string;
-  areas: ('COVID_19' | 'DATA_ANALYTICS_AND_RESEARCH' | 'DIGITALISING_SYSTEM' | 'IMPROVING_SYSTEM_FLOW' | 'INDEPENDENCE_AND_PREVENTION' | 'OPERATIONAL_EXCELLENCE' | 'PATIENT_ACTIVATION_AND_SELF_CARE' | 'PATIENT_SAFETY' | 'WORKFORCE_OPTIMISATION')[];
-  clinicalAreas: ('ACUTE' | 'AGEING' | 'CANCER' | 'CARDIO_ENDOCRINE_METABOLIC' | 'CHILDREN_AND_YOUNG' | 'DISEASE_AGNOSTIC' | 'GASTRO_KDNEY_LIVER' | 'INFECTION_INFLAMATION' | 'MATERNITY_REPRODUCTIVE_HEALTH' | 'MENTAL_HEALTH' | 'NEUROLOGY' | 'POPULATION_HEALTH' | 'RESPIRATORY' | 'UROLOGY' | 'WORKFORCE_AND_EDUCATION')[];
-  careSettings: ('AMBULANCE_OR_PARAMEDIC' | 'COMMUNITY' | 'HOSPITAL_INPATIENT' | 'HOSPITAL_OUTPATIENT' | 'MENTAL_HEALTH' | 'PATIENT_HOME' | 'PHARMACY' | 'PRIMARY_CARE' | 'SOCIAL_CARE')[];
-  mainPurpose: 'PREVENT_CONDITION' | 'PREDICT_CONDITION' | 'DIAGNOSE_CONDITION' | 'MONITOR_CONDITION' | 'PROVIDE_TREATMENT' | 'MANAGE_CONDITION' | 'ENABLING_CARE';
-  supportTypes: ('ADOPTION' | 'ASSESSMENT' | 'PRODUCT_MIGRATION' | 'CLINICAL_TESTS' | 'COMMERCIAL' | 'PROCUREMENT' | 'DEVELOPMENT' | 'EVIDENCE_EVALUATION' | 'FUNDING' | 'INFORMATION')[];
-  moreSupportDescription: string;
+
+type StepPayloadType = Omit<InboundPayloadType, 'name' | 'postcode' | 'countryName'> & {
+  innovationName: string,
+  englandPostCode: string,
+  locationCountryName: string
 };
-type OutboundPayloadType = Partial<InboundPayloadType>;
+type OutboundPayloadType = InboundPayloadType;
 
 
 export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
@@ -111,78 +97,90 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
           validations: { isRequired: [true, 'Choose at least one category'] },
           items: categoriesItems
         }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'mainCategory',
-          dataType: 'radio-group',
-          label: stepsLabels.l6,
-          description: 'Your innovation may be a combination of various categories. Selecting the primary category will help us find the right people to support you.',
-          items: mainCategoryItems
-        }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'areas',
-          dataType: 'checkbox-array',
-          label: stepsLabels.l7,
-          description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-          items: areasItems
-        }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'clinicalAreas',
-          dataType: 'checkbox-array',
-          label: stepsLabels.l8,
-          description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-          items: clinicalAreasItems
-        }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'careSettings',
-          dataType: 'checkbox-array',
-          label: stepsLabels.l9,
-          description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-          items: careSettingsItems
-        }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'mainPurpose',
-          dataType: 'radio-group',
-          label: stepsLabels.l10,
-          description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: mainPurposeItems
-        }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'supportTypes',
-          dataType: 'checkbox-array',
-          label: stepsLabels.l11,
-          description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the innovation service.',
-          validations: { isRequired: [true, 'Choose at least one type of support'] },
-          items: supportTypesItems
-        }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'moreSupportDescription',
-          dataType: 'textarea',
-          label: stepsLabels.l12,
-          lengthLimit: 'medium'
-        }]
       })
     ],
+    runtimeRules: [(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, data, currentStep)],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
     showSummary: true
   })
 };
+
+function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary'): void {
+
+  steps.splice(5);
+
+  if (data.categories.length === 1) {
+
+    data.mainCategory = data.categories[0];
+
+  } else {
+
+    const selectedCategories = categoriesItems.filter(category => data.categories.some(e => e === category.value));
+    steps.push(
+      new FormEngineModel({
+        parameters: [{
+          id: 'mainCategory',
+          dataType: 'radio-group',
+          label: stepsLabels.l6,
+          description: 'Your innovation may be a combination of various categories. Selecting the primary category will help us find the right people to support you.',
+          items: selectedCategories
+        }]
+      })
+    );
+
+  }
+
+  steps.push(
+    new FormEngineModel({
+      parameters: [{
+        id: 'areas',
+        dataType: 'checkbox-array',
+        label: stepsLabels.l7,
+        description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
+        items: areasItems
+      }]
+    }),
+    new FormEngineModel({
+      parameters: [{
+        id: 'careSettings',
+        dataType: 'checkbox-array',
+        label: stepsLabels.l8,
+        description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
+        items: careSettingsItems
+      }]
+    }),
+    new FormEngineModel({
+      parameters: [{
+        id: 'mainPurpose',
+        dataType: 'radio-group',
+        label: stepsLabels.l9,
+        description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.',
+        validations: { isRequired: [true, 'Choose one option'] },
+        items: mainPurposeItems
+      }]
+    }),
+    new FormEngineModel({
+      parameters: [{
+        id: 'supportTypes',
+        dataType: 'checkbox-array',
+        label: stepsLabels.l10,
+        description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the innovation service.',
+        validations: { isRequired: [true, 'Choose at least one type of support'] },
+        items: supportTypesItems
+      }]
+    }),
+    new FormEngineModel({
+      parameters: [{
+        id: 'moreSupportDescription',
+        dataType: 'textarea',
+        label: stepsLabels.l11,
+        lengthLimit: 'medium'
+      }]
+    })
+  );
+}
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
@@ -198,11 +196,11 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     mainCategory: data.mainCategory,
     otherMainCategoryDescription: data.otherMainCategoryDescription,
     areas: data.areas,
-    clinicalAreas: data.clinicalAreas,
     careSettings: data.careSettings,
+    otherCareSetting: data.otherCareSetting,
     mainPurpose: data.mainPurpose,
     supportTypes: data.supportTypes,
-    moreSupportDescription: data.moreSupportDescription
+    moreSupportDescription: data.moreSupportDescription,
   };
 
 }
@@ -221,8 +219,8 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     mainCategory: data.mainCategory,
     otherMainCategoryDescription: data.otherMainCategoryDescription,
     areas: data.areas,
-    clinicalAreas: data.clinicalAreas,
     careSettings: data.careSettings,
+    otherCareSetting: data.otherCareSetting,
     mainPurpose: data.mainPurpose,
     supportTypes: data.supportTypes,
     moreSupportDescription: data.moreSupportDescription
@@ -230,10 +228,12 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
 }
 
-
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
-  return [
+  const toReturn: WizardSummaryType[] = [];
+  let stepIndex = 0;
+
+  toReturn.push(
     {
       label: stepsLabels.l1,
       value: data.innovationName,
@@ -258,42 +258,49 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       label: stepsLabels.l5,
       value: data.categories?.map(v => v === 'OTHER' ? data.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n'),
       editStepNumber: 5
-    },
-    {
-      label: stepsLabels.l6,
-      value: data.otherMainCategoryDescription || mainCategoryItems.find(item => item.value === data.mainCategory)?.label,
-      editStepNumber: 6
-    },
+    });
+
+  if (data.categories.length > 1) {
+    stepIndex = 1;
+    toReturn.push(
+      {
+        label: stepsLabels.l6,
+        value: data.otherMainCategoryDescription || mainCategoryItems.find(item => item.value === data.mainCategory)?.label,
+        editStepNumber: 6
+      },
+    );
+  } else {
+    stepIndex = 0;
+  }
+
+  toReturn.push(
     {
       label: stepsLabels.l7,
       value: data.areas?.map(v => areasItems.find(item => item.value === v)?.label).join('\n'),
-      editStepNumber: 7
+      editStepNumber: 6 + stepIndex
     },
     {
       label: stepsLabels.l8,
-      value: data.clinicalAreas?.map(v => clinicalAreasItems.find(item => item.value === v)?.label).join('\n'),
-      editStepNumber: 8
+      value: data.careSettings?.map(v => careSettingsItems.find(item => item.value === v)?.label).join('\n'),
+      editStepNumber: 7 + stepIndex
     },
     {
       label: stepsLabels.l9,
-      value: data.careSettings?.map(v => careSettingsItems.find(item => item.value === v)?.label).join('\n'),
-      editStepNumber: 9
+      value: mainPurposeItems.find(item => item.value === data.mainPurpose)?.label,
+      editStepNumber: 8 + stepIndex
     },
     {
       label: stepsLabels.l10,
-      value: mainPurposeItems.find(item => item.value === data.mainPurpose)?.label,
-      editStepNumber: 10
+      value: data.supportTypes?.map(v => supportTypesItems.find(item => item.value === v)?.label).join('\n'),
+      editStepNumber: 9 + stepIndex
     },
     {
       label: stepsLabels.l11,
-      value: data.supportTypes?.map(v => supportTypesItems.find(item => item.value === v)?.label).join('\n'),
-      editStepNumber: 11
-    },
-    {
-      label: stepsLabels.l12,
       value: data.moreSupportDescription,
-      editStepNumber: 12
+      editStepNumber: 10 + stepIndex
     }
-  ];
+  );
+
+  return toReturn;
 
 }

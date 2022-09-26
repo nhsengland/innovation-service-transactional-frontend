@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormArray } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 
@@ -28,12 +29,12 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
   ACTIVITY_LOG_ITEMS = ACTIVITY_LOG_ITEMS;
 
-  activitiesList = new TableModel<ActivitiesListType, { activityTypes: ActivityLogTypesEnum }>();
+  activitiesList = new TableModel<ActivitiesListType, { activityTypes: ActivityLogTypesEnum[] }>();
 
   currentDateOrderBy: 'ascending' | 'descending';
 
   form = new FormGroup({
-    activityTypes: new FormArray([])
+    activityTypes: new UntypedFormArray([])
   }, { updateOn: 'change' });
 
   anyFilterSelected = false;

@@ -5,7 +5,7 @@ type LabelType = null | 'dot' | 'new' | number;
 
 
 @Component({
-  selector: 'notification-tag',
+  selector: 'theme-notification-tag',
   templateUrl: './notification-tag.component.html',
   styleUrls: ['./notification-tag.component.scss']
 })

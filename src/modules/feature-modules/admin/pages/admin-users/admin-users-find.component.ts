@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -20,7 +21,7 @@ export class PageAdminUsersFindComponent extends CoreComponent implements OnInit
 
   formSubmitted = false;
   form = new FormGroup({
-    email: new FormControl('')
+    email: new UntypedFormControl('')
   }, { updateOn: 'change' }); // Needs to be 'change' to allow submtitting using the enter key.
 
   usersList: searchUserEndpointOutDTO[] = [];
@@ -33,13 +34,10 @@ export class PageAdminUsersFindComponent extends CoreComponent implements OnInit
 
     super();
     this.setPageTitle('Find an admin user');
+
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'adminDeletedSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'Admin deleted successfully',
-          // message: 'Your suggestions were saved and notifications sent.'
-        };
+        this.setAlertSuccess('Admin deleted successfully');
         break;
       default:
         break;
@@ -54,8 +52,9 @@ export class PageAdminUsersFindComponent extends CoreComponent implements OnInit
 
   onSubmit(): void {
 
-    this.alert = { type: null };
+    this.clearAlert();
     this.setPageStatus('LOADING');
+
     this.formSubmitted = true;
 
     this.serviceUsersService.searchUser(this.form.get('email')!.value, true).subscribe(

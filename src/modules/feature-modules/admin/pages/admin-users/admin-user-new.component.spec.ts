@@ -22,7 +22,7 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserNewComponent', () =
   let component: PageAdminUserNewComponent;
   let fixture: ComponentFixture<PageAdminUserNewComponent>;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
   let serviceUserService: ServiceUsersService;
@@ -42,7 +42,7 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserNewComponent', () =
     AppInjector.setInjector(TestBed.inject(Injector));
 
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     serviceUserService = TestBed.inject(ServiceUsersService);

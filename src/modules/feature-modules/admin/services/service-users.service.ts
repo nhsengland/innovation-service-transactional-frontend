@@ -4,9 +4,9 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, TermsOfUseTypeEnum, UserTypeEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
-import { APIQueryParamsType, MappedObjectType } from '@app/base/types';
+import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
 
 
 export type getUserMinimalInfoDTO = {
@@ -31,8 +31,8 @@ export type getUserFullInfoDTO = {
     size: null | string;
     role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum;
     isShadow: boolean;
-    units: { id: string, name: string, acronym: string, supportCount: null | string }[]
-  }[]
+    units: { id: string, name: string, acronym: string, supportCount: null | string }[];
+  }[];
 };
 
 
@@ -119,21 +119,17 @@ export type lockUserEndpointDTO = {
 
 export type searchUserEndpointInDTO = {
   id: string;
-  displayName: string;
-  type: 'INNOVATOR' | 'ACCESSOR' | 'ASSESSMENT' | 'ADMIN',
   email: string;
+  displayName: string;
+  type: UserTypeEnum,
   lockedAt?: string;
-  userOrganisations?: [{
+  userOrganisations?: {
     id: string;
     name: string;
     acronym: string;
     role: string;
-    units?: [{
-      id: string;
-      name: string;
-      acronym: string;
-    }]
-  }]
+    units?: { id: string, name: string, acronym: string }[]
+  }[]
 };
 export type searchUserEndpointOutDTO = searchUserEndpointInDTO & { typeLabel: string };
 
@@ -157,6 +153,15 @@ export type getListOfTerms = {
     createdAt: string
   }[]
 };
+
+type GetListByIdDTO = {
+  id: string,
+  touType: TermsOfUseTypeEnum,
+  name: string,
+  summary: string,
+  createdAt: DateISOType,
+  releasedAt: null | DateISOType
+}
 
 @Injectable()
 export class ServiceUsersService extends CoreService {
@@ -264,22 +269,6 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-
-  // Validators.
-  userEmailValidator(): AsyncValidatorFn {
-
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-
-      const url = new UrlModel(this.API_URL).addPath('user-admin/users').setQueryParams({ email: control.value });
-      return this.http.head(url.buildUrl()).pipe(
-        take(1),
-        map(() => ({ customError: true, message: 'Email already exist' })),
-        catchError(() => of(null))
-      );
-
-    };
-  }
-
   getUserRoleRules(userId: string): Observable<getOrganisationRoleRulesOutDTO[]> {
 
     const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId });
@@ -372,13 +361,10 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  getTermsById(id: string): Observable<any> {
+  getTermsById(id: string): Observable<GetListByIdDTO> {
 
     const url = new UrlModel(this.API_URL).addPath('user-admin/tou/:id').setPathParams({ id });
-    return this.http.get<getLockUserRulesInDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
+    return this.http.get<GetListByIdDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
   updateTermsById(id: string, data: MappedObjectType): Observable<any> {
@@ -389,6 +375,22 @@ export class ServiceUsersService extends CoreService {
       take(1),
       map(response => response)
     );
+  }
+
+
+  // Validators.
+  userEmailValidator(): AsyncValidatorFn {
+
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+
+      const url = new UrlModel(this.API_URL).addPath('user-admin/users').setQueryParams({ email: control.value });
+      return this.http.head(url.buildUrl()).pipe(
+        take(1),
+        map(() => ({ customError: true, message: 'Email already exist' })),
+        catchError(() => of(null))
+      );
+
+    };
   }
 
 }

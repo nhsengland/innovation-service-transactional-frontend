@@ -1,5 +1,5 @@
 import { Injector, NgModule } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { TransferHttpCacheModule } from '@nguniversal/common';
@@ -17,7 +17,6 @@ import { AppComponent } from './app.component';
 @NgModule({
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
-    BrowserTransferStateModule,
     BrowserAnimationsModule,
     HttpClientModule,
     HttpClientXsrfModule,

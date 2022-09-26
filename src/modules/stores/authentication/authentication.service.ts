@@ -9,13 +9,14 @@ import { UrlModel } from '@modules/core/models/url.model';
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum, UserTypeEnum } from './authentication.enums';
 
 
-type getUserInfoInDTO = {
+type getUserInfoDTO = {
   id: string;
   email: string;
   displayName: string;
-  phone: string;
+  phone: null | string;
   type: UserTypeEnum;
   roles: UserRoleEnum[];
+  passwordResetOn: string;
   organisations: {
     id: string;
     name: string;
@@ -24,10 +25,7 @@ type getUserInfoInDTO = {
     isShadow: boolean;
     organisationUnits: { id: string; name: string; }[];
   }[];
-  passwordResetOn: string;
 };
-type getUserInfoOutDTO = Required<getUserInfoInDTO>;
-
 
 export type saveUserInfoDTO = {
   displayName: string;
@@ -67,10 +65,10 @@ export class AuthenticationService {
 
   }
 
-  getUserInfo(): Observable<getUserInfoOutDTO> {
+  getUserInfo(): Observable<getUserInfoDTO> {
 
     const url = new UrlModel(this.API_URL).addPath('me');
-    return this.http.get<getUserInfoInDTO>(url.buildUrl()).pipe(
+    return this.http.get<getUserInfoDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => ({
         id: response.id,

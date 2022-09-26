@@ -9,7 +9,7 @@ type InboundPayloadType = Required<AuthenticationModel>['user'];
 
 type StepPayloadType = {
   displayName: string;
-  mobilePhone: string;
+  mobilePhone: null | string;
   isCompanyOrOrganisation: 'YES' | 'NO';
   organisationName: string;
   organisationSize: null | string;
@@ -20,7 +20,7 @@ type StepPayloadType = {
 
 type OutboundPayloadType = {
   displayName: string;
-  mobilePhone: string;
+  mobilePhone: null | string;
   organisation?: {
     id: string;
     name: string;

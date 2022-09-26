@@ -22,7 +22,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
 
   let activatedRoute: ActivatedRoute;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
   let accessorService: AccessorService;
@@ -45,7 +45,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     accessorService = TestBed.inject(AccessorService);

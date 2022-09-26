@@ -10,7 +10,7 @@ import { CoreComponent } from '@app/base';
 })
 export class PageErrorComponent extends CoreComponent {
 
-  errorType: 'generic' | 'forbidden_innovation';
+  errorType: 'generic' | 'forbidden_innovation' | 'unauthenticated';
   message: string;
   buttonLabel: string;
 
@@ -24,6 +24,10 @@ export class PageErrorComponent extends CoreComponent {
     switch (this.activatedRoute.snapshot.params.errorType) {
       case 'forbidden-innovation':
         this.errorType = 'forbidden_innovation';
+        break;
+
+      case 'unauthenticated':
+        this.errorType = 'unauthenticated';
         break;
 
       case 'generic':

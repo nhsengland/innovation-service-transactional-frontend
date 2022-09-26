@@ -168,6 +168,7 @@ export class FormEngineHelper {
     if (error.minlength) { return { message: 'shared.forms_module.validations.min_length', params: { minLength: error.minlength.requiredLength } }; }
     if (error.maxlength) { return { message: 'shared.forms_module.validations.max_length', params: { maxLength: error.maxlength.requiredLength } }; }
     if (error.pattern) { return { message: error.pattern.message || 'shared.forms_module.validations.invalid_format', params: {} }; }
+    if (error.existsIn) { return { message: error.existsIn.message || 'shared.forms_module.validations.existsIn', params: {} }; }
 
     if (error.hexadecimalFormat) { return { message: 'shared.forms_module.validations.invalid_hexadecimal_format', params: {} }; }
     if (error.minHexadecimal) { return { message: 'shared.forms_module.validations.min_hexadecimal' + ` (${error.minHexadecimal.min})`, params: {} }; }
@@ -186,7 +187,7 @@ export class FormEngineHelper {
 
     const validators = [];
 
-    let validation: [boolean | number | string, string | null];
+    let validation: [boolean | number | string | string[], string | null];
 
     if (parameter.validations?.isRequired) {
       validation = typeof parameter.validations.isRequired === 'boolean' ? [parameter.validations.isRequired, null] : parameter.validations.isRequired;
@@ -195,6 +196,7 @@ export class FormEngineHelper {
         switch (parameter.dataType) {
           case 'autocomplete-array':
           case 'checkbox-array':
+          case 'fields-group':
             validators.push(CustomValidators.requiredCheckboxArray(validation[1]));
             break;
           case 'checkbox-group':
@@ -223,13 +225,14 @@ export class FormEngineHelper {
         switch (parameter.dataType) {
           case 'autocomplete-array':
           case 'checkbox-array':
+          case 'fields-group':
             validators.push(CustomValidators.minCheckboxArray(validation[0] as number, validation[1] as string));
             break;
           // case 'checkbox-group':
           //   validators.push(CustomValidators.requiredCheckboxGroup(validation[1]));
           //   break;
           default:
-            // validators.push(CustomValidators.required(validation[1]));
+            validators.push(Validators.min(validation[0] as number));
             break;
         }
 
@@ -243,16 +246,24 @@ export class FormEngineHelper {
         switch (parameter.dataType) {
           case 'autocomplete-array':
           case 'checkbox-array':
+          case 'fields-group':
             validators.push(CustomValidators.maxCheckboxArray(validation[0] as number, validation[1] as string));
             break;
           // case 'checkbox-group':
           //   validators.push(CustomValidators.requiredCheckboxGroup(validation[1]));
           //   break;
           default:
-            // validators.push(CustomValidators.required(validation[1]));
+            validators.push(Validators.max(validation[0] as number));
             break;
         }
 
+      }
+    }
+
+    if (parameter.validations?.existsIn) {
+      validation = (!Array.isArray(parameter.validations.existsIn) ? [parameter.validations.existsIn, null] : parameter.validations.existsIn as [string[], string]);
+      if (validation[0]) {
+        validators.push(CustomValidators.existsInValidator(validation[0] as string[], validation[1] as string));
       }
     }
 

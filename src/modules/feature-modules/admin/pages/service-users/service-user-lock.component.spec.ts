@@ -20,7 +20,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserLockComponent',
 
   let activatedRoute: ActivatedRoute;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let serviceUsersService: ServiceUsersService;
 
@@ -42,7 +42,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserLockComponent',
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     serviceUsersService = TestBed.inject(ServiceUsersService);
 

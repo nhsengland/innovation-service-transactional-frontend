@@ -20,7 +20,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
 
   let activatedRoute: ActivatedRoute;
   let router: Router;
-  let routerSpy: jasmine.Spy;
+  let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
   let environmentStore: EnvironmentStore;
@@ -44,7 +44,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
 
     activatedRoute = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigate');
+    routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     environmentStore = TestBed.inject(EnvironmentStore);
@@ -64,6 +64,7 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
         section: InnovationSectionEnum.REGULATIONS_AND_STANDARDS,
         status: 'DRAFT' as keyof typeof INNOVATION_SECTION_STATUS,
         actionStatus: '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
+        actionCount: 0,
         updatedAt: '2020-01-01T00:00:00.000Z',
       },
       data: {

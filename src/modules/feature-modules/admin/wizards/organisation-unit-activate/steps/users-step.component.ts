@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { UntypedFormArray, UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormArray, FormControl, FormGroup, FormEngineHelper } from '@app/base/forms';
@@ -35,8 +36,8 @@ export class WizardOrganisationUnitActivateUsersStepComponent extends CoreCompon
   });
 
   form = new FormGroup({
-    users: new FormArray([]),
-    agreeUsers: new FormControl(false, CustomValidators.required('You need to confirm to proceed'))
+    users: new UntypedFormArray([]),
+    agreeUsers: new UntypedFormControl(false, CustomValidators.required('You need to confirm to proceed'))
   }, { updateOn: 'blur' });
 
 
