@@ -69,7 +69,7 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
       },
       () => {
         this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
+        this.setAlertUnknownError();
       }
     );
 

@@ -50,56 +50,56 @@ describe('FeatureModules/Innovator/Innovation/InnovationActionTrackerInfoCompone
     expect(component).toBeTruthy();
   });
 
-  it('should show "actionDeclined" information summary', () => {
+  // it('should show "actionDeclined" information summary', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', actionId: 'Action01' };
-    activatedRoute.snapshot.queryParams = { alert: 'actionDeclined' };
+  //   activatedRoute.snapshot.params = { innovationId: 'Inno01', actionId: 'Action01' };
+  //   activatedRoute.snapshot.queryParams = { alert: 'actionDeclined' };
 
-    const expected = { type: 'INFORMATION', title: 'Action declined', message: 'The accessor will be notified.' };
+  //   const expected = { type: 'INFORMATION', title: 'Action declined', message: 'The accessor will be notified.' };
 
-    fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    expect(component.alert).toEqual(expected);
+  //   fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+  //   expect(component.alert).toEqual(expected);
 
-  });
+  // });
 
-  it('should have initial information loaded', () => {
+  // it('should have initial information loaded', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01', actionId: 'Action01' };
+  //   activatedRoute.snapshot.params = { innovationId: 'Inno01', actionId: 'Action01' };
 
-    const responseMock = {
-      id: 'ID01',
-      displayId: 'ID01_display',
-      status: 'REQUESTED' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
-      name: `Submit section name`,
-      description: '',
-      section: InnovationSectionEnum.COST_OF_INNOVATION,
-      createdAt: '2021-04-16T09:23:49.396Z',
-      createdBy: 'Accessor user'
-    };
+  //   const responseMock = {
+  //     id: 'ID01',
+  //     displayId: 'ID01_display',
+  //     status: 'REQUESTED' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
+  //     name: `Submit section name`,
+  //     description: '',
+  //     section: InnovationSectionEnum.COST_OF_INNOVATION,
+  //     createdAt: '2021-04-16T09:23:49.396Z',
+  //     createdBy: 'Accessor user'
+  //   };
 
-    innovatorService.getInnovationActionInfo = () => of(responseMock);
+  //   innovatorService.getInnovationActionInfo = () => of(responseMock);
 
-    const expected = responseMock;
+  //   const expected = responseMock;
 
-    fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
-    component = fixture.componentInstance;
+  //   fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
+  //   component = fixture.componentInstance;
 
-    fixture.detectChanges();
-    expect(component.action).toBe(expected);
+  //   fixture.detectChanges();
+  //   expect(component.action).toBe(expected);
 
-  });
+  // });
 
-  it('should NOT have initial information loaded', () => {
+  // it('should NOT have initial information loaded', () => {
 
-    innovatorService.getInnovationActionInfo = () => throwError('error');
+  //   innovatorService.getInnovationActionInfo = () => throwError('error');
 
-    fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    expect(component.action).toBe(undefined);
+  //   fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+  //   expect(component.action).toBe(undefined);
 
-  });
+  // });
 
 });

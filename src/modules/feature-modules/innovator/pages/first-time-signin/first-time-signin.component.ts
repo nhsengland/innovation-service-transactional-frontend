@@ -34,16 +34,14 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
 
     // Update last step with the organisations list with description and pre-select all checkboxes.
     this.organisationsService.getAccessorsOrganisations().subscribe(response => {
+
       this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
       this.wizard.addAnswers({ organisationShares: response.map(item => item.id) });
 
       this.setPageStatus('READY');
 
-    },
-      () => {
-        this.setPageStatus('READY');
-        this.logger.error('Error fetching organisations list');
-      });
+    });
+
   }
 
 
@@ -69,7 +67,11 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
         break;
     }
 
-    this.focusBody();
+    if (!this.wizard.isFirstStep()) {
+      this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
+    } else {
+      this.resetBackLink();
+    }
 
   }
 
@@ -81,9 +83,9 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
       concatMap(() => {
         return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
       })
-    ).subscribe(
-      () => this.redirectTo(`innovator/dashboard`, { alert: 'alertDisabled' }),
-      () => {
+    ).subscribe({
+      next: () => this.redirectTo(`innovator/dashboard`, { alert: 'alertDisabled' }),
+      error: () => {
         this.alert = {
           type: 'ERROR',
           title: 'An unknown error occurred',
@@ -91,7 +93,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
           setFocus: true
         };
       }
-    );
+    });
 
   }
 

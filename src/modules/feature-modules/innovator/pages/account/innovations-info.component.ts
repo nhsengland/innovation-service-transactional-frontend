@@ -28,16 +28,6 @@ export class PageAccountInnovationsInfoComponent extends CoreComponent implement
     super();
     this.setPageTitle('Manage innovations');
 
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'archivalSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: `You have archived the innovation '${this.activatedRoute.snapshot.queryParams.innovation}'`
-        };
-        break;
-      default:
-        break;
-    }
   }
 
 
@@ -62,15 +52,7 @@ export class PageAccountInnovationsInfoComponent extends CoreComponent implement
 
       this.setPageStatus('READY');
 
-    },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch innovations transfers',
-          message: 'Please try again or contact us for further help'
-        };
-      }
+    }
     );
   }
 
@@ -83,23 +65,14 @@ export class PageAccountInnovationsInfoComponent extends CoreComponent implement
         this.getInnovationsTransfers();
         return of(true);
       })
-    ).subscribe(
-      () => {
-        this.alert = {
-          type: 'ACTION',
-          title: `You have cancelled the request to transfer the ownership of '${innovation.name}'`,
-          setFocus: true
-        };
+    ).subscribe({
+      next: () => {
+        this.setAlertSuccess(`You have cancelled the request to transfer the ownership of '${innovation.name}'`);
       },
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when cancelling the transfer',
-          message: 'Please try again or contact us for further help',
-          setFocus: true
-        };
+      error: () => {
+        this.setAlertError('An error occurred when cancelling the transfer. Please try again or contact us for further help');
       }
-    );
+    });
 
   }
 

@@ -48,7 +48,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     };
     let response: any = null;
 
-    authenticationStore.initializeAuthentication$().subscribe(success => response = success, error => response = error);
+    authenticationStore.initializeAuthentication$().subscribe({ next: success => response = success, error: error => response = error});
 
     expect(response).toBe(expectedResponse);
     expect(authenticationStore.state.isSignIn).toEqual(expectedState.isSignIn);
@@ -73,7 +73,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     };
     let response: any = null;
 
-    authenticationStore.initializeAuthentication$().subscribe(success => response = success, error => response = error);
+    authenticationStore.initializeAuthentication$().subscribe({ next: success => response = success, error: error => response = error});
 
     expect(response).toBe(expectedResponse);
     expect(authenticationStore.state.isSignIn).toEqual(expectedState.isSignIn);
@@ -91,7 +91,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     };
     let response: any = null;
 
-    authenticationStore.initializeAuthentication$().subscribe(success => response = success, error => response = error);
+    authenticationStore.initializeAuthentication$().subscribe({ next: success => response = success, error: error => response = error});
 
     expect(response).toBe(expectedResponse);
     expect(authenticationStore.state.isSignIn).toEqual(expectedState.isSignIn);

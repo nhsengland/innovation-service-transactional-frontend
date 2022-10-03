@@ -1,15 +1,7 @@
-<div class="nhsuk-grid-row nhsuk-u-padding-top-3">
-  <div class="nhsuk-grid-column-full">
+<theme-content-wrapper [status]="pageStatus">
 
-    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-      <p> {{ alert.message }} </p>
-    </theme-alert>
-
-    <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
-
-    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-    <ng-container *ngIf="pageStatus === 'READY'">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
 
       <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
         <div class="nhsuk-heading-m nhsuk-warning-callout__label">
@@ -17,7 +9,6 @@
         </div>
         <p> You will lose all access to an innovation when you transfer it to someone else. Your access is removed when the new owner accepts your transfer request. </p>
       </div>
-
 
       <form [formGroup]="form">
 
@@ -38,7 +29,7 @@
 
       </form>
 
-    </ng-container>
-
+    </div>
   </div>
-</div>
+
+</theme-content-wrapper>

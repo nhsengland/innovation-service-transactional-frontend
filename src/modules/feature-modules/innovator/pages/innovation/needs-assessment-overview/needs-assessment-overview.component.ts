@@ -7,7 +7,7 @@ import { NotificationContextTypeEnum } from '@app/base/enums';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { getInnovationNeedsAssessmentEndpointOutDTO, GetSupportLogListOutDTO } from '@modules/feature-modules/innovator/services/innovator.service';
 
@@ -22,7 +22,7 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
 
   innovationId: string;
   assessmentId: string;
-  innovation: EnvironmentInnovationType;
+  innovation: ContextInnovationType;
 
   assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
 
@@ -42,7 +42,7 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
-    this.innovation = this.stores.environment.getInnovation();
+    this.innovation = this.stores.context.getInnovation();
 
   }
 
@@ -50,7 +50,7 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
   ngOnInit(): void {
 
     // Throw notification read dismiss.
-    this.stores.environment.dismissNotification(NotificationContextTypeEnum.NEEDS_ASSESSMENT, this.assessmentId);
+    this.stores.context.dismissNotification(NotificationContextTypeEnum.NEEDS_ASSESSMENT, this.assessmentId);
 
     forkJoin([
       this.innovatorService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),

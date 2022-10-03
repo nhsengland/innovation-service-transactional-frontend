@@ -44,31 +44,32 @@ export class AdminLayoutComponent extends CoreComponent {
 
     this.headerMenuBar = {
       leftItems: [
-        { title: 'Service users', url: '/admin/service-users' },
+        { id: 'serviceUsers', label: 'Service users', url: '/admin/service-users' },
         {
-          title: 'Management',
+          id: 'management',
+          label: 'Management',
           description: 'This is the menu description',
           children: [
-            { title: 'Organisations', url: '/admin/organisations', description: 'Manage organisations and associated units' },
-            { title: 'Terms of use', url: '/admin/terms-conditions', description: 'Create a new version and trigger acceptance by the users' }
+            { label: 'Organisations', url: '/admin/organisations', description: 'Manage organisations and associated units' },
+            { label: 'Terms of use', url: '/admin/terms-conditions', description: 'Create a new version and trigger acceptance by the users' }
           ]
         }
       ],
       rightItems: [
-        { title: 'My account', url: '/admin/account' },
-        { title: 'Sign out', url: `${this.CONSTANTS.APP_URL}/signout`, fullReload: true }
+        { id: 'account', label: 'My account', url: '/admin/account' },
+        { id: 'signOut', label: 'Sign out', url: `${this.CONSTANTS.APP_URL}/signout`, fullReload: true }
       ]
     };
 
     if (this.stores.authentication.isAdminRole()) {
-      this.headerMenuBar.leftItems.splice(0, 0, { title: 'Admin users', url: '/admin/administration-users' });
+      this.headerMenuBar.leftItems.splice(0, 0, { id: 'adminUsers', label: 'Admin users', url: '/admin/administration-users' });
     }
 
   }
 
   private onRouteChange(event: NavigationEnd): void {
 
-    const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
+    const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData<any>(this.activatedRoute).layoutOptions || {};
 
     this.layoutOptions = {
       type: routeData.type || null,

@@ -46,7 +46,7 @@ describe('Core/Services/InnovationService', () => {
     const expected = responseMock;
     let response: any = null;
 
-    service.getInnovationTransfer('id01').subscribe(success => response = success, error => response = error);
+    service.getInnovationTransfer('id01').subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.APP_URL}/innovators/innovation-transfers/id01/check`);
     httpRequest.flush(responseMock);

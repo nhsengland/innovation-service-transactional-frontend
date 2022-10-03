@@ -6,7 +6,7 @@ import { RoutingHelper } from '@app/base/helpers';
 
 import { INNOVATION_SUPPORT_STATUS, InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
+import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -40,7 +40,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.setPageTitle('Overview');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
   }
@@ -64,10 +64,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           { label: 'Categories', value: response.summary.categories.map(v => v === 'OTHER' ? response.summary.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
         ];
 
-        this.stores.environment.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+        this.stores.context.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
 
         if (response.support?.id) {
-          this.stores.environment.dismissNotification(NotificationContextTypeEnum.SUPPORT, response.support.id);
+          this.stores.context.dismissNotification(NotificationContextTypeEnum.SUPPORT, response.support.id);
         }
 
         this.setPageStatus('READY');

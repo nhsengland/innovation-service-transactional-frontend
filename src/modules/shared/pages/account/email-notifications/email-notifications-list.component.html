@@ -1,24 +1,16 @@
-<div class="nhsuk-grid-row nhsuk-u-padding-top-3">
-  <div class="nhsuk-grid-column-full">
+<theme-content-wrapper [status]="pageStatus">
 
-    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-      <p> {{ alert.message }} </p>
-    </theme-alert>
-
-    <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
-
-    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-    <ng-container *ngIf="pageStatus === 'READY'">
+  <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+    <div class="nhsuk-grid-column-full">
 
       <dl class=" nhsuk-summary-list">
-      <div *ngFor="let item of notificationTypeList" class="nhsuk-summary-list__row">
-        <dt class="nhsuk-summary-list__key"> {{ 'shared.catalog.innovation.notification_context_types.' + item.type + '.title.plural' | translate }} </dt>
-        <dd class="nhsuk-summary-list__value text-pre-wrap"> {{ 'shared.catalog.innovation.email_notification_preferences.' + item.preference + '.you' | translate  }} </dd>
-        <dd class="nhsuk-summary-list__actions">
-          <a routerLink="edit/{{ item.type }}"> Change </a>
-        </dd>
-      </div>
+        <div *ngFor="let item of notificationTypeList" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key"> {{ 'shared.catalog.innovation.notification_context_types.' + item.type + '.title.plural' | translate }} </dt>
+          <dd class="nhsuk-summary-list__value text-pre-wrap"> {{ 'shared.catalog.innovation.email_notification_preferences.' + item.preference + '.you' | translate  }} </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a routerLink="edit/{{ item.type }}"> Change </a>
+          </dd>
+        </div>
       </dl>
 
       <div *ngIf="isAnySubscribed" class="nhsuk-inset-text"><span class="nhsuk-u-visually-hidden">Information:</span>
@@ -27,7 +19,7 @@
         </p>
       </div>
 
-    </ng-container>
-
+    </div>
   </div>
-</div>
+
+</theme-content-wrapper>

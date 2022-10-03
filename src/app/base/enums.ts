@@ -10,4 +10,4 @@ export {
 export { TermsOfUseTypeEnum } from '@modules/stores/authentication/authentication.enums';
 
 // Environment store.
-export { NotificationContextTypeEnum, NotificationContextDetailEnum } from '@modules/stores/environment/environment.enums';
+export { NotificationContextTypeEnum, NotificationContextDetailEnum } from '@modules/stores/context/context.enums';

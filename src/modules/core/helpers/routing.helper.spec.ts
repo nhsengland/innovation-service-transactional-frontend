@@ -45,7 +45,7 @@ describe('Core/Helpers/RoutingHelper', () => {
 
     const expected = { idOne: '1', idTwo: '2', idThree: '3', idFour: '4' };
 
-    expect(RoutingHelper.getRouteData(routeMock as any)).toEqual(expected);
+    expect(RoutingHelper.getRouteData<any>(routeMock as any)).toEqual(expected);
 
   });
 

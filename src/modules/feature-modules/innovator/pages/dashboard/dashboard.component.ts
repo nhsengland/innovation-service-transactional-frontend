@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
+import { catchError, concatMap, map } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { getInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
+
 
 @Component({
   selector: 'app-innovator-pages-dashboard',
@@ -17,7 +18,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   user: {
     displayName: string,
-    innovations: { id: string, name: string, notifications: number }[],
+    innovations: { id: string, name: string, description: string }[],
     passwordResetOn: string
   };
 
@@ -32,7 +33,6 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   ) {
 
     super();
-    this.setPageTitle('Your innovations');
 
     const user = this.stores.authentication.getUserInfo();
     this.user = {
@@ -40,11 +40,35 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       innovations: [],
       passwordResetOn: user.passwordResetOn
     };
+
+    this.setPageTitle('Home', { hint: `Hello${user.displayName ? ' ' + user.displayName : ''}` });
+
   }
 
   ngOnInit(): void {
 
-    this.getPageInformation();
+    forkJoin([
+      this.innovationsService.getInnovationsList().pipe(map(response => response), catchError(() => of(null))),
+      this.innovatorService.getInnovationTransfers(true).pipe(map(response => response), catchError(() => of(null)))
+    ]).subscribe(([innovationsList, innovationsTransfers]) => {
+
+      if (innovationsList) {
+        this.user.innovations = innovationsList;
+      } else {
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
+        return;
+      }
+
+      if (innovationsTransfers) {
+        this.innovationTransfers = innovationsTransfers;
+      } else {
+        this.setAlertUnknownError();
+      }
+
+      this.setPageStatus('READY');
+
+    });
 
     const startTime = new Date();
     const endTime = new Date(this.user.passwordResetOn);
@@ -54,32 +78,6 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
     }
 
-
-  }
-
-
-  getPageInformation(): void {
-
-    this.setPageStatus('LOADING');
-
-    forkJoin([
-      this.innovationsService.getInnovationsList(),
-      this.innovatorService.getInnovationTransfers(true),
-    ]).subscribe(([innovationsList, innovationsTransfers]) => {
-
-      this.user.innovations = innovationsList.map(item => ({ ...item, ...{ notifications: 0 } }));
-      this.innovationTransfers = innovationsTransfers;
-
-      this.setPageStatus('READY');
-
-    },
-      (error) => {
-        this.setPageStatus('READY');
-        this.logger.error('Error fetching innovations transfer information', error);
-      }
-    );
-
-
   }
 
 
@@ -87,27 +85,14 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
     this.innovatorService.updateTransferInnovation(transferId, (accept ? 'COMPLETED' : 'DECLINED')).pipe(
       concatMap(() => this.stores.authentication.initializeAuthentication$()), // Initialize authentication in order to update First Time SignIn information.
-      concatMap(() => {
-        this.getPageInformation();
-        return of(true);
-      })
-    ).subscribe(
-      () => {
-        this.alert = {
-          type: 'SUCCESS',
-          title: accept ? `You have successfully accepted ownership` : `You have successfully rejected ownership`,
-          setFocus: true
-        };
-      },
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred',
-          message: 'Please try again or contact us for further help',
-          setFocus: true
-        };
-      }
-    );
+      concatMap(() => this.innovationsService.getInnovationsList())
+    ).subscribe(innovationsList => {
+
+      this.user.innovations = innovationsList;
+
+      this.setAlertSuccess(accept ? `You have successfully accepted ownership` : `You have successfully rejected ownership`);
+
+    });
 
   }
 

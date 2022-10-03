@@ -39,7 +39,7 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
 
     super();
 
-    this.module = RoutingHelper.getRouteData(this.activatedRoute.root).module;
+    this.module = RoutingHelper.getRouteData<any>(this.activatedRoute.root).module;
 
   }
 

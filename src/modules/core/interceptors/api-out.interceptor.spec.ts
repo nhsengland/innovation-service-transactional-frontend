@@ -50,7 +50,7 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
     const responseMock = true;
     let response: any = null;
 
-    authenticationService.verifyUserSession().subscribe(success => response = success, error => response = error);
+    authenticationService.verifyUserSession().subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.APP_URL}/session`);
     httpRequest.flush(responseMock);
@@ -102,7 +102,7 @@ describe('Core/Interceptors/ApiOutInterceptor running CLIENT side', () => {
     const responseMock = true;
     let response: any = null;
 
-    authenticationService.verifyUserSession().subscribe(success => response = success, error => response = error);
+    authenticationService.verifyUserSession().subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${environmentStore.APP_URL}/session`);
     httpRequest.flush(responseMock);

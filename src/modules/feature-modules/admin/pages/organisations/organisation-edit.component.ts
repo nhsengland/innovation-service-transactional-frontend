@@ -98,8 +98,6 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
         break;
     }
 
-    this.focusBody();
-
   }
 
   onSubmitWizard(): void {

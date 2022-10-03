@@ -43,48 +43,48 @@ describe('FeatureModules/Innovator/Innovation/ActionTrackerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have initial information loaded with OpenActions', () => {
+  // it('should have initial information loaded with OpenActions', () => {
 
-    const getInnovationActionsListDataMock = {
-      openedActions: [{ id: 'ID01', status: InnovationActionStatusEnum.REQUESTED, name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 1 } }],
-      closedActions: [{ id: 'ID01', status: InnovationActionStatusEnum.COMPLETED, name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 1 } }]
-    };
-    innovatorService.getInnovationActionsList = () => of(getInnovationActionsListDataMock as any);
-    const expected = getInnovationActionsListDataMock.openedActions;
+  //   const getInnovationActionsListDataMock = {
+  //     openedActions: [{ id: 'ID01', status: InnovationActionStatusEnum.REQUESTED, name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 1 } }],
+  //     closedActions: [{ id: 'ID01', status: InnovationActionStatusEnum.COMPLETED, name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 1 } }]
+  //   };
+  //   innovatorService.getInnovationActionsList = () => of(getInnovationActionsListDataMock as any);
+  //   const expected = getInnovationActionsListDataMock.openedActions;
 
-    fixture = TestBed.createComponent(InnovationActionTrackerComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    expect(component.openedActionsList.getRecords()).toEqual(expected);
-    expect(component.openedActionsList.getRecords().length).toEqual(1);
-  });
+  //   fixture = TestBed.createComponent(InnovationActionTrackerComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+  //   expect(component.openedActionsList.getRecords()).toEqual(expected);
+  //   expect(component.openedActionsList.getRecords().length).toEqual(1);
+  // });
 
-  it('should have initial information loaded with ClosedActions', () => {
+  // it('should have initial information loaded with ClosedActions', () => {
 
-    const getInnovationActionsListDataMock = {
-      openedActions: [{ id: 'ID01', status: InnovationActionStatusEnum.REQUESTED, name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 1 } }],
-      closedActions: [{ id: 'ID01', status: InnovationActionStatusEnum.DECLINED, name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 0 } }]
-    };
-    innovatorService.getInnovationActionsList = () => of(getInnovationActionsListDataMock as any);
-    const expected = getInnovationActionsListDataMock.closedActions;
+  //   const getInnovationActionsListDataMock = {
+  //     openedActions: [{ id: 'ID01', status: InnovationActionStatusEnum.REQUESTED, name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 1 } }],
+  //     closedActions: [{ id: 'ID01', status: InnovationActionStatusEnum.DECLINED, name: 'Submit section X', createdAt: '2021-04-16T09:23:49.396Z', notifications: { count: 0 } }]
+  //   };
+  //   innovatorService.getInnovationActionsList = () => of(getInnovationActionsListDataMock as any);
+  //   const expected = getInnovationActionsListDataMock.closedActions;
 
-    fixture = TestBed.createComponent(InnovationActionTrackerComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    expect(component.closedActionsList.getRecords()).toEqual(expected);
-    expect(component.closedActionsList.getRecords().length).toEqual(1);
-  });
+  //   fixture = TestBed.createComponent(InnovationActionTrackerComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+  //   expect(component.closedActionsList.getRecords()).toEqual(expected);
+  //   expect(component.closedActionsList.getRecords().length).toEqual(1);
+  // });
 
-  it('should NOT have initial information loaded', () => {
+  // it('should NOT have initial information loaded', () => {
 
-    innovatorService.getInnovationActionsList = () => throwError('error');
+  //   innovatorService.getInnovationActionsList = () => throwError('error');
 
-    fixture = TestBed.createComponent(InnovationActionTrackerComponent);
-    component = fixture.componentInstance;
+  //   fixture = TestBed.createComponent(InnovationActionTrackerComponent);
+  //   component = fixture.componentInstance;
 
-    fixture.detectChanges();
-    expect(component.pageStatus).toBe('ERROR');
+  //   fixture.detectChanges();
+  //   expect(component.pageStatus).toBe('ERROR');
 
-  });
+  // });
 
 });

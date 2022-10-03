@@ -1,79 +1,52 @@
-<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
+<theme-content-wrapper [status]="pageStatus">
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-      <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-        <p> {{ alert.message }} </p>
-        <ul *ngIf="alertErrorsList.length > 0" class="nhsuk-list nhsuk-error-summary__list">
-          <li *ngFor="let item of alertErrorsList">{{ item.label }}<br />({{ item.error | translate }})</li>
-        </ul>
-      </theme-alert>
+
+      <ng-container *ngIf="wizard.isQuestionStep()">
+        <theme-form-engine formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
+        <button type="submit" form="sectionForm" [disabled]="!saveButton.isActive" class="nhsuk-button" (click)="onSubmitStep('next')"> {{ saveButton.label }}</button>
+      </ng-container>
+
+      <ng-container *ngIf="wizard.isSummaryStep()">
+
+        <dl class="nhsuk-summary-list">
+
+          <ng-container *ngFor="let item of wizard.getSummary()">
+
+            <ng-container [ngSwitch]="item.type">
+              <ng-container *ngSwitchCase="'button'">
+                <div class="width-max-content">
+                  <dt class="nhsuk-u-margin-top-5">
+                    <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0" (click)="onGotoStep(item.editStepNumber || 1)">{{ item.label }} </button>
+                  </dt>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">
+                    <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
+                    <span *ngIf="!item.allowHTML">{{ item.value }}</span>
+                  </dd>
+                  <dd class="nhsuk-summary-list__actions">
+                    <a href="javascript:void(0)" (click)="onGotoStep(item.editStepNumber || 1)">
+                      Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span>
+                    </a>
+                  </dd>
+                </div>
+              </ng-container>
+            </ng-container>
+
+          </ng-container>
+        </dl>
+
+        <button [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmitSection()"> {{ submitButton.label }} </button>
+
+      </ng-container>
+
     </div>
   </div>
 
-  <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-  <ng-container *ngIf="pageStatus === 'READY'">
-
-    <div class="nhsuk-back-link">
-      <a href="javascript:void(0)" class="nhsuk-back-link__link" (click)="onSubmitStep('previous')">
-        <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
-        </svg>
-        Go back
-      </a>
-    </div>
-
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-two-thirds">
-
-        <ng-container *ngIf="wizard.isQuestionStep()">
-          <theme-form-engine formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
-          <button type="submit" form="sectionForm" [disabled]="!saveButton.isActive" class="nhsuk-button" (click)="onSubmitStep('next')"> {{ saveButton.label }}</button>
-        </ng-container>
-
-        <ng-container *ngIf="wizard.isSummaryStep()">
-
-          <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
-
-          <dl class="nhsuk-summary-list">
-
-            <ng-container *ngFor="let item of wizard.getSummary()">
-
-              <ng-container [ngSwitch]="item.type">
-                <ng-container *ngSwitchCase="'button'">
-                  <div class="width-max-content">
-                    <dt class="nhsuk-u-margin-top-5">
-                      <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0" (click)="onGotoStep(item.editStepNumber || 1)">{{ item.label }} </button>
-                    </dt>
-                  </div>
-                </ng-container>
-                <ng-container *ngSwitchDefault>
-                  <div class="nhsuk-summary-list__row">
-                    <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-                    <dd class="nhsuk-summary-list__value text-pre-wrap">
-                      <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
-                      <span *ngIf="!item.allowHTML">{{ item.value }}</span>
-                    </dd>
-                    <dd class="nhsuk-summary-list__actions">
-                      <a href="javascript:void(0)" (click)="onGotoStep(item.editStepNumber || 1)">
-                        Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span>
-                      </a>
-                    </dd>
-                  </div>
-                </ng-container>
-              </ng-container>
-
-            </ng-container>
-          </dl>
-
-          <button [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmitSection()"> {{ submitButton.label }} </button>
-
-        </ng-container>
-
-      </div>
-    </div>
-
-  </ng-container>
-
-</div>
+</theme-content-wrapper>

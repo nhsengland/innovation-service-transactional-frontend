@@ -1,46 +1,34 @@
-<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-2">
+<theme-content-wrapper [status]="pageStatus">
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-        <p> {{ alert.message }} </p>
-      </theme-alert>
+      <p><a [href]="organisationInfoUrl" target="_blank" rel="noopener noreferrer"> What does each organisation do? (opens in a new window) </a></p>
 
-      <h1> {{ pageTitle }} </h1>
+      <form [formGroup]="form">
+        <theme-form-checkbox-array arrayName="organisations" label="Please choose your data sharing preferences" [items]="organisationsList" [pageUniqueField]="false"></theme-form-checkbox-array>
+      </form>
 
-      <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-      <ng-container *ngIf="pageStatus === 'READY'">
-
-        <p><a [href]="organisationInfoUrl" target="_blank" rel="noopener noreferrer"> What does each organisation do? (opens in a new window) </a></p>
-
-        <form [formGroup]="form">
-          <theme-form-checkbox-array arrayName="organisations" label="Please choose your data sharing preferences" [items]="organisationsList" [pageUniqueField]="false"></theme-form-checkbox-array>
-        </form>
-
-        <ng-container *ngIf="showDataSharingValidationWarning">
-          <div class="nhsuk-grid-row">
-            <div class="nhsuk-grid-column-full">
-              <div class="nhsuk-warning-callout">
-                <div class="nhsuk-heading-m nhsuk-warning-callout__label">
-                  <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
-                </div>
-                <p> This will remove the organisations(s) permission to view your innovation record and the organisation(s) will not be able to offer you support. </p>
+      <ng-container *ngIf="showDataSharingValidationWarning">
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-full">
+            <div class="nhsuk-warning-callout">
+              <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+                <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
               </div>
+              <p> This will remove the organisations(s) permission to view your innovation record and the organisation(s) will not be able to offer you support. </p>
             </div>
           </div>
-        </ng-container>
-
-        <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Save changes</button>
-
-        <div class="nhsuk-u-padding-bottom-5">
-          <a routerLink="/innovator/innovations/{{ innovationId }}/support"> Cancel </a>
         </div>
-
       </ng-container>
+
+      <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Save changes</button>
+
+      <div class="nhsuk-u-padding-bottom-5">
+        <a routerLink="/innovator/innovations/{{ innovationId }}/support"> Cancel </a>
+      </div>
 
     </div>
   </div>
 
-</div>
+</theme-content-wrapper>

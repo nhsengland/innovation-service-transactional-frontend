@@ -48,7 +48,7 @@ describe('Shared/Services/OrganisationsService', () => {
     const expected = [{ id: 'id1', name: 'Organisation 01' }];
     let response: any = null;
 
-    service.getAccessorsOrganisations().subscribe(success => response = success, error => response = error);
+    service.getAccessorsOrganisations().subscribe({ next: success => response = success, error: error => response = error});
 
     const req = httpMock.expectOne(`${envVariablesStore.API_URL}/organisations?type=ACCESSOR`);
     req.flush(responseMock);

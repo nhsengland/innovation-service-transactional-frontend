@@ -86,6 +86,8 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
       ];
     }
 
+    this.setPageStatus('READY');
+
   }
 
 }

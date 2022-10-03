@@ -4,7 +4,9 @@ import { ThemeModule } from '@modules/theme/theme.module';
 import { SharedModule } from '@modules/shared/shared.module';
 
 import { InnovatorRoutingModule } from './innovator-routing.module';
-import { InnovatorLayoutComponent } from './base/innovator-layout.component';
+
+// Layouts.
+import { BaseLayoutComponent } from './base/base-layout.component';
 
 // Pages.
 // // Account.
@@ -33,14 +35,11 @@ import { InnovationTransferAcceptanceComponent } from './pages/innovation-transf
 // Components.
 import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
 
-// Services.
-import { InnovatorService } from './services/innovator.service';
-
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
-// Resolvers.
-import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
+// Services.
+import { InnovatorService } from './services/innovator.service';
 
 
 @NgModule({
@@ -51,7 +50,7 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovatorRoutingModule
   ],
   declarations: [
-    InnovatorLayoutComponent,
+    BaseLayoutComponent,
 
     // Pages.
     // // Account.
@@ -81,14 +80,11 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     OrganisationSuggestionsCardComponent
   ],
   providers: [
-    // Services.
-    InnovatorService,
-
     // Guards.
     FirstTimeSigninGuard,
 
-    // Resolvers.
-    InnovationDataResolver
+    // Services.
+    InnovatorService
   ]
 })
 export class InnovatorModule { }

@@ -66,7 +66,7 @@ describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
     };
 
     let response: any = null;
-    resolver.resolve(routeMock as any).subscribe(success => response = success, error => response = error);
+    resolver.resolve(routeMock as any).subscribe({ next: success => response = success, error: error => response = error});
     expect(response).toEqual(expected);
 
   });
@@ -96,7 +96,7 @@ describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
 
     let response: any = null;
 
-    resolver.resolve(routeMock as any).subscribe(success => response = success, error => response = error);
+    resolver.resolve(routeMock as any).subscribe({ next: success => response = success, error: error => response = error});
     expect(response).toEqual(expected);
 
   });
@@ -110,7 +110,7 @@ describe('FeatureModules/Assessment/Resolvers/InnovationDataResolver', () => {
 
     let response: any = null;
 
-    resolver.resolve(routeMock as any).subscribe(success => response = success, error => response = error);
+    resolver.resolve(routeMock as any).subscribe({ next: success => response = success, error: error => response = error});
     expect(response).toBe(null);
 
   });

@@ -29,7 +29,6 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   ) {
 
     super();
-    this.setPageTitle('Evidence details');
 
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -50,22 +49,15 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
 
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionEvidence$(this.innovationId, this.evidence.id).subscribe(
-      response => {
+    this.stores.innovation.getSectionEvidence$(this.innovationId, this.evidence.id).subscribe(response => {
 
-        this.summaryList = this.wizard.runSummaryParsing(response);
-        this.evidence.title = this.summaryList[1].value || '';
+      this.summaryList = this.wizard.runSummaryParsing(response);
+      this.evidence.title = this.summaryList[1].value || '';
 
-        this.setPageStatus('READY');
-      },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch evidence information',
-          message: 'Please try again or contact us for further help'
-        };
-      });
+      this.setPageTitle(this.evidence.title);
+      this.setPageStatus('READY');
+
+    });
 
   }
 
@@ -74,13 +66,16 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   }
 
   onDeleteEvidence(): void {
-    this.stores.innovation.deleteEvidence$(this.innovationId, this.evidence.id).subscribe(
-      () => {
+    this.stores.innovation.deleteEvidence$(this.innovationId, this.evidence.id).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('Your evidence has been deleted');
         this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`, { alert: 'evidenceDeleteSuccess' });
       },
-      () => {
-        this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`, { alert: 'evidenceDeleteError' });
-      });
+      error: () => {
+        this.setAlertError('An error occurred when deleting your evidence. Please try again or contact us for further help.');
+        // this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`, { alert: 'evidenceDeleteError' });
+      }
+    });
 
   }
 

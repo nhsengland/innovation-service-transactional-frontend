@@ -69,16 +69,7 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
       this.setPageStatus('READY');
 
-    },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch data sharing information',
-          message: 'Please try again or contact us for further help'
-        };
-      }
-    );
+    });
 
   }
 
@@ -86,10 +77,13 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
     const redirectUrl = `/innovator/innovations/${this.innovationId}/support`;
 
-    this.innovatorService.submitOrganisationSharing(this.innovationId, this.form.value).subscribe(
-      () => this.redirectTo(redirectUrl, { alert: 'sharingUpdateSuccess' }),
-      () => this.redirectTo(redirectUrl, { alert: 'sharingUpdateError' })
-    );
+    this.innovatorService.submitOrganisationSharing(this.innovationId, this.form.value).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('Your data sharing preferences were changed');
+        this.redirectTo(redirectUrl);
+      },
+      error: () => this.setAlertUnknownError()
+    });
 
   }
 

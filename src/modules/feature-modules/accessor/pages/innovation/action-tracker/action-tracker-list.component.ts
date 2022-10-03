@@ -36,7 +36,7 @@ export class InnovationActionTrackerListComponent extends CoreComponent implemen
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
 
     this.openedActionsList = new TableModel({
       visibleColumns: {

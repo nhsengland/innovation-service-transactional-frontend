@@ -49,7 +49,7 @@ describe('Shared/Services/TermsOfUseService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.getTermsOfUseLastVersionInfo().subscribe(success => response = success, error => response = error);
+    service.getTermsOfUseLastVersionInfo().subscribe({ next: success => response = success, error: error => response = error});
 
     const req = httpMock.expectOne(`${envVariablesStore.API_URL}/tou/me`);
     req.flush(responseMock);
@@ -64,7 +64,7 @@ describe('Shared/Services/TermsOfUseService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.acceptTermsOfUseVersion('id1').subscribe(success => response = success, error => response = error);
+    service.acceptTermsOfUseVersion('id1').subscribe({ next: success => response = success, error: error => response = error});
 
     const req = httpMock.expectOne(`${envVariablesStore.API_URL}/tou/id1/accept`);
     req.flush(responseMock);

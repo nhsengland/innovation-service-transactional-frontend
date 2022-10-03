@@ -41,7 +41,7 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
     super();
     this.setPageTitle('Lock user');
 
-    this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData(this.activatedRoute).user.displayName };
+    this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName };
 
   }
 

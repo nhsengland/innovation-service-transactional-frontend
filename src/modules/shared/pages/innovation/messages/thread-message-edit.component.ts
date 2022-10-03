@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormGroup } from '@app/base/forms';
-import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { UntypedFormControl } from '@angular/forms';
@@ -16,7 +16,7 @@ import { UntypedFormControl } from '@angular/forms';
 export class PageInnovationThreadMessageEditComponent extends CoreComponent implements OnInit {
 
   selfUser: { id: string, urlBasePath: string };
-  innovation: EnvironmentInnovationType;
+  innovation: ContextInnovationType;
   threadId: string;
   messageId: string;
 
@@ -38,7 +38,7 @@ export class PageInnovationThreadMessageEditComponent extends CoreComponent impl
       urlBasePath: this.stores.authentication.userUrlBasePath()
     };
 
-    this.innovation = this.stores.environment.getInnovation();
+    this.innovation = this.stores.context.getInnovation();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
     this.messageId = this.activatedRoute.snapshot.params.messageId;
 
@@ -46,17 +46,13 @@ export class PageInnovationThreadMessageEditComponent extends CoreComponent impl
 
   ngOnInit(): void {
 
-    this.innovationsService.getThreadMessageInfo(this.innovation.id, this.threadId, this.messageId).subscribe(
-      response => {
+    this.innovationsService.getThreadMessageInfo(this.innovation.id, this.threadId, this.messageId).subscribe(response => {
 
-        this.form.get('message')!.setValue(response.message);
-        this.setPageStatus('READY');
+      this.form.get('message')!.setValue(response.message);
+      this.setPageStatus('READY');
 
-      },
-      () => {
-        this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
-      });
+    });
+
   }
 
 
@@ -71,10 +67,13 @@ export class PageInnovationThreadMessageEditComponent extends CoreComponent impl
       message: this.form.get('message')?.value
     };
 
-    this.innovationsService.editThreadMessage(this.innovation.id, this.threadId, this.messageId, body).subscribe(
-      () => this.redirectTo(`/${this.selfUser.urlBasePath}/innovations/${this.innovation.id}/threads/${this.threadId}`, { alert: 'messageEditSuccess' }),
-      () => this.setAlertUnknownError()
-    );
+    this.innovationsService.editThreadMessage(this.innovation.id, this.threadId, this.messageId, body).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('You have successfully updated a message');
+        this.redirectTo(`/${this.selfUser.urlBasePath}/innovations/${this.innovation.id}/threads/${this.threadId}`)
+      },
+      error: () => this.setAlertUnknownError()
+    });
 
   }
 

@@ -47,7 +47,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     super();
     this.setPageTitle('Suggest organisations for support');
 
-    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
 
   }
 
@@ -100,7 +100,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       },
       () => {
         this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
+        this.setAlertUnknownError();
       }
     );
 
@@ -158,7 +158,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       () => this.redirectTo(`/accessor/innovations/${this.innovation.id}/support`, { alert: 'supportOrganisationSuggestSuccess' }),
       () => {
         this.submitButton = { isActive: true, label: 'Confirm and notify organisations' };
-        this.setAlertDataSaveError();
+        this.setAlertUnknownError();
       }
     );
 

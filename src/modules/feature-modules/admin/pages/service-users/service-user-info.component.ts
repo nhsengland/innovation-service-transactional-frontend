@@ -43,7 +43,7 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
     super();
     this.setPageTitle('User information');
 
-    this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData(this.activatedRoute).user.displayName };
+    this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName };
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'lockSuccess':

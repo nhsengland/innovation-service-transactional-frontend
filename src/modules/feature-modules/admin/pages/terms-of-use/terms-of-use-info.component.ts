@@ -42,7 +42,7 @@ export class PageTermsOfUseInfoComponent extends CoreComponent implements OnInit
       },
       error: () => {
         this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
+        this.setAlertUnknownError();
       }
     });
 

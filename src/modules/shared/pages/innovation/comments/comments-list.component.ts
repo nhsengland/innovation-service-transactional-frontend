@@ -4,8 +4,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormControl, FormGroup, FormEngineHelper } from '@app/base/forms';
 
-import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
-import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { getInnovationCommentsDTO } from '@modules/stores/innovation/innovation.models';
 
@@ -19,7 +18,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
   module: '' | 'innovator' | 'accessor' | 'assessment' = '';
   innovationId: string;
 
-  innovation: EnvironmentInnovationType;
+  innovation: ContextInnovationType;
   currentCreatedOrder: 'asc' | 'desc';
 
   lengthLimitCharacters = 2000;
@@ -37,7 +36,7 @@ export class PageInnovationCommentsListComponent extends CoreComponent implement
     this.setPageTitle('Comments');
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = this.stores.environment.getInnovation();
+    this.innovation = this.stores.context.getInnovation();
     this.currentCreatedOrder = 'desc';
     this.userId = this.stores.authentication.getUserId();
 

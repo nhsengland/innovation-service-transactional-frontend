@@ -146,8 +146,22 @@ export class WizardEngineModel {
 
 
 
+  validateData(): { valid: boolean, errors: { title: string, description: string }[] } {
 
-  validateData(): { valid: boolean, errors: { label: string, error: string }[] } {
+    const parameters = this.steps.flatMap(step => step.parameters);
+    const form = FormEngineHelper.buildForm(parameters, this.currentAnswers);
+
+    return {
+      valid: form.valid,
+      errors: Object.entries(FormEngineHelper.getErrors(form)).map(([key, value]) => ({
+        title: parameters.find(p => p.id === key)?.label || '',
+        description: value || ''
+      }))
+    };
+
+  }
+
+  validateDataLegacy(): { valid: boolean, errors: { label: string, error: string }[] } {
 
     const parameters = this.steps.flatMap(step => step.parameters);
     const form = FormEngineHelper.buildForm(parameters, this.currentAnswers);

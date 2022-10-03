@@ -1,34 +1,26 @@
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
+<theme-content-wrapper [status]="pageStatus">
 
-    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-      <p> {{ alert.message }} </p>
-    </theme-alert>
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
 
-    <h1 class="nhsuk-u-margin-bottom-3"> {{ pageTitle }} </h1>
+      <p *ngIf="isInnovator()">
+        Start a new conversation by entering a subject and a message. Everyone who is currently supporting your innovation will be notified and be able to see and reply to your message.
+      </p>
+      <p *ngIf="isNotInnovator()">
+        Start a new conversation by entering a subject and a message. The innovator will be notified. As well as the innovator, everyone who is supporting this innovation will be able to see and reply to your message.
+      </p>
 
-  </div>
-</div>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <theme-form-input controlName="subject" label="Subject" description="Enter a subject for your conversation" [pageUniqueField]="false"></theme-form-input>
+        <theme-form-textarea controlName="message" label="Message" description="Enter your message" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
+        <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3"> Send message </button>
+      </form>
 
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-two-thirds">
+      <div class="nhsuk-u-padding-bottom-5">
+        <a routerLink="..">Cancel</a>
+      </div>
 
-    <p *ngIf="isInnovator()">
-      Start a new conversation by entering a subject and a message. Everyone who is currently supporting your innovation will be notified and be able to see and reply to your message.
-    </p>
-    <p *ngIf="isNotInnovator()">
-      Start a new conversation by entering a subject and a message. The innovator will be notified. As well as the innovator, everyone who is supporting this innovation will be able to see and reply to your message.
-    </p>
-
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <theme-form-input controlName="subject" label="Subject" description="Enter a subject for your conversation" [pageUniqueField]="false"></theme-form-input>
-      <theme-form-textarea controlName="message" label="Message" description="Enter your message" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
-      <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3"> Send message </button>
-    </form>
-
-    <div class="nhsuk-u-padding-bottom-5">
-      <a routerLink="..">Cancel</a>
     </div>
-
   </div>
-</div>
+
+</theme-content-wrapper>
