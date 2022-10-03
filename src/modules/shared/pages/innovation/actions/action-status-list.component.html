@@ -1,29 +1,31 @@
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
+<theme-content-wrapper [status]="pageStatus">
 
-    <h1 class="nhsuk-heading-xl nhsuk-u-padding-top-4 nhsuk-u-margin-bottom-5"> {{ pageTitle }} </h1>
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
 
-    <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-9">
-      <caption class="nhsuk-table__caption"> Actions status list </caption>
-      <thead class="nhsuk-table__head">
-        <tr>
-          <th scope="col">Status</th>
-          <th scope="col">Definition</th>
-        </tr>
-      </thead>
-      <tbody class="nhsuk-table__body">
-        <tr *ngFor="let status of visibleStatus" class="nhsuk-table__row">
-          <td class="nhsuk-table__cell">
-            <span class="nhsuk-table-responsive__heading">Status</span>
-            <theme-tag type="{{ 'shared.catalog.innovation.action_status.' + status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.action_status.' + status + '.name' | translate }}"></theme-tag>
-          </td>
-          <td class="nhsuk-table__cell">
-            <span class="nhsuk-table-responsive__heading">Definition</span>
-            {{ 'shared.catalog.innovation.action_status.' + status + '.description' | translate }}"
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-9">
+        <caption class="nhsuk-table__caption"> Actions status list </caption>
+        <thead class="nhsuk-table__head">
+          <tr>
+            <th scope="col">Status</th>
+            <th scope="col">Definition</th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <tr *ngFor="let status of visibleStatus" class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">
+              <span class="nhsuk-table-responsive__heading">Status</span>
+              <theme-tag type="{{ 'shared.catalog.innovation.action_status.' + status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.action_status.' + status + '.name' | translate }}"></theme-tag>
+            </td>
+            <td class="nhsuk-table__cell">
+              <span class="nhsuk-table-responsive__heading">Definition</span>
+              {{ 'shared.catalog.innovation.action_status.' + status + '.description' | translate }}"
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
+    </div>
   </div>
-</div>
+
+</theme-content-wrapper>

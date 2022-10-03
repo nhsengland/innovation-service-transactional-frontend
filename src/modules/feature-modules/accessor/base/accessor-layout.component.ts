@@ -52,11 +52,11 @@ export class AccessorLayoutComponent extends CoreComponent {
 
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e)),
 
-      this.stores.environment.notifications$().subscribe(e => {
+      this.stores.context.notifications$().subscribe(e => {
         this.navigationMenuBar.notifications = { notifications: e.UNREAD }; // We need to reassign the variable so that the component reacts to it.
       }),
 
-      this.stores.environment.innovation$().subscribe(e => {
+      this.stores.context.innovation$().subscribe(e => {
         Object.entries(e?.notifications || {}).forEach(([key, value]) => {
           const leftSideMenu = this.leftSideBar.find(item => item.notificationKey === key);
           if (leftSideMenu) { leftSideMenu.notifications = value; }
@@ -70,9 +70,9 @@ export class AccessorLayoutComponent extends CoreComponent {
 
   private onRouteChange(event: NavigationEnd): void {
 
-    this.stores.environment.updateUserUnreadNotifications();
+    this.stores.context.updateUserUnreadNotifications();
 
-    const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
+    const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData<any>(this.activatedRoute).layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
 
     this.layoutOptions = {
@@ -100,7 +100,7 @@ export class AccessorLayoutComponent extends CoreComponent {
           { title: 'Support status', link: `/accessor/innovations/${currentRouteInnovationId}/support` },
           { title: 'Activity log', link: `/accessor/innovations/${currentRouteInnovationId}/activity-log` }
         ];
-        this.stores.environment.updateInnovationNotifications();
+        this.stores.context.updateInnovationNotifications();
         break;
 
       case 'emptyLeftAside':

@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
+import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
-import { InnovatorService, getInnovationActionInfoOutDTO } from '../../../services/innovator.service';
+import { InnovationsService, getInnovationActionInfoOutDTO } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -29,11 +29,10 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService
+    private InnovationsService: InnovationsService
   ) {
 
     super();
-    this.setPageTitle('Action detail');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.actionId = this.activatedRoute.snapshot.params.actionId;
@@ -41,43 +40,23 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
     this.actionStatus = '';
     this.declineShow = false;
 
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'actionDeclined':
-        this.alert = {
-          type: 'INFORMATION',
-          title: `Action declined`,
-          message: 'The accessor will be notified.'
-        };
-        break;
-      default:
-        break;
-    }
-
   }
 
 
   ngOnInit(): void {
 
-    this.innovatorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
-      response => {
+    this.InnovationsService.getInnovatorInnovationActionInfo(this.innovationId, this.actionId).subscribe(response => {
 
-        this.action = response;
-        this.declineShow = this.action.status.toLocaleLowerCase() === INNOVATION_SECTION_ACTION_STATUS.REQUESTED.label.toLocaleLowerCase();
+      this.action = response;
+      this.declineShow = this.action.status.toLocaleLowerCase() === INNOVATION_SECTION_ACTION_STATUS.REQUESTED.label.toLocaleLowerCase();
 
-        this.setPageStatus('READY');
+      this.setPageTitle(this.action.name, { hint: this.action.displayId });
+      this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker`);
+      this.setPageStatus('READY');
 
-      },
-      error => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch actions information',
-          message: 'Please try again or contact us for further help'
-        };
-      }
-    );
+    });
 
-    this.stores.environment.dismissNotification(NotificationContextTypeEnum.ACTION, this.actionId);
+    this.stores.context.dismissNotification(NotificationContextTypeEnum.ACTION, this.actionId);
 
   }
 

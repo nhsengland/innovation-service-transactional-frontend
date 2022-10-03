@@ -1,16 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 // Angular Material.
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 // Base.
 import { BaseLayoutComponent } from './base/base-layout.component';
+import { TransactionalLayoutComponent } from './base/transactional-layout.component';
 
 // Components.
 import { ActivityTimeoutComponent } from './components/activity-timeout/activity-timeout.component';
 import { AlertComponent } from './components/alert/alert.component';
+import { ContentWrapperComponent } from './components/content-wrapper/content-wrapper.component';
 import { HeaderComponent } from './components/header/header.component';
 import { HeaderBreadcrumbsBarComponent } from './components/header/breadcrumbs-bar.component';
 import { HeaderNavigationBarComponent } from './components/header/navigation-bar.component';
@@ -33,6 +36,7 @@ import { TagComponent } from './components/tag/tag.component';
   imports: [
     CommonModule,
     RouterModule,
+    TranslateModule.forChild(),
 
     // Angular Material.
     MatProgressSpinnerModule
@@ -40,10 +44,12 @@ import { TagComponent } from './components/tag/tag.component';
   declarations: [
     // Base.
     BaseLayoutComponent,
+    TransactionalLayoutComponent,
 
     // Components.
     ActivityTimeoutComponent,
     AlertComponent,
+    ContentWrapperComponent,
     HeaderComponent,
     HeaderBreadcrumbsBarComponent,
     HeaderNavigationBarComponent,
@@ -72,6 +78,7 @@ import { TagComponent } from './components/tag/tag.component';
     // Components.
     ActivityTimeoutComponent,
     AlertComponent,
+    ContentWrapperComponent,
     HeaderComponent,
     HeaderBreadcrumbsBarComponent,
     HeaderNavigationBarComponent,

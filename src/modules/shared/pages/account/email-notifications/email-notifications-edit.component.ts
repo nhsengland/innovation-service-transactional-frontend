@@ -3,7 +3,7 @@ import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
+import { CustomValidators, FormGroup } from '@app/base/forms';
 
 import { EmailNotificationsTypeEnum, EmailNotificationsPreferencesEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 
@@ -31,7 +31,6 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
   ) {
 
     super();
-    this.setPageTitle('Edit email notifications');
 
     this.notificationType = this.activatedRoute.snapshot.params.notificationType;
     this.notificationListLink = `/${this.stores.authentication.userUrlBasePath()}/account/email-notifications`;
@@ -40,6 +39,9 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
       question: `How often do you want to get email notifications about ${this.translate(`shared.catalog.innovation.notification_context_types.${this.notificationType}.title.plural`).toLowerCase()}?`,
       items: Object.values(EmailNotificationsPreferencesEnum).map(key => ({ value: key, label: this.translate(`shared.catalog.innovation.email_notification_preferences.${key}.me`) }))
     };
+
+    this.setPageTitle('Edit email notifications', { showPage: false });
+    this.setBackLink('Go back', this.notificationListLink)
 
   }
 
@@ -50,21 +52,15 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
     }
 
 
-    this.notificationsService.getEmailNotificationsPreferences().subscribe(
-      response => {
+    this.notificationsService.getEmailNotificationsPreferences().subscribe(response => {
 
-        const emailNotification = response.find(item => item.notificationType === this.notificationType);
+      const emailNotification = response.find(item => item.notificationType === this.notificationType);
 
-        this.form.get('notificationPreference')!.setValue(emailNotification?.preference);
+      this.form.get('notificationPreference')!.setValue(emailNotification?.preference);
 
-        this.setPageStatus('READY');
+      this.setPageStatus('READY');
 
-      },
-      () => {
-        this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
-      }
-    );
+    });
 
   }
 
@@ -78,10 +74,16 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
 
     this.notificationsService.updateEmailNotificationsPreferences(
       [{ notificationType: this.notificationType, preference: this.form.get('notificationPreference')!.value }]
-    ).subscribe(
-      () => this.redirectTo(this.notificationListLink, { alert: 'editSuccess' }),
-      () => this.redirectTo(this.notificationListLink, { alert: 'editError' })
-    );
+    ).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('Your notification preference has been saved');
+        this.redirectTo(this.notificationListLink, { alert: 'editSuccess' })
+      },
+      error: () => {
+        this.setAlertError('An error occurred when updating your notification preferences. Please try again or contact us for further help');
+        // this.redirectTo(this.notificationListLink, { alert: 'editError' })
+      }
+    });
 
   }
 

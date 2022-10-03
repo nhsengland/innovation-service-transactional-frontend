@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { NGXLogger } from 'ngx-logger';
 
-import { EnvironmentStore } from '@modules/stores/environment/environment.store';
+import { ContextStore } from '@modules/stores/context/context.store';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
@@ -21,7 +21,7 @@ export class InnovationDataResolver implements Resolve<null | InnovationDataReso
   constructor(
     private router: Router,
     private logger: NGXLogger,
-    private environmentStore: EnvironmentStore,
+    private contextStore: ContextStore,
     private accessorService: AccessorService
   ) { }
 
@@ -31,7 +31,7 @@ export class InnovationDataResolver implements Resolve<null | InnovationDataReso
     return this.accessorService.getInnovationInfo(route.params.innovationId).pipe(
       map(response => {
 
-        this.environmentStore.setInnovation({
+        this.contextStore.setInnovation({
           id: response.summary.id,
           name: response.summary.name,
           status: response.summary.status,
@@ -65,7 +65,7 @@ export class InnovationDataResolver implements Resolve<null | InnovationDataReso
       }),
       catchError(error => {
 
-        this.environmentStore.clearInnovation();
+        this.contextStore.clearInnovation();
         this.router.navigateByUrl('error/forbidden-innovation');
 
         /* istanbul ignore next */

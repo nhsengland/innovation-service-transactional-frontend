@@ -134,7 +134,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   onSubmit(action: 'update' | 'saveAsDraft' | 'submit'): void {
 
-    this.alert = { type: '' };
+    this.alert = { type: null };
 
     let isValid = true;
 

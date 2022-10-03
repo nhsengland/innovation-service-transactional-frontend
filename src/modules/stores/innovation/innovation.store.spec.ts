@@ -64,7 +64,7 @@ describe('Stores/Innovation/InnovationStore', () => {
     ];
     let response: any = null;
 
-    innovationStore.getSectionsSummary$('innovationId').subscribe(success => response = success, error => response = error);
+    innovationStore.getSectionsSummary$('innovationId').subscribe({ next: success => response = success, error: error => response = error});
 
     // expect(response).toEqual(expectedResponse);
     expect(true).toBe(true); // TODO: Review this test!

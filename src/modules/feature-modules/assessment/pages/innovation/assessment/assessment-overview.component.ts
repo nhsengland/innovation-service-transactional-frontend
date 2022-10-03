@@ -53,7 +53,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
-    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'needsAssessmentSubmited':

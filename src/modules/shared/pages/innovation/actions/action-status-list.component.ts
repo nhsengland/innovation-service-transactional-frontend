@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
@@ -20,10 +21,18 @@ export class PageActionStatusListComponent extends CoreComponent {
   ];
 
 
-  constructor() {
+  constructor(
+    private activatedRoute: ActivatedRoute
+  ) {
 
     super();
+
+    const innovationId = this.activatedRoute.snapshot.params.innovationId;
+    const actionId = this.activatedRoute.snapshot.params.actionId;
+
     this.setPageTitle('Actions status key');
+    this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/action-tracker${actionId ?? ''}`);
+    this.setPageStatus('READY');
 
   }
 

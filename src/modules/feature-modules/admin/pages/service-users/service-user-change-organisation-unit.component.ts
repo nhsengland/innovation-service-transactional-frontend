@@ -56,7 +56,7 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
   ) {
 
     super();
-    this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData(this.activatedRoute).user.displayName, };
+    this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName, };
     this.pageStep = 'RULES_LIST';
 
     this.setPageTitle(`Change organisation unit`);
@@ -110,8 +110,6 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
       default: // Should NOT happen!
         break;
     }
-
-    this.focusBody();
 
   }
 

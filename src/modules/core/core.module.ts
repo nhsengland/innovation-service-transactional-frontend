@@ -6,6 +6,7 @@ import { LoggerModule } from 'ngx-logger';
 import { TranslateModule } from '@ngx-translate/core';
 
 // Interceptors.
+import { ApiInInterceptor } from './interceptors/api-in.interceptor';
 import { ApiOutInterceptor } from './interceptors/api-out.interceptor';
 
 // Guards.
@@ -38,11 +39,8 @@ import { LoggerService } from './services/logger.service';
     },
 
     // Interceptors.
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ApiOutInterceptor,
-      multi: true
-    },
+    { provide: HTTP_INTERCEPTORS, useClass: ApiInInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ApiOutInterceptor, multi: true },
 
     // Guards.
     AuthenticationGuard,

@@ -5,9 +5,9 @@ export { StoresModule } from './stores.module';
 export { AuthenticationStore } from './authentication/authentication.store';
 export { AuthenticationService } from './authentication/authentication.service';
 
-// // Environment Store.
-export { EnvironmentStore } from './environment/environment.store';
-export { EnvironmentService } from './environment/environment.service';
+// // Context Store.
+export { ContextStore } from './context/context.store';
+export { ContextService } from './context/context.service';
 
 // // Innovation Store.
 export { InnovationStore } from './innovation/innovation.store';

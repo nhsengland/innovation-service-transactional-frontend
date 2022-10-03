@@ -81,8 +81,6 @@ export class PageServiceUserNewComponent extends CoreComponent implements OnInit
         break;
     }
 
-    this.focusBody();
-
   }
 
   onSubmitWizard(): void {

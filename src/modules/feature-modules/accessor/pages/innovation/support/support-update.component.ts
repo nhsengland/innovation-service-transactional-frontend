@@ -134,7 +134,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         return;
 
       } else {
-        this.alert = { type: null, setFocus: false };
+        this.alert = { type: null };
       }
 
     }
@@ -178,7 +178,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           };
           return false;
         } else {
-          this.alert = { type: null, setFocus: false };
+          this.alert = { type: null };
         }
         break;
       case 3:
@@ -192,7 +192,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           };
           return false;
         } else {
-          this.alert = { type: null, setFocus: false };
+          this.alert = { type: null };
         }
 
         break;

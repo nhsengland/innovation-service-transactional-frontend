@@ -67,7 +67,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
       },
       () => {
         this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
+        this.setAlertUnknownError();
       }
     );
 

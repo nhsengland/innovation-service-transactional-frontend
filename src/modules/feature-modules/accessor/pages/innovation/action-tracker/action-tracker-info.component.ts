@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
+import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 
 import { AccessorService, GetInnovationActionInfoOutDTO } from '../../../services/accessor.service';
 
@@ -34,10 +34,10 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'actionCreationSuccess':
-        this.setAlertSuccess('Action requested', 'The innovator has been notified of your action request.');
+        this.setAlertSuccess('Action requested', { message: 'The innovator has been notified of your action request.' });
         break;
       case 'actionUpdateSuccess':
-        this.setAlertSuccess(`You have updated the status of this action to '${this.activatedRoute.snapshot.queryParams.status}'`, 'The innovator will be notified of this status change');
+        this.setAlertSuccess(`You have updated the status of this action to '${this.activatedRoute.snapshot.queryParams.status}'`, { message: 'The innovator will be notified of this status change' });
         break;
       default:
         break;
@@ -58,11 +58,11 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
       },
       () => {
         this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
+        this.setAlertUnknownError();
       }
     );
 
-    this.stores.environment.dismissNotification(NotificationContextTypeEnum.ACTION, this.actionId);
+    this.stores.context.dismissNotification(NotificationContextTypeEnum.ACTION, this.actionId);
 
   }
 

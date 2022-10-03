@@ -81,8 +81,6 @@ export class PageOrganisationNewComponent extends CoreComponent implements OnIni
         break;
     }
 
-    this.focusBody();
-
   }
 
   onSubmitWizard(): void {

@@ -1,38 +1,28 @@
-<theme-header></theme-header>
-<theme-header-navigation-bar [leftMenuItems]="navigationMenuBar.leftItems" [rightMenuItems]="navigationMenuBar.rightItems" [notifications]="navigationMenuBar.notifications"></theme-header-navigation-bar>
+<theme-header [showUserInformation]="true" [showSignOut]="true"></theme-header>
+<theme-header-breadcrumbs-bar></theme-header-breadcrumbs-bar>
 
-<div class="nhsuk-width-container-fluid app-width-container-fluid overflow-x-hidden">
-  <main id="maincontent" role="main" class="nhsuk-main-wrapper app-main-wrapper--no-padding">
+<div class="nhsuk-width-container-fluid app-width-container-fluid overflow-x-hidden" [ngClass]="layout.backgroundColor">
+  <main id="maincontent" role="main" class="nhsuk-main-wrapper nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5">
 
-    <ng-container *ngIf="layoutOptions.showInnovationHeader && innovationHeaderBar.id">
-      <div class="nhsuk-width-container app-width-container">
-        <div class="nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 d-flex align-items-center justify-content-space-between">
-          <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0"> {{ innovationHeaderBar.name }} </p>
-        </div>
-        <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-0" />
-      </div>
-    </ng-container>
-
-    <ng-container [ngSwitch]="layoutOptions.type">
-      <div *ngSwitchCase="'emptyLeftAside'">
-        <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
-      </div>
-      <div *ngSwitchCase="'innovationLeftAsideMenu'">
-        <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
-      </div>
-      <div *ngSwitchCase="'userAccountMenu'">
-        <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
-      </div>
-      <div *ngSwitchCase="null">
+    <ng-container [ngSwitch]="layout.type">
+      <div *ngSwitchCase="'full'" class="nhsuk-width-container app-width-container">
         <router-outlet></router-outlet>
       </div>
+      <!-- <div *ngSwitchCase="'emptyLeftAside'">
+        <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
+      </div> -->
+      <div *ngSwitchCase="'1.third-2.thirds'">
+        <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
+      </div>
+      <!-- <div *ngSwitchCase="'userAccountMenu'">
+        <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
+      </div> -->
     </ng-container>
 
   </main>
 </div>
 
 <theme-footer></theme-footer>
-
 
 <ng-template #leftAsideMenu>
   <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5">
@@ -41,7 +31,7 @@
       <div class="nhsuk-grid-column-full">
         <div class="app-pane">
 
-          <div class="app-pane__side-bar">
+          <div class="app-pane__side-bar nhsuk-u-padding-top-3">
             <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
 
               <div *ngIf="layoutOptions.backLink" class="nhsuk-back-link app-u-hide-mobile app-side-nav__back nhsuk-u-margin-bottom-4">
@@ -54,10 +44,7 @@
 
               <ul class="nhsuk-list app-side-nav__list">
                 <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
-                  <div class="d-flex">
-                    <a class="app-side-nav__link nhsuk-u-padding-right-1" [routerLink]="item.link"> {{ item.title }} </a>
-                    <theme-notification-tag [label]="item.notifications || null"></theme-notification-tag>
-                  </div>
+                  <a class="app-side-nav__link" [routerLink]="item.link"> {{ item.title }} </a>
                 </li>
               </ul>
 
@@ -73,16 +60,12 @@
 
                 <ul class="nhsuk-list app-side-nav__list">
                   <li *ngFor="let item of leftSideBar" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
-                    <div class="d-flex">
-                      <a class="app-side-nav__link nhsuk-u-padding-right-1" [routerLink]="item.link"> {{ item.title }} </a>
-                      <theme-notification-tag [label]="item.notifications || null"></theme-notification-tag>
-                    </div>
+                    <a class="app-side-nav__link" [routerLink]="item.link"> {{ item.title }} </a>
                   </li>
                 </ul>
 
               </nav>
             </div>
-
           </div>
 
         </div>

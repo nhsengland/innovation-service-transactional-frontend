@@ -24,17 +24,6 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
     super();
     this.setPageTitle('Email notifications');
 
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'editSuccess':
-        this.setAlertSuccess('Your notification preference has been saved');
-        break;
-      case 'editError':
-        this.setAlertError('An error occurred when updating your notification preferences', 'Please try again or contact us for further help');
-        break;
-      default:
-        break;
-    }
-
   }
 
   ngOnInit(): void {
@@ -59,10 +48,6 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
         this.setPageStatus('READY');
 
-      },
-      () => {
-        this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
       }
     );
   }
@@ -84,7 +69,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
         this.setAlertSuccess('Your notification preferences have been saved');
       },
       () => {
-        this.setAlertError('An error occurred when updating your notification preferences', 'Please try again or contact us for further help');
+        this.setAlertError('An error occurred when updating your notification preferences. Please try again or contact us for further help');
       }
     );
   }

@@ -12,12 +12,15 @@ import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.he
 export class AlertComponent implements OnChanges {
 
   @Input() type: null | '' | 'ACTION' | 'INFORMATION' | 'SUCCESS' | 'WARNING' | 'ERROR' = null;
-  @Input() title?: string;
+  @Input() title?: string = '';
+  @Input() itemsList?: { title: string, description?: string, callback?: string | ((...p: any) => void) }[] = [];
   @Input() setFocus?: boolean;
+  @Input() width?: 'full' | '2.thirds' = 'full';
 
   id: string;
 
   borderColorCSS = '';
+  widthCSS = '';
 
 
   constructor(
@@ -44,6 +47,14 @@ export class AlertComponent implements OnChanges {
         case '':
         default:
           this.borderColorCSS = '';
+          break;
+      }
+
+      switch (this.width) {
+        case 'full': this.widthCSS = 'nhsuk-grid-column-full'; break;
+        case '2.thirds': this.widthCSS = 'nhsuk-grid-column-two-thirds'; break;
+        default:
+          this.widthCSS = 'nhsuk-grid-column-full';
           break;
       }
 

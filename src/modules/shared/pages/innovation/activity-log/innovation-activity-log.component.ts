@@ -7,7 +7,7 @@ import { CoreComponent } from '@app/base';
 import { FormArray, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
-import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { ActivityLogTypesEnum, ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { ActivityLogOutDTO } from '@modules/stores/innovation/innovation.service';
@@ -25,7 +25,7 @@ type FiltersType = { key: FilterKeysType, title: string, showHideStatus: 'opened
 export class PageInnovationActivityLogComponent extends CoreComponent implements OnInit {
 
   module: '' | 'innovator' | 'accessor' | 'assessment' = '';
-  innovation: EnvironmentInnovationType;
+  innovation: ContextInnovationType;
 
   ACTIVITY_LOG_ITEMS = ACTIVITY_LOG_ITEMS;
 
@@ -62,10 +62,10 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
   ) {
 
     super();
-    this.setPageTitle('Activity log');
+    this.innovation = this.stores.context.getInnovation();
 
-    this.module = this.activatedRoute.snapshot.data.module;
-    this.innovation = this.stores.environment.getInnovation();
+    this.setPageTitle('Activity log');
+    this.setBackLink('Go back', `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`, `to ${this.innovation.name} innovation`);
 
     this.activitiesList.setOrderBy('createdAt', 'descending');
     this.currentDateOrderBy = 'descending';
@@ -97,10 +97,6 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
         this.setPageStatus('READY');
 
-      },
-      error => {
-        this.setPageStatus('ERROR');
-        this.logger.error(error);
       }
     );
 

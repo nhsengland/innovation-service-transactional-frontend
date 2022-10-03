@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+// import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
@@ -25,10 +26,16 @@ export class PageInnovationSupportStatusListComponent extends CoreComponent {
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
 
-  constructor() {
+  constructor(
+    // private activatedRoute: ActivatedRoute
+  ) {
 
     super();
+    // const innovationId = this.activatedRoute.snapshot.params.innovationId;
+
     this.setPageTitle('Support status key ');
+    // this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/support`);
+    this.setPageStatus('READY');
 
   }
 

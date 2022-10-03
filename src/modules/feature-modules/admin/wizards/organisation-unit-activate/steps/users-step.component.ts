@@ -80,7 +80,7 @@ export class WizardOrganisationUnitActivateUsersStepComponent extends CoreCompon
       },
       () => {
         this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
+        this.setAlertUnknownError();
       }
     );
 

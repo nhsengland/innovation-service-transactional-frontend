@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 
 
 @Component({
@@ -6,22 +6,14 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } 
   templateUrl: './tag.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TagComponent implements OnInit {
+export class TagComponent {
 
-  @Input() type: null | string = null; // This accepts a specific type, or the CSS class.
   @Input() label = '';
+  @Input()
+  // get type(): string { return this.cssClass; }
+  set type(v: null | string) { // This accepts a specific type, or the CSS class.
 
-  cssClass = '';
-
-
-  constructor(
-    private cdr: ChangeDetectorRef
-  ) { }
-
-
-  ngOnInit(): void {
-
-    switch (this.type) {
+    switch (v) {
       case 'INFORMATION':
         this.cssClass = 'nhsuk-tag--blue'; break;
       case 'SUCCESS':
@@ -37,11 +29,18 @@ export class TagComponent implements OnInit {
       case 'WHITE':
         this.cssClass = 'nhsuk-tag--white'; break;
       default:
-        this.cssClass = this.type || ''; break; // Default is blue.
+        this.cssClass = v || ''; break; // Default is blue.
     }
 
     this.cdr.detectChanges();
 
   }
+
+  cssClass = '';
+
+
+  constructor(
+    private cdr: ChangeDetectorRef
+  ) { }
 
 }

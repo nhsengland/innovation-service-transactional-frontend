@@ -1,4 +1,4 @@
-import { Injector, NgModule } from '@angular/core';
+import { ErrorHandler, Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
@@ -10,9 +10,10 @@ import { ThemeModule } from '@modules/theme/theme.module';
 
 import { AppInjector } from '@modules/core';
 
+import { GlobalErrorHandler } from './config/handlers/global-error.handler';
 import { AppRoutingModule } from './app-routing.module';
-
 import { AppComponent } from './app.component';
+
 
 @NgModule({
   imports: [
@@ -27,6 +28,9 @@ import { AppComponent } from './app.component';
     ThemeModule,
 
     AppRoutingModule
+  ],
+  providers: [
+    { provide: ErrorHandler, useClass: GlobalErrorHandler }
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent]

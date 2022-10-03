@@ -53,7 +53,7 @@ export class AssessmentLayoutComponent extends CoreComponent {
         }
       }),
 
-      this.stores.environment.notifications$().subscribe({
+      this.stores.context.notifications$().subscribe({
         next: e => {
         this.navigationMenuBar.notifications = { notifications: e.UNREAD }; // We need to reassign the variable so that the component reacts to it.
         }
@@ -65,11 +65,11 @@ export class AssessmentLayoutComponent extends CoreComponent {
 
   private onRouteChange(event: NavigationEnd): void {
 
-    this.stores.environment.updateUserUnreadNotifications();
+    this.stores.context.updateUserUnreadNotifications();
 
-    const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData(this.activatedRoute).layoutOptions || {};
+    const routeData: RouteDataLayoutOptionsType = RoutingHelper.getRouteData<any>(this.activatedRoute).layoutOptions || {};
     const currentRouteInnovationId: string | null = RoutingHelper.getRouteParams(this.activatedRoute).innovationId || null;
-    const innovation = currentRouteInnovationId ? this.stores.environment.getInnovation() : null;
+    const innovation = currentRouteInnovationId ? this.stores.context.getInnovation() : null;
     const currentAssessmentRouteId: string | undefined = innovation?.assessment?.id;
 
     this.layoutOptions = {

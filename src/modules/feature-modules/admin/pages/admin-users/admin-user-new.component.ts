@@ -68,8 +68,6 @@ export class PageAdminUserNewComponent extends CoreComponent implements OnInit {
         break;
     }
 
-    this.focusBody();
-
   }
 
   onSubmitWizard(): void {

@@ -52,7 +52,7 @@ export class PageAdminUsersFindComponent extends CoreComponent implements OnInit
 
   onSubmit(): void {
 
-    this.clearAlert();
+    this.resetAlert();
     this.setPageStatus('LOADING');
 
     this.formSubmitted = true;

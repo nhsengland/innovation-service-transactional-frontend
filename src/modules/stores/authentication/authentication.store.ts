@@ -43,18 +43,18 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           this.state.hasInnovationTransfers = innovatorInfo.hasInvites;
           return of(true);
         })
-      ).subscribe(
-        () => {
+      ).subscribe({
+        next: () => {
           this.setState(this.state);
           observer.next(true);
           observer.complete();
         },
-        (e) => {
+        error: (e) => {
           this.setState(this.state);
           observer.error(e);
           observer.complete();
         }
-      );
+      });
 
     });
 

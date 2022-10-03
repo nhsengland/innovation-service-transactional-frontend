@@ -1,0 +1,127 @@
+<theme-header [showUserInformation]="true" [showSignOut]="true" [leftMenuBarItems]="headerSection.menuBarItems.left" [rightMenuBarItems]="headerSection.menuBarItems.right" [notifications]="headerSection.notifications"></theme-header>
+<theme-header-breadcrumbs-bar></theme-header-breadcrumbs-bar>
+
+<div class="nhsuk-width-container-fluid app-width-container-fluid overflow-x-hidden" [ngClass]="routeLayoutInfo.backgroundColor">
+  <main id="maincontent" role="main" class="nhsuk-main-wrapper nhsuk-u-padding-0">
+
+    <div class="nhsuk-width-container app-width-container">
+
+      <div *ngIf="pageLayout.context.visible" class="nhsuk-u-padding-top-3">
+        <div class="d-flex align-items-center justify-content-space-between">
+          <p class="nhsuk-heading-l nhsuk-u-margin-bottom-3">{{ pageLayout.context.innovation.name }}</p>
+        </div>
+        <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+      </div>
+
+      <ng-container [ngSwitch]="routeLayoutInfo.type">
+
+        <ng-container *ngSwitchCase="'1.third-2.thirds'">
+          <ng-container *ngTemplateOutlet="leftAsideMenu"></ng-container>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'full'">
+
+          <div *ngIf="pageLayout.backLink.label" class="nhsuk-back-link nhsuk-u-padding-top-4 nhsuk-u-margin-bottom-0">
+            <a (click)="onBackLinkClicked()" class="nhsuk-back-link__link cursor-pointer">
+              <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="24" width="24">
+                <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
+              </svg>
+              {{ pageLayout.backLink.label }} <span class="nhsuk-u-visually-hidden">{{ pageLayout.backLink.hiddenLabel }}</span>
+            </a>
+          </div>
+
+          <theme-alert *ngIf="pageLayout.alert.type" [type]="pageLayout.alert.type" [title]="pageLayout.alert.title" [itemsList]="pageLayout.alert.itemsList" [width]="pageLayout.alert.width" [setFocus]="pageLayout.alert.setFocus"
+            class="d-block nhsuk-u-padding-top-4">
+            <p> {{ pageLayout.alert.message }} </p>
+          </theme-alert>
+
+          <div class="nhsuk-u-padding-top-5">
+
+            <div *ngIf="pageLayout.title.main" class="nhsuk-grid-row">
+              <div class="nhsuk-grid-column-full">
+                <p *ngIf="pageLayout.title.secondary" class="nhsuk-hint nhsuk-u-margin-bottom-0">{{ pageLayout.title.secondary }}</p>
+                <h1 [ngClass]="{'nhsuk-heading-l': pageLayout.title.size === 'l'}">{{ pageLayout.title.main }}</h1>
+              </div>
+            </div>
+
+            <router-outlet></router-outlet>
+
+          </div>
+
+        </ng-container>
+
+      </ng-container>
+
+    </div>
+
+  </main>
+</div>
+
+<theme-footer></theme-footer>
+
+
+<ng-template #leftAsideMenu>
+
+  <div class="nhsuk-grid-row nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5">
+    <div class="nhsuk-grid-column-full">
+      <div class="app-pane">
+
+        <div class="app-pane__side-bar">
+          <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
+
+            <div *ngIf="pageLayout.backLink.label" class="nhsuk-back-link app-u-hide-mobile app-side-nav__back">
+              <a (click)="onBackLinkClicked()" class="nhsuk-back-link__link cursor-pointer">
+                <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="24" width="24">
+                  <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
+                </svg>
+                {{ pageLayout.backLink.label }} <span class="nhsuk-u-visually-hidden">{{ pageLayout.backLink.hiddenLabel }}</span>
+              </a>
+            </div>
+
+            <ul class="nhsuk-list app-side-nav__list">
+              <li *ngFor="let item of pageLayout.sidebarItems" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
+                <a class="app-side-nav__link nhsuk-u-padding-right-1" [routerLink]="item.url"> {{ item.label }} </a>
+              </li>
+            </ul>
+
+          </nav>
+        </div>
+
+        <div class="app-pane__main-content">
+
+          <theme-alert *ngIf="pageLayout.alert.type" [type]="pageLayout.alert.type" [title]="pageLayout.alert.title" [itemsList]="pageLayout.alert.itemsList" [width]="pageLayout.alert.width" [setFocus]="pageLayout.alert.setFocus">
+            <p> {{ pageLayout.alert.message }} </p>
+          </theme-alert>
+
+          <!-- <div class="nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5"> -->
+
+            <div *ngIf="pageLayout.title.main" class="nhsuk-grid-row">
+              <div class="nhsuk-grid-column-full">
+                <p *ngIf="pageLayout.title.secondary" class="nhsuk-hint nhsuk-u-margin-bottom-0">{{ pageLayout.title.secondary }}</p>
+                <h1 [ngClass]="{'nhsuk-heading-l': pageLayout.title.size === 'l'}">{{ pageLayout.title.main }}</h1>
+              </div>
+            </div>
+
+            <router-outlet></router-outlet>
+
+          <!-- </div> -->
+
+          <div class="nhsuk-u-padding-top-4 nhsuk-u-padding-bottom-5 app-u-hide-desktop">
+            <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
+
+              <ul class="nhsuk-list app-side-nav__list">
+                <li *ngFor="let item of pageLayout.sidebarItems" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
+                  <a class="app-side-nav__link nhsuk-u-padding-right-1" [routerLink]="item.url"> {{ item.label }} </a>
+                </li>
+              </ul>
+
+            </nav>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</ng-template>

@@ -68,7 +68,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({});
 
     let response: any = null;
-    service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+    service.getInnovationsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations?take=20&skip=0&status=`);
     httpRequest.flush(responseMock);
@@ -135,7 +135,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({ status: ['ASSESSMENT'] });
 
     let response: any = null;
-    service.getInnovationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+    service.getInnovationsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations?take=20&skip=0&status=ASSESSMENT`);
     httpRequest.flush(responseMock);
@@ -156,7 +156,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.getInnovationInfo('inno01').subscribe(success => response = success, error => response = error);
+    service.getInnovationInfo('inno01').subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01`);
     httpRequest.flush(responseMock);
@@ -232,7 +232,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     };
 
     let response: any = null;
-    service.getInnovationNeedsAssessment('inno01', 'assess01').subscribe(success => response = success, error => response = error);
+    service.getInnovationNeedsAssessment('inno01', 'assess01').subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
     httpRequest.flush(responseMock);
@@ -266,7 +266,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
 
     let response: any = null;
-    service.getSupportLog('Inno01').subscribe(success => response = success, error => response = error);
+    service.getSupportLog('Inno01').subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
     httpRequest.flush(responseMock);
@@ -305,7 +305,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
 
     let response: any = null;
-    service.getSupportLog('Inno01').subscribe(success => response = success, error => response = error);
+    service.getSupportLog('Inno01').subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
     httpRequest.flush(responseMock);
@@ -338,7 +338,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
 
     let response: any = null;
-    service.getSupportLog('Inno01').subscribe(success => response = success, error => response = error);
+    service.getSupportLog('Inno01').subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
     httpRequest.flush(responseMock);
@@ -353,7 +353,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.createInnovationNeedsAssessment('inno01', { some: 'data' }).subscribe(success => response = success, error => response = error);
+    service.createInnovationNeedsAssessment('inno01', { some: 'data' }).subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/assessments`);
     httpRequest.flush(responseMock);
@@ -368,7 +368,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.updateInnovationNeedsAssessment('inno01', 'assess01', true, { some: 'data' }).subscribe(success => response = success, error => response = error);
+    service.updateInnovationNeedsAssessment('inno01', 'assess01', true, { some: 'data' }).subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
     httpRequest.flush(responseMock);
@@ -383,7 +383,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.updateInnovationNeedsAssessment('inno01', 'assess01', false, { some: 'data' }).subscribe(success => response = success, error => response = error);
+    service.updateInnovationNeedsAssessment('inno01', 'assess01', false, { some: 'data' }).subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
     httpRequest.flush(responseMock);
@@ -405,7 +405,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.getInnovationSupports('inno01', false).subscribe(success => response = success, error => response = error);
+    service.getInnovationSupports('inno01', false).subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/supports?full=false`);
     httpRequest.flush(responseMock);

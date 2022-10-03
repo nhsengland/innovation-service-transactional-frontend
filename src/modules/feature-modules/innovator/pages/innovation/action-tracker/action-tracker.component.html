@@ -1,8 +1,4 @@
-<h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-5"> {{ pageTitle }} </h1>
-
-<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-<ng-container *ngIf="pageStatus === 'READY'">
+<theme-content-wrapper [status]="pageStatus">
 
   <ng-container *ngIf="openedActionsList.getTotalRowsNumber() === 0 && closedActionsList.getTotalRowsNumber() === 0; else openedOrClosedActions">
     <p> There are no actions </p>
@@ -112,4 +108,4 @@
 
   </ng-template>
 
-</ng-container>
+</theme-content-wrapper>

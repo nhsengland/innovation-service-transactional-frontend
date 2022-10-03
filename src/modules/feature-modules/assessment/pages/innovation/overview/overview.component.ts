@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 import { AssessmentService, getInnovationInfoEndpointDTO } from '../../../services/assessment.service';
 
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
+import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 
 
 @Component({
@@ -59,7 +59,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           { label: 'Phone number', value: response.contact.phone || '' }
         ];
 
-        this.stores.environment.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+        this.stores.context.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
 
         this.setPageStatus('READY');
 

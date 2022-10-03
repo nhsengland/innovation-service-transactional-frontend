@@ -6,7 +6,7 @@ import { map, take } from 'rxjs/operators';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { UrlModel } from '@modules/core/models/url.model';
 
-import { NotificationContextTypeEnum } from './environment.enums';
+import { NotificationContextTypeEnum } from './context.enums';
 
 
 type InnovationNotificationsDTO = {
@@ -16,7 +16,7 @@ type InnovationNotificationsDTO = {
 
 
 @Injectable()
-export class EnvironmentService {
+export class ContextService {
 
   private API_URL = this.envVariablesStore.API_URL;
 

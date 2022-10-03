@@ -51,7 +51,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
-    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
   }
@@ -60,7 +60,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   ngOnInit(): void {
 
     // Throw notification read dismiss.
-    this.stores.environment.dismissNotification(NotificationContextTypeEnum.NEEDS_ASSESSMENT, this.assessmentId);
+    this.stores.context.dismissNotification(NotificationContextTypeEnum.NEEDS_ASSESSMENT, this.assessmentId);
 
     forkJoin([
       this.accessorService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),

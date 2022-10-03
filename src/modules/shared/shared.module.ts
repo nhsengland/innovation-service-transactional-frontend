@@ -43,11 +43,19 @@ import { WizardSummaryWithConfirmStepComponent } from './wizards/steps/summary-w
 // Pipes.
 import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
 
+// Resolvers.
+import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
+import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
+import { InnovationSectionDataResolver } from './resolvers/innovation-section-data.resolver';
+import { InnovationSectionEvidenceDataResolver } from './resolvers/innovation-section-evidence-data.resolver';
+import { InnovationThreadDataResolver } from './resolvers/innovation-thread-data.resolver';
+
 // Services.
 import { InnovationsService } from './services/innovations.service';
 import { NotificationsService } from './services/notifications.service';
 import { OrganisationsService } from './services/organisations.service';
 import { TermsOfUseService } from './services/terms-of-use.service';
+
 
 @NgModule({
   imports: [
@@ -97,6 +105,14 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     PluralTranslatePipe
   ],
   providers: [
+    // Resolvers.
+    InnovationActionDataResolver,
+    InnovationDataResolver,
+    InnovationSectionDataResolver,
+    InnovationSectionEvidenceDataResolver,
+    InnovationThreadDataResolver,
+
+    // Services.
     InnovationsService,
     NotificationsService,
     OrganisationsService,

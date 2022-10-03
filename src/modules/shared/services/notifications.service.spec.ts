@@ -10,7 +10,7 @@ import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/cor
 import { StoresModule } from '@modules/stores';
 
 import { EmailNotificationsPreferencesEnum, EmailNotificationsTypeEnum, NotificationsListInDTO, NotificationsListOutDTO, NotificationsService } from './notifications.service';
-import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
+import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
@@ -78,7 +78,7 @@ describe('Shared/Services/NotificationsService', () => {
       { contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }
     >();
 
-    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&unreadOnly=false`);
     httpRequest.flush(responseMock);
@@ -118,7 +118,7 @@ describe('Shared/Services/NotificationsService', () => {
       { contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }
     >();
 
-    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&unreadOnly=false`);
     httpRequest.flush(responseMock);
@@ -170,7 +170,7 @@ describe('Shared/Services/NotificationsService', () => {
       { contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }
     >();
 
-    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&unreadOnly=false`);
     httpRequest.flush(responseMock);
@@ -210,7 +210,7 @@ describe('Shared/Services/NotificationsService', () => {
       { contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }
     >();
 
-    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&unreadOnly=false`);
     httpRequest.flush(responseMock);
@@ -236,7 +236,7 @@ describe('Shared/Services/NotificationsService', () => {
       { contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }
     >().setFilters({ contextTypes: [NotificationContextTypeEnum.INNOVATION], unreadOnly: true });
 
-    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe(success => response = success, error => response = error);
+    service.getNotificationsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&contextTypes=INNOVATION&unreadOnly=true`);
     httpRequest.flush(responseMock);
@@ -251,7 +251,7 @@ describe('Shared/Services/NotificationsService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.dismissAllUserNotifications().subscribe(success => response = success, error => response = error);
+    service.dismissAllUserNotifications().subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications/dismiss`);
     httpRequest.flush(responseMock);
@@ -266,7 +266,7 @@ describe('Shared/Services/NotificationsService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.deleteNotification('Notification001').subscribe(success => response = success, error => response = error);
+    service.deleteNotification('Notification001').subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications/${responseMock.id}`);
     httpRequest.flush(responseMock);
@@ -285,7 +285,7 @@ describe('Shared/Services/NotificationsService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.getEmailNotificationsPreferences().subscribe(success => response = success, error => response = error);
+    service.getEmailNotificationsPreferences().subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/email-notifications`);
     httpRequest.flush(responseMock);
@@ -301,7 +301,7 @@ describe('Shared/Services/NotificationsService', () => {
     const expected = true;
 
     let response: any = null;
-    service.updateEmailNotificationsPreferences(payload).subscribe(success => response = success, error => response = error);
+    service.updateEmailNotificationsPreferences(payload).subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/email-notifications`);
     httpRequest.flush(responseMock);
