@@ -2,7 +2,6 @@ import { Component, PLATFORM_ID, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Router } from '@angular/router';
-// import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { NGXLogger } from 'ngx-logger';
@@ -34,7 +33,6 @@ export class CoreComponent implements OnDestroy {
   private titleService: Title;
   private translateService: TranslateService;
   protected router: Router;
-  // protected http: HttpClient;
   protected logger: NGXLogger;
 
   protected CONSTANTS: {
@@ -74,7 +72,6 @@ export class CoreComponent implements OnDestroy {
 
     this.titleService = injector.get(Title);
     this.router = injector.get(Router);
-    // this.http = injector.get(HttpClient);
     this.translateService = injector.get(TranslateService);
     this.logger = injector.get(NGXLogger);
 
@@ -103,10 +100,8 @@ export class CoreComponent implements OnDestroy {
   get sResponse(): null | Response { return this.serverResponse; }
   /* istanbul ignore next */
   get requestBody(): MappedObjectType { return this.serverRequest?.body || {}; }
-
-
   /* istanbul ignore next */
-  get pageTitle(): string { return 'OLD'; }
+  get pageTitle(): string { return this.stores.context.state.pageLayoutBS.getValue().title.main ?? ''; } // Deprecated!
 
 
 

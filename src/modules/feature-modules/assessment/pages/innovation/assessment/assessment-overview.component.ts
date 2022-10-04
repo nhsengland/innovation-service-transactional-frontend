@@ -55,17 +55,6 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
     this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
 
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'needsAssessmentSubmited':
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'Needs assessment successfully completed'
-        };
-        break;
-      default:
-        break;
-    }
-
   }
 
 
@@ -134,16 +123,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
       this.setPageStatus('READY');
 
-    },
-      error => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch needs assessment overview',
-          message: 'Please try again or contact us for further help'
-        };
-      }
-    );
+    });
 
   }
 

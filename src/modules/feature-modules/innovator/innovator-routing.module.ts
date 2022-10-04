@@ -80,7 +80,6 @@ export type RoutesDataType = {
 
 const routes: Routes = [
 
-
   {
     path: '',
     component: BaseLayoutComponent,

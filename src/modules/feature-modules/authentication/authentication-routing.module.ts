@@ -16,23 +16,17 @@ const routes: Routes = [
   },
 
   {
-    path: 'signup',
-    pathMatch: 'full',
-    redirectTo: '/not-found'
-  },
-
-  {
     path: '',
     component: BaseLayoutComponent,
     children: [
       {
         path: 'signup',
         children: [
-          {
-            path: 'confirmation',
-            pathMatch: 'full',
-            component: SignUpConfirmationComponent
-          },
+
+          { path: '', pathMatch: 'full', redirectTo: '/not-found' },
+
+          { path: 'confirmation', pathMatch: 'full', component: SignUpConfirmationComponent }
+
         ]
       }
     ]
