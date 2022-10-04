@@ -3,7 +3,7 @@ import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
+import { CustomValidators, FormGroup } from '@app/base/forms';
 
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
@@ -60,19 +60,13 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
       return;
     }
 
-    this.accessorService.createAction(this.innovationId, this.form.value).subscribe(
-      response => {
-        this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionCreationSuccess' });
+    this.accessorService.createAction(this.innovationId, this.form.value).subscribe({
+      next: response => {
+        this.setRedirectAlertSuccess('Action requested', { message: 'The innovator has been notified of your action request.' });
+        this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`);
       },
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when creating an action',
-          message: 'Please try again or contact us for further help',
-          setFocus: true
-        };
-      }
-    );
+      error: () => this.setAlertError('An error occurred when creating an action. Please try again or contact us for further help')
+    });
 
   }
 

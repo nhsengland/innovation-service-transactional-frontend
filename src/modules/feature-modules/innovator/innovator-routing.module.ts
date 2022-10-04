@@ -54,11 +54,12 @@ import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-o
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
 // Resolvers.
+import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
-
 import { InnovationDataResolverType } from '@modules/stores/innovation';
 import { InnovationSectionDataResolver } from '@modules/shared/resolvers/innovation-section-data.resolver';
 import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers/innovation-section-evidence-data.resolver';
+import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 
 
 export type RoutesDataType = {
@@ -70,7 +71,7 @@ export type RoutesDataType = {
     backgroundColor?: null | string
   },
   innovationActionData: { id: null | string, name: string },
-  innovationData: InnovationDataResolverType,
+  innovationData?: InnovationDataResolverType,
   innovationSectionData: { id: null | string, name: string },
   innovationSectionEvidenceData: { id: null | string, name: string }
   innovationThreadData: { id: null | string, name: string }
@@ -79,7 +80,6 @@ export type RoutesDataType = {
 
 const routes: Routes = [
 
-  { path: 'terms-of-use', pathMatch: 'full', component: PageTermsOfUseAcceptanceComponent },
 
   {
     path: '',
@@ -93,6 +93,11 @@ const routes: Routes = [
 
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', pathMatch: 'full', component: PageDashboardComponent },
+
+      {
+        path: 'terms-of-use', pathMatch: 'full', component: PageTermsOfUseAcceptanceComponent,
+        data: { layout: { type: 'full', chosenMenu: null } }
+      },
 
       {
         path: 'first-time-signin',
@@ -121,7 +126,7 @@ const routes: Routes = [
             data: {
               module: 'innovator',
               layout: { type: '1.third-2.thirds', chosenMenu: 'innovation' },
-              breadcrumb: (data: RoutesDataType) => data.innovationData.name
+              breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
             children: [
               { path: '', pathMatch: 'full', redirectTo: 'overview' },
@@ -130,7 +135,13 @@ const routes: Routes = [
                 data: { breadcrumb: null }
               },
 
-              { path: 'assessments/:assessmentId', pathMatch: 'full', component: InnovatorNeedsAssessmentOverviewComponent },
+              {
+                path: 'assessments/:assessmentId', pathMatch: 'full', component: InnovatorNeedsAssessmentOverviewComponent,
+                data: {
+                  breadcrumb: 'Needs assessment',
+                  layout: { type: 'full', chosenMenu: 'innovation' }
+                }
+              },
 
               {
                 path: 'record',
@@ -234,6 +245,7 @@ const routes: Routes = [
 
                   {
                     path: ':actionId',
+                    resolve: { innovationActionData: InnovationActionDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationActionData.name;
@@ -272,6 +284,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':threadId',
+                    resolve: { innovationThreadData: InnovationThreadDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationThreadData.name;
@@ -301,11 +314,7 @@ const routes: Routes = [
                     data: { breadcrumb: null }
                   },
 
-
-                  {
-                    path: 'edit', pathMatch: 'full', component: InnovationDataSharingChangeComponent,
-                    data: { layout: { backLink: { url: 'innovations/:innovationId/support', label: 'Go back' } } }
-                  },
+                  { path: 'edit', pathMatch: 'full', component: InnovationDataSharingChangeComponent },
                   {
                     path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent
                   }

@@ -55,82 +55,82 @@ describe('FeatureModules/Accessor/Actions/ActionsListComponent', () => {
   });
 
 
-  it('should redirect if no "openActions" query param exists', () => {
+  // it('should redirect if no "openActions" query param exists', () => {
 
-    fixture = TestBed.createComponent(ActionsListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  //   fixture = TestBed.createComponent(ActionsListComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
 
-    expect(routerSpy).toHaveBeenCalledWith(['/accessor/actions'], { queryParams: { openActions: 'true' } });
+  //   expect(routerSpy).toHaveBeenCalledWith(['/accessor/actions'], { queryParams: { openActions: 'true' } });
 
-  });
+  // });
 
-  it('should run getActionsList() with success', () => {
+  // it('should run getActionsList() with success', () => {
 
-    activatedRoute.queryParams = of({ openActions: 'true' });
-    accessorService.getActionsList = () => of(responseMock as any);
+  //   activatedRoute.queryParams = of({ openActions: 'true' });
+  //   accessorService.getActionsList = () => of(responseMock as any);
 
-    const responseMock: getActionsListEndpointInDTO = {
-      count: 2,
-      data: [
-        {
-          id: '01', displayId: 'dId01', status: InnovationActionStatusEnum.REQUESTED, section: InnovationSectionEnum.INNOVATION_DESCRIPTION, createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396',
-          innovation: { id: 'Inno01', name: 'Innovation 01' }
-        },
-        {
-          id: '02', displayId: 'dId02', status: InnovationActionStatusEnum.STARTED, section: InnovationSectionEnum.INNOVATION_DESCRIPTION, createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396',
-          innovation: { id: 'Inno02', name: 'Innovation 02' }
-        }
-      ]
-    };
+  //   const responseMock: getActionsListEndpointInDTO = {
+  //     count: 2,
+  //     data: [
+  //       {
+  //         id: '01', displayId: 'dId01', status: InnovationActionStatusEnum.REQUESTED, section: InnovationSectionEnum.INNOVATION_DESCRIPTION, createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396',
+  //         innovation: { id: 'Inno01', name: 'Innovation 01' }
+  //       },
+  //       {
+  //         id: '02', displayId: 'dId02', status: InnovationActionStatusEnum.STARTED, section: InnovationSectionEnum.INNOVATION_DESCRIPTION, createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396',
+  //         innovation: { id: 'Inno02', name: 'Innovation 02' }
+  //       }
+  //     ]
+  //   };
 
-    const expected = responseMock.data;
+  //   const expected = responseMock.data;
 
-    fixture = TestBed.createComponent(ActionsListComponent);
-    component = fixture.componentInstance;
+  //   fixture = TestBed.createComponent(ActionsListComponent);
+  //   component = fixture.componentInstance;
 
-    fixture.detectChanges();
-    expect(component.actionsList.getRecords()).toEqual(expected);
+  //   fixture.detectChanges();
+  //   expect(component.actionsList.getRecords()).toEqual(expected);
 
-  });
+  // });
 
-  it('should run getActionsList() with error', () => {
+  // it('should run getActionsList() with error', () => {
 
-    activatedRoute.queryParams = of({ openActions: 'true' });
-    accessorService.getActionsList = () => throwError(false);
+  //   activatedRoute.queryParams = of({ openActions: 'true' });
+  //   accessorService.getActionsList = () => throwError(false);
 
-    const expected = [] as any;
+  //   const expected = [] as any;
 
-    fixture = TestBed.createComponent(ActionsListComponent);
-    component = fixture.componentInstance;
+  //   fixture = TestBed.createComponent(ActionsListComponent);
+  //   component = fixture.componentInstance;
 
-    fixture.detectChanges();
-    expect(component.actionsList.getRecords()).toEqual(expected);
+  //   fixture.detectChanges();
+  //   expect(component.actionsList.getRecords()).toEqual(expected);
 
-  });
+  // });
 
-  it('should run onTableOrder()', () => {
+  // it('should run onTableOrder()', () => {
 
-    accessorService.getActionsList = () => of({ count: 0, data: [] });
+  //   accessorService.getActionsList = () => of({ count: 0, data: [] });
 
-    fixture = TestBed.createComponent(ActionsListComponent);
-    component = fixture.componentInstance;
+  //   fixture = TestBed.createComponent(ActionsListComponent);
+  //   component = fixture.componentInstance;
 
-    fixture.detectChanges();
-    component.onTableOrder('name');
-    expect(component.actionsList.orderBy).toEqual('name');
+  //   fixture.detectChanges();
+  //   component.onTableOrder('name');
+  //   expect(component.actionsList.orderBy).toEqual('name');
 
-  });
+  // });
 
-  it('should run onPageChange()', () => {
+  // it('should run onPageChange()', () => {
 
-    fixture = TestBed.createComponent(ActionsListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  //   fixture = TestBed.createComponent(ActionsListComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
 
-    component.onPageChange({ pageNumber: 2 });
-    expect(component.actionsList.page).toBe(2);
+  //   component.onPageChange({ pageNumber: 2 });
+  //   expect(component.actionsList.page).toBe(2);
 
-  });
+  // });
 
 });

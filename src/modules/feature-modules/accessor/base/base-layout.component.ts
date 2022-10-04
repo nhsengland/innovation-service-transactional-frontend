@@ -10,7 +10,7 @@ import { ContextStore } from '@modules/stores';
 import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 import { HeaderMenuBarItemType, HeaderNotificationsType } from '@modules/theme/components/header/header.component';
 
-import { RoutesDataType } from '../innovator-routing.module';
+import { RoutesDataType } from '../accessor-routing.module';
 
 
 @Component({
@@ -32,7 +32,7 @@ export class BaseLayoutComponent implements OnInit, OnDestroy {
   routeLayoutInfo: Required<RoutesDataType>['layout'] = { type: 'full', chosenMenu: null, backgroundColor: null };
 
   pageLayout: {
-    context: { visible: boolean, innovation: { id: string, name: string } },
+    context: { visible: boolean, innovation: { id: string, name: string, assessmentId?: string } },
     alert: ContextPageLayoutType['alert'],
     backLink: ContextPageLayoutType['backLink'],
     title: ContextPageLayoutType['title'],
@@ -57,9 +57,10 @@ export class BaseLayoutComponent implements OnInit, OnDestroy {
     this.headerSection = {
       menuBarItems: {
         left: [
-          { id: 'innovations', label: 'Your innovations', url: '/innovator/dashboard' },
-          { id: 'notifications', label: 'Notifications', url: '/innovator/notifications' },
-          { id: 'account', label: 'Your account', url: '/innovator/account' }
+          { id: 'innovations', label: 'Innovations', url: '/accessor/innovations' },
+          { id: 'notifications', label: 'Notifications', url: '/accessor/notifications' },
+          { id: 'actions', label: 'Actions', url: '/accessor/actions', },
+          { id: 'account', label: 'Account', url: '/accessor/account' }
         ],
         right: []
       },
@@ -92,6 +93,15 @@ export class BaseLayoutComponent implements OnInit, OnDestroy {
       this.contextStore.notifications$().subscribe(item => { this.headerSection.notifications = { notifications: item.UNREAD }; })
     );
 
+    // this.subscriptions.add(
+    //   this.contextStore.innovation$().subscribe(e => {
+    //     Object.entries(e?.notifications || {}).forEach(([key, value]) => {
+    //       const leftSideMenu = this.leftSideBar.find(item => item.notificationKey === key);
+    //       if (leftSideMenu) { leftSideMenu.notifications = value; }
+    //     });
+    //   })
+    // );
+
   }
 
   ngOnDestroy(): void {
@@ -106,13 +116,13 @@ export class BaseLayoutComponent implements OnInit, OnDestroy {
     this.routeLayoutInfo = {
       type: routeData.layout?.type ?? 'full',
       chosenMenu: routeData.layout?.chosenMenu ?? null,
-      backgroundColor: routeData.layout?.backgroundColor ?? null
+      backgroundColor: routeData.layout?.backgroundColor ?? null,
     };
 
     console.log('EventData', event.url);
     // console.log('RouteLayoutData', this.routeLayoutInfo);
 
-    if (event.url.startsWith('/innovator/first-time-signin') || event.url.startsWith('/innovator/terms-of-use')) {
+    if (event.url.startsWith('/accessor/terms-of-use')) {
       this.headerSection.menuBarItems.left = [];
       this.headerSection.menuBarItems.right = [];
     } else {
@@ -121,27 +131,28 @@ export class BaseLayoutComponent implements OnInit, OnDestroy {
 
       switch (this.routeLayoutInfo.chosenMenu) {
 
-        case 'innovation':
+        case 'innovations':
           const innovation = this.contextStore.getInnovation();
-          this.pageLayout.context = { visible: true, innovation: { id: innovation.id, name: innovation.name } };
+          // Only shows link if not on needs assessment page.
+          const assessmentId = !event.url.endsWith(`assessments/${innovation.assessment?.id}`) ? innovation.assessment?.id : undefined;
+          this.pageLayout.context = { visible: true, innovation: { id: innovation.id, name: innovation.name, assessmentId } };
 
           this.pageLayout.sidebarItems = [
-            { label: 'Overview', url: `/innovator/innovations/${innovation.id}/overview` },
-            { label: 'Innovation record', url: `/innovator/innovations/${innovation.id}/record` },
-            { label: 'Action tracker', url: `/innovator/innovations/${innovation.id}/action-tracker` },
-            { label: 'Messages', url: `/innovator/innovations/${innovation.id}/threads` },
-            { label: 'Data sharing and support', url: `/innovator/innovations/${innovation.id}/support` },
-            { label: 'Activity log', url: `/innovator/innovations/${innovation.id}/activity-log` }
+            { label: 'Overview', url: `/accessor/innovations/${innovation.id}/overview` },
+            { label: 'Innovation record', url: `/accessor/innovations/${innovation.id}/record` },
+            { label: 'Action tracker', url: `/accessor/innovations/${innovation.id}/action-tracker` },
+            { label: 'Messages', url: `/accessor/innovations/${innovation.id}/threads` },
+            { label: 'Support status', url: `/accessor/innovations/${innovation.id}/support` },
+            { label: 'Activity log', url: `/accessor/innovations/${innovation.id}/activity-log` }
           ];
           break;
 
         case 'yourAccount':
           this.pageLayout.context = { visible: false, innovation: { id: '', name: '' } };
           this.pageLayout.sidebarItems = [
-            { label: 'Your details', url: `/innovator/account/manage-details` },
-            { label: 'Email notifications', url: `/innovator/account/email-notifications` },
-            { label: 'Manage innovations', url: `/innovator/account/manage-innovations` },
-            { label: 'Manage account', url: `/innovator/account/manage-account` }
+            { label: 'Your details', url: `/accessor/account/manage-details` },
+            { label: 'Email notifications', url: `/accessor/account/email-notifications` },
+            { label: 'Manage account', url: `/accessor/account/manage-account` }
           ];
           break;
 

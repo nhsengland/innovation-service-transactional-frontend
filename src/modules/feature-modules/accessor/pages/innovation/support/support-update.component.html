@@ -1,88 +1,76 @@
-<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-3">
+<theme-content-wrapper [status]="pageStatus">
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-        <p> {{ alert.message }} </p>
-      </theme-alert>
+      <form [formGroup]="form">
 
-      <h1> {{ pageTitle }} </h1>
+        <ng-container *ngIf="stepNumber === 1">
 
-      <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+          <div class="nhsuk-form-group">
+            <fieldset class="nhsuk-fieldset">
 
-      <ng-container *ngIf="pageStatus === 'READY'">
+              <legend class="nhsuk-fieldset__legend"> Choose a support status </legend>
 
-        <form [formGroup]="form">
-
-          <ng-container *ngIf="stepNumber === 1">
-
-            <div class="nhsuk-form-group">
-              <fieldset class="nhsuk-fieldset">
-
-                <legend class="nhsuk-fieldset__legend"> Choose a support status </legend>
-
-                <div class="nhsuk-radios">
-                  <div *ngFor="let item of supportStatus; let i = index" class="nhsuk-radios__item">
-                    <input formControlName="status" id="status{{ i }}" type="radio" name="status" [value]="item.key" class="nhsuk-radios__input" />
-                    <label for="status{{ i }}" class="nhsuk-label nhsuk-radios__label nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-2">
-                      <strong class="nhsuk-tag" [ngClass]="item.cssClass"> {{ item.label }} </strong>
-                    </label>
-                    <div class="nhsuk-hint nhsuk-radios__hint"> {{ item.description }} </div>
-                  </div>
+              <div class="nhsuk-radios">
+                <div *ngFor="let item of supportStatus; let i = index" class="nhsuk-radios__item">
+                  <input formControlName="status" id="status{{ i }}" type="radio" name="status" [value]="item.key" class="nhsuk-radios__input" />
+                  <label for="status{{ i }}" class="nhsuk-label nhsuk-radios__label nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-2">
+                    <strong class="nhsuk-tag" [ngClass]="item.cssClass"> {{ item.label }} </strong>
+                  </label>
+                  <div class="nhsuk-hint nhsuk-radios__hint"> {{ item.description }} </div>
                 </div>
+              </div>
 
-              </fieldset>
-            </div>
-
-            <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep()"> Continue </button>
-
-          </ng-container>
-
-
-          <ng-container *ngIf="stepNumber === 2">
-
-            <div class="nhsuk-heading-m">
-              <section class="d-flex align-items-center">
-                <div> You selected </div>
-                <strong class="nhsuk-tag nhsuk-u-margin-left-3" [ngClass]="currentStatus.cssClass"> {{ currentStatus.label }} </strong>
-              </section>
-            </div>
-
-            <p class="nhsuk-hint"> {{ currentStatus.description }} </p>
-
-            <theme-form-checkbox-array arrayName="accessors" label="Assign one or more accessors from {{ organisationUnit }}" [items]="accessorsList" [pageUniqueField]="false"></theme-form-checkbox-array>
-
-            <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
-
-          </ng-container>
-
-
-          <ng-container *ngIf="stepNumber === 3">
-
-            <p *ngIf="selectedAccessors.length > 0" class="nhsuk-heading-m nhsuk-u-margin-0"> You assigned </p>
-            <ul>
-              <li *ngFor="let item of selectedAccessors" class="d-flex align-items-center">
-                <theme-svg-icon type="success" class="nhsuk-u-margin-top-2 nhsuk-u-margin-right-1"></theme-svg-icon>
-                <div> {{ item.label }} </div>
-              </li>
-            </ul>
-
-            <theme-form-textarea controlName="comment" label="Let the innovator know what's changed" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
-
-            <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()"> Save and post comment </button>
-
-          </ng-container>
-
-          <div class="nhsuk-u-padding-bottom-5">
-            <a routerLink="/accessor/innovations/{{ innovationId }}/support"> Cancel </a>
+            </fieldset>
           </div>
 
-        </form>
+          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep()"> Continue </button>
 
-      </ng-container>
+        </ng-container>
+
+
+        <ng-container *ngIf="stepNumber === 2">
+
+          <div class="nhsuk-heading-m">
+            <section class="d-flex align-items-center">
+              <div> You selected </div>
+              <strong class="nhsuk-tag nhsuk-u-margin-left-3" [ngClass]="currentStatus.cssClass"> {{ currentStatus.label }} </strong>
+            </section>
+          </div>
+
+          <p class="nhsuk-hint"> {{ currentStatus.description }} </p>
+
+          <theme-form-checkbox-array arrayName="accessors" label="Assign one or more accessors from {{ organisationUnit }}" [items]="accessorsList" [pageUniqueField]="false"></theme-form-checkbox-array>
+
+          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
+
+        </ng-container>
+
+
+        <ng-container *ngIf="stepNumber === 3">
+
+          <p *ngIf="selectedAccessors.length > 0" class="nhsuk-heading-m nhsuk-u-margin-0"> You assigned </p>
+          <ul>
+            <li *ngFor="let item of selectedAccessors" class="d-flex align-items-center">
+              <theme-svg-icon type="success" class="nhsuk-u-margin-top-2 nhsuk-u-margin-right-1"></theme-svg-icon>
+              <div> {{ item.label }} </div>
+            </li>
+          </ul>
+
+          <theme-form-textarea controlName="comment" label="Let the innovator know what's changed" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
+
+          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()"> Save and post comment </button>
+
+        </ng-container>
+
+        <div class="nhsuk-u-padding-bottom-5">
+          <a routerLink="/accessor/innovations/{{ innovationId }}/support"> Cancel </a>
+        </div>
+
+      </form>
 
     </div>
   </div>
 
-</div>
+</theme-content-wrapper>

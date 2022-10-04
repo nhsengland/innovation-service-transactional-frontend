@@ -88,11 +88,11 @@ export class PageServiceUserNewComponent extends CoreComponent implements OnInit
     this.submitBtnClicked = true;
     const body = this.wizard.runOutboundParsing();
     this.securityConfirmation.code = this.form.get('code')!.value;
-    this.serviceUsersService.createUser(body, this.securityConfirmation).subscribe(
-      response => {
+    this.serviceUsersService.createUser(body, this.securityConfirmation).subscribe({
+      next: response => {
         this.redirectTo(`admin/service-users/${response.id}`, { alert: 'userCreationSuccess' });
       },
-      (error) => {
+      error: (error) => {
         this.submitBtnClicked = false;
 
         if (!this.securityConfirmation.id && error.id) {
@@ -106,7 +106,7 @@ export class PageServiceUserNewComponent extends CoreComponent implements OnInit
         }
 
       }
-    );
+    });
 
   }
 

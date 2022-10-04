@@ -38,7 +38,7 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
   ) {
 
     super();
-    this.setPageTitle('Innovation needs assessment overview');
+    this.setPageTitle('Needs assessment overview');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
@@ -111,19 +111,10 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
         }
       ];
 
+      // this.setBackLink('Go back', `/innovator/innovations/${this.innovationId}`);
       this.setPageStatus('READY');
 
-    },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch needs assessment overview',
-          message: 'Please try again or contact us for further help'
-        };
-      }
-
-    );
+    });
 
   }
 

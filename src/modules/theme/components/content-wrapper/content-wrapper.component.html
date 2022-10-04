@@ -1,11 +1,11 @@
 <theme-spinner *ngIf="status === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-<ng-container *ngIf="status === 'READY'">
+<div *ngIf="status === 'READY'" aria-live="polite">
   <ng-content></ng-content>
-</ng-container>
+</div>
 
-<ng-container *ngIf="status === 'ERROR'">
+<div *ngIf="status === 'ERROR'" aria-live="polite">
   <div>
     Opps....
   </div>
-</ng-container>
+</div>

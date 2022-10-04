@@ -70,27 +70,17 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     } else {
 
-      this.accessorService.getInnovationSupportInfo(this.innovationId, this.supportId).subscribe(
-        response => {
+      this.accessorService.getInnovationSupportInfo(this.innovationId, this.supportId).subscribe(response => {
 
-          this.form.get('status')!.setValue(response.status);
+        this.form.get('status')!.setValue(response.status);
 
-          response.accessors.forEach(accessor => {
-            (this.form.get('accessors') as FormArray).push(new UntypedFormControl(accessor.id));
-          });
+        response.accessors.forEach(accessor => {
+          (this.form.get('accessors') as FormArray).push(new UntypedFormControl(accessor.id));
+        });
 
-          this.setPageStatus('READY');
+        this.setPageStatus('READY');
 
-        },
-        () => {
-          this.setPageStatus('ERROR');
-          this.alert = {
-            type: 'ERROR',
-            title: 'Unable to fetch support information',
-            message: 'Please try again or contact us for further help'
-          };
-        }
-      );
+      });
     }
 
     this.accessorService.getAccessorsList().subscribe(
@@ -124,17 +114,10 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     if (this.stepNumber === 2 && this.currentStatus === this.supportStatusObj.ENGAGING) {
 
       if (this.selectedAccessors.length === 0) {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error has occurred when updating Status',
-          message: 'You must select at least one Accessor.',
-          setFocus: true
-        };
-
+        this.setAlertError('An error has occurred when updating Status. You must select at least one Accessor.');
         return;
-
       } else {
-        this.alert = { type: null };
+        this.resetAlert();
       }
 
     }
@@ -154,14 +137,13 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     if (!this.validateForm(this.stepNumber)) { return; }
 
-    this.accessorService.saveSupportStatus(this.innovationId, this.form.value, this.supportId).subscribe(
-      response => {
-        this.redirectTo(`/accessor/innovations/${this.innovationId}/support`, { alert: 'supportUpdateSuccess' });
+    this.accessorService.saveSupportStatus(this.innovationId, this.form.value, this.supportId).subscribe({
+      next: response => {
+        this.setRedirectAlertSuccess('Support status updated', { message: 'You\'ve updated your support status and posted a comment to the innovator.' });
+        this.redirectTo(`/accessor/innovations/${this.innovationId}/support`);
       },
-      error => {
-        this.logger.error(error);
-      }
-    );
+      error: error => this.setAlertUnknownError()
+    });
 
   }
 
@@ -170,32 +152,22 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     switch (step) {
       case 1:
         if (!this.form.get('status')!.valid) {
-          this.alert = {
-            type: 'ERROR',
-            title: 'An error has occurred when updating Status',
-            message: 'You must select a status.',
-            setFocus: true
-          };
+          this.setAlertError('An error has occurred when updating Status. You must select a status.');
           return false;
         } else {
-          this.alert = { type: null };
+          this.resetAlert();
         }
         break;
+
       case 3:
-
         if (!this.form.get('comment')!.valid && this.form.get('status')!.value !== 'WAITING') {
-          this.alert = {
-            type: 'ERROR',
-            title: 'An error has occurred when updating the Comment',
-            message: 'You must add a Comment.',
-            setFocus: true
-          };
+          this.setAlertError('An error has occurred when updating the comment. You must add a Comment.');
           return false;
         } else {
-          this.alert = { type: null };
+          this.resetAlert();
         }
-
         break;
+
       default:
         break;
     }

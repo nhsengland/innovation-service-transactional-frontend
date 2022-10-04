@@ -26,7 +26,6 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
   ) {
 
     super();
-    this.setPageTitle('Actions');
 
     this.tabs = [
       {
@@ -86,20 +85,14 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
     this.setPageStatus('LOADING');
 
-    this.accessorService.getActionsList(this.actionsList.getAPIQueryParams()).subscribe(
-      response => {
-        this.actionsList.setData(response.data, response.count);
-        this.currentTab.description = `${response.count} ${this.tabs[this.currentTab.index].title.toLowerCase()} created by you`;
-        this.setPageStatus('READY');
-      },
-      error => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch actions information',
-          message: 'Please try again or contact us for further help'
-        };
-      }
+    this.accessorService.getActionsList(this.actionsList.getAPIQueryParams()).subscribe(response => {
+      this.actionsList.setData(response.data, response.count);
+      this.currentTab.description = `${response.count} ${this.tabs[this.currentTab.index].title.toLowerCase()} created by you`;
+
+      this.setPageTitle('Actions');
+      this.setPageStatus('READY');
+    }
+
     );
 
   }

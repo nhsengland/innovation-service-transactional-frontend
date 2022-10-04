@@ -122,19 +122,10 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
         }
       ];
 
+      // this.setBackLink('Go back', `/accessor/innovations/${this.innovationId}`);
       this.setPageStatus('READY');
 
-    },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch needs assessment overview',
-          message: 'Please try again or contact us for further help'
-        };
-      }
-
-    );
+    });
 
   }
 

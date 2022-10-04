@@ -1,18 +1,4 @@
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
-
-    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-      <p> {{ alert.message }} </p>
-    </theme-alert>
-
-    <h1> {{ pageTitle }} </h1>
-
-    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-  </div>
-</div>
-
-<ng-container *ngIf="pageStatus === 'READY'">
+<theme-content-wrapper [status]="pageStatus">
 
   <form [formGroup]="form">
 
@@ -58,4 +44,4 @@
 
   </form>
 
-</ng-container>
+</theme-content-wrapper>
