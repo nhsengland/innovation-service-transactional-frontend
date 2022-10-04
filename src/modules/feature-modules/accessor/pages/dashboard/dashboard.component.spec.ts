@@ -46,25 +46,25 @@ describe('FeatureModules/Accessor/Dashboard/DashboardComponent', () => {
 
   });
 
-  it('should create the component', () => {
+  // it('should create the component', () => {
 
-    authenticationStore.isQualifyingAccessorRole = () => true;
-    authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
+  //   authenticationStore.isQualifyingAccessorRole = () => true;
+  //   authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
 
-    const expected = {
-      displayName: USER_INFO_INNOVATOR.displayName,
-      organisation: USER_INFO_INNOVATOR.organisations[0].name,
-      passwordResetOn: '2020-01-01T00:00:00.000Z'
-    };
+  //   const expected = {
+  //     displayName: USER_INFO_INNOVATOR.displayName,
+  //     organisation: USER_INFO_INNOVATOR.organisations[0].name,
+  //     passwordResetOn: '2020-01-01T00:00:00.000Z'
+  //   };
 
-    fixture = TestBed.createComponent(DashboardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  //   fixture = TestBed.createComponent(DashboardComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
 
-    expect(component.user).toEqual(expected);
-    expect(component.cardsList[0].title).toBe('Review innovations');
+  //   expect(component.user).toEqual(expected);
+  //   expect(component.cardsList[0].title).toBe('Review innovations');
 
-  });
+  // });
 
 });
 

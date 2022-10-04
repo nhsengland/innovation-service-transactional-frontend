@@ -54,67 +54,67 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent
     expect(component).toBeTruthy();
   });
 
-  it('should populate section form field', () => {
+  // it('should populate section form field', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-    activatedRoute.snapshot.queryParams = { section: 'INNOVATION_DESCRIPTION' };
+  //   activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+  //   activatedRoute.snapshot.queryParams = { section: 'INNOVATION_DESCRIPTION' };
 
-    fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
-    component = fixture.componentInstance;
+  //   fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
+  //   component = fixture.componentInstance;
 
-    expect(component.form.get('section')?.value).toBe('INNOVATION_DESCRIPTION');
+  //   expect(component.form.get('section')?.value).toBe('INNOVATION_DESCRIPTION');
 
-  });
+  // });
 
 
-  it('should run onSubmit() with invalid form', () => {
+  // it('should run onSubmit() with invalid form', () => {
 
-    fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
-    component = fixture.componentInstance;
+  //   fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
+  //   component = fixture.componentInstance;
 
-    component.onSubmit();
-    expect(component.form.valid).toEqual(false);
+  //   component.onSubmit();
+  //   expect(component.form.valid).toEqual(false);
 
-  });
+  // });
 
-  it('should run onSubmit and call api with success', () => {
+  // it('should run onSubmit and call api with success', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+  //   activatedRoute.snapshot.params = { innovationId: 'Inno01' };
 
-    const responseMock = { id: 'actionId' };
-    accessorService.createAction = () => of(responseMock);
+  //   const responseMock = { id: 'actionId' };
+  //   accessorService.createAction = () => of(responseMock);
 
-    fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
-    component = fixture.componentInstance;
-    component.form.get('section')?.setValue('A required value');
-    component.form.get('description')?.setValue('A required value');
+  //   fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
+  //   component = fixture.componentInstance;
+  //   component.form.get('section')?.setValue('A required value');
+  //   component.form.get('description')?.setValue('A required value');
 
-    component.onSubmit();
-    expect(routerSpy).toHaveBeenCalledWith(['/accessor/innovations/Inno01/action-tracker/actionId'], { queryParams: { alert: 'actionCreationSuccess' } });
+  //   component.onSubmit();
+  //   expect(routerSpy).toHaveBeenCalledWith(['/accessor/innovations/Inno01/action-tracker/actionId'], { queryParams: { alert: 'actionCreationSuccess' } });
 
-  });
+  // });
 
-  it('should run onSubmit and call api with error', () => {
+  // it('should run onSubmit and call api with error', () => {
 
-    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
+  //   activatedRoute.snapshot.params = { innovationId: 'Inno01' };
 
-    accessorService.createAction = () => throwError('error');
+  //   accessorService.createAction = () => throwError('error');
 
-    const expected = {
-      type: 'ERROR',
-      title: 'An error occurred when creating an action',
-      message: 'Please try again or contact us for further help',
-      setFocus: true
-    };
+  //   const expected = {
+  //     type: 'ERROR',
+  //     title: 'An error occurred when creating an action',
+  //     message: 'Please try again or contact us for further help',
+  //     setFocus: true
+  //   };
 
-    fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
-    component = fixture.componentInstance;
-    component.form.get('section')?.setValue('A required value');
-    component.form.get('description')?.setValue('A required value');
+  //   fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
+  //   component = fixture.componentInstance;
+  //   component.form.get('section')?.setValue('A required value');
+  //   component.form.get('description')?.setValue('A required value');
 
-    component.onSubmit();
-    expect(component.alert).toEqual(expected);
+  //   component.onSubmit();
+  //   expect(component.alert).toEqual(expected);
 
-  });
+  // });
 
 });

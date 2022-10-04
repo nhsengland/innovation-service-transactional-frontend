@@ -49,19 +49,10 @@ export class PageTermsOfUseAcceptanceComponent extends CoreComponent implements 
 
   ngOnInit(): void {
 
-    this.termsOfUserService.getTermsOfUseLastVersionInfo().subscribe(
-      response => {
-        this.termsOfUseVersion = { id: response.id, summary: response.summary, name: response.name };
-        this.setPageStatus('READY');
-      },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to retrieve information',
-          message: 'Please try again or contact us for further help'
-        };
-      });
+    this.termsOfUserService.getTermsOfUseLastVersionInfo().subscribe(response => {
+      this.termsOfUseVersion = { id: response.id, summary: response.summary, name: response.name };
+      this.setPageStatus('READY');
+    });
 
   }
 
@@ -69,15 +60,11 @@ export class PageTermsOfUseAcceptanceComponent extends CoreComponent implements 
 
     this.alert = { type: null };
 
-    this.termsOfUserService.acceptTermsOfUseVersion(this.termsOfUseVersion.id).subscribe(
-      () => { window.location.assign(`${this.appUrl}/dashboard`); },
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to save terms of use',
-          message: 'Please try again or contact us for further help'
-        };
-      });
+    this.termsOfUserService.acceptTermsOfUseVersion(this.termsOfUseVersion.id).subscribe({
+      next: () => { window.location.assign(`${this.appUrl}/dashboard`); },
+      error: () => this.setAlertError('Unable to save terms of use. Please try again or contact us for further help')
+    });
+
   }
 
 }

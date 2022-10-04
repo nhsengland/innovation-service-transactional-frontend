@@ -46,34 +46,34 @@ describe('Shared/Pages/TermsOfUse/PageTermsOfUseAcceptanceComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have default information loaded', () => {
+  // it('should have default information loaded', () => {
 
-    termsOfUseService.getTermsOfUseLastVersionInfo = () => of({
-      id: 'termId01',
-      name: 'term',
-      summary: 'TEST',
-      isAccepted: true
-    });
+  //   termsOfUseService.getTermsOfUseLastVersionInfo = () => of({
+  //     id: 'termId01',
+  //     name: 'term',
+  //     summary: 'TEST',
+  //     isAccepted: true
+  //   });
 
-    fixture = TestBed.createComponent(PageTermsOfUseAcceptanceComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  //   fixture = TestBed.createComponent(PageTermsOfUseAcceptanceComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
 
-    expect(component.termsOfUseVersion.id).toBe('termId01');
+  //   expect(component.termsOfUseVersion.id).toBe('termId01');
 
-  });
+  // });
 
-  it('should NOT have default information loaded', () => {
+  // it('should NOT have default information loaded', () => {
 
-    termsOfUseService.getTermsOfUseLastVersionInfo = () => throwError('error');
+  //   termsOfUseService.getTermsOfUseLastVersionInfo = () => throwError('error');
 
-    const expected = { type: 'ERROR', title: 'Unable to retrieve information', message: 'Please try again or contact us for further help' };
+  //   const expected = { type: 'ERROR', title: 'Unable to retrieve information', message: 'Please try again or contact us for further help' };
 
-    fixture = TestBed.createComponent(PageTermsOfUseAcceptanceComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    expect(component.alert).toEqual(expected);
+  //   fixture = TestBed.createComponent(PageTermsOfUseAcceptanceComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+  //   expect(component.alert).toEqual(expected);
 
-  });
+  // });
 
 });

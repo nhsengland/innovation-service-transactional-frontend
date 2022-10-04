@@ -1,26 +1,11 @@
-<div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
-  <div class="nhsuk-grid-column-one-half">
-    <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation.name }}</h1>
-  </div>
-  <div *ngIf="innovation.assessment.id" class="nhsuk-grid-column-one-half text-align-right">
-    <a routerLink="/accessor/innovations/{{ innovationId }}/assessments/{{ innovation.assessment.id }}"> View needs assessment </a>
-  </div>
-</div>
-<hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
-<div *ngIf="innovation.lockedInnovatorValidation?.displayIsInnovatorLocked" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
-  <div class="nhsuk-heading-m nhsuk-warning-callout__label">
-    <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
-  </div>
-  <p> Please note that the innovator {{ innovation.lockedInnovatorValidation?.innovatorName  }} is currently locked. </p>
-</div>
+<theme-content-wrapper [status]="pageStatus">
 
-<theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-  <p> {{ alert.message }} </p>
-</theme-alert>
-
-<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-<ng-container *ngIf="pageStatus === 'READY'">
+  <div *ngIf="innovation.lockedInnovatorValidation?.displayIsInnovatorLocked" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+    <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+      <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
+    </div>
+    <p> Please note that the innovator {{ innovation.lockedInnovatorValidation?.innovatorName  }} is currently locked. </p>
+  </div>
 
   <p class="nhsuk-heading-s nhsuk-u-margin-bottom-2">{{ innovationSupport.organisationUnit }}</p>
   <hr class="nhsuk-section-break nhsuk-section-break--visible" />
@@ -45,4 +30,4 @@
     </div>
   </dl>
 
-</ng-container>
+</theme-content-wrapper>

@@ -3,7 +3,7 @@ import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormControl, FormGroup, FormEngineHelper } from '@app/base/forms';
+import { CustomValidators, FormGroup, FormEngineHelper } from '@app/base/forms';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 import { AccessorService } from '../../../services/accessor.service';
@@ -57,19 +57,14 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
 
   ngOnInit(): void {
 
-    this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
-      response => {
+    this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(response => {
 
-        this.actionDisplayId = response.displayId;
+      this.actionDisplayId = response.displayId;
 
-        this.setPageStatus('READY');
+      this.setPageTitle(response.name, { hint: response.displayId });
+      this.setPageStatus('READY');
 
-      },
-      () => {
-        this.setPageStatus('ERROR');
-        this.setAlertUnknownError();
-      }
-    );
+    });
 
   }
 
@@ -82,20 +77,15 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
       return;
     }
 
-    this.accessorService.updateAction(this.innovationId, this.actionId, this.form.value).subscribe(
-      response => {
+    this.accessorService.updateAction(this.innovationId, this.actionId, this.form.value).subscribe({
+      next: response => {
         const status = this.form.get('status')!.value as InnovationActionStatusEnum;
-        this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionUpdateSuccess', status: this.statusItems.find(item => item.value === status)?.label });
+        this.setRedirectAlertSuccess(`You have updated the status of this action to '${this.statusItems.find(item => item.value === status)?.label}'`, { message: 'The innovator will be notified of this status change' });
+        this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`);
       },
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when creating an action',
-          message: 'Please try again or contact us for further help',
-          setFocus: true
-        };
-      }
-    );
+      error: () => this.setAlertError('An error occurred when updating an action. Please try again or contact us for further help')
+
+    });
 
   }
 

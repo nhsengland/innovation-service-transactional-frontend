@@ -97,35 +97,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.setPageTitle(this.section.title);
 
-    // switch (this.activatedRoute.snapshot.queryParams.alert) {
-    //   case 'sectionUpdateSuccess':
-    //     this.section.nextSectionId = this.getNextSectionId();
-    //     this.alert = { type: 'SUCCESS', title: 'Your answers have been confirmed for this section', message: this.section.nextSectionId ? 'Go to next section or return to the full innovation record' : undefined };
-    //     break;
-
-    //   case 'sectionUpdateError':
-    //     this.alert = { type: 'ERROR', title: 'An error occurred when saving your section', message: 'Please try again or contact us for further help.' };
-    //     break;
-
-    //   case 'evidenceUpdateSuccess':
-    //     this.alert = { type: 'SUCCESS', title: 'Your evidence has been saved', message: 'You need to submit this section for review to notify your supporting accessor(s).' };
-    //     break;
-
-    //   case 'evidenceDeleteSuccess':
-    //     this.alert = { type: 'WARNING', title: 'Your evidence has been deleted' };
-    //     break;
-
-    //   case 'evidenceUpdateError':
-    //   case 'evidenceDeleteError':
-    //     this.alert = { type: 'ERROR', title: 'An error occurred when saving your evidence', message: 'Please try again or contact us for further help.' };
-    //     break;
-
-    //   default:
-    //     this.alert = { type: null };
-    //     break;
-    // }
-
-
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
       next: response => {
 
@@ -133,7 +104,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
         this.section.nextSectionId = this.section.status.id === 'SUBMITTED' ? this.getNextSectionId() : null;
 
-        this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data)).runRules();
+        this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data));
 
         const validInformation = this.section.wizard.validateDataLegacy();
         this.section.showSubmitButton = validInformation.valid && ['DRAFT'].includes(this.section.status.id);

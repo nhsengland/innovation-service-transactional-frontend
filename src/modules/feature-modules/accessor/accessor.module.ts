@@ -4,7 +4,10 @@ import { ThemeModule } from '@modules/theme/theme.module';
 import { SharedModule } from '@modules/shared/shared.module';
 
 import { AccessorRoutingModule } from './accessor-routing.module';
-import { AccessorLayoutComponent } from './base/accessor-layout.component';
+
+// Layouts.
+import { BaseLayoutComponent } from './base/base-layout.component';
+// import { AccessorLayoutComponent } from './base/accessor-layout.component';
 
 // Pages.
 // // Account.
@@ -33,12 +36,19 @@ import { InnovationsReviewComponent } from './pages/innovations/innovations-revi
 import { AccessorService } from './services/accessor.service';
 
 // Resolvers.
+import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 
 @NgModule({
-  imports: [ThemeModule, SharedModule, AccessorRoutingModule],
+  imports: [
+    ThemeModule,
+    SharedModule,
+
+    AccessorRoutingModule
+  ],
   declarations: [
-    AccessorLayoutComponent,
+    BaseLayoutComponent,
+    // AccessorLayoutComponent,
 
     // Pages.
     // // Account.
@@ -67,6 +77,7 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     AccessorService,
 
     // Resolvers.
+    InnovationActionDataResolver,
     InnovationDataResolver
   ]
 })

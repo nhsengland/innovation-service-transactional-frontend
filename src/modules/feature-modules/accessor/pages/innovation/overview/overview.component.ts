@@ -48,41 +48,30 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    this.accessorService.getInnovationInfo(this.innovationId).subscribe(
-      response => {
+    this.accessorService.getInnovationInfo(this.innovationId).subscribe(response => {
 
-        this.innovationSupport = {
-          organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-          status: response.support?.status || 'UNASSIGNED'
-        };
-        this.innovationSummary = [
-          { label: 'Innovator name', value: response.contact.name },
-          { label: 'Company name', value: response.summary.company },
-          { label: 'Company size', value: response.summary.companySize },
-          { label: 'Location', value: `${response.summary.countryName}${response.summary.postCode ? ', ' + response.summary.postCode : ''}` },
-          { label: 'Description', value: response.summary.description },
-          { label: 'Categories', value: response.summary.categories.map(v => v === 'OTHER' ? response.summary.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
-        ];
+      this.innovationSupport = {
+        organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
+        status: response.support?.status || 'UNASSIGNED'
+      };
+      this.innovationSummary = [
+        { label: 'Innovator name', value: response.contact.name },
+        { label: 'Company name', value: response.summary.company },
+        { label: 'Company size', value: response.summary.companySize },
+        { label: 'Location', value: `${response.summary.countryName}${response.summary.postCode ? ', ' + response.summary.postCode : ''}` },
+        { label: 'Description', value: response.summary.description },
+        { label: 'Categories', value: response.summary.categories.map(v => v === 'OTHER' ? response.summary.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
+      ];
 
-        this.stores.context.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+      this.stores.context.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
 
-        if (response.support?.id) {
-          this.stores.context.dismissNotification(NotificationContextTypeEnum.SUPPORT, response.support.id);
-        }
-
-        this.setPageStatus('READY');
-
-      },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch innovation record information',
-          message: 'Please try again or contact us for further help'
-        };
+      if (response.support?.id) {
+        this.stores.context.dismissNotification(NotificationContextTypeEnum.SUPPORT, response.support.id);
       }
-    );
 
+      this.setPageStatus('READY');
+
+    });
 
   }
 

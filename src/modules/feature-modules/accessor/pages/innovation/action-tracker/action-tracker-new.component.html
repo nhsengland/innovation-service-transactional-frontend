@@ -1,16 +1,4 @@
-<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-3">
-
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-
-      <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-        <p> {{ alert.message }} </p>
-      </theme-alert>
-
-      <h1 class="nhsuk-u-margin-bottom-3"> {{ pageTitle }} </h1>
-
-    </div>
-  </div>
+<theme-content-wrapper [status]="pageStatus">
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
@@ -27,4 +15,4 @@
     </div>
   </div>
 
-</div>
+</theme-content-wrapper>

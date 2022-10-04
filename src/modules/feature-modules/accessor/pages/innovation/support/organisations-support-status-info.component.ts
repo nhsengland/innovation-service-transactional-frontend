@@ -47,7 +47,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
   ) {
 
     super();
-    this.setPageTitle('Support status');
+    this.setPageTitle('Support status', { hint: 'All organisations' });
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
@@ -98,16 +98,8 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
 
       this.setPageStatus('READY');
 
-    },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch innovation record information',
-          message: 'Please try again or contact us for further help'
-        };
-      }
-    );
+    });
+
   }
 
 

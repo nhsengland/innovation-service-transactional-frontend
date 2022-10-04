@@ -43,25 +43,6 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'supportUpdateSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'Support status updated',
-          message: 'You\'ve updated your support status and posted a comment to the innovator.'
-        };
-        break;
-      case 'supportOrganisationSuggestSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'Organisation suggestions sent',
-          message: 'Your suggestions were saved and notifications sent.'
-        };
-        break;
-      default:
-        break;
-    }
-
   }
 
 
@@ -73,25 +54,17 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
       this.setPageStatus('READY');
 
-    } else  {
-      this.accessorService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id).subscribe(
-        response => {
+    } else {
 
-          this.innovationSupport.accessors = (response.accessors).map(item => item.name).join(', ');
-          this.innovationSupport.status = response.status;
+      this.accessorService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id).subscribe(response => {
 
-          this.setPageStatus('READY');
+        this.innovationSupport.accessors = (response.accessors).map(item => item.name).join(', ');
+        this.innovationSupport.status = response.status;
 
-        },
-        () => {
-          this.setPageStatus('ERROR');
-          this.alert = {
-            type: 'ERROR',
-            title: 'Unable to fetch support information',
-            message: 'Please try again or contact us for further help'
-          };
-        }
-      );
+        this.setPageStatus('READY');
+
+      });
+
     }
 
   }

@@ -54,162 +54,162 @@ describe('FeatureModules/Accessor/Actions/FilterActionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should run getActionsList() with error', () => {
+  // it('should run getActionsList() with error', () => {
 
-    accessorService.getAdvanceActionsList = () => throwError(false);
+  //   accessorService.getAdvanceActionsList = () => throwError(false);
 
-    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-    component = fixture.componentInstance;
+  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+  //   component = fixture.componentInstance;
 
-    component.getActionsList();
-    fixture.detectChanges();
-    expect(component.actionsList.getRecords()).toEqual([]);
+  //   component.getActionsList();
+  //   fixture.detectChanges();
+  //   expect(component.actionsList.getRecords()).toEqual([]);
 
-  });
+  // });
 
-  it('should run onTableOrder()', () => {
+  // it('should run onTableOrder()', () => {
 
-    const dataMock = { count: 0, data: [] };
+  //   const dataMock = { count: 0, data: [] };
 
-    accessorService.getAdvanceActionsList = () => of(dataMock as any);
+  //   accessorService.getAdvanceActionsList = () => of(dataMock as any);
 
-    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
 
-    component.onTableOrder('name');
-    expect(component.actionsList.orderBy).toEqual('name');
+  //   component.onTableOrder('name');
+  //   expect(component.actionsList.orderBy).toEqual('name');
 
-  });
+  // });
 
-  it('should run onOpenCloseFilter() and do nothing with an invalid key', () => {
+  // it('should run onOpenCloseFilter() and do nothing with an invalid key', () => {
 
-    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-    component = fixture.componentInstance;
-    component.filters[0].showHideStatus = 'closed' as any;
+  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+  //   component = fixture.componentInstance;
+  //   component.filters[0].showHideStatus = 'closed' as any;
 
-    component.onOpenCloseFilter('invalidKey' as any);
-    expect(component.filters[0].showHideStatus).toBe('closed');
+  //   component.onOpenCloseFilter('invalidKey' as any);
+  //   expect(component.filters[0].showHideStatus).toBe('closed');
 
-  });
-  it('should run onOpenCloseFilter() and do nothing with an invalid status', () => {
+  // });
+  // it('should run onOpenCloseFilter() and do nothing with an invalid status', () => {
 
-    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-    component = fixture.componentInstance;
-    component.filters[0].showHideStatus = 'invalid status' as any;
+  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+  //   component = fixture.componentInstance;
+  //   component.filters[0].showHideStatus = 'invalid status' as any;
 
-    component.onOpenCloseFilter('innovationStatus');
-    expect(component.filters[0].showHideStatus).toBe('invalid status');
+  //   component.onOpenCloseFilter('innovationStatus');
+  //   expect(component.filters[0].showHideStatus).toBe('invalid status');
 
-  });
+  // });
 
 
-  it('should run onOpenCloseFilter() and close the filter', () => {
+  // it('should run onOpenCloseFilter() and close the filter', () => {
 
-    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-    component = fixture.componentInstance;
-    component.filters[0].showHideStatus = 'opened';
+  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+  //   component = fixture.componentInstance;
+  //   component.filters[0].showHideStatus = 'opened';
 
-    component.onOpenCloseFilter('innovationStatus');
-    expect(component.filters[0].showHideStatus).toBe('closed');
+  //   component.onOpenCloseFilter('innovationStatus');
+  //   expect(component.filters[0].showHideStatus).toBe('closed');
 
-  });
+  // });
 
-  it('should run onOpenCloseFilter() and open the filter', () => {
+  // it('should run onOpenCloseFilter() and open the filter', () => {
 
-    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-    component = fixture.componentInstance;
-    component.filters[0].showHideStatus = 'closed';
+  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+  //   component = fixture.componentInstance;
+  //   component.filters[0].showHideStatus = 'closed';
 
-    component.onOpenCloseFilter('innovationStatus');
-    expect(component.filters[0].showHideStatus).toBe('opened');
+  //   component.onOpenCloseFilter('innovationStatus');
+  //   expect(component.filters[0].showHideStatus).toBe('opened');
 
-  });
+  // });
 
-  it('should run onTableOrder()', () => {
+  // it('should run onTableOrder()', () => {
 
-    accessorService.getActionsList = () => of({ count: 0, data: [] });
+  //   accessorService.getActionsList = () => of({ count: 0, data: [] });
 
-    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-    component = fixture.componentInstance;
+  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+  //   component = fixture.componentInstance;
 
-    fixture.detectChanges();
-    component.onTableOrder('name');
-    expect(component.actionsList.orderBy).toEqual('name');
+  //   fixture.detectChanges();
+  //   component.onTableOrder('name');
+  //   expect(component.actionsList.orderBy).toEqual('name');
 
-  });
+  // });
 
-  it('should run onPageChange()', () => {
+  // it('should run onPageChange()', () => {
 
-    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
 
-    component.onPageChange({ pageNumber: 2 });
-    expect(component.actionsList.page).toBe(2);
+  //   component.onPageChange({ pageNumber: 2 });
+  //   expect(component.actionsList.page).toBe(2);
 
-  });
+  // });
 
-  it('should run onFormChange()', fakeAsync(() => {
+  // it('should run onFormChange()', fakeAsync(() => {
 
-    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
 
-    component.form.get('search')?.setValue('A search text');
-    (component.form.get('innovationStatus') as FormArray).push(new FormControl('IN_REVIEW'));
+  //   component.form.get('search')?.setValue('A search text');
+  //   (component.form.get('innovationStatus') as FormArray).push(new FormControl('IN_REVIEW'));
 
-    tick(500); // Needed because of the debounce on the form.
+  //   tick(500); // Needed because of the debounce on the form.
 
-    expect(component.actionsList.filters).toEqual({
-      name: 'A search text',
-      innovationStatus: ['IN_REVIEW'],
-      innovationSection: []
-    });
+  //   expect(component.actionsList.filters).toEqual({
+  //     name: 'A search text',
+  //     innovationStatus: ['IN_REVIEW'],
+  //     innovationSection: []
+  //   });
 
-  }));
+  // }));
 
-  it('should run onFormChange()', fakeAsync(() => {
+  // it('should run onFormChange()', fakeAsync(() => {
 
-    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
 
-    component.form.get('search')?.setValue('A search text');
-    (component.form.get('innovationSection') as FormArray).push(new FormControl('VALUE_PROPOSITION'));
+  //   component.form.get('search')?.setValue('A search text');
+  //   (component.form.get('innovationSection') as FormArray).push(new FormControl('VALUE_PROPOSITION'));
 
-    tick(500); // Needed because of the debounce on the form.
+  //   tick(500); // Needed because of the debounce on the form.
 
-    expect(component.actionsList.filters).toEqual({
-      name: 'A search text',
-      innovationStatus: [],
-      innovationSection: ['VALUE_PROPOSITION']
-    });
+  //   expect(component.actionsList.filters).toEqual({
+  //     name: 'A search text',
+  //     innovationStatus: [],
+  //     innovationSection: ['VALUE_PROPOSITION']
+  //   });
 
-  }));
+  // }));
 
-  it('should run onRemoveFilter() with a invalid value', () => {
+  // it('should run onRemoveFilter() with a invalid value', () => {
 
-    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-    component = fixture.componentInstance;
-    (component.form.get('innovationSection') as FormArray).push(new FormControl('VALUE_PROPOSITION'));
+  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+  //   component = fixture.componentInstance;
+  //   (component.form.get('innovationSection') as FormArray).push(new FormControl('VALUE_PROPOSITION'));
 
-    fixture.detectChanges();
-    component.onRemoveFilter('innovationSection', 'INVALID VALUE');
-    expect((component.form.get('innovationSection') as FormArray).length).toBe(1);
+  //   fixture.detectChanges();
+  //   component.onRemoveFilter('innovationSection', 'INVALID VALUE');
+  //   expect((component.form.get('innovationSection') as FormArray).length).toBe(1);
 
-  });
+  // });
 
-  it('should run onRemoveFilter()', () => {
+  // it('should run onRemoveFilter()', () => {
 
-    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
-    component = fixture.componentInstance;
-    (component.form.get('innovationSection') as FormArray).push(new FormControl('VALUE_PROPOSITION'));
+  //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+  //   component = fixture.componentInstance;
+  //   (component.form.get('innovationSection') as FormArray).push(new FormControl('VALUE_PROPOSITION'));
 
-    fixture.detectChanges();
-    component.onRemoveFilter('innovationSection', 'VALUE_PROPOSITION');
-    expect((component.form.get('innovationSection') as FormArray).length).toBe(0);
+  //   fixture.detectChanges();
+  //   component.onRemoveFilter('innovationSection', 'VALUE_PROPOSITION');
+  //   expect((component.form.get('innovationSection') as FormArray).length).toBe(0);
 
-  });
+  // });
 
 });

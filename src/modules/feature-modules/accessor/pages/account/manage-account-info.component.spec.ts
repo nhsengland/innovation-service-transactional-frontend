@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
-import { USER_INFO_ACCESSOR, USER_INFO_ADMIN } from '@tests/data.mocks';
+import { USER_INFO_ACCESSOR } from '@tests/data.mocks';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
@@ -33,6 +33,7 @@ describe('FeatureModules/Accessor/Pages/Account?ManageAccount/PageAccessorAccoun
     authenticationStore = TestBed.inject(AuthenticationStore);
     authenticationStore.getUserInfo = () => USER_INFO_ACCESSOR;
   });
+
   it('should create the component', () => {
     fixture = TestBed.createComponent(
       PageAccessorAccountManageAccountInfoComponent
@@ -40,4 +41,5 @@ describe('FeatureModules/Accessor/Pages/Account?ManageAccount/PageAccessorAccoun
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
+
 });

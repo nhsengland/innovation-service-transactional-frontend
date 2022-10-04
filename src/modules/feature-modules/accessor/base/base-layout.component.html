@@ -7,8 +7,11 @@
     <div class="nhsuk-width-container app-width-container">
 
       <div *ngIf="pageLayout.context.visible" class="nhsuk-u-padding-top-3">
-        <div class="d-flex align-items-center justify-content-space-between">
-          <p class="nhsuk-heading-l nhsuk-u-margin-bottom-3">{{ pageLayout.context.innovation.name }}</p>
+        <div class="d-flex align-items-center justify-content-space-between nhsuk-u-padding-bottom-3">
+          <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ pageLayout.context.innovation.name }}</p>
+          <div *ngIf="pageLayout.context.innovation.assessmentId">
+            <a routerLink="/accessor/innovations/{{ pageLayout.context.innovation.id }}/assessments/{{ pageLayout.context.innovation.assessmentId}}">View needs assessment</a>
+          </div>
         </div>
         <hr class="nhsuk-section-break nhsuk-section-break--visible" />
       </div>
@@ -95,14 +98,14 @@
 
           <!-- <div class="nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5"> -->
 
-            <div *ngIf="pageLayout.title.main" class="nhsuk-grid-row">
-              <div class="nhsuk-grid-column-full">
-                <p *ngIf="pageLayout.title.secondary" class="nhsuk-hint nhsuk-u-margin-bottom-0">{{ pageLayout.title.secondary }}</p>
-                <h1 [ngClass]="{'nhsuk-heading-l': pageLayout.title.size === 'l'}">{{ pageLayout.title.main }}</h1>
-              </div>
+          <div *ngIf="pageLayout.title.main" class="nhsuk-grid-row">
+            <div class="nhsuk-grid-column-full">
+              <p *ngIf="pageLayout.title.secondary" class="nhsuk-hint nhsuk-u-margin-bottom-0">{{ pageLayout.title.secondary }}</p>
+              <h1 [ngClass]="{'nhsuk-heading-l': pageLayout.title.size === 'l'}">{{ pageLayout.title.main }}</h1>
             </div>
+          </div>
 
-            <router-outlet></router-outlet>
+          <router-outlet></router-outlet>
 
           <!-- </div> -->
 
