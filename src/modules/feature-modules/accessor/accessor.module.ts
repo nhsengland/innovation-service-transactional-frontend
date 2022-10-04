@@ -7,7 +7,6 @@ import { AccessorRoutingModule } from './accessor-routing.module';
 
 // Layouts.
 import { BaseLayoutComponent } from './base/base-layout.component';
-// import { AccessorLayoutComponent } from './base/accessor-layout.component';
 
 // Pages.
 // // Account.

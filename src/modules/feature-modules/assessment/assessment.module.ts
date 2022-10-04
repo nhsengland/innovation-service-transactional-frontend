@@ -4,7 +4,9 @@ import { ThemeModule } from '@modules/theme/theme.module';
 import { SharedModule } from '@modules/shared/shared.module';
 
 import { AssessmentRoutingModule } from './assessment-routing.module';
-import { AssessmentLayoutComponent } from './base/assessment-layout.component';
+
+// Layouts.
+import { BaseLayoutComponent } from './base/base-layout.component';
 
 // Pages.
 // // Account.
@@ -29,7 +31,7 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 @NgModule({
   imports: [ThemeModule, SharedModule, AssessmentRoutingModule],
   declarations: [
-    AssessmentLayoutComponent,
+    BaseLayoutComponent,
 
     // Pages.
     // // Account.

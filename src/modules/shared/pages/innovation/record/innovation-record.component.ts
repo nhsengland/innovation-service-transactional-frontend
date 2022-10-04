@@ -16,7 +16,6 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 })
 export class PageInnovationRecordComponent extends CoreComponent implements OnInit {
 
-  module: '' | 'innovator' | 'accessor' | 'assessment' = '';
   baseUrl = '';
   documentUrl = '';
   pdfDocumentUrl = '';
@@ -59,8 +58,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     super();
     this.setPageTitle('Innovation record');
 
-    this.module = this.activatedRoute.snapshot.data.module;
-    this.baseUrl = `/${this.module}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
+    this.baseUrl = `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
     this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${this.activatedRoute.snapshot.params.innovationId}/pdf`;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;

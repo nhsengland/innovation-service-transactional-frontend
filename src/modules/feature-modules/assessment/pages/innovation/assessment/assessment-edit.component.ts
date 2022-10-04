@@ -54,7 +54,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   ) {
 
     super();
-    this.setPageTitle('Needs assessment');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovationName = '';
@@ -89,15 +88,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
       this.setPageStatus('READY');
 
-    },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch needs assessment overview',
-          message: 'Please try again or contact us for further help'
-        };
-      });
+    });
 
     this.subscriptions.push(
       this.activatedRoute.params.subscribe(params => {
@@ -125,6 +116,10 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
             ];
             break;
         }
+
+        this.setBackLink('Back to innovation', `/assessment/innovations/${this.innovationId}`);
+        this.setPageTitle('Needs assessment', { hint: `${this.stepId} of 2` });
+        this.setPageStatus('READY');
 
       })
     );
@@ -161,8 +156,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       return;
     }
 
-    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit'), this.currentAnswers).subscribe(
-      () => {
+    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit'), this.currentAnswers).subscribe({
+      next: () => {
         switch (action) {
           case 'saveAsDraft':
             this.saveAsDraft = { disabled: true, label: 'Saved' };
@@ -174,7 +169,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
                 this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
                 break;
               case 2:
-                this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`, { alert: 'needsAssessmentSubmited' });
+                this.setRedirectAlertSuccess('Needs assessment successfully completed');
+                this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`);
                 break;
             }
             break;
@@ -182,15 +178,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
             break;
         }
       },
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when starting needs assessment',
-          message: 'Please try again or contact us for further help',
-          setFocus: true
-        };
-      }
-    );
+      error: () => this.setAlertError('An error occurred when starting needs assessment. Please try again or contact us for further help')
+    });
 
   }
 

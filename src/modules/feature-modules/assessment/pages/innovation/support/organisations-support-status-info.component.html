@@ -1,63 +1,48 @@
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
-    <div *ngIf="innovation.lockedInnovatorValidation?.displayIsInnovatorLocked" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
-      <div class="nhsuk-heading-m nhsuk-warning-callout__label">
-        <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <div *ngIf="innovation.lockedInnovatorValidation?.displayIsInnovatorLocked" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+        <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+          <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
+        </div>
+        <p> Please note that the innovator {{ innovation.lockedInnovatorValidation?.innovatorName }} is currently locked. </p>
       </div>
-      <p> Please note that the innovator {{ innovation.lockedInnovatorValidation?.innovatorName }} is currently locked. </p>
-    </div>
-    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-      <p> {{ alert.message }} </p>
-    </theme-alert>
 
-    <p class="nhsuk-hint nhsuk-u-padding-top-3 nhsuk-u-margin-bottom-0">All organisations</p>
-    <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-5"> {{ pageTitle }} </h1>
+      <p>
+        <a routerLink="/assessment/innovations/{{ innovationId }}/support/statuses" arial-label="View support status keys information"> Support status key </a>
+      </p>
 
-    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-    <ng-container *ngIf="pageStatus === 'READY'">
+      <div class="d-flex nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
+        <div>Organisation</div>
+        <div class="ml-auto">Support status</div>
+      </div>
 
-      <p><a routerLink="/assessment/innovations/{{ innovationId }}/support/statuses"
-          arial-label="View support status keys information"> Support status key </a></p>
+      <ng-container *ngFor="let organisation of organisations">
 
-      <div class="nhsuk-u-padding-bottom-5">
-
-        <div
-          class="d-flex nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
-          <div>Organisation</div>
-          <div class="ml-auto">Support status</div>
+        <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'bottom-border-separator': organisation.showHideStatus !== 'opened'}">
+          <div> {{ organisation.info.name }} </div>
+          <a *ngIf="!organisation.info.status" href="javascript:void(0)" (click)="onShowHideClicked(organisation.info.id)" class="ml-auto">
+            {{ organisation.showHideText }} <span class="nhsuk-u-visually-hidden"> {{ organisation.showHideDescription
+                }} </span>
+          </a>
+          <strong *ngIf="organisation.info.status" class="nhsuk-tag ml-auto" [ngClass]="innovationSupportStatus[organisation.info.status].cssClass">{{
+              innovationSupportStatus[organisation.info.status].label }}</strong>
         </div>
 
-        <ng-container *ngFor="let organisation of organisations">
-
-          <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3"
-            [ngClass]="{'bottom-border-separator': organisation.showHideStatus !== 'opened'}">
-            <div> {{ organisation.info.name }} </div>
-            <a *ngIf="!organisation.info.status" href="javascript:void(0)"
-              (click)="onShowHideClicked(organisation.info.id)" class="ml-auto">
-              {{ organisation.showHideText }} <span class="nhsuk-u-visually-hidden"> {{ organisation.showHideDescription
-                }} </span>
-            </a>
-            <strong *ngIf="organisation.info.status" class="nhsuk-tag ml-auto"
-              [ngClass]="innovationSupportStatus[organisation.info.status].cssClass">{{
-              innovationSupportStatus[organisation.info.status].label }}</strong>
-          </div>
-
-          <ng-container *ngIf="organisation.showHideStatus === 'opened'">
-            <div *ngFor="let organisationUnit of organisation.info.organisationUnits; let i = index;"
-              class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
-              <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3"
-                [ngClass]="{'top-border-separator': i === 0}">
-                <div class="">{{ organisationUnit.name }}</div>
-                <strong class="nhsuk-tag ml-auto"
-                  [ngClass]="innovationSupportStatus[organisationUnit.status].cssClass">{{
+        <ng-container *ngIf="organisation.showHideStatus === 'opened'">
+          <div *ngFor="let organisationUnit of organisation.info.organisationUnits; let i = index;" class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
+            <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'top-border-separator': i === 0}">
+              <div class="">{{ organisationUnit.name }}</div>
+              <strong class="nhsuk-tag ml-auto" [ngClass]="innovationSupportStatus[organisationUnit.status].cssClass">{{
                   innovationSupportStatus[organisationUnit.status].label }}</strong>
-              </div>
             </div>
-          </ng-container>
+          </div>
         </ng-container>
-      </div>
-    </ng-container>
+      </ng-container>
 
+    </div>
   </div>
-</div>
+
+</theme-content-wrapper>

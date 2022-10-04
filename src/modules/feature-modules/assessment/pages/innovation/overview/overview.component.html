@@ -1,29 +1,4 @@
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
-
-    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-      <p> {{ alert.message }} </p>
-    </theme-alert>
-
-    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-  </div>
-</div>
-
-<ng-container *ngIf="pageStatus === 'READY'">
-
-  <div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
-    <div class="nhsuk-grid-column-two-thirds">
-      <h1 class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation?.summary?.name }}</h1>
-    </div>
-    <ng-container *ngIf="module === 'assessment'">
-      <div *ngIf="innovation?.assessment?.id && innovation?.summary?.status === 'IN_PROGRESS'" class="nhsuk-grid-column-one-third text-align-right">
-        <a routerLink="/assessment/innovations/{{ innovation?.summary?.id || '' }}/assessments/{{ innovation?.assessment?.id || '' }}"> View needs assessment </a>
-      </div>
-    </ng-container>
-  </div>
-
-  <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
+<theme-content-wrapper [status]="pageStatus">
 
   <div *ngIf="innovation?.lockedInnovatorValidation?.displayIsInnovatorLocked" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
@@ -88,4 +63,4 @@
     </div>
   </dl>
 
-</ng-container>
+</theme-content-wrapper>

@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 // Layouts.
 import { BaseLayoutComponent } from './base/base-layout.component';
-// import { AccessorLayoutComponent } from './base/accessor-layout.component';
 
 // Accessor module pages.
 // // Account.
@@ -51,7 +50,6 @@ import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-o
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
-// import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers/innovation-section-evidence-data.resolver';
 import { InnovationDataResolverType } from '@modules/stores/innovation';
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
@@ -73,7 +71,6 @@ export type RoutesDataType = {
 
 
 const routes: Routes = [
-
 
   {
     path: '',
@@ -128,7 +125,6 @@ const routes: Routes = [
               {
                 path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent,
                 data: { breadcrumb: null }
-                // data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } }
               },
 
               {
@@ -157,10 +153,6 @@ const routes: Routes = [
 
                       {
                         path: ':sectionId',
-                        // resolve: { innovationSectionData: InnovationSectionDataResolver },
-                        data: {
-                          // breadcrumb: (data: RoutesDataType) => data.innovationSectionData.name
-                        },
                         children: [
                           {
                             path: '', pathMatch: 'full', component: PageInnovationSectionInfoComponent,
@@ -340,12 +332,7 @@ const routes: Routes = [
         ]
       },
 
-      {
-        path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent,
-        // data: {
-        //   layout: { backgroundColor: 'bg-color-white' }
-        // }
-      },
+      { path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent },
 
       {
         path: 'account',

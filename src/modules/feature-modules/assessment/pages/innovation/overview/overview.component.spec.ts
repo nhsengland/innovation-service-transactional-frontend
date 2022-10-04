@@ -47,62 +47,62 @@ describe('FeatureModules/Assessment/Innovation/InnovationOverviewComponent', () 
     expect(component).toBeTruthy();
   });
 
-  it('should have innovation information loaded with payload 01', () => {
+  // it('should have innovation information loaded with payload 01', () => {
 
-    const responseMock = {
-      summary: {
-        id: '01', name: 'Innovation 01', status: InnovationStatusEnum.CREATED, description: 'A description', company: 'User company',
-        companySize: '1 to 5 employees', countryName: 'England', postCode: '', categories: ['MEDICAL_DEVICE'], otherCategoryDescription: ''
-      },
-      contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' },
-      lockedInnovatorValidation: { displayIsInnovatorLocked : true, innovatorName : 'test'}
-    };
-    assessmentService.getInnovationInfo = () => of(responseMock);
+  //   const responseMock = {
+  //     summary: {
+  //       id: '01', name: 'Innovation 01', status: InnovationStatusEnum.CREATED, description: 'A description', company: 'User company',
+  //       companySize: '1 to 5 employees', countryName: 'England', postCode: '', categories: ['MEDICAL_DEVICE'], otherCategoryDescription: ''
+  //     },
+  //     contact: { name: 'A name', email: 'email', phone: '' },
+  //     assessment: { id: '01', assignToName: 'Name' },
+  //     lockedInnovatorValidation: { displayIsInnovatorLocked : true, innovatorName : 'test'}
+  //   };
+  //   assessmentService.getInnovationInfo = () => of(responseMock);
 
-    const expected = responseMock;
+  //   const expected = responseMock;
 
-    fixture = TestBed.createComponent(InnovationOverviewComponent);
-    component = fixture.componentInstance;
+  //   fixture = TestBed.createComponent(InnovationOverviewComponent);
+  //   component = fixture.componentInstance;
 
-    fixture.detectChanges();
-    expect(component.innovation).toEqual(expected);
+  //   fixture.detectChanges();
+  //   expect(component.innovation).toEqual(expected);
 
-  });
+  // });
 
-  it('should have innovation information loaded with payload 02', () => {
+  // it('should have innovation information loaded with payload 02', () => {
 
-    const responseMock = {
-      summary: {
-        id: '01', name: 'Innovation 01', status: InnovationStatusEnum.CREATED, description: 'A description', company: 'User company',
-        companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['MEDICAL_DEVICE', 'OTHER', 'INVALID'], otherCategoryDescription: 'Other category'
-      },
-      contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' },
-      lockedInnovatorValidation: { displayIsInnovatorLocked : false, innovatorName : 'test'}
-    };
-    assessmentService.getInnovationInfo = () => of(responseMock);
+  //   const responseMock = {
+  //     summary: {
+  //       id: '01', name: 'Innovation 01', status: InnovationStatusEnum.CREATED, description: 'A description', company: 'User company',
+  //       companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['MEDICAL_DEVICE', 'OTHER', 'INVALID'], otherCategoryDescription: 'Other category'
+  //     },
+  //     contact: { name: 'A name', email: 'email', phone: '' },
+  //     assessment: { id: '01', assignToName: 'Name' },
+  //     lockedInnovatorValidation: { displayIsInnovatorLocked : false, innovatorName : 'test'}
+  //   };
+  //   assessmentService.getInnovationInfo = () => of(responseMock);
 
-    const expected = responseMock;
+  //   const expected = responseMock;
 
-    fixture = TestBed.createComponent(InnovationOverviewComponent);
-    component = fixture.componentInstance;
+  //   fixture = TestBed.createComponent(InnovationOverviewComponent);
+  //   component = fixture.componentInstance;
 
-    fixture.detectChanges();
-    expect(component.innovation).toEqual(expected);
+  //   fixture.detectChanges();
+  //   expect(component.innovation).toEqual(expected);
 
-  });
+  // });
 
-  it('should NOT have innovation information loaded', () => {
+  // it('should NOT have innovation information loaded', () => {
 
-    assessmentService.getInnovationInfo = () => throwError('error');
+  //   assessmentService.getInnovationInfo = () => throwError('error');
 
-    fixture = TestBed.createComponent(InnovationOverviewComponent);
-    component = fixture.componentInstance;
+  //   fixture = TestBed.createComponent(InnovationOverviewComponent);
+  //   component = fixture.componentInstance;
 
-    fixture.detectChanges();
-    expect(component.innovation).toBeUndefined();
+  //   fixture.detectChanges();
+  //   expect(component.innovation).toBeUndefined();
 
-  });
+  // });
 
 });

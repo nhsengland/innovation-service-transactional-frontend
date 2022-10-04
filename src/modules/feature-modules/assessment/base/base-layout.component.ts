@@ -9,12 +9,13 @@ import { RoutingHelper } from '@app/base/helpers';
 import { ContextStore } from '@modules/stores';
 import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 import { HeaderMenuBarItemType, HeaderNotificationsType } from '@modules/theme/components/header/header.component';
+import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-import { RoutesDataType } from '../accessor-routing.module';
+import { RoutesDataType } from '../assessment-routing.module';
 
 
 @Component({
-  selector: 'app-accessor-layouts-base-layout',
+  selector: 'app-assessment-layouts-base-layout',
   templateUrl: './base-layout.component.html'
 })
 export class BaseLayoutComponent implements OnInit, OnDestroy {
@@ -32,13 +33,13 @@ export class BaseLayoutComponent implements OnInit, OnDestroy {
   routeLayoutInfo: Required<RoutesDataType>['layout'] = { type: 'full', chosenMenu: null, backgroundColor: null };
 
   pageLayout: {
-    context: { visible: boolean, innovation: { id: string, name: string, assessmentId?: string } },
+    context: { visible: boolean, innovation: { id: string, name: string, status: null | InnovationStatusEnum, assessmentId?: string } },
     alert: ContextPageLayoutType['alert'],
     backLink: ContextPageLayoutType['backLink'],
     title: ContextPageLayoutType['title'],
     sidebarItems: { label: string, url: string }[]
   } = {
-      context: { visible: false, innovation: { id: '', name: '' } },
+      context: { visible: false, innovation: { id: '', name: '', status: null } },
       alert: { type: null },
       backLink: { label: null },
       title: { main: null },
@@ -57,10 +58,9 @@ export class BaseLayoutComponent implements OnInit, OnDestroy {
     this.headerSection = {
       menuBarItems: {
         left: [
-          { id: 'innovations', label: 'Innovations', url: '/accessor/innovations' },
-          { id: 'notifications', label: 'Notifications', url: '/accessor/notifications' },
-          { id: 'actions', label: 'Actions', url: '/accessor/actions', },
-          { id: 'account', label: 'Account', url: '/accessor/account' }
+          { id: 'innovations', label: 'Innovations', url: '/assessment/innovations' },
+          { id: 'notifications', label: 'Notifications', url: '/assessment/notifications' },
+          { id: 'account', label: 'Account', url: '/assessment/account' },
         ],
         right: []
       },
@@ -122,7 +122,7 @@ export class BaseLayoutComponent implements OnInit, OnDestroy {
     console.log('EventData', event.url);
     // console.log('RouteLayoutData', this.routeLayoutInfo);
 
-    if (event.url.startsWith('/accessor/terms-of-use')) {
+    if (event.url.startsWith('/assessment/terms-of-use')) {
       this.headerSection.menuBarItems.left = [];
       this.headerSection.menuBarItems.right = [];
     } else {
@@ -135,29 +135,34 @@ export class BaseLayoutComponent implements OnInit, OnDestroy {
           const innovation = this.contextStore.getInnovation();
           // Only shows link if not on needs assessment page.
           const assessmentId = !event.url.endsWith(`assessments/${innovation.assessment?.id}`) ? innovation.assessment?.id : undefined;
-          this.pageLayout.context = { visible: true, innovation: { id: innovation.id, name: innovation.name, assessmentId } };
+          this.pageLayout.context = { visible: true, innovation: { id: innovation.id, name: innovation.name, status: innovation.status, assessmentId } };
 
           this.pageLayout.sidebarItems = [
-            { label: 'Overview', url: `/accessor/innovations/${innovation.id}/overview` },
-            { label: 'Innovation record', url: `/accessor/innovations/${innovation.id}/record` },
-            { label: 'Action tracker', url: `/accessor/innovations/${innovation.id}/action-tracker` },
-            { label: 'Messages', url: `/accessor/innovations/${innovation.id}/threads` },
-            { label: 'Support status', url: `/accessor/innovations/${innovation.id}/support` },
-            { label: 'Activity log', url: `/accessor/innovations/${innovation.id}/activity-log` }
+            { label: 'Overview', url: `/assessment/innovations/${innovation.id}/overview` },
+            { label: 'Innovation record', url: `/assessment/innovations/${innovation.id}/record` },
+            { label: 'Messages', url: `/assessment/innovations/${innovation.id}/threads` }
           ];
+          if (innovation.status === InnovationStatusEnum.IN_PROGRESS) {
+            this.pageLayout.sidebarItems.push(
+              { label: 'Support status', url: `/assessment/innovations/${innovation.id}/support` },
+              { label: 'Needs assessment', url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }
+            );
+          }
+
+          this.pageLayout.sidebarItems.push({ label: 'Activity log', url: `/assessment/innovations/${innovation.id}/activity-log` });
+
           break;
 
         case 'yourAccount':
-          this.pageLayout.context = { visible: false, innovation: { id: '', name: '' } };
+          this.pageLayout.context = { visible: false, innovation: { id: '', name: '', status: null } };
           this.pageLayout.sidebarItems = [
-            { label: 'Your details', url: `/accessor/account/manage-details` },
-            { label: 'Email notifications', url: `/accessor/account/email-notifications` },
-            { label: 'Manage account', url: `/accessor/account/manage-account` }
+            { label: 'Your details', url: `/assessment/account/manage-details` },
+            { label: 'Manage account', url: `/assessment/account/manage-account` }
           ];
           break;
 
         default:
-          this.pageLayout.context = { visible: false, innovation: { id: '', name: '' } };
+          this.pageLayout.context = { visible: false, innovation: { id: '', name: '', status: null } };
           this.pageLayout.sidebarItems = [];
           break;
 
