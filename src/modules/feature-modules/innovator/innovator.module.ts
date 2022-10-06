@@ -5,8 +5,10 @@ import { SharedModule } from '@modules/shared/shared.module';
 
 import { InnovatorRoutingModule } from './innovator-routing.module';
 
-// Layouts.
-import { BaseLayoutComponent } from './base/base-layout.component';
+// Base.
+import { ContextInnovationOutletComponent } from './base/context-innovation-outlet.component';
+import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
+import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
 
 // Pages.
 // // Account.
@@ -50,7 +52,10 @@ import { InnovatorService } from './services/innovator.service';
     InnovatorRoutingModule
   ],
   declarations: [
-    BaseLayoutComponent,
+    // Base.
+    ContextInnovationOutletComponent,
+    SidebarAccountMenuOutletComponent,
+    SidebarInnovationMenuOutletComponent,
 
     // Pages.
     // // Account.

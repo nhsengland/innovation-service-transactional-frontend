@@ -112,7 +112,7 @@ export class ContextStore extends Store<ContextModel> {
     this.pageLayoutState.backLink = { label: null };
     this.pageLayoutState.status = 'LOADING';
     this.pageLayoutState.title = { main: null };
-    // this.setPageLayoutState();
+    this.setPageLayoutState();
   }
 
 

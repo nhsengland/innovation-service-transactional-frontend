@@ -1,13 +1,8 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <!-- <div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
-    <div class="nhsuk-grid-column-one-half">
-      <h1 class="nhsuk-heading-l"> {{ pageTitle }} </h1>
-    </div>
-    <div *ngIf="emailNotificationPreferencesLink" class="nhsuk-grid-column-one-half text-align-right">
-      <a [routerLink]="emailNotificationPreferencesLink"> Change your email notifications preferences </a>
-    </div>
-  </div> -->
+  <div *ngIf="emailNotificationPreferencesLink" class="text-align-right nhsuk-u-padding-bottom-3">
+    <a [routerLink]="emailNotificationPreferencesLink">Change your email notifications preferences</a>
+  </div>
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-one-quarter">

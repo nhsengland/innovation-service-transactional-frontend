@@ -46,7 +46,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     const resultInMinutes = Math.round(timediffer / 60000);
 
     if (resultInMinutes <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {
-      this.alert = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
+      this.setAlertSuccess('You have successfully changed your password.');
     }
 
     this.setPageStatus('READY');

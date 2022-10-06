@@ -47,7 +47,7 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
   ngOnChanges(): void {
 
     if (this.suggestions) {
-      this.accessors = this.parseAccessors(this.suggestions.accessors);
+      this.accessors = this.parseAccessors(this.suggestions.accessors ?? []);
       this.assessments = this.parseAssessments(this.suggestions.assessment);
 
       if (this.assessments && this.assessments.organisations.length > 0) {
@@ -83,7 +83,7 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
   private parseAssessments(assessmentsSuggestions: AssessmentSuggestionModel): { organisations: string[] } {
 
     const shares = this.shares?.map(s => s.id) || [];
-    const suggestedOrganisations = assessmentsSuggestions.suggestedOrganisations
+    const suggestedOrganisations = (assessmentsSuggestions.suggestedOrganisations ?? [])
       .filter(so => !shares.includes(so.id))
       .map(so => `${so.name} (${so.acronym})`);
 

@@ -278,7 +278,7 @@ export const locale = {
             SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}"` }
           },
           section_status: {
-            NOT_STARTED: { name: 'Not started', cssColorClass: 'nhsuk-tag--white' },
+            NOT_STARTED: { name: 'Not started', cssColorClass: 'nhsuk-tag--blue' },
             DRAFT: { name: 'Draft', cssColorClass: 'nhsuk-tag--yellow' },
             SUBMITTED: { name: 'Submitted', cssColorClass: 'nhsuk-tag--green' }
 

@@ -66,7 +66,7 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
   ) {
 
     super();
-    this.setPageTitle('Innovations');
+    this.setPageTitle('Innovations advanced search');
 
     this.innovationsList.setVisibleColumns({
       name: { label: 'Innovation', orderable: true },

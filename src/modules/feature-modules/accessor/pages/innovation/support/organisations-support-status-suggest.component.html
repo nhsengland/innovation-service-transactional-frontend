@@ -8,9 +8,9 @@
           <theme-form-grouped-checkbox-array arrayName="organisationUnits" label="Select the organisations you think would be right to offer support. These organisations will be notified." [groupedItems]="groupedItems"
             [pageUniqueField]="false"></theme-form-grouped-checkbox-array>
           <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
-          <div class="nhsuk-u-padding-bottom-5">
-            <a routerLink="/accessor/innovations/{{ innovation.id }}/support"> Cancel </a>
-          </div>
+
+          <a routerLink="/accessor/innovations/{{ innovation.id }}/support" class="d-block">Cancel</a>
+
         </div>
       </div>
     </ng-container>
@@ -34,9 +34,7 @@
 
           <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button nhsuk-u-margin-top-3"> {{ submitButton.label }} </button>
 
-          <div class="nhsuk-u-padding-bottom-5">
-            <a routerLink="/accessor/innovations/{{ innovation.id }}/support"> Cancel </a>
-          </div>
+          <a routerLink="/accessor/innovations/{{ innovation.id }}/support" class="d-block">Cancel</a>
 
         </div>
       </div>

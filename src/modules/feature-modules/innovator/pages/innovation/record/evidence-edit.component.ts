@@ -169,13 +169,9 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
     ).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('Your evidence has been saved', { message: 'You need to submit this section for review to notify your supporting accessor(s).' });
-        this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'evidenceUpdateSuccess' });
+        this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`);
       },
-      error: () => {
-        this.setAlertError('An error occurred when saving your evidence. Please try again or contact us for further help.', { width: '2.thirds' });
-        // this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`, { alert: 'evidenceUpdateError' });
-        // this.setPageStatus('ERROR');
-      }
+      error: () => this.setAlertError('An error occurred when saving your evidence. Please try again or contact us for further help.', { width: '2.thirds' })
     });
 
   }

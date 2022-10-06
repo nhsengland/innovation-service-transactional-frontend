@@ -8,17 +8,13 @@ import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
 import { SignUpConfirmationComponent } from './pages/sign-up-confirmation.component';
 
 const routes: Routes = [
-
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: '/not-found'
-  },
-
   {
     path: '',
     component: BaseLayoutComponent,
     children: [
+
+      { path: '', pathMatch: 'full', redirectTo: '/not-found' },
+
       {
         path: 'signup',
         children: [
@@ -31,7 +27,6 @@ const routes: Routes = [
       }
     ]
   }
-
 ];
 
 @NgModule({
