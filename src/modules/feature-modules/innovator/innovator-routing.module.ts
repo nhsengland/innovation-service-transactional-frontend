@@ -1,8 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-// Layouts.
-import { BaseLayoutComponent } from './base/base-layout.component';
+// Layout.
+import { RoutesDataType, TransactionalLayoutComponent } from '@modules/theme/base/transactional-layout.component';
+
+// Base
+import { ContextInnovationOutletComponent } from './base/context-innovation-outlet.component';
+import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
+import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
 
 // Innovator module pages.
 // // Account.
@@ -56,38 +61,29 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 // Resolvers.
 import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
-import { InnovationDataResolverType } from '@modules/stores/innovation';
 import { InnovationSectionDataResolver } from '@modules/shared/resolvers/innovation-section-data.resolver';
 import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers/innovation-section-evidence-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 
 
-export type RoutesDataType = {
-  module?: string, // TODO: To remove.
-  breadcrumb?: string,
-  layout?: {
-    type?: 'full' | '1.third-2.thirds',
-    chosenMenu?: null | 'home' | 'innovation' | 'notifications' | 'yourAccount',
-    backgroundColor?: null | string
+const header: RoutesDataType['header'] = {
+  menuBarItems: {
+    left: [
+      { id: 'innovations', label: 'Your innovations', url: '/innovator/dashboard' },
+      { id: 'notifications', label: 'Notifications', url: '/innovator/notifications' },
+      { id: 'account', label: 'Your account', url: '/innovator/account' }
+    ],
+    right: []
   },
-  innovationActionData: { id: null | string, name: string },
-  innovationData?: InnovationDataResolverType,
-  innovationSectionData: { id: null | string, name: string },
-  innovationSectionEvidenceData: { id: null | string, name: string }
-  innovationThreadData: { id: null | string, name: string }
+  notifications: {}
 };
 
 
 const routes: Routes = [
-
   {
-    path: '',
-    component: BaseLayoutComponent,
+    path: '', component: TransactionalLayoutComponent,
     canActivateChild: [FirstTimeSigninGuard],
-    data: {
-      module: 'innovator',
-      breadcrumb: 'Home'
-    },
+    data: { header, module: 'innovator', breadcrumb: 'Home' },
     children: [
 
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -95,20 +91,32 @@ const routes: Routes = [
 
       {
         path: 'terms-of-use', pathMatch: 'full', component: PageTermsOfUseAcceptanceComponent,
-        data: { layout: { type: 'full', chosenMenu: null } }
+        data: {
+          header: { menuBarItems: { left: [], right: [], notifications: {} } },
+          layout: { type: 'full' }
+        }
       },
 
       {
-        path: 'first-time-signin',
-        pathMatch: 'full',
-        component: FirstTimeSigninComponent
+        path: 'first-time-signin', pathMatch: 'full', component: FirstTimeSigninComponent,
+        data: {
+          header: { menuBarItems: { left: [], right: [], notifications: {} } },
+          layout: { type: 'full' }
+        }
       },
 
       {
         path: 'innovation-transfer-acceptance',
         children: [
           { path: '', pathMatch: 'full', redirectTo: '1' },
-          { path: ':stepId', pathMatch: 'full', component: InnovationTransferAcceptanceComponent }
+          {
+            path: ':stepId', pathMatch: 'full', component: InnovationTransferAcceptanceComponent,
+            data: {
+              header: { menuBarItems: { left: [], right: [], notifications: {} } },
+              layout: { type: 'full' }
+            }
+
+          }
         ]
       },
 
@@ -124,10 +132,16 @@ const routes: Routes = [
             resolve: { innovationData: InnovationDataResolver },
             data: {
               module: 'innovator',
-              layout: { type: '1.third-2.thirds', chosenMenu: 'innovation' },
+              layout: { type: '1.third-2.thirds' },
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
             children: [
+
+              { path: '', outlet: 'page-context-outlet', component: ContextInnovationOutletComponent },
+
+              { path: '', outlet: 'page-sidebar-outlet', component: SidebarInnovationMenuOutletComponent },
+              { path: '', outlet: 'page-sidebar-mobile-outlet', component: SidebarInnovationMenuOutletComponent },
+
               { path: '', pathMatch: 'full', redirectTo: 'overview' },
               {
                 path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent,
@@ -138,7 +152,7 @@ const routes: Routes = [
                 path: 'assessments/:assessmentId', pathMatch: 'full', component: InnovatorNeedsAssessmentOverviewComponent,
                 data: {
                   breadcrumb: 'Needs assessment',
-                  layout: { type: 'full', chosenMenu: 'innovation' }
+                  layout: { type: 'full' }
                 }
               },
 
@@ -162,7 +176,7 @@ const routes: Routes = [
                         path: ':sectionId',
                         resolve: { innovationSectionData: InnovationSectionDataResolver },
                         data: {
-                          breadcrumb: (data: RoutesDataType) => data.innovationSectionData.name
+                          breadcrumb: (data: RoutesDataType) => data.innovationSectionData?.name ?? ''
                         },
                         children: [
                           {
@@ -173,7 +187,7 @@ const routes: Routes = [
                           { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
                           {
                             path: 'edit/:questionId', pathMatch: 'full', component: InnovationSectionEditComponent,
-                            data: { layout: { type: 'full', chosenMenu: 'innovation' } }
+                            data: { layout: { type: 'full' } }
                           },
 
                           {
@@ -188,7 +202,7 @@ const routes: Routes = [
                                 path: 'new/:questionId', pathMatch: 'full', component: InnovationSectionEvidenceEditComponent,
                                 data: {
                                   breadcrumb: 'New',
-                                  layout: { type: 'full', chosenMenu: 'innovation' }
+                                  layout: { type: 'full' }
                                 }
                               },
                               {
@@ -196,7 +210,7 @@ const routes: Routes = [
                                 resolve: { innovationSectionEvidenceData: InnovationSectionEvidenceDataResolver },
                                 data: {
                                   breadcrumb: (data: RoutesDataType) => {
-                                    const name = data.innovationSectionEvidenceData.name;
+                                    const name = data.innovationSectionEvidenceData?.name ?? '';
                                     return name.length > 30 ? `${name.substring(0, 30)}...` : name;
                                   }
                                 },
@@ -210,7 +224,7 @@ const routes: Routes = [
                                     path: 'edit/:questionId', pathMatch: 'full', component: InnovationSectionEvidenceEditComponent,
                                     data: {
                                       data: { breadcrumb: 'Edit' },
-                                      layout: { type: 'full', chosenMenu: 'innovation' }
+                                      layout: { type: 'full' }
                                     }
                                   }
                                 ]
@@ -247,7 +261,7 @@ const routes: Routes = [
                     resolve: { innovationActionData: InnovationActionDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
-                        const name = data.innovationActionData.name;
+                        const name = data.innovationActionData?.name ?? '';
                         return name.length > 30 ? `${name.substring(0, 30)}...` : name;
                       }
                     },
@@ -286,7 +300,7 @@ const routes: Routes = [
                     resolve: { innovationThreadData: InnovationThreadDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
-                        const name = data.innovationThreadData.name;
+                        const name = data.innovationThreadData?.name ?? '';
                         return name.length > 30 ? `${name.substring(0, 30)}...` : name;
                       }
                     },
@@ -324,7 +338,7 @@ const routes: Routes = [
                 path: 'activity-log', pathMatch: 'full', component: PageInnovationActivityLogComponent,
                 data: {
                   breadcrumb: 'Activity Log',
-                  layout: { type: 'full', chosenMenu: 'innovation', backgroundColor: 'bg-color-white' }
+                  layout: { type: 'full', backgroundColor: 'bg-color-white' }
                 }
               }
 
@@ -337,7 +351,8 @@ const routes: Routes = [
       {
         path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent,
         data: {
-          layout: { backgroundColor: 'bg-color-white' }
+          breadcrumb: 'Notifications',
+          layout: { type: 'full', backgroundColor: 'bg-color-white' }
         }
       },
 
@@ -345,9 +360,13 @@ const routes: Routes = [
         path: 'account',
         data: {
           breadcrumb: 'Your account',
-          layout: { type: '1.third-2.thirds', chosenMenu: 'yourAccount' }
+          layout: { type: '1.third-2.thirds' }
         },
         children: [
+
+          { path: '', outlet: 'page-sidebar-outlet', component: SidebarAccountMenuOutletComponent },
+          { path: '', outlet: 'page-sidebar-mobile-outlet', component: SidebarAccountMenuOutletComponent },
+
           { path: '', pathMatch: 'full', redirectTo: 'manage-details' },
           {
             path: 'manage-details',
@@ -362,7 +381,7 @@ const routes: Routes = [
                 path: 'edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent,
                 data: {
                   breadcrumb: 'Edit',
-                  layout: { type: 'full', chosenMenu: 'yourAccount' }
+                  layout: { type: 'full' }
                 }
               }
             ]
@@ -379,7 +398,7 @@ const routes: Routes = [
                 path: 'edit/:notificationType', pathMatch: 'full', component: PageAccountEmailNotificationsEditComponent,
                 data: {
                   breadcrumb: 'Edit',
-                  layout: { type: 'full', chosenMenu: 'yourAccount' }
+                  layout: { type: 'full' }
                 }
               }
             ]
@@ -412,11 +431,9 @@ const routes: Routes = [
             ]
           }
         ]
-      },
-
+      }
     ]
   }
-
 ];
 
 @NgModule({

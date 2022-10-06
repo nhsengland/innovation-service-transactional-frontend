@@ -5,8 +5,10 @@ import { SharedModule } from '@modules/shared/shared.module';
 
 import { AssessmentRoutingModule } from './assessment-routing.module';
 
-// Layouts.
-import { BaseLayoutComponent } from './base/base-layout.component';
+// Base.
+import { ContextInnovationOutletComponent } from './base/context-innovation-outlet.component';
+import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
+import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
 
 // Pages.
 // // Account.
@@ -31,7 +33,10 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 @NgModule({
   imports: [ThemeModule, SharedModule, AssessmentRoutingModule],
   declarations: [
-    BaseLayoutComponent,
+    // Base.
+    ContextInnovationOutletComponent,
+    SidebarAccountMenuOutletComponent,
+    SidebarInnovationMenuOutletComponent,
 
     // Pages.
     // // Account.

@@ -14,18 +14,16 @@
 
         <ng-container *ngIf="stepNumber === 1">
           <theme-form-radio-group controlName="innovation" label="Choose which innovation to transfer" [items]="formInnovationsItems" [pageUniqueField]="false"></theme-form-radio-group>
-          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
+          <button class="nhsuk-button" (click)="onSubmitStep()"> Continue </button>
         </ng-container>
 
         <ng-container *ngIf="stepNumber === 2">
           <theme-form-input controlName="email" label="Enter the email of the new owner" [pageUniqueField]="false"></theme-form-input>
           <theme-form-input controlName="confirmation" label="Are you sure that you want to transfer?" description="To confirm, please type the following: transfer my innovation" [pageUniqueField]="false"></theme-form-input>
-          <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3" (click)="onSubmitForm()"> Request transfer of ownership </button>
+          <button class="nhsuk-button nhsuk-button--secondary" (click)="onSubmitForm()"> Request transfer of ownership </button>
         </ng-container>
 
-        <div class="nhsuk-u-padding-bottom-5">
-          <a routerLink="manage-innovations"> Cancel </a>
-        </div>
+        <a routerLink=".." class="d-block">Cancel</a>
 
       </form>
 

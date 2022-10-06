@@ -62,8 +62,6 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
 
   onSubmit(): void {
 
-    this.alert = { type: null };
-
     const formData = this.formEngineComponent?.getFormValues();
 
     if (!formData?.valid) {

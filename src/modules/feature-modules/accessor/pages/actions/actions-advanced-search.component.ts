@@ -14,10 +14,10 @@ import { AccessorService, getAdvanceActionsListEndpointOutDTO } from '../../serv
 type FilterKeysType = 'innovationStatus' | 'innovationSection';
 
 @Component({
-  selector: 'app-accessor-pages-actions-advanced-filter',
-  templateUrl: './actions-advanced-filter.component.html'
+  selector: 'app-accessor-pages-actions-advanced-search',
+  templateUrl: './actions-advanced-search.component.html'
 })
-export class ActionAdvancedFilterComponent extends CoreComponent implements OnInit {
+export class ActionsAdvancedSearchComponent extends CoreComponent implements OnInit {
 
   actionsList: TableModel<getAdvanceActionsListEndpointOutDTO['data'][0],
     { name: string, innovationStatus: string[], innovationSection: string[] }>;
@@ -53,7 +53,7 @@ export class ActionAdvancedFilterComponent extends CoreComponent implements OnIn
   ) {
 
     super();
-    this.setPageTitle('Actions');
+    this.setPageTitle('Actions advanced search');
 
     this.actionsList = new TableModel({});
 

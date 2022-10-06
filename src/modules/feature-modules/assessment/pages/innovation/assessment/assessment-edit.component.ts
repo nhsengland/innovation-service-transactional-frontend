@@ -129,8 +129,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   onSubmit(action: 'update' | 'saveAsDraft' | 'submit'): void {
 
-    this.alert = { type: null };
-
     let isValid = true;
 
     // This section is not easy to test. TOIMPROVE: Include this code on unit test.

@@ -10,6 +10,7 @@ import { UrlModel } from '@app/base/models';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationSectionEnum } from '@modules/stores/innovation';
+import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
 
 @Component({
@@ -45,6 +46,14 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.wizard = this.stores.innovation.getSectionWizard(this.sectionId);
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
+
+  }
+
+  private getNextSectionId(): string | null {
+
+    const sectionsIdsList = INNOVATION_SECTIONS.flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
+    const currentSectionIndex = sectionsIdsList.indexOf(this.sectionId);
+    return sectionsIdsList[currentSectionIndex + 1] || null;
 
   }
 
@@ -206,13 +215,11 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     this.stores.innovation.submitSections$(this.innovation.id, [this.sectionId]).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess('Your answers have been confirmed for this section');
-        this.redirectTo(this.baseUrl, { alert: 'sectionUpdateSuccess', });
+        this.setRedirectAlertSuccess('Your answers have been confirmed for this section', { message: this.getNextSectionId() ? 'Go to next section or return to the full innovation record' : undefined });
+        this.redirectTo(this.baseUrl);
       },
-      error: () => {
-        this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' });
-        // this.redirectTo(this.baseUrl, { alert: 'sectionUpdateError' });
-      }
+      error: () => this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' })
+
     });
 
   }

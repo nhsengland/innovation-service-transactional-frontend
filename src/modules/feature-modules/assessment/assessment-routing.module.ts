@@ -1,7 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { BaseLayoutComponent } from './base/base-layout.component';
+// Layout.
+import { RoutesDataType, TransactionalLayoutComponent } from '@modules/theme/base/transactional-layout.component';
+
+// Base
+import { ContextInnovationOutletComponent } from './base/context-innovation-outlet.component';
+import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
+import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
 
 // Assessment module pages.
 // // Account.
@@ -38,34 +44,26 @@ import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-o
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
-import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 
 
-export type RoutesDataType = {
-  module?: string, // TODO: To remove.
-  breadcrumb?: string,
-  layout?: {
-    type?: 'full' | '1.third-2.thirds',
-    chosenMenu?: null | 'home' | 'innovations' | 'actions' | 'notifications' | 'yourAccount',
-    backgroundColor?: null | string
+const header: RoutesDataType['header'] = {
+  menuBarItems: {
+    left: [
+      { id: 'innovations', label: 'Innovations', url: '/assessment/innovations' },
+      { id: 'notifications', label: 'Notifications', url: '/assessment/notifications' },
+      { id: 'account', label: 'Account', url: '/assessment/account' },
+    ],
+    right: []
   },
-  innovationActionData: { id: null | string, name: string },
-  innovationData?: InnovationDataResolverType,
-  innovationSectionEvidenceData: { id: null | string, name: string }
-  innovationThreadData: { id: null | string, name: string }
+  notifications: {}
 };
 
 
 const routes: Routes = [
-
   {
-    path: '',
-    component: BaseLayoutComponent,
-    data: {
-      module: 'assessment',
-      breadcrumb: 'Home'
-    },
+    path: '', component: TransactionalLayoutComponent,
+    data: { header, module: 'assessment', breadcrumb: 'Home' },
     children: [
 
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -73,44 +71,50 @@ const routes: Routes = [
 
       {
         path: 'terms-of-use', pathMatch: 'full', component: PageTermsOfUseAcceptanceComponent,
-        data: { layout: { type: 'full', chosenMenu: null } }
+        data: {
+          header: { menuBarItems: { left: [], right: [], notifications: {} } },
+          layout: { type: 'full' }
+        }
       },
 
       {
         path: 'innovations',
-        data: {
-          breadcrumb: 'Innovations'
-        },
+        data: { breadcrumb: 'Innovations' },
         children: [
           {
             path: '', pathMatch: 'full', component: ReviewInnovationsComponent,
             data: {
               breadcrumb: null,
-              layout: { type: 'full', chosenMenu: null, backgroundColor: 'bg-color-white' }
+              layout: { type: 'full', backgroundColor: 'bg-color-white' }
             }
           },
 
           {
             path: ':innovationId',
+            runGuardsAndResolvers: 'always', // TODO: Try to remove this in the future. triggering update when doing actions (Ex: new).
             resolve: { innovationData: InnovationDataResolver },
             data: {
-              layout: { type: '1.third-2.thirds', chosenMenu: 'innovations' },
+              layout: { type: '1.third-2.thirds' },
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
             children: [
+
+              { path: '', outlet: 'page-context-outlet', component: ContextInnovationOutletComponent },
+
+              { path: '', outlet: 'page-sidebar-outlet', component: SidebarInnovationMenuOutletComponent },
+              { path: '', outlet: 'page-sidebar-mobile-outlet', component: SidebarInnovationMenuOutletComponent },
 
               { path: '', pathMatch: 'full', redirectTo: 'overview' },
               {
                 path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent,
                 data: { breadcrumb: null }
-                // data: { layoutOptions: { type: 'innovationLeftAsideMenu', backLink: { url: '/accessor/innovations', label: 'Innovations' } } }
               },
 
               {
                 path: 'assessments',
                 data: {
                   data: { breadcrumb: null },
-                  layout: { type: 'full', chosenMenu: 'innovations' }
+                  layout: { type: 'full' }
                 },
                 children: [
                   { path: '', pathMatch: 'full', redirectTo: '../:innovationId/overview' },
@@ -131,7 +135,7 @@ const routes: Routes = [
                         path: 'edit/:stepId', pathMatch: 'full', component: InnovationAssessmentEditComponent,
                         data: {
                           data: { breadcrumb: null },
-                          layout: { type: 'full', chosenMenu: 'innovations' }
+                          layout: { type: 'full' }
                         }
                       }]
                   }
@@ -182,7 +186,6 @@ const routes: Routes = [
 
               {
                 path: 'threads',
-                // resolve: { innovationData: InnovationDataResolver },
                 data: { breadcrumb: 'Messages' },
                 children: [
                   {
@@ -200,7 +203,7 @@ const routes: Routes = [
                     resolve: { innovationThreadData: InnovationThreadDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
-                        const name = data.innovationThreadData.name;
+                        const name = data.innovationThreadData?.name ?? '';
                         return name.length > 30 ? `${name.substring(0, 30)}...` : name;
                       }
                     },
@@ -235,7 +238,7 @@ const routes: Routes = [
                 path: 'activity-log', pathMatch: 'full', component: PageInnovationActivityLogComponent,
                 data: {
                   breadcrumb: 'Activity Log',
-                  layout: { type: 'full', chosenMenu: 'innovations', backgroundColor: 'bg-color-white' }
+                  layout: { type: 'full', backgroundColor: 'bg-color-white' }
                 }
               }
 
@@ -244,15 +247,22 @@ const routes: Routes = [
         ]
       },
 
-      { path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent },
+      {
+        path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent,
+        data: { breadcrumb: 'Notifications' }
+      },
 
       {
         path: 'account',
         data: {
           breadcrumb: 'Your account',
-          layout: { type: '1.third-2.thirds', chosenMenu: 'yourAccount' }
+          layout: { type: '1.third-2.thirds' }
         },
         children: [
+
+          { path: '', outlet: 'page-sidebar-outlet', component: SidebarAccountMenuOutletComponent },
+          { path: '', outlet: 'page-sidebar-mobile-outlet', component: SidebarAccountMenuOutletComponent },
+
           { path: '', pathMatch: 'full', redirectTo: 'manage-details' },
           {
             path: 'manage-details',
@@ -267,7 +277,7 @@ const routes: Routes = [
                 path: 'edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent,
                 data: {
                   breadcrumb: 'Edit',
-                  layout: { type: 'full', chosenMenu: 'yourAccount' }
+                  layout: { type: 'full' }
                 }
               }
             ],

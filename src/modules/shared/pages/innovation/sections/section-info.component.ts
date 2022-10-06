@@ -97,36 +97,26 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.setPageTitle(this.section.title);
 
-    this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
-      next: response => {
+    this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe(response => {
 
-        this.section.status = { id: response.section.status, label: INNOVATION_SECTION_STATUS[response.section.status]?.label || '' };
-        this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
-        this.section.nextSectionId = this.section.status.id === 'SUBMITTED' ? this.getNextSectionId() : null;
+      this.section.status = { id: response.section.status, label: INNOVATION_SECTION_STATUS[response.section.status]?.label || '' };
+      this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
+      this.section.nextSectionId = this.section.status.id === 'SUBMITTED' ? this.getNextSectionId() : null;
 
-        this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data));
+      this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data));
 
-        const validInformation = this.section.wizard.validateDataLegacy();
-        this.section.showSubmitButton = validInformation.valid && ['DRAFT'].includes(this.section.status.id);
+      const validInformation = this.section.wizard.validateDataLegacy();
+      this.section.showSubmitButton = validInformation.valid && ['DRAFT'].includes(this.section.status.id);
 
-        if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
-          // If accessor, only view information if section is submitted.
-          this.summaryList = [];
-        } else {
-          this.summaryList = this.section.wizard.runSummaryParsing();
-        }
-
-        this.setPageStatus('READY');
-
-      },
-      error: () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch innovation section information',
-          message: 'Please try again or contact us for further help'
-        };
+      if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
+        // If accessor, only view information if section is submitted.
+        this.summaryList = [];
+      } else {
+        this.summaryList = this.section.wizard.runSummaryParsing();
       }
+
+      this.setPageStatus('READY');
+
     });
 
   }
@@ -135,23 +125,12 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.stores.innovation.submitSections$(this.innovation.id, [this.section.id]).subscribe({
       next: () => {
-
         this.section.status = { id: 'SUBMITTED', label: 'Submitted' };
         this.section.showSubmitButton = false;
         this.section.nextSectionId = this.getNextSectionId();
-        this.alert = { type: 'SUCCESS', title: 'Your answers have been confirmed for this section', message: this.section.nextSectionId ? 'Go to next section or return to the full innovation record' : undefined };
-
+        this.setAlertSuccess('Your answers have been confirmed for this section', { message: this.section.nextSectionId ? 'Go to next section or return to the full innovation record' : undefined });
       },
-      error: () => {
-
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when submitting your section',
-          message: 'Please try again or contact us for further help',
-          setFocus: true
-        };
-
-      }
+      error: () => this.setAlertUnknownError()
     });
 
   }

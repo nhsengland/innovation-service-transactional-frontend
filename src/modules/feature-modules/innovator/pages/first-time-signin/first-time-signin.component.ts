@@ -85,14 +85,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
       })
     ).subscribe({
       next: () => this.redirectTo(`innovator/dashboard`, { alert: 'alertDisabled' }),
-      error: () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An unknown error occurred',
-          message: 'You may try to go back and try again.',
-          setFocus: true
-        };
-      }
+      error: () => this.setAlertUnknownError()
     });
 
   }

@@ -1,14 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-// Layouts.
-import { BaseLayoutComponent } from './base/base-layout.component';
+// Layout.
+import { RoutesDataType, TransactionalLayoutComponent } from '@modules/theme/base/transactional-layout.component';
+
+// Base
+import { ContextInnovationOutletComponent } from './base/context-innovation-outlet.component';
+import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
+import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
 
 // Accessor module pages.
 // // Account.
 import { PageAccessorAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
 // // Actions.
-import { ActionAdvancedFilterComponent } from './pages/actions/actions-advanced-filter.component';
+import { ActionsAdvancedSearchComponent } from './pages/actions/actions-advanced-search.component';
 import { ActionsListComponent } from './pages/actions/actions-list.component';
 // // Dashboard.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
@@ -55,30 +60,25 @@ import { InnovationActionDataResolver } from './resolvers/innovation-action-data
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 
 
-export type RoutesDataType = {
-  module?: string, // TODO: To remove.
-  breadcrumb?: string,
-  layout?: {
-    type?: 'full' | '1.third-2.thirds',
-    chosenMenu?: null | 'home' | 'innovations' | 'actions' | 'notifications' | 'yourAccount',
-    backgroundColor?: null | string
+const header: RoutesDataType['header'] = {
+  menuBarItems: {
+    left: [
+      { id: 'innovations', label: 'Innovations', url: '/accessor/innovations' },
+      { id: 'notifications', label: 'Notifications', url: '/accessor/notifications' },
+      { id: 'actions', label: 'Actions', url: '/accessor/actions', },
+      { id: 'account', label: 'Account', url: '/accessor/account' }
+    ],
+    right: []
   },
-  innovationActionData: { id: null | string, name: string },
-  innovationData?: InnovationDataResolverType,
-  innovationSectionEvidenceData: { id: null | string, name: string }
-  innovationThreadData: { id: null | string, name: string }
+  notifications: {}
 };
 
 
 const routes: Routes = [
 
   {
-    path: '',
-    component: BaseLayoutComponent,
-    data: {
-      module: 'accessor',
-      breadcrumb: 'Home'
-    },
+    path: '', component: TransactionalLayoutComponent,
+    data: { header, module: 'accessor', breadcrumb: 'Home' },
     children: [
 
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -86,41 +86,46 @@ const routes: Routes = [
 
       {
         path: 'terms-of-use', pathMatch: 'full', component: PageTermsOfUseAcceptanceComponent,
-        data: { layout: { type: 'full', chosenMenu: null } }
+        data: {
+          header: { menuBarItems: { left: [], right: [], notifications: {} } },
+          layout: { type: 'full' }
+        }
       },
 
       {
         path: 'innovations',
-        data: {
-          breadcrumb: 'Innovations'
-        },
+        data: { breadcrumb: 'Innovations' },
         children: [
-
           {
             path: '', pathMatch: 'full', component: InnovationsReviewComponent,
             data: {
               breadcrumb: null,
-              layout: { type: 'full', chosenMenu: null, backgroundColor: 'bg-color-white' }
+              layout: { type: 'full', backgroundColor: 'bg-color-white' }
             }
           },
 
           {
             path: 'advanced-search', pathMatch: 'full', component: InnovationsAdvancedReviewComponent,
             data: {
-              breadcrumb: null,
-              layout: { type: 'full', chosenMenu: null, backgroundColor: 'bg-color-white' }
+              layout: { type: 'full', backgroundColor: 'bg-color-white' }
             }
           },
           {
             path: ':innovationId',
             data: {
               module: 'accessor',
-              layout: { type: '1.third-2.thirds', chosenMenu: 'innovations' },
+              layout: { type: '1.third-2.thirds' },
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
             runGuardsAndResolvers: 'pathParamsOrQueryParamsChange',
             resolve: { innovationData: InnovationDataResolver },
             children: [
+
+              { path: '', outlet: 'page-context-outlet', component: ContextInnovationOutletComponent },
+
+              { path: '', outlet: 'page-sidebar-outlet', component: SidebarInnovationMenuOutletComponent },
+              { path: '', outlet: 'page-sidebar-mobile-outlet', component: SidebarInnovationMenuOutletComponent },
+
               { path: '', pathMatch: 'full', redirectTo: 'overview' },
               {
                 path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent,
@@ -131,7 +136,7 @@ const routes: Routes = [
                 path: 'assessments/:assessmentId', pathMatch: 'full', component: InnovationNeedsAssessmentOverviewComponent,
                 data: {
                   breadcrumb: 'Needs assessment',
-                  layout: { type: 'full', chosenMenu: 'innovations' }
+                  layout: { type: 'full' }
                 }
               },
 
@@ -211,7 +216,7 @@ const routes: Routes = [
                     resolve: { innovationActionData: InnovationActionDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
-                        const name = data.innovationActionData.name;
+                        const name = data.innovationActionData?.name ?? '';
                         return name.length > 30 ? `${name.substring(0, 30)}...` : name;
                       }
                     },
@@ -250,7 +255,7 @@ const routes: Routes = [
                     resolve: { innovationThreadData: InnovationThreadDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
-                        const name = data.innovationThreadData.name;
+                        const name = data.innovationThreadData?.name ?? '';
                         return name.length > 30 ? `${name.substring(0, 30)}...` : name;
                       }
                     },
@@ -277,27 +282,11 @@ const routes: Routes = [
                     path: '', pathMatch: 'full', component: InnovationSupportInfoComponent,
                     data: { breadcrumb: null }
                   },
-
-                  {
-                    path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
-                    // data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Go back' } } }
-                  },
-                  {
-                    path: 'new', pathMatch: 'full', component: InnovationSupportUpdateComponent,
-                    // data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Go back' } } }
-                  },
-                  {
-                    path: 'organisations', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusInfoComponent,
-                    // data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Go back' } } }
-                  },
-                  {
-                    path: 'organisations/suggest', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent,
-                    // data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Back to innovation' } } }
-                  },
-                  {
-                    path: ':supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent,
-                    // data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/innovations/:innovationId/support', label: 'Go back' } } }
-                  }
+                  { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent },
+                  { path: 'new', pathMatch: 'full', component: InnovationSupportUpdateComponent },
+                  { path: 'organisations', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusInfoComponent },
+                  { path: 'organisations/suggest', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent },
+                  { path: ':supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent }
                 ]
               },
 
@@ -305,7 +294,7 @@ const routes: Routes = [
                 path: 'activity-log', pathMatch: 'full', component: PageInnovationActivityLogComponent,
                 data: {
                   breadcrumb: 'Activity Log',
-                  layout: { type: 'full', chosenMenu: 'innovations', backgroundColor: 'bg-color-white' }
+                  layout: { type: 'full', backgroundColor: 'bg-color-white' }
                 }
               }
             ]
@@ -324,15 +313,15 @@ const routes: Routes = [
             path: '', pathMatch: 'full', component: ActionsListComponent,
             data: { breadcrumb: null }
           },
-          {
-            path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent,
-            // data: { layoutOptions: { type: 'emptyLeftAside', backLink: { url: '/accessor/actions', label: 'Go back' } } }
-          },
-          { path: 'advanced-filter', pathMatch: 'full', component: ActionAdvancedFilterComponent }
+          { path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent },
+          { path: 'advanced-filter', pathMatch: 'full', component: ActionsAdvancedSearchComponent }
         ]
       },
 
-      { path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent },
+      {
+        path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent,
+        data: { breadcrumb: 'Notifications' }
+      },
 
       {
         path: 'account',
@@ -341,6 +330,10 @@ const routes: Routes = [
           layout: { type: '1.third-2.thirds', chosenMenu: 'yourAccount' }
         },
         children: [
+
+          { path: '', outlet: 'page-sidebar-outlet', component: SidebarAccountMenuOutletComponent },
+          { path: '', outlet: 'page-sidebar-mobile-outlet', component: SidebarAccountMenuOutletComponent },
+
           { path: '', pathMatch: 'full', redirectTo: 'manage-details' },
           {
             path: 'manage-details',
@@ -389,10 +382,7 @@ const routes: Routes = [
           }
         ]
       }
-
-
     ]
-
   }
 ];
 

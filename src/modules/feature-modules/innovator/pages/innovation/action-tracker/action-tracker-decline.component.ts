@@ -49,7 +49,7 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
       this.actionDisplayId = response.displayId;
 
       this.setPageTitle(response.name, { hint: response.displayId });
-      this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker`);
+      // this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker`);
       this.setPageStatus('READY');
 
     });
@@ -69,7 +69,7 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
     this.innovatorService.declineAction(this.innovationId, this.actionId, { ...this.form.value, status }).subscribe({
       next: response => {
         this.setRedirectAlertSuccess('The action was declined', { message: 'The accessor will be notified' });
-        this.redirectTo(`/innovator/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionDeclined', status });
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/action-tracker/${response.id}`);
       },
       error: () => this.setAlertUnknownError()
     });

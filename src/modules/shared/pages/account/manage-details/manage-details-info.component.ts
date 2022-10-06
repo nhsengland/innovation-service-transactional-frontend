@@ -24,24 +24,6 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
 
     this.module = this.activatedRoute.snapshot.data.module;
 
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'accountDetailsUpdateSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'Your information has been saved'
-        };
-        break;
-      case 'accountDetailsUpdateError':
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when creating an action',
-          message: 'Please try again or contact us for further help'
-        };
-        break;
-      default:
-        break;
-    }
-
   }
 
 

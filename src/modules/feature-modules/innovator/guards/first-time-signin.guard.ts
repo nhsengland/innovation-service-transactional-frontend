@@ -27,7 +27,7 @@ export class FirstTimeSigninGuard implements CanActivateChild {
 
     } else {
 
-      // User has pending innovation transfers and a localStorage item that states that he pressed an email?
+      // User has pending innovation transfers?
       if (this.authenticationStore.hasInnovationTransfers()) {
 
         if (['innovation-transfer-acceptance', ':stepId'].includes(activatedRouteSnapshot.routeConfig?.path || '')) {
@@ -47,7 +47,6 @@ export class FirstTimeSigninGuard implements CanActivateChild {
 
       this.router.navigate(['/innovator/first-time-signin']);
       return of(false);
-
 
     }
 

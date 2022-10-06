@@ -58,8 +58,6 @@ export class PageTermsOfUseAcceptanceComponent extends CoreComponent implements 
 
   onAgree(): void {
 
-    this.alert = { type: null };
-
     this.termsOfUserService.acceptTermsOfUseVersion(this.termsOfUseVersion.id).subscribe({
       next: () => { window.location.assign(`${this.appUrl}/dashboard`); },
       error: () => this.setAlertError('Unable to save terms of use. Please try again or contact us for further help')

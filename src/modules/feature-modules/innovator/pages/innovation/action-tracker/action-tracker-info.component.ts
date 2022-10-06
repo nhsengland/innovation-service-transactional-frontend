@@ -51,7 +51,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
       this.declineShow = this.action.status.toLocaleLowerCase() === INNOVATION_SECTION_ACTION_STATUS.REQUESTED.label.toLocaleLowerCase();
 
       this.setPageTitle(this.action.name, { hint: this.action.displayId });
-      this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker`);
+      // this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker`);
       this.setPageStatus('READY');
 
     });

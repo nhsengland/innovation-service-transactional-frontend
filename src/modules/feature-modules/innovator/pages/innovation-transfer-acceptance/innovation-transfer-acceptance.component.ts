@@ -48,51 +48,54 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
 
     this.wizard = INNOVATION_TRANSFER;
 
-    this.innovatorService.getInnovationTransfers(true).subscribe(
-      response => {
+    this.innovatorService.getInnovationTransfers(true).subscribe(response => {
 
-        if (response.length === 0) {
-          this.redirectTo('error/generic');
-          return;
-        }
+      if (response.length === 0) {
+        this.redirectTo('error/generic');
+        return;
+      }
 
-        // As this page only appears for new users, if more innovation transfers exists to him, we just choose the first to finish the process.
-        // User will have the opportunity to accept other transfers afterwards.
-        const transfer = response[0];
-        this.transferId = transfer.id;
+      // As this page only appears for new users, if more innovation transfers exists to him, we just choose the first to finish the process.
+      // User will have the opportunity to accept other transfers afterwards.
+      const transfer = response[0];
+      this.transferId = transfer.id;
 
-        // Updates wizard configuration step 1 description.
-        this.wizard.steps[0].description = `${transfer.innovation.owner} has requested that you take ownership of ${transfer.innovation.name}.`;
+      // Updates wizard configuration step 1 description.
+      this.wizard.steps[0].description = `${transfer.innovation.owner} has requested that you take ownership of ${transfer.innovation.name}.`;
 
 
-        this.wizard.setAnswers(this.wizard.runInboundParsing({})).runRules();
+      this.wizard.setAnswers(this.wizard.runInboundParsing({})).runRules();
 
-        this.subscriptions.push(
-          this.activatedRoute.params.subscribe(params => {
+      this.subscriptions.push(
+        this.activatedRoute.params.subscribe(params => {
 
-            if (!this.wizard.isValidStep(params.stepId)) {
-              this.redirectTo('/not-found');
-              return;
-            }
+          if (!this.wizard.isValidStep(params.stepId)) {
+            this.redirectTo('/not-found');
+            return;
+          }
 
-            if (this.isSummaryStep()) {
-              this.setPageTitle('Check your answers');
-              this.summaryList = this.wizard.runSummaryParsing();
-              return;
-            }
+          if (this.isSummaryStep()) {
+            this.setPageTitle('Check your answers');
+            this.summaryList = this.wizard.runSummaryParsing();
+            return;
+          }
 
-            /* istanbul ignore next */
-            this.setPageTitle(this.wizard.currentStep().label || this.wizard.currentStep().parameters[0].label || '');
-            this.wizard.gotoStep(Number(params.stepId));
+          /* istanbul ignore next */
+          this.setPageTitle(this.wizard.currentStep().label || this.wizard.currentStep().parameters[0].label || '');
 
-          })
-        );
+          if (!this.wizard.isFirstStep()) {
+            this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
+          } else {
+            this.resetBackLink();
+          }
+          this.wizard.gotoStep(Number(params.stepId));
 
-        this.setPageStatus('READY');
+        })
+      );
 
-      },
-      error => this.redirectTo('error/generic')
-    );
+      this.setPageStatus('READY');
+
+    });
 
   }
 
@@ -124,10 +127,10 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
       concatMap(() => {
         return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
       })
-    ).subscribe(
-      () => this.redirectTo(`innovator/dashboard`),
-      () => this.redirectTo(`innovator/innovation-transfer-acceptance/summary`)
-    );
+    ).subscribe({
+      next: () => this.redirectTo(`innovator/dashboard`),
+      error: () => this.redirectTo(`innovator/innovation-transfer-acceptance/summary`)
+    });
 
   }
 

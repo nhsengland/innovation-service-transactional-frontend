@@ -12,7 +12,7 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
-import { ActionAdvancedFilterComponent } from './actions-advanced-filter.component';
+import { ActionsAdvancedSearchComponent } from './actions-advanced-search.component';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { AccessorService } from '../../services/accessor.service';
@@ -23,8 +23,8 @@ describe('FeatureModules/Accessor/Actions/FilterActionComponent', () => {
   let authenticationStore: AuthenticationStore;
   let accessorService: AccessorService;
   let organisationsService: OrganisationsService;
-  let component: ActionAdvancedFilterComponent;
-  let fixture: ComponentFixture<ActionAdvancedFilterComponent>;
+  let component: ActionsAdvancedSearchComponent;
+  let fixture: ComponentFixture<ActionsAdvancedSearchComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -48,7 +48,7 @@ describe('FeatureModules/Accessor/Actions/FilterActionComponent', () => {
   });
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
+    fixture = TestBed.createComponent(ActionsAdvancedSearchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();

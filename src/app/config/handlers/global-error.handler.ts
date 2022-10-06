@@ -19,20 +19,20 @@ export class GlobalErrorHandler implements ErrorHandler {
 
     if (error instanceof HttpErrorResponse) { // Server error.
 
-      console.error('SERVER ERROR: ', error.message, error);
-      this.contextStore.setPageAlert({ type: 'ERROR', title: 'Unable to fetch information', message: error.message, setFocus: true});
+      console.error('SERVER ERROR: ', error);
+      this.contextStore.setPageAlert({ type: 'ERROR', title: 'There is a problem', message: 'An error has occured while fetching information. Please, try again or contact us for further help', setFocus: true });
       this.contextStore.setPageStatus('ERROR');
 
     } else { // Client Error.
 
-      console.error('CLIENT ERROR', error.message);
-      this.contextStore.setPageAlert({ type: 'ERROR', title: 'There is a problem', message: 'An error has occured. Please, try again or contact us for further help', setFocus: true});
+      console.error('CLIENT ERROR', error);
+      this.contextStore.setPageAlert({ type: 'ERROR', title: 'There is a problem', message: 'An error has occured. Please, try again or contact us for further help', setFocus: true });
 
     }
 
     // Always log errors
     // logger.logError(message, stackTrace);
-    console.error('ERROR DETAILS', error);
+    // console.error('ERROR DETAILS', error);
 
   }
 
