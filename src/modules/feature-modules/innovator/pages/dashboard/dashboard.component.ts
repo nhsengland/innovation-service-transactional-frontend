@@ -84,10 +84,16 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   onSubmitTransferResponse(transferId: string, accept: boolean): void {
 
     this.innovatorService.updateTransferInnovation(transferId, (accept ? 'COMPLETED' : 'DECLINED')).pipe(
-      concatMap(() => this.stores.authentication.initializeAuthentication$()), // Initialize authentication in order to update First Time SignIn information.
-      concatMap(() => this.innovationsService.getInnovationsList())
-    ).subscribe(innovationsList => {
+      concatMap(() =>
+        forkJoin([
+          this.stores.authentication.initializeAuthentication$(), // Initialize authentication in order to update First Time SignIn information.
+          this.innovatorService.getInnovationTransfers(true),
+          this.innovationsService.getInnovationsList()
+        ])
+      )
+    ).subscribe(([_authentication, innovationsTransfers, innovationsList]) => {
 
+      this.innovationTransfers = innovationsTransfers;
       this.user.innovations = innovationsList;
 
       this.setAlertSuccess(accept ? `You have successfully accepted ownership` : `You have successfully rejected ownership`);

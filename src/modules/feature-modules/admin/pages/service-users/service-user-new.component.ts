@@ -93,6 +93,7 @@ export class PageServiceUserNewComponent extends CoreComponent implements OnInit
         this.redirectTo(`admin/service-users/${response.id}`, { alert: 'userCreationSuccess' });
       },
       error: (error) => {
+
         this.submitBtnClicked = false;
 
         if (!this.securityConfirmation.id && error.id) {

@@ -19,7 +19,9 @@
       </ng-container>
       <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3" (click)="onSubmitForm()" [disabled]="submitBtnClicked"> Delete account </button>
 
-      <a routerLink="/admin/administration-users/{{user.id}}" class="d-block">Cancel</a>
+      <div>
+        <a routerLink="/admin/administration-users/{{user.id}}">Cancel</a>
+      </div>
 
     </form>
 

@@ -55,7 +55,6 @@ import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-o
 
 // Resolvers.
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
-import { InnovationDataResolverType } from '@modules/stores/innovation';
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 
@@ -66,7 +65,7 @@ const header: RoutesDataType['header'] = {
       { id: 'innovations', label: 'Innovations', url: '/accessor/innovations' },
       { id: 'notifications', label: 'Notifications', url: '/accessor/notifications' },
       { id: 'actions', label: 'Actions', url: '/accessor/actions', },
-      { id: 'account', label: 'Account', url: '/accessor/account' }
+      { id: 'account', label: 'Your account', url: '/accessor/account' }
     ],
     right: []
   },
@@ -276,10 +275,10 @@ const routes: Routes = [
               {
                 path: 'support',
                 data: { breadcrumb: 'Data Sharing and Support' },
-                resolve: { innovationData: InnovationDataResolver }, // Needed to repeat this resolver as support can be updated from this routes.
                 children: [
                   {
                     path: '', pathMatch: 'full', component: InnovationSupportInfoComponent,
+                    resolve: { innovationData: InnovationDataResolver }, // Needed to repeat this resolver as support can be updated from this routes.
                     data: { breadcrumb: null }
                   },
                   { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent },
@@ -320,7 +319,10 @@ const routes: Routes = [
 
       {
         path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent,
-        data: { breadcrumb: 'Notifications' }
+        data: {
+          breadcrumb: 'Notifications',
+          layout: { type: 'full', backgroundColor: 'bg-color-white' }
+        }
       },
 
       {

@@ -6,8 +6,6 @@ import { catchError, Observable, throwError } from 'rxjs';
 @Injectable()
 export class ApiInInterceptor implements HttpInterceptor {
 
-  constructor() { }
-
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     return next.handle(request).pipe(
@@ -21,7 +19,8 @@ export class ApiInInterceptor implements HttpInterceptor {
         } else {
 
           // If error is handled on the subscription itself, this error will be ignored!
-          return throwError(() => new HttpErrorResponse({ error }));
+          // return throwError(() => new HttpErrorResponse({ error }));
+          return throwError(() => error);
 
         }
 

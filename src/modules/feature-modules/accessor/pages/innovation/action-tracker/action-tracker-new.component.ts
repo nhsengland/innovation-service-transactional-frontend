@@ -50,6 +50,8 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
       this.form.get('section')!.setValue(this.activatedRoute.snapshot.queryParams.section);
     }
 
+    this.setPageStatus('READY');
+
   }
 
 
