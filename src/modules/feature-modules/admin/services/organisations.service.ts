@@ -127,7 +127,7 @@ export class OrganisationsService extends CoreService {
     return this.http.patch<updateOrganisationDTO>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error })))
+      catchError(error => throwError(() => ({ id: error.error.id })))
     );
 
   }
@@ -184,7 +184,7 @@ export class OrganisationsService extends CoreService {
     return this.http.patch<updateOrganisationDTO>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error })))
+      catchError(error => throwError(() => ({ id: error.error.id })))
     );
 
   }

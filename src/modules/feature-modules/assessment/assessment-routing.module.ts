@@ -52,7 +52,7 @@ const header: RoutesDataType['header'] = {
     left: [
       { id: 'innovations', label: 'Innovations', url: '/assessment/innovations' },
       { id: 'notifications', label: 'Notifications', url: '/assessment/notifications' },
-      { id: 'account', label: 'Account', url: '/assessment/account' },
+      { id: 'account', label: 'Your account', url: '/assessment/account' },
     ],
     right: []
   },
@@ -249,7 +249,10 @@ const routes: Routes = [
 
       {
         path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent,
-        data: { breadcrumb: 'Notifications' }
+        data: {
+          breadcrumb: 'Notifications',
+          layout: { type: 'full', backgroundColor: 'bg-color-white' }
+        }
       },
 
       {

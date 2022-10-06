@@ -9,7 +9,9 @@
         <theme-form-textarea controlName="description" label="Please describe what information you want the innovator to provide" [pageUniqueField]="false" lengthLimit="medium"></theme-form-textarea>
         <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Request action</button>
 
-        <a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker" class="d-block">Cancel</a>
+        <div>
+          <a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker">Cancel</a>
+        </div>
 
       </form>
 

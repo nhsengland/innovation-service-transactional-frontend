@@ -34,7 +34,9 @@
 
           <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button nhsuk-u-margin-top-3"> {{ submitButton.label }} </button>
 
-          <a routerLink="/accessor/innovations/{{ innovation.id }}/support" class="d-block">Cancel</a>
+          <div>
+            <a routerLink="/accessor/innovations/{{ innovation.id }}/support">Cancel</a>
+          </div>
 
         </div>
       </div>

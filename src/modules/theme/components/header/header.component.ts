@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit, OnDestroy, PLATFORM_ID, Inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -7,6 +7,7 @@ import { filter } from 'rxjs/operators';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { CookiesService } from '@modules/core/services/cookies.service';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
+import { UserTypeEnum } from '@app/base/enums';
 
 
 export type HeaderMenuBarItemType = {
@@ -34,7 +35,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() rightMenuBarItems: HeaderMenuBarItemType[] = [];
   @Input() notifications: HeaderNotificationsType = {};
 
-  // @ViewChild('headerNavigationElement', { read: ElementRef, static: false }) headerNavigationElement?: ElementRef;
 
   private subscriptions: Subscription[] = [];
 
@@ -63,7 +63,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     const user = this.authenticationStore.getUserInfo();
     this.user = {
       displayName: user.displayName,
-      description: `Logged as ${user.type}`
+      description: `Logged as ${this.authenticationStore.getUserTypeDescription(user.type as UserTypeEnum)}`
     };
 
     this.signOutUrl = `${this.environmentVariablesStore.APP_URL}/signout`;
