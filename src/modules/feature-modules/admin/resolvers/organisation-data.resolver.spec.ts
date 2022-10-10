@@ -52,7 +52,7 @@ describe('FeatureModules/Admin/Resolvers/OrganisationDataResolver', () => {
     let response: any = null;
     const expected = { id: 'orgId01', name: 'Org name 01' };
 
-    resolver.resolve(routeMock as any).subscribe(success => response = success, error => response = error);
+    resolver.resolve(routeMock as any).subscribe({ next: success => response = success, error: error => response = error});
     expect(response).toEqual(expected);
 
   });
@@ -66,7 +66,7 @@ describe('FeatureModules/Admin/Resolvers/OrganisationDataResolver', () => {
 
     let response: any = null;
 
-    resolver.resolve(routeMock as any).subscribe(success => response = success, error => response = error);
+    resolver.resolve(routeMock as any).subscribe({ next: success => response = success, error: error => response = error});
     expect(response).toBe('error');
 
   });

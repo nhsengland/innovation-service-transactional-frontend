@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 
@@ -20,35 +20,6 @@ type getInnovationActionsListEndpointInDTO = {
     count: number
   },
 };
-
-export type getInnovationInfoEndpointDTO = {
-  id: string;
-  name: string;
-  status: InnovationStatusEnum;
-  description: string;
-  countryName: string;
-  postcode: string;
-  submittedAt?: string;
-  assessment?: {
-    id: string;
-  };
-  actions: {
-    requestedCount: number;
-    inReviewCount: number;
-  },
-  notifications: { [key: string]: number }
-};
-
-export type getInnovationActionInfoInDTO = {
-  id: string;
-  displayId: string;
-  status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-  description: string;
-  section: InnovationSectionEnum;
-  createdAt: string; // '2021-04-16T09:23:49.396Z',
-  createdBy: { id: string; name: string; };
-};
-export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
 
 export type getInnovationSupportsInDTO = {
   id: string;
@@ -193,16 +164,6 @@ export class InnovatorService extends CoreService {
 
   }
 
-  getInnovationInfo(innovationId: string): Observable<getInnovationInfoEndpointDTO> {
-
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
-
-  }
-
   getInnovationSupports(innovationId: string, returnAccessorsInfo: boolean): Observable<getInnovationSupportsInDTO[]> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId }).setQueryParams({ full: returnAccessorsInfo });
@@ -227,25 +188,6 @@ export class InnovatorService extends CoreService {
           })),
         };
       })
-    );
-
-  }
-
-  getInnovationActionInfo(innovationId: string, actionId: string): Observable<getInnovationActionInfoOutDTO> {
-
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
-    return this.http.get<getInnovationActionInfoInDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => ({
-        id: response.id,
-        displayId: response.displayId,
-        status: response.status,
-        name: `Submit '${this.stores.innovation.getSectionTitle(response.section).toLowerCase()}'`,
-        description: response.description,
-        section: response.section,
-        createdAt: response.createdAt,
-        createdBy: response.createdBy.name
-      }))
     );
 
   }
@@ -357,7 +299,6 @@ export class InnovatorService extends CoreService {
     return this.http.get<getInnovationTransfersDTO[]>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
-
 
   transferInnovation(body: { innovationId: string, email: string }): Observable<{ id: string }> {
 

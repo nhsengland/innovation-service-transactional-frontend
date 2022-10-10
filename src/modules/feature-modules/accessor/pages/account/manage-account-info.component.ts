@@ -24,6 +24,8 @@ export class PageAccessorAccountManageAccountInfoComponent extends CoreComponent
       passwordResetOn: user.passwordResetOn
     };
 
+    this.setPageStatus('READY');
+
   }
 
 }

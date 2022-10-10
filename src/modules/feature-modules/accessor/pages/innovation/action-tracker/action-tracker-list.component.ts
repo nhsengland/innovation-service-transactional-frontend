@@ -36,7 +36,7 @@ export class InnovationActionTrackerListComponent extends CoreComponent implemen
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
 
     this.openedActionsList = new TableModel({
       visibleColumns: {
@@ -61,21 +61,11 @@ export class InnovationActionTrackerListComponent extends CoreComponent implemen
 
   ngOnInit(): void {
 
-    this.accessorService.getInnovationActionsList(this.innovationId).subscribe(
-      response => {
-        this.openedActionsList.setData(response.openedActions);
-        this.closedActionsList.setData(response.closedActions);
-        this.setPageStatus('READY');
-      },
-      error => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch actions information',
-          message: 'Please try again or contact us for further help'
-        };
-      }
-    );
+    this.accessorService.getInnovationActionsList(this.innovationId).subscribe(response => {
+      this.openedActionsList.setData(response.openedActions);
+      this.closedActionsList.setData(response.closedActions);
+      this.setPageStatus('READY');
+    });
 
   }
 

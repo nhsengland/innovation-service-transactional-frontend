@@ -17,7 +17,7 @@ interface Breadcrumb {
 })
 export class HeaderBreadcrumbsBarComponent implements OnInit, OnDestroy {
 
-  protected subscriptions: Subscription[] = [];
+  private subscriptions = new Subscription();
 
   breadcrumbs: Breadcrumb[] = [];
   backToItem: Breadcrumb = { label: '', url: '' };
@@ -31,7 +31,7 @@ export class HeaderBreadcrumbsBarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.subscriptions.push(
+    this.subscriptions.add(
       this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => this.onRouteChange())
     );
 
@@ -49,6 +49,7 @@ export class HeaderBreadcrumbsBarComponent implements OnInit, OnDestroy {
 
   private createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: Breadcrumb[] = []): Breadcrumb[] {
 
+    // console.log('route.firstChild', url, breadcrumbs);
     const children: ActivatedRoute[] = route.children;
 
     if (children.length === 0) {
@@ -81,7 +82,7 @@ export class HeaderBreadcrumbsBarComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.unsubscribe();
   }
 
 }

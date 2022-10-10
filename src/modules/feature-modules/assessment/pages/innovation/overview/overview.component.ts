@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 import { AssessmentService, getInnovationInfoEndpointDTO } from '../../../services/assessment.service';
 
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
+import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 
 
 @Component({
@@ -14,8 +14,6 @@ import { NotificationContextTypeEnum } from '@modules/stores/environment/environ
   templateUrl: './overview.component.html'
 })
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
-
-  module: '' | 'innovator' | 'accessor' | 'assessment' = '';
 
   innovationId: string;
   innovation: getInnovationInfoEndpointDTO | undefined;
@@ -32,46 +30,35 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     super();
     this.setPageTitle('Overview');
 
-    this.module = this.activatedRoute.snapshot.data.module;
-
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
   }
 
 
   ngOnInit(): void {
-    this.assessmentService.getInnovationInfo(this.innovationId).subscribe({
-      next: response => {
 
-        this.innovation = response;
+    this.assessmentService.getInnovationInfo(this.innovationId).subscribe(response => {
 
-        this.innovationSummary = [
-          { label: 'Company', value: response.summary.company },
-          { label: 'Company size', value: response.summary.companySize },
-          { label: 'Location', value: `${response.summary.countryName}${response.summary.postCode ? ', ' + response.summary.postCode : ''}` },
-          { label: 'Description', value: response.summary.description },
-          { label: 'Categories', value: response.summary.categories.map(v => v === 'OTHER' ? response.summary.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
-        ];
+      this.innovation = response;
 
-        this.innovatorSummary = [
-          { label: 'Name', value: response.contact.name },
-          { label: 'Email address', value: response.contact.email },
-          { label: 'Phone number', value: response.contact.phone || '' }
-        ];
+      this.innovationSummary = [
+        { label: 'Company', value: response.summary.company },
+        { label: 'Company size', value: response.summary.companySize },
+        { label: 'Location', value: `${response.summary.countryName}${response.summary.postCode ? ', ' + response.summary.postCode : ''}` },
+        { label: 'Description', value: response.summary.description },
+        { label: 'Categories', value: response.summary.categories.map(v => v === 'OTHER' ? response.summary.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
+      ];
 
-        this.stores.environment.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+      this.innovatorSummary = [
+        { label: 'Name', value: response.contact.name },
+        { label: 'Email address', value: response.contact.email },
+        { label: 'Phone number', value: response.contact.phone || '' }
+      ];
 
-        this.setPageStatus('READY');
+      this.stores.context.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
 
-      },
-      error: () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch information',
-          message: 'Please try again or contact us for further help'
-        };
-      }
+      this.setPageStatus('READY');
+
     });
 
   }

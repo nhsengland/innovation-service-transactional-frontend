@@ -5,7 +5,7 @@ import { filter } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 
 import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
-import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
@@ -19,7 +19,7 @@ import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/store
 export class PageInnovationSectionInfoComponent extends CoreComponent implements OnInit {
 
   module: '' | 'innovator' | 'accessor' | 'assessment' = '';
-  innovation: EnvironmentInnovationType;
+  innovation: ContextInnovationType;
 
   section: {
     id: InnovationSectionEnum;
@@ -40,10 +40,10 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   ) {
 
     super();
-    this.setPageTitle('Section details');
+
 
     this.module = this.activatedRoute.snapshot.data.module;
-    this.innovation = this.stores.environment.getInnovation();
+    this.innovation = this.stores.context.getInnovation();
 
     this.section = {
       id: this.activatedRoute.snapshot.params.sectionId,
@@ -65,9 +65,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     // This router subscription is needed for the button to go to the next step.
     // As is it the same component, we can't use the routerLink directive alone.
     this.subscriptions.push(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe({
-        next: e => this.initializePage()
-      })
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.initializePage())
     );
 
   }
@@ -97,65 +95,28 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       wizard: section?.wizard || new WizardEngineModel({})
     };
 
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'sectionUpdateSuccess':
-        this.section.nextSectionId = this.getNextSectionId();
-        this.alert = { type: 'SUCCESS', title: 'Your answers have been confirmed for this section', message: this.section.nextSectionId ? 'Go to next section or return to the full innovation record' : undefined };
-        break;
+    this.setPageTitle(this.section.title);
 
-      case 'sectionUpdateError':
-        this.alert = { type: 'ERROR', title: 'An error occurred when saving your section', message: 'Please try again or contact us for further help.' };
-        break;
+    this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe(response => {
 
-      case 'evidenceUpdateSuccess':
-        this.alert = { type: 'SUCCESS', title: 'Your evidence has been saved', message: 'You need to submit this section for review to notify your supporting accessor(s).' };
-        break;
+      this.section.status = { id: response.section.status, label: INNOVATION_SECTION_STATUS[response.section.status]?.label || '' };
+      this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
+      this.section.nextSectionId = this.section.status.id === 'SUBMITTED' ? this.getNextSectionId() : null;
 
-      case 'evidenceDeleteSuccess':
-        this.alert = { type: 'WARNING', title: 'Your evidence has been deleted' };
-        break;
+      this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data));
 
-      case 'evidenceUpdateError':
-      case 'evidenceDeleteError':
-        this.alert = { type: 'ERROR', title: 'An error occurred when saving your evidence', message: 'Please try again or contact us for further help.' };
-        break;
+      const validInformation = this.section.wizard.validateDataLegacy();
+      this.section.showSubmitButton = validInformation.valid && ['DRAFT'].includes(this.section.status.id);
 
-      default:
-        this.alert = { type: null };
-        break;
-    }
-
-
-    this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
-      next: response => {
-
-        this.section.status = { id: response.section.status, label: INNOVATION_SECTION_STATUS[response.section.status]?.label || '' };
-        this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
-        this.section.nextSectionId = this.section.status.id === 'SUBMITTED' ? this.getNextSectionId() : null;
-
-        this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data)).runRules();
-
-        const validInformation = this.section.wizard.validateData();
-        this.section.showSubmitButton = validInformation.valid && ['DRAFT'].includes(this.section.status.id);
-
-        if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
-          // If accessor, only view information if section is submitted.
-          this.summaryList = [];
-        } else {
-          this.summaryList = this.section.wizard.runSummaryParsing();
-        }
-
-        this.setPageStatus('READY');
-
-      },
-      error: () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch innovation section information',
-          message: 'Please try again or contact us for further help'
-        };
+      if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
+        // If accessor, only view information if section is submitted.
+        this.summaryList = [];
+      } else {
+        this.summaryList = this.section.wizard.runSummaryParsing();
       }
+
+      this.setPageStatus('READY');
+
     });
 
   }
@@ -164,23 +125,12 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.stores.innovation.submitSections$(this.innovation.id, [this.section.id]).subscribe({
       next: () => {
-
         this.section.status = { id: 'SUBMITTED', label: 'Submitted' };
         this.section.showSubmitButton = false;
         this.section.nextSectionId = this.getNextSectionId();
-        this.alert = { type: 'SUCCESS', title: 'Your answers have been confirmed for this section', message: this.section.nextSectionId ? 'Go to next section or return to the full innovation record' : undefined };
-
+        this.setAlertSuccess('Your answers have been confirmed for this section', { message: this.section.nextSectionId ? 'Go to next section or return to the full innovation record' : undefined });
       },
-      error: () => {
-
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when submitting your section',
-          message: 'Please try again or contact us for further help',
-          setFocus: true
-        };
-
-      }
+      error: () => this.setAlertUnknownError()
     });
 
   }

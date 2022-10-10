@@ -61,23 +61,6 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
     this.organisationInfoUrl = `${this.CONSTANTS.BASE_URL}/about-the-service/who-we-are`;
     this.shares = [];
 
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'sharingUpdateSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: 'Data sharing preferences',
-          message: 'Your data sharing preferences were changed.'
-        };
-        break;
-      case 'sharingUpdateError':
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when updating data sharing preferences',
-          message: 'Please try again or contact us for further help'
-        };
-        break;
-    }
-
   }
 
   ngOnInit(): void {
@@ -132,16 +115,7 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
       this.setPageStatus('READY');
 
-    },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch data sharing information',
-          message: 'Please try again or contact us for further help'
-        };
-      }
-    );
+    });
 
   }
 

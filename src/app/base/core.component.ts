@@ -2,7 +2,6 @@ import { Component, PLATFORM_ID, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { NGXLogger } from 'ngx-logger';
@@ -14,7 +13,8 @@ import { AppInjector } from '@modules/core/injectors/app-injector';
 
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
-import { EnvironmentStore } from '@modules/stores/environment/environment.store';
+import { ContextStore } from '@modules/stores/context/context.store';
+import { ContextPageLayoutType, ContextPageStatusType } from '@modules/stores/context/context.types';
 import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 
 import { AlertType, MappedObjectType } from '@modules/core/interfaces/base.interfaces';
@@ -28,15 +28,11 @@ export class CoreComponent implements OnDestroy {
   private serverRequest: Request | null;
   private serverResponse: Response | null;
 
-  private pageTitleHolder = '';
-  private pageStatusHolder: 'LOADING' | 'READY' | 'ERROR' = 'LOADING';
-
   private envVariablesStore: EnvironmentVariablesStore;
 
-  protected titleService: Title;
+  private titleService: Title;
+  private translateService: TranslateService;
   protected router: Router;
-  protected http: HttpClient;
-  protected translateService: TranslateService;
   protected logger: NGXLogger;
 
   protected CONSTANTS: {
@@ -48,13 +44,15 @@ export class CoreComponent implements OnDestroy {
 
   protected stores: {
     authentication: AuthenticationStore;
-    environment: EnvironmentStore;
+    context: ContextStore;
     innovation: InnovationStore;
   };
 
   protected subscriptions: Subscription[] = [];
 
   public alert: AlertType = { type: null };
+
+  public pageStatus: ContextPageStatusType = 'LOADING';
 
   constructor() {
 
@@ -74,7 +72,6 @@ export class CoreComponent implements OnDestroy {
 
     this.titleService = injector.get(Title);
     this.router = injector.get(Router);
-    this.http = injector.get(HttpClient);
     this.translateService = injector.get(TranslateService);
     this.logger = injector.get(NGXLogger);
 
@@ -87,9 +84,13 @@ export class CoreComponent implements OnDestroy {
 
     this.stores = {
       authentication: injector.get(AuthenticationStore),
-      environment: injector.get(EnvironmentStore),
+      context: injector.get(ContextStore),
       innovation: injector.get(InnovationStore)
     };
+
+    this.subscriptions.push(
+      this.stores.context.pageLayoutStatus$().subscribe(item => { this.pageStatus = item; })
+    );
 
   }
 
@@ -100,9 +101,8 @@ export class CoreComponent implements OnDestroy {
   /* istanbul ignore next */
   get requestBody(): MappedObjectType { return this.serverRequest?.body || {}; }
   /* istanbul ignore next */
-  get pageTitle(): string { return this.pageTitleHolder || ''; }
-  /* istanbul ignore next */
-  get pageStatus(): string { return this.pageStatusHolder; }
+  get pageTitle(): string { return this.stores.context.state.pageLayoutBS.getValue().title.main ?? ''; } // Deprecated!
+
 
 
   isRunningOnBrowser(): boolean {
@@ -117,44 +117,79 @@ export class CoreComponent implements OnDestroy {
     return this.serverRequest?.method?.toLowerCase() === 'post';
   }
 
+  setPageTitle(main: string, options?: { hint?: string, showTab?: boolean, showPage?: boolean, size?: 'xl' | 'l' }): void {
 
-  setPageTitle(s: undefined | string): void {
+    main = main ? this.translateService.instant(main) : null;
 
-    if (!s) { this.pageTitleHolder = ''; }
-    else { this.pageTitleHolder = this.translateService.instant(s); }
+    if (main && (options?.showPage ?? true)) {
+      this.stores.context.setPageTitle({ main, secondary: options?.hint, size: options?.size });
+    } else {
+      this.stores.context.setPageTitle({ main: null });
+    }
 
-    this.titleService.setTitle(`${this.pageTitleHolder ? this.pageTitleHolder + ' | ' : ''}${this.translateService.instant('app.title')}`);
+    const tabTitle = (main && (options?.showTab ?? true)) ? `${main} | ` : '';
+    this.titleService.setTitle(`${tabTitle}${this.translateService.instant('app.title')}`);
+
   }
 
-  setPageStatus(s: 'LOADING' | 'READY' | 'ERROR'): void {
+
+  setPageStatus(status: 'LOADING' | 'READY' | 'ERROR'): void {
 
     // When running server side, the status always remains LOADING.
     // The visual effects only are meant to be applied on the browser.
     if (this.isRunningOnBrowser()) {
-      this.pageStatusHolder = s;
+      this.stores.context.setPageStatus(status);
     }
 
   }
 
-  clearAlert(): void { this.alert = { type: null }; }
-  setAlert(type: AlertType['type'], title: string, message?: string, setFocus?: boolean): void {
-    this.alert = { type, title, message, setFocus: !!setFocus };
+  resetBackLink() {
+    this.stores.context.setPageBackLink({ label: null });
   }
-  setAlertSuccess(title?: string, message?: string): void { this.setAlert('SUCCESS', title || 'Operation was successful', message, true); }
-  setAlertError(title: string, message?: string): void { this.setAlert('ERROR', title, message, true); }
-  setAlertDataLoadError(): void { this.setAlert('ERROR', 'Unable to fetch information', 'Please try again or contact us for further help', true); }
-  setAlertDataSaveError(): void { this.setAlert('ERROR', 'An error occurred when saving information', 'Please try again or contact us for further help', true); }
-  setAlertUnknownError(): void { this.setAlert('ERROR', 'It appears that something went wrong!', 'Please try again or contact us for further help', true); }
+  setBackLink(label: string, urlOrCallback: string | ((...p: any) => void), hiddenLabel?: string): void {
 
-  focusBody(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      setTimeout(() => {
-        document.body.setAttribute('tabindex', '-1');
-        document.body.focus();
-        document.body.removeAttribute('tabindex');
-      });
+    if (typeof urlOrCallback === 'string') {
+      this.stores.context.setPageBackLink({ label, url: urlOrCallback, hiddenLabel });
+    } else {
+      this.stores.context.setPageBackLink({ label, callback: urlOrCallback, hiddenLabel });
     }
   }
+
+  resetAlert(): void {
+    this.alert = { type: null };
+    this.stores.context.resetPageAlert();
+  }
+  setAlert(data: ContextPageLayoutType['alert']): void {
+    this.alert = { type: data.type, title: data.title, message: data.message, setFocus: true };
+    this.stores.context.setPageAlert(data);
+  }
+  setRedirectAlertSuccess(title: string, options?: { message?: string, width?: ContextPageLayoutType['alert']['width'] }): void {
+    this.stores.context.setPageAlert({ type: 'SUCCESS', title, message: options?.message, width: options?.width, persistOneRedirect: true });
+  }
+  setRedirectAlertError(message: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
+    this.stores.context.setPageAlert({ type: 'ERROR', title: 'There is a problem', message, width: options?.width, persistOneRedirect: true });
+  }
+  setAlertSuccess(title: string, options?: { message?: string, width?: ContextPageLayoutType['alert']['width'] }): void {
+    this.setAlert({ type: 'SUCCESS', title, message: options?.message, width: options?.width });
+  }
+  setAlertWarning(title: string, options?: { message?: string, width?: ContextPageLayoutType['alert']['width'] }): void {
+    this.setAlert({ type: 'WARNING', title, message: options?.message, width: options?.width });
+  }
+  setAlertError(message: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
+    this.setAlert({ type: 'ERROR', title: 'There is a problem', message, itemsList: options?.itemsList, width: options?.width });
+  }
+  setAlertUnknownError(): void { this.setAlert({ type: 'ERROR', title: 'There is a problem', message: 'It appears that something went wrong! You can try again or contact us for further help' }); }
+
+
+  // focusBody(): void {
+  //   if (isPlatformBrowser(this.platformId)) {
+  //     setTimeout(() => {
+  //       document.body.setAttribute('tabindex', '-1');
+  //       document.body.focus();
+  //       document.body.removeAttribute('tabindex');
+  //     });
+  //   }
+  // }
 
 
   userUrlBasePath(): string { return this.stores.authentication.userUrlBasePath(); }

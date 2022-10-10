@@ -26,7 +26,14 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
   constructor(
     private organisationsService: OrganisationsService,
     private innovatorService: InnovatorService
-  ) { super(); }
+  ) {
+
+    super();
+
+    this.setPageTitle('', { showPage: false });
+    this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
+
+  }
 
 
   ngOnInit(): void {
@@ -75,17 +82,15 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
         this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update innovations information.
         return of(response);
       })
-    ).subscribe(
-      response => this.redirectTo(`innovator/innovations/${response.id}`, { alert: 'innovationCreationSuccess', name: body.name }),
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when creating the innovation',
-          message: 'Please try again or contact us for further help',
-          setFocus: true
-        };
+    ).subscribe({
+      next: response => {
+        this.setRedirectAlertSuccess(`You have successfully registered the innovation '${body.name}'`);
+        this.redirectTo(`innovator/innovations/${response.id}`)
+      },
+      error: () => {
+        this.setAlertError('An error occurred when creating the innovation, Please try again or contact us for further help');
       }
-    );
+    });
 
   }
 

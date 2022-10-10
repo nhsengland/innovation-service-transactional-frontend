@@ -8,7 +8,7 @@ import { NotificationContextTypeEnum } from '@app/base/enums';
 import { FormControl, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
-import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { GetThreadInfoDTO, GetThreadMessagesListOutDTO, InnovationsService } from '@modules/shared/services/innovations.service';
 
@@ -20,7 +20,7 @@ import { GetThreadInfoDTO, GetThreadMessagesListOutDTO, InnovationsService } fro
 export class PageInnovationThreadMessagesListComponent extends CoreComponent implements OnInit {
 
   selfUser: { id: string, urlBasePath: string };
-  innovation: EnvironmentInnovationType;
+  innovation: ContextInnovationType;
   threadId: string;
 
   threadInfo: null | GetThreadInfoDTO = null;
@@ -41,23 +41,15 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   ) {
 
     super();
-    this.setPageTitle('Messages');
+    this.setPageTitle('Messages', { showPage: false });
 
     this.selfUser = {
       id: this.stores.authentication.getUserId(),
       urlBasePath: this.stores.authentication.userUrlBasePath()
     };
 
-    this.innovation = this.stores.environment.getInnovation();
+    this.innovation = this.stores.context.getInnovation();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
-
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'messageEditSuccess':
-        this.setAlertSuccess('You have successfully updated a message');
-        break;
-      default:
-        break;
-    }
 
   }
 
@@ -83,14 +75,14 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
       this.messagesList.setData(threadMessages.messages, threadMessages.count);
 
       // Throw notification read dismiss.
-      this.stores.environment.dismissNotification(NotificationContextTypeEnum.THREAD, this.threadInfo.id);
+      this.stores.context.dismissNotification(NotificationContextTypeEnum.THREAD, this.threadInfo.id);
 
       this.setPageStatus('READY');
 
     },
       () => {
         this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
+        this.setAlertUnknownError();
       });
   }
 
@@ -126,7 +118,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         messageField.setValue('');
         messageField.markAsPristine();
 
-        this.setAlertSuccess('You have successfully sent a message', 'All participants in this conversation will be notified.');
+        this.setAlertSuccess('You have successfully sent a message', { message: 'All participants in this conversation will be notified.' });
 
         this.getThreadsList();
 

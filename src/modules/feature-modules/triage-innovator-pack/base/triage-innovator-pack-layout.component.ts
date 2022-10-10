@@ -10,26 +10,29 @@ import { HeaderMenuBarItemType } from '@app/base/types';
 })
 export class TriageInnovatorPackLayoutComponent extends CoreComponent {
 
-  headerMenuBar: {
-    leftItems: HeaderMenuBarItemType[];
-    rightItems: HeaderMenuBarItemType[];
-  } = { leftItems: [], rightItems: [] };
+  headerSection: {
+    menuBarItems: { left: HeaderMenuBarItemType[], right: HeaderMenuBarItemType[] }
+  } = {
+      menuBarItems: { left: [], right: [] }
+    };
 
 
   constructor() {
 
     super();
 
-    this.headerMenuBar = {
-      leftItems: [
-        { title: 'Find support', url: `/triage-innovator-pack` },
-        { title: 'Innovation guides', url: `/innovation-guides`, fullReload: true },
-        { title: 'Case studies', url: `/case-studies`, fullReload: true },
-        { title: 'About the service', url: `/about-the-service`, fullReload: true }
-      ],
-      rightItems: [
-        { title: 'My dashboard', url: `${this.CONSTANTS.APP_URL}/dashboard`, fullReload: true }
-      ]
+    this.headerSection = {
+      menuBarItems: {
+        left: [
+          { id: 'findSupport', label: 'Find support', url: `/triage-innovator-pack` },
+          { id: 'innovationGuides', label: 'Innovation guides', url: `/innovation-guides`, fullReload: true },
+          { id: 'caseStudies', label: 'Case studies', url: `/case-studies`, fullReload: true },
+          { id: 'aboutTheService', label: 'About the service', url: `/about-the-service`, fullReload: true }
+        ],
+        right: [
+          { id: 'myDashboard', label: 'My dashboard', url: `${this.CONSTANTS.APP_URL}/dashboard`, fullReload: true }
+        ]
+      }
     };
 
   }

@@ -3,7 +3,7 @@ import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { FormControl, FormGroup, FormEngineParameterModel } from '@app/base/forms';
+import { FormGroup, FormEngineParameterModel } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
 
@@ -35,7 +35,6 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   ) {
 
     super();
-    this.setPageTitle('Innovations');
 
     this.tabs = [
       {
@@ -87,17 +86,15 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
     this.setPageStatus('LOADING');
 
-    this.assessmentService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(
-      response => {
-        this.innovationsList.setData(response.data, response.count);
-        this.currentTab.overdueInnovations = response.overdue;
-        this.setPageStatus('READY');
-      },
-      error => {
-        this.setPageStatus('ERROR');
-        this.logger.error(error);
-      }
-    );
+    this.assessmentService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(response => {
+
+      this.innovationsList.setData(response.data, response.count);
+      this.currentTab.overdueInnovations = response.overdue;
+
+      this.setPageTitle('Innovations');
+      this.setPageStatus('READY');
+
+    });
 
   }
 

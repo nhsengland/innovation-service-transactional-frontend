@@ -71,7 +71,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
       },
       () => {
         this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
+        this.setAlertUnknownError();
       }
     );
 

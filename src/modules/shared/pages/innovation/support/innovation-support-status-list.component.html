@@ -1,29 +1,31 @@
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
+<theme-content-wrapper [status]="pageStatus">
 
-    <h1 class="nhsuk-heading-xl nhsuk-u-padding-top-4 nhsuk-u-margin-bottom-5"> {{ pageTitle }} </h1>
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
 
-    <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-9">
-      <caption class="nhsuk-table__caption"> Support status keys list </caption>
-      <thead class="nhsuk-table__head">
-        <tr>
-          <th scope="col" class="app-th-min-width-140">Status</th>
-          <th scope="col">Definition</th>
-        </tr>
-      </thead>
-      <tbody class="nhsuk-table__body">
-        <tr *ngFor="let status of visibleStatus" class="nhsuk-table__row">
-          <td class="nhsuk-table__cell">
-            <span class="nhsuk-table-responsive__heading">Status</span>
-            <strong class="nhsuk-tag" [ngClass]="innovationSupportStatus[status].cssClass">{{ innovationSupportStatus[status].label }}</strong>
-          </td>
-          <td class="nhsuk-table__cell">
-            <span class="nhsuk-table-responsive__heading">Definition</span>
-            {{ innovationSupportStatus[status].innovatorDescription }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-9">
+        <caption class="nhsuk-u-visually-hidden">Support status definition list</caption>
+        <thead class="nhsuk-table__head">
+          <tr>
+            <th scope="col" class="app-th-min-width-140">Status</th>
+            <th scope="col">Definition</th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <tr *ngFor="let status of visibleStatus" class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">
+              <span class="nhsuk-table-responsive__heading">Status</span>
+              <strong class="nhsuk-tag" [ngClass]="innovationSupportStatus[status].cssClass">{{ innovationSupportStatus[status].label }}</strong>
+            </td>
+            <td class="nhsuk-table__cell">
+              <span class="nhsuk-table-responsive__heading">Definition</span>
+              {{ innovationSupportStatus[status].innovatorDescription }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
+    </div>
   </div>
-</div>
+
+</theme-content-wrapper>

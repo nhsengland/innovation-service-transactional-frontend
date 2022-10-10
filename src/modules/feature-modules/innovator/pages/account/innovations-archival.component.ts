@@ -63,15 +63,7 @@ export class PageAccountInnovationsArchivalComponent extends CoreComponent imple
 
       this.setPageStatus('READY');
 
-    },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch innovations transfers',
-          message: 'Please, try again or contact us for further help'
-        };
-      }
+    }
     );
 
   }
@@ -87,19 +79,17 @@ export class PageAccountInnovationsArchivalComponent extends CoreComponent imple
       concatMap(() => {
         return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
       })
-    ).subscribe(
-      () => {
-        this.redirectTo('/innovator/account/manage-innovations', { alert: 'archivalSuccess', innovation: this.innovationName });
+    ).subscribe({
+      next: () => {
+
+        this.setRedirectAlertSuccess(`You have archived the innovation '${this.innovationName}'`);
+        this.redirectTo('/innovator/account/manage-innovations');
+
       },
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occured when archiving the innovation',
-          message: 'Please, try again or contact us for further help',
-          setFocus: true
-        };
+      error: () => {
+        this.setAlertError('An error occured when archiving the innovation. Please, try again or contact us for further help');
       }
-    );
+    });
 
   }
 

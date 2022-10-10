@@ -180,17 +180,11 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
     this.setPageStatus('LOADING');
 
-    this.accessorService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(
-      response => {
-        this.innovationsList.setData(response.data, response.count);
-        this.currentTab.numberDescription = `${response.count} ${this.currentTab.numberDescription}`;
-        this.setPageStatus('READY');
-      },
-      error => {
-        this.setPageStatus('ERROR');
-        this.logger.error(error);
-      }
-    );
+    this.accessorService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(response => {
+      this.innovationsList.setData(response.data, response.count);
+      this.currentTab.numberDescription = `${response.count} ${this.currentTab.numberDescription}`;
+      this.setPageStatus('READY');
+    });
 
   }
 
@@ -261,6 +255,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   }
 
   onRouteChange(queryParams: Params): void {
+
+    this.setPageTitle('Innovations');
 
     const currentStatus = queryParams.status;
     const currentTabIndex = this.tabs.findIndex(tab => tab.queryParams.status === currentStatus) || 0;

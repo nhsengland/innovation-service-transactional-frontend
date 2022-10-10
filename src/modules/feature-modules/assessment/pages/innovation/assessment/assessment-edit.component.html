@@ -1,17 +1,7 @@
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-column-full">
+<theme-content-wrapper [status]="pageStatus">
 
-    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-      <p> {{ alert.message }} </p>
-    </theme-alert>
-
-    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-    <ng-container *ngIf="pageStatus === 'READY'">
-
-      <p class="nhsuk-hint nhsuk-u-padding-top-3 nhsuk-u-margin-bottom-0">{{ stepId }} of 2</p>
-      <h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ pageTitle }} </h1>
-      <p class="nhsuk-body-l">{{ innovationName }}</p>
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
 
       <ng-container *ngFor="let section of form.sections; let i = index">
 
@@ -32,7 +22,7 @@
       <button *ngIf="!assessmentHasBeenSubmitted && stepId > 1" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">Submit needs assessment</button>
       <button [disabled]="saveAsDraft.disabled" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5" (click)="onSubmit('saveAsDraft')">{{ saveAsDraft.label }}</button>
 
-    </ng-container>
-
+    </div>
   </div>
-</div>
+
+</theme-content-wrapper>

@@ -8,8 +8,9 @@ import { FormEngineComponent, FileTypes, WizardEngineModel } from '@app/base/for
 
 import { UrlModel } from '@app/base/models';
 
-import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationSectionEnum } from '@modules/stores/innovation';
+import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
 
 @Component({
@@ -20,9 +21,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
-  alertErrorsList: { label: string, error: string }[] = [];
+  alertErrorsList: { title: string, description: string }[] = [];
 
-  innovation: EnvironmentInnovationType;
+  innovation: ContextInnovationType;
   sectionId: InnovationSectionEnum;
   baseUrl: string;
 
@@ -38,11 +39,21 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     super();
 
-    this.innovation = this.stores.environment.getInnovation();
+    this.innovation = this.stores.context.getInnovation();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.baseUrl = `innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
     this.wizard = this.stores.innovation.getSectionWizard(this.sectionId);
+
+    this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
+
+  }
+
+  private getNextSectionId(): string | null {
+
+    const sectionsIdsList = INNOVATION_SECTIONS.flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
+    const currentSectionIndex = sectionsIdsList.indexOf(this.sectionId);
+    return sectionsIdsList[currentSectionIndex + 1] || null;
 
   }
 
@@ -55,9 +66,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         this.wizard.setAnswers(this.wizard.runInboundParsing(response.data)).runRules();
         this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
 
-        this.setPageTitle(this.wizard.currentStepTitle());
         this.setUploadConfiguration();
 
+        this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
         this.setPageStatus('READY');
 
       },
@@ -90,8 +101,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   onGotoStep(stepNumber: number): void {
 
     this.wizard.gotoStep(stepNumber);
-    this.clearAlert();
-    this.setPageTitle(this.wizard.currentStepTitle());
+    this.resetAlert();
+    this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
     this.setUploadConfiguration();
 
   }
@@ -99,6 +110,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   onSubmitStep(action: 'previous' | 'next'): void {
 
     this.alertErrorsList = [];
+    this.resetAlert();
 
     const formData = this.formEngineComponent?.getFormValues();
 
@@ -106,7 +118,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       this.wizard.addAnswers(formData?.data || {}).runRules();
       if (this.wizard.isFirstStep()) { this.redirectTo(this.baseUrl); }
       else { this.wizard.previousStep(); }
-      this.setPageTitle(this.wizard.currentStepTitle());
+      this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
       this.setUploadConfiguration();
       return;
     }
@@ -142,7 +154,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         // NOTE: This is a very specific operation that updates the context (store) innovation name.
         // If more exceptions appears, a wizard configurations should be considered.
         if (this.sectionId === 'INNOVATION_DESCRIPTION' && this.wizard.currentStepId === 1) {
-          this.stores.environment.updateInnovation({ name: this.wizard.getAnswers().innovationName });
+          this.stores.context.updateInnovation({ name: this.wizard.getAnswers().innovationName });
         }
         return of(true);
 
@@ -157,8 +169,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           return of({ data: {} });
         }
 
-      })).subscribe(
-        response => {
+      })).subscribe({
+        next: response => {
 
           // Update only if GET call was made!
           if (Object.keys(response.data).length > 0) {
@@ -166,22 +178,21 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           }
 
           this.wizard.nextStep();
-          this.focusBody();
 
           if (this.wizard.isQuestionStep()) {
-            this.setPageTitle(this.wizard.currentStepTitle());
+            this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
             this.setUploadConfiguration();
           }
           else {
 
-            this.setPageTitle('Check your answers');
+            this.setPageTitle('Check your answers', { size: 'l' });
 
             const validInformation = this.wizard.validateData();
 
             this.submitButton.isActive = validInformation.valid;
             if (!validInformation.valid) {
               this.alertErrorsList = validInformation.errors;
-              this.setAlertError(`Please verify what's missing with your answers`);
+              this.setAlertError(`Please verify what's missing with your answers`, { itemsList: this.alertErrorsList, width: '2.thirds' });
             }
 
           }
@@ -189,22 +200,27 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           this.saveButton = { isActive: true, label: 'Save and continue' };
 
         },
-        () => {
+        error: () => {
 
           this.saveButton = { isActive: true, label: 'Save and continue' };
           this.alertErrorsList = [];
-          this.setAlertDataSaveError();
+          this.setAlertUnknownError();
 
-        });
+        }
+      });
 
   }
 
   onSubmitSection(): void {
 
-    this.stores.innovation.submitSections$(this.innovation.id, [this.sectionId]).subscribe(
-      () => { this.redirectTo(this.baseUrl, { alert: 'sectionUpdateSuccess' }); },
-      () => { this.redirectTo(this.baseUrl, { alert: 'sectionUpdateError' }); }
-    );
+    this.stores.innovation.submitSections$(this.innovation.id, [this.sectionId]).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('Your answers have been confirmed for this section', { message: this.getNextSectionId() ? 'Go to next section or return to the full innovation record' : undefined });
+        this.redirectTo(this.baseUrl);
+      },
+      error: () => this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' })
+
+    });
 
   }
 

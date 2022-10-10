@@ -277,6 +277,12 @@ export const locale = {
             INNOVATION_SUBMISSION: { title: `Innovation "{{ innovationName }}" is available for review` },
             SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}"` }
           },
+          section_status: {
+            NOT_STARTED: { name: 'Not started', cssColorClass: 'nhsuk-tag--blue' },
+            DRAFT: { name: 'Draft', cssColorClass: 'nhsuk-tag--yellow' },
+            SUBMITTED: { name: 'Submitted', cssColorClass: 'nhsuk-tag--green' }
+
+          },
           support_status: {
             ENGAGING: { name: 'Engaging', cssColorClass: 'nhsuk-tag--green' },
             FURTHER_INFO_REQUIRED: { name: 'Further info', cssColorClass: 'nhsuk-tag--white' },

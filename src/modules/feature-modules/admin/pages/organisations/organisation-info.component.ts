@@ -92,7 +92,7 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
       },
       () => {
         this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
+        this.setAlertUnknownError();
       }
     );
 
@@ -122,7 +122,7 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
             unit.isLoading = false;
           },
           () => {
-            this.setAlertError('Unable to fetch organisation users information', 'Please try again or contact us for further help');
+            this.setAlertError('Unable to fetch organisation users information. Please try again or contact us for further help');
             unit.isLoading = false;
           }
         );

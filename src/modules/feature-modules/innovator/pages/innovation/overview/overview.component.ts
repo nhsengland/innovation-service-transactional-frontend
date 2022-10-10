@@ -5,8 +5,9 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
+import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
 
 
@@ -64,11 +65,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService
+    private innovatorService: InnovatorService,
+    private innovationsService: InnovationsService
   ) {
 
     super();
-    this.setPageTitle('Innovation record overview');
+    this.setPageTitle('Innovation overview');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.needsAssessmentCompleted = false;
@@ -77,28 +79,16 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'innovationCreationSuccess':
-        this.alert = {
-          type: 'SUCCESS',
-          title: `You have successfully registered the innovation '${this.activatedRoute.snapshot.queryParams.name}'`
-        };
-        break;
-      default:
-        break;
-    }
-
-
     forkJoin([
-      this.innovatorService.getInnovationInfo(this.innovationId),
+      this.innovationsService.getInnovatorInnovationInfo(this.innovationId),
       this.stores.innovation.getSectionsSummary$(this.innovationId),
       this.innovatorService.getInnovationSupports(this.innovationId, true),
     ]).subscribe(([innovationInfo, sectionSummary, innovationSupports]) => {
 
-      this.stores.environment.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+      this.stores.context.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
 
       if (innovationSupports.length === 1) {
-        this.stores.environment.dismissNotification(NotificationContextTypeEnum.SUPPORT, innovationSupports[0].id);
+        this.stores.context.dismissNotification(NotificationContextTypeEnum.SUPPORT, innovationSupports[0].id);
       }
 
       this.submittedAt = innovationInfo.submittedAt || '';
@@ -141,16 +131,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.setPageStatus('READY');
 
-    },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch innovation record information',
-          message: 'Please try again or contact us for further help'
-        };
-      }
-    );
+    });
+
   }
 
 }

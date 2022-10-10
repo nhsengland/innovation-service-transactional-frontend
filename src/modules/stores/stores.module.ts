@@ -3,8 +3,8 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { AuthenticationStore } from './authentication/authentication.store';
 import { AuthenticationService } from './authentication/authentication.service';
 
-import { EnvironmentStore } from './environment/environment.store';
-import { EnvironmentService } from './environment/environment.service';
+import { ContextStore } from './context/context.store';
+import { ContextService } from './context/context.service';
 
 import { InnovationStore } from './innovation/innovation.store';
 import { InnovationService } from './innovation/innovation.service';
@@ -15,8 +15,8 @@ import { InnovationService } from './innovation/innovation.service';
     AuthenticationStore,
     AuthenticationService,
 
-    EnvironmentStore,
-    EnvironmentService,
+    ContextStore,
+    ContextService,
 
     InnovationStore,
     InnovationService

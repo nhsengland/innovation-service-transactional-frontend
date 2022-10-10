@@ -37,7 +37,7 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
 
     super();
 
-    this.module = RoutingHelper.getRouteData(this.activatedRoute.root).module;
+    this.module = RoutingHelper.getRouteData<any>(this.activatedRoute.root).module;
 
   }
 
@@ -64,16 +64,22 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
         }
 
         if (this.isSummaryStep()) {
-          this.setPageTitle('Check your answers');
+          this.setPageTitle('Check your answers', { size: 'l' });
+          this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
           this.summaryList = this.wizard.runSummaryParsing();
+          this.setPageStatus('READY');
           return;
         }
 
-        this.setPageTitle(this.wizard.currentStep().parameters[0].label || ''); // 1 question per page approach.
+        this.setPageTitle(this.wizard.currentStep().parameters[0].label || '', { showPage: false });
+        this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
         this.wizard.gotoStep(Number(params.stepId));
+
+        this.setPageStatus('READY');
 
       })
     );
+
 
   }
 
@@ -101,10 +107,15 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
 
     this.stores.authentication.saveUserInfo$(body).pipe(
       concatMap(() => this.stores.authentication.initializeAuthentication$()) // Fetch all new information.
-    ).subscribe(
-      () => { this.redirectTo(`${this.module}/account/manage-details`, { alert: 'accountDetailsUpdateSuccess' }); },
-      () => { this.redirectTo(`${this.module}/account/manage-details`, { alert: 'accountDetailsUpdateError' }); }
-    );
+    ).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('Your information has been saved');
+        this.redirectTo(`${this.module}/account/manage-details`);
+      },
+      error: () => {
+        this.setAlertError('An error occurred while updating information. Please try again or contact us for further help');
+      }
+    });
 
   }
 

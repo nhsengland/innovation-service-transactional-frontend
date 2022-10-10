@@ -55,24 +55,14 @@ export class InnovationActionTrackerComponent extends CoreComponent implements O
 
   ngOnInit(): void {
 
-    this.innovatorService.getInnovationActionsList(this.innovationId).subscribe(
-      response => {
+    this.innovatorService.getInnovationActionsList(this.innovationId).subscribe(response => {
 
-        this.openedActionsList.setData(response.openedActions);
-        this.closedActionsList.setData(response.closedActions);
+      this.openedActionsList.setData(response.openedActions);
+      this.closedActionsList.setData(response.closedActions);
 
-        this.setPageStatus('READY');
+      this.setPageStatus('READY');
 
-      },
-      error => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch actions information',
-          message: 'Please try again or contact us for further help'
-        };
-      }
-    );
+    });
 
   }
 

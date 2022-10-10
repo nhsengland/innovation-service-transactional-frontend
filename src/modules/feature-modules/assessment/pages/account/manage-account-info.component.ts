@@ -24,6 +24,8 @@ export class PageAssessmentAccountManageAccountInfoComponent extends CoreCompone
       passwordResetOn: user.passwordResetOn
     };
 
+    this.setPageStatus('READY');
+
   }
 
 }

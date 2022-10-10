@@ -108,7 +108,7 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
       },
       () => {
         this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
+        this.setAlertUnknownError();
       }
     );
 
@@ -117,7 +117,7 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
 
   onPreviousStep<T extends WizardStepEventType<MappedObjectType>>(stepData: T, ...args: ((data: T) => void)[]): void {
 
-    this.clearAlert();
+    this.resetAlert();
 
     if (this.wizard.currentStepNumber() === 1) {
       this.redirectTo(`/admin/organisations/${this.wizard.data.organisation.id}`);
@@ -131,7 +131,7 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
 
   onNextStep<T extends WizardStepEventType<MappedObjectType>>(stepData: T, ...args: ((data: T) => void)[]): void {
 
-    this.clearAlert();
+    this.resetAlert();
 
     args.forEach(element => element.bind(this)(stepData));
     this.wizard.gotoNextStep();

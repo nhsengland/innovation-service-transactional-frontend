@@ -52,7 +52,7 @@ export let FIRST_TIME_SIGNIN_QUESTIONS: WizardEngineModel = new WizardEngineMode
         id: 'innovationDescription',
         dataType: 'textarea',
         label: 'Please provide a short description of your innovation',
-        validations: { isRequired: [true, 'Innovation short description is required'] },
+        validations: { isRequired: [true, 'Innovation description is required'] },
         lengthLimit: 'medium'
       }]
     }),

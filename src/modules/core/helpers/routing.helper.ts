@@ -8,8 +8,11 @@ export class RoutingHelper {
   }
 
   // Returns all ActivatedRouteSnapshot data, including the ones from childrens.
-  static getRouteData(route: ActivatedRoute): ActivatedRouteSnapshot['data'] {
-    return { ...route.snapshot.data, ...route.children.reduce((acc: ActivatedRouteSnapshot['data'], child: ActivatedRoute) => ({ ...RoutingHelper.getRouteData(child), ...acc }), {}) };
+  static getRouteData<T>(route: ActivatedRoute): T {
+    return {
+      ...route.snapshot.data as T,
+      ...route.children.reduce((acc: T, child: ActivatedRoute) => ({ ...RoutingHelper.getRouteData<T>(child), ...acc }), {} as T)
+    };
   }
 
   // Returns a url with all parameters replaced.

@@ -8,36 +8,25 @@ import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
 import { SignUpConfirmationComponent } from './pages/sign-up-confirmation.component';
 
 const routes: Routes = [
-
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: '/not-found'
-  },
-
-  {
-    path: 'signup',
-    pathMatch: 'full',
-    redirectTo: '/not-found'
-  },
-
   {
     path: '',
     component: BaseLayoutComponent,
     children: [
+
+      { path: '', pathMatch: 'full', redirectTo: '/not-found' },
+
       {
         path: 'signup',
         children: [
-          {
-            path: 'confirmation',
-            pathMatch: 'full',
-            component: SignUpConfirmationComponent
-          },
+
+          { path: '', pathMatch: 'full', redirectTo: '/not-found' },
+
+          { path: 'confirmation', pathMatch: 'full', component: SignUpConfirmationComponent }
+
         ]
       }
     ]
   }
-
 ];
 
 @NgModule({

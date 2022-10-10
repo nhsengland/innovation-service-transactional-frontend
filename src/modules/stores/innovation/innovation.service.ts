@@ -247,11 +247,7 @@ export class InnovationService {
   deleteEvidence(innovationId: string, evidenceId: string): Observable<boolean> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/evidence/:evidenceId').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, evidenceId });
-    return this.http.delete<MappedObjectType>(url.buildUrl()).pipe(
-      take(1),
-      map(response => !!response),
-      catchError(() => of(false))
-    );
+    return this.http.delete<MappedObjectType>(url.buildUrl()).pipe(take(1), map(response => !!response));
 
   }
 

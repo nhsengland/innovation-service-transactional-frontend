@@ -1,18 +1,4 @@
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
-
-    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-      <p> {{ alert.message }} </p>
-    </theme-alert>
-
-    <h1> {{ pageTitle }} </h1>
-
-    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-  </div>
-</div>
-
-<ng-container *ngIf="pageStatus === 'READY'">
+<theme-content-wrapper [status]="pageStatus">
 
   <form [formGroup]="form">
 
@@ -22,9 +8,9 @@
           <theme-form-grouped-checkbox-array arrayName="organisationUnits" label="Select the organisations you think would be right to offer support. These organisations will be notified." [groupedItems]="groupedItems"
             [pageUniqueField]="false"></theme-form-grouped-checkbox-array>
           <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
-          <div class="nhsuk-u-padding-bottom-5">
-            <a routerLink="/accessor/innovations/{{ innovation.id }}/support"> Cancel </a>
-          </div>
+
+          <a routerLink="/accessor/innovations/{{ innovation.id }}/support" class="d-block">Cancel</a>
+
         </div>
       </div>
     </ng-container>
@@ -48,8 +34,8 @@
 
           <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button nhsuk-u-margin-top-3"> {{ submitButton.label }} </button>
 
-          <div class="nhsuk-u-padding-bottom-5">
-            <a routerLink="/accessor/innovations/{{ innovation.id }}/support"> Cancel </a>
+          <div>
+            <a routerLink="/accessor/innovations/{{ innovation.id }}/support">Cancel</a>
           </div>
 
         </div>
@@ -58,4 +44,4 @@
 
   </form>
 
-</ng-container>
+</theme-content-wrapper>

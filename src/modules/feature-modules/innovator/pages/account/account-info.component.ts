@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-
-import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 
 @Component({
@@ -17,10 +14,9 @@ export class PageAccountInfoComponent extends CoreComponent {
   user: {
     passwordResetOn: string
   };
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService
-  ) {
+
+
+  constructor() {
 
     super();
     this.setPageTitle('Manage account');
@@ -29,6 +25,9 @@ export class PageAccountInfoComponent extends CoreComponent {
     this.user = {
       passwordResetOn: user.passwordResetOn
     };
+
+    this.setPageStatus('READY');
+
   }
 
 }

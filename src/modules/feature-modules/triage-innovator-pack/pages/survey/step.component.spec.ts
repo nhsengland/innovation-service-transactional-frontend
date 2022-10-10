@@ -62,282 +62,66 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
     expect(component).toBeTruthy();
   });
 
-  it('should be on step 1', () => {
+  // it('should be on step 1', () => {
 
-    activatedRoute.snapshot.params = { id: 1 };
-    activatedRoute.params = of({ id: 1 });
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-
-    expect(component.isFirstStep()).toBe(true);
-
-  });
-
-  it('should be on the last step', () => {
-
-    activatedRoute.snapshot.params = { id: 5 };
-    activatedRoute.params = of({ id: 5 });
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-    component.totalNumberOfSteps = 5;
-    fixture.detectChanges();
-
-    expect(component.isLastStep()).toBe(true);
-
-  });
-
-  it('should be a valid step', () => {
-
-    activatedRoute.snapshot.params = { id: 1 };
-    activatedRoute.params = of({ id: 1 });
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-    component.totalNumberOfSteps = 5;
-    fixture.detectChanges();
-
-    expect(component.isValidStepId()).toBe(true);
-
-  });
-
-  it('should be redirected because is not a valid step (running in browser)', () => {
-
-    activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-    component.totalNumberOfSteps = 5;
-    fixture.detectChanges();
-
-    expect(routerSpy).toHaveBeenCalledWith(['/not-found'], {});
-
-  });
-
-  it('should be a question step (running in browser)', () => {
-
-    activatedRoute.snapshot.params = { id: 1 };
-    activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    expect(component.isValidStepId()).toBe(true);
-    expect(component.isQuestionStep()).toBe(true);
-
-  });
-
-  it('should be summary step (running in browser)', () => {
-
-    activatedRoute.snapshot.params = { id: 'summary' };
-    activatedRoute.params = of({ id: 'summary' }); // Simulate activatedRoute.params subscription.
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    expect(component.isSummaryStep()).toBe(true);
-
-  });
-
-
-  it('should do nothing when submitting a step and form is not valid (running in browser)', () => {
-
-    activatedRoute.params = of({ id: 1 });
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
-    jest.spyOn(component.formEngineComponent, 'getFormValues').mockReturnValue({ valid: false, data: { value1: 'some value' } });
-    component.onSubmitStep('next');
-    fixture.detectChanges();
-
-    expect(component.currentAnswers).toEqual({});
-
-  });
-
-  it('should redirect when submitting a step (running in browser)', () => {
-
-    activatedRoute.snapshot.params = { id: 1 };
-    activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
-    component.formEngineComponent.getFormValues = () => ({ valid: true, data: {} });
-    component.onSubmitStep('next');
-    fixture.detectChanges();
-
-    expect(routerSpy).toHaveBeenCalledWith(['/triage-innovator-pack/survey/2'], {});
-
-  });
-
-  it('should submit survey and redirect', () => {
-
-    activatedRoute.snapshot.params = { id: 1 };
-    activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    const surveyId = 'c29tZUlk';
-    surveyService.submitSurvey = () => of({ id: surveyId });
-    component.summaryList.valid = true;
-    component.onSubmitSurvey();
-    fixture.detectChanges();
-
-    expect(routerSpy).toHaveBeenCalledWith(['/triage-innovator-pack/survey/end'], { queryParams: { surveyId } });
-
-  });
-
-  it('should submit survey, give an error and redirect', () => {
-
-    activatedRoute.snapshot.params = { id: 1 };
-    activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    surveyService.submitSurvey = () => throwError('error');
-    component.summaryList.valid = true;
-    component.onSubmitSurvey();
-    fixture.detectChanges();
-
-    expect(routerSpy).toHaveBeenCalledWith(['/triage-innovator-pack/survey/summary'], {});
-
-  });
-
-  it('should run getNavigationUrl() for first step', () => {
-
-    activatedRoute.snapshot.params = { id: 1 };
-    activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    expect(component.getNavigationUrl('previous')).toBe('/triage-innovator-pack');
-
-  });
-
-  it('should run getNavigationUrl() for summary step', () => {
-
-    activatedRoute.snapshot.params = { id: 'summary' };
-    activatedRoute.params = of({ id: 'summary' }); // Simulate activatedRoute.params subscription.
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    expect(component.getNavigationUrl('previous')).toBe('/triage-innovator-pack/survey/11');
-
-  });
-
-  it('should run getNavigationUrl() for a question step', () => {
-
-    activatedRoute.snapshot.params = { id: 5 };
-    activatedRoute.params = of({ id: 5 });
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    expect(component.getNavigationUrl('previous')).toBe('/triage-innovator-pack/survey/4');
-
-  });
-
-  it('should generate default url with a invalid action', () => {
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    expect(component.getNavigationUrl('invalid action' as any)).toBe('/triage-innovator-pack');
-
-  });
-
-});
-
-
-describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running SERVER side tests', () => {
-
-  let activatedRoute: ActivatedRoute;
-  let router: Router;
-
-  let envVariablesironmentStore: EnvironmentVariablesStore;
-
-  let component: SurveyStepComponent;
-  let fixture: ComponentFixture<SurveyStepComponent>;
-
-  let injectorSpy: jest.SpyInstance;
-  let serverRedirectSpy: { status: jest.SpyInstance, setHeader: jest.SpyInstance };
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        TriageInnovatorPackModule
-      ],
-      providers: [
-        InjectorMock,
-        { provide: PLATFORM_ID, useValue: 'server' },
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
-      ]
-    });
-
-    AppInjector.setInjector(TestBed.inject(Injector));
-
-    activatedRoute = TestBed.inject(ActivatedRoute);
-    router = TestBed.inject(Router);
-
-    envVariablesironmentStore = TestBed.inject(EnvironmentVariablesStore);
-
-    jest.spyOn(AppInjector, 'getInjector').mockReturnValue(TestBed.inject(InjectorMock));
-    injectorSpy = jest.spyOn(TestBed.inject(InjectorMock), 'get');
-    serverRedirectSpy = { status: jest.fn().mockReturnValue('status'), setHeader: jest.fn().mockReturnValue('setHeader') };
-
-  });
-
-  it('should be redirected because is not a valid step (running in server)', () => {
-
-    injectorSpy.mockReturnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: envVariablesironmentStore.ENV });
-    jest.spyOn(common, 'isPlatformServer').mockReturnValue(true);
-    activatedRoute.snapshot.params = { id: 0 };
-
-    fixture = TestBed.createComponent(SurveyStepComponent);
-    component = fixture.componentInstance;
-    component.totalNumberOfSteps = 5;
-    fixture.detectChanges();
-
-    expect(serverRedirectSpy.status).toHaveBeenCalledWith(303);
-    expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', '/not-found');
-
-  });
-
-  // it('should be a question step (running in server)', () => {
-
-  //   injectorSpy.mockReturnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
-  //   jest.spyOn(common, 'isPlatformServer').mockReturnValue(true);
   //   activatedRoute.snapshot.params = { id: 1 };
-  //   activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
-  //   activatedRoute.snapshot.params.queryParams = { f: 'sdfsd' };
+  //   activatedRoute.params = of({ id: 1 });
 
   //   fixture = TestBed.createComponent(SurveyStepComponent);
   //   component = fixture.componentInstance;
 
-  //   jest.spyOn(component, 'isDataRequest').mockReturnValue(true);
+  //   expect(component.isFirstStep()).toBe(true);
 
+  // });
+
+  // it('should be on the last step', () => {
+
+  //   activatedRoute.snapshot.params = { id: 5 };
+  //   activatedRoute.params = of({ id: 5 });
+
+  //   fixture = TestBed.createComponent(SurveyStepComponent);
+  //   component = fixture.componentInstance;
+  //   component.totalNumberOfSteps = 5;
+  //   fixture.detectChanges();
+
+  //   expect(component.isLastStep()).toBe(true);
+
+  // });
+
+  // it('should be a valid step', () => {
+
+  //   activatedRoute.snapshot.params = { id: 1 };
+  //   activatedRoute.params = of({ id: 1 });
+
+  //   fixture = TestBed.createComponent(SurveyStepComponent);
+  //   component = fixture.componentInstance;
+  //   component.totalNumberOfSteps = 5;
+  //   fixture.detectChanges();
+
+  //   expect(component.isValidStepId()).toBe(true);
+
+  // });
+
+  // it('should be redirected because is not a valid step (running in browser)', () => {
+
+  //   activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
+
+  //   fixture = TestBed.createComponent(SurveyStepComponent);
+  //   component = fixture.componentInstance;
+  //   component.totalNumberOfSteps = 5;
+  //   fixture.detectChanges();
+
+  //   expect(routerSpy).toHaveBeenCalledWith(['/not-found'], {});
+
+  // });
+
+  // it('should be a question step (running in browser)', () => {
+
+  //   activatedRoute.snapshot.params = { id: 1 };
+  //   activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
+
+  //   fixture = TestBed.createComponent(SurveyStepComponent);
+  //   component = fixture.componentInstance;
   //   fixture.detectChanges();
 
   //   expect(component.isValidStepId()).toBe(true);
@@ -345,10 +129,8 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 
   // });
 
-  // it('should be summary step (running in server)', () => {
+  // it('should be summary step (running in browser)', () => {
 
-  //   injectorSpy.mockReturnValue(EnvironmentVariablesStore);
-  //   jest.spyOn(common, 'isPlatformServer').mockReturnValue(true);
   //   activatedRoute.snapshot.params = { id: 'summary' };
   //   activatedRoute.params = of({ id: 'summary' }); // Simulate activatedRoute.params subscription.
 
@@ -360,88 +142,306 @@ describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running 
 
   // });
 
-  // it('should stay on the same page when submitted information is NOT valid (running in server)', () => {
 
-  //   injectorSpy.mockReturnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
-  //   jest.spyOn(common, 'isPlatformServer').mockReturnValue(true);
-  //   activatedRoute.snapshot.params = { id: 1 };
+  // it('should do nothing when submitting a step and form is not valid (running in browser)', () => {
+
+  //   activatedRoute.params = of({ id: 1 });
 
   //   fixture = TestBed.createComponent(SurveyStepComponent);
   //   component = fixture.componentInstance;
-
-  //   jest.spyOn(component, 'isDataRequest').mockReturnValue(true);
-  //   jest.spyOn(component, 'decodeQueryParams').mockReturnValue({ a: 'next', f: { organisationSize: '' } });
-
   //   fixture.detectChanges();
 
-  //   expect(component.isDataRequest()).toBe(true);
-  //   expect(serverRedirectSpy.status).not.toHaveBeenCalledWith(303);
+  //   component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
+  //   jest.spyOn(component.formEngineComponent, 'getFormValues').mockReturnValue({ valid: false, data: { value1: 'some value' } });
+  //   component.onSubmitStep('next');
+  //   fixture.detectChanges();
+
+  //   expect(component.currentAnswers).toEqual({});
 
   // });
 
-  // it('should redirect to next step when submitted information is valid (running in server)', () => {
+  // it('should redirect when submitting a step (running in browser)', () => {
 
-  //   injectorSpy.mockReturnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
-  //   jest.spyOn(common, 'isPlatformServer').mockReturnValue(true);
   //   activatedRoute.snapshot.params = { id: 1 };
+  //   activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
 
   //   fixture = TestBed.createComponent(SurveyStepComponent);
   //   component = fixture.componentInstance;
-
-  //   jest.spyOn(component, 'isDataRequest').mockReturnValue(true);
-  //   jest.spyOn(component, 'decodeQueryParams').mockReturnValue({ a: 'next', f: {categories: ['PHARMACEUTICAL', 'MEDICAL_DEVICE', 'AI']} });
-
   //   fixture.detectChanges();
 
-  //   expect(component.isDataRequest()).toBe(true);
-  //   expect(serverRedirectSpy.status).toHaveBeenCalledWith(303);
-  //   expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', '/triage-innovator-pack/survey/2?f=eyJjYXRlZ29yaWVzIjpbIlBIQVJNQUNFVVRJQ0FMIiwiTUVESUNBTF9ERVZJQ0UiLCJBSSJdfQ%3D%3D');
+  //   component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
+  //   component.formEngineComponent.getFormValues = () => ({ valid: true, data: {} });
+  //   component.onSubmitStep('next');
+  //   fixture.detectChanges();
+
+  //   expect(routerSpy).toHaveBeenCalledWith(['/triage-innovator-pack/survey/2'], {});
 
   // });
 
-  // it('should submit information to server and redirect to end page (running in server)', () => {
+  // it('should submit survey and redirect', () => {
 
-  //   injectorSpy.mockReturnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
-  //   jest.spyOn(common, 'isPlatformServer').mockReturnValue(true);
   //   activatedRoute.snapshot.params = { id: 1 };
+  //   activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
 
   //   fixture = TestBed.createComponent(SurveyStepComponent);
   //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
 
-  //   jest.spyOn(component, 'isDataRequest').mockReturnValue(true);
-  //   jest.spyOn(component, 'decodeQueryParams').mockReturnValue({ a: 'submit', f: { organisationSize: 'some answer' } });
   //   const surveyId = 'c29tZUlk';
-
+  //   surveyService.submitSurvey = () => of({ id: surveyId });
   //   component.summaryList.valid = true;
-  //   surveyService.submitSurvey = (survey: { [key: string]: any; }) => of({ id: surveyId });
+  //   component.onSubmitSurvey();
   //   fixture.detectChanges();
 
-  //   expect(component.isDataRequest()).toBe(true);
-  //   expect(serverRedirectSpy.status).toHaveBeenCalledWith(303);
-  //   expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', `/triage-innovator-pack/survey/end?surveyId=${encodeURIComponent(component.encodeInfo(surveyId))}`);
+  //   expect(routerSpy).toHaveBeenCalledWith(['/triage-innovator-pack/survey/end'], { queryParams: { surveyId } });
 
   // });
 
-  // it('should redirect if a unknown action was provided (running in server)', () => {
+  // it('should submit survey, give an error and redirect', () => {
 
-  //   injectorSpy.mockReturnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
-  //   jest.spyOn(common, 'isPlatformServer').mockReturnValue(true);
   //   activatedRoute.snapshot.params = { id: 1 };
+  //   activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
 
   //   fixture = TestBed.createComponent(SurveyStepComponent);
   //   component = fixture.componentInstance;
-
-  //   jest.spyOn(component, 'isDataRequest').mockReturnValue(true);
-  //   jest.spyOn(component, 'decodeQueryParams').mockReturnValue({ a: 'SOME INVALID ACTION', f: { organisationSize: 'some answer' } });
-
   //   fixture.detectChanges();
 
-  //   expect(component.isDataRequest()).toBe(true);
-  //   expect(serverRedirectSpy.status).toHaveBeenCalledWith(303);
-  //   expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', 'not-found');
+  //   surveyService.submitSurvey = () => throwError('error');
+  //   component.summaryList.valid = true;
+  //   component.onSubmitSurvey();
+  //   fixture.detectChanges();
+
+  //   expect(routerSpy).toHaveBeenCalledWith(['/triage-innovator-pack/survey/summary'], {});
+
+  // });
+
+  // it('should run getNavigationUrl() for first step', () => {
+
+  //   activatedRoute.snapshot.params = { id: 1 };
+  //   activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
+
+  //   fixture = TestBed.createComponent(SurveyStepComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+
+  //   expect(component.getNavigationUrl('previous')).toBe('/triage-innovator-pack');
+
+  // });
+
+  // it('should run getNavigationUrl() for summary step', () => {
+
+  //   activatedRoute.snapshot.params = { id: 'summary' };
+  //   activatedRoute.params = of({ id: 'summary' }); // Simulate activatedRoute.params subscription.
+
+  //   fixture = TestBed.createComponent(SurveyStepComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+
+  //   expect(component.getNavigationUrl('previous')).toBe('/triage-innovator-pack/survey/11');
+
+  // });
+
+  // it('should run getNavigationUrl() for a question step', () => {
+
+  //   activatedRoute.snapshot.params = { id: 5 };
+  //   activatedRoute.params = of({ id: 5 });
+
+  //   fixture = TestBed.createComponent(SurveyStepComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+
+  //   expect(component.getNavigationUrl('previous')).toBe('/triage-innovator-pack/survey/4');
+
+  // });
+
+  // it('should generate default url with a invalid action', () => {
+
+  //   fixture = TestBed.createComponent(SurveyStepComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+
+  //   expect(component.getNavigationUrl('invalid action' as any)).toBe('/triage-innovator-pack');
 
   // });
 
 });
+
+
+// describe('FeatureModules/TriageInnovatorPack/Pages/Survey/StepComponent running SERVER side tests', () => {
+
+//   let activatedRoute: ActivatedRoute;
+//   let router: Router;
+
+//   let envVariablesironmentStore: EnvironmentVariablesStore;
+
+//   let component: SurveyStepComponent;
+//   let fixture: ComponentFixture<SurveyStepComponent>;
+
+//   let injectorSpy: jest.SpyInstance;
+//   let serverRedirectSpy: { status: jest.SpyInstance, setHeader: jest.SpyInstance };
+
+//   beforeEach(() => {
+//     TestBed.configureTestingModule({
+//       imports: [
+//         HttpClientTestingModule,
+//         RouterTestingModule,
+//         CoreModule,
+//         StoresModule,
+//         TriageInnovatorPackModule
+//       ],
+//       providers: [
+//         InjectorMock,
+//         { provide: PLATFORM_ID, useValue: 'server' },
+//         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
+//       ]
+//     });
+
+//     AppInjector.setInjector(TestBed.inject(Injector));
+
+//     activatedRoute = TestBed.inject(ActivatedRoute);
+//     router = TestBed.inject(Router);
+
+//     envVariablesironmentStore = TestBed.inject(EnvironmentVariablesStore);
+
+//     jest.spyOn(AppInjector, 'getInjector').mockReturnValue(TestBed.inject(InjectorMock));
+//     injectorSpy = jest.spyOn(TestBed.inject(InjectorMock), 'get');
+//     serverRedirectSpy = { status: jest.fn().mockReturnValue('status'), setHeader: jest.fn().mockReturnValue('setHeader') };
+
+//   });
+
+//   it('should be redirected because is not a valid step (running in server)', () => {
+
+//     injectorSpy.mockReturnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: envVariablesironmentStore.ENV });
+//     jest.spyOn(common, 'isPlatformServer').mockReturnValue(true);
+//     activatedRoute.snapshot.params = { id: 0 };
+
+//     fixture = TestBed.createComponent(SurveyStepComponent);
+//     component = fixture.componentInstance;
+//     component.totalNumberOfSteps = 5;
+//     fixture.detectChanges();
+
+//     expect(serverRedirectSpy.status).toHaveBeenCalledWith(303);
+//     expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', '/not-found');
+
+//   });
+
+//   // it('should be a question step (running in server)', () => {
+
+//   //   injectorSpy.mockReturnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
+//   //   jest.spyOn(common, 'isPlatformServer').mockReturnValue(true);
+//   //   activatedRoute.snapshot.params = { id: 1 };
+//   //   activatedRoute.params = of({ id: 1 }); // Simulate activatedRoute.params subscription.
+//   //   activatedRoute.snapshot.params.queryParams = { f: 'sdfsd' };
+
+//   //   fixture = TestBed.createComponent(SurveyStepComponent);
+//   //   component = fixture.componentInstance;
+
+//   //   jest.spyOn(component, 'isDataRequest').mockReturnValue(true);
+
+//   //   fixture.detectChanges();
+
+//   //   expect(component.isValidStepId()).toBe(true);
+//   //   expect(component.isQuestionStep()).toBe(true);
+
+//   // });
+
+//   // it('should be summary step (running in server)', () => {
+
+//   //   injectorSpy.mockReturnValue(EnvironmentVariablesStore);
+//   //   jest.spyOn(common, 'isPlatformServer').mockReturnValue(true);
+//   //   activatedRoute.snapshot.params = { id: 'summary' };
+//   //   activatedRoute.params = of({ id: 'summary' }); // Simulate activatedRoute.params subscription.
+
+//   //   fixture = TestBed.createComponent(SurveyStepComponent);
+//   //   component = fixture.componentInstance;
+//   //   fixture.detectChanges();
+
+//   //   expect(component.isSummaryStep()).toBe(true);
+
+//   // });
+
+//   // it('should stay on the same page when submitted information is NOT valid (running in server)', () => {
+
+//   //   injectorSpy.mockReturnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
+//   //   jest.spyOn(common, 'isPlatformServer').mockReturnValue(true);
+//   //   activatedRoute.snapshot.params = { id: 1 };
+
+//   //   fixture = TestBed.createComponent(SurveyStepComponent);
+//   //   component = fixture.componentInstance;
+
+//   //   jest.spyOn(component, 'isDataRequest').mockReturnValue(true);
+//   //   jest.spyOn(component, 'decodeQueryParams').mockReturnValue({ a: 'next', f: { organisationSize: '' } });
+
+//   //   fixture.detectChanges();
+
+//   //   expect(component.isDataRequest()).toBe(true);
+//   //   expect(serverRedirectSpy.status).not.toHaveBeenCalledWith(303);
+
+//   // });
+
+//   // it('should redirect to next step when submitted information is valid (running in server)', () => {
+
+//   //   injectorSpy.mockReturnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
+//   //   jest.spyOn(common, 'isPlatformServer').mockReturnValue(true);
+//   //   activatedRoute.snapshot.params = { id: 1 };
+
+//   //   fixture = TestBed.createComponent(SurveyStepComponent);
+//   //   component = fixture.componentInstance;
+
+//   //   jest.spyOn(component, 'isDataRequest').mockReturnValue(true);
+//   //   jest.spyOn(component, 'decodeQueryParams').mockReturnValue({ a: 'next', f: {categories: ['PHARMACEUTICAL', 'MEDICAL_DEVICE', 'AI']} });
+
+//   //   fixture.detectChanges();
+
+//   //   expect(component.isDataRequest()).toBe(true);
+//   //   expect(serverRedirectSpy.status).toHaveBeenCalledWith(303);
+//   //   expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', '/triage-innovator-pack/survey/2?f=eyJjYXRlZ29yaWVzIjpbIlBIQVJNQUNFVVRJQ0FMIiwiTUVESUNBTF9ERVZJQ0UiLCJBSSJdfQ%3D%3D');
+
+//   // });
+
+//   // it('should submit information to server and redirect to end page (running in server)', () => {
+
+//   //   injectorSpy.mockReturnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
+//   //   jest.spyOn(common, 'isPlatformServer').mockReturnValue(true);
+//   //   activatedRoute.snapshot.params = { id: 1 };
+
+//   //   fixture = TestBed.createComponent(SurveyStepComponent);
+//   //   component = fixture.componentInstance;
+
+//   //   jest.spyOn(component, 'isDataRequest').mockReturnValue(true);
+//   //   jest.spyOn(component, 'decodeQueryParams').mockReturnValue({ a: 'submit', f: { organisationSize: 'some answer' } });
+//   //   const surveyId = 'c29tZUlk';
+
+//   //   component.summaryList.valid = true;
+//   //   surveyService.submitSurvey = (survey: { [key: string]: any; }) => of({ id: surveyId });
+//   //   fixture.detectChanges();
+
+//   //   expect(component.isDataRequest()).toBe(true);
+//   //   expect(serverRedirectSpy.status).toHaveBeenCalledWith(303);
+//   //   expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', `/triage-innovator-pack/survey/end?surveyId=${encodeURIComponent(component.encodeInfo(surveyId))}`);
+
+//   // });
+
+//   // it('should redirect if a unknown action was provided (running in server)', () => {
+
+//   //   injectorSpy.mockReturnValue({ status: serverRedirectSpy.status, setHeader: serverRedirectSpy.setHeader, ENV: EnvironmentVariablesStore.ENV });
+//   //   jest.spyOn(common, 'isPlatformServer').mockReturnValue(true);
+//   //   activatedRoute.snapshot.params = { id: 1 };
+
+//   //   fixture = TestBed.createComponent(SurveyStepComponent);
+//   //   component = fixture.componentInstance;
+
+//   //   jest.spyOn(component, 'isDataRequest').mockReturnValue(true);
+//   //   jest.spyOn(component, 'decodeQueryParams').mockReturnValue({ a: 'SOME INVALID ACTION', f: { organisationSize: 'some answer' } });
+
+//   //   fixture.detectChanges();
+
+//   //   expect(component.isDataRequest()).toBe(true);
+//   //   expect(serverRedirectSpy.status).toHaveBeenCalledWith(303);
+//   //   expect(serverRedirectSpy.setHeader).toHaveBeenCalledWith('Location', 'not-found');
+
+//   // });
+
+// });
 
 

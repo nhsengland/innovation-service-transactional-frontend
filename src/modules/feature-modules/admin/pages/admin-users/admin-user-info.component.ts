@@ -33,7 +33,7 @@ export class PageAdminUserInfoComponent extends CoreComponent implements OnInit 
     super();
     this.setPageTitle('Admin User information');
 
-    this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData(this.activatedRoute).user.displayName };
+    this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName };
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'adminCreationSuccess':

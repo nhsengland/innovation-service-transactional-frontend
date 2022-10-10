@@ -3,9 +3,10 @@ import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { FormControl, FormGroup } from '@app/base/forms';
+import { FormGroup } from '@app/base/forms';
 
 import { InnovatorService } from '../../../services/innovator.service';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -28,11 +29,11 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService
+    private innovatorService: InnovatorService,
+    private innovationsService: InnovationsService
   ) {
 
     super();
-    this.setPageTitle('Decline action');
 
     this.actionDisplayId = '';
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -43,20 +44,15 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
 
   ngOnInit(): void {
 
-    this.innovatorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
-      response => {
-        this.actionDisplayId = response.displayId;
-        this.setPageStatus('READY');
-      },
-      error => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch action information',
-          message: 'Please try again or contact us for further help'
-        };
-      }
-    );
+    this.innovationsService.getInnovatorInnovationActionInfo(this.innovationId, this.actionId).subscribe(response => {
+
+      this.actionDisplayId = response.displayId;
+
+      this.setPageTitle(response.name, { hint: response.displayId });
+      // this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker`);
+      this.setPageStatus('READY');
+
+    });
 
   }
 
@@ -70,19 +66,13 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
 
     const status = 'DECLINED';
 
-    this.innovatorService.declineAction(this.innovationId, this.actionId, { ...this.form.value, status }).subscribe(
-      response => {
-        this.redirectTo(`/innovator/innovations/${this.innovationId}/action-tracker/${response.id}`, { alert: 'actionDeclined', status });
+    this.innovatorService.declineAction(this.innovationId, this.actionId, { ...this.form.value, status }).subscribe({
+      next: response => {
+        this.setRedirectAlertSuccess('The action was declined', { message: 'The accessor will be notified' });
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/action-tracker/${response.id}`);
       },
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when declining an action',
-          message: 'Please try again or contact us for further help',
-          setFocus: true
-        };
-      }
-    );
+      error: () => this.setAlertUnknownError()
+    });
 
   }
 

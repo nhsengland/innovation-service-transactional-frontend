@@ -89,7 +89,7 @@ export class WizardOrganisationUnitActivateComponent extends CoreComponent imple
       },
       () => {
         this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
+        this.setAlertUnknownError();
       }
     );
 
@@ -98,7 +98,7 @@ export class WizardOrganisationUnitActivateComponent extends CoreComponent imple
 
   onPreviousStep<T extends WizardStepEventType<MappedObjectType>>(stepData: T, ...args: ((data: T) => void)[]): void {
 
-    this.clearAlert();
+    this.resetAlert();
 
     if (this.wizard.currentStepNumber() === 1) {
       this.redirectTo(`/admin/organisations/${this.wizard.data.organisation.id}`);
@@ -112,7 +112,7 @@ export class WizardOrganisationUnitActivateComponent extends CoreComponent imple
 
   onNextStep<T extends WizardStepEventType<MappedObjectType>>(stepData: T, ...args: ((data: T) => void)[]): void {
 
-    this.clearAlert();
+    this.resetAlert();
 
     args.forEach(element => element.bind(this)(stepData));
     this.wizard.gotoNextStep();

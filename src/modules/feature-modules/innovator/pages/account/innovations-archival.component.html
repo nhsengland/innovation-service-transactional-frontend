@@ -1,15 +1,7 @@
-<div class="nhsuk-grid-row nhsuk-u-padding-top-3">
-  <div class="nhsuk-grid-column-full">
+<theme-content-wrapper [status]="pageStatus">
 
-    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-      <p> {{ alert.message }} </p>
-    </theme-alert>
-
-    <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
-
-    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-    <ng-container *ngIf="pageStatus === 'READY'">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
 
       <form [formGroup]="form" (ngSubmit)="onSubmitForm()">
 
@@ -41,13 +33,13 @@
           <button type="submit" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3"> Archive innovation </button>
         </ng-container>
 
-        <div class="nhsuk-u-padding-bottom-5">
-          <a routerLink="/innovator/account/manage-innovations"> Cancel </a>
+        <div>
+          <a routerLink="/innovator/account/manage-innovations">Cancel</a>
         </div>
 
       </form>
 
-    </ng-container>
-
+    </div>
   </div>
-</div>
+
+</theme-content-wrapper>

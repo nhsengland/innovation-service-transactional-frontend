@@ -47,7 +47,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     super();
     this.setPageTitle('Suggest organisations for support');
 
-    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
 
   }
 
@@ -58,51 +58,45 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       this.organisationsService.getOrganisationsListWithUnits(),
       this.accessorService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment.id || ''),
       this.accessorService.getInnovationSupports(this.innovation.id, false)
-    ]).subscribe(
-      ([organisations, needsAssessmentInfo, supportsInfo]) => {
+    ]).subscribe(([organisations, needsAssessmentInfo, supportsInfo]) => {
 
-        const needsAssessmentSuggestedOrganisations = needsAssessmentInfo.assessment.organisations.map(item => item.id);
+      const needsAssessmentSuggestedOrganisations = needsAssessmentInfo.assessment.organisations.map(item => item.id);
 
-        this.groupedItems = organisations.map(item => {
+      this.groupedItems = organisations.map(item => {
 
-          const description = needsAssessmentSuggestedOrganisations.includes(item.id) ? 'Suggested by needs assessment' : undefined;
+        const description = needsAssessmentSuggestedOrganisations.includes(item.id) ? 'Suggested by needs assessment' : undefined;
 
-          return {
-            value: item.id,
-            label: item.name,
-            description,
-            items: item.organisationUnits.map(i => ({
-              value: i.id,
-              label: i.name,
-              description: (item.organisationUnits.length === 1 ? description : undefined),
-              isEditable: true
-            })),
-          };
+        return {
+          value: item.id,
+          label: item.name,
+          description,
+          items: item.organisationUnits.map(i => ({
+            value: i.id,
+            label: i.name,
+            description: (item.organisationUnits.length === 1 ? description : undefined),
+            isEditable: true
+          })),
+        };
 
+      });
+
+      supportsInfo.filter(s => s.status === 'ENGAGING').forEach(s => {
+
+        (this.form.get('organisationUnits') as FormArray).push(new FormControl(s.organisationUnit.id));
+
+        this.groupedItems.forEach(o => {
+          const ou = o.items.find(i => i.value === s.organisationUnit.id);
+          if (ou) {
+            ou.isEditable = false;
+            ou.label += ` (currently engaging)`;
+          }
         });
 
-        supportsInfo.filter(s => s.status === 'ENGAGING').forEach(s => {
+      });
 
-          (this.form.get('organisationUnits') as FormArray).push(new FormControl(s.organisationUnit.id));
+      this.setPageStatus('READY');
 
-          this.groupedItems.forEach(o => {
-            const ou = o.items.find(i => i.value === s.organisationUnit.id);
-            if (ou) {
-              ou.isEditable = false;
-              ou.label += ` (currently engaging)`;
-            }
-          });
-
-        });
-
-        this.setPageStatus('READY');
-
-      },
-      () => {
-        this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
-      }
-    );
+    });
 
   }
 
@@ -154,13 +148,16 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       type: SupportLogType.ACCESSOR_SUGGESTION,
     };
 
-    this.accessorService.suggestNewOrganisations(this.innovation.id, body).subscribe(
-      () => this.redirectTo(`/accessor/innovations/${this.innovation.id}/support`, { alert: 'supportOrganisationSuggestSuccess' }),
-      () => {
+    this.accessorService.suggestNewOrganisations(this.innovation.id, body).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('Organisation suggestions sent', { message: 'Your suggestions were saved and notifications sent.' });
+        this.redirectTo(`/accessor/innovations/${this.innovation.id}/support`);
+      },
+      error: () => {
         this.submitButton = { isActive: true, label: 'Confirm and notify organisations' };
-        this.setAlertDataSaveError();
+        this.setAlertUnknownError();
       }
-    );
+    });
 
   }
 

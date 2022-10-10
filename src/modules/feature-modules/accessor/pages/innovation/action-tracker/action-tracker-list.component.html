@@ -1,32 +1,15 @@
-<div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
-  <div class="nhsuk-grid-column-two-thirds">
-    <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation.name }}</p>
+<theme-content-wrapper [status]="pageStatus">
+
+  <div *ngIf="innovation.lockedInnovatorValidation?.displayIsInnovatorLocked" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+    <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+      <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
+    </div>
+    <p> Please note that the innovator {{ innovation.lockedInnovatorValidation?.innovatorName }} is currently locked. </p>
   </div>
-  <div *ngIf="innovation.assessment.id" class="nhsuk-grid-column-one-third text-align-right">
-    <a routerLink="/accessor/innovations/{{ innovationId }}/assessments/{{ innovation.assessment.id }}"> View needs assessment </a>
-  </div>
-</div>
-<hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
-<div *ngIf="innovation.lockedInnovatorValidation?.displayIsInnovatorLocked" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
-  <div class="nhsuk-heading-m nhsuk-warning-callout__label">
-    <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
-  </div>
-  <p> Please note that the innovator {{ innovation.lockedInnovatorValidation?.innovatorName }} is currently locked. </p>
-</div>
 
-<theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-  <p> {{ alert.message }} </p>
-</theme-alert>
-
-<h1 class="nhsuk-heading-xl nhsuk-u-margin-bottom-5"> {{ pageTitle }} </h1>
-
-<a *ngIf="innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED'" routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" class="nhsuk-button nhsuk-u-margin-bottom-7">
-  Create new action
-</a>
-
-<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-<ng-container *ngIf="pageStatus === 'READY'">
+  <a *ngIf="innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED'" routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" class="nhsuk-button nhsuk-u-margin-bottom-7">
+    Create new action
+  </a>
 
   <ng-container *ngIf="openedActionsList.getTotalRowsNumber() === 0 && closedActionsList.getTotalRowsNumber() === 0; else openedOrClosedActions">
     <p> There are no actions </p>
@@ -136,4 +119,4 @@
 
   </ng-template>
 
-</ng-container>
+</theme-content-wrapper>

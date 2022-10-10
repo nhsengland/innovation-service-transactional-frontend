@@ -49,10 +49,10 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
   ) {
 
     super();
-    this.setPageTitle('Support status');
+    this.setPageTitle('Support status', { hint: 'All organisations' });
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = RoutingHelper.getRouteData(this.activatedRoute).innovationData;
+    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
 
   }
 
@@ -62,50 +62,45 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
     forkJoin([
       this.organisationsService.getOrganisationsListWithUnits(),
       this.assessmentService.getInnovationSupports(this.innovationId, false),
-    ]).subscribe(
-      ([organisationUnits, organisationUnitsSupportStatus]) => {
+    ]).subscribe(([organisationUnits, organisationUnitsSupportStatus]) => {
 
-        this.organisations = organisationUnits.map(organisation => {
-          if (organisation.organisationUnits.length === 1) {
-            return {
-              info: {
-                id: organisation.id,
-                name: organisation.name,
-                acronym: organisation.acronym,
-                organisationUnits: [],
-                status: organisationUnitsSupportStatus.find(o => o.organisationUnit.organisation.id === organisation.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
-              },
-              showHideStatus: 'hidden',
-              showHideText: null,
-              showHideDescription: null
-            };
-          } else {
-            return {
-              info: {
-                id: organisation.id,
-                name: organisation.name,
-                acronym: organisation.acronym,
-                organisationUnits: organisation.organisationUnits.map(org => ({
-                  ...org,
-                  status: organisationUnitsSupportStatus.find(o => o.organisationUnit.id === org.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
-                }))
-              },
-              showHideStatus: 'closed',
-              showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
-              showHideDescription: `that belong to the ${organisation.name}`
-            };
-          }
+      this.organisations = organisationUnits.map(organisation => {
+        if (organisation.organisationUnits.length === 1) {
+          return {
+            info: {
+              id: organisation.id,
+              name: organisation.name,
+              acronym: organisation.acronym,
+              organisationUnits: [],
+              status: organisationUnitsSupportStatus.find(o => o.organisationUnit.organisation.id === organisation.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
+            },
+            showHideStatus: 'hidden',
+            showHideText: null,
+            showHideDescription: null
+          };
+        } else {
+          return {
+            info: {
+              id: organisation.id,
+              name: organisation.name,
+              acronym: organisation.acronym,
+              organisationUnits: organisation.organisationUnits.map(org => ({
+                ...org,
+                status: organisationUnitsSupportStatus.find(o => o.organisationUnit.id === org.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
+              }))
+            },
+            showHideStatus: 'closed',
+            showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
+            showHideDescription: `that belong to the ${organisation.name}`
+          };
+        }
 
-        });
+      });
 
-        this.setPageStatus('READY');
+      this.setPageStatus('READY');
 
-      },
-      () => {
-        this.setPageStatus('ERROR');
-        this.setAlertError('Unable to fetch innovation record information', 'Please try again or contact us for further help');
-      }
-    );
+    });
+
   }
 
 

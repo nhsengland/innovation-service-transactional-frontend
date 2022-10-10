@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
+import { CustomValidators, FormGroup } from '@app/base/forms';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
@@ -36,6 +36,9 @@ export class PageAccountDeleteComponent extends CoreComponent {
       confirmation: new UntypedFormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('delete my account')]),
     }, { updateOn: 'blur' });
 
+
+    this.setPageStatus('READY');
+
   }
 
   onSubmitStep(): void {
@@ -53,19 +56,14 @@ export class PageAccountDeleteComponent extends CoreComponent {
       reason: this.form.get('reason')?.value
     };
 
-    this.innovatorService.deleteUserAccount(body).subscribe(
-      () => {
+    this.innovatorService.deleteUserAccount(body).subscribe({
+      next: () => {
         this.redirectTo('/delete-account-message', {});
       },
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occured while deleting user',
-          message: 'Please, try again or contact us for further help',
-          setFocus: true
-        };
+      error: () => {
+        this.setAlertError('An error occured while deleting user. Please, try again or contact us for further help');
       }
-    );
+    });
 
   }
 

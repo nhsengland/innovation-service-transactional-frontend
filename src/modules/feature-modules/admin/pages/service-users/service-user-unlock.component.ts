@@ -36,7 +36,7 @@ export class PageServiceUserUnlockComponent extends CoreComponent implements OnI
     super();
     this.setPageTitle('Unlock user');
 
-    this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData(this.activatedRoute).user.displayName };
+    this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName };
 
   }
 

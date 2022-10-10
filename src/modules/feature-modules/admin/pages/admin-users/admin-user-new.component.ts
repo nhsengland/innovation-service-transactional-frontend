@@ -68,8 +68,6 @@ export class PageAdminUserNewComponent extends CoreComponent implements OnInit {
         break;
     }
 
-    this.focusBody();
-
   }
 
   onSubmitWizard(): void {
@@ -77,11 +75,12 @@ export class PageAdminUserNewComponent extends CoreComponent implements OnInit {
     this.submitBtnClicked = true;
     const body = this.wizard.runOutboundParsing();
     this.securityConfirmation.code = this.form.get('code')!.value;
-    this.serviceUsersService.createUser(body, this.securityConfirmation).subscribe(
-      response => {
+    this.serviceUsersService.createUser(body, this.securityConfirmation).subscribe({
+      next: response => {
         this.redirectTo(`admin/administration-users/${response.id}`, { alert: 'adminCreationSuccess' });
       },
-      (error) => {
+      error: (error) => {
+
         this.submitBtnClicked = false;
 
         if (!this.securityConfirmation.id && error.id) {
@@ -95,7 +94,7 @@ export class PageAdminUserNewComponent extends CoreComponent implements OnInit {
         }
 
       }
-    );
+    });
 
   }
 

@@ -28,7 +28,6 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
   ) {
 
     super();
-    this.setPageTitle('Starting needs assessment');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovationName = '';
@@ -49,29 +48,19 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
 
   ngOnInit(): void {
 
-    this.assessmentService.getInnovationInfo(this.innovationId).subscribe(
-      response => {
+    this.assessmentService.getInnovationInfo(this.innovationId).subscribe(response => {
 
-        this.innovationName = response.summary.name;
+      this.innovationName = response.summary.name;
 
-        this.setPageStatus('READY');
+      this.setPageTitle(this.innovationName, { hint: 'Starting needs assessment for', size:'l' });
+      this.setBackLink('Go back', `/assessment/innovations/${response.summary.id}`);
+      this.setPageStatus('READY');
 
-      },
-      error => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch information',
-          message: 'Please try again or contact us for further help'
-        };
-      }
-    );
+    });
 
   }
 
   onSubmit(): void {
-
-    this.alert = { type: null };
 
     const formData = this.formEngineComponent?.getFormValues();
 
@@ -81,19 +70,10 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
 
     this.formAnswers = formData.data;
 
-    this.assessmentService.createInnovationNeedsAssessment(this.innovationId, this.formAnswers).subscribe(
-      response => {
-        this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${response.id}/edit`);
-      },
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when starting needs assessment',
-          message: 'Please try again or contact us for further help',
-          setFocus: true
-        };
-      }
-    );
+    this.assessmentService.createInnovationNeedsAssessment(this.innovationId, this.formAnswers).subscribe({
+      next: response => this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${response.id}/edit`),
+      error: () => this.setAlertUnknownError()
+    });
 
   }
 

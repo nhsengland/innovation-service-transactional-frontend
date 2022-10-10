@@ -1,4 +1,4 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel, FormEngineParameterModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
@@ -111,13 +111,14 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
 
   steps.splice(5);
 
-  if (data.categories.length === 1) {
-
+  if (data.categories.length === 0) {
+    data.mainCategory = null;
+  } else if (data.categories.length === 1) {
     data.mainCategory = data.categories[0];
-
   } else {
 
     const selectedCategories = categoriesItems.filter(category => data.categories.some(e => e === category.value));
+
     steps.push(
       new FormEngineModel({
         parameters: [{
@@ -180,6 +181,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
       }]
     })
   );
+
 }
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
@@ -231,73 +233,69 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   const toReturn: WizardSummaryType[] = [];
-  let stepIndex = 0;
+
+  let editStepNumber = 1;
 
   toReturn.push(
     {
       label: stepsLabels.l1,
       value: data.innovationName,
-      editStepNumber: 1
+      editStepNumber: editStepNumber++
     },
     {
       label: stepsLabels.l2,
       value: data.description,
-      editStepNumber: 2
+      editStepNumber: editStepNumber++
     },
     {
       label: stepsLabels.l3,
       value: `${data.locationCountryName || data.location}${data.englandPostCode ? ', ' + data.englandPostCode : ''}`,
-      editStepNumber: 3
+      editStepNumber: editStepNumber++
     },
     {
       label: stepsLabels.l4,
       value: hasFinalProductItems.find(item => item.value === data.hasFinalProduct)?.label,
-      editStepNumber: 4
+      editStepNumber: editStepNumber++
     },
     {
       label: stepsLabels.l5,
       value: data.categories?.map(v => v === 'OTHER' ? data.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n'),
-      editStepNumber: 5
+      editStepNumber: editStepNumber++
     });
 
   if (data.categories.length > 1) {
-    stepIndex = 1;
-    toReturn.push(
-      {
-        label: stepsLabels.l6,
-        value: data.otherMainCategoryDescription || mainCategoryItems.find(item => item.value === data.mainCategory)?.label,
-        editStepNumber: 6
-      },
-    );
-  } else {
-    stepIndex = 0;
+    toReturn.push({
+      label: stepsLabels.l6,
+      value: data.otherMainCategoryDescription || mainCategoryItems.find(item => item.value === data.mainCategory)?.label,
+      editStepNumber: editStepNumber++
+    });
   }
 
   toReturn.push(
     {
       label: stepsLabels.l7,
       value: data.areas?.map(v => areasItems.find(item => item.value === v)?.label).join('\n'),
-      editStepNumber: 6 + stepIndex
+      editStepNumber: editStepNumber++
     },
     {
       label: stepsLabels.l8,
       value: data.careSettings?.map(v => careSettingsItems.find(item => item.value === v)?.label).join('\n'),
-      editStepNumber: 7 + stepIndex
+      editStepNumber: editStepNumber++
     },
     {
       label: stepsLabels.l9,
       value: mainPurposeItems.find(item => item.value === data.mainPurpose)?.label,
-      editStepNumber: 8 + stepIndex
+      editStepNumber: editStepNumber++
     },
     {
       label: stepsLabels.l10,
       value: data.supportTypes?.map(v => supportTypesItems.find(item => item.value === v)?.label).join('\n'),
-      editStepNumber: 9 + stepIndex
+      editStepNumber: editStepNumber++
     },
     {
       label: stepsLabels.l11,
       value: data.moreSupportDescription,
-      editStepNumber: 10 + stepIndex
+      editStepNumber: editStepNumber++
     }
   );
 

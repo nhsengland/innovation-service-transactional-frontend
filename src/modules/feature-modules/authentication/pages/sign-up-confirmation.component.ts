@@ -14,7 +14,7 @@ export class SignUpConfirmationComponent extends CoreComponent {
   constructor() {
 
     super();
-    this.setPageTitle('Account created');
+    this.setPageTitle('Account created', { showPage: false });
 
   }
 

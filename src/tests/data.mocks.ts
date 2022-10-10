@@ -1,6 +1,6 @@
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum, UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
-import { EnvironmentInnovationType } from '@modules/stores/environment/environment.types';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 
@@ -44,7 +44,7 @@ export const USER_INFO_ADMIN: Required<AuthenticationModel>['user'] = {
 };
 
 
-export const CONTEXT_INNOVATION_INFO: EnvironmentInnovationType = {
+export const CONTEXT_INNOVATION_INFO: ContextInnovationType = {
   id: 'innovationId01',
   name: 'Test innovation',
   status: InnovationStatusEnum.IN_PROGRESS,

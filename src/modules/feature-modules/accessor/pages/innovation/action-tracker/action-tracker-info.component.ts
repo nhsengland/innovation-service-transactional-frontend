@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
+import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 
 import { AccessorService, GetInnovationActionInfoOutDTO } from '../../../services/accessor.service';
 
@@ -26,43 +26,25 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
   ) {
 
     super();
-    this.setPageTitle('Action details');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.actionId = this.activatedRoute.snapshot.params.actionId;
-
-
-    switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'actionCreationSuccess':
-        this.setAlertSuccess('Action requested', 'The innovator has been notified of your action request.');
-        break;
-      case 'actionUpdateSuccess':
-        this.setAlertSuccess(`You have updated the status of this action to '${this.activatedRoute.snapshot.queryParams.status}'`, 'The innovator will be notified of this status change');
-        break;
-      default:
-        break;
-    }
 
   }
 
 
   ngOnInit(): void {
 
-    this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(
-      response => {
+    this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(response => {
 
-        this.action = response;
+      this.action = response;
 
-        this.setPageStatus('READY');
+      this.setPageTitle(this.action.name, { hint: this.action.displayId });
+      this.setPageStatus('READY');
 
-      },
-      () => {
-        this.setPageStatus('ERROR');
-        this.setAlertDataLoadError();
-      }
-    );
+    });
 
-    this.stores.environment.dismissNotification(NotificationContextTypeEnum.ACTION, this.actionId);
+    this.stores.context.dismissNotification(NotificationContextTypeEnum.ACTION, this.actionId);
 
   }
 

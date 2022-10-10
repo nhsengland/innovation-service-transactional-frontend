@@ -3,7 +3,7 @@ import { UntypedFormControl } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormControl, FormGroup, FormEngineParameterModel, Validators } from '@app/base/forms';
+import { CustomValidators, FormGroup, FormEngineParameterModel, Validators } from '@app/base/forms';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
@@ -47,16 +47,7 @@ export class PageAccountInnovationsTransferComponent extends CoreComponent imple
         .map(item => ({ value: item.id, label: item.name }));
 
       this.setPageStatus('READY');
-    },
-      () => {
-        this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch innovations transfers',
-          message: 'Please try again or contact us for further help'
-        };
-      }
-    );
+    });
 
   }
 
@@ -84,19 +75,14 @@ export class PageAccountInnovationsTransferComponent extends CoreComponent imple
       email: this.form.get('email')!.value
     };
 
-    this.innovatorService.transferInnovation(body).subscribe(
-      () => {
+    this.innovatorService.transferInnovation(body).subscribe({
+      next: () => {
         this.redirectTo('/innovator/account/manage-innovations');
       },
-      () => {
-        this.alert = {
-          type: 'ERROR',
-          title: 'An error occurred when transferring innovation ownership.',
-          message: 'Please check the details and try again or contact us for further info.',
-          setFocus: true
-        };
+      error: () => {
+        this.setAlertError('An error occurred when transferring innovation ownership. Please check the details and try again or contact us for further info.');
       }
-    );
+    });
 
   }
 

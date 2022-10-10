@@ -8,7 +8,39 @@ import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
+import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
+
+export type getInnovationInfoEndpointDTO = {
+  id: string;
+  name: string;
+  status: InnovationStatusEnum;
+  description: string;
+  countryName: string;
+  postcode: string;
+  submittedAt?: string;
+  assessment?: {
+    id: string;
+  };
+  actions: {
+    requestedCount: number;
+    inReviewCount: number;
+  },
+  notifications: { [key: string]: number }
+};
+
+
+export type getInnovationActionInfoInDTO = {
+  id: string;
+  displayId: string;
+  status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
+  description: string;
+  section: InnovationSectionEnum;
+  createdAt: string; // '2021-04-16T09:23:49.396Z',
+  createdBy: { id: string; name: string; };
+};
+export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
 
 export type GetThreadsListDTO = {
   count: number;
@@ -76,52 +108,45 @@ export class InnovationsService extends CoreService {
 
   constructor() { super(); }
 
-  getInnovationsList(): Observable<{ id: string, name: string }[]> {
+  getInnovationsList(): Observable<{ id: string, name: string, description: string }[]> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() });
-    return this.http.get<{ id: string, name: string }[]>(url.buildUrl()).pipe(take(1), map(response => response));
+    return this.http.get<{ id: string, name: string, description: string }[]>(url.buildUrl()).pipe(take(1), map(response => response));
+
+  }
+
+  getInnovatorInnovationInfo(innovationId: string): Observable<getInnovationInfoEndpointDTO> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
+  getInnovatorInnovationActionInfo(innovationId: string, actionId: string): Observable<getInnovationActionInfoOutDTO> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
+    return this.http.get<getInnovationActionInfoInDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => ({
+        id: response.id,
+        displayId: response.displayId,
+        status: response.status,
+        name: `Submit '${this.stores.innovation.getSectionTitle(response.section).toLowerCase()}'`,
+        description: response.description,
+        section: response.section,
+        createdAt: response.createdAt,
+        createdBy: response.createdBy.name
+      }))
+    );
 
   }
 
 
   // Threads and messages methods.
   getThreadsList(innovationId: string, queryParams: APIQueryParamsType<{}>): Observable<GetThreadsListDTO> {
-
-    // return of({
-    //   count: 50,
-    //   threads: [
-    //     {
-    //       id: 'T01', subject: 'Some title 01', messageCount: 5,
-    //       createdAt: '2020-01-01T00:00:00.000Z',
-    //       isNew: true,
-    //       lastMessage: {
-    //         id: 'LastMessageId',
-    //         createdAt: '2020-01-01T00:00:00.000Z',
-    //         createdBy: {
-    //           id: '',
-    //           name: 'LM01',
-    //           type: UserTypeEnum.ASSESSMENT
-    //         }
-    //       }
-    //     },
-    //     {
-    //       id: 'T02', subject: 'Some title 02', messageCount: 10,
-    //       createdAt: '2020-01-01T00:00:00.000Z',
-    //       isNew: false,
-    //       lastMessage: {
-    //         id: 'LastMessageId',
-    //         createdAt: '2020-01-01T00:00:00.000Z',
-    //         createdBy: {
-    //           id: '',
-    //           name: 'LM02',
-    //           type: UserTypeEnum.ACCESSOR,
-    //           organisation: { id: 'sadf', name: 'OrgName', acronym: 'aA' },
-    //           organisationUnit: { id: 'sdf', name: 'Unit Name', acronym: 'dsa' }
-    //         }
-    //       }
-    //     }
-    //   ]
-    // });
 
     const { filters, ...qp } = queryParams;
 
@@ -137,11 +162,6 @@ export class InnovationsService extends CoreService {
 
   getThreadInfo(innovationId: string, threadId: string): Observable<GetThreadInfoDTO> {
 
-    // return of({
-    //   id: 'T01', subject: 'Some title 01',
-    //   createdAt: '2020-01-01T00:00:00.000Z', createdBy: { id: '', name: 'LM01', type: UserTypeEnum.ASSESSMENT }
-    // });
-
     const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId').setPathParams({ innovationId, threadId });
     return this.http.get<GetThreadInfoDTO>(url.buildUrl()).pipe(take(1),
       map(response => response)
@@ -150,11 +170,6 @@ export class InnovationsService extends CoreService {
   }
 
   getThreadMessageInfo(innovationId: string, threadId: string, messageId: string): Observable<GetThreadMessageInfoDTO> {
-
-    // return of({
-    //   id: 'T01', message: 'Some message 01',
-    //   createdAt: '2020-01-01T00:00:00.000Z'
-    // });
 
     const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId/messages/:messageId').setPathParams({ innovationId, threadId, messageId });
 
@@ -165,40 +180,6 @@ export class InnovationsService extends CoreService {
   }
 
   getThreadMessagesList(innovationId: string, threadId: string, queryParams: APIQueryParamsType<{}>): Observable<GetThreadMessagesListOutDTO> {
-
-    // return of({
-    //   count: 5,
-    //   messages: [
-    //     {
-    //       id: 'M01', message: 'Some title 01',
-    //       createdAt: '2020-01-01T00:00:00.000Z',
-    //       createdBy: {
-    //         id: '5FDE0B71-BD0D-4C88-98E6-51399BB7B4AD',
-    //         name: 'LM01',
-    //         type: UserTypeEnum.INNOVATOR,
-    //         typeDescription: 'Needs assessment',
-    //       },
-    //       updatedAt: null,
-    //       isNew: true,
-    //       isEditable: true
-    //     },
-    //     {
-    //       id: 'M02', message: 'Some title 02',
-    //       createdAt: '2020-01-01T00:00:00.000Z',
-    //       createdBy: {
-    //         id: '',
-    //         name: 'LM02',
-    //         type: UserTypeEnum.ACCESSOR,
-    //         typeDescription: 'Support assessment',
-    //         organisation: { id: 'sadf', name: 'OrgName', acronym: 'aA' },
-    //         organisationUnit: { id: 'sdf', name: 'Unit Name', acronym: 'dsa' }
-    //       },
-    //       updatedAt: '2020-01-02T00:00:00.000Z',
-    //       isNew: false,
-    //       isEditable: false,
-    //     }
-    //   ]
-    // });
 
     const { filters, ...qp } = queryParams;
 
@@ -217,9 +198,6 @@ export class InnovationsService extends CoreService {
 
   createThread(innovationId: string, body: { subject: string, message: string }): Observable<{ id: string }> {
 
-    // return of({ id: 'sfsdfa' });
-    // return throwError('error');
-
     const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads').setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
@@ -227,18 +205,12 @@ export class InnovationsService extends CoreService {
 
   createThreadMessage(innovationId: string, threadId: string, body: { message: string }): Observable<{ id: string }> {
 
-    // return of({ id: 'sfsdfa' });
-    // return throwError('error');
-
     const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId/messages').setPathParams({ innovationId, threadId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
 
   editThreadMessage(innovationId: string, threadId: string, messageId: string, body: { message: string }): Observable<{ id: string }> {
-
-    // return of({ id: 'sfsdfa' });
-    // return throwError('error');
 
     const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId/messages/:messageId').setPathParams({ innovationId, threadId, messageId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));

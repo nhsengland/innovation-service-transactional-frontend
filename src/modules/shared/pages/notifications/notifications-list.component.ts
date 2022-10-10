@@ -3,10 +3,10 @@ import { UntypedFormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { FormArray, FormControl, FormGroup } from '@app/base/forms';
+import { FormArray, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
-import { NotificationContextTypeEnum } from '@modules/stores/environment/environment.enums';
+import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 
 import { NotificationsListOutDTO, NotificationsService } from '@modules/shared/services/notifications.service';
 
@@ -92,57 +92,47 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
     this.setPageStatus('LOADING');
 
-    this.notificationsService.getNotificationsList(this.notificationsList.getAPIQueryParams()).subscribe(
-      response => {
-        this.notificationsList.setData(response.data, response.count);
-        this.setPageStatus('READY');
-      },
-      error => {
-        this.setAlertDataLoadError();
-        this.setPageStatus('READY');
-        this.logger.error(error);
-      }
-    );
+    this.notificationsService.getNotificationsList(this.notificationsList.getAPIQueryParams()).subscribe(response => {
+      this.notificationsList.setData(response.data, response.count);
+      this.setPageStatus('READY');
+    });
 
   }
 
   onDeleteNotification(notificationId: string): void {
 
-    this.clearAlert();
+    this.resetAlert();
     this.setPageStatus('LOADING');
 
-    this.notificationsService.deleteNotification(notificationId).subscribe(
-      () => {
+    this.notificationsService.deleteNotification(notificationId).subscribe({
+      next: () => {
         this.setAlertSuccess('Notification successfully cleared.');
-        this.stores.environment.updateUserUnreadNotifications();
+        this.stores.context.updateUserUnreadNotifications();
         this.getNotificationsList();
       },
-      error => {
-        this.setAlertDataSaveError();
-        this.setPageStatus('READY');
+      error: error => {
+        this.setAlertUnknownError();
         this.logger.error(error);
       }
-    );
+    });
 
   }
 
   onMarkAsReadAllNotifications(): void {
 
-    this.clearAlert();
+    this.resetAlert();
     this.setPageStatus('LOADING');
 
-    this.notificationsService.dismissAllUserNotifications().subscribe(
-      response => {
+    this.notificationsService.dismissAllUserNotifications().subscribe({
+      next: response => {
         this.setAlertSuccess(`${response.affected || 'All'} notifications have been marked as read.`);
-        this.stores.environment.updateUserUnreadNotifications();
+        this.stores.context.updateUserUnreadNotifications();
         this.getNotificationsList();
       },
-      error => {
-        this.setAlertDataSaveError();
-        this.setPageStatus('READY');
-        this.logger.error(error);
+      error: () => {
+        this.setAlertUnknownError();
       }
-    );
+    });
 
   }
 
@@ -151,7 +141,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
   onFormChange(): void {
 
-    this.clearAlert();
+    this.resetAlert();
     this.setPageStatus('LOADING');
 
     this.filters.forEach(filter => {
@@ -201,7 +191,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
   onTableOrder(column: string): void {
 
-    this.clearAlert();
+    this.resetAlert();
 
     this.notificationsList.setOrderBy(column);
     this.getNotificationsList();
@@ -209,7 +199,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
   onPageChange(event: { pageNumber: number }): void {
 
-    this.clearAlert();
+    this.resetAlert();
 
     this.notificationsList.setPage(event.pageNumber);
     this.getNotificationsList();

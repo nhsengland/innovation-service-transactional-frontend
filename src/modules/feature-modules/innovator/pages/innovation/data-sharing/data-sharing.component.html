@@ -1,15 +1,7 @@
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
+<theme-content-wrapper [status]="pageStatus">
 
-    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-      <p> {{ alert.message }} </p>
-    </theme-alert>
-
-    <h1 class="nhsuk-u-margin-bottom"> {{ pageTitle }} </h1>
-
-    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-    <ng-container *ngIf="pageStatus === 'READY'">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
 
       <app-organisation-suggestions-card [suggestions]="organisationSuggestions" [shares]="shares"></app-organisation-suggestions-card>
 
@@ -17,7 +9,7 @@
         <span class="nhsuk-u-visually-hidden">Information:</span>
         <p> Sharing your data with an organisation means that they can view your innovation and initiate contact. It doesn't guarantee a response. </p>
       </div>
-      
+
       <ul class="nhsuk-list">
         <li><a [href]="organisationInfoUrl" target="_blank" rel="noopener noreferrer">What does each organisation do? (opens in a new window) </a></li>
         <li><a routerLink="/innovator/innovations/{{ innovationId }}/support/statuses" arial-label="View support status keys information"> Support status key </a></li>
@@ -43,8 +35,7 @@
                 <a *ngIf="organisation.shared && !organisation.info.status" href="javascript:void(0)" (click)="onShowHideClicked(organisation.info.id)">
                   {{ organisation.showHideText }} <span class="nhsuk-u-visually-hidden"> {{ organisation.showHideDescription }} </span>
                 </a>
-                <strong *ngIf="organisation.shared && organisation.info.status" class="nhsuk-tag"
-                  [ngClass]="innovationSupportStatus[organisation.info.status].cssClass">{{ innovationSupportStatus[organisation.info.status].label }}</strong>
+                <strong *ngIf="organisation.shared && organisation.info.status" class="nhsuk-tag" [ngClass]="innovationSupportStatus[organisation.info.status].cssClass">{{ innovationSupportStatus[organisation.info.status].label }}</strong>
                 <span *ngIf="organisation.shared && organisation.info.status" class="nhsuk-u-visually-hidden">Organisation unit with support status
                   {{ innovationSupportStatus[organisation.info.status].label.toLowerCase() }}</span>
               </dd>
@@ -71,10 +62,10 @@
 
       <button routerLink="/innovator/innovations/{{ innovationId }}/support/edit" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Change preferences</button>
 
-    </ng-container>
-
+    </div>
   </div>
-</div>
+
+</theme-content-wrapper>
 
 
 <ng-template #icon let-shared="shared">

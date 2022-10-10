@@ -3,7 +3,7 @@ import { UntypedFormArray, UntypedFormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { FormArray, FormControl, FormGroup } from '@app/base/forms';
+import { FormArray, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
@@ -27,7 +27,7 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
 
   innovationsList = new TableModel<
     getAdvancedInnovationsListEndpointOutDTO['data'][0],
-    { name: string, mainCategories: string[], locations: string[], engagingOrganisations: string[], supportStatuses: string[], assignedToMe: boolean, suggestedOnly: boolean }>({pageSize: 20});
+    { name: string, mainCategories: string[], locations: string[], engagingOrganisations: string[], supportStatuses: string[], assignedToMe: boolean, suggestedOnly: boolean }>({ pageSize: 20 });
 
   form = new FormGroup({
     search: new UntypedFormControl(),
@@ -66,7 +66,7 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
   ) {
 
     super();
-    this.setPageTitle('Innovations');
+    this.setPageTitle('Innovations advanced search');
 
     this.innovationsList.setVisibleColumns({
       name: { label: 'Innovation', orderable: true },
@@ -108,16 +108,10 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
 
     this.setPageStatus('LOADING');
 
-    this.accessorService.getAdvancedInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(
-      response => {
-        this.innovationsList.setData(response.data, response.count);
-        this.setPageStatus('READY');
-      },
-      error => {
-        this.setPageStatus('ERROR');
-        this.logger.error(error);
-      }
-    );
+    this.accessorService.getAdvancedInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(response => {
+      this.innovationsList.setData(response.data, response.count);
+      this.setPageStatus('READY');
+    });
 
   }
 

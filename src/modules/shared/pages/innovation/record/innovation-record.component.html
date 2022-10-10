@@ -1,56 +1,14 @@
-<ng-container *ngIf="module === 'accessor'">
-  <div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
-    <div class="nhsuk-grid-column-two-thirds">
-      <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0"> {{ innovationName }} </p>
+<theme-content-wrapper [status]="pageStatus">
+
+  <div *ngIf="!innovation.owner.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+    <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+      <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
     </div>
-    <!-- <div *ngIf="innovation?.assessment?.id" class="nhsuk-grid-column-one-third text-align-right">
-      <a routerLink="/accessor/innovations/{{ innovation?.summary?.id || '' }}/assessments/{{ innovation?.assessment?.id || '' }}"> View needs assessment </a>
-    </div> -->
+    <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
   </div>
-  <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
-</ng-container>
 
-<ng-container *ngIf="module === 'assessment'">
-  <div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
-    <div class="nhsuk-grid-column-two-thirds">
-      <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0"> {{ innovationName }} </p>
-    </div>
-    <ng-container [ngSwitch]="innovation.status">
-      <div *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'" class="nhsuk-grid-column-one-third text-align-right">
-        <a routerLink="/assessment/innovations/{{ innovation.id || '' }}/assessments/new"> Start needs assessment </a>
-      </div>
-      <div *ngSwitchCase="'NEEDS_ASSESSMENT'" class="nhsuk-grid-column-one-third text-align-right">
-        <a routerLink="/assessment/innovations/{{ innovation.id || '' }}/assessments/{{ innovation.assessment?.id || '' }}/edit"> Continue needs assessment </a>
-      </div>
-      <div *ngSwitchCase="'IN_PROGRESS'" class="nhsuk-grid-column-one-third text-align-right">
-        <a routerLink="/assessment/innovations/{{ innovation.id || '' }}/assessments/{{ innovation.assessment?.id || '' }}"> View needs assessment </a>
-      </div>
-    </ng-container>
-  </div>
-  <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
-</ng-container>
-
-
-<div *ngIf="!innovation.owner.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
-  <div class="nhsuk-heading-m nhsuk-warning-callout__label">
-    <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
-  </div>
-  <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
-</div>
-
-
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full">
-
-    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-      <p> {{ alert.message }} </p>
-    </theme-alert>
-
-    <h1 class="nhsuk-u-margin-bottom-3"> {{ pageTitle }} </h1>
-
-    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-    <ng-container *ngIf="pageStatus === 'READY'">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
 
       <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
         <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="item.substring(2)"></li>
@@ -75,14 +33,11 @@
       </ng-container>
 
       <h4>Helpful documents</h4>
-      <ng-container *ngIf="module === 'innovator'">
-
+      <ng-container *ngIf="stores.authentication.userUrlBasePath() === 'innovator'">
         <ul>
-          <li>You may want to <a [href]="documentUrl">download all questions (DOCX, 820KB)</a> you will be asked to
-            answer in your innovation record</li>
+          <li>You may want to <a [href]="documentUrl">download all questions (DOCX, 820KB)</a> you will be asked to answer in your innovation record</li>
           <li>You can also <a [href]="pdfDocumentUrl">export your current innovation record (pdf)</a></li>
         </ul>
-
       </ng-container>
 
       <ol class="app-task-list">
@@ -90,7 +45,6 @@
 
           <h2 class="app-task-list__section">
             <span class="app-task-list__section-number">{{ i + 1 }}. </span> {{ sectionGroup.title }}
-            <!-- <span *ngIf="i === 0" class="nhsuk-heading-xs nhsuk-u-margin-bottom-0 float-r">Open actions</span> -->
           </h2>
 
           <ol class="app-task-list__items">
@@ -112,17 +66,17 @@
                 </a>
               </span>
 
-              <ng-container [ngSwitch]="module">
+              <ng-container [ngSwitch]="stores.authentication.userUrlBasePath()">
                 <ng-container *ngSwitchCase="'innovator'">
                   <span *ngIf="section.actionCount >= 1" class="float-r">
                     <theme-tag type="{{ 'shared.catalog.innovation.action_status.REQUESTED.cssColorClass' | translate }}"
-                               label="{{ section.actionCount + ' ' + ('dictionary.action' | pluralTranslate: section.actionCount | translate) + ' ' + ('shared.catalog.innovation.action_status.REQUESTED.name' | translate | lowercase) }}"></theme-tag>
+                      label="{{ section.actionCount + ' ' + ('dictionary.action' | pluralTranslate: section.actionCount | translate) + ' ' + ('shared.catalog.innovation.action_status.REQUESTED.name' | translate | lowercase) }}"></theme-tag>
                   </span>
                 </ng-container>
                 <ng-container *ngSwitchCase="'accessor'">
                   <span *ngIf="section.actionCount >= 1" class="float-r">
                     <theme-tag type="{{ 'shared.catalog.innovation.action_status.IN_REVIEW.cssColorClass' | translate }}"
-                               label="{{ section.actionCount + ' ' + ('dictionary.action' | pluralTranslate: section.actionCount | translate) + ' ' + ('shared.catalog.innovation.action_status.IN_REVIEW.name' | translate | lowercase) }}"></theme-tag>
+                      label="{{ section.actionCount + ' ' + ('dictionary.action' | pluralTranslate: section.actionCount | translate) + ' ' + ('shared.catalog.innovation.action_status.IN_REVIEW.name' | translate | lowercase) }}"></theme-tag>
                   </span>
                 </ng-container>
               </ng-container>
@@ -133,11 +87,10 @@
         </li>
       </ol>
 
-    </ng-container>
-
+    </div>
   </div>
-</div>
 
+</theme-content-wrapper>
 
 <ng-template #icon let-status="status">
   <theme-svg-icon *ngIf="status === 'NOT_STARTED'" type="error"></theme-svg-icon>

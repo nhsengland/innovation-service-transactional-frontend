@@ -12,7 +12,8 @@ export class SurveyStartComponent extends CoreComponent {
 
     super();
 
-    this.setPageTitle('Find innovation support');
+    this.setPageTitle('Find innovation support', { showPage: false });
+    this.setPageStatus('READY');
 
   }
 

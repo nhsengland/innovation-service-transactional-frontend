@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit, OnDestroy, PLATFORM_ID, Inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -6,15 +6,21 @@ import { filter } from 'rxjs/operators';
 
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { CookiesService } from '@modules/core/services/cookies.service';
+import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
+import { UserTypeEnum } from '@app/base/enums';
+
 
 export type HeaderMenuBarItemType = {
-  title: string;
-  url?: string;
-  description?: string;
-  fullReload?: boolean;
-  isOpen?: boolean;
-  children?: { title: string; url: string; description?: string; fullReload?: boolean; }[];
+  id: string,
+  label: string,
+  url?: string,
+  description?: string,
+  fullReload?: boolean,
+  isOpen?: boolean,
+  children?: { label: string; url: string; description?: string; fullReload?: boolean; }[]
 };
+
+export type HeaderNotificationsType = { [key: string]: number };
 
 @Component({
   selector: 'theme-header',
@@ -24,12 +30,15 @@ export type HeaderMenuBarItemType = {
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() showUserInformation = false;
+  @Input() showSignOut = false;
   @Input() leftMenuBarItems: HeaderMenuBarItemType[] = [];
   @Input() rightMenuBarItems: HeaderMenuBarItemType[] = [];
+  @Input() notifications: HeaderNotificationsType = {};
 
-  @ViewChild('headerNavigationElement', { read: ElementRef, static: false }) headerNavigationElement?: ElementRef;
 
   private subscriptions: Subscription[] = [];
+
+  signOutUrl: string;
 
   showCookiesBanner = false;
   showCookiesSaveSuccess = false;
@@ -44,18 +53,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: object,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
     private authenticationStore: AuthenticationStore,
+    private environmentVariablesStore: EnvironmentVariablesStore,
     private coockiesService: CookiesService
   ) {
 
     const user = this.authenticationStore.getUserInfo();
     this.user = {
       displayName: user.displayName,
-      description: `Logged as ${user.type}`
+      description: `Logged as ${this.authenticationStore.getUserTypeDescription(user.type as UserTypeEnum)}`
     };
 
+    this.signOutUrl = `${this.environmentVariablesStore.APP_URL}/signout`;
 
     this.subscriptions.push(
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
@@ -108,14 +119,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     // Only show cookies banner if NOT on policies pages.
     this.showCookiesBanner = (this.coockiesService.shouldAskForCookies() && !event.url.startsWith('/policies'));
 
-    // Always reset focus to body.
-    if (isPlatformBrowser(this.platformId)) {
-      setTimeout(() => {
-        document.body.setAttribute('tabindex', '-1');
-        document.body.focus();
-        document.body.removeAttribute('tabindex');
-      });
-    }
+    // // Always reset focus to body.
+    // if (isPlatformBrowser(this.platformId)) {
+    //   setTimeout(() => {
+    //     document.body.setAttribute('tabindex', '-1');
+    //     document.body.focus();
+    //     document.body.removeAttribute('tabindex');
+    //   });
+    // }
 
   }
 
@@ -150,7 +161,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onHeaderMenuClick(menuItem: HeaderMenuBarItemType): void {
 
-    [...this.menuBarItems.left, ...this.menuBarItems.right].forEach(i => i.isOpen = (menuItem.title !== i.title && i.isOpen) ? false : i.isOpen);
+    [...this.menuBarItems.left, ...this.menuBarItems.right].forEach(i => i.isOpen = (menuItem.label !== i.label && i.isOpen) ? false : i.isOpen);
 
     this.menuBarItems.isChildrenOpened = menuItem.isOpen = !menuItem.isOpen;
 
