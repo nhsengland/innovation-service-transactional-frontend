@@ -19,7 +19,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   user: {
     displayName: string,
     innovations: { id: string, name: string, description: string }[],
-    passwordResetOn: string
+    passwordResetAt: string
   };
 
   innovationTransfers: getInnovationTransfersDTO[] = [];
@@ -38,7 +38,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     this.user = {
       displayName: user.displayName,
       innovations: [],
-      passwordResetOn: user.passwordResetOn
+      passwordResetAt: user.passwordResetAt || ''
     };
 
     this.setPageTitle('Home', { hint: `Hello${user.displayName ? ' ' + user.displayName : ''}` });
@@ -71,7 +71,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     });
 
     const startTime = new Date();
-    const endTime = new Date(this.user.passwordResetOn);
+    const endTime = new Date(this.user.passwordResetAt);
     const timediffer = startTime.getTime() - endTime.getTime();
     const resultInMinutes = Math.round(timediffer / 60000);
     if (resultInMinutes <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {

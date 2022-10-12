@@ -26,7 +26,7 @@ export class AuthenticationRedirectionGuard implements CanActivate {
     const pathSegment = activatedRouteSnapshot.routeConfig?.path || '';
     const userType = this.authentication.getUserType() || '';
 
-    if (!state.url.endsWith('terms-of-use') && userType !== 'ADMIN' && this.authentication.isValidUser() && !this.authentication.isTermsOfUseAccepted()) {
+    if (!state.url.endsWith('terms-of-use') && userType !== 'ADMIN' && !this.authentication.isTermsOfUseAccepted()) {
       const path = userTypePaths[userType] + '/terms-of-use';
       this.router.navigateByUrl(path);
       return false;

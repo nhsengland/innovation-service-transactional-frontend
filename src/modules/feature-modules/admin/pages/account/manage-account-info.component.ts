@@ -12,7 +12,7 @@ export class PageAccountManageAccountInfoComponent extends CoreComponent {
   changePassword = `${this.CONSTANTS.APP_URL}/change-password`;
 
   user: {
-    passwordResetOn: string
+    passwordResetAt: null | string
   };
 
   constructor() {
@@ -22,7 +22,7 @@ export class PageAccountManageAccountInfoComponent extends CoreComponent {
 
     const user = this.stores.authentication.getUserInfo();
     this.user = {
-      passwordResetOn: user.passwordResetOn
+      passwordResetAt: user.passwordResetAt
     };
 
   }

@@ -116,7 +116,7 @@ const routes: Routes = [
               layout: { type: '1.third-2.thirds' },
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
-            runGuardsAndResolvers: 'pathParamsOrQueryParamsChange',
+            runGuardsAndResolvers: 'always',
             resolve: { innovationData: InnovationDataResolver },
             children: [
 
@@ -236,7 +236,7 @@ const routes: Routes = [
 
               {
                 path: 'threads',
-                resolve: { innovationData: InnovationDataResolver },
+                // resolve: { innovationData: InnovationDataResolver },
                 data: { breadcrumb: 'Messages' },
                 children: [
                   {
@@ -275,10 +275,11 @@ const routes: Routes = [
               {
                 path: 'support',
                 data: { breadcrumb: 'Data Sharing and Support' },
+                // runGuardsAndResolvers: 'pathParamsOrQueryParamsChange',
+                // resolve: { innovationData: InnovationDataResolver }, // Needed to repeat this resolver as support can be updated from this routes.
                 children: [
                   {
                     path: '', pathMatch: 'full', component: InnovationSupportInfoComponent,
-                    resolve: { innovationData: InnovationDataResolver }, // Needed to repeat this resolver as support can be updated from this routes.
                     data: { breadcrumb: null }
                   },
                   { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent },

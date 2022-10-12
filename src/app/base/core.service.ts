@@ -30,9 +30,9 @@ export class CoreService {
 
   protected APP_URL: string;
   protected API_URL: string;
-  protected API_ADMIN: string;
-  protected API_INNOVATIONS: string;
-  protected API_USERS: string;
+  protected API_ADMIN_URL: string;
+  protected API_INNOVATIONS_URL: string;
+  protected API_USERS_URL: string;
 
 
   constructor() {
@@ -52,9 +52,9 @@ export class CoreService {
 
     this.APP_URL = this.envVariablesStore.APP_URL;
     this.API_URL = this.envVariablesStore.API_URL;
-    this.API_ADMIN = this.envVariablesStore.API_ADMIN;
-    this.API_INNOVATIONS = this.envVariablesStore.API_INNOVATIONS;
-    this.API_USERS = this.envVariablesStore.API_USERS;
+    this.API_ADMIN_URL = this.envVariablesStore.API_ADMIN_URL;
+    this.API_INNOVATIONS_URL = this.envVariablesStore.API_INNOVATIONS_URL;
+    this.API_USERS_URL = this.envVariablesStore.API_USERS_URL;
 
   }
 

@@ -51,7 +51,6 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
   it('should deny access and redirect when user has terms of use to accept', () => {
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'terms-of-use' } };
     authenticationStore.getUserType = () => UserTypeEnum.INNOVATOR;
-    authenticationStore.isValidUser = () => true;
     authenticationStore.isTermsOfUseAccepted = () => false;
     expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(false);
   });
@@ -109,6 +108,7 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
   it('should allow access when user type is INNOVATOR', () => {
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovator' } };
     authenticationStore.getUserType = () => UserTypeEnum.INNOVATOR;
+    authenticationStore.isTermsOfUseAccepted = () => true;
     expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(true);
   });
 

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
+import { DateISOType } from '@app/base/types';
 
 
 @Component({
@@ -12,7 +13,7 @@ export class PageAccountInfoComponent extends CoreComponent {
   changePassword = `${this.CONSTANTS.APP_URL}/change-password`;
 
   user: {
-    passwordResetOn: string
+    passwordResetAt: null | DateISOType
   };
 
 
@@ -23,7 +24,7 @@ export class PageAccountInfoComponent extends CoreComponent {
 
     const user = this.stores.authentication.getUserInfo();
     this.user = {
-      passwordResetOn: user.passwordResetOn
+      passwordResetAt: user.passwordResetAt
     };
 
     this.setPageStatus('READY');

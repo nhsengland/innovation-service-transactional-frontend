@@ -82,34 +82,4 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
 
   // });
 
-  // it('should run verifyInnovator() and return success', () => {
-
-  //   const responseMock = { userExists: true, hasInvites: false };
-  //   const expected = { userExists: true, hasInvites: false };
-  //   let response: any = null;
-
-  //   service.verifyInnovator().subscribe({ next: success => response = success, error: error => response = error});
-
-  //   const httpRequest = httpMock.expectOne(`${envVaraiblesStore.API_URL}/innovators/check`);
-  //   httpRequest.flush(responseMock);
-  //   expect(httpRequest.request.method).toBe('GET');
-  //   expect(response).toEqual(expected);
-
-  // });
-
-  // it('should run verifyInnovator() and return error', () => {
-
-  //   const responseMock = '';
-  //   const expected = { userExists: false, hasInvites: false };
-  //   let response: any = null;
-
-  //   service.verifyInnovator().subscribe({ next: success => response = success, error: error => response = error});
-
-  //   const httpRequest = httpMock.expectOne(`${envVaraiblesStore.API_URL}/innovators/check`);
-  //   httpRequest.flush(responseMock, { status: 404, statusText: 'Not found' });
-  //   expect(httpRequest.request.method).toBe('GET');
-  //   expect(response).toEqual(expected);
-
-  // });
-
 });

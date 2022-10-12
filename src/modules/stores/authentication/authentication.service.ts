@@ -1,31 +1,36 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, map, take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
+import { DateISOType } from '@modules/core/interfaces/base.interfaces';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
-
 import { UrlModel } from '@modules/core/models/url.model';
+
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum, UserTypeEnum } from './authentication.enums';
 
 
-type getUserInfoDTO = {
-  id: string;
-  email: string;
-  displayName: string;
-  phone: null | string;
-  type: UserTypeEnum;
-  roles: UserRoleEnum[];
-  passwordResetOn: string;
+type GetUserInfoDTO = {
+  id: string,
+  email: string,
+  displayName: string,
+  type: UserTypeEnum,
+  roles: UserRoleEnum[],
+  phone: null | string,
+  termsOfUseAccepted: boolean,
+  hasInnovationTransfers: boolean,
+  passwordResetAt: null | DateISOType,
+  firstTimeSignInAt: null | DateISOType,
   organisations: {
-    id: string;
-    name: string;
-    size: null | string;
-    role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum;
-    isShadow: boolean;
-    organisationUnits: { id: string; name: string; }[];
-  }[];
+    id: string,
+    name: string,
+    role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
+    isShadow: boolean,
+    size: null | string,
+    organisationUnits: { id: string; name: string; acronym: string; }[]
+  }[]
 };
+
 
 export type saveUserInfoDTO = {
   displayName: string;
@@ -47,6 +52,7 @@ export class AuthenticationService {
 
   private APP_URL = this.envVariablesStore.APP_URL;
   private API_URL = this.envVariablesStore.API_URL;
+  private API_USERS_URL = this.envVariablesStore.API_USERS_URL;
 
   constructor(
     private http: HttpClient,
@@ -57,28 +63,27 @@ export class AuthenticationService {
   verifyUserSession(): Observable<boolean> {
 
     const url = new UrlModel(this.APP_URL).addPath('session').buildUrl();
-    return this.http.head(url).pipe(
-      take(1),
-      map(() => true),
-      catchError((e) => throwError(e))
-    );
+    return this.http.head(url).pipe(take(1), map(() => true));
 
   }
 
-  getUserInfo(): Observable<getUserInfoDTO> {
+  getUserInfo(): Observable<GetUserInfoDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('me');
-    return this.http.get<getUserInfoDTO>(url.buildUrl()).pipe(
-      take(1),
+    // const url = new UrlModel(this.API_URL).addPath('me');
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/me');
+    return this.http.get<GetUserInfoDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         id: response.id,
         email: response.email,
         displayName: ['unknown'].includes(response.displayName) ? '' : response.displayName,
         type: response.type,
         roles: response.roles || [],
-        organisations: response.organisations,
-        passwordResetOn: response.passwordResetOn,
-        phone: response.phone
+        phone: response.phone,
+        termsOfUseAccepted: response.termsOfUseAccepted,
+        hasInnovationTransfers: response.hasInnovationTransfers,
+        passwordResetAt: response.passwordResetAt,
+        firstTimeSignInAt: response.firstTimeSignInAt,
+        organisations: response.organisations
       }))
     );
 
@@ -90,28 +95,6 @@ export class AuthenticationService {
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
-    );
-
-  }
-
-  verifyInnovator(): Observable<{ userExists: boolean, hasInvites: boolean }> {
-
-    const url = new UrlModel(this.API_URL).addPath('innovators/check');
-    return this.http.get<{ userExists: boolean, hasInvites: boolean }>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response),
-      catchError(() => of({ userExists: false, hasInvites: false }))
-    );
-
-  }
-
-  userTermsOfUseInfo(): Observable<null | GetTermsOfUseLastVersionInfoDTO> {
-
-    const url = new UrlModel(this.API_URL).addPath('tou/me');
-    return this.http.get<GetTermsOfUseLastVersionInfoDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response),
-      catchError(() => of(null))
     );
 
   }

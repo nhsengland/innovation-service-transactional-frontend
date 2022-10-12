@@ -13,25 +13,27 @@ This project is build in JavaScript + TypeScript, with the **Angular framework**
 
 ## Installation
 ### Set environment variables file
-| Name                        | Required | Default | Possibilities                             | Description                          |
-| --------------------------- | :------: | :-----: | ----------------------------------------- | ------------------------------------ |
-| BASE_URL                    |   Yes    |         |                                           |                                      |
-| BASE_PATH                   |          |    /    |                                           |                                      |
-| API_URL                     |   Yes    |         |                                           |                                      |
-| LOG_LEVEL                   |          |  ERROR  | TRACE DEBUG INFO LOG WARN ERROR FATAL OFF |                                      |
-| STATIC_CONTENT_PATH         |   Yes    |         |                                           |                                      |
-| VIEWS_PATH                  |   Yes    |         |                                           | Path to browser directory            |
-| OAUTH_TENANT_NAME           |   Yes    |         |                                           |                                      |
-| OAUTH_CLIENT_ID             |   Yes    |         |                                           |                                      |
-| OAUTH_CLIENT_SECRET         |   Yes    |         |                                           |                                      |
-| OAUTH_SIGNUP_POLICY         |   Yes    |         |                                           |                                      |
-| OAUTH_SIGNIN_POLICY         |   Yes    |         |                                           |                                      |
-| OAUTH_REDIRECT_URL_SIGNUP   |   Yes    |         |                                           |                                      |
-| OAUTH_REDIRECT_URL_SIGNIN   |   Yes    |         |                                           |                                      |
-| OAUTH_REDIRECT_URL_SIGNOUT  |   Yes    |         |                                           |                                      |
-| OAUTH_SCOPE                 |   Yes    |         |                                           |                                      |
-| OAUTH_ALLOW_HTTP_REDIRECT   |   Yes    |         |                                           |                                      |
-| SESSION_SECRET              |   Yes    |         |                                           |                                      |
+| Name                            | Required | Default | Possibilities                             | Description                          |
+| ------------------------------- | :------: | :-----: | ----------------------------------------- | ------------------------------------ |
+| BASE_URL                        |   Yes    |         |                                           |                                      |
+| BASE_PATH                       |          |    /    |                                           |                                      |
+| API_URL                         |   Yes    |         |                                           |                                      |
+| LOG_LEVEL                       |          |  ERROR  | TRACE DEBUG INFO LOG WARN ERROR FATAL OFF |                                      |
+| STATIC_CONTENT_PATH             |   Yes    |         |                                           |                                      |
+| VIEWS_PATH                      |   Yes    |         |                                           | Path to browser directory            |
+| ENABLE_ANALYTICS                |   No     |  true   |                                           |                                      |
+| APPINSIGHTS_INSTRUMENTATION_KEY |   Yes    |         |                                           |                                      |
+| OAUTH_TENANT_NAME               |   Yes    |         |                                           |                                      |
+| OAUTH_CLIENT_ID                 |   Yes    |         |                                           |                                      |
+| OAUTH_CLIENT_SECRET             |   Yes    |         |                                           |                                      |
+| OAUTH_SIGNUP_POLICY             |   Yes    |         |                                           |                                      |
+| OAUTH_SIGNIN_POLICY             |   Yes    |         |                                           |                                      |
+| OAUTH_REDIRECT_URL_SIGNUP       |   Yes    |         |                                           |                                      |
+| OAUTH_REDIRECT_URL_SIGNIN       |   Yes    |         |                                           |                                      |
+| OAUTH_REDIRECT_URL_SIGNOUT      |   Yes    |         |                                           |                                      |
+| OAUTH_SCOPE                     |   Yes    |         |                                           |                                      |
+| OAUTH_ALLOW_HTTP_REDIRECT       |   Yes    |         |                                           |                                      |
+| SESSION_SECRET                  |   Yes    |         |                                           |                                      |
 
 Create a new file ".env" file on the root's project with the above variables
 
@@ -55,38 +57,3 @@ npm run build:ssr # Build like a Server Side Rendering
 ```
 
 Output file will be on `dist` folder
-
-## Logging
-
-There is a custom `LoggerService` that will log traces to `AppInsights`.
-To use it, you must inject it in the component you wish to create logs on:
-
-```
-class TheComponent {
-  private loggerService: LoggerService;
-
-  constructor(loggerService: LoggerService) {
-    this.loggerService = loggerService;
-  }
-
-  ...
-
-  someMethod() {
-    this.loggerService.trackTrace('message', Severity.INFORMATION, {custom_prop: 'some value' });
-  }
-}
-```
-
-This service also exposes an `enum` with Severity levels.
-
-```
-enum Severity {
-  VERBOSE = 0,
-  INFORMATION = 1,
-  WARNING = 2,
-  ERROR = 3,
-  CRITICAL = 4
-}
-```
-
-Currently the only existing method is `trackTrace` which creates a `trace` log in `AppInsights`.
