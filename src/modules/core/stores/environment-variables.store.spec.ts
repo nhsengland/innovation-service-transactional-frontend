@@ -33,9 +33,9 @@ describe('Core/Stores/EnvironmentStore running SERVER side', () => {
     expect(store.APP_URL).toBe('http://demo.com');
     expect(store.APP_ASSETS_URL).toBe('http://demo.com/static/assets');
     expect(store.API_URL).toBe('http://demo.com/api');
-    expect(store.API_ADMIN).toBe('http://demo.com/api/configuration');
-    expect(store.API_INNOVATIONS).toBe('http://demo.com/api/innovations');
-    expect(store.API_USERS).toBe('http://demo.com/api/management/users');
+    expect(store.API_ADMIN_URL).toBe('http://demo.com/api/admin');
+    expect(store.API_INNOVATIONS_URL).toBe('http://demo.com/api/innovations');
+    expect(store.API_USERS_URL).toBe('http://demo.com/api/users');
     expect(store.BASE_URL).toBe('http://demo.com');
     expect(store.BASE_PATH).toBe('');
   });
@@ -87,9 +87,9 @@ describe('Core/Stores/EnvironmentStore running CLIENT side', () => {
     expect(store.APP_URL).toBe('http://demo.com');
     expect(store.APP_ASSETS_URL).toBe('http://demo.com/static/assets');
     expect(store.API_URL).toBe('http://demo.com/api');
-    expect(store.API_ADMIN).toBe('http://demo.com/api/configuration');
-    expect(store.API_INNOVATIONS).toBe('http://demo.com/api/innovations');
-    expect(store.API_USERS).toBe('http://demo.com/api/management/users');
+    expect(store.API_ADMIN_URL).toBe('http://demo.com/api/admin');
+    expect(store.API_INNOVATIONS_URL).toBe('http://demo.com/api/innovations');
+    expect(store.API_USERS_URL).toBe('http://demo.com/api/users');
     expect(store.BASE_URL).toBe('http://demo.com');
     expect(store.BASE_PATH).toBe('');
   });

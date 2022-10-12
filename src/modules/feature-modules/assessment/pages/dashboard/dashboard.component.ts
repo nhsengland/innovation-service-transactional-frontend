@@ -13,7 +13,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   user: {
     displayName: string;
     organisation: string;
-    passwordResetOn: string;
+    passwordResetAt: string;
   };
 
   cardsList = [{
@@ -33,7 +33,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     this.user = {
       displayName: this.stores.authentication.getUserInfo().displayName,
       organisation: 'Needs assessment team',
-      passwordResetOn: this.stores.authentication.getUserInfo().passwordResetOn
+      passwordResetAt: this.stores.authentication.getUserInfo().passwordResetAt || ''
     };
 
   }
@@ -41,7 +41,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   ngOnInit(): void {
 
     const startTime = new Date();
-    const endTime = new Date(this.user.passwordResetOn);
+    const endTime = new Date(this.user.passwordResetAt);
     const timediffer = startTime.getTime() - endTime.getTime();
     const resultInMinutes = Math.round(timediffer / 60000);
 

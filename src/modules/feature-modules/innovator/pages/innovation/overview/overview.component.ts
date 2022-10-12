@@ -9,6 +9,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
+import { AuthenticationService } from '@modules/stores/authentication/authentication.service';
 
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
@@ -66,7 +67,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService,
-    private innovationsService: InnovationsService
+    private innovationsService: InnovationsService,
+    private authenticationService: AuthenticationService
   ) {
 
     super();
@@ -78,6 +80,14 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
 
   ngOnInit(): void {
+
+
+    this.authenticationService.getUserInfo().subscribe(response => {
+
+
+      console.log(response);
+    });
+
 
     forkJoin([
       this.innovationsService.getInnovatorInnovationInfo(this.innovationId),
