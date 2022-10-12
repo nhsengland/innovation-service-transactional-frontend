@@ -21,25 +21,23 @@ function getRequestHandler(): AxiosInstance {
 
 function parseAPIUrl(url: string): string {
 
-  const urlEndingSegments = url.substring(url.indexOf('api')); // Includes api/...
+  let urlEndingSegments = url.substring(url.indexOf('api')); // Includes api/...
   let apiUrl = ENVIRONMENT.API_URL;
 
   if (ENVIRONMENT.LOCAL_MODE) {
-    switch (true) {
-      case url.includes('api/users'):
-        apiUrl = ENVIRONMENT.LOCAL_API_USERS_BASE_URL;
-        break;
-      case url.includes('api/innovations'):
-        apiUrl = ENVIRONMENT.LOCAL_API_INNOVATIONS_BASE_URL;
-        break;
-      case url.includes('api/configuration'):
-        apiUrl = ENVIRONMENT.LOCAL_API_ADMIN_BASE_URL;
-        break;
-      default:
-        apiUrl = ENVIRONMENT.API_URL;
-        break;
+    if (ENVIRONMENT.LOCAL_API_ADMIN_ACTIVE && url.includes('api/admin')) {
+      apiUrl = ENVIRONMENT.LOCAL_API_ADMIN_BASE_URL;
+      urlEndingSegments = urlEndingSegments.replace('/admin', '');
+    } else if (ENVIRONMENT.LOCAL_API_INNOVATIONS_ACTIVE && url.includes('api/innovations')) {
+      apiUrl = ENVIRONMENT.LOCAL_API_INNOVATIONS_BASE_URL;
+      urlEndingSegments = urlEndingSegments.replace('/innovations', '');
+    } else if (ENVIRONMENT.LOCAL_API_USERS_ACTIVE && url.includes('api/users')) {
+      apiUrl = ENVIRONMENT.LOCAL_API_USERS_BASE_URL;
+      urlEndingSegments = urlEndingSegments.replace('/users', '');
     }
   }
+
+  // console.log('Calling API: ', new URL(urlEndingSegments, apiUrl).href);
 
   return new URL(urlEndingSegments, apiUrl).href;
 
@@ -64,7 +62,7 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, (req, res) => {
 
     const fail = (error: any) => {
 
-      console.error(`Error calling api url: ${url}. Error: ${error}`);
+      console.error(`Error calling api url: ${url} Error: ${error}`);
 
       if (error.response && error.response.status) {
         res.status(error.response.status).send(error.response.data);

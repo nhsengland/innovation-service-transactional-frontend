@@ -58,7 +58,7 @@ describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
     authenticationStore.getUserInfo = () => ({
       ...USER_INFO_INNOVATOR,
       type: UserTypeEnum.ADMIN,
-      passwordResetOn: new Date(new Date().getTime() - 1 * 60000).toString()
+      passwordResetAt: new Date(new Date().getTime() - 1 * 60000).toString()
     });
 
     const expected = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };

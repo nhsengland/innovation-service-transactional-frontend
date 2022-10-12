@@ -52,7 +52,6 @@ describe('FeatureModules/Admin/Base/AdminLayoutComponent', () => {
   // it('should have leftSideBar with "emptyLeftAside" menu values', () => {
 
   //   activatedRoute.snapshot.data = { module: 'admin', layoutOptions: { type: 'emptyLeftAside' } };
-  //   authenticationStore.isValidUser = () => true;
 
   //   const expected = [] as any;
 
@@ -67,7 +66,6 @@ describe('FeatureModules/Admin/Base/AdminLayoutComponent', () => {
   // it('should have leftSideBar with no values', () => {
 
   //   activatedRoute.snapshot.data = { layoutOptions: { backLink: { url: '/', label: 'Go back' } } };
-  //   authenticationStore.isValidUser = () => true;
 
   //   const expected = [] as any;
 
