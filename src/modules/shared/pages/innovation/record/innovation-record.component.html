@@ -9,7 +9,23 @@
 
   <div class="nhsuk-grid-row">
 
-    <ng-container *ngIf="sections.submitted === 0; then firstTimeBanner"></ng-container>
+    <ng-container *ngIf="sections.submitted > 0; else firstTimeBanner">
+      <div class="nhsuk-grid-column-full">
+
+        <p class="nhsuk-body-l" *ngIf="isInnovationInCreatedStatus()">
+          Please complete all sections by providing as much information
+          as possible about your innovation. Share your record for a needs
+          assessment review - a member of the team will contact you within a
+          week to understand how we can best support your current needs.
+        </p>
+
+        <p class="nhsuk-body-l" *ngIf="!isInnovationInCreatedStatus()">
+          You can continue to update your Innovation Record throughout the
+          development of your innovation with support from the NHS Innovation Service.
+        </p>
+
+      </div>
+    </ng-container>
 
     <div class="nhsuk-grid-column-full">
 
@@ -32,8 +48,12 @@
 
       <ng-container *ngIf="isInnovationInCreatedStatus()">
         <button class="nhsuk-button nhsuk-u-margin-bottom-2" [disabled]="!allSectionsSubmitted()"
-          (click)="onSubmitInnovation()"> Submit record for needs assessment </button>
-        <p class="nhsuk-body-s">Confirm all section answers before you submit your innovation record for review</p>
+          (click)="onSubmitInnovation()"> Share record for needs assessment </button>
+        <p class="nhsuk-body-s">
+          Please note: you will not be able to share your record for a needs assessment review
+          until you have completed all sections below. You can continue to update your record once it is submitted for
+          review.
+        </p>
       </ng-container>
 
       <h4>Helpful documents</h4>
@@ -44,6 +64,13 @@
           <li>You can also <a [href]="pdfDocumentUrl">export your current innovation record (pdf)</a></li>
         </ul>
       </ng-container>
+
+      <h2 class="nhsuk-heading-l">All sections</h2>
+      <p>
+        Please complete all sections, providing as much information as possible. As you are developing your innovation,
+        we do not expect the information to be finalised at this stage, and you can return to update your Innovation
+        record once shared for review.
+      <p>
 
       <ol class="app-task-list">
         <li *ngFor="let sectionGroup of innovationSections; let i = index">
