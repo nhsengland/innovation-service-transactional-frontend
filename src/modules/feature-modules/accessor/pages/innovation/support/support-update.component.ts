@@ -34,7 +34,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   form = new FormGroup({
     status: new UntypedFormControl('', { validators: Validators.required, updateOn: 'change' }),
     accessors: new UntypedFormArray([], { updateOn: 'change' }),
-    comment: new UntypedFormControl('', CustomValidators.required('A comment is required')),
+    MediaKeyMessageEvent: new UntypedFormControl('', CustomValidators.required('A message is required')),
   }, { updateOn: 'blur' });
 
 
@@ -139,7 +139,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.accessorService.saveSupportStatus(this.innovationId, this.form.value, this.supportId).subscribe({
       next: response => {
-        this.setRedirectAlertSuccess('Support status updated', { message: 'You\'ve updated your support status and posted a comment to the innovator.' });
+        this.setRedirectAlertSuccess('Support status updated', { message: 'You\'ve updated your support status and posted a message to the innovator.' });
         this.redirectTo(`/accessor/innovations/${this.innovationId}/support`);
       },
       error: error => this.setAlertUnknownError()
@@ -160,8 +160,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         break;
 
       case 3:
-        if (!this.form.get('comment')!.valid && this.form.get('status')!.value !== 'WAITING') {
-          this.setAlertError('An error has occurred when updating the comment. You must add a Comment.');
+        if (!this.form.get('message')!.valid && this.form.get('status')!.value !== 'WAITING') {
+          this.setAlertError('An error has occurred when updating the message. You must add a message.');
           return false;
         } else {
           this.resetAlert();

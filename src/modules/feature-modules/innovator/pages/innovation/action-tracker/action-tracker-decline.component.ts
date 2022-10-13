@@ -23,7 +23,7 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
   form = new FormGroup({
-    comment: new UntypedFormControl('')
+    message: new UntypedFormControl('')
   }, { updateOn: 'blur' });
 
 
