@@ -8,6 +8,29 @@
   </div>
 
   <div class="nhsuk-grid-row">
+
+    <ng-container *ngIf="sections.submitted > 0; else firstTimeBanner">
+      <div class="nhsuk-grid-column-full">
+
+        <p class="nhsuk-body-l" *ngIf="isInnovationInCreatedStatus(); else innovationSharedText">
+          Please complete all sections by providing as much information
+          as possible about your innovation. Share your record for a needs
+          assessment review - a member of the team will contact you within a
+          week to understand how we can best support your current needs.
+        </p>
+
+        <ng-template #innovationSharedText>
+
+          <p class="nhsuk-body-l">
+            You can continue to update your Innovation Record throughout the
+            development of your innovation with support from the NHS Innovation Service.
+          </p>
+
+        </ng-template>
+
+      </div>
+    </ng-container>
+
     <div class="nhsuk-grid-column-full">
 
       <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
@@ -28,17 +51,30 @@
       </p>
 
       <ng-container *ngIf="isInnovationInCreatedStatus()">
-        <button class="nhsuk-button nhsuk-u-margin-bottom-2" [disabled]="!allSectionsSubmitted()" (click)="onSubmitInnovation()"> Submit record for needs assessment </button>
-        <p class="nhsuk-body-s">Confirm all section answers before you submit your innovation record for review</p>
+        <button class="nhsuk-button nhsuk-u-margin-bottom-2" [disabled]="!allSectionsSubmitted()"
+          (click)="onSubmitInnovation()"> Share record for needs assessment </button>
+        <p class="nhsuk-body-s">
+          Please note: you will not be able to share your record for a needs assessment review
+          until you have completed all sections below. You can continue to update your record once it is submitted for
+          review.
+        </p>
       </ng-container>
 
       <h4>Helpful documents</h4>
       <ng-container *ngIf="stores.authentication.userUrlBasePath() === 'innovator'">
         <ul>
-          <li>You may want to <a [href]="documentUrl">download all questions (DOCX, 820KB)</a> you will be asked to answer in your innovation record</li>
+          <li>You may want to <a [href]="documentUrl">download all questions (DOCX, 820KB)</a> you will be asked to
+            answer in your innovation record</li>
           <li>You can also <a [href]="pdfDocumentUrl">export your current innovation record (pdf)</a></li>
         </ul>
       </ng-container>
+
+      <h2 class="nhsuk-heading-l">All sections</h2>
+      <p>
+        Please complete all sections, providing as much information as possible. As you are developing your innovation,
+        we do not expect the information to be finalised at this stage, and you can return to update your Innovation
+        record once shared for review.
+      <p>
 
       <ol class="app-task-list">
         <li *ngFor="let sectionGroup of innovationSections; let i = index">
@@ -69,14 +105,18 @@
               <ng-container [ngSwitch]="stores.authentication.userUrlBasePath()">
                 <ng-container *ngSwitchCase="'innovator'">
                   <span *ngIf="section.actionCount >= 1" class="float-r">
-                    <theme-tag type="{{ 'shared.catalog.innovation.action_status.REQUESTED.cssColorClass' | translate }}"
-                      label="{{ section.actionCount + ' ' + ('dictionary.action' | pluralTranslate: section.actionCount | translate) + ' ' + ('shared.catalog.innovation.action_status.REQUESTED.name' | translate | lowercase) }}"></theme-tag>
+                    <theme-tag
+                      type="{{ 'shared.catalog.innovation.action_status.REQUESTED.cssColorClass' | translate }}"
+                      label="{{ section.actionCount + ' ' + ('dictionary.action' | pluralTranslate: section.actionCount | translate) + ' ' + ('shared.catalog.innovation.action_status.REQUESTED.name' | translate | lowercase) }}">
+                    </theme-tag>
                   </span>
                 </ng-container>
                 <ng-container *ngSwitchCase="'accessor'">
                   <span *ngIf="section.actionCount >= 1" class="float-r">
-                    <theme-tag type="{{ 'shared.catalog.innovation.action_status.IN_REVIEW.cssColorClass' | translate }}"
-                      label="{{ section.actionCount + ' ' + ('dictionary.action' | pluralTranslate: section.actionCount | translate) + ' ' + ('shared.catalog.innovation.action_status.IN_REVIEW.name' | translate | lowercase) }}"></theme-tag>
+                    <theme-tag
+                      type="{{ 'shared.catalog.innovation.action_status.IN_REVIEW.cssColorClass' | translate }}"
+                      label="{{ section.actionCount + ' ' + ('dictionary.action' | pluralTranslate: section.actionCount | translate) + ' ' + ('shared.catalog.innovation.action_status.IN_REVIEW.name' | translate | lowercase) }}">
+                    </theme-tag>
                   </span>
                 </ng-container>
               </ng-container>
@@ -96,4 +136,35 @@
   <theme-svg-icon *ngIf="status === 'NOT_STARTED'" type="error"></theme-svg-icon>
   <theme-svg-icon *ngIf="status === 'DRAFT'" type="edit"></theme-svg-icon>
   <theme-svg-icon *ngIf="status === 'SUBMITTED'" type="success"></theme-svg-icon>
+</ng-template>
+
+<ng-template #firstTimeBanner>
+  <div class="nhsuk-grid-column-full">
+
+    <div class="nhsuk-card nhsuk-card--care nhsuk-card--care--non-urgent nhsuk-u-margin-top-0">
+
+      <div class="nhsuk-card--care__heading-container">
+        <h2 class="nhsuk-card--care__heading">
+          <span role="text"><span class="nhsuk-u-visually-hidden">Information: </span>Welcome to your Innovation
+            Record!</span>
+        </h2>
+      </div>
+
+      <div class="nhsuk-card__content">
+        <p>So that we can match you with the right organisations that can support your next steps on your innovation
+          journey, you must:</p>
+        <ul>
+          <li>Complete all sections by providing as much information about your innovation as possible.</li>
+          <li>
+            Share your record for a needs assessment review - the Needs Assessment team will contact you within a week
+            to understand the type of support you require.
+          </li>
+        </ul>
+        <p>Don't worry! The information you provide doesn't need to be final - you can continue to update your
+          Innovation Record through its development with support from the NHS Innovation Service.</p>
+      </div>
+
+    </div>
+
+  </div>
 </ng-template>
