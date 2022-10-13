@@ -12,17 +12,21 @@
     <ng-container *ngIf="sections.submitted > 0; else firstTimeBanner">
       <div class="nhsuk-grid-column-full">
 
-        <p class="nhsuk-body-l" *ngIf="isInnovationInCreatedStatus()">
+        <p class="nhsuk-body-l" *ngIf="isInnovationInCreatedStatus(); else innovationSharedText">
           Please complete all sections by providing as much information
           as possible about your innovation. Share your record for a needs
           assessment review - a member of the team will contact you within a
           week to understand how we can best support your current needs.
         </p>
 
-        <p class="nhsuk-body-l" *ngIf="!isInnovationInCreatedStatus()">
-          You can continue to update your Innovation Record throughout the
-          development of your innovation with support from the NHS Innovation Service.
-        </p>
+        <ng-template #innovationSharedText>
+
+          <p class="nhsuk-body-l">
+            You can continue to update your Innovation Record throughout the
+            development of your innovation with support from the NHS Innovation Service.
+          </p>
+
+        </ng-template>
 
       </div>
     </ng-container>
@@ -141,7 +145,7 @@
 
       <div class="nhsuk-card--care__heading-container">
         <h2 class="nhsuk-card--care__heading">
-          <span role="text"><span class="nhsuk-u-visually-hidden">Non-urgent advice: </span>Welcome to your Innovation
+          <span role="text"><span class="nhsuk-u-visually-hidden">Information: </span>Welcome to your Innovation
             Record!</span>
         </h2>
       </div>
