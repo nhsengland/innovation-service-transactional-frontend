@@ -24,7 +24,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
   statusItems: { value: InnovationActionStatusEnum, label: string, description: string }[] = [
     {
       value: InnovationActionStatusEnum.COMPLETED,
-      label: 'Done',
+      label: 'Completed',
       description: 'The information submitted is sufficient. This closes the action.'
     },
     {
