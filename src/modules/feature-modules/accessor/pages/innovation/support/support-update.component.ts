@@ -34,7 +34,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   form = new FormGroup({
     status: new UntypedFormControl('', { validators: Validators.required, updateOn: 'change' }),
     accessors: new UntypedFormArray([], { updateOn: 'change' }),
-    MediaKeyMessageEvent: new UntypedFormControl('', CustomValidators.required('A message is required')),
+    message: new UntypedFormControl('', CustomValidators.required('A message is required')),
   }, { updateOn: 'blur' });
 
 
