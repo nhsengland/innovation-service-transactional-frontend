@@ -33,7 +33,7 @@
             <ng-container *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
               <ng-container [ngSwitch]="item.type">
                 <ng-container *ngSwitchCase="'button'">
-                  <div class="width-max-content">
+                  <div class="width-max-content" *ngIf="module === 'innovator'">
                     <dt class="nhsuk-u-margin-top-5">
                       <a routerLink="edit/{{ item.editStepNumber }}" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0">{{ item.label }}</a>
                     </dt>
