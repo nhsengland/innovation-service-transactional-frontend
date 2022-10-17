@@ -4,20 +4,18 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 
 import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
-import { FormEngineComponent } from '@modules/shared/forms';
 
-import { InnovationTransferAcceptanceComponent } from './innovation-transfer-acceptance.component';
+
+import { FirstTimeSigninInnovationTransferComponent } from './innovation-transfer.component';
 
 import { InnovatorService } from '../../services/innovator.service';
-
-import { INNOVATION_TRANSFER } from './innovation-transfer-acceptance.config';
 
 
 describe('FeatureModules/Innovator/Pages/InnovationTransferAcceptanceComponent', () => {
@@ -29,8 +27,8 @@ describe('FeatureModules/Innovator/Pages/InnovationTransferAcceptanceComponent',
   let authenticationStore: AuthenticationStore;
   let innovatorService: InnovatorService;
 
-  let component: InnovationTransferAcceptanceComponent;
-  let fixture: ComponentFixture<InnovationTransferAcceptanceComponent>;
+  let component: FirstTimeSigninInnovationTransferComponent;
+  let fixture: ComponentFixture<FirstTimeSigninInnovationTransferComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -55,13 +53,13 @@ describe('FeatureModules/Innovator/Pages/InnovationTransferAcceptanceComponent',
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
 
     innovatorService.getInnovationTransfers = () => of([
-      { id: 'TransferId01', email: 'some@email.com', innovation: { id: 'InnoNew01', name: 'Innovation name 01' } },
+      { id: 'TransferId01', email: 'some@email.com', innovation: { id: 'InnoNew01', name: 'Innovation name 01', owner: 'User name' } },
     ]);
 
   });
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(InnovationTransferAcceptanceComponent);
+    fixture = TestBed.createComponent(FirstTimeSigninInnovationTransferComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 
 import { UrlModel } from '@app/base/models';
 import { MappedObjectType } from '@app/base/types';
 
-import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
+import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationSupportStatusEnum, InnovationTransferStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 
 
 type getInnovationActionsListEndpointInDTO = {
@@ -101,66 +101,25 @@ export type GetSupportLogListInDTO = {
 };
 export type GetSupportLogListOutDTO = GetSupportLogListInDTO & { logTitle: string; suggestedOrganisationUnitsNames: string[]; };
 
-export type getInnovationTransfersDTO = {
+export type GetInnovationTransfersDTO = {
   id: string;
   email: string;
-  name?: string;
-  innovation: { id: string, name: string, owner?: string };
-};
+  innovation: { id: string, name: string, owner: string };
+}[];
 
 @Injectable()
 export class InnovatorService extends CoreService {
 
   constructor() { super(); }
 
-  submitFirstTimeSigninInfo(type: 'FIRST_TIME_SIGNIN' | 'TRANSFER', data: { [key: string]: any }): Observable<{ id: string }> {
 
-    const body: {
-      actionType: '' | 'first_time_signin' | 'transfer',
-      user: { displayName: string, mobilePhone?: string },
-      transferId?: string,
-      innovation?: { name: string, description: string, countryName: string, postcode: string, organisationShares: string[] },
-      organisation?: { name: string, size: string }
-    } = {
-      actionType: '',
-      user: { displayName: data.innovatorName },
-      organisation: data.isCompanyOrOrganisation.toUpperCase() === 'YES' ? { name: data.organisationName, size: data.organisationSize } : undefined
-    };
+  createInnovation(
+    body: { name: string, description: string, countryName: string, postcode: null | string, organisationShares: string[] },
+    useSurvey: boolean
+  ): Observable<{ id: string }> {
 
-    switch (type) {
-      case 'FIRST_TIME_SIGNIN':
-        body.actionType = 'first_time_signin';
-        body.user.mobilePhone = data.mobilePhone;
-        body.innovation = {
-          name: data.innovationName,
-          description: data.innovationDescription,
-          countryName: data.locationCountryName || data.location,
-          postcode: data.englandPostCode || '',
-          organisationShares: data.organisationShares || []
-        };
-        break;
-
-      case 'TRANSFER':
-        body.actionType = 'transfer';
-        body.transferId = data.transferId;
-        break;
-
-      default:
-        break;
-    }
-
-    const url = new UrlModel(this.API_URL).addPath('innovators');
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1').setQueryParams({ useSurvey });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
-
-  }
-
-  createInnovation(body: { name: string, description: string, countryName: string, postcode: string, organisationShares: string[] }): Observable<{ id: string }> {
-
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() });
-    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response)
-    );
 
   }
 
@@ -291,12 +250,12 @@ export class InnovatorService extends CoreService {
   }
 
 
-  getInnovationTransfers(assignToMe = false): Observable<getInnovationTransfersDTO[]> {
+  getInnovationTransfers(assignToMe = false): Observable<GetInnovationTransfersDTO> {
 
     const qp: { assignedToMe?: boolean } = assignToMe ? { assignedToMe: true } : {};
 
-    const url = new UrlModel(this.API_URL).addPath('innovators/innovation-transfers').setQueryParams(qp);
-    return this.http.get<getInnovationTransfersDTO[]>(url.buildUrl()).pipe(take(1), map(response => response));
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/transfers').setQueryParams(qp);
+    return this.http.get<GetInnovationTransfersDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 
@@ -307,9 +266,12 @@ export class InnovatorService extends CoreService {
 
   }
 
-  updateTransferInnovation(transferId: string, status: 'CANCELED' | 'DECLINED' | 'COMPLETED'): Observable<{ id: string }> {
+  updateTransferInnovation(
+    transferId: string,
+    status: InnovationTransferStatusEnum.CANCELED | InnovationTransferStatusEnum.DECLINED | InnovationTransferStatusEnum.COMPLETED
+  ): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovators/innovation-transfers/:transferId').setPathParams({ transferId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/transfers/:transferId').setPathParams({ transferId });
     return this.http.patch<{ id: string }>(url.buildUrl(), { status }).pipe(take(1), map(response => response));
 
   }

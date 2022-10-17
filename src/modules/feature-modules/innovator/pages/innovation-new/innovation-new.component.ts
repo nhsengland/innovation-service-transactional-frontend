@@ -77,7 +77,7 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
       organisationShares: data.organisationShares
     };
 
-    this.innovatorService.createInnovation(body).pipe(
+    this.innovatorService.createInnovation(body, false).pipe(
       concatMap(response => {
         this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update innovations information.
         return of(response);

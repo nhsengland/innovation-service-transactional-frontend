@@ -7,9 +7,9 @@ import { Injector } from '@angular/core';
 
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { InnovationSectionEnum, InnovationTransferStatusEnum } from '@modules/stores/innovation';
 
 import { InnovatorService } from './innovator.service';
-import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 
 describe('FeatureModules/Innovator/InnovatorService', () => {
@@ -50,101 +50,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
   });
 
 
-  it('should run submitFirstTimeSigninInfo(FIRST_TIME_SIGNIN, PayloadTest01) and return success', () => {
 
-    const payload = {
-      innovatorName: 'User display name',
-      mobilePhone: '01010101',
-      innovationName: 'Innovation name',
-      innovationDescription: 'Some description',
-      locationCountryName: 'Some location',
-      // location: 'Other location',
-      // englandPostCode: 'EN05',
-      isCompanyOrOrganisation: 'no',
-      // organisationName: 'Organisation name',
-      // organisationSize: '1 to 5 workers',
-      // organisationShares: ['Organisation 01']
-    };
-    const responseMock = { id: 'id' };
-    const expected = { id: 'id' };
-
-    let response: any = null;
-    service.submitFirstTimeSigninInfo('FIRST_TIME_SIGNIN', payload).subscribe({ next: success => response = success, error: error => response = error});
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('POST');
-    expect(response).toEqual(expected);
-
-  });
-
-  it('should run submitFirstTimeSigninInfo(FIRST_TIME_SIGNIN, PayloadTest02) and return success', () => {
-
-    const payload = {
-      innovatorName: 'User display name',
-      // mobilePhone: '01010101',
-      innovationName: 'Innovation name',
-      innovationDescription: 'Some description',
-      // locationCountryName: 'Some location',
-      location: 'Other location',
-      // englandPostCode: 'EN05',
-      isCompanyOrOrganisation: 'yes',
-      organisationName: 'Organisation name',
-      organisationSize: '1 to 5 workers',
-      organisationShares: ['Organisation 01']
-    };
-    const responseMock = { id: 'id' };
-    const expected = { id: 'id' };
-
-    let response: any = null;
-    service.submitFirstTimeSigninInfo('FIRST_TIME_SIGNIN', payload).subscribe({ next: success => response = success, error: error => response = error});
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('POST');
-    expect(response).toEqual(expected);
-
-  });
-
-  it('should run submitFirstTimeSigninInfo(TRANSFER, PayloadTest01) and return success', () => {
-
-    const payload = {
-      innovatorName: 'User display name',
-      transferId: 'id',
-      isCompanyOrOrganisation: 'NO',
-    };
-    const responseMock = { id: 'id' };
-    const expected = { id: 'id' };
-
-    let response: any = null;
-    service.submitFirstTimeSigninInfo('TRANSFER', payload).subscribe({ next: success => response = success, error: error => response = error});
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('POST');
-    expect(response).toEqual(expected);
-
-  });
-
-  it('should run submitFirstTimeSigninInfo(INVALID, PayloadTest01) and return success', () => {
-
-    const payload = {
-      innovatorName: 'User display name',
-      transferId: 'id',
-      isCompanyOrOrganisation: 'NO',
-    };
-    const responseMock = { id: 'id' };
-    const expected = { id: 'id' };
-
-    let response: any = null;
-    service.submitFirstTimeSigninInfo('INVALID' as any, payload).subscribe({ next: success => response = success, error: error => response = error});
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('POST');
-    expect(response).toEqual(expected);
-
-  });
 
   it('should run createInnovation() and return success', () => {
 
@@ -159,9 +65,9 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     const expected = { id: 'id' };
 
     let response: any = null;
-    service.createInnovation(payload).subscribe({ next: success => response = success, error: error => response = error});
+    service.createInnovation(payload, true).subscribe({ next: success => response = success, error: error => response = error });
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1?useSurvey=true`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
     expect(response).toEqual(expected);
@@ -206,7 +112,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     ];
 
     let response: any = null;
-    service.getInnovationSupports('Inno01', true).subscribe({ next: success => response = success, error: error => response = error});
+    service.getInnovationSupports('Inno01', true).subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/supports?full=true`);
     httpRequest.flush(responseMock);
@@ -255,7 +161,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     };
 
     let response: any = null;
-    service.getInnovationActionsList('Inno01').subscribe({ next: success => response = success, error: error => response = error});
+    service.getInnovationActionsList('Inno01').subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/actions`);
     httpRequest.flush(responseMock);
@@ -302,7 +208,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     const expected = { id: 'id' };
 
     let response: any = null;
-    service.declineAction('Inno01', 'ActionId01', { some: 'parameters' }).subscribe({ next: success => response = success, error: error => response = error});
+    service.declineAction('Inno01', 'ActionId01', { some: 'parameters' }).subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/actions/ActionId01`);
     httpRequest.flush(responseMock);
@@ -320,7 +226,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.getInnovationShares('Inno01').subscribe({ next: success => response = success, error: error => response = error});
+    service.getInnovationShares('Inno01').subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/shares`);
     httpRequest.flush(responseMock);
@@ -335,7 +241,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     const expected = { id: 'id' };
 
     let response: any = null;
-    service.submitOrganisationSharing('Inno01', { some: 'parameters' }).subscribe({ next: success => response = success, error: error => response = error});
+    service.submitOrganisationSharing('Inno01', { some: 'parameters' }).subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/shares`);
     httpRequest.flush(responseMock);
@@ -367,7 +273,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
       hasScaleResource: null,
       hasScaleResourceComment: null,
       summary: null,
-      organisations: [{ id: 'OrgId01', name: 'Organisation Name', acronym: 'ORG', organisationUnits: [{id: 'OrgId01', name: 'Organisation Unit Name', acronym: 'Unit' }] }],
+      organisations: [{ id: 'OrgId01', name: 'Organisation Name', acronym: 'ORG', organisationUnits: [{ id: 'OrgId01', name: 'Organisation Unit Name', acronym: 'Unit' }] }],
       assignToName: '',
       finishedAt: null,
       updatedBy: null,
@@ -408,7 +314,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     };
 
     let response: any = null;
-    service.getInnovationNeedsAssessment('Inno01', 'AssessmentId01').subscribe({ next: success => response = success, error: error => response = error});
+    service.getInnovationNeedsAssessment('Inno01', 'AssessmentId01').subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/assessments/AssessmentId01`);
     httpRequest.flush(responseMock);
@@ -426,9 +332,9 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.getInnovationTransfers().subscribe({ next: success => response = success, error: error => response = error});
+    service.getInnovationTransfers().subscribe({ next: success => response = success, error: error => response = error });
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/innovation-transfers`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/transfers`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -444,9 +350,9 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.getInnovationTransfers(true).subscribe({ next: success => response = success, error: error => response = error});
+    service.getInnovationTransfers(true).subscribe({ next: success => response = success, error: error => response = error });
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/innovation-transfers?assignedToMe=true`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/transfers?assignedToMe=true`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -459,7 +365,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.transferInnovation({ innovationId: 'Inno01', email: 'some@email.com' }).subscribe({ next: success => response = success, error: error => response = error});
+    service.transferInnovation({ innovationId: 'Inno01', email: 'some@email.com' }).subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/innovation-transfers`);
     httpRequest.flush(responseMock);
@@ -474,9 +380,9 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.updateTransferInnovation('transferId01', 'COMPLETED').subscribe({ next: success => response = success, error: error => response = error});
+    service.updateTransferInnovation('transferId01', InnovationTransferStatusEnum.COMPLETED).subscribe({ next: success => response = success, error: error => response = error });
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/innovation-transfers/transferId01`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/transfers/transferId01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PATCH');
     expect(response).toEqual(expected);
@@ -489,7 +395,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.archiveInnovation('Inno01', 'Some reason').subscribe({ next: success => response = success, error: error => response = error});
+    service.archiveInnovation('Inno01', 'Some reason').subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/archive`);
     httpRequest.flush(responseMock);
@@ -504,7 +410,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.deleteUserAccount({ reason: 'Some reason'}).subscribe({ next: success => response = success, error: error => response = error});
+    service.deleteUserAccount({ reason: 'Some reason' }).subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/delete`);
     httpRequest.flush(responseMock);

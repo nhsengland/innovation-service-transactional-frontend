@@ -170,27 +170,25 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup`, (req, res) => {
 });
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) => {
-  const query = req.query;
-  const state = query.state || '';
-  const idToken = query.id_token || '';
 
-  if (state && idToken) {
-    const body = {
-      surveyId: state,
-      idToken
-    };
+  const token = req.query.id_token;
+  const surveyId = req.query.state || null;
 
-    // TODO: What's the use of this?
-    axios.post(`${ENVIRONMENT.API_URL}/api/me`, body)
-      .then(() => {
-        res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`);
-      })
-      .catch((error: any) => {
-        console.error(`Error when attempting to save the user: ${ENVIRONMENT.API_URL}/api/me. Error: ${error}`);
-        // TODO : error handling if we stop using AZ AD B2C
-        res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`);
-      });
+  if (!token) {
+    res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
+    return;
   }
+
+  const body = { surveyId, token };
+
+  axios.post(`${ENVIRONMENT.API_URL}/api/users/v1/me`, body)
+    // axios.post(`${ENVIRONMENT.LOCAL_API_USERS_BASE_URL}/api/v1/me`, body)
+    .then(() => { res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`); })
+    .catch((error: any) => {
+      console.error(`Error when attempting to save the user: ${ENVIRONMENT.API_URL}/api/users/v1/me. Error: ${error}`);
+      res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
+    });
+
 });
 
 // Login endpoint - AD OpenIdConnect

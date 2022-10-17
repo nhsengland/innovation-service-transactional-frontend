@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { getInnovationTransfersDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { GetInnovationTransfersDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -16,11 +16,10 @@ import { getInnovationTransfersDTO, InnovatorService } from '@modules/feature-mo
 export class PageAccountInnovationsInfoComponent extends CoreComponent implements OnInit {
 
   haveAnyActiveInnovation = false;
-  innovationTransfers: getInnovationTransfersDTO[] = [];
+  innovationTransfers: GetInnovationTransfersDTO = [];
 
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
     private innovatorService: InnovatorService
   ) {
@@ -59,8 +58,7 @@ export class PageAccountInnovationsInfoComponent extends CoreComponent implement
 
   cancelInnovationTransfer(transferId: string, innovation: { id: string, name: string }): void {
 
-    this.innovatorService.updateTransferInnovation(transferId, 'CANCELED').pipe(
-      // concatMap(() => this.stores.authentication.initializeAuthentication$()), // Initialize authentication in order to update First Time SignIn information.
+    this.innovatorService.updateTransferInnovation(transferId, InnovationTransferStatusEnum.CANCELED).pipe(
       concatMap(() => {
         this.getInnovationsTransfers();
         return of(true);

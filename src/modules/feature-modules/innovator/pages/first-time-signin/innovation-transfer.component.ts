@@ -1,23 +1,25 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { RoutingHelper } from '@app/base/helpers';
 
+import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 import { WizardSummaryType } from '@modules/shared/forms';
 
 import { InnovatorService } from '../../services/innovator.service';
 
-import { INNOVATION_TRANSFER } from './innovation-transfer-acceptance.config';
+import { INNOVATION_TRANSFER } from './innovation-transfer.config';
 
 
 @Component({
-  selector: 'app-innovator-pages-innovation-transfer-acceptance',
-  templateUrl: './innovation-transfer-acceptance.component.html'
+  selector: 'app-innovator-pages-first-time-signin-innovation-transfer',
+  templateUrl: './innovation-transfer.component.html'
 })
-export class InnovationTransferAcceptanceComponent extends CoreComponent implements OnInit {
+export class FirstTimeSigninInnovationTransferComponent extends CoreComponent implements OnInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
@@ -75,12 +77,16 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
           }
 
           if (this.isSummaryStep()) {
-            this.setPageTitle('Check your answers');
+
             this.summaryList = this.wizard.runSummaryParsing();
+
+            this.setPageTitle('Check your answers');
+            this.setPageStatus('READY');
             return;
           }
 
-          /* istanbul ignore next */
+          this.wizard.gotoStep(Number(params.stepId));
+
           this.setPageTitle(this.wizard.currentStep().label || this.wizard.currentStep().parameters[0].label || '');
 
           if (!this.wizard.isFirstStep()) {
@@ -88,12 +94,11 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
           } else {
             this.resetBackLink();
           }
-          this.wizard.gotoStep(Number(params.stepId));
+
+          this.setPageStatus('READY');
 
         })
       );
-
-      this.setPageStatus('READY');
 
     });
 
@@ -119,14 +124,30 @@ export class InnovationTransferAcceptanceComponent extends CoreComponent impleme
 
   onSubmitWizard(): void {
 
-    const body = this.wizard.runOutboundParsing();
+    const wizardData = this.wizard.runOutboundParsing();
 
-    body.transferId = this.transferId;
+    wizardData.transferId = this.transferId;
 
-    this.innovatorService.submitFirstTimeSigninInfo('TRANSFER', body).pipe(
-      concatMap(() => {
-        return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
-      })
+    of(true).pipe(
+
+      concatMap(() => this.stores.authentication.updateUserInfo$({
+        displayName: wizardData.innovatorName,
+        organisation: wizardData.isCompanyOrOrganisation.toUpperCase() === 'YES' ? {
+          id: this.stores.authentication.getUserInfo().organisations[0].id,
+          isShadow: false,
+          name: wizardData.organisationName,
+          size: wizardData.organisationSize
+        } : {
+          id: this.stores.authentication.getUserInfo().organisations[0].id,
+          isShadow: true
+        }
+      })),
+
+      concatMap(() => this.innovatorService.updateTransferInnovation(this.transferId, InnovationTransferStatusEnum.COMPLETED)),
+
+      // Initialize authentication in order to update First Time SignIn information.
+      concatMap(() => this.stores.authentication.initializeAuthentication$())
+
     ).subscribe({
       next: () => this.redirectTo(`innovator/dashboard`),
       error: () => this.redirectTo(`innovator/innovation-transfer-acceptance/summary`)

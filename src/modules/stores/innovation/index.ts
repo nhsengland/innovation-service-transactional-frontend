@@ -8,6 +8,7 @@ export { InnovationService } from './innovation.service';
 export {
   InnovationStatusEnum,
   InnovationSupportStatusEnum,
+  InnovationTransferStatusEnum,
   InnovationSectionEnum,
   InnovationActionStatusEnum,
   ActivityLogTypesEnum,
