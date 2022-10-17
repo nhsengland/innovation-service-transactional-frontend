@@ -32,10 +32,10 @@ type GetUserInfoDTO = {
 };
 
 
-export type saveUserInfoDTO = {
+export type UpdateUserInfoDTO = {
   displayName: string;
   mobilePhone?: string;
-  organisation?: { id: string; name: string; isShadow: boolean; size: null | string; }
+  organisation?: { id: string, isShadow: boolean, name?: null | string, size?: null | string }
 };
 
 export type GetTermsOfUseLastVersionInfoDTO = {
@@ -69,7 +69,6 @@ export class AuthenticationService {
 
   getUserInfo(): Observable<GetUserInfoDTO> {
 
-    // const url = new UrlModel(this.API_URL).addPath('me');
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/me');
     return this.http.get<GetUserInfoDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
@@ -89,13 +88,10 @@ export class AuthenticationService {
 
   }
 
-  saveUserInfo(body: saveUserInfoDTO): Observable<{ id: string }> {
+  updateUserInfo(body: UpdateUserInfoDTO): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('me');
-    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response)
-    );
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/me');
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
 

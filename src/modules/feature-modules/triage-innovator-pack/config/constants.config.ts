@@ -1,4 +1,5 @@
-import { FormEngineModel, FormEngineParameterModel } from '@modules/shared/forms';
+import { categoriesItems, hasBenefitsItems, hasEvidenceItems, hasMarketResearchItems, hasProblemTackleKnowledgeItems, hasTestsItems, mainCategoryItems, supportTypesItems, yesNotYetNotSureItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { FormEngineModel } from '@modules/shared/forms';
 
 export const TRIAGE_INNOVATOR_PACK_QUESTIONS: { question: FormEngineModel, summary: { [key: string]: null | string } }[] = [
 
@@ -12,19 +13,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: { question: FormEngineModel, summa
           label: 'Choose all categories that can be used to describe your innovation',
           description: 'Your answer will help us to establish your primary point of contact if you choose to create an account with the innovation service.',
           validations: { isRequired: [true, 'Choose at least one category that describes your innovation'] },
-          items: [
-            { value: 'MEDICAL_DEVICE', label: 'Medical device' },
-            { value: 'PHARMACEUTICAL', label: 'Pharmaceutical' },
-            { value: 'DIGITAL', label: 'Digital (including apps, platforms, software)' },
-            { value: 'AI', label: 'Artificial intelligence (AI)' },
-            { value: 'EDUCATION', label: 'Education or training of workforce' },
-            { value: 'PPE', label: 'Personal protective equipment (PPE)' },
-            {
-              value: 'OTHER',
-              label: 'Other',
-              conditional: new FormEngineParameterModel({ id: 'otherCategoryDescription', dataType: 'text', label: 'Other category', validations: { isRequired: [true, 'Other description is required'] } })
-            }
-          ]
+          items: categoriesItems
         }
       ]
     }),
@@ -41,19 +30,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: { question: FormEngineModel, summa
           label: 'If you had to select one primary category to describe your innovation, which one would it be?',
           description: 'Your innovation may be a combination of various categories. Selecting the primary category will help us find the right people to support you.',
           validations: { isRequired: [true, 'Choose the category that best describes your innovation'] },
-          items: [
-            { value: 'MEDICAL_DEVICE', label: 'Medical device' },
-            { value: 'PHARMACEUTICAL', label: 'Pharmaceutical' },
-            { value: 'DIGITAL', label: 'Digital (including apps, platforms, software)' },
-            { value: 'AI', label: 'Artificial intelligence (AI)' },
-            { value: 'EDUCATION', label: 'Education or training of workforce' },
-            { value: 'PPE', label: 'Personal protective equipment (PPE)' },
-            {
-              value: 'OTHER',
-              label: 'Other',
-              conditional: new FormEngineParameterModel({ id: 'otherMainCategoryDescription', dataType: 'text', label: 'Other main category', validations: { isRequired: [true, 'Other description is required'] } })
-            }
-          ]
+          items: mainCategoryItems
         }
       ]
     }),
@@ -70,11 +47,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: { question: FormEngineModel, summa
           label: 'Have you identified what problem the innovation will tackle (also known as \'value proposition\')?',
           description: 'This is a simple statement that summarises your innovation, shows how it\'s different and documents the value that it brings to the customer.',
           validations: { isRequired: [true, 'Choose the option that best identifies what problem the innovation will tackle'] },
-          items: [
-            { value: 'YES', label: 'Yes' },
-            { value: 'NOT_YET', label: 'Not yet' },
-            { value: 'NOT_SURE', label: 'I\'m not sure' }
-          ]
+          items: hasProblemTackleKnowledgeItems
         }
       ]
     }),
@@ -95,11 +68,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: { question: FormEngineModel, summa
           label: 'Have you done market research so that you understand the need for your innovation in the UK?',
           description: 'For example, information and insight on your customers and competitors gathered from interviews, focus groups, pricing research or competitive analysis.',
           validations: { isRequired: [true, 'Choose if you have done market research'] },
-          items: [
-            { value: 'YES', label: 'Yes' },
-            { value: 'IN_PROGRESS', label: 'I\'m currently doing market research' },
-            { value: 'NOT_YET', label: 'Not yet' }
-          ]
+          items: hasMarketResearchItems
         }
       ]
     }),
@@ -120,11 +89,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: { question: FormEngineModel, summa
           label: 'Have you identified who would benefit from your innovation?',
           description: 'This can include specific patient groups, clinicians, nurses, administrative staff and wider organisations.',
           validations: { isRequired: [true, 'Choose if you identified who would benefit from your innovation'] },
-          items: [
-            { value: 'YES', label: 'Yes' },
-            { value: 'NOT_YET', label: 'Not yet' },
-            { value: 'NOT_SURE', label: 'I\'m not sure' }
-          ]
+          items: yesNotYetNotSureItems
         }
       ]
     }),
@@ -145,11 +110,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: { question: FormEngineModel, summa
           label: 'Have you identified the specific benefits that your innovation would bring?',
           description: 'For example, your innovation could help reduce cost, benefit the public, improve the quality of healthcare or address a specific issue.',
           validations: { isRequired: [true, 'Choose if you identified the specific benefits that your innovation would bring'] },
-          items: [
-            { value: 'YES', label: 'Yes' },
-            { value: 'NOT_YET', label: 'Not yet' },
-            { value: 'NOT_SURE', label: 'I\'m not sure' }
-          ]
+          items: hasBenefitsItems
         }
       ]
     }),
@@ -170,11 +131,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: { question: FormEngineModel, summa
           label: 'Have you tested the innovation with users?',
           description: 'Depending on the context of your innovation, this can include device prototyping and testing, laboratory studies, clinical trials, amongst others.',
           validations: { isRequired: [true, 'Choose if you tested the innovation with users'] },
-          items: [
-            { value: 'YES', label: 'Yes' },
-            { value: 'IN_PROCESS', label: 'I\'m in the process of testing with users' },
-            { value: 'NOT_YET', label: 'Not yet' }
-          ]
+          items: hasTestsItems
         }
       ]
     }),
@@ -190,7 +147,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: { question: FormEngineModel, summa
     question: new FormEngineModel({
       parameters: [
         {
-          id: 'hasRelevanteCertifications',
+          id: 'hasRelevantCertifications',
           dataType: 'radio-group',
           label: 'Have you achieved all relevant certifications?',
           description: 'There are different certifications for different types of innovations. For example, different types of medical devices need different levels of CE and/or UKCA certification.',
@@ -222,11 +179,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: { question: FormEngineModel, summa
           label: 'Do you have evidence to show that your innovation is safe to use and effective?',
           description: 'For example, data from clinical trials published in a peer reviewed journal.',
           validations: { isRequired: [true, 'Choose if you have evidences regarding your innovation safety'] },
-          items: [
-            { value: 'YES', label: 'Yes' },
-            { value: 'IN_PROGRESS', label: 'I\'m in the process of gathering this evidence' },
-            { value: 'NOT_YET', label: 'Not yet' }
-          ]
+          items: hasEvidenceItems
         }
       ]
     }),
@@ -275,19 +228,7 @@ export const TRIAGE_INNOVATOR_PACK_QUESTIONS: { question: FormEngineModel, summa
             isRequired: [true, 'Choose between 1 and 5 types of support'],
             max: [5, 'Choose between 1 and 5 types of support']
           },
-          items: [
-            { value: 'ADOPTION', label: 'Adoption' },
-            { value: 'ASSESSMENT', label: 'Health technology assessment' },
-            { value: 'PRODUCT_MIGRATION', label: 'Bringing my product to or from the UK' },
-            { value: 'CLINICAL_TESTS', label: 'Clinical trials and testing' },
-            { value: 'COMMERCIAL', label: 'Commercial support and advice' },
-            { value: 'PROCUREMENT', label: 'Procurement' },
-            { value: 'DEVELOPMENT', label: 'Product development and regulatory advice' },
-            { value: 'EVIDENCE_EVALUATION', label: 'Real-world evidence and evaluation' },
-            { value: 'FUNDING', label: 'Understanding funding channels' },
-            { value: '', label: 'SEPARATOR' },
-            { value: 'INFORMATION', label: 'I\'m only looking for information right now' }
-          ]
+          items: supportTypesItems
         }
       ]
     }),

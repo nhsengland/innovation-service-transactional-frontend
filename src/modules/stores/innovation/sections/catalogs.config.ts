@@ -13,6 +13,11 @@ export const yesPartiallyNoItems = [
   { value: 'NO', label: 'No' }
 ];
 
+export const yesNotYetNotSureItems = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'NOT_YET', label: 'Not yet' },
+  { value: 'NOT_SURE', label: 'I\'m not sure' }
+];
 
 
 // Section 1.

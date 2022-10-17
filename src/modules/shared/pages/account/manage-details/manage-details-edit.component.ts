@@ -11,6 +11,7 @@ import { WizardSummaryType } from '@modules/shared/forms';
 import { ACCOUNT_DETAILS_INNOVATOR } from './manage-details-edit-innovator.config';
 import { ACCOUNT_DETAILS_ACCESSOR } from './manage-details-edit-accessor.config';
 import { ACCOUNT_DETAILS_ADMIN } from './manage-details-edit-admin.config';
+import { UpdateUserInfoDTO } from '@modules/stores/authentication/authentication.service';
 
 
 @Component({
@@ -103,9 +104,15 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
 
   onSubmitWizard(): void {
 
-    const body = this.wizard.runOutboundParsing();
+    const wizardData = this.wizard.runOutboundParsing();
 
-    this.stores.authentication.saveUserInfo$(body).pipe(
+    const body: UpdateUserInfoDTO = {
+      displayName: wizardData.displayName,
+      ...(wizardData.mobilePhone ? { mobilePhone: wizardData.mobilePhone } : {}),
+      ...(wizardData.organisation ? { organisation: wizardData.organisation } : {})
+    };
+
+    this.stores.authentication.updateUserInfo$(body).pipe(
       concatMap(() => this.stores.authentication.initializeAuthentication$()) // Fetch all new information.
     ).subscribe({
       next: () => {

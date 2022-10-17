@@ -1,20 +1,21 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
-import { FIRST_TIME_SIGNIN_QUESTIONS } from './first-time-signin.config';
+import { FIRST_TIME_SIGNIN_QUESTIONS } from './innovation-new.config';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovatorService } from '../../services/innovator.service';
 
 
 @Component({
-  selector: 'app-innovator-pages-first-time-signin',
-  templateUrl: './first-time-signin.component.html'
+  selector: 'app-innovator-pages-first-time-signin-innovation-new',
+  templateUrl: './innovation-new.component.html'
 })
-export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
+export class FirstTimeSigninInnovationNewComponent extends CoreComponent implements OnInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
@@ -77,12 +78,36 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
 
   onSubmitWizard(): void {
 
-    const body = this.wizard.runOutboundParsing();
+    const wizardData = this.wizard.runOutboundParsing();
 
-    this.innovatorService.submitFirstTimeSigninInfo('FIRST_TIME_SIGNIN', body).pipe(
-      concatMap(() => {
-        return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
-      })
+
+    of(true).pipe(
+
+      concatMap(() => this.stores.authentication.updateUserInfo$({
+        displayName: wizardData.innovatorName,
+        mobilePhone: wizardData.mobilePhone,
+        organisation: wizardData.isCompanyOrOrganisation.toUpperCase() === 'YES' ? {
+          id: this.stores.authentication.getUserInfo().organisations[0].id,
+          isShadow: false,
+          name: wizardData.organisationName,
+          size: wizardData.organisationSize
+        } : {
+          id: this.stores.authentication.getUserInfo().organisations[0].id,
+          isShadow: true
+        }
+      })),
+
+      concatMap(() => this.innovatorService.createInnovation({
+        name: wizardData.innovationName,
+        description: wizardData.innovationDescription,
+        countryName: wizardData.locationCountryName || wizardData.location,
+        postcode: wizardData.englandPostCode,
+        organisationShares: wizardData.organisationShares
+      }, true)),
+
+      // Initialize authentication in order to update First Time SignIn information.
+      concatMap(() => this.stores.authentication.initializeAuthentication$())
+
     ).subscribe({
       next: () => this.redirectTo(`innovator/dashboard`, { alert: 'alertDisabled' }),
       error: () => this.setAlertUnknownError()

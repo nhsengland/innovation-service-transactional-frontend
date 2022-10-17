@@ -19,7 +19,8 @@ import { PageAccountInnovationsTransferComponent } from './pages/account/innovat
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // First time signin.
-import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
+import { FirstTimeSigninInnovationNewComponent } from './pages/first-time-signin/innovation-new.component';
+import { FirstTimeSigninInnovationTransferComponent } from './pages/first-time-signin/innovation-transfer.component';
 // // Innovation.
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
@@ -31,7 +32,6 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
-import { InnovationTransferAcceptanceComponent } from './pages/innovation-transfer-acceptance/innovation-transfer-acceptance.component';
 
 // // Shared module pages.
 // // Account.
@@ -98,7 +98,7 @@ const routes: Routes = [
       },
 
       {
-        path: 'first-time-signin', pathMatch: 'full', component: FirstTimeSigninComponent,
+        path: 'first-time-signin', pathMatch: 'full', component: FirstTimeSigninInnovationNewComponent,
         data: {
           header: { menuBarItems: { left: [], right: [], notifications: {} } },
           layout: { type: 'full' }
@@ -110,7 +110,7 @@ const routes: Routes = [
         children: [
           { path: '', pathMatch: 'full', redirectTo: '1' },
           {
-            path: ':stepId', pathMatch: 'full', component: InnovationTransferAcceptanceComponent,
+            path: ':stepId', pathMatch: 'full', component: FirstTimeSigninInnovationTransferComponent,
             data: {
               header: { menuBarItems: { left: [], right: [], notifications: {} } },
               layout: { type: 'full' }

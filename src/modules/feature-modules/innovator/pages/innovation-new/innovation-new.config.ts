@@ -18,7 +18,7 @@ type OutboundPayloadType = {
   name: string;
   description: string;
   countryName: string;
-  postcode: string;
+  postcode: null | string;
   organisationShares: string[];
 };
 
@@ -101,8 +101,8 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     name: data.innovationName,
     description: data.innovationDescription,
     countryName: data.locationCountryName || data.location,
-    postcode: data.englandPostCode || '',
-    organisationShares: data.organisationShares,
+    postcode: data.englandPostCode || null,
+    organisationShares: data.organisationShares
   };
 
 }

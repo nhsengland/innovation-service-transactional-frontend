@@ -254,7 +254,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
     this.summaryList.valid = form.valid;
 
     if (!this.summaryList.valid) {
-      this.alert = { type: 'ERROR', title: 'Unable to fetch innovations transfers', setFocus: true };
+      this.alert = { type: 'ERROR', title: 'There is a problem', setFocus: true };
     }
 
     this.stepsData.forEach((step, stepIndex) => {
@@ -292,7 +292,7 @@ export class SurveyStepComponent extends CoreComponent implements OnInit, AfterV
     // Rule 02: If innovators answer "YES" from Q3 to Q10, and Q11 does NOT contains "I'm only looking for information right now".
     // Rule 03: None of the previous, adds a text per each questions that is not YES.
 
-    const Q3ToQ10QuestionIds = ['hasProblemTackleKnowledge', 'hasMarketResearch', 'hasWhoBenefitsKnowledge', 'hasBenefits', 'hasTests', 'hasRelevanteCertifications', 'hasEvidence', 'hasCostEvidence'];
+    const Q3ToQ10QuestionIds = ['hasProblemTackleKnowledge', 'hasMarketResearch', 'hasWhoBenefitsKnowledge', 'hasBenefits', 'hasTests', 'hasRelevantCertifications', 'hasEvidence', 'hasCostEvidence'];
 
     let yesToQuestion3To10 = true;
     Q3ToQ10QuestionIds.forEach(item => {

@@ -8,7 +8,6 @@ export enum InnovationStatusEnum {
   COMPLETE = 'COMPLETE'
 }
 
-// Innovation Support.
 export enum InnovationSupportStatusEnum {
   UNASSIGNED = 'UNASSIGNED',
   ENGAGING = 'ENGAGING',
@@ -20,8 +19,14 @@ export enum InnovationSupportStatusEnum {
   COMPLETE = 'COMPLETE'
 }
 
+export enum InnovationTransferStatusEnum {
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  DECLINED = 'DECLINED',
+  CANCELED = 'CANCELED',
+  EXPIRED = 'EXPIRED'
+}
 
-// Innovation Sections.
 export enum InnovationSectionEnum {
   INNOVATION_DESCRIPTION = 'INNOVATION_DESCRIPTION',
   VALUE_PROPOSITION = 'VALUE_PROPOSITION',
@@ -39,8 +44,6 @@ export enum InnovationSectionEnum {
   IMPLEMENTATION_PLAN = 'IMPLEMENTATION_PLAN'
 }
 
-
-// Innovation Actions.
 export enum InnovationActionStatusEnum {
   REQUESTED = 'REQUESTED',
   STARTED = 'STARTED',
@@ -52,8 +55,6 @@ export enum InnovationActionStatusEnum {
   CANCELLED = 'CANCELLED'
 }
 
-
-// Innovation Activity Log.
 export enum ActivityLogTypesEnum {
   INNOVATION_MANAGEMENT = 'INNOVATION_MANAGEMENT',
   INNOVATION_RECORD = 'INNOVATION_RECORD',

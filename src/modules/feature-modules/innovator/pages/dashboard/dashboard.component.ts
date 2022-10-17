@@ -7,7 +7,8 @@ import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { getInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
+import { GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
+import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     passwordResetAt: string
   };
 
-  innovationTransfers: getInnovationTransfersDTO[] = [];
+  innovationTransfers: GetInnovationTransfersDTO = [];
 
   innovationGuidesUrl = `${this.CONSTANTS.BASE_URL}/innovation-guides`;
 
@@ -83,7 +84,10 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   onSubmitTransferResponse(transferId: string, accept: boolean): void {
 
-    this.innovatorService.updateTransferInnovation(transferId, (accept ? 'COMPLETED' : 'DECLINED')).pipe(
+    this.innovatorService.updateTransferInnovation(
+      transferId,
+      (accept ? InnovationTransferStatusEnum.COMPLETED : InnovationTransferStatusEnum.DECLINED)
+    ).pipe(
       concatMap(() =>
         forkJoin([
           this.stores.authentication.initializeAuthentication$(), // Initialize authentication in order to update First Time SignIn information.

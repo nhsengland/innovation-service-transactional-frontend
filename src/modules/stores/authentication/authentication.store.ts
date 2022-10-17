@@ -5,7 +5,7 @@ import { concatMap } from 'rxjs/operators';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 
 import { Store } from '../store.class';
-import { AuthenticationService, saveUserInfoDTO } from './authentication.service';
+import { AuthenticationService, UpdateUserInfoDTO } from './authentication.service';
 
 import { UserRoleEnum, UserTypeEnum } from './authentication.enums';
 import { AuthenticationModel } from './authentication.models';
@@ -86,8 +86,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     return this.state.user || { id: '', email: '', displayName: '', type: '', roles: [], phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
   }
 
-  saveUserInfo$(body: MappedObjectType): Observable<{ id: string }> {
-    return this.authenticationService.saveUserInfo(body as saveUserInfoDTO);
+  updateUserInfo$(body: UpdateUserInfoDTO): Observable<{ id: string }> {
+    return this.authenticationService.updateUserInfo(body);
   }
 
   getUserTypeDescription(userType: UserTypeEnum): string {

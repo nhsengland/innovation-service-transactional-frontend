@@ -4,21 +4,20 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
-import { FormEngineComponent } from '@modules/shared/forms';
-import { FirstTimeSigninComponent } from './first-time-signin.component';
+import { FirstTimeSigninInnovationNewComponent } from './innovation-new.component';
 
 import { InnovatorService } from '../../services/innovator.service';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
-describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
+describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninInnovationNewComponent', () => {
 
   let router: Router;
   let routerSpy: jest.SpyInstance;
@@ -27,8 +26,8 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
   let innovatorService: InnovatorService;
   let organisationsService: OrganisationsService;
 
-  let component: FirstTimeSigninComponent;
-  let fixture: ComponentFixture<FirstTimeSigninComponent>;
+  let component: FirstTimeSigninInnovationNewComponent;
+  let fixture: ComponentFixture<FirstTimeSigninInnovationNewComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -58,7 +57,7 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSigninComponent', () => {
   });
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    fixture = TestBed.createComponent(FirstTimeSigninInnovationNewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();

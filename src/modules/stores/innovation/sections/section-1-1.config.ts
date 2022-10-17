@@ -117,7 +117,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
     data.mainCategory = data.categories[0];
   } else {
 
-    const selectedCategories = categoriesItems.filter(category => data.categories.some(e => e === category.value));
+    const selectedCategories = mainCategoryItems.filter(category => data.categories.some(e => e === category.value));
 
     steps.push(
       new FormEngineModel({
