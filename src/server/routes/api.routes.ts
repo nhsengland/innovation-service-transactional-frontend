@@ -62,7 +62,8 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, (req, res) => {
 
     const fail = (error: any) => {
 
-      console.error(`Error calling api url: ${url}. ${error}`);
+      console.error(`Error calling API URL: ${url}`);
+      console.error(`StatusCode: ${error.response.status}`, `Data: ${error.response.data}`);
 
       if (error.response && error.response.status) {
         res.status(error.response.status).send(error.response.data);

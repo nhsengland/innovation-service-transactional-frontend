@@ -45,13 +45,13 @@ describe('Shared/Services/TermsOfUseService', () => {
 
   it('should run getTermsOfUseLastVersionInfo() and return success', () => {
 
-    const responseMock: GetTermsOfUseLastVersionInfoDTO  = { id: 'id1', name: 'Organisation 01', summary: 'summary', isAccepted: true };
+    const responseMock: GetTermsOfUseLastVersionInfoDTO  = { id: 'id1', name: 'Organisation 01', summary: 'summary', releasedAt: new Date().toISOString(), isAccepted: true };
     const expected = responseMock;
 
     let response: any = null;
     service.getTermsOfUseLastVersionInfo().subscribe({ next: success => response = success, error: error => response = error});
 
-    const req = httpMock.expectOne(`${envVariablesStore.API_URL}/tou/me`);
+    const req = httpMock.expectOne(`${envVariablesStore.API_USERS_URL}/v1/me/terms-of-use`);
     req.flush(responseMock);
     expect(req.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -66,7 +66,7 @@ describe('Shared/Services/TermsOfUseService', () => {
     let response: any = null;
     service.acceptTermsOfUseVersion('id1').subscribe({ next: success => response = success, error: error => response = error});
 
-    const req = httpMock.expectOne(`${envVariablesStore.API_URL}/tou/id1/accept`);
+    const req = httpMock.expectOne(`${envVariablesStore.API_USERS_URL}/v1/me/terms-of-use/accept`);
     req.flush(responseMock);
     expect(req.request.method).toBe('PATCH');
     expect(response).toEqual(expected);
