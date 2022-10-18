@@ -367,7 +367,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.transferInnovation({ innovationId: 'Inno01', email: 'some@email.com' }).subscribe({ next: success => response = success, error: error => response = error });
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/innovation-transfers`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/transfers`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
     expect(response).toEqual(expected);
