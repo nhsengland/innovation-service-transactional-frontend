@@ -75,9 +75,8 @@ export type getInnovationInfoEndpointDTO = {
   }
 };
 
-export type getInnovationNeedsAssessmentEndpointInDTO = {
+export type GetInnovationNeedsAssessmentEndpointInDTO = {
   id: string;
-  innovation: { id: string; name: string; };
   description: null | string;
   maturityLevel: null | string;
   maturityLevelComment: null | string;
@@ -96,18 +95,15 @@ export type getInnovationNeedsAssessmentEndpointInDTO = {
   hasScaleResource: null | string;
   hasScaleResourceComment: null | string;
   summary: null | string;
-  organisations: { id: string; name: string; acronym: null | string, organisationUnits: { id: string; name: string; acronym: string; }[] }[];
-  assignToName: string;
+  suggestedOrganisations: { id: string; name: string; acronym: null | string, units: { id: string; name: string; acronym: string; }[] }[];
+  assignTo: { id: string, name: string };
   finishedAt: null | string;
-  createdAt: string;
-  createdBy: string;
   updatedAt: null | string;
-  updatedBy: null | string;
+  updatedBy: { id: string, name: string };
 };
 
-export type getInnovationNeedsAssessmentEndpointOutDTO = {
-  innovation: { id: string; name: string; };
-  assessment: Omit<getInnovationNeedsAssessmentEndpointInDTO, 'id' | 'innovation'> & { hasBeenSubmitted: boolean };
+export type GetInnovationNeedsAssessmentEndpointOutDTO = {
+  assessment: Omit<GetInnovationNeedsAssessmentEndpointInDTO, 'id'> & { hasBeenSubmitted: boolean };
 };
 
 export type getSupportLogInDTO = {
@@ -197,13 +193,12 @@ export class AssessmentService extends CoreService {
 
   }
 
-  getInnovationNeedsAssessment(innovationId: string, assessmentId: string): Observable<getInnovationNeedsAssessmentEndpointOutDTO> {
+  getInnovationNeedsAssessment(innovationId: string, assessmentId: string): Observable<GetInnovationNeedsAssessmentEndpointOutDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId/assessments/:assessmentId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, assessmentId });
-    return this.http.get<getInnovationNeedsAssessmentEndpointInDTO>(url.buildUrl()).pipe(
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/assessments/:assessmentId').setPathParams({ innovationId, assessmentId });
+    return this.http.get<GetInnovationNeedsAssessmentEndpointInDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => ({
-        innovation: response.innovation,
         assessment: {
           description: response.description,
           maturityLevel: response.maturityLevel,
@@ -223,11 +218,9 @@ export class AssessmentService extends CoreService {
           hasScaleResource: response.hasScaleResource,
           hasScaleResourceComment: response.hasScaleResourceComment,
           summary: response.summary,
-          organisations: response.organisations,
-          assignToName: response.assignToName,
+          suggestedOrganisations: response.suggestedOrganisations,
+          assignTo: response.assignTo,
           finishedAt: response.finishedAt,
-          createdAt: response.createdAt,
-          createdBy: response.createdBy,
           updatedAt: response.updatedAt,
           updatedBy: response.updatedBy,
           hasBeenSubmitted: !!response.finishedAt
@@ -269,7 +262,7 @@ export class AssessmentService extends CoreService {
 
   createInnovationNeedsAssessment(innovationId: string, data: MappedObjectType): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId/assessments').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/assessments').setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), data).pipe(
       take(1),
       map(response => response)
@@ -285,7 +278,7 @@ export class AssessmentService extends CoreService {
       body.isSubmission = true;
     }
 
-    const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId/assessments/:assessmentId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, assessmentId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/assessments/:assessmentId').setPathParams({ innovationId, assessmentId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)

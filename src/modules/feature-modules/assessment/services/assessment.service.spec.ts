@@ -15,7 +15,7 @@ import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stor
 
 import {
   AssessmentService,
-  getInnovationInfoEndpointDTO, getInnovationNeedsAssessmentEndpointInDTO, getInnovationNeedsAssessmentEndpointOutDTO, getInnovationsListEndpointInDTO,
+  getInnovationInfoEndpointDTO, GetInnovationNeedsAssessmentEndpointInDTO, GetInnovationNeedsAssessmentEndpointOutDTO, getInnovationsListEndpointInDTO,
   getInnovationsListEndpointOutDTO, getInnovationSupportsDTO, getSupportLogInDTO, getSupportLogOutDTO, SupportLogType
 } from './assessment.service';
 
@@ -167,9 +167,8 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
   it('should run getInnovationNeedsAssessment() and return success', () => {
 
-    const responseMock: getInnovationNeedsAssessmentEndpointInDTO = {
+    const responseMock: GetInnovationNeedsAssessmentEndpointInDTO = {
       id: 'Assess01',
-      innovation: { id: 'Innov01', name: 'Innovation 01' },
       description: 'A description',
       maturityLevel: 'One value',
       maturityLevelComment: 'One value',
@@ -188,19 +187,16 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
       hasScaleResource: 'One value',
       hasScaleResourceComment: 'One value',
       summary: 'One value',
-      organisations: [
-        { id: 'org1', name: 'orgName', acronym: 'orgAcronym', organisationUnits: [{ id: 'unit1', name: 'orgUnitName', acronym: 'orgUnitAcronym' }] }
+      suggestedOrganisations: [
+        { id: 'org1', name: 'orgName', acronym: 'orgAcronym', units: [{ id: 'unit1', name: 'orgUnitName', acronym: 'orgUnitAcronym' }] }
       ],
-      assignToName: 'One value',
+      assignTo: { id: 'na01', name: 'One value'},
       finishedAt: 'One value',
-      createdAt: '2020-01-01T00:00:00.000Z',
-      createdBy: ' A user',
       updatedAt: null,
-      updatedBy: null
+      updatedBy: { id: 'na01', name: 'One value'}
     };
 
-    const expected: getInnovationNeedsAssessmentEndpointOutDTO = {
-      innovation: responseMock.innovation,
+    const expected: GetInnovationNeedsAssessmentEndpointOutDTO = {
       assessment: {
         description: responseMock.description,
         maturityLevel: responseMock.maturityLevel,
@@ -220,11 +216,9 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
         hasScaleResource: responseMock.hasScaleResource,
         hasScaleResourceComment: responseMock.hasScaleResourceComment,
         summary: responseMock.summary,
-        organisations: responseMock.organisations,
-        assignToName: responseMock.assignToName,
+        suggestedOrganisations: responseMock.suggestedOrganisations,
+        assignTo: responseMock.assignTo,
         finishedAt: responseMock.finishedAt,
-        createdAt: responseMock.createdAt,
-        createdBy: responseMock.createdBy,
         updatedAt: responseMock.updatedAt,
         updatedBy: responseMock.updatedBy,
         hasBeenSubmitted: !!responseMock.finishedAt
@@ -234,7 +228,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.getInnovationNeedsAssessment('inno01', 'assess01').subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/inno01/assessments/assess01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -355,7 +349,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.createInnovationNeedsAssessment('inno01', { some: 'data' }).subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/assessments`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/inno01/assessments`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
     expect(response).toEqual(expected);
@@ -370,7 +364,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.updateInnovationNeedsAssessment('inno01', 'assess01', true, { some: 'data' }).subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/inno01/assessments/assess01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PUT');
     expect(response).toEqual(expected);
@@ -385,7 +379,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     let response: any = null;
     service.updateInnovationNeedsAssessment('inno01', 'assess01', false, { some: 'data' }).subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/assessments/assess01`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/inno01/assessments/assess01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PUT');
     expect(response).toEqual(expected);

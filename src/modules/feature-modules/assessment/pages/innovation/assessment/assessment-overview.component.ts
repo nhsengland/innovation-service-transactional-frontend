@@ -7,7 +7,7 @@ import { DatesHelper, RoutingHelper } from '@app/base/helpers';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
-import { getInnovationNeedsAssessmentEndpointOutDTO, getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/assessment/services/assessment.service';
+import { GetInnovationNeedsAssessmentEndpointOutDTO, getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/assessment/services/assessment.service';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
@@ -25,12 +25,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
   assessmentId: string;
   innovation: InnovationDataResolverType;
 
-  assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] & {
-    organisations: {
-      id: string; name: string; acronym: null | string;
-      organisationUnits: { id: string; name: string; acronym: null | string; }[];
-    }[]
-  } | undefined;
+  assessment: GetInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
@@ -67,7 +62,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
       this.logHistory = supportLog;
 
-      this.assessment = { ...needsAssessmentInfo.assessment, organisations: needsAssessmentInfo.assessment.organisations };
+      this.assessment = { ...needsAssessmentInfo.assessment };
 
       this.shouldShowUpdatedAt = DatesHelper.dateDiff(this.assessment.finishedAt || '', this.assessment.updatedAt || '') > 0;
 
