@@ -5,7 +5,7 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
   innovation: FormEngineParameterModel[],
   innovator: FormEngineParameterModel[],
   summary: FormEngineParameterModel[],
-  organisationUnits: FormEngineParameterModel[]
+  suggestedOrganisationUnitsIds: FormEngineParameterModel[]
 } = {
   innovation: [
     new FormEngineParameterModel({
@@ -97,9 +97,9 @@ export const NEEDS_ASSESSMENT_QUESTIONS: {
     })
   ],
 
-  organisationUnits: [
+  suggestedOrganisationUnitsIds: [
     new FormEngineParameterModel({
-      id: 'organisationUnits',
+      id: 'suggestedOrganisationUnitsIds',
       dataType: 'grouped-checkbox-array',
       label: 'Suggest organisations for support',
       validations: { isRequired: [true, 'Choose at least one organisation unit'] },
