@@ -64,6 +64,7 @@ export type ActivityLogOutDTO = {
 export class InnovationService {
 
   private API_URL = this.envVariablesStore.API_URL;
+  private API_INNOVATIONS_URL = this.envVariablesStore.API_INNOVATIONS_URL;
 
   constructor(
     private http: HttpClient,
@@ -86,8 +87,8 @@ export class InnovationService {
 
 
   submitInnovation(innovationId: string): Observable<{ id: string, status: keyof typeof INNOVATION_STATUS }> {
-
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/submit').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
+    
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/submit').setPathParams({ innovationId });
     return this.http.patch<{ id: string, status: keyof typeof INNOVATION_STATUS }>(url.buildUrl(), {}).pipe(
       take(1),
       map(response => response)
