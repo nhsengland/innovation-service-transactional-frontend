@@ -11,6 +11,7 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 import { AccessorService, SupportLogType } from '../../../services/accessor.service';
 
 import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   constructor(
     private activatedRoute: ActivatedRoute,
     private accessorService: AccessorService,
+    private innovationsService: InnovationsService,
     private organisationsService: OrganisationsService
   ) {
 
@@ -56,11 +58,11 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
     forkJoin([
       this.organisationsService.getOrganisationsListWithUnits(),
-      this.accessorService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment.id || ''),
+      this.innovationsService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment.id || ''),
       this.accessorService.getInnovationSupports(this.innovation.id, false)
     ]).subscribe(([organisations, needsAssessmentInfo, supportsInfo]) => {
 
-      const needsAssessmentSuggestedOrganisations = needsAssessmentInfo.assessment.organisations.map(item => item.id);
+      const needsAssessmentSuggestedOrganisations = needsAssessmentInfo.assessment.suggestedOrganisations.map(item => item.id);
 
       this.groupedItems = organisations.map(item => {
 

@@ -10,6 +10,7 @@ import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/ne
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 import { AssessmentService } from '../../../services/assessment.service';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -50,7 +51,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   constructor(
     protected activatedRoute: ActivatedRoute,
     protected assessmentService: AssessmentService,
-    protected organisationsService: OrganisationsService
+    protected organisationsService: OrganisationsService,
+    protected innovationsService: InnovationsService
   ) {
 
     super();
@@ -72,7 +74,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     forkJoin([
       this.organisationsService.getOrganisationsListWithUnits(),
-      this.assessmentService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
+      this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
     ]).subscribe(([organisationUnits, innovationNeedsAssessment]) => {
 
       // Update last step with the organisations list with description and pre-select all checkboxes.
