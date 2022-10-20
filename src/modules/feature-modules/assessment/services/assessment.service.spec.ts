@@ -15,7 +15,7 @@ import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stor
 
 import {
   AssessmentService,
-  getInnovationInfoEndpointDTO, GetInnovationNeedsAssessmentEndpointInDTO, GetInnovationNeedsAssessmentEndpointOutDTO, getInnovationsListEndpointInDTO,
+  getInnovationInfoEndpointDTO, getInnovationsListEndpointInDTO,
   getInnovationsListEndpointOutDTO, getInnovationSupportsDTO, getSupportLogInDTO, getSupportLogOutDTO, SupportLogType
 } from './assessment.service';
 
@@ -159,76 +159,6 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     service.getInnovationInfo('inno01').subscribe({ next: success => response = success, error: error => response = error});
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-  });
-
-  it('should run getInnovationNeedsAssessment() and return success', () => {
-
-    const responseMock: GetInnovationNeedsAssessmentEndpointInDTO = {
-      id: 'Assess01',
-      description: 'A description',
-      maturityLevel: 'One value',
-      maturityLevelComment: 'One value',
-      hasRegulatoryApprovals: 'One value',
-      hasRegulatoryApprovalsComment: 'One value',
-      hasEvidence: 'One value',
-      hasEvidenceComment: 'One value',
-      hasValidation: 'One value',
-      hasValidationComment: 'One value',
-      hasProposition: 'One value',
-      hasPropositionComment: 'One value',
-      hasCompetitionKnowledge: 'One value',
-      hasCompetitionKnowledgeComment: 'One value',
-      hasImplementationPlan: 'One value',
-      hasImplementationPlanComment: 'One value',
-      hasScaleResource: 'One value',
-      hasScaleResourceComment: 'One value',
-      summary: 'One value',
-      suggestedOrganisations: [
-        { id: 'org1', name: 'orgName', acronym: 'orgAcronym', units: [{ id: 'unit1', name: 'orgUnitName', acronym: 'orgUnitAcronym' }] }
-      ],
-      assignTo: { id: 'na01', name: 'One value'},
-      finishedAt: 'One value',
-      updatedAt: null,
-      updatedBy: { id: 'na01', name: 'One value'}
-    };
-
-    const expected: GetInnovationNeedsAssessmentEndpointOutDTO = {
-      assessment: {
-        description: responseMock.description,
-        maturityLevel: responseMock.maturityLevel,
-        maturityLevelComment: responseMock.maturityLevelComment,
-        hasRegulatoryApprovals: responseMock.hasRegulatoryApprovals,
-        hasRegulatoryApprovalsComment: responseMock.hasRegulatoryApprovalsComment,
-        hasEvidence: responseMock.hasEvidence,
-        hasEvidenceComment: responseMock.hasEvidenceComment,
-        hasValidation: responseMock.hasValidation,
-        hasValidationComment: responseMock.hasValidationComment,
-        hasProposition: responseMock.hasProposition,
-        hasPropositionComment: responseMock.hasPropositionComment,
-        hasCompetitionKnowledge: responseMock.hasCompetitionKnowledge,
-        hasCompetitionKnowledgeComment: responseMock.hasCompetitionKnowledgeComment,
-        hasImplementationPlan: responseMock.hasImplementationPlan,
-        hasImplementationPlanComment: responseMock.hasImplementationPlanComment,
-        hasScaleResource: responseMock.hasScaleResource,
-        hasScaleResourceComment: responseMock.hasScaleResourceComment,
-        summary: responseMock.summary,
-        suggestedOrganisations: responseMock.suggestedOrganisations,
-        assignTo: responseMock.assignTo,
-        finishedAt: responseMock.finishedAt,
-        updatedAt: responseMock.updatedAt,
-        updatedBy: responseMock.updatedBy,
-        hasBeenSubmitted: !!responseMock.finishedAt
-      }
-    };
-
-    let response: any = null;
-    service.getInnovationNeedsAssessment('inno01', 'assess01').subscribe({ next: success => response = success, error: error => response = error});
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/inno01/assessments/assess01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);

@@ -7,12 +7,14 @@ import { NotificationContextTypeEnum } from '@app/base/enums';
 import { RoutingHelper } from '@app/base/helpers';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
-import { getInnovationNeedsAssessmentEndpointOutDTO, getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/accessor/services/accessor.service';
+import { getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/accessor/services/accessor.service';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 import { AccessorService } from '../../../services/accessor.service';
+
+import { GetInnovationNeedsAssessmentEndpointOutDTO, InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -25,11 +27,8 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   assessmentId: string;
   innovation: InnovationDataResolverType;
 
-  assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
-  suggestedOrganisations: {
-    id: string; name: string; acronym: null | string;
-    organisationUnits: { id: string; name: string; acronym: null | string; }[];
-  }[] = [];
+  assessment: GetInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
+  suggestedOrganisations: GetInnovationNeedsAssessmentEndpointOutDTO["assessment"]["suggestedOrganisations"] = [];
   logHistory: getSupportLogOutDTO[] = [];
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
@@ -43,7 +42,8 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService
+    private accessorService: AccessorService,
+    private innovationsService: InnovationsService
   ) {
 
     super();
@@ -63,14 +63,14 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
     this.stores.context.dismissNotification(NotificationContextTypeEnum.NEEDS_ASSESSMENT, this.assessmentId);
 
     forkJoin([
-      this.accessorService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
+      this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
       this.accessorService.getSupportLog(this.innovationId)
     ]).subscribe(([needsAssessmentInfo, supportLog]) => {
 
       this.logHistory = supportLog;
 
       this.assessment = needsAssessmentInfo.assessment;
-      this.suggestedOrganisations = this.assessment.organisations;
+      this.suggestedOrganisations = this.assessment.suggestedOrganisations;
 
       const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === needsAssessmentInfo.assessment.maturityLevel) || 0) + 1;
       this.innovationMaturityLevel = {

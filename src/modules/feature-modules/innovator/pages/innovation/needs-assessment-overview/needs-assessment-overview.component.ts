@@ -9,9 +9,11 @@ import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/ne
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { getInnovationNeedsAssessmentEndpointOutDTO, GetSupportLogListOutDTO } from '@modules/feature-modules/innovator/services/innovator.service';
+import { GetSupportLogListOutDTO } from '@modules/feature-modules/innovator/services/innovator.service';
 
 import { InnovatorService } from '../../../services/innovator.service';
+
+import { GetInnovationNeedsAssessmentEndpointOutDTO, InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -24,7 +26,7 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
   assessmentId: string;
   innovation: ContextInnovationType;
 
-  assessment: getInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
+  assessment: GetInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
 
   supportLogList: GetSupportLogListOutDTO[] = [];
 
@@ -34,7 +36,8 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService
+    private innovatorService: InnovatorService,
+    private innovationsService: InnovationsService
   ) {
 
     super();
@@ -53,7 +56,7 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
     this.stores.context.dismissNotification(NotificationContextTypeEnum.NEEDS_ASSESSMENT, this.assessmentId);
 
     forkJoin([
-      this.innovatorService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
+      this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
       this.innovatorService.getSupportLogList(this.innovationId)
     ]).subscribe(([response, supportLogList]) => {
 

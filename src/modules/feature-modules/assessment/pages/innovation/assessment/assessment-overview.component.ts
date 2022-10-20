@@ -7,12 +7,14 @@ import { DatesHelper, RoutingHelper } from '@app/base/helpers';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
-import { GetInnovationNeedsAssessmentEndpointOutDTO, getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/assessment/services/assessment.service';
+import { getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/assessment/services/assessment.service';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 import { AssessmentService } from '../../../services/assessment.service';
+
+import { GetInnovationNeedsAssessmentEndpointOutDTO, InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -40,7 +42,8 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private assessmentService: AssessmentService
+    private assessmentService: AssessmentService,
+    private innovationsService: InnovationsService
   ) {
 
     super();
@@ -57,7 +60,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
     forkJoin([
       this.assessmentService.getSupportLog(this.innovationId),
-      this.assessmentService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId)
+      this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId)
     ]).subscribe(([supportLog, needsAssessmentInfo]) => {
 
       this.logHistory = supportLog;

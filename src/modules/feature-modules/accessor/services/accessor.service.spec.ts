@@ -15,7 +15,7 @@ import { TableModel } from '@app/base/models';
 import {
   AccessorService,
   getActionsListEndpointInDTO, getActionsListEndpointOutDTO,
-  getInnovationNeedsAssessmentEndpointOutDTO, getInnovationsListEndpointInDTO, getInnovationsListEndpointOutDTO, getInnovationNeedsAssessmentEndpointInDTO, getInnovationSupportsDTO,
+  getInnovationsListEndpointInDTO, getInnovationsListEndpointOutDTO, getInnovationSupportsDTO,
   getSupportLogInDTO, SupportLogType, getSupportLogOutDTO, getAdvancedInnovationsListEndpointInDTO, getAdvancedInnovationsListEndpointOutDTO
 } from './accessor.service';
 
@@ -372,75 +372,6 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors/UserId01/innovations/Inno01/actions/Inno01Action01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PUT');
-    expect(response).toEqual(expected);
-
-  });
-
-
-  it('should run getInnovationNeedsAssessment() and return success', () => {
-
-    const responseMock: getInnovationNeedsAssessmentEndpointInDTO = {
-      id: 'NeedsAssessment01',
-      innovation: { id: 'Inno01', name: 'Innovation name' },
-      description: null,
-      maturityLevel: null,
-      maturityLevelComment: null,
-      hasRegulatoryApprovals: null,
-      hasRegulatoryApprovalsComment: null,
-      hasEvidence: null,
-      hasEvidenceComment: null,
-      hasValidation: null,
-      hasValidationComment: null,
-      hasProposition: null,
-      hasPropositionComment: null,
-      hasCompetitionKnowledge: null,
-      hasCompetitionKnowledgeComment: null,
-      hasImplementationPlan: null,
-      hasImplementationPlanComment: null,
-      hasScaleResource: null,
-      hasScaleResourceComment: null,
-      summary: null,
-      organisations: [],
-      assignToName: 'Name of user',
-      finishedAt: '2020-01-01T00:00:00.000Z',
-      support: { id: null }
-    };
-
-    const expected: getInnovationNeedsAssessmentEndpointOutDTO = {
-      innovation: responseMock.innovation,
-      assessment: {
-        description: responseMock.description,
-        maturityLevel: responseMock.maturityLevel,
-        maturityLevelComment: responseMock.maturityLevelComment,
-        hasRegulatoryApprovals: responseMock.hasRegulatoryApprovals,
-        hasRegulatoryApprovalsComment: responseMock.hasRegulatoryApprovalsComment,
-        hasEvidence: responseMock.hasEvidence,
-        hasEvidenceComment: responseMock.hasEvidenceComment,
-        hasValidation: responseMock.hasValidation,
-        hasValidationComment: responseMock.hasValidationComment,
-        hasProposition: responseMock.hasProposition,
-        hasPropositionComment: responseMock.hasPropositionComment,
-        hasCompetitionKnowledge: responseMock.hasCompetitionKnowledge,
-        hasCompetitionKnowledgeComment: responseMock.hasCompetitionKnowledgeComment,
-        hasImplementationPlan: responseMock.hasImplementationPlan,
-        hasImplementationPlanComment: responseMock.hasImplementationPlanComment,
-        hasScaleResource: responseMock.hasScaleResource,
-        hasScaleResourceComment: responseMock.hasScaleResourceComment,
-        summary: responseMock.summary,
-        organisations: responseMock.organisations,
-        assignToName: responseMock.assignToName,
-        finishedAt: responseMock.finishedAt
-      },
-      support: responseMock.support
-
-    };
-
-    let response: any = null;
-    service.getInnovationNeedsAssessment('Inno01', 'NeedsAssessment01').subscribe({ next: success => response = success, error: error => response = error});
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors/UserId01/innovations/Inno01/assessments/NeedsAssessment01`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
 
   });

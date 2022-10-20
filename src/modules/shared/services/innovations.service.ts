@@ -30,6 +30,37 @@ export type getInnovationInfoEndpointDTO = {
   notifications: { [key: string]: number }
 };
 
+export type GetInnovationNeedsAssessmentEndpointInDTO = {
+  id: string;
+  description: null | string;
+  maturityLevel: null | string;
+  maturityLevelComment: null | string;
+  hasRegulatoryApprovals: null | string;
+  hasRegulatoryApprovalsComment: null | string;
+  hasEvidence: null | string;
+  hasEvidenceComment: null | string;
+  hasValidation: null | string;
+  hasValidationComment: null | string;
+  hasProposition: null | string;
+  hasPropositionComment: null | string;
+  hasCompetitionKnowledge: null | string;
+  hasCompetitionKnowledgeComment: null | string;
+  hasImplementationPlan: null | string;
+  hasImplementationPlanComment: null | string;
+  hasScaleResource: null | string;
+  hasScaleResourceComment: null | string;
+  summary: null | string;
+  suggestedOrganisations: { id: string; name: string; acronym: null | string, units: { id: string; name: string; acronym: string; }[] }[];
+  assignTo: { id: string, name: string };
+  finishedAt: null | string;
+  updatedAt: null | string;
+  updatedBy: { id: string, name: string };
+};
+
+export type GetInnovationNeedsAssessmentEndpointOutDTO = {
+  assessment: Omit<GetInnovationNeedsAssessmentEndpointInDTO, 'id'> & { hasBeenSubmitted: boolean };
+};
+
 
 export type getInnovationActionInfoInDTO = {
   id: string;
@@ -139,6 +170,44 @@ export class InnovationsService extends CoreService {
         section: response.section,
         createdAt: response.createdAt,
         createdBy: response.createdBy.name
+      }))
+    );
+
+  }
+
+  // Needs Assessment
+  getInnovationNeedsAssessment(innovationId: string, assessmentId: string): Observable<GetInnovationNeedsAssessmentEndpointOutDTO> {
+    
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/assessments/:assessmentId').setPathParams({ innovationId, assessmentId });
+    return this.http.get<GetInnovationNeedsAssessmentEndpointInDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => ({
+        assessment: {
+          description: response.description,
+          maturityLevel: response.maturityLevel,
+          maturityLevelComment: response.maturityLevelComment,
+          hasRegulatoryApprovals: response.hasRegulatoryApprovals,
+          hasRegulatoryApprovalsComment: response.hasRegulatoryApprovalsComment,
+          hasEvidence: response.hasEvidence,
+          hasEvidenceComment: response.hasEvidenceComment,
+          hasValidation: response.hasValidation,
+          hasValidationComment: response.hasValidationComment,
+          hasProposition: response.hasProposition,
+          hasPropositionComment: response.hasPropositionComment,
+          hasCompetitionKnowledge: response.hasCompetitionKnowledge,
+          hasCompetitionKnowledgeComment: response.hasCompetitionKnowledgeComment,
+          hasImplementationPlan: response.hasImplementationPlan,
+          hasImplementationPlanComment: response.hasImplementationPlanComment,
+          hasScaleResource: response.hasScaleResource,
+          hasScaleResourceComment: response.hasScaleResourceComment,
+          summary: response.summary,
+          suggestedOrganisations: response.suggestedOrganisations,
+          assignTo: response.assignTo,
+          finishedAt: response.finishedAt,
+          updatedAt: response.updatedAt,
+          updatedBy: response.updatedBy,
+          hasBeenSubmitted: !!response.finishedAt
+        }
       }))
     );
 
