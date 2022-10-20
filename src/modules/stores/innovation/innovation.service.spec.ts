@@ -57,7 +57,7 @@ describe('Stores/Innovation/InnovationService', () => {
 
     service.submitInnovation('Inno01').subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/user001/innovations/Inno01/submit`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/Inno01/submit`);
     httpRequest.flush(responseMock);
 
     expect(httpRequest.request.method).toBe('PATCH');
