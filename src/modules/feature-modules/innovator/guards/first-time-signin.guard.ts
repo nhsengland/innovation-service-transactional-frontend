@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateChild, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
@@ -13,7 +13,11 @@ export class FirstTimeSigninGuard implements CanActivateChild {
     private authenticationStore: AuthenticationStore
   ) { }
 
-  canActivateChild(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<boolean> {
+  canActivateChild(activatedRouteSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+
+    if (state.url.endsWith('terms-of-use')) {
+      return of(true);
+    }
 
     if (this.authenticationStore.isFirstTimeSignInDone()) {
 
