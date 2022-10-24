@@ -34,7 +34,7 @@
             <div>
               <div class="d-flex align-items-center">
                 <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-right-2">
-                  {{ message.createdBy.name }}{{ message.createdBy.organisationUnit ? ', ' + message.createdBy.organisationUnit.name : '' }}
+                  {{ message.createdBy.name }}{{ message.createdBy.organisationUnit && message.createdBy.organisationUnit.name ? ', ' + message.createdBy.organisationUnit.name : '' }}
                 </p>
                 <theme-notification-tag label="new" *ngIf="message.isNew" class=""></theme-notification-tag>
               </div>
