@@ -213,7 +213,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   onSubmitSection(): void {
 
-    this.stores.innovation.submitSections$(this.innovation.id, [this.sectionId]).subscribe({
+    this.stores.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('Your answers have been confirmed for this section', { message: this.getNextSectionId() ? 'Go to next section or return to the full innovation record' : undefined });
         this.redirectTo(this.baseUrl);
