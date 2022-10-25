@@ -4,7 +4,7 @@
   "tasks": [
     {
       "type": "npm",
-      "script": "start",
+      "script": "start:dev:ssr",
       "isBackground": true,
       "problemMatcher": {
         "owner": "typescript",
@@ -15,10 +15,15 @@
             "regexp": "(.*?)"
           },
           "endsPattern": {
-            "regexp": "bundle generation complete"
+            "regexp": "Angular Universal Live Development Server is listening"
           }
         }
       }
+    },
+    {
+      "label": "terminate",
+      "type": "shell",
+      "command":"echo ${input:terminate}",
     },
     {
       "type": "npm",
@@ -37,6 +42,14 @@
           }
         }
       }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "terminate",
+      "type": "command",
+      "command": "workbench.action.tasks.terminate",
+      "args": "npm: start:dev:ssr"
     }
   ]
 }
