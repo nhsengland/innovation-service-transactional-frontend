@@ -8,62 +8,12 @@ import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/typ
 
 import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 
-import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
-
 
 export enum SupportLogType {
   ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
   STATUS_UPDATE = 'STATUS_UPDATE',
 }
 
-export type getInnovationsListEndpointInDTO = {
-  count: number;
-  data: {
-    id: string;
-    name: string;
-    mainCategory: string;
-    otherMainCategoryDescription: string;
-    countryName: string;
-    postcode: string;
-    submittedAt: DateISOType;
-    support: {
-      id?: string;
-      status: keyof typeof INNOVATION_SUPPORT_STATUS;
-      createdAt?: DateISOType;
-      updatedAt?: DateISOType;
-      accessors?: { id: string; name: string; }[];
-    };
-    organisations: string[];
-    assessment: { id: null | string; };
-    notifications?: {
-      count: number;
-      hasNew: boolean;
-    }
-  }[];
-};
-export type getInnovationsListEndpointOutDTO = {
-  count: number;
-  data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription' | 'postcode'>)[],
-};
-
-export type getAdvancedInnovationsListEndpointInDTO = {
-  count: number;
-  data: {
-    id: string;
-    name: string;
-    mainCategory: string;
-    otherMainCategoryDescription: string;
-    countryName: string;
-    postcode: string;
-    submittedAt: DateISOType;
-    supportStatus: null | keyof typeof INNOVATION_SUPPORT_STATUS
-  }[];
-};
-
-export type getAdvancedInnovationsListEndpointOutDTO = {
-  count: number;
-  data: (Omit<getAdvancedInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription' | 'postcode' | 'supportStatus'> & { supportStatus: keyof typeof INNOVATION_SUPPORT_STATUS })[],
-};
 
 export type getAdvanceActionsListEndpointInDTO = {
   count: number;
@@ -206,79 +156,6 @@ export class AccessorService extends CoreService {
 
   constructor() { super(); }
 
-  getInnovationsList(queryParams: APIQueryParamsType): Observable<getInnovationsListEndpointOutDTO> {
-
-    const { filters, ...qParams } = queryParams;
-
-    const qp = {
-      ...qParams,
-      supportStatus: filters.status || undefined,
-      assignedToMe: filters.assignedToMe ? 'true' : 'false',
-      suggestedOnly: filters.suggestedOnly ? 'true' : 'false'
-    };
-
-    const url = new UrlModel(this.API_URL).addPath('/accessors/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);
-
-    return this.http.get<getInnovationsListEndpointInDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => ({
-        count: response.count,
-        data: response.data.map(item => ({
-          id: item.id,
-          name: item.name,
-          mainCategory: item.otherMainCategoryDescription || mainCategoryItems.find(i => i.value === item.mainCategory)?.label || '',
-          countryName: `${item.countryName}${item.postcode ? ', ' + item.postcode : ''}`,
-          submittedAt: item.submittedAt,
-          support: {
-            id: item.support.id,
-            status: item.support.status,
-            createdAt: item.support.createdAt,
-            updatedAt: item.support.updatedAt,
-            accessors: item.support.accessors
-          },
-          organisations: item.organisations,
-          assessment: item.assessment,
-          notifications: item.notifications,
-        }))
-      }))
-    );
-
-  }
-
-  getAdvancedInnovationsList(
-    queryParams: APIQueryParamsType<{ name: string, mainCategories: string[], locations: string[], engagingOrganisations: string[], supportStatuses: string[], assignedToMe: boolean, suggestedOnly: boolean }>
-  ): Observable<getAdvancedInnovationsListEndpointOutDTO> {
-
-    const { filters, ...qParams } = queryParams;
-
-    const qp = {
-      ...qParams,
-      name: filters.name || undefined,
-      cat: filters.mainCategories || undefined,
-      loc: filters.locations || undefined,
-      orgs: filters.engagingOrganisations || undefined,
-      status: filters.supportStatuses || undefined,
-      assignedToMe: filters.assignedToMe ? 'true' : 'false',
-      suggestedOnly: filters.suggestedOnly ? 'true' : 'false'
-    };
-
-    const url = new UrlModel(this.API_URL).addPath('/accessors/:userId/innovations/advanced').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);
-    return this.http.get<getAdvancedInnovationsListEndpointInDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => ({
-        count: response.count,
-        data: response.data.map(item => ({
-          id: item.id,
-          name: item.name,
-          mainCategory: item.otherMainCategoryDescription || mainCategoryItems.find(i => i.value === item.mainCategory)?.label || '',
-          countryName: `${item.countryName}${item.postcode ? ', ' + item.postcode : ''}`,
-          submittedAt: item.submittedAt,
-          supportStatus: item.supportStatus || 'UNASSIGNED'
-        }))
-      }))
-    );
-
-  }
 
   getInnovationInfo(innovationId: string): Observable<getInnovationInfoEndpointDTO> {
 

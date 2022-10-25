@@ -7,9 +7,61 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
-import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
-import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
+import { InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
+
+
+export enum AssessmentSupportFilterEnum {
+  UNASSIGNED = 'UNASSIGNED',
+  ENGAGING = 'ENGAGING',
+  NOT_ENGAGING = 'NOT_ENGAGING'
+}
+
+export type InnovationsListFiltersType = {
+  name?: null | string,
+  mainCategories?: string[],
+  locations?: string[],
+  status?: InnovationStatusEnum[],
+  assessmentSupportStatus?: AssessmentSupportFilterEnum,
+  supportStatuses?: InnovationSupportStatusEnum[],
+  engagingOrganisations?: string[],
+  assignedToMe?: boolean,
+  suggestedOnly?: boolean,
+  fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications')[]
+}
+
+export type InnovationsListDTO = {
+  count: number,
+  data: {
+    id: string,
+    name: string,
+    description: null | string,
+    status: InnovationStatusEnum,
+    submittedAt: null | DateISOType,
+    countryName: null | string,
+    postCode: null | string,
+    mainCategory: null | string,
+    otherMainCategoryDescription: null | string,
+    isAssessmentOverdue?: boolean,
+    assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { name: string } },
+    supports?: {
+      id: string,
+      status: InnovationSupportStatusEnum,
+      updatedAt: DateISOType,
+      organisation: {
+        id: string, name: string, acronym: null | string,
+        unit: {
+          id: string, name: string, acronym: string,
+          // Users only exists while a support is ENGAGING.
+          users?: { name: string, role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum }[]
+        }
+      }
+    }[],
+    notifications?: number
+  }[]
+};
 
 
 export type getInnovationInfoEndpointDTO = {
@@ -139,10 +191,55 @@ export class InnovationsService extends CoreService {
 
   constructor() { super(); }
 
-  getInnovationsList(): Observable<{ id: string, name: string, description: string }[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() });
-    return this.http.get<{ id: string, name: string, description: string }[]>(url.buildUrl()).pipe(take(1), map(response => response));
+  getInnovationsList(queryParams?: APIQueryParamsType<InnovationsListFiltersType>): Observable<InnovationsListDTO> {
+
+    if (!queryParams) {
+      queryParams = { take: 100, skip: 0, order: { name: 'ASC' }, filters: {} };
+    }
+
+    const requestUserType = this.stores.authentication.getUserType();
+    const { filters, ...qParams } = queryParams;
+
+    const qp = {
+      ...qParams,
+      ...(filters.name ? { name: filters.name } : {}),
+      ...(filters.mainCategories ? { mainCategories: filters.mainCategories } : {}),
+      ...(filters.locations ? { locations: filters.locations } : {}),
+      ...(filters.status ? { status: filters.status } : {}),
+      ...(filters.assessmentSupportStatus ? { assessmentSupportStatus: filters.assessmentSupportStatus } : {}),
+      ...(filters.supportStatuses ? { supportStatuses: filters.supportStatuses } : {}),
+      ...(filters.engagingOrganisations ? { engagingOrganisations: filters.engagingOrganisations } : {}),
+      ...(filters.assignedToMe !== undefined ? { assignedToMe: filters.assignedToMe } : {}),
+      ...(filters.suggestedOnly != undefined ? { suggestedOnly: filters.suggestedOnly } : {}),
+      fields: [] as InnovationsListFiltersType['fields']
+    };
+
+    switch (requestUserType) {
+      case UserTypeEnum.ASSESSMENT:
+        qp.fields = ['isAssessmentOverdue', 'assessment', 'supports'];
+        break;
+      case UserTypeEnum.ACCESSOR:
+        qp.status = [InnovationStatusEnum.IN_PROGRESS];
+        qp.fields = ['assessment', 'supports', 'notifications'];
+        break;
+
+      default:
+        break;
+    }
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1').setQueryParams(qp);
+    return this.http.get<InnovationsListDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => ({
+        count: response.count,
+        data: response.data.map(item => ({
+          ...item,
+          mainCategory: item.otherMainCategoryDescription || mainCategoryItems.find(i => i.value === item.mainCategory)?.label || '',
+        }))
+      }))
+
+    );
 
   }
 

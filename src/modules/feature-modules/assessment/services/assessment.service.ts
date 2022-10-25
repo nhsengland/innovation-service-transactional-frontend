@@ -3,13 +3,10 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { APIQueryParamsType, MappedObjectType } from '@app/base/types';
+import { MappedObjectType } from '@app/base/types';
 import { UrlModel } from '@app/base/models';
-import { DatesHelper } from '@app/base/helpers';
 
 import { InnovationStatusEnum, InnovationSupportStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
-
-import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 
 export enum SupportLogType {
@@ -17,35 +14,6 @@ export enum SupportLogType {
   STATUS_UPDATE = 'STATUS_UPDATE'
 }
 
-export type getInnovationsListEndpointInDTO = {
-  count: number;
-  overdue: number;
-  data: {
-    id: string;
-    name: string;
-    countryName: string;
-    postCode: string;
-    mainCategory: string;
-    otherMainCategoryDescription: string;
-    submittedAt: string; // "2021-04-16T09:23:49.396Z",
-    assessment: {
-      id: string,
-      createdAt: string; // "2021-04-16T09:23:49.396Z",
-      assignTo: { name: string };
-      finishedAt: string; // "2021-04-16T09:23:49.396Z",
-    };
-    organisations: string[];
-    notifications: {
-      count: number;
-      isNew: boolean;
-    };
-  }[];
-};
-export type getInnovationsListEndpointOutDTO = {
-  count: number;
-  overdue: number;
-  data: (Omit<getInnovationsListEndpointInDTO['data'][0], 'otherMainCategoryDescription'> & { isOverdue: boolean })[]
-};
 
 export type getInnovationInfoEndpointDTO = {
   summary: {
@@ -109,46 +77,21 @@ export type getInnovationSupportsDTO = {
   accessors?: { id: string, name: string }[];
   notifications?: { [key: string]: number };
 };
+
+
 @Injectable()
 export class AssessmentService extends CoreService {
 
   constructor() { super(); }
 
-  getInnovationsList(queryParams: APIQueryParamsType): Observable<getInnovationsListEndpointOutDTO> {
 
-    const { filters, ...qParams } = queryParams;
+  getOverdueAssessments(status: InnovationStatusEnum[]): Observable<{ overdue: number }> {
 
-    const qp = {
-      ...qParams,
-      status: filters.status || [],
-      supportFilter: filters.supportFilter
-    };
+    // Overdue assessments only exists on these 2 statuses. If more is passed, is removed.
+    status = status.filter(item => [InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT, InnovationStatusEnum.NEEDS_ASSESSMENT].includes(item));
 
-    const url = new UrlModel(this.API_URL).addPath('/assessments/:userId/innovations').setPathParams({ userId: this.stores.authentication.getUserId() }).setQueryParams(qp);
-    return this.http.get<getInnovationsListEndpointInDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => ({
-        count: response.count,
-        overdue: response.overdue || 0,
-        data: response.data.map(item => ({
-          id: item.id,
-          name: item.name,
-          countryName: item.countryName,
-          postCode: item.postCode,
-          mainCategory: item.otherMainCategoryDescription || mainCategoryItems.find(i => i.value === item.mainCategory)?.label || '',
-          submittedAt: item.submittedAt,
-          assessment: {
-            id: item.assessment.id,
-            createdAt: item.assessment.createdAt,
-            assignTo: item.assessment.assignTo,
-            finishedAt: item.assessment.finishedAt,
-          },
-          organisations: item.organisations,
-          isOverdue: DatesHelper.dateDiff(item.submittedAt, Date()) >= 7,
-          notifications: item.notifications
-        }))
-      }))
-    );
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/overdue-assessments').setQueryParams({ status });
+    return this.http.get<{ overdue: number }>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 

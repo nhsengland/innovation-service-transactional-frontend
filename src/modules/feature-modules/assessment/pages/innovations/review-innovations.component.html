@@ -18,7 +18,7 @@
         <ng-container *ngIf="innovationsList.getTotalRowsNumber() > 0">
           <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
         </ng-container>
-        <p *ngIf="currentTab.key !== 'IN_PROGRESS' && currentTab.overdueInnovations > 0" class="nhsuk-body-s nhsuk-u-margin-bottom-2 d-flex align-items-center">
+        <p *ngIf="!isCurrentTabStatusInProgress() && currentTab.overdueInnovations > 0" class="nhsuk-body-s nhsuk-u-margin-bottom-2 d-flex align-items-center">
           <span class="dot-error nhsuk-u-margin-right-2"></span>
           <span>{{ currentTab.overdueInnovations }} are overdue</span>
         </p>
@@ -27,9 +27,9 @@
         </ng-container>
       </ng-container>
 
-      <ng-container *ngIf="currentTab.key === 'IN_PROGRESS'">
-        <form *ngIf="currentTab.key === 'IN_PROGRESS'" [formGroup]="form" class="nhsuk-u-margin-bottom-1">
-          <theme-form-radio-group controlName="supportFilter" label="Organisations support status" [items]="formFilterItems" size="small" [pageUniqueField]="false"></theme-form-radio-group>
+      <ng-container *ngIf="isCurrentTabStatusInProgress()">
+        <form [formGroup]="form" class="nhsuk-u-margin-bottom-1">
+          <theme-form-radio-group controlName="assessmentSupportStatus" label="Organisations support status" [items]="formFilterItems" size="small" [pageUniqueField]="false"></theme-form-radio-group>
         </form>
         <hr class="nhsuk-section-break nhsuk-section-break--visible" />
       </ng-container>
@@ -56,20 +56,20 @@
                 <div class="d-flex">
                   <div class="nhsuk-u-padding-right-2">
                     <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }}</span>
-                    <a *ngIf="currentTab.status !== 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation"> {{ item.name }} </a>
-                    <a *ngIf="currentTab.status === 'IN_PROGRESS'" routerLink="/assessment/innovations/{{ item.id }}/assessments/{{item.assessment.id}}" attr.aria-label="View {{ item.name }} innovation assessment details">
+                    <a *ngIf="!isCurrentTabStatusInProgress()" routerLink="/assessment/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation"> {{ item.name }} </a>
+                    <a *ngIf="isCurrentTabStatusInProgress()" routerLink="/assessment/innovations/{{ item.id }}/assessments/{{item.assessment?.id}}" attr.aria-label="View {{ item.name }} innovation assessment details">
                       {{ item.name }}
                     </a>
                   </div>
-                  <theme-notification-tag *ngIf="item.notifications.isNew !== true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" [label]="item.notifications.count"></theme-notification-tag>
-                  <theme-notification-tag *ngIf="item.notifications.isNew === true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" label="new"></theme-notification-tag>
+                  <!-- <theme-notification-tag *ngIf="item.notifications.isNew !== true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" [label]="item.notifications.count"></theme-notification-tag> -->
+                  <!-- <theme-notification-tag *ngIf="item.notifications.isNew === true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" label="new"></theme-notification-tag> -->
                 </div>
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('submittedAt')" class="nhsuk-table__cell d-flex align-items-center">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('submittedAt') }}</span>
                 <span>{{ item.submittedAt | date: ('app.date_formats.long_date' | translate) }}</span>
-                <span *ngIf="item.isOverdue" class="dot-error nhsuk-u-margin-left-2"></span>
+                <span *ngIf="item.isAssessmentOverdue" class="dot-error nhsuk-u-margin-left-2"></span>
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('location')" class="nhsuk-table__cell">
@@ -77,22 +77,22 @@
                 {{ item.countryName }} {{ item.postCode ? ', ' + item.postCode : ''}}
               </td>
 
-              <td *ngIf="innovationsList.getColumnLabel('assessmentStartDate')" class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('assessmentStartDate') }}</span>
-                {{ item.assessment.createdAt | date: ('app.date_formats.long_date' | translate) }}
+              <td *ngIf="innovationsList.getColumnLabel('assessmentStartedAt')" class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('assessmentStartedAt') }}</span>
+                {{ item.assessment?.createdAt | date: ('app.date_formats.long_date' | translate) }}
               </td>
               <td *ngIf="innovationsList.getColumnLabel('assessedBy')" class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('assessedBy') }}</span>
-                {{ item.assessment.assignTo.name }}
+                {{ item.assessment?.assignedTo?.name }}
               </td>
 
-              <td *ngIf="innovationsList.getColumnLabel('assessmentDate')" class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('assessmentDate') }}</span>
-                {{ item.assessment.finishedAt | date: ('app.date_formats.long_date' | translate) }}
+              <td *ngIf="innovationsList.getColumnLabel('assessmentFinishedAt')" class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('assessmentFinishedAt') }}</span>
+                {{ item.assessment?.finishedAt | date: ('app.date_formats.long_date' | translate) }}
               </td>
               <td *ngIf="innovationsList.getColumnLabel('engagingEntities')" class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('engagingEntities') }}</span>
-                {{ item.organisations.join(', ') }}
+                {{ item.supportingOrganisations }}
               </td>
 
               <td class="nhsuk-table__cell text-align-right">

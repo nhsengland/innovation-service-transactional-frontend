@@ -7,16 +7,13 @@ import { Injector } from '@angular/core';
 
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
-import { TableModel } from '@app/base/models';
 
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import {
   AssessmentService,
-  getInnovationInfoEndpointDTO, getInnovationsListEndpointInDTO,
-  getInnovationsListEndpointOutDTO, getInnovationSupportsDTO, getSupportLogInDTO, getSupportLogOutDTO, SupportLogType
+  getInnovationInfoEndpointDTO, getInnovationSupportsDTO, getSupportLogInDTO, getSupportLogOutDTO, SupportLogType
 } from './assessment.service';
 
 
@@ -60,89 +57,6 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
   });
 
 
-  it('should run getInnovationsList() and return success with NO filters', () => {
-
-    const responseMock: getInnovationsListEndpointInDTO = { count: 0, overdue: 0, data: [] };
-    const expected: getInnovationsListEndpointInDTO = { count: 0, overdue: 0, data: [] };
-
-    const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({});
-
-    let response: any = null;
-    service.getInnovationsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error});
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations?take=20&skip=0&status=`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-  });
-
-  it('should run getInnovationsList() and return success', () => {
-
-    const responseMock: getInnovationsListEndpointInDTO = {
-      count: 2,
-      overdue: 1,
-      data: [
-        {
-          id: '01', name: 'Innovation 01', countryName: 'England', postCode: 'SW01', mainCategory: 'MEDICAL_DEVICE', otherMainCategoryDescription: '', submittedAt: '2020-01-01T00:00:00.000Z',
-          assessment: { id: 'Assessment01', createdAt: '2021-04-16T09:23:49.396Z', assignTo: { name: 'User Name' }, finishedAt: '2021-04-16T09:23:49.396' },
-          organisations: ['Org. 01'],
-          notifications: { count: 0, isNew: false }
-        },
-        {
-          id: '02', name: 'Innovation 02', countryName: 'England', postCode: 'SW01', mainCategory: 'OTHER', otherMainCategoryDescription: 'Other category', submittedAt: '2020-01-01T00:00:00.000Z',
-          assessment: { id: 'Assessment02', createdAt: '2021-04-16T09:23:49.396Z', assignTo: { name: 'User Name' }, finishedAt: '2021-04-16T09:23:49.396' },
-          organisations: ['Org. 02'],
-          notifications: { count: 0, isNew: false }
-        },
-        {
-          id: '03', name: 'Innovation 03', countryName: 'England', postCode: 'SW01', mainCategory: 'INVALID_CATEGORY', otherMainCategoryDescription: '', submittedAt: '2020-01-01T00:00:00.000Z',
-          assessment: { id: 'Assessment03', createdAt: '2021-04-16T09:23:49.396Z', assignTo: { name: 'User Name' }, finishedAt: '2021-04-16T09:23:49.396' },
-          organisations: ['Org. 03'],
-          notifications: { count: 0, isNew: false }
-        }
-      ]
-    };
-
-    const expected: getInnovationsListEndpointOutDTO = {
-      count: 2,
-      overdue: 1,
-      data: [
-        {
-          id: '01', name: 'Innovation 01', countryName: 'England', postCode: 'SW01', mainCategory: 'Medical device', submittedAt: '2020-01-01T00:00:00.000Z',
-          assessment: { id: 'Assessment01', createdAt: '2021-04-16T09:23:49.396Z', assignTo: { name: 'User Name' }, finishedAt: '2021-04-16T09:23:49.396' },
-          organisations: ['Org. 01'],
-          notifications: { count: 0, isNew: false },
-          isOverdue: true
-        },
-        {
-          id: '02', name: 'Innovation 02', countryName: 'England', postCode: 'SW01', mainCategory: 'Other category', submittedAt: '2020-01-01T00:00:00.000Z',
-          assessment: { id: 'Assessment02', createdAt: '2021-04-16T09:23:49.396Z', assignTo: { name: 'User Name' }, finishedAt: '2021-04-16T09:23:49.396' },
-          organisations: ['Org. 02'],
-          notifications: { count: 0, isNew: false },
-          isOverdue: true
-        },
-        {
-          id: '03', name: 'Innovation 03', countryName: 'England', postCode: 'SW01', mainCategory: '', submittedAt: '2020-01-01T00:00:00.000Z',
-          assessment: { id: 'Assessment03', createdAt: '2021-04-16T09:23:49.396Z', assignTo: { name: 'User Name' }, finishedAt: '2021-04-16T09:23:49.396' },
-          organisations: ['Org. 03'],
-          notifications: { count: 0, isNew: false },
-          isOverdue: true
-        }
-      ]
-    };
-
-    const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({ status: ['ASSESSMENT'] });
-
-    let response: any = null;
-    service.getInnovationsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error});
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations?take=20&skip=0&status=ASSESSMENT`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-  });
 
   it('should run getInnovationInfo() and return success', () => {
 
@@ -150,13 +64,13 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
       summary: { id: '01', name: 'Innovation 01', status: InnovationStatusEnum.CREATED, description: 'A description', company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: '' },
       contact: { name: 'A name', email: 'email', phone: '' },
       assessment: { id: '01', assignToName: 'Name' },
-      lockedInnovatorValidation: { displayIsInnovatorLocked : false, innovatorName : 'test'}
+      lockedInnovatorValidation: { displayIsInnovatorLocked: false, innovatorName: 'test' }
     };
 
     const expected = responseMock;
 
     let response: any = null;
-    service.getInnovationInfo('inno01').subscribe({ next: success => response = success, error: error => response = error});
+    service.getInnovationInfo('inno01').subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01`);
     httpRequest.flush(responseMock);
@@ -190,7 +104,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
 
     let response: any = null;
-    service.getSupportLog('Inno01').subscribe({ next: success => response = success, error: error => response = error});
+    service.getSupportLog('Inno01').subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
     httpRequest.flush(responseMock);
@@ -229,7 +143,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
 
     let response: any = null;
-    service.getSupportLog('Inno01').subscribe({ next: success => response = success, error: error => response = error});
+    service.getSupportLog('Inno01').subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
     httpRequest.flush(responseMock);
@@ -262,7 +176,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
 
 
     let response: any = null;
-    service.getSupportLog('Inno01').subscribe({ next: success => response = success, error: error => response = error});
+    service.getSupportLog('Inno01').subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/Inno01/support-logs`);
     httpRequest.flush(responseMock);
@@ -277,7 +191,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.createInnovationNeedsAssessment('inno01', { some: 'data' }).subscribe({ next: success => response = success, error: error => response = error});
+    service.createInnovationNeedsAssessment('inno01', { some: 'data' }).subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/inno01/assessments`);
     httpRequest.flush(responseMock);
@@ -292,7 +206,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.updateInnovationNeedsAssessment('inno01', 'assess01', true, { some: 'data' }).subscribe({ next: success => response = success, error: error => response = error});
+    service.updateInnovationNeedsAssessment('inno01', 'assess01', true, { some: 'data' }).subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/inno01/assessments/assess01`);
     httpRequest.flush(responseMock);
@@ -307,7 +221,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.updateInnovationNeedsAssessment('inno01', 'assess01', false, { some: 'data' }).subscribe({ next: success => response = success, error: error => response = error});
+    service.updateInnovationNeedsAssessment('inno01', 'assess01', false, { some: 'data' }).subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/inno01/assessments/assess01`);
     httpRequest.flush(responseMock);
@@ -329,7 +243,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.getInnovationSupports('inno01', false).subscribe({ next: success => response = success, error: error => response = error});
+    service.getInnovationSupports('inno01', false).subscribe({ next: success => response = success, error: error => response = error });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/supports?full=false`);
     httpRequest.flush(responseMock);
