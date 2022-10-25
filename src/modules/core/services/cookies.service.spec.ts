@@ -89,12 +89,6 @@ describe('Core/Services/CookiesService running CLIENT side', () => {
     expect(service.getConsentCookie()).toEqual({});
   });
 
-  it('should run setConsentCookie(true) and apply analytics scripts', () => {
-    cookieService.get = () => '{ "consented": true, "necessary": true, "analytics": true }';
-    service.setConsentCookie(true);
-    expect(document.getElementById('hj-analytics')).toBeTruthy();
-  });
-
   it('should run setConsentCookie(false) and remove analytics scripts', () => {
 
     cookieService.get = () => '{ "consented": true, "necessary": true, "analytics": false }';
