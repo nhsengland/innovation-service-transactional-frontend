@@ -34,12 +34,6 @@ describe('Core/Services/CookiesService running SERVER side', () => {
   });
 
 
-  it('should run setAnalyticsScripts() and do nothing', () => {
-    cookieService.get = () => '{ "consented": true, "necessary": true, "analytics": true }';
-    service.setAnalyticsScripts();
-    expect(document.getElementById('hj-analytics')).toBeFalsy();
-  });
-
   it('should run removeAnalyticsScripts() and do nothing', () => {
     cookieService.get = () => '{ "consented": true, "necessary": true, "analytics": true }';
     service.removeAnalyticsScripts();

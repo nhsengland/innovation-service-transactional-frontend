@@ -46,8 +46,7 @@ export class CookiesService {
 
     this.coockieService.set('cookies-consent', JSON.stringify({ consented: true, necessary: true, analytics }), this.cookiesOptions);
 
-    if (analytics) { this.setAnalyticsScripts(); }
-    else {
+    if (!analytics) { 
       this.deleteAnalyticsCookies();
       this.removeAnalyticsScripts();
     }
@@ -64,19 +63,6 @@ export class CookiesService {
 
   }
 
-
-  setAnalyticsScripts(): void { // Add analytics scripts to header.
-
-    if (isPlatformBrowser(this.platformId) && this.getConsentCookie().analytics) {
-      const node = document.createElement('script');
-      node.id = 'hj-analytics';
-      node.src = `${this.environment.APP_ASSETS_URL}/js/analytics.js`;
-      node.type = 'text/javascript';
-      node.async = true;
-      document.getElementsByTagName('head')[0].appendChild(node);
-    }
-
-  }
 
   removeAnalyticsScripts(): void { // Add analytics scripts to header.
 

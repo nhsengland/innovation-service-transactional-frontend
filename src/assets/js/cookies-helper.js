@@ -37,6 +37,7 @@ function getConsentCookie() { // cookies-consent type = { consented: boolean, ne
 }
 
 function setConsentCookie(agreed) {
+  console.log('cookie');
   setCookie('cookies-consent', JSON.stringify({ consented: true, necessary: true, analytics: agreed }), 365);
 }
 
