@@ -133,6 +133,30 @@ export type GetThreadMessagesListOutDTO = {
     })[];
 };
 
+export type CreateThreadDTO = {
+  thread: {
+    id: string;
+    subject: string;
+    createdBy: {
+      id: string;
+    };
+    createdAt: DateISOType;
+  }
+}
+
+export type CreateThreadMessageDTO = {
+  threadMessage: {
+    createdBy: {
+      id: string;
+      identityId: string;
+    };
+    id: string;
+    message: string;
+    isEditable: boolean;
+    createdAt: DateISOType;
+  };
+}
+
 
 @Injectable()
 export class InnovationsService extends CoreService {
@@ -177,7 +201,7 @@ export class InnovationsService extends CoreService {
 
   // Needs Assessment
   getInnovationNeedsAssessment(innovationId: string, assessmentId: string): Observable<GetInnovationNeedsAssessmentEndpointOutDTO> {
-    
+
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/assessments/:assessmentId').setPathParams({ innovationId, assessmentId });
     return this.http.get<GetInnovationNeedsAssessmentEndpointInDTO>(url.buildUrl()).pipe(
       take(1),
@@ -219,7 +243,7 @@ export class InnovationsService extends CoreService {
 
     const { filters, ...qp } = queryParams;
 
-    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads').setPathParams({ innovationId }).setQueryParams(qp);
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads').setPathParams({ innovationId }).setQueryParams(qp);
     return this.http.get<GetThreadsListDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         count: response.count,
@@ -231,7 +255,7 @@ export class InnovationsService extends CoreService {
 
   getThreadInfo(innovationId: string, threadId: string): Observable<GetThreadInfoDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId').setPathParams({ innovationId, threadId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId').setPathParams({ innovationId, threadId });
     return this.http.get<GetThreadInfoDTO>(url.buildUrl()).pipe(take(1),
       map(response => response)
     );
@@ -240,7 +264,7 @@ export class InnovationsService extends CoreService {
 
   getThreadMessageInfo(innovationId: string, threadId: string, messageId: string): Observable<GetThreadMessageInfoDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId/messages/:messageId').setPathParams({ innovationId, threadId, messageId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/messages/:messageId').setPathParams({ innovationId, threadId, messageId });
 
     return this.http.get<GetThreadMessageInfoDTO>(url.buildUrl()).pipe(take(1),
       map(response => response)
@@ -252,7 +276,7 @@ export class InnovationsService extends CoreService {
 
     const { filters, ...qp } = queryParams;
 
-    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId/messages').setPathParams({ innovationId, threadId }).setQueryParams(qp);
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/messages').setPathParams({ innovationId, threadId }).setQueryParams(qp);
     return this.http.get<GetThreadMessagesListInDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         count: response.count,
@@ -265,23 +289,23 @@ export class InnovationsService extends CoreService {
 
   }
 
-  createThread(innovationId: string, body: { subject: string, message: string }): Observable<{ id: string }> {
+  createThread(innovationId: string, body: { subject: string, message: string }): Observable<CreateThreadDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads').setPathParams({ innovationId });
-    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads').setPathParams({ innovationId });
+    return this.http.post<CreateThreadDTO>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
 
-  createThreadMessage(innovationId: string, threadId: string, body: { message: string }): Observable<{ id: string }> {
+  createThreadMessage(innovationId: string, threadId: string, body: { message: string }): Observable<CreateThreadMessageDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId/messages').setPathParams({ innovationId, threadId });
-    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/messages').setPathParams({ innovationId, threadId });
+    return this.http.post<CreateThreadMessageDTO>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
 
   editThreadMessage(innovationId: string, threadId: string, messageId: string, body: { message: string }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovations/:innovationId/threads/:threadId/messages/:messageId').setPathParams({ innovationId, threadId, messageId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/messages/:messageId').setPathParams({ innovationId, threadId, messageId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
