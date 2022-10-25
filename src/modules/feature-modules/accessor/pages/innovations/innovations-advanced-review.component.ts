@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormControl } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { FormArray, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
-import { AccessorService, getAdvancedInnovationsListEndpointOutDTO } from '../../services/accessor.service';
+import { InnovationsListDTO, InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
+
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 type FilterKeysType = 'mainCategories' | 'locations' | 'engagingOrganisations' | 'supportStatuses';
@@ -23,20 +24,19 @@ type FilterKeysType = 'mainCategories' | 'locations' | 'engagingOrganisations' |
 })
 export class InnovationsAdvancedReviewComponent extends CoreComponent implements OnInit {
 
-  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
-
   innovationsList = new TableModel<
-    getAdvancedInnovationsListEndpointOutDTO['data'][0],
-    { name: string, mainCategories: string[], locations: string[], engagingOrganisations: string[], supportStatuses: string[], assignedToMe: boolean, suggestedOnly: boolean }>({ pageSize: 20 });
+    InnovationsListDTO['data'][0] & { supportInfo: { status: null | InnovationSupportStatusEnum } },
+    InnovationsListFiltersType
+  >({ pageSize: 20 });
 
   form = new FormGroup({
-    search: new UntypedFormControl(),
-    mainCategories: new UntypedFormArray([]),
-    locations: new UntypedFormArray([]),
-    engagingOrganisations: new UntypedFormArray([]),
-    supportStatuses: new UntypedFormArray([]),
-    assignedToMe: new UntypedFormControl(false),
-    suggestedOnly: new UntypedFormControl(true)
+    search: new FormControl(''),
+    mainCategories: new FormArray([]),
+    locations: new FormArray([]),
+    supportStatuses: new FormArray([]),
+    engagingOrganisations: new FormArray([]),
+    assignedToMe: new FormControl(false),
+    suggestedOnly: new FormControl(true)
   }, { updateOn: 'change' });
 
   anyFilterSelected = false;
@@ -61,7 +61,7 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
 
 
   constructor(
-    private accessorService: AccessorService,
+    private innovationsService: InnovationsService,
     private organisationsService: OrganisationsService
   ) {
 
@@ -86,14 +86,15 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
       this.datasets.supportStatuses = Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({ label: item.label, value: key }));
     }
 
-    this.organisationsService.getAccessorsOrganisations().subscribe(
-      response => {
+    this.organisationsService.getAccessorsOrganisations().subscribe({
+      next: response => {
         const myOrganisation = this.stores.authentication.getUserInfo().organisations[0].id;
         this.datasets.engagingOrganisations = response.filter(i => i.id !== myOrganisation).map(i => ({ label: i.name, value: i.id }));
       },
-      error => {
+      error: error => {
         this.logger.error(error);
-      });
+      }
+    });
 
     this.subscriptions.push(
       this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange())
@@ -108,8 +109,17 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
 
     this.setPageStatus('LOADING');
 
-    this.accessorService.getAdvancedInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(response => {
-      this.innovationsList.setData(response.data, response.count);
+    this.innovationsService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(response => {
+      this.innovationsList.setData(
+        response.data.map(item => ({
+          ...item,
+          supportInfo: {
+            status: (item.supports || []).find(s =>
+              s.organisation.unit.id === this.stores.authentication.getUserInfo().organisations[0].organisationUnits[0].id
+            )?.status ?? InnovationSupportStatusEnum.UNASSIGNED
+          }
+        })),
+        response.count);
       this.setPageStatus('READY');
     });
 
@@ -129,13 +139,13 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
     this.anyFilterSelected = this.filters.filter(i => i.selected.length > 0).length > 0 || !!this.form.get('assignedToMe')?.value || !!this.form.get('suggestedOnly')?.value;
 
     this.innovationsList.setFilters({
-      name: this.form.get('search')!.value,
-      mainCategories: this.form.get('mainCategories')!.value,
-      locations: this.form.get('locations')!.value,
-      engagingOrganisations: this.form.get('engagingOrganisations')!.value,
-      supportStatuses: this.form.get('supportStatuses')!.value,
-      assignedToMe: this.form.get('assignedToMe')!.value,
-      suggestedOnly: this.form.get('suggestedOnly')!.value,
+      name: this.form.get('search')?.value,
+      mainCategories: this.form.get('mainCategories')?.value,
+      locations: this.form.get('locations')?.value,
+      engagingOrganisations: this.form.get('engagingOrganisations')?.value,
+      supportStatuses: this.form.get('supportStatuses')?.value,
+      assignedToMe: this.form.get('assignedToMe')?.value ?? false,
+      suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
     });
 
     this.getInnovationsList();

@@ -26,13 +26,9 @@ export class GlobalErrorHandler implements ErrorHandler {
     } else { // Client Error.
 
       console.error('CLIENT ERROR', error);
-      this.contextStore.setPageAlert({ type: 'ERROR', title: 'There is a problem', message: 'An error has occured. Please, try again or contact us for further help', setFocus: true });
+      // this.contextStore.setPageAlert({ type: 'ERROR', title: 'There is a problem', message: 'An error has occured. Please, try again or contact us for further help', setFocus: true });
 
     }
-
-    // Always log errors
-    // logger.logError(message, stackTrace);
-    // console.error('ERROR DETAILS', error);
 
   }
 

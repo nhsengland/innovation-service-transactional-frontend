@@ -19,7 +19,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   user: {
     displayName: string,
-    innovations: { id: string, name: string, description: string }[],
+    innovations: { id: string, name: string, description: null | string }[],
     passwordResetAt: string
   };
 
@@ -54,7 +54,11 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     ]).subscribe(([innovationsList, innovationsTransfers]) => {
 
       if (innovationsList) {
-        this.user.innovations = innovationsList;
+        this.user.innovations = innovationsList.data.map(item => ({
+          id: item.id,
+          name: item.name,
+          description: item.description
+        }))
       } else {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
@@ -98,7 +102,11 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     ).subscribe(([_authentication, innovationsTransfers, innovationsList]) => {
 
       this.innovationTransfers = innovationsTransfers;
-      this.user.innovations = innovationsList;
+      this.user.innovations = innovationsList.data.map(item => ({
+        id: item.id,
+        name: item.name,
+        description: item.description
+      }));
 
       this.setAlertSuccess(accept ? `You have successfully accepted ownership` : `You have successfully rejected ownership`);
 
