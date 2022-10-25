@@ -7,7 +7,6 @@ import { filter } from 'rxjs/operators';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { CookiesService } from '@modules/core/services/cookies.service';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
-import { UserTypeEnum } from '@app/base/enums';
 
 
 export type HeaderMenuBarItemType = {
@@ -81,9 +80,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       right: this.rightMenuBarItems,
       isChildrenOpened: false
     };
-
-
-    this.coockiesService.setAnalyticsScripts();
 
   }
 
