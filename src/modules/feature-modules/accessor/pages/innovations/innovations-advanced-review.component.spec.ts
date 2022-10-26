@@ -110,45 +110,6 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   });
 
-  it('should run getInnovationsList() with success', () => {
-
-    const responseMock = {
-      count: 100,
-      data: [{
-        id: 'id01',
-        name: 'Innovation Name',
-        mainCategory: '',
-        countryName: '',
-        submittedAt: '2020-01-01T00:00:00.000Z',
-        supportStatus: 'UNASSIGNED' as keyof typeof INNOVATION_SUPPORT_STATUS
-      }]
-    };
-    accessorService.getAdvancedInnovationsList = () => of(responseMock);
-
-    const expected = responseMock.data;
-
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
-    component = fixture.componentInstance;
-
-    component.getInnovationsList();
-    fixture.detectChanges();
-    expect(component.innovationsList.getRecords()).toEqual(expected);
-
-  });
-
-  it('should run getInnovationsList() with error', () => {
-
-    accessorService.getAdvancedInnovationsList = () => throwError(false);
-
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
-    component = fixture.componentInstance;
-
-    component.getInnovationsList();
-    fixture.detectChanges();
-    expect(component.innovationsList.getRecords()).toEqual([]);
-
-  });
-
   it('should run onFormChange()', fakeAsync(() => {
 
     fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
@@ -171,21 +132,6 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
     });
 
   }));
-
-  it('should run onTableOrder()', () => {
-
-    const dataMock = { count: 0, data: [] };
-
-    accessorService.getAdvancedInnovationsList = () => of(dataMock as any);
-
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    component.onTableOrder('name');
-    expect(component.innovationsList.orderBy).toEqual('name');
-
-  });
 
   it('should run onOpenCloseFilter() and do nothing with an invalid key', () => {
 

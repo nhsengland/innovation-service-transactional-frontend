@@ -6,8 +6,10 @@
       "name": "ng serve",
       "type": "pwa-chrome",
       "request": "launch",
-      "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200/"
+      "preLaunchTask": "npm: start:dev:ssr",
+      "postDebugTask": "terminate",
+      "url": "http://localhost:4200/",
+      "timeout": 30000
     },
     {
       "name": "ng test",

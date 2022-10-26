@@ -57,7 +57,7 @@ export class PageAccountInnovationsArchivalComponent extends CoreComponent imple
       this.innovatorService.getInnovationTransfers()
     ]).subscribe(([innovationsList, innovationTransfers]) => {
 
-      this.formInnovationsItems = innovationsList
+      this.formInnovationsItems = innovationsList.data
         .filter(i => !innovationTransfers.map(it => it.innovation.id).includes(i.id))
         .map(item => ({ value: item.id, label: item.name }));
 

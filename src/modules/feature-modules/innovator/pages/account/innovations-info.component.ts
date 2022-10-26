@@ -45,7 +45,7 @@ export class PageAccountInnovationsInfoComponent extends CoreComponent implement
 
       this.innovationTransfers = innovationTransfers;
 
-      this.haveAnyActiveInnovation = innovationsList.filter(i => !this.innovationTransfers.map(it => it.innovation.id).includes(i.id))
+      this.haveAnyActiveInnovation = innovationsList.data.filter(i => !this.innovationTransfers.map(it => it.innovation.id).includes(i.id))
         .length
         > 0;
 

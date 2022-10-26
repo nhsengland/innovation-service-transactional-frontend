@@ -69,22 +69,25 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     forkJoin([
       this.innovationsService.getThreadInfo(this.innovation.id, this.threadId),
       this.innovationsService.getThreadMessagesList(this.innovation.id, this.threadId, this.messagesList.getAPIQueryParams())
-    ]).subscribe(([threadInfo, threadMessages]) => {
+    ]).subscribe({
+      next: ([threadInfo, threadMessages]) => {
 
-      this.threadInfo = threadInfo;
-      this.messagesList.setData(threadMessages.messages, threadMessages.count);
+        this.threadInfo = threadInfo;
+        this.messagesList.setData(threadMessages.messages, threadMessages.count);
 
-      // Throw notification read dismiss.
-      this.stores.context.dismissNotification(NotificationContextTypeEnum.THREAD, this.threadInfo.id);
+        // Throw notification read dismiss.
+        this.stores.context.dismissNotification(NotificationContextTypeEnum.THREAD, this.threadInfo.id);
 
-      this.setPageStatus('READY');
+        this.setPageStatus('READY');
 
-    },
-      () => {
+      },
+      error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
-      });
-  }
+      }
+    });
+  };
+
 
 
   onTableOrder(column: string): void {
@@ -112,8 +115,8 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     const body = { message: this.form.get('message')?.value };
 
-    this.innovationsService.createThreadMessage(this.innovation.id, this.threadId, body).subscribe(
-      () => {
+    this.innovationsService.createThreadMessage(this.innovation.id, this.threadId, body).subscribe({
+      next: () => {
 
         messageField.setValue('');
         messageField.markAsPristine();
@@ -123,10 +126,11 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         this.getThreadsList();
 
       },
-      () => {
+      error: () => {
         this.setPageStatus('READY');
         this.setAlertUnknownError();
-      });
+      }
+    });
 
   }
 
