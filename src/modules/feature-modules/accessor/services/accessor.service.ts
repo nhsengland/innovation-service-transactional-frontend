@@ -7,7 +7,7 @@ import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
 
 import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
-
+import { getAccessorsSupportsListDTO, getInnovationSupportsDTO } from './accessors.dtos';
 
 export enum SupportLogType {
   ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
@@ -113,23 +113,6 @@ export type getActionsListEndpointInDTO = {
   }[];
 };
 export type getActionsListEndpointOutDTO = { count: number, data: (getActionsListEndpointInDTO['data'][0] & { name: string })[] };
-
-
-export type getInnovationSupportsDTO = {
-  id: string;
-  status: keyof typeof INNOVATION_SUPPORT_STATUS;
-  organisationUnit: {
-    id: string;
-    name: string;
-    organisation: {
-      id: string;
-      name: string;
-      acronym: string;
-    };
-  };
-  accessors?: { id: string, name: string }[];
-  notifications?: { [key: string]: number };
-};
 
 
 export type getSupportLogInDTO = {
@@ -272,10 +255,10 @@ export class AccessorService extends CoreService {
 
   }
 
-  getInnovationSupportInfo(innovationId: string, supportId: string): Observable<{ id: string, status: keyof typeof INNOVATION_SUPPORT_STATUS, accessors: { id: string, name: string }[] }> {
+  getInnovationSupportInfo(innovationId: string, supportId: string): Observable<getAccessorsSupportsListDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
-    return this.http.get<{ id: string, status: keyof typeof INNOVATION_SUPPORT_STATUS, accessors: { id: string, name: string }[] }>(url.buildUrl()).pipe(
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
+    return this.http.get<getAccessorsSupportsListDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );
@@ -293,20 +276,28 @@ export class AccessorService extends CoreService {
 
   }
 
-  getInnovationSupports(innovationId: string, returnAccessorsInfo: boolean): Observable<getInnovationSupportsDTO[]> {
+  getInnovationSupports(innovationId: string, returnAccessorsInfo: boolean): Observable<getInnovationSupportsDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId }).setQueryParams({ full: returnAccessorsInfo });
-    return this.http.get<getInnovationSupportsDTO[]>(url.buildUrl()).pipe(
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId })
+    return this.http.get<getInnovationSupportsDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );
   }
 
-  saveSupportStatus(innovationId: string, body: MappedObjectType, supportId?: string): Observable<{ id: string }> {
+  saveSupportStatus(
+    innovationId: string,
+    body: {
+      status: InnovationSupportStatusEnum;
+      message: string;
+      accessors: { id: string, organisationUnitUserId: string }[];
+    },
+    supportId?: string
+  ): Observable<{ id: string }> {
 
     if (!supportId) {
 
-      const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+      const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
       return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
         take(1),
         map(response => response)
@@ -314,7 +305,7 @@ export class AccessorService extends CoreService {
 
     } else {
 
-      const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/supports/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
+      const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('accessors/:userId/innovations/:innovationId/supports/:supportId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, supportId });
       return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
         take(1),
         map(response => response)

@@ -84,10 +84,10 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
       supportsInfo.filter(s => s.status === 'ENGAGING').forEach(s => {
 
-        (this.form.get('organisationUnits') as FormArray).push(new FormControl(s.organisationUnit.id));
+        (this.form.get('organisationUnits') as FormArray).push(new FormControl(s.organisation.id));
 
         this.groupedItems.forEach(o => {
-          const ou = o.items.find(i => i.value === s.organisationUnit.id);
+          const ou = o.items.find(i => i.value === s.organisation.id);
           if (ou) {
             ou.isEditable = false;
             ou.label += ` (currently engaging)`;
