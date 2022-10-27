@@ -11,7 +11,6 @@ import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 import { CoreModule, AppInjector } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { InnovationsAdvancedReviewComponent } from './innovations-advanced-review.component';
 
@@ -85,9 +84,8 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   it('should have default values', () => {
 
-    organisationsService.getAccessorsOrganisations = () => of([
-      { id: 'orgId01', name: 'Org name 01' },
-      { id: 'org_id', name: 'Org name 02' }
+    organisationsService.getOrganisationsList = () => of([
+      { id: 'orgId01', name: 'Org name 01', acronym: 'OrgAcronym01', organisationUnits: [] }
     ]);
 
     fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
@@ -100,7 +98,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   it('should NOT have default values', () => {
 
-    organisationsService.getAccessorsOrganisations = () => throwError('error');
+    organisationsService.getOrganisationUnitUsersList = () => throwError('error');
 
     fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;

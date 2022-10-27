@@ -5,11 +5,12 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 
 import { InnovationService } from '@modules/stores/innovation/innovation.service';
-import { INNOVATION_SUPPORT_STATUS, OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
+import { OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
 
-import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { NotificationsService } from '@modules/shared/services/notifications.service';
+
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -24,16 +25,16 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
   organisations: {
     info: {
-      id: string;
-      name: string;
-      acronym: string;
-      status?: keyof typeof INNOVATION_SUPPORT_STATUS;
+      id: string,
+      name: string,
+      acronym: string,
+      status?: InnovationSupportStatusEnum,
       organisationUnits: {
-        id: string;
-        name: string;
-        acronym: string;
-        status: keyof typeof INNOVATION_SUPPORT_STATUS;
-      }[];
+        id: string,
+        name: string,
+        acronym: string,
+        status: InnovationSupportStatusEnum
+      }[]
     };
     shared: boolean;
     showHideStatus: 'hidden' | 'opened' | 'closed';
@@ -44,14 +45,13 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
   organisationInfoUrl: string;
 
   organisationSuggestions: OrganisationSuggestionModel | undefined;
-  shares: { id: string, status: string }[];
+  shares: { organisationId: string }[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private innovationsService: InnovationsService,
     private organisationsService: OrganisationsService,
-    private innovatorService: InnovatorService,
-    private innovationService: InnovationService,
-    private notificationsService: NotificationsService
+    private innovationService: InnovationService
   ) {
 
     super();
@@ -59,7 +59,6 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.organisationInfoUrl = `${this.CONSTANTS.BASE_URL}/about-the-service/who-we-are`;
-    this.shares = [];
 
   }
 
@@ -68,16 +67,16 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
     // this.notificationsService.dismissNotification(NotificationContextTypeEnum.DATA_SHARING, this.innovationId).subscribe();
 
     forkJoin([
-      this.organisationsService.getOrganisationsListWithUnits(),
-      this.innovatorService.getInnovationShares(this.innovationId),
-      this.innovatorService.getInnovationSupports(this.innovationId, false),
+      this.organisationsService.getOrganisationsList(true),
+      this.innovationsService.getInnovationSharesList(this.innovationId),
+      this.innovationsService.getInnovationSupportsList(this.innovationId, false),
       this.innovationService.getInnovationOrganisationSuggestions(this.innovationId),
-    ]).subscribe(([organisationUnits, innovationShares, organisationUnitsSupportStatus, organisationSuggestions]) => {
+    ]).subscribe(([organisationsList, innovationShares, innovationSupports, organisationSuggestions]) => {
 
       this.organisationSuggestions = organisationSuggestions;
-      this.shares = innovationShares;
+      this.shares = innovationShares.map(item => ({ organisationId: item.organisation.id }));
 
-      this.organisations = organisationUnits.map(organisation => {
+      this.organisations = organisationsList.map(organisation => {
 
         if (organisation.organisationUnits.length === 1) {
           return {
@@ -86,9 +85,9 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
               name: organisation.name,
               acronym: organisation.acronym,
               organisationUnits: [],
-              status: innovationShares.find(i => i.id === organisation.id)?.status || 'UNASSIGNED',
+              status: innovationSupports.find(item => item.organisation.id === organisation.id)?.status || InnovationSupportStatusEnum.UNASSIGNED,
             },
-            shared: (innovationShares.findIndex(i => i.id === organisation.id) > -1),
+            shared: (innovationShares.findIndex(item => item.organisation.id === organisation.id) > -1),
             showHideStatus: 'hidden',
             showHideText: null,
             showHideDescription: null
@@ -99,12 +98,12 @@ export class InnovationDataSharingComponent extends CoreComponent implements OnI
               id: organisation.id,
               name: organisation.name,
               acronym: organisation.acronym,
-              organisationUnits: organisation.organisationUnits.map(org => ({
-                ...org,
-                status: organisationUnitsSupportStatus.find(o => o.organisationUnit.id === org.id)?.status || 'UNASSIGNED'
+              organisationUnits: organisation.organisationUnits.map(organisationUnit => ({
+                ...organisationUnit,
+                status: innovationSupports.find(item => item.organisation.unit.id === organisationUnit.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
               }))
             },
-            shared: (innovationShares.findIndex(i => i.id === organisation.id) > -1),
+            shared: (innovationShares.findIndex(item => item.organisation.id === organisation.id) > -1),
             showHideStatus: 'closed',
             showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
             showHideDescription: `that belong to the ${organisation.name}`

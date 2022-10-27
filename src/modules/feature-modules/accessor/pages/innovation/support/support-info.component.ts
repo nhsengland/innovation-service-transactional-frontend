@@ -4,9 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { RoutingHelper } from '@app/base/helpers';
 
-import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { AccessorService } from '../../../services/accessor.service';
+import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService
+    private innovationsService: InnovationsService
   ) {
 
     super();
@@ -56,13 +56,15 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
     } else {
 
-      this.accessorService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id).subscribe(response => {
+      this.innovationsService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id).subscribe({
+        next: response => {
 
-        this.innovationSupport.accessors = (response.accessors).map(item => item.name).join(', ');
-        this.innovationSupport.status = response.status;
+          this.innovationSupport.accessors = response.engagingAccessors.map(item => item.name).join(', ');
+          this.innovationSupport.status = response.status;
 
-        this.setPageStatus('READY');
+          this.setPageStatus('READY');
 
+        }
       });
 
     }

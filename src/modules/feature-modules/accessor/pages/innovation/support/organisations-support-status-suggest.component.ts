@@ -7,11 +7,13 @@ import { CoreComponent } from '@app/base';
 import { CustomValidators, FormArray, FormControl, FormGroup, FormEngineParameterModel } from '@app/base/forms';
 import { RoutingHelper } from '@app/base/helpers';
 
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+
 import { AccessorService, SupportLogType } from '../../../services/accessor.service';
 
 import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
-import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -57,10 +59,10 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   ngOnInit(): void {
 
     forkJoin([
-      this.organisationsService.getOrganisationsListWithUnits(),
+      this.organisationsService.getOrganisationsList(true),
       this.innovationsService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment.id || ''),
-      this.accessorService.getInnovationSupports(this.innovation.id, false)
-    ]).subscribe(([organisations, needsAssessmentInfo, supportsInfo]) => {
+      this.innovationsService.getInnovationSupportsList(this.innovation.id, false)
+    ]).subscribe(([organisations, needsAssessmentInfo, innovationSupportsList]) => {
 
       const needsAssessmentSuggestedOrganisations = needsAssessmentInfo.assessment.suggestedOrganisations.map(item => item.id);
 
@@ -82,12 +84,12 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
       });
 
-      supportsInfo.filter(s => s.status === 'ENGAGING').forEach(s => {
+      innovationSupportsList.filter(s => s.status === InnovationSupportStatusEnum.ENGAGING).forEach(s => {
 
-        (this.form.get('organisationUnits') as FormArray).push(new FormControl(s.organisationUnit.id));
+        (this.form.get('organisationUnits') as FormArray).push(new FormControl(s.organisation.id));
 
         this.groupedItems.forEach(o => {
-          const ou = o.items.find(i => i.value === s.organisationUnit.id);
+          const ou = o.items.find(i => i.value === s.organisation.id);
           if (ou) {
             ou.isEditable = false;
             ou.label += ` (currently engaging)`;

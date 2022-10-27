@@ -21,22 +21,6 @@ type getInnovationActionsListEndpointInDTO = {
   },
 };
 
-export type getInnovationSupportsInDTO = {
-  id: string;
-  status: keyof typeof INNOVATION_SUPPORT_STATUS;
-  organisationUnit: {
-    id: string;
-    name: string;
-    organisation: {
-      id: string;
-      name: string;
-      acronym: string;
-    };
-  };
-  accessors?: { id: string, name: string }[];
-  notifications?: { [key: string]: number };
-};
-
 export type getInnovationActionsListEndpointOutDTO = {
   openedActions: (getInnovationActionsListEndpointInDTO & { name: string })[];
   closedActions: (getInnovationActionsListEndpointInDTO & { name: string })[];
@@ -66,6 +50,7 @@ export type GetInnovationTransfersDTO = {
   innovation: { id: string, name: string, owner: string };
 }[];
 
+
 @Injectable()
 export class InnovatorService extends CoreService {
 
@@ -82,14 +67,16 @@ export class InnovatorService extends CoreService {
 
   }
 
-  getInnovationSupports(innovationId: string, returnAccessorsInfo: boolean): Observable<getInnovationSupportsInDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId }).setQueryParams({ full: returnAccessorsInfo });
-    return this.http.get<getInnovationSupportsInDTO[]>(url.buildUrl()).pipe(
+  submitOrganisationSharing(innovationId: string, body: MappedObjectType): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/shares').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
     );
   }
+
 
   getInnovationActionsList(innovationId: string): Observable<getInnovationActionsListEndpointOutDTO> {
 
@@ -118,25 +105,6 @@ export class InnovatorService extends CoreService {
       map(response => response)
     );
 
-  }
-
-  getInnovationShares(innovationId: string): Observable<{ id: string, status: keyof typeof INNOVATION_SUPPORT_STATUS }[]> {
-
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/shares').setPathParams({ innovationId });
-    return this.http.get<{ id: string, status: keyof typeof INNOVATION_SUPPORT_STATUS }[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
-
-  }
-
-  submitOrganisationSharing(innovationId: string, body: MappedObjectType): Observable<{ id: string }> {
-
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/shares').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response)
-    );
   }
 
   getSupportLogList(innovationId: string): Observable<GetSupportLogListOutDTO[]> {

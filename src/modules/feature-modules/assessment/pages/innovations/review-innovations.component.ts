@@ -7,7 +7,9 @@ import { CoreComponent } from '@app/base';
 import { FormGroup, FormEngineParameterModel } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
-import { AssessmentSupportFilterEnum, InnovationsListDTO, InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { AssessmentSupportFilterEnum, InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
+
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { AssessmentService } from '../../services/assessment.service';
