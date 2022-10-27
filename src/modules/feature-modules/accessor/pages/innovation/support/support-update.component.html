@@ -35,13 +35,11 @@
           <div class="nhsuk-heading-m">
             <div>You selected:</div>
             <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + currentStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + currentStatus + '.name' | translate }}"></theme-tag>
-            <!-- <strong class="nhsuk-tag nhsuk-u-margin-left-3" [ngClass]="currentStatus.cssClass"> {{ currentStatus.label }} </strong> -->
-
           </div>
 
           <p class="nhsuk-hint"> {{ supportStatusObj[currentStatus ?? 'UNASSIGNED'].description }} </p>
 
-          <theme-form-checkbox-array arrayName="accessors" label="Assign one or more accessors from {{ organisationUnit }}" [items]="accessorsList" [pageUniqueField]="false"></theme-form-checkbox-array>
+          <theme-form-checkbox-array arrayName="accessors" label="Assign one or more accessors from {{ userOrganisationUnit?.name }}" [items]="formAccessorsList" [pageUniqueField]="false"></theme-form-checkbox-array>
 
           <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
 
@@ -54,7 +52,7 @@
           <ul>
             <li *ngFor="let item of selectedAccessors" class="d-flex align-items-center nhsuk-u-margin-0">
               <theme-svg-icon type="success" class="nhsuk-u-margin-top-2 nhsuk-u-margin-right-1"></theme-svg-icon>
-              <div> {{ item.label }} </div>
+              <div> {{ item.name }} </div>
             </li>
           </ul>
 

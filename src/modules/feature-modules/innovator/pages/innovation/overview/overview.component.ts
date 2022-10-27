@@ -4,12 +4,10 @@ import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 
-import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
-import { AuthenticationService } from '@modules/stores/authentication/authentication.service';
 
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
@@ -66,9 +64,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService,
-    private innovationsService: InnovationsService,
-    private authenticationService: AuthenticationService
+    private innovationsService: InnovationsService
   ) {
 
     super();
@@ -81,24 +77,16 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-
-    this.authenticationService.getUserInfo().subscribe(response => {
-
-
-      console.log(response);
-    });
-
-
     forkJoin([
       this.innovationsService.getInnovatorInnovationInfo(this.innovationId),
       this.stores.innovation.getSectionsSummary$(this.innovationId),
-      this.innovatorService.getInnovationSupports(this.innovationId, true),
-    ]).subscribe(([innovationInfo, sectionSummary, innovationSupports]) => {
+      this.innovationsService.getInnovationSupportsList(this.innovationId, true),
+    ]).subscribe(([innovationInfo, sectionSummary, innovationSupportsList]) => {
 
       this.stores.context.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
 
-      if (innovationSupports.length === 1) {
-        this.stores.context.dismissNotification(NotificationContextTypeEnum.SUPPORT, innovationSupports[0].id);
+      if (innovationSupportsList.length === 1) {
+        this.stores.context.dismissNotification(NotificationContextTypeEnum.SUPPORT, innovationSupportsList[0].id);
       }
 
       this.submittedAt = innovationInfo.submittedAt || '';
@@ -129,14 +117,13 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
       this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
 
-
-      this.supportStatus = innovationSupports.find(s => s.status.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase())?.status || this.innovationSupportStatus.WAITING.label;
+      this.supportStatus = innovationSupportsList.find(s => s.status.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase())?.status || this.innovationSupportStatus.WAITING.label;
 
       if (this.supportStatus.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase()) {
         this.supportStatus = this.innovationSupportStatus.ENGAGING.label;
-        this.supportingAccessors = innovationSupports
-          .filter(support => support.status.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase())
-          .flatMap(s => (s.accessors || []).map(a => ({ ...a, unit: s.organisationUnit.name })));
+        // this.supportingAccessors = innovationSupportsList
+        //   .filter(support => support.status.toLocaleLowerCase() === this.innovationSupportStatus.ENGAGING.label.toLocaleLowerCase())
+        //   .flatMap(s => (s.accessors || []).map(a => ({ ...a, unit: s.organisationUnit.name })));
       }
 
       this.setPageStatus('READY');

@@ -48,7 +48,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserNewComponent', 
     serviceUserService = TestBed.inject(ServiceUsersService);
     organisationsService = TestBed.inject(OrganisationsService);
 
-    organisationsService.getOrganisationsListWithUnits = () => of([
+    organisationsService.getOrganisationsList = () => of([
       { id: 'orgId', acronym: 'orgId01', name: 'Org name 01', organisationUnits: [{ id: 'orgId', acronym: 'orgId01', name: 'Org name 01' }] },
       { id: 'orgId', acronym: 'orgId02', name: 'Org name 02', organisationUnits: [{ id: 'orgId', acronym: 'orgId01', name: 'Org name 01' }] }
     ]);
@@ -64,7 +64,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserNewComponent', 
 
   it('should NOT have default information loaded', () => {
 
-    organisationsService.getOrganisationsListWithUnits = () => throwError('error');
+    organisationsService.getOrganisationsList = () => throwError('error');
 
     fixture = TestBed.createComponent(PageServiceUserNewComponent);
     component = fixture.componentInstance;

@@ -12,7 +12,7 @@ import { AccessorSuggestionModel, AssessmentSuggestionModel, OrganisationSuggest
 export class OrganisationSuggestionsCardComponent implements OnChanges {
 
   @Input() suggestions: OrganisationSuggestionModel | undefined;
-  @Input() shares: { id: string, status: string }[] | undefined;
+  @Input() shares: { organisationId: string }[] | undefined;
 
   assessments: {
     organisations: string[]
@@ -63,7 +63,7 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
   }
 
   private parseAccessors(accessorsSuggestions: AccessorSuggestionModel[]): { suggestors: string, organisations: string[] } {
-    const shares = this.shares?.map(s => s.id) || [];
+    const shares = this.shares?.map(s => s.organisationId) || [];
     const accessorsUnits = accessorsSuggestions.map(as => `${as.organisationUnit.name} ${as.organisationUnit.organisation.acronym}`);
     const suggestedOrganisations = accessorsSuggestions
       .flatMap(as => as.suggestedOrganisations
@@ -82,7 +82,7 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
 
   private parseAssessments(assessmentsSuggestions: AssessmentSuggestionModel): { organisations: string[] } {
 
-    const shares = this.shares?.map(s => s.id) || [];
+    const shares = this.shares?.map(s => s.organisationId) || [];
     const suggestedOrganisations = (assessmentsSuggestions.suggestedOrganisations ?? [])
       .filter(so => !shares.includes(so.id))
       .map(so => `${so.name} (${so.acronym})`);

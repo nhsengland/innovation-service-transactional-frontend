@@ -9,7 +9,8 @@ import { locationItems } from '@modules/stores/innovation/config/innovation-cata
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
-import { InnovationsListDTO, InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
@@ -86,7 +87,7 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
       this.datasets.supportStatuses = Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({ label: item.label, value: key }));
     }
 
-    this.organisationsService.getAccessorsOrganisations().subscribe({
+    this.organisationsService.getOrganisationsList(false).subscribe({
       next: response => {
         const myOrganisation = this.stores.authentication.getUserInfo().organisations[0].id;
         this.datasets.engagingOrganisations = response.filter(i => i.id !== myOrganisation).map(i => ({ label: i.name, value: i.id }));

@@ -6,7 +6,7 @@ import { CoreService } from '@app/base';
 import { MappedObjectType } from '@app/base/types';
 import { UrlModel } from '@app/base/models';
 
-import { InnovationStatusEnum, InnovationSupportStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
+import { InnovationStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 
 
 export enum SupportLogType {
@@ -61,22 +61,6 @@ export type getSupportLogInDTO = {
 };
 
 export type getSupportLogOutDTO = getSupportLogInDTO & { logTitle: string; suggestedOrganisationUnitsNames: string[]; };
-
-export type getInnovationSupportsDTO = {
-  id: string;
-  status: InnovationSupportStatusEnum;
-  organisationUnit: {
-    id: string;
-    name: string;
-    organisation: {
-      id: string;
-      name: string;
-      acronym: string;
-    };
-  };
-  accessors?: { id: string, name: string }[];
-  notifications?: { [key: string]: number };
-};
 
 
 @Injectable()
@@ -159,15 +143,6 @@ export class AssessmentService extends CoreService {
       map(response => response)
     );
 
-  }
-
-  getInnovationSupports(innovationId: string, returnAccessorsInfo: boolean): Observable<getInnovationSupportsDTO[]> {
-
-    const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId/supports').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId }).setQueryParams({ full: returnAccessorsInfo });
-    return this.http.get<getInnovationSupportsDTO[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
   }
 
 }

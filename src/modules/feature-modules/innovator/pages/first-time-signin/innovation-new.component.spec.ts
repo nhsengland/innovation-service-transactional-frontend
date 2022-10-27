@@ -49,9 +49,9 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninInnovati
     innovatorService = TestBed.inject(InnovatorService);
     organisationsService = TestBed.inject(OrganisationsService);
 
-    organisationsService.getAccessorsOrganisations = () => of([
-      { id: 'orgId01', name: 'Org name 01' },
-      { id: 'orgId02', name: 'Org name 02' }
+    organisationsService.getOrganisationUnitUsersList = () => of([
+      { id: 'orgId01', name: 'Org name 01', organisationUnitUserId: 'OrgUnitId01' },
+      { id: 'orgId02', name: 'Org name 02', organisationUnitUserId: 'OrgUnitId02' }
     ]);
 
   });
