@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError, map, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
 import { APIQueryParamsType } from '@modules/core/models/table.model';
 
@@ -23,11 +23,11 @@ import { getSectionTitle } from './innovation.config';
 
 export type ActivityLogInDTO = {
   count: number;
+  innovation: { id: string, name: string },
   data: {
     date: string; // '2020-01-01T00:00:00.000Z',
     type: keyof ActivityLogItemsEnum;
     activity: ActivityLogItemsEnum;
-    innovation: { id: string, name: string };
     params: {
 
       actionUserName: string;
@@ -52,7 +52,6 @@ export type ActivityLogOutDTO = {
   data: (Omit<ActivityLogInDTO['data'][0], 'innovation' | 'params'>
     & {
       params: ActivityLogInDTO['data'][0]['params'] & {
-        innovationName: string;
         sectionTitle: string;
       };
       link: null | { label: string; url: string; };
@@ -105,10 +104,8 @@ export class InnovationService {
       activityTypes: filters.activityTypes || undefined,
     };
 
-    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/activities')
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/activities')
       .setPathParams({
-        endpointModule: this.apiUserBasePath(),
-        userId: this.authenticationStore.getUserId(),
         innovationId
       })
       .setQueryParams(qp);
@@ -123,20 +120,20 @@ export class InnovationService {
 
           switch (ACTIVITY_LOG_ITEMS[i.activity].link) {
             case 'NEEDS_ASSESSMENT':
-              link = i.params.assessmentId ? { label: 'Go to Needs assessment', url: `/${userUrlBasePath}/innovations/${i.innovation.id}/assessments/${i.params.assessmentId}` } : null;
+              link = i.params.assessmentId ? { label: 'Go to Needs assessment', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/assessments/${i.params.assessmentId}` } : null;
               break;
             case 'SUPPORT_STATUS':
-              link = { label: 'Go to Support status', url: `/${userUrlBasePath}/innovations/${i.innovation.id}/support` };
+              link = { label: 'Go to Support status', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/support` };
               break;
             case 'SECTION':
-              link = i.params.sectionId ? { label: 'View section', url: `/${userUrlBasePath}/innovations/${i.innovation.id}/record/sections/${i.params.sectionId}` } : null;
+              link = i.params.sectionId ? { label: 'View section', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/record/sections/${i.params.sectionId}` } : null;
               break;
             case 'THREAD':
-              link = { label: 'View messages', url: `/${userUrlBasePath}/innovations/${i.innovation.id}/threads/${i.params.thread?.id}` };
+              link = { label: 'View messages', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/threads/${i.params.thread?.id}` };
               break;
             case 'ACTION':
               if (['innovator', 'accessor'].includes(userUrlBasePath) && i.params.actionId) { // Don't make sense for assessment users.
-                link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${i.innovation.id}/action-tracker/${i.params.actionId}` };
+                link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/action-tracker/${i.params.actionId}` };
               }
               break;
           }
@@ -145,10 +142,9 @@ export class InnovationService {
             date: i.date,
             type: i.type,
             activity: i.activity,
-            innovation: i.innovation,
+            innovation: response.innovation,
             params: {
               ...i.params,
-              innovationName: i.innovation.name,
               sectionTitle: getSectionTitle(i.params.sectionId || null)
             },
             link
