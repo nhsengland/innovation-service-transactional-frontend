@@ -7,17 +7,36 @@
 
         <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Filters</h2>
 
-        <ng-container *ngFor="let filter of filters">
+        <ng-container *ngFor="let filter of filters" [ngSwitch]="filter.type">
 
-          <a href="javascript:void(0)" (click)="onOpenCloseFilter(filter.key)" class="d-flex align-items-center nhsuk-u-font-size-19 text-decoration-none nhsuk-u-margin-bottom-0"
+          <a href="javascript:void(0)" (click)="onOpenCloseFilter(filter.key)"
+            class="d-flex align-items-center nhsuk-u-font-size-19 text-decoration-none nhsuk-u-margin-bottom-0"
             [attr.aria-expanded]="filter.showHideStatus === 'opened' ? 'true' : 'false'">
-            <ng-container *ngTemplateOutlet="filterIcon; context: { showHideStatus: filter.showHideStatus }"></ng-container>
-            <span class="nhsuk-u-padding-left-2"> {{ filter.title }} <span class="nhsuk-u-visually-hidden"> filter section </span></span>
+            <ng-container *ngTemplateOutlet="filterIcon; context: { showHideStatus: filter.showHideStatus }">
+            </ng-container>
+            <span class="nhsuk-u-padding-left-2">
+              {{ filter.title }}
+              <span class="nhsuk-u-visually-hidden"> filter section </span>
+            </span>
           </a>
 
-          <div class="nhsuk-u-padding-left-1" [ngClass]="{'nhsuk-u-visually-hidden': filter.showHideStatus !== 'opened'}">
-            <div class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-bottom-1 nhsuk-u-padding-left-6">{{ (form.get(filter.key)?.value || []).length }} selected</div>
-            <theme-form-checkbox-array [arrayName]="filter.key" [items]="datasets[filter.key]" size="small" [pageUniqueField]="false"> </theme-form-checkbox-array>
+
+          <div class="nhsuk-u-padding-left-1"
+            [ngClass]="{'nhsuk-u-visually-hidden': filter.showHideStatus !== 'opened'}">
+
+            <ng-container *ngSwitchCase="'CHECKBOX'">
+              <div class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-bottom-1 nhsuk-u-padding-left-6">{{
+                (form.get(filter.key)?.value || []).length }} selected</div>
+              <theme-form-checkbox-array [arrayName]="filter.key" [items]="this.datasets[filter.key]" size="small"
+                [pageUniqueField]="false"> </theme-form-checkbox-array>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'DATERANGE'">
+              <ng-container *ngFor="let option of datasets[filter.key]">
+                <theme-form-input [controlName]="option.formControl!" [label]="option.label"
+                  [description]="option.description" [pageUniqueField]="false"></theme-form-input>
+              </ng-container>
+            </ng-container>
           </div>
 
           <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" />
@@ -35,19 +54,27 @@
       <ng-container *ngIf="pageStatus === 'READY'" aria-live="polite">
 
         <div class="d-flex align-items-center justify-content-space-between nhsuk-u-margin-bottom-2">
-          <div class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-0"> {{ activitiesList.getTotalRowsNumber() }} activities found </div>
+          <div class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-0">
+            {{ activitiesList.getTotalRowsNumber() }} activities found
+          </div>
           <div class="d-flex">
-            <a *ngIf="currentDateOrderBy === 'ascending'" href="javascript:void(0)" (click)="onDateOrderBy('descending')" class="nhsuk-body-s nhsuk-u-margin-bottom-0 right-border-separator nhsuk-u-padding-right-3"
+            <a *ngIf="currentDateOrderBy === 'ascending'" href="javascript:void(0)"
+              (click)="onDateOrderBy('descending')"
+              class="nhsuk-body-s nhsuk-u-margin-bottom-0 right-border-separator nhsuk-u-padding-right-3"
               aria-label="Sort activities by newest first">
               Newest first
             </a>
-            <span *ngIf="currentDateOrderBy === 'descending'" class="nhsuk-body-s nhsuk-u-margin-bottom-0 right-border-separator nhsuk-u-padding-right-3">
+            <span *ngIf="currentDateOrderBy === 'descending'"
+              class="nhsuk-body-s nhsuk-u-margin-bottom-0 right-border-separator nhsuk-u-padding-right-3">
               <span class="nhsuk-u-visually-hidden"> Activities are sorted by </span> Newest first
             </span>
-            <a *ngIf="currentDateOrderBy === 'descending'" href="javascript:void(0)" (click)="onDateOrderBy('ascending')" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-left-3" aria-label="Sort activities by oldest first">
+            <a *ngIf="currentDateOrderBy === 'descending'" href="javascript:void(0)"
+              (click)="onDateOrderBy('ascending')" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-left-3"
+              aria-label="Sort activities by oldest first">
               Oldest first
             </a>
-            <span *ngIf="currentDateOrderBy === 'ascending'" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-left-3">
+            <span *ngIf="currentDateOrderBy === 'ascending'"
+              class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-left-3">
               <span class="nhsuk-u-visually-hidden"> Activities are sorted by </span> Oldest first
             </span>
           </div>
@@ -57,18 +84,54 @@
 
           <dt *ngIf="!anyFilterSelected" class="nhsuk-u-font-size-16"> No filter has been selected </dt>
 
-          <div *ngFor="let filter of selectedFilters" class="d-flex align-items-center">
-            <dt class="width-15 nhsuk-u-font-size-16">{{ filter.title }}</dt>
-            <dd class="width-75">
-              <span *ngFor="let selected of filter.selected" class="d-inline-block bordered-item nhsuk-u-margin-1">
-                <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.value)" attr.aria-label="Remove {{ selected.label }} from {{ filter.title }} filter">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" aria-hidden="true" focusable="false" height="20" width="20">
-                    <path d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"></path>
-                  </svg>
-                </a>
-                <span class="nhsuk-u-font-size-14">{{ selected.label }}</span>
-              </span>
-            </dd>
+          <div *ngFor="let filter of selectedFilters" class="d-flex align-items-center" [ngSwitch]="filter.type">
+
+            <ng-container *ngSwitchCase="'CHECKBOX'">
+
+              <dt class="width-20 nhsuk-u-font-size-16">{{ filter.title }}</dt>
+              <dd class="width-75">
+                <span *ngFor="let selected of filter.selected" class="d-inline-block bordered-item nhsuk-u-margin-1">
+                  <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.value)"
+                    attr.aria-label="Remove {{ selected.label }} from {{ filter.title }} filter">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" aria-hidden="true" focusable="false"
+                      height="20" width="20">
+                      <path
+                        d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z">
+                      </path>
+                    </svg>
+                  </a>
+                  <span class="nhsuk-u-font-size-14">{{ selected.label }}</span>
+                </span>
+              </dd>
+
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'DATERANGE'">
+
+              <dt class="width-20 nhsuk-u-font-size-16">{{ getDaterangeFilterTitle(filter) }}</dt>
+              <dd class="width-75">
+                <ng-container *ngFor="let selected of filter.selected; let i = index">
+
+                  <span class="d-inline-block bordered-item nhsuk-u-margin-1">
+                    <a href="javascript:void(0)"
+                      (click)="onRemoveDateRangeFilter(selected.formControl!, selected.value)"
+                      attr.aria-label="Remove {{ selected.value }} from {{ filter.title }} filter">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" aria-hidden="true" focusable="false"
+                        height="20" width="20">
+                        <path
+                          d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z">
+                        </path>
+                      </svg>
+                    </a>
+                    <span class="nhsuk-u-font-size-14">{{ selected.value }}</span>
+                  </span>
+
+                  <span class="nhsuk-u-font-size-16" *ngIf="i === 0 && filter.selected.length === 2"> and </span>
+                </ng-container>
+
+              </dd>
+
+            </ng-container>
           </div>
 
         </dl>
@@ -83,18 +146,24 @@
 
           <div *ngFor="let item of activitiesList.getRecords()">
 
-            <div class="d-flex align-items-center nhsuk-body-s nhsuk-u-margin-0 nhsuk-u-padding-top-3" [ngClass]="{'bottom-border-separator nhsuk-u-padding-bottom-3': item.showHideStatus === 'closed'}">
+            <div class="d-flex align-items-center nhsuk-body-s nhsuk-u-margin-0 nhsuk-u-padding-top-3"
+              [ngClass]="{'bottom-border-separator nhsuk-u-padding-bottom-3': item.showHideStatus === 'closed'}">
               <div>
-                <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">{{ item.date | date: ('app.date_formats.full_date_time' | translate) }}</p>
-                <p class="nhsuk-body-s nhsuk-u-margin-0">{{ 'shared.catalog.innovation.activity_log_items.' + item.activity + '.message' | translate: item.params }}</p>
+                <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">{{ item.date | date:
+                  ('app.date_formats.full_date_time' | translate) }}</p>
+                <p class="nhsuk-body-s nhsuk-u-margin-0">{{ 'shared.catalog.innovation.activity_log_items.' +
+                  item.activity + '.message' | translate: item.params }}</p>
               </div>
               <div class="ml-auto d-flex flex-direction-column text-align-right">
                 <div>
                   <a *ngIf="item.link" [routerLink]="item.link.url">{{ item.link.label }}</a>
                 </div>
                 <div>
-                  <a *ngIf="ACTIVITY_LOG_ITEMS[item.activity].details" href="javascript:void(0)" (click)="onShowHideClicked(item)">
-                    {{ item.showHideText }} <span class="nhsuk-u-visually-hidden"> of {{ 'shared.catalog.innovation.activity_log_items.' + item.activity + '.title' | translate }} activity </span>
+                  <a *ngIf="ACTIVITY_LOG_ITEMS[item.activity].details" href="javascript:void(0)"
+                    (click)="onShowHideClicked(item)">
+                    {{ item.showHideText }} <span class="nhsuk-u-visually-hidden"> of {{
+                      'shared.catalog.innovation.activity_log_items.' + item.activity + '.title' | translate }} activity
+                    </span>
                   </a>
                 </div>
               </div>
@@ -107,7 +176,8 @@
                     <dt class="nhsuk-summary-list__key nhsuk-body-s">Organisations</dt>
                     <dd class="nhsuk-summary-list__value">
                       <ul class="nhsuk-list nhsuk-body-s">
-                        <li *ngFor="let organisation of (item.params.organisations || [])" class="nhsuk-u-margin-0">{{ organisation }} </li>
+                        <li *ngFor="let organisation of (item.params.organisations || [])" class="nhsuk-u-margin-0">{{
+                          organisation }} </li>
                       </ul>
                     </dd>
                   </dl>
@@ -116,7 +186,8 @@
                   <dl class="nhsuk-summary-list nhsuk-u-margin-0 nhsuk-u-padding-top-2">
                     <dt class="nhsuk-summary-list__key nhsuk-body-s">Support status</dt>
                     <dd class="nhsuk-summary-list__value nhsuk-body-s">
-                      <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + item.params.innovationSupportStatus + '.cssColorClass' | translate }}"
+                      <theme-tag
+                        type="{{ 'shared.catalog.innovation.support_status.' + item.params.innovationSupportStatus + '.cssColorClass' | translate }}"
                         label="{{ 'shared.catalog.innovation.support_status.' + item.params.innovationSupportStatus + '.name' | translate }}">
                       </theme-tag>
                       <p class="nhsuk-body-s nhsuk-u-padding-top-2 text-pre-wrap">{{ item.params.comment?.value }}</p>
@@ -126,7 +197,8 @@
                 <ng-container *ngSwitchCase="'COMMENT'">
                   <dl class="nhsuk-summary-list nhsuk-u-margin-0 nhsuk-u-padding-top-2">
                     <dt class="nhsuk-summary-list__key nhsuk-body-s">Comment</dt>
-                    <dd class="nhsuk-summary-list__value nhsuk-body-s text-pre-wrap">{{ item.params.comment?.value || '' }}</dd>
+                    <dd class="nhsuk-summary-list__value nhsuk-body-s text-pre-wrap">{{ item.params.comment?.value || ''
+                      }}</dd>
                   </dl>
                 </ng-container>
               </ng-container>
@@ -135,7 +207,9 @@
           </div>
 
           <div class="nhsuk-u-padding-bottom-4">
-            <theme-pagination [currentPage]="activitiesList.page" [pageSize]="activitiesList.pageSize" [totalRows]="activitiesList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+            <theme-pagination [currentPage]="activitiesList.page" [pageSize]="activitiesList.pageSize"
+              [totalRows]="activitiesList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)">
+            </theme-pagination>
           </div>
 
         </ng-container>
@@ -148,13 +222,15 @@
 
 </theme-content-wrapper>
 
-
 <ng-template #filterIcon let-showHideStatus="showHideStatus">
-  <svg *ngIf="showHideStatus === 'closed'" class="nhsuk-icon nhsuk-icon__plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
+  <svg *ngIf="showHideStatus === 'closed'" class="nhsuk-icon nhsuk-icon__plus" xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
     <circle cx="12" cy="12" r="10"></circle>
-    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M12 8v8M8 12h8"></path>
+    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M12 8v8M8 12h8">
+    </path>
   </svg>
-  <svg *ngIf="showHideStatus === 'opened'" class="nhsuk-icon nhsuk-icon__minus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
+  <svg *ngIf="showHideStatus === 'opened'" class="nhsuk-icon nhsuk-icon__minus" xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
     <circle cx="12" cy="12" r="10"></circle>
     <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M8 12h8"></path>
   </svg>

@@ -95,13 +95,18 @@ export class InnovationService {
 
   }
 
-  getInnovationActivityLog(innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum[] }>): Observable<ActivityLogOutDTO> {
+  getInnovationActivityLog(
+    innovationId: string,
+    queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum[], activityStartAfter: string, activityStartBefore: string }>
+  ): Observable<ActivityLogOutDTO> {
 
     const userUrlBasePath = this.authenticationStore.userUrlBasePath();
     const { filters, ...qParams } = queryParams;
     const qp = {
       ...qParams,
       activityTypes: filters.activityTypes || undefined,
+      activityStartAfter: filters.activityStartAfter || undefined,
+      activityStartBefore: filters.activityStartBefore || undefined,
     };
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/activities')
