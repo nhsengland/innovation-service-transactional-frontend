@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormControl } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormArray, FormGroup, Validators } from '@app/base/forms';
+import { CustomValidators } from '@app/base/forms';
+
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -29,12 +31,12 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     ...item
   })).filter(x => !x.hidden);
 
-  currentStatus: { label: string, cssClass: string, description: string };
+  currentStatus: null | InnovationSupportStatusEnum = null;
 
   form = new FormGroup({
-    status: new UntypedFormControl('', { validators: Validators.required, updateOn: 'change' }),
-    accessors: new UntypedFormArray([], { updateOn: 'change' }),
-    message: new UntypedFormControl('', CustomValidators.required('A message is required')),
+    status: new FormControl<null | InnovationSupportStatusEnum>(null, { validators: Validators.required, updateOn: 'change', nonNullable: true }),
+    accessors: new FormArray<FormControl<string>>([], { updateOn: 'change' }),
+    message: new FormControl<string>('', CustomValidators.required('A message is required'))
   }, { updateOn: 'blur' });
 
 
@@ -55,8 +57,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     this.accessorsList = [];
     this.selectedAccessors = [];
 
-    this.currentStatus = { label: '', cssClass: '', description: '' };
-    /* istanbul ignore next */
     this.organisationUnit = this.stores.authentication.getUserInfo().organisations[0].organisationUnits?.[0]?.name;
 
   }
@@ -74,8 +74,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
         this.form.get('status')!.setValue(response.status);
 
-        response.accessors.forEach(accessor => {
-          (this.form.get('accessors') as FormArray).push(new UntypedFormControl(accessor.id));
+        response.engagingAccessors?.forEach(accessor => {
+          (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
         });
 
         this.setPageStatus('READY');
@@ -83,6 +83,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       });
     }
 
+    /** TODO: Change to new endpoint */
     this.accessorService.getAccessorsList().subscribe(
       response => {
         this.accessorsList = response.map((r) => ({ value: r.id, label: r.name }));
@@ -100,18 +101,18 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     if (!this.validateForm(this.stepNumber)) { return; }
 
-    this.selectedAccessors = (this.form.get('accessors')!.value as string[]).map((a) => {
+    this.selectedAccessors = (this.form.get('accessors')?.value ?? []).map(a => {
       return this.accessorsList.find(acc => acc.value === a);
     });
 
     if (this.stepNumber === 1 && this.form.get('status')!.value !== 'ENGAGING') {
 
-      this.currentStatus = (this.supportStatusObj as any)[this.form.get('status')!.value];
+      this.currentStatus = this.form.get('status')?.value ?? null;
 
       this.stepNumber++;
     }
 
-    if (this.stepNumber === 2 && this.currentStatus === this.supportStatusObj.ENGAGING) {
+    if (this.stepNumber === 2 && this.currentStatus === InnovationSupportStatusEnum.ENGAGING) {
 
       if (this.selectedAccessors.length === 0) {
         this.setAlertError('An error has occurred when updating Status. You must select at least one Accessor.');
@@ -122,9 +123,9 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     }
 
-    this.currentStatus = (this.supportStatusObj as any)[this.form.get('status')!.value];
+    this.currentStatus = this.form.get('status')?.value ?? null;
 
-    if (this.currentStatus.label !== this.supportStatusObj.ENGAGING.label) {
+    if (this.currentStatus !== InnovationSupportStatusEnum.ENGAGING) {
       this.selectedAccessors = [];
     }
 
@@ -134,10 +135,18 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   }
 
   onSubmit(): void {
+    const body = {
+      status: this.form.get('status')?.value ?? InnovationSupportStatusEnum.UNASSIGNED,
+      accessors: [{
+        id: this.form.get('accessors'),
+        organisationUnitUserId: ''
+      }],
+      message: this.form.get('message')?.value ?? ''
+    }
 
     if (!this.validateForm(this.stepNumber)) { return; }
 
-    this.accessorService.saveSupportStatus(this.innovationId, this.form.value, this.supportId).subscribe({
+    this.accessorService.saveSupportStatus(this.innovationId, body, this.supportId).subscribe({
       next: response => {
         this.setRedirectAlertSuccess('Support status updated', { message: 'You\'ve updated your support status and posted a message to the innovator.' });
         this.redirectTo(`/accessor/innovations/${this.innovationId}/support`);

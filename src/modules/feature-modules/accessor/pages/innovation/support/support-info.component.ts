@@ -56,13 +56,15 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
     } else {
 
-      this.accessorService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id).subscribe(response => {
+      this.accessorService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id).subscribe({
+        next: response => {
 
-        this.innovationSupport.accessors = (response.accessors).map(item => item.name).join(', ');
-        this.innovationSupport.status = response.status;
+          this.innovationSupport.accessors = (response.engagingAccessors || []).map(item => item.name).join(', ');
+          this.innovationSupport.status = response.status;
 
-        this.setPageStatus('READY');
+          this.setPageStatus('READY');
 
+        }
       });
 
     }

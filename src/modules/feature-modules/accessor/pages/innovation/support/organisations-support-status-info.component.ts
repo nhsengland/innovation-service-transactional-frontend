@@ -71,7 +71,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
               name: organisation.name,
               acronym: organisation.acronym,
               organisationUnits: [],
-              status: organisationUnitsSupportStatus.find(o => o.organisationUnit.id === organisation.id)?.status || 'UNASSIGNED'
+              status: organisationUnitsSupportStatus.find(o => o.organisation.id === organisation.id)?.status || 'UNASSIGNED'
             },
             showHideStatus: 'hidden',
             showHideText: null,
@@ -85,7 +85,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
               acronym: organisation.acronym,
               organisationUnits: organisation.organisationUnits.map(org => ({
                 ...org,
-                status: organisationUnitsSupportStatus.find(o => o.organisationUnit.id === org.id)?.status || 'UNASSIGNED'
+                status: organisationUnitsSupportStatus.find(o => o.organisation.id === org.id)?.status || 'UNASSIGNED'
               }))
             },
             showHideStatus: 'closed',
