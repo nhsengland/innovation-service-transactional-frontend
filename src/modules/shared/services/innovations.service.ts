@@ -11,6 +11,7 @@ import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEn
 import { InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { InnovationInfoDTO, InnovationsListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO } from './innovations.dtos';
 
 
 export enum AssessmentSupportFilterEnum {
@@ -31,56 +32,6 @@ export type InnovationsListFiltersType = {
   suggestedOnly?: boolean,
   fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications')[]
 }
-
-export type InnovationsListDTO = {
-  count: number,
-  data: {
-    id: string,
-    name: string,
-    description: null | string,
-    status: InnovationStatusEnum,
-    submittedAt: null | DateISOType,
-    countryName: null | string,
-    postCode: null | string,
-    mainCategory: null | string,
-    otherMainCategoryDescription: null | string,
-    isAssessmentOverdue?: boolean,
-    assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { name: string } },
-    supports?: {
-      id: string,
-      status: InnovationSupportStatusEnum,
-      updatedAt: DateISOType,
-      organisation: {
-        id: string, name: string, acronym: null | string,
-        unit: {
-          id: string, name: string, acronym: string,
-          // Users only exists while a support is ENGAGING.
-          users?: { name: string, role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum }[]
-        }
-      }
-    }[],
-    notifications?: number
-  }[]
-};
-
-
-export type getInnovationInfoEndpointDTO = {
-  id: string;
-  name: string;
-  status: InnovationStatusEnum;
-  description: string;
-  countryName: string;
-  postcode: string;
-  submittedAt?: string;
-  assessment?: {
-    id: string;
-  };
-  actions: {
-    requestedCount: number;
-    inReviewCount: number;
-  },
-  notifications: { [key: string]: number }
-};
 
 export type GetInnovationNeedsAssessmentEndpointInDTO = {
   id: string;
@@ -267,15 +218,55 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getInnovatorInnovationInfo(innovationId: string): Observable<getInnovationInfoEndpointDTO> {
+  getInnovatorInnovationInfo(innovationId: string): Observable<InnovationInfoDTO> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
+    return this.http.get<InnovationInfoDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );
 
   }
+
+  getInnovationSharesList(innovationId: string): Observable<{ organisation: { id: string, name: string, acronym: string } }[]> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/shares').setPathParams({ innovationId });
+    return this.http.get<{ organisation: { id: string, name: string, acronym: string } }[]>(url.buildUrl()).pipe(take(1), map(response => response));
+
+  }
+
+  getInnovationSupportsList(innovationId: string, accessorsInfo: boolean): Observable<InnovationSupportsListDTO> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports').setPathParams({ innovationId });
+
+    if (accessorsInfo) {
+      url.setQueryParams({ fields: ['engagingAccessors'] });
+    }
+
+    return this.http.get<InnovationSupportsListDTO>(url.buildUrl()).pipe(take(1),
+      map(response => response.map(item => ({
+        id: item.id,
+        status: item.status,
+        organisation: {
+          id: item.organisation.id, name: item.organisation.name, acronym: item.organisation.acronym,
+          unit: item.organisation.unit
+        },
+        engagingAccessors: accessorsInfo ? item.engagingAccessors : []
+      })))
+    );
+
+  }
+
+  getInnovationSupportInfo(innovationId: string, supportId: string): Observable<InnovationSupportInfoDTO> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports/:supportId').setPathParams({ innovationId, supportId });
+    return this.http.get<InnovationSupportInfoDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
 
   getInnovatorInnovationActionInfo(innovationId: string, actionId: string): Observable<getInnovationActionInfoOutDTO> {
 

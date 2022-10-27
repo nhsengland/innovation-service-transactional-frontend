@@ -34,12 +34,6 @@ describe('Core/Services/CookiesService running SERVER side', () => {
   });
 
 
-  it('should run setAnalyticsScripts() and do nothing', () => {
-    cookieService.get = () => '{ "consented": true, "necessary": true, "analytics": true }';
-    service.setAnalyticsScripts();
-    expect(document.getElementById('hj-analytics')).toBeFalsy();
-  });
-
   it('should run removeAnalyticsScripts() and do nothing', () => {
     cookieService.get = () => '{ "consented": true, "necessary": true, "analytics": true }';
     service.removeAnalyticsScripts();
@@ -93,12 +87,6 @@ describe('Core/Services/CookiesService running CLIENT side', () => {
   it('should run getConsentCookie() and return an empty object when cookie is not JSON format', () => {
     cookieService.get = () => 'Not a JSON text';
     expect(service.getConsentCookie()).toEqual({});
-  });
-
-  it('should run setConsentCookie(true) and apply analytics scripts', () => {
-    cookieService.get = () => '{ "consented": true, "necessary": true, "analytics": true }';
-    service.setConsentCookie(true);
-    expect(document.getElementById('hj-analytics')).toBeTruthy();
   });
 
   it('should run setConsentCookie(false) and remove analytics scripts', () => {

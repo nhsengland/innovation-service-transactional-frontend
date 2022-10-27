@@ -4,8 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
-
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -16,13 +18,15 @@ import { AccessorService } from '../../../services/accessor.service';
 })
 export class InnovationSupportUpdateComponent extends CoreComponent implements OnInit {
 
+  private accessorsList: { id: string, organisationUnitUserId: string, name: string }[] = [];
+
   innovationId: string;
   supportId: string;
   stepNumber: number;
 
-  accessorsList: { value: string, label: string }[];
-  selectedAccessors: any[];
-  organisationUnit: string | undefined;
+  formAccessorsList: { value: string, label: string }[] = [];
+  selectedAccessors: typeof this.accessorsList = [];
+  userOrganisationUnit: null | { id: string, name: string, acronym: string };
 
   supportStatusObj = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   supportStatus = Object.entries(this.supportStatusObj).map(([key, item]) => ({
@@ -42,6 +46,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private innovationsService: InnovationsService,
+    private organisationsService: OrganisationsService,
     private accessorService: AccessorService
   ) {
 
@@ -54,10 +60,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.stepNumber = 1;
 
-    this.accessorsList = [];
-    this.selectedAccessors = [];
-
-    this.organisationUnit = this.stores.authentication.getUserInfo().organisations[0].organisationUnits?.[0]?.name;
+    this.userOrganisationUnit = this.stores.authentication.getUserInfo().organisations[0].organisationUnits[0];
 
   }
 
@@ -70,11 +73,11 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     } else {
 
-      this.accessorService.getInnovationSupportInfo(this.innovationId, this.supportId).subscribe(response => {
+      this.innovationsService.getInnovationSupportInfo(this.innovationId, this.supportId).subscribe(response => {
 
         this.form.get('status')!.setValue(response.status);
 
-        response.engagingAccessors?.forEach(accessor => {
+        response.engagingAccessors.forEach(accessor => {
           (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
         });
 
@@ -83,10 +86,12 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       });
     }
 
-    /** TODO: Change to new endpoint */
-    this.accessorService.getAccessorsList().subscribe(
+    this.organisationsService.getOrganisationUnitUsersList(this.userOrganisationUnit?.id ?? '').subscribe(
       response => {
-        this.accessorsList = response.map((r) => ({ value: r.id, label: r.name }));
+
+        this.accessorsList = response;
+        this.formAccessorsList = response.map((r) => ({ value: r.id, label: r.name }));
+
       }
     );
 
@@ -101,9 +106,9 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     if (!this.validateForm(this.stepNumber)) { return; }
 
-    this.selectedAccessors = (this.form.get('accessors')?.value ?? []).map(a => {
-      return this.accessorsList.find(acc => acc.value === a);
-    });
+    this.selectedAccessors = this.accessorsList.filter(item =>
+      (this.form.get('accessors')?.value ?? []).includes(item.id)
+    );
 
     if (this.stepNumber === 1 && this.form.get('status')!.value !== 'ENGAGING') {
 
@@ -135,23 +140,23 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   }
 
   onSubmit(): void {
-    const body = {
-      status: this.form.get('status')?.value ?? InnovationSupportStatusEnum.UNASSIGNED,
-      accessors: [{
-        id: this.form.get('accessors'),
-        organisationUnitUserId: ''
-      }],
-      message: this.form.get('message')?.value ?? ''
-    }
 
     if (!this.validateForm(this.stepNumber)) { return; }
 
-    this.accessorService.saveSupportStatus(this.innovationId, body, this.supportId).subscribe({
-      next: response => {
-        this.setRedirectAlertSuccess('Support status updated', { message: 'You\'ve updated your support status and posted a message to the innovator.' });
-        this.redirectTo(`/accessor/innovations/${this.innovationId}/support`);
-      },
-      error: error => this.setAlertUnknownError()
+    const body = {
+      status: this.form.get('status')?.value ?? InnovationSupportStatusEnum.UNASSIGNED,
+      accessors: this.selectedAccessors.map(item => ({
+        id: item.id,
+        organisationUnitUserId: item.organisationUnitUserId
+      })),
+      message: this.form.get('message')?.value ?? ''
+    }
+
+    this.accessorService.saveSupportStatus(this.innovationId, body, this.supportId).subscribe(() => {
+
+      this.setRedirectAlertSuccess('Support status updated', { message: 'You\'ve updated your support status and posted a message to the innovator.' });
+      this.redirectTo(`/accessor/innovations/${this.innovationId}/support`);
+
     });
 
   }

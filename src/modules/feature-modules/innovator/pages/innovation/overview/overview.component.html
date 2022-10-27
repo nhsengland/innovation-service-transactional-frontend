@@ -91,13 +91,13 @@
       </div>
       <div class="nhsuk-grid-column-two-thirds">
         <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{supportStatus}}</p>
-        <ng-container *ngIf="supportingAccessors.length > 0">
+        <!-- <ng-container *ngIf="supportingAccessors.length > 0">
           <ul class="nhsuk-list">
             <li *ngFor="let item of supportingAccessors">
               {{item.unit}}, {{item.name}}
             </li>
           </ul>
-        </ng-container>
+        </ng-container> -->
         See <strong><a routerLink="/innovator/innovations/{{ innovationId }}/support"> data sharing and support</a></strong>
       </div>
       <div class="nhsuk-grid-column-one-third" *ngIf="showNeedsAssessmentCompleteCard()">

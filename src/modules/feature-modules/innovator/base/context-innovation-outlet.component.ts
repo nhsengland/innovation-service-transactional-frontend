@@ -40,7 +40,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
   private onRouteChange(_event: NavigationEnd): void {
 
     const innovation = this.contextStore.getInnovation();
-    this.data.innovation = { id: innovation.id, name: innovation.name, status: innovation.status, assessmentId: innovation.assessment?.id }
+    this.data.innovation = { id: innovation.id, name: innovation.name, status: innovation.status, assessmentId: innovation.assessment?.id };
 
   }
 
