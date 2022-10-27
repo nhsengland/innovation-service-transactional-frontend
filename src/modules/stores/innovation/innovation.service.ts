@@ -199,7 +199,7 @@ export class InnovationService {
   }
 
   submitSections(innovationId: string, sectionKey: string): Observable<any> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionKey').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, sectionKey });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionKey/submit').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, sectionKey });
     return this.http.patch<any>(url.buildUrl(), { sectionKey }).pipe(
       take(1),
       map(response => response)
