@@ -74,52 +74,6 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
 
   });
 
-  it('should run getInnovationSupports() and return success', () => {
-
-    const responseMock = [
-      {
-        id: 'C2B7433E-F36B-1410-8103-0032FE5B194B',
-        status: 'ENGAGING',
-        organisationUnit: {
-          id: '4BB7433E-F36B-1410-8103-0032FE5B194B', name: 'Ratke Inc',
-          organisation: { id: '43B7433E-F36B-1410-8103-0032FE5B194B', name: 'Reinger Inc', acronym: 'Group' }
-        },
-        accessors: [
-          { id: '60CF433E-F36B-1410-8103-0032FE5B194B', name: 'ASHN Q. Accessor' },
-          { id: '60CF433E-F36B-1410-8103-0032FE5B194C', name: 'ASHN Q. Accessor 2' }
-        ]
-      },
-      {
-        id: '52CF433E-F36B-1410-8103-0032FE5B194B',
-        status: 'NOT_YET',
-        organisationUnit: {
-          id: '49CF433E-F36B-1410-8103-0032FE5B194B', name: 'Unit Test',
-          organisation: { id: 'D1B7433E-F36B-1410-8103-0032FE5B194B', name: 'Kunde and Sons', acronym: 'LLC' }
-        },
-        accessors: [
-          { id: '60CF433E-F36B-1410-8103-0032FE5B194C', name: 'ASHN Q. Accessor 3' }
-        ]
-      },
-      {
-        id: '59CF433E-F36B-1410-8103-0032FE5B194B',
-        status: 'ENGAGING',
-        organisationUnit: {
-          id: '4BCF433E-F36B-1410-8103-0032FE5B194B', name: 'Second Unit',
-          organisation: { id: '43B7433E-F36B-1410-8103-0032FE5B194B', name: 'Reinger Inc', acronym: 'Group' }
-        },
-        accessors: []
-      }
-    ];
-
-    let response: any = null;
-    service.getInnovationSupports('Inno01', true).subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/supports?full=true`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response.length).toBe(3);
-
-  });
 
   it('should run getInnovationActionsList() and return success', () => {
 
@@ -213,24 +167,6 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/actions/ActionId01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PUT');
-    expect(response).toEqual(expected);
-
-  });
-
-  it('should run getInnovationShares() and return success', () => {
-
-    const responseMock = [
-      { id: 'id', status: 'ENGAGING' },
-      { id: 'id', status: 'WAITING' }
-    ];
-    const expected = responseMock;
-
-    let response: any = null;
-    service.getInnovationShares('Inno01').subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/Inno01/shares`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
 
   });

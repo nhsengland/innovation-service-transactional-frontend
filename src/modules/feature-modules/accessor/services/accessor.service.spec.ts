@@ -14,7 +14,7 @@ import { TableModel } from '@app/base/models';
 
 import {
   AccessorService,
-  getActionsListEndpointInDTO, getActionsListEndpointOutDTO, getInnovationSupportsDTO,
+  getActionsListEndpointInDTO, getActionsListEndpointOutDTO,
   getSupportLogInDTO, SupportLogType, getSupportLogOutDTO
 } from './accessor.service';
 
@@ -225,106 +225,6 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
     expect(response).toEqual(expected);
 
   });
-
-
-  it('should run getInnovationSupportInfo() and return success', () => {
-
-    const responseMock: { status: string, accessors: string[] } = {
-      status: 'NeedsAssessment01',
-      accessors: []
-    };
-    const expected: { status: string, accessors: string[] } = responseMock;
-
-    let response: any = null;
-    service.getInnovationSupportInfo('Inno01', 'SupportId01').subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors/UserId01/innovations/Inno01/supports/SupportId01`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-  });
-
-
-  it('should run getAccessorsList() and return success', () => {
-
-    const responseMock: { id: string, name: string }[] = [
-      { id: '01', name: 'Name 01' },
-      { id: '02', name: 'Name 02' }
-    ];
-    const expected: { id: string, name: string }[] = responseMock;
-
-    let response: any = null;
-    service.getAccessorsList().subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-  });
-
-
-  it('should run getInnovationSupports() and return success', () => {
-
-    const responseMock: getInnovationSupportsDTO = {
-      id: 'supportId01',
-      status: 'ENGAGING',
-      organisationUnit: {
-        id: 'Unit01',
-        name: 'Organisation unit 01',
-        organisation: {
-          id: 'Organisation01',
-          name: 'Organisation 01',
-          acronym: 'ORG'
-        },
-      },
-      accessors: [],
-      notifications: {}
-    };
-    const expected: getInnovationSupportsDTO = responseMock;
-
-    let response: any = null;
-    service.getInnovationSupports('Inno01', false).subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors/UserId01/innovations/Inno01/supports?full=false`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-  });
-
-
-  it('should run saveSupportStatus() WITHOUT a supportId and return success', () => {
-
-    const responseMock = { id: 'ID01' };
-    const expected = responseMock;
-    let response: any = null;
-
-    service.saveSupportStatus('Inno01', { some: 'data' }).subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors/UserId01/innovations/Inno01/supports`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('POST');
-    expect(response).toEqual(expected);
-
-  });
-
-  it('should run saveSupportStatus() WITH a supportId and return success', () => {
-
-    const responseMock = { id: 'Inno01Support01' };
-    const expected = responseMock;
-    let response: any = null;
-
-    service.saveSupportStatus('Inno01', { some: 'data' }, 'Inno01Support01').subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors/UserId01/innovations/Inno01/supports/Inno01Support01`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('PUT');
-    expect(response).toEqual(expected);
-
-  });
-
 
   it('should run getSupportLog() with type = "" and return success', () => {
 

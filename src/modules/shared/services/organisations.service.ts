@@ -11,15 +11,11 @@ export type getAccessorsOrganisationsDTO = {
   name: string;
 };
 
-export type getOrganisationUnitsDTO = {
-  id: string;
-  name: string;
-  acronym: string;
-  organisationUnits: {
-    id: string;
-    name: string;
-    acronym: string;
-  }[];
+export type OrganisationsListDTO = {
+  id: string,
+  name: string,
+  acronym: string,
+  organisationUnits: { id: string, name: string, acronym: string }[];
 };
 
 
@@ -28,23 +24,29 @@ export class OrganisationsService extends CoreService {
 
   constructor() { super(); }
 
-  getOrganisationsListWithUnits(): Observable<getOrganisationUnitsDTO[]> {
+  getOrganisationsList(unitsInformation: boolean): Observable<OrganisationsListDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('organisation-units'); // user-admin/organisations only active
-    return this.http.get<getOrganisationUnitsDTO[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/organisations');
+
+    if (unitsInformation) {
+      url.setQueryParams({ fields: ['organisationUnits'] });
+    }
+
+    return this.http.get<OrganisationsListDTO[]>(url.buildUrl()).pipe(take(1),
+      map(response => response.map(item => ({
+        id: item.id,
+        name: item.name,
+        acronym: item.acronym,
+        organisationUnits: unitsInformation ? item.organisationUnits : []
+      })))
     );
 
   }
 
-  getAccessorsOrganisations(): Observable<getAccessorsOrganisationsDTO[]> {
+  getOrganisationUnitUsersList(organisationUnitId: string): Observable<{ id: string, organisationUnitUserId: string, name: string }[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('organisations').setQueryParams({ type: 'ACCESSOR' });
-    return this.http.get<getAccessorsOrganisationsDTO[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ organisationUnitId });
+    return this.http.get<{ id: string, organisationUnitUserId: string, name: string }[]>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 

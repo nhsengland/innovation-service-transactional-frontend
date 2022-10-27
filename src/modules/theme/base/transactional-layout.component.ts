@@ -20,7 +20,7 @@ export type RoutesDataType = {
   },
   breadcrumb?: string,
   layout?: {
-    type?: 'full' | '1.third-2.thirds',
+    type?: 'full' | 'journey' | '1.third-2.thirds',
     backgroundColor?: null | string
   },
   innovationActionData?: { id: null | string, name: string },
@@ -125,7 +125,7 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
     // console.log('RouteLayoutData', this.routeLayoutInfo);
 
     // if (this.header.menuBarItems.left.length > 0 || this.header.menuBarItems.right.length > 0) {
-      this.contextStore.updateUserUnreadNotifications();
+    this.contextStore.updateUserUnreadNotifications();
     // }
 
 

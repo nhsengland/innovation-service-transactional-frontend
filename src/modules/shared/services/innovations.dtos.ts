@@ -1,0 +1,73 @@
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
+import { DateISOType } from '@app/base/types';
+
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+
+
+export type InnovationsListDTO = {
+  count: number,
+  data: {
+    id: string,
+    name: string,
+    description: null | string,
+    status: InnovationStatusEnum,
+    submittedAt: null | DateISOType,
+    countryName: null | string,
+    postCode: null | string,
+    mainCategory: null | string,
+    otherMainCategoryDescription: null | string,
+    isAssessmentOverdue?: boolean,
+    assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { name: string } },
+    supports?: {
+      id: string,
+      status: InnovationSupportStatusEnum,
+      updatedAt: DateISOType,
+      organisation: {
+        id: string, name: string, acronym: null | string,
+        unit: {
+          id: string, name: string, acronym: string,
+          // Users only exists while a support is ENGAGING.
+          users?: { name: string, role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum }[]
+        }
+      }
+    }[],
+    notifications?: number
+  }[]
+};
+
+
+export type InnovationInfoDTO = {
+  id: string;
+  name: string;
+  status: InnovationStatusEnum;
+  description: string;
+  countryName: string;
+  postcode: string;
+  submittedAt?: string;
+  assessment?: {
+    id: string;
+  };
+  actions: {
+    requestedCount: number;
+    inReviewCount: number;
+  },
+  notifications: { [key: string]: number }
+};
+
+
+export type InnovationSupportsListDTO = {
+  id: string,
+  status: InnovationSupportStatusEnum,
+  organisation: {
+    id: string, name: string, acronym: string,
+    unit: { id: string, name: string, acronym: string }
+  },
+  engagingAccessors: { id: string, organisationUnitUserId: string, name: string }[]
+}[];
+
+
+export type InnovationSupportInfoDTO = {
+  id: string,
+  status: InnovationSupportStatusEnum,
+  engagingAccessors: { id: string, organisationUnitUserId: string, name: string }[]
+}

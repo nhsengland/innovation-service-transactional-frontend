@@ -11,7 +11,6 @@ import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
-import { FormEngineComponent } from '@modules/shared/forms';
 
 import { InnovationNewComponent } from './innovation-new.component';
 
@@ -52,7 +51,10 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
     organisationsService = TestBed.inject(OrganisationsService);
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
-    organisationsService.getAccessorsOrganisations = () => of([{ id: 'orgId', name: 'Org name' }]);
+    // organisationsService.getOrganisationUnitUsersList = () => of([
+    //   { id: 'orgId01', name: 'Org name 01', organisationUnitUserId: 'OrgUnitId01' },
+    //   { id: 'orgId02', name: 'Org name 02', organisationUnitUserId: 'OrgUnitId02' }
+    // ]);
 
   });
 

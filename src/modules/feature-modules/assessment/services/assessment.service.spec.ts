@@ -9,11 +9,11 @@ import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/cor
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
 
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 import {
   AssessmentService,
-  getInnovationInfoEndpointDTO, getInnovationSupportsDTO, getSupportLogInDTO, getSupportLogOutDTO, SupportLogType
+  getInnovationInfoEndpointDTO, getSupportLogInDTO, getSupportLogOutDTO, SupportLogType
 } from './assessment.service';
 
 
@@ -226,28 +226,6 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/inno01/assessments/assess01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PUT');
-    expect(response).toEqual(expected);
-
-  });
-
-  it('should run getInnovationSupports() and return success', () => {
-
-    const responseMock: getInnovationSupportsDTO = {
-      id: '01', status: InnovationSupportStatusEnum.ENGAGING,
-      organisationUnit: {
-        id: 'unit01', name: 'Unit 01',
-        organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
-      }
-    };
-
-    const expected = responseMock;
-
-    let response: any = null;
-    service.getInnovationSupports('inno01', false).subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01/supports?full=false`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
 
   });

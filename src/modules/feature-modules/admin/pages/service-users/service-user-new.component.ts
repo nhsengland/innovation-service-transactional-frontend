@@ -43,16 +43,17 @@ export class PageServiceUserNewComponent extends CoreComponent implements OnInit
     // Adds async e-mail validator to the second step.
     this.wizard.steps[1].parameters[0].validations = { ...this.wizard.steps[1].parameters[0].validations, async: [this.serviceUsersService.userEmailValidator()] };
 
-    this.organisationsService.getOrganisationsListWithUnits().subscribe(
-      response => {
+    this.organisationsService.getOrganisationsList(true).subscribe({
+      next: response => {
         const organisationsList = response.map(o => ({ acronym: o.acronym, name: o.name, units: o.organisationUnits.map(u => ({ acronym: u.acronym, name: u.name })) }));
         this.wizard.gotoStep(1).setAnswers(this.wizard.runInboundParsing({ organisationsList })).runRules();
         this.setPageStatus('READY');
       },
-      () => {
+      error: () => {
         this.setPageStatus('READY');
         this.logger.error('Error fetching organisations units');
-      });
+      }
+    });
 
 
     this.setPageStatus('READY');

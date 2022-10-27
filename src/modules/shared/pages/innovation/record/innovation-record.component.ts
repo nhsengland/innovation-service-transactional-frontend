@@ -92,7 +92,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
       this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
 
       if (!this.innovationName) { // This means that an API error occurred.
-        this.setAlertWarning('There is a problem', { message: 'Unable to fetch full innovation record information' })
+        this.setAlertError('There is a problem', { message: 'Unable to fetch full innovation record information' })
       }
 
       this.setPageStatus('READY');

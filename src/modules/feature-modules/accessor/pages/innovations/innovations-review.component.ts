@@ -6,7 +6,9 @@ import { FormControl, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { DateISOType, NotificationValueType } from '@app/base/types';
 
-import { InnovationsListDTO, InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
+
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
