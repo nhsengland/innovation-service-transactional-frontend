@@ -11,9 +11,11 @@
 
           <a href="javascript:void(0)" (click)="onOpenCloseFilter(filter.key)"
             class="d-flex align-items-center nhsuk-u-font-size-19 text-decoration-none nhsuk-u-margin-bottom-0"
-            [attr.aria-expanded]="filter.showHideStatus === 'opened' ? 'true' : 'false'">
-            <ng-container *ngTemplateOutlet="filterIcon; context: { showHideStatus: filter.showHideStatus }">
-            </ng-container>
+            [attr.aria-expanded]="filter.showHideStatus === 'opened' ? 'true' : 'false'"
+          >
+
+            <ng-container *ngTemplateOutlet="filterIcon; context: { showHideStatus: filter.showHideStatus }"></ng-container>
+
             <span class="nhsuk-u-padding-left-2">
               {{ filter.title }}
               <span class="nhsuk-u-visually-hidden"> filter section </span>
@@ -93,12 +95,7 @@
                 <span *ngFor="let selected of filter.selected" class="d-inline-block bordered-item nhsuk-u-margin-1">
                   <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.value)"
                     attr.aria-label="Remove {{ selected.label }} from {{ filter.title }} filter">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" aria-hidden="true" focusable="false"
-                      height="20" width="20">
-                      <path
-                        d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z">
-                      </path>
-                    </svg>
+                    <ng-container *ngTemplateOutlet="closeIcon"></ng-container>
                   </a>
                   <span class="nhsuk-u-font-size-14">{{ selected.label }}</span>
                 </span>
@@ -116,12 +113,7 @@
                     <a href="javascript:void(0)"
                       (click)="onRemoveDateRangeFilter(selected.formControl!, selected.value)"
                       attr.aria-label="Remove {{ selected.value }} from {{ filter.title }} filter">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" aria-hidden="true" focusable="false"
-                        height="20" width="20">
-                        <path
-                          d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z">
-                        </path>
-                      </svg>
+                      <ng-container *ngTemplateOutlet="closeIcon"></ng-container>
                     </a>
                     <span class="nhsuk-u-font-size-14">{{ selected.value }}</span>
                   </span>
@@ -233,5 +225,14 @@
     viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
     <circle cx="12" cy="12" r="10"></circle>
     <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M8 12h8"></path>
+  </svg>
+</ng-template>
+
+<ng-template #closeIcon>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" aria-hidden="true" focusable="false" height="20"
+    width="20">
+    <path
+      d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z">
+    </path>
   </svg>
 </ng-template>

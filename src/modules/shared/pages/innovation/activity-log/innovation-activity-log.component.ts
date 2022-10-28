@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { FormArray, FormGroup } from '@app/base/forms';
+import { CustomValidators, FormArray, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
@@ -61,8 +60,8 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
   form = new FormGroup({
     activityTypes: new FormArray([]),
-    activityStartAfter: new FormControl(),
-    activityStartBefore: new FormControl(),
+    activityStartAfter: new FormControl('', CustomValidators.parsedDateStringValidator('Please enter a valid date.')),
+    activityStartBefore: new FormControl('', CustomValidators.parsedDateStringValidator('Please enter a valid date.')),
   }, { updateOn: 'change' });
 
   anyFilterSelected = false;
