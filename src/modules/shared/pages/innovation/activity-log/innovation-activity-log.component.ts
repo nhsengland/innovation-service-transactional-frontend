@@ -60,8 +60,8 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
   form = new FormGroup({
     activityTypes: new FormArray([]),
-    activityStartAfter: new FormControl('', CustomValidators.parsedDateStringValidator('Please enter a valid date.')),
-    activityStartBefore: new FormControl('', CustomValidators.parsedDateStringValidator('Please enter a valid date.')),
+    activityStartAfter: new FormControl('', CustomValidators.parsedDateStringValidator()),
+    activityStartBefore: new FormControl('', CustomValidators.parsedDateStringValidator()),
   }, { updateOn: 'change' });
 
   anyFilterSelected = false;
@@ -156,6 +156,11 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
 
   onFormChange(): void {
+
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     this.setPageStatus('LOADING');
 
@@ -260,9 +265,9 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
     const afterDate = this.form.get(this.datasets[filter.key][0].formControl!)!.value;
     const beforeDate = this.form.get(this.datasets[filter.key][1].formControl!)!.value;
 
-    if (afterDate != null && beforeDate == null) return "Activity after";
+    if (afterDate !== null && beforeDate === null) return "Activity after";
 
-    if (afterDate == null && beforeDate != null) return "Activity before";
+    if (afterDate === null && beforeDate !== null) return "Activity before";
 
     return "Activity between";
   }

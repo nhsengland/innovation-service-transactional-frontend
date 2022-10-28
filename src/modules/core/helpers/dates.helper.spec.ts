@@ -30,6 +30,26 @@ describe('Core/Helpers/DatesHelper', () => {
     it(`should return YYYY-MM-DD (first day of the given year) when input is YYYY`, () => {
       expect(DatesHelper.parseIntoValidFormat('2020')).toBe('2020/01/01');
     });
+
+    it(`should return date in given format`, () => {
+      expect(DatesHelper.parseIntoValidFormat('14/09/2020', 'MM/dd/yyyy')).toBe('09/14/2020');
+    });
+
+    it(`should return null if input is empty`, () => {
+      expect(DatesHelper.parseIntoValidFormat('')).toBeNull();
+    });
+
+    it(`should return null if input is null`, () => {
+      expect(DatesHelper.parseIntoValidFormat(null)).toBeNull();
+    });
+
+    it(`should return null if input is invalid (MM//DD)`, () => {
+      expect(DatesHelper.parseIntoValidFormat('09//12')).toBeNull();
+    });
+
+    it(`should return null if input is invalid (DD)`, () => {
+      expect(DatesHelper.parseIntoValidFormat('00')).toBeNull();
+    });
   });
 
 });

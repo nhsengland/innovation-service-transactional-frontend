@@ -115,7 +115,7 @@
                       attr.aria-label="Remove {{ selected.value }} from {{ filter.title }} filter">
                       <ng-container *ngTemplateOutlet="closeIcon"></ng-container>
                     </a>
-                    <span class="nhsuk-u-font-size-14">{{ selected.value }}</span>
+                    <span class="nhsuk-u-font-size-14">{{ selected.value | date: ('app.date_formats.long_date' | translate) }}</span>
                   </span>
 
                   <span class="nhsuk-u-font-size-16" *ngIf="i === 0 && filter.selected.length === 2"> and </span>

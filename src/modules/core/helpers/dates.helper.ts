@@ -12,8 +12,8 @@ export class DatesHelper {
 
   }
 
-  static parseIntoValidFormat(dateStr: string): string | null {
-    if (dateStr == null) {
+  static parseIntoValidFormat(dateStr: string | null, format = "yyyy/MM/dd"): string | null {
+    if (dateStr === null) {
       return null;
     }
 
@@ -30,7 +30,7 @@ export class DatesHelper {
       const date = DateTime.fromFormat(dateStr, dateFormat);
 
       if (date.isValid === true) {
-        return date.toFormat('yyyy/MM/dd');
+        return date.toFormat(format);
       }
     }
 

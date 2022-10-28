@@ -173,6 +173,7 @@ export class FormEngineHelper {
     if (error.hexadecimalFormat) { return { message: 'shared.forms_module.validations.invalid_hexadecimal_format', params: {} }; }
     if (error.minHexadecimal) { return { message: 'shared.forms_module.validations.min_hexadecimal' + ` (${error.minHexadecimal.min})`, params: {} }; }
     if (error.maxHexadecimal) { return { message: 'shared.forms_module.validations.max_hexadecimal' + ` (${error.maxHexadecimal.max})`, params: {} }; }
+    if (error.parsedDateString) { return { message: error.parsedDateString.message || "shared.forms_module.validations.invalid_parse_date", params: {} } }
     if (error.customError) { return { message: error.message, params: {} }; }
     return { message: '', params: {} };
 
