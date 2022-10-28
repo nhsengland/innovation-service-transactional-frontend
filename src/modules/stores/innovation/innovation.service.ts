@@ -86,7 +86,7 @@ export class InnovationService {
 
 
   submitInnovation(innovationId: string): Observable<{ id: string, status: keyof typeof INNOVATION_STATUS }> {
-    
+
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/submit').setPathParams({ innovationId });
     return this.http.patch<{ id: string, status: keyof typeof INNOVATION_STATUS }>(url.buildUrl(), {}).pipe(
       take(1),
@@ -97,7 +97,7 @@ export class InnovationService {
 
   getInnovationActivityLog(
     innovationId: string,
-    queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum[], activityStartAfter: string, activityStartBefore: string }>
+    queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum[], startDate: string, endDate: string }>
   ): Observable<ActivityLogOutDTO> {
 
     const userUrlBasePath = this.authenticationStore.userUrlBasePath();
@@ -105,8 +105,8 @@ export class InnovationService {
     const qp = {
       ...qParams,
       activityTypes: filters.activityTypes || undefined,
-      activityStartAfter: filters.activityStartAfter || undefined,
-      activityStartBefore: filters.activityStartBefore || undefined,
+      startDate: filters.startDate || undefined,
+      endDate: filters.endDate || undefined,
     };
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/activities')

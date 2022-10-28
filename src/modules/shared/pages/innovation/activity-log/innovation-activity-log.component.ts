@@ -54,14 +54,14 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
   ACTIVITY_LOG_ITEMS = ACTIVITY_LOG_ITEMS;
 
-  activitiesList = new TableModel<ActivitiesListType, { activityTypes: ActivityLogTypesEnum[], activityStartAfter: string, activityStartBefore: string }>();
+  activitiesList = new TableModel<ActivitiesListType, { activityTypes: ActivityLogTypesEnum[], startDate: string, endDate: string }>();
 
   currentDateOrderBy: 'ascending' | 'descending';
 
   form = new FormGroup({
     activityTypes: new FormArray([]),
-    activityStartAfter: new FormControl('', CustomValidators.parsedDateStringValidator()),
-    activityStartBefore: new FormControl('', CustomValidators.parsedDateStringValidator()),
+    startDate: new FormControl('', CustomValidators.parsedDateStringValidator()),
+    endDate: new FormControl('', CustomValidators.parsedDateStringValidator()),
   }, { updateOn: 'change' });
 
   anyFilterSelected = false;
@@ -95,13 +95,13 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
         label: "Activity date after",
         description: "For example, 2005 or 21/11/2014",
         value: "",
-        formControl: "activityStartAfter",
+        formControl: "startDate",
       },
       {
         label: "Activity date before",
         description: "For example, 2005 or 21/11/2014",
         value: "",
-        formControl: "activityStartBefore",
+        formControl: "endDate",
       }
     ]
   };
@@ -194,8 +194,8 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
     this.activitiesList.setFilters({
       activityTypes: this.form.get('activityTypes')!.value,
-      activityStartAfter: this.getDateByControlName('activityStartAfter') ?? '',
-      activityStartBefore: this.getDateByControlName('activityStartBefore') ?? '',
+      startDate: this.getDateByControlName('startDate') ?? '',
+      endDate: this.getDateByControlName('endDate') ?? '',
     });
 
     this.getActivitiesLogList();
