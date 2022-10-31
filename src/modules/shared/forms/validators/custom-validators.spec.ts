@@ -211,5 +211,31 @@ describe('CustomValidators', () => {
 
   });
 
+  describe('CustomValidators.parsedDateStringValidator()', () => {
+    beforeAll(() => {
+      formControl = new FormControl();
+      validatorFn = CustomValidators.parsedDateStringValidator();
+    });
+
+    it('should return null when control value is null', () => {
+      formControl.setValue(null);
+      validator = validatorFn(formControl);
+      expect(validator).toBeNull();
+    });
+
+    it('should return error when control value is invalid date', () => {
+      formControl.setValue('24//24');
+      validator = validatorFn(formControl);
+      expect(validator).toEqual({ parsedDateString: true });
+    });
+
+    it('should return null when control value is valid date', () => {
+      formControl.setValue('12/12');
+      validator = validatorFn(formControl);
+      expect(validator).toBeNull();
+    });
+
+  })
+
 
 });

@@ -361,7 +361,8 @@ export const locale = {
           password_mismatch: 'Passwords don\'t appear to match',
           password_regex: 'The password must contain at least minimum 8 characters: one uppercase, one lowercase, one number and one special character',
           required: 'Required',
-          existsIn: 'Value already exists'
+          existsIn: 'Value already exists',
+          invalid_parse_date: 'Please enter a valid date format'
         }
       }
 
