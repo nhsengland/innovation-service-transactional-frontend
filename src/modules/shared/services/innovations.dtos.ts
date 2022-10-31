@@ -1,7 +1,7 @@
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
 import { DateISOType } from '@app/base/types';
 
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 export type InnovationsListDTO = {
@@ -71,3 +71,31 @@ export type InnovationSupportInfoDTO = {
   status: InnovationSupportStatusEnum,
   engagingAccessors: { id: string, organisationUnitUserId: string, name: string }[]
 }
+
+
+export type InnovationActionsListInDTO = {
+  count: number,
+  data: {
+    id: string,
+    displayId: string,
+    description: string,
+    innovation: { id: string, name: string },
+    status: InnovationActionStatusEnum,
+    section: InnovationSectionEnum,
+    createdAt: DateISOType,
+    updatedAt: DateISOType,
+    notifications: number
+  }[]
+};
+export type InnovationActionsListDTO = { count: number, data: (InnovationActionsListInDTO['data'][0] & { name: string })[] };
+
+export type InnovationActionInfoDTO = {
+  id: string,
+  displayId: string,
+  status: InnovationActionStatusEnum,
+  section: InnovationSectionEnum,
+  name: string,
+  description: string,
+  createdAt: DateISOType,
+  createdBy: string
+};

@@ -5,9 +5,11 @@ import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 import { RoutingHelper } from '@app/base/helpers';
 
-import { AccessorService, getInnovationActionsListEndpointOutDTO } from '../../../services/accessor.service';
+import { InnovationsActionsListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
+import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -19,8 +21,8 @@ export class InnovationActionTrackerListComponent extends CoreComponent implemen
   innovationId: string;
   innovation: InnovationDataResolverType;
 
-  openedActionsList: TableModel<(getInnovationActionsListEndpointOutDTO['openedActions'][0])>;
-  closedActionsList: TableModel<(getInnovationActionsListEndpointOutDTO['closedActions'][0])>;
+  openedActionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>;
+  closedActionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>;
 
   innovationSummary: { label: string; value: string; }[] = [];
 
@@ -28,7 +30,7 @@ export class InnovationActionTrackerListComponent extends CoreComponent implemen
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService
+    private innovationsService: InnovationsService
   ) {
 
     super();
@@ -45,7 +47,7 @@ export class InnovationActionTrackerListComponent extends CoreComponent implemen
         createdAt: { label: 'Requested date' },
         status: { label: 'Status', align: 'right' }
       }
-    });
+    })
 
     this.closedActionsList = new TableModel({
       visibleColumns: {
@@ -61,10 +63,30 @@ export class InnovationActionTrackerListComponent extends CoreComponent implemen
 
   ngOnInit(): void {
 
-    this.accessorService.getInnovationActionsList(this.innovationId).subscribe(response => {
-      this.openedActionsList.setData(response.openedActions);
-      this.closedActionsList.setData(response.closedActions);
+    const filters = new TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>({ pageSize: 1000 });
+    filters.setFilters({ innovationId: this.innovationId, fields: ['notifications'] });
+
+    this.innovationsService.getActionsList(filters.getAPIQueryParams()).subscribe(response => {
+
+      this.openedActionsList.setData(response.data
+        .filter(item => [
+          InnovationActionStatusEnum.REQUESTED,
+          InnovationActionStatusEnum.STARTED,
+          InnovationActionStatusEnum.CONTINUE,
+          InnovationActionStatusEnum.IN_REVIEW
+        ].includes(item.status))
+      );
+
+      this.closedActionsList.setData(response.data
+        .filter(item => [
+          InnovationActionStatusEnum.DECLINED,
+          InnovationActionStatusEnum.COMPLETED,
+          InnovationActionStatusEnum.DELETED
+        ].includes(item.status))
+      );
+
       this.setPageStatus('READY');
+
     });
 
   }

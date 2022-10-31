@@ -7,7 +7,7 @@ import { Injector } from '@angular/core';
 
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
-import { InnovationSectionEnum, InnovationTransferStatusEnum } from '@modules/stores/innovation';
+import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 
 import { InnovatorService } from './innovator.service';
 
@@ -74,87 +74,6 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
 
   });
 
-
-  it('should run getInnovationActionsList() and return success', () => {
-
-    const responseMock = [
-      {
-        id: 'C2B7433E-F36B-1410-8103-0032FE5B194B',
-        displayId: 'C2B7433E-F36B-1410-8103-0032FE5B194B',
-        status: 'CONTINUE',
-        section: InnovationSectionEnum.INNOVATION_DESCRIPTION,
-        createdAt: '2020-01-01T00:00:00.000Z',
-        notifications: { count: 0 }
-      },
-      {
-        id: '52CF433E-F36B-1410-8103-0032FE5B194B',
-        displayId: '52CF433E-F36B-1410-8103-0032FE5B194B',
-        status: 'STARTED',
-        section: InnovationSectionEnum.INNOVATION_DESCRIPTION,
-        createdAt: '2020-01-01T00:00:00.000Z',
-        notifications: { count: 0 }
-      },
-      {
-        id: '59CF433E-F36B-1410-8103-0032FE5B194B',
-        displayId: '59CF433E-F36B-1410-8103-0032FE5B194B',
-        status: 'COMPLETED',
-        section: InnovationSectionEnum.INNOVATION_DESCRIPTION,
-        createdAt: '2020-01-01T00:00:00.000Z',
-        notifications: { count: 0 }
-      }
-    ];
-
-    const expected = {
-      openedActions: [
-        { ...responseMock[0], name: 'Submit \'Description of innovation\'' },
-        { ...responseMock[1], name: 'Submit \'Description of innovation\'' }
-      ],
-      closedActions: [
-        { ...responseMock[2], name: 'Submit \'Description of innovation\'' }
-      ]
-    };
-
-    let response: any = null;
-    service.getInnovationActionsList('Inno01').subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/actions`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-  });
-
-  // it('should run getInnovationActionInfo() and return success', () => {
-
-  //   const responseMock = {
-  //     id: 'C2B7433E-F36B-1410-8103-0032FE5B194B',
-  //     displayId: 'C2B7433E-F36B-1410-8103-0032FE5B194B',
-  //     status: 'CONTINUE',
-  //     description: '',
-  //     section: InnovationSectionEnum.INNOVATION_DESCRIPTION,
-  //     createdAt: '2020-01-01T00:00:00.000Z',
-  //     createdBy: 'User Name'
-  //   };
-
-  //   const expected = {
-  //     id: responseMock.id,
-  //     displayId: responseMock.displayId,
-  //     status: responseMock.status,
-  //     name: `Submit 'description of innovation'`,
-  //     description: responseMock.description,
-  //     section: responseMock.section,
-  //     createdAt: responseMock.createdAt
-  //   };
-
-  //   let response: any = null;
-  //   service.getInnovationActionInfo('Inno01', 'ActionId01').subscribe({ next: success => response = success, error: error => response = error});
-
-  //   const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/actions/ActionId01`);
-  //   httpRequest.flush(responseMock);
-  //   expect(httpRequest.request.method).toBe('GET');
-  //   expect(response).toEqual(expected);
-
-  // });
 
   it('should run declineAction() and return success', () => {
 

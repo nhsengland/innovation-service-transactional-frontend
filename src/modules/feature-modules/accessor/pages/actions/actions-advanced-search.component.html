@@ -6,7 +6,7 @@
       <form [formGroup]="form">
         <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Search by innovation name</h2>
 
-        <theme-form-input controlName="search" [pageUniqueField]="false">
+        <theme-form-input controlName="innovationName" [pageUniqueField]="false">
           <ng-container append>
             <button type="button" (click)="onFormChange()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px">
               <svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false" height="24" width="24">
@@ -104,7 +104,7 @@
                       {{ item.name }}
                     </a>
                   </div>
-                  <theme-notification-tag label="dot" *ngIf="item.notifications && item.notifications.count > 0"></theme-notification-tag>
+                  <theme-notification-tag label="dot" *ngIf="item.notifications && item.notifications > 0"></theme-notification-tag>
                 </div>
               </td>
               <td class="nhsuk-table__cell">
