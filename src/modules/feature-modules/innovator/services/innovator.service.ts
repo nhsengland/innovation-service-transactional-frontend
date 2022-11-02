@@ -51,6 +51,12 @@ export class InnovatorService extends CoreService {
 
   }
 
+  createNeedsReassessment(innovationId: string, body: { updatedInnovationRecord: string, description: string }): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/reassessments').setPathParams({ innovationId });
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
+
+  }
 
   submitOrganisationSharing(innovationId: string, body: MappedObjectType): Observable<{ id: string }> {
 

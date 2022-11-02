@@ -28,7 +28,9 @@ import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-
 import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
 import { InnovationDataSharingComponent } from './pages/innovation/data-sharing/data-sharing.component';
-import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
+import { PageInnovationHowToProceedComponent } from './pages/innovation/how-to-proceed/how-to-proceed.component';
+import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment/needs-assessment-overview.component';
+import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation/needs-reassessment/needs-reassessment-send.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
@@ -75,7 +77,9 @@ import { InnovatorService } from './services/innovator.service';
     InnovationActionTrackerComponent,
     InnovationDataSharingChangeComponent,
     InnovationDataSharingComponent,
+    PageInnovationHowToProceedComponent,
     InnovatorNeedsAssessmentOverviewComponent,
+    PageInnovationNeedsReassessmentSendComponent,
     InnovationOverviewComponent,
     InnovationSectionEvidenceEditComponent,
     InnovationSectionEditComponent,

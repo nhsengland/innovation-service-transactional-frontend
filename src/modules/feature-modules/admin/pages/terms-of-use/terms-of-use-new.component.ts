@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UntypedFormControl, Validators } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
+import { CustomValidators, FormGroup } from '@app/base/forms';
 
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
