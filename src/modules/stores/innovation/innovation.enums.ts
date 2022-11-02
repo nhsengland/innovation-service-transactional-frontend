@@ -51,8 +51,7 @@ export enum InnovationActionStatusEnum {
   IN_REVIEW = 'IN_REVIEW',
   DELETED = 'DELETED',
   DECLINED = 'DECLINED',
-  COMPLETED = 'COMPLETED',
-  CANCELLED = 'CANCELLED'
+  COMPLETED = 'COMPLETED'
 }
 
 export enum ActivityLogTypesEnum {

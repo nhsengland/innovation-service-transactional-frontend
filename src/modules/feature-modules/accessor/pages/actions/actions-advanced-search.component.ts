@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
-import { UntypedFormControl } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
-import { FormArray, FormControl, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
-import { AccessorService, getAdvanceActionsListEndpointOutDTO } from '../../services/accessor.service';
+import { InnovationsActionsListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationActionStatusEnum, InnovationSectionEnum } from '@modules/stores/innovation';
 
-type FilterKeysType = 'innovationStatus' | 'innovationSection';
+type FilterKeysType = 'status' | 'sections';
 
 @Component({
   selector: 'app-accessor-pages-actions-advanced-search',
@@ -19,15 +20,14 @@ type FilterKeysType = 'innovationStatus' | 'innovationSection';
 })
 export class ActionsAdvancedSearchComponent extends CoreComponent implements OnInit {
 
-  actionsList: TableModel<getAdvanceActionsListEndpointOutDTO['data'][0],
-    { name: string, innovationStatus: string[], innovationSection: string[] }>;
+  actionsList = new TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>({});
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
   form = new FormGroup({
-    search: new UntypedFormControl(),
-    innovationStatus: new FormArray([]),
-    innovationSection: new FormArray([])
+    innovationName: new FormControl<string>(''),
+    status: new FormArray<FormControl<InnovationActionStatusEnum>>([]),
+    sections: new FormArray<FormControl<InnovationSectionEnum>>([])
   }, { updateOn: 'change' });
 
   anyFilterSelected = false;
@@ -37,25 +37,23 @@ export class ActionsAdvancedSearchComponent extends CoreComponent implements OnI
     showHideStatus: 'opened' | 'closed',
     selected: { label: string, value: string }[]
   }[] = [
-      { key: 'innovationStatus', title: 'Status', showHideStatus: 'closed', selected: [] },
-      { key: 'innovationSection', title: 'Innovation record section', showHideStatus: 'closed', selected: [] }
+      { key: 'status', title: 'Status', showHideStatus: 'closed', selected: [] },
+      { key: 'sections', title: 'Innovation record section', showHideStatus: 'closed', selected: [] }
     ];
 
-  datasets: { [key in FilterKeysType]: { label: string, value: string }[] } = {
-    innovationStatus: [],
-    innovationSection: []
+  datasets: { [key in FilterKeysType]: { label: string, value: InnovationActionStatusEnum | string }[] } = {
+    status: [],
+    sections: []
   };
 
   innovationsList: any;
 
   constructor(
-    private accessorService: AccessorService
+    private innovationsService: InnovationsService
   ) {
 
     super();
     this.setPageTitle('Actions advanced search');
-
-    this.actionsList = new TableModel({});
 
     this.actionsList.setVisibleColumns({
       section: { label: 'Action', orderable: true },
@@ -68,11 +66,11 @@ export class ActionsAdvancedSearchComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    this.datasets.innovationStatus = Object.entries(INNOVATION_SECTION_ACTION_STATUS).
+    this.datasets.status = Object.entries(INNOVATION_SECTION_ACTION_STATUS).
       map(([key, item]) => ({ label: item.label, value: key })).
-      filter(i => ['REQUESTED', 'IN_REVIEW', 'COMPLETED', 'DECLINED', 'CANCELLED'].includes(i.value));
+      filter(i => [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.IN_REVIEW, InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DECLINED].includes(i.value as InnovationActionStatusEnum));
 
-    this.datasets.innovationSection = INNOVATION_SECTIONS.reduce((sectionGroupAcc: { value: string, label: string }[], sectionGroup, i) => {
+    this.datasets.sections = INNOVATION_SECTIONS.reduce((sectionGroupAcc: { value: string, label: string }[], sectionGroup, i) => {
       return [
         ...sectionGroupAcc,
         ...sectionGroup.sections.reduce((sectionAcc: { value: string, label: string }[], section, j) => {
@@ -93,17 +91,10 @@ export class ActionsAdvancedSearchComponent extends CoreComponent implements OnI
 
     this.setPageStatus('LOADING');
 
-    this.accessorService.getAdvanceActionsList(this.actionsList.getAPIQueryParams()).subscribe(
-      response => {
-        this.actionsList.setData(response.data, response.count);
-        this.setPageStatus('READY');
-
-      },
-      error => {
-        this.setPageStatus('ERROR');
-        this.logger.error(error);
-      }
-    );
+    this.innovationsService.getActionsList(this.actionsList.getAPIQueryParams()).subscribe(response => {
+      this.actionsList.setData(response.data, response.count);
+      this.setPageStatus('READY');
+    });
 
   }
 
@@ -121,9 +112,11 @@ export class ActionsAdvancedSearchComponent extends CoreComponent implements OnI
     this.actionsList
       .clearData()
       .setFilters({
-        name: this.form.get('search')!.value,
-        innovationStatus: this.form.get('innovationStatus')!.value,
-        innovationSection: this.form.get('innovationSection')!.value,
+        ...(this.form.get('innovationName')?.value ? { innovationName: this.form.get('innovationName')?.value || '' } : {}),
+        ...(this.form.get('status')?.value ? { status: this.form.get('status')?.value } : {}),
+        ...(this.form.get('sections')?.value ? { sections: this.form.get('sections')?.value } : {}),
+        createdByMe: true,
+        fields: ['notifications']
       });
 
     this.getActionsList();

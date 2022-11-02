@@ -7,24 +7,8 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { MappedObjectType } from '@app/base/types';
 
-import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationSupportStatusEnum, InnovationTransferStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum, InnovationTransferStatusEnum } from '@modules/stores/innovation';
 
-
-type getInnovationActionsListEndpointInDTO = {
-  id: string;
-  displayId: string;
-  status: InnovationActionStatusEnum;
-  section: InnovationSectionEnum;
-  createdAt: string; // '2021-04-16T09:23:49.396Z',
-  notifications: {
-    count: number
-  },
-};
-
-export type getInnovationActionsListEndpointOutDTO = {
-  openedActions: (getInnovationActionsListEndpointInDTO & { name: string })[];
-  closedActions: (getInnovationActionsListEndpointInDTO & { name: string })[];
-};
 
 export type GetSupportLogListInDTO = {
   id: string;
@@ -75,26 +59,6 @@ export class InnovatorService extends CoreService {
       take(1),
       map(response => response)
     );
-  }
-
-
-  getInnovationActionsList(innovationId: string): Observable<getInnovationActionsListEndpointOutDTO> {
-
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    return this.http.get<getInnovationActionsListEndpointInDTO[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => {
-        return {
-          openedActions: response.filter(item => [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.STARTED, InnovationActionStatusEnum.CONTINUE, InnovationActionStatusEnum.IN_REVIEW].includes(item.status)).map(item => ({
-            ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'` }
-          })),
-          closedActions: response.filter(item => [InnovationActionStatusEnum.DELETED, InnovationActionStatusEnum.DECLINED, InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.CANCELLED].includes(item.status)).map(item => ({
-            ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'` }
-          })),
-        };
-      })
-    );
-
   }
 
   declineAction(innovationId: string, actionId: string, body: MappedObjectType): Observable<{ id: string }> {

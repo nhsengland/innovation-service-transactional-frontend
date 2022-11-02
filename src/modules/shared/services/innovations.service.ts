@@ -7,11 +7,10 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
-import { InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
+import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationInfoDTO, InnovationsListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO } from './innovations.dtos';
+import { InnovationActionsListInDTO, InnovationActionsListDTO, InnovationInfoDTO, InnovationsListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationActionInfoDTO } from './innovations.dtos';
 
 
 export enum AssessmentSupportFilterEnum {
@@ -32,6 +31,16 @@ export type InnovationsListFiltersType = {
   suggestedOnly?: boolean,
   fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications')[]
 }
+
+export type InnovationsActionsListFilterType = {
+  innovationId?: string,
+  innovationName?: string,
+  sections?: InnovationSectionEnum[],
+  status?: InnovationActionStatusEnum[],
+  createdByMe?: boolean,
+  fields?: ('notifications')[]
+}
+
 
 export type GetInnovationNeedsAssessmentEndpointInDTO = {
   id: string;
@@ -63,18 +72,6 @@ export type GetInnovationNeedsAssessmentEndpointInDTO = {
 export type GetInnovationNeedsAssessmentEndpointOutDTO = {
   assessment: Omit<GetInnovationNeedsAssessmentEndpointInDTO, 'id'> & { hasBeenSubmitted: boolean };
 };
-
-
-export type getInnovationActionInfoInDTO = {
-  id: string;
-  displayId: string;
-  status: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
-  description: string;
-  section: InnovationSectionEnum;
-  createdAt: string; // '2021-04-16T09:23:49.396Z',
-  createdBy: { id: string; name: string; };
-};
-export type getInnovationActionInfoOutDTO = Omit<getInnovationActionInfoInDTO, 'createdBy'> & { name: string, createdBy: string };
 
 export type GetThreadsListDTO = {
   count: number;
@@ -267,26 +264,6 @@ export class InnovationsService extends CoreService {
 
   }
 
-
-  getInnovatorInnovationActionInfo(innovationId: string, actionId: string): Observable<getInnovationActionInfoOutDTO> {
-
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
-    return this.http.get<getInnovationActionInfoInDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => ({
-        id: response.id,
-        displayId: response.displayId,
-        status: response.status,
-        name: `Submit '${this.stores.innovation.getSectionTitle(response.section).toLowerCase()}'`,
-        description: response.description,
-        section: response.section,
-        createdAt: response.createdAt,
-        createdBy: response.createdBy.name
-      }))
-    );
-
-  }
-
   // Needs Assessment
   getInnovationNeedsAssessment(innovationId: string, assessmentId: string): Observable<GetInnovationNeedsAssessmentEndpointOutDTO> {
 
@@ -320,6 +297,50 @@ export class InnovationsService extends CoreService {
           updatedBy: response.updatedBy,
           hasBeenSubmitted: !!response.finishedAt
         }
+      }))
+    );
+
+  }
+
+
+  // Actions methods.
+  getActionsList(queryParams: APIQueryParamsType<InnovationsActionsListFilterType>): Observable<InnovationActionsListDTO> {
+
+    const { filters, ...qParams } = queryParams;
+
+    const qp = {
+      ...qParams,
+      ...(filters.innovationId ? { innovationId: filters.innovationId } : {}),
+      ...(filters.innovationName ? { innovationName: filters.innovationName } : {}),
+      ...(filters.sections ? { sections: filters.sections } : {}),
+      ...(filters.status ? { status: filters.status } : {}),
+      ...(filters.createdByMe ? { createdByMe: filters.createdByMe } : {}),
+      ...(filters.fields ? { fields: filters.fields } : {})
+    };
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/actions').setQueryParams(qp);
+    return this.http.get<InnovationActionsListInDTO>(url.buildUrl()).pipe(take(1),
+      map(response => ({
+        count: response.count,
+        data: response.data.map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'`, } }))
+      }))
+    );
+
+  }
+
+  getActionInfo(innovationId: string, actionId: string): Observable<InnovationActionInfoDTO> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/actions/:actionId').setPathParams({ innovationId, actionId });
+    return this.http.get<Omit<InnovationActionInfoDTO, 'name'>>(url.buildUrl()).pipe(take(1),
+      map(response => ({
+        id: response.id,
+        displayId: response.displayId,
+        status: response.status,
+        name: `Submit '${this.stores.innovation.getSectionTitle(response.section).toLowerCase()}'`,
+        description: response.description,
+        section: response.section,
+        createdAt: response.createdAt,
+        createdBy: response.createdBy
       }))
     );
 

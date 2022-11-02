@@ -1,4 +1,5 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { DatesHelper } from '@app/base/helpers';
 
 export class CustomValidators {
 
@@ -57,6 +58,13 @@ export class CustomValidators {
       if (!control.value) { return null; }
       return !existsIn.includes(control.value) ? null : { existsIn: (message ? { message } : true) };
     };
+  }
+
+  static parsedDateStringValidator(message?: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if(!control.value) { return null; }
+      return DatesHelper.parseIntoValidFormat(control.value) !== null ? null : { parsedDateString: (message ? { message } : true) };
+    }
   }
 
   // May be used in the future.

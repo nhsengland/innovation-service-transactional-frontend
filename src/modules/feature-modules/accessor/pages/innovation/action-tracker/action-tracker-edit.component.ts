@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormGroup, FormEngineHelper } from '@app/base/forms';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 import { AccessorService } from '../../../services/accessor.service';
@@ -42,6 +43,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private innovationsService: InnovationsService,
     private accessorService: AccessorService
   ) {
 
@@ -57,7 +59,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
 
   ngOnInit(): void {
 
-    this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(response => {
+    this.innovationsService.getActionInfo(this.innovationId, this.actionId).subscribe(response => {
 
       this.actionDisplayId = response.displayId;
 

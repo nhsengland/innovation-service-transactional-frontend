@@ -4,16 +4,14 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { InnovationActionStatusEnum, InnovationSectionEnum } from '@modules/stores/innovation';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { InnovationActionTrackerInfoComponent } from './action-tracker-info.component';
 
-import { AccessorService, GetInnovationActionInfoOutDTO } from '@modules/feature-modules/accessor/services/accessor.service';
+import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 
 
 describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponent', () => {

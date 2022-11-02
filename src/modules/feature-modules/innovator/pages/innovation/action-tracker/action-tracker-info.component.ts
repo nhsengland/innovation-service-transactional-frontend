@@ -5,7 +5,8 @@ import { CoreComponent } from '@app/base';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
-import { InnovationsService, getInnovationActionInfoOutDTO } from '@modules/shared/services/innovations.service';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationActionInfoDTO } from '@modules/shared/services/innovations.dtos';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
   actionName: string;
   actionStatus: keyof typeof INNOVATION_SECTION_ACTION_STATUS;
 
-  action?: getInnovationActionInfoOutDTO;
+  action?: InnovationActionInfoDTO;
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
@@ -45,7 +46,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
   ngOnInit(): void {
 
-    this.InnovationsService.getInnovatorInnovationActionInfo(this.innovationId, this.actionId).subscribe(response => {
+    this.InnovationsService.getActionInfo(this.innovationId, this.actionId).subscribe(response => {
 
       this.action = response;
       this.declineShow = this.action.status.toLocaleLowerCase() === INNOVATION_SECTION_ACTION_STATUS.REQUESTED.label.toLocaleLowerCase();
