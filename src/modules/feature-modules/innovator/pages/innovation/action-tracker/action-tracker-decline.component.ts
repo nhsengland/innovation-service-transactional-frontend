@@ -44,7 +44,7 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
 
   ngOnInit(): void {
 
-    this.innovationsService.getInnovatorInnovationActionInfo(this.innovationId, this.actionId).subscribe(response => {
+    this.innovationsService.getActionInfo(this.innovationId, this.actionId).subscribe(response => {
 
       this.actionDisplayId = response.displayId;
 

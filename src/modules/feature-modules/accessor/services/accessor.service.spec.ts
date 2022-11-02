@@ -9,12 +9,8 @@ import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/cor
 import { StoresModule, AuthenticationStore, InnovationStore } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
-import { InnovationActionStatusEnum, InnovationSectionEnum } from '@modules/stores/innovation';
-import { TableModel } from '@app/base/models';
-
 import {
   AccessorService,
-  getActionsListEndpointInDTO, getActionsListEndpointOutDTO,
   getSupportLogInDTO, SupportLogType, getSupportLogOutDTO
 } from './accessor.service';
 
@@ -83,118 +79,6 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
   });
 
-  it('should run getInnovationActionsList() with payload 01 and return success', () => {
-
-    const responseMock = [
-      { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.REQUESTED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
-      { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.STARTED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
-      { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.COMPLETED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
-      { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.CANCELLED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' }
-    ];
-
-    const expected = {
-      openedActions: [
-        { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.REQUESTED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
-        { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.STARTED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' }
-      ],
-      closedActions: [
-        { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.COMPLETED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' },
-        { id: 'ID01', section: InnovationSectionEnum.COST_OF_INNOVATION, status: InnovationActionStatusEnum.CANCELLED, name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION)}'`, createdAt: '2021-04-16T09:23:49.396Z' }
-      ]
-    };
-
-    let response: any = null;
-
-    service.getInnovationActionsList('Inno01').subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors/UserId01/innovations/Inno01/actions`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-  });
-
-  it('should run getInnovationActionInfo() and return success', () => {
-
-    const responseMock = {
-      id: 'ID01',
-      status: 'REQUESTED',
-      description: 'some description',
-      section: InnovationSectionEnum.COST_OF_INNOVATION,
-      createdAt: '2021-04-16T09:23:49.396Z',
-      createdBy: { id: 'user01', name: 'One guy name' }
-    };
-
-    const expected = {
-      ...responseMock,
-      ...{
-        name: `Submit '${innovationStore.getSectionTitle(InnovationSectionEnum.COST_OF_INNOVATION).toLowerCase()}'`,
-        createdBy: 'One guy name'
-      }
-    };
-
-    let response: any = null;
-
-    service.getInnovationActionInfo('Inno01', 'Inno01Action01').subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors/UserId01/innovations/Inno01/actions/Inno01Action01`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-
-  });
-
-  it('should run getActionsList() and return success', () => {
-
-    const responseMock: getActionsListEndpointInDTO = {
-      count: 2,
-      data: [
-        {
-          id: '01', displayId: 'dId01', status: InnovationActionStatusEnum.REQUESTED, section: InnovationSectionEnum.INNOVATION_DESCRIPTION, createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396',
-          innovation: { id: 'Inno01', name: 'Innovation 01' }
-        },
-        {
-          id: '02', displayId: 'dId02', status: InnovationActionStatusEnum.STARTED, section: InnovationSectionEnum.INNOVATION_DESCRIPTION, createdAt: '2021-04-16T09:23:49.396Z', updatedAt: '2021-04-16T09:23:49.396',
-          innovation: { id: 'Inno02', name: 'Innovation 02' }
-        }
-      ]
-    };
-
-    const expected: getActionsListEndpointOutDTO = {
-      count: responseMock.count,
-      data: responseMock.data.map(item => ({ ...item, ...{ name: `Submit '${innovationStore.getSectionTitle(item.section)}'`, } }))
-    };
-
-    const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({ openActions: '' });
-
-    let response: any = null;
-    service.getActionsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors/UserId01/actions?take=20&skip=0&openActions=`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-  });
-
-  it('should run getActionsList() with filters and return success', () => {
-
-    const responseMock: getActionsListEndpointInDTO = { count: 0, data: [] };
-
-    const expected: getActionsListEndpointOutDTO = { count: 0, data: [] };
-
-    const tableList = new TableModel({ visibleColumns: { name: 'Name' } }).setFilters({ openActions: 'true' });
-
-    let response: any = null;
-    service.getActionsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors/UserId01/actions?take=20&skip=0&openActions=true`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-  });
 
   it('should run createAction() and return success', () => {
 
