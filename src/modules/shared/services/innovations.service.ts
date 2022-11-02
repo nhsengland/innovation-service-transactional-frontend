@@ -318,8 +318,6 @@ export class InnovationsService extends CoreService {
       ...(filters.fields ? { fields: filters.fields } : {})
     };
 
-
-    console.log('QP', qp);
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/actions').setQueryParams(qp);
     return this.http.get<InnovationActionsListInDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
