@@ -59,22 +59,12 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
 
     innovationStore.getSectionInfo$ = () => of({
-      section: {
-        id: '',
-        section: InnovationSectionEnum.REGULATIONS_AND_STANDARDS,
-        status: 'DRAFT' as keyof typeof INNOVATION_SECTION_STATUS,
-        actionStatus: '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
-        actionCount: 0,
-        updatedAt: '2020-01-01T00:00:00.000Z',
-      },
-      data: {
-        hasRegulationKnowledge: 'YES_ALL',
-        standards: [],
-        otherRegulationDescription: null,
-        files: []
-      }
+      id: '',
+      section: InnovationSectionEnum.REGULATIONS_AND_STANDARDS,
+      status: 'DRAFT' as keyof typeof INNOVATION_SECTION_STATUS,
+      updatedAt: '2020-01-01T00:00:00.000Z',
+      data: {}
     });
-
   });
 
   it('should create the component', () => {

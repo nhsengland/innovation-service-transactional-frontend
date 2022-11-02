@@ -62,7 +62,7 @@ export type ActivityLogOutDTO = {
 export class InnovationService {
 
   private API_URL = this.envVariablesStore.API_URL;
-  private API_INNOVATIONS_URL = this.envVariablesStore.API_INNOVATIONS_URL
+  private API_INNOVATIONS_URL = this.envVariablesStore.API_INNOVATIONS_URL;
 
   constructor(
     private http: HttpClient,
