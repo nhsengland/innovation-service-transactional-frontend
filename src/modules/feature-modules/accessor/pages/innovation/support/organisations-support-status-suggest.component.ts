@@ -40,6 +40,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
   submitButton = { isActive: true, label: 'Confirm and notify organisations' };
 
+  isQualifyingAccessorRole = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -52,6 +53,8 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     this.setPageTitle('Suggest organisations for support');
 
     this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
+
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
   }
 
