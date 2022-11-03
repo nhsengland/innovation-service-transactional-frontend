@@ -30,6 +30,7 @@ import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './p
 import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
+import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/organisation-referral-criteria/organisation-referral-criteria.component';
 
 // Shared module pages.
 // // Account.
@@ -301,6 +302,8 @@ const routes: Routes = [
           }
         ]
       },
+
+      { path: 'organisations/referral-criteria', pathMatch: 'full', component: InnovationSupportOrganisationReferralCriteriaComponent },
 
       {
         path: 'actions',
