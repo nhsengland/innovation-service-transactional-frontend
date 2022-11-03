@@ -44,12 +44,12 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   }, { updateOn: 'blur' });
 
   STATUS_LABELS: { [key: string]: string } = {
-    ENGAGING: 'Provide the innovator with clear details of changes to their support status and that your organisation is ready to actively engage with this innovation. Provide details of at least one person from your organisation assigned to this innovation',
-    FURTHER_INFO_REQUIRED: 'Provide the innovator with clear details of changes to their support status and that further information is needed from the innovator in order to make a decision on their status. Provide a comment on what specific information is needed',
-    WAITING: 'Provide the innovator with clear details of changes to their support status and that an internal decision is pending for the progression of their status',
-    NOT_YET: 'Provide the innovator with clear details of changes to their support status and that their Innovation Record is not ready for your organisation to provide just yet. Provide a comment outlining this decision',
-    UNSUITABLE: 'Provide the innovator with clear details of changes to their support status and that your organisation has no suitable support offer for their innovation. Provide comments and feedback on why you organisation has made this decision',
-    COMPLETE: 'Provide the innovator with clear details of changes to their support status and that you have completed the engagement process. Provide an outline of the completion of the engagement process with you organisation'
+    ENGAGING: 'Provide the innovator with clear details of changes to their support status and that your organisation is ready to actively engage with this innovation. Provide details of at least one person from your organisation assigned to this innovation.',
+    FURTHER_INFO_REQUIRED: 'Provide the innovator with clear details of changes to their support status and that further information is needed from the innovator in order to make a decision on their status. Provide a comment on what specific information is needed.',
+    WAITING: 'Provide the innovator with clear details of changes to their support status and that an internal decision is pending for the progression of their status.',
+    NOT_YET: 'Provide the innovator with clear details of changes to their support status and that their Innovation Record is not ready for your organisation to provide just yet. Provide a comment outlining this decision.',
+    UNSUITABLE: 'Provide the innovator with clear details of changes to their support status and that your organisation has no suitable support offer for their innovation. Provide comments and feedback on why you organisation has made this decision.',
+    COMPLETE: 'Provide the innovator with clear details of changes to their support status and that you have completed the engagement process. Provide an outline of the completion of the engagement process with you organisation.'
   };
 
   constructor(

@@ -51,6 +51,7 @@ export type ActivityLogOutDTO = {
   data: (Omit<ActivityLogInDTO['data'][0], 'innovation' | 'params'>
     & {
       params: ActivityLogInDTO['data'][0]['params'] & {
+        innovationName: string;
         sectionTitle: string;
       };
       link: null | { label: string; url: string; };
@@ -149,6 +150,7 @@ export class InnovationService {
             innovation: response.innovation,
             params: {
               ...i.params,
+              innovationName: response.innovation.name,
               sectionTitle: getSectionTitle(i.params.sectionId || null)
             },
             link
