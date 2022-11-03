@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -13,7 +13,7 @@ import { NEEDS_REASSESSMENT_CONFIG, OutboundPayloadType } from './needs-reassess
   selector: 'app-innovator-pages-innovation-reassessment-innovation-reassessment-send',
   templateUrl: './needs-reassessment-send.component.html'
 })
-export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent {
+export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent implements OnInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
