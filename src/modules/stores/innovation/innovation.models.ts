@@ -1,3 +1,4 @@
+import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { WizardEngineModel } from '@modules/shared/forms';
 
 import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum, InnovationSupportStatusEnum } from './innovation.enums';
@@ -45,6 +46,14 @@ export type sectionType = {
   status: keyof typeof INNOVATION_SECTION_STATUS;
   updatedAt: string;
 };
+
+export type InnovationSectionInfoDTO = {
+  id: null | string;
+  section: InnovationSectionEnum;
+  status: keyof typeof INNOVATION_SECTION_STATUS;
+  updatedAt: string;
+  data: MappedObjectType;
+}
 
 export type getInnovationInfoEndpointDTO = {
   id: string;

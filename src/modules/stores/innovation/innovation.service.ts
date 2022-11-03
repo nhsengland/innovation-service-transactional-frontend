@@ -11,9 +11,8 @@ import { UserTypeEnum } from '@modules/stores/authentication/authentication.enum
 
 import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum } from './innovation.enums';
 import {
-  sectionType,
   INNOVATION_STATUS, ACTIVITY_LOG_ITEMS, INNOVATION_SUPPORT_STATUS,
-  getInnovationSectionsDTO, getInnovationEvidenceDTO, getInnovationCommentsDTO, OrganisationSuggestionModel
+  getInnovationSectionsDTO, getInnovationEvidenceDTO, getInnovationCommentsDTO, OrganisationSuggestionModel, InnovationSectionInfoDTO
 } from './innovation.models';
 
 import { UrlModel } from '@modules/core/models/url.model';
@@ -163,7 +162,7 @@ export class InnovationService {
 
   getInnovationSections(innovationId: string): Observable<getInnovationSectionsDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/section-summary')
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections')
       .setPathParams({
         endpointModule: this.apiUserBasePath(),
         userId: this.authenticationStore.getUserId(),
@@ -175,24 +174,24 @@ export class InnovationService {
   }
 
 
-  getSectionInfo(innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObjectType }> {
+  getSectionInfo(innovationId: string, sectionId: string): Observable<InnovationSectionInfoDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/sections')
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionId')
       .setPathParams({
         endpointModule: this.apiUserBasePath(),
         userId: this.authenticationStore.getUserId(),
-        innovationId
+        innovationId,
+        sectionId
       })
-      .setQueryParams({ section });
-    return this.http.get<{ section: sectionType; data: MappedObjectType }>(url.buildUrl()).pipe(take(1), map(response => response));
+      .setQueryParams({ sectionId });
+    return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
 
-  updateSectionInfo(innovationId: string, section: string, data: MappedObjectType): Observable<MappedObjectType> {
+  updateSectionInfo(innovationId: string, sectionKey: string, data: MappedObjectType): Observable<MappedObjectType> {
 
-    const body = { section, data };
-
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/sections').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
+    const body = { ...data };
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionKey').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, sectionKey });
     return this.http.put<MappedObjectType>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
@@ -200,10 +199,9 @@ export class InnovationService {
 
   }
 
-
-  submitSections(innovationId: string, sections: string[]): Observable<any> {
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/sections/submit').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
-    return this.http.patch<any>(url.buildUrl(), { sections }).pipe(
+  submitSections(innovationId: string, sectionKey: string): Observable<any> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionKey/submit').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, sectionKey });
+    return this.http.patch<any>(url.buildUrl(), { sectionKey }).pipe(
       take(1),
       map(response => response)
     );

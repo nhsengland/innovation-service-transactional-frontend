@@ -60,8 +60,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe(
-      response => {
+    this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
+      next: response => {
 
         this.wizard.setAnswers(this.wizard.runInboundParsing(response.data)).runRules();
         this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
@@ -72,10 +72,11 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         this.setPageStatus('READY');
 
       },
-      () => {
+      error: () => {
         this.setPageStatus('ERROR');
         this.logger.error('Error fetching data');
-      });
+      }
+    });
 
   }
 
@@ -213,7 +214,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   onSubmitSection(): void {
 
-    this.stores.innovation.submitSections$(this.innovation.id, [this.sectionId]).subscribe({
+    this.stores.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('Your answers have been confirmed for this section', { message: this.getNextSectionId() ? 'Go to next section or return to the full innovation record' : undefined });
         this.redirectTo(this.baseUrl);

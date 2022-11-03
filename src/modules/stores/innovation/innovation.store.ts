@@ -20,7 +20,7 @@ import {
   sectionType,
   INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS,
   SectionsSummaryModel, InnovationSectionConfigType,
-  getInnovationEvidenceDTO, getInnovationCommentsDTO
+  getInnovationEvidenceDTO, getInnovationCommentsDTO, InnovationSectionInfoDTO
 } from './innovation.models';
 
 
@@ -100,16 +100,16 @@ export class InnovationStore extends Store<InnovationModel> {
 
   }
 
-  getSectionInfo$(innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObjectType }> {
+  getSectionInfo$(innovationId: string, section: string): Observable<InnovationSectionInfoDTO> {
     return this.innovationsService.getSectionInfo(innovationId, section);
   }
 
-  updateSectionInfo$(innovationId: string, section: string, data: MappedObjectType): Observable<MappedObjectType> {
-    return this.innovationsService.updateSectionInfo(innovationId, section, data);
+  updateSectionInfo$(innovationId: string, sectionKey: string, data: MappedObjectType): Observable<MappedObjectType> {
+    return this.innovationsService.updateSectionInfo(innovationId, sectionKey, data);
   }
 
-  submitSections$(innovationId: string, sections: string[]): Observable<MappedObjectType> {
-    return this.innovationsService.submitSections(innovationId, sections);
+  submitSections$(innovationId: string, sectionKey: string): Observable<MappedObjectType> {
+    return this.innovationsService.submitSections(innovationId, sectionKey);
   }
 
   getSectionEvidence$(innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
