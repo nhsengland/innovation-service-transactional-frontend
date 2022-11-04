@@ -43,6 +43,9 @@ export type ActivityLogInDTO = {
       thread?: { id: string, subject: string, messageId: string },
       totalActions?: number;
 
+      assessment?: { id: string };
+      reassessment?: { id: string }
+
     };
   }[];
 };
@@ -126,6 +129,9 @@ export class InnovationService {
           switch (ACTIVITY_LOG_ITEMS[i.activity].link) {
             case 'NEEDS_ASSESSMENT':
               link = i.params.assessmentId ? { label: 'Go to Needs assessment', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/assessments/${i.params.assessmentId}` } : null;
+              break;
+            case 'NEEDS_REASSESSMENT':
+              link = i.params.reassessment?.id && i.params.assessment?.id ? { label: 'Go to Needs reassessment', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/assessments/${i.params.assessment.id}` } : null;
               break;
             case 'SUPPORT_STATUS':
               link = { label: 'Go to Support status', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/support` };
