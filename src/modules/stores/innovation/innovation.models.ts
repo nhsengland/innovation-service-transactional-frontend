@@ -292,7 +292,7 @@ export const ACTIVITY_LOG_ITEMS: {
   [key in ActivityLogItemsEnum]: {
     type: ActivityLogTypesEnum;
     details: null | 'ORGANISATIONS_LIST' | 'SUPPORT_STATUS_UPDATE' | 'COMMENT';
-    link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'ACTION' | 'THREAD';
+    link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'ACTION' | 'THREAD' | 'NEEDS_REASSESSMENT';
   }
 } = {
   INNOVATION_CREATION: {
@@ -336,6 +336,11 @@ export const ACTIVITY_LOG_ITEMS: {
     type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
     details: null,
     link: 'NEEDS_ASSESSMENT'
+  },
+  NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: {
+    type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
+    details: null,
+    link: 'NEEDS_REASSESSMENT'
   },
 
   ORGANISATION_SUGGESTION: {

@@ -60,8 +60,8 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
   form = new FormGroup({
     activityTypes: new FormArray([]),
-    startDate: new FormControl('', CustomValidators.parsedDateStringValidator()),
-    endDate: new FormControl('', CustomValidators.parsedDateStringValidator()),
+    startDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
+    endDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
   }, { updateOn: 'change' });
 
   anyFilterSelected = false;
@@ -127,7 +127,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
   ngOnInit(): void {
 
     this.subscriptions.push(
-      this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange())
+      this.form.valueChanges.pipe(debounceTime(1000)).subscribe(() => this.onFormChange())
     );
 
     this.onFormChange();
