@@ -31,6 +31,10 @@ describe('Core/Helpers/DatesHelper', () => {
       expect(DatesHelper.parseIntoValidFormat('2020')).toBe('2020/01/01');
     });
 
+    it(`should return YYYY-MM-DD when input is D/MM/YYYY`, () => {
+      expect(DatesHelper.parseIntoValidFormat('4/11/2022')).toBe('2022/11/04');
+    });
+
     it(`should return date in given format`, () => {
       expect(DatesHelper.parseIntoValidFormat('14/09/2020', 'MM/dd/yyyy')).toBe('09/14/2020');
     });
