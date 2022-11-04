@@ -73,7 +73,7 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
       name: { label: 'Innovation', orderable: true },
       submittedAt: { label: 'Submitted', orderable: true },
       mainCategory: { label: 'Main category', orderable: true },
-      countryName: { label: 'Location', orderable: true },
+      location: { label: 'Location', orderable: true },
       supportStatus: { label: 'Support status', align: 'right', orderable: false }
     }).setOrderBy('submittedAt', 'descending');
 
