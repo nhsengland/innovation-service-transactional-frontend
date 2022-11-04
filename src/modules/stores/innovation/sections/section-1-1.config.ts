@@ -43,7 +43,7 @@ type InboundPayloadType = {
 
 type StepPayloadType = Omit<InboundPayloadType, 'name' | 'postcode' | 'countryName'> & {
   innovationName: string,
-  englandPostCode: string,
+  englandPostCode: null | string,
   locationCountryName: string
 };
 type OutboundPayloadType = InboundPayloadType;
@@ -190,7 +190,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     innovationName: data.name,
     description: data.description,
     location: locationItems.filter(item => !['', 'Based outside UK'].includes(item.value)).map(item => item.value).includes(data.countryName) ? data.countryName : 'Based outside UK',
-    englandPostCode: data.postcode ? data.postcode : '',
+    englandPostCode: data.postcode || null,
     locationCountryName: data.countryName,
     hasFinalProduct: data.hasFinalProduct,
     categories: data.categories,
@@ -202,7 +202,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     otherCareSetting: data.otherCareSetting,
     mainPurpose: data.mainPurpose,
     supportTypes: data.supportTypes,
-    moreSupportDescription: data.moreSupportDescription,
+    moreSupportDescription: data.moreSupportDescription
   };
 
 }
