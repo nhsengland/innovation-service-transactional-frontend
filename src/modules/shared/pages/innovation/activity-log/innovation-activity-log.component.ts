@@ -265,9 +265,9 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
     const afterDate = this.form.get(this.datasets[filter.key][0].formControl!)!.value;
     const beforeDate = this.form.get(this.datasets[filter.key][1].formControl!)!.value;
 
-    if (afterDate !== null && beforeDate === null) return "Activity after";
+    if (afterDate !== null && (beforeDate === null || beforeDate === '')) return "Activity after";
 
-    if (afterDate === null && beforeDate !== null) return "Activity before";
+    if ((afterDate === null || afterDate === '') && beforeDate !== null) return "Activity before";
 
     return "Activity between";
   }
