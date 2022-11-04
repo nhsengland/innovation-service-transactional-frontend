@@ -224,7 +224,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             name: { label: 'Innovation', orderable: true },
             submittedAt: { label: 'Submitted', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
-            countryName: { label: 'Location', orderable: true },
+            location: { label: 'Location', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
           .setOrderBy('submittedAt', 'descending');
@@ -264,7 +264,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             name: { label: 'Innovation', orderable: true },
             updatedAt: { label: 'Updated', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
-            countryName: { label: 'Location', orderable: true },
+            location: { label: 'Location', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
           .setOrderBy('updatedAt', 'descending');

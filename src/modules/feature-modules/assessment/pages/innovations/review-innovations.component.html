@@ -14,11 +14,11 @@
   <div class="nhsuk-grid-row">
     <div id="content-{{ currentTab.key }}" role="tabpanel" attr.aria-labelledby="tab-{{ currentTab.key }}" class="nhsuk-grid-column-full">
 
-      <ng-container *ngIf="currentTab.key !== 'IN_PROGRESS'">
+      <ng-container *ngIf="currentTab.status !== 'IN_PROGRESS'">
         <ng-container *ngIf="innovationsList.getTotalRowsNumber() > 0">
           <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
         </ng-container>
-        <p *ngIf="!isCurrentTabStatusInProgress() && currentTab.overdueInnovations > 0" class="nhsuk-body-s nhsuk-u-margin-bottom-2 d-flex align-items-center">
+        <p *ngIf="currentTab.overdueInnovations > 0" class="nhsuk-body-s nhsuk-u-margin-bottom-2 d-flex align-items-center">
           <span class="dot-error nhsuk-u-margin-right-2"></span>
           <span>{{ currentTab.overdueInnovations }} are overdue</span>
         </p>
@@ -27,7 +27,7 @@
         </ng-container>
       </ng-container>
 
-      <ng-container *ngIf="isCurrentTabStatusInProgress()">
+      <ng-container *ngIf="currentTab.status === 'IN_PROGRESS'">
         <form [formGroup]="form" class="nhsuk-u-margin-bottom-1">
           <theme-form-radio-group controlName="assessmentSupportStatus" label="Organisations support status" [items]="formFilterItems" size="small" [pageUniqueField]="false"></theme-form-radio-group>
         </form>
@@ -56,14 +56,19 @@
                 <div class="d-flex">
                   <div class="nhsuk-u-padding-right-2">
                     <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }}</span>
-                    <a *ngIf="!isCurrentTabStatusInProgress()" routerLink="/assessment/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation"> {{ item.name }} </a>
-                    <a *ngIf="isCurrentTabStatusInProgress()" routerLink="/assessment/innovations/{{ item.id }}/assessments/{{item.assessment?.id}}" attr.aria-label="View {{ item.name }} innovation assessment details">
+                    <a *ngIf="!item.assessment?.id" routerLink="/assessment/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation"> {{ item.name }} </a>
+                    <a *ngIf="item.assessment?.id" routerLink="/assessment/innovations/{{ item.id }}/assessments/{{item.assessment?.id}}" attr.aria-label="View {{ item.name }} innovation assessment details">
                       {{ item.name }}
                     </a>
                   </div>
                   <!-- <theme-notification-tag *ngIf="item.notifications.isNew !== true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" [label]="item.notifications.count"></theme-notification-tag> -->
                   <!-- <theme-notification-tag *ngIf="item.notifications.isNew === true && currentTab.status !== 'IN_PROGRESS' && item.notifications.count > 0" label="new"></theme-notification-tag> -->
                 </div>
+              </td>
+
+              <td *ngIf="innovationsList.getColumnLabel('reassessmentsCount')" class="nhsuk-table__cell d-flex align-items-center">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('reassessmentsCount') }}</span>
+                <span>{{ !item.assessment ? 'Initial' : 'Reassessment (' + item.assessment.reassessmentCount + ')' }}</span>
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('submittedAt')" class="nhsuk-table__cell d-flex align-items-center">

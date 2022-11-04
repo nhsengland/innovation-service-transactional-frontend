@@ -55,7 +55,11 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
       switch (innovation.status) {
         case InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT:
-          this.data.link = { label: 'Start needs assessment', url: `/assessment/innovations/${innovation.id}/assessments/new` };
+          if (!innovation.assessment?.id) {
+            this.data.link = { label: 'Start needs assessment', url: `/assessment/innovations/${innovation.id}/assessments/new` };
+          } else {
+            this.data.link = { label: 'Continue needs assessment', url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment.id}/edit` };
+          }
           break;
         case InnovationStatusEnum.NEEDS_ASSESSMENT:
           this.data.link = { label: 'Continue needs assessment', url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}/edit` };

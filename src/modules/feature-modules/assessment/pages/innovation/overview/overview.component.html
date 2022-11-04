@@ -10,10 +10,11 @@
   <ng-container [ngSwitch]="innovation?.summary?.status">
     <ng-container *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'">
       <div class="nhsuk-action-link">
-        <a class="nhsuk-action-link__link" routerLink="/assessment/innovations/{{ innovation?.summary?.id || '' }}/assessments/new">
+        <a *ngIf="!innovation?.assessment?.id" class="nhsuk-action-link__link" routerLink="/assessment/innovations/{{ innovation?.summary?.id || '' }}/assessments/new">
           <theme-svg-icon type="action"></theme-svg-icon>
           <span class="nhsuk-action-link__text"> Start the needs assessment process </span>
         </a>
+        <a *ngIf="innovation?.assessment?.id" routerLink="/assessment/innovations/{{ innovation?.summary?.id }}/assessments/{{ innovation?.assessment?.id }}/edit" class="nhsuk-button"> Continue needs assessment </a>
       </div>
     </ng-container>
     <ng-container *ngSwitchCase="'NEEDS_ASSESSMENT'">

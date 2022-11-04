@@ -36,8 +36,6 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
   innovationStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
-  isCurrentTabStatusInProgress(): boolean { return this.currentTab.status === InnovationStatusEnum.IN_PROGRESS; }
-
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -157,6 +155,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
           .setFilters({ status: [this.currentTab.status] })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
+            reassessmentsCount: { label: 'Type', orderable: false },
             submittedAt: { label: 'Submitted', orderable: true },
             location: { label: 'Location', orderable: true },
             mainCategory: { label: 'Primary category', align: 'right', orderable: true }

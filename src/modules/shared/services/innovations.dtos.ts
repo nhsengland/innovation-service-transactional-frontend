@@ -17,7 +17,7 @@ export type InnovationsListDTO = {
     mainCategory: null | string,
     otherMainCategoryDescription: null | string,
     isAssessmentOverdue?: boolean,
-    assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { name: string } },
+    assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { name: string }, reassessmentCount: number },
     supports?: {
       id: string,
       status: InnovationSupportStatusEnum,
