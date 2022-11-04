@@ -1,6 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <ng-container>
+  <ng-container *ngIf="innovationStatus === 'IN_PROGRESS' && lastStatusSupportChange">
     <div class="nhsuk-card nhsuk-card--care nhsuk-card--care--non-urgent nhsuk-u-margin-top-0">
       <div class="nhsuk-card--care__heading-container">
         <h2 class="nhsuk-card--care__heading">

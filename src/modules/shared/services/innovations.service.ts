@@ -157,6 +157,10 @@ export type CreateThreadMessageDTO = {
   };
 }
 
+export type statusChangeDTO = {
+  statusChangedAt: null | string
+}
+
 
 @Injectable()
 export class InnovationsService extends CoreService {
@@ -416,6 +420,13 @@ export class InnovationsService extends CoreService {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/messages/:messageId').setPathParams({ innovationId, threadId, messageId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
+
+  }
+
+  getInnovationSafetyPeriod(innovationId: string): Observable<statusChangeDTO> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId').setPathParams({ innovationId });
+    return this.http.get<statusChangeDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 
