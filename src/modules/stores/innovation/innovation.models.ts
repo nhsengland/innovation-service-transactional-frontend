@@ -194,7 +194,7 @@ export const INNOVATION_SUPPORT_STATUS = {
   },
   FURTHER_INFO_REQUIRED: {
     label: 'Further info', cssClass: 'nhsuk-tag--white',
-    description: 'Further info is needed from the innovator to make a decision. You must provide a comment on what information is needed.',
+    description: 'Further info is needed from the innovator to make a decision. You must provide a message on what information is needed.',
     innovatorDescription: 'The organisation needs further information from you to make a decision.',
     hidden: false
   },
@@ -206,7 +206,7 @@ export const INNOVATION_SUPPORT_STATUS = {
   },
   NOT_YET: {
     label: 'Not yet', cssClass: 'nhsuk-tag--blue',
-    description: 'The innovation is not yet ready for your support offer. You must provide a comment outlining your decision.',
+    description: 'The innovation is not yet ready for your support offer. You must provide a message outlining your decision.',
     innovatorDescription: 'Your innovation is not yet ready for the organisation\'s support offer.',
     hidden: false
   },
@@ -218,7 +218,7 @@ export const INNOVATION_SUPPORT_STATUS = {
   },
   UNSUITABLE: {
     label: 'Unsuitable', cssClass: 'nhsuk-tag--red',
-    description: 'You have no suitable support offer for the innovation. You must provide a comment outlining your decision.',
+    description: 'You have no suitable support offer for the innovation. You must provide a message outlining your decision.',
     innovatorDescription: 'The organisation has no suitable support offer for your innovation.',
     hidden: false,
   },
@@ -230,7 +230,7 @@ export const INNOVATION_SUPPORT_STATUS = {
   },
   COMPLETE: {
     label: 'Completed', cssClass: 'nhsuk-tag--dark-grey',
-    description: 'Your organisation has completed this engagement. You must provide a comment outlining your decision.',
+    description: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
     innovatorDescription: 'The organisation has completed their engagement with your innovation.',
     hidden: false
   }

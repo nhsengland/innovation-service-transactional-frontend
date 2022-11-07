@@ -15,7 +15,7 @@ export class PageAccountDeleteMessageComponent extends CoreComponent {
     this.setPageTitle('Delete account successful');
 
     this.alert = {
-      type: 'INFORMATION',
+      type: 'SUCCESS',
       title: 'You have successfully deleted your account'
     };
 

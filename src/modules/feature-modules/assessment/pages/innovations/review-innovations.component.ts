@@ -169,11 +169,12 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
           .setFilters({ status: [this.currentTab.status] })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
+            reassessmentsCount: { label: 'Type', orderable: false },
             assessmentStartedAt: { label: 'Assessment start date', orderable: true },
             assessedBy: { label: 'Assessed by', orderable: false },
             mainCategory: { label: 'Primary category', align: 'right', orderable: true }
           })
-          .setOrderBy('assessmentStartedAt');
+          .setOrderBy('assessmentStartedAt', 'descending');
         break;
 
       case InnovationStatusEnum.IN_PROGRESS:
@@ -187,11 +188,12 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
+            reassessmentsCount: { label: 'Type', orderable: false },
             assessmentFinishedAt: { label: 'Assessment date', orderable: true },
             engagingEntities: { label: 'Engaging entities', orderable: false },
             mainCategory: { label: 'Primary category', align: 'right', orderable: true }
           })
-          .setOrderBy('assessmentFinishedAt');
+          .setOrderBy('assessmentFinishedAt', 'descending');
         break;
 
     }
