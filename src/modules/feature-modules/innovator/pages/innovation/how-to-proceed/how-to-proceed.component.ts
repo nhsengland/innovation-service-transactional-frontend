@@ -82,7 +82,7 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
 
     switch (this.form.get('action')?.value) {
       case FormFieldActionsEnum.ARCHIVE:
-        this.redirectTo('/innovator/account/manage-innovations/archive');
+        this.redirectTo('/innovator/account/manage-innovations/archive', { innovationId: this.innovationId });
         break;
 
       case FormFieldActionsEnum.DELETE_ACCOUNT:
@@ -95,12 +95,7 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
 
       case FormFieldActionsEnum.NO_ACTION:
       default:
-        this.setAlert({
-          type: 'INFORMATION',
-          title: 'Your innovation will remain with unassigned status for now',
-          message: 'You can come back here and choose how you want to continue later.',
-          persistOneRedirect: true
-        });
+        this.setRedirectAlertSuccess('Your innovation will remain with unassigned status for now', { message: 'You can come back here and choose how you want to continue later.' });
         this.redirectTo(this.baseUrl);
         break;
     }

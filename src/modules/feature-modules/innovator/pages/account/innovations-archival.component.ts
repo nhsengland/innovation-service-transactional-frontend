@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { FormControl, FormGroup } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormControl, FormGroup, FormEngineParameterModel } from '@app/base/forms';
+import { CustomValidators, FormEngineParameterModel } from '@app/base/forms';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
@@ -27,6 +28,7 @@ export class PageAccountInnovationsArchivalComponent extends CoreComponent imple
   innovationName = '';
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
     private innovatorService: InnovatorService
   ) {
@@ -40,10 +42,10 @@ export class PageAccountInnovationsArchivalComponent extends CoreComponent imple
     };
 
     this.form = new FormGroup({
-      innovation: new UntypedFormControl('', { validators: CustomValidators.required('Please, choose an innovation'), updateOn: 'change' }),
-      reason: new UntypedFormControl(''),
-      email: new UntypedFormControl('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')]),
-      confirmation: new UntypedFormControl('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('archive my innovation')])
+      innovation: new FormControl<string>('', { validators: CustomValidators.required('Please, choose an innovation'), updateOn: 'change' }),
+      reason: new FormControl<string>(''),
+      email: new FormControl<string>('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')]),
+      confirmation: new FormControl<string>('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('archive my innovation')])
     }, { updateOn: 'blur' }
     );
   }
@@ -61,10 +63,13 @@ export class PageAccountInnovationsArchivalComponent extends CoreComponent imple
         .filter(i => !innovationTransfers.map(it => it.innovation.id).includes(i.id))
         .map(item => ({ value: item.id, label: item.name }));
 
+      if (this.activatedRoute.snapshot.queryParams.innovationId) { // Pre-select innovation.
+        this.form.get('innovation')?.setValue(this.activatedRoute.snapshot.queryParams.innovationId);
+      }
+
       this.setPageStatus('READY');
 
-    }
-    );
+    });
 
   }
 

@@ -75,8 +75,16 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   const toReturn: WizardSummaryType[] = [];
 
   toReturn.push(
-    { label: stepsLabels.l1, value: data.updatedInnovationRecord || '', editStepNumber: 1 },
-    { label: stepsLabels.l2, value: data.description, editStepNumber: 2 }
+    {
+      label: stepsLabels.l1,
+      value: yesNoItems.find(item => item.value === data.updatedInnovationRecord)?.label,
+      editStepNumber: 1
+    },
+    {
+      label: stepsLabels.l2,
+      value: data.description,
+      editStepNumber: 2
+    }
   );
 
   return toReturn;

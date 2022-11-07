@@ -3,8 +3,7 @@
   <div class="app-tabs">
     <ul class="app-tabs__list" role="tablist" aria-label="Tabs">
       <li *ngFor="let tab of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
-        <a id="tab-{{ tab.key }}" [routerLink]="tab.link" [queryParams]="tab.queryParams" role="tab" class="nhsuk-u-padding-right-1" attr.aria-controls="content-{{ tab.key }}"
-          attr.aria-selected="{{ currentTab.key === tab.key ? 'true' : 'false' }}">
+        <a id="tab-{{ tab.key }}" [routerLink]="tab.link" [queryParams]="tab.queryParams" role="tab" class="nhsuk-u-padding-right-1" attr.aria-controls="content-{{ tab.key }}" attr.aria-selected="{{ currentTab.key === tab.key ? 'true' : 'false' }}">
           {{ tab.title }}
         </a>
       </li>
@@ -68,7 +67,7 @@
 
               <td *ngIf="innovationsList.getColumnLabel('reassessmentsCount')" class="nhsuk-table__cell d-flex align-items-center">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('reassessmentsCount') }}</span>
-                <span>{{ !item.assessment ? 'Initial' : 'Reassessment (' + item.assessment.reassessmentCount + ')' }}</span>
+                <span>{{ item.assessment && item.assessment.reassessmentCount > 0 ? 'Reassessment (' + item.assessment.reassessmentCount + ')' : 'Initial' }}</span>
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('submittedAt')" class="nhsuk-table__cell d-flex align-items-center">
