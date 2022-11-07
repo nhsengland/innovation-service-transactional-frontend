@@ -62,7 +62,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
     activityTypes: new FormArray([]),
     startDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
     endDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
-  }, { updateOn: 'change' });
+  }, { updateOn: 'blur' });
 
   anyFilterSelected = false;
   filters: FiltersType[] = [
