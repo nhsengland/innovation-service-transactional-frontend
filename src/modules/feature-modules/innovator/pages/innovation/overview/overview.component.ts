@@ -12,7 +12,6 @@ import { INNOVATION_STATUS, SectionsSummaryModel } from '@modules/stores/innovat
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
-
 @Component({
   selector: 'app-innovator-pages-innovations-overview',
   templateUrl: './overview.component.html'
@@ -29,6 +28,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   needsAssessmentCompleted: boolean;
 
   assessmentId: string | undefined;
+  lastStatusSupportChange: null | string;
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   innovationStatusObj = this.stores.innovation.INNOVATION_STATUS;
@@ -72,10 +72,17 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.needsAssessmentCompleted = false;
+    this.lastStatusSupportChange = null;
   }
 
 
   ngOnInit(): void {
+
+    this.innovationsService.getInnovationSafetyPeriod(this.innovationId).subscribe({
+      next: response => {
+        this.lastStatusSupportChange = response.statusChangedAt
+      }
+    })
 
     forkJoin([
       this.innovationsService.getInnovatorInnovationInfo(this.innovationId),
@@ -127,6 +134,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }
 
       this.setPageStatus('READY');
+
+      console.log(this)
 
     });
 
