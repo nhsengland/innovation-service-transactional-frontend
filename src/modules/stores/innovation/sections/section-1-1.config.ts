@@ -168,7 +168,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
         dataType: 'checkbox-array',
         label: stepsLabels.l10,
         description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the innovation service.',
-        validations: { isRequired: [true, 'Choose at least one type of support'] },
+        validations: { isRequired: [true, 'Choose at least one type of support'], max: [5, 'Maximum 5 options'] },
         items: supportTypesItems
       }]
     }),
