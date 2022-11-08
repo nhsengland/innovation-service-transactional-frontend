@@ -8,7 +8,7 @@
         <div class="app-pane__side-bar">
           <div class="nhsuk-u-padding-top-8">
 
-            <ng-container *ngIf="assessment?.hasBeenSubmitted && shouldShowUpdatedAt">
+            <ng-container *ngIf="assessmentHasBeenSubmitted && shouldShowUpdatedAt">
               <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">Updated: {{ assessment?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</p>
               <p class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.updatedBy?.name }}</p>
               <p class="nhsuk-body-s nhsuk-u-margin-bottom-5">Needs assessment team</p>
@@ -25,10 +25,15 @@
           <div class="nhsuk-grid-row">
             <div class="nhsuk-grid-column-full">
 
-              <!-- <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus"></theme-alert>
-
-              <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Needs assessment</p>
-              <h1>{{ innovation.name }}</h1> -->
+              <ng-container *ngIf="assessment?.reassessment">
+                <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Reassessment details</h2>
+                <dl class="nhsuk-summary-list">
+                  <div *ngFor="let item of innovationReassessment" class="nhsuk-summary-list__row">
+                    <dt class="nhsuk-summary-list__key nhsuk-u-font-weight-normal">{{ item.label }}</dt>
+                    <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+                  </div>
+                </dl>
+              </ng-container>
 
               <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">The innovation</h2>
               <p class="text-pre-wrap">{{ assessment?.description }}</p>
@@ -71,6 +76,7 @@
               <p class="text-pre-wrap">{{ assessment?.summary }}</p>
 
               <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Suggested organisations</h2>
+              <p *ngIf="(assessment?.suggestedOrganisations || []).length === 0" class="text-pre-wrap">No suggested organisations</p>
               <div *ngFor="let organisation of assessment?.suggestedOrganisations">
                 <p class="nhsuk-u-margin-bottom-1"> {{ organisation.name }} </p>
                 <div *ngFor="let unit of organisation?.units">

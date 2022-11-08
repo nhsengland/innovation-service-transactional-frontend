@@ -9,12 +9,13 @@ import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/ne
 
 import { getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/accessor/services/accessor.service';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
 
 import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 import { AccessorService } from '../../../services/accessor.service';
 
-import { GetInnovationNeedsAssessmentEndpointOutDTO, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -27,8 +28,8 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   assessmentId: string;
   innovation: InnovationDataResolverType;
 
-  assessment: GetInnovationNeedsAssessmentEndpointOutDTO['assessment'] | undefined;
-  suggestedOrganisations: GetInnovationNeedsAssessmentEndpointOutDTO["assessment"]["suggestedOrganisations"] = [];
+  assessment: InnovationNeedsAssessmentInfoDTO | undefined;
+  suggestedOrganisations: InnovationNeedsAssessmentInfoDTO['suggestedOrganisations'] = [];
   logHistory: getSupportLogOutDTO[] = [];
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
@@ -65,60 +66,60 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
     forkJoin([
       this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
       this.accessorService.getSupportLog(this.innovationId)
-    ]).subscribe(([needsAssessmentInfo, supportLog]) => {
+    ]).subscribe(([needsAssessment, supportLog]) => {
 
       this.logHistory = supportLog;
 
-      this.assessment = needsAssessmentInfo.assessment;
+      this.assessment = needsAssessment;
       this.suggestedOrganisations = this.assessment.suggestedOrganisations;
 
-      const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === needsAssessmentInfo.assessment.maturityLevel) || 0) + 1;
+      const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === needsAssessment.maturityLevel) || 0) + 1;
       this.innovationMaturityLevel = {
         label: NEEDS_ASSESSMENT_QUESTIONS.innovation[1].label || '',
         value: `${maturityLevelIndex} / ${maturityLevelItems.length}`,
         levelIndex: maturityLevelIndex,
-        description: maturityLevelItems.find(item => item.value === needsAssessmentInfo.assessment.maturityLevel)?.label || '',
-        comment: needsAssessmentInfo.assessment.maturityLevelComment || ''
+        description: maturityLevelItems.find(item => item.value === needsAssessment.maturityLevel)?.label || '',
+        comment: needsAssessment.maturityLevelComment || ''
       };
 
       this.innovationSummary = [
         {
           label: NEEDS_ASSESSMENT_QUESTIONS.innovation[2].label,
-          value: yesPartiallyNoItems.find(item => item.value === needsAssessmentInfo.assessment.hasRegulatoryApprovals)?.label || '',
-          comment: needsAssessmentInfo.assessment.hasRegulatoryApprovalsComment || ''
+          value: yesPartiallyNoItems.find(item => item.value === needsAssessment.hasRegulatoryApprovals)?.label || '',
+          comment: needsAssessment.hasRegulatoryApprovalsComment || ''
         },
         {
           label: NEEDS_ASSESSMENT_QUESTIONS.innovation[3].label,
-          value: yesPartiallyNoItems.find(item => item.value === needsAssessmentInfo.assessment.hasEvidence)?.label || '',
-          comment: needsAssessmentInfo.assessment.hasEvidenceComment || ''
+          value: yesPartiallyNoItems.find(item => item.value === needsAssessment.hasEvidence)?.label || '',
+          comment: needsAssessment.hasEvidenceComment || ''
         },
         {
           label: NEEDS_ASSESSMENT_QUESTIONS.innovation[4].label,
-          value: yesPartiallyNoItems.find(item => item.value === needsAssessmentInfo.assessment.hasValidation)?.label || '',
-          comment: needsAssessmentInfo.assessment.hasValidationComment || ''
+          value: yesPartiallyNoItems.find(item => item.value === needsAssessment.hasValidation)?.label || '',
+          comment: needsAssessment.hasValidationComment || ''
         }
       ];
 
       this.innovatorSummary = [
         {
           label: NEEDS_ASSESSMENT_QUESTIONS.innovator[0].label,
-          value: yesPartiallyNoItems.find(item => item.value === needsAssessmentInfo.assessment.hasProposition)?.label || '',
-          comment: needsAssessmentInfo.assessment.hasPropositionComment || ''
+          value: yesPartiallyNoItems.find(item => item.value === needsAssessment.hasProposition)?.label || '',
+          comment: needsAssessment.hasPropositionComment || ''
         },
         {
           label: NEEDS_ASSESSMENT_QUESTIONS.innovator[1].label,
-          value: yesPartiallyNoItems.find(item => item.value === needsAssessmentInfo.assessment.hasCompetitionKnowledge)?.label || '',
-          comment: needsAssessmentInfo.assessment.hasCompetitionKnowledgeComment || ''
+          value: yesPartiallyNoItems.find(item => item.value === needsAssessment.hasCompetitionKnowledge)?.label || '',
+          comment: needsAssessment.hasCompetitionKnowledgeComment || ''
         },
         {
           label: NEEDS_ASSESSMENT_QUESTIONS.innovator[2].label,
-          value: yesPartiallyNoItems.find(item => item.value === needsAssessmentInfo.assessment.hasImplementationPlan)?.label || '',
-          comment: needsAssessmentInfo.assessment.hasImplementationPlanComment || ''
+          value: yesPartiallyNoItems.find(item => item.value === needsAssessment.hasImplementationPlan)?.label || '',
+          comment: needsAssessment.hasImplementationPlanComment || ''
         },
         {
           label: NEEDS_ASSESSMENT_QUESTIONS.innovator[3].label,
-          value: yesPartiallyNoItems.find(item => item.value === needsAssessmentInfo.assessment.hasScaleResource)?.label || '',
-          comment: needsAssessmentInfo.assessment.hasScaleResourceComment || ''
+          value: yesPartiallyNoItems.find(item => item.value === needsAssessment.hasScaleResource)?.label || '',
+          comment: needsAssessment.hasScaleResourceComment || ''
         }
       ];
 
