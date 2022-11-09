@@ -22,7 +22,7 @@
         <tbody class="nhsuk-table__body">
           <tr *ngFor="let item of rulesList" class="nhsuk-table__row">
             <td class="nhsuk-table__cell">
-              {{ 'shared.catalog.user.change_orggnisation_user_role_validations.' + item.key + '.label' | translate }}
+              {{ 'shared.catalog.user.change_organisation_user_role_validations.' + item.key + '.label' | translate }}
             </td>
             <td class="nhsuk-table__cell text-align-right">
               <strong class="nhsuk-tag" [ngClass]="{'nhsuk-tag--green': item.valid, 'nhsuk-tag--red': !item.valid}">{{ item.valid ? 'Valid' : 'Invalid' }}</strong>

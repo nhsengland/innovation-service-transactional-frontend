@@ -3,63 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import { APIQueryParamsType } from '@modules/core/models/table.model';
-
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
 
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum } from './innovation.enums';
 import {
-  INNOVATION_STATUS, ACTIVITY_LOG_ITEMS, INNOVATION_SUPPORT_STATUS,
+  INNOVATION_STATUS,
   getInnovationSectionsDTO, getInnovationEvidenceDTO, getInnovationCommentsDTO, OrganisationSuggestionModel, InnovationSectionInfoDTO
 } from './innovation.models';
 
 import { UrlModel } from '@modules/core/models/url.model';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-import { getSectionTitle } from './innovation.config';
-
-
-export type ActivityLogInDTO = {
-  count: number;
-  innovation: { id: string, name: string },
-  data: {
-    date: string; // '2020-01-01T00:00:00.000Z',
-    type: keyof ActivityLogItemsEnum;
-    activity: ActivityLogItemsEnum;
-    params: {
-
-      actionUserName: string;
-      interveningUserName?: string;
-
-      assessmentId?: string;
-      sectionId?: InnovationSectionEnum;
-      actionId?: string;
-      innovationSupportStatus?: keyof typeof INNOVATION_SUPPORT_STATUS;
-
-      organisations?: string[];
-      organisationUnit?: string;
-      comment?: { id: string; value: string; };
-      thread?: { id: string, subject: string, messageId: string },
-      totalActions?: number;
-
-      assessment?: { id: string };
-      reassessment?: { id: string }
-
-    };
-  }[];
-};
-export type ActivityLogOutDTO = {
-  count: number;
-  data: (Omit<ActivityLogInDTO['data'][0], 'innovation' | 'params'>
-    & {
-      params: ActivityLogInDTO['data'][0]['params'] & {
-        innovationName: string;
-        sectionTitle: string;
-      };
-      link: null | { label: string; url: string; };
-    })[]
-};
 
 
 @Injectable()
@@ -97,76 +51,6 @@ export class InnovationService {
     );
 
   }
-
-  getInnovationActivityLog(
-    innovationId: string,
-    queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum[], startDate: string, endDate: string }>
-  ): Observable<ActivityLogOutDTO> {
-
-    const userUrlBasePath = this.authenticationStore.userUrlBasePath();
-    const { filters, ...qParams } = queryParams;
-    const qp = {
-      ...qParams,
-      activityTypes: filters.activityTypes || undefined,
-      startDate: filters.startDate || undefined,
-      endDate: filters.endDate || undefined,
-    };
-
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/activities')
-      .setPathParams({
-        innovationId
-      })
-      .setQueryParams(qp);
-
-    return this.http.get<ActivityLogInDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => ({
-        count: response.count,
-        data: response.data.map(i => {
-
-          let link: null | { label: string; url: string; } = null;
-
-          switch (ACTIVITY_LOG_ITEMS[i.activity].link) {
-            case 'NEEDS_ASSESSMENT':
-              link = i.params.assessmentId ? { label: 'Go to Needs assessment', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/assessments/${i.params.assessmentId}` } : null;
-              break;
-            case 'NEEDS_REASSESSMENT':
-              link = i.params.reassessment?.id && i.params.assessment?.id ? { label: 'Go to Needs reassessment', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/assessments/${i.params.assessment.id}` } : null;
-              break;
-            case 'SUPPORT_STATUS':
-              link = { label: 'Go to Support status', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/support` };
-              break;
-            case 'SECTION':
-              link = i.params.sectionId ? { label: 'View section', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/record/sections/${i.params.sectionId}` } : null;
-              break;
-            case 'THREAD':
-              link = { label: 'View messages', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/threads/${i.params.thread?.id}` };
-              break;
-            case 'ACTION':
-              if (['innovator', 'accessor'].includes(userUrlBasePath) && i.params.actionId) { // Don't make sense for assessment users.
-                link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/action-tracker/${i.params.actionId}` };
-              }
-              break;
-          }
-
-          return {
-            date: i.date,
-            type: i.type,
-            activity: i.activity,
-            innovation: response.innovation,
-            params: {
-              ...i.params,
-              innovationName: response.innovation.name,
-              sectionTitle: getSectionTitle(i.params.sectionId || null)
-            },
-            link
-          };
-
-        })
-      }))
-    );
-  }
-
 
   getInnovationSections(innovationId: string): Observable<getInnovationSectionsDTO> {
 

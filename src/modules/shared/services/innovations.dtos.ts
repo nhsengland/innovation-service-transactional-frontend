@@ -1,7 +1,7 @@
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
 import { DateISOType } from '@app/base/types';
 
-import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 export type InnovationsListDTO = {
@@ -124,4 +124,46 @@ export type InnovationActionInfoDTO = {
   description: string,
   createdAt: DateISOType,
   createdBy: string;
+};
+
+
+export type InnovationActivityLogListInDTO = {
+  count: number,
+  innovation: { id: string, name: string },
+  data: {
+    date: DateISOType,
+    type: keyof ActivityLogItemsEnum;
+    activity: ActivityLogItemsEnum;
+    params: {
+
+      actionUserName: string,
+      interveningUserName?: string,
+
+      assessmentId?: string,
+      sectionId?: InnovationSectionEnum,
+      actionId?: string,
+      innovationSupportStatus?: InnovationSupportStatusEnum,
+
+      organisations?: string[],
+      organisationUnit?: string,
+      comment?: { id: string; value: string; },
+      thread?: { id: string, subject: string, messageId: string },
+      totalActions?: number,
+
+      assessment?: { id: string },
+      reassessment?: { id: string }
+
+    }
+  }[]
+};
+export type InnovationActivityLogListDTO = {
+  count: number;
+  data: (Omit<InnovationActivityLogListInDTO['data'][0], 'innovation' | 'params'>
+    & {
+      params: InnovationActivityLogListInDTO['data'][0]['params'] & {
+        innovationName: string,
+        sectionTitle: string
+      },
+      link: null | { label: string, url: string }
+    })[]
 };

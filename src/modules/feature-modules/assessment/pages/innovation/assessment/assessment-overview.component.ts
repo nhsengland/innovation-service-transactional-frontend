@@ -61,9 +61,9 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
   ngOnInit(): void {
 
     forkJoin([
-      this.assessmentService.getSupportLog(this.innovationId),
-      this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId)
-    ]).subscribe(([supportLog, needsAssessment]) => {
+      this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
+      this.assessmentService.getSupportLog(this.innovationId)
+    ]).subscribe(([needsAssessment, supportLog]) => {
 
       this.logHistory = supportLog;
 
@@ -71,15 +71,6 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
       this.assessmentHasBeenSubmitted = !!needsAssessment.finishedAt;
 
       this.shouldShowUpdatedAt = DatesHelper.dateDiff(this.assessment.finishedAt || '', this.assessment.updatedAt || '') > 0;
-
-      const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === needsAssessment.maturityLevel) || 0) + 1;
-      this.innovationMaturityLevel = {
-        label: NEEDS_ASSESSMENT_QUESTIONS.innovation[1].label || '',
-        value: `${maturityLevelIndex} / ${maturityLevelItems.length}`,
-        levelIndex: maturityLevelIndex,
-        description: maturityLevelItems.find(item => item.value === needsAssessment.maturityLevel)?.label || '',
-        comment: needsAssessment.maturityLevelComment || ''
-      };
 
       if (this.assessment.reassessment) {
         this.innovationReassessment = [
@@ -93,6 +84,15 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
           }
         ];
       }
+
+      const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === needsAssessment.maturityLevel) || 0) + 1;
+      this.innovationMaturityLevel = {
+        label: NEEDS_ASSESSMENT_QUESTIONS.innovation[1].label || '',
+        value: `${maturityLevelIndex} / ${maturityLevelItems.length}`,
+        levelIndex: maturityLevelIndex,
+        description: maturityLevelItems.find(item => item.value === needsAssessment.maturityLevel)?.label || '',
+        comment: needsAssessment.maturityLevelComment || ''
+      };
 
       this.innovationSummary = [
         {
