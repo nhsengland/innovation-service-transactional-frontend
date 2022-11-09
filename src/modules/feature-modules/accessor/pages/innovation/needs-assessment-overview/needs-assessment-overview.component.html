@@ -15,8 +15,15 @@
           <div class="nhsuk-grid-row">
             <div class="nhsuk-grid-column-full">
 
-              <!-- <p class="nhsuk-hint nhsuk-u-margin-bottom-0">Needs assessment</p>
-              <h1>{{ innovation.name }}</h1> -->
+              <ng-container *ngIf="assessment?.reassessment">
+                <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Reassessment details</h2>
+                <dl class="nhsuk-summary-list">
+                  <div *ngFor="let item of innovationReassessment" class="nhsuk-summary-list__row">
+                    <dt class="nhsuk-summary-list__key nhsuk-u-font-weight-normal">{{ item.label }}</dt>
+                    <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+                  </div>
+                </dl>
+              </ng-container>
 
               <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">The innovation</h2>
               <p class="text-pre-wrap">{{ assessment?.description }}</p>
@@ -112,8 +119,7 @@
                 <p *ngFor="let organisationUnit of item.suggestedOrganisationUnitsNames" class="nhsuk-u-margin-bottom-0"> {{ organisationUnit }} </p>
               </div>
               <div *ngSwitchCase="supportLogType.STATUS_UPDATE">
-                <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + item.innovationSupportStatus + '.cssColorClass' | translate }}"
-                  label="{{ 'shared.catalog.innovation.support_status.' + item.innovationSupportStatus + '.name' | translate }}"></theme-tag>
+                <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + item.innovationSupportStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + item.innovationSupportStatus + '.name' | translate }}"></theme-tag>
               </div>
             </ng-container>
             <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-4">Comment</p>

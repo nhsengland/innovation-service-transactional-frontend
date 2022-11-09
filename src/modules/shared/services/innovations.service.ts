@@ -8,9 +8,11 @@ import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
-import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationActionsListInDTO, InnovationActionsListDTO, InnovationInfoDTO, InnovationsListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationActionInfoDTO, InnovationNeedsAssessmentInfoDTO } from './innovations.dtos';
+import { InnovationActionsListInDTO, InnovationActionsListDTO, InnovationInfoDTO, InnovationsListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationActionInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO } from './innovations.dtos';
+import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
+import { getSectionTitle } from '@modules/stores/innovation/innovation.config';
 
 
 export enum AssessmentSupportFilterEnum {
@@ -29,7 +31,7 @@ export type InnovationsListFiltersType = {
   engagingOrganisations?: string[],
   assignedToMe?: boolean,
   suggestedOnly?: boolean,
-  fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications')[];
+  fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications')[]
 };
 
 export type InnovationsActionsListFilterType = {
@@ -38,7 +40,7 @@ export type InnovationsActionsListFilterType = {
   sections?: InnovationSectionEnum[],
   status?: InnovationActionStatusEnum[],
   createdByMe?: boolean,
-  fields?: ('notifications')[];
+  fields?: ('notifications')[]
 };
 
 export type GetThreadsListDTO = {
@@ -94,11 +96,11 @@ export type GetThreadMessagesListInDTO = {
   }[];
 };
 export type GetThreadMessagesListOutDTO = {
-  count: number;
+  count: number,
   messages: (
     Omit<GetThreadMessagesListInDTO['messages'][0], 'createdBy'> & {
       createdBy: GetThreadMessagesListInDTO['messages'][0]['createdBy'] & { typeDescription: string; };
-    })[];
+    })[]
 };
 
 export type CreateThreadDTO = {
@@ -109,7 +111,7 @@ export type CreateThreadDTO = {
       id: string;
     };
     createdAt: DateISOType;
-  };
+  }
 };
 
 export type CreateThreadMessageDTO = {
@@ -366,6 +368,71 @@ export class InnovationsService extends CoreService {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId').setPathParams({ innovationId });
     return this.http.get<statusChangeDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
+  }
+
+  getInnovationActivityLog(
+    innovationId: string,
+    queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum[], startDate: string, endDate: string }>
+  ): Observable<InnovationActivityLogListDTO> {
+
+    const { filters, ...qParams } = queryParams;
+    const qp = {
+      ...qParams,
+      ...(filters.activityTypes ? { activityTypes: filters.activityTypes } : {}),
+      ...(filters.startDate ? { startDate: filters.startDate } : {}),
+      ...(filters.endDate ? { endDate: filters.endDate } : {}),
+    };
+    
+    const userUrlBasePath = this.stores.authentication.userUrlBasePath();
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/activities').setPathParams({ innovationId }).setQueryParams(qp);
+
+    return this.http.get<InnovationActivityLogListInDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => ({
+        count: response.count,
+        data: response.data.map(i => {
+
+          let link: null | { label: string; url: string; } = null;
+
+          switch (ACTIVITY_LOG_ITEMS[i.activity].link) {
+            case 'NEEDS_ASSESSMENT':
+              link = i.params.assessmentId ? { label: 'Go to Needs assessment', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/assessments/${i.params.assessmentId}` } : null;
+              break;
+            case 'NEEDS_REASSESSMENT':
+              link = i.params.assessment?.id ? { label: 'Go to Needs reassessment', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/assessments/${i.params.assessment.id}` } : null;
+              break;
+            case 'SUPPORT_STATUS':
+              link = { label: 'Go to Support status', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/support` };
+              break;
+            case 'SECTION':
+              link = i.params.sectionId ? { label: 'View section', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/record/sections/${i.params.sectionId}` } : null;
+              break;
+            case 'THREAD':
+              link = { label: 'View messages', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/threads/${i.params.thread?.id}` };
+              break;
+            case 'ACTION':
+              if (['innovator', 'accessor'].includes(userUrlBasePath) && i.params.actionId) { // Don't make sense for assessment users.
+                link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/action-tracker/${i.params.actionId}` };
+              }
+              break;
+          }
+
+          return {
+            date: i.date,
+            type: i.type,
+            activity: i.activity,
+            innovation: response.innovation,
+            params: {
+              ...i.params,
+              innovationName: response.innovation.name,
+              sectionTitle: getSectionTitle(i.params.sectionId || null)
+            },
+            link
+          };
+
+        })
+      }))
+    );
   }
 
 }

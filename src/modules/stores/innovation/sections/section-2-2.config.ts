@@ -1,4 +1,5 @@
 import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
+import { UtilsHelper } from '@app/base/helpers';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
@@ -156,11 +157,11 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
     hasBenefits: data.hasBenefits,
-    patientsCitizensBenefits: data.patientsCitizensBenefits,
+    patientsCitizensBenefits: UtilsHelper.isEmpty(data.patientsCitizensBenefits) ? null : data.patientsCitizensBenefits,
     otherPatientsCitizensBenefit: data.otherPatientsCitizensBenefit,
-    generalBenefits: data.generalBenefits,
+    generalBenefits: UtilsHelper.isEmpty(data.generalBenefits) ? null : data.generalBenefits,
     otherGeneralBenefit: data.otherGeneralBenefit,
-    environmentalBenefits: data.environmentalBenefits,
+    environmentalBenefits: UtilsHelper.isEmpty(data.environmentalBenefits) ? null : data.environmentalBenefits,
     otherEnvironmentalBenefit: data.otherEnvironmentalBenefit,
     accessibilityImpactDetails: data.accessibilityImpactDetails,
     accessibilityStepsDetails: data.accessibilityStepsDetails

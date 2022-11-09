@@ -8,7 +8,7 @@ import { RoutingHelper } from '@app/base/helpers';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/accessor/services/accessor.service';
-import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { maturityLevelItems, yesNoItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
 
 import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
@@ -33,6 +33,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   logHistory: getSupportLogOutDTO[] = [];
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
+  innovationReassessment: { label?: string, value: null | string }[] = [];
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
 
@@ -48,7 +49,6 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
   ) {
 
     super();
-    this.setPageTitle('Needs assessment overview');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
@@ -72,6 +72,19 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
       this.assessment = needsAssessment;
       this.suggestedOrganisations = this.assessment.suggestedOrganisations;
+
+      if (this.assessment.reassessment) {
+        this.innovationReassessment = [
+          {
+            label: 'Did the innovator updated innovation record since submitting it to the previous needs assessment?',
+            value: yesNoItems.find(item => item.value === needsAssessment.reassessment?.updatedInnovationRecord)?.label || ''
+          },
+          {
+            label: 'What has changed with the innovation and what support does the innovator need next?',
+            value: needsAssessment.reassessment?.description || ''
+          }
+        ];
+      }
 
       const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === needsAssessment.maturityLevel) || 0) + 1;
       this.innovationMaturityLevel = {
@@ -123,7 +136,12 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
         }
       ];
 
-      // this.setBackLink('Go back', `/accessor/innovations/${this.innovationId}`);
+      if (!this.assessment.reassessment) {
+        this.setPageTitle('Needs assessment overview');
+      } else {
+        this.setPageTitle('Needs reassessment overview');
+      }
+
       this.setPageStatus('READY');
 
     });
