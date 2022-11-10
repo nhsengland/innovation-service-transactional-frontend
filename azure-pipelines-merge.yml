@@ -22,7 +22,7 @@ steps:
   displayName: 'Install dependencies'
   inputs:
     script: |
-      npm install
+      npm install &&
       npm run postinstall
 
 - task: CmdLine@2
