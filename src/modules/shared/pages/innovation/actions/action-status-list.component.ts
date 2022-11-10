@@ -16,6 +16,7 @@ export class PageActionStatusListComponent extends CoreComponent {
     InnovationActionStatusEnum.IN_REVIEW,
     InnovationActionStatusEnum.COMPLETED,
     InnovationActionStatusEnum.DECLINED,
+    InnovationActionStatusEnum.CANCELLED,
     InnovationActionStatusEnum.DELETED
   ];
 

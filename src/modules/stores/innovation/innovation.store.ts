@@ -1,20 +1,17 @@
-/* istanbul ignore file */
-
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-import { APIQueryParamsType } from '@modules/core/models/table.model';
 
 import { Store } from '../store.class';
 import { WizardEngineModel } from '@modules/shared/forms';
 
-import { InnovationService, ActivityLogOutDTO, } from './innovation.service';
+import { InnovationService } from './innovation.service';
 
 import { INNOVATION_SECTIONS, getSectionTitle } from './innovation.config';
-import { ActivityLogTypesEnum, GroupedInnovationStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
+import { GroupedInnovationStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
 import {
   InnovationModel,
   INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS,
@@ -41,19 +38,8 @@ export class InnovationStore extends Store<InnovationModel> {
     return ['WAITING_NEEDS_ASSESSMENT', 'NEEDS_ASSESSMENT'].includes(status);
   }
 
-  // getInnovationInfo$(innovationId: string): Observable<getInnovationInfoResponse> {
-  //   return this.innovationsService.getInnovationInfo(innovationId);
-  // }
-
   submitInnovation$(innovationId: string): Observable<{ id: string, status: keyof typeof INNOVATION_STATUS }> {
     return this.innovationsService.submitInnovation(innovationId);
-  }
-
-  getActivityLog$(
-    innovationId: string,
-    queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum[], startDate: string, endDate: string }>
-  ): Observable<ActivityLogOutDTO> {
-    return this.innovationsService.getInnovationActivityLog(innovationId, queryParams);
   }
 
   getSectionsSummary$(innovationId: string): Observable<{ innovation: { name: string, status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {

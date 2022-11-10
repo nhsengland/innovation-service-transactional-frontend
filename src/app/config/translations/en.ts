@@ -352,7 +352,7 @@ export const locale = {
               }
             }
           },
-          change_orggnisation_user_role_validations: {
+          change_organisation_user_role_validations: {
             lastAccessorUserOnOrganisationUnit: {
               label: 'User cannot be the last Qualifying Accessor on the organisation unit'
             }

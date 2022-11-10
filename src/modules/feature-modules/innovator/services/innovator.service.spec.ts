@@ -83,7 +83,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.declineAction('Inno01', 'ActionId01', { some: 'parameters' }).subscribe({ next: success => response = success, error: error => response = error });
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/actions/ActionId01`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/Inno01/actions/ActionId01`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PUT');
     expect(response).toEqual(expected);

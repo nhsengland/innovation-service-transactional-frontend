@@ -7,10 +7,11 @@ import { CustomValidators, FormArray, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-
 import { ActivityLogTypesEnum, ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
-import { ActivityLogOutDTO } from '@modules/stores/innovation/innovation.service';
+import { InnovationActivityLogListDTO } from '@modules/shared/services/innovations.dtos';
+
 import { DatesHelper } from '@app/base/helpers';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 enum FilterTypeEnum {
@@ -19,7 +20,7 @@ enum FilterTypeEnum {
 }
 
 type FilterKeysType = 'activityTypes' | 'activityDate';
-type ActivitiesListType = ActivityLogOutDTO['data'][0] & { showHideStatus: 'opened' | 'closed', showHideText: string };
+type ActivitiesListType = InnovationActivityLogListDTO['data'][0] & { showHideStatus: 'opened' | 'closed', showHideText: string };
 
 type FiltersType = {
   key: FilterKeysType,
@@ -29,8 +30,8 @@ type FiltersType = {
   selected: {
     label: string,
     value: string;
-    formControl?: string,
-  }[];
+    formControl?: string
+  }[]
 }
 
 type DatasetType = {
@@ -38,7 +39,7 @@ type DatasetType = {
     label: string,
     description?: string,
     value: string,
-    formControl?: string,
+    formControl?: string
   }[]
 }
 
@@ -49,7 +50,6 @@ type DatasetType = {
 })
 export class PageInnovationActivityLogComponent extends CoreComponent implements OnInit {
 
-  module: '' | 'innovator' | 'accessor' | 'assessment' = '';
   innovation: ContextInnovationType;
 
   ACTIVITY_LOG_ITEMS = ACTIVITY_LOG_ITEMS;
@@ -111,7 +111,9 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
     return this.filters.filter(i => i.selected.length > 0);
   }
 
-  constructor() {
+  constructor(
+    private innovationsService: InnovationsService
+  ) {
 
     super();
     this.innovation = this.stores.context.getInnovation();
@@ -139,7 +141,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
     this.setPageStatus('LOADING');
 
-    this.stores.innovation.getActivityLog$(this.innovation.id, this.activitiesList.getAPIQueryParams()).subscribe(
+    this.innovationsService.getInnovationActivityLog(this.innovation.id, this.activitiesList.getAPIQueryParams()).subscribe(
       response => {
 
         this.activitiesList.setData(
@@ -189,7 +191,6 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
       }
     }
 
-    /* istanbul ignore next */
     this.anyFilterSelected = this.filters.filter(i => i.selected.length > 0).length > 0;
 
     this.activitiesList.setFilters({
@@ -262,6 +263,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
   // Daterange helpers
   getDaterangeFilterTitle(filter: FiltersType): string {
+
     const afterDate = this.form.get(this.datasets[filter.key][0].formControl!)!.value;
     const beforeDate = this.form.get(this.datasets[filter.key][1].formControl!)!.value;
 
@@ -270,6 +272,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
     if ((afterDate === null || afterDate === '') && beforeDate !== null) return "Activity before";
 
     return "Activity between";
+
   }
 
   onRemoveDateRangeFilter(formControlName: string, value: string): void {
@@ -277,9 +280,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
     const formValue = this.getDateByControlName(formControlName);
 
     if (formValue === value) {
-      this.form.patchValue({
-        [formControlName]: null
-      })
+      this.form.patchValue({ [formControlName]: null });
     }
 
   }

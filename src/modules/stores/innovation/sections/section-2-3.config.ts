@@ -4,7 +4,7 @@ import { InnovationSectionConfigType } from '../innovation.models';
 
 import { hasEvidenceItems } from './catalogs.config';
 
-import { SECTION_2_EVIDENCES } from './section-2-3-evidences.config';
+import { clinicalEvidenceItems, SECTION_2_EVIDENCES } from './section-2-3-evidences.config';
 
 
 // Labels.
@@ -15,7 +15,14 @@ const stepsLabels = {
 
 // Types.
 type InboundPayloadType = {
-  hasEvidence: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET'
+  hasEvidence: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET',
+  evidences: {
+    id: string,
+    evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER',
+    clinicalEvidenceType: null | 'DATA_PUBLISHED' | 'NON_RANDOMISED_COMPARATIVE_DATA' | 'NON_RANDOMISED_NON_COMPARATIVE_DATA' | 'CONFERENCE' | 'RANDOMISED_CONTROLLED_TRIAL' | 'UNPUBLISHED_DATA' | 'OTHER',
+    description: string,
+    summary: string
+  }[];
 };
 type StepPayloadType = InboundPayloadType;
 
@@ -65,6 +72,14 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     label: stepsLabels.l1,
     value: hasEvidenceItems.find(item => item.value === data.hasEvidence)?.label,
     editStepNumber: 1
+  });
+
+  (data.evidences || []).forEach((item, i) => {
+    toReturn.push({
+      label: `Evidence ${i + 1}`,
+      value: item.description || clinicalEvidenceItems.find(e => e.value === item.clinicalEvidenceType)?.label,
+      evidenceId: item.id
+    });
   });
 
   return toReturn;

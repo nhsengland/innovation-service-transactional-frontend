@@ -27,7 +27,8 @@ export class TriageInnovatorPackLayoutComponent extends CoreComponent {
           { id: 'findSupport', label: 'Find support', url: `/triage-innovator-pack` },
           { id: 'innovationGuides', label: 'Innovation guides', url: `/innovation-guides`, fullReload: true },
           { id: 'caseStudies', label: 'Case studies', url: `/case-studies`, fullReload: true },
-          { id: 'aboutTheService', label: 'About the service', url: `/about-the-service`, fullReload: true }
+          { id: 'aboutTheService', label: 'About the service', url: `/about-the-service`, fullReload: true },
+          { id: 'news', label: 'News', url: `/news`, fullReload: true }
         ],
         right: [
           { id: 'myDashboard', label: 'My dashboard', url: `${this.CONSTANTS.APP_URL}/dashboard`, fullReload: true }

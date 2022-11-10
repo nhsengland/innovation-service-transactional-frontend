@@ -65,9 +65,9 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       this.organisationsService.getOrganisationsList(true),
       this.innovationsService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment.id || ''),
       this.innovationsService.getInnovationSupportsList(this.innovation.id, false)
-    ]).subscribe(([organisations, needsAssessmentInfo, innovationSupportsList]) => {
+    ]).subscribe(([organisations, needsAssessment, innovationSupportsList]) => {
 
-      const needsAssessmentSuggestedOrganisations = needsAssessmentInfo.assessment.suggestedOrganisations.map(item => item.id);
+      const needsAssessmentSuggestedOrganisations = needsAssessment.suggestedOrganisations.map(item => item.id);
 
       this.groupedItems = organisations.map(item => {
 

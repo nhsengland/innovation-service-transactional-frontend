@@ -8,9 +8,11 @@ import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
-import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationActionsListInDTO, InnovationActionsListDTO, InnovationInfoDTO, InnovationsListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationActionInfoDTO } from './innovations.dtos';
+import { InnovationActionsListInDTO, InnovationActionsListDTO, InnovationInfoDTO, InnovationsListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationActionInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO } from './innovations.dtos';
+import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
+import { getSectionTitle } from '@modules/stores/innovation/innovation.config';
 
 
 export enum AssessmentSupportFilterEnum {
@@ -39,38 +41,6 @@ export type InnovationsActionsListFilterType = {
   status?: InnovationActionStatusEnum[],
   createdByMe?: boolean,
   fields?: ('notifications')[]
-}
-
-
-export type GetInnovationNeedsAssessmentEndpointInDTO = {
-  id: string;
-  description: null | string;
-  maturityLevel: null | string;
-  maturityLevelComment: null | string;
-  hasRegulatoryApprovals: null | string;
-  hasRegulatoryApprovalsComment: null | string;
-  hasEvidence: null | string;
-  hasEvidenceComment: null | string;
-  hasValidation: null | string;
-  hasValidationComment: null | string;
-  hasProposition: null | string;
-  hasPropositionComment: null | string;
-  hasCompetitionKnowledge: null | string;
-  hasCompetitionKnowledgeComment: null | string;
-  hasImplementationPlan: null | string;
-  hasImplementationPlanComment: null | string;
-  hasScaleResource: null | string;
-  hasScaleResourceComment: null | string;
-  summary: null | string;
-  suggestedOrganisations: { id: string; name: string; acronym: null | string, units: { id: string; name: string; acronym: string; }[] }[];
-  assignTo: { id: string, name: string };
-  finishedAt: null | string;
-  updatedAt: null | string;
-  updatedBy: { id: string, name: string };
-};
-
-export type GetInnovationNeedsAssessmentEndpointOutDTO = {
-  assessment: Omit<GetInnovationNeedsAssessmentEndpointInDTO, 'id'> & { hasBeenSubmitted: boolean };
 };
 
 export type GetThreadsListDTO = {
@@ -88,9 +58,9 @@ export type GetThreadsListDTO = {
         id: string;
         name: string;
         type: UserTypeEnum;
-        organisationUnit?: { id: string, name: string, acronym: string };
-      }
-    }
+        organisationUnit?: { id: string, name: string, acronym: string; };
+      };
+    };
   }[];
 };
 
@@ -98,7 +68,7 @@ export type GetThreadInfoDTO = {
   id: string;
   subject: string;
   createdAt: DateISOType;
-  createdBy: { id: string, name: string, type: UserTypeEnum }
+  createdBy: { id: string, name: string, type: UserTypeEnum; };
 };
 
 export type GetThreadMessageInfoDTO = {
@@ -117,8 +87,8 @@ export type GetThreadMessagesListInDTO = {
       id: string;
       name: string;
       type: UserTypeEnum;
-      organisation?: { id: string, name: string, acronym: string };
-      organisationUnit?: { id: string, name: string, acronym: string };
+      organisation?: { id: string, name: string, acronym: string; };
+      organisationUnit?: { id: string, name: string, acronym: string; };
     };
     updatedAt: null | DateISOType;
     isNew: boolean;
@@ -126,11 +96,11 @@ export type GetThreadMessagesListInDTO = {
   }[];
 };
 export type GetThreadMessagesListOutDTO = {
-  count: number;
+  count: number,
   messages: (
     Omit<GetThreadMessagesListInDTO['messages'][0], 'createdBy'> & {
-      createdBy: GetThreadMessagesListInDTO['messages'][0]['createdBy'] & { typeDescription: string }
-    })[];
+      createdBy: GetThreadMessagesListInDTO['messages'][0]['createdBy'] & { typeDescription: string; };
+    })[]
 };
 
 export type CreateThreadDTO = {
@@ -142,7 +112,7 @@ export type CreateThreadDTO = {
     };
     createdAt: DateISOType;
   }
-}
+};
 
 export type CreateThreadMessageDTO = {
   threadMessage: {
@@ -155,11 +125,11 @@ export type CreateThreadMessageDTO = {
     isEditable: boolean;
     createdAt: DateISOType;
   };
-}
+};
 
 export type statusChangeDTO = {
-  statusChangedAt: null | string
-}
+  statusChangedAt: null | string;
+};
 
 
 @Injectable()
@@ -232,10 +202,10 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getInnovationSharesList(innovationId: string): Observable<{ organisation: { id: string, name: string, acronym: string } }[]> {
+  getInnovationSharesList(innovationId: string): Observable<{ organisation: { id: string, name: string, acronym: string; }; }[]> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/shares').setPathParams({ innovationId });
-    return this.http.get<{ organisation: { id: string, name: string, acronym: string } }[]>(url.buildUrl()).pipe(take(1), map(response => response));
+    return this.http.get<{ organisation: { id: string, name: string, acronym: string; }; }[]>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 
@@ -264,48 +234,15 @@ export class InnovationsService extends CoreService {
   getInnovationSupportInfo(innovationId: string, supportId: string): Observable<InnovationSupportInfoDTO> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports/:supportId').setPathParams({ innovationId, supportId });
-    return this.http.get<InnovationSupportInfoDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
+    return this.http.get<InnovationSupportInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 
   // Needs Assessment
-  getInnovationNeedsAssessment(innovationId: string, assessmentId: string): Observable<GetInnovationNeedsAssessmentEndpointOutDTO> {
+  getInnovationNeedsAssessment(innovationId: string, assessmentId: string): Observable<InnovationNeedsAssessmentInfoDTO> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/assessments/:assessmentId').setPathParams({ innovationId, assessmentId });
-    return this.http.get<GetInnovationNeedsAssessmentEndpointInDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => ({
-        assessment: {
-          description: response.description,
-          maturityLevel: response.maturityLevel,
-          maturityLevelComment: response.maturityLevelComment,
-          hasRegulatoryApprovals: response.hasRegulatoryApprovals,
-          hasRegulatoryApprovalsComment: response.hasRegulatoryApprovalsComment,
-          hasEvidence: response.hasEvidence,
-          hasEvidenceComment: response.hasEvidenceComment,
-          hasValidation: response.hasValidation,
-          hasValidationComment: response.hasValidationComment,
-          hasProposition: response.hasProposition,
-          hasPropositionComment: response.hasPropositionComment,
-          hasCompetitionKnowledge: response.hasCompetitionKnowledge,
-          hasCompetitionKnowledgeComment: response.hasCompetitionKnowledgeComment,
-          hasImplementationPlan: response.hasImplementationPlan,
-          hasImplementationPlanComment: response.hasImplementationPlanComment,
-          hasScaleResource: response.hasScaleResource,
-          hasScaleResourceComment: response.hasScaleResourceComment,
-          summary: response.summary,
-          suggestedOrganisations: response.suggestedOrganisations,
-          assignTo: response.assignTo,
-          finishedAt: response.finishedAt,
-          updatedAt: response.updatedAt,
-          updatedBy: response.updatedBy,
-          hasBeenSubmitted: !!response.finishedAt
-        }
-      }))
-    );
+    return this.http.get<InnovationNeedsAssessmentInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 
@@ -405,24 +342,24 @@ export class InnovationsService extends CoreService {
 
   }
 
-  createThread(innovationId: string, body: { subject: string, message: string }): Observable<CreateThreadDTO> {
+  createThread(innovationId: string, body: { subject: string, message: string; }): Observable<CreateThreadDTO> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads').setPathParams({ innovationId });
     return this.http.post<CreateThreadDTO>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
 
-  createThreadMessage(innovationId: string, threadId: string, body: { message: string }): Observable<CreateThreadMessageDTO> {
+  createThreadMessage(innovationId: string, threadId: string, body: { message: string; }): Observable<CreateThreadMessageDTO> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/messages').setPathParams({ innovationId, threadId });
     return this.http.post<CreateThreadMessageDTO>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
 
-  editThreadMessage(innovationId: string, threadId: string, messageId: string, body: { message: string }): Observable<{ id: string }> {
+  editThreadMessage(innovationId: string, threadId: string, messageId: string, body: { message: string; }): Observable<{ id: string; }> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/messages/:messageId').setPathParams({ innovationId, threadId, messageId });
-    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
+    return this.http.put<{ id: string; }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
 
@@ -431,6 +368,71 @@ export class InnovationsService extends CoreService {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId').setPathParams({ innovationId });
     return this.http.get<statusChangeDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
+  }
+
+  getInnovationActivityLog(
+    innovationId: string,
+    queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum[], startDate: string, endDate: string }>
+  ): Observable<InnovationActivityLogListDTO> {
+
+    const { filters, ...qParams } = queryParams;
+    const qp = {
+      ...qParams,
+      ...(filters.activityTypes ? { activityTypes: filters.activityTypes } : {}),
+      ...(filters.startDate ? { startDate: filters.startDate } : {}),
+      ...(filters.endDate ? { endDate: filters.endDate } : {}),
+    };
+
+    const userUrlBasePath = this.stores.authentication.userUrlBasePath();
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/activities').setPathParams({ innovationId }).setQueryParams(qp);
+
+    return this.http.get<InnovationActivityLogListInDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => ({
+        count: response.count,
+        data: response.data.map(i => {
+
+          let link: null | { label: string; url: string; } = null;
+
+          switch (ACTIVITY_LOG_ITEMS[i.activity].link) {
+            case 'NEEDS_ASSESSMENT':
+              link = i.params.assessmentId ? { label: 'Go to Needs assessment', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/assessments/${i.params.assessmentId}` } : null;
+              break;
+            case 'NEEDS_REASSESSMENT':
+              link = i.params.assessment?.id ? { label: 'Go to Needs reassessment', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/assessments/${i.params.assessment.id}` } : null;
+              break;
+            case 'SUPPORT_STATUS':
+              link = { label: 'Go to Support status', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/support` };
+              break;
+            case 'SECTION':
+              link = i.params.sectionId ? { label: 'View section', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/record/sections/${i.params.sectionId}` } : null;
+              break;
+            case 'THREAD':
+              link = { label: 'View messages', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/threads/${i.params.thread?.id}` };
+              break;
+            case 'ACTION':
+              if (['innovator', 'accessor'].includes(userUrlBasePath) && i.params.actionId) { // Don't make sense for assessment users.
+                link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/action-tracker/${i.params.actionId}` };
+              }
+              break;
+          }
+
+          return {
+            date: i.date,
+            type: i.type,
+            activity: i.activity,
+            innovation: response.innovation,
+            params: {
+              ...i.params,
+              innovationName: response.innovation.name,
+              sectionTitle: getSectionTitle(i.params.sectionId || null)
+            },
+            link
+          };
+
+        })
+      }))
+    );
   }
 
 }

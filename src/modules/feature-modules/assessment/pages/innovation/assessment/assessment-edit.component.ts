@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
+import { UtilsHelper } from '@app/base/helpers';
 import { MappedObjectType } from '@app/base/types';
 import { FormEngineComponent, FormEngineParameterModel } from '@modules/shared/forms';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
@@ -75,7 +76,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     forkJoin([
       this.organisationsService.getOrganisationsList(true),
       this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
-    ]).subscribe(([organisationUnits, innovationNeedsAssessment]) => {
+    ]).subscribe(([organisationUnits, needsAssessment]) => {
 
       // Update last step with the organisations list with description and pre-select all checkboxes.
       NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> Support offer guide (opens in a new window) </a>`;
@@ -84,10 +85,10 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       this.innovationName = this.stores.context.getInnovation().name;
 
       this.form.data = {
-        ...innovationNeedsAssessment.assessment,
-        suggestedOrganisationUnitsIds: innovationNeedsAssessment.assessment.suggestedOrganisations.reduce((unitsAcc: string[], o) => [...unitsAcc, ...o.units.map(u => u.id)], [])
+        ...needsAssessment,
+        suggestedOrganisationUnitsIds: needsAssessment.suggestedOrganisations.reduce((unitsAcc: string[], o) => [...unitsAcc, ...o.units.map(u => u.id)], [])
       };
-      this.assessmentHasBeenSubmitted = innovationNeedsAssessment.assessment.hasBeenSubmitted;
+      this.assessmentHasBeenSubmitted = !!needsAssessment.finishedAt;
 
       this.setPageStatus('READY');
 
@@ -149,7 +150,13 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
       }
 
-      this.currentAnswers = { ...this.currentAnswers, ...formData?.data };
+      this.currentAnswers = {
+        ...this.currentAnswers,
+        // Update to null empty values.
+        ...Object.entries(formData?.data).reduce((accumulator, [key, value]) => {
+          return { ...accumulator, [key]: UtilsHelper.isEmpty(value) ? null : value };
+        }, {})
+      }
 
     });
 
