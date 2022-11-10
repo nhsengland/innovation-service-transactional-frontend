@@ -16,7 +16,7 @@ const stepsLabels = {
 // Types.
 type InboundPayloadType = {
   hasEvidence: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET',
-  evidence: {
+  evidences: {
     id: string,
     evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER',
     clinicalEvidenceType: null | 'DATA_PUBLISHED' | 'NON_RANDOMISED_COMPARATIVE_DATA' | 'NON_RANDOMISED_NON_COMPARATIVE_DATA' | 'CONFERENCE' | 'RANDOMISED_CONTROLLED_TRIAL' | 'UNPUBLISHED_DATA' | 'OTHER',
@@ -74,7 +74,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     editStepNumber: 1
   });
 
-  (data.evidence || []).forEach((item, i) => {
+  (data.evidences || []).forEach((item, i) => {
     toReturn.push({
       label: `Evidence ${i + 1}`,
       value: item.description || clinicalEvidenceItems.find(e => e.value === item.clinicalEvidenceType)?.label,

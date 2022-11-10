@@ -8,7 +8,7 @@ import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/
 type InboundPayloadType = Required<AuthenticationModel>['user'];
 
 type StepPayloadType = {
-  displayName: string;
+  displayName: string
 };
 
 type OutboundPayloadType = StepPayloadType;
