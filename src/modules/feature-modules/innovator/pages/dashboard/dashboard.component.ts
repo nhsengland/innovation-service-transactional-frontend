@@ -9,6 +9,8 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 
 import { GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
 import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
+import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
+import { GroupedInnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 @Component({
@@ -19,13 +21,13 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   user: {
     displayName: string,
-    innovations: { id: string, name: string, description: null | string }[],
+    innovations: { id: string, name: string, description: null | string, groupedStatus: keyof typeof GroupedInnovationStatusEnum }[],
     passwordResetAt: string
   };
 
   innovationTransfers: GetInnovationTransfersDTO = [];
 
-  innovationGuidesUrl = `${this.CONSTANTS.BASE_URL}/innovation-guides`;
+  innovationStatus = this.stores.innovation.INNOVATION_STATUS;
 
   constructor(
     private innovationsService: InnovationsService,
@@ -54,10 +56,12 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     ]).subscribe(([innovationsList, innovationsTransfers]) => {
 
       if (innovationsList) {
-        this.user.innovations = innovationsList.data.map(item => ({
-          id: item.id,
-          name: item.name,
-          description: item.description
+
+        this.user.innovations = innovationsList.data.map(innovation => ({
+          id: innovation.id,
+          name: innovation.name,
+          description: this.buildDescriptionString(innovation),
+          groupedStatus: this.getGroupedStatus(innovation),
         }))
       } else {
         this.setPageStatus('ERROR');
@@ -102,10 +106,11 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     ).subscribe(([_authentication, innovationsTransfers, innovationsList]) => {
 
       this.innovationTransfers = innovationsTransfers;
-      this.user.innovations = innovationsList.data.map(item => ({
-        id: item.id,
-        name: item.name,
-        description: item.description
+      this.user.innovations = innovationsList.data.map(innovation => ({
+        id: innovation.id,
+        name: innovation.name,
+        description: this.buildDescriptionString(innovation),
+        groupedStatus: this.getGroupedStatus(innovation),
       }));
 
       this.setAlertSuccess(accept ? `You have successfully accepted ownership` : `You have successfully rejected ownership`);
@@ -114,4 +119,30 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   }
 
+  private buildDescriptionString(innovation: InnovationsListDTO['data'][0]): string | null {
+    const { actions, messages } = innovation.statistics!;
+
+    const actionsStr = `${actions} ${actions > 1 ? 'updates' : 'update'} on actions`;
+    const messagesStr = `${messages} new ${messages > 1 ? 'messages' : 'message'}`;
+
+    let description = [];
+
+    if (actions !== 0) {
+      description.push(actionsStr);
+    }
+
+    if (messages !== 0) {
+      description.push(messagesStr);
+    }
+
+    return description.length !== 0 ? `${description.join(', ')}.` : null;
+  }
+
+  private getGroupedStatus(innovation: InnovationsListDTO['data'][0]) {
+    return this.stores.innovation.getGroupedInnovationStatus(
+      innovation.status,
+      (innovation.supports ?? []).map((support) => support.status),
+      innovation.assessment?.reassessmentCount ?? 0
+    )
+  }
 }
