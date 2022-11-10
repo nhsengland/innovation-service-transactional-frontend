@@ -231,10 +231,7 @@ export class InnovationsService extends CoreService {
   getInnovationSupportInfo(innovationId: string, supportId: string): Observable<InnovationSupportInfoDTO> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports/:supportId').setPathParams({ innovationId, supportId });
-    return this.http.get<InnovationSupportInfoDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
+    return this.http.get<InnovationSupportInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 
@@ -382,7 +379,7 @@ export class InnovationsService extends CoreService {
       ...(filters.startDate ? { startDate: filters.startDate } : {}),
       ...(filters.endDate ? { endDate: filters.endDate } : {}),
     };
-    
+
     const userUrlBasePath = this.stores.authentication.userUrlBasePath();
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/activities').setPathParams({ innovationId }).setQueryParams(qp);
 

@@ -7,13 +7,11 @@ import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/
 type InboundPayloadType = Required<AuthenticationModel>['user'];
 
 type StepPayloadType = {
-  displayName: string;
-  // mobilePhone?: string;
+  displayName: string
 };
 
 type OutboundPayloadType = {
-  displayName: string;
-  // mobilePhone?: string;
+  displayName: string
 };
 
 
@@ -26,12 +24,7 @@ export const ACCOUNT_DETAILS_ACCESSOR: WizardEngineModel = new WizardEngineModel
         label: 'What\'s your full name?',
         validations: { isRequired: [true, 'Name is required'] }
       }]
-    }),
-
-    // new FormEngineModel({
-    //   parameters: [{ id: 'mobilePhone', dataType: 'text', label: 'Phone number' }]
-    // }),
-
+    })
   ],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data),
@@ -41,20 +34,14 @@ export const ACCOUNT_DETAILS_ACCESSOR: WizardEngineModel = new WizardEngineModel
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
-  return {
-    displayName: data.displayName,
-    // mobilePhone?: string;
-  };
+  return { displayName: data.displayName };
 
 }
 
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
-  return {
-    displayName: data.displayName,
-    // mobilePhone: data.mobilePhone,
-  };
+  return { displayName: data.displayName };
 
 }
 
@@ -64,7 +51,6 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   toReturn.push(
     { label: 'Name', value: data.displayName, editStepNumber: 1 }
-    // { label: 'Phone', value: data.mobilePhone, editStepNumber: 2 },
   );
 
   return toReturn;
