@@ -32,6 +32,7 @@ import { PageInnovationRecordComponent } from './pages/innovation/record/innovat
 import { PageInnovationSectionInfoComponent } from './pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from './pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSupportStatusListComponent } from './pages/innovation/support/innovation-support-status-list.component';
+import { PageInnovationStatusListComponent } from './pages/innovation/status/innovation-status-list.component';
 // // Notifications.
 import { PageNotificationsListComponent } from './pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -93,6 +94,7 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     PageInnovationSectionInfoComponent,
     PageInnovationSectionEvidenceInfoComponent,
     PageInnovationSupportStatusListComponent,
+    PageInnovationStatusListComponent,
     // // Notifications.
     PageNotificationsListComponent,
     // // Terms of use.

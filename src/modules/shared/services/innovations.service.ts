@@ -31,8 +31,8 @@ export type InnovationsListFiltersType = {
   engagingOrganisations?: string[],
   assignedToMe?: boolean,
   suggestedOnly?: boolean,
-  fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications')[]
-};
+  fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications' | 'statistics')[]
+}
 
 export type InnovationsActionsListFilterType = {
   innovationId?: string,
@@ -162,6 +162,9 @@ export class InnovationsService extends CoreService {
     };
 
     switch (requestUserType) {
+      case UserTypeEnum.INNOVATOR:
+        qp.fields = ['statistics', 'assessment', 'supports'];
+        break;
       case UserTypeEnum.ASSESSMENT:
         qp.fields = ['isAssessmentOverdue', 'assessment', 'supports'];
         break;

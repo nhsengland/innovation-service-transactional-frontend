@@ -31,7 +31,11 @@ export type InnovationsListDTO = {
         }
       }
     }[],
-    notifications?: number
+    notifications?: number,
+    statistics?: {
+      messages: number,
+      actions: number
+    }
   }[]
 };
 

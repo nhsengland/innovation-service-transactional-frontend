@@ -296,6 +296,38 @@ export const locale = {
             UNSUITABLE: { name: 'Unsuitable', cssColorClass: 'nhsuk-tag--red' },
             WITHDRAWN: { name: 'Withdrawn', cssColorClass: 'nhsuk-tag--red' },
             COMPLETE: { name: 'Completed', cssColorClass: 'nhsuk-tag--dark-grey' }
+          },
+          grouped_status: {
+            RECORD_NOT_SHARED: {
+              name: 'Record not shared',
+              description: 'You have not yet shared your innovation record for a needs assessment review.',
+              cssColorClass: 'nhsuk-tag--orange'
+            },
+            AWAITING_NEEDS_ASSESSMENT: {
+              name: 'Awaiting needs assessment',
+              description: 'The needs assessment team will review your innovation record within 5 working days from submission.',
+              cssColorClass: 'nhsuk-tag--yellow'
+            },
+            NEEDS_ASSESSMENT: {
+              name: 'Needs assessment',
+              description: 'Your needs assessment is in progress.',
+              cssColorClass: 'nhsuk-tag--blue'
+            },
+            AWAITING_SUPPORT: {
+              name: 'Awaiting support',
+              description: 'We are waiting for an organisation unit to support your innovation.',
+              cssColorClass: 'nhsuk-tag--grey'
+            },
+            RECEIVING_SUPPORT: {
+              name: 'Receiving support',
+              description: 'At least one organisation unit is engaging with your innovation.',
+              cssColorClass: 'nhsuk-tag--green'
+            },
+            AWAITING_NEEDS_REASSESSMENT: {
+              name: 'Awaiting needs reassessment',
+              description: 'Your innovation has been resent for a needs assessment review.',
+              cssColorClass: 'nhsuk-tag--purple'
+            }
           }
         },
         user: {

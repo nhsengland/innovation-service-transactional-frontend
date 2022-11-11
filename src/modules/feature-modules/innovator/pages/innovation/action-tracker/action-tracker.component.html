@@ -73,6 +73,10 @@
                 <th *ngFor="let item of closedActionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                   <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
                   <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
+                  <ng-container *ngIf="item.key === 'status'">
+                    <br />
+                    <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0" arial-label="View status keys information"> Status key </a>
+                  </ng-container>
                 </th>
               </tr>
             </thead>

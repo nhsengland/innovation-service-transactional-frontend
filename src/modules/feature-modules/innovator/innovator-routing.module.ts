@@ -52,6 +52,7 @@ import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/innovation-support-status-list.component';
+import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -361,6 +362,8 @@ const routes: Routes = [
           }
         ]
       },
+
+      { path: 'innovation-statuses', pathMatch: 'full', component: PageInnovationStatusListComponent },
 
       {
         path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent,

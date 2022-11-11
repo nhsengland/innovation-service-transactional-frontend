@@ -11,7 +11,7 @@ import { WizardEngineModel } from '@modules/shared/forms';
 import { InnovationService } from './innovation.service';
 
 import { INNOVATION_SECTIONS, getSectionTitle } from './innovation.config';
-import { InnovationSectionEnum } from './innovation.enums';
+import { GroupedInnovationStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
 import {
   InnovationModel,
   INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS,
@@ -129,12 +129,43 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.getInnovationComments(innovationId, createdOrder);
   }
 
-  createInnovationComment$( innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
+  createInnovationComment$(innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
     return this.innovationsService.createInnovationComment(innovationId, body);
   }
 
-  updateInnovationComment$( innovationId: string, body: { comment: string, replyTo?: string }, commentId: string): Observable<{ id: string }> {
+  updateInnovationComment$(innovationId: string, body: { comment: string, replyTo?: string }, commentId: string): Observable<{ id: string }> {
     return this.innovationsService.updateInnovationComment(innovationId, body, commentId);
   }
 
+  // Grouped Innovation Status methods
+  getGroupedInnovationStatus(
+    innovationStatus: InnovationStatusEnum,
+    supportStatus: InnovationSupportStatusEnum[],
+    reassessmentCount: number
+  ): keyof typeof GroupedInnovationStatusEnum {
+
+    if (innovationStatus === InnovationStatusEnum.CREATED) {
+      return GroupedInnovationStatusEnum.RECORD_NOT_SHARED;
+    }
+
+    if (innovationStatus === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
+      return reassessmentCount === 0
+        ? GroupedInnovationStatusEnum.AWAITING_NEEDS_ASSESSMENT
+        : GroupedInnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT;
+    }
+
+    if (innovationStatus === InnovationStatusEnum.NEEDS_ASSESSMENT) {
+      return GroupedInnovationStatusEnum.NEEDS_ASSESSMENT;
+    }
+
+    if (innovationStatus === InnovationStatusEnum.IN_PROGRESS) {
+      const isReceivingSupport = !!supportStatus.some(status => status === InnovationSupportStatusEnum.ENGAGING || status === InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED);
+      return isReceivingSupport === true
+        ? GroupedInnovationStatusEnum.RECEIVING_SUPPORT
+        : GroupedInnovationStatusEnum.AWAITING_SUPPORT;
+    }
+
+    return GroupedInnovationStatusEnum.RECORD_NOT_SHARED;
+
+  }
 }

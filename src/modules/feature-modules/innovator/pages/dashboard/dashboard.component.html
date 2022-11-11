@@ -17,16 +17,31 @@
         </li>
       </ul>
 
-      <h2>Your innovations</h2>
+      <div class="d-flex align-items-center justify-content-space-between">
+            <h2>Your innovations</h2>
+            <a routerLink="/innovator/innovation-statuses" class="float-r nhsuk-u-margin-bottom-4" arial-label="View innovation status keys information"> What does this status mean? </a>
+      </div>
 
       <ul class="nhsuk-grid-row nhsuk-card-group">
-        <li *ngFor="let item of user.innovations" class="nhsuk-grid-column-full nhsuk-card-group__item">
+        <li *ngFor="let innovation of user.innovations" class="nhsuk-grid-column-full nhsuk-card-group__item">
           <div class="nhsuk-card nhsuk-card">
             <div class="nhsuk-card__content">
-              <a routerLink="/innovator/innovations/{{ item.id }}" class="nhsuk-u-font-size-24 nhsuk-u-font-weight-bold nhsuk-u-margin-right-2">
-                {{ item.name }} <span class="nhsuk-u-visually-hidden"> Access {{ item.name }} innovation </span>
-              </a>
-              <div class="nhsuk-card__description text-vertical-ellipsis-2-lines">{{ item.description }}</div>
+
+              <div class="d-flex justify-content-space-between">
+
+                <div>
+                  <a routerLink="/innovator/innovations/{{ innovation.id }}" class="nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-margin-right-2">
+                    {{ innovation.name }} <span class="nhsuk-u-visually-hidden"> Access {{ innovation.name }} innovation </span>
+                  </a>
+                  <div class="nhsuk-card__description nhsuk-body-s nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-0" *ngIf="innovation.description !== null">{{ innovation.description }}</div>
+                </div>
+
+                <div>
+                  <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}"></theme-tag>
+                </div>
+                
+              </div>
+              
             </div>
           </div>
         </li>
@@ -38,15 +53,15 @@
 
       <a routerLink="/innovator/innovations/new" class="nhsuk-action-link__link nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-3">
         <theme-svg-icon type="action"></theme-svg-icon>
-        <span class="nhsuk-action-link__text"> Register a new innovation </span>
+        <span class="nhsuk-action-link__text"> Add another innovation </span>
       </a>
 
       <div class="nhsuk-card x-card-top-border">
         <div class="nhsuk-card__content">
-          <h2 class="nhsuk-card__heading nhsuk-heading-m">Information guides</h2>
+          <h2 class="nhsuk-card__heading nhsuk-heading-m">Resources</h2>
           <ul class="nhsuk-list">
-            <li><a href="/innovation-guides/starter-innovation-guide" target="_blank" rel="noopener noreferrer">Starter Innovation Guide</a></li>
-            <li><a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Advanced Innovation Guide</a></li>
+            <li><a href="/innovation-guides" target="_blank" rel="noopener noreferrer">Access our starter and advanced innovation guides.</a></li>
+            <li><a href="/about-the-service" target="_blank" rel="noopener noreferrer">How does the innovation service work?</a></li>
           </ul>
 
         </div>
