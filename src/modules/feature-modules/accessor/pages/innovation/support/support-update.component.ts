@@ -217,8 +217,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     const suggestOrganisations = this.form.get('suggestOrganisations')?.value;
 
-    console.log('sdf', suggestOrganisations);
-
     if (suggestOrganisations === 'YES') {
       this.redirectTo(`/accessor/innovations/${this.innovationId}/support/organisations/suggest`);
     } else {
