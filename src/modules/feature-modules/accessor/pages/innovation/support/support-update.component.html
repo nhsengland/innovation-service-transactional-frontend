@@ -7,10 +7,17 @@
 
         <ng-container *ngIf="stepNumber === 1">
 
-          <div class="nhsuk-form-group">
+          <div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': form.get('status')?.invalid && form.get('status')?.touched}">
             <fieldset class="nhsuk-fieldset">
 
-              <legend class="nhsuk-fieldset__legend"> Choose a support status </legend>
+              <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+                <h1>Choose a support status</h1>
+              </legend>
+
+              <ng-container *ngIf="form.get('status')?.invalid && form.get('status')?.touched">
+                <span id="error-field-status" class="nhsuk-error-message" role="alert">
+                  <span class="nhsuk-u-visually-hidden">Error:</span> {{ form.get('status')?.errors?.message }} </span>
+              </ng-container>
 
               <div class="nhsuk-radios">
                 <div *ngFor="let item of supportStatus; let i = index" class="nhsuk-radios__item">
@@ -25,7 +32,7 @@
             </fieldset>
           </div>
 
-          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep()"> Continue </button>
+          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep()">Continue</button>
 
         </ng-container>
 
@@ -34,14 +41,14 @@
 
           <div class="nhsuk-heading-m">
             <div>You selected:</div>
-            <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + currentStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + currentStatus + '.name' | translate }}"></theme-tag>
+            <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + chosenStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + chosenStatus + '.name' | translate }}"></theme-tag>
           </div>
 
-          <p class="nhsuk-hint"> {{ supportStatusObj[currentStatus ?? 'UNASSIGNED'].description }} </p>
+          <p class="nhsuk-hint">{{ 'shared.catalog.innovation.support_status.' + chosenStatus + '.accessorTypeDescription' | translate }}</p>
 
           <theme-form-checkbox-array arrayName="accessors" label="Assign one or more accessors from {{ userOrganisationUnit?.name }}" [items]="formAccessorsList" [pageUniqueField]="false"></theme-form-checkbox-array>
 
-          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
+          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()">Continue</button>
 
         </ng-container>
 
@@ -56,70 +63,48 @@
           </ul>
 
           <theme-form-textarea controlName="message" [label]="getMessageLabel()" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
-
-            <ng-container *ngIf="currentStatus === 'NOT_YET' || currentStatus === 'COMPLETE' || currentStatus=== 'UNSUITABLE'; else submitAnswear">
-              <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep()"> Continue and post message </button>
-            </ng-container>
-
-            <ng-template #submitAnswear>
-              <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()"> Save and post message </button>
-            </ng-template>
+          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Save and post message</button>
 
         </ng-container>
 
-        <ng-container *ngIf=" stepNumber === 4 ">
+        <ng-container *ngIf="stepNumber === 4">
 
-          <a href="transactional/accessor/innovations/{{innovationId}}/support/organisations" target="_blank" rel="noopener noreferrer">Review innovation's support status here (open in a new window)</a>
 
-          <theme-form-radio-group controlName="suggestOrganisations" [description]="formfieldAction.description" [items]="formfieldAction.items"></theme-form-radio-group>
+          <!-- <theme-form-radio-group controlName="suggestOrganisations" label="Suggest other organisations" [description]="formfieldSuggestOrganisations.description" [items]="formfieldSuggestOrganisations.items"></theme-form-radio-group> -->
 
-          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
 
-        </ng-container>
 
-        <ng-container *ngIf="currentSuggestOrganisations === 'YES' && stepNumber === 5 ">
+          <div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': form.get('suggestOrganisations')?.invalid && form.get('suggestOrganisations')?.touched}">
+            <fieldset class="nhsuk-fieldset">
 
-          <div class="nhsuk-grid-row">
-            <div class="nhsuk-grid-column-full">
-              <p class="nhsuk-body-l">Review referral guidance and select the organisations you think would be right to offer support. These organisations will be notified.</p>
-              <ul class="nhsuk-list">
-                <li><a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer">Support Offer Guide (opens in a new window)</a></li>
-                <li *ngIf="isQualifyingAccessorRole === true">
-                  <a routerLink="/accessor/organisations/referral-criteria" aria-label="View organisation referral criteria" target="_blank">
-                    Organisation referral criteria (opens in a new window)
-                  </a>
-                </li>
-              </ul>
-              <theme-form-grouped-checkbox-array arrayName="organisationUnits" label="Select the organisations you think would be right to offer support. These organisations will be notified." [groupedItems]="groupedItems"
-                [pageUniqueField]="false"></theme-form-grouped-checkbox-array>
-              <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
+              <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+                <h1>Do you want to suggest other organisations?</h1>
+              </legend>
 
-            </div>
+              <div id="suggestOrganisations-hint" class="nhsuk-hint">
+                <div>
+                  <a href="transactional/accessor/innovations/{{innovationId}}/support/organisations" target="_blank" rel="noopener noreferrer">Review innovation's support status here (open in a new window)</a>
+                </div>
+                {{ formfieldSuggestOrganisations.description }}
+              </div>
+
+              <ng-container *ngIf="form.get('suggestOrganisations')?.invalid && form.get('suggestOrganisations')?.touched">
+                <span id="error-field-suggestOrganisations" class="nhsuk-error-message" role="alert">
+                  <span class="nhsuk-u-visually-hidden">Error:</span> {{ form.get('suggestOrganisations')?.errors?.message }} </span>
+              </ng-container>
+
+              <div class="nhsuk-radios">
+                <div *ngFor="let item of formfieldSuggestOrganisations.items; let i = index" class="nhsuk-radios__item">
+                  <input formControlName="suggestOrganisations" id="suggestOrganisations{{ i }}" type="radio" name="suggestOrganisations" [value]="item.value" class="nhsuk-radios__input" />
+                  <label for="suggestOrganisations{{ i }}" class="nhsuk-label nhsuk-radios__label nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-2">{{ item.label }}</label>
+                </div>
+              </div>
+
+            </fieldset>
           </div>
 
-        </ng-container>
+          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitRedirect()">Continue</button>
 
-        <ng-container *ngIf="stepNumber === 6">
-          <div class="nhsuk-grid-row">
-            <div class="nhsuk-grid-column-two-thirds">
-
-              <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0"> You have selected: </p>
-              <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-5">
-                <li *ngFor="let organisation of chosenUnits.list">
-                  {{ organisation.organisation }}
-                  <ul *ngIf="organisation.units.length > 0" class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-0">
-                    <li *ngFor="let unit of organisation.units" class="nhsuk-u-margin-0"> {{ unit }} </li>
-                  </ul>
-                </li>
-              </ul>
-
-              <theme-form-textarea controlName="comment" label="Describe briefly why you selected these organisations" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
-              <theme-form-checkbox controlName="confirm" label="I confirm that I understand the support offers of the selected organisations" size="small"></theme-form-checkbox>
-
-              <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button nhsuk-u-margin-top-3"> Continue </button>
-
-            </div>
-          </div>
         </ng-container>
 
         <div>
