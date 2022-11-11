@@ -131,7 +131,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     this.chosenUnits = { list: chosenUnitsList, values: chosenUnitsValues };
 
     if (this.chosenUnits.values.length === 0) {
-      this.form.get('organisationUnits')!.setErrors({ customError: true, message: 'You need to choose at least one organisationn or one unit to suggest' });
+      this.form.get('organisationUnits')!.setErrors({ customError: true, message: 'You need to choose at least one organisation or one unit to suggest' });
       this.form.get('organisationUnits')!.markAsTouched();
       return;
     }

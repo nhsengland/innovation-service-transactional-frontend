@@ -39,7 +39,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
+    this.innovation = RoutingHelper.getRouteData<{ innovationData: InnovationDataResolverType }>(this.activatedRoute).innovationData;
 
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 

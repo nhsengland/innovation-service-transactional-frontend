@@ -106,7 +106,7 @@ export class AccessorService extends CoreService {
     supportId?: string
   ): Observable<{ id: string }> {
 
-    // If NOT enganging, the enpoint won't accept an accessors key.
+    // If NOT enganging, the endpoint won't accept an accessors key.
     if (body.status !== InnovationSupportStatusEnum.ENGAGING) {
       delete body.accessors;
     }
