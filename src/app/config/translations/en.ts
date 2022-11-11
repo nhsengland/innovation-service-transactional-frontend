@@ -340,33 +340,33 @@ export const locale = {
           grouped_status: {
             RECORD_NOT_SHARED: {
               name: 'Record not shared',
-              description: 'You have not yet shared your innovation record for a needs assessment review.',
-              cssColorClass: 'nhsuk-tag--orange'
+              cssColorClass: 'nhsuk-tag--orange',
+              innovatorTypeDescription: 'You have not yet shared your innovation record for a needs assessment review.'
             },
             AWAITING_NEEDS_ASSESSMENT: {
               name: 'Awaiting needs assessment',
-              description: 'The needs assessment team will review your innovation record within 5 working days from submission.',
-              cssColorClass: 'nhsuk-tag--yellow'
+              cssColorClass: 'nhsuk-tag--yellow',
+              innovatorTypeDescription: 'The needs assessment team will review your innovation record within 5 working days from submission.'
             },
             NEEDS_ASSESSMENT: {
               name: 'Needs assessment',
-              description: 'Your needs assessment is in progress.',
-              cssColorClass: 'nhsuk-tag--blue'
+              cssColorClass: 'nhsuk-tag--blue',
+              innovatorTypeDescription: 'Your needs assessment is in progress.'
             },
             AWAITING_SUPPORT: {
               name: 'Awaiting support',
-              description: 'We are waiting for an organisation unit to support your innovation.',
-              cssColorClass: 'nhsuk-tag--grey'
+              cssColorClass: 'nhsuk-tag--grey',
+              innovatorTypeDescription: 'We are waiting for an organisation unit to support your innovation.'
             },
             RECEIVING_SUPPORT: {
               name: 'Receiving support',
-              description: 'At least one organisation unit is engaging with your innovation.',
-              cssColorClass: 'nhsuk-tag--green'
+              cssColorClass: 'nhsuk-tag--green',
+              innovatorTypeDescription: 'At least one organisation unit is engaging with your innovation.'
             },
             AWAITING_NEEDS_REASSESSMENT: {
               name: 'Awaiting needs reassessment',
-              description: 'Your innovation has been resent for a needs assessment review.',
-              cssColorClass: 'nhsuk-tag--purple'
+              cssColorClass: 'nhsuk-tag--purple',
+              innovatorTypeDescription: 'Your innovation has been resent for a needs assessment review.'
             }
           }
         },

@@ -135,8 +135,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.setPageStatus('READY');
 
-      console.log(this)
-
     });
 
   }
