@@ -47,7 +47,7 @@
   <div class="nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5">
 
     <div *ngIf="pageLayout.title.main" class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
+      <div [ngClass]="{'nhsuk-grid-column-full': pageLayout.title.width === 'full', 'nhsuk-grid-column-two-thirds': pageLayout.title.width === '2.thirds'}">
         <span *ngIf="pageLayout.title.secondary" class="nhsuk-caption-l nhsuk-u-margin-0">{{ pageLayout.title.secondary }}</span>
         <h1 [ngClass]="{'nhsuk-heading-l nhsuk-u-padding-0': pageLayout.title.size === 'l'}">{{ pageLayout.title.main }}</h1>
       </div>

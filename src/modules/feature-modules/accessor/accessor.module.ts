@@ -32,6 +32,7 @@ import { InnovationSupportInfoComponent } from './pages/innovation/support/suppo
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
 import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/organisation-referral-criteria/organisation-referral-criteria.component';
+import { InnovationExportRequestComponent } from './pages/innovation/export/export-request.component';
 
 // Services.
 import { AccessorService } from './services/accessor.service';
@@ -74,7 +75,8 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovationSupportInfoComponent,
     InnovationSupportUpdateComponent,
     InnovationsReviewComponent,
-    InnovationSupportOrganisationReferralCriteriaComponent
+    InnovationSupportOrganisationReferralCriteriaComponent,
+    InnovationExportRequestComponent
   ],
   providers: [
     // Services.

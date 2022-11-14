@@ -83,7 +83,7 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
       this.contextStore.pageLayout$().subscribe(item => {
         this.pageLayout.alert = item.alert;
         this.pageLayout.backLink = item.backLink;
-        this.pageLayout.title = item.title;
+        this.pageLayout.title = { ...item.title, width: item.title.width ?? 'full'};
         this.cdr.detectChanges();
         // console.log('ContextPageLayout', item.alert);
       })

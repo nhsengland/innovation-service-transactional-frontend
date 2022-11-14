@@ -33,7 +33,7 @@ export type ContextPageLayoutType = {
     hiddenLabel?: string,
   },
   status: 'LOADING' | 'READY' | 'ERROR',
-  title: { main: null | string, secondary?: string, size?: 'xl' | 'l' }
+  title: { main: null | string, secondary?: string, size?: 'xl' | 'l', width?: 'full' | '2.thirds' }
 };
 
 
