@@ -75,21 +75,6 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
   });
 
 
-  it('should run declineAction() and return success', () => {
-
-    const responseMock = { id: 'id' };
-    const expected = { id: 'id' };
-
-    let response: any = null;
-    service.declineAction('Inno01', 'ActionId01', { some: 'parameters' }).subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/Inno01/actions/ActionId01`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('PUT');
-    expect(response).toEqual(expected);
-
-  });
-
   it('should run submitOrganisationSharing() and return success', () => {
 
     const responseMock = { id: 'id' };
