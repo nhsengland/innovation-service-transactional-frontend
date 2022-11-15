@@ -66,7 +66,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
     service.createAction('Inno01', { section: InnovationSectionEnum.INNOVATION_DESCRIPTION, description: 'some description' }).subscribe({ next: success => response = success, error: error => response = error });
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors/UserId01/innovations/Inno01/actions`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/Inno01/actions`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
     expect(response).toEqual(expected);
