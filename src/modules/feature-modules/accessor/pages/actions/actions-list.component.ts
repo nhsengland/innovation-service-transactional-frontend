@@ -76,7 +76,11 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
         switch (queryParams.openActions) {
           case 'true':
             this.actionsList.clearData().setFilters({
-              status: [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.STARTED, InnovationActionStatusEnum.CONTINUE, InnovationActionStatusEnum.IN_REVIEW],
+              status: [
+                InnovationActionStatusEnum.REQUESTED,
+                // InnovationActionStatusEnum.STARTED,
+                // InnovationActionStatusEnum.CONTINUE,
+                InnovationActionStatusEnum.IN_REVIEW],
               createdByMe: true,
               fields: ['notifications']
             });

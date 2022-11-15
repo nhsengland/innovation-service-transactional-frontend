@@ -6,7 +6,7 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { DateISOType, MappedObjectType } from '@app/base/types';
 
-import { InnovationSupportStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
+import { InnovationSectionEnum, InnovationSupportStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 
 export enum SupportLogType {
   ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
@@ -38,26 +38,15 @@ export class AccessorService extends CoreService {
   constructor() { super(); }
 
 
-  createAction(innovationId: string, body: MappedObjectType): Observable<{ id: string }> {
+  createAction(innovationId: string, body: { section: InnovationSectionEnum, description: string }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/actions').setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
     );
 
   }
-
-  updateAction(innovationId: string, actionId: string, body: MappedObjectType): Observable<{ id: string }> {
-
-    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/actions/:actionId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId, actionId });
-    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response)
-    );
-
-  }
-
 
   saveSupportStatus(
     innovationId: string,
@@ -131,7 +120,7 @@ export class AccessorService extends CoreService {
       take(1),
       map(response => response)
     );
-    
+
   }
 
 }

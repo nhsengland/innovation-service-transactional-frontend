@@ -67,16 +67,6 @@ export class InnovatorService extends CoreService {
     );
   }
 
-  declineAction(innovationId: string, actionId: string, body: MappedObjectType): Observable<{ id: string }> {
-
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/actions/:actionId').setPathParams({ innovationId, actionId });
-    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response)
-    );
-
-  }
-
   getSupportLogList(innovationId: string): Observable<GetSupportLogListOutDTO[]> {
 
     const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/support-logs').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });

@@ -33,16 +33,14 @@
         <hr class="nhsuk-section-break nhsuk-section-break--visible" />
       </ng-container>
 
-      <ng-container *ngIf="innovationsList.getTotalRowsNumber() === 0">
-        <p class="nhsuk-u-padding-top-3"> There are no innovations to display. </p>
-      </ng-container>
+      <p *ngIf="innovationsList.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-3">There are no innovations to display.</p>
 
       <ng-container *ngIf="innovationsList.getTotalRowsNumber() > 0">
 
         <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-margin-top-3">
           <caption class="nhsuk-table__caption"> {{ currentTab.description }} </caption>
           <thead class="nhsuk-table__head">
-            <tr class="">
+            <tr>
               <th *ngFor="let item of innovationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                 <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
                 <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
