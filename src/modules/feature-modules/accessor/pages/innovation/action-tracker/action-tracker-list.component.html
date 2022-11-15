@@ -1,10 +1,10 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <div *ngIf="innovation.lockedInnovatorValidation?.displayIsInnovatorLocked" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+  <div *ngIf="!innovation.owner.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
     </div>
-    <p> Please note that the innovator {{ innovation.lockedInnovatorValidation?.innovatorName }} is currently locked. </p>
+    <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
   </div>
 
   <a *ngIf="innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED'" routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" class="nhsuk-button nhsuk-u-margin-bottom-7">

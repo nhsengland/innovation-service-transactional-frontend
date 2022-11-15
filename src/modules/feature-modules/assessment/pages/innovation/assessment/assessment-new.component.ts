@@ -48,15 +48,11 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
 
   ngOnInit(): void {
 
-    this.assessmentService.getInnovationInfo(this.innovationId).subscribe(response => {
+    this.innovationName = this.stores.context.getInnovation().name;
 
-      this.innovationName = response.summary.name;
-
-      this.setPageTitle(this.innovationName, { hint: 'Starting needs assessment for', size:'l' });
-      this.setBackLink('Go back', `/assessment/innovations/${response.summary.id}`);
-      this.setPageStatus('READY');
-
-    });
+    this.setPageTitle(this.innovationName, { hint: 'Starting needs assessment for', size: 'l' });
+    this.setBackLink('Go back', `/assessment/innovations/${this.innovationId}`);
+    this.setPageStatus('READY');
 
   }
 

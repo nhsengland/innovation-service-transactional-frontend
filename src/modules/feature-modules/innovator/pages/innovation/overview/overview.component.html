@@ -1,6 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <ng-container *ngIf="innovationStatus === 'IN_PROGRESS' && lastStatusSupportChange">
+  <ng-container *ngIf="innovationStatus === 'IN_PROGRESS' && lastEndSupportAt">
     <div class="nhsuk-card nhsuk-card--care nhsuk-card--care--non-urgent nhsuk-u-margin-top-0">
       <div class="nhsuk-card--care__heading-container">
         <h2 class="nhsuk-card--care__heading">
@@ -87,7 +87,7 @@
   <!-- ACTIONS AREA -->
   <ng-container *ngIf="isSubmittedForAssessment() && !isInAssessmentStatus()">
     <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
-    <div class="nhsuk-grid-row">
+    <!-- <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <h2 class="nhsuk-heading-m">Actions overview</h2>
       </div>
@@ -100,7 +100,7 @@
         <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.review }}</p>
         <p>actions awaiting review from an accessor</p>
       </div>
-    </div>
+    </div> -->
 
     <!-- SUPPORT AREA -->
     <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />

@@ -6,43 +6,12 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { DateISOType, MappedObjectType } from '@app/base/types';
 
-import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 
 export enum SupportLogType {
   ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
   STATUS_UPDATE = 'STATUS_UPDATE',
 }
-
-
-export type getInnovationInfoEndpointDTO = {
-  summary: {
-    id: string;
-    name: string;
-    status: InnovationStatusEnum;
-    description: string;
-    company: string;
-    countryName: string;
-    postCode: string;
-    categories: string[];
-    otherCategoryDescription: null | string;
-    companySize: string;
-  };
-  contact: {
-    name: string;
-  };
-  assessment?: {
-    id: string;
-  };
-  support?: {
-    id: string;
-    status: InnovationSupportStatusEnum;
-  };
-  lockedInnovatorValidation: {
-    displayIsInnovatorLocked: boolean;
-    innovatorName?: string;
-  };
-  notifications: { [key: string]: number },
-};
 
 export type getSupportLogInDTO = {
   id: string;
@@ -68,16 +37,6 @@ export class AccessorService extends CoreService {
 
   constructor() { super(); }
 
-
-  getInnovationInfo(innovationId: string): Observable<getInnovationInfoEndpointDTO> {
-
-    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
-
-  }
 
   createAction(innovationId: string, body: MappedObjectType): Observable<{ id: string }> {
 

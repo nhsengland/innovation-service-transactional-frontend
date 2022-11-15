@@ -1,14 +1,13 @@
-/* istanbul ignore file */
-// TODO: create tests.
-
-import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, Input, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { AbstractControl, ControlContainer, FormArray, FormControl, FormGroup } from '@angular/forms';
-import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
-import { LoggerService, Severity } from '@modules/core/services/logger.service';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { Observable, of } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
+
+import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
+import { LoggerService, Severity } from '@modules/core/services/logger.service';
+
 import { FileTypes, FileUploadType } from '../engine/types/form-engine.types';
 
 
@@ -27,12 +26,26 @@ export class FormFileUploadComponent implements OnInit {
   @Input() description?: string;
   @Input() pageUniqueField = true;
 
-  @Input() config?: {
+  @Input()
+  set config(c: undefined | {
     httpUploadUrl: string;
     httpUploadBody?: { [key: string]: any };
     acceptedFiles?: FileTypes[];
     multiple?: boolean;
     maxFileSize?: number; // In Mb.
+  }) {
+
+    this.fileConfig = {
+      httpUploadUrl: c?.httpUploadUrl ?? '',
+      httpUploadBody: c?.httpUploadBody
+    };
+
+    this.dzConfig = {
+      acceptedFiles: (c?.acceptedFiles || [FileTypes.ALL]).map(ext => ext).join(','),
+      multiple: c?.multiple === false ? false : true,
+      maxFileSize: c?.maxFileSize ? (c.maxFileSize * 1000000) : 1000000 // 1Mb.
+    };
+
   };
 
   files: { id: string, file: File }[] = [];
@@ -40,11 +53,16 @@ export class FormFileUploadComponent implements OnInit {
 
   isLoadingFile = false;
 
+  fileConfig: {
+    httpUploadUrl: string,
+    httpUploadBody?: { [key: string]: any }
+  } = { httpUploadUrl: '' };
+
   dzConfig: {
     acceptedFiles: string;
     multiple: boolean;
     maxFileSize: number; // In bytes
-  };
+  } = { acceptedFiles: '*', multiple: false, maxFileSize: 1000000 };
 
   // Get hold of the control being used.
   get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
@@ -56,25 +74,11 @@ export class FormFileUploadComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private loggerService: LoggerService
-  ) {
-
-    this.dzConfig = { acceptedFiles: '*', multiple: false, maxFileSize: 1000000 };
-
-  }
+  ) { }
 
   ngOnInit(): void {
 
-    if (!this.config?.httpUploadUrl) {
-      console.error('No httpUploadUrl provided for file upload.');
-    }
-
     this.id = this.id || RandomGeneratorHelper.generateRandom();
-
-    this.dzConfig = {
-      acceptedFiles: (this.config?.acceptedFiles || [FileTypes.ALL]).map(ext => ext).join(','),
-      multiple: this.config?.multiple === false ? false : true,
-      maxFileSize: this.config?.maxFileSize ? (this.config.maxFileSize * 1000000) : 1000000 // 1Mb.
-    };
 
     this.previousUploadedFiles = [...this.fieldArrayValues]; // Need to clone here!
 
@@ -85,11 +89,11 @@ export class FormFileUploadComponent implements OnInit {
     const formdata = new FormData();
     formdata.append('file', file, file.name);
 
-    Object.entries(this.config?.httpUploadBody || {}).forEach(([key, value]) => {
+    Object.entries(this.fileConfig?.httpUploadBody || {}).forEach(([key, value]) => {
       formdata.append(key, value);
     });
 
-    return this.http.post<{ id: string, displayFileName: string, url: string }>(this.config?.httpUploadUrl || '', formdata).pipe(
+    return this.http.post<{ id: string, displayFileName: string, url: string }>(this.fileConfig?.httpUploadUrl || '', formdata).pipe(
       take(1),
       map(response => ({ id: response.id, name: response.displayFileName, url: response.url })),
       catchError((error) => {
@@ -101,13 +105,17 @@ export class FormFileUploadComponent implements OnInit {
 
   onChange(event: NgxDropzoneChangeEvent): void {
 
+    if (!this.fileConfig.httpUploadUrl) {
+      console.error('No httpUploadUrl provided for file upload.');
+    }
+
     if (event.addedFiles.length > 0) {
       this.isLoadingFile = true;
     }
 
     event.addedFiles.forEach(file => {
-      this.uploadFile(file).subscribe(
-        response => {
+      this.uploadFile(file).subscribe({
+        next: response => {
           this.files.push({ id: response.id, file });
           this.fieldArrayControl.push(new FormGroup({ id: new FormControl(response.id), name: new FormControl(response.name), url: new FormControl(response.url) }));
           this.evaluateDropZoneTabIndex();
@@ -115,15 +123,15 @@ export class FormFileUploadComponent implements OnInit {
           this.isLoadingFile = false;
           this.cdr.detectChanges();
         },
-        error => {
+        error: error => {
           this.isLoadingFile = false;
           this.loggerService.trackTrace('upload error', Severity.ERROR, { error });
         }
-      );
+      });
     });
 
     event.rejectedFiles.forEach(file => {
-      this.loggerService.trackTrace(`File Upload failed for file: ${file}`, Severity.ERROR);
+      this.loggerService.trackTrace(`File Upload failed for file`, Severity.ERROR, file);
     });
   }
 

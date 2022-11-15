@@ -39,7 +39,7 @@ import { AccessorService } from './services/accessor.service';
 
 // Resolvers.
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
-import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
+
 
 @NgModule({
   imports: [
@@ -83,8 +83,7 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     AccessorService,
 
     // Resolvers.
-    InnovationActionDataResolver,
-    InnovationDataResolver
+    InnovationActionDataResolver
   ]
 })
 export class AccessorModule { }

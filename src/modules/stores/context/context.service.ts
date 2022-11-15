@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
@@ -27,8 +27,6 @@ export class ContextService {
 
 
   getUserUnreadNotifications(): Observable<{ total: number }> {
-
-    // return of({ count: Math.floor(Math.random() * 120) });
 
     const url = new UrlModel(this.API_URL).addPath('notifications/counters');
     return this.http.get<{ total: number }>(url.buildUrl()).pipe(

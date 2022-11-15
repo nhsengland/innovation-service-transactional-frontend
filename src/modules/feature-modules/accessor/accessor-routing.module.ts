@@ -56,9 +56,9 @@ import { PageNotificationsListComponent } from '@modules/shared/pages/notificati
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
 
 // Resolvers.
-import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
-import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
+import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 
 
 const header: RoutesDataType['header'] = {

@@ -3,12 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { RoutingHelper } from '@app/base/helpers';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { InnovationDataResolverType, InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -21,7 +21,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
-  innovation: InnovationDataResolverType;
+  innovation: ContextInnovationType;
 
   organisations: {
     info: {
@@ -52,7 +52,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
     this.setPageTitle('Support status', { hint: 'All organisations' });
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
+    this.innovation = this.stores.context.getInnovation();
 
   }
 

@@ -14,35 +14,6 @@ export enum SupportLogType {
   STATUS_UPDATE = 'STATUS_UPDATE'
 }
 
-
-export type getInnovationInfoEndpointDTO = {
-  summary: {
-    id: string;
-    name: string;
-    status: InnovationStatusEnum;
-    description: string;
-    company: string;
-    countryName: string;
-    postCode: string;
-    categories: string[];
-    otherCategoryDescription: null | string;
-    companySize: string;
-  };
-  contact: {
-    name: string;
-    email: string;
-    phone: null | string;
-  };
-  assessment?: {
-    id: string;
-    assignToName: string;
-  };
-  lockedInnovatorValidation: {
-    displayIsInnovatorLocked: boolean,
-    innovatorName?: string
-  }
-};
-
 export type getSupportLogInDTO = {
   id: string;
   type: SupportLogType;
@@ -76,16 +47,6 @@ export class AssessmentService extends CoreService {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/overdue-assessments').setQueryParams({ status });
     return this.http.get<{ overdue: number }>(url.buildUrl()).pipe(take(1), map(response => response));
-
-  }
-
-  getInnovationInfo(innovationId: string): Observable<getInnovationInfoEndpointDTO> {
-
-    const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    return this.http.get<getInnovationInfoEndpointDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
 
   }
 

@@ -4,14 +4,12 @@ import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { NotificationContextTypeEnum } from '@app/base/enums';
-import { RoutingHelper } from '@app/base/helpers';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/accessor/services/accessor.service';
 import { maturityLevelItems, yesNoItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
-
-import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -26,7 +24,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
   innovationId: string;
   assessmentId: string;
-  innovation: InnovationDataResolverType;
+  innovation: ContextInnovationType;
 
   assessment: InnovationNeedsAssessmentInfoDTO | undefined;
   suggestedOrganisations: InnovationNeedsAssessmentInfoDTO['suggestedOrganisations'] = [];
@@ -52,7 +50,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
-    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
+    this.innovation = this.stores.context.getInnovation();
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
   }

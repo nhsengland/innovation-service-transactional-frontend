@@ -15,9 +15,6 @@ export {
   ActivityLogItemsEnum
 } from './innovation.enums';
 
-// Types.
-export { InnovationDataResolverType } from './innovation.models';
-
 // Constants.
 export {
   ACTIVITY_LOG_ITEMS,

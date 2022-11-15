@@ -3,10 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { AssessmentService, getInnovationInfoEndpointDTO } from '../../../services/assessment.service';
-
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 
 
 @Component({
@@ -16,7 +16,7 @@ import { NotificationContextTypeEnum } from '@modules/stores/context/context.enu
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-  innovation: getInnovationInfoEndpointDTO | undefined;
+  innovation: null | InnovationInfoDTO = null;
 
   innovationSummary: { label: string; value: null | string; }[] = [];
   innovatorSummary: { label: string; value: string; }[] = [];
@@ -24,7 +24,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private assessmentService: AssessmentService
+    private innovationsService: InnovationsService
   ) {
 
     super();
@@ -37,22 +37,22 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    this.assessmentService.getInnovationInfo(this.innovationId).subscribe(response => {
+    this.innovationsService.getInnovationInfo(this.innovationId).subscribe(response => {
 
       this.innovation = response;
 
       this.innovationSummary = [
-        { label: 'Company', value: response.summary.company },
-        { label: 'Company size', value: response.summary.companySize },
-        { label: 'Location', value: `${response.summary.countryName}${response.summary.postCode ? ', ' + response.summary.postCode : ''}` },
-        { label: 'Description', value: response.summary.description },
-        { label: 'Categories', value: response.summary.categories.map(v => v === 'OTHER' ? response.summary.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
+        { label: 'Company', value: response.owner.organisations ? response.owner.organisations[0].name : '' },
+        { label: 'Company size', value: response.owner.organisations ? response.owner.organisations[0].size : '' },
+        { label: 'Location', value: `${response.countryName}${response.postCode ? ', ' + response.postCode : ''}` },
+        { label: 'Description', value: response.description },
+        { label: 'Categories', value: response.categories.map(v => v === 'OTHER' ? response.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
       ];
 
       this.innovatorSummary = [
-        { label: 'Name', value: response.contact.name },
-        { label: 'Email address', value: response.contact.email },
-        { label: 'Phone number', value: response.contact.phone || '' }
+        { label: 'Name', value: response.owner.name },
+        { label: 'Email address', value: response.owner.email || '' },
+        { label: 'Phone number', value: response.owner.mobilePhone || '' }
       ];
 
       this.stores.context.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);

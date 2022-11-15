@@ -9,7 +9,6 @@ import { RoutingHelper } from '@app/base/helpers';
 import { ContextStore } from '@modules/stores';
 import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 import { HeaderMenuBarItemType, HeaderNotificationsType } from '@modules/theme/components/header/header.component';
-import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 
 export type RoutesDataType = {
@@ -24,7 +23,7 @@ export type RoutesDataType = {
     backgroundColor?: null | string
   },
   innovationActionData?: { id: null | string, name: string },
-  innovationData?: InnovationDataResolverType,
+  innovationData?: { id: string, name: string },
   innovationSectionData?: { id: null | string, name: string },
   innovationSectionEvidenceData?: { id: null | string, name: string }
   innovationThreadData?: { id: null | string, name: string }
