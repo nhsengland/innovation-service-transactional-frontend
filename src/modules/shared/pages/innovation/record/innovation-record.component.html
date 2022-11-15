@@ -44,6 +44,14 @@
         <span class="nhsuk-u-margin-right-2"></span> {{ sections.notStarted }} sections not started
       </p>
 
+      <!-- TODO: Add different redirect if request exists already -->
+      <ng-container *ngIf="stores.authentication.userUrlBasePath() === 'accessor'">
+        <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
+          <span class="nhsuk-u-visually-hidden">Information: </span>
+          <a routerLink="/accessor/innovations/{{innovationId}}/export/request" class="nhsuk-link--no-visited-state nhsuk-u-font-size-22 text-decoration-none nhsuk-u-font-weight-bold">Export innovation record</a>
+        </div>
+      </ng-container>
+
       <ng-container *ngIf="isInnovationInCreatedStatus()">
         <button class="nhsuk-button nhsuk-u-margin-bottom-2" [disabled]="!allSectionsSubmitted()" (click)="onSubmitInnovation()">Share record for needs assessment</button>
         <p class="nhsuk-body-s">

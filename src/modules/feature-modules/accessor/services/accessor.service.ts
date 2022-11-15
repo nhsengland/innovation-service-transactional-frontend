@@ -165,5 +165,14 @@ export class AccessorService extends CoreService {
 
   }
 
+  createExportRequest(innovationId: string, body: { requestReason: string }) {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/export-requests').setPathParams({ innovationId });
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
+    
+  }
 
 }

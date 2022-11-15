@@ -117,12 +117,12 @@ export class CoreComponent implements OnDestroy {
     return this.serverRequest?.method?.toLowerCase() === 'post';
   }
 
-  setPageTitle(main: string, options?: { hint?: string, showTab?: boolean, showPage?: boolean, size?: 'xl' | 'l' }): void {
+  setPageTitle(main: string, options?: { hint?: string, showTab?: boolean, showPage?: boolean, size?: 'xl' | 'l', width?: 'full' | '2.thirds' }): void {
 
     main = main ? this.translateService.instant(main) : null;
 
     if (main && (options?.showPage ?? true)) {
-      this.stores.context.setPageTitle({ main, secondary: options?.hint, size: options?.size });
+      this.stores.context.setPageTitle({ main, secondary: options?.hint, size: options?.size, width: options?.width });
     } else {
       this.stores.context.setPageTitle({ main: null });
     }
