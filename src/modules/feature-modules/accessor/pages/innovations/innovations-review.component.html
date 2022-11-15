@@ -8,8 +8,7 @@
     <ul class="app-tabs__list" role="tablist" aria-label="Tabs">
       <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
         <div class="d-flex">
-          <a id="tab-{{ item.key }}" [routerLink]="item.link" [queryParams]="item.queryParams" role="tab" class="nhsuk-u-padding-right-1" attr.aria-controls="content-{{ item.key }}"
-            attr.aria-selected="{{ currentTab.key === item.key ? 'true' : 'false' }}"> {{ item.title }} </a>
+          <a id="tab-{{ item.key }}" [routerLink]="item.link" [queryParams]="item.queryParams" role="tab" class="nhsuk-u-padding-right-1" attr.aria-controls="content-{{ item.key }}" attr.aria-selected="{{ currentTab.key === item.key ? 'true' : 'false' }}"> {{ item.title }} </a>
           <theme-notification-tag [label]="item.notifications"></theme-notification-tag>
         </div>
       </li>
@@ -19,20 +18,18 @@
   <div class="nhsuk-grid-row">
     <div id="content-{{ currentTab.key }}" role="tabpanel" attr.aria-labelledby="tab-{{ currentTab.key }}" class="nhsuk-grid-column-full">
 
-      <ng-container *ngIf="innovationsList.getTotalRowsNumber() === 0">
-        <p> There are no innovations </p>
-      </ng-container>
+      <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-2" aria-live="polite">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
+
+      <form [formGroup]="form" class="nhsuk-u-margin-bottom-1">
+        <theme-form-checkbox *ngIf="currentTab.showAssignedToMeFilter" controlName="assignedToMe" label="Only show innovations assigned to me" size="small"></theme-form-checkbox>
+        <theme-form-checkbox *ngIf="currentTab.showSuggestedOnlyFilter" controlName="suggestedOnly" label="Only show suggested innovations" size="small"></theme-form-checkbox>
+      </form>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+
+      <p *ngIf="innovationsList.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-3">There are no innovations to display.</p>
 
       <ng-container *ngIf="innovationsList.getTotalRowsNumber() > 0">
-
-        <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-2" aria-live="polite">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
-
-        <form [formGroup]="form" class="nhsuk-u-margin-bottom-1">
-          <theme-form-checkbox *ngIf="currentTab.showAssignedToMeFilter" controlName="assignedToMe" label="Only show innovations assigned to me" size="small"></theme-form-checkbox>
-          <theme-form-checkbox *ngIf="currentTab.showSuggestedOnlyFilter" controlName="suggestedOnly" label="Only show suggested innovations" size="small"></theme-form-checkbox>
-        </form>
-
-        <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
         <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-margin-top-3">
           <caption class="nhsuk-table__caption">

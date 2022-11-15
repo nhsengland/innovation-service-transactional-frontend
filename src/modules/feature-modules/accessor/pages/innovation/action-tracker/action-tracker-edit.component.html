@@ -6,7 +6,7 @@
 
       <div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': statusError}">
         <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="statusError ? 'error-status' : null">
-          <legend class="nhsuk-fieldset__legend"> Choose a status </legend>
+          <legend class="nhsuk-fieldset__legend">Choose a status</legend>
 
           <span *ngIf="statusError" id="error-status" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ statusError | translate }} </span>
 

@@ -70,8 +70,8 @@ export class InnovationActionTrackerListComponent extends CoreComponent implemen
       this.openedActionsList.setData(response.data
         .filter(item => [
           InnovationActionStatusEnum.REQUESTED,
-          InnovationActionStatusEnum.STARTED,
-          InnovationActionStatusEnum.CONTINUE,
+          // InnovationActionStatusEnum.STARTED,
+          // InnovationActionStatusEnum.CONTINUE,
           InnovationActionStatusEnum.IN_REVIEW
         ].includes(item.status))
       );

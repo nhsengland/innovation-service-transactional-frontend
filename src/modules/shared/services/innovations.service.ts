@@ -302,6 +302,16 @@ export class InnovationsService extends CoreService {
 
   }
 
+  updateAction(innovationId: string, actionId: string, body: { status: InnovationActionStatusEnum, message?: string }): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/actions/:actionId').setPathParams({ innovationId, actionId });
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
 
   // Threads and messages methods.
   getThreadsList(innovationId: string, queryParams: APIQueryParamsType<{}>): Observable<GetThreadsListDTO> {

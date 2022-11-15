@@ -55,8 +55,8 @@ export enum InnovationSectionEnum {
 
 export enum InnovationActionStatusEnum {
   REQUESTED = 'REQUESTED',
-  STARTED = 'STARTED',
-  CONTINUE = 'CONTINUE',
+  // STARTED = 'STARTED',
+  // CONTINUE = 'CONTINUE',
   IN_REVIEW = 'IN_REVIEW',
   DELETED = 'DELETED',
   DECLINED = 'DECLINED',
