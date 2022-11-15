@@ -1,8 +1,7 @@
-/* istanbul ignore file */
-
-import { Component, OnInit } from '@angular/core';
-import { NgxDropzonePreviewComponent } from 'ngx-dropzone';
+import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { NgxDropzonePreviewComponent } from 'ngx-dropzone';
+
 
 @Component({
   selector: 'theme-file-upload-preview',
@@ -17,20 +16,12 @@ import { DomSanitizer } from '@angular/platform-browser';
     }
   ]
 })
-export class FormFileUploadPreviewComponent extends NgxDropzonePreviewComponent implements OnInit {
+export class FormFileUploadPreviewComponent extends NgxDropzonePreviewComponent {
 
   constructor(
     sanitizer: DomSanitizer
   ) {
     super(sanitizer);
-  }
-
-  ngOnInit(): void {
-
-    if (!this.file) {
-      console.error('No file to read. Please provide a file using the [file] Input property.');
-    }
-
   }
 
 }

@@ -4,10 +4,12 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { NGXLogger } from 'ngx-logger';
 
+import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { ContextStore } from '@modules/stores/context/context.store';
 import { InnovationsService } from '../services/innovations.service';
 
-import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
+import { UserTypeEnum } from '@app/base/enums';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 /**
@@ -15,41 +17,45 @@ import { InnovationDataResolverType } from '@modules/stores/innovation/innovatio
  * as it is also assuming that responsability now (verifying access to the innovation).
  */
 @Injectable()
-export class InnovationDataResolver implements Resolve<null | InnovationDataResolverType> {
+export class InnovationDataResolver implements Resolve<null | { id: string, name: string }> {
 
   constructor(
     private router: Router,
     private logger: NGXLogger,
+    private authenticationStore: AuthenticationStore,
     private contextStore: ContextStore,
     private innovationsService: InnovationsService
   ) { }
 
 
-  resolve(route: ActivatedRouteSnapshot): Observable<null | InnovationDataResolverType> {
+  resolve(route: ActivatedRouteSnapshot): Observable<null | { id: string, name: string }> {
 
-    return this.innovationsService.getInnovatorInnovationInfo(route.params.innovationId).pipe(
+    return this.innovationsService.getInnovationInfo(route.params.innovationId).pipe(
       map(response => {
+
+        const user = this.authenticationStore.getUserInfo();
+
+        let support: undefined | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string };
+
+        if (user.type === UserTypeEnum.ACCESSOR) {
+          support = (response.supports || []).find(item => item.organisationUnitId === user.organisations[0]?.organisationUnits[0]?.id);
+          if (!support) {
+            console.error('Accessor user type without unit id');
+          }
+        }
 
         this.contextStore.setInnovation({
           id: response.id,
           name: response.name,
           status: response.status,
-          assessment: response.assessment ? { id: response.assessment.id } : undefined,
-          owner: {
-            isActive: true,
-            name: ''
-          }
+          owner: { isActive: response.owner.isActive, name: response.owner.name },
+          ...(response.assessment ? { assessment: { id: response.assessment.id } } : {}),
+          ...(support ? { support: { id: support.id, status: support.status } } : {})
         });
 
         return {
           id: response.id,
-          name: response.name,
-          status: response.status,
-          assessment: { id: response.assessment?.id },
-          owner: {
-            isActive: true,
-            name: ''
-          }
+          name: response.name
         };
 
       }),

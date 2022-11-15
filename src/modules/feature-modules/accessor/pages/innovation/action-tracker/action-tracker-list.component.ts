@@ -3,11 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
-import { RoutingHelper } from '@app/base/helpers';
 
 import { InnovationsActionsListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
@@ -19,7 +18,7 @@ import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 export class InnovationActionTrackerListComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-  innovation: InnovationDataResolverType;
+  innovation: ContextInnovationType;
 
   openedActionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>;
   closedActionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>;
@@ -38,7 +37,7 @@ export class InnovationActionTrackerListComponent extends CoreComponent implemen
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
+    this.innovation = this.stores.context.getInnovation();
 
     this.openedActionsList = new TableModel({
       visibleColumns: {

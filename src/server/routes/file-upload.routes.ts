@@ -68,6 +68,8 @@ async function uploadFile(url: string, file: any): Promise<void> {
         'x-ms-blob-type': 'BlockBlob',
         'content-length': file.size
       },
+      maxBodyLength: 10000000,
+      maxContentLength: 10000000,
       data: file.buffer
     };
 

@@ -1,10 +1,10 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <div *ngIf="innovation.lockedInnovatorValidation?.displayIsInnovatorLocked" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+  <div *ngIf="!innovation.owner.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
     </div>
-    <p> Please note that the innovator {{ innovation.lockedInnovatorValidation?.innovatorName  }} is currently locked. </p>
+    <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
   </div>
 
   <p class="nhsuk-heading-s nhsuk-u-margin-bottom-2">{{ innovationSupport.organisationUnit }}</p>
@@ -13,9 +13,7 @@
     <div class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">Support status</dt>
       <dd class="nhsuk-summary-list__value">
-        <strong class="nhsuk-tag app-task-list__tag float-l" [ngClass]="innovationSupportStatus[innovationSupport.status].cssClass">
-          {{ innovationSupportStatus[innovationSupport.status].label }}
-        </strong>
+        <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.name' | translate }}"></theme-tag>
       </dd>
     </div>
   </dl>

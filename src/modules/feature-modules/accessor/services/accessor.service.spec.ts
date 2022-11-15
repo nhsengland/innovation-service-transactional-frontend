@@ -57,29 +57,6 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
   });
 
 
-
-  it('should run getInnovationInfo() and return success', () => {
-
-    const responseMock = {
-      summary: { id: '01', name: 'Innovation 01', status: 'CREATED', description: 'A description', company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: null, categories: ['Medical'], otherCategoryDescription: '' },
-      contact: { name: 'A name' },
-      assessment: { id: '01' },
-      support: { id: '01', status: 'WAITING' }
-    };
-
-    const expected = responseMock;
-    let response: any = null;
-
-    service.getInnovationInfo('Inno01').subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/accessors/UserId01/innovations/Inno01`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-  });
-
-
   it('should run createAction() and return success', () => {
 
     const responseMock = { id: 'ID01' };

@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { RoutingHelper } from '@app/base/helpers';
 
-import { INNOVATION_SUPPORT_STATUS, InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { AccessorService } from '../../../services/accessor.service';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -18,14 +18,14 @@ import { AccessorService } from '../../../services/accessor.service';
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-  innovation: InnovationDataResolverType;
+  innovation: ContextInnovationType;
 
   isQualifyingAccessorRole = false;
 
   innovationSupport: {
-    organisationUnit: string;
-    status: keyof typeof INNOVATION_SUPPORT_STATUS;
-  } = { organisationUnit: '', status: 'UNASSIGNED' };
+    organisationUnit: string,
+    status: InnovationSupportStatusEnum,
+  } = { organisationUnit: '', status: InnovationSupportStatusEnum.UNASSIGNED };
 
   innovationSummary: { label: string; value: null | string; }[] = [];
 
@@ -33,14 +33,14 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService
+    private innovationsService: InnovationsService
   ) {
 
     super();
     this.setPageTitle('Overview');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
+    this.innovation = this.stores.context.getInnovation();
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
   }
@@ -48,25 +48,25 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    this.accessorService.getInnovationInfo(this.innovationId).subscribe(response => {
+    this.innovationsService.getInnovationInfo(this.innovationId).subscribe(response => {
 
       this.innovationSupport = {
         organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-        status: response.support?.status || 'UNASSIGNED'
+        status: this.innovation.support?.status || InnovationSupportStatusEnum.UNASSIGNED
       };
       this.innovationSummary = [
-        { label: 'Innovator name', value: response.contact.name },
-        { label: 'Company name', value: response.summary.company },
-        { label: 'Company size', value: response.summary.companySize },
-        { label: 'Location', value: `${response.summary.countryName}${response.summary.postCode ? ', ' + response.summary.postCode : ''}` },
-        { label: 'Description', value: response.summary.description },
-        { label: 'Categories', value: response.summary.categories.map(v => v === 'OTHER' ? response.summary.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
+        { label: 'Innovator name', value: response.owner.name },
+        { label: 'Company name', value: response.owner.organisations ? response.owner.organisations[0].name : '' },
+        { label: 'Company size', value: response.owner.organisations ? response.owner.organisations[0].size : '' },
+        { label: 'Location', value: `${response.countryName}${response.postCode ? ', ' + response.postCode : ''}` },
+        { label: 'Description', value: response.description },
+        { label: 'Categories', value: response.categories.map(v => v === 'OTHER' ? response.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
       ];
 
       this.stores.context.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
 
-      if (response.support?.id) {
-        this.stores.context.dismissNotification(NotificationContextTypeEnum.SUPPORT, response.support.id);
+      if (this.innovation.support?.id) {
+        this.stores.context.dismissNotification(NotificationContextTypeEnum.SUPPORT, this.innovation.support.id);
       }
 
       this.setPageStatus('READY');

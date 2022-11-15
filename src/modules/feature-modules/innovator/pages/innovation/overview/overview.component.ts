@@ -21,14 +21,14 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationId: string;
   innovationStatus: keyof typeof INNOVATION_STATUS = '';
   innovationSections: SectionsSummaryModel[] = [];
-  actionSummary: { requested: number, review: number } = { requested: 0, review: 0 };
+  // actionSummary: { requested: number, review: number } = { requested: 0, review: 0 };
   supportStatus = 'Awaiting support';
   supportingAccessors: { id: string; name: string, unit: string }[] = [];
   submittedAt: string | undefined;
   needsAssessmentCompleted: boolean;
 
   assessmentId: string | undefined;
-  lastStatusSupportChange: null | string;
+  lastEndSupportAt: null | string = null;
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   innovationStatusObj = this.stores.innovation.INNOVATION_STATUS;
@@ -72,25 +72,21 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.needsAssessmentCompleted = false;
-    this.lastStatusSupportChange = null;
+
   }
 
 
   ngOnInit(): void {
 
-    this.innovationsService.getInnovationSafetyPeriod(this.innovationId).subscribe({
-      next: response => {
-        this.lastStatusSupportChange = response.statusChangedAt
-      }
-    })
-
     forkJoin([
-      this.innovationsService.getInnovatorInnovationInfo(this.innovationId),
+      this.innovationsService.getInnovationInfo(this.innovationId),
       this.stores.innovation.getSectionsSummary$(this.innovationId),
       this.innovationsService.getInnovationSupportsList(this.innovationId, true),
     ]).subscribe(([innovationInfo, sectionSummary, innovationSupportsList]) => {
 
       this.stores.context.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+
+      this.lastEndSupportAt = innovationInfo.lastEndSupportAt;
 
       if (innovationSupportsList.length === 1) {
         this.stores.context.dismissNotification(NotificationContextTypeEnum.SUPPORT, innovationSupportsList[0].id);
@@ -100,10 +96,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.needsAssessmentCompleted = !this.isInAssessmentStatus();
       this.assessmentId = innovationInfo.assessment?.id;
 
-      this.actionSummary = {
-        requested: innovationInfo.actions.requestedCount,
-        review: innovationInfo.actions.inReviewCount
-      };
+      // this.actionSummary = {
+      //   requested: innovationInfo.actions.requestedCount,
+      //   review: innovationInfo.actions.inReviewCount
+      // };
 
       this.innovationStatus = sectionSummary.innovation.status;
       this.innovationSections = sectionSummary.sections;

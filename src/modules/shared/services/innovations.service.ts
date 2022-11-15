@@ -127,10 +127,6 @@ export type CreateThreadMessageDTO = {
   };
 };
 
-export type statusChangeDTO = {
-  statusChangedAt: null | string;
-};
-
 
 @Injectable()
 export class InnovationsService extends CoreService {
@@ -192,13 +188,29 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getInnovatorInnovationInfo(innovationId: string): Observable<InnovationInfoDTO> {
+  getInnovationInfo(innovationId: string): Observable<InnovationInfoDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    return this.http.get<InnovationInfoDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
+    const requestUserType = this.stores.authentication.getUserType();
+    const qp: { fields: ('assessment' | 'supports')[] } = {
+      fields: []
+    };
+
+    switch (requestUserType) {
+      case UserTypeEnum.INNOVATOR:
+        qp.fields = ['assessment'];
+        break;
+      case UserTypeEnum.ASSESSMENT:
+        qp.fields = ['assessment'];
+        break;
+      case UserTypeEnum.ACCESSOR:
+        qp.fields = ['assessment', 'supports'];
+        break;
+      default:
+        break;
+    }
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId').setPathParams({ innovationId }).setQueryParams(qp);
+    return this.http.get<InnovationInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 
@@ -360,13 +372,6 @@ export class InnovationsService extends CoreService {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/messages/:messageId').setPathParams({ innovationId, threadId, messageId });
     return this.http.put<{ id: string; }>(url.buildUrl(), body).pipe(take(1), map(response => response));
-
-  }
-
-  getInnovationSafetyPeriod(innovationId: string): Observable<statusChangeDTO> {
-
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId').setPathParams({ innovationId });
-    return this.http.get<statusChangeDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 

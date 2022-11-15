@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { RoutingHelper } from '@app/base/helpers';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-
-import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -16,15 +15,13 @@ import { InnovationDataResolverType } from '@modules/stores/innovation/innovatio
 export class InnovationSupportInfoComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-  innovation: InnovationDataResolverType;
+  innovation: ContextInnovationType;
 
   innovationSupport: {
-    organisationUnit: string;
-    accessors: string;
-    status: string;
-  } = { organisationUnit: '', accessors: '', status: '' };
-
-  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+    organisationUnit: string,
+    accessors: string,
+    status: InnovationSupportStatusEnum
+  } = { organisationUnit: '', accessors: '', status: InnovationSupportStatusEnum.UNASSIGNED };
 
   isQualifyingAccessorRole = false;
 
@@ -39,7 +36,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.innovation = RoutingHelper.getRouteData<{ innovationData: InnovationDataResolverType }>(this.activatedRoute).innovationData;
+    this.innovation = this.stores.context.getInnovation();
 
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 

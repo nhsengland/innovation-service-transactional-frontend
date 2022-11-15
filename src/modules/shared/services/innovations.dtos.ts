@@ -43,17 +43,25 @@ export type InnovationsListDTO = {
 export type InnovationInfoDTO = {
   id: string,
   name: string,
+  description: null | string,
   status: InnovationStatusEnum,
-  description: string,
-  countryName: string,
-  postcode: string,
-  submittedAt?: string,
-  assessment?: { id: string },
-  actions: {
-    requestedCount: number,
-    inReviewCount: number
+  submittedAt: null | DateISOType,
+  countryName: null | string,
+  postCode: null | string,
+  categories: string[],
+  otherCategoryDescription: null | string,
+  owner: {
+    id: string,
+    name: string,
+    email?: string,
+    mobilePhone?: null | string,
+    isActive: boolean,
+    organisations: null | { name: string, size: null | string }[],
   },
-  notifications: { [key: string]: number }
+  lastEndSupportAt: null | DateISOType,
+  canUserExport: boolean,
+  assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { name: string } },
+  supports?: null | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string }[]
 };
 
 export type InnovationNeedsAssessmentInfoDTO = {

@@ -3,15 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { DatesHelper, RoutingHelper } from '@app/base/helpers';
+import { DatesHelper } from '@app/base/helpers';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/assessment/services/assessment.service';
 import { maturityLevelItems, yesNoItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
-
-import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { AssessmentService } from '../../../services/assessment.service';
 
@@ -26,7 +25,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
   innovationId: string;
   assessmentId: string;
-  innovation: InnovationDataResolverType;
+  innovation: ContextInnovationType;
 
   assessment: InnovationNeedsAssessmentInfoDTO | undefined;
   assessmentHasBeenSubmitted = false;
@@ -53,7 +52,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
-    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
+    this.innovation = this.stores.context.getInnovation();
 
   }
 

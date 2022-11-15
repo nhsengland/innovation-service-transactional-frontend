@@ -11,10 +11,7 @@ import { AssessmentModule } from '@modules/feature-modules/assessment/assessment
 
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
-import {
-  AssessmentService,
-  getInnovationInfoEndpointDTO, getSupportLogInDTO, getSupportLogOutDTO, SupportLogType
-} from './assessment.service';
+import { AssessmentService, getSupportLogInDTO, getSupportLogOutDTO, SupportLogType } from './assessment.service';
 
 
 describe('FeatureModules/Assessment/Services/AssessmentService', () => {
@@ -56,28 +53,6 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     httpMock.verify();
   });
 
-
-
-  it('should run getInnovationInfo() and return success', () => {
-
-    const responseMock: getInnovationInfoEndpointDTO = {
-      summary: { id: '01', name: 'Innovation 01', status: InnovationStatusEnum.CREATED, description: 'A description', company: 'User company', companySize: '1 to 5 employees', countryName: 'England', postCode: 'SW01', categories: ['Medical'], otherCategoryDescription: '' },
-      contact: { name: 'A name', email: 'email', phone: '' },
-      assessment: { id: '01', assignToName: 'Name' },
-      lockedInnovatorValidation: { displayIsInnovatorLocked: false, innovatorName: 'test' }
-    };
-
-    const expected = responseMock;
-
-    let response: any = null;
-    service.getInnovationInfo('inno01').subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/assessments/UserId01/innovations/inno01`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toEqual(expected);
-
-  });
 
   it('should run getSupportLog() with type = "" and return success', () => {
 

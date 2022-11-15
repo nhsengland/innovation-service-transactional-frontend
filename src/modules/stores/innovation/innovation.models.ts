@@ -1,7 +1,7 @@
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { WizardEngineModel } from '@modules/shared/forms';
 
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum, InnovationSupportStatusEnum } from './innovation.enums';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum } from './innovation.enums';
 
 
 // Store state model.
@@ -17,27 +17,6 @@ export type InnovationSectionConfigType = {
     wizard: WizardEngineModel;
     evidences?: WizardEngineModel;
   }[];
-};
-
-export type InnovationDataResolverType = {
-  id: string;
-  name: string;
-  status: keyof typeof INNOVATION_STATUS;
-  assessment: {
-    id: undefined | string;
-  };
-  support?: {
-    id: undefined | string;
-    status: InnovationSupportStatusEnum;
-  };
-  lockedInnovatorValidation?: {
-    displayIsInnovatorLocked: boolean;
-    innovatorName?: string;
-  };
-  owner: {
-    isActive: boolean;
-    name: string;
-  }
 };
 
 export type sectionType = {
