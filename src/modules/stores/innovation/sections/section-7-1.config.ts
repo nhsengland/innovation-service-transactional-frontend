@@ -49,6 +49,7 @@ export const SECTION_7_1: InnovationSectionConfigType['sections'][0] = {
     ],
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
+    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data),
     showSummary: true
   })
 };
@@ -176,4 +177,8 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   return toReturn;
 
+}
+
+function summaryPDFParsing(data: StepPayloadType): WizardSummaryType[] {
+  return summaryParsing(data);
 }

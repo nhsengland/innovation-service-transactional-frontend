@@ -85,7 +85,8 @@ export function getAllSectionsSummary(data: AllSectionsInboundPayloadType): AllS
     title: i.title,
     sections: i.sections.map(s => ({
       section: s.title,
-      answers: s.wizard.runSummaryParsing(data.find(d => d.section.section === s.id)?.data).map(a => ({ label: a.label, value: a.value || '' }))
+      answers: s.wizard.runSummaryPDFParsing(s.wizard.runInboundParsing(data.find(d => d.section.section === s.id)?.data ?? {})).map(a => ({ label: a.label, value: a.value || '' })
+      )
     }))
   }));
 

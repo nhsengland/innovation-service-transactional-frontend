@@ -57,6 +57,7 @@ export const SECTION_5_2: InnovationSectionConfigType['sections'][0] = {
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: SummaryPayloadType) => summaryParsing(data),
+    summaryPDFParsing: (data: SummaryPayloadType) => summaryPDFParsing(data),
     showSummary: true
   })
 };
@@ -211,4 +212,8 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
 
   return toReturn;
 
+}
+
+function summaryPDFParsing(data: SummaryPayloadType): WizardSummaryType[] {
+  return summaryParsing(data);
 }
