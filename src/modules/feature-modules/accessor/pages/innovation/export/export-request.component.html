@@ -7,8 +7,10 @@
 
         <ng-container *ngIf="stepNumber === 1">
 
-          <p class="nhsuk-body-l">You need to request permission from the innovator to download and share their
-            innovation record in PDF format.</p>
+          <p>
+            You need to request permission from the innovator to download and share their
+            innovation record in PDF format.
+          </p>
 
           <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep('next')">
             Request permission
@@ -19,7 +21,7 @@
 
         <ng-container *ngIf="stepNumber === 2">
 
-          <p class="nhsuk-body-l">
+          <p>
             The innovator will be notified of your request and can approve or reject it. If the innovator approves,
             everyone from your organisation unit will be able to export the innovation record for the next 30 days.
           </p>
@@ -56,7 +58,7 @@
 
         <ng-container *ngIf="stepNumber === 3">
 
-          <p class="nhsuk-body-l">
+          <p>
             Let the innovator know how their information will be used, the people or organisations it will be shared
             with, and the reason for the request.
           </p>
