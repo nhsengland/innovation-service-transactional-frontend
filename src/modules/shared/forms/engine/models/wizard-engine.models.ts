@@ -14,6 +14,7 @@ export type WizardSummaryType = {
   editStepNumber?: number;
   evidenceId?: string;
   allowHTML?: boolean;
+  isFile?: boolean;
 };
 
 

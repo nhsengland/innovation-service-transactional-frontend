@@ -201,7 +201,8 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
         label: `Attachment ${i + 1}`,
         value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
         editStepNumber: stepNumber,
-        allowHTML: true
+        allowHTML: true,
+        isFile: true,
       });
     });
 
@@ -215,7 +216,9 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
 }
 
 function summaryPDFParsing(data: SummaryPayloadType): WizardSummaryType[] {
-  const summaryData = summaryParsing(data);
+  const summaryData = summaryParsing(data)
+    .filter(item => item.type !== 'button')
+    .filter(item => !item.isFile);
 
   return summaryData.filter(item => item.type !== 'button');
 }
