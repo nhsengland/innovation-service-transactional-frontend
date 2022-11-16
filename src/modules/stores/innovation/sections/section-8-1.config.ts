@@ -264,5 +264,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 }
 
 function summaryPDFParsing(data: StepPayloadType): WizardSummaryType[] {
-  return summaryParsing(data);
+  const summaryData = summaryParsing(data);
+
+  return summaryData.filter(item => item.type !== 'button');
 }
