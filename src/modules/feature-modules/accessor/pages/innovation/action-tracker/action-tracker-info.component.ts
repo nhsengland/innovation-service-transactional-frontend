@@ -44,7 +44,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
     });
 
-    this.stores.context.dismissNotification(NotificationContextTypeEnum.ACTION, this.actionId);
+    this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.ACTION], contextIds: [this.actionId]});
 
   }
 
