@@ -48,6 +48,7 @@ export const SECTION_3_2: InnovationSectionConfigType['sections'][0] = {
       })
     ],
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
+    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data),
     showSummary: true
   })
 };
@@ -69,4 +70,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     }
   ];
 
+}
+function summaryPDFParsing(data: StepPayloadType): WizardSummaryType[] {
+  return summaryParsing(data);
 }

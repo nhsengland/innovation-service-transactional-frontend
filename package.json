@@ -11,7 +11,6 @@
     "test": "jest --config ./jest.config.json --coverage --silent",
     "serve:ssr": "node dist/app/server/main.js",
     "build:ssr": "ng build --base-href /transactional/ --deploy-url /transactional/static/ && ng run app:server && npm run copyconfig",
-    "postinstall": "cp patches/jspdf/package.json node_modules/jspdf",
     "prerender": "ng run app:prerender",
     "copyconfig": "cp web.config dist/app",
     "lint": "ng lint"
@@ -38,7 +37,6 @@
     "express-session": "^1.17.3",
     "govuk-frontend": "^4.3.1",
     "helmet": "^6.0.0",
-    "jspdf": "~2.5.1",
     "lodash": "^4.17.21",
     "luxon": "^3.0.4",
     "multer": "^1.4.5-lts.1",
