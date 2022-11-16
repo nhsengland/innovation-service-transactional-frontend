@@ -84,12 +84,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovationsService.getInnovationSupportsList(this.innovationId, true),
     ]).subscribe(([innovationInfo, sectionSummary, innovationSupportsList]) => {
 
-      this.stores.context.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+      this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.INNOVATION]});
 
       this.lastEndSupportAt = innovationInfo.lastEndSupportAt;
 
       if (innovationSupportsList.length === 1) {
-        this.stores.context.dismissNotification(NotificationContextTypeEnum.SUPPORT, innovationSupportsList[0].id);
+        this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.SUPPORT], contextIds: [innovationSupportsList[0].id]});
       }
 
       this.submittedAt = innovationInfo.submittedAt || '';

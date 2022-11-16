@@ -3,10 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
@@ -63,10 +63,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         { label: 'Categories', value: response.categories.map(v => v === 'OTHER' ? response.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
       ];
 
-      this.stores.context.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+      this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.INNOVATION]});
 
       if (this.innovation.support?.id) {
-        this.stores.context.dismissNotification(NotificationContextTypeEnum.SUPPORT, this.innovation.support.id);
+        this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.SUPPORT], contextIds: [this.innovation.support.id]});
       }
 
       this.setPageStatus('READY');
