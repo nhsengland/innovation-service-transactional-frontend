@@ -67,8 +67,12 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
     this.organisationsService.getOrganisationUnitInnovationsList(this.data.organisation.id, this.data.organisationUnit.id, this.tableList.getAPIQueryParams()).subscribe(
       response => {
         this.innovationStatusCounters = response.innovationsByStatus.filter(i => [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(i.status));
-        let tableData = response.innovationsList.filter(i => [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(i.status));
-        this.tableList.setData(tableData, this.innovationStatusCounters.map(i => i.count).reduce((a,b) => a+b));
+        this.tableList.setData(
+          response.innovationsList
+           .filter(i => [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(i.status)),
+          this.innovationStatusCounters
+           .map(i => i.count).reduce((a,b) => a+b)
+        );
         this.setPageStatus('READY');
       },
       () => {
