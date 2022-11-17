@@ -20,6 +20,7 @@ export class ContextService {
 
   private API_URL = this.envVariablesStore.API_URL;
   private API_INNOVATIONS_URL = this.envVariablesStore.API_INNOVATIONS_URL;
+  private API_USERS_URL = this.envVariablesStore.API_USERS_URL;
 
   constructor(
     private http: HttpClient,
@@ -29,7 +30,7 @@ export class ContextService {
 
   getUserUnreadNotifications(): Observable<{ total: number }> {
 
-    const url = new UrlModel(this.API_URL).addPath('notifications/counters');
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notifications/counters');
     return this.http.get<{ total: number }>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
