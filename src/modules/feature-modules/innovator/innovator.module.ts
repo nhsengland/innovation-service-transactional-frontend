@@ -35,6 +35,7 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
+import { InnovationExportRequestRejectComponent } from './pages/innovation/export/export-request-reject.component';
 
 // Components.
 import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
@@ -84,6 +85,7 @@ import { InnovatorService } from './services/innovator.service';
     InnovationSectionEvidenceEditComponent,
     InnovationSectionEditComponent,
     InnovationNewComponent,
+    InnovationExportRequestRejectComponent,
 
     // Components.
     OrganisationSuggestionsCardComponent

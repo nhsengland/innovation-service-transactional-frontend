@@ -368,6 +368,23 @@ export const locale = {
               cssColorClass: 'nhsuk-tag--purple',
               innovatorTypeDescription: 'Your innovation has been resent for a needs assessment review.'
             }
+          },
+          export_request_status: {
+            PENDING: {
+              name: 'Request pending'
+            },
+            APPROVED: {
+              name: 'Request approved'
+            },
+            REJECTED: {
+              name: 'Request rejected'
+            },
+            CANCELLED: {
+              name: 'Request cancelled'
+            },
+            EXPIRED: {
+              name: 'Request expired'
+            }
           }
         },
         user: {

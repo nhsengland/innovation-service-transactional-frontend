@@ -1,0 +1,174 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <p>
+        {{ pageInformation[userType].lead }}
+      </p>
+
+      <ng-container *ngIf="userType === 'INNOVATOR'">
+        <details class="nhsuk-details nhsuk-u-padding-top-5">
+          <summary class="nhsuk-details__summary">
+            <span class="nhsuk-details__summary-text">
+              See what your innovation record data can be used for
+            </span>
+          </summary>
+          <div class="nhsuk-details__text">
+            <p>The data you are sharing can be used for the purpose of:</p>
+            <ul>
+              <li>The data you are sharing can be used for the purpose of:
+                providing the health and social care system (or parts of the health and social care system) in the UK
+                with
+                information on Health Technologies (such as guidance, advice, and policies)</li>
+              <li>commissioning</li>
+              <li>supporting the development or adoption of Health Technologies</li>
+              <li>for medical/health technology procurement</li>
+              <li>continuous improvement of the NHS Innovation Service and Support Organisation processes <br> and/or
+              </li>
+              <li>such other purposes as may be agreed in writing between the Support Organisation and your Company from
+                time to time</li>
+            </ul>
+            <p>
+              For more information, please
+              <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">see the terms of use.</a>
+            </p>
+          </div>
+        </details>
+      </ng-container>
+
+      <h2>
+        {{ pageInformation[userType].secondaryTitle }}
+      </h2>
+
+      <p *ngIf="validRequestTable.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-4">No new requests.</p>
+
+      <div *ngIf="validRequestTable.getTotalRowsNumber() > 0">
+
+        <ng-container *ngIf="this.userType === 'ACCESSOR'" [ngTemplateOutlet]="defaultTable"
+          [ngTemplateOutletContext]="{ $implicit: validRequestTable, isHistory: false, caption: 'Innovation record export requests' }">
+        </ng-container>
+
+        <ng-container *ngIf="this.userType === 'INNOVATOR'" [ngTemplateOutlet]="validInnovatorTable"
+          [ngTemplateOutletContext]="{ $implicit: validRequestTable, caption: 'Innovation new record export requests' }">
+        </ng-container>
+
+      </div>
+
+      <details class="nhsuk-details nhsuk-u-padding-top-5">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">
+            Request History
+          </span>
+        </summary>
+        <div class="nhsuk-details__text">
+          <p *ngIf="historyRequestTable.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-4">No history yet.</p>
+
+          <ng-container *ngIf="historyRequestTable.getTotalRowsNumber() > 0" [ngTemplateOutlet]="defaultTable"
+            [ngTemplateOutletContext]="{ $implicit: historyRequestTable, isHistory: true, caption: 'Innovation record export history' }">
+          </ng-container>
+
+        </div>
+      </details>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>
+
+<ng-template #defaultTable let-table let-isHistory="isHistory" let-caption="caption">
+  <table class="nhsuk-table-responsive app-sortable-table">
+
+    <caption class="nhsuk-u-visually-hidden"> {{ caption }} </caption>
+
+    <thead class="nhsuk-table__head">
+      <tr>
+        <th *ngFor="let item of table.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align"
+          [attr.aria-sort]="item.orderDir">
+          <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+          <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody class="nhsuk-table__body">
+      <tr *ngFor="let item of table.getRecords()" class="nhsuk-table__row">
+
+        <td class="nhsuk-table__cell">
+          <span class="nhsuk-table-responsive__heading">{{ table.getColumnLabel('requestedBy') }}</span>
+          <p class="nhsuk-u-margin-bottom-0">{{ item?.organisation?.name }}</p>
+          <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0">by {{ item?.createdBy?.name }}</span>
+        </td>
+
+        <td class="nhsuk-table__cell">
+          <span class="nhsuk-table-responsive__heading">{{ table.getColumnLabel('lastUpdate') }}</span>
+          {{ item.updatedAt | date: ('app.date_formats.long_date' | translate) }}
+          <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0" *ngIf="item.status === 'APPROVED'">Expires on {{ item?.expiresAt | date: ('app.date_formats.long_date' | translate) }}</span>
+        </td>
+
+        <td class="nhsuk-table__cell">
+          <span class="nhsuk-table-responsive__heading">{{ table.getColumnLabel('status') }}</span>
+          {{ 'shared.catalog.innovation.export_request_status.' + item.status + '.name' | translate }}
+        </td>
+
+        <td class="nhsuk-table__cell text-align-right">
+          <span class="nhsuk-table-responsive__heading">{{ table.getColumnLabel('actions') }}</span>
+
+          <ng-container *ngIf="(isHistory === true && item.status === 'REJECTED') || isHistory === false">
+            <a href="javascript:;" class="nhsuk-link nhsuk-link--no-visited-state"
+              (click)="redirectSeeDetails(item.id)">
+              View request
+            </a>
+          </ng-container>
+
+        </td>
+
+      </tr>
+    </tbody>
+
+  </table>
+</ng-template>
+
+<ng-template #validInnovatorTable let-table let-caption="caption">
+  <table class="nhsuk-table-responsive app-sortable-table">
+
+    <caption class="nhsuk-u-visually-hidden"> {{ caption }} </caption>
+
+    <thead class="nhsuk-table__head">
+      <tr>
+        <th *ngFor="let item of table.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align"
+          [attr.aria-sort]="item.orderDir">
+          <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+          <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody class="nhsuk-table__body">
+      <tr *ngFor="let item of table.getRecords()" class="nhsuk-table__row">
+
+        <td class="nhsuk-table__cell">
+          <span class="nhsuk-table-responsive__heading">{{ table.getColumnLabel('requestedBy') }}</span>
+          <p class="nhsuk-u-margin-bottom-0">{{ item?.organisation?.name }}</p>
+          <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0">by {{ item?.createdBy?.name }}</span>
+        </td>
+
+        <td class="nhsuk-table__cell">
+          <span class="nhsuk-table-responsive__heading">{{ table.getColumnLabel('requestedOn') }}</span>
+          {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}
+        </td>
+
+        <td class="nhsuk-table__cell text-align-right">
+          <span class="nhsuk-table-responsive__heading">{{ table.getColumnLabel('actions') }}</span>
+
+          <a href="javascript:;" class="nhsuk-link nhsuk-link--no-visited-state" (click)="redirectSeeDetails(item.id)">
+            View request
+          </a>
+
+        </td>
+
+      </tr>
+    </tbody>
+
+  </table>
+</ng-template>
