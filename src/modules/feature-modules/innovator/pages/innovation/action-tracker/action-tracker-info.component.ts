@@ -5,8 +5,8 @@ import { CoreComponent } from '@app/base';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
-import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationActionInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -57,7 +57,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
     });
 
-    this.stores.context.dismissNotification(NotificationContextTypeEnum.ACTION, this.actionId);
+    this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.ACTION], contextIds: [this.actionId]});
 
   }
 

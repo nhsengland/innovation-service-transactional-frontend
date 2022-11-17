@@ -3,10 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
-import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
+import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 
 @Component({
@@ -55,7 +55,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         { label: 'Phone number', value: response.owner.mobilePhone || '' }
       ];
 
-      this.stores.context.dismissNotification(NotificationContextTypeEnum.INNOVATION, this.innovationId);
+      this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT]});
 
       this.setPageStatus('READY');
 

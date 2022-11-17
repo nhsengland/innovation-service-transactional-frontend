@@ -5,7 +5,7 @@ import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { NotificationContextTypeEnum } from '@app/base/enums';
-import { FormControl, FormGroup } from '@app/base/forms';
+import { FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
@@ -76,7 +76,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         this.messagesList.setData(threadMessages.messages, threadMessages.count);
 
         // Throw notification read dismiss.
-        this.stores.context.dismissNotification(NotificationContextTypeEnum.THREAD, this.threadInfo.id);
+        this.stores.context.dismissNotification(this.innovation.id, {contextTypes: [NotificationContextTypeEnum.THREAD], contextIds: [this.threadInfo.id]});
 
         this.setPageStatus('READY');
 
