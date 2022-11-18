@@ -11,7 +11,7 @@ import { WizardEngineModel } from '@modules/shared/forms';
 import { InnovationService } from './innovation.service';
 
 import { INNOVATION_SECTIONS, getSectionTitle } from './innovation.config';
-import { GroupedInnovationStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
+import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
 import {
   InnovationModel,
   INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS,
@@ -42,33 +42,27 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitInnovation(innovationId);
   }
 
-  getSectionsSummary$(innovationId: string): Observable<{ innovation: { name: string, status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {
+  getSectionsSummary$(innovationId: string): Observable<SectionsSummaryModel> {
 
     return this.innovationsService.getInnovationSections(innovationId).pipe(
-      map(response => ({
-        innovation: {
-          status: response.status,
-          name: response.name
-        },
-        sections: INNOVATION_SECTIONS.map(item => ({
-          title: item.title,
-          sections: item.sections.map(ss => {
-            const sectionState = response.sections.find(a => a.section === ss.id) || { status: 'UNKNOWN', actionStatus: '', actionCount: 0 };
-            return {
-              id: ss.id,
-              title: ss.title,
-              status: sectionState.status,
-              isCompleted: INNOVATION_SECTION_STATUS[sectionState.status]?.isCompleteState || false,
-              actionCount: sectionState.actionCount
-            };
-          })
-        }))
-      })),
+      map(response => INNOVATION_SECTIONS.map(item => ({
+        title: item.title,
+        sections: item.sections.map(ss => {
+          const sectionState = response.find(a => a.section === ss.id) || { status: 'UNKNOWN', actionStatus: '', openActionsCount: 0 };
+          return {
+            id: ss.id,
+            title: ss.title,
+            status: sectionState.status,
+            isCompleted: INNOVATION_SECTION_STATUS[sectionState.status]?.isCompleteState || false,
+            openActionsCount: sectionState.openActionsCount
+          };
+        })
+      }))
+      ),
       catchError(() => {
         // this.logger.error('Unable to fetch sections information');
-        return of({
-          innovation: { name: '', status: '' as any },
-          sections: INNOVATION_SECTIONS.map(item => ({
+        return of(
+          INNOVATION_SECTIONS.map(item => ({
             title: item.title,
             sections: item.sections.map(ss => ({
               id: ss.id,
@@ -76,10 +70,10 @@ export class InnovationStore extends Store<InnovationModel> {
               status: 'UNKNOWN' as keyof typeof INNOVATION_SECTION_STATUS,
               actionStatus: '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
               isCompleted: false,
-              actionCount: 0
+              openActionsCount: 0
             }))
           }))
-        });
+        );
       })
     );
 
@@ -142,30 +136,30 @@ export class InnovationStore extends Store<InnovationModel> {
     innovationStatus: InnovationStatusEnum,
     supportStatus: InnovationSupportStatusEnum[],
     reassessmentCount: number
-  ): keyof typeof GroupedInnovationStatusEnum {
+  ): InnovationGroupedStatusEnum {
 
     if (innovationStatus === InnovationStatusEnum.CREATED) {
-      return GroupedInnovationStatusEnum.RECORD_NOT_SHARED;
+      return InnovationGroupedStatusEnum.RECORD_NOT_SHARED;
     }
 
     if (innovationStatus === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
       return reassessmentCount === 0
-        ? GroupedInnovationStatusEnum.AWAITING_NEEDS_ASSESSMENT
-        : GroupedInnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT;
+        ? InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT
+        : InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT;
     }
 
     if (innovationStatus === InnovationStatusEnum.NEEDS_ASSESSMENT) {
-      return GroupedInnovationStatusEnum.NEEDS_ASSESSMENT;
+      return InnovationGroupedStatusEnum.NEEDS_ASSESSMENT;
     }
 
     if (innovationStatus === InnovationStatusEnum.IN_PROGRESS) {
       const isReceivingSupport = !!supportStatus.some(status => status === InnovationSupportStatusEnum.ENGAGING || status === InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED);
       return isReceivingSupport === true
-        ? GroupedInnovationStatusEnum.RECEIVING_SUPPORT
-        : GroupedInnovationStatusEnum.AWAITING_SUPPORT;
+        ? InnovationGroupedStatusEnum.RECEIVING_SUPPORT
+        : InnovationGroupedStatusEnum.AWAITING_SUPPORT;
     }
 
-    return GroupedInnovationStatusEnum.RECORD_NOT_SHARED;
+    return InnovationGroupedStatusEnum.RECORD_NOT_SHARED;
 
   }
 }
