@@ -9,7 +9,7 @@ import { UserTypeEnum } from '@modules/stores/authentication/authentication.enum
 
 import {
   INNOVATION_STATUS,
-  getInnovationSectionsDTO, getInnovationEvidenceDTO, getInnovationCommentsDTO, OrganisationSuggestionModel, InnovationSectionInfoDTO
+  InnovationSectionsListDTO, getInnovationEvidenceDTO, getInnovationCommentsDTO, OrganisationSuggestionModel, InnovationSectionInfoDTO
 } from './innovation.models';
 
 import { UrlModel } from '@modules/core/models/url.model';
@@ -52,16 +52,10 @@ export class InnovationService {
 
   }
 
-  getInnovationSections(innovationId: string): Observable<getInnovationSectionsDTO> {
+  getInnovationSections(innovationId: string): Observable<InnovationSectionsListDTO> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections')
-      .setPathParams({
-        endpointModule: this.apiUserBasePath(),
-        userId: this.authenticationStore.getUserId(),
-        innovationId
-      });
-
-    return this.http.get<getInnovationSectionsDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections').setPathParams({ innovationId });
+    return this.http.get<InnovationSectionsListDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 

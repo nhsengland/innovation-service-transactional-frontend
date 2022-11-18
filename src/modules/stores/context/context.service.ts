@@ -38,8 +38,8 @@ export class ContextService {
 
   }
 
-  dismissNotification(innovationId: string, conditions: {notificationIds?: string[], contextTypes?: NotificationContextTypeEnum[], contextIds?: string[]}): Observable<void> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/notifications/dismiss').setPathParams({innovationId});
+  dismissNotification(innovationId: string, conditions: { notificationIds?: string[], contextTypes?: NotificationContextTypeEnum[], contextIds?: string[] }): Observable<void> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/notifications/dismiss').setPathParams({ innovationId });
     return this.http.patch<void>(url.buildUrl(), conditions).pipe(take(1))
   }
 

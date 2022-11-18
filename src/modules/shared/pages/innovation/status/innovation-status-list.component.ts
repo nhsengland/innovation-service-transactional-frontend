@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-import { GroupedInnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 @Component({
@@ -10,13 +10,13 @@ import { GroupedInnovationStatusEnum } from '@modules/stores/innovation/innovati
 })
 export class PageInnovationStatusListComponent extends CoreComponent {
 
-  visibleStatus: GroupedInnovationStatusEnum[] = [
-    GroupedInnovationStatusEnum.RECORD_NOT_SHARED,
-    GroupedInnovationStatusEnum.AWAITING_NEEDS_ASSESSMENT,
-    GroupedInnovationStatusEnum.NEEDS_ASSESSMENT,
-    GroupedInnovationStatusEnum.AWAITING_SUPPORT,
-    GroupedInnovationStatusEnum.RECEIVING_SUPPORT,
-    GroupedInnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT
+  visibleStatus: InnovationGroupedStatusEnum[] = [
+    InnovationGroupedStatusEnum.RECORD_NOT_SHARED,
+    InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT,
+    InnovationGroupedStatusEnum.NEEDS_ASSESSMENT,
+    InnovationGroupedStatusEnum.AWAITING_SUPPORT,
+    InnovationGroupedStatusEnum.RECEIVING_SUPPORT,
+    InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT
   ];
 
   constructor() {

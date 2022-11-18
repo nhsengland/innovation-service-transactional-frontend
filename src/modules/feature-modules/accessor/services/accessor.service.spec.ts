@@ -131,7 +131,7 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
     ];
     const expected: getSupportLogOutDTO[] = responseMock.map(item => ({
       ...item,
-      logTitle: 'Suggested organisations',
+      logTitle: 'Suggested organisation units',
       suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits || []).map(o => o.name)
     }));
 

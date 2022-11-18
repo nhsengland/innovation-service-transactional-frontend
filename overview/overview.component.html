@@ -1,0 +1,77 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="d-flex align-items-center justify-content-space-between">
+    <h2 class="nhsuk-heading-m">Innovation status</h2>
+    <a routerLink="/innovator/innovation-statuses" class="float-r nhsuk-u-margin-bottom-4" arial-label="View innovation status information">What does this status mean?</a>
+  </div>
+
+
+  <div class="d-flex align-items-center justify-content-space-between">
+    <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}"></theme-tag>
+    <div class="mr-auto nhsuk-u-font-size-14">
+      Organisations: {{ innovation.organisationsStatusDescription }}
+    </div>
+    <a routerLink="/innovator/innovation-statuses" class="float-r nhsuk-u-margin-bottom-4" arial-label="View innovation support status information">View support status</a>
+  </div>
+
+
+  <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-section-break--m" />
+
+  <ul class="nhsuk-grid-row nhsuk-card-group">
+    <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+
+      <div class="nhsuk-card nhsuk-card--clickable">
+        <div class="nhsuk-card__content">
+          <h2 class="nhsuk-card__heading nhsuk-heading-m">
+            <a routerLink="/innovator/innovations/{{ innovationId }}" class="nhsuk-card__link">
+              <span class="nhsuk-u-visually-hidden"> Go to </span> Innovation record
+            </a>
+          </h2>
+          <p class="d-flex align-items-center">
+            <span class="nhsuk-u-font-size-48 nhsuk-u-font-weight-bold">8</span> of <span class="nhsuk-u-font-size-48 nhsuk-u-font-weight-bold">14</span>
+            <span class="nhsuk-u-font-size-14">sections were submitted by you</span>
+          </p>
+          <p class="nhsuk-u-font-size-14">A quick guide for people who have care and support needs and their carers</p>
+        </div>
+      </div>
+
+    </li>
+    <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+
+      <div class="nhsuk-card nhsuk-card--clickable">
+        <div class="nhsuk-card__content">
+          <h2 class="nhsuk-card__heading nhsuk-heading-m">
+            <a class="nhsuk-card__link" href="#">Help from social services and charities</a>
+          </h2>
+          <p class="nhsuk-card__description">Includes helplines, needs assessments, advocacy and reporting abuse</p>
+        </div>
+      </div>
+
+    </li>
+    <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+
+      <div class="nhsuk-card nhsuk-card--clickable">
+        <div class="nhsuk-card__content">
+          <h2 class="nhsuk-card__heading nhsuk-heading-m">
+            <a class="nhsuk-card__link" href="#">Money, work and benefits</a>
+          </h2>
+          <p class="nhsuk-card__description">How to pay for care and support, and where you can get help with costs</p>
+        </div>
+      </div>
+
+    </li>
+    <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+
+      <div class="nhsuk-card nhsuk-card--clickable">
+        <div class="nhsuk-card__content">
+          <h2 class="nhsuk-card__heading nhsuk-heading-m">
+            <a class="nhsuk-card__link" href="#">Care after a hospital stay</a>
+          </h2>
+          <p class="nhsuk-card__description">Includes hospital discharge and care and support afterwards</p>
+        </div>
+      </div>
+
+    </li>
+  </ul>
+
+</theme-content-wrapper>

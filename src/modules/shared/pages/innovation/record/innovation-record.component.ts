@@ -25,7 +25,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   innovationId: string;
   innovationName: string;
   innovationStatus: keyof typeof INNOVATION_STATUS = '';
-  innovationSections: SectionsSummaryModel[] = [];
+  innovationSections: SectionsSummaryModel = [];
 
   sections: {
     progressBar: ProgressBarType[];
@@ -62,8 +62,9 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${this.activatedRoute.snapshot.params.innovationId}/pdf`;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovationName = '';
     this.innovation = this.stores.context.getInnovation();
+    this.innovationName = this.innovation.name;
+    this.innovationStatus = this.innovation.status;
   }
 
 
@@ -71,9 +72,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
     this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe(response => {
 
-      this.innovationName = response.innovation.name;
-      this.innovationStatus = response.innovation.status;
-      this.innovationSections = response.sections;
+      this.innovationSections = response;
 
       this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
         return [...acc, ...item.sections.map(s => {

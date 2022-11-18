@@ -20,7 +20,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   innovationId: string;
   innovationStatus: keyof typeof INNOVATION_STATUS = '';
-  innovationSections: SectionsSummaryModel[] = [];
+  innovationSections: SectionsSummaryModel = [];
   // actionSummary: { requested: number, review: number } = { requested: 0, review: 0 };
   supportStatus = 'Awaiting support';
   supportingAccessors: { id: string; name: string, unit: string }[] = [];
@@ -84,7 +84,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovationsService.getInnovationSupportsList(this.innovationId, true),
     ]).subscribe(([innovationInfo, sectionSummary, innovationSupportsList]) => {
 
-      this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT]});
+      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT] });
 
       this.lastEndSupportAt = innovationInfo.lastEndSupportAt;
 
@@ -97,8 +97,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       //   review: innovationInfo.actions.inReviewCount
       // };
 
-      this.innovationStatus = sectionSummary.innovation.status;
-      this.innovationSections = sectionSummary.sections;
+      this.innovationStatus = innovationInfo.status;
+      this.innovationSections = sectionSummary;
 
       this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
         return [...acc, ...item.sections.map(s => {
