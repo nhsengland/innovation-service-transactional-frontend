@@ -4,7 +4,7 @@ import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
-import { DateISOType, MappedObjectType } from '@app/base/types';
+import { DateISOType } from '@app/base/types';
 
 import { InnovationSectionEnum, InnovationSupportStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 
@@ -84,7 +84,7 @@ export class AccessorService extends CoreService {
 
         switch (item.type) {
           case SupportLogType.ACCESSOR_SUGGESTION:
-            logTitle = 'Suggested organisations';
+            logTitle = 'Suggested organisation units';
             break;
           case SupportLogType.STATUS_UPDATE:
             logTitle = 'Updated support status';

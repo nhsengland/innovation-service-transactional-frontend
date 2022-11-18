@@ -1,7 +1,8 @@
+import { DateISOType } from '@app/base/types';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { WizardEngineModel } from '@modules/shared/forms';
 
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum } from './innovation.enums';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum, InnovationStatusEnum } from './innovation.enums';
 
 
 // Store state model.
@@ -55,20 +56,13 @@ export type getInnovationInfoResponse = {
   openCommentsNumber: number;
 };
 
-export type getInnovationSectionsDTO = {
-  id: string;
-  name: string;
-  status: keyof typeof INNOVATION_STATUS;
-  submittedAt: string | undefined;
-  sections: {
-    id: null | string;
-    section: InnovationSectionEnum;
-    status: keyof typeof INNOVATION_SECTION_STATUS;
-    updatedAt: string;
-    actionCount: number;
-  }[];
-};
-
+export type InnovationSectionsListDTO = {
+  id: null | string,
+  section: InnovationSectionEnum,
+  status: keyof typeof INNOVATION_SECTION_STATUS,
+  submittedAt: null | DateISOType,
+  openActionsCount: number
+}[];
 
 export type getInnovationEvidenceDTO = {
   evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER',
@@ -108,15 +102,15 @@ export type getInnovationCommentsDTO = {
 };
 
 export type SectionsSummaryModel = {
-  title: string;
+  title: string,
   sections: {
-    id: InnovationSectionEnum;
-    title: string;
-    status: keyof typeof INNOVATION_SECTION_STATUS;
-    isCompleted: boolean;
-    actionCount: number;
+    id: InnovationSectionEnum,
+    title: string,
+    status: keyof typeof INNOVATION_SECTION_STATUS,
+    isCompleted: boolean,
+    openActionsCount: number
   }[]
-};
+}[];
 
 export type OrganisationModel = {
   id: string;

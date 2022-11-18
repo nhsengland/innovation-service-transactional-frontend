@@ -8,7 +8,7 @@ export enum InnovationStatusEnum {
   COMPLETE = 'COMPLETE'
 }
 
-export enum GroupedInnovationStatusEnum {
+export enum InnovationGroupedStatusEnum {
   RECORD_NOT_SHARED = 'RECORD_NOT_SHARED',
   AWAITING_NEEDS_ASSESSMENT = 'AWAITING_NEEDS_ASSESSMENT',
   NEEDS_ASSESSMENT = 'NEEDS_ASSESSMENT',

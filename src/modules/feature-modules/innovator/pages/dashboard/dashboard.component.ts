@@ -7,10 +7,11 @@ import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
 import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
-import { GroupedInnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
+
+import { GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
 
 
 @Component({
@@ -21,13 +22,12 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   user: {
     displayName: string,
-    innovations: { id: string, name: string, description: null | string, groupedStatus: keyof typeof GroupedInnovationStatusEnum }[],
+    innovations: { id: string, name: string, description: null | string, groupedStatus: keyof typeof InnovationGroupedStatusEnum }[],
     passwordResetAt: string
   };
 
   innovationTransfers: GetInnovationTransfersDTO = [];
 
-  innovationStatus = this.stores.innovation.INNOVATION_STATUS;
 
   constructor(
     private innovationsService: InnovationsService,
@@ -141,8 +141,9 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   private getGroupedStatus(innovation: InnovationsListDTO['data'][0]) {
     return this.stores.innovation.getGroupedInnovationStatus(
       innovation.status,
-      (innovation.supports ?? []).map((support) => support.status),
+      (innovation.supports ?? []).map(support => support.status),
       innovation.assessment?.reassessmentCount ?? 0
-    )
+    );
   }
+
 }

@@ -59,8 +59,8 @@ export type InnovationInfoDTO = {
     organisations: null | { name: string, size: null | string }[],
   },
   lastEndSupportAt: null | DateISOType,
-  canUserExport: boolean,
-  assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { name: string } },
+  export: { canUserExport: boolean, activeRequestsCount: number },
+  assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { name: string }, reassessmentCount: number },
   supports?: null | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string }[]
 };
 
@@ -87,7 +87,7 @@ export type InnovationNeedsAssessmentInfoDTO = {
   hasImplementationPlanComment: null | string,
   hasScaleResource: null | string,
   hasScaleResourceComment: null | string,
-  suggestedOrganisations: { id: string; name: string; acronym: null | string, units: { id: string; name: string; acronym: string; }[]; }[],
+  suggestedOrganisations: { id: string, name: string, acronym: null | string, units: { id: string, name: string, acronym: string }[]; }[],
   updatedAt: null | DateISOType,
   updatedBy: { id: string, name: string }
 };
