@@ -84,8 +84,8 @@
             <ng-container *ngTemplateOutlet="usesOfInnovationRecordData"></ng-container>
           </ng-container>
 
-          <ng-container *ngSwitchDefault="">
-            <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="requestAgainRedirect()">
+          <ng-container *ngSwitchDefault>
+            <button *ngIf="innovationExport?.pendingRequestsCount === 0" class="nhsuk-button nhsuk-u-margin-top-3" (click)="requestAgainRedirect()">
               Request again
             </button>
           </ng-container>
