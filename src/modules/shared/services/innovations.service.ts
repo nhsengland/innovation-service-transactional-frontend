@@ -13,6 +13,7 @@ import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.
 import { InnovationActionsListInDTO, InnovationActionsListDTO, InnovationInfoDTO, InnovationsListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationActionInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO } from './innovations.dtos';
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { getSectionTitle } from '@modules/stores/innovation/innovation.config';
+import { InnovationStatisticsEnum } from './innovations.enum';
 
 
 export enum AssessmentSupportFilterEnum {
@@ -248,6 +249,26 @@ export class InnovationsService extends CoreService {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports/:supportId').setPathParams({ innovationId, supportId });
     return this.http.get<InnovationSupportInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
+  }
+
+  getInnovationStatisticsInfo(innovationId: string): Observable<any> {
+    const requestUserType = this.stores.authentication.getUserType();
+    const qp: { statistics: InnovationStatisticsEnum[] } = {
+      statistics: []
+    };
+
+    switch (requestUserType) {
+      case UserTypeEnum.INNOVATOR:
+      case UserTypeEnum.ASSESSMENT:
+        case UserTypeEnum.ACCESSOR:
+        qp.statistics = [InnovationStatisticsEnum.ACTIONS_TO_SUBMIT, InnovationStatisticsEnum.SECTIONS_SUBMITTED, InnovationStatisticsEnum.UNREAD_MESSAGES];
+        break;
+      default:
+        break;
+    }
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/statistics').setPathParams({ innovationId }).setQueryParams(qp);
+    return this.http.get<any>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
   // Needs Assessment

@@ -43,8 +43,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
     forkJoin([
       this.innovationsService.getInnovationInfo(this.innovationId),
-      // this.stores.innovation.getSectionsSummary$(this.innovationId),
-    ]).subscribe(([innovation]) => {
+      this.innovationsService.getInnovationStatisticsInfo(this.innovationId),
+    ]).subscribe(([innovation, statistics]) => {
+console.log(statistics)
 
       this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT] });
 
