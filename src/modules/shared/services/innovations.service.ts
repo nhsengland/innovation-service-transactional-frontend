@@ -197,7 +197,7 @@ export class InnovationsService extends CoreService {
 
     switch (requestUserType) {
       case UserTypeEnum.INNOVATOR:
-        qp.fields = ['assessment'];
+        qp.fields = ['assessment', 'supports'];
         break;
       case UserTypeEnum.ASSESSMENT:
         qp.fields = ['assessment'];
