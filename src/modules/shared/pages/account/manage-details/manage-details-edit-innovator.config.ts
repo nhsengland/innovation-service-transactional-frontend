@@ -41,7 +41,15 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
     }),
 
     new FormEngineModel({
-      parameters: [{ id: 'mobilePhone', dataType: 'text', label: 'What\'s your Phone number?' }]
+      parameters: [{ 
+        id: 'mobilePhone', 
+        dataType: 'number', 
+        label: 'What\'s your Phone number?',
+        validations: {
+          isRequired: false,
+          pattern: ['(^\s*$|^[0-9]*)$', 'Special characters and characters are not allowed'],
+        }
+      }]
     }),
 
     new FormEngineModel({
@@ -136,7 +144,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   toReturn.push(
     { label: 'Name', value: data.displayName, editStepNumber: 1 },
-    { label: 'Phone number', value: data.mobilePhone, editStepNumber: 2 },
+    { label: 'Phone number', value: data.mobilePhone, editStepNumber: 2, },
     { label: 'Is company or organisation?', value: data.isCompanyOrOrganisation === 'YES' ? 'Yes' : 'No', editStepNumber: 3 }
   );
 
