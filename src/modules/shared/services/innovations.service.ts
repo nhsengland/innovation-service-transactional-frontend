@@ -8,11 +8,11 @@ import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
-import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationActionsListInDTO, InnovationActionsListDTO, InnovationInfoDTO, InnovationsListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationActionInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO } from './innovations.dtos';
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { getSectionTitle } from '@modules/stores/innovation/innovation.config';
+import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO } from './innovations.dtos';
 
 
 export enum AssessmentSupportFilterEnum {
@@ -127,6 +127,37 @@ export type CreateThreadMessageDTO = {
   };
 };
 
+export type statusChangeDTO = {
+  statusChangedAt: null | string;
+};
+
+export type InnovationExportRequestItemType = {
+  id: string,
+  status: InnovationExportRequestStatusEnum,
+  isExportable: boolean,
+  requestReason: string,
+  rejectReason?: null | string,
+  expiresAt?: DateISOType, // Returned only when "opened".
+  organisation: {
+    id: string,
+    name: string,
+    acronym: null | string,
+    organisationUnit: { id: string, name: string, acronym: null | string }
+  },
+  createdAt: DateISOType,
+  createdBy: {
+    id: string,
+    name: string
+  },
+  updatedAt: DateISOType
+}
+
+export type GetExportRequestsListDTO = {
+  count: number;
+  data: InnovationExportRequestItemType[]
+}
+
+export type GetExportRequestInfoDto = InnovationExportRequestItemType;
 
 @Injectable()
 export class InnovationsService extends CoreService {
@@ -450,4 +481,30 @@ export class InnovationsService extends CoreService {
     );
   }
 
+  getExportRequestsList(innovationId: string, queryParams: Omit<APIQueryParamsType, 'filters'>): Observable<GetExportRequestsListDTO> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/export-requests').setPathParams({ innovationId }).setQueryParams({ ...queryParams });
+    return this.http.get<GetExportRequestsListDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
+  getExportRequestInfo(innovationId: string, requestId: string): Observable<GetExportRequestInfoDto> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/export-requests/:requestId').setPathParams({ innovationId, requestId });
+    return this.http.get<GetExportRequestInfoDto>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+
+  }
+
+  updateExportRequestStatus(innovationId: string, requestId: string, body: { status: keyof typeof InnovationExportRequestStatusEnum, rejectReason?: string }): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/export-requests/:requestId/status').setPathParams({ innovationId, requestId });
+    return this.http.patch<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
+
+  }
 }

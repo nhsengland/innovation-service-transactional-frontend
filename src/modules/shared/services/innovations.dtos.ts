@@ -59,7 +59,7 @@ export type InnovationInfoDTO = {
     organisations: null | { name: string, size: null | string }[],
   },
   lastEndSupportAt: null | DateISOType,
-  export: { canUserExport: boolean, activeRequestsCount: number },
+  export: { canUserExport: boolean, pendingRequestsCount: number },
   assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { name: string }, reassessmentCount: number },
   supports?: null | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string }[]
 };

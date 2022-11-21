@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -17,7 +18,6 @@ export class InnovationExportRequestComponent extends CoreComponent implements O
   innovationId: string;
   stepNumber: number;
 
-
   form = new FormGroup({
     requestReason: new FormControl<string>('', CustomValidators.required('A explanation is required')),
   }, { updateOn: 'blur' });
@@ -28,18 +28,21 @@ export class InnovationExportRequestComponent extends CoreComponent implements O
     3: { title: 'Explain why you need to export this innovation record' }
   }
 
-  private titleSettings: { width: 'full' | '2.thirds' } = { width: '2.thirds'};
+  private titleSettings: { width: 'full' | '2.thirds' } = { width: '2.thirds' };
+
+  private isFirstTime = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService
+    private accessorService: AccessorService,
+    private innovationsService: InnovationsService
   ) {
 
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.stepNumber = 1;
+    this.stepNumber = 0;
 
   }
 
@@ -47,7 +50,16 @@ export class InnovationExportRequestComponent extends CoreComponent implements O
 
     this.setPageTitle('Export innovation record', this.titleSettings);
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
-    this.setPageStatus('READY');
+
+    this.innovationsService.getExportRequestsList(this.innovationId, { take: 1, skip: 0 }).subscribe(response => {
+
+      this.isFirstTime = response.count === 0;
+
+      this.stepNumber = this.isFirstTime ? 1 : 2;
+
+      this.setPageStatus('READY');
+
+    });
 
   }
 
@@ -56,7 +68,7 @@ export class InnovationExportRequestComponent extends CoreComponent implements O
     switch (direction) {
 
       case 'previous':
-        if (this.stepNumber === 1) {
+        if ((this.stepNumber === 1 && this.isFirstTime) || (this.stepNumber === 2 && !this.isFirstTime)) {
           this.redirectTo(`/accessor/innovations/${this.innovationId}/record`);
           return;
         }
@@ -88,7 +100,7 @@ export class InnovationExportRequestComponent extends CoreComponent implements O
     this.accessorService.createExportRequest(this.innovationId, body).subscribe(() => {
 
       this.setRedirectAlertSuccess('You\'ve requested permission to export this innovation record', { message: 'The innovator has been notified of your request. If the innovator approves everyone from your organisation unit will be able to export the innovation record for the next 30 days.' });
-      this.redirectTo(`/accessor/innovations/${this.innovationId}/`); // TODO: Change this later to export request list page
+      this.redirectTo(`/accessor/innovations/${this.innovationId}/export/list`);
 
     });
 
