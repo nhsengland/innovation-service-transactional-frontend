@@ -58,7 +58,7 @@
       <details class="nhsuk-details nhsuk-u-padding-top-5">
         <summary class="nhsuk-details__summary">
           <span class="nhsuk-details__summary-text">
-            Request History
+            Previous requests
           </span>
         </summary>
         <div class="nhsuk-details__text">
@@ -103,7 +103,9 @@
         <td class="nhsuk-table__cell">
           <span class="nhsuk-table-responsive__heading">{{ table.getColumnLabel('lastUpdate') }}</span>
           {{ item.updatedAt | date: ('app.date_formats.long_date' | translate) }}
-          <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0" *ngIf="item.status === 'APPROVED'">Expires on {{ item?.expiresAt | date: ('app.date_formats.long_date' | translate) }}</span>
+          <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0"
+            *ngIf="item.status === 'APPROVED'">Expires on {{ item?.expiresAt | date: ('app.date_formats.long_date' |
+            translate) }}</span>
         </td>
 
         <td class="nhsuk-table__cell">

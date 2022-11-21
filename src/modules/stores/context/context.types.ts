@@ -50,5 +50,6 @@ export type ContextInnovationType = {
   },
   assessment?: { id: string },
   support?: { id: string, status: InnovationSupportStatusEnum },
-  notifications?: { [key in NotificationContextTypeEnum]?: number }
+  notifications?: { [key in NotificationContextTypeEnum]?: number },
+  export?: { canUserExport: boolean, pendingRequestsCount: number }
 };

@@ -13,10 +13,6 @@ import { InnovationExportRequestStatusEnum } from '@modules/stores/innovation/in
 })
 export class PageExportRecordInfoComponent extends CoreComponent implements OnInit {
 
-  // TODO: Criar um summary para o innovator e para o accessor
-  // Adicionar páginas ao innovator
-  // Verificar flow do innovator
-
   innovationId: string;
   requestId: string;
   request?: InnovationExportRequestItemType;
