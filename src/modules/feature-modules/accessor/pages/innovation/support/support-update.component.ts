@@ -138,12 +138,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           return;
         }
 
-        if (this.chosenStatus === this.currentStatus) {
-          formStatusField?.markAsTouched();
-          formStatusField?.setErrors({ customError: true, message: 'Please, choose a different state than the current one' });
-          return;
-        }
-
         this.setPageTitle('Update support status - accessors');
         if (this.chosenStatus === InnovationSupportStatusEnum.ENGAGING) {
           this.setPageTitle('Choose accessors to support');
