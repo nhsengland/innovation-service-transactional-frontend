@@ -481,9 +481,16 @@ export class InnovationsService extends CoreService {
     );
   }
 
-  getExportRequestsList(innovationId: string, queryParams: Omit<APIQueryParamsType, 'filters'>): Observable<GetExportRequestsListDTO> {
+  getExportRequestsList(innovationId: string, queryParams: APIQueryParamsType<{ statuses?: InnovationExportRequestStatusEnum[]}>): Observable<GetExportRequestsListDTO> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/export-requests').setPathParams({ innovationId }).setQueryParams({ ...queryParams });
+    const { filters, ...qParams } = queryParams;
+
+    const qp = {
+      ...qParams,
+      ...({ statuses: filters?.statuses }),
+    }
+    
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/export-requests').setPathParams({ innovationId }).setQueryParams(qp);
     return this.http.get<GetExportRequestsListDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
