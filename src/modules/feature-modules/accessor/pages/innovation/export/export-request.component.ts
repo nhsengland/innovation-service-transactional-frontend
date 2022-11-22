@@ -51,7 +51,7 @@ export class InnovationExportRequestComponent extends CoreComponent implements O
     this.setPageTitle('Export innovation record', this.titleSettings);
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
 
-    this.innovationsService.getExportRequestsList(this.innovationId, { take: 1, skip: 0 }).subscribe(response => {
+    this.innovationsService.getExportRequestsList(this.innovationId, { take: 1, skip: 0, filters: {} }).subscribe(response => {
 
       this.isFirstTime = response.count === 0;
 
