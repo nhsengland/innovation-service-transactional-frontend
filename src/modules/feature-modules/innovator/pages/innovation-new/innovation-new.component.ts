@@ -41,7 +41,7 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
     this.wizard.setAnswers(this.wizard.runInboundParsing({}));
 
     // Update last step with the organisations list and pre-select all checkboxes.
-    this.organisationsService.getAccessorsOrganisations().subscribe(response => {
+    this.organisationsService.getOrganisationsList(false).subscribe(response => {
       this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
       this.wizard.addAnswers({ organisationShares: response.map(item => item.id) }).runRules();
     });
@@ -77,7 +77,7 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
       organisationShares: data.organisationShares
     };
 
-    this.innovatorService.createInnovation(body).pipe(
+    this.innovatorService.createInnovation(body, false).pipe(
       concatMap(response => {
         this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update innovations information.
         return of(response);

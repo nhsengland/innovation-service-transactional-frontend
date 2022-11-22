@@ -27,8 +27,6 @@ import { ReviewInnovationsComponent } from './pages/innovations/review-innovatio
 // Services.
 import { AssessmentService } from './services/assessment.service';
 
-// Resolvers.
-import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, AssessmentRoutingModule],
@@ -54,10 +52,7 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
   ],
   providers: [
     // Services.
-    AssessmentService,
-
-    // Resolvers.
-    InnovationDataResolver
+    AssessmentService
   ]
 })
 export class AssessmentModule { }

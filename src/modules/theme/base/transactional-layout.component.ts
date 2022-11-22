@@ -9,7 +9,6 @@ import { RoutingHelper } from '@app/base/helpers';
 import { ContextStore } from '@modules/stores';
 import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 import { HeaderMenuBarItemType, HeaderNotificationsType } from '@modules/theme/components/header/header.component';
-import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
 
 
 export type RoutesDataType = {
@@ -20,11 +19,11 @@ export type RoutesDataType = {
   },
   breadcrumb?: string,
   layout?: {
-    type?: 'full' | '1.third-2.thirds',
+    type?: 'full' | 'journey' | '1.third-2.thirds',
     backgroundColor?: null | string
   },
   innovationActionData?: { id: null | string, name: string },
-  innovationData?: InnovationDataResolverType,
+  innovationData?: { id: string, name: string },
   innovationSectionData?: { id: null | string, name: string },
   innovationSectionEvidenceData?: { id: null | string, name: string }
   innovationThreadData?: { id: null | string, name: string }
@@ -83,7 +82,7 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
       this.contextStore.pageLayout$().subscribe(item => {
         this.pageLayout.alert = item.alert;
         this.pageLayout.backLink = item.backLink;
-        this.pageLayout.title = item.title;
+        this.pageLayout.title = { ...item.title, width: item.title.width ?? 'full'};
         this.cdr.detectChanges();
         // console.log('ContextPageLayout', item.alert);
       })
@@ -125,7 +124,7 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
     // console.log('RouteLayoutData', this.routeLayoutInfo);
 
     // if (this.header.menuBarItems.left.length > 0 || this.header.menuBarItems.right.length > 0) {
-      this.contextStore.updateUserUnreadNotifications();
+    this.contextStore.updateUserUnreadNotifications();
     // }
 
 

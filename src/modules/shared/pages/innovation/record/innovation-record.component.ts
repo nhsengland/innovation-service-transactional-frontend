@@ -25,7 +25,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   innovationId: string;
   innovationName: string;
   innovationStatus: keyof typeof INNOVATION_STATUS = '';
-  innovationSections: SectionsSummaryModel[] = [];
+  innovationSections: SectionsSummaryModel = [];
+  innovationExport: ContextInnovationType['export'];
 
   sections: {
     progressBar: ProgressBarType[];
@@ -36,7 +37,6 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   innovationSectionStatus = this.stores.innovation.INNOVATION_SECTION_STATUS;
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
-
 
   isInnovationInCreatedStatus(): boolean {
     return this.innovationStatus === 'CREATED';
@@ -62,8 +62,11 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${this.activatedRoute.snapshot.params.innovationId}/pdf`;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovationName = '';
     this.innovation = this.stores.context.getInnovation();
+    this.innovationName = this.innovation.name;
+    this.innovationStatus = this.innovation.status;
+    this.innovationExport = this.innovation.export;
+
   }
 
 
@@ -71,9 +74,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
     this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe(response => {
 
-      this.innovationName = response.innovation.name;
-      this.innovationStatus = response.innovation.status;
-      this.innovationSections = response.sections;
+      this.innovationSections = response;
 
       this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
         return [...acc, ...item.sections.map(s => {
@@ -92,7 +93,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
       this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
 
       if (!this.innovationName) { // This means that an API error occurred.
-        this.setAlertWarning('There is a problem', { message: 'Unable to fetch full innovation record information' })
+        this.setAlertError('There is a problem', { message: 'Unable to fetch full innovation record information' })
       }
 
       this.setPageStatus('READY');

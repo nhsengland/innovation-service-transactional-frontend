@@ -13,7 +13,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   user: {
     displayName: string;
     organisation: string;
-    passwordResetOn: string;
+    passwordResetAt: null | string;
   };
 
   cardsList: { title: string, description: string, link: string, queryParams: { status?: string } }[];
@@ -29,7 +29,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     this.user = {
       displayName: this.stores.authentication.getUserInfo().displayName,
       organisation: this.stores.authentication.getUserInfo().organisations[0]?.name || '',
-      passwordResetOn: this.stores.authentication.getUserInfo().passwordResetOn
+      passwordResetAt: this.stores.authentication.getUserInfo().passwordResetAt
     };
 
     this.cardsList = [
@@ -68,7 +68,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   ngOnInit(): void {
 
     const startTime = new Date();
-    const endTime = new Date(this.user.passwordResetOn);
+    const endTime = new Date(this.user.passwordResetAt ?? '');
     const timediffer = startTime.getTime() - endTime.getTime();
     const resultInMinutes = Math.round(timediffer / 60000);
 

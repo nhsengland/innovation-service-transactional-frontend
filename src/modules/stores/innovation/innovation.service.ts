@@ -1,69 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError, map, take } from 'rxjs/operators';
-
-import { APIQueryParamsType } from '@modules/core/models/table.model';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
 
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum } from './innovation.enums';
 import {
-  sectionType,
-  INNOVATION_STATUS, ACTIVITY_LOG_ITEMS, INNOVATION_SUPPORT_STATUS,
-  getInnovationSectionsDTO, getInnovationEvidenceDTO, getInnovationCommentsDTO, OrganisationSuggestionModel
+  INNOVATION_STATUS,
+  InnovationSectionsListDTO, getInnovationEvidenceDTO, getInnovationCommentsDTO, OrganisationSuggestionModel, InnovationSectionInfoDTO
 } from './innovation.models';
 
 import { UrlModel } from '@modules/core/models/url.model';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-import { getSectionTitle } from './innovation.config';
-
-
-export type ActivityLogInDTO = {
-  count: number;
-  data: {
-    date: string; // '2020-01-01T00:00:00.000Z',
-    type: keyof ActivityLogItemsEnum;
-    activity: ActivityLogItemsEnum;
-    innovation: { id: string, name: string };
-    params: {
-
-      actionUserName: string;
-      interveningUserName?: string;
-
-      assessmentId?: string;
-      sectionId?: InnovationSectionEnum;
-      actionId?: string;
-      innovationSupportStatus?: keyof typeof INNOVATION_SUPPORT_STATUS;
-
-      organisations?: string[];
-      organisationUnit?: string;
-      comment?: { id: string; value: string; };
-      thread?: { id: string, subject: string, messageId: string },
-      totalActions?: number;
-
-    };
-  }[];
-};
-export type ActivityLogOutDTO = {
-  count: number;
-  data: (Omit<ActivityLogInDTO['data'][0], 'innovation' | 'params'>
-    & {
-      params: ActivityLogInDTO['data'][0]['params'] & {
-        innovationName: string;
-        sectionTitle: string;
-      };
-      link: null | { label: string; url: string; };
-    })[]
-};
 
 
 @Injectable()
 export class InnovationService {
 
   private API_URL = this.envVariablesStore.API_URL;
+  private API_INNOVATIONS_URL = this.envVariablesStore.API_INNOVATIONS_URL;
 
   constructor(
     private http: HttpClient,
@@ -87,7 +44,7 @@ export class InnovationService {
 
   submitInnovation(innovationId: string): Observable<{ id: string, status: keyof typeof INNOVATION_STATUS }> {
 
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/submit').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/submit').setPathParams({ innovationId });
     return this.http.patch<{ id: string, status: keyof typeof INNOVATION_STATUS }>(url.buildUrl(), {}).pipe(
       take(1),
       map(response => response)
@@ -95,102 +52,32 @@ export class InnovationService {
 
   }
 
-  getInnovationActivityLog(innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum[] }>): Observable<ActivityLogOutDTO> {
+  getInnovationSections(innovationId: string): Observable<InnovationSectionsListDTO> {
 
-    const userUrlBasePath = this.authenticationStore.userUrlBasePath();
-    const { filters, ...qParams } = queryParams;
-    const qp = {
-      ...qParams,
-      activityTypes: filters.activityTypes || undefined,
-    };
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections').setPathParams({ innovationId });
+    return this.http.get<InnovationSectionsListDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
-    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/activities')
+  }
+
+
+  getSectionInfo(innovationId: string, sectionId: string): Observable<InnovationSectionInfoDTO> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionId')
       .setPathParams({
         endpointModule: this.apiUserBasePath(),
         userId: this.authenticationStore.getUserId(),
-        innovationId
+        innovationId,
+        sectionId
       })
-      .setQueryParams(qp);
-
-    return this.http.get<ActivityLogInDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => ({
-        count: response.count,
-        data: response.data.map(i => {
-
-          let link: null | { label: string; url: string; } = null;
-
-          switch (ACTIVITY_LOG_ITEMS[i.activity].link) {
-            case 'NEEDS_ASSESSMENT':
-              link = i.params.assessmentId ? { label: 'Go to Needs assessment', url: `/${userUrlBasePath}/innovations/${i.innovation.id}/assessments/${i.params.assessmentId}` } : null;
-              break;
-            case 'SUPPORT_STATUS':
-              link = { label: 'Go to Support status', url: `/${userUrlBasePath}/innovations/${i.innovation.id}/support` };
-              break;
-            case 'SECTION':
-              link = i.params.sectionId ? { label: 'View section', url: `/${userUrlBasePath}/innovations/${i.innovation.id}/record/sections/${i.params.sectionId}` } : null;
-              break;
-            case 'THREAD':
-              link = { label: 'View messages', url: `/${userUrlBasePath}/innovations/${i.innovation.id}/threads/${i.params.thread?.id}` };
-              break;
-            case 'ACTION':
-              if (['innovator', 'accessor'].includes(userUrlBasePath) && i.params.actionId) { // Don't make sense for assessment users.
-                link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${i.innovation.id}/action-tracker/${i.params.actionId}` };
-              }
-              break;
-          }
-
-          return {
-            date: i.date,
-            type: i.type,
-            activity: i.activity,
-            innovation: i.innovation,
-            params: {
-              ...i.params,
-              innovationName: i.innovation.name,
-              sectionTitle: getSectionTitle(i.params.sectionId || null)
-            },
-            link
-          };
-
-        })
-      }))
-    );
+      .setQueryParams({ sectionId });
+    return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
 
-  getInnovationSections(innovationId: string): Observable<getInnovationSectionsDTO> {
+  updateSectionInfo(innovationId: string, sectionKey: string, data: MappedObjectType): Observable<MappedObjectType> {
 
-    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/section-summary')
-      .setPathParams({
-        endpointModule: this.apiUserBasePath(),
-        userId: this.authenticationStore.getUserId(),
-        innovationId
-      });
-
-    return this.http.get<getInnovationSectionsDTO>(url.buildUrl()).pipe(take(1), map(response => response));
-
-  }
-
-
-  getSectionInfo(innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObjectType }> {
-
-    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/sections')
-      .setPathParams({
-        endpointModule: this.apiUserBasePath(),
-        userId: this.authenticationStore.getUserId(),
-        innovationId
-      })
-      .setQueryParams({ section });
-    return this.http.get<{ section: sectionType; data: MappedObjectType }>(url.buildUrl()).pipe(take(1), map(response => response));
-  }
-
-
-  updateSectionInfo(innovationId: string, section: string, data: MappedObjectType): Observable<MappedObjectType> {
-
-    const body = { section, data };
-
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/sections').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
+    const body = { ...data };
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionKey').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, sectionKey });
     return this.http.put<MappedObjectType>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
@@ -198,10 +85,9 @@ export class InnovationService {
 
   }
 
-
-  submitSections(innovationId: string, sections: string[]): Observable<any> {
-    const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/sections/submit').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
-    return this.http.patch<any>(url.buildUrl(), { sections }).pipe(
+  submitSections(innovationId: string, sectionKey: string): Observable<any> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionKey/submit').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId, sectionKey });
+    return this.http.patch<any>(url.buildUrl(), { sectionKey }).pipe(
       take(1),
       map(response => response)
     );

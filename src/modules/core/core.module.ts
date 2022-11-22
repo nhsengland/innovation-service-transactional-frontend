@@ -1,5 +1,5 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
-import { APP_BASE_HREF } from '@angular/common';
+import { APP_BASE_HREF, DatePipe } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { LoggerModule } from 'ngx-logger';
@@ -53,7 +53,10 @@ import { LoggerService } from './services/logger.service';
     // Services.
     CookiesService,
     InnovationService,
-    LoggerService
+    LoggerService,
+
+    // Extra dependencies
+    DatePipe
   ]
 })
 export class CoreModule {

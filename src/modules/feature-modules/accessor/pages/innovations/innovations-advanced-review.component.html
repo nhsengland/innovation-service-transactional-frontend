@@ -116,22 +116,19 @@
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('submittedAt') }}</span>
                 {{ item.submittedAt | date: ('app.date_formats.long_date' | translate) }}
               </td>
-
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('mainCategory') }}</span>
                 {{ item.mainCategory }}
               </td>
-
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('countryName') }}</span>
-                {{ item.countryName }}
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('location') }}</span>
+                {{ item.countryName }}{{ item.postCode ? ', ' + item.postCode : '' }}
               </td>
-
               <td class="nhsuk-table__cell text-align-right">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('accessors') }}</span>
-                <strong class="nhsuk-tag ml-auto" [ngClass]="innovationSupportStatus[item.supportStatus].cssClass">{{ innovationSupportStatus[item.supportStatus].label }}</strong>
+                <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + item.supportInfo.status + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.support_status.' + item.supportInfo.status + '.name' | translate }}"></theme-tag>
               </td>
-
             </tr>
           </tbody>
         </table>

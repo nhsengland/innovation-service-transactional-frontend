@@ -1,26 +1,22 @@
-/* istanbul ignore file */
-
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-import { APIQueryParamsType } from '@modules/core/models/table.model';
 
 import { Store } from '../store.class';
 import { WizardEngineModel } from '@modules/shared/forms';
 
-import { InnovationService, ActivityLogOutDTO, } from './innovation.service';
+import { InnovationService } from './innovation.service';
 
 import { INNOVATION_SECTIONS, getSectionTitle } from './innovation.config';
-import { ActivityLogTypesEnum, InnovationSectionEnum } from './innovation.enums';
+import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
 import {
   InnovationModel,
-  sectionType,
   INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS,
   SectionsSummaryModel, InnovationSectionConfigType,
-  getInnovationEvidenceDTO, getInnovationCommentsDTO
+  getInnovationEvidenceDTO, getInnovationCommentsDTO, InnovationSectionInfoDTO
 } from './innovation.models';
 
 
@@ -42,45 +38,31 @@ export class InnovationStore extends Store<InnovationModel> {
     return ['WAITING_NEEDS_ASSESSMENT', 'NEEDS_ASSESSMENT'].includes(status);
   }
 
-  // getInnovationInfo$(innovationId: string): Observable<getInnovationInfoResponse> {
-  //   return this.innovationsService.getInnovationInfo(innovationId);
-  // }
-
   submitInnovation$(innovationId: string): Observable<{ id: string, status: keyof typeof INNOVATION_STATUS }> {
     return this.innovationsService.submitInnovation(innovationId);
   }
 
-  getActivityLog$(innovationId: string, queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum[] }>): Observable<ActivityLogOutDTO> {
-    return this.innovationsService.getInnovationActivityLog(innovationId, queryParams);
-  }
-
-  getSectionsSummary$(innovationId: string): Observable<{ innovation: { name: string, status: keyof typeof INNOVATION_STATUS }, sections: SectionsSummaryModel[] }> {
+  getSectionsSummary$(innovationId: string): Observable<SectionsSummaryModel> {
 
     return this.innovationsService.getInnovationSections(innovationId).pipe(
-      map(response => ({
-        innovation: {
-          status: response.status,
-          name: response.name
-        },
-        sections: INNOVATION_SECTIONS.map(item => ({
-          title: item.title,
-          sections: item.sections.map(ss => {
-            const sectionState = response.sections.find(a => a.section === ss.id) || { status: 'UNKNOWN', actionStatus: '', actionCount: 0 };
-            return {
-              id: ss.id,
-              title: ss.title,
-              status: sectionState.status,
-              isCompleted: INNOVATION_SECTION_STATUS[sectionState.status]?.isCompleteState || false,
-              actionCount: sectionState.actionCount
-            };
-          })
-        }))
-      })),
+      map(response => INNOVATION_SECTIONS.map(item => ({
+        title: item.title,
+        sections: item.sections.map(ss => {
+          const sectionState = response.find(a => a.section === ss.id) || { status: 'UNKNOWN', actionStatus: '', openActionsCount: 0 };
+          return {
+            id: ss.id,
+            title: ss.title,
+            status: sectionState.status,
+            isCompleted: INNOVATION_SECTION_STATUS[sectionState.status]?.isCompleteState || false,
+            openActionsCount: sectionState.openActionsCount
+          };
+        })
+      }))
+      ),
       catchError(() => {
         // this.logger.error('Unable to fetch sections information');
-        return of({
-          innovation: { name: '', status: '' as any },
-          sections: INNOVATION_SECTIONS.map(item => ({
+        return of(
+          INNOVATION_SECTIONS.map(item => ({
             title: item.title,
             sections: item.sections.map(ss => ({
               id: ss.id,
@@ -88,25 +70,25 @@ export class InnovationStore extends Store<InnovationModel> {
               status: 'UNKNOWN' as keyof typeof INNOVATION_SECTION_STATUS,
               actionStatus: '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
               isCompleted: false,
-              actionCount: 0
+              openActionsCount: 0
             }))
           }))
-        });
+        );
       })
     );
 
   }
 
-  getSectionInfo$(innovationId: string, section: string): Observable<{ section: sectionType, data: MappedObjectType }> {
+  getSectionInfo$(innovationId: string, section: string): Observable<InnovationSectionInfoDTO> {
     return this.innovationsService.getSectionInfo(innovationId, section);
   }
 
-  updateSectionInfo$(innovationId: string, section: string, data: MappedObjectType): Observable<MappedObjectType> {
-    return this.innovationsService.updateSectionInfo(innovationId, section, data);
+  updateSectionInfo$(innovationId: string, sectionKey: string, data: MappedObjectType): Observable<MappedObjectType> {
+    return this.innovationsService.updateSectionInfo(innovationId, sectionKey, data);
   }
 
-  submitSections$(innovationId: string, sections: string[]): Observable<MappedObjectType> {
-    return this.innovationsService.submitSections(innovationId, sections);
+  submitSections$(innovationId: string, sectionKey: string): Observable<MappedObjectType> {
+    return this.innovationsService.submitSections(innovationId, sectionKey);
   }
 
   getSectionEvidence$(innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
@@ -141,12 +123,43 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.getInnovationComments(innovationId, createdOrder);
   }
 
-  createInnovationComment$( innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
+  createInnovationComment$(innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
     return this.innovationsService.createInnovationComment(innovationId, body);
   }
 
-  updateInnovationComment$( innovationId: string, body: { comment: string, replyTo?: string }, commentId: string): Observable<{ id: string }> {
+  updateInnovationComment$(innovationId: string, body: { comment: string, replyTo?: string }, commentId: string): Observable<{ id: string }> {
     return this.innovationsService.updateInnovationComment(innovationId, body, commentId);
   }
 
+  // Grouped Innovation Status methods
+  getGroupedInnovationStatus(
+    innovationStatus: InnovationStatusEnum,
+    supportStatus: InnovationSupportStatusEnum[],
+    reassessmentCount: number
+  ): InnovationGroupedStatusEnum {
+
+    if (innovationStatus === InnovationStatusEnum.CREATED) {
+      return InnovationGroupedStatusEnum.RECORD_NOT_SHARED;
+    }
+
+    if (innovationStatus === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
+      return reassessmentCount === 0
+        ? InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT
+        : InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT;
+    }
+
+    if (innovationStatus === InnovationStatusEnum.NEEDS_ASSESSMENT) {
+      return InnovationGroupedStatusEnum.NEEDS_ASSESSMENT;
+    }
+
+    if (innovationStatus === InnovationStatusEnum.IN_PROGRESS) {
+      const isReceivingSupport = !!supportStatus.some(status => status === InnovationSupportStatusEnum.ENGAGING || status === InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED);
+      return isReceivingSupport === true
+        ? InnovationGroupedStatusEnum.RECEIVING_SUPPORT
+        : InnovationGroupedStatusEnum.AWAITING_SUPPORT;
+    }
+
+    return InnovationGroupedStatusEnum.RECORD_NOT_SHARED;
+
+  }
 }

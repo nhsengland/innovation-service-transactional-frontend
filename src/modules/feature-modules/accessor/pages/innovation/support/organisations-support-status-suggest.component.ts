@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormArray, UntypedFormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormArray, FormControl, FormGroup, FormEngineParameterModel } from '@app/base/forms';
-import { RoutingHelper } from '@app/base/helpers';
 
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
+
 import { AccessorService, SupportLogType } from '../../../services/accessor.service';
 
-import { InnovationDataResolverType } from '@modules/stores/innovation/innovation.models';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -20,12 +20,12 @@ import { InnovationDataResolverType } from '@modules/stores/innovation/innovatio
 export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends CoreComponent implements OnInit {
 
   currentStep: 1 | 2 = 1;
-  innovation: InnovationDataResolverType;
+  innovation: ContextInnovationType;
 
   form = new FormGroup({
-    organisationUnits: new UntypedFormArray([]),
-    comment: new UntypedFormControl('', CustomValidators.required('A comment is required')),
-    confirm: new UntypedFormControl(false, CustomValidators.required('You need to confirm to proceed'))
+    organisationUnits: new FormArray<FormControl<string>>([]),
+    comment: new FormControl<string>('', CustomValidators.required('A comment is required')),
+    confirm: new FormControl<boolean>(false, CustomValidators.required('You need to confirm to proceed'))
   }, { updateOn: 'blur' });
 
   groupedItems: Required<FormEngineParameterModel>['groupedItems'] = [];
@@ -37,17 +37,20 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
   submitButton = { isActive: true, label: 'Confirm and notify organisations' };
 
+  isQualifyingAccessorRole = false;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private accessorService: AccessorService,
+    private innovationsService: InnovationsService,
     private organisationsService: OrganisationsService
   ) {
 
     super();
     this.setPageTitle('Suggest organisations for support');
 
-    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
+    this.innovation = this.stores.context.getInnovation();
+
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
   }
 
@@ -55,12 +58,12 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   ngOnInit(): void {
 
     forkJoin([
-      this.organisationsService.getOrganisationsListWithUnits(),
-      this.accessorService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment.id || ''),
-      this.accessorService.getInnovationSupports(this.innovation.id, false)
-    ]).subscribe(([organisations, needsAssessmentInfo, supportsInfo]) => {
+      this.organisationsService.getOrganisationsList(true),
+      this.innovationsService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment?.id || ''),
+      this.innovationsService.getInnovationSupportsList(this.innovation.id, false)
+    ]).subscribe(([organisations, needsAssessment, innovationSupportsList]) => {
 
-      const needsAssessmentSuggestedOrganisations = needsAssessmentInfo.assessment.organisations.map(item => item.id);
+      const needsAssessmentSuggestedOrganisations = needsAssessment.suggestedOrganisations.map(item => item.id);
 
       this.groupedItems = organisations.map(item => {
 
@@ -80,12 +83,12 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
       });
 
-      supportsInfo.filter(s => s.status === 'ENGAGING').forEach(s => {
+      innovationSupportsList.filter(s => s.status === InnovationSupportStatusEnum.ENGAGING).forEach(s => {
 
-        (this.form.get('organisationUnits') as FormArray).push(new FormControl(s.organisationUnit.id));
+        (this.form.get('organisationUnits') as FormArray).push(new FormControl(s.organisation.id));
 
         this.groupedItems.forEach(o => {
-          const ou = o.items.find(i => i.value === s.organisationUnit.id);
+          const ou = o.items.find(i => i.value === s.organisation.id);
           if (ou) {
             ou.isEditable = false;
             ou.label += ` (currently engaging)`;
@@ -124,7 +127,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     this.chosenUnits = { list: chosenUnitsList, values: chosenUnitsValues };
 
     if (this.chosenUnits.values.length === 0) {
-      this.form.get('organisationUnits')!.setErrors({ customError: true, message: 'You need to choose at least one organisationn or one unit to suggest' });
+      this.form.get('organisationUnits')!.setErrors({ customError: true, message: 'You need to choose at least one organisation or one unit to suggest' });
       this.form.get('organisationUnits')!.markAsTouched();
       return;
     }
@@ -144,8 +147,8 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
     const body = {
       organisationUnits: this.chosenUnits.values,
-      description: this.form.get('comment')!.value,
-      type: SupportLogType.ACCESSOR_SUGGESTION,
+      description: this.form.get('comment')?.value || '',
+      type: SupportLogType.ACCESSOR_SUGGESTION
     };
 
     this.accessorService.suggestNewOrganisations(this.innovation.id, body).subscribe({

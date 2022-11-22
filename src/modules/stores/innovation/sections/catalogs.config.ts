@@ -7,12 +7,22 @@ export const maturityLevelItems = [
   { value: 'READY', label: 'Ready or nearly ready for adoption and scale' }
 ];
 
+export const yesNoItems = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'NO', label: 'No' }
+];
+
 export const yesPartiallyNoItems = [
   { value: 'YES', label: 'Yes' },
   { value: 'PARTIALLY', label: 'Partially' },
   { value: 'NO', label: 'No' }
 ];
 
+export const yesNotYetNotSureItems = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'NOT_YET', label: 'Not yet' },
+  { value: 'NOT_SURE', label: 'I\'m not sure' }
+];
 
 
 // Section 1.

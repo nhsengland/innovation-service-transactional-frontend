@@ -57,6 +57,7 @@ export const SECTION_5_2: InnovationSectionConfigType['sections'][0] = {
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: SummaryPayloadType) => summaryParsing(data),
+    summaryPDFParsing: (data: SummaryPayloadType) => summaryPDFParsing(data),
     showSummary: true
   })
 };
@@ -200,7 +201,8 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
         label: `Attachment ${i + 1}`,
         value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
         editStepNumber: stepNumber,
-        allowHTML: true
+        allowHTML: true,
+        isFile: true,
       });
     });
 
@@ -211,4 +213,12 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
 
   return toReturn;
 
+}
+
+function summaryPDFParsing(data: SummaryPayloadType): WizardSummaryType[] {
+  const summaryData = summaryParsing(data)
+    .filter(item => item.type !== 'button')
+    .filter(item => !item.isFile);
+
+  return summaryData.filter(item => item.type !== 'button');
 }

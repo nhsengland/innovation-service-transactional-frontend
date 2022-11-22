@@ -23,7 +23,6 @@ steps:
   inputs:
     script: |
       npm install
-      npm run postinstall
 
 - task: CmdLine@2
   displayName: 'Run Lint'

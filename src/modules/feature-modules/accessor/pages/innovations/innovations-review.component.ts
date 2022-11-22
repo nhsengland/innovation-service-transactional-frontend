@@ -1,28 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { FormControl, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
-import { NotificationValueType } from '@app/base/types';
+import { DateISOType, NotificationValueType } from '@app/base/types';
 
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 
-import { AccessorService, getInnovationsListEndpointOutDTO } from '../../services/accessor.service';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 type TabType = {
-  key: keyof typeof INNOVATION_SUPPORT_STATUS;
-  title: string;
-  mainDescription: string;
-  secondaryDescription?: string;
-  numberDescription?: string;
-  showAssignedToMeFilter: boolean;
-  showSuggestedOnlyFilter: boolean;
-  link: string;
-  queryParams: { status: keyof typeof INNOVATION_SUPPORT_STATUS; };
-  notifications: NotificationValueType;
+  key: InnovationSupportStatusEnum,
+  title: string,
+  mainDescription: string,
+  secondaryDescription?: string,
+  numberDescription?: string,
+  showAssignedToMeFilter: boolean,
+  showSuggestedOnlyFilter: boolean,
+  link: string,
+  queryParams: { status: InnovationSupportStatusEnum },
+  notifications: NotificationValueType,
 };
 
 
@@ -38,17 +38,20 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   currentTab: TabType;
 
   form = new FormGroup({
-    assignedToMe: new UntypedFormControl(false),
-    suggestedOnly: new UntypedFormControl(true)
+    assignedToMe: new FormControl(false),
+    suggestedOnly: new FormControl(true)
   }, { updateOn: 'change' });
 
-  innovationsList: TableModel<(getInnovationsListEndpointOutDTO['data'][0])>;
+  innovationsList: TableModel<
+    InnovationsListDTO['data'][0] & { supportInfo: { accessorsNames: string[], supportingOrganisations: string[], updatedAt: null | DateISOType } },
+    InnovationsListFiltersType
+  >;
 
   innovationStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService
+    private innovationsService: InnovationsService
   ) {
 
     super();
@@ -59,23 +62,23 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       this.defaultStatus = 'ENGAGING';
       this.tabs = [
         {
-          key: 'ENGAGING',
+          key: InnovationSupportStatusEnum.ENGAGING,
           title: 'Engaging',
           mainDescription: 'Innovations being supported, assessed or guided by your organisation.',
           numberDescription: 'innovations in active engagement',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'ENGAGING' },
+          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
           notifications: null
         },
         {
-          key: 'COMPLETE',
+          key: InnovationSupportStatusEnum.COMPLETE,
           title: 'Completed',
           mainDescription: 'Your organisation has completed an engagement with these innovations.',
           numberDescription: 'innovations with completed engagements',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'COMPLETE' },
+          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.COMPLETE },
           notifications: null
         }
       ];
@@ -85,81 +88,81 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       this.defaultStatus = 'UNASSIGNED';
       this.tabs = [
         {
-          key: 'UNASSIGNED',
+          key: InnovationSupportStatusEnum.UNASSIGNED,
           title: 'Unassigned',
           mainDescription: 'Innovations awaiting status assignment from your organisation.',
           secondaryDescription: 'If your organisation has been suggested to support an innovation, you must assign a status within 30 days of submission.',
           numberDescription: 'unassigned innovations',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: true,
-          link: '/accessor/innovations', queryParams: { status: 'UNASSIGNED' },
+          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
           notifications: null
         },
         {
-          key: 'ENGAGING',
+          key: InnovationSupportStatusEnum.ENGAGING,
           title: 'Engaging',
           mainDescription: 'Innovations being supported, assessed or guided by your organisation.',
           showAssignedToMeFilter: true,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'ENGAGING' },
+          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
           notifications: null
         },
         {
-          key: 'FURTHER_INFO_REQUIRED',
+          key: InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED,
           title: 'Further info',
           mainDescription: 'Further information is needed from the innovator to make a decision.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'FURTHER_INFO_REQUIRED' },
+          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED },
           notifications: null
         },
         {
-          key: 'WAITING',
+          key: InnovationSupportStatusEnum.WAITING,
           title: 'Waiting',
           mainDescription: 'Waiting for an internal decision to progress.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'WAITING' },
+          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.WAITING },
           notifications: null
         },
         {
-          key: 'NOT_YET',
+          key: InnovationSupportStatusEnum.NOT_YET,
           title: 'Not yet',
           mainDescription: 'Innovations not yet ready for your support offer.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'NOT_YET' },
+          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.NOT_YET },
           notifications: null
         },
         {
-          key: 'UNSUITABLE',
+          key: InnovationSupportStatusEnum.UNSUITABLE,
           title: 'Unsuitable',
           mainDescription: 'Your organisation has no suitable offer for these innovations.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'UNSUITABLE' },
+          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.UNSUITABLE },
           notifications: null
         },
         {
-          key: 'COMPLETE',
+          key: InnovationSupportStatusEnum.COMPLETE,
           title: 'Completed',
           mainDescription: 'Your organisation has completed an engagement with these innovations.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: 'COMPLETE' },
+          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.COMPLETE },
           notifications: null
         }
       ];
     }
 
     this.currentTab = {
-      key: 'UNASSIGNED',
+      key: InnovationSupportStatusEnum.UNASSIGNED,
       title: '',
       mainDescription: '',
       showAssignedToMeFilter: false,
       showSuggestedOnlyFilter: false,
       link: '',
-      queryParams: { status: 'UNASSIGNED' },
+      queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
       notifications: null
     };
 
@@ -180,42 +183,59 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
     this.setPageStatus('LOADING');
 
-    this.accessorService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(response => {
-      this.innovationsList.setData(response.data, response.count);
+    this.innovationsService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(response => {
+      this.innovationsList.setData(
+        response.data.map(item => {
+
+          const supportingOrganisations = (item.supports ?? [])
+            .filter(s => s.status === InnovationSupportStatusEnum.ENGAGING)
+            .map(s => s.organisation.acronym || '');
+
+          return {
+            ...item,
+            supportInfo: {
+              accessorsNames: (item.supports ?? []).flatMap(s => (s.organisation.unit.users ?? []).map(u => u.name)),
+              supportingOrganisations: [...new Set(supportingOrganisations)], // Remove duplicates.
+              updatedAt: item.supports && item.supports.length > 0 ? item.supports[0].updatedAt : null
+            }
+          };
+
+        }),
+        response.count);
       this.currentTab.numberDescription = `${response.count} ${this.currentTab.numberDescription}`;
       this.setPageStatus('READY');
     });
 
   }
 
-  prepareInnovationsList(status: keyof typeof INNOVATION_SUPPORT_STATUS): void {
+  prepareInnovationsList(status: InnovationSupportStatusEnum): void {
 
     switch (status) {
 
-      case 'UNASSIGNED':
+      case InnovationSupportStatusEnum.UNASSIGNED:
         this.innovationsList
           .clearData()
           .setFilters({
-            status: this.currentTab.key,
+            supportStatuses: [this.currentTab.key],
             assignedToMe: false,
-            suggestedOnly: this.form.get('suggestedOnly')!.value
+            suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
             submittedAt: { label: 'Submitted', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
-            countryName: { label: 'Location', orderable: true },
+            location: { label: 'Location', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
           .setOrderBy('submittedAt', 'descending');
         break;
 
-      case 'ENGAGING':
+      case InnovationSupportStatusEnum.ENGAGING:
         this.innovationsList
           .clearData()
           .setFilters({
-            status: this.currentTab.key,
-            assignedToMe: this.form.get('assignedToMe')!.value,
+            supportStatuses: [this.currentTab.key],
+            assignedToMe: this.form.get('assignedToMe')?.value ?? false,
             suggestedOnly: false
           })
           .setVisibleColumns({
@@ -228,15 +248,15 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           .setOrderBy('updatedAt', 'descending');
         break;
 
-      case 'FURTHER_INFO_REQUIRED':
-      case 'WAITING':
-      case 'NOT_YET':
-      case 'UNSUITABLE':
-      case 'COMPLETE':
+      case InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED:
+      case InnovationSupportStatusEnum.WAITING:
+      case InnovationSupportStatusEnum.NOT_YET:
+      case InnovationSupportStatusEnum.UNSUITABLE:
+      case InnovationSupportStatusEnum.COMPLETE:
         this.innovationsList
           .clearData()
           .setFilters({
-            status: this.currentTab.key,
+            supportStatuses: [this.currentTab.key],
             assignedToMe: false,
             suggestedOnly: false
           })
@@ -244,7 +264,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             name: { label: 'Innovation', orderable: true },
             updatedAt: { label: 'Updated', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
-            countryName: { label: 'Location', orderable: true },
+            location: { label: 'Location', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
           .setOrderBy('updatedAt', 'descending');

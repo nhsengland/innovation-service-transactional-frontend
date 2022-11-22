@@ -8,14 +8,12 @@ export { InnovationService } from './innovation.service';
 export {
   InnovationStatusEnum,
   InnovationSupportStatusEnum,
+  InnovationTransferStatusEnum,
   InnovationSectionEnum,
   InnovationActionStatusEnum,
   ActivityLogTypesEnum,
   ActivityLogItemsEnum
 } from './innovation.enums';
-
-// Types.
-export { InnovationDataResolverType } from './innovation.models';
 
 // Constants.
 export {

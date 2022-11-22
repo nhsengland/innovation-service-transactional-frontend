@@ -7,6 +7,7 @@ import { TableModel } from '@app/base/models';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 
 import { GetOrganisationUnitInnovationsListDTO, OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { InnovationsStepInputType, InnovationsStepOutputType } from './innovations-step.types';
 
@@ -65,8 +66,13 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
 
     this.organisationsService.getOrganisationUnitInnovationsList(this.data.organisation.id, this.data.organisationUnit.id, this.tableList.getAPIQueryParams()).subscribe(
       response => {
-        this.innovationStatusCounters = response.innovationsByStatus;
-        this.tableList.setData(response.innovationsList, response.count);
+        this.innovationStatusCounters = response.innovationsByStatus.filter(i => [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(i.status));
+        this.tableList.setData(
+          response.innovationsList
+           .filter(i => [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(i.status)),
+          this.innovationStatusCounters
+           .map(i => i.count).reduce((a,b) => a+b)
+        );
         this.setPageStatus('READY');
       },
       () => {

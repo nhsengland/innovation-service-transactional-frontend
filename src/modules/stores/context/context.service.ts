@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { UrlModel } from '@modules/core/models/url.model';
+import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
 import { NotificationContextTypeEnum } from './context.enums';
 
@@ -19,6 +19,8 @@ type InnovationNotificationsDTO = {
 export class ContextService {
 
   private API_URL = this.envVariablesStore.API_URL;
+  private API_INNOVATIONS_URL = this.envVariablesStore.API_INNOVATIONS_URL;
+  private API_USERS_URL = this.envVariablesStore.API_USERS_URL;
 
   constructor(
     private http: HttpClient,
@@ -28,9 +30,7 @@ export class ContextService {
 
   getUserUnreadNotifications(): Observable<{ total: number }> {
 
-    // return of({ count: Math.floor(Math.random() * 120) });
-
-    const url = new UrlModel(this.API_URL).addPath('notifications/counters');
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notifications/counters');
     return this.http.get<{ total: number }>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
@@ -38,12 +38,9 @@ export class ContextService {
 
   }
 
-  dismissNotification(type: NotificationContextTypeEnum, id: string): Observable<{ affected: number }> {
-
-    const url = new UrlModel(this.API_URL).addPath('notifications/dismiss');
-    return this.http.patch<{ affected: number }>(url.buildUrl(), { context: { type, id } }).pipe(take(1), map(response => response)
-    );
-
+  dismissNotification(innovationId: string, conditions: { notificationIds?: string[], contextTypes?: NotificationContextTypeEnum[], contextIds?: string[] }): Observable<void> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/notifications/dismiss').setPathParams({ innovationId });
+    return this.http.patch<void>(url.buildUrl(), conditions).pipe(take(1))
   }
 
 

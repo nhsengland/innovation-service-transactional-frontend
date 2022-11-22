@@ -4,11 +4,11 @@ import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
-import { AccessorService } from '../../../services/accessor.service';
-
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-organisations-support-status-info',
@@ -22,16 +22,16 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
 
   organisations: {
     info: {
-      id: string;
-      name: string;
-      acronym: string;
-      status?: keyof typeof INNOVATION_SUPPORT_STATUS;
+      id: string,
+      name: string,
+      acronym: string,
+      status?: InnovationSupportStatusEnum,
       organisationUnits: {
-        id: string;
-        name: string;
-        acronym: string;
-        status: keyof typeof INNOVATION_SUPPORT_STATUS;
-      }[];
+        id: string,
+        name: string,
+        acronym: string,
+        status: InnovationSupportStatusEnum
+      }[]
     };
     showHideStatus: 'hidden' | 'opened' | 'closed';
     showHideText: null | string;
@@ -42,7 +42,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService,
+    private innovationsService: InnovationsService,
     private organisationsService: OrganisationsService
   ) {
 
@@ -58,9 +58,9 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
   ngOnInit(): void {
 
     forkJoin([
-      this.organisationsService.getOrganisationsListWithUnits(),
-      this.accessorService.getInnovationSupports(this.innovationId, false),
-    ]).subscribe(([organisationUnits, organisationUnitsSupportStatus]) => {
+      this.organisationsService.getOrganisationsList(true),
+      this.innovationsService.getInnovationSupportsList(this.innovationId, false),
+    ]).subscribe(([organisationUnits, innovationSupportsList]) => {
 
       this.organisations = organisationUnits.map(organisation => {
 
@@ -71,7 +71,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
               name: organisation.name,
               acronym: organisation.acronym,
               organisationUnits: [],
-              status: organisationUnitsSupportStatus.find(o => o.organisationUnit.id === organisation.id)?.status || 'UNASSIGNED'
+              status: innovationSupportsList.find(o => o.organisation.id === organisation.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
             },
             showHideStatus: 'hidden',
             showHideText: null,
@@ -83,9 +83,9 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
               id: organisation.id,
               name: organisation.name,
               acronym: organisation.acronym,
-              organisationUnits: organisation.organisationUnits.map(org => ({
-                ...org,
-                status: organisationUnitsSupportStatus.find(o => o.organisationUnit.id === org.id)?.status || 'UNASSIGNED'
+              organisationUnits: organisation.organisationUnits.map(organisationUnit => ({
+                ...organisationUnit,
+                status: innovationSupportsList.find(o => o.organisation.unit.id === organisationUnit.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
               }))
             },
             showHideStatus: 'closed',

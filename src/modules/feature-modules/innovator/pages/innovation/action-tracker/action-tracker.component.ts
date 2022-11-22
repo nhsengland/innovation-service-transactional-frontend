@@ -4,7 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-import { getInnovationActionsListEndpointOutDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationsActionsListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -15,8 +17,9 @@ export class InnovationActionTrackerComponent extends CoreComponent implements O
 
   innovationId: string;
 
-  openedActionsList: TableModel<(getInnovationActionsListEndpointOutDTO['openedActions'][0])>;
-  closedActionsList: TableModel<(getInnovationActionsListEndpointOutDTO['closedActions'][0])>;
+  openedActionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>;
+  closedActionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>;
+
 
   innovationSummary: { label: string; value: string; }[] = [];
 
@@ -24,7 +27,7 @@ export class InnovationActionTrackerComponent extends CoreComponent implements O
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService,
+    private innovationsService: InnovationsService
   ) {
 
     super();
@@ -55,10 +58,27 @@ export class InnovationActionTrackerComponent extends CoreComponent implements O
 
   ngOnInit(): void {
 
-    this.innovatorService.getInnovationActionsList(this.innovationId).subscribe(response => {
+    const filters = new TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>({ pageSize: 1000 });
+    filters.setFilters({ innovationId: this.innovationId, fields: ['notifications'] });
 
-      this.openedActionsList.setData(response.openedActions);
-      this.closedActionsList.setData(response.closedActions);
+    this.innovationsService.getActionsList(filters.getAPIQueryParams()).subscribe(response => {
+
+      this.openedActionsList.setData(response.data
+        .filter(item => [
+          InnovationActionStatusEnum.REQUESTED,
+          // InnovationActionStatusEnum.STARTED,
+          // InnovationActionStatusEnum.CONTINUE,
+          InnovationActionStatusEnum.IN_REVIEW
+        ].includes(item.status))
+      );
+
+      this.closedActionsList.setData(response.data
+        .filter(item => [
+          InnovationActionStatusEnum.DECLINED,
+          InnovationActionStatusEnum.COMPLETED,
+          InnovationActionStatusEnum.DELETED
+        ].includes(item.status))
+      );
 
       this.setPageStatus('READY');
 

@@ -34,10 +34,10 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
 
     this.formParameters = [
       new FormEngineParameterModel({
-        id: 'comment',
+        id: 'message',
         dataType: 'textarea',
         label: 'Let the innovator know how you want to proceed',
-        validations: { isRequired: [true, 'Comment is required'] },
+        validations: { isRequired: [true, 'Message is required'] },
         lengthLimit: 'medium'
       })
     ];
@@ -48,15 +48,11 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
 
   ngOnInit(): void {
 
-    this.assessmentService.getInnovationInfo(this.innovationId).subscribe(response => {
+    this.innovationName = this.stores.context.getInnovation().name;
 
-      this.innovationName = response.summary.name;
-
-      this.setPageTitle(this.innovationName, { hint: 'Starting needs assessment for', size:'l' });
-      this.setBackLink('Go back', `/assessment/innovations/${response.summary.id}`);
-      this.setPageStatus('READY');
-
-    });
+    this.setPageTitle(this.innovationName, { hint: 'Starting needs assessment for', size: 'l' });
+    this.setBackLink('Go back', `/assessment/innovations/${this.innovationId}`);
+    this.setPageStatus('READY');
 
   }
 

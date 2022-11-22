@@ -43,9 +43,10 @@ type InboundPayloadType = {
 
 type StepPayloadType = Omit<InboundPayloadType, 'name' | 'postcode' | 'countryName'> & {
   innovationName: string,
-  englandPostCode: string,
+  englandPostCode: null | string,
   locationCountryName: string
 };
+
 type OutboundPayloadType = InboundPayloadType;
 
 
@@ -103,6 +104,7 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
+    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data),
     showSummary: true
   })
 };
@@ -117,7 +119,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
     data.mainCategory = data.categories[0];
   } else {
 
-    const selectedCategories = categoriesItems.filter(category => data.categories.some(e => e === category.value));
+    const selectedCategories = mainCategoryItems.filter(category => data.categories.some(e => e === category.value));
 
     steps.push(
       new FormEngineModel({
@@ -168,7 +170,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
         dataType: 'checkbox-array',
         label: stepsLabels.l10,
         description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the innovation service.',
-        validations: { isRequired: [true, 'Choose at least one type of support'] },
+        validations: { isRequired: [true, 'Choose at least one type of support'], max: [5, 'Maximum 5 options'] },
         items: supportTypesItems
       }]
     }),
@@ -190,7 +192,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     innovationName: data.name,
     description: data.description,
     location: locationItems.filter(item => !['', 'Based outside UK'].includes(item.value)).map(item => item.value).includes(data.countryName) ? data.countryName : 'Based outside UK',
-    englandPostCode: data.postcode ? data.postcode : '',
+    englandPostCode: data.postcode || null,
     locationCountryName: data.countryName,
     hasFinalProduct: data.hasFinalProduct,
     categories: data.categories,
@@ -202,7 +204,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     otherCareSetting: data.otherCareSetting,
     mainPurpose: data.mainPurpose,
     supportTypes: data.supportTypes,
-    moreSupportDescription: data.moreSupportDescription,
+    moreSupportDescription: data.moreSupportDescription
   };
 
 }
@@ -301,4 +303,10 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   return toReturn;
 
+}
+
+
+
+function summaryPDFParsing(data: StepPayloadType): WizardSummaryType[] {
+  return summaryParsing(data);
 }

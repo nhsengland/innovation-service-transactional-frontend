@@ -1,14 +1,14 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { NGXLogger } from 'ngx-logger';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-import { NGXLogger } from 'ngx-logger';
 
+import { InnovationStatusEnum } from '../innovation/innovation.enums';
 import { Store } from '../store.class';
 import { ContextModel } from './context.models';
 import { ContextService } from './context.service';
 import { ContextInnovationType, ContextPageLayoutType, ContextPageStatusType } from './context.types';
-import { InnovationStatusEnum } from '../innovation/innovation.enums';
 
 import { NotificationContextTypeEnum } from './context.enums';
 
@@ -45,9 +45,9 @@ export class ContextStore extends Store<ContextModel> {
 
   }
 
-  dismissNotification(contextType: NotificationContextTypeEnum, contextId: string): void {
+  dismissNotification(innovationId: string, conditions: {notificationIds?: string[], contextTypes?: NotificationContextTypeEnum[], contextIds?: string[]}): void {
 
-    this.contextService.dismissNotification(contextType, contextId).subscribe({
+    this.contextService.dismissNotification(innovationId, conditions).subscribe({
       next: () => this.updateUserUnreadNotifications(),
       error: (error) => this.logger.error('Error dismissing all user notifications', error)
     });

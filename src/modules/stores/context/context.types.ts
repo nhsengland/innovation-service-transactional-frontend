@@ -1,5 +1,6 @@
-import { NotificationContextTypeEnum } from './context.enums';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '../innovation/innovation.enums';
+
+import { NotificationContextTypeEnum } from './context.enums';
 
 
 export type ContextPageAlertType = {
@@ -33,24 +34,22 @@ export type ContextPageLayoutType = {
     hiddenLabel?: string,
   },
   status: 'LOADING' | 'READY' | 'ERROR',
-  title: { main: null | string, secondary?: string, size?: 'xl' | 'l' }
+  title: { main: null | string, secondary?: string, size?: 'xl' | 'l', width?: 'full' | '2.thirds' }
 };
 
 
 
 
 export type ContextInnovationType = {
-  id: string;
-  name: string;
-  status: InnovationStatusEnum;
+  id: string,
+  name: string,
+  status: InnovationStatusEnum,
   owner: {
-    name: string;
-    isActive: boolean;
-  };
-  assessment?: { id: string };
-  support?: {
-    id: string;
-    status: InnovationSupportStatusEnum;
+    name: string,
+    isActive: boolean
   },
-  notifications?: { [key in NotificationContextTypeEnum]?: number };
+  assessment?: { id: string },
+  support?: { id: string, status: InnovationSupportStatusEnum },
+  notifications?: { [key in NotificationContextTypeEnum]?: number },
+  export?: { canUserExport: boolean, pendingRequestsCount: number }
 };

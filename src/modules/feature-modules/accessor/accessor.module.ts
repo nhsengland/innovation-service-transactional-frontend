@@ -31,13 +31,15 @@ import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './p
 import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
+import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/organisation-referral-criteria/organisation-referral-criteria.component';
+import { InnovationExportRequestComponent } from './pages/innovation/export/export-request.component';
 
 // Services.
 import { AccessorService } from './services/accessor.service';
 
 // Resolvers.
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
-import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
+
 
 @NgModule({
   imports: [
@@ -72,15 +74,16 @@ import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
     InnovationSupportOrganisationsSupportStatusSuggestComponent,
     InnovationSupportInfoComponent,
     InnovationSupportUpdateComponent,
-    InnovationsReviewComponent
+    InnovationsReviewComponent,
+    InnovationSupportOrganisationReferralCriteriaComponent,
+    InnovationExportRequestComponent
   ],
   providers: [
     // Services.
     AccessorService,
 
     // Resolvers.
-    InnovationActionDataResolver,
-    InnovationDataResolver
+    InnovationActionDataResolver
   ]
 })
 export class AccessorModule { }

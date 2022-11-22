@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormGroup } from '@app/base/forms';
+import { CustomValidators } from '@app/base/forms';
+import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
@@ -21,8 +22,8 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
   sectionItems: { value: string, label: string }[] = [];
 
   form = new FormGroup({
-    section: new UntypedFormControl('', { validators: CustomValidators.required('Choose at least one section'), updateOn: 'change' }),
-    description: new UntypedFormControl('', CustomValidators.required('A description is required'))
+    section: new FormControl<null | InnovationSectionEnum>(null, { validators: CustomValidators.required('Choose at least one section'), updateOn: 'change' }),
+    description: new FormControl<string>('', CustomValidators.required('A description is required'))
   }, { updateOn: 'blur' });
 
 
@@ -62,7 +63,12 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
       return;
     }
 
-    this.accessorService.createAction(this.innovationId, this.form.value).subscribe({
+    const body = {
+      section: this.form.value.section!,
+      description: this.form.value.description!
+    };
+
+    this.accessorService.createAction(this.innovationId, body).subscribe({
       next: response => {
         this.setRedirectAlertSuccess('Action requested', { message: 'The innovator has been notified of your action request.' });
         this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`);

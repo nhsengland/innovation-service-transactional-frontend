@@ -18,7 +18,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
     const accessToken = getAccessTokenByOid(oid);
     const config = { headers: { Authorization: `Bearer ${accessToken}` } };
 
-    generatePDF(req.params.innovationId, oid, config)
+    generatePDF(req.params.innovationId, config)
       .then((response: any) => {
 
         const client = getAppInsightsClient(req);

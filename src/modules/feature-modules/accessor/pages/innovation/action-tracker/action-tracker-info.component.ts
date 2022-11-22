@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { InnovationActionInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
-
-import { AccessorService, GetInnovationActionInfoOutDTO } from '../../../services/accessor.service';
 
 
 @Component({
@@ -17,12 +17,12 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
   innovationId: string;
   actionId: string;
 
-  action?: GetInnovationActionInfoOutDTO;
+  action?: InnovationActionInfoDTO;
 
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService
+    private innovationsService: InnovationsService
   ) {
 
     super();
@@ -35,7 +35,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
   ngOnInit(): void {
 
-    this.accessorService.getInnovationActionInfo(this.innovationId, this.actionId).subscribe(response => {
+    this.innovationsService.getActionInfo(this.innovationId, this.actionId).subscribe(response => {
 
       this.action = response;
 
@@ -44,7 +44,7 @@ export class InnovationActionTrackerInfoComponent extends CoreComponent implemen
 
     });
 
-    this.stores.context.dismissNotification(NotificationContextTypeEnum.ACTION, this.actionId);
+    this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.ACTION], contextIds: [this.actionId]});
 
   }
 

@@ -21,7 +21,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     const user = this.stores.authentication.getUserInfo();
 
     const startTime = new Date();
-    const endTime = new Date(user.passwordResetOn);
+    const endTime = new Date(user.passwordResetAt ?? '');
     const timediffer = startTime.getTime() - endTime.getTime();
     const resultInMinutes = Math.round(timediffer / 60000);
     if (resultInMinutes <= 2) {

@@ -21,25 +21,23 @@ function getRequestHandler(): AxiosInstance {
 
 function parseAPIUrl(url: string): string {
 
-  const urlEndingSegments = url.substring(url.indexOf('api')); // Includes api/...
+  let urlEndingSegments = url.substring(url.indexOf('api')); // Includes api/...
   let apiUrl = ENVIRONMENT.API_URL;
 
   if (ENVIRONMENT.LOCAL_MODE) {
-    switch (true) {
-      case url.includes('api/users'):
-        apiUrl = ENVIRONMENT.LOCAL_API_USERS_BASE_URL;
-        break;
-      case url.includes('api/innovations'):
-        apiUrl = ENVIRONMENT.LOCAL_API_INNOVATIONS_BASE_URL;
-        break;
-      case url.includes('api/configuration'):
-        apiUrl = ENVIRONMENT.LOCAL_API_ADMIN_BASE_URL;
-        break;
-      default:
-        apiUrl = ENVIRONMENT.API_URL;
-        break;
+    if (ENVIRONMENT.LOCAL_API_ADMIN_ACTIVE && url.includes('api/admin')) {
+      apiUrl = ENVIRONMENT.LOCAL_API_ADMIN_BASE_URL;
+      urlEndingSegments = urlEndingSegments.replace('/admin', '');
+    } else if (ENVIRONMENT.LOCAL_API_INNOVATIONS_ACTIVE && url.includes('api/innovations')) {
+      apiUrl = ENVIRONMENT.LOCAL_API_INNOVATIONS_BASE_URL;
+      urlEndingSegments = urlEndingSegments.replace('/innovations', '');
+    } else if (ENVIRONMENT.LOCAL_API_USERS_ACTIVE && url.includes('api/users')) {
+      apiUrl = ENVIRONMENT.LOCAL_API_USERS_BASE_URL;
+      urlEndingSegments = urlEndingSegments.replace('/users', '');
     }
   }
+
+  // console.log('Calling API: ', new URL(urlEndingSegments, apiUrl).href);
 
   return new URL(urlEndingSegments, apiUrl).href;
 
@@ -64,7 +62,8 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, (req, res) => {
 
     const fail = (error: any) => {
 
-      console.error(`Error calling api url: ${url}. Error: ${error}`);
+      console.error(`Error calling API URL: ${url}`);
+      console.error(`StatusCode: ${error.response.status}`, `Data: ${JSON.stringify(error.response.data)}`);
 
       if (error.response && error.response.status) {
         res.status(error.response.status).send(error.response.data);
@@ -106,34 +105,35 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, (req, res) => {
 
 // Unauthenticated endpoint: Survey endpoint.
 apiRouter.post(`${ENVIRONMENT.BASE_PATH}/survey`, (req, res) => {
-  const requestHandler: AxiosInstance = getRequestHandler();
+
+  const requestHandler = getRequestHandler();
   const body = req.body;
 
-  requestHandler.post(`${ENVIRONMENT.API_URL}/api/survey`, body)
-    .then((response: any) => {
+  requestHandler.post<{ id: string }>(`${ENVIRONMENT.API_URL}/api/users/v1/survey`, body)
+    // requestHandler.post<{ id: string }>(`${ENVIRONMENT.LOCAL_API_USERS_BASE_URL}/api/v1/survey`, body)
+    .then(response => {
       res.cookie('surveyId', response.data.id);
       res.send(response.data);
     })
     .catch((error: any) => {
-      console.error(`Error when attempting to submit survey with url: ${ENVIRONMENT.API_URL}/api/survey. Error: ${error}`);
+      console.error(`Error when attempting to submit survey with url: ${ENVIRONMENT.API_URL}/api/survey. ${error}`);
       res.status(500).send();
     });
 });
 
 // Unauthenticated endpoint: Innovation transfer check endpoint.
 apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-transfers/:id/check`, (req, res) => {
-  const requestHandler: AxiosInstance = getRequestHandler();
 
-  requestHandler.get(`${ENVIRONMENT.API_URL}/api/innovators/innovation-transfers/${req.params.id}/check`)
-    .then((response) => {
-      res.status(response.status).send(response.data);
-    })
+  const requestHandler = getRequestHandler();
+
+  requestHandler.get<{ userExists: boolean }>(`${ENVIRONMENT.API_URL}/api/innovations/v1/transfers/${req.params.id}/check`)
+    // requestHandler.get<{ userExists: boolean }>(`${ENVIRONMENT.LOCAL_API_INNOVATIONS_BASE_URL}/api/v1/transfers/${req.params.id}/check`)
+    .then(response => { res.status(response.status).send(response.data); })
     .catch((error: any) => {
-      console.error(`Error: ${ENVIRONMENT.API_URL}/api/innovators/innovation-transfers/:id/check : ${error}`);
+      console.error(`Error: ${ENVIRONMENT.API_URL}/api/innovations/v1/transfers/:id/check`, error);
       res.status(500).send();
     });
 
 });
-
 
 export default apiRouter;

@@ -32,6 +32,9 @@ import { PageInnovationRecordComponent } from './pages/innovation/record/innovat
 import { PageInnovationSectionInfoComponent } from './pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from './pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSupportStatusListComponent } from './pages/innovation/support/innovation-support-status-list.component';
+import { PageInnovationStatusListComponent } from './pages/innovation/status/innovation-status-list.component';
+import { PageExportRecordInfoComponent } from './pages/innovation/export/export-record-info.component';
+import { PageExportRecordListComponent } from './pages/innovation/export/export-record-list.component';
 // // Notifications.
 import { PageNotificationsListComponent } from './pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -93,6 +96,9 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     PageInnovationSectionInfoComponent,
     PageInnovationSectionEvidenceInfoComponent,
     PageInnovationSupportStatusListComponent,
+    PageInnovationStatusListComponent,
+    PageExportRecordListComponent,
+    PageExportRecordInfoComponent,
     // // Notifications.
     PageNotificationsListComponent,
     // // Terms of use.

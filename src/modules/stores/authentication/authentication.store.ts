@@ -5,7 +5,7 @@ import { concatMap } from 'rxjs/operators';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 
 import { Store } from '../store.class';
-import { AuthenticationService, saveUserInfoDTO } from './authentication.service';
+import { AuthenticationService, UpdateUserInfoDTO } from './authentication.service';
 
 import { UserRoleEnum, UserTypeEnum } from './authentication.enums';
 import { AuthenticationModel } from './authentication.models';
@@ -31,17 +31,6 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           this.state.user = user;
           this.state.isSignIn = true;
           return of(true);
-        }),
-        concatMap(() => this.authenticationService.userTermsOfUseInfo()),
-        concatMap(response => {
-          this.state.isTermsOfUseAccepted = response?.isAccepted ?? false;
-          return of(true);
-        }),
-        concatMap(() => this.authenticationService.verifyInnovator()),
-        concatMap(innovatorInfo => {
-          this.state.isValidUser = innovatorInfo.userExists;
-          this.state.hasInnovationTransfers = innovatorInfo.hasInvites;
-          return of(true);
         })
       ).subscribe({
         next: () => {
@@ -61,9 +50,9 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   isSignIn(): boolean { return this.state.isSignIn; }
-  isValidUser(): boolean { return this.state.isValidUser || false; }
-  isTermsOfUseAccepted(): boolean { return this.state.isTermsOfUseAccepted ?? false; }
-  hasInnovationTransfers(): boolean { return this.state.hasInnovationTransfers || false; }
+  isTermsOfUseAccepted(): boolean { return this.state.user?.termsOfUseAccepted ?? false; }
+  isFirstTimeSignInDone(): boolean { return !!this.state.user?.firstTimeSignInAt ?? false; }
+  hasInnovationTransfers(): boolean { return this.state.user?.hasInnovationTransfers || false; }
 
   isInnovatorType(): boolean { return this.state.user?.type === 'INNOVATOR'; }
   isAccessorType(): boolean { return this.state.user?.type === 'ACCESSOR'; }
@@ -79,17 +68,26 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   getUserType(): Required<AuthenticationModel>['user']['type'] {
     return this.state.user?.type || '';
   }
+  getUserRole() {
+    switch (this.state.user?.type) {
+      case UserTypeEnum.ADMIN: return 'Administrator';
+      case UserTypeEnum.ASSESSMENT: return 'Needs assessment';
+      case UserTypeEnum.INNOVATOR: return 'Innovator';
+      case UserTypeEnum.ACCESSOR: return this.getRoleDescription(this.state.user.organisations.map(org => org.role)[0]);
+      default: return '';
+    }
+  }
 
   getAccessorOrganisationUnitName(): string {
     return (this.state.user?.organisations[0]?.organisationUnits || [])[0]?.name || '';
   }
 
   getUserInfo(): Required<AuthenticationModel>['user'] {
-    return this.state.user || { id: '', email: '', displayName: '', type: '', roles: [], organisations: [], passwordResetOn: '', phone: '' };
+    return this.state.user || { id: '', email: '', displayName: '', type: '', roles: [], phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
   }
 
-  saveUserInfo$(body: MappedObjectType): Observable<{ id: string }> {
-    return this.authenticationService.saveUserInfo(body as saveUserInfoDTO);
+  updateUserInfo$(body: UpdateUserInfoDTO): Observable<{ id: string }> {
+    return this.authenticationService.updateUserInfo(body);
   }
 
   getUserTypeDescription(userType: UserTypeEnum): string {

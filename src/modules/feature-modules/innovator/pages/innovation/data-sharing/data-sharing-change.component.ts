@@ -5,7 +5,9 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { FormArray, FormControl, FormGroup } from '@app/base/forms';
 
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 
@@ -16,22 +18,21 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
 export class InnovationDataSharingChangeComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-  organisationsList: { value: string, label: string }[];
   organisationInfoUrl: string;
+  organisationsList: { value: string, label: string }[] = [];
 
-  form = new FormGroup({
-    organisations: new FormArray([])
-  }, { updateOn: 'change' });
-
-  initialState: {
-    organisations: { id: string, status: string }[]
-  };
+  initialState: { organisations: { id: string }[] } = { organisations: [] };
 
   showDataSharingValidationWarning = false;
+
+  form = new FormGroup({
+    organisations: new FormArray<FormControl<string>>([])
+  }, { updateOn: 'change' });
 
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private innovationsService: InnovationsService,
     private organisationsService: OrganisationsService,
     private innovatorService: InnovatorService,
   ) {
@@ -40,11 +41,6 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
     this.setPageTitle('Change data sharing preferences');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.organisationsList = [];
-    this.initialState = {
-      organisations: []
-    };
-
     this.organisationInfoUrl = `${this.CONSTANTS.BASE_URL}/about-the-service/who-we-are`;
 
   }
@@ -52,15 +48,15 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
   ngOnInit(): void {
 
     forkJoin([
-      this.organisationsService.getAccessorsOrganisations(),
-      this.innovatorService.getInnovationShares(this.innovationId)
-    ]).subscribe(([organisations, innovationShares]) => {
+      this.organisationsService.getOrganisationsList(false),
+      this.innovationsService.getInnovationSharesList(this.innovationId)
+    ]).subscribe(([organisationsList, innovationSharesList]) => {
 
-      this.organisationsList = organisations.map(o => ({ value: o.id, label: o.name }));
+      this.initialState.organisations = innovationSharesList.map(item => ({ id: item.organisation.id }));
+      this.organisationsList = organisationsList.map(o => ({ value: o.id, label: o.name }));
 
-      this.initialState.organisations = innovationShares;
-      innovationShares.forEach((organisation) => {
-        (this.form.get('organisations') as FormArray).push(new FormControl(organisation.id));
+      innovationSharesList.forEach(item => {
+        (this.form.get('organisations') as FormArray).push(new FormControl(item.organisation.id));
       });
 
       this.subscriptions.push(
@@ -77,12 +73,9 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
     const redirectUrl = `/innovator/innovations/${this.innovationId}/support`;
 
-    this.innovatorService.submitOrganisationSharing(this.innovationId, this.form.value).subscribe({
-      next: () => {
-        this.setRedirectAlertSuccess('Your data sharing preferences were changed');
-        this.redirectTo(redirectUrl);
-      },
-      error: () => this.setAlertUnknownError()
+    this.innovatorService.submitOrganisationSharing(this.innovationId, this.form.value).subscribe(() => {
+      this.setRedirectAlertSuccess('Your data sharing preferences were changed');
+      this.redirectTo(redirectUrl);
     });
 
   }

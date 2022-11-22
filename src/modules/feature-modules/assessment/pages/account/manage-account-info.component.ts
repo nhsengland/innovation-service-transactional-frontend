@@ -11,7 +11,7 @@ export class PageAssessmentAccountManageAccountInfoComponent extends CoreCompone
   changePassword = `${this.CONSTANTS.APP_URL}/change-password`;
 
   user: {
-    passwordResetOn: string
+    passwordResetAt: null | string
   };
 
   constructor() {
@@ -21,7 +21,7 @@ export class PageAssessmentAccountManageAccountInfoComponent extends CoreCompone
 
     const user = this.stores.authentication.getUserInfo();
     this.user = {
-      passwordResetOn: user.passwordResetOn
+      passwordResetAt: user.passwordResetAt
     };
 
     this.setPageStatus('READY');

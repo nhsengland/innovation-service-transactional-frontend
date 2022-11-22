@@ -3,8 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
+import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationsActionsListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
-import { AccessorService, getActionsListEndpointOutDTO } from '../../services/accessor.service';
 
 @Component({
   selector: 'app-accessor-pages-actions-actions-list',
@@ -15,14 +17,14 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
   tabs: { key: string, title: string, link: string, queryParams: { openActions: 'true' | 'false' } }[] = [];
   currentTab: { index: number, key: string, contentTitle: string, description: string };
 
-  actionsList: TableModel<getActionsListEndpointOutDTO['data'][0]>;
+  actionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>;
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService
+    private innovationsService: InnovationsService
   ) {
 
     super();
@@ -71,7 +73,30 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
         this.currentTab.key = this.tabs[this.currentTab.index].key;
         this.currentTab.contentTitle = `${this.tabs[this.currentTab.index].title} list`;
 
-        this.actionsList.clearData().setFilters({ openActions: queryParams.openActions });
+        switch (queryParams.openActions) {
+          case 'true':
+            this.actionsList.clearData().setFilters({
+              status: [
+                InnovationActionStatusEnum.REQUESTED,
+                // InnovationActionStatusEnum.STARTED,
+                // InnovationActionStatusEnum.CONTINUE,
+                InnovationActionStatusEnum.IN_REVIEW],
+              createdByMe: true,
+              fields: ['notifications']
+            });
+            break;
+
+          case 'false':
+            this.actionsList.clearData().setFilters({
+              status: [InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DECLINED, InnovationActionStatusEnum.DELETED],
+              createdByMe: true,
+              fields: ['notifications']
+            });
+            break;
+
+          default:
+            break;
+        }
 
         this.getActionsList();
 
@@ -85,7 +110,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
     this.setPageStatus('LOADING');
 
-    this.accessorService.getActionsList(this.actionsList.getAPIQueryParams()).subscribe(response => {
+    this.innovationsService.getActionsList(this.actionsList.getAPIQueryParams()).subscribe(response => {
       this.actionsList.setData(response.data, response.count);
       this.currentTab.description = `${response.count} ${this.tabs[this.currentTab.index].title.toLowerCase()} created by you`;
 

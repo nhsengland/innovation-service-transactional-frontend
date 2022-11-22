@@ -3,12 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { RoutingHelper } from '@app/base/helpers';
 
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { InnovationDataResolverType, InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -21,20 +21,20 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
-  innovation: InnovationDataResolverType;
+  innovation: ContextInnovationType;
 
   organisations: {
     info: {
-      id: string;
-      name: string;
-      acronym: string;
-      status?: InnovationSupportStatusEnum;
+      id: string,
+      name: string,
+      acronym: string,
+      status?: InnovationSupportStatusEnum,
       organisationUnits: {
-        id: string;
-        name: string;
-        acronym: string;
-        status: InnovationSupportStatusEnum;
-      }[];
+        id: string,
+        name: string,
+        acronym: string,
+        status: InnovationSupportStatusEnum,
+      }[]
     };
     showHideStatus: 'hidden' | 'opened' | 'closed';
     showHideText: null | string;
@@ -44,7 +44,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private assessmentService: AssessmentService,
+    private innovationsService: InnovationsService,
     private organisationsService: OrganisationsService
   ) {
 
@@ -52,7 +52,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
     this.setPageTitle('Support status', { hint: 'All organisations' });
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = RoutingHelper.getRouteData<any>(this.activatedRoute).innovationData;
+    this.innovation = this.stores.context.getInnovation();
 
   }
 
@@ -60,8 +60,8 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
   ngOnInit(): void {
 
     forkJoin([
-      this.organisationsService.getOrganisationsListWithUnits(),
-      this.assessmentService.getInnovationSupports(this.innovationId, false),
+      this.organisationsService.getOrganisationsList(true),
+      this.innovationsService.getInnovationSupportsList(this.innovationId, false),
     ]).subscribe(([organisationUnits, organisationUnitsSupportStatus]) => {
 
       this.organisations = organisationUnits.map(organisation => {
@@ -72,7 +72,7 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
               name: organisation.name,
               acronym: organisation.acronym,
               organisationUnits: [],
-              status: organisationUnitsSupportStatus.find(o => o.organisationUnit.organisation.id === organisation.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
+              status: organisationUnitsSupportStatus.find(item => item.organisation.id === organisation.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
             },
             showHideStatus: 'hidden',
             showHideText: null,
@@ -84,9 +84,9 @@ export class InnovationSupportOrganisationsSupportStatusInfoComponent extends Co
               id: organisation.id,
               name: organisation.name,
               acronym: organisation.acronym,
-              organisationUnits: organisation.organisationUnits.map(org => ({
-                ...org,
-                status: organisationUnitsSupportStatus.find(o => o.organisationUnit.id === org.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
+              organisationUnits: organisation.organisationUnits.map(organisationUnit => ({
+                ...organisationUnit,
+                status: organisationUnitsSupportStatus.find(item => item.organisation.unit.id === organisationUnit.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
               }))
             },
             showHideStatus: 'closed',

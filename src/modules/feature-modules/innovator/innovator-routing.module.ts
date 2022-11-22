@@ -19,19 +19,21 @@ import { PageAccountInnovationsTransferComponent } from './pages/account/innovat
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // First time signin.
-import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
+import { FirstTimeSigninInnovationNewComponent } from './pages/first-time-signin/innovation-new.component';
+import { FirstTimeSigninInnovationTransferComponent } from './pages/first-time-signin/innovation-transfer.component';
 // // Innovation.
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
 import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
 import { InnovationDataSharingComponent } from './pages/innovation/data-sharing/data-sharing.component';
-import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
+import { PageInnovationHowToProceedComponent } from './pages/innovation/how-to-proceed/how-to-proceed.component';
+import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment/needs-assessment-overview.component';
+import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation/needs-reassessment/needs-reassessment-send.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
-import { InnovationTransferAcceptanceComponent } from './pages/innovation-transfer-acceptance/innovation-transfer-acceptance.component';
 
 // // Shared module pages.
 // // Account.
@@ -50,6 +52,10 @@ import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/innovation-support-status-list.component';
+import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
+import { PageExportRecordListComponent } from '@modules/shared/pages/innovation/export/export-record-list.component';
+import { PageExportRecordInfoComponent } from '@modules/shared/pages/innovation/export/export-record-info.component';
+import { InnovationExportRequestRejectComponent } from './pages/innovation/export/export-request-reject.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -98,7 +104,7 @@ const routes: Routes = [
       },
 
       {
-        path: 'first-time-signin', pathMatch: 'full', component: FirstTimeSigninComponent,
+        path: 'first-time-signin', pathMatch: 'full', component: FirstTimeSigninInnovationNewComponent,
         data: {
           header: { menuBarItems: { left: [], right: [], notifications: {} } },
           layout: { type: 'full' }
@@ -110,7 +116,7 @@ const routes: Routes = [
         children: [
           { path: '', pathMatch: 'full', redirectTo: '1' },
           {
-            path: ':stepId', pathMatch: 'full', component: InnovationTransferAcceptanceComponent,
+            path: ':stepId', pathMatch: 'full', component: FirstTimeSigninInnovationTransferComponent,
             data: {
               header: { menuBarItems: { left: [], right: [], notifications: {} } },
               layout: { type: 'full' }
@@ -154,6 +160,18 @@ const routes: Routes = [
                   breadcrumb: 'Needs assessment',
                   layout: { type: 'full' }
                 }
+              },
+
+              {
+                path: 'how-to-proceed',
+                data: {
+                  breadcrumb: 'How to proceed',
+                  layout: { type: 'full' }
+                },
+                children: [
+                  { path: '', pathMatch: 'full', component: PageInnovationHowToProceedComponent },
+                  { path: 'needs-reassessment-send', pathMatch: 'full', component: PageInnovationNeedsReassessmentSendComponent },
+                ]
               },
 
               {
@@ -340,6 +358,17 @@ const routes: Routes = [
                   breadcrumb: 'Activity Log',
                   layout: { type: 'full', backgroundColor: 'bg-color-white' }
                 }
+              },
+
+              {
+                path: 'export',
+                data: { breadcrumb: 'Export', layout: { type: 'full' } },
+                children: [
+                  { path: '', pathMatch: 'full', redirectTo: 'list' },
+                  { path: 'list', pathMatch: 'full', component: PageExportRecordListComponent, data: { breadcrumb: null } },
+                  { path: ':requestId', pathMatch: 'full', component: PageExportRecordInfoComponent, data: { breadcrumb: 'Export information' } },
+                  { path: ':requestId/reject', pathMatch: 'full', component: InnovationExportRequestRejectComponent, data: { breadcrumb: 'Reject Export' } }
+                ]
               }
 
             ]
@@ -347,6 +376,8 @@ const routes: Routes = [
           }
         ]
       },
+
+      { path: 'innovation-statuses', pathMatch: 'full', component: PageInnovationStatusListComponent },
 
       {
         path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent,

@@ -30,6 +30,7 @@ import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './p
 import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
+import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/organisation-referral-criteria/organisation-referral-criteria.component';
 
 // Shared module pages.
 // // Account.
@@ -48,15 +49,18 @@ import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/innovation-support-status-list.component';
+import { PageExportRecordListComponent } from '@modules/shared/pages/innovation/export/export-record-list.component';
+import { PageExportRecordInfoComponent } from '@modules/shared/pages/innovation/export/export-record-info.component';
+import { InnovationExportRequestComponent } from './pages/innovation/export/export-request.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
 
 // Resolvers.
-import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
-import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
+import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 
 
 const header: RoutesDataType['header'] = {
@@ -116,7 +120,7 @@ const routes: Routes = [
               layout: { type: '1.third-2.thirds' },
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
-            runGuardsAndResolvers: 'pathParamsOrQueryParamsChange',
+            runGuardsAndResolvers: 'always',
             resolve: { innovationData: InnovationDataResolver },
             children: [
 
@@ -236,7 +240,7 @@ const routes: Routes = [
 
               {
                 path: 'threads',
-                resolve: { innovationData: InnovationDataResolver },
+                // resolve: { innovationData: InnovationDataResolver },
                 data: { breadcrumb: 'Messages' },
                 children: [
                   {
@@ -275,10 +279,11 @@ const routes: Routes = [
               {
                 path: 'support',
                 data: { breadcrumb: 'Data Sharing and Support' },
+                // runGuardsAndResolvers: 'pathParamsOrQueryParamsChange',
+                // resolve: { innovationData: InnovationDataResolver }, // Needed to repeat this resolver as support can be updated from this routes.
                 children: [
                   {
                     path: '', pathMatch: 'full', component: InnovationSupportInfoComponent,
-                    resolve: { innovationData: InnovationDataResolver }, // Needed to repeat this resolver as support can be updated from this routes.
                     data: { breadcrumb: null }
                   },
                   { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent },
@@ -295,11 +300,24 @@ const routes: Routes = [
                   breadcrumb: 'Activity Log',
                   layout: { type: 'full', backgroundColor: 'bg-color-white' }
                 }
+              },
+
+              {
+                path: 'export',
+                data: { breadcrumb: 'Export', layout: { type: 'full' } },
+                children: [
+                  { path: '', pathMatch: 'full', redirectTo: 'list' },
+                  { path: 'request', pathMatch: 'full', component: InnovationExportRequestComponent, data: { breadcrumb: null } },
+                  { path: 'list', pathMatch: 'full', component: PageExportRecordListComponent, data: { breadcrumb: null } },
+                  { path: ':requestId', pathMatch: 'full', component: PageExportRecordInfoComponent, data: { breadcrumb: 'Export information' } }
+                ]
               }
             ]
           }
         ]
       },
+
+      { path: 'organisations/referral-criteria', pathMatch: 'full', component: InnovationSupportOrganisationReferralCriteriaComponent },
 
       {
         path: 'actions',

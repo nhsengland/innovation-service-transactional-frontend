@@ -10,14 +10,17 @@ export const USER_INFO_ACCESSOR: Required<AuthenticationModel>['user'] = {
   displayName: 'Test qualifying Accessor',
   type: UserTypeEnum.ACCESSOR,
   roles: [],
+  phone: '212000000',
+  termsOfUseAccepted: true,
+  hasInnovationTransfers: false,
+  passwordResetAt: '2020-01-01T00:00:00.000Z',
+  firstTimeSignInAt: '2020-01-01T00:00:00.000Z',
   organisations: [{
     id: 'org_id', isShadow: false, name: 'organisation_1', size: '', role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR,
     organisationUnits: [
-      { id: '_unit_id', name: 'ORG_UNIT' }
+      { id: '_unit_id', name: 'ORG_UNIT', acronym: 'ORG' }
     ]
   }],
-  passwordResetOn: '2020-01-01T00:00:00.000Z',
-  phone: '212000000'
 };
 
 
@@ -26,10 +29,14 @@ export const USER_INFO_INNOVATOR: Required<AuthenticationModel>['user'] = {
   email: 'some@email.com',
   displayName: 'Test innovator',
   type: UserTypeEnum.INNOVATOR,
-  phone: '212000000',
-  passwordResetOn: '2020-01-01T00:00:00.000Z',
   roles: [],
-  organisations: [{ id: 'org_id', isShadow: true, name: '', size: '', role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER }]
+  phone: '212000000',
+  termsOfUseAccepted: true,
+  hasInnovationTransfers: false,
+  passwordResetAt: '2020-01-01T00:00:00.000Z',
+  firstTimeSignInAt: '2020-01-01T00:00:00.000Z',
+  organisations: [
+    { id: 'org_id', isShadow: true, name: '', size: '', role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER, organisationUnits: [] }]
 };
 
 export const USER_INFO_ADMIN: Required<AuthenticationModel>['user'] = {
@@ -38,9 +45,12 @@ export const USER_INFO_ADMIN: Required<AuthenticationModel>['user'] = {
   displayName: 'Test admin  ',
   type: UserTypeEnum.ADMIN,
   roles: [UserRoleEnum.ADMIN, UserRoleEnum.SERVICE_TEAM],
-  organisations: [],
-  passwordResetOn: '2022-03-10T07:42:24.0571567Z',
-  phone: '23422134'
+  phone: '212000000',
+  termsOfUseAccepted: true,
+  hasInnovationTransfers: false,
+  passwordResetAt: '2020-01-01T00:00:00.000Z',
+  firstTimeSignInAt: '2020-01-01T00:00:00.000Z',
+  organisations: []
 };
 
 

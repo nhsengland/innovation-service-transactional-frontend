@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
+import { UtilsHelper } from '@app/base/helpers';
 import { MappedObjectType } from '@app/base/types';
 import { FormEngineComponent, FormEngineParameterModel } from '@modules/shared/forms';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
@@ -10,6 +11,7 @@ import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/ne
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 import { AssessmentService } from '../../../services/assessment.service';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -50,7 +52,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   constructor(
     protected activatedRoute: ActivatedRoute,
     protected assessmentService: AssessmentService,
-    protected organisationsService: OrganisationsService
+    protected organisationsService: OrganisationsService,
+    protected innovationsService: InnovationsService
   ) {
 
     super();
@@ -71,20 +74,21 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   ngOnInit(): void {
 
     forkJoin([
-      this.organisationsService.getOrganisationsListWithUnits(),
-      this.assessmentService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId)
-    ]).subscribe(([organisationUnits, innovationNeedsAssessment]) => {
+      this.organisationsService.getOrganisationsList(true),
+      this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
+    ]).subscribe(([organisationUnits, needsAssessment]) => {
 
       // Update last step with the organisations list with description and pre-select all checkboxes.
-      NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> Support offer guide (opens in a new window) </a>`;
-      NEEDS_ASSESSMENT_QUESTIONS.organisationUnits[0].groupedItems = organisationUnits.map(item => ({ value: item.id, label: item.name, items: item.organisationUnits.map(i => ({ value: i.id, label: i.name })) }));
+      NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> Support offer guide (opens in a new window) </a>`;
+      NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds[0].groupedItems = organisationUnits.map(item => ({ value: item.id, label: item.name, items: item.organisationUnits.map(i => ({ value: i.id, label: i.name })) }));
 
-      this.innovationName = innovationNeedsAssessment.innovation.name;
+      this.innovationName = this.stores.context.getInnovation().name;
+
       this.form.data = {
-        ...innovationNeedsAssessment.assessment,
-        organisationUnits: innovationNeedsAssessment.assessment.organisations.reduce((unitsAcc: string[], o) => [...unitsAcc, ...o.organisationUnits.map(u => u.id)], [])
+        ...needsAssessment,
+        suggestedOrganisationUnitsIds: needsAssessment.suggestedOrganisations.reduce((unitsAcc: string[], o) => [...unitsAcc, ...o.units.map(u => u.id)], [])
       };
-      this.assessmentHasBeenSubmitted = innovationNeedsAssessment.assessment.hasBeenSubmitted;
+      this.assessmentHasBeenSubmitted = !!needsAssessment.finishedAt;
 
       this.setPageStatus('READY');
 
@@ -112,7 +116,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
           case 2:
             this.form.sections = [
               { title: 'Support need summary', parameters: NEEDS_ASSESSMENT_QUESTIONS.summary },
-              { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.organisationUnits }
+              { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds }
             ];
             break;
         }
@@ -146,7 +150,13 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
       }
 
-      this.currentAnswers = { ...this.currentAnswers, ...formData?.data };
+      this.currentAnswers = {
+        ...this.currentAnswers,
+        // Update to null empty values.
+        ...Object.entries(formData?.data).reduce((accumulator, [key, value]) => {
+          return { ...accumulator, [key]: UtilsHelper.isEmpty(value) ? null : value };
+        }, {})
+      }
 
     });
 

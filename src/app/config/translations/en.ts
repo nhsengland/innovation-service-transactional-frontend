@@ -187,9 +187,13 @@ export const locale = {
               title: 'Needs assessment completed',
               message: `{{ actionUserName }} completed needs assessment`
             },
+            NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: {
+              title: "Reassessment requested",
+              message: `{{ actionUserName }} requested a needs reassessment`
+            },
             ORGANISATION_SUGGESTION: {
               title: 'Organisation suggestion',
-              message: `{{ actionUserName }} suggested one or more organisations to support`
+              message: `{{ actionUserName }} suggested one or more organisation units to support`
             },
             SUPPORT_STATUS_UPDATE: {
               title: 'Support status update',
@@ -284,14 +288,103 @@ export const locale = {
 
           },
           support_status: {
-            ENGAGING: { name: 'Engaging', cssColorClass: 'nhsuk-tag--green' },
-            FURTHER_INFO_REQUIRED: { name: 'Further info', cssColorClass: 'nhsuk-tag--white' },
-            WAITING: { name: 'Waiting', cssColorClass: 'nhsuk-tag--yellow' },
-            NOT_YET: { name: 'Not yet', cssColorClass: 'nhsuk-tag--blue' },
-            UNASSIGNED: { name: 'Unassigned', cssColorClass: 'nhsuk-tag--red' },
-            UNSUITABLE: { name: 'Unsuitable', cssColorClass: 'nhsuk-tag--red' },
-            WITHDRAWN: { name: 'Withdrawn', cssColorClass: 'nhsuk-tag--red' },
-            COMPLETE: { name: 'Completed', cssColorClass: 'nhsuk-tag--dark-grey' }
+            ENGAGING: {
+              name: 'Engaging',
+              cssColorClass: 'nhsuk-tag--green',
+              accessorTypeDescription: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.',
+              innovatorTypeDescription: 'Ready to support, assess or provide guidance.'
+            },
+            FURTHER_INFO_REQUIRED: {
+              name: 'Further info',
+              cssColorClass: 'nhsuk-tag--white',
+              accessorTypeDescription: 'Further info is needed from the innovator to make a decision. You must provide a message on what information is needed.',
+              innovatorTypeDescription: 'The organisation needs further information from you to make a decision.'
+            },
+            WAITING: {
+              name: 'Waiting',
+              cssColorClass: 'nhsuk-tag--yellow',
+              accessorTypeDescription: 'Waiting for an internal decision to progress.',
+              innovatorTypeDescription: 'The organisation is waiting for an internal decision to progress.'          
+            },
+            NOT_YET: {
+              name: 'Not yet',
+              cssColorClass: 'nhsuk-tag--blue',
+              accessorTypeDescription: 'The innovation is not yet ready for your support offer. You must provide a message outlining your decision.',
+              innovatorTypeDescription: 'Your innovation is not yet ready for the organisation\'s support offer.'          
+            },
+            UNASSIGNED: {
+              name: 'Unassigned',
+              cssColorClass: 'nhsuk-tag--red',
+              accessorTypeDescription: 'No status assigned yet.',
+              innovatorTypeDescription: 'No status assigned yet.'          
+            },
+            UNSUITABLE: {
+              name: 'Unsuitable',
+              cssColorClass: 'nhsuk-tag--red',
+              accessorTypeDescription: 'You have no suitable support offer for the innovation. You must provide a message outlining your decision.',
+              innovatorTypeDescription: 'The organisation has no suitable support offer for your innovation.'          
+            },
+            WITHDRAWN: {
+              name: 'Withdrawn',
+              cssColorClass: 'nhsuk-tag--red',
+              accessorTypeDescription: '',
+              innovatorTypeDescription: ''          
+            },
+            COMPLETE: {
+              name: 'Completed',
+              cssColorClass: 'nhsuk-tag--dark-grey',
+              accessorTypeDescription: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
+              innovatorTypeDescription: 'The organisation has completed their engagement with your innovation.'          
+            }
+          },
+          grouped_status: {
+            RECORD_NOT_SHARED: {
+              name: 'Record not shared',
+              cssColorClass: 'nhsuk-tag--orange',
+              innovatorTypeDescription: 'You have not yet shared your innovation record for a needs assessment review.'
+            },
+            AWAITING_NEEDS_ASSESSMENT: {
+              name: 'Awaiting needs assessment',
+              cssColorClass: 'nhsuk-tag--yellow',
+              innovatorTypeDescription: 'The needs assessment team will review your innovation record within 5 working days from submission.'
+            },
+            NEEDS_ASSESSMENT: {
+              name: 'Needs assessment',
+              cssColorClass: 'nhsuk-tag--blue',
+              innovatorTypeDescription: 'Your needs assessment is in progress.'
+            },
+            AWAITING_SUPPORT: {
+              name: 'Awaiting support',
+              cssColorClass: 'nhsuk-tag--grey',
+              innovatorTypeDescription: 'We are waiting for an organisation unit to support your innovation.'
+            },
+            RECEIVING_SUPPORT: {
+              name: 'Receiving support',
+              cssColorClass: 'nhsuk-tag--green',
+              innovatorTypeDescription: 'At least one organisation unit is engaging with your innovation.'
+            },
+            AWAITING_NEEDS_REASSESSMENT: {
+              name: 'Awaiting needs reassessment',
+              cssColorClass: 'nhsuk-tag--purple',
+              innovatorTypeDescription: 'Your innovation has been resent for a needs assessment review.'
+            }
+          },
+          export_request_status: {
+            PENDING: {
+              name: 'Request pending'
+            },
+            APPROVED: {
+              name: 'Request approved'
+            },
+            REJECTED: {
+              name: 'Request rejected'
+            },
+            CANCELLED: {
+              name: 'Request cancelled'
+            },
+            EXPIRED: {
+              name: 'Request expired'
+            }
           }
         },
         user: {
@@ -316,7 +409,7 @@ export const locale = {
               }
             }
           },
-          change_orggnisation_user_role_validations: {
+          change_organisation_user_role_validations: {
             lastAccessorUserOnOrganisationUnit: {
               label: 'User cannot be the last Qualifying Accessor on the organisation unit'
             }
@@ -361,7 +454,8 @@ export const locale = {
           password_mismatch: 'Passwords don\'t appear to match',
           password_regex: 'The password must contain at least minimum 8 characters: one uppercase, one lowercase, one number and one special character',
           required: 'Required',
-          existsIn: 'Value already exists'
+          existsIn: 'Value already exists',
+          invalid_parse_date: 'Please enter a valid date format'
         }
       }
 

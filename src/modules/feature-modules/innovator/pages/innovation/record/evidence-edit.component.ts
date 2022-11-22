@@ -4,8 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormEngineModel, FileTypes } from '@app/base/forms';
 import { UrlModel } from '@app/base/models';
+
 import { WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '@modules/stores/innovation';
+
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-evidence-edit',
@@ -69,7 +71,6 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
       this.wizard.runRules(this.currentAnswers);
 
       this.setPageTitle('New evidence', { showPage: false });
-      this.setPageStatus('READY');
       this.draw();
 
     } else {
@@ -80,8 +81,6 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
         this.wizard.runRules(this.currentAnswers);
 
         this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-        this.setPageStatus('READY');
-
         this.draw();
 
       });
@@ -95,6 +94,8 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
 
     this.subscriptions.push(
       this.activatedRoute.params.subscribe(params => {
+
+        this.setPageStatus('LOADING');
 
         // if (!this.isValidStepId()) {
         //   this.redirectTo('/not-found');
@@ -116,7 +117,6 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
         this.wizard.gotoStep(Number(params.questionId));
         this.currentStep = this.wizard.currentStep();
 
-        this.setPageTitle(this.currentStep.parameters[0].label || '', { showPage: false }); // Only 1 question per page.
 
         if (this.currentStep.parameters[0].dataType === 'file-upload') {
           this.currentStep.parameters[0].fileUploadConfig = {
@@ -132,6 +132,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
         }
 
         this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
+        this.setPageTitle(this.currentStep.parameters[0].label || '', { showPage: false }); // Only 1 question per page.
         this.setPageStatus('READY');
 
       })

@@ -1,5 +1,24 @@
 <theme-content-wrapper [status]="pageStatus">
 
+  <ng-container *ngIf="innovationStatus === 'IN_PROGRESS' && lastEndSupportAt">
+    <div class="nhsuk-card nhsuk-card--care nhsuk-card--care--non-urgent nhsuk-u-margin-top-0">
+      <div class="nhsuk-card--care__heading-container">
+        <h2 class="nhsuk-card--care__heading">
+          <span role="text"><span class="nhsuk-u-visually-hidden">Non-urgent advice: </span> Your innovation is currently not receiving any support </span>
+        </h2>
+        <span class="nhsuk-card--care__arrow" aria-hidden="true"></span>
+      </div>
+
+      <div class="nhsuk-card__content">
+        <p> There are no organisation units currently supporting your innovation. There are also no more outstanding suggestions from your original needs assessment or from other organisations. </p>
+        <p> Don't worry, there are a few options available to you. </p>
+        <p>
+          <a routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed"> Choose how you want to proceed with your innovation </a>
+        </p>
+      </div>
+    </div>
+  </ng-container>
+
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
@@ -42,7 +61,7 @@
           <li class="d-flex">
             <ng-container *ngTemplateOutlet="icon; context: { completed: false }"></ng-container>
             <div class="nhsuk-u-margin-left-2">
-              Submit the record for the needs assessment
+              Share the record for the needs assessment
             </div>
           </li>
         </ol>
@@ -68,7 +87,7 @@
   <!-- ACTIONS AREA -->
   <ng-container *ngIf="isSubmittedForAssessment() && !isInAssessmentStatus()">
     <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
-    <div class="nhsuk-grid-row">
+    <!-- <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <h2 class="nhsuk-heading-m">Actions overview</h2>
       </div>
@@ -81,7 +100,7 @@
         <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.review }}</p>
         <p>actions awaiting review from an accessor</p>
       </div>
-    </div>
+    </div> -->
 
     <!-- SUPPORT AREA -->
     <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
@@ -91,13 +110,13 @@
       </div>
       <div class="nhsuk-grid-column-two-thirds">
         <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{supportStatus}}</p>
-        <ng-container *ngIf="supportingAccessors.length > 0">
+        <!-- <ng-container *ngIf="supportingAccessors.length > 0">
           <ul class="nhsuk-list">
             <li *ngFor="let item of supportingAccessors">
               {{item.unit}}, {{item.name}}
             </li>
           </ul>
-        </ng-container>
+        </ng-container> -->
         See <strong><a routerLink="/innovator/innovations/{{ innovationId }}/support"> data sharing and support</a></strong>
       </div>
       <div class="nhsuk-grid-column-one-third" *ngIf="showNeedsAssessmentCompleteCard()">

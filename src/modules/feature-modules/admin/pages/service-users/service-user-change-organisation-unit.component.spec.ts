@@ -65,7 +65,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
       ]
     });
 
-    organisationsService.getOrganisationsListWithUnits = () => of([
+    organisationsService.getOrganisationsList = () => of([
       {
         id: 'Org01', name: 'Org name 01', acronym: 'ORG01',
         organisationUnits: [
@@ -115,7 +115,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
   it('should NOT have initial information loaded', () => {
 
     serviceUsersService.getUserFullInfo = () => throwError('error');
-    organisationsService.getOrganisationsListWithUnits = () => throwError('error');
+    organisationsService.getOrganisationsList = () => throwError('error');
     serviceUsersService.getOrgnisationUnitRules = () => throwError('error');
 
     fixture = TestBed.createComponent(PageServiceUserChangeOrganisationUnitComponent);

@@ -1,6 +1,8 @@
+import { DateISOType } from '@app/base/types';
+import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { WizardEngineModel } from '@modules/shared/forms';
 
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum, InnovationSupportStatusEnum } from './innovation.enums';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum, InnovationStatusEnum } from './innovation.enums';
 
 
 // Store state model.
@@ -18,33 +20,20 @@ export type InnovationSectionConfigType = {
   }[];
 };
 
-export type InnovationDataResolverType = {
-  id: string;
-  name: string;
-  status: keyof typeof INNOVATION_STATUS;
-  assessment: {
-    id: undefined | string;
-  };
-  support?: {
-    id: undefined | string;
-    status: InnovationSupportStatusEnum;
-  };
-  lockedInnovatorValidation?: {
-    displayIsInnovatorLocked: boolean;
-    innovatorName?: string;
-  };
-  owner: {
-    isActive: boolean;
-    name: string;
-  }
-};
-
 export type sectionType = {
   id: null | string;
   section: InnovationSectionEnum;
   status: keyof typeof INNOVATION_SECTION_STATUS;
   updatedAt: string;
 };
+
+export type InnovationSectionInfoDTO = {
+  id: null | string;
+  section: InnovationSectionEnum;
+  status: keyof typeof INNOVATION_SECTION_STATUS;
+  updatedAt: string;
+  data: MappedObjectType;
+}
 
 export type getInnovationInfoEndpointDTO = {
   id: string;
@@ -67,20 +56,13 @@ export type getInnovationInfoResponse = {
   openCommentsNumber: number;
 };
 
-export type getInnovationSectionsDTO = {
-  id: string;
-  name: string;
-  status: keyof typeof INNOVATION_STATUS;
-  submittedAt: string | undefined;
-  sections: {
-    id: null | string;
-    section: InnovationSectionEnum;
-    status: keyof typeof INNOVATION_SECTION_STATUS;
-    updatedAt: string;
-    actionCount: number;
-  }[];
-};
-
+export type InnovationSectionsListDTO = {
+  id: null | string,
+  section: InnovationSectionEnum,
+  status: keyof typeof INNOVATION_SECTION_STATUS,
+  submittedAt: null | DateISOType,
+  openActionsCount: number
+}[];
 
 export type getInnovationEvidenceDTO = {
   evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER',
@@ -120,15 +102,15 @@ export type getInnovationCommentsDTO = {
 };
 
 export type SectionsSummaryModel = {
-  title: string;
+  title: string,
   sections: {
-    id: InnovationSectionEnum;
-    title: string;
-    status: keyof typeof INNOVATION_SECTION_STATUS;
-    isCompleted: boolean;
-    actionCount: number;
+    id: InnovationSectionEnum,
+    title: string,
+    status: keyof typeof INNOVATION_SECTION_STATUS,
+    isCompleted: boolean,
+    openActionsCount: number
   }[]
-};
+}[];
 
 export type OrganisationModel = {
   id: string;
@@ -185,7 +167,7 @@ export const INNOVATION_SUPPORT_STATUS = {
   },
   FURTHER_INFO_REQUIRED: {
     label: 'Further info', cssClass: 'nhsuk-tag--white',
-    description: 'Further info is needed from the innovator to make a decision. You must provide a comment on what information is needed.',
+    description: 'Further info is needed from the innovator to make a decision. You must provide a message on what information is needed.',
     innovatorDescription: 'The organisation needs further information from you to make a decision.',
     hidden: false
   },
@@ -197,7 +179,7 @@ export const INNOVATION_SUPPORT_STATUS = {
   },
   NOT_YET: {
     label: 'Not yet', cssClass: 'nhsuk-tag--blue',
-    description: 'The innovation is not yet ready for your support offer. You must provide a comment outlining your decision.',
+    description: 'The innovation is not yet ready for your support offer. You must provide a message outlining your decision.',
     innovatorDescription: 'Your innovation is not yet ready for the organisation\'s support offer.',
     hidden: false
   },
@@ -209,7 +191,7 @@ export const INNOVATION_SUPPORT_STATUS = {
   },
   UNSUITABLE: {
     label: 'Unsuitable', cssClass: 'nhsuk-tag--red',
-    description: 'You have no suitable support offer for the innovation. You must provide a comment outlining your decision.',
+    description: 'You have no suitable support offer for the innovation. You must provide a message outlining your decision.',
     innovatorDescription: 'The organisation has no suitable support offer for your innovation.',
     hidden: false,
   },
@@ -221,7 +203,7 @@ export const INNOVATION_SUPPORT_STATUS = {
   },
   COMPLETE: {
     label: 'Completed', cssClass: 'nhsuk-tag--dark-grey',
-    description: 'Your organisation has completed this engagement. You must provide a comment outlining your decision.',
+    description: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
     innovatorDescription: 'The organisation has completed their engagement with your innovation.',
     hidden: false
   }
@@ -283,7 +265,7 @@ export const ACTIVITY_LOG_ITEMS: {
   [key in ActivityLogItemsEnum]: {
     type: ActivityLogTypesEnum;
     details: null | 'ORGANISATIONS_LIST' | 'SUPPORT_STATUS_UPDATE' | 'COMMENT';
-    link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'ACTION' | 'THREAD';
+    link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'ACTION' | 'THREAD' | 'NEEDS_REASSESSMENT';
   }
 } = {
   INNOVATION_CREATION: {
@@ -327,6 +309,11 @@ export const ACTIVITY_LOG_ITEMS: {
     type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
     details: null,
     link: 'NEEDS_ASSESSMENT'
+  },
+  NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: {
+    type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
+    details: null,
+    link: 'NEEDS_REASSESSMENT'
   },
 
   ORGANISATION_SUGGESTION: {

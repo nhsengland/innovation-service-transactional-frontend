@@ -19,8 +19,7 @@
               <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
               <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
               <ng-container *ngIf="item.key === 'status'">
-                <br />
-                <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0" arial-label="View status keys information"> Status key </a>
+                <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-1" arial-label="View status keys information"> Status key </a>
               </ng-container>
             </th>
           </tr>
@@ -37,7 +36,7 @@
                   <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('name') }} </span>
                   <a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/{{ item.id }}" attr.aria-label="View {{ item.name }} action"> {{ item.name }} </a>
                 </div>
-                <theme-notification-tag label="dot" *ngIf="item.notifications.count > 0"></theme-notification-tag>
+                <theme-notification-tag label="dot" *ngIf="item.notifications"></theme-notification-tag>
               </div>
             </td>
             <td class="nhsuk-table__cell">
@@ -73,6 +72,9 @@
                 <th *ngFor="let item of closedActionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                   <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
                   <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
+                  <ng-container *ngIf="item.key === 'status'">
+                    <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-1" arial-label="View status keys information"> Status key </a>
+                  </ng-container>
                 </th>
               </tr>
             </thead>
@@ -88,7 +90,7 @@
                       <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('name') }} </span>
                       <a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/{{ item.id }}" attr.aria-label="View {{ item.name }} action"> {{ item.name }} </a>
                     </div>
-                    <theme-notification-tag label="dot" *ngIf="item.notifications.count > 0"></theme-notification-tag>
+                    <theme-notification-tag label="dot" *ngIf="item.notifications"></theme-notification-tag>
                   </div>
                 </td>
                 <td class="nhsuk-table__cell">

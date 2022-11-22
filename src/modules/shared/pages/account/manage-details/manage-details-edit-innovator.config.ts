@@ -8,26 +8,23 @@ import { FormEngineModel, FormEngineParameterModel, WizardSummaryType, WizardEng
 type InboundPayloadType = Required<AuthenticationModel>['user'];
 
 type StepPayloadType = {
-  displayName: string;
-  mobilePhone: null | string;
-  isCompanyOrOrganisation: 'YES' | 'NO';
-  organisationName: string;
-  organisationSize: null | string;
-  organisationAdditionalInformation: {
-    id: string;
-  };
+  displayName: string,
+  mobilePhone: null | string,
+  isCompanyOrOrganisation: 'YES' | 'NO',
+  organisationName: null | string,
+  organisationSize: null | string,
+  organisationAdditionalInformation: { id: string }
 };
 
 type OutboundPayloadType = {
-  displayName: string;
-  mobilePhone: null | string;
+  displayName: string,
+  mobilePhone: null | string,
   organisation?: {
-    id: string;
-    name: string;
-    isShadow: boolean;
-    size: null | string;
-  };
-
+    id: string,
+    isShadow: boolean,
+    name: null | string,
+    size: null | string,
+  }
 };
 
 
@@ -78,7 +75,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
   steps.splice(3);
 
   if (data.isCompanyOrOrganisation === 'NO') {
-    data.organisationName = '';
+    data.organisationName = null;
     data.organisationSize = null;
     return;
   }
@@ -125,8 +122,8 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     mobilePhone: data.mobilePhone,
     organisation: {
       id: data.organisationAdditionalInformation.id,
-      name: data.organisationName,
       isShadow: data.isCompanyOrOrganisation === 'NO',
+      name: data.organisationName,
       size: data.organisationSize,
     }
   };
