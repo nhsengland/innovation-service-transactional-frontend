@@ -96,7 +96,7 @@
 
         <td class="nhsuk-table__cell">
           <span class="nhsuk-table-responsive__heading">{{ table.getColumnLabel('requestedBy') }}</span>
-          <p class="nhsuk-u-margin-bottom-0">{{ item?.organisation?.name }}</p>
+          <p class="nhsuk-u-margin-bottom-0">{{ item?.organisation?.organisationUnit?.name }}</p>
           <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0">by {{ item?.createdBy?.name }}</span>
         </td>
 
@@ -110,15 +110,14 @@
 
         <td class="nhsuk-table__cell">
           <span class="nhsuk-table-responsive__heading">{{ table.getColumnLabel('status') }}</span>
-          {{ 'shared.catalog.innovation.export_request_status.' + item.status + '.name' | translate }}
+          <span>{{ 'shared.catalog.innovation.export_request_status.' + item.status + '.name' | translate }}</span>
         </td>
 
         <td class="nhsuk-table__cell text-align-right">
           <span class="nhsuk-table-responsive__heading">{{ table.getColumnLabel('actions') }}</span>
 
           <ng-container *ngIf="(isHistory === true && item.status === 'REJECTED') || isHistory === false">
-            <a href="javascript:;" class="nhsuk-link nhsuk-link--no-visited-state"
-              (click)="redirectSeeDetails(item.id)">
+            <a class="nhsuk-link nhsuk-link--no-visited-state" routerLink="/{{this.stores.authentication.userUrlBasePath()}}/innovations/{{ innovationId }}/export/{{ item.id }}">
               View request
             </a>
           </ng-container>
@@ -151,7 +150,7 @@
 
         <td class="nhsuk-table__cell">
           <span class="nhsuk-table-responsive__heading">{{ table.getColumnLabel('requestedBy') }}</span>
-          <p class="nhsuk-u-margin-bottom-0">{{ item?.organisation?.name }}</p>
+          <p class="nhsuk-u-margin-bottom-0">{{ item?.organisation?.organisationUnit?.name }}</p>
           <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0">by {{ item?.createdBy?.name }}</span>
         </td>
 
@@ -163,7 +162,7 @@
         <td class="nhsuk-table__cell text-align-right">
           <span class="nhsuk-table-responsive__heading">{{ table.getColumnLabel('actions') }}</span>
 
-          <a href="javascript:;" class="nhsuk-link nhsuk-link--no-visited-state" (click)="redirectSeeDetails(item.id)">
+          <a class="nhsuk-link nhsuk-link--no-visited-state" routerLink="/{{this.stores.authentication.userUrlBasePath()}}/innovations/{{ innovationId }}/export/{{ item.id }}">
             View request
           </a>
 
