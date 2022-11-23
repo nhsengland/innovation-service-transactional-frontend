@@ -361,7 +361,7 @@ export const ACTIVITY_LOG_ITEMS: {
   },
   ACTION_STATUS_COMPLETED_UPDATE: {
     type: ActivityLogTypesEnum.ACTIONS,
-    details: 'COMMENT',
+    details: null,
     link: 'ACTION'
   },
   ACTION_STATUS_CANCELLED_UPDATE: {
