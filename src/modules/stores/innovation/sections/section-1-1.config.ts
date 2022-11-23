@@ -128,6 +128,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
           dataType: 'radio-group',
           label: stepsLabels.l6,
           description: 'Your innovation may be a combination of various categories. Selecting the primary category will help us find the right people to support you.',
+          validations: { isRequired: [true, 'Choose one option'] },
           items: selectedCategories
         }]
       })

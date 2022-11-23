@@ -364,6 +364,11 @@ export const ACTIVITY_LOG_ITEMS: {
     details: null,
     link: 'ACTION'
   },
+  ACTION_STATUS_REQUESTED_UPDATE: {
+    type: ActivityLogTypesEnum.ACTIONS,
+    details: 'COMMENT',
+    link: 'ACTION'
+  },
   ACTION_STATUS_CANCELLED_UPDATE: {
     type: ActivityLogTypesEnum.ACTIONS,
     details: null,
