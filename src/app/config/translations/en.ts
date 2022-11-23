@@ -371,19 +371,19 @@ export const locale = {
           },
           export_request_status: {
             PENDING: {
-              name: 'Request pending'
+              name: 'Pending'
             },
             APPROVED: {
-              name: 'Request approved'
+              name: 'Approved'
             },
             REJECTED: {
-              name: 'Request rejected'
+              name: 'Rejected'
             },
             CANCELLED: {
-              name: 'Request cancelled'
+              name: 'Cancelled'
             },
             EXPIRED: {
-              name: 'Request expired'
+              name: 'Expired'
             }
           }
         },

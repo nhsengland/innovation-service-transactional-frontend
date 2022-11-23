@@ -137,10 +137,4 @@ export class PageExportRecordListComponent extends CoreComponent implements OnIn
     this.redirectTo(`/accessor/innovations/${this.innovationId}/export/request`);
   }
 
-  redirectSeeDetails(requestId: string) {
-    
-    this.redirectTo(`/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/export/${requestId}`)
-    
-  }
-
 }
