@@ -310,6 +310,11 @@ export const ACTIVITY_LOG_ITEMS: {
     details: null,
     link: 'NEEDS_ASSESSMENT'
   },
+  NEEDS_ASSESSMENT_EDITED: {
+    type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
+    details: null,
+    link: 'NEEDS_ASSESSMENT'
+  },
   NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: {
     type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
     details: null,
@@ -366,7 +371,7 @@ export const ACTIVITY_LOG_ITEMS: {
   },
   ACTION_STATUS_REQUESTED_UPDATE: {
     type: ActivityLogTypesEnum.ACTIONS,
-    details: 'COMMENT',
+    details: null,
     link: 'ACTION'
   },
   ACTION_STATUS_CANCELLED_UPDATE: {

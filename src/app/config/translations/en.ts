@@ -231,6 +231,10 @@ export const locale = {
               title: 'Action completed',
               message: `{{ actionUserName }} marked an action as complete`
             },
+            ACTION_STATUS_REQUESTED_UPDATE: {
+              title: 'Action requested',
+              message: `{{ actionUserName }} marked an action as requested`
+            },
             ACTION_STATUS_CANCELLED_UPDATE: {
               title: 'Action cancelled',
               message: `{{ totalActions }} actions for {{ sectionTitle }} section were changed to "Cancelled"`
