@@ -45,10 +45,7 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
         id: 'mobilePhone', 
         dataType: 'number', 
         label: 'What\'s your Phone number?',
-        validations: {
-          isRequired: false,
-          pattern: ['(^\s*$|^[0-9]*)$', 'Special characters and characters are not allowed'],
-        }
+
       }]
     }),
 
