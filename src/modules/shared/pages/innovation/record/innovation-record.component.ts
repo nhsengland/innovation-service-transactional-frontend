@@ -26,6 +26,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   innovationName: string;
   innovationStatus: keyof typeof INNOVATION_STATUS = '';
   innovationSections: SectionsSummaryModel = [];
+  innovationExport: ContextInnovationType['export'];
 
   sections: {
     progressBar: ProgressBarType[];
@@ -36,7 +37,6 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   innovationSectionStatus = this.stores.innovation.INNOVATION_SECTION_STATUS;
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
-
 
   isInnovationInCreatedStatus(): boolean {
     return this.innovationStatus === 'CREATED';
@@ -65,6 +65,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.innovation = this.stores.context.getInnovation();
     this.innovationName = this.innovation.name;
     this.innovationStatus = this.innovation.status;
+    this.innovationExport = this.innovation.export;
+
   }
 
 

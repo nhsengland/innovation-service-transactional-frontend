@@ -164,7 +164,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       return;
     }
 
-    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit'), this.currentAnswers).subscribe({
+    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && (action === 'submit' || action === 'update')), this.currentAnswers).subscribe({
       next: () => {
         switch (action) {
           case 'saveAsDraft':

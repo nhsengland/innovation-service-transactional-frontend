@@ -44,14 +44,6 @@
         <span class="nhsuk-u-margin-right-2"></span> {{ sections.notStarted }} sections not started
       </p>
 
-      <!-- TODO: Add different redirect if request exists already -->
-      <ng-container *ngIf="stores.authentication.userUrlBasePath() === 'accessor'">
-        <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
-          <span class="nhsuk-u-visually-hidden">Information: </span>
-          <a routerLink="/accessor/innovations/{{innovationId}}/export/request" class="nhsuk-link--no-visited-state nhsuk-u-font-size-22 text-decoration-none nhsuk-u-font-weight-bold">Export innovation record</a>
-        </div>
-      </ng-container>
-
       <ng-container *ngIf="isInnovationInCreatedStatus()">
         <button class="nhsuk-button nhsuk-u-margin-bottom-2" [disabled]="!allSectionsSubmitted()" (click)="onSubmitInnovation()">Share record for needs assessment</button>
         <p class="nhsuk-body-s">
@@ -68,6 +60,68 @@
             answer in your innovation record</li>
           <li>You can also <a [href]="pdfDocumentUrl">export your current innovation record (pdf)</a></li>
         </ul>
+      </ng-container>
+
+      <ng-container *ngIf="innovation.owner.isActive === true">
+        
+        <ng-container *ngIf="stores.authentication.isAccessorType() && innovationExport">
+
+          <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
+
+            <span class="nhsuk-u-visually-hidden">Information: </span>
+            <p class="nhsuk-u-font-size-22 text-decoration-none nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-2">Export innovation record</p>
+
+            <ng-container *ngIf="innovationExport.canUserExport === false">
+
+              <span>
+                You need to request permission from the innovator to download their innovation record pdf.
+                
+                <ng-container *ngIf="innovationExport.pendingRequestsCount === 0">
+                  <a routerLink="/accessor/innovations/{{ innovationId }}/export/request" class="nhsuk-link--no-visited-state">Request permission</a>
+                  or 
+                </ng-container>
+                
+                <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/export/list" class="nhsuk-link--no-visited-state">
+                  {{ innovationExport.pendingRequestsCount === 0 ? 'v' : 'V'}}iew requests.
+                </a>
+
+              </span>
+
+            </ng-container>
+
+            <ng-container *ngIf="innovationExport.canUserExport === true">
+
+              The innovator approved your organisation unit request.
+              <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/export/list" class="nhsuk-link--no-visited-state">
+                View requests.
+              </a>
+              <a [href]="pdfDocumentUrl" class="d-inline-block nhsuk-link--no-visited-state">Export innovation record (PDF).</a>
+
+            </ng-container>
+
+          </div>
+
+        </ng-container>
+
+        <ng-container *ngIf="stores.authentication.isInnovatorType() && innovationExport">
+
+          <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
+            
+            <span class="nhsuk-u-visually-hidden">Information: </span>
+            <a routerLink="/innovator/innovations/{{ innovationId }}/export/list" class="nhsuk-link--no-visited-state nhsuk-u-font-size-22 text-decoration-none nhsuk-u-font-weight-bold">Innovation record export requests</a>
+              
+            <ng-container *ngIf="innovationExport.pendingRequestsCount === 0">
+              <p class="nhsuk-body-s">No new requests.</p>
+            </ng-container>
+
+            <ng-container *ngIf="innovationExport.pendingRequestsCount > 0">
+              <p class="nhsuk-body-s">You have {{ innovationExport.pendingRequestsCount }} pending requests.</p>
+            </ng-container>
+
+          </div>
+
+        </ng-container>
+
       </ng-container>
 
       <h2 class="nhsuk-heading-l">All sections</h2>

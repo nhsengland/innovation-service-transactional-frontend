@@ -1,0 +1,29 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form [formGroup]="form">
+
+        <p>
+          Explain the reason for rejecting this request. The organisation unit will be notified and will
+          not be able to export your innovation record.
+        </p>
+
+        <theme-form-textarea controlName="rejectReason" label="Enter the reason for rejecting this request"
+          [pageUniqueField]="false" lengthLimit="medium"></theme-form-textarea>
+
+        <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmit()">
+          Reject request
+        </button>
+
+        <div>
+          <a routerLink="/accessor/innovations/{{ innovationId }}/export/{{ requestId }}">Cancel</a>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>

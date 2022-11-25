@@ -1,0 +1,139 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <p *ngIf="this.stores.authentication.isInnovatorType() && this.request?.status === 'PENDING'">
+        If you approve this request, everyone from this organisation unit will be able to export your innovation record
+        for the next 30 days.
+      </p>
+
+      <dl class="nhsuk-summary-list">
+
+        <div class="nhsuk-summary-list__row">
+
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">
+            Request Status
+          </dt>
+
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
+
+            <p class="nhsuk-u-margin-bottom-0">{{ 'shared.catalog.innovation.export_request_status.' + this.request?.status + '.name' | translate }}</p>
+            <span class="font-color-secondary nhsuk-body-s">on {{ this.request?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</span>
+
+          </dd>
+
+        </div>
+
+
+        <div class="nhsuk-summary-list__row">
+
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">
+            Requested by
+          </dt>
+
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
+            <p class="nhsuk-u-margin-bottom-0">{{ this.request?.organisation?.organisationUnit?.name }}</p>
+            <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0">by {{ this.request?.createdBy?.name }} on {{ this.request?.createdAt | date: ('app.date_formats.long_date' | translate) }}</span>
+          </dd>
+
+        </div>
+
+        <div class="nhsuk-summary-list__row">
+
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">
+            Description
+          </dt>
+
+          <dd class="nhsuk-summary-list__value text-pre-wrap nhsuk-u-padding-3">{{ this.request?.requestReason }}</dd>
+
+        </div>
+
+        <div class="nhsuk-summary-list__row" *ngIf="this.request?.status === 'REJECTED'">
+
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">
+            Reason
+          </dt>
+
+          <dd class="nhsuk-summary-list__value text-pre-wrap nhsuk-u-padding-3">{{ this.request?.rejectReason }}</dd>
+
+        </div>
+
+      </dl>
+
+
+      <ng-container *ngIf="this.userType === 'ACCESSOR'">
+
+        <ng-container [ngSwitch]="this.request?.status">
+
+          <ng-container *ngSwitchCase="'PENDING'">
+            <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="updateExportRequestStatus('CANCELLED')">
+              Cancel request
+            </button>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'APPROVED'">
+            <a href="{{ CONSTANTS.APP_URL }}/exports/{{ innovationId }}/pdf" class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-font-size-19">
+              Export innovation record (PDF)
+            </a>
+
+            <ng-container *ngTemplateOutlet="usesOfInnovationRecordData"></ng-container>
+          </ng-container>
+
+          <ng-container *ngSwitchDefault>
+            <button *ngIf="innovationExport?.pendingRequestsCount === 0 && innovationExport?.canUserExport === false" class="nhsuk-button nhsuk-u-margin-top-3" (click)="requestAgainRedirect()">
+              Request again
+            </button>
+          </ng-container>
+
+        </ng-container>
+
+      </ng-container>
+
+      <ng-container *ngIf="this.userType === 'INNOVATOR' && this.request?.status === 'PENDING'">
+
+        <button class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-top-3"
+          (click)="updateExportRequestStatus('APPROVED')">Approve request</button>
+        <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3"
+          (click)="rejectRequestRedirect()">Reject request</button>
+
+      </ng-container>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>
+
+<ng-template #usesOfInnovationRecordData>
+
+  <details class="nhsuk-details nhsuk-u-padding-top-5">
+    <summary class="nhsuk-details__summary">
+      <span class="nhsuk-details__summary-text">
+        See what the innovation record data can be used for
+      </span>
+    </summary>
+    <div class="nhsuk-details__text">
+      <p>You can use the data for the purpose of:</p>
+      <ul class="nhsuk-list nhsuk-list--bullet">
+        <li>
+          providing the health and social care system (or parts of the health and social care system) in the UK
+          with information on Health Technologies (such as guidance, advice, and policies)
+        </li>
+        <li>commissioning</li>
+        <li>supporting the development or adoption of Health Technologies</li>
+        <li>for medical/health technology procurement</li>
+        <li>
+          continuous improvement of the NHS Innovation Service and Support Organisation processes <br> and/or
+        </li>
+        <li>
+          such other purposes as may be agreed in writing between the Support Organisation and a Company from
+          time to time
+        </li>
+      </ul>
+      <p>
+        For more information, please <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">see
+          the terms of use.</a></p>
+    </div>
+  </details>
+
+</ng-template>

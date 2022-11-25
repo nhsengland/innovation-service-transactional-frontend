@@ -187,6 +187,10 @@ export const locale = {
               title: 'Needs assessment completed',
               message: `{{ actionUserName }} completed needs assessment`
             },
+            NEEDS_ASSESSMENT_EDITED: {
+              title: 'Needs assessment edited',
+              message:  `{{ actionUserName }} edited needs assessment`
+            },
             NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: {
               title: "Reassessment requested",
               message: `{{ actionUserName }} requested a needs reassessment`
@@ -226,6 +230,10 @@ export const locale = {
             ACTION_STATUS_COMPLETED_UPDATE: {
               title: 'Action completed',
               message: `{{ actionUserName }} marked an action as complete`
+            },
+            ACTION_STATUS_REQUESTED_UPDATE: {
+              title: 'Action requested',
+              message: `{{ actionUserName }} marked an action as requested`
             },
             ACTION_STATUS_CANCELLED_UPDATE: {
               title: 'Action cancelled',
@@ -367,6 +375,23 @@ export const locale = {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
               innovatorTypeDescription: 'Your innovation has been resent for a needs assessment review.'
+            }
+          },
+          export_request_status: {
+            PENDING: {
+              name: 'Pending'
+            },
+            APPROVED: {
+              name: 'Approved'
+            },
+            REJECTED: {
+              name: 'Rejected'
+            },
+            CANCELLED: {
+              name: 'Cancelled'
+            },
+            EXPIRED: {
+              name: 'Expired'
             }
           }
         },
