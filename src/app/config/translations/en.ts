@@ -187,6 +187,10 @@ export const locale = {
               title: 'Needs assessment completed',
               message: `{{ actionUserName }} completed needs assessment`
             },
+            NEEDS_ASSESSMENT_EDITED: {
+              title: 'Needs assessment edited',
+              message:  `{{ actionUserName }} edited needs assessment`
+            },
             NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: {
               title: "Reassessment requested",
               message: `{{ actionUserName }} requested a needs reassessment`
@@ -226,6 +230,10 @@ export const locale = {
             ACTION_STATUS_COMPLETED_UPDATE: {
               title: 'Action completed',
               message: `{{ actionUserName }} marked an action as complete`
+            },
+            ACTION_STATUS_REQUESTED_UPDATE: {
+              title: 'Action requested',
+              message: `{{ actionUserName }} marked an action as requested`
             },
             ACTION_STATUS_CANCELLED_UPDATE: {
               title: 'Action cancelled',
