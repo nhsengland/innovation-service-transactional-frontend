@@ -11,10 +11,10 @@ import { UserTypeEnum } from '@modules/stores/authentication/authentication.enum
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { getSectionTitle } from '@modules/stores/innovation/innovation.config';
 
-import { InnovationStatisticsEnum } from './innovations.enum';
+import { InnovationStatisticsEnum } from './statistics.enum';
 import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO } from './innovations.dtos';
+import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO } from './innovations.dtos';
 
 export enum AssessmentSupportFilterEnum {
   UNASSIGNED = 'UNASSIGNED',
@@ -282,24 +282,10 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getInnovationStatisticsInfo(innovationId: string): Observable<any> {
-    const requestUserType = this.stores.authentication.getUserType();
-    const qp: { statistics: InnovationStatisticsEnum[] } = {
-      statistics: []
-    };
+  getInnovationStatisticsInfo(innovationId: string, qParams: { statistics: InnovationStatisticsEnum[] }): Observable<InnovationStatisticsDTO> {
 
-    switch (requestUserType) {
-      case UserTypeEnum.INNOVATOR:
-      case UserTypeEnum.ASSESSMENT:
-        case UserTypeEnum.ACCESSOR:
-        qp.statistics = [InnovationStatisticsEnum.ACTIONS_TO_SUBMIT, InnovationStatisticsEnum.SECTIONS_SUBMITTED, InnovationStatisticsEnum.UNREAD_MESSAGES];
-        break;
-      default:
-        break;
-    }
-
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/statistics').setPathParams({ innovationId }).setQueryParams(qp);
-    return this.http.get<any>(url.buildUrl()).pipe(take(1), map(response => response));
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/statistics').setPathParams({ innovationId }).setQueryParams(qParams);
+    return this.http.get<InnovationStatisticsDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
   // Needs Assessment

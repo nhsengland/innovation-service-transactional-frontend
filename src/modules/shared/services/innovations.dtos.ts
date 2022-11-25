@@ -2,6 +2,7 @@ import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@ap
 import { DateISOType } from '@app/base/types';
 
 import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationStatisticsEnum } from './statistics.enum';
 
 
 export type InnovationsListDTO = {
@@ -179,3 +180,11 @@ export type InnovationActivityLogListDTO = {
       link: null | { label: string, url: string }
     })[]
 };
+
+export type InnovationStatisticsDTO = {
+  [InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER]: { count: number; total: number; lastSubmittedAt: null | DateISOType;},
+  [InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]: { count: number; total: number; lastSubmittedSection: string; lastSubmittedAt: null | DateISOType;},
+  [InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]: { count: number; lastSubmittedAt: null | DateISOType;},
+  [InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER]: { count: number; lastSubmittedAt: null | DateISOType;},
+  [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER]: { count: number; lastSubmittedAt: null | DateISOType;},
+}

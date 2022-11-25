@@ -19,61 +19,43 @@
 
   <ul class="nhsuk-grid-row nhsuk-card-group">
     <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
-      <div class="nhsuk-card">
-        <div class="nhsuk-card__content">
-          <h2 class="nhsuk-card__heading nhsuk-heading-m">
-            <a routerLink="/innovator/innovations/{{ innovationId }}" class="nhsuk-card__link">
-              <span class="nhsuk-u-visually-hidden"> Go to </span> Innovation record
-            </a>
-          </h2>
-          <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline">
-            <span class="nhsuk-u-font-size-48">8</span>
-            <span class="nhsuk-u-padding-1">of</span>
-            <span class="mr-auto">14</span>
-            <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-self-end nhsuk-u-padding-left-4">
-              section were submitted by you
-            </span>
-          </p>
-          <p class="nhsuk-u-font-size-16">
-            Last submitted section: "section here" on date
-          </p>
+        <div class="nhsuk-card nhsuk-card--clickable">
+          <div class="nhsuk-card__content">
+            <h2 class="nhsuk-card__heading nhsuk-heading-m">
+              <a routerLink="{{ statisticsSectionsCard.link }}" class="nhsuk-card__link">
+                <span class="nhsuk-u-visually-hidden"> Go to </span> {{ statisticsSectionsCard.title }}
+              </a>
+            </h2>
+            <ng-container *ngIf="statisticsSectionsCard.count!== 0; else noSectionsToSubmit">
+              <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline">
+                <span class="nhsuk-u-font-size-48">{{ statisticsSectionsCard.count }}</span>
+                <ng-container *ngIf="statisticsSectionsCard.total">
+                  <span class="nhsuk-u-padding-1">of</span>
+                  <span class="mr-auto">{{ statisticsSectionsCard.total }}</span>
+                </ng-container>
+                <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-self-end nhsuk-u-padding-left-4">
+                  {{ statisticsSectionsCard.label }}
+                </span>
+              </p>
+            </ng-container>
+            <ng-template #noSectionsToSubmit>
+              <p class="nhsuk-u-font-weight-normal">
+                You haven\’t submitted any section of your innovation record yet.
+              </p>
+            </ng-template>
+
+            <ng-container *ngIf="statisticsSectionsCard.footer">
+              <p class="nhsuk-u-font-size-16 font-color-secondary">
+                {{ statisticsSectionsCard.footer }}
+              </p>
+            </ng-container>
+          </div>
         </div>
-      </div>
     </li>
     <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
 
-      <div class="nhsuk-card nhsuk-card--clickable">
-        <div class="nhsuk-card__content">
-          <h2 class="nhsuk-card__heading nhsuk-heading-m">
-            <a class="nhsuk-card__link" href="#">Help from social services and charities</a>
-          </h2>
-          <p class="nhsuk-card__description">Includes helplines, needs assessments, advocacy and reporting abuse</p>
-        </div>
-      </div>
-
     </li>
     <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
-
-      <div class="nhsuk-card nhsuk-card--clickable">
-        <div class="nhsuk-card__content">
-          <h2 class="nhsuk-card__heading nhsuk-heading-m">
-            <a class="nhsuk-card__link" href="#">Money, work and benefits</a>
-          </h2>
-          <p class="nhsuk-card__description">How to pay for care and support, and where you can get help with costs</p>
-        </div>
-      </div>
-
-    </li>
-    <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
-
-      <div class="nhsuk-card nhsuk-card--clickable">
-        <div class="nhsuk-card__content">
-          <h2 class="nhsuk-card__heading nhsuk-heading-m">
-            <a class="nhsuk-card__link" href="#">Care after a hospital stay</a>
-          </h2>
-          <p class="nhsuk-card__description">Includes hospital discharge and care and support afterwards</p>
-        </div>
-      </div>
 
     </li>
   </ul>
