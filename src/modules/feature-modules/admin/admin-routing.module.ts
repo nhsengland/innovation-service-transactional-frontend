@@ -33,7 +33,8 @@ import { PageTermsOfUseNewComponent } from './pages/terms-of-use/terms-of-use-ne
 // // Shared.
 import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
-
+// // // Innovations
+import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 // Wizards.
 import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-unit-activate/organisation-unit-activate.component';
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
@@ -187,6 +188,18 @@ const routes: Routes = [
             data: { module: 'Edit' }
           },
           { path: 'show-version/:id', pathMatch: 'full', component: PageTermsOfUseInfoComponent }
+        ]
+      },
+      {
+        path: 'innovations',
+        data: { breadcrumb: 'Innovations' },
+        children: [
+          {
+            path: '', pathMatch: 'full', component: PageInnovationsAdvancedReviewComponent,
+            data: {
+              layout: { type: 'full', backgroundColor: 'bg-color-white' }
+            }
+          },
         ]
       }
     ]

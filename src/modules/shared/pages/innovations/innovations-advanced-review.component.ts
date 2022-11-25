@@ -14,19 +14,19 @@ import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
-type FilterKeysType = 'mainCategories' | 'locations' | 'engagingOrganisations' | 'supportStatuses';
-
+type FilterKeysType = 'mainCategories' | 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
 
 @Component({
-  selector: 'app-accessor-pages-innovations-advanced-review',
+  selector: 'shared-pages-innovations-advanced-review',
   templateUrl: './innovations-advanced-review.component.html'
 })
-export class InnovationsAdvancedReviewComponent extends CoreComponent implements OnInit {
+export class PageInnovationsAdvancedReviewComponent extends CoreComponent implements OnInit {
 
   innovationsList = new TableModel<
-    InnovationsListDTO['data'][0] & { supportInfo: { status: null | InnovationSupportStatusEnum } },
+    InnovationsListDTO['data'][0] & { supportInfo?: { status: null | InnovationSupportStatusEnum }, groupedStatus: InnovationGroupedStatusEnum },
     InnovationsListFiltersType
   >({ pageSize: 20 });
 
@@ -35,6 +35,7 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
     mainCategories: new FormArray([]),
     locations: new FormArray([]),
     supportStatuses: new FormArray([]),
+    groupedStatuses: new FormArray([]),
     engagingOrganisations: new FormArray([]),
     assignedToMe: new FormControl(false),
     suggestedOnly: new FormControl(true)
@@ -45,19 +46,22 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
     key: FilterKeysType,
     title: string,
     showHideStatus: 'opened' | 'closed',
-    selected: { label: string, value: string }[]
+    selected: { label: string, value: string }[],
+    active: boolean
   }[] = [
-      { key: 'mainCategories', title: 'Main category', showHideStatus: 'closed', selected: [] },
-      { key: 'locations', title: 'Location', showHideStatus: 'closed', selected: [] },
-      { key: 'engagingOrganisations', title: 'Engaging organisations', showHideStatus: 'closed', selected: [] },
-      { key: 'supportStatuses', title: 'Support status', showHideStatus: 'closed', selected: [] }
+      { key: 'mainCategories', title: 'Main category', showHideStatus: 'closed', selected: [], active: false },
+      { key: 'locations', title: 'Location', showHideStatus: 'closed', selected: [], active: false },
+      { key: 'groupedStatuses', title: 'Innovation status', showHideStatus: 'closed', selected: [], active: false },
+      { key: 'engagingOrganisations', title: 'Engaging organisations', showHideStatus: 'closed', selected: [], active: false },
+      { key: 'supportStatuses', title: 'Support status', showHideStatus: 'closed', selected: [], active: false }
     ];
 
   datasets: { [key in FilterKeysType]: { label: string, value: string }[] } = {
     mainCategories: mainCategoryItems.map(i => ({ label: i.label, value: i.value })),
     locations: locationItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ label: i.label, value: i.value })),
     engagingOrganisations: [],
-    supportStatuses: []
+    supportStatuses: [],
+    groupedStatuses: []
   };
 
 
@@ -69,28 +73,59 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
     super();
     this.setPageTitle('Innovations advanced search');
 
-    this.innovationsList.setVisibleColumns({
+    let columns: { [key: string]: (string | { label: string; align?: 'left' | 'right' | 'center'; orderable?: boolean; }) } = {
       name: { label: 'Innovation', orderable: true },
       submittedAt: { label: 'Submitted', orderable: true },
       mainCategory: { label: 'Main category', orderable: true },
       location: { label: 'Location', orderable: true },
       supportStatus: { label: 'Support status', align: 'right', orderable: false }
-    }).setOrderBy('submittedAt', 'descending');
+    };
+    const orderBy: { key: string, order?: 'descending' | 'ascending' } = { key: 'submittedAt', order: 'descending' };
+
+    if (this.stores.authentication.isAdminRole()) {
+      columns = {
+        name: { label: 'Innovation', orderable: true },
+        updatedAt: { label: 'Updated', orderable: true },
+        groupedStatus: { label: 'Innovation status', orderable: false },
+        engagingOrgs: { label: 'Engaging orgs', align: 'right', orderable: false }
+      }
+      orderBy.key = 'updatedAt';
+    }
+
+    this.innovationsList.setVisibleColumns(columns).setOrderBy(orderBy.key, orderBy.order);
 
   }
 
   ngOnInit(): void {
 
-    if (this.stores.authentication.isAccessorRole()) {
+    let filters: FilterKeysType[] = ['engagingOrganisations', 'locations', 'mainCategories', 'supportStatuses'];
+
+    if (this.stores.authentication.isAdminRole()) {
+
+      filters = ['engagingOrganisations', 'groupedStatuses'];
+      this.form.get('suggestedOnly')?.setValue(false);
+      this.datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum).map(groupedStatus => ({ label: this.translate(`shared.catalog.innovation.grouped_status.${groupedStatus}.name`), value: groupedStatus }))
+
+    } else if (this.stores.authentication.isAccessorRole()) {
+
       this.datasets.supportStatuses = Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({ label: item.label, value: key })).filter(i => ['ENGAGING', 'COMPLETE'].includes(i.value));
+
     } else if (this.stores.authentication.isQualifyingAccessorRole()) {
+
       this.datasets.supportStatuses = Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({ label: item.label, value: key }));
+
     }
+
+    this.filters = this.filters.map(filter => ({ ...filter, active: filters.includes(filter.key) }));
 
     this.organisationsService.getOrganisationsList(false).subscribe({
       next: response => {
-        const myOrganisation = this.stores.authentication.getUserInfo().organisations[0].id;
-        this.datasets.engagingOrganisations = response.filter(i => i.id !== myOrganisation).map(i => ({ label: i.name, value: i.id }));
+        if (this.stores.authentication.isAdminRole() === true) {
+          this.datasets.engagingOrganisations = response.map(i => ({ label: i.name, value: i.id }));
+        } else {
+          const myOrganisation = this.stores.authentication.getUserInfo().organisations[0].id;
+          this.datasets.engagingOrganisations = response.filter(i => i.id !== myOrganisation).map(i => ({ label: i.name, value: i.id }));
+        }
       },
       error: error => {
         this.logger.error(error);
@@ -112,14 +147,25 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
 
     this.innovationsService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(response => {
       this.innovationsList.setData(
-        response.data.map(item => ({
-          ...item,
-          supportInfo: {
-            status: (item.supports || []).find(s =>
+        response.data.map(item => {
+          let status = null;
+
+          if (this.stores.authentication.isAdminRole() === false) {
+            status = (item.supports || []).find(s =>
               s.organisation.unit.id === this.stores.authentication.getUserInfo().organisations[0].organisationUnits[0].id
             )?.status ?? InnovationSupportStatusEnum.UNASSIGNED
           }
-        })),
+
+          return {
+            ...item,
+            ...({
+              supportInfo: {
+                status,
+              }
+            }),
+            groupedStatus: this.getGroupedStatus(item),
+          }
+        }),
         response.count);
       this.setPageStatus('READY');
     });
@@ -145,6 +191,7 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
       locations: this.form.get('locations')?.value,
       engagingOrganisations: this.form.get('engagingOrganisations')?.value,
       supportStatuses: this.form.get('supportStatuses')?.value,
+      groupedStatuses: this.form.get('groupedStatuses')?.value,
       assignedToMe: this.form.get('assignedToMe')?.value ?? false,
       suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
     });
@@ -193,6 +240,14 @@ export class InnovationsAdvancedReviewComponent extends CoreComponent implements
     this.innovationsList.setPage(event.pageNumber);
     this.getInnovationsList();
 
+  }
+
+  private getGroupedStatus(innovation: InnovationsListDTO['data'][0]) {
+    return this.stores.innovation.getGroupedInnovationStatus(
+      innovation.status,
+      (innovation.supports ?? []).map(support => support.status),
+      innovation.assessment?.reassessmentCount ?? 0
+    );
   }
 
 }

@@ -10,7 +10,7 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { getSectionTitle } from '@modules/stores/innovation/innovation.config';
-import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO } from './innovations.dtos';
 
@@ -28,6 +28,7 @@ export type InnovationsListFiltersType = {
   status?: InnovationStatusEnum[],
   assessmentSupportStatus?: AssessmentSupportFilterEnum,
   supportStatuses?: InnovationSupportStatusEnum[],
+  groupedStatuses?: InnovationGroupedStatusEnum[],
   engagingOrganisations?: string[],
   assignedToMe?: boolean,
   suggestedOnly?: boolean,
@@ -182,6 +183,7 @@ export class InnovationsService extends CoreService {
       ...(filters.status ? { status: filters.status } : {}),
       ...(filters.assessmentSupportStatus ? { assessmentSupportStatus: filters.assessmentSupportStatus } : {}),
       ...(filters.supportStatuses ? { supportStatuses: filters.supportStatuses } : {}),
+      ...(filters.groupedStatuses ? { groupedStatuses: filters.groupedStatuses } : {}),
       ...(filters.engagingOrganisations ? { engagingOrganisations: filters.engagingOrganisations } : {}),
       ...(filters.assignedToMe !== undefined ? { assignedToMe: filters.assignedToMe } : {}),
       ...(filters.suggestedOnly != undefined ? { suggestedOnly: filters.suggestedOnly } : {}),
@@ -199,7 +201,9 @@ export class InnovationsService extends CoreService {
         qp.status = [InnovationStatusEnum.IN_PROGRESS];
         qp.fields = ['assessment', 'supports', 'notifications'];
         break;
-
+      case UserTypeEnum.ADMIN:
+        qp.fields = ['assessment', 'supports'];
+        break;
       default:
         break;
     }

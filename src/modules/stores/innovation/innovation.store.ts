@@ -159,6 +159,10 @@ export class InnovationStore extends Store<InnovationModel> {
         : InnovationGroupedStatusEnum.AWAITING_SUPPORT;
     }
 
+    if(innovationStatus === 'ARCHIVED') {
+      return InnovationGroupedStatusEnum.ARCHIVED;
+    }
+
     return InnovationGroupedStatusEnum.RECORD_NOT_SHARED;
 
   }

@@ -23,7 +23,6 @@ import { InnovationActionTrackerEditComponent } from './pages/innovation/action-
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
 import { InnovationActionTrackerListComponent } from './pages/innovation/action-tracker/action-tracker-list.component';
 import { InnovationActionTrackerNewComponent } from './pages/innovation/action-tracker/action-tracker-new.component';
-import { InnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
 import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './pages/innovation/support/organisations-support-status-info.component';
@@ -67,7 +66,6 @@ import { InnovationActionDataResolver } from './resolvers/innovation-action-data
     InnovationActionTrackerInfoComponent,
     InnovationActionTrackerListComponent,
     InnovationActionTrackerNewComponent,
-    InnovationsAdvancedReviewComponent,
     InnovationNeedsAssessmentOverviewComponent,
     InnovationOverviewComponent,
     InnovationSupportOrganisationsSupportStatusInfoComponent,
