@@ -108,7 +108,7 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
 
     const body: UpdateUserInfoDTO = {
       displayName: wizardData.displayName,
-      mobilePhone: !!wizardData.mobilePhone ? wizardData.mobilePhone : null,
+      mobilePhone: wizardData.mobilePhone || null,
       ...(wizardData.organisation ? { organisation: wizardData.organisation } : {})
     };
 
