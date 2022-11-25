@@ -1,21 +1,19 @@
 export const locale = {
   lang: 'en',
   data: {
-
     // Global app/configuration translations.
     app: {
       title: 'NHS Innovation Service',
 
       date_formats: {
-        full_date_time: 'EEEE, MMMM d, y \'at\' h:mm:ss a',
-        long_date_time: 'd MMMM y \'at\' h:mm a',
-        short_date_time: 'd/M/yy \'at\' h:mm a',
+        full_date_time: "EEEE, MMMM d, y 'at' h:mm:ss a",
+        long_date_time: "d MMMM y 'at' h:mm a",
+        short_date_time: "d/M/yy 'at' h:mm a",
         long_date: 'd MMMM y',
         short_date: 'd mm y',
         medium_time: 'h:mm:ss a',
-        short_seconds: 'd/M/yy, h:mm:ss a'
-      }
-
+        short_seconds: 'd/M/yy, h:mm:ss a',
+      },
     },
 
     // Single words, ALWAYS lowercased.
@@ -24,135 +22,142 @@ export const locale = {
         _: 'action',
         none: 'action',
         singular: 'action',
-        plural: 'actions'
+        plural: 'actions',
       },
       yes: 'yes',
     },
 
     // Forms (fields) related translations.
     forms: {
-      address: { label: 'Address' }
+      address: { label: 'Address' },
     },
 
     // Specific translations to specific features (modules).
     features: {
-
       shared_pages: {
         page_error: {
           forbidden_innovation: {
             title: 'It appears that something went wrong!',
-            message: 'You don\'t have access to the requested innovation. Changes in the innovation status may have caused this situation.',
-            button_label: 'Go back to home'
+            message:
+              "You don't have access to the requested innovation. Changes in the innovation status may have caused this situation.",
+            button_label: 'Go back to home',
           },
           generic: {
             title: 'It appears that something went wrong!',
-            message: 'The operation you are trying to do is no longer available.',
-            button_label: 'Go back to home'
+            message:
+              'The operation you are trying to do is no longer available.',
+            button_label: 'Go back to home',
           },
           unauthenticated: {
             title: 'It appears that something went wrong!',
-            message: 'It seems that you don\'t have access to the service. Please contact us for further help.',
-            button_label: 'Go back to home'
-          }
+            message:
+              "It seems that you don't have access to the service. Please contact us for further help.",
+            button_label: 'Go back to home',
+          },
         },
         page_not_found: {
           title: 'It appears that something went wrong!',
-          message: 'Give us time while we investigate what happened that took you to here.',
-          button_label: 'Go back to home'
-        }
-      }
-
+          message:
+            'Give us time while we investigate what happened that took you to here.',
+          button_label: 'Go back to home',
+        },
+      },
     },
 
-    labels: {
-
-    },
+    labels: {},
 
     messages: {
       errors: {},
       informations: {
-        fetching_information: 'Please wait while we fetch information from server.'
+        fetching_information:
+          'Please wait while we fetch information from server.',
       },
       notifications: {},
-      warnings: {}
+      warnings: {},
     },
 
     // Shared translations to serve external / catalog modules.
     shared: {
-
       catalog: {
         innovation: {
           action_status: {
             REQUESTED: {
               name: 'Requested',
-              description: 'An accessor has requested that the innovation owner submit information to a specific section of their innovation record.',
-              cssColorClass: 'nhsuk-tag--blue'
+              description:
+                'An accessor has requested that the innovation owner submit information to a specific section of their innovation record.',
+              cssColorClass: 'nhsuk-tag--blue',
             },
             STARTED: {
               name: 'Started',
               description: '',
-              cssColorClass: 'nhsuk-tag--green'
+              cssColorClass: 'nhsuk-tag--green',
             },
             CONTINUE: {
               name: 'Continue',
               description: '',
-              cssColorClass: 'nhsuk-tag--blue'
+              cssColorClass: 'nhsuk-tag--blue',
             },
             IN_REVIEW: {
               name: 'In review',
-              description: 'The innovation owner has submitted information requested by an accessor and are waiting for them to review it.',
-              cssColorClass: 'nhsuk-tag--yellow'
+              description:
+                'The innovation owner has submitted information requested by an accessor and are waiting for them to review it.',
+              cssColorClass: 'nhsuk-tag--yellow',
             },
             DELETED: {
               name: 'Deleted',
-              description: 'The action is deleted as it\'s no longer relevant due to a change to the innovation or your account',
-              cssColorClass: 'nhsuk-tag--grey'
+              description:
+                "The action is deleted as it's no longer relevant due to a change to the innovation or your account",
+              cssColorClass: 'nhsuk-tag--grey',
             },
             DECLINED: {
               name: 'Declined',
-              description: 'The innovation owner has declined the action requested.',
-              cssColorClass: 'nhsuk-tag--grey'
+              description:
+                'The innovation owner has declined the action requested.',
+              cssColorClass: 'nhsuk-tag--grey',
             },
             COMPLETED: {
               name: 'Completed',
-              description: 'An accessor has closed the action after reviewing the information.',
-              cssColorClass: 'nhsuk-tag--green'
+              description:
+                'An accessor has closed the action after reviewing the information.',
+              cssColorClass: 'nhsuk-tag--green',
             },
             CANCELLED: {
               name: 'Cancelled',
               description: 'An accessor has cancelled the action.',
-              cssColorClass: 'nhsuk-tag--red'
-            }
+              cssColorClass: 'nhsuk-tag--red',
+            },
           },
           activity_log_groups: {
             INNOVATION_MANAGEMENT: {
               title: 'Innovation management',
-              description: 'Innovator activities regarding ownership and sharing preferences'
+              description:
+                'Innovator activities regarding ownership and sharing preferences',
             },
             INNOVATION_RECORD: {
               title: 'Innovation record',
-              description: 'Activities regarding the innovation information update'
+              description:
+                'Activities regarding the innovation information update',
             },
             NEEDS_ASSESSMENT: {
               title: 'Needs assessment',
-              description: 'Needs assessment activities'
+              description: 'Needs assessment activities',
             },
             SUPPORT: {
               title: 'Support',
-              description: 'Organisations related activities'
+              description: 'Organisations related activities',
             },
             ACTIONS: {
               title: 'Actions',
-              description: ''
+              description: '',
             },
             COMMENTS: {
               title: 'Comments',
-              description: ''
+              description: '',
             },
             THREADS: {
               title: 'Messages',
-              description: ''
-            }
+              description: '',
+            },
           },
           activity_log_items: {
             INNOVATION_CREATION: {
@@ -161,19 +166,19 @@ export const locale = {
             },
             OWNERSHIP_TRANSFER: {
               title: 'Ownership transfer',
-              message: `Ownership was transfered from {{ actionUserName }} to {{ interveningUserName }}`
+              message: `Ownership was transfered from {{ actionUserName }} to {{ interveningUserName }}`,
             },
             SHARING_PREFERENCES_UPDATE: {
               title: 'Sharing preferences update',
-              message: `Sharing preferences changed`
+              message: `Sharing preferences changed`,
             },
             SECTION_DRAFT_UPDATE: {
               title: 'Section draft update',
-              message: `"{{ sectionTitle }}" section saved as a draft`
+              message: `"{{ sectionTitle }}" section saved as a draft`,
             },
             SECTION_SUBMISSION: {
               title: 'Section submission',
-              message: `"{{ sectionTitle }}" section submitted`
+              message: `"{{ sectionTitle }}" section submitted`,
             },
             INNOVATION_SUBMISSION: {
               title: 'Innovation submission',
@@ -181,64 +186,64 @@ export const locale = {
             },
             NEEDS_ASSESSMENT_START: {
               title: 'Needs assessment start',
-              message: `{{ actionUserName }} started needs assessment`
+              message: `{{ actionUserName }} started needs assessment`,
             },
             NEEDS_ASSESSMENT_COMPLETED: {
               title: 'Needs assessment completed',
-              message: `{{ actionUserName }} completed needs assessment`
+              message: `{{ actionUserName }} completed needs assessment`,
             },
             NEEDS_ASSESSMENT_EDITED: {
               title: 'Needs assessment edited',
-              message:  `{{ actionUserName }} edited needs assessment`
+              message: `{{ actionUserName }} edited needs assessment`,
             },
             NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: {
-              title: "Reassessment requested",
-              message: `{{ actionUserName }} requested a needs reassessment`
+              title: 'Reassessment requested',
+              message: `{{ actionUserName }} requested a needs reassessment`,
             },
             ORGANISATION_SUGGESTION: {
               title: 'Organisation suggestion',
-              message: `{{ actionUserName }} suggested one or more organisation units to support`
+              message: `{{ actionUserName }} suggested one or more organisation units to support`,
             },
             SUPPORT_STATUS_UPDATE: {
               title: 'Support status update',
-              message: `{{ actionUserName }} changed the support status of {{ organisationUnit }}`
+              message: `{{ actionUserName }} changed the support status of {{ organisationUnit }}`,
             },
             THREAD_CREATION: {
               title: 'New conversation',
-              message: `{{ actionUserName }} created a new message with subject {{ thread.subject }}`
+              message: `{{ actionUserName }} created a new message with subject {{ thread.subject }}`,
             },
             THREAD_MESSAGE_CREATION: {
               title: 'New messages',
-              message: `{{ actionUserName }} created a new message under the conversation with subject {{ thread.subject }}`
+              message: `{{ actionUserName }} created a new message under the conversation with subject {{ thread.subject }}`,
             },
             COMMENT_CREATION: {
               title: 'Comment creation',
-              message: `{{ actionUserName }} left a comment`
+              message: `{{ actionUserName }} left a comment`,
             },
             ACTION_CREATION: {
               title: 'Action creation',
-              message: `{{ actionUserName }} created an action for section "{{ sectionTitle }}"`
+              message: `{{ actionUserName }} created an action for section "{{ sectionTitle }}"`,
             },
             ACTION_STATUS_IN_REVIEW_UPDATE: {
               title: 'Action changed to in review',
-              message: `{{ totalActions }} actions for "{{ sectionTitle }}" section were changed to "In review"`
+              message: `{{ totalActions }} actions for "{{ sectionTitle }}" section were changed to "In review"`,
             },
             ACTION_STATUS_DECLINED_UPDATE: {
               title: 'Action declined',
-              message: `{{ actionUserName }} declined an action from {{ interveningUserName }}`
+              message: `{{ actionUserName }} declined an action from {{ interveningUserName }}`,
             },
             ACTION_STATUS_COMPLETED_UPDATE: {
               title: 'Action completed',
-              message: `{{ actionUserName }} marked an action as complete`
+              message: `{{ actionUserName }} marked an action as completed`,
             },
             ACTION_STATUS_REQUESTED_UPDATE: {
               title: 'Action requested',
-              message: `{{ actionUserName }} marked an action as requested`
+              message: `{{ actionUserName }} marked an action as requested`,
             },
             ACTION_STATUS_CANCELLED_UPDATE: {
               title: 'Action cancelled',
-              message: `{{ totalActions }} actions for {{ sectionTitle }} section were changed to "Cancelled"`
-            }
+              message: `{{ totalActions }} actions for {{ sectionTitle }} section were changed to "Cancelled"`,
+            },
           },
 
           email_notification_preferences: {
@@ -252,196 +257,249 @@ export const locale = {
             },
             DAILY: {
               me: 'Send me daily summary updates',
-              you: 'You get daily summary updates'
-            }
+              you: 'You get daily summary updates',
+            },
           },
 
           notification_context_types: {
             NEEDS_ASSESSMENT: {
-              title: { singular: 'Needs Assessment', plural: 'Needs Assessment' }
+              title: {
+                singular: 'Needs Assessment',
+                plural: 'Needs Assessment',
+              },
             },
             INNOVATION: {
-              title: { singular: 'Innovation', plural: 'Innovations' }
+              title: { singular: 'Innovation', plural: 'Innovations' },
             },
             COMMENT: {
-              title: { singular: 'Message', plural: 'Messages' }
+              title: { singular: 'Message', plural: 'Messages' },
             },
             ACTION: {
-              title: { singular: 'Action', plural: 'Actions' }
+              title: { singular: 'Action', plural: 'Actions' },
             },
             SUPPORT: {
-              title: { singular: 'Support status change', plural: 'Support status changes' }
+              title: {
+                singular: 'Support status change',
+                plural: 'Support status changes',
+              },
             },
             THREAD: {
-              title: { singular: 'Message', plural: 'Messages' }
-            }
+              title: { singular: 'Message', plural: 'Messages' },
+            },
           },
           notification_context_details: {
-            LOCK_USER: { title: `Innovaton "{{ innovationName }}" owner has been locked` },
+            LOCK_USER: {
+              title: `Innovaton "{{ innovationName }}" owner has been locked`,
+            },
             // COMMENT_CREATION: { title: `New comment for innovation "{{ innovationName }}"` },
             // COMMENT_REPLY: { title: `New comment reply for innovation "{{ innovationName }}"` },
-            THREAD_CREATION: { title: `New conversation for innovation "{{ innovationName }}"` },
-            THREAD_MESSAGE_CREATION: { title: `New message for a conversation on innovation "{{ innovationName }}"` },
-            ACTION_CREATION: { title: `New action for section {{ sectionNumber }} on innovation "{{ innovationName }}"` },
-            ACTION_UPDATE: { title: `Action {{ actionCode }} status updated to "{{ actionStatusName }}" on innovation "{{ innovationName }}"` },
-            NEEDS_ASSESSMENT_COMPLETED: { title: `Innovation "{{ innovationName }}" was suggested by needs assessment` },
-            NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION: { title: `Assessment team suggested one or more organisations for you to share your innovation` },
-            INNOVATION_SUBMISSION: { title: `Innovation "{{ innovationName }}" is available for review` },
-            SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}"` }
+            THREAD_CREATION: {
+              title: `New conversation for innovation "{{ innovationName }}"`,
+            },
+            THREAD_MESSAGE_CREATION: {
+              title: `New message for a conversation on innovation "{{ innovationName }}"`,
+            },
+            ACTION_CREATION: {
+              title: `New action for section {{ sectionNumber }} on innovation "{{ innovationName }}"`,
+            },
+            ACTION_UPDATE: {
+              title: `Action {{ actionCode }} status updated to "{{ actionStatusName }}" on innovation "{{ innovationName }}"`,
+            },
+            NEEDS_ASSESSMENT_COMPLETED: {
+              title: `Innovation "{{ innovationName }}" was suggested by needs assessment`,
+            },
+            NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION: {
+              title: `Assessment team suggested one or more organisations for you to share your innovation`,
+            },
+            INNOVATION_SUBMISSION: {
+              title: `Innovation "{{ innovationName }}" is available for review`,
+            },
+            SUPPORT_STATUS_UPDATE: {
+              title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}"`,
+            },
           },
           section_status: {
-            NOT_STARTED: { name: 'Not started', cssColorClass: 'nhsuk-tag--blue' },
+            NOT_STARTED: {
+              name: 'Not started',
+              cssColorClass: 'nhsuk-tag--blue',
+            },
             DRAFT: { name: 'Draft', cssColorClass: 'nhsuk-tag--yellow' },
-            SUBMITTED: { name: 'Submitted', cssColorClass: 'nhsuk-tag--green' }
-
+            SUBMITTED: { name: 'Submitted', cssColorClass: 'nhsuk-tag--green' },
           },
           support_status: {
             ENGAGING: {
               name: 'Engaging',
               cssColorClass: 'nhsuk-tag--green',
-              accessorTypeDescription: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.',
-              innovatorTypeDescription: 'Ready to support, assess or provide guidance.'
+              accessorTypeDescription:
+                'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.',
+              innovatorTypeDescription:
+                'Ready to support, assess or provide guidance.',
             },
             FURTHER_INFO_REQUIRED: {
               name: 'Further info',
               cssColorClass: 'nhsuk-tag--white',
-              accessorTypeDescription: 'Further info is needed from the innovator to make a decision. You must provide a message on what information is needed.',
-              innovatorTypeDescription: 'The organisation needs further information from you to make a decision.'
+              accessorTypeDescription:
+                'Further info is needed from the innovator to make a decision. You must provide a message on what information is needed.',
+              innovatorTypeDescription:
+                'The organisation needs further information from you to make a decision.',
             },
             WAITING: {
               name: 'Waiting',
               cssColorClass: 'nhsuk-tag--yellow',
-              accessorTypeDescription: 'Waiting for an internal decision to progress.',
-              innovatorTypeDescription: 'The organisation is waiting for an internal decision to progress.'          
+              accessorTypeDescription:
+                'Waiting for an internal decision to progress.',
+              innovatorTypeDescription:
+                'The organisation is waiting for an internal decision to progress.',
             },
             NOT_YET: {
               name: 'Not yet',
               cssColorClass: 'nhsuk-tag--blue',
-              accessorTypeDescription: 'The innovation is not yet ready for your support offer. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'Your innovation is not yet ready for the organisation\'s support offer.'          
+              accessorTypeDescription:
+                'The innovation is not yet ready for your support offer. You must provide a message outlining your decision.',
+              innovatorTypeDescription:
+                "Your innovation is not yet ready for the organisation's support offer.",
             },
             UNASSIGNED: {
               name: 'Unassigned',
               cssColorClass: 'nhsuk-tag--red',
               accessorTypeDescription: 'No status assigned yet.',
-              innovatorTypeDescription: 'No status assigned yet.'          
+              innovatorTypeDescription: 'No status assigned yet.',
             },
             UNSUITABLE: {
               name: 'Unsuitable',
               cssColorClass: 'nhsuk-tag--red',
-              accessorTypeDescription: 'You have no suitable support offer for the innovation. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'The organisation has no suitable support offer for your innovation.'          
+              accessorTypeDescription:
+                'You have no suitable support offer for the innovation. You must provide a message outlining your decision.',
+              innovatorTypeDescription:
+                'The organisation has no suitable support offer for your innovation.',
             },
             WITHDRAWN: {
               name: 'Withdrawn',
               cssColorClass: 'nhsuk-tag--red',
               accessorTypeDescription: '',
-              innovatorTypeDescription: ''          
+              innovatorTypeDescription: '',
             },
             COMPLETE: {
               name: 'Completed',
               cssColorClass: 'nhsuk-tag--dark-grey',
-              accessorTypeDescription: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'The organisation has completed their engagement with your innovation.'          
-            }
+              accessorTypeDescription:
+                'Your organisation has completed this engagement. You must provide a message outlining your decision.',
+              innovatorTypeDescription:
+                'The organisation has completed their engagement with your innovation.',
+            },
           },
           grouped_status: {
             RECORD_NOT_SHARED: {
               name: 'Record not shared',
               cssColorClass: 'nhsuk-tag--orange',
-              innovatorTypeDescription: 'You have not yet shared your innovation record for a needs assessment review.'
+              innovatorTypeDescription:
+                'You have not yet shared your innovation record for a needs assessment review.',
             },
             AWAITING_NEEDS_ASSESSMENT: {
               name: 'Awaiting needs assessment',
               cssColorClass: 'nhsuk-tag--yellow',
-              innovatorTypeDescription: 'The needs assessment team will review your innovation record within 5 working days from submission.'
+              innovatorTypeDescription:
+                'The needs assessment team will review your innovation record within 5 working days from submission.',
             },
             NEEDS_ASSESSMENT: {
               name: 'Needs assessment',
               cssColorClass: 'nhsuk-tag--blue',
-              innovatorTypeDescription: 'Your needs assessment is in progress.'
+              innovatorTypeDescription: 'Your needs assessment is in progress.',
             },
             AWAITING_SUPPORT: {
               name: 'Awaiting support',
               cssColorClass: 'nhsuk-tag--grey',
-              innovatorTypeDescription: 'We are waiting for an organisation unit to support your innovation.'
+              innovatorTypeDescription:
+                'We are waiting for an organisation unit to support your innovation.',
             },
             RECEIVING_SUPPORT: {
               name: 'Receiving support',
               cssColorClass: 'nhsuk-tag--green',
-              innovatorTypeDescription: 'At least one organisation unit is engaging with your innovation.'
+              innovatorTypeDescription:
+                'At least one organisation unit is engaging with your innovation.',
             },
             AWAITING_NEEDS_REASSESSMENT: {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
-              innovatorTypeDescription: 'Your innovation has been resent for a needs assessment review.'
-            }
+              innovatorTypeDescription:
+                'Your innovation has been resent for a needs assessment review.',
+            },
           },
           export_request_status: {
             PENDING: {
-              name: 'Request pending'
+              name: 'Request pending',
             },
             APPROVED: {
-              name: 'Request approved'
+              name: 'Request approved',
             },
             REJECTED: {
-              name: 'Request rejected'
+              name: 'Request rejected',
             },
             CANCELLED: {
-              name: 'Request cancelled'
+              name: 'Request cancelled',
             },
             EXPIRED: {
-              name: 'Request expired'
-            }
-          }
+              name: 'Request expired',
+            },
+          },
         },
         user: {
           lock_user_validations: {
             lastAssessmentUserOnPlatform: {
-              label: 'User is not the only needs assessor on the service'
+              label: 'User is not the only needs assessor on the service',
             },
             lastAccessorUserOnOrganisation: {
-              label: 'User is not the only qualifying accessor within their organisation',
-              description: '{{ organisation.name }}'
+              label:
+                'User is not the only qualifying accessor within their organisation',
+              description: '{{ organisation.name }}',
             },
             lastAccessorUserOnOrganisationUnit: {
-              label: 'User is not the only qualifying accessor within their unit',
-              description: '{{ unit.name }}'
+              label:
+                'User is not the only qualifying accessor within their unit',
+              description: '{{ unit.name }}',
             },
             lastAccessorFromUnitProvidingSupport: {
-              label: 'User is not the person in their unit who is supporting an innovator',
+              label:
+                'User is not the person in their unit who is supporting an innovator',
               description: {
                 none: 'No innovation is being supported',
-                singular: '{{ supports.innovations.length }} innovation being supported',
-                plural: '{{ supports.innovations.length }} innovations being supported',
-              }
-            }
+                singular:
+                  '{{ supports.innovations.length }} innovation being supported',
+                plural:
+                  '{{ supports.innovations.length }} innovations being supported',
+              },
+            },
           },
           change_organisation_user_role_validations: {
             lastAccessorUserOnOrganisationUnit: {
-              label: 'User cannot be the last Qualifying Accessor on the organisation unit'
-            }
+              label:
+                'User cannot be the last Qualifying Accessor on the organisation unit',
+            },
           },
           change_organisation_user_unit: {
             lastAccessorUserOnOrganisation: {
-              label: 'User is not the only {{ role }} within their organisation',
-              description: '{{ organisation.name }}'
+              label:
+                'User is not the only {{ role }} within their organisation',
+              description: '{{ organisation.name }}',
             },
             lastAccessorUserOnOrganisationUnit: {
-              label: 'User is not the only {{ role }} within their organisation unit',
-              description: '{{ unit.name }}'
+              label:
+                'User is not the only {{ role }} within their organisation unit',
+              description: '{{ unit.name }}',
             },
             lastAccessorFromUnitProvidingSupport: {
-              label: 'User is not the person in their organisation or unit who is supporting an innovator',
+              label:
+                'User is not the person in their organisation or unit who is supporting an innovator',
               description: {
                 none: 'No innovation is being supported',
-                singular: '{{ supports.innovations.length }} innovation being supported',
-                plural: '{{ supports.innovations.length }} innovations being supported',
-              }
-            }
-          }
-
-        }
+                singular:
+                  '{{ supports.innovations.length }} innovation being supported',
+                plural:
+                  '{{ supports.innovations.length }} innovations being supported',
+              },
+            },
+          },
+        },
       },
 
       forms_module: {
@@ -459,14 +517,14 @@ export const locale = {
           max_hexadecimal: 'Value above the maximum allowed',
           min_length: 'Text must have at least {{ maxLength }} characters',
           max_length: 'Text cannot exceed {{ maxLength }} characters',
-          password_mismatch: 'Passwords don\'t appear to match',
-          password_regex: 'The password must contain at least minimum 8 characters: one uppercase, one lowercase, one number and one special character',
+          password_mismatch: "Passwords don't appear to match",
+          password_regex:
+            'The password must contain at least minimum 8 characters: one uppercase, one lowercase, one number and one special character',
           required: 'Required',
           existsIn: 'Value already exists',
-          invalid_parse_date: 'Please enter a valid date format'
-        }
-      }
-
-    }
-  }
+          invalid_parse_date: 'Please enter a valid date format',
+        },
+      },
+    },
+  },
 };
