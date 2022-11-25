@@ -11,6 +11,7 @@ export const locale = {
         long_date_time: 'd MMMM y \'at\' h:mm a',
         short_date_time: 'd/M/yy \'at\' h:mm a',
         long_date: 'd MMMM y',
+        medium_date: 'd MMM y',
         short_date: 'd mm y',
         medium_time: 'h:mm:ss a',
         short_seconds: 'd/M/yy, h:mm:ss a'
@@ -312,37 +313,37 @@ export const locale = {
               name: 'Waiting',
               cssColorClass: 'nhsuk-tag--yellow',
               accessorTypeDescription: 'Waiting for an internal decision to progress.',
-              innovatorTypeDescription: 'The organisation is waiting for an internal decision to progress.'          
+              innovatorTypeDescription: 'The organisation is waiting for an internal decision to progress.'
             },
             NOT_YET: {
               name: 'Not yet',
               cssColorClass: 'nhsuk-tag--blue',
               accessorTypeDescription: 'The innovation is not yet ready for your support offer. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'Your innovation is not yet ready for the organisation\'s support offer.'          
+              innovatorTypeDescription: 'Your innovation is not yet ready for the organisation\'s support offer.'
             },
             UNASSIGNED: {
               name: 'Unassigned',
               cssColorClass: 'nhsuk-tag--red',
               accessorTypeDescription: 'No status assigned yet.',
-              innovatorTypeDescription: 'No status assigned yet.'          
+              innovatorTypeDescription: 'No status assigned yet.'
             },
             UNSUITABLE: {
               name: 'Unsuitable',
               cssColorClass: 'nhsuk-tag--red',
               accessorTypeDescription: 'You have no suitable support offer for the innovation. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'The organisation has no suitable support offer for your innovation.'          
+              innovatorTypeDescription: 'The organisation has no suitable support offer for your innovation.'
             },
             WITHDRAWN: {
               name: 'Withdrawn',
               cssColorClass: 'nhsuk-tag--red',
               accessorTypeDescription: '',
-              innovatorTypeDescription: ''          
+              innovatorTypeDescription: ''
             },
             COMPLETE: {
               name: 'Completed',
               cssColorClass: 'nhsuk-tag--dark-grey',
               accessorTypeDescription: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'The organisation has completed their engagement with your innovation.'          
+              innovatorTypeDescription: 'The organisation has completed their engagement with your innovation.'
             }
           },
           grouped_status: {
