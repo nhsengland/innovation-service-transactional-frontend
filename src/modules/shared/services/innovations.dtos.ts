@@ -188,3 +188,16 @@ export type InnovationStatisticsDTO = {
   [InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER]: { count: number; lastSubmittedAt: null | DateISOType;},
   [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER]: { count: number; lastSubmittedAt: null | DateISOType;},
 }
+
+export type baseStatisticsCard = {
+  title: string,
+  label: string,
+  link: string
+};
+
+export type statisticsCard = {
+  count: number,
+  total?: number,
+  footer: string | null,
+  date: DateISOType | null
+} & baseStatisticsCard;

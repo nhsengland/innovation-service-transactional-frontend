@@ -7,40 +7,9 @@ import { CoreComponent } from '@app/base';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
-import { InnovationGroupedStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
-import { DateISOType } from '@app/base/types';
-import { INNOVATION_STATUS } from '@modules/stores/innovation/innovation.models';
-
-type baseStatisticsCard = {
-  title: string,
-  label: string,
-  link: string
-};
-
-type statisticsCard = {
-  count: number,
-  total?: number,
-  footer: string | null,
-  date: DateISOType | null
-} & baseStatisticsCard;
-
-enum InnovationSectionEnum {
-  INNOVATION_DESCRIPTION = 'INNOVATION_DESCRIPTION',
-  VALUE_PROPOSITION = 'VALUE_PROPOSITION',
-  UNDERSTANDING_OF_NEEDS = 'UNDERSTANDING_OF_NEEDS',
-  UNDERSTANDING_OF_BENEFITS = 'UNDERSTANDING_OF_BENEFITS',
-  EVIDENCE_OF_EFFECTIVENESS = 'EVIDENCE_OF_EFFECTIVENESS',
-  MARKET_RESEARCH = 'MARKET_RESEARCH',
-  INTELLECTUAL_PROPERTY = 'INTELLECTUAL_PROPERTY',
-  REGULATIONS_AND_STANDARDS = 'REGULATIONS_AND_STANDARDS',
-  CURRENT_CARE_PATHWAY = 'CURRENT_CARE_PATHWAY',
-  TESTING_WITH_USERS = 'TESTING_WITH_USERS',
-  COST_OF_INNOVATION = 'Cost of your innovation',
-  COMPARATIVE_COST_BENEFIT = 'Comparative cost benefit',
-  REVENUE_MODEL = 'Revenue model',
-  IMPLEMENTATION_PLAN = 'Implementation plan and deployment'
-}
+import { statisticsCard } from '@modules/shared/services/innovations.dtos';
 
 
 @Component({
