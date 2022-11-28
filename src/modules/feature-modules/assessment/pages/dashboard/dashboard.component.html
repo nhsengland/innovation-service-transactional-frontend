@@ -1,23 +1,54 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-one-half">
-      <p class="nhsuk-body-l nhsuk-u-margin-bottom-0">{{ user.displayName }}</p>
-      <p class="nhsuk-body-s">{{ user.organisation }}</p>
-    </div>
+  
+  <div class="d-flex align-items-center justify-content-space-between">
+    <h2 class="nhsuk-heading-m">Needs Assessment team</h2>
   </div>
 
-  <ul class="nhsuk-grid-row nhsuk-card-group">
-    <li *ngFor="let item of cardsList" class="nhsuk-grid-column-one-third nhsuk-card-group__item">
-      <div class="nhsuk-card nhsuk-card--clickable">
-        <div class="nhsuk-card__content">
-          <h2 class="nhsuk-card__heading nhsuk-heading-m d-flex">
-            <a class="nhsuk-card__link nhsuk-u-padding-right-2" [routerLink]="item.link"> {{ item.title }} </a>
-          </h2>
-          <p class="nhsuk-card__description">{{ item.description }}</p>
-        </div>
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li *ngFor="let item of cardsList" class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+          <div class="nhsuk-card nhsuk-card--clickable">
+            <div class="nhsuk-card__content nhsuk-u-padding-4">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">
+                <a routerLink="{{ item.link }}" [queryParams]="{ status: item.queryParams }" class="nhsuk-card__link">
+                  <span class="nhsuk-u-visually-hidden"> Go to </span> {{ item.title }}
+                </a>
+              </h2>
+              <div class="d-flex">
+                <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline">
+                  <span class="nhsuk-u-font-size-48">{{ item.count }}</span>
+                  <ng-container *ngIf="item.total">
+                    <span class="nhsuk-u-padding-right-1">of</span>
+                    <span class="mr-auto">{{ item.total }}</span>
+                  </ng-container>
+                </p>
+                <p class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-self-end nhsuk-u-padding-left-4">
+                  {{ item.label }}
+                </p>
+              </div>
+             
+              <ng-container *ngIf="item.footer">
+                <p class="nhsuk-u-font-size-16 font-color-secondary">
+                  {{ item.footer }}
+                </p>
+              </ng-container>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="nhsuk-grid-column-one-third">
+      <div class="nhsuk-card__content">
+        <h2 class="nhsuk-card__heading nhsuk-heading-m">Recent innovations you have worked on</h2>
+        <!-- <ul class="nhsuk-list">
+          <li><a href="/innovation-guides" target="_blank" rel="noopener noreferrer">Clinic innovation</a></li>
+          <li><a href="/about-the-service" target="_blank" rel="noopener noreferrer">HealthTalk</a></li>
+        </ul> -->
       </div>
-    </li>
-  </ul>
+    </div>
+  </div>
 
 </theme-content-wrapper>

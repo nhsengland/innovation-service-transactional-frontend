@@ -53,7 +53,9 @@ export class AdminLayoutComponent extends CoreComponent {
             { label: 'Organisations', url: '/admin/organisations', description: 'Manage organisations and associated units' },
             { label: 'Terms of use', url: '/admin/terms-conditions', description: 'Create a new version and trigger acceptance by the users' }
           ]
-        }
+        },
+        { id: 'innovations', label: 'Innovations', url: '/admin/innovations' },
+
       ],
       rightItems: [
         { id: 'account', label: 'My account', url: '/admin/account' },

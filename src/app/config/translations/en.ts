@@ -230,7 +230,7 @@ export const locale = {
             },
             ACTION_STATUS_COMPLETED_UPDATE: {
               title: 'Action completed',
-              message: `{{ actionUserName }} marked an action as complete`
+              message: `{{ actionUserName }} marked an action as completed`
             },
             ACTION_STATUS_REQUESTED_UPDATE: {
               title: 'Action requested',
@@ -376,7 +376,12 @@ export const locale = {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
               innovatorTypeDescription: 'Your innovation has been resent for a needs assessment review.'
-            }
+            },
+            ARCHIVED: {
+              name: 'Archived',
+              cssColorClass: 'nhsuk-tag--dark-grey',
+              innovatorTypeDescription: ''
+            },
           },
           export_request_status: {
             PENDING: {

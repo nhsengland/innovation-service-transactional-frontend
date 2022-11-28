@@ -1,0 +1,203 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-one-quarter">
+
+      <form [formGroup]="form">
+        <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Filters</h2>
+
+        <theme-form-input controlName="search" [pageUniqueField]="false">
+          <ng-container append>
+            <button type="button" (click)="onFormChange()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px">
+              <svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false" height="24" width="24">
+                <path d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z"></path>
+              </svg>
+            </button>
+          </ng-container>
+        </theme-form-input>
+
+        <ng-container *ngFor="let filter of filters">
+
+          <ng-container *ngIf="filter.active === true">
+
+            <a href="javascript:void(0)" (click)="onOpenCloseFilter(filter.key)" class="d-flex align-items-center nhsuk-u-font-size-19 text-decoration-none nhsuk-u-margin-bottom-0"
+              [attr.aria-expanded]="filter.showHideStatus === 'opened' ? 'true' : 'false'">
+              <ng-container *ngTemplateOutlet="filterIcon; context: { showHideStatus: filter.showHideStatus }"></ng-container>
+              <span class="nhsuk-u-padding-left-2"> {{ filter.title }} <span class="nhsuk-u-visually-hidden"> filter section </span></span>
+            </a>
+
+            <div class="nhsuk-u-padding-left-1" [ngClass]="{'nhsuk-u-visually-hidden': filter.showHideStatus !== 'opened'}">
+              <div class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-bottom-1 nhsuk-u-padding-left-6">{{ (form.get(filter.key)?.value || []).length }} selected</div>
+              <theme-form-checkbox-array [arrayName]="filter.key" [items]="datasets[filter.key]" size="small" [pageUniqueField]="false"> </theme-form-checkbox-array>
+            </div>
+
+            <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" />
+
+          </ng-container>
+
+        </ng-container>
+
+        <ng-container *ngIf="stores.authentication.userUrlBasePath() === 'accessor'">
+
+          <theme-form-checkbox controlName="assignedToMe" label="Only show innovations assigned to me" size="small"></theme-form-checkbox>
+          <theme-form-checkbox controlName="suggestedOnly" label="Only show suggested innovations" size="small"></theme-form-checkbox>
+
+        </ng-container>
+
+      </form>
+
+    </div>
+
+    <div class="nhsuk-grid-column-three-quarters">
+
+      <p class="nhsuk-u-margin-bottom-0">{{ innovationsList.getTotalRowsNumber() }} records found</p>
+
+      <dl class="nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1 nhsuk-u-padding-2 bg-color-grey">
+
+        <dt *ngIf="!anyFilterSelected" class="nhsuk-u-font-size-16"> No filter has been selected </dt>
+
+        <ng-container *ngIf="anyFilterSelected">
+
+          <ng-container *ngFor="let filter of filters">
+            <div *ngIf="filter.selected.length > 0" class="d-flex align-items-center border-bottom-neutral">
+              <dt class="width-15 nhsuk-u-font-size-16">{{ filter.title }}</dt>
+              <dd class="width-75">
+                <span *ngFor="let selected of filter.selected" class="d-inline-block bordered-item nhsuk-u-margin-1">
+                  <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.value)" attr.aria-label="Remove {{ selected.label }} from {{ filter.title }} filter">
+                    <svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" aria-hidden="true" focusable="false" height="20" width="20">
+                      <path d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z">
+                      </path>
+                    </svg>
+                  </a>
+                  <span class="nhsuk-u-font-size-14">{{ selected.label }}</span>
+                </span>
+
+              </dd>
+            </div>
+          </ng-container>
+
+          <dt *ngIf="form.get('assignedToMe')?.value" class="nhsuk-u-font-size-16 nhsuk-u-margin-top-2">
+            Viewing innovations assigned to me
+          </dt>
+
+          <dt *ngIf="form.get('suggestedOnly')?.value" class="nhsuk-u-font-size-16 nhsuk-u-margin-top-2">
+            Viewing suggested innovations
+          </dt>
+
+        </ng-container>
+
+      </dl>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+
+
+      <ng-container *ngIf="innovationsList.getTotalRowsNumber() === 0">
+        <p class="nhsuk-u-padding-top-4">There are no matching results.</p>
+        <p class="nhsuk-u-margin-bottom-2">Improve your search results by:</p>
+        <ul>
+          <li> removing filters </li>
+          <li> double-checking your spelling </li>
+          <li> using fewer words </li>
+          <li> searching for something less specific </li>
+        </ul>
+      </ng-container>
+
+      <ng-container *ngIf="innovationsList.getTotalRowsNumber() > 0">
+        <table class="nhsuk-table-responsive app-sortable-table">
+          <caption class="nhsuk-u-visually-hidden"> Innovations list </caption>
+          <thead class="nhsuk-table__head">
+            <tr class="">
+              <th *ngFor="let item of innovationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+                <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="nhsuk-table__body">
+            <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
+
+              <ng-container [ngSwitch]="stores.authentication.getUserType()">
+                
+                <ng-container *ngSwitchCase="'ADMIN'">
+
+                  <td class="nhsuk-table__cell">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }}</span>
+                    <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation"> {{ item.name }} </a>
+                  </td>
+                  <td class="nhsuk-table__cell">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('updatedAt') }}</span>
+                    {{ item.updatedAt | date: ('app.date_formats.long_date' | translate) }}
+                  </td>
+                  <td class="nhsuk-table__cell">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('status') }}</span>
+                    <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + item.groupedStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + item.groupedStatus + '.name' | translate }}"></theme-tag>
+                  </td>
+                  <td class="nhsuk-table__cell text-align-right">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('engagingOrgs') }}</span>                    
+                    <ng-container *ngFor="let support of (item.supports ?? []); let i = index">
+                      <ng-container *ngIf="i < 2">
+                        <theme-tag type="{{ 'WHITE' }}" label="{{ support.organisation.acronym }}" class="nhsuk-u-margin-left-1"></theme-tag>
+                      </ng-container>
+                      <ng-container *ngIf="i === 2 && (item.supports ?? []).length > 2">
+                        <theme-tag type="{{ 'WHITE' }}" label="+ {{ (item.supports || []).length - 2 }}" class="nhsuk-u-margin-left-1"></theme-tag>
+                      </ng-container>
+                    </ng-container>
+                  </td>
+
+                </ng-container>
+
+                <ng-container *ngSwitchDefault>
+
+                  <td class="nhsuk-table__cell">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }}</span>
+                    <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation"> {{ item.name }} </a>
+                  </td>
+                  <td class="nhsuk-table__cell">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('submittedAt') }}</span>
+                    {{ item.submittedAt | date: ('app.date_formats.long_date' | translate) }}
+                  </td>
+                  <td class="nhsuk-table__cell">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('mainCategory') }}</span>
+                    {{ item.mainCategory }}
+                  </td>
+                  <td class="nhsuk-table__cell">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('location') }}</span>
+                    {{ item.countryName }}{{ item.postCode ? ', ' + item.postCode : '' }}
+                  </td>
+                  <td class="nhsuk-table__cell text-align-right">
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('accessors') }}</span>
+                    <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + item.supportInfo?.status + '.cssColorClass' | translate }}"
+                      label="{{ 'shared.catalog.innovation.support_status.' + item.supportInfo?.status + '.name' | translate }}"></theme-tag>
+                  </td>
+
+                </ng-container>
+
+              </ng-container>
+
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="nhsuk-u-padding-bottom-4">
+          <theme-pagination [currentPage]="innovationsList.page" [pageSize]="innovationsList.pageSize" [totalRows]="innovationsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+        </div>
+
+      </ng-container>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>
+
+
+<ng-template #filterIcon let-showHideStatus="showHideStatus">
+  <svg *ngIf="showHideStatus === 'closed'" class="nhsuk-icon nhsuk-icon__plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
+    <circle cx="12" cy="12" r="10"></circle>
+    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M12 8v8M8 12h8"></path>
+  </svg>
+  <svg *ngIf="showHideStatus === 'opened'" class="nhsuk-icon nhsuk-icon__minus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
+    <circle cx="12" cy="12" r="10"></circle>
+    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M8 12h8"></path>
+  </svg>
+</ng-template>
