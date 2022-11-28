@@ -1,0 +1,77 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div *ngIf="!innovation.owner.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+    <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+      <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
+    </div>
+    <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
+  </div>
+
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <div class="nhsuk-u-margin-bottom-3">
+        <p class="nhsuk-u-font-weight-bold d-inline-block nhsuk-u-margin-bottom-0">Innovation status</p>
+        <a routerLink="/innovator/innovation-statuses" class="float-r nhsuk-body-s nhsuk-u-margin-bottom-0"
+          arial-label="View innovation status information">What does this status mean?</a>
+      </div>
+    
+      <div>
+        <div class="d-inline-block nhsuk-u-margin-bottom-4">
+          <theme-tag
+            type="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.cssColorClass' | translate }}"
+            label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}">
+          </theme-tag>
+          <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-left-2 d-inline-block"
+            *ngIf="innovation.groupedStatus === 'RECEIVING_SUPPORT'">
+            Organisations: {{ getSupportStatusCount(innovation.supportStatuses ?? [], 'ENGAGING') }} engaging, {{
+            getSupportStatusCount(innovation.supportStatuses ?? [], 'FURTHER_INFO_REQUIRED') }} further info.
+          </span>
+        </div>
+        <a routerLink="/admin/innovations/{{ innovation.id }}/support" class="float-r nhsuk-body-s"
+          arial-label="View innovation support status" *ngIf="innovation.groupedStatus === 'RECEIVING_SUPPORT'">View support
+          status</a>
+      </div>
+            
+    </div>
+  </div>
+  <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+
+  <div class="nhsuk-grid-row nhsuk-u-margin-top-5">
+    <div class="nhsuk-grid-column-full">
+
+      <h2 class="nhsuk-heading-m">Innovation summary</h2>
+      <dl class="nhsuk-summary-list">
+        <div *ngFor="let item of innovationSummary" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">{{ item.label }}</dt>
+          <dd class="nhsuk-summary-list__value text-pre-wrap nhsuk-u-padding-3">{{ item.value }}</dd>
+        </div>
+      </dl>
+
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row nhsuk-u-margin-top-5">
+    <div class="nhsuk-grid-column-full">
+
+      <div class="full-width-section bg-color-white">
+
+        <div class="nhsuk-u-padding-top-4 nhsuk-u-padding-bottom-4">
+
+          <h2 class="nhsuk-heading-m">Innovator details</h2>
+          <dl class="nhsuk-summary-list">
+            <div *ngFor="let item of innovatorDetails" class="nhsuk-summary-list__row">
+              <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">{{ item.label }}</dt>
+              <dd class="nhsuk-summary-list__value nhsuk-u-padding-3 text-pre-wrap">{{ item.value }}</dd>
+            </div>
+          </dl>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>
