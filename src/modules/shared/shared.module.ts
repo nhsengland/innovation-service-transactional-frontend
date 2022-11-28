@@ -59,6 +59,7 @@ import { InnovationsService } from './services/innovations.service';
 import { NotificationsService } from './services/notifications.service';
 import { OrganisationsService } from './services/organisations.service';
 import { TermsOfUseService } from './services/terms-of-use.service';
+import { StatisticsService } from './services/statistics.service';
 
 
 @NgModule({
@@ -124,7 +125,8 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     InnovationsService,
     NotificationsService,
     OrganisationsService,
-    TermsOfUseService
+    TermsOfUseService,
+    StatisticsService
   ],
   exports: [
     CommonModule,
