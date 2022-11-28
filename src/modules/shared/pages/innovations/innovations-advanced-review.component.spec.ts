@@ -12,11 +12,10 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
-import { InnovationsAdvancedReviewComponent } from './innovations-advanced-review.component';
+import { PageInnovationsAdvancedReviewComponent } from './innovations-advanced-review.component';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { AccessorService } from '../../services/accessor.service';
-
+import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 
 
 describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () => {
@@ -26,8 +25,8 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
   let organisationsService: OrganisationsService;
 
 
-  let component: InnovationsAdvancedReviewComponent;
-  let fixture: ComponentFixture<InnovationsAdvancedReviewComponent>;
+  let component: PageInnovationsAdvancedReviewComponent;
+  let fixture: ComponentFixture<PageInnovationsAdvancedReviewComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -51,7 +50,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
   });
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    fixture = TestBed.createComponent(PageInnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
@@ -62,7 +61,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     authenticationStore.isAccessorRole = () => true;
 
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    fixture = TestBed.createComponent(PageInnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -74,7 +73,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     authenticationStore.isQualifyingAccessorRole = () => true;
 
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    fixture = TestBed.createComponent(PageInnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -88,7 +87,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
       { id: 'orgId01', name: 'Org name 01', acronym: 'OrgAcronym01', organisationUnits: [] }
     ]);
 
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    fixture = TestBed.createComponent(PageInnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -100,7 +99,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     organisationsService.getOrganisationUnitUsersList = () => throwError('error');
 
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    fixture = TestBed.createComponent(PageInnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -110,7 +109,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   it('should run onFormChange()', fakeAsync(() => {
 
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    fixture = TestBed.createComponent(PageInnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
@@ -125,6 +124,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
       locations: [],
       engagingOrganisations: [],
       supportStatuses: [],
+      groupedStatuses: [],
       assignedToMe: false,
       suggestedOnly: true,
     });
@@ -133,7 +133,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   it('should run onOpenCloseFilter() and do nothing with an invalid key', () => {
 
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    fixture = TestBed.createComponent(PageInnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;
     component.filters[0].showHideStatus = 'closed' as any;
 
@@ -144,7 +144,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   it('should run onOpenCloseFilter() and do nothing with an invalid status', () => {
 
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    fixture = TestBed.createComponent(PageInnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;
     component.filters[0].showHideStatus = 'invalid status' as any;
 
@@ -155,7 +155,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   it('should run onOpenCloseFilter() and close the filter', () => {
 
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    fixture = TestBed.createComponent(PageInnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;
     component.filters[0].showHideStatus = 'opened';
 
@@ -166,7 +166,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   it('should run onOpenCloseFilter() and open the filter', () => {
 
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    fixture = TestBed.createComponent(PageInnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;
     component.filters[0].showHideStatus = 'closed';
 
@@ -177,7 +177,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   it('should run onRemoveFilter() with a invalid value', () => {
 
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    fixture = TestBed.createComponent(PageInnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;
     (component.form.get('mainCategories') as FormArray).push(new FormControl('MEDICAL_DEVICE'));
 
@@ -189,7 +189,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   it('should run onRemoveFilter()', () => {
 
-    fixture = TestBed.createComponent(InnovationsAdvancedReviewComponent);
+    fixture = TestBed.createComponent(PageInnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;
     (component.form.get('mainCategories') as FormArray).push(new FormControl('MEDICAL_DEVICE'));
 

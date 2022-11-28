@@ -421,27 +421,31 @@ export const locale = {
             AWAITING_NEEDS_REASSESSMENT: {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
-              innovatorTypeDescription:
-                'Your innovation has been resent for a needs assessment review.',
+              innovatorTypeDescription: 'Your innovation has been resent for a needs assessment review.'
+            },
+            ARCHIVED: {
+              name: 'Archived',
+              cssColorClass: 'nhsuk-tag--dark-grey',
+              innovatorTypeDescription: ''
             },
           },
           export_request_status: {
             PENDING: {
-              name: 'Request pending',
+              name: 'Pending'
             },
             APPROVED: {
-              name: 'Request approved',
+              name: 'Approved'
             },
             REJECTED: {
-              name: 'Request rejected',
+              name: 'Rejected'
             },
             CANCELLED: {
-              name: 'Request cancelled',
+              name: 'Cancelled'
             },
             EXPIRED: {
-              name: 'Request expired',
-            },
-          },
+              name: 'Expired'
+            }
+          }
         },
         user: {
           lock_user_validations: {

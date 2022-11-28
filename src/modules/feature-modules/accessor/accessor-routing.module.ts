@@ -22,7 +22,6 @@ import { InnovationActionTrackerEditComponent } from './pages/innovation/action-
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
 import { InnovationActionTrackerListComponent } from './pages/innovation/action-tracker/action-tracker-list.component';
 import { InnovationActionTrackerNewComponent } from './pages/innovation/action-tracker/action-tracker-new.component';
-import { InnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
 import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './pages/innovation/support/organisations-support-status-info.component';
@@ -52,6 +51,8 @@ import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/
 import { PageExportRecordListComponent } from '@modules/shared/pages/innovation/export/export-record-list.component';
 import { PageExportRecordInfoComponent } from '@modules/shared/pages/innovation/export/export-record-info.component';
 import { InnovationExportRequestComponent } from './pages/innovation/export/export-request.component';
+// // Innovations
+import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -108,7 +109,7 @@ const routes: Routes = [
           },
 
           {
-            path: 'advanced-search', pathMatch: 'full', component: InnovationsAdvancedReviewComponent,
+            path: 'advanced-search', pathMatch: 'full', component: PageInnovationsAdvancedReviewComponent,
             data: {
               layout: { type: 'full', backgroundColor: 'bg-color-white' }
             }

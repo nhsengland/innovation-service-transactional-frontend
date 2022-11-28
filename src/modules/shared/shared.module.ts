@@ -35,6 +35,7 @@ import { PageInnovationSupportStatusListComponent } from './pages/innovation/sup
 import { PageInnovationStatusListComponent } from './pages/innovation/status/innovation-status-list.component';
 import { PageExportRecordInfoComponent } from './pages/innovation/export/export-record-info.component';
 import { PageExportRecordListComponent } from './pages/innovation/export/export-record-list.component';
+import { PageInnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
 // // Notifications.
 import { PageNotificationsListComponent } from './pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -58,6 +59,7 @@ import { InnovationsService } from './services/innovations.service';
 import { NotificationsService } from './services/notifications.service';
 import { OrganisationsService } from './services/organisations.service';
 import { TermsOfUseService } from './services/terms-of-use.service';
+import { StatisticsService } from './services/statistics.service';
 
 
 @NgModule({
@@ -99,6 +101,7 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     PageInnovationStatusListComponent,
     PageExportRecordListComponent,
     PageExportRecordInfoComponent,
+    PageInnovationsAdvancedReviewComponent,
     // // Notifications.
     PageNotificationsListComponent,
     // // Terms of use.
@@ -122,7 +125,8 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     InnovationsService,
     NotificationsService,
     OrganisationsService,
-    TermsOfUseService
+    TermsOfUseService,
+    StatisticsService
   ],
   exports: [
     CommonModule,

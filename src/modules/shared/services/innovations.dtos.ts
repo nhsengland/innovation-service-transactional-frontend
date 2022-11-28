@@ -12,6 +12,7 @@ export type InnovationsListDTO = {
     description: null | string,
     status: InnovationStatusEnum,
     submittedAt: null | DateISOType,
+    updatedAt: null | DateISOType,
     countryName: null | string,
     postCode: null | string,
     mainCategory: null | string,

@@ -9,6 +9,7 @@ import { FIRST_TIME_SIGNIN_QUESTIONS } from './innovation-new.config';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovatorService } from '../../services/innovator.service';
+import { UtilsHelper } from '@modules/core/helpers/utils.helper';
 
 
 @Component({
@@ -85,7 +86,7 @@ export class FirstTimeSigninInnovationNewComponent extends CoreComponent impleme
 
       concatMap(() => this.stores.authentication.updateUserInfo$({
         displayName: wizardData.innovatorName,
-        mobilePhone: wizardData.mobilePhone,
+        mobilePhone: UtilsHelper.isEmpty(wizardData.mobilePhone) ? null : wizardData.mobilePhone,
         organisation: wizardData.isCompanyOrOrganisation.toUpperCase() === 'YES' ? {
           id: this.stores.authentication.getUserInfo().organisations[0].id,
           isShadow: false,

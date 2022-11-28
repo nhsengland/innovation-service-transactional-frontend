@@ -19,7 +19,7 @@ export class InnovationExportRequestRejectComponent extends CoreComponent implem
   request?: InnovationExportRequestItemType;
 
   form = new FormGroup({
-    rejectReason: new FormControl<string>('', CustomValidators.required('A explanation is required')),
+    rejectReason: new FormControl<string>('', CustomValidators.required('A reason is required')),
   }, { updateOn: 'blur' });
 
   constructor(
@@ -63,7 +63,7 @@ export class InnovationExportRequestRejectComponent extends CoreComponent implem
 
     this.innovationsService.updateExportRequestStatus(this.innovationId, this.requestId, body).subscribe(() => {
 
-      this.setRedirectAlertSuccess('You\'ve rejected the export request', { message: `${this.request?.organisation.name} will be notified.` });
+      this.setRedirectAlertSuccess('You\'ve rejected the export request', { message: `${ this.request?.organisation.organisationUnit.name } will be notified.` });
       this.redirectTo(`/innovator/innovations/${this.innovationId}/export/list`);
 
     });
