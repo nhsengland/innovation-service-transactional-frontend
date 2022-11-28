@@ -1,3 +1,4 @@
+import { LinkType } from '@app/base/types';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '../innovation/innovation.enums';
 
 import { NotificationContextTypeEnum } from './context.enums';
@@ -34,7 +35,7 @@ export type ContextPageLayoutType = {
     hiddenLabel?: string,
   },
   status: 'LOADING' | 'READY' | 'ERROR',
-  title: { main: null | string, secondary?: string, size?: 'xl' | 'l', width?: 'full' | '2.thirds' }
+  title: { main: null | string, secondary?: string, size?: 'xl' | 'l', width?: 'full' | '2.thirds', actions?: LinkType[] }
 };
 
 

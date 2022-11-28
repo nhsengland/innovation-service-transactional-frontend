@@ -33,7 +33,7 @@ export class PageAdminUsersFindComponent extends CoreComponent implements OnInit
   ) {
 
     super();
-    this.setPageTitle('Find an admin user');
+    this.setPageTitle('Find an admin user', { actions: this.titleActions });
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'adminDeletedSuccess':

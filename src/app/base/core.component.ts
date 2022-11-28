@@ -17,7 +17,7 @@ import { ContextStore } from '@modules/stores/context/context.store';
 import { ContextPageLayoutType, ContextPageStatusType } from '@modules/stores/context/context.types';
 import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 
-import { AlertType, MappedObjectType } from '@modules/core/interfaces/base.interfaces';
+import { AlertType, LinkType, MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { UtilsHelper } from './helpers';
 
 
@@ -117,12 +117,12 @@ export class CoreComponent implements OnDestroy {
     return this.serverRequest?.method?.toLowerCase() === 'post';
   }
 
-  setPageTitle(main: string, options?: { hint?: string, showTab?: boolean, showPage?: boolean, size?: 'xl' | 'l', width?: 'full' | '2.thirds' }): void {
+  setPageTitle(main: string, options?: { hint?: string, showTab?: boolean, showPage?: boolean, size?: 'xl' | 'l', width?: 'full' | '2.thirds', actions?: LinkType[] }): void {
 
     main = main ? this.translateService.instant(main) : null;
 
     if (main && (options?.showPage ?? true)) {
-      this.stores.context.setPageTitle({ main, secondary: options?.hint, size: options?.size, width: options?.width });
+      this.stores.context.setPageTitle({ main, secondary: options?.hint, size: options?.size, width: options?.width, actions: options?.actions });
     } else {
       this.stores.context.setPageTitle({ main: null });
     }

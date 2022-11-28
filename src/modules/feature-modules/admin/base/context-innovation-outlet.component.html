@@ -1,0 +1,10 @@
+<div *ngIf="data.innovation" class="nhsuk-u-padding-top-3">
+
+  <div class="d-flex align-items-center justify-content-space-between nhsuk-u-padding-bottom-3">
+    <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ data.innovation.name }}</p>
+    <a *ngIf="data.link" [routerLink]="data.link.url">{{ data.link.label }}</a>
+  </div>
+
+  <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+
+</div>

@@ -13,6 +13,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { PageTermsOfUseListComponent } from './terms-of-use-list.component';
 
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { AlertType } from '@app/base/types';
 
 
 describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseListComponent', () => {
@@ -99,7 +100,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseListComponent', ()
 
     activatedRoute.snapshot.queryParams = { alert: 'versionCreationSuccess' };
 
-    const expected = { type: 'SUCCESS', title: 'You\'ve successfully created new version.' };
+    const expected: AlertType = { type: 'SUCCESS', title: 'You\'ve successfully created new version.', setFocus: true };
 
     fixture = TestBed.createComponent(PageTermsOfUseListComponent);
     component = fixture.componentInstance;
@@ -110,7 +111,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseListComponent', ()
 
     activatedRoute.snapshot.queryParams = { alert: 'versionUpdatedSuccess' };
 
-    const expected = { type: 'SUCCESS', title: 'You\'ve successfully updated  version.' };
+    const expected: AlertType = { type: 'SUCCESS', title: 'You\'ve successfully updated version.', setFocus: true };
 
     fixture = TestBed.createComponent(PageTermsOfUseListComponent);
     component = fixture.componentInstance;

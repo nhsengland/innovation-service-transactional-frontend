@@ -11,6 +11,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageOrganisationsListComponent } from './organisations-list.component';
 import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { AlertType } from '@app/base/types';
 
 
 describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponent', () => {
@@ -123,14 +124,10 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponen
 
   it('should NOT load initial data', () => {
 
-    organisationsService.getOrganisationsList = () => throwError(false);
+    organisationsService.getOrganisationsList = () => throwError(() => new Error());
 
-    const expected = {
-      type: 'ERROR',
-      title: 'Unable to fetch organisations information',
-      message: 'Please try again or contact us for further help'
-    };
-
+    const expected: AlertType = { type: 'ERROR', title: 'There is a problem', message: 'Unable to fetch organisations information', setFocus: true };
+    
     fixture = TestBed.createComponent(PageOrganisationsListComponent);
     component = fixture.componentInstance;
 

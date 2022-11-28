@@ -1,13 +1,4 @@
-<theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-  <p> {{ alert.message }} </p>
-</theme-alert>
-
-<theme-page-title [title]="pageTitle" [titleHint]="user.name"></theme-page-title>
-
-<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-
-<div *ngIf="pageStatus === 'READY'" aria-live="polite">
+<theme-content-wrapper [status]="pageStatus" >
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
@@ -27,4 +18,4 @@
     </div>
   </div>
 
-</div>
+</theme-content-wrapper>

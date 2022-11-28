@@ -37,14 +37,15 @@ export class PageTermsOfUseNewComponent extends CoreComponent implements OnInit 
     this.module = this.activatedRoute.snapshot.data.module;
     this.id = this.activatedRoute.snapshot.params.id;
     this.setPageTitle(`${this.module} version`);
+    this.setBackLink('Go back', '/admin/terms-conditions');
   }
 
   ngOnInit(): void {
 
     if (this.module === 'Edit') {
 
-      this.userService.getTermsById(this.id).subscribe(
-        response => {
+      this.userService.getTermsById(this.id).subscribe({
+        next: (response) => {
 
           this.form.setValue({
             name: response.name,
@@ -55,11 +56,11 @@ export class PageTermsOfUseNewComponent extends CoreComponent implements OnInit 
 
           this.setPageStatus('READY');
         },
-        () => {
+        error: () => {
           this.setPageStatus('ERROR');
           this.errorResponse();
         }
-      );
+      });
     }
     this.setPageStatus('READY');
   }
@@ -100,19 +101,11 @@ export class PageTermsOfUseNewComponent extends CoreComponent implements OnInit 
   errorResponse(code?: string): void {
     switch (code || '') {
       case 'UniqueKeyError':
-        this.alert = {
-          type: 'ERROR',
-          title: 'A version of the terms of use with this name already exists, please re-name this new version',
-          setFocus: true
-        };
+        this.setAlertError('A version of the terms of use with this name already exists, please re-name this new version');
         break;
       default:
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to perform the necessary action',
-          message: 'Please try again or contact us for further help',
-          setFocus: true
-        };
+        this.setAlertError('Unable to perform the necessary action', { message: 'Please try again or contact us for further help' });
+
         break;
     }
   }

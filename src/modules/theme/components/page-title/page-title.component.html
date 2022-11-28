@@ -1,9 +1,9 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-two-thirds">
-    <p *ngIf="titleHint" class="nhsuk-hint nhsuk-u-margin-bottom-0">{{ titleHint }}</p>
-    <h1>{{ title }}</h1>
+    <span *ngIf="titleHint" class="nhsuk-caption-l nhsuk-u-margin-0">{{ titleHint }}</span>
+    <h1 [ngClass]="{'nhsuk-heading-l nhsuk-u-padding-0': size === 'l'}">{{ title }}</h1>
   </div>
-  <ng-container *ngIf="actions.length > 0">
+  <ng-container *ngIf="(actions ?? []).length > 0">
     <div class="nhsuk-grid-column-one-third text-align-right-only-desktop">
 
       <div *ngFor="let item of actions" class="nhsuk-u-margin-bottom-1">
