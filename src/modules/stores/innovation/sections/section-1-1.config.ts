@@ -121,6 +121,10 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
 
     const selectedCategories = mainCategoryItems.filter(category => data.categories.some(e => e === category.value));
 
+    if (data.mainCategory !== null && !data.categories.includes(data.mainCategory)) {
+      data.mainCategory = null;
+    }
+
     steps.push(
       new FormEngineModel({
         parameters: [{
