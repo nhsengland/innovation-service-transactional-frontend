@@ -71,7 +71,12 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   ) {
 
     super();
+
     this.setPageTitle('Innovations advanced search');
+
+    if(this.stores.authentication.isAdminRole()) {
+      this.setPageTitle('Innovations');
+    }
 
     let columns: { [key: string]: (string | { label: string; align?: 'left' | 'right' | 'center'; orderable?: boolean; }) } = {
       name: { label: 'Innovation', orderable: true },

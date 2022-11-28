@@ -8,7 +8,6 @@ import { AdminRoutingModule } from './admin-routing.module';
 
 // Base.
 import { ContextInnovationOutletComponent } from './base/context-innovation-outlet.component';
-import { AdminLayoutComponent } from './base/admin-layout.component';
 import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
 // Pages.
 // // Account.
@@ -64,7 +63,6 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
   ],
   declarations: [
     // Base
-    AdminLayoutComponent,
     ContextInnovationOutletComponent,
     SidebarInnovationMenuOutletComponent,
     
