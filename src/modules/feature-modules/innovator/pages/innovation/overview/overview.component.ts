@@ -9,7 +9,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
-import { statisticsCard } from '@modules/shared/services/innovations.dtos';
+import { StatisticsCard } from '@modules/shared/services/innovations.dtos';
 
 
 @Component({
@@ -20,9 +20,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   innovationId: string;
 
-  statisticsSectionsCard: statisticsCard;
-  statisticsActionsCard: statisticsCard;
-  statisticsMessagesCard: statisticsCard;
+  statisticsSectionsCard: StatisticsCard;
+  statisticsActionsCard: StatisticsCard;
+  statisticsMessagesCard: StatisticsCard;
+
+  actionLabelMapping: {[k: string]: string} = {'=1': 'requested action to submit', 'other': 'requested actions to submit'};
+  messageLabelMapping: {[k: string]: string} = {'=1': 'unread message', 'other': 'unread messages'};
 
   innovation: {
     groupedStatus: null | InnovationGroupedStatusEnum,
@@ -105,8 +108,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovation.organisationsStatusDescription = Object.entries(occurrences).map(([status, item]) => `${item.count} ${item.text}`).join(', ');
       // console.log(occurrences) // => {2: 5, 4: 1, 5: 3, 9: 1}
 
+      console.log(statistics)
+
       const lastSectionSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection!];
-      const lastActionSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER].lastSubmittedAt!];
+      const lastActionSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER].lastSubmittedSection!];
 
       this.statisticsSectionsCard = {
 
@@ -115,7 +120,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         link: `/innovator/innovations/${this.innovationId}/record`,
         count: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].count,
         total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].total,
-        footer: `Last submitted section: "${lastSectionSubmitted}"`,
+        footer: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + lastSectionSubmitted)}"`,
         date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]?.lastSubmittedAt
 
       };
@@ -126,7 +131,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         label: `request actions to submit`,
         link: `/innovator/innovations/${this.innovationId}/action-tracker`,
         count: statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER].count,
-        footer: `Last requested action: "${lastActionSubmitted}"`,
+        footer: `Last requested action: "Submit '${this.translate('shared.catalog.innovation.innovation_sections.' + lastActionSubmitted)}'"`,
         date: statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER]?.lastSubmittedAt
 
       };
@@ -138,7 +143,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         link: `/innovator/innovations/${this.innovationId}/threads`,
         count: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER].count,
         footer: `Last received message`,
-        date: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER].lastSubmittedAt,
+        date: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]?.lastSubmittedAt,
 
       }
 

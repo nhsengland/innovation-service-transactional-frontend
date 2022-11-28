@@ -190,15 +190,15 @@ export type InnovationStatisticsDTO = {
   [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER]: { count: number; lastSubmittedAt: null | DateISOType;},
 }
 
-export type baseStatisticsCard = {
+export type BaseStatisticsCard = {
   title: string,
   label: string,
   link: string
 };
 
-export type statisticsCard = {
+export type StatisticsCard = {
   count: number,
   total?: number,
   footer: string | null,
   date: DateISOType | null
-} & baseStatisticsCard;
+} & BaseStatisticsCard;

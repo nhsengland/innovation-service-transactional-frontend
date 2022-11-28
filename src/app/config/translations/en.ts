@@ -190,7 +190,7 @@ export const locale = {
             },
             NEEDS_ASSESSMENT_EDITED: {
               title: 'Needs assessment edited',
-              message:  `{{ actionUserName }} edited needs assessment`
+              message: `{{ actionUserName }} edited needs assessment`
             },
             NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: {
               title: "Reassessment requested",
@@ -255,6 +255,23 @@ export const locale = {
               me: 'Send me daily summary updates',
               you: 'You get daily summary updates'
             }
+          },
+
+          innovation_sections: {
+            INNOVATION_DESCRIPTION: 'Description of innovation',
+            VALUE_PROPOSITION: 'Value proposition',
+            UNDERSTANDING_OF_NEEDS: 'Detailed understanding of needs',
+            UNDERSTANDING_OF_BENEFITS: 'Detailed understanding of benefits',
+            EVIDENCE_OF_EFFECTIVENESS: 'Evidence of effectiveness',
+            MARKET_RESEARCH: 'Market research',
+            INTELLECTUAL_PROPERTY: 'Intellectual property',
+            REGULATIONS_AND_STANDARDS: 'Standards and certifications',
+            CURRENT_CARE_PATHWAY: 'Current care pathway',
+            TESTING_WITH_USERS: 'Testing with users',
+            COST_OF_INNOVATION: 'Cost of your innovation',
+            COMPARATIVE_COST_BENEFIT: 'Comparative cost benefit',
+            REVENUE_MODEL: 'Revenue model',
+            IMPLEMENTATION_PLAN: 'Implementation plan and deployment'
           },
 
           notification_context_types: {

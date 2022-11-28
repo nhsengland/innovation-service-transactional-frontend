@@ -42,7 +42,7 @@
             </ng-container>
             <ng-container *ngIf="statisticsSectionsCard.date">
               <p class="nhsuk-u-font-size-16 font-color-secondary">
-                {{ statisticsSectionsCard.footer }} on {{ statisticsSectionsCard.date| date: ('app.date_formats.medium_date' | translate) }}
+                {{ statisticsSectionsCard.footer }} on {{ statisticsSectionsCard.date | date: ('app.date_formats.medium_date' | translate) }}
               </p>
             </ng-container>
             <ng-template #noSectionsToSubmit>
@@ -65,14 +65,14 @@
             <ng-container *ngIf="statisticsActionsCard.count!== 0; else noActionsToSubmit">
               <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline">
                 <span class="nhsuk-u-font-size-48">{{ statisticsActionsCard.count }}</span>
-                <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-self-end nhsuk-u-padding-left-4">
-                  {{ statisticsActionsCard.label }}
+                <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-center nhsuk-u-padding-left-4">
+                  {{ statisticsActionsCard.count | i18nPlural: actionLabelMapping }}
                 </span>
               </p>
             </ng-container>
             <ng-container *ngIf="statisticsActionsCard.date">
               <p class="nhsuk-u-font-size-16 font-color-secondary">
-                {{ statisticsActionsCard.footer }} on {{ statisticsActionsCard.date| date: ('app.date_formats.long_date' | translate) }}
+                {{ statisticsActionsCard.footer }} on {{ statisticsActionsCard.date | date: ('app.date_formats.long_date' | translate) }}
               </p>
             </ng-container>
             <ng-template #noActionsToSubmit>
@@ -99,13 +99,13 @@
             <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline">
               <span class="nhsuk-u-font-size-48">{{ statisticsMessagesCard.count }}</span>
               <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-self-end nhsuk-u-padding-left-4">
-                {{ statisticsMessagesCard.label }}
+                {{ statisticsMessagesCard.count | i18nPlural: messageLabelMapping }} }}
               </span>
             </p>
           </ng-container>
-          <ng-container *ngIf="statisticsActionsCard.date">
+          <ng-container *ngIf="statisticsMessagesCard.date">
             <p class="nhsuk-u-font-size-16 font-color-secondary">
-              {{ statisticsMessagesCard.footer }} on {{ statisticsMessagesCard.date| date: ('app.date_formats.long_date' | translate) }}
+              {{ statisticsMessagesCard.footer }} on {{ statisticsMessagesCard.date | date: ('app.date_formats.long_date' | translate) }}
             </p>
           </ng-container>
           <ng-template #noUnreadMessages>
