@@ -1,53 +1,124 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <ng-container *ngIf="innovationStatus === 'IN_PROGRESS' && lastEndSupportAt">
-    <div class="nhsuk-card nhsuk-card--care nhsuk-card--care--non-urgent nhsuk-u-margin-top-0">
-      <div class="nhsuk-card--care__heading-container">
-        <h2 class="nhsuk-card--care__heading">
-          <span role="text"><span class="nhsuk-u-visually-hidden">Non-urgent advice: </span> Your innovation is currently not receiving any support </span>
-        </h2>
-        <span class="nhsuk-card--care__arrow" aria-hidden="true"></span>
+  <div class="d-flex align-items-center justify-content-space-between">
+    <h2 class="nhsuk-heading-m">Innovation status</h2>
+    <a routerLink="/innovator/innovation-statuses" class="float-r nhsuk-u-margin-bottom-4" arial-label="View innovation status information">What does this status mean?</a>
+  </div>
+
+
+  <div class="d-flex align-items-center justify-content-space-between">
+    <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}"></theme-tag>
+    <ng-container *ngIf="innovation.organisationsStatusDescription">
+      <div class="mr-auto nhsuk-u-font-size-16 nhsuk-u-padding-left-2">
+        Organisations: {{ innovation.organisationsStatusDescription }}
       </div>
+    </ng-container>
+    <a routerLink="/innovator/innovation-statuses" class="float-r nhsuk-u-margin-bottom-4" arial-label="View innovation support status information">View support status</a>
+  </div>
 
-      <div class="nhsuk-card__content">
-        <p> There are no organisation units currently supporting your innovation. There are also no more outstanding suggestions from your original needs assessment or from other organisations. </p>
-        <p> Don't worry, there are a few options available to you. </p>
-        <p>
-          <a routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed"> Choose how you want to proceed with your innovation </a>
-        </p>
+
+  <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-section-break--m" />
+
+  <ul class="nhsuk-grid-row nhsuk-card-group">
+    <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+        <div class="nhsuk-card nhsuk-card--clickable">
+          <div class="nhsuk-card__content">
+            <h2 class="nhsuk-card__heading nhsuk-heading-m">
+              <a routerLink="{{ statisticsSectionsCard.link }}" class="nhsuk-card__link">
+                <span class="nhsuk-u-visually-hidden"> Go to </span> {{ statisticsSectionsCard.title }}
+              </a>
+            </h2>
+            <ng-container *ngIf="statisticsSectionsCard.count!== 0; else noSectionsToSubmit">
+              <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline">
+                <span class="nhsuk-u-font-size-48">{{ statisticsSectionsCard.count }}</span>
+                <ng-container *ngIf="statisticsSectionsCard.total">
+                  <span class="nhsuk-u-padding-1">of</span>
+                  <span class="mr-auto">{{ statisticsSectionsCard.total }}</span>
+                </ng-container>
+                <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-self-end nhsuk-u-padding-left-4">
+                  {{ statisticsSectionsCard.label }}
+                </span>
+              </p>
+            </ng-container>
+            <ng-container *ngIf="statisticsSectionsCard.date">
+              <p class="nhsuk-u-font-size-16 font-color-secondary">
+                {{ statisticsSectionsCard.footer }} on {{ statisticsSectionsCard.date | date: ('app.date_formats.medium_date' | translate) }}
+              </p>
+            </ng-container>
+            <ng-template #noSectionsToSubmit>
+              <p class="nhsuk-u-font-weight-normal">
+                You haven't submitted any section of your innovation record yet.
+              </p>
+            </ng-template>
+          </div>
+        </div>
+    </li>
+    <ng-container *ngIf="innovation.groupedStatus !== 'RECORD_NOT_SHARED'">
+      <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+        <div class="nhsuk-card nhsuk-card--clickable">
+          <div class="nhsuk-card__content">
+            <h2 class="nhsuk-card__heading nhsuk-heading-m">
+              <a routerLink="{{ statisticsActionsCard.link }}" class="nhsuk-card__link">
+                <span class="nhsuk-u-visually-hidden"> Go to </span> {{ statisticsActionsCard.title }}
+              </a>
+            </h2>
+            <ng-container *ngIf="statisticsActionsCard.count!== 0; else noActionsToSubmit">
+              <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline">
+                <span class="nhsuk-u-font-size-48">{{ statisticsActionsCard.count }}</span>
+                <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-center nhsuk-u-padding-left-4">
+                  {{ statisticsActionsCard.count | i18nPlural: actionLabelMapping }}
+                </span>
+              </p>
+            </ng-container>
+            <ng-container *ngIf="statisticsActionsCard.date">
+              <p class="nhsuk-u-font-size-16 font-color-secondary">
+                {{ statisticsActionsCard.footer }} on {{ statisticsActionsCard.date | date: ('app.date_formats.long_date' | translate) }}
+              </p>
+            </ng-container>
+            <ng-template #noActionsToSubmit>
+              <p class="nhsuk-u-font-weight-bold">
+                No action requests yet.
+              </p>
+              <span class="nhsuk-u-font-weight-normal">
+                We might send a request to add more information to your innovation record here.
+              </span>
+            </ng-template>
+          </div>
+        </div>
+      </li>
+    </ng-container>
+    <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+      <div class="nhsuk-card nhsuk-card--clickable">
+        <div class="nhsuk-card__content">
+          <h2 class="nhsuk-card__heading nhsuk-heading-m">
+            <a routerLink="{{ statisticsMessagesCard.link }}" class="nhsuk-card__link">
+              <span class="nhsuk-u-visually-hidden"> Go to </span> {{ statisticsMessagesCard.title }}
+            </a>
+          </h2>
+          <ng-container *ngIf="statisticsMessagesCard.count!== 0; else noUnreadMessages">
+            <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline">
+              <span class="nhsuk-u-font-size-48">{{ statisticsMessagesCard.count }}</span>
+              <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-self-end nhsuk-u-padding-left-4">
+                {{ statisticsMessagesCard.count | i18nPlural: messageLabelMapping }} }}
+              </span>
+            </p>
+          </ng-container>
+          <ng-container *ngIf="statisticsMessagesCard.date">
+            <p class="nhsuk-u-font-size-16 font-color-secondary">
+              {{ statisticsMessagesCard.footer }} on {{ statisticsMessagesCard.date | date: ('app.date_formats.long_date' | translate) }}
+            </p>
+          </ng-container>
+          <ng-template #noUnreadMessages>
+            <p class="nhsuk-u-font-weight-normal">
+              No messages yet
+            </p>
+          </ng-template>
+        </div>
       </div>
-    </div>
-  </ng-container>
+    </li>
+  </ul>
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-      <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
-        <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="item.substring(2)"></li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="nhsuk-grid-row">
-    <div *ngIf="sections.submitted > 0" class="nhsuk-grid-column-one-third">
-      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.submitted }} <span class="nhsuk-u-visually-hidden"> sections submitted </span></div>
-      <p>sections submitted</p>
-    </div>
-    <div *ngIf="sections.draft > 0" class="nhsuk-grid-column-one-third">
-      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.draft }} <span class="nhsuk-u-visually-hidden"> sections in draft </span></div>
-      <p>sections in draft</p>
-    </div>
-    <div *ngIf="sections.notStarted > 0" class="nhsuk-grid-column-one-third">
-      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.notStarted }} <span class="nhsuk-u-visually-hidden"> sections not started </span></div>
-      <p>sections not started</p>
-    </div>
-  </div>
-  <div class="nhsuk-grid-row" *ngIf="!isInAssessmentStatus()">
-    <div class="nhsuk-grid-column-one-third">
-      See your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a>
-    </div>
-  </div>
-
-  <ng-container *ngIf="!isSubmittedForAssessment()">
+  <!-- <ng-container *ngIf="!isSubmittedForAssessment()">
     <div class="nhsuk-card nhsuk-u-margin-top-2">
       <div class="nhsuk-card__content">
         <h2 class="nhsuk-heading-m"> Your next steps </h2>
@@ -67,68 +138,6 @@
         </ol>
       </div>
     </div>
-  </ng-container>
-
-  <ng-container *ngIf="isInAssessmentStatus()">
-    <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <h2 class="nhsuk-heading-m">Support status</h2>
-      </div>
-    </div>
-    <div class="nhsuk-grid-column-two-thirds">
-      <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ innovationStatusObj[innovationStatus]?.label || '' }}</p>
-    </div>
-    <div class="nhsuk-grid-column-two-thirds">
-      <p>You can expect the service team to get in touch within one week of submitting your record for assessment.</p>
-    </div>
-  </ng-container>
-
-  <!-- ACTIONS AREA -->
-  <ng-container *ngIf="isSubmittedForAssessment() && !isInAssessmentStatus()">
-    <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
-    <!-- <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <h2 class="nhsuk-heading-m">Actions overview</h2>
-      </div>
-      <div class="nhsuk-grid-column-two-thirds">
-        <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.requested }}</p>
-        <p class="">actions requested of you</p>
-        See your <strong><a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker"> action tracker</a></strong>
-      </div>
-      <div class="nhsuk-grid-column-one-third">
-        <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.review }}</p>
-        <p>actions awaiting review from an accessor</p>
-      </div>
-    </div> -->
-
-    <!-- SUPPORT AREA -->
-    <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <h2 class="nhsuk-heading-m">Support status</h2>
-      </div>
-      <div class="nhsuk-grid-column-two-thirds">
-        <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{supportStatus}}</p>
-        <!-- <ng-container *ngIf="supportingAccessors.length > 0">
-          <ul class="nhsuk-list">
-            <li *ngFor="let item of supportingAccessors">
-              {{item.unit}}, {{item.name}}
-            </li>
-          </ul>
-        </ng-container> -->
-        See <strong><a routerLink="/innovator/innovations/{{ innovationId }}/support"> data sharing and support</a></strong>
-      </div>
-      <div class="nhsuk-grid-column-one-third" *ngIf="showNeedsAssessmentCompleteCard()">
-        <strong><a routerLink="/innovator/innovations/{{ innovationId }}/assessments/{{ assessmentId }}">Needs assessment completed</a></strong>
-        <p>Your innovation is visible to all organisations you've selected.</p>
-      </div>
-    </div>
-  </ng-container>
+  </ng-container> -->
 
 </theme-content-wrapper>
-
-<ng-template #icon let-completed="completed">
-  <theme-svg-icon *ngIf="!completed" type="error"></theme-svg-icon>
-  <theme-svg-icon *ngIf="completed" type="success"></theme-svg-icon>
-</ng-template>

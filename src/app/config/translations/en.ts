@@ -11,6 +11,7 @@ export const locale = {
         long_date_time: 'd MMMM y \'at\' h:mm a',
         short_date_time: 'd/M/yy \'at\' h:mm a',
         long_date: 'd MMMM y',
+        medium_date: 'd MMM y',
         short_date: 'd mm y',
         medium_time: 'h:mm:ss a',
         short_seconds: 'd/M/yy, h:mm:ss a'
@@ -189,7 +190,7 @@ export const locale = {
             },
             NEEDS_ASSESSMENT_EDITED: {
               title: 'Needs assessment edited',
-              message:  `{{ actionUserName }} edited needs assessment`
+              message: `{{ actionUserName }} edited needs assessment`
             },
             NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: {
               title: "Reassessment requested",
@@ -229,7 +230,7 @@ export const locale = {
             },
             ACTION_STATUS_COMPLETED_UPDATE: {
               title: 'Action completed',
-              message: `{{ actionUserName }} marked an action as complete`
+              message: `{{ actionUserName }} marked an action as completed`
             },
             ACTION_STATUS_REQUESTED_UPDATE: {
               title: 'Action requested',
@@ -254,6 +255,23 @@ export const locale = {
               me: 'Send me daily summary updates',
               you: 'You get daily summary updates'
             }
+          },
+
+          innovation_sections: {
+            INNOVATION_DESCRIPTION: 'Description of innovation',
+            VALUE_PROPOSITION: 'Value proposition',
+            UNDERSTANDING_OF_NEEDS: 'Detailed understanding of needs',
+            UNDERSTANDING_OF_BENEFITS: 'Detailed understanding of benefits',
+            EVIDENCE_OF_EFFECTIVENESS: 'Evidence of effectiveness',
+            MARKET_RESEARCH: 'Market research',
+            INTELLECTUAL_PROPERTY: 'Intellectual property',
+            REGULATIONS_AND_STANDARDS: 'Standards and certifications',
+            CURRENT_CARE_PATHWAY: 'Current care pathway',
+            TESTING_WITH_USERS: 'Testing with users',
+            COST_OF_INNOVATION: 'Cost of your innovation',
+            COMPARATIVE_COST_BENEFIT: 'Comparative cost benefit',
+            REVENUE_MODEL: 'Revenue model',
+            IMPLEMENTATION_PLAN: 'Implementation plan and deployment'
           },
 
           notification_context_types: {
@@ -312,37 +330,37 @@ export const locale = {
               name: 'Waiting',
               cssColorClass: 'nhsuk-tag--yellow',
               accessorTypeDescription: 'Waiting for an internal decision to progress.',
-              innovatorTypeDescription: 'The organisation is waiting for an internal decision to progress.'          
+              innovatorTypeDescription: 'The organisation is waiting for an internal decision to progress.'
             },
             NOT_YET: {
               name: 'Not yet',
               cssColorClass: 'nhsuk-tag--blue',
               accessorTypeDescription: 'The innovation is not yet ready for your support offer. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'Your innovation is not yet ready for the organisation\'s support offer.'          
+              innovatorTypeDescription: 'Your innovation is not yet ready for the organisation\'s support offer.'
             },
             UNASSIGNED: {
               name: 'Unassigned',
               cssColorClass: 'nhsuk-tag--red',
               accessorTypeDescription: 'No status assigned yet.',
-              innovatorTypeDescription: 'No status assigned yet.'          
+              innovatorTypeDescription: 'No status assigned yet.'
             },
             UNSUITABLE: {
               name: 'Unsuitable',
               cssColorClass: 'nhsuk-tag--red',
               accessorTypeDescription: 'You have no suitable support offer for the innovation. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'The organisation has no suitable support offer for your innovation.'          
+              innovatorTypeDescription: 'The organisation has no suitable support offer for your innovation.'
             },
             WITHDRAWN: {
               name: 'Withdrawn',
               cssColorClass: 'nhsuk-tag--red',
               accessorTypeDescription: '',
-              innovatorTypeDescription: ''          
+              innovatorTypeDescription: ''
             },
             COMPLETE: {
               name: 'Completed',
               cssColorClass: 'nhsuk-tag--dark-grey',
               accessorTypeDescription: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'The organisation has completed their engagement with your innovation.'          
+              innovatorTypeDescription: 'The organisation has completed their engagement with your innovation.'
             }
           },
           grouped_status: {
