@@ -116,11 +116,9 @@
         <td class="nhsuk-table__cell text-align-right">
           <span class="nhsuk-table-responsive__heading">{{ table.getColumnLabel('actions') }}</span>
 
-          <ng-container *ngIf="(isHistory === true && item.status === 'REJECTED') || isHistory === false">
-            <a class="nhsuk-link nhsuk-link--no-visited-state" routerLink="/{{this.stores.authentication.userUrlBasePath()}}/innovations/{{ innovationId }}/export/{{ item.id }}">
-              View request
-            </a>
-          </ng-container>
+          <a class="nhsuk-link nhsuk-link--no-visited-state" routerLink="/{{this.stores.authentication.userUrlBasePath()}}/innovations/{{ innovationId }}/export/{{ item.id }}">
+            View request
+          </a>
 
         </td>
 
