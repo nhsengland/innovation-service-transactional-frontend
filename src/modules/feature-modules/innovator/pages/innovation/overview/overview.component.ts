@@ -108,8 +108,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovation.organisationsStatusDescription = Object.entries(occurrences).map(([status, item]) => `${item.count} ${item.text}`).join(', ');
       // console.log(occurrences) // => {2: 5, 4: 1, 5: 3, 9: 1}
 
-      console.log(statistics)
-
       const lastSectionSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection!];
       const lastActionSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER].lastSubmittedSection!];
 

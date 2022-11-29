@@ -3,25 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
-import { DateISOType } from '@app/base/types';
-import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationsListDTO, StatisticsCard } from '@modules/shared/services/innovations.dtos';
 import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { forkJoin } from 'rxjs';
 
-type baseStatisticsCard = {
-  title: string,
-  label: string,
-  link: string
-  queryParams: string;
-}
-
-type statisticsSectionsCard = {
-  count: number,
-  total?: number,
-  footer: string
-} & baseStatisticsCard
 @Component({
   selector: 'app-assessment-pages-dashboard',
   templateUrl: './dashboard.component.html'
@@ -33,7 +20,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     passwordResetAt: string;
   };
 
-  cardsList: statisticsSectionsCard[] = [];
+  cardsList: StatisticsCard[] = [];
 
   latestInnovations: TableModel<InnovationsListDTO['data'][0], InnovationsListFiltersType>;
 
