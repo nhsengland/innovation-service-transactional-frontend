@@ -31,7 +31,6 @@ export class PageAdminUserInfoComponent extends CoreComponent implements OnInit 
   ) {
 
     super();
-    this.setPageTitle('Admin User information');
 
     this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName };
 
@@ -47,8 +46,8 @@ export class PageAdminUserInfoComponent extends CoreComponent implements OnInit 
 
   ngOnInit(): void {
 
-    this.serviceUsersService.getUserFullInfo(this.user.id).subscribe(
-      response => {
+    this.serviceUsersService.getUserFullInfo(this.user.id).subscribe({
+      next: (response) => {
 
         this.sections.userInfo = [
           { label: 'Name', value: response.displayName },
@@ -66,14 +65,16 @@ export class PageAdminUserInfoComponent extends CoreComponent implements OnInit 
           }];
         }
 
+        this.setPageTitle('Admin User information', { hint: this.user.name, actions: this.titleActions });
+
         this.setPageStatus('READY');
 
       },
-      error => {
+      error: () => {
         this.setPageStatus('ERROR');
         this.setAlertError('Unable to fetch the necessary information');
       }
-    );
+    });
 
   }
 

@@ -59,6 +59,7 @@ export type InnovationInfoDTO = {
     mobilePhone?: null | string,
     isActive: boolean,
     organisations: null | { name: string, size: null | string }[],
+    lastLoginAt?: DateISOType
   },
   lastEndSupportAt: null | DateISOType,
   export: { canUserExport: boolean, pendingRequestsCount: number },

@@ -15,6 +15,7 @@ import { PageServiceUserInfoComponent } from './service-user-info.component';
 
 import { getUserFullInfoDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { AlertType } from '@app/base/types';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent', () => {
@@ -62,7 +63,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
 
     activatedRoute.snapshot.queryParams = { alert: 'lockSuccess' };
 
-    const expected = { type: 'SUCCESS', title: 'User locked successfully' };
+    const expected: AlertType = { type: 'SUCCESS', title: 'User locked successfully', setFocus: true };
 
     fixture = TestBed.createComponent(PageServiceUserInfoComponent);
     component = fixture.componentInstance;
@@ -75,7 +76,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
 
     activatedRoute.snapshot.queryParams = { alert: 'unlockSuccess' };
 
-    const expected = { type: 'SUCCESS', title: 'User unlocked successfully' };
+    const expected: AlertType = { type: 'SUCCESS', title: 'User unlocked successfully', setFocus: true };
 
     fixture = TestBed.createComponent(PageServiceUserInfoComponent);
     component = fixture.componentInstance;
@@ -87,7 +88,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
 
     activatedRoute.snapshot.queryParams = { alert: 'userCreationSuccess' };
 
-    const expected = { type: 'SUCCESS', title: 'User created successfully' };
+    const expected: AlertType = { type: 'SUCCESS', title: 'User created successfully', setFocus: true };
 
     fixture = TestBed.createComponent(PageServiceUserInfoComponent);
     component = fixture.componentInstance;
@@ -98,7 +99,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
 
     activatedRoute.snapshot.queryParams = { alert: 'roleChangeSuccess' };
 
-    const expected = { type: 'SUCCESS', title: 'User role changed successfully' };
+    const expected: AlertType = { type: 'SUCCESS', title: 'User role changed successfully', setFocus: true };
 
     fixture = TestBed.createComponent(PageServiceUserInfoComponent);
     component = fixture.componentInstance;
@@ -109,7 +110,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
 
     activatedRoute.snapshot.queryParams = { alert: 'unitChangeSuccess' };
 
-    const expected = { type: 'SUCCESS', title: 'Organisation unit has been successfully changed' };
+    const expected: AlertType = { type: 'SUCCESS', title: 'Organisation unit has been successfully changed', setFocus: true };
 
     fixture = TestBed.createComponent(PageServiceUserInfoComponent);
     component = fixture.componentInstance;

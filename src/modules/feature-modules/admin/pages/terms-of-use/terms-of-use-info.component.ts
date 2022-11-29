@@ -23,6 +23,7 @@ export class PageTermsOfUseInfoComponent extends CoreComponent implements OnInit
     super();
     this.id = this.activatedRoute.snapshot.params['id'];
 
+    this.setBackLink('Go back', '/admin/terms-conditions');
   }
 
 

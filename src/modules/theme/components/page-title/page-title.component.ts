@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { LinkType } from '@app/base/types';
 
 @Component({
   selector: 'theme-page-title',
@@ -7,8 +8,9 @@ import { Component, Input } from '@angular/core';
 export class PageTitleComponent {
 
   @Input() title = '';
-  @Input() titleHint = '';
-  @Input() actions: { type: 'link' | 'button', label: string, url: string, fullReload?: boolean }[] = [];
+  @Input() titleHint?: string;
+  @Input() size?: 'xl' | 'l' = 'xl';
+  @Input() actions?: LinkType[] = [];
 
   constructor() { }
 

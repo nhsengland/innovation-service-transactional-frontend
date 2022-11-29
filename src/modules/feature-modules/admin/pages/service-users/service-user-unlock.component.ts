@@ -34,17 +34,19 @@ export class PageServiceUserUnlockComponent extends CoreComponent implements OnI
   ) {
 
     super();
-    this.setPageTitle('Unlock user');
 
     this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName };
+
+    this.setPageTitle('Unlock user', { hint: this.user.name });
 
   }
 
 
   ngOnInit(): void {
 
-    this.serviceUsersService.getUserFullInfo(this.user.id).subscribe(
-      response => {
+    this.serviceUsersService.getUserFullInfo(this.user.id).subscribe({
+
+      next: response => {
 
         if (!response.lockedAt) {
           this.redirectTo(`admin/service-users/${this.user.id}`);
@@ -53,15 +55,12 @@ export class PageServiceUserUnlockComponent extends CoreComponent implements OnI
 
         this.setPageStatus('READY');
       },
-      () => {
+      error: () => {
         this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch the necessary information',
-          message: 'Please try again or contact us for further help'
-        };
+        this.setAlertError('Unable to fetch the necessary information', { message: 'Please try again or contact us for further help' });
       }
-    );
+
+    });
 
   }
 
@@ -72,13 +71,13 @@ export class PageServiceUserUnlockComponent extends CoreComponent implements OnI
 
     this.securityConfirmation.code = this.form.get('code')!.value;
 
-    this.serviceUsersService.unlockUser(this.user.id, this.securityConfirmation).subscribe(
-      () => {
+    this.serviceUsersService.unlockUser(this.user.id, this.securityConfirmation).subscribe({
+      next: () => {
 
         this.redirectTo(`admin/service-users/${this.user.id}`, { alert: 'unlockSuccess' });
 
       },
-      (error: { id: string }) => {
+      error: (error: { id: string }) => {
 
         if (!this.securityConfirmation.id && error.id) {
 
@@ -92,7 +91,7 @@ export class PageServiceUserUnlockComponent extends CoreComponent implements OnI
         }
 
       }
-    );
+    });
 
   }
 

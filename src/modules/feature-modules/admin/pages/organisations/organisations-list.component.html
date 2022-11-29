@@ -1,22 +1,17 @@
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-two-thirds">
+<theme-content-wrapper [status]="pageStatus">
 
-    <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-      <p> {{ alert.message }} </p>
-    </theme-alert>
-
-    <h1 class="nhsuk-u-margin-bottom"> {{ pageTitle }} </h1>
-
-    <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-    <ng-container *ngIf="pageStatus === 'READY'">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
 
       <div class="nhsuk-u-padding-bottom-5">
         <div class="nhsuk-action-link">
           <a class="nhsuk-action-link__link" routerLink="/admin/organisations/new" title="New Organisation">
-            <svg class="nhsuk-icon nhsuk-icon__arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" width="36" height="36">
+            <svg class="nhsuk-icon nhsuk-icon__arrow-right-circle" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24" aria-hidden="true" width="36" height="36">
               <path d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M12 2a10 10 0 0 0-9.95 9h11.64L9.74 7.05a1 1 0 0 1 1.41-1.41l5.66 5.65a1 1 0 0 1 0 1.42l-5.66 5.65a1 1 0 0 1-1.41 0 1 1 0 0 1 0-1.41L13.69 13H2.05A10 10 0 1 0 12 2z"></path>
+              <path
+                d="M12 2a10 10 0 0 0-9.95 9h11.64L9.74 7.05a1 1 0 0 1 1.41-1.41l5.66 5.65a1 1 0 0 1 0 1.42l-5.66 5.65a1 1 0 0 1-1.41 0 1 1 0 0 1 0-1.41L13.69 13H2.05A10 10 0 1 0 12 2z">
+              </path>
             </svg>
             <span class="nhsuk-action-link__text">Create a new organisation</span>
           </a>
@@ -37,27 +32,34 @@
         </div>
         <div>
           <ul class="nhsuk-u-margin-left-2">
-            <li>Click through in the table below to <strong>view or change an organisation's information</strong> or <strong>access its attached units</strong></li>
+            <li>Click through in the table below to <strong>view or change an organisation's information</strong> or
+              <strong>access its attached units</strong></li>
           </ul>
         </div>
 
-        <div class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
+        <div
+          class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
           Organisation
         </div>
 
         <dl class="nhsuk-u-margin-0">
           <ng-container *ngFor="let organisation of organisations">
 
-            <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'bottom-border-separator': organisation.showHideStatus !== 'opened'}">
-              <dt class="nhsuk-u-font-weight-normal mr-auto"> {{ organisation.info.name }} ({{ organisation.info.acronym }})</dt>
+            <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3"
+              [ngClass]="{'bottom-border-separator': organisation.showHideStatus !== 'opened'}">
+              <dt class="nhsuk-u-font-weight-normal mr-auto"> {{ organisation.info.name }} ({{ organisation.info.acronym
+                }})</dt>
               <dd class="width-20 nhsuk-u-margin-0">
-                <theme-tag type="{{ organisation.info.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ organisation.info.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+                <theme-tag type="{{ organisation.info.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
+                  label="{{ organisation.info.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
               </dd>
               <dd class="width-20 nhsuk-u-margin-0">
                 <ul class="nhsuk-list text-align-right nhsuk-u-margin-0">
                   <li>
-                    <a *ngIf="organisation.info.organisationUnits.length > 1" href="javascript:void(0)" (click)="onShowHideClicked(organisation.info.id)">
-                      {{ organisation.showHideText }} <span class="nhsuk-u-visually-hidden"> {{ organisation.showHideDescription }} </span>
+                    <a *ngIf="organisation.info.organisationUnits.length > 1" href="javascript:void(0)"
+                      (click)="onShowHideClicked(organisation.info.id)">
+                      {{ organisation.showHideText }} <span class="nhsuk-u-visually-hidden"> {{
+                        organisation.showHideDescription }} </span>
                     </a>
                   </li>
                   <li>
@@ -69,11 +71,14 @@
 
             <ng-container *ngIf="organisation.showHideStatus === 'opened'">
               <dl class="nhsuk-u-margin-0">
-                <div *ngFor="let organisationUnit of organisation.info.organisationUnits; let i = index;" class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
-                  <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'top-border-separator': i === 0}">
+                <div *ngFor="let organisationUnit of organisation.info.organisationUnits; let i = index;"
+                  class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
+                  <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3"
+                    [ngClass]="{'top-border-separator': i === 0}">
                     <dt class="">{{ organisationUnit.name }} ({{ organisationUnit.acronym }})</dt>
                     <dd>
-                      <theme-tag type="{{ organisationUnit.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ organisationUnit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+                      <theme-tag type="{{ organisationUnit.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
+                        label="{{ organisationUnit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
                     </dd>
                   </div>
                 </div>
@@ -83,7 +88,8 @@
           </ng-container>
         </dl>
       </div>
-    </ng-container>
 
+    </div>
   </div>
-</div>
+
+</theme-content-wrapper>

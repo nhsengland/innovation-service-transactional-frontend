@@ -241,6 +241,9 @@ export class InnovationsService extends CoreService {
       case UserTypeEnum.ACCESSOR:
         qp.fields = ['assessment', 'supports'];
         break;
+      case UserTypeEnum.ADMIN:
+        qp.fields = ['assessment', 'supports'];
+        break;
       default:
         break;
     }

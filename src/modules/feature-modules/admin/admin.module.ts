@@ -5,8 +5,10 @@ import { SharedModule } from '@modules/shared/shared.module';
 
 import { AdminRoutingModule } from './admin-routing.module';
 
-import { AdminLayoutComponent } from './base/admin-layout.component';
 
+// Base.
+import { ContextInnovationOutletComponent } from './base/context-innovation-outlet.component';
+import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
 // Pages.
 // // Account.
 import { PageAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
@@ -17,6 +19,8 @@ import { PageAdminUserNewComponent } from './pages/admin-users/admin-user-new.co
 import { PageAdminUserDeleteComponent } from './pages/admin-users/admin-user-delete.component';
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
+// // Innovation
+import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 // // Organisations.
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
@@ -58,8 +62,10 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     AdminRoutingModule
   ],
   declarations: [
-    AdminLayoutComponent,
-
+    // Base
+    ContextInnovationOutletComponent,
+    SidebarInnovationMenuOutletComponent,
+    
     // Pages.
     PageAccountManageAccountInfoComponent,
     // // Admin Users.
@@ -69,6 +75,8 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageAdminUserDeleteComponent,
     // // Dashboard.
     PageDashboardComponent,
+    // // Innovation
+    InnovationOverviewComponent,
     // // Organisations.
     PageOrganisationNewComponent,
     PageOrganisationEditComponent,
