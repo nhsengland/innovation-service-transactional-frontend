@@ -193,7 +193,7 @@ export class InnovationsService extends CoreService {
       fields: [] as InnovationsListFiltersType['fields']
     };
 
-    if(!!!filters.latestWorkedByMe) {
+    if(!filters.latestWorkedByMe) {
       switch (requestUserType) {
         case UserTypeEnum.INNOVATOR:
           qp.fields = ['statistics', 'assessment', 'supports'];
