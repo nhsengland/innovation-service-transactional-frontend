@@ -70,6 +70,10 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
     const qp: { statistics: UserStatisticsTypeEnum[] } = { statistics: [UserStatisticsTypeEnum.WAITING_ASSESSMENT_COUNTER, UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER] };
 
+    this.latestInnovations.setFilters({
+      latestWorkedByMe: true
+    })
+
     forkJoin([
       this.statisticsService.getUserStatisticsInfo(qp), 
       this.innovationsService.getInnovationsList(this.latestInnovations.getAPIQueryParams())

@@ -50,6 +50,7 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 const header: RoutesDataType['header'] = {
   menuBarItems: {
     left: [
+      { id: 'home', label: 'Home', url: '/assessment/dashboard' },
       { id: 'innovations', label: 'Innovations', url: '/assessment/innovations' },
       { id: 'notifications', label: 'Notifications', url: '/assessment/notifications' },
       { id: 'account', label: 'Your account', url: '/assessment/account' },
