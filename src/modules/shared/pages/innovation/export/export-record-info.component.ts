@@ -73,7 +73,7 @@ export class PageExportRecordInfoComponent extends CoreComponent implements OnIn
         }
 
         if (status === InnovationExportRequestStatusEnum.CANCELLED) {
-          this.setRedirectAlertSuccess('You\'ve cancelled the request to export the innovation record', { message: 'The innovator has been notified.' });
+          this.setRedirectAlertSuccess('You\'ve cancelled the request to export the innovation record');
         }
 
         this.redirectTo(`/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/export/list`)
