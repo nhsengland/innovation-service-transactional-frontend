@@ -33,6 +33,7 @@ export type InnovationsListFiltersType = {
   engagingOrganisations?: string[],
   assignedToMe?: boolean,
   suggestedOnly?: boolean,
+  latestWorkedByMe?: boolean,
   fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications' | 'statistics')[]
 }
 
@@ -168,7 +169,7 @@ export class InnovationsService extends CoreService {
 
 
   getInnovationsList(queryParams?: APIQueryParamsType<InnovationsListFiltersType>): Observable<InnovationsListDTO> {
-
+  
     if (!queryParams) {
       queryParams = { take: 100, skip: 0, order: { name: 'ASC' }, filters: {} };
     }
@@ -188,27 +189,30 @@ export class InnovationsService extends CoreService {
       ...(filters.engagingOrganisations ? { engagingOrganisations: filters.engagingOrganisations } : {}),
       ...(filters.assignedToMe !== undefined ? { assignedToMe: filters.assignedToMe } : {}),
       ...(filters.suggestedOnly != undefined ? { suggestedOnly: filters.suggestedOnly } : {}),
+      ...(filters.latestWorkedByMe != undefined ? { latestWorkedByMe: filters.latestWorkedByMe } : {}),
       fields: [] as InnovationsListFiltersType['fields']
     };
 
-    switch (requestUserType) {
-      case UserTypeEnum.INNOVATOR:
-        qp.fields = ['statistics', 'assessment', 'supports'];
-        break;
-      case UserTypeEnum.ASSESSMENT:
-        qp.fields = ['isAssessmentOverdue', 'assessment', 'supports'];
-        break;
-      case UserTypeEnum.ACCESSOR:
-        qp.status = [InnovationStatusEnum.IN_PROGRESS];
-        qp.fields = ['assessment', 'supports', 'notifications'];
-        break;
-      case UserTypeEnum.ADMIN:
-        qp.fields = ['assessment', 'supports'];
-        break;
-      default:
-        break;
+    if(!filters.latestWorkedByMe) {
+      switch (requestUserType) {
+        case UserTypeEnum.INNOVATOR:
+          qp.fields = ['statistics', 'assessment', 'supports'];
+          break;
+        case UserTypeEnum.ASSESSMENT:
+          qp.fields = ['isAssessmentOverdue', 'assessment', 'supports'];
+          break;
+        case UserTypeEnum.ACCESSOR:
+          qp.status = [InnovationStatusEnum.IN_PROGRESS];
+          qp.fields = ['assessment', 'supports', 'notifications'];
+          break;
+        case UserTypeEnum.ADMIN:
+          qp.fields = ['assessment', 'supports'];
+          break;
+        default:
+          break;
+      }
     }
-
+  
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1').setQueryParams(qp);
     return this.http.get<InnovationsListDTO>(url.buildUrl()).pipe(
       take(1),
