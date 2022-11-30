@@ -71,7 +71,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
           response.innovationsList
            .filter(i => [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(i.status)),
           this.innovationStatusCounters
-           .map(i => i.count).reduce((a,b) => a+b)
+           .map(i => i.count).reduce((a,b) => a+b, 0)
         );
         this.setPageStatus('READY');
       },
