@@ -5,7 +5,7 @@
   <ng-container *ngIf="getPages().includes(1) === false">
 
     <a (click)="onPageChange(1)">1</a>
-    <a>...</a>
+    <span>...</span>
   
   </ng-container>
 
@@ -13,7 +13,7 @@
 
   <ng-container *ngIf="getPages().includes(totalPages) === false">
 
-    <a>...</a>
+    <span>...</span>
     <a (click)="onPageChange(totalPages)">{{ totalPages }}</a>
 
   </ng-container>
