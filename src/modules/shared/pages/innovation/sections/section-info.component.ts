@@ -18,7 +18,7 @@ import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/store
 })
 export class PageInnovationSectionInfoComponent extends CoreComponent implements OnInit {
 
-  module: '' | 'innovator' | 'accessor' | 'assessment' = '';
+  module: '' | 'innovator' | 'accessor' | 'assessment' | 'admin' = '';
   innovation: ContextInnovationType;
 
   section: {
@@ -104,15 +104,15 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
         this.section.nextSectionId = this.section.status.id === 'SUBMITTED' ? this.getNextSectionId() : null;
 
-        this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data));
-
-        const validInformation = this.section.wizard.validateDataLegacy();
-        this.section.showSubmitButton = validInformation.valid && ['DRAFT'].includes(this.section.status.id);
-
         if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
           // If accessor, only view information if section is submitted.
           this.summaryList = [];
         } else {
+          this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data));
+
+          const validInformation = this.section.wizard.validateDataLegacy();
+          this.section.showSubmitButton = validInformation.valid && ['DRAFT'].includes(this.section.status.id);
+          
           this.summaryList = this.section.wizard.runSummaryParsing();
         }
 

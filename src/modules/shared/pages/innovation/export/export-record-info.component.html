@@ -19,7 +19,14 @@
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
 
             <p class="nhsuk-u-margin-bottom-0">{{ 'shared.catalog.innovation.export_request_status.' + this.request?.status + '.name' | translate }}</p>
-            <span class="font-color-secondary nhsuk-body-s">on {{ this.request?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</span>
+
+            <ng-container *ngIf="this.request?.status !== 'EXPIRED'; else expiredAtDate">
+              <span class="font-color-secondary nhsuk-body-s">on {{ this.request?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</span>
+            </ng-container>
+
+            <ng-template #expiredAtDate>
+              <span class="font-color-secondary nhsuk-body-s">on {{ this.request?.expiresAt | date: ('app.date_formats.long_date' | translate) }}</span>
+            </ng-template>
 
           </dd>
 

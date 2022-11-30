@@ -64,11 +64,12 @@ export type InnovationSectionsListDTO = {
   openActionsCount: number
 }[];
 
-export type getInnovationEvidenceDTO = {
-  evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER',
-  clinicalEvidenceType: string,
-  description: string,
-  summary: string
+export type GetInnovationEvidenceDTO = {
+  id: string;
+  evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER';
+  clinicalEvidenceType: 'DATA_PUBLISHED' | 'NON_RANDOMISED_COMPARATIVE_DATA' | 'NON_RANDOMISED_NON_COMPARATIVE_DATA' | 'CONFERENCE' | 'RANDOMISED_CONTROLLED_TRIAL' | 'UNPUBLISHED_DATA' | 'OTHER';
+  description: string;
+  summary: string;
   files: { id: string; displayFileName: string; url: string }[];
 };
 

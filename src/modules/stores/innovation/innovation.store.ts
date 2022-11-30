@@ -16,7 +16,7 @@ import {
   InnovationModel,
   INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS,
   SectionsSummaryModel, InnovationSectionConfigType,
-  getInnovationEvidenceDTO, getInnovationCommentsDTO, InnovationSectionInfoDTO
+  GetInnovationEvidenceDTO, getInnovationCommentsDTO, InnovationSectionInfoDTO
 } from './innovation.models';
 
 
@@ -91,7 +91,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitSections(innovationId, sectionKey);
   }
 
-  getSectionEvidence$(innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
+  getSectionEvidence$(innovationId: string, evidenceId: string): Observable<GetInnovationEvidenceDTO> {
     return this.innovationsService.getSectionEvidenceInfo(innovationId, evidenceId);
   }
 

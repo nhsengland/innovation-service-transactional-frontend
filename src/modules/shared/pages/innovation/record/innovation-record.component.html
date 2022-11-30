@@ -9,20 +9,22 @@
 
   <div class="nhsuk-grid-row">
 
-    <ng-container *ngIf="sections.submitted > 0; else firstTimeBanner">
+    <ng-container *ngIf="stores.authentication.isInnovatorType()">
+      <ng-container *ngIf="sections.submitted > 0; else firstTimeBanner">
 
-      <div class="nhsuk-grid-column-full">
-        <p *ngIf="isInnovationInCreatedStatus(); else innovationSharedText">
-          Please complete all sections by providing as much information
-          as possible about your innovation. Share your record for a needs
-          assessment review - a member of the team will contact you within a
-          week to understand how we can best support your current needs.
-        </p>
-        <ng-template #innovationSharedText>
-          <p>You can continue to update your Innovation Record throughout the development of your innovation with support from the NHS Innovation Service.</p>
-        </ng-template>
+        <div class="nhsuk-grid-column-full">
+          <p *ngIf="isInnovationInCreatedStatus(); else innovationSharedText">
+            Please complete all sections by providing as much information
+            as possible about your innovation. Share your record for a needs
+            assessment review - a member of the team will contact you within a
+            week to understand how we can best support your current needs.
+          </p>
+          <ng-template #innovationSharedText>
+            <p>You can continue to update your Innovation Record throughout the development of your innovation with support from the NHS Innovation Service.</p>
+          </ng-template>
 
-      </div>
+        </div>
+      </ng-container>
     </ng-container>
 
     <div class="nhsuk-grid-column-full">
@@ -125,7 +127,7 @@
       </ng-container>
 
       <h2 class="nhsuk-heading-l">All sections</h2>
-      <p>
+      <p *ngIf="stores.authentication.isInnovatorType()">
         Please complete all sections, providing as much information as possible. As you are developing your innovation,
         we do not expect the information to be finalised at this stage, and you can return to update your Innovation
         record once shared for review.
