@@ -50,8 +50,9 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationsSection
     activatedRoute.params = of({ innovationId: 'Inno01', sectionId: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS, questionId: 1 }); // Simulate activatedRoute.params subscription.
 
     innovationStore.getSectionEvidence$ = () => of({
+      id: "1",
       evidenceType: 'CLINICAL',
-      clinicalEvidenceType: 'Evidence Type',
+      clinicalEvidenceType: 'DATA_PUBLISHED',
       description: 'Evidence description',
       summary: 'Evidence Summary',
       files: [{ id: 'fileId01', displayFileName: 'File 01', url: 'http://filerepository/file01' }]
