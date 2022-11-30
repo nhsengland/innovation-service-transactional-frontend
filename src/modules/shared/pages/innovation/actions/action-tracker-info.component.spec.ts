@@ -1,27 +1,26 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
-import { InnovationActionTrackerInfoComponent } from './action-tracker-info.component';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { SharedModule } from '@modules/shared/shared.module';
+import { PageInnovationActionTrackerInfoComponent } from './action-tracker-info.component';
 
-import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 
-
-describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponent', () => {
+describe('Shared/Pages/Innovation/PageInnovationActionTrackerInfoComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
-  let accessorService: AccessorService;
+  let innovationsService: InnovationsService;
 
-  let component: InnovationActionTrackerInfoComponent;
-  let fixture: ComponentFixture<InnovationActionTrackerInfoComponent>;
+  let component: PageInnovationActionTrackerInfoComponent;
+  let fixture: ComponentFixture<PageInnovationActionTrackerInfoComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -30,7 +29,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        AccessorModule
+        SharedModule
       ]
     });
 
@@ -38,13 +37,13 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    accessorService = TestBed.inject(AccessorService);
+    innovationsService = TestBed.inject(InnovationsService);
 
   });
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
+    fixture = TestBed.createComponent(PageInnovationActionTrackerInfoComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
@@ -54,7 +53,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
   //   activatedRoute.snapshot.params = { innovationId: 'Inno01', actionId: 'Action01' };
   //   activatedRoute.snapshot.queryParams = { alert: 'actionCreationSuccess' };
 
-  //   fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
+  //   fixture = TestBed.createComponent(PageInnovationActionTrackerInfoComponent);
   //   component = fixture.componentInstance;
   //   expect(component.alert.type).toEqual('SUCCESS');
 
@@ -65,7 +64,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
   //   activatedRoute.snapshot.params = { innovationId: 'Inno01', actionId: 'Action01' };
   //   activatedRoute.snapshot.queryParams = { alert: 'actionUpdateSuccess', status: 'Completed' };
 
-  //   fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
+  //   fixture = TestBed.createComponent(PageInnovationActionTrackerInfoComponent);
   //   component = fixture.componentInstance;
   //   expect(component.alert.type).toEqual('SUCCESS');
 
@@ -89,7 +88,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
   //   accessorService.getInnovationActionInfo = () => of(responseMock);
   //   const expected = responseMock;
 
-  //   fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
+  //   fixture = TestBed.createComponent(PageInnovationActionTrackerInfoComponent);
   //   component = fixture.componentInstance;
 
   //   fixture.detectChanges();
@@ -101,7 +100,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerInfoComponen
 
   //   accessorService.getInnovationActionInfo = () => throwError('error');
 
-  //   fixture = TestBed.createComponent(InnovationActionTrackerInfoComponent);
+  //   fixture = TestBed.createComponent(PageInnovationActionTrackerInfoComponent);
   //   component = fixture.componentInstance;
 
   //   fixture.detectChanges();

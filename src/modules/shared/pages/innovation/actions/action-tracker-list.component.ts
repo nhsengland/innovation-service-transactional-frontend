@@ -12,10 +12,10 @@ import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
-  selector: 'app-accessor-pages-innovation-action-tracker-list',
+  selector: 'shared-pages-innovation-action-tracker-list',
   templateUrl: './action-tracker-list.component.html'
 })
-export class InnovationActionTrackerListComponent extends CoreComponent implements OnInit {
+export class PageInnovationActionTrackerListComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
   innovation: ContextInnovationType;
