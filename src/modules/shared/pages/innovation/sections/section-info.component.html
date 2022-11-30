@@ -16,7 +16,7 @@
 
       <ng-container *ngIf="!section.isNotStarted">
 
-        <div *ngIf="innovation.status === 'IN_PROGRESS' && section.status.id === 'DRAFT'" class="nhsuk-inset-text">
+        <div *ngIf="innovation.status === 'IN_PROGRESS' && section.status.id === 'DRAFT' && ['innovator','accessor'].includes(module)" class="nhsuk-inset-text">
           <span class="nhsuk-u-visually-hidden">Information:</span>
           <p *ngIf="module === 'innovator'">
             This section is not visible to accessors because you changed it to "In draft" status, you need to submit the section if you want to share it with accessors.

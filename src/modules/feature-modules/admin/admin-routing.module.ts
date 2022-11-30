@@ -40,6 +40,10 @@ import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/acc
 import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
 // // // Innovations
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
+// // // Innovation
+import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
+import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
+import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
 // Wizards.
 import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-unit-activate/organisation-unit-activate.component';
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
@@ -247,8 +251,48 @@ const routes: Routes = [
               {
                 path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent,
                 data: { breadcrumb: null }
-              }
+              },
+              {
+                path: 'record',
+                data: { breadcrumb: 'Innovation Record' },
+                children: [
+                  {
+                    path: '', pathMatch: 'full', component: PageInnovationRecordComponent,
+                    data: { breadcrumb: null }
+                  },
 
+                  {
+                    path: 'sections',
+                    data: { breadcrumb: null },
+                    children: [
+
+                      { path: '', pathMatch: 'full', redirectTo: '../record' },
+
+                      {
+                        path: ':sectionId',
+                        children: [
+                          {
+                            path: '', pathMatch: 'full', component: PageInnovationSectionInfoComponent,
+                            data: { module: 'admin', breadcrumb: null }
+                          },
+                          {
+                            path: 'evidences',
+                            data: { breadcrumb: null },
+                            children: [
+                              { path: '', pathMatch: 'full', redirectTo: '../:sectionId' },
+                              {
+                                path: ':evidenceId', pathMatch: 'full', component: PageInnovationSectionEvidenceInfoComponent,
+                                data: { breadcrumb: 'Evidence Info' },
+                              }
+                            ]
+                          }
+                        ]
+                      }
+
+                    ]
+                  }
+                ]
+              }
             ]
           }
         ]

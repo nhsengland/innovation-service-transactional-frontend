@@ -64,12 +64,9 @@ export class InnovationService {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionId')
       .setPathParams({
-        endpointModule: this.apiUserBasePath(),
-        userId: this.authenticationStore.getUserId(),
         innovationId,
         sectionId
-      })
-      .setQueryParams({ sectionId });
+      });
     return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
