@@ -2,8 +2,23 @@
 
   <a *ngIf="currentPage !== 1" (click)="onPreviousPage()">« Prev</a>
 
+  <ng-container *ngIf="getPages().includes(1) === false">
+
+    <a (click)="onPageChange(1)">1</a>
+    <a>...</a>
+  
+  </ng-container>
+
   <a *ngFor="let page of getPages()" [ngClass]="{ active: currentPage === page }" (click)="onPageChange(page)">{{ page }}</a>
 
-  <a *ngIf="currentPage !== getPages()?.length" (click)="onNextPage()">Next »</a>
+  <ng-container *ngIf="getPages().includes(totalPages) === false">
+
+    <a>...</a>
+    <a (click)="onPageChange(totalPages)">{{ totalPages }}</a>
+
+  </ng-container>
+
+
+  <a *ngIf="currentPage !== totalPages" (click)="onNextPage()">Next »</a>
 
 </div>
