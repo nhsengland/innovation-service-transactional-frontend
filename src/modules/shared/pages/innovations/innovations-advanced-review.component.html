@@ -123,7 +123,13 @@
 
                   <td class="nhsuk-table__cell">
                     <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }}</span>
-                    <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation"> {{ item.name }} </a>
+                    <ng-container *ngIf="item.groupedStatus !== 'ARCHIVED'; else innovationWithoutLink">
+                      <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation"> {{ item.name }} </a>
+                    </ng-container>
+                    <ng-template #innovationWithoutLink>
+                      <span>{{ item.name }}</span>
+                    </ng-template>
+
                   </td>
                   <td class="nhsuk-table__cell">
                     <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('updatedAt') }}</span>
