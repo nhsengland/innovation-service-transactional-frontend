@@ -33,7 +33,7 @@ export class EnvironmentVariablesStore {
   get APP_URL(): string { return new UrlModel(this.environment.BASE_URL).setPath(this.environment.BASE_PATH).buildUrl(); }
   get APP_ASSETS_URL(): string { return new UrlModel(this.environment.BASE_URL).setPath(this.environment.BASE_PATH).addPath('static/assets').buildUrl(); }
   get API_URL(): string { return new UrlModel(this.environment.BASE_URL).setPath(this.environment.BASE_PATH).addPath('api').buildUrl(); }
-  get API_ADMIN_URL(): string { return new UrlModel(this.environment.BASE_URL).setPath(this.environment.BASE_PATH).addPath('api/admin').buildUrl(); }
+  get API_ADMIN_URL(): string { return new UrlModel(this.environment.BASE_URL).setPath(this.environment.BASE_PATH).addPath('api/admins').buildUrl(); }
   get API_INNOVATIONS_URL(): string { return new UrlModel(this.environment.BASE_URL).setPath(this.environment.BASE_PATH).addPath('api/innovations').buildUrl(); }
   get API_USERS_URL(): string { return new UrlModel(this.environment.BASE_URL).setPath(this.environment.BASE_PATH).addPath('api/users').buildUrl(); }
   get BASE_URL(): string { return this.environment.BASE_URL; }
