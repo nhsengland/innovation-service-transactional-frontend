@@ -72,7 +72,7 @@
             </ng-container>
             <ng-container *ngIf="statisticsActionsCard.date">
               <p class="nhsuk-u-font-size-16 font-color-secondary">
-                {{ statisticsActionsCard.footer }} on {{ statisticsActionsCard.date | date: ('app.date_formats.long_date' | translate) }}
+                {{ statisticsActionsCard.footer }} on {{ statisticsActionsCard.date | date: ('app.date_formats.medium_date' | translate) }}
               </p>
             </ng-container>
             <ng-template #noActionsToSubmit>
@@ -105,7 +105,7 @@
           </ng-container>
           <ng-container *ngIf="statisticsMessagesCard.date">
             <p class="nhsuk-u-font-size-16 font-color-secondary">
-              {{ statisticsMessagesCard.footer }} on {{ statisticsMessagesCard.date | date: ('app.date_formats.long_date' | translate) }}
+              {{ statisticsMessagesCard.footer }} on {{ statisticsMessagesCard.date | date: ('app.date_formats.medium_date' | translate) }}
             </p>
           </ng-container>
           <ng-template #noUnreadMessages>
@@ -118,19 +118,19 @@
     </li>
   </ul>
 
-  <ng-container *ngIf="!innovation.isSubmitted?.submittedAllSections && !innovation.isSubmitted?.submittedForNeedsAssessment">
+  <ng-container *ngIf="showBanner">
     <div class="nhsuk-card nhsuk-u-margin-top-2">
       <div class="nhsuk-card__content">
         <h2 class="nhsuk-heading-m"> Your next steps </h2>
         <ol class="nhsuk-list nhsuk-u-padding-0">
           <li class="d-flex">
-            <ng-container *ngTemplateOutlet="icon; context: { completed: innovation.isSubmitted?.submittedAllSections}"></ng-container>
+            <ng-container *ngTemplateOutlet="icon; context: { completed: isSubmitted?.submittedAllSections}"></ng-container>
             <div class="nhsuk-u-margin-left-2">
               Submit all sections of your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a>
             </div>
           </li>
           <li class="d-flex">
-            <ng-container *ngTemplateOutlet="icon; context: { completed: innovation.isSubmitted?.submittedForNeedsAssessment }"></ng-container>
+            <ng-container *ngTemplateOutlet="icon; context: { completed: isSubmitted?.submittedForNeedsAssessment }"></ng-container>
             <div class="nhsuk-u-margin-left-2">
               Share the record for the needs assessment
             </div>

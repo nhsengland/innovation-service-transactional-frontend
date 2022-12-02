@@ -69,7 +69,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].total,
         footer: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].lastSubmittedSection)}"`,
         date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].lastSubmittedAt,
-        emptyMessage: `You haven't had submitted sections since the assessment started.`
+        emptyMessage: `No sections habe been submitted since the supported started.`
       }, {
         title: 'Messages',
         label: `unread replies to conversations you have started`,

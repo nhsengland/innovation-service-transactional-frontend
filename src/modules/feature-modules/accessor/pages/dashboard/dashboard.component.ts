@@ -21,20 +21,22 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   cardsList: StatisticsCard[] = [];
 
+  isQualifyingAccessorRole = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
-    private statisticsService: StatisticsService,  
+    private statisticsService: StatisticsService,
   ) {
 
     super();
-    this.setPageTitle('Home', {hint: `Hello ${this.stores.authentication.getUserInfo().displayName}`});
+    this.setPageTitle('Home', { hint: `Hello ${this.stores.authentication.getUserInfo().displayName}` });
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
     this.user = {
       displayName: this.stores.authentication.getUserInfo().displayName,
       organisation: this.stores.authentication.getUserInfo().organisations[0]?.name || '',
       passwordResetAt: this.stores.authentication.getUserInfo().passwordResetAt
     };
-
 
   }
 
@@ -49,8 +51,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       this.setAlertSuccess('You have successfully changed your password.');
     }
 
-    const qp: { statistics: UserStatisticsTypeEnum[] } = { statistics: [UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER, UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER] };
-    
+    const qp: { statistics: UserStatisticsTypeEnum[] } = { statistics: [UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER, UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER, UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER] };
+
     this.statisticsService.getUserStatisticsInfo(qp).subscribe((statistics) => {
 
       this.cardsList = [{
@@ -58,8 +60,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         label: `Engaging innovations are assigned to you`,
         link: '/accessor/innovations',
         queryParams: { status: "ENGAGING" },
-        count: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].count,    
-        total: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].total,    
+        count: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].count,
+        total: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].total,
         footer: `Last submitted`,
         date: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER]?.lastSubmittedAt,
         emptyMessage: 'No engaging innovations assigned to you'
@@ -73,6 +75,19 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         date: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
         emptyMessage: 'No actions to review'
       }]
+
+      if (this.isQualifyingAccessorRole) {
+        this.cardsList.unshift({
+          title: 'Review innovations',
+          label: `Innovations awaiting status assigment from your organisation unit`,
+          link: '/accessor/innovations',
+          queryParams: { status: "ENGAGING" },
+          count: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER].count,
+          footer: `Last submitted`,
+          date: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
+          emptyMessage: 'No engaging innovations assigned to you'
+        })
+      }
 
       this.setPageStatus('READY');
     })
