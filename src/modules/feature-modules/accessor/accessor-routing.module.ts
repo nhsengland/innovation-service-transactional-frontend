@@ -19,8 +19,6 @@ import { ActionsListComponent } from './pages/actions/actions-list.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
 import { InnovationActionTrackerEditComponent } from './pages/innovation/action-tracker/action-tracker-edit.component';
-import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
-import { InnovationActionTrackerListComponent } from './pages/innovation/action-tracker/action-tracker-list.component';
 import { InnovationActionTrackerNewComponent } from './pages/innovation/action-tracker/action-tracker-new.component';
 import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
@@ -51,6 +49,8 @@ import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/
 import { PageExportRecordListComponent } from '@modules/shared/pages/innovation/export/export-record-list.component';
 import { PageExportRecordInfoComponent } from '@modules/shared/pages/innovation/export/export-record-info.component';
 import { InnovationExportRequestComponent } from './pages/innovation/export/export-request.component';
+import { PageInnovationActionTrackerInfoComponent } from '@modules/shared/pages/innovation/actions/action-tracker-info.component';
+import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
 // // Innovations
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 // // Notifications.
@@ -201,7 +201,7 @@ const routes: Routes = [
                 children: [
 
                   {
-                    path: '', pathMatch: 'full', component: InnovationActionTrackerListComponent,
+                    path: '', pathMatch: 'full', component: PageInnovationActionTrackerListComponent,
                     data: { breadcrumb: null }
                   },
 
@@ -226,7 +226,7 @@ const routes: Routes = [
                     },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: InnovationActionTrackerInfoComponent,
+                        path: '', pathMatch: 'full', component: PageInnovationActionTrackerInfoComponent,
                         data: { breadcrumb: null }
                       },
                       {
