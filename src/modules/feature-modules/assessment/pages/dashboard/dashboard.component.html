@@ -12,7 +12,7 @@
           <div class="nhsuk-card nhsuk-card--clickable">
             <div class="nhsuk-card__content nhsuk-u-padding-4">
               <h2 class="nhsuk-card__heading nhsuk-heading-m">
-                <a routerLink="{{ item.link }}" [queryParams]="{ status: item.queryParams }" class="nhsuk-card__link">
+                <a routerLink="{{ item.link }}" [queryParams]=item.queryParams class="nhsuk-card__link">
                   <span class="nhsuk-u-visually-hidden"> Go to </span> {{ item.title }}
                 </a>
               </h2>

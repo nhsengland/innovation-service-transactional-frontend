@@ -1,3 +1,4 @@
+import { Params } from '@angular/router';
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
 import { DateISOType } from '@app/base/types';
 
@@ -198,7 +199,7 @@ export type BaseStatisticsCard = {
   title: string,
   label: string,
   link: string
-  queryParams?: string;
+  queryParams?: Params;
 };
 
 export type StatisticsCard = {

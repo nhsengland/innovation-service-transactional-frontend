@@ -72,14 +72,14 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         title: 'Innovations awaiting assessment',
         label: `Innovations awaiting needs assessment`,
         link: `/assessment/innovations`,
-        queryParams: 'WAITING_NEEDS_ASSESSMENT',
+        queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' },
         count: statistics[UserStatisticsTypeEnum.WAITING_ASSESSMENT_COUNTER].count,
         footer: this.getFooter(statistics[UserStatisticsTypeEnum.WAITING_ASSESSMENT_COUNTER].overdue)
       }, {
         title: 'Your innovations',
         label: `Innovations in needs assessment being assessed by you`,
         link: `/assessment/innovations`,
-        queryParams: 'NEEDS_ASSESSMENT',
+        queryParams: { status: 'NEEDS_ASSESSMENT' },
         count: statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].count,
         total: statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].total,
         footer: this.getFooter(statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].overdue)
