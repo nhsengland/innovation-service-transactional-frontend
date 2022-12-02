@@ -44,6 +44,9 @@ import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/in
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
+import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/actions/action-status-list.component';
+import { PageInnovationActionTrackerInfoComponent } from '@modules/shared/pages/innovation/actions/action-tracker-info.component';
+import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
 // Wizards.
 import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-unit-activate/organisation-unit-activate.component';
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
@@ -53,6 +56,7 @@ import { OrganisationDataResolver } from './resolvers/organisation-data.resolver
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
+import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -292,7 +296,41 @@ const routes: Routes = [
                     ]
                   }
                 ]
-              }
+              },
+              {
+                path: 'action-tracker',
+                data: { breadcrumb: 'Action Tracker' },
+                children: [
+
+                  {
+                    path: '', pathMatch: 'full', component: PageInnovationActionTrackerListComponent,
+                    data: { breadcrumb: null }
+                  },
+
+                  {
+                    path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent,
+                    data: { breadcrumb: 'Statuses' }
+                  },
+
+                  {
+                    path: ':actionId',
+                    resolve: { innovationActionData: InnovationActionDataResolver },
+                    data: {
+                      breadcrumb: (data: RoutesDataType) => {
+                        const name = data.innovationActionData?.name ?? '';
+                        return name.length > 30 ? `${name.substring(0, 30)}...` : name;
+                      }
+                    },
+                    children: [
+                      {
+                        path: '', pathMatch: 'full', component: PageInnovationActionTrackerInfoComponent,
+                        data: { breadcrumb: null }
+                      }
+                    ]
+                  }
+
+                ]
+              },
             ]
           }
         ]
