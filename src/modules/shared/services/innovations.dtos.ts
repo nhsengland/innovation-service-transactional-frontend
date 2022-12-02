@@ -114,6 +114,10 @@ export type InnovationSupportInfoDTO = {
   engagingAccessors: { id: string, organisationUnitUserId: string, name: string; }[];
 };
 
+export type InnovationSubmissionDTO = {
+  submittedAllSections: boolean,
+  submittedForNeedsAssessment: boolean
+};
 
 export type InnovationActionsListInDTO = {
   count: number,
@@ -190,7 +194,7 @@ export type InnovationStatisticsDTO = {
   [InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]: { count: number; lastSubmittedAt: null | DateISOType;},
   [InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER]: { count: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType;},
   [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER]: { count: number; total: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType;},
-  
+
   [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER]: { count: number; total: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType;},
   [InnovationStatisticsEnum.UNREAD_MESSAGES_THREADS_INITIATED_BY_COUNTER]: { count: number; lastSubmittedAt: null | DateISOType;},
 }

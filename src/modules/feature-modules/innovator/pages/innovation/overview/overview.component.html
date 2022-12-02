@@ -13,7 +13,7 @@
         Organisations: {{ innovation.organisationsStatusDescription }}
       </div>
     </ng-container>
-    <a routerLink="/innovator/innovation-statuses" class="float-r nhsuk-u-margin-bottom-4" arial-label="View innovation support status information">View support status</a>
+    <a routerLink="/innovator/innovations/{{ innovationId }}/support" class="float-r nhsuk-u-margin-bottom-4" arial-label="View innovation support status information">View support status</a>
   </div>
 
 
@@ -35,7 +35,7 @@
                   <span class="nhsuk-u-padding-1">of</span>
                   <span class="mr-auto">{{ statisticsSectionsCard.total }}</span>
                 </ng-container>
-                <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-self-end nhsuk-u-padding-left-4">
+                <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-center nhsuk-u-padding-left-4">
                   {{ statisticsSectionsCard.label }}
                 </span>
               </p>
@@ -98,8 +98,8 @@
           <ng-container *ngIf="statisticsMessagesCard.count!== 0; else noUnreadMessages">
             <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline">
               <span class="nhsuk-u-font-size-48">{{ statisticsMessagesCard.count }}</span>
-              <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-self-end nhsuk-u-padding-left-4">
-                {{ statisticsMessagesCard.count | i18nPlural: messageLabelMapping }} }}
+              <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-center nhsuk-u-padding-left-4">
+                {{ statisticsMessagesCard.count | i18nPlural: messageLabelMapping }}
               </span>
             </p>
           </ng-container>
@@ -118,19 +118,19 @@
     </li>
   </ul>
 
-  <!-- <ng-container *ngIf="!isSubmittedForAssessment()">
+  <ng-container *ngIf="!innovation.isSubmitted?.submittedAllSections && !innovation.isSubmitted?.submittedForNeedsAssessment">
     <div class="nhsuk-card nhsuk-u-margin-top-2">
       <div class="nhsuk-card__content">
         <h2 class="nhsuk-heading-m"> Your next steps </h2>
         <ol class="nhsuk-list nhsuk-u-padding-0">
           <li class="d-flex">
-            <ng-container *ngTemplateOutlet="icon; context: { completed: allSectionsSubmitted()}"></ng-container>
+            <ng-container *ngTemplateOutlet="icon; context: { completed: innovation.isSubmitted?.submittedAllSections}"></ng-container>
             <div class="nhsuk-u-margin-left-2">
               Submit all sections of your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a>
             </div>
           </li>
           <li class="d-flex">
-            <ng-container *ngTemplateOutlet="icon; context: { completed: false }"></ng-container>
+            <ng-container *ngTemplateOutlet="icon; context: { completed: innovation.isSubmitted?.submittedForNeedsAssessment }"></ng-container>
             <div class="nhsuk-u-margin-left-2">
               Share the record for the needs assessment
             </div>
@@ -138,6 +138,11 @@
         </ol>
       </div>
     </div>
-  </ng-container> -->
+  </ng-container>
 
 </theme-content-wrapper>
+
+<ng-template #icon let-completed="completed">
+  <theme-svg-icon *ngIf="!completed" type="error"></theme-svg-icon>
+  <theme-svg-icon *ngIf="completed" type="success"></theme-svg-icon>
+</ng-template>
