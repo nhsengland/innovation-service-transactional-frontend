@@ -1,28 +1,27 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
-
-import { InnovationActionTrackerListComponent } from './action-tracker-list.component';
-
-import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 
 
-describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerListComponent', () => {
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { SharedModule } from '@modules/shared/shared.module';
+import { PageInnovationActionTrackerListComponent } from './action-tracker-list.component';
+
+
+describe('Shared/Pages/Innovation/PageInnovationActionTrackerListComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
-  let accessorService: AccessorService;
+  let innovationsService: InnovationsService;
 
-  let component: InnovationActionTrackerListComponent;
-  let fixture: ComponentFixture<InnovationActionTrackerListComponent>;
+  let component: PageInnovationActionTrackerListComponent;
+  let fixture: ComponentFixture<PageInnovationActionTrackerListComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,7 +30,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerListComponen
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        AccessorModule
+        SharedModule
       ]
     });
 
@@ -39,7 +38,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerListComponen
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    accessorService = TestBed.inject(AccessorService);
+    innovationsService = TestBed.inject(InnovationsService);
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
@@ -48,7 +47,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerListComponen
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(InnovationActionTrackerListComponent);
+    fixture = TestBed.createComponent(PageInnovationActionTrackerListComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });

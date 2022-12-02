@@ -9,10 +9,10 @@ import { NotificationContextTypeEnum } from '@modules/stores/context/context.enu
 
 
 @Component({
-  selector: 'app-accessor-pages-innovation-action-tracker-info',
+  selector: 'shared-pages-innovation-action-tracker-info',
   templateUrl: './action-tracker-info.component.html'
 })
-export class InnovationActionTrackerInfoComponent extends CoreComponent implements OnInit {
+export class PageInnovationActionTrackerInfoComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
   actionId: string;
