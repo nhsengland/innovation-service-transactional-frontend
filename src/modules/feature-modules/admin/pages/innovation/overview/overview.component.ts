@@ -11,6 +11,7 @@ import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.co
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -35,7 +36,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovationsService: InnovationsService
+    private innovationsService: InnovationsService,
+    private datePipe: DatePipe
   ) {
 
     super();
@@ -65,7 +67,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.innovatorDetails = [
         { label: 'Innovator name', value: response.owner.name },
-        { label: 'Last login', value: response.owner.lastLoginAt ?? '' },
+        { label: 'Last login', value: this.datePipe.transform(response.owner.lastLoginAt ?? '', this.translate('app.date_formats.long_date_time')) },
         { label: 'Email address', value: response.owner.email ?? '' },
         { label: 'Phone number', value: response.owner.mobilePhone ?? '' },
       ]

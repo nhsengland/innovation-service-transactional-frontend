@@ -46,22 +46,24 @@
         <span class="nhsuk-u-margin-right-2"></span> {{ sections.notStarted }} sections not started
       </p>
 
-      <ng-container *ngIf="isInnovationInCreatedStatus()">
-        <button class="nhsuk-button nhsuk-u-margin-bottom-2" [disabled]="!allSectionsSubmitted()" (click)="onSubmitInnovation()">Share record for needs assessment</button>
-        <p class="nhsuk-body-s">
-          Please note: you will not be able to share your record for a needs assessment review
-          until you have completed all sections below. You can continue to update your record once it is submitted for
-          review.
-        </p>
-      </ng-container>
+      <ng-container *ngIf="stores.authentication.isInnovatorType()">
 
-      <ng-container *ngIf="stores.authentication.userUrlBasePath() === 'innovator'">
+        <ng-container *ngIf="isInnovationInCreatedStatus()">
+          <button class="nhsuk-button nhsuk-u-margin-bottom-2" [disabled]="!allSectionsSubmitted()" (click)="onSubmitInnovation()">Share record for needs assessment</button>
+          <p class="nhsuk-body-s">
+            Please note: you will not be able to share your record for a needs assessment review
+            until you have completed all sections below. You can continue to update your record once it is submitted for
+            review.
+          </p>
+        </ng-container>
+
         <h4>Helpful documents</h4>
         <ul>
           <li>You may want to <a [href]="documentUrl">download all questions (DOCX, 820KB)</a> you will be asked to
             answer in your innovation record</li>
           <li>You can also <a [href]="pdfDocumentUrl">export your current innovation record (pdf)</a></li>
         </ul>
+
       </ng-container>
 
       <ng-container *ngIf="innovation.owner.isActive === true">
