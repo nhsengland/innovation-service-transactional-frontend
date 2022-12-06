@@ -37,6 +37,7 @@ import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/innovation-support-status-list.component';
+import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -227,7 +228,7 @@ const routes: Routes = [
                 resolve: { innovationData: InnovationDataResolver }, // Needed to repeat this resolver as support can be updated from this routes.
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusInfoComponent,
+                    path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,
                     data: { breadcrumb: null }
                   },
                   { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent }

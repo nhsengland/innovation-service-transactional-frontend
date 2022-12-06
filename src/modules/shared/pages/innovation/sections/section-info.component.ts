@@ -110,7 +110,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         } else {
           this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data));
 
-          const validInformation = this.section.wizard.validateDataLegacy();
+          const validInformation = this.section.wizard.validateData();
           this.section.showSubmitButton = validInformation.valid && ['DRAFT'].includes(this.section.status.id);
           
           this.summaryList = this.section.wizard.runSummaryParsing();

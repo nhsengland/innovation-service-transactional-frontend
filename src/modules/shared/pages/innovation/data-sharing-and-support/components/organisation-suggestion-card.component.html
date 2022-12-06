@@ -1,0 +1,38 @@
+<ng-container *ngIf="showAssessmentsCard">
+  <div class="card-container">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Consider updating your data sharing preferences</h2>
+        <p>
+          <strong>The needs assessment team</strong> has suggested one or more organisations that you're not sharing your data with.
+          Consider updating your preferences for the best chance of receiving support.
+        </p>
+        <div class="d-flex">
+          <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3 nhsuk-u-padding-right-2"> Suggested organisations </h2>
+          <!-- <theme-notification-tag label="dot" *ngIf="hasNewSuggestions"></theme-notification-tag> -->
+        </div>
+        <ul class="nhsuk-list">
+          <li *ngFor="let item of assessments.organisations"> {{ item }} </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="showAccessorsCard">
+  <div class="card-container">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Consider updating your data sharing preferences</h2>
+        <p>
+          <strong>{{accessors.suggestors}}</strong> has suggested one or more organisations that you're not sharing your data with.
+          Consider updating your preferences for the best chance of receiving support.
+        </p>
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3"> Suggested organisations </h2>
+        <ul class="nhsuk-list">
+          <li *ngFor="let item of accessors.organisations"> {{ item }} </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</ng-container>

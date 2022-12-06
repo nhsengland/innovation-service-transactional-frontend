@@ -56,6 +56,7 @@ import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovat
 import { PageExportRecordListComponent } from '@modules/shared/pages/innovation/export/export-record-list.component';
 import { PageExportRecordInfoComponent } from '@modules/shared/pages/innovation/export/export-record-info.component';
 import { InnovationExportRequestRejectComponent } from './pages/innovation/export/export-request-reject.component';
+import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -341,7 +342,7 @@ const routes: Routes = [
                 data: { breadcrumb: 'Data Sharing and Support' },
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: InnovationDataSharingComponent,
+                    path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,
                     data: { breadcrumb: null }
                   },
 

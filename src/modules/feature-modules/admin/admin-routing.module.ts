@@ -47,6 +47,8 @@ import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/
 import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/actions/action-status-list.component';
 import { PageInnovationActionTrackerInfoComponent } from '@modules/shared/pages/innovation/actions/action-tracker-info.component';
 import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
+import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
+import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/innovation-support-status-list.component';
 // Wizards.
 import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-unit-activate/organisation-unit-activate.component';
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
@@ -329,6 +331,20 @@ const routes: Routes = [
                     ]
                   }
 
+                ]
+              },
+
+              {
+                path: 'support',
+                data: { breadcrumb: 'Data Sharing and Support' },
+                children: [
+                  {
+                    path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,
+                    data: { breadcrumb: null }
+                  },
+                  {
+                    path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent
+                  }
                 ]
               },
             ]
