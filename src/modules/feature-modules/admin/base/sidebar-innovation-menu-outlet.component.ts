@@ -24,7 +24,7 @@ export class SidebarInnovationMenuOutletComponent {
       { label: 'Action tracker', url: `/admin/innovations/${innovation.id}/action-tracker` },
       { label: 'Messages', url: `/admin/innovations/${innovation.id}/threads` },
       { label: 'Data sharing and support', url: `/admin/innovations/${innovation.id}/support` }, // TODO: this url may change
-      { label: 'Needs assessment', url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }, // TODO: This may have to be status checked to show
+      { label: 'Needs assessment', url: `/admin/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }, // TODO: This may have to be status checked to show
       { label: 'Activity log', url: `/admin/innovations/${innovation.id}/activity-log` }
     ];
 
