@@ -12,6 +12,8 @@ import { InnovationAssessmentOverviewComponent } from './assessment-overview.com
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { of } from 'rxjs';
+import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 
 describe('FeatureModules/Admin/Innovation/InnovationAssessmentOverviewComponent', () => {
 
@@ -41,20 +43,20 @@ describe('FeatureModules/Admin/Innovation/InnovationAssessmentOverviewComponent'
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
 
-    // assessmentService.getSupportLog = () => of([{
-    //   id: 'support01',
-    //   type: SupportLogType.STATUS_UPDATE,
-    //   description: 'description',
-    //   createdBy: 'A user',
-    //   createdAt: '2020-01-01T00:00:00.000Z',
-    //   innovationSupportStatus: 'ENGAGING',
-    //   organisationUnit: {
-    //     id: 'unit01', name: 'Unit 01', acronym: 'UN',
-    //     organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
-    //   },
-    //   logTitle: 'Updated support status',
-    //   suggestedOrganisationUnitsNames: ['Unit 01']
-    // }]);
+    innovationsService.getInnovationSupportLog = () => of([{
+      id: 'support01',
+      type: SupportLogType.STATUS_UPDATE,
+      description: 'description',
+      createdBy: 'A user',
+      createdAt: '2020-01-01T00:00:00.000Z',
+      innovationSupportStatus: 'ENGAGING',
+      organisationUnit: {
+        id: 'unit01', name: 'Unit 01', acronym: 'UN',
+        organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
+      },
+      logTitle: 'Updated support status',
+      suggestedOrganisationUnitsNames: ['Unit 01']
+    }]);
 
   });
 

@@ -61,7 +61,13 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
 
   ngOnInit(): void {
-    this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId).subscribe((needsAssessment) => {
+    
+    forkJoin([
+      this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
+      this.innovationsService.getInnovationSupportLog(this.innovationId)
+    ]).subscribe(([needsAssessment, supportLog]) => {
+      this.logHistory = supportLog;
+
       this.assessment = needsAssessment;
       this.assessmentHasBeenSubmitted = !!needsAssessment.finishedAt;
 

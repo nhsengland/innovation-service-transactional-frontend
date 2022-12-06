@@ -14,7 +14,7 @@ import { getSectionTitle } from '@modules/stores/innovation/innovation.config';
 import { InnovationStatisticsEnum } from './statistics.enum';
 import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO } from './innovations.dtos';
+import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLog, InnovationSupportsLogDTO, SupportLogType } from './innovations.dtos';
 
 export enum AssessmentSupportFilterEnum {
   UNASSIGNED = 'UNASSIGNED',
@@ -297,6 +297,35 @@ export class InnovationsService extends CoreService {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/statistics').setPathParams({ innovationId }).setQueryParams(qParams);
     return this.http.get<InnovationStatisticsDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+  }
+
+  getInnovationSupportLog(innovationId: string): Observable<InnovationSupportsLogDTO[]> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-logs').setPathParams({ innovationId });
+    return this.http.get<InnovationSupportsLog[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response.map(item => {
+
+        let logTitle = '';
+
+        switch (item.type) {
+          case SupportLogType.ACCESSOR_SUGGESTION:
+            logTitle = 'Suggested organisation units';
+            break;
+          case SupportLogType.STATUS_UPDATE:
+            logTitle = 'Updated support status';
+            break;
+          default:
+            break;
+        }
+
+        return {
+          ...item,
+          logTitle,
+          suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits || []).map((o: { name: any; }) => o.name)
+        };
+
+      }))
+    );
   }
 
   // Needs Assessment
