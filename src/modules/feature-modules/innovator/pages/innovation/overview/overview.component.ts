@@ -9,7 +9,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
-import { StatisticsCard } from '@modules/shared/services/innovations.dtos';
+import { InnovationSubmissionDTO, StatisticsCard } from '@modules/shared/services/innovations.dtos';
 
 
 @Component({
@@ -29,16 +29,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   innovation: {
     groupedStatus: null | InnovationGroupedStatusEnum,
-    organisationsStatusDescription: null | string
-  } = { groupedStatus: null, organisationsStatusDescription: null };
+    organisationsStatusDescription: null | string,
+    isSubmitted: null | InnovationSubmissionDTO
+  } = { groupedStatus: null, organisationsStatusDescription: null, isSubmitted: null };
 
-  /* allSectionsSubmitted(): boolean {
-    return this.sections.submitted === this.sections.progressBar.length;
-  }
 
-  isSubmittedForAssessment(): boolean {
-    return this.submittedAt !== '';
-  } */
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -90,7 +86,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     forkJoin([
       this.innovationsService.getInnovationInfo(this.innovationId),
       this.innovationsService.getInnovationStatisticsInfo(this.innovationId, qp),
-    ]).subscribe(([innovation, statistics]) => {
+      this.innovationsService.getInnovationSubmission(this.innovationId)
+    ]).subscribe(([innovation, statistics, submit]) => {
 
       this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT] });
 
@@ -99,6 +96,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         (innovation.supports ?? []).map(support => support.status),
         innovation.assessment?.reassessmentCount ?? 0
       );
+
+      this.innovation.isSubmitted = submit;
 
       const occurrences = (innovation.supports ?? []).map(item => item.status)
         .reduce((acc, status) => (

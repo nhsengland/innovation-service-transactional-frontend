@@ -14,7 +14,7 @@ import { getSectionTitle } from '@modules/stores/innovation/innovation.config';
 import { InnovationStatisticsEnum } from './statistics.enum';
 import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLog, InnovationSupportsLogDTO, SupportLogType } from './innovations.dtos';
+import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSubmissionDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLog, InnovationSupportsLogDTO, SupportLogType } from './innovations.dtos';
 
 export enum AssessmentSupportFilterEnum {
   UNASSIGNED = 'UNASSIGNED',
@@ -169,7 +169,7 @@ export class InnovationsService extends CoreService {
 
 
   getInnovationsList(queryParams?: APIQueryParamsType<InnovationsListFiltersType>): Observable<InnovationsListDTO> {
-  
+
     if (!queryParams) {
       queryParams = { take: 100, skip: 0, order: { name: 'ASC' }, filters: {} };
     }
@@ -212,7 +212,7 @@ export class InnovationsService extends CoreService {
           break;
       }
     }
-  
+
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1').setQueryParams(qp);
     return this.http.get<InnovationsListDTO>(url.buildUrl()).pipe(
       take(1),
@@ -326,6 +326,11 @@ export class InnovationsService extends CoreService {
 
       }))
     );
+  }
+  
+  getInnovationSubmission(innovationId: string): Observable<InnovationSubmissionDTO> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/submissions').setPathParams({ innovationId });
+    return this.http.get<InnovationSubmissionDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
   // Needs Assessment
