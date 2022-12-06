@@ -26,7 +26,6 @@ import { InnovationActionTrackerDeclineComponent } from './pages/innovation/acti
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
 import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
-import { InnovationDataSharingComponent } from './pages/innovation/data-sharing/data-sharing.component';
 import { PageInnovationHowToProceedComponent } from './pages/innovation/how-to-proceed/how-to-proceed.component';
 import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment/needs-assessment-overview.component';
 import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation/needs-reassessment/needs-reassessment-send.component';
