@@ -8,9 +8,10 @@ import { StoresModule } from '@modules/stores';
 
 import { InnovationsService } from './innovations.service';
 import { InnovationSupportsLog, InnovationSupportsLogDTO } from './innovations.dtos';
+import { ENV } from '@tests/app.mocks';
 
 
-describe('Shared/Services/Innovations', () => {
+fdescribe('Shared/Services/Innovations', () => {
 
   let httpMock: HttpTestingController;
   let envVariablesStore: EnvironmentVariablesStore;
@@ -25,6 +26,7 @@ describe('Shared/Services/Innovations', () => {
       ],
       providers: [
         InnovationsService,
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
 

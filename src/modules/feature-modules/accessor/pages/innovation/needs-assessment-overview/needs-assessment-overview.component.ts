@@ -41,7 +41,6 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService,
     private innovationsService: InnovationsService
   ) {
 

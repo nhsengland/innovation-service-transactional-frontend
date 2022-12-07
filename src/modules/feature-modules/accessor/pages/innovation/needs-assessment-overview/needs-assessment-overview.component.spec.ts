@@ -12,16 +12,16 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 
 import { InnovationNeedsAssessmentOverviewComponent } from './needs-assessment-overview.component';
 
-import { AccessorService, SupportLogType } from '@modules/feature-modules/accessor/services/accessor.service';
+import { SupportLogType } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 
 describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
-  let accessorService: AccessorService;
+  let innovationsService: InnovationsService;
 
   let component: InnovationNeedsAssessmentOverviewComponent;
   let fixture: ComponentFixture<InnovationNeedsAssessmentOverviewComponent>;
@@ -41,13 +41,13 @@ describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', 
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    accessorService = TestBed.inject(AccessorService);
+    innovationsService = TestBed.inject(InnovationsService);
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
 
 
-    accessorService.getSupportLog = () => of([{
+    innovationsService.getInnovationSupportLog = () => of([{
       id: 'support01',
       type: SupportLogType.STATUS_UPDATE,
       description: 'description',

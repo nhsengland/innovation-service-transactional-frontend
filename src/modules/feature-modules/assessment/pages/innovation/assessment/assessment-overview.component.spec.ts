@@ -12,16 +12,15 @@ import { AssessmentModule } from '@modules/feature-modules/assessment/assessment
 
 import { InnovationAssessmentOverviewComponent } from './assessment-overview.component';
 
-import { AssessmentService, SupportLogType } from '@modules/feature-modules/assessment/services/assessment.service';
-
-import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 
 
 describe('FeatureModules/Assessment/Innovation/InnovationAssessmentOverviewComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
-  let assessmentService: AssessmentService;
+  let innovationsService: InnovationsService;
 
   let component: InnovationAssessmentOverviewComponent;
   let fixture: ComponentFixture<InnovationAssessmentOverviewComponent>;
@@ -41,12 +40,12 @@ describe('FeatureModules/Assessment/Innovation/InnovationAssessmentOverviewCompo
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    assessmentService = TestBed.inject(AssessmentService);
+    innovationsService = TestBed.inject(InnovationsService);
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
 
-    assessmentService.getSupportLog = () => of([{
+    innovationsService.getInnovationSupportLog = () => of([{
       id: 'support01',
       type: SupportLogType.STATUS_UPDATE,
       description: 'description',
