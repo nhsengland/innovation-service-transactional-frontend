@@ -5,14 +5,10 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { NotificationContextTypeEnum } from '@app/base/enums';
 
-import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationNeedsAssessmentInfoDTO, InnovationSupportsLogDTO } from '@modules/shared/services/innovations.dtos';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 import { maturityLevelItems, yesNoItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
-
-import { GetSupportLogListOutDTO } from '@modules/feature-modules/innovator/services/innovator.service';
-
-import { InnovatorService } from '../../../services/innovator.service';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
@@ -29,7 +25,7 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
 
   assessment: InnovationNeedsAssessmentInfoDTO | undefined;
 
-  supportLogList: GetSupportLogListOutDTO[] = [];
+  supportLogList: InnovationSupportsLogDTO[] = [];
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
   innovationReassessment: { label?: string, value: null | string }[] = [];
@@ -38,7 +34,6 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService,
     private innovationsService: InnovationsService
   ) {
 
@@ -58,7 +53,7 @@ export class InnovatorNeedsAssessmentOverviewComponent extends CoreComponent imp
 
     forkJoin([
       this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
-      this.innovatorService.getSupportLogList(this.innovationId)
+      this.innovationsService.getInnovationSupportLog(this.innovationId)
     ]).subscribe(([needsAssessment, supportLog]) => {
 
       this.supportLogList = supportLog;

@@ -22,7 +22,6 @@ import { InnovationActionTrackerEditComponent } from './pages/innovation/action-
 import { InnovationActionTrackerNewComponent } from './pages/innovation/action-tracker/action-tracker-new.component';
 import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
-import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './pages/innovation/support/organisations-support-status-info.component';
 import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './pages/innovation/support/organisations-support-status-suggest.component';
 import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
@@ -51,6 +50,7 @@ import { PageExportRecordInfoComponent } from '@modules/shared/pages/innovation/
 import { InnovationExportRequestComponent } from './pages/innovation/export/export-request.component';
 import { PageInnovationActionTrackerInfoComponent } from '@modules/shared/pages/innovation/actions/action-tracker-info.component';
 import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
+import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 // // Innovations
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 // // Notifications.
@@ -289,7 +289,7 @@ const routes: Routes = [
                   },
                   { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent },
                   { path: 'new', pathMatch: 'full', component: InnovationSupportUpdateComponent },
-                  { path: 'organisations', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusInfoComponent },
+                  { path: 'organisations', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent },
                   { path: 'organisations/suggest', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent },
                   { path: ':supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent }
                 ]

@@ -4,27 +4,25 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
-import { InnovationNeedsAssessmentOverviewComponent } from './needs-assessment-overview.component';
+import { InnovationAssessmentOverviewComponent } from './assessment-overview.component';
 
-import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { of } from 'rxjs';
+import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 
-
-
-describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', () => {
+describe('FeatureModules/Admin/Innovation/InnovationAssessmentOverviewComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
   let innovationsService: InnovationsService;
 
-  let component: InnovationNeedsAssessmentOverviewComponent;
-  let fixture: ComponentFixture<InnovationNeedsAssessmentOverviewComponent>;
+  let component: InnovationAssessmentOverviewComponent;
+  let fixture: ComponentFixture<InnovationAssessmentOverviewComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -33,19 +31,17 @@ describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', 
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        AccessorModule
+        AdminModule
       ]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
     activatedRoute = TestBed.inject(ActivatedRoute);
-
     innovationsService = TestBed.inject(InnovationsService);
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
-
 
     innovationsService.getInnovationSupportLog = () => of([{
       id: 'support01',
@@ -58,7 +54,7 @@ describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', 
         id: 'unit01', name: 'Unit 01', acronym: 'UN',
         organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
       },
-      logTitle: 'Updated  support status',
+      logTitle: 'Updated support status',
       suggestedOrganisationUnitsNames: ['Unit 01']
     }]);
 
@@ -66,13 +62,30 @@ describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', 
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
+
+    fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
     expect(component).toBeTruthy();
+
   });
 
+  // it('should show "needsAssessmentSubmited" success', () => {
+
+  //   activatedRoute.snapshot.queryParams = { alert: 'needsAssessmentSubmited' };
+
+  //   const expected = { type: 'SUCCESS', title: 'Needs assessment successfully completed' };
+
+  //   fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+  //   expect(component.alert).toEqual(expected);
+
+  // });
 
   // it('should run getInnovationNeedsAssessment() with a response with all RELEVANT information', () => {
+
+  //   NEEDS_ASSESSMENT_QUESTIONS.innovation[1].label = '';
 
   //   const responseMock = {
   //     innovation: { id: '01', name: 'Innovation 01' },
@@ -95,16 +108,21 @@ describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', 
   //       hasScaleResource: 'YES',
   //       hasScaleResourceComment: null,
   //       summary: null,
-  //       organisations: [],
+  //       organisations: [{ id: 'OrgId', name: 'Org name', acronym: 'ORG', organisationUnits: [{ id: 'OrgUnitId', name: 'Org Unit name', acronym: 'ORGu' }] }],
   //       assignToName: '',
-  //       finishedAt: null
+  //       finishedAt: null,
+  //       createdAt: '2020-01-01T00:00:00.000Z',
+  //       createdBy: '2020-01-01T00:00:00.000Z',
+  //       updatedAt: null,
+  //       updatedBy: null,
+  //       hasBeenSubmitted: true
   //     },
   //     support: { id: null }
   //   };
-  //   accessorService.getInnovationNeedsAssessment = () => of(responseMock);
-  //   const expected = responseMock.assessment;
+  //   assessmentService.getInnovationNeedsAssessment = () => of(responseMock);
+  //   const expected = { ...responseMock.assessment, organisations: [{ id: 'OrgId', name: 'Org name', acronym: 'ORG', organisationUnits: [{ id: 'OrgUnitId', name: 'Org Unit name', acronym: 'ORGu' }] }] };
 
-  //   fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
+  //   fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
   //   component = fixture.componentInstance;
 
   //   fixture.detectChanges();
@@ -113,8 +131,6 @@ describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', 
   // });
 
   // it('should run getInnovationNeedsAssessment() with a response with EMPTY information', () => {
-
-  //   NEEDS_ASSESSMENT_QUESTIONS.innovation[1].label = '';
 
   //   const responseMock = {
   //     innovation: { id: '01', name: 'Innovation 01' },
@@ -139,14 +155,19 @@ describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', 
   //       summary: null,
   //       organisations: [],
   //       assignToName: '',
-  //       finishedAt: null
+  //       finishedAt: null,
+  //       createdAt: '2020-01-01T00:00:00.000Z',
+  //       createdBy: '2020-01-01T00:00:00.000Z',
+  //       updatedAt: null,
+  //       updatedBy: null,
+  //       hasBeenSubmitted: false
   //     },
   //     support: { id: null }
   //   };
-  //   accessorService.getInnovationNeedsAssessment = () => of(responseMock);
-  //   const expected = responseMock.assessment;
+  //   assessmentService.getInnovationNeedsAssessment = () => of(responseMock);
+  //   const expected = { ...responseMock.assessment, organisations: [] };
 
-  //   fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
+  //   fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
   //   component = fixture.componentInstance;
 
   //   fixture.detectChanges();
@@ -156,53 +177,14 @@ describe('FeatureModules/Accessor/Innovation/NeedsAssessmentOverviewComponent', 
 
   // it('should run getInnovationNeedsAssessment() with error', () => {
 
-  //   accessorService.getInnovationNeedsAssessment = () => throwError(false);
+  //   assessmentService.getInnovationNeedsAssessment = () => throwError(false);
 
   //   const expected = undefined;
 
-  //   fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
+  //   fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
   //   component = fixture.componentInstance;
-
   //   fixture.detectChanges();
   //   expect(component.assessment).toBe(expected);
-
-  // });
-
-
-  // it('should run getSupportLog() with success', () => {
-
-  //   accessorService.getSupportLog = () => of([{
-  //     id: 'support01',
-  //     type: SupportLogType.STATUS_UPDATE,
-  //     description: 'description',
-  //     createdBy: 'A user',
-  //     createdAt: '2020-01-01T00:00:00.000Z',
-  //     innovationSupportStatus: 'ENGAGING',
-  //     organisationUnit: {
-  //       id: 'unit01', name: 'Unit 01', acronym: 'UN',
-  //       organisation: { id: 'org01', name: 'Org 01', acronym: 'ORG' }
-  //     },
-  //     logTitle: 'Updated support status',
-  //     suggestedOrganisationUnitsNames: ['Unit 01']
-  //   }]);
-
-  //   fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
-  //   component = fixture.componentInstance;
-
-  //   fixture.detectChanges();
-  //   expect(component.logHistory[0].id).toBe('support01');
-
-  // });
-
-  // it('should run getSupportLog() with error', () => {
-
-  //   accessorService.getSupportLog = () => throwError(false);
-
-  //   fixture = TestBed.createComponent(InnovationNeedsAssessmentOverviewComponent);
-  //   component = fixture.componentInstance;
-
-  //   fixture.detectChanges();
-  //   expect(component.logHistory).toEqual([]);
 
   // });
 

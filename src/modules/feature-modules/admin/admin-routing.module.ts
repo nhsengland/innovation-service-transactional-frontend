@@ -47,6 +47,8 @@ import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/
 import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/actions/action-status-list.component';
 import { PageInnovationActionTrackerInfoComponent } from '@modules/shared/pages/innovation/actions/action-tracker-info.component';
 import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
+import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
+import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/innovation-support-status-list.component';
 // Wizards.
 import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-unit-activate/organisation-unit-activate.component';
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
@@ -57,6 +59,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
+import { InnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -329,6 +332,35 @@ const routes: Routes = [
                     ]
                   }
 
+                ]
+              },
+              {
+                path: 'assessments',
+                data: { breadcrumb: null },
+                children: [
+                  {
+                    path: ':assessmentId',
+                    data: { breadcrumb: null },
+                    children: [
+                      {
+                        path: '', pathMatch: 'full', component: InnovationAssessmentOverviewComponent,
+                        data: { breadcrumb: null }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                path: 'support',
+                data: { breadcrumb: 'Data Sharing and Support' },
+                children: [
+                  {
+                    path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,
+                    data: { breadcrumb: null }
+                  },
+                  {
+                    path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent
+                  }
                 ]
               },
             ]

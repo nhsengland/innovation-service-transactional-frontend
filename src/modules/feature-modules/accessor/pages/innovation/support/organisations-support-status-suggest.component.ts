@@ -8,9 +8,10 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { AccessorService, SupportLogType } from '../../../services/accessor.service';
+import { AccessorService } from '../../../services/accessor.service';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 
 
 @Component({

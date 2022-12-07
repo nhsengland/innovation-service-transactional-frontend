@@ -56,7 +56,7 @@
               <td class="nhsuk-table__cell text-align-right">
                 <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('createdAt') }}</span>
 
-                <p class="nhsuk-body-s nhsuk-u-margin-0">{{ item.createdAt | date: ('app.date_formats.short_date_time' | translate) }}</p>
+                <p class="nhsuk-body-s nhsuk-u-margin-0">{{ item.lastMessage.createdAt | date: ('app.date_formats.short_date_time' | translate) }}</p>
                 <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">
 
                   <ng-container *ngIf="item.lastMessage.createdBy.id === selfUser.id; else notSelfUser">
