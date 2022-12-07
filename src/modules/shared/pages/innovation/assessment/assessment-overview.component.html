@@ -23,6 +23,18 @@
               <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.assignTo?.name }}</p>
               <p class="nhsuk-hint">Needs assessment team</p>
             </ng-container>
+
+            <ng-container *ngIf="userType === 'INNOVATOR'">
+              <p class="nhsuk-heading-xs">Updated: {{ assessment?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</p>
+              <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.updatedBy?.name }}</p>
+              <p class="nhsuk-hint">Needs assessment team</p>
+
+              <div class="nhsuk-u-padding-top-8">
+                <p class="nhsuk-heading-xs">Created: {{ assessment?.finishedAt | date: ('app.date_formats.long_date' | translate) }}</p>
+                <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.assignTo?.name }}</p>
+                <p class="nhsuk-hint">Needs assessment team</p>
+              </div>
+            </ng-container>
           </div>
 
 
@@ -172,6 +184,10 @@
         <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary">
           Update support status
         </a>
+      </ng-container>
+
+      <ng-container *ngIf="userType === 'INNOVATOR'">
+        <a routerLink="/innovator/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
       </ng-container>
 
     </div>
