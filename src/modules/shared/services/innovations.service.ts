@@ -130,6 +130,8 @@ export type CreateThreadMessageDTO = {
   };
 };
 
+export type InnovationSharesListDTO = { organisation: { id: string, name: string, acronym: string; }; }[];
+
 export type statusChangeDTO = {
   statusChangedAt: null | string;
 };
@@ -257,10 +259,10 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getInnovationSharesList(innovationId: string): Observable<{ organisation: { id: string, name: string, acronym: string; }; }[]> {
+  getInnovationSharesList(innovationId: string): Observable<InnovationSharesListDTO> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/shares').setPathParams({ innovationId });
-    return this.http.get<{ organisation: { id: string, name: string, acronym: string; }; }[]>(url.buildUrl()).pipe(take(1), map(response => response));
+    return this.http.get<InnovationSharesListDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 

@@ -38,6 +38,7 @@ import { PageExportRecordListComponent } from './pages/innovation/export/export-
 import { PageInnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
 import { PageInnovationActionTrackerListComponent } from './pages/innovation/actions/action-tracker-list.component';
 import { PageInnovationActionTrackerInfoComponent } from './pages/innovation/actions/action-tracker-info.component';
+import { PageInnovationDataSharingAndSupportComponent } from './pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 // // Notifications.
 import { PageNotificationsListComponent } from './pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -48,6 +49,9 @@ import { WizardSummaryWithConfirmStepComponent } from './wizards/steps/summary-w
 
 // Pipes.
 import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
+
+// Components
+import { OrganisationSuggestionsCardComponent } from './pages/innovation/data-sharing-and-support/components/organisation-suggestion-card.component';
 
 // Resolvers.
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
@@ -106,6 +110,7 @@ import { StatisticsService } from './services/statistics.service';
     PageInnovationsAdvancedReviewComponent,
     PageInnovationActionTrackerListComponent,
     PageInnovationActionTrackerInfoComponent,
+    PageInnovationDataSharingAndSupportComponent,
     // // Notifications.
     PageNotificationsListComponent,
     // // Terms of use.
@@ -115,7 +120,10 @@ import { StatisticsService } from './services/statistics.service';
     WizardSummaryWithConfirmStepComponent,
 
     // Pipes.
-    PluralTranslatePipe
+    PluralTranslatePipe,
+
+    // Components
+    OrganisationSuggestionsCardComponent,
   ],
   providers: [
     // Resolvers.

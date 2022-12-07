@@ -108,9 +108,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           // If accessor, only view information if section is submitted.
           this.summaryList = [];
         } else {
-          this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data));
+          this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data)).runRules();
 
-          const validInformation = this.section.wizard.validateDataLegacy();
+          const validInformation = this.section.wizard.validateData();
           this.section.showSubmitButton = validInformation.valid && ['DRAFT'].includes(this.section.status.id);
           
           this.summaryList = this.section.wizard.runSummaryParsing();

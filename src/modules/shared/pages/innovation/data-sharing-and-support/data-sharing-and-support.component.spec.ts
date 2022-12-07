@@ -7,25 +7,28 @@ import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { StoresModule } from '@modules/stores';
-import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
+import { StoresModule, InnovationService } from '@modules/stores';
+import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
-import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './organisations-support-status-info.component';
+import { PageInnovationDataSharingAndSupportComponent } from './data-sharing-and-support.component';
 
-import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
+import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { SharedModule } from '@modules/shared/shared.module';
 
 
-describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisationsSupportStatusInfoComponent', () => {
+describe('FeatureModules/Innovator/Pages/Innovation/PageInnovationDataSharingAndSupportComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
-  let accessorService: AccessorService;
+  let innovationService: InnovationService;
+  let innovatorService: InnovatorService;
   let organisationsService: OrganisationsService;
 
-  let component: InnovationSupportOrganisationsSupportStatusInfoComponent;
-  let fixture: ComponentFixture<InnovationSupportOrganisationsSupportStatusInfoComponent>;
+  let component: PageInnovationDataSharingAndSupportComponent;
+  let fixture: ComponentFixture<PageInnovationDataSharingAndSupportComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -34,7 +37,8 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        AccessorModule
+        InnovatorModule,
+        SharedModule
       ]
     });
 
@@ -42,49 +46,80 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    accessorService = TestBed.inject(AccessorService);
+    innovationService = TestBed.inject(InnovationService);
+    innovatorService = TestBed.inject(InnovatorService);
     organisationsService = TestBed.inject(OrganisationsService);
-
-    activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
 
   });
 
-
   it('should create the component', () => {
-    fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);
+    fixture = TestBed.createComponent(PageInnovationDataSharingAndSupportComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
 
+  // it('should show "sharingUpdateSuccess" warning', () => {
+
+  //   activatedRoute.snapshot.queryParams = { alert: 'sharingUpdateSuccess' };
+
+  //   const expected = { type: 'SUCCESS', title: 'Data sharing preferences', message: 'Your data sharing preferences were changed.' };
+
+  //   fixture = TestBed.createComponent(PageInnovationDataSharingAndSupportComponent);
+  //   component = fixture.componentInstance;
+  //   expect(component.alert).toEqual(expected);
+
+  // });
+
+  // it('should show "sharingUpdateError" warning', () => {
+
+  //   activatedRoute.snapshot.queryParams = { alert: 'sharingUpdateError' };
+
+  //   const expected = { type: 'ERROR', title: 'An error occurred when updating data sharing preferences', message: 'Please try again or contact us for further help' };
+
+  //   fixture = TestBed.createComponent(PageInnovationDataSharingAndSupportComponent);
+  //   component = fixture.componentInstance;
+  //   expect(component.alert).toEqual(expected);
+
+  // });
+
   // it('should have initial information loaded with payload 01 (Organisations with NO organisations units)', () => {
 
   //   organisationsService.getOrganisationsListWithUnits = () => of([{ id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [] }]);
-  //   accessorService.getInnovationSupports = () => of([]);
+  //   innovatorService.getInnovationShares = () => of([]);
+  //   innovatorService.getInnovationSupports = () => of([]);
+  //   innovationService.getInnovationOrganisationSuggestions = () => of({
+  //     assessment: { id: 'id', suggestedOrganisations: [] },
+  //     accessors: []
+  //   });
 
   //   const expected = {
   //     info: { id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [] },
+  //     shared: false,
   //     showHideStatus: 'closed',
   //     showHideText: null,
   //     showHideDescription: 'that belong to the Org name'
   //   };
 
-  //   fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);
+  //   fixture = TestBed.createComponent(PageInnovationDataSharingAndSupportComponent);
   //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
 
+  //   fixture.detectChanges();
   //   expect(component.organisations[0]).toEqual(expected);
 
   // });
 
-  // it('should have initial information loaded with payload 02 (Organisations with ONE organisation unit AND mathing organisation support)', () => {
+  // it('should have initial information loaded with payload 02 (Organisations with ONE organisation unit AND mathing organisation share)', () => {
 
   //   organisationsService.getOrganisationsListWithUnits = () => of([{
   //     id: 'orgId', name: 'Org name', acronym: 'ORG',
   //     organisationUnits: [{ id: 'orgUnitId', name: 'Org Unit name', acronym: 'ORGu' }]
   //   }]);
 
-  //   accessorService.getInnovationSupports = () => of([{
+  //   innovatorService.getInnovationShares = () => of([
+  //     { id: 'orgId', status: 'ENGAGING' as keyof typeof INNOVATION_SUPPORT_STATUS }
+  //   ]);
+
+  //   innovatorService.getInnovationSupports = () => of([{
   //     id: 'SupportId01', status: 'ENGAGING',
   //     organisationUnit: {
   //       id: 'orgId', name: 'Org Unit name',
@@ -92,29 +127,37 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
   //     }
   //   }]);
 
+  //   innovationService.getInnovationOrganisationSuggestions = () => of({
+  //     assessment: { id: 'id', suggestedOrganisations: [] },
+  //     accessors: []
+  //   });
+
   //   const expected = {
   //     info: { id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [], status: 'ENGAGING' },
+  //     shared: true,
   //     showHideStatus: 'hidden',
   //     showHideText: null,
   //     showHideDescription: null
   //   };
 
-  //   fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);
+  //   fixture = TestBed.createComponent(PageInnovationDataSharingAndSupportComponent);
   //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
 
+  //   fixture.detectChanges();
   //   expect(component.organisations[0]).toEqual(expected);
 
   // });
 
-  // it('should have initial information loaded with payload 03 (Organisations with ONE organisation unit AND NO mathing organisation support)', () => {
+  // it('should have initial information loaded with payload 03 (Organisations with ONE organisation unit AND NO mathing organisation share)', () => {
 
   //   organisationsService.getOrganisationsListWithUnits = () => of([{
   //     id: 'orgId', name: 'Org name', acronym: 'ORG',
   //     organisationUnits: [{ id: 'orgUnitId', name: 'Org Unit name', acronym: 'ORGu' }]
   //   }]);
 
-  //   accessorService.getInnovationSupports = () => of([{
+  //   innovatorService.getInnovationShares = () => of([]);
+
+  //   innovatorService.getInnovationSupports = () => of([{
   //     id: 'SupportId01', status: 'ENGAGING',
   //     organisationUnit: {
   //       id: 'UnknownOrgUnitId', name: 'Org Unit name',
@@ -122,17 +165,23 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
   //     }
   //   }]);
 
+  //   innovationService.getInnovationOrganisationSuggestions = () => of({
+  //     assessment: { id: 'id', suggestedOrganisations: [] },
+  //     accessors: []
+  //   });
+
   //   const expected = {
   //     info: { id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [], status: 'UNASSIGNED' },
+  //     shared: false,
   //     showHideStatus: 'hidden',
   //     showHideText: null,
   //     showHideDescription: null
   //   };
 
-  //   fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);
+  //   fixture = TestBed.createComponent(PageInnovationDataSharingAndSupportComponent);
   //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
 
+  //   fixture.detectChanges();
   //   expect(component.organisations[0]).toEqual(expected);
 
   // });
@@ -147,7 +196,11 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
   //     ]
   //   }]);
 
-  //   accessorService.getInnovationSupports = () => of([
+  //   innovatorService.getInnovationShares = () => of([
+  //     { id: 'orgId', status: 'ENGAGING' as keyof typeof INNOVATION_SUPPORT_STATUS }
+  //   ]);
+
+  //   innovatorService.getInnovationSupports = () => of([
   //     {
   //       id: 'SupportId01', status: 'ENGAGING',
   //       organisationUnit: {
@@ -164,6 +217,11 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
   //     }
   //   ]);
 
+  //   innovationService.getInnovationOrganisationSuggestions = () => of({
+  //     assessment: { id: 'id', suggestedOrganisations: [] },
+  //     accessors: []
+  //   });
+
   //   const expected = {
   //     info: {
   //       id: 'orgId', name: 'Org name', acronym: 'ORG',
@@ -172,41 +230,51 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
   //         { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02', status: 'UNASSIGNED' }
   //       ]
   //     },
+  //     shared: true,
   //     showHideStatus: 'closed',
   //     showHideText: 'Show 2 units',
   //     showHideDescription: 'that belong to the Org name'
   //   };
 
-  //   fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);
+  //   fixture = TestBed.createComponent(PageInnovationDataSharingAndSupportComponent);
   //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
 
+  //   fixture.detectChanges();
   //   expect(component.organisations[0]).toEqual(expected);
 
   // });
 
-  // it('should NOT have initial information loaded', () => {
+  // it('should NOT load initial data', () => {
 
-  //   organisationsService.getOrganisationsListWithUnits = () => throwError('error');
-  //   accessorService.getInnovationSupports = () => throwError('error');
+  //   organisationsService.getOrganisationsListWithUnits = () => throwError(false);
+  //   innovatorService.getInnovationShares = () => throwError(false);
+  //   innovatorService.getInnovationSupports = () => throwError(false);
+  //   innovationService.getInnovationOrganisationSuggestions = () => throwError(false);
 
-  //   fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);
+  //   const expected = {
+  //     type: 'ERROR',
+  //     title: 'Unable to fetch data sharing information',
+  //     message: 'Please try again or contact us for further help'
+  //   };
+
+  //   fixture = TestBed.createComponent(PageInnovationDataSharingAndSupportComponent);
   //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
 
-  //   expect(component.organisations.length).toBe(0);
+  //   fixture.detectChanges();
+  //   expect(component.alert).toEqual(expected);
 
   // });
 
   // it('should run onShowHideClicked() and do nothing because organisations do not exists', () => {
 
-  //   fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);
+  //   fixture = TestBed.createComponent(PageInnovationDataSharingAndSupportComponent);
   //   component = fixture.componentInstance;
   //   component.organisations = [{
   //     info: {
   //       id: 'orgId', name: 'Org name', acronym: 'ORG',
   //       organisationUnits: []
   //     },
+  //     shared: true,
   //     showHideStatus: 'opened',
   //     showHideText: 'Hide 0 units',
   //     showHideDescription: 'that belong to the Org name'
@@ -219,13 +287,14 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
   // it('should run onShowHideClicked() when organisations is opened', () => {
 
-  //   fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);
+  //   fixture = TestBed.createComponent(PageInnovationDataSharingAndSupportComponent);
   //   component = fixture.componentInstance;
   //   component.organisations = [{
   //     info: {
   //       id: 'orgId', name: 'Org name', acronym: 'ORG',
   //       organisationUnits: []
   //     },
+  //     shared: true,
   //     showHideStatus: 'opened',
   //     showHideText: 'Hide 0 units',
   //     showHideDescription: 'that belong to the Org name'
@@ -238,13 +307,14 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
   // it('should run onShowHideClicked() when organisation is closed', () => {
 
-  //   fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusInfoComponent);
+  //   fixture = TestBed.createComponent(PageInnovationDataSharingAndSupportComponent);
   //   component = fixture.componentInstance;
   //   component.organisations = [{
   //     info: {
   //       id: 'orgId', name: 'Org name', acronym: 'ORG',
   //       organisationUnits: []
   //     },
+  //     shared: true,
   //     showHideStatus: 'closed',
   //     showHideText: 'Show 0 units',
   //     showHideDescription: 'that belong to the Org name'

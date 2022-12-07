@@ -43,12 +43,12 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
     this.sidebarItems = [
       { label: 'Overview', url: `/assessment/innovations/${innovation.id}/overview` },
       { label: 'Innovation record', url: `/assessment/innovations/${innovation.id}/record` },
-      { label: 'Messages', url: `/assessment/innovations/${innovation.id}/threads` }
+      { label: 'Messages', url: `/assessment/innovations/${innovation.id}/threads` },
+      { label: 'Support status', url: `/assessment/innovations/${innovation.id}/support` }
     ];
 
     if (innovation.status === InnovationStatusEnum.IN_PROGRESS) {
       this.sidebarItems.push(
-        { label: 'Support status', url: `/assessment/innovations/${innovation.id}/support` },
         { label: 'Needs assessment', url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }
       );
     }
