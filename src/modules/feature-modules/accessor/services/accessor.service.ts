@@ -4,34 +4,9 @@ import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
-import { DateISOType } from '@app/base/types';
 
-import { InnovationSectionEnum, InnovationSupportStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
-
-export enum SupportLogType {
-  ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
-  STATUS_UPDATE = 'STATUS_UPDATE',
-}
-
-export type getSupportLogInDTO = {
-  id: string;
-  type: SupportLogType;
-  description: string;
-  createdBy: string;
-  createdAt: DateISOType;
-  innovationSupportStatus: keyof typeof INNOVATION_SUPPORT_STATUS;
-  organisationUnit: {
-    id: string; name: string; acronym: string;
-    organisation: { id: string; name: string; acronym: string; };
-  };
-  suggestedOrganisationUnits?: {
-    id: string; name: string; acronym: string;
-    organisation: { id: string; name: string; acronym: string; };
-  }[];
-};
-export type getSupportLogOutDTO = getSupportLogInDTO & { logTitle: string; suggestedOrganisationUnitsNames: string[]; };
-
-
+import { InnovationSectionEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 @Injectable()
 export class AccessorService extends CoreService {
 
@@ -71,36 +46,6 @@ export class AccessorService extends CoreService {
 
     }
 
-  }
-
-  getSupportLog(innovationId: string): Observable<getSupportLogOutDTO[]> {
-
-    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/support-logs').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    return this.http.get<getSupportLogInDTO[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response.map(item => {
-
-        let logTitle = '';
-
-        switch (item.type) {
-          case SupportLogType.ACCESSOR_SUGGESTION:
-            logTitle = 'Suggested organisation units';
-            break;
-          case SupportLogType.STATUS_UPDATE:
-            logTitle = 'Updated support status';
-            break;
-          default:
-            break;
-        }
-
-        return {
-          ...item,
-          logTitle,
-          suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits || []).map(o => o.name)
-        };
-
-      }))
-    );
   }
 
   suggestNewOrganisations(innovationId: string, body: { organisationUnits: string[], type: SupportLogType, description: string }): Observable<{ id: string }> {

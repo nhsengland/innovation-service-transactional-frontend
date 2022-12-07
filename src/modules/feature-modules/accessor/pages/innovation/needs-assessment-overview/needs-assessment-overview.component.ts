@@ -6,8 +6,7 @@ import { CoreComponent } from '@app/base';
 import { NotificationContextTypeEnum } from '@app/base/enums';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
-import { getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/accessor/services/accessor.service';
-import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationNeedsAssessmentInfoDTO, InnovationSupportsLogDTO, SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { maturityLevelItems, yesNoItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
@@ -28,7 +27,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
   assessment: InnovationNeedsAssessmentInfoDTO | undefined;
   suggestedOrganisations: InnovationNeedsAssessmentInfoDTO['suggestedOrganisations'] = [];
-  logHistory: getSupportLogOutDTO[] = [];
+  logHistory: InnovationSupportsLogDTO[] = [];
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
   innovationReassessment: { label?: string, value: null | string }[] = [];
@@ -42,7 +41,6 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService,
     private innovationsService: InnovationsService
   ) {
 
@@ -63,7 +61,7 @@ export class InnovationNeedsAssessmentOverviewComponent extends CoreComponent im
 
     forkJoin([
       this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
-      this.accessorService.getSupportLog(this.innovationId)
+      this.innovationsService.getInnovationSupportLog(this.innovationId)
     ]).subscribe(([needsAssessment, supportLog]) => {
 
       this.logHistory = supportLog;

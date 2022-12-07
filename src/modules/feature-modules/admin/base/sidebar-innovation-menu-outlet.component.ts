@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ContextStore } from '@modules/stores';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -23,11 +24,14 @@ export class SidebarInnovationMenuOutletComponent {
       { label: 'Innovation record', url: `/admin/innovations/${innovation.id}/record` },
       { label: 'Action tracker', url: `/admin/innovations/${innovation.id}/action-tracker` },
       { label: 'Messages', url: `/admin/innovations/${innovation.id}/threads` },
-      { label: 'Data sharing and support', url: `/admin/innovations/${innovation.id}/support` }, // TODO: this url may change
-      { label: 'Needs assessment', url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }, // TODO: This may have to be status checked to show
-      { label: 'Activity log', url: `/admin/innovations/${innovation.id}/activity-log` }
+      { label: 'Data sharing and support', url: `/admin/innovations/${innovation.id}/support` }, // TODO: this url may change      
     ];
+    
+    if (innovation.status !== InnovationStatusEnum.CREATED && innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
+      this.sidebarItems.push({ label: 'Needs assessment', url: `/admin/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` });
+    }
 
+    this.sidebarItems.push({ label: 'Activity log', url: `/admin/innovations/${innovation.id}/activity-log` });
   }
 
 }

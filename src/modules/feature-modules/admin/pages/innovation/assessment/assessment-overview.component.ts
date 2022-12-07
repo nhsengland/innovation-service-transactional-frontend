@@ -8,12 +8,18 @@ import { DatesHelper } from '@app/base/helpers';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { maturityLevelItems, yesNoItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationNeedsAssessmentInfoDTO, InnovationSupportsLogDTO, SupportLogType } from '@modules/shared/services/innovations.dtos';
+import { InnovationActivityLogListDTO, InnovationNeedsAssessmentInfoDTO, InnovationSupportsLogDTO, SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
+
+
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { TableModel } from '@app/base/models';
+import { ActivityLogTypesEnum } from '@modules/stores/innovation';
+
+type ActivitiesListType = InnovationActivityLogListDTO['data'][0] & { showHideStatus: 'opened' | 'closed', showHideText: string };
 
 @Component({
-  selector: 'app-assessment-pages-innovation-assessment-overview',
+  selector: 'app-admin-pages-innovation-assessment-overview',
   templateUrl: './assessment-overview.component.html'
 })
 export class InnovationAssessmentOverviewComponent extends CoreComponent implements OnInit {
@@ -29,6 +35,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
   logHistory: InnovationSupportsLogDTO[] = [];
   supportLogType = SupportLogType;
+  activitiesList = new TableModel<ActivitiesListType, { activityTypes: ActivityLogTypesEnum[], startDate: string, endDate: string }>();
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
   innovationReassessment: { label?: string, value: null | string }[] = [];
@@ -39,7 +46,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovationsService: InnovationsService
+    private innovationsService: InnovationsService,
   ) {
 
     super();
@@ -47,14 +54,17 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
     this.innovation = this.stores.context.getInnovation();
+    this.activitiesList.setOrderBy('createdAt', 'descending');
+
   }
 
+
   ngOnInit(): void {
+    
     forkJoin([
       this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
       this.innovationsService.getInnovationSupportLog(this.innovationId)
     ]).subscribe(([needsAssessment, supportLog]) => {
-
       this.logHistory = supportLog;
 
       this.assessment = needsAssessment;
@@ -125,11 +135,9 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
         }
       ];
 
-      if (!this.assessment.reassessment) {
-        this.setPageTitle('Needs assessment overview');
-      } else {
-        this.setPageTitle('Needs reassessment overview');
-      }
+      const title = !this.assessment.reassessment ? 'Needs assessment' : 'Needs reassessment';
+      this.setPageTitle(title, {hint: `Innovation ${this.innovation.name}`});
+  
 
       this.setPageStatus('READY');
 

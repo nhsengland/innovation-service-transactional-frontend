@@ -213,3 +213,27 @@ export type StatisticsCard = {
   date?: DateISOType | null,
   emptyMessage?: string,
 } & BaseStatisticsCard;
+
+export enum SupportLogType {
+  ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
+  STATUS_UPDATE = 'STATUS_UPDATE',
+}
+
+export type InnovationSupportsLog = {
+  id: string;
+  type: SupportLogType;
+  description: string;
+  createdBy: string;
+  createdAt: DateISOType;
+  innovationSupportStatus: keyof typeof InnovationSupportStatusEnum;
+  organisationUnit: {
+    id: string; name: string; acronym: string;
+    organisation: { id: string; name: string; acronym: string; };
+  };
+  suggestedOrganisationUnits?: {
+    id: string; name: string; acronym: string;
+    organisation: { id: string; name: string; acronym: string; };
+  }[];
+};
+
+export type InnovationSupportsLogDTO = InnovationSupportsLog & { logTitle: string; suggestedOrganisationUnitsNames: string[]; };
