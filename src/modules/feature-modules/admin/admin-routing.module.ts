@@ -49,6 +49,9 @@ import { PageInnovationActionTrackerInfoComponent } from '@modules/shared/pages/
 import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/innovation-support-status-list.component';
+import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innovation/messages/threads-list.component';
+import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages/innovation/messages/thread-messages-list.component';
+import { InnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 // Wizards.
 import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-unit-activate/organisation-unit-activate.component';
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
@@ -59,7 +62,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
-import { InnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
+import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -350,6 +353,33 @@ const routes: Routes = [
                   }
                 ]
               },
+              {
+                path: 'threads',
+                data: { breadcrumb: 'Messages' },
+                children: [
+                  {
+                    path: '', pathMatch: 'full', component: PageInnovationThreadsListComponent,
+                    data: { breadcrumb: null }
+                  },
+                  {
+                    path: ':threadId',
+                    resolve: { innovationThreadData: InnovationThreadDataResolver },
+                    data: {
+                      breadcrumb: (data: RoutesDataType) => {
+                        const name = data.innovationThreadData?.name ?? '';
+                        return name.length > 30 ? `${name.substring(0, 30)}...` : name;
+                      }
+                    },
+                    children: [
+                      {
+                        path: '', pathMatch: 'full', component: PageInnovationThreadMessagesListComponent,
+                        data: { breadcrumb: null }
+                      }
+                    ]
+                  }
+                ]
+              },
+
               {
                 path: 'support',
                 data: { breadcrumb: 'Data Sharing and Support' },
