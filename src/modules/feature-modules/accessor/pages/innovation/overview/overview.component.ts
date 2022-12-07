@@ -88,7 +88,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].total,
         footer: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].lastSubmittedSection)}"`,
         date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].lastSubmittedAt,
-        emptyMessage: `You haven't had submitted sections since the supported started.`
+        emptyMessage: `No sections have been submitted since support started.`
       }, {
         title: 'Actions to review',
         label: `actions responded to by the innovator awaiting your review`,

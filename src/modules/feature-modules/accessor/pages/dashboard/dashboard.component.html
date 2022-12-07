@@ -7,13 +7,13 @@
   </div>
 
   <ul class="nhsuk-grid-row nhsuk-card-group">
-    <li *ngFor="let item of cardsList" class="nhsuk-grid-column-one-third nhsuk-card-group__item">    
+    <li *ngFor="let item of cardsList" class="nhsuk-grid-column-one-third nhsuk-card-group__item">
       <div class="nhsuk-card nhsuk-card--clickable">
         <div class="nhsuk-card__content">
           <h2 class="nhsuk-card__heading nhsuk-heading-m">
             <a routerLink="{{ item.link }}" [queryParams]=item.queryParams class="nhsuk-card__link">
               <span class="nhsuk-u-visually-hidden"> Go to </span> {{ item.title }}
-            </a>        
+            </a>
           </h2>
           <ng-container *ngIf="item.count!== 0; else noSectionsToSubmit">
             <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline">
@@ -29,7 +29,7 @@
           </ng-container>
           <ng-container *ngIf="item.date">
             <p class="nhsuk-u-font-size-16 font-color-secondary">
-              {{ item.footer }} on {{ item.date | date: ('app.date_formats.medium_date' | translate) }}
+              {{ item.footer }} on {{ item.date | date: ('app.date_formats.medium_date_time' | translate) }}
             </p>
           </ng-container>
           <ng-template #noSectionsToSubmit>

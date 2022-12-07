@@ -30,10 +30,13 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovation: {
     groupedStatus: null | InnovationGroupedStatusEnum,
     organisationsStatusDescription: null | string,
-    isSubmitted: null | InnovationSubmissionDTO
-  } = { groupedStatus: null, organisationsStatusDescription: null, isSubmitted: null };
+  } = { groupedStatus: null, organisationsStatusDescription: null };
 
-
+  isSubmitted: InnovationSubmissionDTO = {
+    submittedAllSections: false,
+    submittedForNeedsAssessment: false
+  };
+  showBanner = true;
 
 
   constructor(
@@ -97,7 +100,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         innovation.assessment?.reassessmentCount ?? 0
       );
 
-      this.innovation.isSubmitted = submit;
+      this.isSubmitted.submittedAllSections = submit.submittedAllSections.valueOf();
+      this.isSubmitted.submittedForNeedsAssessment = submit.submittedForNeedsAssessment.valueOf();
+
+      (submit.submittedAllSections && submit.submittedForNeedsAssessment) ? this.showBanner = false : this.showBanner = true;
 
       const occurrences = (innovation.supports ?? []).map(item => item.status)
         .reduce((acc, status) => (
