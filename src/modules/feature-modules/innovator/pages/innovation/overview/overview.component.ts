@@ -6,10 +6,10 @@ import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
+import { InnovationSubmissionDTO, StatisticsCard } from '@modules/shared/services/innovations.dtos';
+import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
-import { InnovationSubmissionDTO, StatisticsCard } from '@modules/shared/services/innovations.dtos';
 
 
 @Component({
@@ -100,6 +100,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovation.isSubmitted = submit;
 
       const occurrences = (innovation.supports ?? []).map(item => item.status)
+        .filter(status => [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(status))
         .reduce((acc, status) => (
           acc[status] ? ++acc[status].count : acc[status] = { count: 1, text: this.translate('shared.catalog.innovation.support_status.' + status + '.name').toLowerCase() }, acc),
           {} as { [a in InnovationSupportStatusEnum]: { count: number, text: string } });
