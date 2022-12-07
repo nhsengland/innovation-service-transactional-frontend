@@ -63,7 +63,7 @@ describe('Shared/Pages/Innovation/Assessment/PageInnovationAssessmentOverviewCom
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
+    fixture = TestBed.createComponent(PageInnovationAssessmentOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
