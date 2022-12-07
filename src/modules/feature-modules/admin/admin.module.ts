@@ -21,7 +21,6 @@ import { PageAdminUserDeleteComponent } from './pages/admin-users/admin-user-del
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
-import { InnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 // // Organisations.
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
@@ -78,7 +77,6 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageDashboardComponent,
     // // Innovation
     InnovationOverviewComponent,
-    InnovationAssessmentOverviewComponent,
     // // Organisations.
     PageOrganisationNewComponent,
     PageOrganisationEditComponent,

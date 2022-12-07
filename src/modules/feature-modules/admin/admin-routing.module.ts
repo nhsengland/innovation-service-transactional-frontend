@@ -59,7 +59,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
-import { InnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
+import { PageInnovationAssessmentOverviewComponent } from '../../shared/pages/innovation/assessment/assessment-overview.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -343,7 +343,7 @@ const routes: Routes = [
                     data: { breadcrumb: null },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: InnovationAssessmentOverviewComponent,
+                        path: '', pathMatch: 'full', component: PageInnovationAssessmentOverviewComponent,
                         data: { breadcrumb: null }
                       }
                     ]
