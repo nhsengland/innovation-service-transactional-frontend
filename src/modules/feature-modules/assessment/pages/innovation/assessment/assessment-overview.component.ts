@@ -7,15 +7,10 @@ import { DatesHelper } from '@app/base/helpers';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
-import { getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/assessment/services/assessment.service';
 import { maturityLevelItems, yesNoItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationNeedsAssessmentInfoDTO, InnovationSupportsLogDTO, SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-
-import { AssessmentService } from '../../../services/assessment.service';
-
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-
 
 @Component({
   selector: 'app-assessment-pages-innovation-assessment-overview',
@@ -32,7 +27,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
-  logHistory: getSupportLogOutDTO[] = [];
+  logHistory: InnovationSupportsLogDTO[] = [];
   supportLogType = SupportLogType;
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
@@ -44,7 +39,6 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private assessmentService: AssessmentService,
     private innovationsService: InnovationsService
   ) {
 
@@ -53,15 +47,12 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
     this.innovation = this.stores.context.getInnovation();
-
   }
 
-
   ngOnInit(): void {
-
     forkJoin([
       this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
-      this.assessmentService.getSupportLog(this.innovationId)
+      this.innovationsService.getInnovationSupportLog(this.innovationId)
     ]).subscribe(([needsAssessment, supportLog]) => {
 
       this.logHistory = supportLog;

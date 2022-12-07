@@ -321,7 +321,7 @@ export class InnovationsService extends CoreService {
         return {
           ...item,
           logTitle,
-          suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits || []).map((o: { name: any; }) => o.name)
+          suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits || []).map(o => o.name)
         };
 
       }))

@@ -6,34 +6,7 @@ import { CoreService } from '@app/base';
 import { MappedObjectType } from '@app/base/types';
 import { UrlModel } from '@app/base/models';
 
-import { InnovationStatusEnum, INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
-
-
-export enum SupportLogType {
-  ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
-  STATUS_UPDATE = 'STATUS_UPDATE'
-}
-
-export type getSupportLogInDTO = {
-  id: string;
-  type: SupportLogType;
-  description: string;
-  createdBy: string;
-  createdAt: string;
-  innovationSupportStatus: keyof typeof INNOVATION_SUPPORT_STATUS;
-  organisationUnit: {
-    id: string; name: string; acronym: string;
-    organisation: { id: string; name: string; acronym: string; };
-  };
-  suggestedOrganisationUnits?: {
-    id: string; name: string; acronym: string;
-    organisation: { id: string; name: string; acronym: string; };
-  }[];
-};
-
-export type getSupportLogOutDTO = getSupportLogInDTO & { logTitle: string; suggestedOrganisationUnitsNames: string[]; };
-
-
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 @Injectable()
 export class AssessmentService extends CoreService {
 
@@ -48,36 +21,6 @@ export class AssessmentService extends CoreService {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/overdue-assessments').setQueryParams({ status });
     return this.http.get<{ overdue: number }>(url.buildUrl()).pipe(take(1), map(response => response));
 
-  }
-
-  getSupportLog(innovationId: string): Observable<getSupportLogOutDTO[]> {
-
-    const url = new UrlModel(this.API_URL).addPath('assessments/:userId/innovations/:innovationId/support-logs').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
-    return this.http.get<getSupportLogInDTO[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response.map(item => {
-
-        let logTitle = '';
-
-        switch (item.type) {
-          case SupportLogType.ACCESSOR_SUGGESTION:
-            logTitle = 'Suggested organisations';
-            break;
-          case SupportLogType.STATUS_UPDATE:
-            logTitle = 'Updated support status';
-            break;
-          default:
-            break;
-        }
-
-        return {
-          ...item,
-          logTitle,
-          suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits || []).map(o => o.name)
-        };
-
-      }))
-    );
   }
 
   createInnovationNeedsAssessment(innovationId: string, data: MappedObjectType): Observable<{ id: string }> {

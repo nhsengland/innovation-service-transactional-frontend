@@ -7,9 +7,8 @@ import { DatesHelper } from '@app/base/helpers';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
-import { AssessmentService, getSupportLogOutDTO, SupportLogType } from '@modules/feature-modules/assessment/services/assessment.service';
 import { maturityLevelItems, yesNoItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationActivityLogListDTO, InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationActivityLogListDTO, InnovationNeedsAssessmentInfoDTO, InnovationSupportsLogDTO, SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 
@@ -34,7 +33,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
-  logHistory: getSupportLogOutDTO[] = [];
+  logHistory: InnovationSupportsLogDTO[] = [];
   supportLogType = SupportLogType;
   activitiesList = new TableModel<ActivitiesListType, { activityTypes: ActivityLogTypesEnum[], startDate: string, endDate: string }>();
 
