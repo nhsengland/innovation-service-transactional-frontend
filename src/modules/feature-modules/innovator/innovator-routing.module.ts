@@ -26,7 +26,6 @@ import { InnovationActionTrackerDeclineComponent } from './pages/innovation/acti
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
 import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
-import { InnovationDataSharingComponent } from './pages/innovation/data-sharing/data-sharing.component';
 import { PageInnovationHowToProceedComponent } from './pages/innovation/how-to-proceed/how-to-proceed.component';
 import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment/needs-assessment-overview.component';
 import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation/needs-reassessment/needs-reassessment-send.component';
@@ -56,6 +55,7 @@ import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovat
 import { PageExportRecordListComponent } from '@modules/shared/pages/innovation/export/export-record-list.component';
 import { PageExportRecordInfoComponent } from '@modules/shared/pages/innovation/export/export-record-info.component';
 import { InnovationExportRequestRejectComponent } from './pages/innovation/export/export-request-reject.component';
+import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -341,7 +341,7 @@ const routes: Routes = [
                 data: { breadcrumb: 'Data Sharing and Support' },
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: InnovationDataSharingComponent,
+                    path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,
                     data: { breadcrumb: null }
                   },
 
