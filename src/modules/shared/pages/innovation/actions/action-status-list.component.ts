@@ -31,7 +31,7 @@ export class PageActionStatusListComponent extends CoreComponent {
     const actionId = this.activatedRoute.snapshot.params.actionId;
 
     this.setPageTitle('Actions status key');
-    this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/action-tracker${actionId ?? ''}`);
+    this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/actions`);
     this.setPageStatus('READY');
 
   }
