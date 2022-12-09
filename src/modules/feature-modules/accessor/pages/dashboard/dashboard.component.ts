@@ -5,6 +5,7 @@ import { CoreComponent } from '@app/base';
 import { StatisticsCard } from '@modules/shared/services/innovations.dtos';
 import { UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -59,7 +60,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         title: 'Your innovations',
         label: `Engaging innovations are assigned to you`,
         link: '/accessor/innovations',
-        queryParams: { status: "ENGAGING" },
+        queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
         count: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].count,
         total: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].total,
         footer: `Last submitted`,
@@ -79,9 +80,9 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       if (this.isQualifyingAccessorRole) {
         this.cardsList.unshift({
           title: 'Review innovations',
-          label: `Innovations awaiting status assigment from your organisation unit`,
+          label: `Innovations awaiting status assignment from your organisation unit`,
           link: '/accessor/innovations',
-          queryParams: { status: "ENGAGING" },
+          queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
           count: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER].count,
           footer: `Last submitted`,
           date: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
