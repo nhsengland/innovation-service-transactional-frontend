@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { StatisticsCard } from '@modules/shared/services/innovations.dtos';
@@ -71,6 +71,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         link: `/accessor/actions`,
         queryParams: { openActions: true },
         count: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].count,
+        total: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].total,
         footer: `Last submitted`,
         date: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
         emptyMessage: 'No actions to review'
