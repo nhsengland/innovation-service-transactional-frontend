@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
@@ -23,6 +23,6 @@ export class StatisticsService extends CoreService {
   getUserStatisticsInfo(qParams: { statistics: any[] }): Observable<UserStatisticsDTO> {
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/statistics').setQueryParams(qParams);
-    return this.http.get<UserStatisticsDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+    return this.http.get<UserStatisticsDTO>(url.buildUrl()).pipe(take(1));
   }
 }
