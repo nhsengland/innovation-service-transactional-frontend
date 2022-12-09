@@ -10,7 +10,7 @@ import { WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationService } from './innovation.service';
 
-import { INNOVATION_SECTIONS, getSectionTitle } from './innovation.config';
+import { INNOVATION_SECTIONS, getSectionTitle, getSectionParentTitle, getSectionParentNumber } from './innovation.config';
 import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
 import {
   InnovationModel,
@@ -103,8 +103,16 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.deleteEvidence(innovationId, evidenceId);
   }
 
+  getSectionParentNumber(sectionId: InnovationSectionEnum): string {
+    return getSectionParentNumber(sectionId);
+  }
+
   getSectionTitle(sectionId: InnovationSectionEnum): string {
     return getSectionTitle(sectionId);
+  }
+
+  getSectionParentTitle(sectionId: InnovationSectionEnum): string {
+    return getSectionParentTitle(sectionId);
   }
 
   getSection(sectionId: InnovationSectionEnum): InnovationSectionConfigType['sections'][0] | undefined {
