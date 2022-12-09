@@ -119,7 +119,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.statisticsSectionsCard = {
 
-        title: ' Innovation Record ',
+        title: ' Innovation record ',
         label: `sections were submitted by you`,
         link: `/innovator/innovations/${this.innovationId}/record`,
         count: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].count,
