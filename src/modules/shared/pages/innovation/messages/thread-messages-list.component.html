@@ -28,38 +28,39 @@
           </button>
         </form>
 
-        <div *ngFor="let message of messagesList.getRecords()" class="nhsuk-card bg-color-grey nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-2 nhsuk-u-padding-3">
+        <ng-container *ngIf="messagesList.getTotalRowsNumber() > 0">
+          <div *ngFor="let message of messagesList.getRecords()" class="nhsuk-card bg-color-grey nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-2 nhsuk-u-padding-3">
 
-          <div class="d-flex justify-content-space-between nhsuk-u-padding-bottom-3">
-            <div>
-              <div class="d-flex align-items-center">
-                <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-right-2">
-                  {{ message.createdBy.name }}{{ message.createdBy.organisationUnit && message.createdBy.organisationUnit.name ? ', ' + message.createdBy.organisationUnit.name : '' }}
-                </p>
-                <theme-notification-tag label="new" *ngIf="message.isNew" class=""></theme-notification-tag>
+            <div class="d-flex justify-content-space-between nhsuk-u-padding-bottom-3">
+              <div>
+                <div class="d-flex align-items-center">
+                  <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-right-2">
+                    {{ message.createdBy.name }}{{ message.createdBy.organisationUnit && message.createdBy.organisationUnit.name ? ', ' + message.createdBy.organisationUnit.name : '' }}
+                  </p>
+                  <theme-notification-tag label="new" *ngIf="message.isNew" class=""></theme-notification-tag>
+                </div>
+                <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ message.createdBy.typeDescription }}</p>
               </div>
-              <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ message.createdBy.typeDescription }}</p>
+              <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">
+                {{ message.createdAt | date: ('app.date_formats.long_date_time' | translate) }}
+              </p>
             </div>
-            <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">
-              {{ message.createdAt | date: ('app.date_formats.long_date_time' | translate) }}
+  
+            <p class="textarea-info-section nhsuk-u-margin-bottom-2">{{ message.message }}
+              <span *ngIf="message.updatedAt && message.updatedAt !== message.createdAt" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2">(last edited at
+                {{ message.updatedAt | date: ('app.date_formats.long_date_time' | translate) }})</span>
             </p>
+  
+            <a *ngIf="message.isEditable && message.createdBy.id === selfUser.id" routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/threads/{{ threadInfo?.id }}/messages/{{ message.id }}"
+              class="nhsuk-body-s nhsuk-u-margin-bottom-0 d-inline-block">
+              Edit this message
+            </a>
+  
           </div>
-
-          <p class="textarea-info-section nhsuk-u-margin-bottom-2">{{ message.message }}
-            <span *ngIf="message.updatedAt && message.updatedAt !== message.createdAt" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2">(last edited at
-              {{ message.updatedAt | date: ('app.date_formats.long_date_time' | translate) }})</span>
-          </p>
-
-          <a *ngIf="message.isEditable && message.createdBy.id === selfUser.id" routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/threads/{{ threadInfo?.id }}/messages/{{ message.id }}"
-            class="nhsuk-body-s nhsuk-u-margin-bottom-0 d-inline-block">
-            Edit this message
-          </a>
-
-        </div>
-
-        <div class="nhsuk-u-padding-bottom-4">
-          <theme-pagination [currentPage]="messagesList.page" [pageSize]="messagesList.pageSize" [totalRows]="messagesList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
-        </div>
+          <div class="nhsuk-u-padding-bottom-4">
+            <theme-pagination [currentPage]="messagesList.page" [pageSize]="messagesList.pageSize" [totalRows]="messagesList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+          </div>
+        </ng-container>
 
       </div>
 
