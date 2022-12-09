@@ -75,7 +75,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         total: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].total,
         footer: `Last submitted`,
         date: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
-        emptyMessage: 'No actions to review'
+        emptyMessageTitle: 'No actions opened by you yet',
+        emptyMessage: 'Start requesting actions from Innovators you are currently engaging with'
       }]
 
       if (this.isQualifyingAccessorRole) {
