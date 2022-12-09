@@ -95,8 +95,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       wizard: section?.wizard || new WizardEngineModel({})
     };
 
-    this.setPageTitle(this.section.title);
-
+    this.setPageTitle(this.section.title, { hint: `${this.stores.innovation.getSectionParentNumber(this.section.id)}. ${this.stores.innovation.getSectionParentTitle(this.section.id)}`});
+    
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
       next: response => {
 
