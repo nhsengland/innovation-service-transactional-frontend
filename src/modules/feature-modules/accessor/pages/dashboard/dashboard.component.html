@@ -27,13 +27,14 @@
               </span>
             </p>
           </ng-container>
-          <ng-container *ngIf="item.date">
+          <ng-container *ngIf="item.date && item.count">
             <p class="nhsuk-u-font-size-16 font-color-secondary">
               {{ item.footer }} on {{ item.date | date: ('app.date_formats.medium_date_time' | translate) }}
             </p>
           </ng-container>
           <ng-template #noSectionsToSubmit>
-            <p class="nhsuk-u-font-weight-normal">{{ item.emptyMessage }}</p>
+            <p *ngIf="item.emptyMessageTitle" class="nhsuk-u-font-weight-bold nhsuk-u-font-size-16 nhsuk-u-margin-bottom-0">{{ item.emptyMessageTitle }}</p>
+            <p class="nhsuk-u-font-weight-normal nhsuk-u-font-size-16">{{ item.emptyMessage }}</p>
           </ng-template>
         </div>
       </div>

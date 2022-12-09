@@ -211,6 +211,7 @@ export type StatisticsCard = {
   total?: number,
   footer: string | null,
   date?: DateISOType | null,
+  emptyMessageTitle?: string,
   emptyMessage?: string,
 } & BaseStatisticsCard;
 
