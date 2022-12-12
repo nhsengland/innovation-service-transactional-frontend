@@ -70,6 +70,14 @@ export function getSectionNumber(sectionId: InnovationSectionEnum): string {
 
 }
 
+export function getSectionParentNumber(sectionId: null | InnovationSectionEnum): string {
+
+  if (!sectionId) { return ''; }
+
+  const groupNumber = INNOVATION_SECTIONS.findIndex(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId));
+  return groupNumber === -1 ? '' : `${groupNumber + 1}`
+}
+
 export function getSectionTitle(sectionId: null | InnovationSectionEnum): string {
 
   if (!sectionId) { return ''; }
@@ -78,6 +86,13 @@ export function getSectionTitle(sectionId: null | InnovationSectionEnum): string
 
 }
 
+export function getSectionParentTitle(sectionId: null | InnovationSectionEnum): string {
+
+  if (!sectionId) { return ''; }
+
+  return INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId))?.title || '';
+
+}
 
 export function getAllSectionsSummary(data: AllSectionsInboundPayloadType): AllSectionsOutboundPayloadType {
 

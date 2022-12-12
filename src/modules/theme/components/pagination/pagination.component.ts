@@ -19,7 +19,9 @@ export class PaginationComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
     this.totalPages = Math.ceil(this.totalRows / this.pageSize)
+    
   }
 
   getPages(): number[] {
