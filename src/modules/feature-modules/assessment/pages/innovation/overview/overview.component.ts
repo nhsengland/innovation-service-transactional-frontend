@@ -67,7 +67,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         link: `/assessment/innovations/${this.innovationId}/record`,
         count: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].count,
         total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].total,
-        footer: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].lastSubmittedSection)}"`,
+        lastMessage: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].lastSubmittedSection)}"`,
         date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].lastSubmittedAt,
         emptyMessage: `No sections have been submitted since the assessment started.`
       }, {
@@ -75,7 +75,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         label: `unread replies to conversations you have started`,
         link: `/assessment/innovations/${this.innovationId}/threads`,
         count: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_THREADS_INITIATED_BY_COUNTER].count,
-        footer: `Last received message`,
+        lastMessage: `Last received message`,
         date: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_THREADS_INITIATED_BY_COUNTER]?.lastSubmittedAt,
         emptyMessage: 'No replies to read'
       }]

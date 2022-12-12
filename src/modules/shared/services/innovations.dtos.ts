@@ -209,7 +209,8 @@ export type BaseStatisticsCard = {
 export type StatisticsCard = {
   count: number,
   total?: number,
-  footer: string | null,
+  lastMessage?: string;
+  overdue?: string,
   date?: DateISOType | null,
   emptyMessageTitle?: string,
   emptyMessage?: string,

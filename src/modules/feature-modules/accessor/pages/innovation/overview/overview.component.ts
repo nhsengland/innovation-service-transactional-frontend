@@ -84,7 +84,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         link: `/accessor/innovations/${this.innovationId}/record`,
         count: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].count,
         total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].total,
-        footer: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].lastSubmittedSection)}"`,
+        lastMessage: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].lastSubmittedSection)}"`,
         date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].lastSubmittedAt,
         emptyMessage: `No sections have been submitted since support started.`
       }, {
@@ -92,7 +92,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         label: `actions responded to by the innovator awaiting your review`,
         link: `/accessor/innovations/${this.innovationId}/action-tracker`,
         count: statistics[InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER].count,
-        footer: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER].lastSubmittedSection)}"`,
+        lastMessage: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER].lastSubmittedSection)}"`,
         date: statistics[InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
         emptyMessage: 'No actions to review'
       }]
