@@ -7,7 +7,7 @@ import { CoreComponent } from '@app/base';
 import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { getSectionNumber, getSectionTitle, INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
+import { getSectionNumber, INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
 import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
 
