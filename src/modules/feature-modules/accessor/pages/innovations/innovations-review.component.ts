@@ -6,8 +6,8 @@ import { FormControl, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { DateISOType, NotificationValueType } from '@app/base/types';
 
-import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
@@ -21,7 +21,7 @@ type TabType = {
   showAssignedToMeFilter: boolean,
   showSuggestedOnlyFilter: boolean,
   link: string,
-  queryParams: { status: InnovationSupportStatusEnum },
+  queryParams: { status: InnovationSupportStatusEnum, assignedToMe?: boolean },
   notifications: NotificationValueType,
 };
 
@@ -284,6 +284,10 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     if (!currentStatus || currentTabIndex === -1) {
       this.router.navigate(['/accessor/innovations'], { queryParams: { status: this.defaultStatus } });
       return;
+    }
+
+    if (queryParams.assignedToMe) {
+      this.form.get('assignedToMe')?.setValue(true);
     }
 
     this.currentTab = this.tabs[currentTabIndex];
