@@ -35,6 +35,10 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
     this.innovation = this.stores.context.getInnovation();
 
+    if (this.stores.authentication.isAdminRole()) {
+      this.setPageTitle('Messages', { hint: `Innovation ${this.innovation.name}` })
+    }
+
   }
 
 
