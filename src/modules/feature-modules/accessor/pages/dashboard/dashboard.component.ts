@@ -60,7 +60,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         title: 'Your innovations',
         label: `Engaging innovations are assigned to you`,
         link: '/accessor/innovations',
-        queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
+        queryParams: { status: InnovationSupportStatusEnum.ENGAGING, assignedToMe: true },
         count: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].count,
         total: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].total,
         lastMessage: `Last submitted`,
