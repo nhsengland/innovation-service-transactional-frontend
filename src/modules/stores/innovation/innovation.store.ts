@@ -107,7 +107,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return getSectionParentNumber(sectionId);
   }
 
-  getSectionTitle(sectionId: InnovationSectionEnum): string {
+  getSectionTitle(sectionId: InnovationSectionEnum | null): string {
     return getSectionTitle(sectionId);
   }
 
