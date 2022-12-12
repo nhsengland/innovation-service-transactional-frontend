@@ -7,10 +7,9 @@ import { CoreComponent } from '@app/base';
 import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
+import { getSectionNumber, getSectionTitle, INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
 import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
-
 
 @Component({
   selector: 'shared-pages-innovation-section-info',
@@ -33,14 +32,23 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   };
 
   summaryList: WizardSummaryType[] = [];
+  previousSection: {
+    id: string;
+    title: string;
+    show: boolean;
+  };
 
+  nextSection: {
+    id: string;
+    title: string;
+    show: boolean;
+  };
 
   constructor(
     private activatedRoute: ActivatedRoute
   ) {
 
     super();
-
 
     this.module = this.activatedRoute.snapshot.data.module;
     this.innovation = this.stores.context.getInnovation();
@@ -56,6 +64,17 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       wizard: new WizardEngineModel({})
     };
 
+    this.previousSection = {
+      id: '',
+      title: '',
+      show: false
+    };
+  
+    this.nextSection = {
+      id: '',
+      title: '',
+      show: false
+    };
   }
 
   ngOnInit(): void {
@@ -75,8 +94,28 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     const sectionsIdsList = INNOVATION_SECTIONS.flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
     const currentSectionIndex = sectionsIdsList.indexOf(this.section.id);
+
     return sectionsIdsList[currentSectionIndex + 1] || null;
 
+  }
+
+  private getPreviousAndNextPagination(): void {
+    const sectionsIdsList = INNOVATION_SECTIONS.flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
+    const currentSectionIndex = sectionsIdsList.indexOf(this.section.id);
+    const previousSectionIndex = sectionsIdsList[currentSectionIndex - 1] || null;
+    const nextSectionIndex = sectionsIdsList[currentSectionIndex + 1] || null;
+
+    this.previousSection = {
+      id: previousSectionIndex,
+      title: `${getSectionNumber(previousSectionIndex)} ${this.stores.innovation.getSectionTitle(previousSectionIndex)}`,
+      show: previousSectionIndex !== null
+    };
+
+    this.nextSection = {
+      id: nextSectionIndex,
+      title: `${getSectionNumber(nextSectionIndex)} ${this.stores.innovation.getSectionTitle(nextSectionIndex)}`,
+      show: nextSectionIndex !== null
+    };
   }
 
   private initializePage(): void {
@@ -102,7 +141,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
         this.section.status = { id: response.status, label: INNOVATION_SECTION_STATUS[response.status]?.label || '' };
         this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
-        this.section.nextSectionId = this.section.status.id === 'SUBMITTED' ? this.getNextSectionId() : null;
+        this.getPreviousAndNextPagination();
 
         if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
           // If accessor, only view information if section is submitted.
@@ -135,5 +174,4 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     });
 
   }
-
 }
