@@ -63,7 +63,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
         count: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].count,
         total: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].total,
-        footer: `Last submitted`,
+        lastMessage: `Last submitted`,
         date: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER]?.lastSubmittedAt,
         emptyMessage: 'No engaging innovations assigned to you'
       }, {
@@ -73,7 +73,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         queryParams: { openActions: true },
         count: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].count,
         total: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].total,
-        footer: `Last submitted`,
+        lastMessage: `Last submitted`,
         date: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
         emptyMessageTitle: 'No actions opened by you yet',
         emptyMessage: 'Start requesting actions from Innovators you are currently engaging with'
@@ -86,7 +86,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           link: '/accessor/innovations',
           queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
           count: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER].count,
-          footer: `Last submitted`,
+          lastMessage: `Last submitted`,
           date: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
           emptyMessage: 'No engaging innovations assigned to you'
         })

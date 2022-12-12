@@ -20,40 +20,7 @@
 
   <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-bottom-7"> Update status </a>
 
-  <ul class="nhsuk-grid-row nhsuk-card-group">
-    <li *ngFor="let item of cardsList" class="nhsuk-grid-column-one-half nhsuk-card-group__item">
-      <div class="nhsuk-card nhsuk-card--clickable">
-        <div class="nhsuk-card__content">
-          <h2 class="nhsuk-card__heading nhsuk-heading-m">
-            <a routerLink="{{ item.link }}" class="nhsuk-card__link">
-              <span class="nhsuk-u-visually-hidden"> Go to </span> {{ item.title }}
-            </a>
-          </h2>
-          <ng-container *ngIf="item.count!== 0; else noSectionsToSubmit">
-            <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline">
-              <span class="nhsuk-u-font-size-48">{{ item.count }}</span>
-              <ng-container *ngIf="item.total">
-                <span class="nhsuk-u-padding-1">of</span>
-                <span class="mr-auto">{{ item.total }}</span>
-              </ng-container>
-              <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-self-end nhsuk-u-padding-left-4">
-                {{ item.label }}
-              </span>
-            </p>
-          </ng-container>
-          <ng-container *ngIf="item.date">
-            <p class="nhsuk-u-font-size-16 font-color-secondary">
-              {{ item.footer }} on {{ item.date | date: ('app.date_formats.medium_date' | translate) }}
-            </p>
-          </ng-container>
-          <ng-template #noSectionsToSubmit>
-            <p class="nhsuk-u-font-weight-normal">{{ item.emptyMessage }}</p>
-          </ng-template>
-        </div>
-      </div>
-    </li>
-  </ul>
-
+  <app-statistics-cards [cardsList]="cardsList" [gridClass]="'nhsuk-grid-column-one-half'"></app-statistics-cards>
 
   <div class="full-width-section bg-color-white">
     <h2 class="nhsuk-heading-l nhsuk-u-margin-top-9">Innovation summary</h2>
