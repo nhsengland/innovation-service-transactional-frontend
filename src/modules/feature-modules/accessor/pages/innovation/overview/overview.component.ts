@@ -8,10 +8,10 @@ import { NotificationContextTypeEnum } from '@modules/stores/context/context.enu
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
 
+import { StatisticsCard } from '@modules/shared/services/innovations.dtos';
+import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { forkJoin } from 'rxjs';
-import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
-import { StatisticsCard } from '@modules/shared/services/innovations.dtos';
 
 
 @Component({
@@ -34,6 +34,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   cardsList: StatisticsCard[] = [];
+  showCards: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -71,6 +72,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         { label: 'Description', value: innovationInfo.description },
         { label: 'Categories', value: innovationInfo.categories.map(v => v === 'OTHER' ? innovationInfo.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
       ];
+      this.showCards = [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(this.innovationSupport.status);
 
       this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.INNOVATION]});
 
