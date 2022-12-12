@@ -17,7 +17,6 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
 import { InnovationAssessmentEditComponent } from './pages/innovation/assessment/assessment-edit.component';
 import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/assessment-new.component';
-import { InnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 // // Innovations.
 import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
@@ -45,6 +44,7 @@ import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-o
 // Resolvers.
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -127,7 +127,7 @@ const routes: Routes = [
                     data: { breadcrumb: null },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: InnovationAssessmentOverviewComponent,
+                        path: '', pathMatch: 'full', component: PageInnovationAssessmentOverviewComponent,
                         data: { breadcrumb: null }
                       },
                       { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },

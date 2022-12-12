@@ -8,21 +8,21 @@ import { ActivatedRoute } from '@angular/router';
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
-import { InnovationAssessmentOverviewComponent } from './assessment-overview.component';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { of } from 'rxjs';
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
+import { PageInnovationAssessmentOverviewComponent } from './assessment-overview.component';
 
-describe('FeatureModules/Admin/Innovation/InnovationAssessmentOverviewComponent', () => {
+describe('Shared/Pages/Innovation/Assessment/PageInnovationAssessmentOverviewComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
   let innovationsService: InnovationsService;
 
-  let component: InnovationAssessmentOverviewComponent;
-  let fixture: ComponentFixture<InnovationAssessmentOverviewComponent>;
+  let component: PageInnovationAssessmentOverviewComponent;
+  let fixture: ComponentFixture<PageInnovationAssessmentOverviewComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -63,7 +63,7 @@ describe('FeatureModules/Admin/Innovation/InnovationAssessmentOverviewComponent'
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(InnovationAssessmentOverviewComponent);
+    fixture = TestBed.createComponent(PageInnovationAssessmentOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();

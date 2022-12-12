@@ -101,7 +101,6 @@
 
     }
 
-
   }
 
   .app-pane__main-content {
@@ -120,17 +119,38 @@
 }
 
 
+.ignore-app-pane__side-bar {
+  width: calc(100% + 216px);
+  margin-left: -280px;
+}
+
+@media (max-width: 75.865em) {
+  .ignore-app-pane__side-bar {
+    width: calc(100% + 200px);
+    margin-left: -260px;
+  }
+}
 
 
 @media (max-width: 61.865em) {
   .app-pane__side-bar {
     width: 200px;
   }
+
+  .ignore-app-pane__side-bar {
+    width: calc(100% + 200px);
+    margin-left: -200px;
+  }
 }
 
 @media (max-width: 48.0525em) {
   .app-pane__side-bar {
     display: none;
+  }
+
+  .ignore-app-pane__side-bar {
+    width: 100%;
+    margin-left: -16px;
   }
 
   .app-side-nav__heading {

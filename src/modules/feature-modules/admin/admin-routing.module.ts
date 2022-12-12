@@ -51,7 +51,8 @@ import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pa
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/innovation-support-status-list.component';
 import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innovation/messages/threads-list.component';
 import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages/innovation/messages/thread-messages-list.component';
-import { InnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
+import { PageInnovationAssessmentOverviewComponent } from '../../shared/pages/innovation/assessment/assessment-overview.component';
+
 // Wizards.
 import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-unit-activate/organisation-unit-activate.component';
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
@@ -346,7 +347,7 @@ const routes: Routes = [
                     data: { breadcrumb: null },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: InnovationAssessmentOverviewComponent,
+                        path: '', pathMatch: 'full', component: PageInnovationAssessmentOverviewComponent,
                         data: { breadcrumb: null }
                       }
                     ]

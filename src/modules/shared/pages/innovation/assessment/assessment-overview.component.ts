@@ -4,25 +4,21 @@ import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { DatesHelper } from '@app/base/helpers';
+import { NotificationContextTypeEnum, UserTypeEnum } from '@app/base/enums';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { maturityLevelItems, yesNoItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationActivityLogListDTO, InnovationNeedsAssessmentInfoDTO, InnovationSupportsLogDTO, SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-
+import { InnovationNeedsAssessmentInfoDTO, InnovationSupportsLogDTO, SupportLogType } from '@modules/shared/services/innovations.dtos';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { TableModel } from '@app/base/models';
-import { ActivityLogTypesEnum } from '@modules/stores/innovation';
-
-type ActivitiesListType = InnovationActivityLogListDTO['data'][0] & { showHideStatus: 'opened' | 'closed', showHideText: string };
 
 @Component({
-  selector: 'app-admin-pages-innovation-assessment-overview',
+  selector: 'shared-pages-innovation-assessment-overview',
   templateUrl: './assessment-overview.component.html'
 })
-export class InnovationAssessmentOverviewComponent extends CoreComponent implements OnInit {
+export class PageInnovationAssessmentOverviewComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
   assessmentId: string;
@@ -32,10 +28,10 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
   assessmentHasBeenSubmitted = false;
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+  userType: '' | UserTypeEnum;
 
   logHistory: InnovationSupportsLogDTO[] = [];
   supportLogType = SupportLogType;
-  activitiesList = new TableModel<ActivitiesListType, { activityTypes: ActivityLogTypesEnum[], startDate: string, endDate: string }>();
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
   innovationReassessment: { label?: string, value: null | string }[] = [];
@@ -43,6 +39,7 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
   innovatorSummary: { label?: string, value: null | string, comment: string }[] = [];
 
   shouldShowUpdatedAt = false;
+  isQualifyingAccessorRole = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -51,15 +48,20 @@ export class InnovationAssessmentOverviewComponent extends CoreComponent impleme
 
     super();
 
+    this.userType = this.stores.authentication.getUserType();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
     this.innovation = this.stores.context.getInnovation();
-    this.activitiesList.setOrderBy('createdAt', 'descending');
 
+    if(this.userType === UserTypeEnum.ACCESSOR) {
+      this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
+    }
   }
 
 
   ngOnInit(): void {
+    // Throw notification read dismiss.
+    this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.NEEDS_ASSESSMENT], contextIds: [this.assessmentId]});
     
     forkJoin([
       this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
