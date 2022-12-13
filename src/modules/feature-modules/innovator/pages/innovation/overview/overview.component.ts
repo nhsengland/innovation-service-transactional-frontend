@@ -114,7 +114,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }];
 
       if(this.innovation.groupedStatus === 'RECORD_NOT_SHARED') {
-        this.cardsList.filter(i => i.title === 'Actions requested');
+        this.cardsList = this.cardsList.filter(i => i.title === 'Actions requested');
       }
 
       this.setPageStatus('READY');

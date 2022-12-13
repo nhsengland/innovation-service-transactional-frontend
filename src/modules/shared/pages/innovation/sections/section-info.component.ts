@@ -135,6 +135,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     };
 
     this.setPageTitle(this.section.title, { hint: `${this.stores.innovation.getSectionParentNumber(this.section.id)}. ${this.stores.innovation.getSectionParentTitle(this.section.id)}`});
+    this.setBackLink('Innovation Record', `../innovations/${this.innovation.id}/record`);
+
     
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
       next: response => {
@@ -142,6 +144,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         this.section.status = { id: response.status, label: INNOVATION_SECTION_STATUS[response.status]?.label || '' };
         this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
         this.getPreviousAndNextPagination();
+
 
         if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
           // If accessor, only view information if section is submitted.
@@ -154,6 +157,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           
           this.summaryList = this.section.wizard.runSummaryParsing();
         }
+
 
         this.setPageStatus('READY');
       }
