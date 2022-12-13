@@ -52,6 +52,7 @@ import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/
 import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innovation/messages/threads-list.component';
 import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationAssessmentOverviewComponent } from '../../shared/pages/innovation/assessment/assessment-overview.component';
+import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 
 // Wizards.
@@ -381,7 +382,13 @@ const routes: Routes = [
                   }
                 ]
               },
-
+              {
+                path: 'activity-log', pathMatch: 'full', component: PageInnovationActivityLogComponent,
+                data: {
+                  breadcrumb: 'Activity Log',
+                  layout: { type: 'full', backgroundColor: 'bg-color-white' }
+                }
+              },
               {
                 path: 'support',
                 data: { breadcrumb: 'Data Sharing and Support' },
