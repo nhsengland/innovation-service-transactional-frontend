@@ -1,21 +1,17 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, InnovationStore } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
+import { StoresModule } from '@modules/stores';
 
+import { SharedModule } from '@modules/shared/shared.module';
 import { PageInnovationSupportStatusListComponent } from './innovation-support-status-list.component';
 
 
-describe('Shared/Pages/Innovation/PageActionStatusListComponent', () => {
-
-  let activatedRoute: ActivatedRoute;
-
-  let innovationStore: InnovationStore;
+describe('Shared/Pages/Innovation/PageInnovationSupportStatusListComponent', () => {
 
   let component: PageInnovationSupportStatusListComponent;
   let fixture: ComponentFixture<PageInnovationSupportStatusListComponent>;
@@ -26,18 +22,12 @@ describe('Shared/Pages/Innovation/PageActionStatusListComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         CoreModule,
-        StoresModule
-      ],
-      declarations: [
-        PageInnovationSupportStatusListComponent
+        StoresModule,
+        SharedModule
       ]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
-
-    activatedRoute = TestBed.inject(ActivatedRoute);
-
-    innovationStore = TestBed.inject(InnovationStore);
 
   });
 
