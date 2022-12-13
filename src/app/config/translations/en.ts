@@ -318,50 +318,50 @@ export const locale = {
             ENGAGING: {
               name: 'Engaging',
               cssColorClass: 'nhsuk-tag--green',
+              description: 'Ready to support, assess or provide guidance.',
               accessorTypeDescription: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.',
-              innovatorTypeDescription: 'Ready to support, assess or provide guidance.'
             },
             FURTHER_INFO_REQUIRED: {
               name: 'Further info',
               cssColorClass: 'nhsuk-tag--white',
+              description: 'The organisation needs further information from the innovator to make a decision.',
               accessorTypeDescription: 'Further info is needed from the innovator to make a decision. You must provide a message on what information is needed.',
-              innovatorTypeDescription: 'The organisation needs further information from you to make a decision.'
             },
             WAITING: {
               name: 'Waiting',
               cssColorClass: 'nhsuk-tag--yellow',
+              description: 'The organisation is waiting for an internal decision to progress.',
               accessorTypeDescription: 'Waiting for an internal decision to progress.',
-              innovatorTypeDescription: 'The organisation is waiting for an internal decision to progress.'
             },
             NOT_YET: {
               name: 'Not yet',
               cssColorClass: 'nhsuk-tag--blue',
+              description: 'The innovation is not yet ready for the organisation\'s support offer.',
               accessorTypeDescription: 'The innovation is not yet ready for your support offer. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'Your innovation is not yet ready for the organisation\'s support offer.'
             },
             UNASSIGNED: {
               name: 'Unassigned',
               cssColorClass: 'nhsuk-tag--red',
+              description: 'No status has been assigned yet.',
               accessorTypeDescription: 'No status assigned yet.',
-              innovatorTypeDescription: 'No status assigned yet.'
             },
             UNSUITABLE: {
               name: 'Unsuitable',
               cssColorClass: 'nhsuk-tag--red',
+              description: 'The organisation has no suitable support offer for the innovation.',
               accessorTypeDescription: 'You have no suitable support offer for the innovation. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'The organisation has no suitable support offer for your innovation.'
             },
             WITHDRAWN: {
               name: 'Withdrawn',
               cssColorClass: 'nhsuk-tag--red',
+              description: '',
               accessorTypeDescription: '',
-              innovatorTypeDescription: ''
             },
             COMPLETE: {
               name: 'Completed',
               cssColorClass: 'nhsuk-tag--dark-grey',
+              description: 'The organisation has completed their engagement with the innovation.',
               accessorTypeDescription: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'The organisation has completed their engagement with your innovation.'
             }
           },
           grouped_status: {
