@@ -87,7 +87,7 @@ export const locale = {
           action_status: {
             REQUESTED: {
               name: 'Requested',
-              description: 'An accessor has requested that the innovation owner submit information to a specific section of their innovation record.',
+              description: 'An accessor has requested that the innovator should submit information to a specific section of their innovation record.',
               cssColorClass: 'nhsuk-tag--blue'
             },
             STARTED: {
@@ -102,17 +102,17 @@ export const locale = {
             },
             IN_REVIEW: {
               name: 'In review',
-              description: 'The innovation owner has submitted information requested by an accessor and are waiting for them to review it.',
+              description: 'The innovator has submitted information requested by an accessor and is waiting for the accessor to review this information.',
               cssColorClass: 'nhsuk-tag--yellow'
             },
             DELETED: {
               name: 'Deleted',
-              description: 'The action is deleted as it\'s no longer relevant due to a change to the innovation or your account',
+              description: 'The action has been deleted as it is no longer relevant due to a change to the innovation or innovator account.',
               cssColorClass: 'nhsuk-tag--grey'
             },
             DECLINED: {
               name: 'Declined',
-              description: 'The innovation owner has declined the action requested.',
+              description: 'The innovator has declined the action requested.',
               cssColorClass: 'nhsuk-tag--grey'
             },
             COMPLETED: {
