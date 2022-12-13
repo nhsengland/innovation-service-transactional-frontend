@@ -1,4 +1,4 @@
-import { FormEngineModel, FormEngineParameterModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
+import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
@@ -17,7 +17,7 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = {
+type BaseType = {
   hasRevenueModel: null | 'YES' | 'NO';
   revenues: null | ('ADVERTISING' | 'DIRECT_PRODUCT_SALES' | 'FEE_FOR_SERVICE' | 'LEASE' | 'SALES_OF_CONSUMABLES_OR_ACCESSORIES' | 'SUBSCRIPTION' | 'OTHER')[];
   otherRevenueDescription: null | string;
@@ -26,8 +26,8 @@ type InboundPayloadType = {
   hasFunding: null | 'YES' | 'NO' | 'NOT_RELEVANT';
   fundingDescription: null | string;
 };
-
-type StepPayloadType = InboundPayloadType;
+type InboundPayloadType = Partial<BaseType>;
+type StepPayloadType = BaseType;
 
 
 

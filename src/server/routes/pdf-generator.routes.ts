@@ -1,9 +1,9 @@
 import * as express from 'express';
 import { IProfile } from 'passport-azure-ad';
+import { getAppInsightsClient } from '../../globals';
 import { ENVIRONMENT } from '../config/constants.config';
 import { generatePDF } from '../utils/pdf/parser';
 import { getAccessTokenByOid } from './authentication.routes';
-import { getAppInsightsClient } from '../../globals';
 
 const pdfRouter = express.Router();
 
@@ -39,13 +39,12 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
       })
       .catch((error: any) => {
         const client = getAppInsightsClient(req);
-        client.trackTrace({
-          message: 'PDFGenerator Error',
+        client.trackException({
+          exception: error,
           severity: 3,
-          properties: error,
-        });
-        console.log(error);
-        console.log(`Error when attempting to generate the PDF from innovation ${innovationId}`);
+        })
+        // console.log(error);
+        // console.log(`Error when attempting to generate the PDF from innovation ${innovationId}`);
         res.status(500).send();
       });
 

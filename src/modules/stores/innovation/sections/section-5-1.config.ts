@@ -1,4 +1,4 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
+import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 import { carePathwayItems, hasUKPathwayKnowledgeItems, innovationPathwayKnowledgeItems } from './catalogs.config';
@@ -14,14 +14,15 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = {
+type BaseType = {
   hasUKPathwayKnowledge: null | 'YES' | 'NO' | 'NOT_RELEVANT';
   innovationPathwayKnowledge: null | 'PATHWAY_EXISTS_AND_CHANGED' | 'PATHWAY_EXISTS_AND_FITS' | 'NO_PATHWAY';
   potentialPathway: null | string;
   carePathway: null | 'ONLY_OPTION' | 'BETTER_OPTION' | 'EQUIVALENT_OPTION' | 'FIT_LESS_COSTS' | 'NO_KNOWLEDGE';
 };
-type StepPayloadType = InboundPayloadType;
-type OutboundPayloadType = InboundPayloadType;
+type InboundPayloadType = Partial<BaseType>;
+type StepPayloadType = BaseType;
+type OutboundPayloadType = BaseType;
 
 
 export const SECTION_5_1: InnovationSectionConfigType['sections'][0] = {
@@ -99,10 +100,10 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
-    hasUKPathwayKnowledge: data.hasUKPathwayKnowledge,
-    innovationPathwayKnowledge: data.innovationPathwayKnowledge,
-    potentialPathway: data.potentialPathway,
-    carePathway: data.carePathway,
+    hasUKPathwayKnowledge: data.hasUKPathwayKnowledge ?? null,
+    innovationPathwayKnowledge: data.innovationPathwayKnowledge ?? null,
+    potentialPathway: data.potentialPathway ?? null,
+    carePathway: data.carePathway ?? null,
   };
 
 }

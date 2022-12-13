@@ -1,5 +1,5 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
 import { UtilsHelper } from '@app/base/helpers';
+import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
@@ -18,8 +18,8 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = {
-  impactPatients: boolean;
+type BaseType = {
+  impactPatients: null | boolean;
   hasBenefits: null | 'YES' | 'NO' | 'NOT_SURE';
   patientsCitizensBenefits: null | ('REDUCE_MORTALITY' | 'REDUCE_FURTHER_TREATMENT' | 'REDUCE_ADVERSE_EVENTS' | 'ENABLE_EARLIER_DIAGNOSIS' | 'REDUCE_RISKS' | 'PREVENTS_CONDITION_OCCURRING' | 'AVOIDS_UNNECESSARY_TREATMENT' | 'ENABLES_NON_INVASIVELY_TEST' | 'INCREASES_SELF_MANAGEMENT' | 'INCREASES_LIFE_QUALITY' | 'ENABLES_SHARED_CARE' | 'OTHER')[];
   otherPatientsCitizensBenefit: null | string;
@@ -30,8 +30,9 @@ type InboundPayloadType = {
   accessibilityImpactDetails: null | string;
   accessibilityStepsDetails: null | string;
 };
-type StepPayloadType = InboundPayloadType;
-type OutboundPayloadType = Omit<InboundPayloadType, 'impactPatients'>;
+type InboundPayloadType = Partial<BaseType>;
+type StepPayloadType = BaseType;
+type OutboundPayloadType = Omit<BaseType, 'impactPatients'>;
 
 
 export const SECTION_2_2: InnovationSectionConfigType['sections'][0] = {
@@ -140,16 +141,16 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
-    impactPatients: data.impactPatients,
-    hasBenefits: data.hasBenefits,
-    patientsCitizensBenefits: data.patientsCitizensBenefits,
-    otherPatientsCitizensBenefit: data.otherPatientsCitizensBenefit,
-    generalBenefits: data.generalBenefits,
-    otherGeneralBenefit: data.otherGeneralBenefit,
-    environmentalBenefits: data.environmentalBenefits,
-    otherEnvironmentalBenefit: data.otherEnvironmentalBenefit,
-    accessibilityImpactDetails: data.accessibilityImpactDetails,
-    accessibilityStepsDetails: data.accessibilityStepsDetails,
+    impactPatients: data.impactPatients ?? null,
+    hasBenefits: data.hasBenefits ?? null,
+    patientsCitizensBenefits: data.patientsCitizensBenefits ?? null,
+    otherPatientsCitizensBenefit: data.otherPatientsCitizensBenefit ?? null,
+    generalBenefits: data.generalBenefits ?? null,
+    otherGeneralBenefit: data.otherGeneralBenefit ?? null,
+    environmentalBenefits: data.environmentalBenefits ?? null,
+    otherEnvironmentalBenefit: data.otherEnvironmentalBenefit ?? null,
+    accessibilityImpactDetails: data.accessibilityImpactDetails ?? null,
+    accessibilityStepsDetails: data.accessibilityStepsDetails ?? null,
   };
 
 }

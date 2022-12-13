@@ -1,4 +1,4 @@
-import { FormEngineModel, WizardStepType, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
@@ -14,7 +14,7 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = {
+type BaseType = {
   impactPatients: boolean;
   impactClinicians: boolean;
   subgroups: {
@@ -24,8 +24,9 @@ type InboundPayloadType = {
   diseasesConditionsImpact: null | string[];
   cliniciansImpactDetails: null | string;
 };
-type StepPayloadType = Omit<InboundPayloadType, 'impactPatients' | 'impactClinicians'> & { impacts: ('PATIENTS' | 'CLINICIANS')[] };
-type OutboundPayloadType = InboundPayloadType;
+type InboundPayloadType = Partial<BaseType>;
+type StepPayloadType = Omit<BaseType, 'impactPatients' | 'impactClinicians'> & { impacts: ('PATIENTS' | 'CLINICIANS')[] };
+type OutboundPayloadType = BaseType;
 
 
 export const SECTION_2_1: InnovationSectionConfigType['sections'][0] = {
@@ -132,9 +133,9 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
     impacts,
-    subgroups: data.subgroups.map(item => ({ id: item.id, name: item.name })),
-    diseasesConditionsImpact: data.diseasesConditionsImpact,
-    cliniciansImpactDetails: data.cliniciansImpactDetails
+    subgroups: (data.subgroups ?? []).map(item => ({ id: item.id, name: item.name })),
+    diseasesConditionsImpact: data.diseasesConditionsImpact ?? null,
+    cliniciansImpactDetails: data.cliniciansImpactDetails ?? null
   };
 
 }

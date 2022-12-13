@@ -1,5 +1,5 @@
+import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { cloneDeep } from 'lodash';
-import { FormEngineModel, WizardStepType, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
@@ -15,7 +15,7 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = {
+type BaseType = {
   hasRegulationKnowledge: null | 'YES_ALL' | 'YES_SOME' | 'NO' | 'NOT_RELEVANT';
   standards: {
     id: null | string;
@@ -26,15 +26,17 @@ type InboundPayloadType = {
   files: { id: string, displayFileName: string, url: string }[];
 };
 
+type InboundPayloadType = Partial<BaseType>;
+
 // [key: string] is needed to support standardHasMet_${number} properties.
-type StepPayloadType = Omit<InboundPayloadType, 'files'>
+type StepPayloadType = Omit<BaseType, 'files'>
   & { standardsType: string[] }
   & { files: { id: string; name: string; url: string; }[] }
   & { [key: string]: null | string };
 
-type OutboundPayloadType = Omit<InboundPayloadType, 'files'> & { files: string[] };
+type OutboundPayloadType = Omit<BaseType, 'files'> & { files: string[] };
 
-type SummaryPayloadType = Omit<InboundPayloadType, 'files'>
+type SummaryPayloadType = Omit<BaseType, 'files'>
   & { standardsType: string[] }
   & { files: ({ id: string, displayFileName: string, url: string } | { id: string, name: string })[] }
   & { [key: string]: null | string };
@@ -106,7 +108,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   });
 
   currentValues.standards = (currentValues.standardsType || []).map(s => {
-    return currentValues.standards.find(item => item.type === s) || { id: null, type: s, hasMet: null } as InboundPayloadType['standards'][0];
+    return currentValues.standards.find(item => item.type === s) || { id: null, type: s, hasMet: null } as BaseType['standards'][0];
   });
 
   (currentValues.standards || []).forEach((standard, i) => {
