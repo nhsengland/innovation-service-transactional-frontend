@@ -53,6 +53,7 @@ import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innova
 import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationAssessmentOverviewComponent } from '../../shared/pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
+import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 
 // Wizards.
 import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-unit-activate/organisation-unit-activate.component';
@@ -400,6 +401,11 @@ const routes: Routes = [
                     path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent
                   }
                 ]
+              },
+
+              {
+                path: 'statuses', pathMatch: 'full', component: PageInnovationStatusListComponent,
+                data: { breadcrumb: 'Statuses' }
               },
             ]
           }
