@@ -1,4 +1,4 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
+import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 import { costComparisonItems, hasCostKnowledgeItems } from './catalogs.config';
@@ -13,13 +13,14 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = {
+type BaseType = {
   hasCostSavingKnowledge: null | 'DETAILED_ESTIMATE' | 'ROUGH_IDEA' | 'NO';
   hasCostCareKnowledge: null | 'DETAILED_ESTIMATE' | 'ROUGH_IDEA' | 'NO';
   costComparison: null | 'CHEAPER' | 'COSTS_MORE_WITH_SAVINGS' | 'COSTS_MORE' | 'NOT_SURE';
 };
-type StepPayloadType = InboundPayloadType;
-type OutboundPayloadType = InboundPayloadType;
+type InboundPayloadType = Partial<BaseType>;
+type StepPayloadType = BaseType;
+type OutboundPayloadType = BaseType;
 
 
 export const SECTION_6_2: InnovationSectionConfigType['sections'][0] = {
@@ -85,9 +86,9 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
-    hasCostSavingKnowledge: data.hasCostSavingKnowledge,
-    hasCostCareKnowledge: data.hasCostCareKnowledge,
-    costComparison: data.costComparison
+    hasCostSavingKnowledge: data.hasCostSavingKnowledge ?? null,
+    hasCostCareKnowledge: data.hasCostCareKnowledge ?? null,
+    costComparison: data.costComparison ?? null
   };
 
 }

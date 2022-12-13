@@ -1,6 +1,6 @@
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { InnovationSectionEnum } from './innovation.enums';
-import { InnovationSectionConfigType, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS } from './innovation.models';
+import { InnovationSectionConfigType, INNOVATION_SECTION_STATUS } from './innovation.models';
 
 import { SECTION_1_1 } from './sections/section-1-1.config';
 import { SECTION_1_2 } from './sections/section-1-2.config';

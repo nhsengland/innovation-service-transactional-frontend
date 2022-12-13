@@ -1,4 +1,4 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
+import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
@@ -16,14 +16,14 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = {
+type BaseType = {
   hasProblemTackleKnowledge: null | 'YES' | 'NOT_YET' | 'NOT_SURE';
   problemsTackled: null | string;
   problemsConsequences: null | string;
   intervention: null | string;
   interventionImpact: null | string;
 };
-type StepPayloadType = InboundPayloadType;
+type StepPayloadType = BaseType;
 
 
 export const SECTION_1_2: InnovationSectionConfigType['sections'][0] = {

@@ -1,5 +1,5 @@
+import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { cloneDeep } from 'lodash';
-import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
@@ -17,7 +17,7 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = {
+type BaseType = {
   hasDeployPlan: null | 'YES' | 'NO';
   isDeployed: null | 'YES' | 'NO';
   deploymentPlans: {
@@ -30,12 +30,14 @@ type InboundPayloadType = {
   files: { id: string, displayFileName: string, url: string }[];
 };
 
+type InboundPayloadType = Partial<BaseType>;
+
 // [key: string] is needed to support deploymentPlansComercialBasis_${number}  and deploymentPlansOrgDeploymentAffect_${number} properties.
-type StepPayloadType = Omit<InboundPayloadType, 'files'>
+type StepPayloadType = Omit<BaseType, 'files'>
   & { files: { id: string; name: string; url: string; }[] }
   & { [key: string]: null | string };
 
-type OutboundPayloadType = Omit<InboundPayloadType, 'files'> & { files: string[] };
+type OutboundPayloadType = Omit<BaseType, 'files'> & { files: string[] };
 
 
 
