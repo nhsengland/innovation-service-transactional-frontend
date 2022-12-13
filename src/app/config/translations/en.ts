@@ -368,37 +368,37 @@ export const locale = {
             RECORD_NOT_SHARED: {
               name: 'Record not shared',
               cssColorClass: 'nhsuk-tag--orange',
-              innovatorTypeDescription: 'You have not yet shared your innovation record for a needs assessment review.'
+              description: 'The innovator has not yet shared the innovation record for a needs assessment review.'
             },
             AWAITING_NEEDS_ASSESSMENT: {
               name: 'Awaiting needs assessment',
               cssColorClass: 'nhsuk-tag--yellow',
-              innovatorTypeDescription: 'The needs assessment team will review your innovation record within 5 working days from submission.'
+              description: 'The needs assessment team will review the innovation record within 5 working days from submission.'
             },
             NEEDS_ASSESSMENT: {
               name: 'Needs assessment',
               cssColorClass: 'nhsuk-tag--blue',
-              innovatorTypeDescription: 'Your needs assessment is in progress.'
+              description: 'Needs assessment is in progress.'
             },
             AWAITING_SUPPORT: {
               name: 'Awaiting support',
               cssColorClass: 'nhsuk-tag--grey',
-              innovatorTypeDescription: 'We are waiting for an organisation unit to support your innovation.'
+              description: 'Waiting for an organisation unit to start supporting this innovation.'
             },
             RECEIVING_SUPPORT: {
               name: 'Receiving support',
               cssColorClass: 'nhsuk-tag--green',
-              innovatorTypeDescription: 'At least one organisation unit is engaging with your innovation.'
+              description: 'At least one organisation unit is engaging with this innovation.'
             },
             AWAITING_NEEDS_REASSESSMENT: {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
-              innovatorTypeDescription: 'Your innovation has been resent for a needs assessment review.'
+              description: 'This innovation has been resent for a needs assessment review.'
             },
             ARCHIVED: {
               name: 'Archived',
               cssColorClass: 'nhsuk-tag--dark-grey',
-              innovatorTypeDescription: ''
+              description: ''
             },
           },
           export_request_status: {
