@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
-// import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -13,28 +11,21 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation
 })
 export class PageInnovationSupportStatusListComponent extends CoreComponent {
 
-  visibleStatus: (keyof typeof INNOVATION_SUPPORT_STATUS)[] = [
-    'UNASSIGNED',
-    'ENGAGING',
-    'FURTHER_INFO_REQUIRED',
-    'WAITING',
-    'NOT_YET',
-    'UNSUITABLE',
-    'COMPLETE',
-  ];
+  visibleStatus: InnovationSupportStatusEnum[] = [
+    InnovationSupportStatusEnum.UNASSIGNED,
+    InnovationSupportStatusEnum.ENGAGING,
+    InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED,
+    InnovationSupportStatusEnum.WAITING,
+    InnovationSupportStatusEnum.NOT_YET,
+    InnovationSupportStatusEnum.UNSUITABLE,
+    InnovationSupportStatusEnum.COMPLETE
+  ]
 
-  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
-
-
-  constructor(
-    // private activatedRoute: ActivatedRoute
-  ) {
+  constructor() {
 
     super();
-    // const innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.setPageTitle('Support status key ');
-    // this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/support`);
+    this.setPageTitle('Support status key');
     this.setPageStatus('READY');
 
   }

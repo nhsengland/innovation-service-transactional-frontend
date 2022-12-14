@@ -1,4 +1,4 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
@@ -14,7 +14,7 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = {
+type BaseType = {
   hasEvidence: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET',
   evidences: {
     id: string,
@@ -24,8 +24,7 @@ type InboundPayloadType = {
     summary: string
   }[];
 };
-type StepPayloadType = InboundPayloadType;
-
+type StepPayloadType = BaseType;
 type OutboundPayloadType = {
   hasEvidence: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET';
 };

@@ -87,7 +87,7 @@ export const locale = {
           action_status: {
             REQUESTED: {
               name: 'Requested',
-              description: 'An accessor has requested that the innovation owner submit information to a specific section of their innovation record.',
+              description: 'An accessor has requested that the innovator should submit information to a specific section of their innovation record.',
               cssColorClass: 'nhsuk-tag--blue'
             },
             STARTED: {
@@ -102,17 +102,17 @@ export const locale = {
             },
             IN_REVIEW: {
               name: 'In review',
-              description: 'The innovation owner has submitted information requested by an accessor and are waiting for them to review it.',
+              description: 'The innovator has submitted information requested by an accessor and is waiting for the accessor to review this information.',
               cssColorClass: 'nhsuk-tag--yellow'
             },
             DELETED: {
               name: 'Deleted',
-              description: 'The action is deleted as it\'s no longer relevant due to a change to the innovation or your account',
+              description: 'The action has been deleted as it is no longer relevant due to a change to the innovation or innovator account.',
               cssColorClass: 'nhsuk-tag--grey'
             },
             DECLINED: {
               name: 'Declined',
-              description: 'The innovation owner has declined the action requested.',
+              description: 'The innovator has declined the action requested.',
               cssColorClass: 'nhsuk-tag--grey'
             },
             COMPLETED: {
@@ -318,87 +318,87 @@ export const locale = {
             ENGAGING: {
               name: 'Engaging',
               cssColorClass: 'nhsuk-tag--green',
+              description: 'Ready to support, assess or provide guidance.',
               accessorTypeDescription: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.',
-              innovatorTypeDescription: 'Ready to support, assess or provide guidance.'
             },
             FURTHER_INFO_REQUIRED: {
               name: 'Further info',
               cssColorClass: 'nhsuk-tag--white',
+              description: 'The organisation needs further information from the innovator to make a decision.',
               accessorTypeDescription: 'Further info is needed from the innovator to make a decision. You must provide a message on what information is needed.',
-              innovatorTypeDescription: 'The organisation needs further information from you to make a decision.'
             },
             WAITING: {
               name: 'Waiting',
               cssColorClass: 'nhsuk-tag--yellow',
+              description: 'The organisation is waiting for an internal decision to progress.',
               accessorTypeDescription: 'Waiting for an internal decision to progress.',
-              innovatorTypeDescription: 'The organisation is waiting for an internal decision to progress.'
             },
             NOT_YET: {
               name: 'Not yet',
               cssColorClass: 'nhsuk-tag--blue',
+              description: 'The innovation is not yet ready for the organisation\'s support offer.',
               accessorTypeDescription: 'The innovation is not yet ready for your support offer. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'Your innovation is not yet ready for the organisation\'s support offer.'
             },
             UNASSIGNED: {
               name: 'Unassigned',
               cssColorClass: 'nhsuk-tag--red',
+              description: 'No status has been assigned yet.',
               accessorTypeDescription: 'No status assigned yet.',
-              innovatorTypeDescription: 'No status assigned yet.'
             },
             UNSUITABLE: {
               name: 'Unsuitable',
               cssColorClass: 'nhsuk-tag--red',
+              description: 'The organisation has no suitable support offer for the innovation.',
               accessorTypeDescription: 'You have no suitable support offer for the innovation. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'The organisation has no suitable support offer for your innovation.'
             },
             WITHDRAWN: {
               name: 'Withdrawn',
               cssColorClass: 'nhsuk-tag--red',
+              description: '',
               accessorTypeDescription: '',
-              innovatorTypeDescription: ''
             },
             COMPLETE: {
               name: 'Completed',
               cssColorClass: 'nhsuk-tag--dark-grey',
+              description: 'The organisation has completed their engagement with the innovation.',
               accessorTypeDescription: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'The organisation has completed their engagement with your innovation.'
             }
           },
           grouped_status: {
             RECORD_NOT_SHARED: {
               name: 'Record not shared',
               cssColorClass: 'nhsuk-tag--orange',
-              innovatorTypeDescription: 'You have not yet shared your innovation record for a needs assessment review.'
+              description: 'The innovator has not yet shared the innovation record for a needs assessment review.'
             },
             AWAITING_NEEDS_ASSESSMENT: {
               name: 'Awaiting needs assessment',
               cssColorClass: 'nhsuk-tag--yellow',
-              innovatorTypeDescription: 'The needs assessment team will review your innovation record within 5 working days from submission.'
+              description: 'The needs assessment team will review the innovation record within 5 working days from submission.'
             },
             NEEDS_ASSESSMENT: {
               name: 'Needs assessment',
               cssColorClass: 'nhsuk-tag--blue',
-              innovatorTypeDescription: 'Your needs assessment is in progress.'
+              description: 'Needs assessment is in progress.'
             },
             AWAITING_SUPPORT: {
               name: 'Awaiting support',
               cssColorClass: 'nhsuk-tag--grey',
-              innovatorTypeDescription: 'We are waiting for an organisation unit to support your innovation.'
+              description: 'Waiting for an organisation unit to start supporting this innovation.'
             },
             RECEIVING_SUPPORT: {
               name: 'Receiving support',
               cssColorClass: 'nhsuk-tag--green',
-              innovatorTypeDescription: 'At least one organisation unit is engaging with your innovation.'
+              description: 'At least one organisation unit is engaging with this innovation.'
             },
             AWAITING_NEEDS_REASSESSMENT: {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
-              innovatorTypeDescription: 'Your innovation has been resent for a needs assessment review.'
+              description: 'This innovation has been resent for a needs assessment review.'
             },
             ARCHIVED: {
               name: 'Archived',
               cssColorClass: 'nhsuk-tag--dark-grey',
-              innovatorTypeDescription: ''
+              description: ''
             },
           },
           export_request_status: {

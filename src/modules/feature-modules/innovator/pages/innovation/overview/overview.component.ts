@@ -93,7 +93,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].total,
         lastMessage: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + lastSectionSubmitted)}"`,
         date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]?.lastSubmittedAt,
-        emptyMessage: "You haven't submitted any section of your innovation record yet."
+        emptyMessage: "You haven't submitted any section of your innovation record yet"
       }, {
         title: 'Actions requested',
         label: `request actions to submit`,
@@ -101,8 +101,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         count: statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER].count,
         lastMessage: `Last requested action: "Submit '${this.translate('shared.catalog.innovation.innovation_sections.' + lastActionSubmitted)}'"`,
         date: statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER]?.lastSubmittedAt,
-        emptyMessageTitle: 'No action requests yet.',
-        emptyMessage: 'We might send a request to add more information to your innovation record here.'
+        emptyMessageTitle: 'No action requests yet',
+        emptyMessage: 'We might send a request to add more information to your innovation record here'
       }, {
         title: 'Messages',
         label: `unread messages`,
@@ -110,10 +110,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         count: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER].count,
         lastMessage: `Last received message`,
         date: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]?.lastSubmittedAt,
-        emptyMessage: 'No messages yet'
+        emptyMessageTitle: 'No messages yet'
       }];
 
-      if(this.innovation.groupedStatus === 'RECORD_NOT_SHARED') {
+      if (this.innovation.groupedStatus === 'RECORD_NOT_SHARED') {
         this.cardsList = this.cardsList.filter(i => i.title === 'Actions requested');
       }
 
