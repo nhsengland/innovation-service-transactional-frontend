@@ -53,7 +53,6 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
           this.sidebarItems.push({ label: `${i + 1}. ${parentSection.title}`, url: `/assessment/innovations/${innovation.id}/record/sections/${parentSection.sections[0].id}`, nestedSidebarItems: []  });
 
           if (parentSection.sections.find(j => j.id === currentSection)) {
-            console.log(this.sidebarItems[i])
             parentSection.sections.map((section, k) => {
               this.sidebarItems[i].nestedSidebarItems?.push({ label: `${i + 1}.${k + 1}. ${section.title}`, url: `/assessment/innovations/${innovation.id}/record/sections/${section.id}` });
             })

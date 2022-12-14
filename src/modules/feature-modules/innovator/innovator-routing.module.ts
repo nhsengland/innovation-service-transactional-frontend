@@ -185,7 +185,7 @@ const routes: Routes = [
 
                   {
                     path: 'sections',
-                    data: { breadcrumb: null },
+                    data: { breadcrumb: null, module: 'innovator' },
                     children: [
 
                       { path: '', pathMatch: 'full', redirectTo: '../record' },

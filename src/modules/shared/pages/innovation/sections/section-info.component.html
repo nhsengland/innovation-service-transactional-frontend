@@ -3,13 +3,19 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
+      <div class="nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information: </span>
-        <p>
+
+        <p *ngIf="section.status.id === 'SUBMITTED'" class="d-flex">
+          <ng-container *ngTemplateOutlet="icon; context: { status: section.status.id }"></ng-container>
+          <span class="nhsuk-u-margin-right-2"></span> Last submitted {{ section.date | date: ('app.date_formats.medium_date_time' | translate) }}
+        </p>
+        
+        <!-- <p>
           The status of this section is
           <theme-tag type="{{ 'shared.catalog.innovation.section_status.' + section.status.id + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.section_status.' + section.status.id + '.name' | translate }}"
             class="nhsuk-u-margin-left-1"></theme-tag>
-        </p>
+        </p> -->
       </div>
 
       <button *ngIf="section.nextSectionId && module === 'innovator'" routerLink="../{{ section.nextSectionId }}" class="nhsuk-button nhsuk-u-margin-right-3"> Continue to next section </button>
@@ -118,3 +124,9 @@
     </ul>
   </nav>
 </theme-content-wrapper>
+
+<ng-template #icon let-status="status">
+  <theme-svg-icon *ngIf="status === 'NOT_STARTED'" type="error"></theme-svg-icon>
+  <theme-svg-icon *ngIf="status === 'DRAFT'" type="edit"></theme-svg-icon>
+  <theme-svg-icon *ngIf="status === 'SUBMITTED'" type="success"></theme-svg-icon>
+</ng-template>
