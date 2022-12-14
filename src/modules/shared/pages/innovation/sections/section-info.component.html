@@ -6,16 +6,12 @@
       <div class="nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information: </span>
 
-        <p *ngIf="section.status.id === 'SUBMITTED'" class="d-flex">
+        <p class="d-flex">
           <ng-container *ngTemplateOutlet="icon; context: { status: section.status.id }"></ng-container>
-          <span class="nhsuk-u-margin-right-2"></span> Last submitted {{ section.date | date: ('app.date_formats.medium_date_time' | translate) }}
+          <span class="nhsuk-u-margin-right-2"></span>
+          <span *ngIf="section.status.id === 'SUBMITTED'">Last submitted {{ section.date | date: ('app.date_formats.medium_date_time' | translate) }}</span> 
+          <span *ngIf="section.status.id !== 'SUBMITTED'">This section is in {{ 'shared.catalog.innovation.section_status.' + section.status.id + '.name' | translate }}</span> 
         </p>
-        
-        <!-- <p>
-          The status of this section is
-          <theme-tag type="{{ 'shared.catalog.innovation.section_status.' + section.status.id + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.section_status.' + section.status.id + '.name' | translate }}"
-            class="nhsuk-u-margin-left-1"></theme-tag>
-        </p> -->
       </div>
 
       <button *ngIf="section.nextSectionId && module === 'innovator'" routerLink="../{{ section.nextSectionId }}" class="nhsuk-button nhsuk-u-margin-right-3"> Continue to next section </button>

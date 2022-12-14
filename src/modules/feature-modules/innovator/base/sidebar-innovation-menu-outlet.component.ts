@@ -13,8 +13,9 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
 
   private subscriptions = new Subscription();
 
-  sidebarItems: { label: string, url: string }[] = [];
-
+  sidebarItems: { label: string, url: string; nestedSidebarItems?: {label: string, url: string;}[] }[] = [];
+  navHeading: string = 'Innovation Record section';
+  showHeading: boolean = false;
 
   constructor(
     private router: Router,
@@ -41,12 +42,24 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
     this.sidebarItems = [];
 
     if (this.router.url.includes('sections')) {
+      const currentSection = this.router.url.split('/').pop();
+      this.showHeading = true;
+
       this.innovationStore.getSectionsSummary$(innovation.id).subscribe(response => {
-        response.map((section, i) => {
-          this.sidebarItems.push({ label: `${i + 1}. ${section.title}`, url: `/innovator/innovations/${innovation.id}/record/sections/${section.title}` })
-        })
+
+        response.map((parentSection, i) => {
+          this.sidebarItems.push({ label: `${i + 1}. ${parentSection.title}`, url: `/innovator/innovations/${innovation.id}/record/sections/${parentSection.sections[0].id}`, nestedSidebarItems: []  });
+
+          if (parentSection.sections.find(j => j.id === currentSection)) {
+            parentSection.sections.map((section, k) => {
+              this.sidebarItems[i].nestedSidebarItems?.push({ label: `${i + 1}.${k + 1}. ${section.title}`, url: `/innovator/innovations/${innovation.id}/record/sections/${section.id}` });
+            })
+          }
+        });
+
       });
     } else {
+      this.showHeading = false;
       this.sidebarItems = [
         { label: 'Overview', url: `/innovator/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/innovator/innovations/${innovation.id}/record` },

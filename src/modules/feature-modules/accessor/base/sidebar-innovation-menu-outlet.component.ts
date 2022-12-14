@@ -43,11 +43,11 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
       this.innovationStore.getSectionsSummary$(innovation.id).subscribe(response => {
 
         response.map((parentSection, i) => {
-          this.sidebarItems.push({ label: `${i + 1}. ${parentSection.title}`, url: `/assessment/innovations/${innovation.id}/record/sections/${parentSection.sections[0].id}`, nestedSidebarItems: []  });
+          this.sidebarItems.push({ label: `${i + 1}. ${parentSection.title}`, url: `/accessor/innovations/${innovation.id}/record/sections/${parentSection.sections[0].id}`, nestedSidebarItems: []  });
 
           if (parentSection.sections.find(j => j.id === currentSection)) {
             parentSection.sections.map((section, k) => {
-              this.sidebarItems[i].nestedSidebarItems?.push({ label: `${i + 1}.${k + 1}. ${section.title}`, url: `/assessment/innovations/${innovation.id}/record/sections/${section.id}` });
+              this.sidebarItems[i].nestedSidebarItems?.push({ label: `${i + 1}.${k + 1}. ${section.title}`, url: `/accessor/innovations/${innovation.id}/record/sections/${section.id}` });
             })
           }
         });
