@@ -10,6 +10,7 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { getSectionNumber, INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
 import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
+import { RoutingHelper } from '@app/base/helpers';
 
 @Component({
   selector: 'shared-pages-innovation-section-info',
@@ -51,7 +52,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     super();
 
-    this.module = this.activatedRoute.snapshot.data.module;
+    this.module = RoutingHelper.getRouteData<any>(this.activatedRoute.root).module;
     this.innovation = this.stores.context.getInnovation();
     
     this.section = {
