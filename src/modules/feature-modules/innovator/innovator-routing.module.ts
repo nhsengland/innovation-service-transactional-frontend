@@ -39,6 +39,8 @@ import { PageAccountEmailNotificationsEditComponent } from '@modules/shared/page
 import { PageAccountEmailNotificationsListComponent } from '@modules/shared/pages/account/email-notifications/email-notifications-list.component';
 import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
+import { PageAccountInnovationsStopSharingComponent } from './pages/account/innovations-stop-sharing.component';
+import { PageAccountInnovationsStopSharingOverviewComponent } from './pages/account/innovations-stop-sharing-overview.component';
 // // Innovation.
 import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/actions/action-status-list.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
@@ -447,6 +449,20 @@ const routes: Routes = [
               },
               {
                 path: 'archive', pathMatch: 'full', component: PageAccountInnovationsArchivalComponent
+              },
+              {
+                path: 'stop-sharing',
+                data: { breadcrumb: 'Stop sharing'},
+                children: [
+                  {
+                    path: '', pathMatch: 'full', component: PageAccountInnovationsStopSharingOverviewComponent,
+                    data: { breadcrumb: null }
+                  },
+                  {
+                    path: 'request', pathMatch: 'full', component: PageAccountInnovationsStopSharingComponent,
+                    data: { breadcrumb: null, layout: { type: 'full' } }
+                  }
+                ]
               }
             ]
           },

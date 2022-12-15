@@ -1,0 +1,79 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <p>There are two ways to stop sharing an innovation. The easiest way is to send a message to your support
+        organisations to let them know you are taking a break.</p>
+
+      <p><a routerLink="/innovator">Go to your innovation</a> and send a message.</p>
+
+      <p class="nhsuk-u-margin-bottom-0">
+        Alternatively you can stop sharing your innovation with your support organisations. This option means they will
+        no longer be able to:
+      </p>
+      <ul class="nhsuk-list nhsuk-list--bullet">
+        <li>See your record or</li>
+        <li>Interact with your innovation</li>
+      </ul>
+
+      <p class="nhsuk-u-margin-bottom-0">When you stop sharing your innovation you can continue to:</p>
+      <ul class="nhsuk-list nhsuk-list--bullet">
+        <li>Update your innovation record</li>
+        <li>See completed actions</li>
+        <li>See previous messages</li>
+      </ul>
+
+      <div class="nhsuk-warning-callout">
+        <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+          <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Warning </span>
+        </div>
+        <p>If you want support with you innovation in the future, you will need to share your innovation record for a
+          needs reassessment.</p>
+      </div>
+
+      <ng-container *ngIf="innovations.getTotalRowsNumber() > 0">
+
+        <h2>Stopped innovations</h2>
+        <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-5">
+          <caption class="nhsuk-table__caption nhsuk-u-visually-hidden"> Stopped innovations </caption>
+          <thead class="nhsuk-table__head">
+            <tr>
+              <th *ngFor="let innovation of innovations.getHeaderColumns(); let i = index" scope="col"
+                [ngClass]="innovation.align" [attr.aria-sort]="innovation.orderDir">
+                <ng-container *ngIf="!innovation.orderable">{{ innovation.label }}</ng-container>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr *ngFor="let innovation of innovations.getRecords()" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel('innovation') }} </span>
+                <span>{{ innovation.name }}</span>
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel('statusUpdatedAt') }}
+                </span>
+                {{ innovation.statusUpdatedAt | date: ('app.date_formats.long_date' | translate) }}
+              </td>
+              <td class="nhsuk-table__cell text-align-right">
+                <span class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel('actions') }} </span>
+                <a href="/innovator/innovations/{{ innovation.id }}" target="_blank" rel="noopener noreferrer">Go to
+                  innovation <span class="nhsuk-u-visually-hidden"> {{ innovation.name }} </span> </a>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+
+      </ng-container>
+
+      <a class="nhsuk-action-link__link" routerLink="request" >
+        <theme-svg-icon type="action"></theme-svg-icon>
+        <span class="nhsuk-action-link__text">Stop sharing an innovation</span>
+      </a>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>

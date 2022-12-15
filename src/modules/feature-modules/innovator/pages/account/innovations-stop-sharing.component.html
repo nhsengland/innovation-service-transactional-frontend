@@ -1,0 +1,42 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form [formGroup]="form" (ngSubmit)="onSubmitForm()">
+
+        <ng-container *ngIf="stepNumber === 1">
+          <theme-form-radio-group controlName="innovation" label="Select the innovation you want to stop sharing:"
+            [items]="formInnovationsItems" [pageUniqueField]="false"></theme-form-radio-group>
+          <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
+        </ng-container>
+
+        <ng-container *ngIf="stepNumber === 2">
+          <p>Let your supporting organisations know why you have decided to stop sharing this innovation.</p>
+          <theme-form-textarea controlName="message" label="Enter your message" [pageUniqueField]="false"
+            lengthLimit="small"></theme-form-textarea>
+          <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
+        </ng-container>
+
+        <ng-container *ngIf="stepNumber === 3">
+          <div class="nhsuk-warning-callout">
+            <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+              <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
+            </div>
+            <p>This means your support organisations will no longer be able to see your record or interact with you. If
+              you want support with you innovation in the future, you will need to share your innovation record for a
+              needs reassessment.</p>
+          </div>
+          <theme-form-input controlName="confirmation" label="Are you sure that you want to stop sharing?"
+            description="To confirm, please type the following: stop sharing my innovation"
+            [pageUniqueField]="false"></theme-form-input>
+          <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3" [disabled]="form.pending || form.invalid">Stop
+            sharing innovation</button>
+        </ng-container>
+
+      </form>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>

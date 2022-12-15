@@ -6,7 +6,8 @@ export enum InnovationStatusEnum {
   // NEEDS_ASSESSMENT_REVIEW = 'NEEDS_ASSESSMENT_REVIEW',
   ABANDONED = 'ABANDONED',
   COMPLETE = 'COMPLETE',
-  ARCHIVED = 'ARCHIVED'
+  ARCHIVED = 'ARCHIVED',
+  PAUSED = 'PAUSED'
 }
 
 export enum InnovationGroupedStatusEnum {
