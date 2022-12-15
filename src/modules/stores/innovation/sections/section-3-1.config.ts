@@ -32,6 +32,7 @@ export const SECTION_3_1: InnovationSectionConfigType['sections'][0] = {
           id: 'hasMarketResearch',
           dataType: 'radio-group',
           label: stepsLabels.l1,
+          description: 'What we mean by market research is information gathering via different methodologies to understand the user need for your innovation. For example, in-depth interview, focus groups, telephone interviews, online surveys, Patient Record Forms (PRFs).',
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasMarketResearchItems
         }]
