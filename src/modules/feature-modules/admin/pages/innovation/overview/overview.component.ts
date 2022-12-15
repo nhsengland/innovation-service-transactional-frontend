@@ -21,7 +21,7 @@ import { DatePipe } from '@angular/common';
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-  innovation: ContextInnovationType & { groupedStatus?: InnovationGroupedStatusEnum, supportStatuses?: InnovationSupportStatusEnum[] };
+  innovation: ContextInnovationType & { organisationsStatusDescription?: string, groupedStatus?: InnovationGroupedStatusEnum };
 
   innovationSupport: {
     organisationUnit: string,
@@ -51,7 +51,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    this.innovationsService.getInnovationInfo(this.innovationId).subscribe(response => {
+    this.innovationsService.getInnovationInfo(this.innovationId).subscribe(innovation => {
 
       this.innovationSupport = {
         organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
@@ -59,23 +59,31 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       };
 
       this.innovationSummary = [
-        { label: 'Company name', value: response.owner.organisations ? response.owner.organisations[0].name : '' },
-        { label: 'Location', value: `${response.countryName}${response.postCode ? ', ' + response.postCode : ''}` },
-        { label: 'Description', value: response.description },
-        { label: 'Categories', value: response.categories.map(v => v === 'OTHER' ? response.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
+        { label: 'Company', value: innovation.owner.organisations ? innovation.owner.organisations[0].name : '' },
+        { label: 'Location', value: `${innovation.countryName}${innovation.postCode ? ', ' + innovation.postCode : ''}` },
+        { label: 'Description', value: innovation.description },
+        { label: 'Categories', value: innovation.categories.map(v => v === 'OTHER' ? innovation.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
       ];
 
       this.innovatorDetails = [
-        { label: 'Innovator name', value: response.owner.name },
-        { label: 'Last login', value: this.datePipe.transform(response.owner.lastLoginAt ?? '', this.translate('app.date_formats.long_date_time')) },
-        { label: 'Email address', value: response.owner.email ?? '' },
-        { label: 'Phone number', value: response.owner.mobilePhone ?? '' },
+        { label: 'Name', value: innovation.owner.name },
+        { label: 'Last login', value: this.datePipe.transform(innovation.owner.lastLoginAt ?? '', this.translate('app.date_formats.long_date_time')) },
+        { label: 'Email address', value: innovation.owner.email ?? '' },
+        { label: 'Phone number', value: innovation.owner.mobilePhone ?? '' },
       ]
 
+      const occurrences = (innovation.supports ?? []).map(item => item.status)
+        .filter(status => [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(status))
+        .reduce((acc, status) => (
+          acc[status] ? ++acc[status].count : acc[status] = { count: 1, text: this.translate('shared.catalog.innovation.support_status.' + status + '.name').toLowerCase() }, acc),
+          {} as { [a in InnovationSupportStatusEnum]: { count: number, text: string } });
+
+      this.innovation.organisationsStatusDescription = Object.entries(occurrences).map(([status, item]) => `${item.count} ${item.text}`).join(', ');
+      
       this.innovation = {
         ...this.innovation,
-        groupedStatus: this.getGroupedStatus(response),
-        supportStatuses: (response.supports ?? []).map(support => support.status),
+        groupedStatus: this.getGroupedStatus(innovation),
+        organisationsStatusDescription: Object.entries(occurrences).map(([_, item]) => `${item.count} ${item.text}`).join(', ')
       }
 
       this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.INNOVATION]}); // TODO: Verify notifications from admin

@@ -25,20 +25,23 @@ export class OrganisationsService extends CoreService {
 
   constructor() { super(); }
 
-  getOrganisationsList(unitsInformation: boolean): Observable<OrganisationsListDTO[]> {
+  getOrganisationsList(query: { unitsInformation: boolean, withInactive?: boolean }): Observable<OrganisationsListDTO[]> {
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/organisations');
 
-    if (unitsInformation) {
-      url.setQueryParams({ fields: ['organisationUnits'] });
-    }
+    const qp = {
+      ...(query.unitsInformation ? { fields: ['organisationUnits'] } : {}),
+      ...(query.withInactive ? { withInactive: query.withInactive } : {}),
+    };
+
+    url.setQueryParams(qp);
 
     return this.http.get<OrganisationsListDTO[]>(url.buildUrl()).pipe(take(1),
       map(response => response.map(item => ({
         id: item.id,
         name: item.name,
         acronym: item.acronym,
-        organisationUnits: unitsInformation ? item.organisationUnits : []
+        organisationUnits: query.unitsInformation ? item.organisationUnits : []
       })))
     );
 

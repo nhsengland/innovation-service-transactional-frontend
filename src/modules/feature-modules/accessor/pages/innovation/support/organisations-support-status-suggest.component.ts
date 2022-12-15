@@ -59,7 +59,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   ngOnInit(): void {
 
     forkJoin([
-      this.organisationsService.getOrganisationsList(true),
+      this.organisationsService.getOrganisationsList({ unitsInformation: true }),
       this.innovationsService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment?.id || ''),
       this.innovationsService.getInnovationSupportsList(this.innovation.id, false)
     ]).subscribe(([organisations, needsAssessment, innovationSupportsList]) => {

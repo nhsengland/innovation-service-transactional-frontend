@@ -123,7 +123,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.filters = this.filters.map(filter => ({ ...filter, active: filters.includes(filter.key) }));
 
-    this.organisationsService.getOrganisationsList(false).subscribe({
+    this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe({
       next: response => {
         if (this.stores.authentication.isAdminRole() === true) {
           this.datasets.engagingOrganisations = response.map(i => ({ label: i.name, value: i.id }));

@@ -99,7 +99,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
       organisationSuggestions?: ObservableInput<OrganisationSuggestionModel>,
 
     } = {
-      organisationsList: this.organisationsService.getOrganisationsList(true),
+      organisationsList: this.organisationsService.getOrganisationsList({ unitsInformation: true }),
       innovationSupports: this.innovationsService.getInnovationSupportsList(this.innovationId, false)
     };
 

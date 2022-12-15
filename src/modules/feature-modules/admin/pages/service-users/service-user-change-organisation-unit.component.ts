@@ -65,7 +65,7 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
   ngOnInit(): void {
 
     forkJoin([
-      this.organisationsService.getOrganisationsList(true),
+      this.organisationsService.getOrganisationsList({ unitsInformation: true }),
       this.serviceUsersService.getUserFullInfo(this.user.id),
       this.serviceUsersService.getOrgnisationUnitRules(this.user.id)
     ]).subscribe(([organisations, userInfo, orgnisationUnitRules]) => {

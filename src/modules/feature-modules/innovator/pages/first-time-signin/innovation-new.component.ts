@@ -35,7 +35,7 @@ export class FirstTimeSigninInnovationNewComponent extends CoreComponent impleme
     this.wizard.setAnswers(this.wizard.runInboundParsing({})).runRules();
 
     // Update last step with the organisations list with description and pre-select all checkboxes.
-    this.organisationsService.getOrganisationsList(false).subscribe(response => {
+    this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe(response => {
 
       this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
       this.wizard.addAnswers({ organisationShares: response.map(item => item.id) });

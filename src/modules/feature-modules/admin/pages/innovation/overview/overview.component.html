@@ -24,9 +24,8 @@
             label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}">
           </theme-tag>
           <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-left-2 d-inline-block"
-            *ngIf="innovation.groupedStatus === 'RECEIVING_SUPPORT'">
-            Organisations: {{ getSupportStatusCount(innovation.supportStatuses ?? [], 'ENGAGING') }} engaging, {{
-            getSupportStatusCount(innovation.supportStatuses ?? [], 'FURTHER_INFO_REQUIRED') }} further info.
+            *ngIf="innovation.organisationsStatusDescription">
+            Organisations: {{ innovation.organisationsStatusDescription }}
           </span>
         </div>
         <a routerLink="/admin/innovations/{{ innovation.id }}/support" class="float-r nhsuk-body-s"
