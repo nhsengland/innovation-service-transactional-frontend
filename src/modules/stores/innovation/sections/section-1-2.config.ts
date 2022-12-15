@@ -99,7 +99,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'interventionImpact',
         dataType: 'textarea',
         label: stepsLabels.l5,
-        description: 'Example impact description:<br />A 20% reduction in emergency referrals from care homes to the Emergency Department. For a mid-sized Clinical Commissioning Group covering a population of 250,000, this would equate to 150-200 referrals per year.',
+        description: 'Example impact description:<br />A 20% reduction in emergency referrals from care homes to the Emergency Department. For a mid-sized Integrated Care System (ICS) covering a population of 250,000, this would equate to 150-200 referrals per year.',
         validations: { isRequired: [true, 'A description of the impact of the intervention is required'] },
         lengthLimit: 'medium'
       }]

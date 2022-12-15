@@ -88,7 +88,7 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
           id: 'hasFinalProduct',
           dataType: 'radio-group',
           label: stepsLabels.l4,
-          description: 'By this, we mean something that performs the same function that the final product or service would.',
+          description: 'This means something that performs or demonstrates the same function that the final product or service would.',
           validations: { isRequired: [true, 'Choose one option'] }, items: hasFinalProductItems
         }]
       }),
@@ -176,7 +176,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
         id: 'supportTypes',
         dataType: 'checkbox-array',
         label: stepsLabels.l10,
-        description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the innovation service.',
+        description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the Innovation Service.',
         validations: { isRequired: [true, 'Choose at least one type of support'], max: [5, 'Maximum 5 options'] },
         items: supportTypesItems
       }]

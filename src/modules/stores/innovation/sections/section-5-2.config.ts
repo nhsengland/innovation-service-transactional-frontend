@@ -95,7 +95,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'userTests',
         dataType: 'fields-group',
         label: stepsLabels.l2,
-        description: 'This can include any testing you\'ve done with people who would use your innovation, for example patients, nurses or administrative staff.',
+        description: 'This can include any testing that you have done with people who would use your innovation. For example, patients, nurses or administrative staff.',
         fieldsGroupConfig: {
           fields: [
             { id: 'id', dataType: 'text', isVisible: false },
