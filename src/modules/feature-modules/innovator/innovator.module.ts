@@ -17,6 +17,8 @@ import { PageAccountInfoComponent } from './pages/account/account-info.component
 import { PageAccountInnovationsArchivalComponent } from './pages/account/innovations-archival.component';
 import { PageAccountInnovationsInfoComponent } from './pages/account/innovations-info.component';
 import { PageAccountInnovationsTransferComponent } from './pages/account/innovations-transfer.component';
+import { PageAccountInnovationsStopSharingComponent } from './pages/account/innovations-stop-sharing.component';
+import { PageAccountInnovationsStopSharingOverviewComponent } from './pages/account/innovations-stop-sharing-overview.component';
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // First time signin.
@@ -65,6 +67,8 @@ import { InnovatorService } from './services/innovator.service';
     PageAccountInnovationsArchivalComponent,
     PageAccountInnovationsInfoComponent,
     PageAccountInnovationsTransferComponent,
+    PageAccountInnovationsStopSharingComponent,
+    PageAccountInnovationsStopSharingOverviewComponent,
     // // Dashboard.
     PageDashboardComponent,
     // // First time signin.

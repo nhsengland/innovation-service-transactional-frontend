@@ -21,6 +21,7 @@ export type InnovationsListDTO = {
     otherMainCategoryDescription: null | string,
     isAssessmentOverdue?: boolean,
     assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { name: string; }, reassessmentCount: number },
+    statusUpdatedAt: null | DateISOType,
     supports?: {
       id: string,
       status: InnovationSupportStatusEnum,
@@ -65,7 +66,8 @@ export type InnovationInfoDTO = {
   lastEndSupportAt: null | DateISOType,
   export: { canUserExport: boolean, pendingRequestsCount: number },
   assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { name: string }, reassessmentCount: number },
-  supports?: null | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string }[]
+  supports?: null | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string }[],
+  statusUpdatedAt: null | DateISOType
 };
 
 export type InnovationNeedsAssessmentInfoDTO = {
@@ -171,7 +173,9 @@ export type InnovationActivityLogListInDTO = {
       totalActions?: number,
 
       assessment?: { id: string },
-      reassessment?: { id: string }
+      reassessment?: { id: string },
+
+      message?: string,
 
     }
   }[]

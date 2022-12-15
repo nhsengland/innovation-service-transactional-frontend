@@ -146,7 +146,7 @@ export class InnovationStore extends Store<InnovationModel> {
     reassessmentCount: number
   ): InnovationGroupedStatusEnum {
 
-    if (innovationStatus === InnovationStatusEnum.CREATED) {
+    if (innovationStatus === InnovationStatusEnum.CREATED || innovationStatus === InnovationStatusEnum.PAUSED) {
       return InnovationGroupedStatusEnum.RECORD_NOT_SHARED;
     }
 
@@ -167,7 +167,7 @@ export class InnovationStore extends Store<InnovationModel> {
         : InnovationGroupedStatusEnum.AWAITING_SUPPORT;
     }
 
-    if(innovationStatus === 'ARCHIVED') {
+    if(innovationStatus === InnovationStatusEnum.ARCHIVED) {
       return InnovationGroupedStatusEnum.ARCHIVED;
     }
 
