@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'theme-pagination',
@@ -6,7 +6,7 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, OnInit
   styleUrls: ['./pagination.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PaginationComponent implements OnInit {
+export class PaginationComponent {
 
   @Input() currentPage = 1;
   @Input() pageSize = 20;
@@ -18,13 +18,9 @@ export class PaginationComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
+  getPages(): number[] {
 
     this.totalPages = Math.ceil(this.totalRows / this.pageSize)
-    
-  }
-
-  getPages(): number[] {
 
     // Default shows current with the two numbers before and after
     let start = this.currentPage - 2;
