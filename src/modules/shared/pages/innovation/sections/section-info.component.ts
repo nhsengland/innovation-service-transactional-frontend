@@ -10,6 +10,7 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { getSectionNumber, INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
 import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
+import { RoutingHelper } from '@app/base/helpers';
 
 @Component({
   selector: 'shared-pages-innovation-section-info',
@@ -29,6 +30,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     showSubmitButton: boolean;
     hasEvidences: boolean;
     wizard: WizardEngineModel;
+    date: string;
   };
 
   summaryList: WizardSummaryType[] = [];
@@ -50,9 +52,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     super();
 
-    this.module = this.activatedRoute.snapshot.data.module;
+    this.module = RoutingHelper.getRouteData<any>(this.activatedRoute.root).module;
     this.innovation = this.stores.context.getInnovation();
-
+    
     this.section = {
       id: this.activatedRoute.snapshot.params.sectionId,
       nextSectionId: null,
@@ -61,7 +63,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       isNotStarted: false,
       showSubmitButton: false,
       hasEvidences: false,
-      wizard: new WizardEngineModel({})
+      wizard: new WizardEngineModel({}),
+      date: ''
     };
 
     this.previousSection = {
@@ -131,16 +134,21 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       isNotStarted: false,
       showSubmitButton: false,
       hasEvidences: !!section?.evidences?.steps.length,
-      wizard: section?.wizard || new WizardEngineModel({})
+      wizard: section?.wizard || new WizardEngineModel({}),
+      date: ''
     };
 
     this.setPageTitle(this.section.title, { hint: `${this.stores.innovation.getSectionParentNumber(this.section.id)}. ${this.stores.innovation.getSectionParentTitle(this.section.id)}`});
     
+    if(this.module !== '') {
+      this.setBackLink('Innovation Record', `${this.module}/innovations/${this.innovation.id}/record`);
+    }
+    
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
       next: response => {
-
         this.section.status = { id: response.status, label: INNOVATION_SECTION_STATUS[response.status]?.label || '' };
         this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
+        this.section.date = response.submittedAt;
         this.getPreviousAndNextPagination();
 
         if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
@@ -154,6 +162,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           
           this.summaryList = this.section.wizard.runSummaryParsing();
         }
+
 
         this.setPageStatus('READY');
       }

@@ -33,6 +33,7 @@ export type InnovationSectionInfoDTO = {
   status: keyof typeof INNOVATION_SECTION_STATUS;
   updatedAt: string;
   data: MappedObjectType;
+  submittedAt: string;
 }
 
 export type getInnovationInfoEndpointDTO = {

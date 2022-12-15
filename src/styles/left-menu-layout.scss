@@ -51,7 +51,13 @@
         }
       }
 
-      .app-side-nav__link {
+      .app-side-nav__item--nested-current {
+        .app-side-nav__link--nested {
+          font-weight: 600;
+        }
+      }
+
+      .app-side-nav__link, .app-side-nav__link--nested {
         text-decoration: none;
 
         &:visited {
@@ -92,10 +98,6 @@
             margin-left: -20px;
             margin-right: 4px;
           }
-        }
-      
-        .app-side-nav__link {
-          font-weight: 400;
         }
       }
 

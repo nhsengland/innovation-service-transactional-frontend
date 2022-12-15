@@ -189,14 +189,14 @@ const routes: Routes = [
                     children: [
 
                       { path: '', pathMatch: 'full', redirectTo: '../record' },
-
                       {
                         path: ':sectionId',
                         resolve: { innovationSectionData: InnovationSectionDataResolver },
                         data: {
                           breadcrumb: (data: RoutesDataType) => data.innovationSectionData?.name ?? ''
                         },
-                        children: [
+                        children: [    
+                          
                           {
                             path: '', pathMatch: 'full', component: PageInnovationSectionInfoComponent,
                             data: { breadcrumb: null }
