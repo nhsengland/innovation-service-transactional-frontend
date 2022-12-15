@@ -173,7 +173,9 @@ export type InnovationActivityLogListInDTO = {
       totalActions?: number,
 
       assessment?: { id: string },
-      reassessment?: { id: string }
+      reassessment?: { id: string },
+
+      message?: string,
 
     }
   }[]

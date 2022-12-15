@@ -240,6 +240,10 @@ export const locale = {
             ACTION_STATUS_CANCELLED_UPDATE: {
               title: 'Action cancelled',
               message: `{{ totalActions }} actions for {{ sectionTitle }} section were changed to "Cancelled"`
+            },
+            INNOVATION_PAUSE: {
+              title: 'Innovation stop share',
+              message: `Innovator stopped sharing {{ innovationName }}`
             }
           },
 

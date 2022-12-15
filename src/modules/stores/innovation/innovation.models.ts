@@ -267,7 +267,7 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
 export const ACTIVITY_LOG_ITEMS: {
   [key in ActivityLogItemsEnum]: {
     type: ActivityLogTypesEnum;
-    details: null | 'ORGANISATIONS_LIST' | 'SUPPORT_STATUS_UPDATE' | 'COMMENT';
+    details: null | 'ORGANISATIONS_LIST' | 'SUPPORT_STATUS_UPDATE' | 'COMMENT' | 'MESSAGE';
     link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'ACTION' | 'THREAD' | 'NEEDS_REASSESSMENT';
   }
 } = {
@@ -284,6 +284,11 @@ export const ACTIVITY_LOG_ITEMS: {
   SHARING_PREFERENCES_UPDATE: {
     type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT,
     details: 'ORGANISATIONS_LIST',
+    link: null
+  },
+  INNOVATION_PAUSE: {
+    type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT,
+    details: 'MESSAGE',
     link: null
   },
 
