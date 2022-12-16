@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { debounceTime, filter } from 'rxjs/operators';
 
 import { ContextStore, InnovationStore } from '@modules/stores';
 
@@ -13,7 +13,7 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
   private subscriptions = new Subscription();
 
   sidebarItems: { label: string, url: string; nestedSidebarItems?: {label: string, url: string;}[] }[] = [];
-  navHeading: string = 'Innovation Record section';
+  navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
 
   constructor(
@@ -22,7 +22,10 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
     private innovationStore: InnovationStore,
   ) {
     this.subscriptions.add(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange())
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd), debounceTime(500)).subscribe(e => {
+        this.sidebarItems = [];
+        this.onRouteChange()
+      })
     );
 
     this.onRouteChange();   
@@ -34,7 +37,6 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
   
   private onRouteChange(): void {
     const innovation = this.contextStore.getInnovation();
-    this.sidebarItems = [];
     
     if (this.router.url.includes('sections')) {
       const currentSection = this.router.url.split('/').pop();
@@ -47,7 +49,7 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
 
           if (parentSection.sections.find(j => j.id === currentSection)) {
             parentSection.sections.map((section, k) => {
-              this.sidebarItems[i].nestedSidebarItems?.push({ label: `${i + 1}.${k + 1}. ${section.title}`, url: `/accessor/innovations/${innovation.id}/record/sections/${section.id}` });
+              this.sidebarItems[i].nestedSidebarItems?.push({ label: `${i + 1}.${k + 1} ${section.title}`, url: `/accessor/innovations/${innovation.id}/record/sections/${section.id}` });
             })
           }
         });

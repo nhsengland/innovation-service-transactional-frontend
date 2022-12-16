@@ -53,7 +53,7 @@
 
       .app-side-nav__item--nested-current {
         .app-side-nav__link--nested {
-          font-weight: 600;
+          color: #212b32 !important;
         }
       }
 
@@ -79,7 +79,6 @@
           }
         }
       }
-
 
       .app-side-nav__list--nested {
         margin-bottom: 8px;
