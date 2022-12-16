@@ -9,7 +9,7 @@
         <p class="d-flex">
           <ng-container *ngTemplateOutlet="icon; context: { status: section.status.id }"></ng-container>
           <span class="nhsuk-u-margin-right-2"></span>
-          <span *ngIf="section.status.id === 'SUBMITTED'">Last submitted {{ section.date | date: ('app.date_formats.medium_date_time' | translate) }}</span> 
+          <span *ngIf="section.status.id === 'SUBMITTED'">Last submitted {{ section.date | date: ('app.date_formats.long_date_time' | translate) }}</span> 
           <span *ngIf="section.status.id !== 'SUBMITTED'">This section is in {{ 'shared.catalog.innovation.section_status.' + section.status.id + '.name' | translate }}</span> 
         </p>
       </div>
