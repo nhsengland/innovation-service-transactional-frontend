@@ -5,6 +5,8 @@ import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 import { NEEDS_REASSESSMENT_CONFIG, OutboundPayloadType } from './needs-reassessment-send.config';
 
@@ -19,6 +21,7 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
 
   innovationId: string;
   baseUrl: string;
+  innovation: ContextInnovationType;
 
   alertErrorsList: { title: string, description: string }[] = [];
 
@@ -36,13 +39,14 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.innovation = this.stores.context.getInnovation();
     this.baseUrl = `/innovator/innovations/${this.innovationId}`;
 
   }
 
   ngOnInit(): void {
 
-    this.wizard.setAnswers(this.wizard.runInboundParsing({})).runRules();
+    this.wizard.setAnswers(this.wizard.runInboundParsing({ status: this.innovation.status })).runRules();
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
     this.setPageStatus('READY');
@@ -65,7 +69,14 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
     switch (action) {
 
       case 'previous':
-        if (this.wizard.isFirstStep()) { this.redirectTo(`${this.baseUrl}/how-to-proceed`); }
+        if (this.wizard.isFirstStep()) { 
+
+          if(this.innovation.status === InnovationStatusEnum.PAUSED) {
+            this.redirectTo(`${this.baseUrl}/record`); 
+          } else {
+            this.redirectTo(`${this.baseUrl}/how-to-proceed`); 
+          }
+        }
         else {
           this.wizard.previousStep();
           this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
@@ -117,8 +128,7 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
 
     this.innovatorService.createNeedsReassessment(this.innovationId, body).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess('Your innovation was submitted to need reassessment', { message: 'Our support team will be in touch within a week to let you know if further support is available to your innovation at this moment in time.' });
-        this.redirectTo(this.baseUrl);
+        this.setRedirectAlertSuccess('Your innovation has been reshared for a needs reassessment', { message: 'Our team will be in touch within a week to let you know if further support is available for your innovation.' });
       },
       error: () => {
         this.submitButton = { isActive: true, label: 'Send to needs reassessment' };

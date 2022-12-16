@@ -80,11 +80,11 @@ export class PageAccountInnovationsStopSharingComponent extends CoreComponent im
 
     this.stepNumber--;
     
-    if (this.stepNumber === 1) {
+    if (this.stepNumber === 0) {
       this.redirectTo('/innovator/account/manage-innovations/stop-sharing');
     }
 
-    if (this.stepNumber === 2) {
+    if (this.stepNumber === 1) {
       this.setPageTitle('Stop sharing an innovation', { size: 'l' });
     }
 

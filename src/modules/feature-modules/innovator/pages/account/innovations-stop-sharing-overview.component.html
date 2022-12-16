@@ -28,7 +28,7 @@
         <div class="nhsuk-heading-m nhsuk-warning-callout__label">
           <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Warning </span>
         </div>
-        <p>If you want support with you innovation in the future, you will need to share your innovation record for a
+        <p>If you want support with your innovation in the future, you will need to share your innovation record for a
           needs reassessment.</p>
       </div>
 
@@ -58,8 +58,7 @@
               </td>
               <td class="nhsuk-table__cell text-align-right">
                 <span class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel('actions') }} </span>
-                <a href="/innovator/innovations/{{ innovation.id }}" target="_blank" rel="noopener noreferrer">Go to
-                  innovation <span class="nhsuk-u-visually-hidden"> {{ innovation.name }} </span> </a>
+                <a routerLink="/innovator/innovations/{{ innovation.id }}">Go to innovation <span class="nhsuk-u-visually-hidden"> {{ innovation.name }} </span></a>
               </td>
 
             </tr>
