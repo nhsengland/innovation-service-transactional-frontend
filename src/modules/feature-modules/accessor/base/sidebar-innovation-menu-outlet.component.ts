@@ -13,7 +13,7 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
   private subscriptions = new Subscription();
 
   sidebarItems: { label: string, url: string; nestedSidebarItems?: {label: string, url: string;}[] }[] = [];
-  navHeading: string = 'Innovation Record section';
+  navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
 
   constructor(
@@ -47,7 +47,7 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
 
           if (parentSection.sections.find(j => j.id === currentSection)) {
             parentSection.sections.map((section, k) => {
-              this.sidebarItems[i].nestedSidebarItems?.push({ label: `${i + 1}.${k + 1}. ${section.title}`, url: `/accessor/innovations/${innovation.id}/record/sections/${section.id}` });
+              this.sidebarItems[i].nestedSidebarItems?.push({ label: `${i + 1}.${k + 1} ${section.title}`, url: `/accessor/innovations/${innovation.id}/record/sections/${section.id}` });
             })
           }
         });
