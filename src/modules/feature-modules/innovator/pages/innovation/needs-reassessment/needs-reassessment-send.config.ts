@@ -1,4 +1,5 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { yesNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 
@@ -8,12 +9,17 @@ const stepsLabels = {
   l2: 'What has changed with your innovation and what support you need next?'
 };
 
+const stepsLabelsInnovationPaused = {
+  l1: 'Have you updated your innovation record since you stopped sharing it?',
+  l2: 'How has your innovation changed?'
+};
 
 // Types.
-type InboundPayloadType = Record<string, never>;
+type InboundPayloadType = { status: InnovationStatusEnum };
 type StepPayloadType = {
   updatedInnovationRecord: '' | 'YES' | 'NO',
-  description: string
+  description: string,
+  status: InnovationStatusEnum
 };
 export type OutboundPayloadType = {
   updatedInnovationRecord: string,
@@ -23,12 +29,23 @@ export type OutboundPayloadType = {
 
 export const NEEDS_REASSESSMENT_CONFIG: WizardEngineModel = new WizardEngineModel({
   showSummary: true,
-  steps: [
+  steps: [],
+  runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+  inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+  outboundParsing: (data: StepPayloadType) => outboundParsing(data),
+  summaryParsing: (data: StepPayloadType) => summaryParsing(data)
+});
+
+function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
+
+  steps.splice(0);
+  
+  steps.push(
     new FormEngineModel({
       parameters: [{
         id: 'updatedInnovationRecord',
         dataType: 'radio-group',
-        label: stepsLabels.l1,
+        label: currentValues.status === InnovationStatusEnum.PAUSED ? stepsLabelsInnovationPaused.l1 : stepsLabels.l1,
         validations: { isRequired: [true, 'Choose one option'] },
         items: yesNoItems
       }]
@@ -38,24 +55,22 @@ export const NEEDS_REASSESSMENT_CONFIG: WizardEngineModel = new WizardEngineMode
       parameters: [{
         id: 'description',
         dataType: 'textarea',
-        label: stepsLabels.l2,
-        description: 'Enter your comment',
+        label: currentValues.status === InnovationStatusEnum.PAUSED ? stepsLabelsInnovationPaused.l2 : stepsLabels.l2,
+        description: currentValues.status === InnovationStatusEnum.PAUSED ? 'Let us know what has changed and what support you now need with your innovation' : 'Enter your comment',
         validations: { isRequired: [true, 'A comment is required'] },
         lengthLimit: 'small'
       }]
-    }),
-  ],
-  inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
-  outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-  summaryParsing: (data: StepPayloadType) => summaryParsing(data)
-});
+    })
+  );
 
+}
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
     updatedInnovationRecord: '',
-    description: ''
+    description: '',
+    status: data.status
   };
 
 }
@@ -76,12 +91,12 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   toReturn.push(
     {
-      label: stepsLabels.l1,
+      label: data.status === InnovationStatusEnum.PAUSED ? stepsLabelsInnovationPaused.l1 : stepsLabels.l1,
       value: yesNoItems.find(item => item.value === data.updatedInnovationRecord)?.label,
       editStepNumber: 1
     },
     {
-      label: stepsLabels.l2,
+      label: data.status === InnovationStatusEnum.PAUSED ? stepsLabelsInnovationPaused.l2 : stepsLabels.l2,
       value: data.description,
       editStepNumber: 2
     }

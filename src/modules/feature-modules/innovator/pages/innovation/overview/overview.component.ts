@@ -9,7 +9,8 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { InnovationSubmissionDTO, StatisticsCard } from '@modules/shared/services/innovations.dtos';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
-import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { DateISOType } from '@app/base/types';
 
 
 @Component({
@@ -28,7 +29,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovation: {
     groupedStatus: null | InnovationGroupedStatusEnum,
     organisationsStatusDescription: null | string,
-  } = { groupedStatus: null, organisationsStatusDescription: null };
+    status: null | InnovationStatusEnum
+    statusUpdatedAt: null | DateISOType,
+  } = { groupedStatus: null, organisationsStatusDescription: null, status: null, statusUpdatedAt: null };
 
   isSubmitted: InnovationSubmissionDTO = {
     submittedAllSections: false,
@@ -61,6 +64,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     ]).subscribe(([innovation, statistics, submit]) => {
 
       this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT] });
+
+      this.innovation.status = innovation.status;
+      this.innovation.statusUpdatedAt = innovation.statusUpdatedAt;
 
       this.innovation.groupedStatus = this.stores.innovation.getGroupedInnovationStatus(
         innovation.status,

@@ -21,6 +21,7 @@ export class PageAccountInnovationsStopSharingOverviewComponent extends CoreComp
     super();
 
     this.setPageTitle('Stop sharing an innovation');
+    this.setBackLink('Go back', '/innovator/account/manage-innovations')
 
     this.innovations = new TableModel({
       visibleColumns: {

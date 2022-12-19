@@ -57,6 +57,10 @@
           </p>
         </ng-container>
 
+        <ng-container *ngIf="innovationStatus === 'PAUSED'" class="nhsuk-u-margin-bottom-4">
+          <button class="nhsuk-button" [disabled]="!allSectionsSubmitted()" routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed/needs-reassessment-send">Share record for needs reassessment</button>
+        </ng-container>
+
         <h4>Helpful documents</h4>
         <ul>
           <li>You may want to <a [href]="documentUrl">download all questions (DOCX, 820KB)</a> you will be asked to

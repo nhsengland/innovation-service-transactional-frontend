@@ -143,6 +143,7 @@ const routes: Routes = [
               layout: { type: '1.third-2.thirds' },
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
+            runGuardsAndResolvers: "always",
             children: [
 
               { path: '', outlet: 'page-context-outlet', component: ContextInnovationOutletComponent },
@@ -172,7 +173,9 @@ const routes: Routes = [
                 },
                 children: [
                   { path: '', pathMatch: 'full', component: PageInnovationHowToProceedComponent },
-                  { path: 'needs-reassessment-send', pathMatch: 'full', component: PageInnovationNeedsReassessmentSendComponent },
+                  { path: 'needs-reassessment-send', pathMatch: 'full', component: PageInnovationNeedsReassessmentSendComponent, 
+                    data: { breadcrumb: null } 
+                  },
                 ]
               },
 
