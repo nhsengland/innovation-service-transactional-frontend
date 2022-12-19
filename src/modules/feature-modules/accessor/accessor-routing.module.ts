@@ -26,6 +26,7 @@ import { InnovationSupportInfoComponent } from './pages/innovation/support/suppo
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
 import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/organisation-referral-criteria/organisation-referral-criteria.component';
+import { InnovationSupportRequestUpdateStatusComponent } from './pages/innovation/support/support-request-update-status.component';
 
 // Shared module pages.
 // // Account.
@@ -291,7 +292,13 @@ const routes: Routes = [
                   { path: 'new', pathMatch: 'full', component: InnovationSupportUpdateComponent },
                   { path: 'organisations', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent },
                   { path: 'organisations/suggest', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent },
-                  { path: ':supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent }
+                  { path: ':supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent },
+                  { 
+                    path: ':supportId/request-update', pathMatch: 'full', component: InnovationSupportRequestUpdateStatusComponent,
+                    data: {
+                      layout: { type: 'full' }
+                    } 
+                  }
                 ]
               },
 

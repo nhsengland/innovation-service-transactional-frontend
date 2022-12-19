@@ -25,9 +25,11 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './pages/innovation/support/organisations-support-status-suggest.component';
 import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
+import { InnovationSupportRequestUpdateStatusComponent } from './pages/innovation/support/support-request-update-status.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
 import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/organisation-referral-criteria/organisation-referral-criteria.component';
 import { InnovationExportRequestComponent } from './pages/innovation/export/export-request.component';
+
 
 // Services.
 import { AccessorService } from './services/accessor.service';
@@ -64,6 +66,7 @@ import { InnovationActionDataResolver } from './resolvers/innovation-action-data
     InnovationSupportOrganisationsSupportStatusSuggestComponent,
     InnovationSupportInfoComponent,
     InnovationSupportUpdateComponent,
+    InnovationSupportRequestUpdateStatusComponent,
     InnovationsReviewComponent,
     InnovationSupportOrganisationReferralCriteriaComponent,
     InnovationExportRequestComponent
