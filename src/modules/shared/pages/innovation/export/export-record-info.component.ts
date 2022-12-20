@@ -52,7 +52,7 @@ export class PageExportRecordInfoComponent extends CoreComponent implements OnIn
 
     this.innovationsService.getExportRequestInfo(this.innovationId, this.requestId).subscribe(response => {
 
-      console.log(response);
+      // console.log(response);
       this.request = response;
 
       this.setPageStatus('READY');
@@ -67,6 +67,15 @@ export class PageExportRecordInfoComponent extends CoreComponent implements OnIn
     this.innovationsService.updateExportRequestStatus(this.innovationId, this.requestId, { status }).subscribe(response => {
 
       if (response.id) {
+
+        if (status === InnovationExportRequestStatusEnum.APPROVED) {
+          this.setRedirectAlertSuccess('You\'ve approved the export request', { message: `${this.request?.organisation.organisationUnit.name} can export your innovation record for the next 30 days.` });
+        }
+
+        if (status === InnovationExportRequestStatusEnum.CANCELLED) {
+          this.setRedirectAlertSuccess('You\'ve cancelled the request to export the innovation record');
+        }
+
         this.redirectTo(`/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/export/list`)
       }
 
@@ -79,7 +88,7 @@ export class PageExportRecordInfoComponent extends CoreComponent implements OnIn
   rejectRequestRedirect() {
 
     this.redirectTo(`/innovator/innovations/${this.innovationId}/export/${this.request?.id}/reject`);
-    
+
   }
 
   requestAgainRedirect() {

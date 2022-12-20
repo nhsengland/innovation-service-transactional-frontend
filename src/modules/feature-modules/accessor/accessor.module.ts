@@ -20,19 +20,16 @@ import { ActionsListComponent } from './pages/actions/actions-list.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
 import { InnovationActionTrackerEditComponent } from './pages/innovation/action-tracker/action-tracker-edit.component';
-import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
-import { InnovationActionTrackerListComponent } from './pages/innovation/action-tracker/action-tracker-list.component';
 import { InnovationActionTrackerNewComponent } from './pages/innovation/action-tracker/action-tracker-new.component';
-import { InnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
-import { InnovationNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment-overview/needs-assessment-overview.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
-import { InnovationSupportOrganisationsSupportStatusInfoComponent } from './pages/innovation/support/organisations-support-status-info.component';
 import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './pages/innovation/support/organisations-support-status-suggest.component';
 import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
+import { InnovationSupportRequestUpdateStatusComponent } from './pages/innovation/support/support-request-update-status.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
 import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/organisation-referral-criteria/organisation-referral-criteria.component';
 import { InnovationExportRequestComponent } from './pages/innovation/export/export-request.component';
+
 
 // Services.
 import { AccessorService } from './services/accessor.service';
@@ -64,16 +61,12 @@ import { InnovationActionDataResolver } from './resolvers/innovation-action-data
     DashboardComponent,
     // // Innovation.
     InnovationActionTrackerEditComponent,
-    InnovationActionTrackerInfoComponent,
-    InnovationActionTrackerListComponent,
     InnovationActionTrackerNewComponent,
-    InnovationsAdvancedReviewComponent,
-    InnovationNeedsAssessmentOverviewComponent,
     InnovationOverviewComponent,
-    InnovationSupportOrganisationsSupportStatusInfoComponent,
     InnovationSupportOrganisationsSupportStatusSuggestComponent,
     InnovationSupportInfoComponent,
     InnovationSupportUpdateComponent,
+    InnovationSupportRequestUpdateStatusComponent,
     InnovationsReviewComponent,
     InnovationSupportOrganisationReferralCriteriaComponent,
     InnovationExportRequestComponent

@@ -10,10 +10,11 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { getSectionTitle } from '@modules/stores/innovation/innovation.config';
-import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO } from './innovations.dtos';
 
+import { InnovationStatisticsEnum } from './statistics.enum';
+import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSubmissionDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLog, InnovationSupportsLogDTO, SupportLogType } from './innovations.dtos';
 
 export enum AssessmentSupportFilterEnum {
   UNASSIGNED = 'UNASSIGNED',
@@ -28,9 +29,11 @@ export type InnovationsListFiltersType = {
   status?: InnovationStatusEnum[],
   assessmentSupportStatus?: AssessmentSupportFilterEnum,
   supportStatuses?: InnovationSupportStatusEnum[],
+  groupedStatuses?: InnovationGroupedStatusEnum[],
   engagingOrganisations?: string[],
   assignedToMe?: boolean,
   suggestedOnly?: boolean,
+  latestWorkedByMe?: boolean,
   fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications' | 'statistics')[]
 }
 
@@ -127,6 +130,8 @@ export type CreateThreadMessageDTO = {
   };
 };
 
+export type InnovationSharesListDTO = { organisation: { id: string, name: string, acronym: string; }; }[];
+
 export type statusChangeDTO = {
   statusChangedAt: null | string;
 };
@@ -182,26 +187,32 @@ export class InnovationsService extends CoreService {
       ...(filters.status ? { status: filters.status } : {}),
       ...(filters.assessmentSupportStatus ? { assessmentSupportStatus: filters.assessmentSupportStatus } : {}),
       ...(filters.supportStatuses ? { supportStatuses: filters.supportStatuses } : {}),
+      ...(filters.groupedStatuses ? { groupedStatuses: filters.groupedStatuses } : {}),
       ...(filters.engagingOrganisations ? { engagingOrganisations: filters.engagingOrganisations } : {}),
       ...(filters.assignedToMe !== undefined ? { assignedToMe: filters.assignedToMe } : {}),
       ...(filters.suggestedOnly != undefined ? { suggestedOnly: filters.suggestedOnly } : {}),
+      ...(filters.latestWorkedByMe != undefined ? { latestWorkedByMe: filters.latestWorkedByMe } : {}),
       fields: [] as InnovationsListFiltersType['fields']
     };
 
-    switch (requestUserType) {
-      case UserTypeEnum.INNOVATOR:
-        qp.fields = ['statistics', 'assessment', 'supports'];
-        break;
-      case UserTypeEnum.ASSESSMENT:
-        qp.fields = ['isAssessmentOverdue', 'assessment', 'supports'];
-        break;
-      case UserTypeEnum.ACCESSOR:
-        qp.status = [InnovationStatusEnum.IN_PROGRESS];
-        qp.fields = ['assessment', 'supports', 'notifications'];
-        break;
-
-      default:
-        break;
+    if(!filters.latestWorkedByMe) {
+      switch (requestUserType) {
+        case UserTypeEnum.INNOVATOR:
+          qp.fields = ['statistics', 'assessment', 'supports'];
+          break;
+        case UserTypeEnum.ASSESSMENT:
+          qp.fields = ['isAssessmentOverdue', 'assessment', 'supports'];
+          break;
+        case UserTypeEnum.ACCESSOR:
+          qp.status = [InnovationStatusEnum.IN_PROGRESS];
+          qp.fields = ['assessment', 'supports', 'notifications'];
+          break;
+        case UserTypeEnum.ADMIN:
+          qp.fields = ['assessment', 'supports'];
+          break;
+        default:
+          break;
+      }
     }
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1').setQueryParams(qp);
@@ -228,12 +239,15 @@ export class InnovationsService extends CoreService {
 
     switch (requestUserType) {
       case UserTypeEnum.INNOVATOR:
-        qp.fields = ['assessment'];
+        qp.fields = ['assessment', 'supports'];
         break;
       case UserTypeEnum.ASSESSMENT:
         qp.fields = ['assessment'];
         break;
       case UserTypeEnum.ACCESSOR:
+        qp.fields = ['assessment', 'supports'];
+        break;
+      case UserTypeEnum.ADMIN:
         qp.fields = ['assessment', 'supports'];
         break;
       default:
@@ -245,10 +259,10 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getInnovationSharesList(innovationId: string): Observable<{ organisation: { id: string, name: string, acronym: string; }; }[]> {
+  getInnovationSharesList(innovationId: string): Observable<InnovationSharesListDTO> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/shares').setPathParams({ innovationId });
-    return this.http.get<{ organisation: { id: string, name: string, acronym: string; }; }[]>(url.buildUrl()).pipe(take(1), map(response => response));
+    return this.http.get<InnovationSharesListDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 
@@ -279,6 +293,46 @@ export class InnovationsService extends CoreService {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports/:supportId').setPathParams({ innovationId, supportId });
     return this.http.get<InnovationSupportInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
+  }
+
+  getInnovationStatisticsInfo(innovationId: string, qParams: { statistics: InnovationStatisticsEnum[] }): Observable<InnovationStatisticsDTO> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/statistics').setPathParams({ innovationId }).setQueryParams(qParams);
+    return this.http.get<InnovationStatisticsDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+  }
+
+  getInnovationSupportLog(innovationId: string): Observable<InnovationSupportsLogDTO[]> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-logs').setPathParams({ innovationId });
+    return this.http.get<InnovationSupportsLog[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response.map(item => {
+
+        let logTitle = '';
+
+        switch (item.type) {
+          case SupportLogType.ACCESSOR_SUGGESTION:
+            logTitle = 'Suggested organisation units';
+            break;
+          case SupportLogType.STATUS_UPDATE:
+            logTitle = 'Updated support status';
+            break;
+          default:
+            break;
+        }
+
+        return {
+          ...item,
+          logTitle,
+          suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits || []).map(o => o.name)
+        };
+
+      }))
+    );
+  }
+  
+  getInnovationSubmission(innovationId: string): Observable<InnovationSubmissionDTO> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/submissions').setPathParams({ innovationId });
+    return this.http.get<InnovationSubmissionDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
   // Needs Assessment
@@ -489,7 +543,7 @@ export class InnovationsService extends CoreService {
       ...qParams,
       ...({ statuses: filters?.statuses }),
     }
-    
+
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/export-requests').setPathParams({ innovationId }).setQueryParams(qp);
     return this.http.get<GetExportRequestsListDTO>(url.buildUrl()).pipe(
       take(1),

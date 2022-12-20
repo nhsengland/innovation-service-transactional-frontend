@@ -57,7 +57,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   ngOnInit(): void {
 
     this.messagesList.setOrderBy('createdAt', 'descending');
-
     this.getThreadsList();
 
   }
@@ -74,7 +73,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
         this.threadInfo = threadInfo;
         this.messagesList.setData(threadMessages.messages, threadMessages.count);
-
         // Throw notification read dismiss.
         this.stores.context.dismissNotification(this.innovation.id, {contextTypes: [NotificationContextTypeEnum.THREAD], contextIds: [this.threadInfo.id]});
 

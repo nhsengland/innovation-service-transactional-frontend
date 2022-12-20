@@ -30,10 +30,10 @@ export class PageTermsOfUseListComponent extends CoreComponent implements OnInit
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'versionCreationSuccess':
-        this.alert = { type: 'SUCCESS', title: 'You\'ve successfully created new version.' };
+        this.setAlertSuccess('You\'ve successfully created new version.');
         break;
       case 'versionUpdatedSuccess':
-        this.alert = { type: 'SUCCESS', title: 'You\'ve successfully updated  version.' };
+        this.setAlertSuccess('You\'ve successfully updated version.');
         break;
       default:
         break;
@@ -48,20 +48,16 @@ export class PageTermsOfUseListComponent extends CoreComponent implements OnInit
 
   getTerms(): void {
     this.setPageStatus('LOADING');
-    this.userService.getListOfTerms(this.terms.getAPIQueryParams()).subscribe(
-      (response) => {
+    this.userService.getListOfTerms(this.terms.getAPIQueryParams()).subscribe({
+      next: (response) => {
         this.terms.setData(response.data, response.count);
         this.setPageStatus('READY');
       },
-      () => {
+      error: () => {
         this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch organisations information',
-          message: 'Please try again or contact us for further help'
-        };
+        this.setAlertError('Unable to fetch organisations information', { message: 'Please try again or contact us for further help'})
       }
-    );
+    });
   }
 
   onPageChange(event: { pageNumber: number }): void {

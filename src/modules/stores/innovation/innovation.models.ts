@@ -33,6 +33,7 @@ export type InnovationSectionInfoDTO = {
   status: keyof typeof INNOVATION_SECTION_STATUS;
   updatedAt: string;
   data: MappedObjectType;
+  submittedAt: string;
 }
 
 export type getInnovationInfoEndpointDTO = {
@@ -64,11 +65,12 @@ export type InnovationSectionsListDTO = {
   openActionsCount: number
 }[];
 
-export type getInnovationEvidenceDTO = {
-  evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER',
-  clinicalEvidenceType: string,
-  description: string,
-  summary: string
+export type GetInnovationEvidenceDTO = {
+  id: string;
+  evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER';
+  clinicalEvidenceType: 'DATA_PUBLISHED' | 'NON_RANDOMISED_COMPARATIVE_DATA' | 'NON_RANDOMISED_NON_COMPARATIVE_DATA' | 'CONFERENCE' | 'RANDOMISED_CONTROLLED_TRIAL' | 'UNPUBLISHED_DATA' | 'OTHER';
+  description: string;
+  summary: string;
   files: { id: string; displayFileName: string; url: string }[];
 };
 
@@ -155,7 +157,9 @@ export const INNOVATION_STATUS = {
   IN_PROGRESS: { label: 'In progress', cssClass: 'nhsuk-tag--wellow' },
   // NEEDS_ASSESSMENT_REVIEW: { label: 'In review', cssClass: 'nhsuk-tag--wellow' },
   ABANDONED: { label: 'Abandoned', cssClass: 'nhsuk-tag--grey' },
-  COMPLETE: { label: 'Complete', cssClass: 'nhsuk-tag--green' }
+  COMPLETE: { label: 'Complete', cssClass: 'nhsuk-tag--green' },
+  ARCHIVED: { label: 'Archived', cssClass: 'nhsuk-tag--dark-grey' },
+  PAUSED: { label: 'Paused', cssClass: 'nhsuk-tag--dark-grey' }
 };
 
 export const INNOVATION_SUPPORT_STATUS = {
@@ -264,7 +268,7 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
 export const ACTIVITY_LOG_ITEMS: {
   [key in ActivityLogItemsEnum]: {
     type: ActivityLogTypesEnum;
-    details: null | 'ORGANISATIONS_LIST' | 'SUPPORT_STATUS_UPDATE' | 'COMMENT';
+    details: null | 'ORGANISATIONS_LIST' | 'SUPPORT_STATUS_UPDATE' | 'COMMENT' | 'MESSAGE';
     link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'ACTION' | 'THREAD' | 'NEEDS_REASSESSMENT';
   }
 } = {
@@ -281,6 +285,11 @@ export const ACTIVITY_LOG_ITEMS: {
   SHARING_PREFERENCES_UPDATE: {
     type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT,
     details: 'ORGANISATIONS_LIST',
+    link: null
+  },
+  INNOVATION_PAUSE: {
+    type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT,
+    details: 'MESSAGE',
     link: null
   },
 
@@ -306,6 +315,11 @@ export const ACTIVITY_LOG_ITEMS: {
     link: null
   },
   NEEDS_ASSESSMENT_COMPLETED: {
+    type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
+    details: null,
+    link: 'NEEDS_ASSESSMENT'
+  },
+  NEEDS_ASSESSMENT_EDITED: {
     type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
     details: null,
     link: 'NEEDS_ASSESSMENT'
@@ -361,7 +375,12 @@ export const ACTIVITY_LOG_ITEMS: {
   },
   ACTION_STATUS_COMPLETED_UPDATE: {
     type: ActivityLogTypesEnum.ACTIONS,
-    details: 'COMMENT',
+    details: null,
+    link: 'ACTION'
+  },
+  ACTION_STATUS_REQUESTED_UPDATE: {
+    type: ActivityLogTypesEnum.ACTIONS,
+    details: null,
     link: 'ACTION'
   },
   ACTION_STATUS_CANCELLED_UPDATE: {

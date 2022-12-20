@@ -3,10 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationInfoDTO, StatisticsCard } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -20,6 +22,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   innovationSummary: { label: string; value: null | string; }[] = [];
   innovatorSummary: { label: string; value: string; }[] = [];
+  cardsList: StatisticsCard[] = [];
 
 
   constructor(
@@ -28,8 +31,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   ) {
 
     super();
-    this.setPageTitle('Overview');
-
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
   }
@@ -37,23 +38,49 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    this.innovationsService.getInnovationInfo(this.innovationId).subscribe(response => {
+    const qp: { statistics: InnovationStatisticsEnum[] } = { statistics: [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER, InnovationStatisticsEnum.UNREAD_MESSAGES_THREADS_INITIATED_BY_COUNTER] };
 
-      this.innovation = response;
+    forkJoin([
+      this.innovationsService.getInnovationInfo(this.innovationId),
+      this.innovationsService.getInnovationStatisticsInfo(this.innovationId, qp),
+    ]).subscribe(([innovationInfo, statistics]) => {
+      this.innovation = innovationInfo;
+      this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
 
       this.innovationSummary = [
-        { label: 'Company', value: response.owner.organisations ? response.owner.organisations[0].name : '' },
-        { label: 'Company size', value: response.owner.organisations ? response.owner.organisations[0].size : '' },
-        { label: 'Location', value: `${response.countryName}${response.postCode ? ', ' + response.postCode : ''}` },
-        { label: 'Description', value: response.description },
-        { label: 'Categories', value: response.categories.map(v => v === 'OTHER' ? response.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
+        { label: 'Company', value: this.innovation.owner.organisations ? this.innovation.owner.organisations[0].name : '' },
+        { label: 'Company size', value: this.innovation.owner.organisations ? this.innovation.owner.organisations[0].size : '' },
+        { label: 'Location', value: `${this.innovation.countryName}${this.innovation.postCode ? ', ' + this.innovation.postCode : ''}` },
+        { label: 'Description', value: this.innovation.description },
+        { label: 'Categories', value: this.innovation.categories.map(v => v === 'OTHER' ? this.innovation?.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
       ];
 
       this.innovatorSummary = [
-        { label: 'Name', value: response.owner.name },
-        { label: 'Email address', value: response.owner.email || '' },
-        { label: 'Phone number', value: response.owner.mobilePhone || '' }
+        { label: 'Name', value: this.innovation.owner.name },
+        { label: 'Email address', value: this.innovation.owner.email || '' },
+        { label: 'Phone number', value: this.innovation.owner.mobilePhone || '' }
       ];
+
+      this.cardsList = [{
+        title: 'Innovation record',
+        label: `sections submitted since assessment was started`,
+        link: `/assessment/innovations/${this.innovationId}/record`,
+        count: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].count,
+        total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].total,
+        lastMessage: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].lastSubmittedSection)}"`,
+        date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].lastSubmittedAt,
+        emptyMessage: `No sections have been submitted since the assessment started`
+      }, {
+        title: 'Messages',
+        label: `unread replies to conversations you have started`,
+        link: `/assessment/innovations/${this.innovationId}/threads`,
+        count: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_THREADS_INITIATED_BY_COUNTER].count,
+        lastMessage: `Last received message`,
+        date: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_THREADS_INITIATED_BY_COUNTER]?.lastSubmittedAt,
+        emptyMessage: 'No replies to read'
+      }]
+
+
 
       this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT]});
 

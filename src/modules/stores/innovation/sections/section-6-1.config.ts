@@ -1,4 +1,4 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
+import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 import { hasCostKnowledgeItems, patientRangeItems } from './catalogs.config';
@@ -15,16 +15,17 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = {
-  impactPatients: boolean;
+type BaseType = {
+  impactPatients: null | boolean;
   hasCostKnowledge: null | 'DETAILED_ESTIMATE' | 'ROUGH_IDEA' | 'NO';
   costDescription: null | string;
   patientsRange: null | 'UP_10000' | 'BETWEEN_10000_500000' | 'MORE_THAN_500000' | 'NOT_SURE' | 'NOT_RELEVANT';
   sellExpectations: null | string;
   usageExpectations: null | string;
 };
-type StepPayloadType = InboundPayloadType;
-type OutboundPayloadType = Omit<InboundPayloadType, 'impactPatients'>;
+type InboundPayloadType = Partial<BaseType>;
+type StepPayloadType = BaseType;
+type OutboundPayloadType = Omit<BaseType, 'impactPatients'>;
 
 
 export const SECTION_6_1: InnovationSectionConfigType['sections'][0] = {
@@ -126,12 +127,12 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
-    impactPatients: data.impactPatients,
-    hasCostKnowledge: data.hasCostKnowledge,
-    costDescription: data.costDescription,
-    patientsRange: data.patientsRange,
-    sellExpectations: data.sellExpectations,
-    usageExpectations: data.usageExpectations
+    impactPatients: data.impactPatients ?? null,
+    hasCostKnowledge: data.hasCostKnowledge ?? null,
+    costDescription: data.costDescription ?? null,
+    patientsRange: data.patientsRange ?? null,
+    sellExpectations: data.sellExpectations ?? null,
+    usageExpectations: data.usageExpectations ?? null
   };
 
 }

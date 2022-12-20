@@ -48,7 +48,7 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
   ngOnInit(): void {
 
     forkJoin([
-      this.organisationsService.getOrganisationsList(false),
+      this.organisationsService.getOrganisationsList({ unitsInformation: false }),
       this.innovationsService.getInnovationSharesList(this.innovationId)
     ]).subscribe(([organisationsList, innovationSharesList]) => {
 

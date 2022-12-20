@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
@@ -7,7 +6,6 @@ import { TableModel } from '@app/base/models';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { GetThreadsListDTO, InnovationsService } from '@modules/shared/services/innovations.service';
-import { UserTypeEnum } from '@app/base/enums';
 
 
 @Component({
@@ -27,7 +25,6 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
 
@@ -37,6 +34,10 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
     this.selfUser = { id: this.stores.authentication.getUserId() };
 
     this.innovation = this.stores.context.getInnovation();
+
+    if (this.stores.authentication.isAdminRole()) {
+      this.setPageTitle('Messages', { hint: `Innovation ${this.innovation.name}` })
+    }
 
   }
 

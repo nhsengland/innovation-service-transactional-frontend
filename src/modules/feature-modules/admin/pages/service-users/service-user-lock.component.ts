@@ -39,9 +39,10 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
   ) {
 
     super();
-    this.setPageTitle('Lock user');
-
+    
     this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName };
+
+    this.setPageTitle('Lock user', { hint: this.user.name });
 
   }
 
@@ -50,8 +51,8 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
     forkJoin([
       this.serviceUsersService.getUserFullInfo(this.user.id),
       this.serviceUsersService.getLockUserRules(this.user.id)
-    ]).subscribe(
-      ([userInfo, response]) => {
+    ]).subscribe({
+      next: ([userInfo, response]) => {
         this.setPageStatus('READY');
         if (userInfo.type === 'INNOVATOR') {
           this.userType = this.stores.authentication.getRoleDescription(userInfo.type);
@@ -68,15 +69,11 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
           }
         }
       },
-      () => {
+      error: () => {
         this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch the necessary information',
-          message: 'Please try again or contact us for further help'
-        };
+        this.setAlertError('Unable to fetch the necessary information', { message: 'Please try again or contact us for further help'})
       }
-    );
+    });
 
   }
 
@@ -90,13 +87,13 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
 
     this.securityConfirmation.code = this.form.get('code')!.value;
 
-    this.serviceUsersService.lockUser(this.user.id, this.securityConfirmation).subscribe(
-      () => {
+    this.serviceUsersService.lockUser(this.user.id, this.securityConfirmation).subscribe({
+      next: () => {
 
         this.redirectTo(`admin/service-users/${this.user.id}`, { alert: 'lockSuccess' });
 
       },
-      (error: { id: string }) => {
+      error: (error: { id: string }) => {
 
         if (!this.securityConfirmation.id && error.id) {
 
@@ -110,7 +107,7 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
         }
 
       }
-    );
+    });
 
   }
 

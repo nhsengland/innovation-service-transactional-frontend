@@ -80,18 +80,18 @@ export const areasItems = [
   { value: 'GREATER_SUPPORT_AND_RESOURCE_PRIMARY_CARE', label: 'Greater support and resource for primary care' }
 ];
 export const careSettingsItems = [
-  { value: 'STP_ICS', label: 'STP / ICS' },
+  { value: 'STP_ICS', label: 'Sustainability and Transformation Partnership (STP) / Integrated Care System (ICS)' },
   { value: 'CCGS', label: 'CCGs' },
-  { value: 'ACUTE_TRUSTS_INPATIENT', label: 'Acute Trusts - Inpatient' },
-  { value: 'ACUTE_TRUSTS_OUTPATIENT', label: 'Acute Trusts - Outpatient' },
-  { value: 'PRIMARY_CARE', label: 'Primary Care' },
+  { value: 'ACUTE_TRUSTS_INPATIENT', label: 'Acute Trusts (Hospital) - Inpatient' },
+  { value: 'ACUTE_TRUSTS_OUTPATIENT', label: 'Acute Trusts (Hospital) - Outpatient' },
+  { value: 'PRIMARY_CARE', label: 'Primary Care (including GPs, dentists and opticians)' },
   { value: 'MENTAL_HEALTH', label: 'Mental health' },
   { value: 'AMBULANCE', label: 'Ambulance' },
   { value: 'SOCIAL_CARE', label: 'Social care' },
   { value: 'INDUSTRY', label: 'Industry' },
   { value: 'COMMUNITY', label: 'Community' },
   { value: 'ACADEMIA', label: 'Academia' },
-  { value: 'DOMICILIARY_CARE', label: 'Domiciliary Care' },
+  { value: 'DOMICILIARY_CARE', label: 'Domiciliary Care (services to support a person in their own home)' },
   { value: 'PHARMACY', label: 'Pharmacy' },
   { value: 'URGENT_AND_EMERGENCY', label: 'Urgent & Emergency' },
   { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCareSetting', dataType: 'text', label: 'Other care setting', validations: { isRequired: [true, 'Other care setting description is required'] } }) }

@@ -10,13 +10,13 @@ import { WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationService } from './innovation.service';
 
-import { INNOVATION_SECTIONS, getSectionTitle } from './innovation.config';
+import { INNOVATION_SECTIONS, getSectionTitle, getSectionParentTitle, getSectionParentNumber } from './innovation.config';
 import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
 import {
   InnovationModel,
   INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS,
   SectionsSummaryModel, InnovationSectionConfigType,
-  getInnovationEvidenceDTO, getInnovationCommentsDTO, InnovationSectionInfoDTO
+  GetInnovationEvidenceDTO, getInnovationCommentsDTO, InnovationSectionInfoDTO
 } from './innovation.models';
 
 
@@ -91,7 +91,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitSections(innovationId, sectionKey);
   }
 
-  getSectionEvidence$(innovationId: string, evidenceId: string): Observable<getInnovationEvidenceDTO> {
+  getSectionEvidence$(innovationId: string, evidenceId: string): Observable<GetInnovationEvidenceDTO> {
     return this.innovationsService.getSectionEvidenceInfo(innovationId, evidenceId);
   }
 
@@ -103,8 +103,16 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.deleteEvidence(innovationId, evidenceId);
   }
 
-  getSectionTitle(sectionId: InnovationSectionEnum): string {
+  getSectionParentNumber(sectionId: InnovationSectionEnum): string {
+    return getSectionParentNumber(sectionId);
+  }
+
+  getSectionTitle(sectionId: InnovationSectionEnum | null): string {
     return getSectionTitle(sectionId);
+  }
+
+  getSectionParentTitle(sectionId: InnovationSectionEnum): string {
+    return getSectionParentTitle(sectionId);
   }
 
   getSection(sectionId: InnovationSectionEnum): InnovationSectionConfigType['sections'][0] | undefined {
@@ -138,7 +146,7 @@ export class InnovationStore extends Store<InnovationModel> {
     reassessmentCount: number
   ): InnovationGroupedStatusEnum {
 
-    if (innovationStatus === InnovationStatusEnum.CREATED) {
+    if (innovationStatus === InnovationStatusEnum.CREATED || innovationStatus === InnovationStatusEnum.PAUSED) {
       return InnovationGroupedStatusEnum.RECORD_NOT_SHARED;
     }
 
@@ -157,6 +165,10 @@ export class InnovationStore extends Store<InnovationModel> {
       return isReceivingSupport === true
         ? InnovationGroupedStatusEnum.RECEIVING_SUPPORT
         : InnovationGroupedStatusEnum.AWAITING_SUPPORT;
+    }
+
+    if(innovationStatus === InnovationStatusEnum.ARCHIVED) {
+      return InnovationGroupedStatusEnum.ARCHIVED;
     }
 
     return InnovationGroupedStatusEnum.RECORD_NOT_SHARED;

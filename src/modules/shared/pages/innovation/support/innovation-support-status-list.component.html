@@ -15,11 +15,11 @@
           <tr *ngFor="let status of visibleStatus" class="nhsuk-table__row">
             <td class="nhsuk-table__cell">
               <span class="nhsuk-table-responsive__heading">Status</span>
-              <strong class="nhsuk-tag" [ngClass]="innovationSupportStatus[status].cssClass">{{ innovationSupportStatus[status].label }}</strong>
+              <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + status + '.name' | translate }}"></theme-tag>
             </td>
             <td class="nhsuk-table__cell">
               <span class="nhsuk-table-responsive__heading">Definition</span>
-              {{ innovationSupportStatus[status].innovatorDescription }}
+              {{ 'shared.catalog.innovation.support_status.' + status + '.description' | translate }}
             </td>
           </tr>
         </tbody>

@@ -35,6 +35,11 @@ import { PageInnovationSupportStatusListComponent } from './pages/innovation/sup
 import { PageInnovationStatusListComponent } from './pages/innovation/status/innovation-status-list.component';
 import { PageExportRecordInfoComponent } from './pages/innovation/export/export-record-info.component';
 import { PageExportRecordListComponent } from './pages/innovation/export/export-record-list.component';
+import { PageInnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
+import { PageInnovationActionTrackerListComponent } from './pages/innovation/actions/action-tracker-list.component';
+import { PageInnovationActionTrackerInfoComponent } from './pages/innovation/actions/action-tracker-info.component';
+import { PageInnovationDataSharingAndSupportComponent } from './pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
+import { PageInnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 // // Notifications.
 import { PageNotificationsListComponent } from './pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -45,6 +50,9 @@ import { WizardSummaryWithConfirmStepComponent } from './wizards/steps/summary-w
 
 // Pipes.
 import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
+
+// Components
+import { OrganisationSuggestionsCardComponent } from './pages/innovation/data-sharing-and-support/components/organisation-suggestion-card.component';
 
 // Resolvers.
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
@@ -58,6 +66,7 @@ import { InnovationsService } from './services/innovations.service';
 import { NotificationsService } from './services/notifications.service';
 import { OrganisationsService } from './services/organisations.service';
 import { TermsOfUseService } from './services/terms-of-use.service';
+import { StatisticsService } from './services/statistics.service';
 
 
 @NgModule({
@@ -99,6 +108,11 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     PageInnovationStatusListComponent,
     PageExportRecordListComponent,
     PageExportRecordInfoComponent,
+    PageInnovationsAdvancedReviewComponent,
+    PageInnovationActionTrackerListComponent,
+    PageInnovationActionTrackerInfoComponent,
+    PageInnovationDataSharingAndSupportComponent,
+    PageInnovationAssessmentOverviewComponent,
     // // Notifications.
     PageNotificationsListComponent,
     // // Terms of use.
@@ -108,7 +122,10 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     WizardSummaryWithConfirmStepComponent,
 
     // Pipes.
-    PluralTranslatePipe
+    PluralTranslatePipe,
+
+    // Components
+    OrganisationSuggestionsCardComponent,
   ],
   providers: [
     // Resolvers.
@@ -122,7 +139,8 @@ import { TermsOfUseService } from './services/terms-of-use.service';
     InnovationsService,
     NotificationsService,
     OrganisationsService,
-    TermsOfUseService
+    TermsOfUseService,
+    StatisticsService
   ],
   exports: [
     CommonModule,

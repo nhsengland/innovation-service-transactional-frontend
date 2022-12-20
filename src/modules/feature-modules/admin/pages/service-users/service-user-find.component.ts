@@ -12,7 +12,7 @@ import { searchUserEndpointOutDTO, ServiceUsersService } from '../../services/se
   selector: 'app-admin-pages-service-users-service-user-find',
   templateUrl: './service-user-find.component.html'
 })
-export class PageServiceUserFindComponent extends CoreComponent implements OnInit {
+export class PageServiceUserFindComponent extends CoreComponent {
 
   titleActions: LinkType[] = [
     { type: 'button', label: 'New user', url: '/admin/service-users/new' }
@@ -31,12 +31,7 @@ export class PageServiceUserFindComponent extends CoreComponent implements OnIni
   ) {
 
     super();
-    this.setPageTitle('Find a service user');
-
-  }
-
-  ngOnInit(): void {
-
+    this.setPageTitle('Find a service user', { actions: this.titleActions });
     this.setPageStatus('READY');
 
   }
@@ -46,16 +41,18 @@ export class PageServiceUserFindComponent extends CoreComponent implements OnIni
     this.setPageStatus('LOADING');
     this.formSubmitted = true;
 
-    this.serviceUsersService.searchUser(this.form.get('email')!.value, false).subscribe(
-      response => {
+    this.serviceUsersService.searchUser(this.form.get('email')!.value, false).subscribe({
+
+      next: (response) => {
         this.usersList = response;
         this.setPageStatus('READY');
       },
-      error => {
+      error: () => {
         this.usersList = [];
         this.setPageStatus('READY');
-      });
-
+      }
+      
+    });
   }
 
 }

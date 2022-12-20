@@ -207,7 +207,7 @@ export class OrganisationsService extends CoreService {
     // return of(true);
     // return throwError('error');
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId/inactivate').setPathParams({ organisationId, organisationUnitId });
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId/units/:organisationUnitId/inactivate').setPathParams({ organisationId, organisationUnitId });
     return this.http.patch<{}>(url.buildUrl(), { organisationUnitId }).pipe(
       take(1),
       map(response => true)

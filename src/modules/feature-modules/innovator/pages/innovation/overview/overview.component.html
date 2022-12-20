@@ -1,6 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <ng-container *ngIf="innovationStatus === 'IN_PROGRESS' && lastEndSupportAt">
+  <ng-container *ngIf="innovation.status === 'IN_PROGRESS' && innovation.lastEndSupportAt">
     <div class="nhsuk-card nhsuk-card--care nhsuk-card--care--non-urgent nhsuk-u-margin-top-0">
       <div class="nhsuk-card--care__heading-container">
         <h2 class="nhsuk-card--care__heading">
@@ -19,109 +19,52 @@
     </div>
   </ng-container>
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-      <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
-        <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="item.substring(2)"></li>
-      </ul>
-    </div>
+  <div class="d-flex align-items-center justify-content-space-between">
+    <h2 class="nhsuk-heading-m">Innovation status</h2>
+    <a routerLink="/innovator/innovation-statuses" class="float-r nhsuk-u-margin-bottom-4" arial-label="View innovation status information">What does this status mean?</a>
   </div>
 
-  <div class="nhsuk-grid-row">
-    <div *ngIf="sections.submitted > 0" class="nhsuk-grid-column-one-third">
-      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.submitted }} <span class="nhsuk-u-visually-hidden"> sections submitted </span></div>
-      <p>sections submitted</p>
-    </div>
-    <div *ngIf="sections.draft > 0" class="nhsuk-grid-column-one-third">
-      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.draft }} <span class="nhsuk-u-visually-hidden"> sections in draft </span></div>
-      <p>sections in draft</p>
-    </div>
-    <div *ngIf="sections.notStarted > 0" class="nhsuk-grid-column-one-third">
-      <div class="nhsuk-heading-xl nhsuk-u-margin-bottom-0"> {{ sections.notStarted }} <span class="nhsuk-u-visually-hidden"> sections not started </span></div>
-      <p>sections not started</p>
-    </div>
-  </div>
-  <div class="nhsuk-grid-row" *ngIf="!isInAssessmentStatus()">
-    <div class="nhsuk-grid-column-one-third">
-      See your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a>
-    </div>
+
+  <div class="d-flex align-items-center justify-content-space-between">
+    <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}"></theme-tag>
+    <ng-container *ngIf="innovation.organisationsStatusDescription">
+      <div class="mr-auto nhsuk-u-font-size-16 nhsuk-u-padding-left-2">
+        Organisations: {{ innovation.organisationsStatusDescription }}
+      </div>
+    </ng-container>
+    <a routerLink="/innovator/innovations/{{ innovationId }}/support" class="float-r nhsuk-u-margin-bottom-4" arial-label="View innovation support status information">View support status</a>
   </div>
 
-  <ng-container *ngIf="!isSubmittedForAssessment()">
+  <div>
+    <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0" *ngIf="innovation.status === 'PAUSED'">
+      You have stopped sharing this innovation on {{ innovation.statusUpdatedAt | date: ('app.date_formats.long_date' | translate) }}.
+      If you want support with your innovation, <a routerLink="/innovator/innovations/{{ innovationId }}/record" arial-label="Go to innovation record">
+      go to the innovation record</a> and reshare your record for a needs reassessment.
+    </span>
+  </div>
+
+  <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-section-break--m" />
+  
+  <app-statistics-cards [cardsList]="cardsList" [gridClass]="'nhsuk-grid-column-one-half'"></app-statistics-cards>
+
+  <ng-container *ngIf="showBanner">
     <div class="nhsuk-card nhsuk-u-margin-top-2">
       <div class="nhsuk-card__content">
         <h2 class="nhsuk-heading-m"> Your next steps </h2>
         <ol class="nhsuk-list nhsuk-u-padding-0">
           <li class="d-flex">
-            <ng-container *ngTemplateOutlet="icon; context: { completed: allSectionsSubmitted()}"></ng-container>
+            <ng-container *ngTemplateOutlet="icon; context: { completed: isSubmitted?.submittedAllSections}"></ng-container>
             <div class="nhsuk-u-margin-left-2">
               Submit all sections of your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a>
             </div>
           </li>
           <li class="d-flex">
-            <ng-container *ngTemplateOutlet="icon; context: { completed: false }"></ng-container>
+            <ng-container *ngTemplateOutlet="icon; context: { completed: isSubmitted?.submittedForNeedsAssessment }"></ng-container>
             <div class="nhsuk-u-margin-left-2">
               Share the record for the needs assessment
             </div>
           </li>
         </ol>
-      </div>
-    </div>
-  </ng-container>
-
-  <ng-container *ngIf="isInAssessmentStatus()">
-    <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <h2 class="nhsuk-heading-m">Support status</h2>
-      </div>
-    </div>
-    <div class="nhsuk-grid-column-two-thirds">
-      <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ innovationStatusObj[innovationStatus]?.label || '' }}</p>
-    </div>
-    <div class="nhsuk-grid-column-two-thirds">
-      <p>You can expect the service team to get in touch within one week of submitting your record for assessment.</p>
-    </div>
-  </ng-container>
-
-  <!-- ACTIONS AREA -->
-  <ng-container *ngIf="isSubmittedForAssessment() && !isInAssessmentStatus()">
-    <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
-    <!-- <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <h2 class="nhsuk-heading-m">Actions overview</h2>
-      </div>
-      <div class="nhsuk-grid-column-two-thirds">
-        <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.requested }}</p>
-        <p class="">actions requested of you</p>
-        See your <strong><a routerLink="/innovator/innovations/{{ innovationId }}/action-tracker"> action tracker</a></strong>
-      </div>
-      <div class="nhsuk-grid-column-one-third">
-        <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{ actionSummary.review }}</p>
-        <p>actions awaiting review from an accessor</p>
-      </div>
-    </div> -->
-
-    <!-- SUPPORT AREA -->
-    <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3" />
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        <h2 class="nhsuk-heading-m">Support status</h2>
-      </div>
-      <div class="nhsuk-grid-column-two-thirds">
-        <p class="nhsuk-heading-xl nhsuk-u-margin-bottom-0">{{supportStatus}}</p>
-        <!-- <ng-container *ngIf="supportingAccessors.length > 0">
-          <ul class="nhsuk-list">
-            <li *ngFor="let item of supportingAccessors">
-              {{item.unit}}, {{item.name}}
-            </li>
-          </ul>
-        </ng-container> -->
-        See <strong><a routerLink="/innovator/innovations/{{ innovationId }}/support"> data sharing and support</a></strong>
-      </div>
-      <div class="nhsuk-grid-column-one-third" *ngIf="showNeedsAssessmentCompleteCard()">
-        <strong><a routerLink="/innovator/innovations/{{ innovationId }}/assessments/{{ assessmentId }}">Needs assessment completed</a></strong>
-        <p>Your innovation is visible to all organisations you've selected.</p>
       </div>
     </div>
   </ng-container>

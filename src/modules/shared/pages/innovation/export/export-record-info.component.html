@@ -19,7 +19,14 @@
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
 
             <p class="nhsuk-u-margin-bottom-0">{{ 'shared.catalog.innovation.export_request_status.' + this.request?.status + '.name' | translate }}</p>
-            <span class="font-color-secondary nhsuk-body-s">on {{ this.request?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</span>
+
+            <ng-container *ngIf="this.request?.status !== 'EXPIRED'; else expiredAtDate">
+              <span class="font-color-secondary nhsuk-body-s">on {{ this.request?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</span>
+            </ng-container>
+
+            <ng-template #expiredAtDate>
+              <span class="font-color-secondary nhsuk-body-s">on {{ this.request?.expiresAt | date: ('app.date_formats.long_date' | translate) }}</span>
+            </ng-template>
 
           </dd>
 
@@ -33,7 +40,7 @@
           </dt>
 
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
-            <p class="nhsuk-u-margin-bottom-0">{{ this.request?.organisation?.name }}</p>
+            <p class="nhsuk-u-margin-bottom-0">{{ this.request?.organisation?.organisationUnit?.name }}</p>
             <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0">by {{ this.request?.createdBy?.name }} on {{ this.request?.createdAt | date: ('app.date_formats.long_date' | translate) }}</span>
           </dd>
 
@@ -45,9 +52,7 @@
             Description
           </dt>
 
-          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
-            {{ this.request?.requestReason }}
-          </dd>
+          <dd class="nhsuk-summary-list__value text-pre-wrap nhsuk-u-padding-3">{{ this.request?.requestReason }}</dd>
 
         </div>
 
@@ -57,9 +62,7 @@
             Reason
           </dt>
 
-          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
-            {{ this.request?.rejectReason }}
-          </dd>
+          <dd class="nhsuk-summary-list__value text-pre-wrap nhsuk-u-padding-3">{{ this.request?.rejectReason }}</dd>
 
         </div>
 

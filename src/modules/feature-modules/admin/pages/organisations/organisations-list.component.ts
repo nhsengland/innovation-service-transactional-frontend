@@ -38,52 +38,49 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    this.organisationsService.getOrganisationsList({ onlyActive: false }).subscribe(organisationUnits => {
+    this.organisationsService.getOrganisationsList({ onlyActive: false }).subscribe({
+      next: (organisationUnits) => {
 
-      this.organisations = organisationUnits.map(organisation => {
+        this.organisations = organisationUnits.map(organisation => {
 
-        if (organisation.organisationUnits.length === 1) {
-          return {
-            info: {
-              id: organisation.id,
-              name: organisation.name,
-              acronym: organisation.acronym,
-              isActive: organisation.isActive,
-              organisationUnits: [],
-            },
-            showHideStatus: 'hidden',
-            showHideText: null,
-            showHideDescription: null
-          };
-        } else {
-          return {
-            info: {
-              id: organisation.id,
-              name: organisation.name,
-              acronym: organisation.acronym,
-              isActive: organisation.isActive,
-              organisationUnits: organisation.organisationUnits
-            },
-            showHideStatus: 'closed',
-            showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
-            showHideDescription: `that belong to the ${organisation.name}`
-          };
-        }
+          if (organisation.organisationUnits.length === 1) {
+            return {
+              info: {
+                id: organisation.id,
+                name: organisation.name,
+                acronym: organisation.acronym,
+                isActive: organisation.isActive,
+                organisationUnits: [],
+              },
+              showHideStatus: 'hidden',
+              showHideText: null,
+              showHideDescription: null
+            };
+          } else {
+            return {
+              info: {
+                id: organisation.id,
+                name: organisation.name,
+                acronym: organisation.acronym,
+                isActive: organisation.isActive,
+                organisationUnits: organisation.organisationUnits
+              },
+              showHideStatus: 'closed',
+              showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
+              showHideDescription: `that belong to the ${organisation.name}`
+            };
+          }
 
-      });
+        });
 
-      this.setPageStatus('READY');
+        this.setPageStatus('READY');
 
-    },
-      () => {
+      },
+      error: () => {
         this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch organisations information',
-          message: 'Please try again or contact us for further help'
-        };
+        this.setAlertError('Unable to fetch organisations information', { message: 'Please try again or contact us for further help' });
       }
-    );
+    });
 
   }
 

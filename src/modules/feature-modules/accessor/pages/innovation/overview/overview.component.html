@@ -20,12 +20,18 @@
 
   <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-bottom-7"> Update status </a>
 
-  <h2 class="nhsuk-heading-m">Innovation summary</h2>
-  <dl class="nhsuk-summary-list">
-    <div *ngFor="let item of innovationSummary" class="nhsuk-summary-list__row">
-      <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-      <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
-    </div>
-  </dl>
+  <app-statistics-cards [cardsList]="cardsList" [gridClass]="'nhsuk-grid-column-one-half'" *ngIf="showCards"></app-statistics-cards>
+
+  <div class="full-width-section bg-color-white">
+    <h2 class="nhsuk-heading-l nhsuk-u-margin-top-9">Innovation summary</h2>
+    <p class="nhsuk-u-font-size-18" *ngIf="innovation.assessment?.id"><a routerLink="/accessor/innovations/{{innovation.id}}/assessments/{{innovation.assessment?.id}}">View needs assessment</a> to better understand what kind of support this innovation needs.</p>
+    <dl class="nhsuk-summary-list">
+      <div *ngFor="let item of innovationSummary" class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+        <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+      </div>
+    </dl>
+  </div>
+ 
 
 </theme-content-wrapper>

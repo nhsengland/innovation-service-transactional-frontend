@@ -22,7 +22,7 @@ export class PageExportRecordListComponent extends CoreComponent implements OnIn
   pageInformation: { [key: string]: { title: string, lead: string, secondaryTitle: string } } = {
     [UserTypeEnum.INNOVATOR]: {
       title: 'Innovation record export requests',
-      lead: 'View requests from organisations to download and share PDF versions of your innovation record.',
+      lead: 'View requests from organisation units to download and share PDF versions of your innovation record.',
       secondaryTitle: 'New requests'
     },
     [UserTypeEnum.ACCESSOR]: {
@@ -135,12 +135,6 @@ export class PageExportRecordListComponent extends CoreComponent implements OnIn
     }
 
     this.redirectTo(`/accessor/innovations/${this.innovationId}/export/request`);
-  }
-
-  redirectSeeDetails(requestId: string) {
-    
-    this.redirectTo(`/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/export/${requestId}`)
-    
   }
 
 }

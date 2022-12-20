@@ -19,7 +19,7 @@ export class InnovationExportRequestComponent extends CoreComponent implements O
   stepNumber: number;
 
   form = new FormGroup({
-    requestReason: new FormControl<string>('', CustomValidators.required('A explanation is required')),
+    requestReason: new FormControl<string>('', CustomValidators.required('An explanation is required')),
   }, { updateOn: 'blur' });
 
   private stepperInfo: { [key: number]: { title: string } } = {

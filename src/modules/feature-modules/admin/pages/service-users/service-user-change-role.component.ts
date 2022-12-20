@@ -52,8 +52,8 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
     forkJoin([
       this.serviceUsersService.getUserRoleRules(this.user.id),
       this.serviceUsersService.getUserFullInfo(this.user.id)
-    ]).subscribe(
-      ([rules, userInfo]) => {
+    ]).subscribe({
+      next: ([rules, userInfo]) => {
 
         this.rulesList = rules;
 
@@ -61,19 +61,16 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
 
         this.roleName = this.stores.authentication.getRoleDescription(this.role);
 
-        this.setPageTitle(`Change role to ${this.roleName}`);
+        this.setPageTitle(`Change role to ${this.roleName}`, { hint: this.user.name });
 
         this.setPageStatus('READY');
       },
-      () => {
+      error: () => {
         this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch the necessary information',
-          message: 'Please try again or contact us for further help'
-        };
+
+        this.setAlertError('Unable to fetch the necessary information', { message: 'Please try again or contact us for further help' })
       }
-    );
+    });
 
 
   }

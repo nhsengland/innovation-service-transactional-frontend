@@ -1,4 +1,4 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
+import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
@@ -16,14 +16,14 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = {
+type BaseType = {
   hasProblemTackleKnowledge: null | 'YES' | 'NOT_YET' | 'NOT_SURE';
   problemsTackled: null | string;
   problemsConsequences: null | string;
   intervention: null | string;
   interventionImpact: null | string;
 };
-type StepPayloadType = InboundPayloadType;
+type StepPayloadType = BaseType;
 
 
 export const SECTION_1_2: InnovationSectionConfigType['sections'][0] = {
@@ -99,7 +99,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'interventionImpact',
         dataType: 'textarea',
         label: stepsLabels.l5,
-        description: 'Example impact description:<br />A 20% reduction in emergency referrals from care homes to the Emergency Department. For a mid-sized Clinical Commissioning Group covering a population of 250,000, this would equate to 150-200 referrals per year.',
+        description: 'Example impact description:<br />A 20% reduction in emergency referrals from care homes to the Emergency Department. For a mid-sized Integrated Care System (ICS) covering a population of 250,000, this would equate to 150-200 referrals per year.',
         validations: { isRequired: [true, 'A description of the impact of the intervention is required'] },
         lengthLimit: 'medium'
       }]

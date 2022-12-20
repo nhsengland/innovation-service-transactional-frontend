@@ -1,4 +1,4 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
@@ -14,7 +14,7 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = {
+type BaseType = {
   hasEvidence: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET',
   evidences: {
     id: string,
@@ -24,8 +24,7 @@ type InboundPayloadType = {
     summary: string
   }[];
 };
-type StepPayloadType = InboundPayloadType;
-
+type StepPayloadType = BaseType;
 type OutboundPayloadType = {
   hasEvidence: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET';
 };
@@ -41,7 +40,7 @@ export const SECTION_2_3: InnovationSectionConfigType['sections'][0] = {
           id: 'hasEvidence',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: 'Evidence of effectiveness can include clinical and economic effectiveness as well as other proven benefits such as staff and system benefits. You\'ll be able to add several pieces of evidence one at a time. We\'ll ask about user testing and regulatory approval in later sections.',
+          description: 'Evidence of effectiveness can include clinical and economic effectiveness as well as other proven benefits such as staff and system benefits. You\'ll be able to add several pieces of evidence one at a time. We will ask about user testing and regulatory approval (approvals by government or health authorities) in later sections.',
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasEvidenceItems
         }]

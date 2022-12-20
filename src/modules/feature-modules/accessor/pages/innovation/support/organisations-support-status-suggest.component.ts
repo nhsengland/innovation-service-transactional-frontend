@@ -8,9 +8,10 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { AccessorService, SupportLogType } from '../../../services/accessor.service';
+import { AccessorService } from '../../../services/accessor.service';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 
 
 @Component({
@@ -58,7 +59,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   ngOnInit(): void {
 
     forkJoin([
-      this.organisationsService.getOrganisationsList(true),
+      this.organisationsService.getOrganisationsList({ unitsInformation: true }),
       this.innovationsService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment?.id || ''),
       this.innovationsService.getInnovationSupportsList(this.innovation.id, false)
     ]).subscribe(([organisations, needsAssessment, innovationSupportsList]) => {

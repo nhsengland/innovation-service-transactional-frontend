@@ -17,6 +17,8 @@ import { PageAccountInfoComponent } from './pages/account/account-info.component
 import { PageAccountInnovationsArchivalComponent } from './pages/account/innovations-archival.component';
 import { PageAccountInnovationsInfoComponent } from './pages/account/innovations-info.component';
 import { PageAccountInnovationsTransferComponent } from './pages/account/innovations-transfer.component';
+import { PageAccountInnovationsStopSharingComponent } from './pages/account/innovations-stop-sharing.component';
+import { PageAccountInnovationsStopSharingOverviewComponent } from './pages/account/innovations-stop-sharing-overview.component';
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // First time signin.
@@ -27,9 +29,7 @@ import { InnovationActionTrackerDeclineComponent } from './pages/innovation/acti
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
 import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
-import { InnovationDataSharingComponent } from './pages/innovation/data-sharing/data-sharing.component';
 import { PageInnovationHowToProceedComponent } from './pages/innovation/how-to-proceed/how-to-proceed.component';
-import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment/needs-assessment-overview.component';
 import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation/needs-reassessment/needs-reassessment-send.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
@@ -67,6 +67,8 @@ import { InnovatorService } from './services/innovator.service';
     PageAccountInnovationsArchivalComponent,
     PageAccountInnovationsInfoComponent,
     PageAccountInnovationsTransferComponent,
+    PageAccountInnovationsStopSharingComponent,
+    PageAccountInnovationsStopSharingOverviewComponent,
     // // Dashboard.
     PageDashboardComponent,
     // // First time signin.
@@ -77,9 +79,7 @@ import { InnovatorService } from './services/innovator.service';
     InnovationActionTrackerInfoComponent,
     InnovationActionTrackerComponent,
     InnovationDataSharingChangeComponent,
-    InnovationDataSharingComponent,
     PageInnovationHowToProceedComponent,
-    InnovatorNeedsAssessmentOverviewComponent,
     PageInnovationNeedsReassessmentSendComponent,
     InnovationOverviewComponent,
     InnovationSectionEvidenceEditComponent,

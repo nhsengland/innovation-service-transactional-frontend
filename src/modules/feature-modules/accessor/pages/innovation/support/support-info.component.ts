@@ -24,6 +24,7 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
   } = { organisationUnit: '', accessors: '', status: InnovationSupportStatusEnum.UNASSIGNED };
 
   isQualifyingAccessorRole = false;
+  hasAccess = false;
 
 
   constructor(
@@ -58,6 +59,8 @@ export class InnovationSupportInfoComponent extends CoreComponent implements OnI
 
           this.innovationSupport.accessors = response.engagingAccessors.map(item => item.name).join(', ');
           this.innovationSupport.status = response.status;
+          
+          this.hasAccess = response.engagingAccessors.some(i => i.id === this.stores.authentication.getUserId());
 
           this.setPageStatus('READY');
 

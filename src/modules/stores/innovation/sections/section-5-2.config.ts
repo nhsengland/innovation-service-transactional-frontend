@@ -1,5 +1,5 @@
+import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { cloneDeep } from 'lodash';
-import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
@@ -16,7 +16,7 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = {
+type BaseType = {
   hasTests: null | 'YES' | 'IN_PROCESS' | 'NOT_YET';
   userTests: {
     id: null | string;
@@ -26,12 +26,14 @@ type InboundPayloadType = {
   files: { id: string; name?: string; displayFileName?: string; url: string }[];
 };
 
+type InboundPayloadType = Partial<BaseType>;
+
 // [key: string] is needed to support userTestFeedback_${number} properties.
-type StepPayloadType = InboundPayloadType & { [key: string]: null | string };
+type StepPayloadType = BaseType & { [key: string]: null | string };
 
-type OutboundPayloadType = Omit<InboundPayloadType, 'files'> & { files: string[] };
+type OutboundPayloadType = Omit<BaseType, 'files'> & { files: string[] };
 
-type SummaryPayloadType = Omit<InboundPayloadType, 'files'>
+type SummaryPayloadType = Omit<BaseType, 'files'>
   & { files: ({ id: string, displayFileName: string, url: string } | { id: string, name: string })[] }
   & { [key: string]: null | string };
 
@@ -93,7 +95,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'userTests',
         dataType: 'fields-group',
         label: stepsLabels.l2,
-        description: 'This can include any testing you\'ve done with people who would use your innovation, for example patients, nurses or administrative staff.',
+        description: 'This can include any testing that you have done with people who would use your innovation. For example, patients, nurses or administrative staff.',
         fieldsGroupConfig: {
           fields: [
             { id: 'id', dataType: 'text', isVisible: false },
@@ -141,7 +143,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   const parsedData = cloneDeep(data) as StepPayloadType;
 
-  parsedData.userTests.forEach((item, i) => { parsedData[`userTestFeedback_${i}`] = item.kind; });
+  (parsedData.userTests ?? []).forEach((item, i) => { parsedData[`userTestFeedback_${i}`] = item.kind; });
 
   parsedData.files = (data.files || []).map(item => ({ id: item.id, name: item.displayFileName, url: item.url }));
 

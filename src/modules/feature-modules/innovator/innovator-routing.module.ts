@@ -26,9 +26,7 @@ import { InnovationActionTrackerDeclineComponent } from './pages/innovation/acti
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
 import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
-import { InnovationDataSharingComponent } from './pages/innovation/data-sharing/data-sharing.component';
 import { PageInnovationHowToProceedComponent } from './pages/innovation/how-to-proceed/how-to-proceed.component';
-import { InnovatorNeedsAssessmentOverviewComponent } from './pages/innovation/needs-assessment/needs-assessment-overview.component';
 import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation/needs-reassessment/needs-reassessment-send.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
@@ -41,6 +39,8 @@ import { PageAccountEmailNotificationsEditComponent } from '@modules/shared/page
 import { PageAccountEmailNotificationsListComponent } from '@modules/shared/pages/account/email-notifications/email-notifications-list.component';
 import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
+import { PageAccountInnovationsStopSharingComponent } from './pages/account/innovations-stop-sharing.component';
+import { PageAccountInnovationsStopSharingOverviewComponent } from './pages/account/innovations-stop-sharing-overview.component';
 // // Innovation.
 import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/actions/action-status-list.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
@@ -56,6 +56,7 @@ import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovat
 import { PageExportRecordListComponent } from '@modules/shared/pages/innovation/export/export-record-list.component';
 import { PageExportRecordInfoComponent } from '@modules/shared/pages/innovation/export/export-record-info.component';
 import { InnovationExportRequestRejectComponent } from './pages/innovation/export/export-request-reject.component';
+import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -70,6 +71,7 @@ import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-dat
 import { InnovationSectionDataResolver } from '@modules/shared/resolvers/innovation-section-data.resolver';
 import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers/innovation-section-evidence-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -141,6 +143,7 @@ const routes: Routes = [
               layout: { type: '1.third-2.thirds' },
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
+            runGuardsAndResolvers: "always",
             children: [
 
               { path: '', outlet: 'page-context-outlet', component: ContextInnovationOutletComponent },
@@ -155,7 +158,7 @@ const routes: Routes = [
               },
 
               {
-                path: 'assessments/:assessmentId', pathMatch: 'full', component: InnovatorNeedsAssessmentOverviewComponent,
+                path: 'assessments/:assessmentId', pathMatch: 'full', component: PageInnovationAssessmentOverviewComponent,
                 data: {
                   breadcrumb: 'Needs assessment',
                   layout: { type: 'full' }
@@ -170,7 +173,9 @@ const routes: Routes = [
                 },
                 children: [
                   { path: '', pathMatch: 'full', component: PageInnovationHowToProceedComponent },
-                  { path: 'needs-reassessment-send', pathMatch: 'full', component: PageInnovationNeedsReassessmentSendComponent },
+                  { path: 'needs-reassessment-send', pathMatch: 'full', component: PageInnovationNeedsReassessmentSendComponent, 
+                    data: { breadcrumb: null } 
+                  },
                 ]
               },
 
@@ -189,14 +194,14 @@ const routes: Routes = [
                     children: [
 
                       { path: '', pathMatch: 'full', redirectTo: '../record' },
-
                       {
                         path: ':sectionId',
                         resolve: { innovationSectionData: InnovationSectionDataResolver },
                         data: {
                           breadcrumb: (data: RoutesDataType) => data.innovationSectionData?.name ?? ''
                         },
-                        children: [
+                        children: [    
+                          
                           {
                             path: '', pathMatch: 'full', component: PageInnovationSectionInfoComponent,
                             data: { breadcrumb: null }
@@ -341,7 +346,7 @@ const routes: Routes = [
                 data: { breadcrumb: 'Data Sharing and Support' },
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: InnovationDataSharingComponent,
+                    path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,
                     data: { breadcrumb: null }
                   },
 
@@ -447,6 +452,20 @@ const routes: Routes = [
               },
               {
                 path: 'archive', pathMatch: 'full', component: PageAccountInnovationsArchivalComponent
+              },
+              {
+                path: 'stop-sharing',
+                data: { breadcrumb: 'Stop sharing'},
+                children: [
+                  {
+                    path: '', pathMatch: 'full', component: PageAccountInnovationsStopSharingOverviewComponent,
+                    data: { breadcrumb: null }
+                  },
+                  {
+                    path: 'request', pathMatch: 'full', component: PageAccountInnovationsStopSharingComponent,
+                    data: { breadcrumb: null, layout: { type: 'full' } }
+                  }
+                ]
               }
             ]
           },

@@ -1,0 +1,39 @@
+<ul class="nhsuk-grid-row nhsuk-card-group">
+  <li *ngFor="let item of cardsList" class="{{gridClass}} nhsuk-card-group__item">
+    <div class="nhsuk-card nhsuk-card--clickable">
+      <div class="nhsuk-card__content nhsuk-u-padding-4">
+        <h2 class="nhsuk-card__heading nhsuk-heading-m">
+          <a routerLink="{{ item.link }}" [queryParams]=item.queryParams class="nhsuk-card__link">
+            <span class="nhsuk-u-visually-hidden"> Go to </span> {{ item.title }}
+          </a>
+        </h2>
+        <ng-container *ngIf="item.count!== 0; else noSectionsToSubmit">
+          <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline">
+            <span class="nhsuk-u-font-size-48">{{ item.count }}</span>
+            <ng-container *ngIf="item.total">
+              <span class="nhsuk-u-padding-1">of</span>
+              <span class="mr-auto">{{ item.total }}</span>
+            </ng-container>
+            <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-center nhsuk-u-padding-left-4">
+              {{ item.label }}
+            </span>
+          </p>
+        </ng-container>
+        <ng-container *ngIf="item.date && item.count">
+          <p class="nhsuk-u-font-size-14 font-color-secondary">
+            {{item.lastMessage}} {{ item.date | date: ('app.date_formats.medium_date_time' | translate) }}
+          </p>
+        </ng-container>
+        <ng-container *ngIf="item.overdue">
+          <p class="nhsuk-u-font-size-16 font-color-secondary">
+            {{ item.overdue }}
+          </p>
+        </ng-container>
+        <ng-template #noSectionsToSubmit>
+          <p *ngIf="item.emptyMessageTitle" class="nhsuk-u-font-weight-bold nhsuk-u-font-size-16 nhsuk-u-margin-bottom-0">{{ item.emptyMessageTitle }}</p>
+          <p class="nhsuk-u-font-weight-normal nhsuk-u-font-size-16">{{ item.emptyMessage }}</p>
+        </ng-template>
+      </div>
+    </div>
+  </li>
+</ul>

@@ -24,7 +24,13 @@ export class PageInnovationStatusListComponent extends CoreComponent {
     super();
 
     this.setPageTitle('Innovation status key');
-    this.setBackLink('Go back', `/${this.stores.authentication.userUrlBasePath()}/`);
+
+    if(this.stores.authentication.isAdminRole()) {
+      this.setBackLink('Go back', `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.stores.context.getInnovation().id}`);
+    } else {
+      this.setBackLink('Go back', `/${this.stores.authentication.userUrlBasePath()}/`);
+    }
+    
     this.setPageStatus('READY');
 
   }

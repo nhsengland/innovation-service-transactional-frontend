@@ -1,4 +1,4 @@
-import { FormEngineModel, FormEngineParameterModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
+import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
 
 // Labels.
@@ -33,9 +33,9 @@ export const clinicalEvidenceItems = [
 
 
 // Types.
-type InboundPayloadType = {
+type BaseType = {
   id: string;
-  evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER';
+  evidenceType: null | 'CLINICAL' | 'ECONOMIC' | 'OTHER';
   clinicalEvidenceType: null | 'DATA_PUBLISHED' | 'NON_RANDOMISED_COMPARATIVE_DATA' | 'NON_RANDOMISED_NON_COMPARATIVE_DATA' | 'CONFERENCE' | 'RANDOMISED_CONTROLLED_TRIAL' | 'UNPUBLISHED_DATA' | 'OTHER';
   description: string;
   summary: string;
@@ -46,7 +46,9 @@ type InboundPayloadType = {
   updatedAt: string;
 };
 
-type StepPayloadType = Omit<InboundPayloadType, 'id' | 'files' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'> & { files: { id: string; name: string; url: string; }[] };
+type InboundPayloadType = Partial<BaseType>;
+
+type StepPayloadType = Omit<BaseType, 'id' | 'files' | 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'> & { files: { id: string; name: string; url: string; }[] };
 
 type OutboundPayloadType = Omit<StepPayloadType, 'files'> & { files: string[] };
 
@@ -158,10 +160,10 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
-    evidenceType: data.evidenceType,
-    clinicalEvidenceType: data.clinicalEvidenceType,
-    description: data.description,
-    summary: data.summary,
+    evidenceType: data.evidenceType ?? null,
+    clinicalEvidenceType: data.clinicalEvidenceType ?? null,
+    description: data.description ?? '',
+    summary: data.summary ?? '',
     files: (data.files || []).map(item => ({ id: item.id, name: item.displayFileName, url: item.url }))
   };
 }

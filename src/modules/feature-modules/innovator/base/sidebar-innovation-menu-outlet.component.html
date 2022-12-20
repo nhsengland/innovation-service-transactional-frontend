@@ -1,5 +1,12 @@
+<h2 *ngIf="showHeading" class="app-side-nav__heading">{{navHeading}}</h2>
 <ul class="nhsuk-list app-side-nav__list">
   <li *ngFor="let item of sidebarItems" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
     <a class="app-side-nav__link nhsuk-u-padding-right-1" [routerLink]="item.url"> {{ item.label }} </a>
+
+    <ul *ngIf="item.nestedSidebarItems && item.nestedSidebarItems.length > 0" class="app-side-nav__list--nested">
+      <li *ngFor="let nestedItem of item.nestedSidebarItems" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--nested-current'">
+        <a class="app-side-nav__link--nested nhsuk-u-padding-right-1" [routerLink]="nestedItem.url"> {{ nestedItem.label }} </a>
+      </li>
+    </ul>
   </li>
 </ul>

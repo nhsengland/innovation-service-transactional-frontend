@@ -9,6 +9,7 @@ import { FIRST_TIME_SIGNIN_QUESTIONS } from './innovation-new.config';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovatorService } from '../../services/innovator.service';
+import { UtilsHelper } from '@modules/core/helpers/utils.helper';
 
 
 @Component({
@@ -34,7 +35,7 @@ export class FirstTimeSigninInnovationNewComponent extends CoreComponent impleme
     this.wizard.setAnswers(this.wizard.runInboundParsing({})).runRules();
 
     // Update last step with the organisations list with description and pre-select all checkboxes.
-    this.organisationsService.getOrganisationsList(false).subscribe(response => {
+    this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe(response => {
 
       this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
       this.wizard.addAnswers({ organisationShares: response.map(item => item.id) });
@@ -85,7 +86,7 @@ export class FirstTimeSigninInnovationNewComponent extends CoreComponent impleme
 
       concatMap(() => this.stores.authentication.updateUserInfo$({
         displayName: wizardData.innovatorName,
-        mobilePhone: wizardData.mobilePhone,
+        mobilePhone: UtilsHelper.isEmpty(wizardData.mobilePhone) ? null : wizardData.mobilePhone,
         organisation: wizardData.isCompanyOrOrganisation.toUpperCase() === 'YES' ? {
           id: this.stores.authentication.getUserInfo().organisations[0].id,
           isShadow: false,

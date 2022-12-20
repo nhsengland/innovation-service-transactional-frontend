@@ -1,9 +1,9 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { InnovationSectionConfigType } from '../innovation.models';
 
-import { areasItems, careSettingsItems, categoriesItems, hasFinalProductItems, mainCategoryItems, mainPurposeItems, supportTypesItems } from './catalogs.config';
 import { locationItems } from '../config/innovation-catalog.config';
+import { areasItems, careSettingsItems, categoriesItems, hasFinalProductItems, mainCategoryItems, mainPurposeItems, supportTypesItems } from './catalogs.config';
 
 
 // Labels.
@@ -22,7 +22,7 @@ const stepsLabels = {
 };
 
 // Types.
-type InboundPayloadType = {
+type BaseType = {
   name: string,
   description: string,
   location: string,
@@ -30,24 +30,26 @@ type InboundPayloadType = {
   countryName: string,
   hasFinalProduct: null | 'YES' | 'NO',
   categories: ('MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER')[],
-  otherCategoryDescription: string,
+  otherCategoryDescription: null | string,
   mainCategory: null | 'MEDICAL_DEVICE' | 'PHARMACEUTICAL' | 'DIGITAL' | 'AI' | 'EDUCATION' | 'PPE' | 'OTHER',
-  otherMainCategoryDescription: string,
+  otherMainCategoryDescription: null | string,
   areas: ('WORKFORCE' | 'ECONOMIC_GROWTH' | 'EVIDENCE_GENERATION' | 'TRANSFORMED_OUT_OF_HOSPITAL_CARE' | 'REDUCIND_PRESSURE_EMERGENCY_HOSPITAL_SERVICES' | 'CONTROL_OVER_THEIR_OWN_HEALTH' | 'DIGITALLY_ENABLING_PRIMARY_CARE' | 'CANCER' | 'MENTAL_HEALTH' | 'CHILDREN_AND_YOUNG_PEOPLE' | 'LEARNING_DISABILITIES_AND_AUTISM' | 'CARDIOVASCULAR_DISEASE' | 'STROKE_CARE' | 'DIABETES' | 'RESPIRATORY' | 'RESEARCH_INNOVATION_DRIVE_FUTURE_OUTCOMES' | 'GENOMICS' | 'WIDER_SOCIAL_IMPACT' | 'REDUCING_VARIATION_ACROSS_HEALTH_SYSTEM' | 'FINANCIAL_PLANNING_ASSUMPTIONS' | 'COVID_19' | 'DATA_ANALYTICS_AND_RESEARCH' | 'IMPROVING_SYSTEM_FLOW' | 'INDEPENDENCE_AND_PREVENTION' | 'OPERATIONAL_EXCELLENCE' | 'PATIENT_ACTIVATION_AND_SELF_CARE' | 'PATIENT_SAFETY' | 'GREATER_SUPPORT_AND_RESOURCE_PRIMARY_CARE')[],
   careSettings: ('STP_ICS' | 'CCGS' | 'ACUTE_TRUSTS_INPATIENT' | 'ACUTE_TRUSTS_OUTPATIENT' | 'PRIMARY_CARE' | 'MENTAL_HEALTH' | 'AMBULANCE' | 'SOCIAL_CARE' | 'INDUSTRY' | 'COMMUNITY' | 'ACADEMIA' | 'DOMICILIARY_CARE' | 'PHARMACY' | 'URGENT_AND_EMERGENCY' | 'OTHER')[],
   otherCareSetting: null | string,
-  mainPurpose: 'PREVENT_CONDITION' | 'PREDICT_CONDITION' | 'DIAGNOSE_CONDITION' | 'MONITOR_CONDITION' | 'PROVIDE_TREATMENT' | 'MANAGE_CONDITION' | 'ENABLING_CARE',
+  mainPurpose: null | 'PREVENT_CONDITION' | 'PREDICT_CONDITION' | 'DIAGNOSE_CONDITION' | 'MONITOR_CONDITION' | 'PROVIDE_TREATMENT' | 'MANAGE_CONDITION' | 'ENABLING_CARE',
   supportTypes: ('ADOPTION' | 'ASSESSMENT' | 'PRODUCT_MIGRATION' | 'CLINICAL_TESTS' | 'COMMERCIAL' | 'PROCUREMENT' | 'DEVELOPMENT' | 'EVIDENCE_EVALUATION' | 'FUNDING' | 'INFORMATION')[],
-  moreSupportDescription: string
+  moreSupportDescription: null | string
 };
 
-type StepPayloadType = Omit<InboundPayloadType, 'name' | 'postcode' | 'countryName'> & {
+type InboundPayloadType = Partial<BaseType>;
+
+type StepPayloadType = Omit<BaseType, 'name' | 'postcode' | 'countryName'> & {
   innovationName: string,
   englandPostCode: null | string,
   locationCountryName: string
 };
 
-type OutboundPayloadType = InboundPayloadType;
+type OutboundPayloadType = BaseType;
 
 
 export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
@@ -86,7 +88,7 @@ export const SECTION_1_1: InnovationSectionConfigType['sections'][0] = {
           id: 'hasFinalProduct',
           dataType: 'radio-group',
           label: stepsLabels.l4,
-          description: 'By this, we mean something that performs the same function that the final product or service would.',
+          description: 'This means something that performs or demonstrates the same function that the final product or service would.',
           validations: { isRequired: [true, 'Choose one option'] }, items: hasFinalProductItems
         }]
       }),
@@ -121,6 +123,10 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
 
     const selectedCategories = mainCategoryItems.filter(category => data.categories.some(e => e === category.value));
 
+    if (data.mainCategory !== null && !data.categories.includes(data.mainCategory)) {
+      data.mainCategory = null;
+    }
+    
     steps.push(
       new FormEngineModel({
         parameters: [{
@@ -128,6 +134,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
           dataType: 'radio-group',
           label: stepsLabels.l6,
           description: 'Your innovation may be a combination of various categories. Selecting the primary category will help us find the right people to support you.',
+          validations: { isRequired: [true, 'Choose one option'] },
           items: selectedCategories
         }]
       })
@@ -169,7 +176,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
         id: 'supportTypes',
         dataType: 'checkbox-array',
         label: stepsLabels.l10,
-        description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the innovation service.',
+        description: 'Select up to 5 options. Your answer will help us to establish your primary point of contact if you choose to sign up for the Innovation Service.',
         validations: { isRequired: [true, 'Choose at least one type of support'], max: [5, 'Maximum 5 options'] },
         items: supportTypesItems
       }]
@@ -189,22 +196,22 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
-    innovationName: data.name,
-    description: data.description,
-    location: locationItems.filter(item => !['', 'Based outside UK'].includes(item.value)).map(item => item.value).includes(data.countryName) ? data.countryName : 'Based outside UK',
+    innovationName: data.name ?? '',
+    description: data.description ?? '',
+    location: data.countryName && locationItems.filter(item => !['', 'Based outside UK'].includes(item.value)).map(item => item.value).includes(data.countryName) ? data.countryName : 'Based outside UK',
     englandPostCode: data.postcode || null,
-    locationCountryName: data.countryName,
-    hasFinalProduct: data.hasFinalProduct,
-    categories: data.categories,
-    otherCategoryDescription: data.otherCategoryDescription,
-    mainCategory: data.mainCategory,
-    otherMainCategoryDescription: data.otherMainCategoryDescription,
-    areas: data.areas,
-    careSettings: data.careSettings,
-    otherCareSetting: data.otherCareSetting,
-    mainPurpose: data.mainPurpose,
-    supportTypes: data.supportTypes,
-    moreSupportDescription: data.moreSupportDescription
+    locationCountryName: data.countryName ?? '',
+    hasFinalProduct: data.hasFinalProduct ?? null,
+    categories: data.categories ?? [],
+    otherCategoryDescription: data.otherCategoryDescription ?? null,
+    mainCategory: data.mainCategory ?? null,
+    otherMainCategoryDescription: data.otherMainCategoryDescription ?? null,
+    areas: data.areas ?? [],
+    careSettings: data.careSettings ?? [],
+    otherCareSetting: data.otherCareSetting ?? null,
+    mainPurpose: data.mainPurpose ?? null,
+    supportTypes: data.supportTypes ?? [],
+    moreSupportDescription: data.moreSupportDescription ?? null
   };
 
 }

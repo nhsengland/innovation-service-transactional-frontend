@@ -9,8 +9,10 @@ export const locale = {
       date_formats: {
         full_date_time: 'EEEE, MMMM d, y \'at\' h:mm:ss a',
         long_date_time: 'd MMMM y \'at\' h:mm a',
+        medium_date_time: 'd MMM y \'at\' h:mm a',
         short_date_time: 'd/M/yy \'at\' h:mm a',
         long_date: 'd MMMM y',
+        medium_date: 'd MMM y',
         short_date: 'd mm y',
         medium_time: 'h:mm:ss a',
         short_seconds: 'd/M/yy, h:mm:ss a'
@@ -85,7 +87,7 @@ export const locale = {
           action_status: {
             REQUESTED: {
               name: 'Requested',
-              description: 'An accessor has requested that the innovation owner submit information to a specific section of their innovation record.',
+              description: 'An accessor has requested that the innovator should submit information to a specific section of their innovation record.',
               cssColorClass: 'nhsuk-tag--blue'
             },
             STARTED: {
@@ -100,17 +102,17 @@ export const locale = {
             },
             IN_REVIEW: {
               name: 'In review',
-              description: 'The innovation owner has submitted information requested by an accessor and are waiting for them to review it.',
+              description: 'The innovator has submitted information requested by an accessor and is waiting for the accessor to review this information.',
               cssColorClass: 'nhsuk-tag--yellow'
             },
             DELETED: {
               name: 'Deleted',
-              description: 'The action is deleted as it\'s no longer relevant due to a change to the innovation or your account',
+              description: 'The action has been deleted as it is no longer relevant due to a change to the innovation or innovator account.',
               cssColorClass: 'nhsuk-tag--grey'
             },
             DECLINED: {
               name: 'Declined',
-              description: 'The innovation owner has declined the action requested.',
+              description: 'The innovator has declined the action requested.',
               cssColorClass: 'nhsuk-tag--grey'
             },
             COMPLETED: {
@@ -187,6 +189,10 @@ export const locale = {
               title: 'Needs assessment completed',
               message: `{{ actionUserName }} completed needs assessment`
             },
+            NEEDS_ASSESSMENT_EDITED: {
+              title: 'Needs assessment edited',
+              message: `{{ actionUserName }} edited needs assessment`
+            },
             NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: {
               title: "Reassessment requested",
               message: `{{ actionUserName }} requested a needs reassessment`
@@ -225,11 +231,19 @@ export const locale = {
             },
             ACTION_STATUS_COMPLETED_UPDATE: {
               title: 'Action completed',
-              message: `{{ actionUserName }} marked an action as complete`
+              message: `{{ actionUserName }} marked an action as completed`
+            },
+            ACTION_STATUS_REQUESTED_UPDATE: {
+              title: 'Action requested',
+              message: `{{ actionUserName }} marked an action as requested`
             },
             ACTION_STATUS_CANCELLED_UPDATE: {
               title: 'Action cancelled',
               message: `{{ totalActions }} actions for {{ sectionTitle }} section were changed to "Cancelled"`
+            },
+            INNOVATION_PAUSE: {
+              title: 'Innovation stop share',
+              message: `Innovator has stopped sharing this innovation`
             }
           },
 
@@ -246,6 +260,23 @@ export const locale = {
               me: 'Send me daily summary updates',
               you: 'You get daily summary updates'
             }
+          },
+
+          innovation_sections: {
+            INNOVATION_DESCRIPTION: 'Description of innovation',
+            VALUE_PROPOSITION: 'Value proposition',
+            UNDERSTANDING_OF_NEEDS: 'Detailed understanding of needs',
+            UNDERSTANDING_OF_BENEFITS: 'Detailed understanding of benefits',
+            EVIDENCE_OF_EFFECTIVENESS: 'Evidence of effectiveness',
+            MARKET_RESEARCH: 'Market research',
+            INTELLECTUAL_PROPERTY: 'Intellectual property',
+            REGULATIONS_AND_STANDARDS: 'Standards and certifications',
+            CURRENT_CARE_PATHWAY: 'Current care pathway',
+            TESTING_WITH_USERS: 'Testing with users',
+            COST_OF_INNOVATION: 'Cost of your innovation',
+            COMPARATIVE_COST_BENEFIT: 'Comparative cost benefit',
+            REVENUE_MODEL: 'Revenue model',
+            IMPLEMENTATION_PLAN: 'Implementation plan and deployment'
           },
 
           notification_context_types: {
@@ -291,99 +322,104 @@ export const locale = {
             ENGAGING: {
               name: 'Engaging',
               cssColorClass: 'nhsuk-tag--green',
+              description: 'Ready to support, assess or provide guidance.',
               accessorTypeDescription: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.',
-              innovatorTypeDescription: 'Ready to support, assess or provide guidance.'
             },
             FURTHER_INFO_REQUIRED: {
               name: 'Further info',
               cssColorClass: 'nhsuk-tag--white',
+              description: 'The organisation needs further information from the innovator to make a decision.',
               accessorTypeDescription: 'Further info is needed from the innovator to make a decision. You must provide a message on what information is needed.',
-              innovatorTypeDescription: 'The organisation needs further information from you to make a decision.'
             },
             WAITING: {
               name: 'Waiting',
               cssColorClass: 'nhsuk-tag--yellow',
+              description: 'The organisation is waiting for an internal decision to progress.',
               accessorTypeDescription: 'Waiting for an internal decision to progress.',
-              innovatorTypeDescription: 'The organisation is waiting for an internal decision to progress.'          
             },
             NOT_YET: {
               name: 'Not yet',
               cssColorClass: 'nhsuk-tag--blue',
+              description: 'The innovation is not yet ready for the organisation\'s support offer.',
               accessorTypeDescription: 'The innovation is not yet ready for your support offer. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'Your innovation is not yet ready for the organisation\'s support offer.'          
             },
             UNASSIGNED: {
               name: 'Unassigned',
               cssColorClass: 'nhsuk-tag--red',
+              description: 'No status has been assigned yet.',
               accessorTypeDescription: 'No status assigned yet.',
-              innovatorTypeDescription: 'No status assigned yet.'          
             },
             UNSUITABLE: {
               name: 'Unsuitable',
               cssColorClass: 'nhsuk-tag--red',
+              description: 'The organisation has no suitable support offer for the innovation.',
               accessorTypeDescription: 'You have no suitable support offer for the innovation. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'The organisation has no suitable support offer for your innovation.'          
             },
             WITHDRAWN: {
               name: 'Withdrawn',
               cssColorClass: 'nhsuk-tag--red',
+              description: '',
               accessorTypeDescription: '',
-              innovatorTypeDescription: ''          
             },
             COMPLETE: {
               name: 'Completed',
               cssColorClass: 'nhsuk-tag--dark-grey',
+              description: 'The organisation has completed their engagement with the innovation.',
               accessorTypeDescription: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
-              innovatorTypeDescription: 'The organisation has completed their engagement with your innovation.'          
             }
           },
           grouped_status: {
             RECORD_NOT_SHARED: {
               name: 'Record not shared',
               cssColorClass: 'nhsuk-tag--orange',
-              innovatorTypeDescription: 'You have not yet shared your innovation record for a needs assessment review.'
+              description: 'The innovator has not yet shared the innovation record for a needs assessment review.'
             },
             AWAITING_NEEDS_ASSESSMENT: {
               name: 'Awaiting needs assessment',
               cssColorClass: 'nhsuk-tag--yellow',
-              innovatorTypeDescription: 'The needs assessment team will review your innovation record within 5 working days from submission.'
+              description: 'The needs assessment team will review the innovation record within 5 working days from submission.'
             },
             NEEDS_ASSESSMENT: {
               name: 'Needs assessment',
               cssColorClass: 'nhsuk-tag--blue',
-              innovatorTypeDescription: 'Your needs assessment is in progress.'
+              description: 'Needs assessment is in progress.'
             },
             AWAITING_SUPPORT: {
               name: 'Awaiting support',
               cssColorClass: 'nhsuk-tag--grey',
-              innovatorTypeDescription: 'We are waiting for an organisation unit to support your innovation.'
+              description: 'Waiting for an organisation unit to start supporting this innovation.'
             },
             RECEIVING_SUPPORT: {
               name: 'Receiving support',
               cssColorClass: 'nhsuk-tag--green',
-              innovatorTypeDescription: 'At least one organisation unit is engaging with your innovation.'
+              description: 'At least one organisation unit is engaging with this innovation.'
             },
             AWAITING_NEEDS_REASSESSMENT: {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
-              innovatorTypeDescription: 'Your innovation has been resent for a needs assessment review.'
-            }
+              description: 'This innovation has been resent for a needs assessment review.'
+            },
+            ARCHIVED: {
+              name: 'Archived',
+              cssColorClass: 'nhsuk-tag--dark-grey',
+              description: ''
+            },
           },
           export_request_status: {
             PENDING: {
-              name: 'Request pending'
+              name: 'Pending'
             },
             APPROVED: {
-              name: 'Request approved'
+              name: 'Approved'
             },
             REJECTED: {
-              name: 'Request rejected'
+              name: 'Rejected'
             },
             CANCELLED: {
-              name: 'Request cancelled'
+              name: 'Cancelled'
             },
             EXPIRED: {
-              name: 'Request expired'
+              name: 'Expired'
             }
           }
         },
