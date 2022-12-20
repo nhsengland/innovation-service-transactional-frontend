@@ -10,7 +10,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <ng-container *ngIf="stores.authentication.isAdminRole() === false">
+      <ng-container *ngIf="stores.authentication.isAdminRole() === false && innovation.status !== 'PAUSED'">
 
         <p *ngIf="isInnovator()">Messages is your space to ask support questions and discuss your innovation with the organisations that are supporting you.</p>
         <p *ngIf="isNotInnovator()">Messages is the space to engage in conversations with the innovator and with other organisations supporting this innovation.</p>

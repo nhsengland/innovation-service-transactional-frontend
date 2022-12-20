@@ -26,7 +26,7 @@ type FilterKeysType = 'mainCategories' | 'locations' | 'engagingOrganisations' |
 export class PageInnovationsAdvancedReviewComponent extends CoreComponent implements OnInit {
 
   innovationsList = new TableModel<
-    InnovationsListDTO['data'][0] & { supportInfo?: { status: null | InnovationSupportStatusEnum }, groupedStatus: InnovationGroupedStatusEnum },
+    InnovationsListDTO['data'][0] & { supportInfo?: { status: null | InnovationSupportStatusEnum }, groupedStatus: InnovationGroupedStatusEnum, engagingOrgs: InnovationsListDTO["data"][0]["supports"] },
     InnovationsListFiltersType
   >({ pageSize: 20 });
 
@@ -152,23 +152,24 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.innovationsService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(response => {
       this.innovationsList.setData(
-        response.data.map(item => {
+        response.data.map(innovation => {
           let status = null;
 
           if (this.stores.authentication.isAdminRole() === false) {
-            status = (item.supports || []).find(s =>
+            status = (innovation.supports || []).find(s =>
               s.organisation.unit.id === this.stores.authentication.getUserInfo().organisations[0].organisationUnits[0].id
             )?.status ?? InnovationSupportStatusEnum.UNASSIGNED
           }
 
           return {
-            ...item,
+            ...innovation,
             ...({
               supportInfo: {
                 status,
               }
             }),
-            groupedStatus: this.getGroupedStatus(item),
+            groupedStatus: this.getGroupedStatus(innovation),
+            engagingOrgs: innovation.supports?.filter((support) => support.status === InnovationSupportStatusEnum.ENGAGING),
           }
         }),
         response.count);
@@ -200,6 +201,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       assignedToMe: this.form.get('assignedToMe')?.value ?? false,
       suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
     });
+
+    this.innovationsList.setPage(1);
 
     this.getInnovationsList();
 

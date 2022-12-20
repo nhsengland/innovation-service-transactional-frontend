@@ -141,7 +141,7 @@
                   </td>
                   <td class="nhsuk-table__cell text-align-right">
                     <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('engagingOrgs') }}</span>                    
-                    <ng-container *ngFor="let support of (item.supports ?? []); let i = index">
+                    <ng-container *ngFor="let support of item.engagingOrgs; let i = index">
                       <ng-container *ngIf="i < 2">
                         <theme-tag type="{{ 'WHITE' }}" label="{{ support.organisation.acronym }}" class="nhsuk-u-margin-left-1"></theme-tag>
                       </ng-container>
