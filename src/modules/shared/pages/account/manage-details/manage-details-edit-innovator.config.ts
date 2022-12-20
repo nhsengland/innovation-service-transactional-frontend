@@ -1,7 +1,7 @@
 
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 
-import { FormEngineModel, FormEngineParameterModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 
 
 // Types.
@@ -60,7 +60,7 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
           {
             value: 'YES',
             label: 'Yes',
-            conditional: new FormEngineParameterModel({ id: 'organisationName', dataType: 'text', label: 'Company or organisation name', validations: { isRequired: true } })
+            conditional: new FormEngineParameterModel({ id: 'organisationName', dataType: 'text', label: 'Company or organisation name', validations: { isRequired: true, maxLength: 100 } })
           },
           { value: 'NO', label: 'No' }
         ]
