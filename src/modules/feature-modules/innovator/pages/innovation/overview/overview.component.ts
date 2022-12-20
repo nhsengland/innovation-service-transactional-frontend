@@ -31,7 +31,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     organisationsStatusDescription: null | string,
     status: null | InnovationStatusEnum
     statusUpdatedAt: null | DateISOType,
-  } = { groupedStatus: null, organisationsStatusDescription: null, status: null, statusUpdatedAt: null };
+    lastEndSupportAt: null | DateISOType
+  } = { groupedStatus: null, organisationsStatusDescription: null, status: null, statusUpdatedAt: null, lastEndSupportAt: null };
 
   isSubmitted: InnovationSubmissionDTO = {
     submittedAllSections: false,
@@ -67,6 +68,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.innovation.status = innovation.status;
       this.innovation.statusUpdatedAt = innovation.statusUpdatedAt;
+      this.innovation.lastEndSupportAt = innovation.lastEndSupportAt;
 
       this.innovation.groupedStatus = this.stores.innovation.getGroupedInnovationStatus(
         innovation.status,
