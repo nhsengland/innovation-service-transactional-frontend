@@ -88,6 +88,11 @@ export type CreateOrganisationBodyDTO = {
   units: { name: string, acronym: string }[]
 };
 
+export type CreateOrganisationUnitBodyDTO = {
+  name: string,
+  acronym: string
+}
+
 
 
 @Injectable()
@@ -219,6 +224,15 @@ export class OrganisationsService extends CoreService {
 
     const url = new UrlModel(this.API_URL).addPath('user-admin/organisations');
     return this.http.post<{ id: string }>(url.buildUrl(), { organisation: body }).pipe(take(1),
+      map(response => response)
+    );
+
+  }
+
+  createOrganisationUnit(organisationId: string, body: CreateOrganisationUnitBodyDTO): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId/units').setPathParams({ organisationId });
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1),
       map(response => response)
     );
 
