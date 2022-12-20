@@ -18,6 +18,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { InnovationAssessmentEditComponent } from './pages/innovation/assessment/assessment-edit.component';
 import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/assessment-new.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { InnovationChangeAssessorComponent } from './pages/innovation/change-assessor/change-assessor.component';
 // // Innovations.
 import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
 
@@ -109,7 +110,13 @@ const routes: Routes = [
                 path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent,
                 data: { breadcrumb: null }
               },
-
+              {
+                path: 'change-assessor', pathMatch: 'full', component: InnovationChangeAssessorComponent,
+                data: { 
+                  breadcrumb: null,
+                  layout: { type: 'full' } 
+                }
+              },
               {
                 path: 'assessments',
                 data: {

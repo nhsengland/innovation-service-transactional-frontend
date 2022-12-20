@@ -28,6 +28,9 @@
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Assigned assessor</dt>
           <dd class="nhsuk-summary-list__value">{{ innovation?.assessment?.assignedTo?.name }}</dd>
+          <dd *ngIf="innovation?.assessment?.id" class="nhsuk-summary-list__value">
+            <a routerLink="/assessment/innovations/{{ innovation?.id }}/change-assessor"> Change assessor </a>
+          </dd>
         </div>
       </dl>
       <a routerLink="/assessment/innovations/{{ innovation?.id }}/assessments/{{ innovation?.assessment?.id }}/edit" class="nhsuk-button"> Continue needs assessment </a>
