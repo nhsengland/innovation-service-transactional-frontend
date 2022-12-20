@@ -13,15 +13,18 @@
         <dl class="nhsuk-summary-list">
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Name</dt>
-            <dd class="nhsuk-summary-list__value">{{ organisation.name }} <span class="nhsuk-hint nhsuk-u-margin-bottom-0"> ({{organisation.acronym }}) </span></dd>
+            <dd class="nhsuk-summary-list__value">{{ organisation.name }} <span
+                class="nhsuk-hint nhsuk-u-margin-bottom-0"> ({{organisation.acronym }}) </span></dd>
             <dd class="nhsuk-summary-list__actions">
-              <a routerLink="edit"> Change <span class="nhsuk-u-visually-hidden"> {{ organisation.name | lowercase }} information</span></a>
+              <a routerLink="edit"> Change <span class="nhsuk-u-visually-hidden"> {{ organisation.name | lowercase }}
+                  information</span></a>
             </dd>
           </div>
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Status</dt>
             <dd class="nhsuk-summary-list__value">
-              <theme-tag type="{{ organisation.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ organisation.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+              <theme-tag type="{{ organisation.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
+                label="{{ organisation.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
             </dd>
           </div>
           <!-- <div *ngIf="organisation.isActive" class="nhsuk-summary-list__row">
@@ -55,13 +58,18 @@
 
     <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
       <div class="nhsuk-grid-column-two-thirds">
-        <dl class="nhsuk-u-margin-0 nhsuk-u-font-size-19">
+        <dl class="nhsuk-u-margin-0 nhsuk-u-font-size-19"
+          *ngIf="organisation.organisationUnits[0].users.length > 0; else noUsersMessage">
 
-          <theme-spinner *ngIf="organisation.organisationUnits[0].isLoading" cssClass="nhsuk-u-margin-9" message="Loading users. Please wait..."></theme-spinner>
+          <theme-spinner *ngIf="organisation.organisationUnits[0].isLoading" cssClass="nhsuk-u-margin-9"
+            message="Loading users. Please wait..."></theme-spinner>
 
-          <ng-container *ngIf="organisation.organisationUnits[0].showHideStatus === 'opened' && organisation.organisationUnits[0].isLoading === false">
+          <ng-container
+            *ngIf="organisation.organisationUnits[0].showHideStatus === 'opened' && organisation.organisationUnits[0].isLoading === false">
             <dl class="nhsuk-u-margin-0">
-              <dt *ngFor="let user of organisation.organisationUnits[0].users; let first = first; let last = last" class="nhsuk-u-padding-3 nhsuk-u-margin-0 border-left-inset-neutral" [ngClass]="{ 'top-border-separator': !first }">
+              <dt *ngFor="let user of organisation.organisationUnits[0].users; let first = first; let last = last"
+                class="nhsuk-u-padding-3 nhsuk-u-margin-0 border-left-inset-neutral"
+                [ngClass]="{ 'top-border-separator': !first }">
                 {{ user.name }} ({{ user.roleDescription }})
               </dt>
             </dl>
@@ -70,32 +78,38 @@
           <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible" />
 
         </dl>
+
+        <ng-template #noUsersMessage>
+          <p>No users attached.</p>
+        </ng-template>
       </div>
     </div>
 
   </section>
 
 
-  <section *ngIf="organisation.organisationUnits.length > 1">
+  <section>
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
 
         <h2 class="nhsuk-heading-l">Units</h2>
 
-        <div class="nhsuk-action-link">
+        <div class="nhsuk-action-link nhsuk-u-margin-bottom-4">
           <a class="nhsuk-action-link__link" routerLink="/admin/organisations/{{ organisationId }}/unit/new">
             <theme-svg-icon type="action"></theme-svg-icon>
             <span class="nhsuk-action-link__text">Create a new unit</span>
           </a>
         </div>
 
-        <p>Click through in the table below to view or change an attached unit information and view users</p>
+        <p *ngIf="organisation.organisationUnits.length > 1">Click through in the table below to view or change an
+          attached unit information and view users</p>
 
       </div>
     </div>
 
-    <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+    <div class="nhsuk-grid-row nhsuk-u-padding-top-3"
+      *ngIf="organisation.organisationUnits.length > 1; else noOrganisationUnitsMessage">
       <div class="nhsuk-grid-column-two-thirds">
 
         <dl class="nhsuk-u-margin-0 nhsuk-u-font-size-19">
@@ -107,30 +121,38 @@
                 <div class="nhsuk-hint nhsuk-u-margin-bottom-0"> ({{ unit.acronym }}) </div>
               </dt>
               <dd class="width-20 nhsuk-u-margin-0">
-                <theme-tag type="{{ unit.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ unit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+                <theme-tag type="{{ unit.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
+                  label="{{ unit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
                 <br />
                 {{ unit.userCount }} users
               </dd>
               <dd class="width-20 nhsuk-u-margin-0">
                 <ul class="nhsuk-list text-align-right nhsuk-u-margin-0">
                   <li>
-                    <a routerLink="unit/{{ unit.id }}/edit"> Change <span class="nhsuk-u-visually-hidden"> {{ unit.name | lowercase }} information</span></a>
+                    <a routerLink="unit/{{ unit.id }}/edit"> Change <span class="nhsuk-u-visually-hidden"> {{ unit.name
+                        | lowercase }} information</span></a>
                   </li>
                   <li>
-                    <a routerLink="unit/{{ unit.id }}/{{ unit.isActive ? 'inactivate' : 'activate' }}"> {{ unit.isActive ? 'Inactivate' : 'Activate' }} unit</a>
+                    <a routerLink="unit/{{ unit.id }}/{{ unit.isActive ? 'inactivate' : 'activate' }}"> {{ unit.isActive
+                      ? 'Inactivate' : 'Activate' }} unit</a>
                   </li>
                   <li *ngIf="unit.userCount > 0">
-                    <a href="javascript:void(0)" (click)="onUnitUsersShowHideClicked(organisation.id, unit.id)">{{ unit.showHideText }}<span class="nhsuk-u-visually-hidden">{{ unit.showHideDescription }}</span></a>
+                    <a href="javascript:void(0)" (click)="onUnitUsersShowHideClicked(organisation.id, unit.id)">{{
+                      unit.showHideText }}<span class="nhsuk-u-visually-hidden">{{ unit.showHideDescription
+                        }}</span></a>
                   </li>
                 </ul>
               </dd>
             </div>
 
-            <theme-spinner *ngIf="unit.isLoading" cssClass="nhsuk-u-margin-9" message="Loading users. Please wait..."></theme-spinner>
+            <theme-spinner *ngIf="unit.isLoading" cssClass="nhsuk-u-margin-9"
+              message="Loading users. Please wait..."></theme-spinner>
 
             <ng-container *ngIf="unit.showHideStatus === 'opened' && unit.isLoading === false">
               <dl class="nhsuk-u-margin-0">
-                <dt *ngFor="let user of unit.users; let first = first; let last = last" class="nhsuk-u-padding-3 nhsuk-u-margin-0 border-left-inset-neutral" [ngClass]="{ 'top-border-separator': !first }">
+                <dt *ngFor="let user of unit.users; let first = first"
+                  class="nhsuk-u-padding-3 nhsuk-u-margin-0 border-left-inset-neutral"
+                  [ngClass]="{ 'top-border-separator': !first }">
                   {{ user.name }} ({{ user.roleDescription }})
                 </dt>
               </dl>
@@ -143,6 +165,15 @@
 
       </div>
     </div>
+
+    <ng-template #noOrganisationUnitsMessage>
+      <div class="nhsuk-grid-column-two-thirds">
+
+        <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+        <p class="nhsuk-u-padding-top-4">No units attached.</p>
+
+      </div>
+    </ng-template>
 
   </section>
 

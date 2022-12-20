@@ -72,12 +72,12 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   toReturn.push(
     {
-      label: stepsLabels.l1,
+      label: 'Name',
       value: data.name,
       editStepNumber: 1
     },
     {
-      label: stepsLabels.l2,
+      label: 'Acronym',
       value: data.acronym,
       editStepNumber: 2
     }
