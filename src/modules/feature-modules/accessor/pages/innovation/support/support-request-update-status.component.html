@@ -1,0 +1,46 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <form [formGroup]="form">
+
+        <ng-container *ngIf="stepNumber === 1">
+          <div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': form.get('status')?.invalid && form.get('status')?.touched}">
+            <fieldset class="nhsuk-fieldset">
+              <ng-container *ngIf="form.get('status')?.invalid && form.get('status')?.touched">
+                <span id="error-field-status" class="nhsuk-error-message" role="alert">
+                  <span class="nhsuk-u-visually-hidden">Error:</span> {{ form.get('status')?.errors?.message }} </span>
+              </ng-container>
+
+              <div class="nhsuk-radios">
+                <div *ngFor="let item of supportStatus; let i = index" class="nhsuk-radios__item">
+                  <input formControlName="status" id="status{{ i }}" type="radio" name="status" [value]="item.key" class="nhsuk-radios__input" />
+                  <label for="status{{ i }}" class="nhsuk-label nhsuk-radios__label nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-2">
+                    <strong class="nhsuk-tag" [ngClass]="item.cssClass"> {{ item.label }} </strong>
+                  </label>
+                  <div class="nhsuk-hint nhsuk-radios__hint"> {{ item.description }} </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmitStep()">Continue</button>
+        </ng-container>  
+
+        <ng-container *ngIf="stepNumber === 2">
+
+          <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Selected support status</h2> 
+          <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + form.get('status')?.value + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + form.get('status')?.value + '.name' | translate }}"></theme-tag>
+          <p class="nhsuk-body-m font-color-secondary nhsuk-u-margin-top-2">{{ 'shared.catalog.innovation.support_status.' + form.get('status')?.value + '.accessorTypeDescription' | translate }}</p>
+
+          <h2 class="nhsuk-heading-m">Let the Qualifying Accessor knows what's changed</h2>
+          <theme-form-textarea controlName="message" [label]="'Enter your comment'" [pageUniqueField]="false" lengthLimit="small"></theme-form-textarea>
+          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Request status update</button>
+        </ng-container>
+
+        <div>
+          <a routerLink="/accessor/innovations/{{ innovationId }}/support">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</theme-content-wrapper>

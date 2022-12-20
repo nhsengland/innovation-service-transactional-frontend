@@ -7,8 +7,8 @@
     <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
   </div>
 
-  <p class="nhsuk-heading-s nhsuk-u-margin-bottom-2">{{ innovationSupport.organisationUnit }}</p>
-  <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+  <p class="nhsuk-heading-m">{{ innovationSupport.organisationUnit }}</p>
+
   <dl class="nhsuk-summary-list">
     <div class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">Support status</dt>
@@ -22,7 +22,7 @@
     </div>
   </dl>
 
-  <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button"> Update status </a>
+  <a *ngIf="isQualifyingAccessorRole; else accessor" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button"> Update status </a>
 
   <h2 class="nhsuk-heading-l nhsuk-u-padding-top-5">All organisations</h2>
 
@@ -36,3 +36,14 @@
   </div>
 
 </theme-content-wrapper>
+
+
+<ng-template #accessor>
+  <ng-container *ngIf="hasAccess">
+    <a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/request-update" class="nhsuk-button nhsuk-u-margin-bottom-3">Request status update</a>
+  
+    <p class="nhsuk-body-s font-color-secondary">
+      Request a status update to the qualifying accessor if you want to change the engaging support status to a more suitable one.
+    </p>
+  </ng-container>
+</ng-template>
