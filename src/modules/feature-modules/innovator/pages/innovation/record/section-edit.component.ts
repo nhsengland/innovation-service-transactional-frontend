@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { FormEngineComponent, FileTypes, WizardEngineModel } from '@app/base/forms';
+import { FileTypes, FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
 import { UrlModel } from '@app/base/models';
 
