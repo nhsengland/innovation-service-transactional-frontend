@@ -25,9 +25,9 @@ function parseAPIUrl(url: string): string {
   let apiUrl = ENVIRONMENT.API_URL;
 
   if (ENVIRONMENT.LOCAL_MODE) {
-    if (ENVIRONMENT.LOCAL_API_ADMIN_ACTIVE && url.includes('api/admin')) {
+    if (ENVIRONMENT.LOCAL_API_ADMIN_ACTIVE && url.includes('api/admins')) {
       apiUrl = ENVIRONMENT.LOCAL_API_ADMIN_BASE_URL;
-      urlEndingSegments = urlEndingSegments.replace('/admin', '');
+      urlEndingSegments = urlEndingSegments.replace('/admins', '');
     } else if (ENVIRONMENT.LOCAL_API_INNOVATIONS_ACTIVE && url.includes('api/innovations')) {
       apiUrl = ENVIRONMENT.LOCAL_API_INNOVATIONS_BASE_URL;
       urlEndingSegments = urlEndingSegments.replace('/innovations', '');
