@@ -111,13 +111,6 @@ const routes: Routes = [
                 data: { breadcrumb: null }
               },
               {
-                path: 'change-assessor', pathMatch: 'full', component: InnovationChangeAssessorComponent,
-                data: { 
-                  breadcrumb: null,
-                  layout: { type: 'full' } 
-                }
-              },
-              {
                 path: 'assessments',
                 data: {
                   data: { breadcrumb: null },
@@ -143,6 +136,13 @@ const routes: Routes = [
                         data: {
                           data: { breadcrumb: null },
                           layout: { type: 'full' }
+                        }
+                      },
+                      {
+                        path: 'change-assessor', pathMatch: 'full', component: InnovationChangeAssessorComponent,
+                        data: { 
+                          breadcrumb: null,
+                          layout: { type: 'full' } 
                         }
                       }]
                   }

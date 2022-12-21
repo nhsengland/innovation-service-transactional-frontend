@@ -50,6 +50,7 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
           status: response.status,
           owner: { isActive: response.owner.isActive, name: response.owner.name },
           ...(response.assessment ? { assessment: { id: response.assessment.id } } : {}),
+          ...(response.assessment?.assignedTo ? { assignedTo: { id: response.assessment.assignedTo?.id } } : {}),
           ...(support ? { support: { id: support.id, status: support.status } } : {}),
           export: response.export,
         });
