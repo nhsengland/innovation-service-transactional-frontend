@@ -12,12 +12,12 @@
             </div>
             <p> You will no longer have access to your innovation. If you want to keep a copy, you should download a PDF from the innovation record page before proceeding. </p>
           </div>
-          <theme-form-radio-group controlName="innovation" label="Choose which innovation to archive" [items]="formInnovationsItems" [pageUniqueField]="false"></theme-form-radio-group>
+          <theme-form-radio-group controlName="innovation" label="Choose which innovation to withdraw:" [items]="formInnovationsItems" [pageUniqueField]="false"></theme-form-radio-group>
           <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3"> Continue </button>
         </ng-container>
 
         <ng-container *ngIf="stepNumber === 2">
-          <theme-form-textarea controlName="reason" label="What's your reason for archiving this innovation?" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
+          <theme-form-textarea controlName="reason" label="What's your reason for withdrawing this innovation?" [pageUniqueField]="false" lengthLimit="small"></theme-form-textarea>
           <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3"> Continue </button>
         </ng-container>
 
@@ -29,8 +29,8 @@
             <p> You will no longer have access to your innovation. If you want to keep a copy, you should download a PDF from the Innovation Record page before proceeding. </p>
           </div>
           <theme-form-input controlName="email" label="Enter your email" [pageUniqueField]="false"></theme-form-input>
-          <theme-form-input controlName="confirmation" label="Are you sure that you want to archive?" description="To confirm, please type the following: archive my innovation" [pageUniqueField]="false"></theme-form-input>
-          <button type="submit" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3"> Archive innovation </button>
+          <theme-form-input controlName="confirmation" label="Are you sure that you want to withdraw?" description="To confirm, please type the following: withdraw my innovation" [pageUniqueField]="false"></theme-form-input>
+          <button type="submit" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3"> Withdraw innovation </button>
         </ng-container>
 
         <div>

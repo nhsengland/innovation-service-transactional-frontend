@@ -14,7 +14,7 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
 import { PageAccountInfoComponent } from './pages/account/account-info.component';
-import { PageAccountInnovationsArchivalComponent } from './pages/account/innovations-archival.component';
+import { PageAccountInnovationsWithdrawComponent } from './pages/account/innovations-withdraw.component';
 import { PageAccountInnovationsInfoComponent } from './pages/account/innovations-info.component';
 import { PageAccountInnovationsTransferComponent } from './pages/account/innovations-transfer.component';
 import { PageAccountInnovationsStopSharingComponent } from './pages/account/innovations-stop-sharing.component';
@@ -64,7 +64,7 @@ import { InnovatorService } from './services/innovator.service';
     // // Account.
     PageAccountDeleteComponent,
     PageAccountInfoComponent,
-    PageAccountInnovationsArchivalComponent,
+    PageAccountInnovationsWithdrawComponent,
     PageAccountInnovationsInfoComponent,
     PageAccountInnovationsTransferComponent,
     PageAccountInnovationsStopSharingComponent,

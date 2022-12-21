@@ -167,8 +167,8 @@ export class InnovationStore extends Store<InnovationModel> {
         : InnovationGroupedStatusEnum.AWAITING_SUPPORT;
     }
 
-    if(innovationStatus === InnovationStatusEnum.ARCHIVED) {
-      return InnovationGroupedStatusEnum.ARCHIVED;
+    if(innovationStatus === InnovationStatusEnum.WITHDRAWN) {
+      return InnovationGroupedStatusEnum.WITHDRAWN;
     }
 
     return InnovationGroupedStatusEnum.RECORD_NOT_SHARED;

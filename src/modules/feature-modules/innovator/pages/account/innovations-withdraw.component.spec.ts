@@ -13,12 +13,12 @@ import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { PageAccountInnovationsArchivalComponent } from './innovations-archival.component';
+import { PageAccountInnovationsWithdrawComponent } from './innovations-withdraw.component';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 
-describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalComponent', () => {
+describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsWithdrawComponent', () => {
 
   let router: Router;
   let routerSpy: jest.SpyInstance;
@@ -27,8 +27,8 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
   let innovationsService: InnovationsService;
   let innovatorService: InnovatorService;
 
-  let component: PageAccountInnovationsArchivalComponent;
-  let fixture: ComponentFixture<PageAccountInnovationsArchivalComponent>;
+  let component: PageAccountInnovationsWithdrawComponent;
+  let fixture: ComponentFixture<PageAccountInnovationsWithdrawComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -56,7 +56,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+    fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
 
@@ -74,7 +74,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
 
   //   const expected = [{ label: 'Innovation Name 01', value: 'innovationId01' }];
 
-  //   fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+  //   fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
   //   component = fixture.componentInstance;
 
   //   fixture.detectChanges();
@@ -89,7 +89,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
 
   //   const expected = { type: 'ERROR', title: 'Unable to fetch innovations transfers', message: 'Please, try again or contact us for further help' };
 
-  //   fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+  //   fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
   //   component = fixture.componentInstance;
 
   //   fixture.detectChanges();
@@ -99,7 +99,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
 
   // it('should run onSubmitStep() with INVALID form', () => {
 
-  //   fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+  //   fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
   //   component = fixture.componentInstance;
 
   //   component.onSubmitStep();
@@ -109,7 +109,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
 
   // it('should run onSubmitStep() with VALID form', () => {
 
-  //   fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+  //   fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
   //   component = fixture.componentInstance;
   //   component.form.get('innovation')?.setValue('Inno01');
   //   component.formInnovationsItems = [{ value: 'Inno01', label: 'Innovation' }];
@@ -121,7 +121,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
 
   // it('should run onSubmitForm() with invalid form', () => {
 
-  //   fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+  //   fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
   //   component = fixture.componentInstance;
 
   //   component.onSubmitForm();
@@ -135,7 +135,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
   //   authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
   //   authenticationStore.initializeAuthentication$ = () => of(true);
 
-  //   fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+  //   fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
   //   component = fixture.componentInstance;
   //   component.form.get('innovation')?.setValue('A required value');
   //   component.form.get('reason')?.setValue('An optional value');
@@ -157,7 +157,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
 
   //   const expected = { type: 'ERROR', title: 'An error occured when archiving the innovation', message: 'Please, try again or contact us for further help', setFocus: true };
 
-  //   fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+  //   fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
   //   component = fixture.componentInstance;
   //   component.form.get('innovation')?.setValue('A required value');
   //   component.form.get('reason')?.setValue('An optional value');
@@ -172,7 +172,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
 
   // it('should run validateForm() with step 1', () => {
 
-  //   fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+  //   fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
   //   component = fixture.componentInstance;
   //   component.stepNumber = 1;
 
@@ -183,7 +183,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
 
   // it('should run validateForm() with step 2', () => {
 
-  //   fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+  //   fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
   //   component = fixture.componentInstance;
 
   //   expect((component as any).validateForm(2)).toBeTruthy();
@@ -192,7 +192,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
 
   // it('should run validateForm() with INVALID step', () => {
 
-  //   fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+  //   fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
   //   component = fixture.componentInstance;
 
   //   expect((component as any).validateForm(3)).toBeTruthy();
@@ -201,7 +201,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
 
   // it('should run setStepTitle() with step 1', () => {
 
-  //   fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+  //   fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
   //   component = fixture.componentInstance;
   //   component.stepNumber = 1;
 
@@ -212,7 +212,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
 
   // it('should run setStepTitle() with step 2', () => {
 
-  //   fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+  //   fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
   //   component = fixture.componentInstance;
   //   component.innovationName = 'Innovation';
   //   component.stepNumber = 2;
@@ -224,7 +224,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
 
   // it('should run setStepTitle() with step 3', () => {
 
-  //   fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+  //   fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
   //   component = fixture.componentInstance;
   //   component.innovationName = 'Innovation';
   //   component.stepNumber = 3;
@@ -236,7 +236,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsArchivalC
 
   // it('should run setStepTitle() with INVALID step', () => {
 
-  //   fixture = TestBed.createComponent(PageAccountInnovationsArchivalComponent);
+  //   fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
   //   component = fixture.componentInstance;
   //   component.stepNumber = 4 as any;
 

@@ -156,15 +156,15 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
 
   });
 
-  it('should run archiveInnovation() and return success', () => {
+  it('should run withdrawInnovation() and return success', () => {
 
     const responseMock = { id: 'id' };
     const expected = responseMock;
 
     let response: any = null;
-    service.archiveInnovation('Inno01', 'Some reason').subscribe({ next: success => response = success, error: error => response = error });
+    service.withdrawInnovation('Inno01', 'Some reason').subscribe({ next: success => response = success, error: error => response = error });
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/archive`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/Inno01/withdraw`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PATCH');
     expect(response).toEqual(expected);
