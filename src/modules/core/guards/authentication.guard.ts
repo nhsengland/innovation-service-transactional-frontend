@@ -1,16 +1,16 @@
-import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { CanActivate } from '@angular/router';
+import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
-import { Response } from 'express';
 import { RESPONSE } from '@nguniversal/express-engine/tokens';
+import { Response } from 'express';
 
-import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 import { LoggerService, Severity } from '../services/logger.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -23,7 +23,7 @@ export class AuthenticationGuard implements CanActivate {
     private loggerService: LoggerService
   ) { }
 
-  canActivate(): Observable<boolean> {
+  canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
 
     return this.authentication.initializeAuthentication$().pipe(
       map(response => response),
@@ -33,7 +33,7 @@ export class AuthenticationGuard implements CanActivate {
 
         // 401: User in not authenticated on identity provider.
         // 4xx: User is authenticated, but has no permission. (Ex: user is blocked).
-        const redirectUrl = e.status === 401 ? `${this.environmentStore.APP_URL}/signin` : `${this.environmentStore.APP_URL}/signout?redirectUrl=${this.environmentStore.APP_URL}/error/unauthenticated`;
+        const redirectUrl = e.status === 401 ? `${this.environmentStore.APP_URL}/signin?back=${state.url}` : `${this.environmentStore.APP_URL}/signout?redirectUrl=${this.environmentStore.APP_URL}/error/unauthenticated`;
 
         if (isPlatformBrowser(this.platformId)) {
           window.location.assign(redirectUrl); // Full reload is needed to hit SSR.

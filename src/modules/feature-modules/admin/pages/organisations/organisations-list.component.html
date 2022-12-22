@@ -33,7 +33,8 @@
         <div>
           <ul class="nhsuk-u-margin-left-2">
             <li>Click through in the table below to <strong>view or change an organisation's information</strong> or
-              <strong>access its attached units</strong></li>
+              <strong>access its attached units</strong>
+            </li>
           </ul>
         </div>
 
@@ -47,26 +48,27 @@
 
             <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3"
               [ngClass]="{'bottom-border-separator': organisation.showHideStatus !== 'opened'}">
-              <dt class="nhsuk-u-font-weight-normal mr-auto"> {{ organisation.info.name }} ({{ organisation.info.acronym
-                }})</dt>
-              <dd class="width-20 nhsuk-u-margin-0">
+
+              <dt class="nhsuk-u-font-weight-normal width-60">
+                {{ organisation.info.name }}
+                <div class="nhsuk-hint nhsuk-u-margin-bottom-0"> ({{ organisation.info.acronym }}) </div>
+              </dt>
+
+              <dd class="width-20">
                 <theme-tag type="{{ organisation.info.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
                   label="{{ organisation.info.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
               </dd>
-              <dd class="width-20 nhsuk-u-margin-0">
-                <ul class="nhsuk-list text-align-right nhsuk-u-margin-0">
-                  <li>
-                    <a *ngIf="organisation.info.organisationUnits.length > 1" href="javascript:void(0)"
-                      (click)="onShowHideClicked(organisation.info.id)">
-                      {{ organisation.showHideText }} <span class="nhsuk-u-visually-hidden"> {{
-                        organisation.showHideDescription }} </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a routerLink="{{organisation.info.id}}" title="View">View</a>
-                  </li>
-                </ul>
+
+              <dd class="text-align-right width-20">
+                <a *ngIf="organisation.info.organisationUnits.length > 1" href="javascript:void(0)"
+                  (click)="onShowHideClicked(organisation.info.id)">
+                  {{ organisation.showHideText }}
+                  <span class="nhsuk-u-visually-hidden"> {{ organisation.showHideDescription }} </span>
+                </a>
+                <a routerLink="{{organisation.info.id}}" title="View">View <span
+                    class="nhsuk-u-visually-hidden">organisation</span></a>
               </dd>
+
             </div>
 
             <ng-container *ngIf="organisation.showHideStatus === 'opened'">
@@ -75,8 +77,11 @@
                   class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
                   <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3"
                     [ngClass]="{'top-border-separator': i === 0}">
-                    <dt class="">{{ organisationUnit.name }} ({{ organisationUnit.acronym }})</dt>
-                    <dd>
+                    <dt>
+                      {{ organisationUnit.name }}
+                      <div class="nhsuk-hint nhsuk-u-margin-bottom-0"> ({{ organisationUnit.acronym }}) </div>
+                    </dt>
+                    <dd class="ml-auto">
                       <theme-tag type="{{ organisationUnit.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
                         label="{{ organisationUnit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
                     </dd>
@@ -87,6 +92,7 @@
 
           </ng-container>
         </dl>
+
       </div>
 
     </div>

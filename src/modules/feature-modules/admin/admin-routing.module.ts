@@ -23,6 +23,7 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
+import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 // // Service Users.
 import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-users/service-user-change-organisation-unit.component';
 import { PageServiceUserChangeRoleComponent } from './pages/service-users/service-user-change-role.component';
@@ -123,6 +124,9 @@ const routes: Routes = [
               {
                 path: 'edit', pathMatch: 'full', component: PageOrganisationEditComponent,
                 data: { module: 'Organisation' }
+              },
+              {
+                path: 'unit/new', pathMatch: 'full', component: PageOrganisationUnitNewComponent,
               },
               {
                 path: 'unit/:organisationUnitId/edit', pathMatch: 'full', component: PageOrganisationEditComponent,
