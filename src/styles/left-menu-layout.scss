@@ -48,12 +48,17 @@
 
         .app-side-nav__link {
           font-weight: 600;
+          pointer-events: none;
+          cursor: default;
         }
       }
 
       .app-side-nav__item--nested-current {
         .app-side-nav__link--nested {
           color: #212b32 !important;
+          pointer-events: none;
+          cursor: default;
+          
         }
       }
 
