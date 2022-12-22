@@ -1,18 +1,16 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ENV } from '@tests/app.mocks';
 
 import { Injector } from '@angular/core';
 
-import { AccessorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
-import { TableModel } from '@app/base/models';
 
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 
-import { getListOfTerms, getLockUserRulesInDTO, getOrganisationUnitRulesInDTO, getOrgnisationRoleRulesInDTO, getUserFullInfoDTO, getUserMinimalInfoDTO, lockUserEndpointDTO, searchUserEndpointInDTO, ServiceUsersService } from './service-users.service';
+import { getUserMinimalInfoDTO, ServiceUsersService } from './service-users.service';
 
 
 describe('FeatureModules/Admin/Services/ServiceUsersService', () => {
