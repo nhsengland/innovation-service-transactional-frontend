@@ -12,10 +12,10 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
 
 
 @Component({
-  selector: 'shared-pages-account-innovations-archival',
-  templateUrl: './innovations-archival.component.html'
+  selector: 'shared-pages-account-innovations-withdraw',
+  templateUrl: './innovations-withdraw.component.html'
 })
-export class PageAccountInnovationsArchivalComponent extends CoreComponent implements OnInit {
+export class PageAccountInnovationsWithdrawComponent extends CoreComponent implements OnInit {
 
   stepNumber: 1 | 2 | 3 = 1;
 
@@ -34,7 +34,7 @@ export class PageAccountInnovationsArchivalComponent extends CoreComponent imple
   ) {
 
     super();
-    this.setPageTitle('Archive an innovation');
+    this.setPageTitle('Withdraw innovation');
 
     const user = this.stores.authentication.getUserInfo();
     this.user = {
@@ -45,7 +45,7 @@ export class PageAccountInnovationsArchivalComponent extends CoreComponent imple
       innovation: new FormControl<string>('', { validators: CustomValidators.required('Please, choose an innovation'), updateOn: 'change' }),
       reason: new FormControl<string>(''),
       email: new FormControl<string>('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')]),
-      confirmation: new FormControl<string>('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('archive my innovation')])
+      confirmation: new FormControl<string>('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('withdraw my innovation')])
     }, { updateOn: 'blur' }
     );
   }
@@ -80,20 +80,15 @@ export class PageAccountInnovationsArchivalComponent extends CoreComponent imple
 
     if (!this.form.valid) { return; }
 
-    this.innovatorService.archiveInnovation(this.form.get('innovation')!.value, this.form.get('reason')!.value).pipe(
+    this.innovatorService.withdrawInnovation(this.form.get('innovation')!.value, this.form.get('reason')!.value).pipe(
       concatMap(() => {
         return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
       })
-    ).subscribe({
-      next: () => {
+    ).subscribe(() => {
 
-        this.setRedirectAlertSuccess(`You have archived the innovation '${this.innovationName}'`);
-        this.redirectTo('/innovator/account/manage-innovations');
+      this.setRedirectAlertSuccess(`You have withdrawn the innovation '${this.innovationName}'`);
+      this.redirectTo('/innovator/account/manage-innovations');
 
-      },
-      error: () => {
-        this.setAlertError('An error occured when archiving the innovation. Please, try again or contact us for further help');
-      }
     });
 
   }
@@ -108,13 +103,13 @@ export class PageAccountInnovationsArchivalComponent extends CoreComponent imple
         /* istanbul ignore next */
         this.innovationName = this.formInnovationsItems?.filter(item => this.form.get('innovation')!.value === item.value)[0].label || '';
         this.stepNumber++;
-        this.setPageTitle('Archive \'' + this.innovationName + '\'');
+        this.setPageTitle('Withdraw \'' + this.innovationName + '\'');
         break;
 
       case 2:
         this.form.get('reason')!.markAsTouched();
         this.stepNumber++;
-        this.setPageTitle('Archive \'' + this.innovationName + '\'');
+        this.setPageTitle('Withdraw \'' + this.innovationName + '\'');
         break;
 
       case 3:

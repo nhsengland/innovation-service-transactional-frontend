@@ -49,9 +49,9 @@ describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
 
     let expected: boolean | null = null;
 
-    authenticationStore.initializeAuthentication$ = () => throwError('error');
-
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = {};
+
+    authenticationStore.initializeAuthentication$ = () => throwError('error');
 
     guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any).subscribe(response => { expected = response; });
 
@@ -97,6 +97,7 @@ describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
   it('should allow access to the route', () => {
 
     let expected!: boolean;
+
     
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = {};
 

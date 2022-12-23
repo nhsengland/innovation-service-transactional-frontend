@@ -399,10 +399,10 @@ export const locale = {
               cssColorClass: 'nhsuk-tag--purple',
               description: 'This innovation has been resent for a needs assessment review.'
             },
-            ARCHIVED: {
-              name: 'Archived',
-              cssColorClass: 'nhsuk-tag--dark-grey',
-              description: ''
+            WITHDRAWN: {
+              name: 'Withdrawn',
+              cssColorClass: 'nhsuk-tag--red',
+              description: 'This innovation has been withdrawn by the innnovator.'
             },
           },
           export_request_status: {

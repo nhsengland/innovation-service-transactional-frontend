@@ -13,7 +13,7 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
 import { PageAccountInfoComponent } from './pages/account/account-info.component';
-import { PageAccountInnovationsArchivalComponent } from './pages/account/innovations-archival.component';
+import { PageAccountInnovationsWithdrawComponent } from './pages/account/innovations-withdraw.component';
 import { PageAccountInnovationsInfoComponent } from './pages/account/innovations-info.component';
 import { PageAccountInnovationsTransferComponent } from './pages/account/innovations-transfer.component';
 // // Dashboard.
@@ -174,7 +174,7 @@ const routes: Routes = [
                 children: [
                   { path: '', pathMatch: 'full', component: PageInnovationHowToProceedComponent },
                   { path: 'needs-reassessment-send', pathMatch: 'full', component: PageInnovationNeedsReassessmentSendComponent, 
-                    data: { breadcrumb: null } 
+                    data: { breadcrumb: null }
                   },
                 ]
               },
@@ -200,8 +200,8 @@ const routes: Routes = [
                         data: {
                           breadcrumb: (data: RoutesDataType) => data.innovationSectionData?.name ?? ''
                         },
-                        children: [    
-                          
+                        children: [
+
                           {
                             path: '', pathMatch: 'full', component: PageInnovationSectionInfoComponent,
                             data: { breadcrumb: null }
@@ -451,11 +451,11 @@ const routes: Routes = [
                 path: 'transfer', pathMatch: 'full', component: PageAccountInnovationsTransferComponent
               },
               {
-                path: 'archive', pathMatch: 'full', component: PageAccountInnovationsArchivalComponent
+                path: 'withdraw', pathMatch: 'full', component: PageAccountInnovationsWithdrawComponent
               },
               {
                 path: 'stop-sharing',
-                data: { breadcrumb: 'Stop sharing'},
+                data: { breadcrumb: 'Stop sharing' },
                 children: [
                   {
                     path: '', pathMatch: 'full', component: PageAccountInnovationsStopSharingOverviewComponent,

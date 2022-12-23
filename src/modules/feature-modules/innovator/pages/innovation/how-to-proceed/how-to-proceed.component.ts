@@ -7,7 +7,7 @@ import { CustomValidators } from '@app/base/forms';
 
 
 enum FormFieldActionsEnum {
-  ARCHIVE = 'ARCHIVE',
+  WITHDRAW = 'WITHDRAW',
   DELETE_ACCOUNT = 'DELETE_ACCOUNT',
   NEEDS_REASSESSMENT = 'NEEDS_REASSESSMENT',
   NO_ACTION = 'NO_ACTION'
@@ -40,14 +40,14 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
         description: `You might want to submit your innovation for a needs reassessment if you have significantly progressed your innovation or introduced major changes since the first Needs Assessment. This might mean you need a different type of support.`
       },
       {
-        value: FormFieldActionsEnum.ARCHIVE,
-        label: `Archive your innovation`,
-        description: `You might want to archive your innovation if you no longer need support from the organisations. Your current innovation will be closed, but you will keep your Innovation service account.`
+        value: FormFieldActionsEnum.WITHDRAW,
+        label: `Withdraw your innovation`,
+        description: `You might want to withdraw your innovation if you no longer need support from the organisations. Your current innovation will be closed, but you will keep your Innovation service account.`
       },
       {
         value: FormFieldActionsEnum.DELETE_ACCOUNT,
         label: `Delete your account`,
-        description: `If you delete your account your innovation will be archived and you will no longer have access to the Innovation service.`
+        description: `If you delete your account your innovation will be withdrawn and you will no longer have access to the Innovation service.`
       }
     ]
   };
@@ -81,8 +81,8 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
     }
 
     switch (this.form.get('action')?.value) {
-      case FormFieldActionsEnum.ARCHIVE:
-        this.redirectTo('/innovator/account/manage-innovations/archive', { innovationId: this.innovationId });
+      case FormFieldActionsEnum.WITHDRAW:
+        this.redirectTo('/innovator/account/manage-innovations/withdraw', { innovationId: this.innovationId });
         break;
 
       case FormFieldActionsEnum.DELETE_ACCOUNT:
