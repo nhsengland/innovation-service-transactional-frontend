@@ -23,8 +23,7 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
     private innovationStore: InnovationStore,
   ) {
     this.subscriptions.add(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd), debounceTime(500)).subscribe(e => {
-        this.sidebarItems = [];
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
         this.onRouteChange()
       })
     );
@@ -38,12 +37,12 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
 
 
   private onRouteChange(): void {
-
     const innovation = this.contextStore.getInnovation();
-    
+
     if (this.router.url.includes('sections')) {
       const currentSection = this.router.url.split('/').pop();
       this.showHeading = true;
+      this.sidebarItems = [];
 
       this.innovationStore.getSectionsSummary$(innovation.id).subscribe(response => {
 
