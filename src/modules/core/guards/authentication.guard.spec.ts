@@ -14,7 +14,6 @@ import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthenticationGuard } from './authentication.guard';
 
-
 describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
 
   let authenticationStore: AuthenticationStore;

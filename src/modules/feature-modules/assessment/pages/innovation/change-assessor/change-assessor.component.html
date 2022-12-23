@@ -1,0 +1,29 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <p>Choose one needs assessor from the needs assessor team to support this innovation</p>
+      <form [formGroup]="form">
+        <div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': form.get('assessor')?.invalid && form.get('assessor')?.touched}">
+          <fieldset class="nhsuk-fieldset">
+            <ng-container *ngIf="form.get('assessor')?.invalid && form.get('assessor')?.touched">
+              <span id="error-field-assessor" class="nhsuk-error-message" role="alert">
+              <span class="nhsuk-u-visually-hidden">Error:</span> {{ form.get('assessor')?.errors?.message }} </span>
+            </ng-container>
+
+            <div class="nhsuk-radios">
+              <div *ngFor="let item of needsAssessorList; let i = index" class="nhsuk-radios__item">
+                <input formControlName="assessor" id="assessor{{ i }}" type="radio" name="assessor" [value]="item.id" class="nhsuk-radios__input" />
+                <label for="assessor{{ i }}" class="nhsuk-label nhsuk-radios__label nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-2">
+                  {{ item.name }}
+                </label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Continue</button>
+      </form>
+    </div>
+  </div>
+
+</theme-content-wrapper>

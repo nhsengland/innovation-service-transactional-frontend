@@ -50,6 +50,7 @@ export type ContextInnovationType = {
     isActive: boolean
   },
   assessment?: { id: string },
+  assignedTo?: { id: string },
   support?: { id: string, status: InnovationSupportStatusEnum },
   notifications?: { [key in NotificationContextTypeEnum]?: number },
   export?: { canUserExport: boolean, pendingRequestsCount: number }

@@ -7,6 +7,7 @@ import { InnovationInfoDTO, StatisticsCard } from '@modules/shared/services/inno
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { forkJoin } from 'rxjs';
 
@@ -23,6 +24,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationSummary: { label: string; value: null | string; }[] = [];
   innovatorSummary: { label: string; value: string; }[] = [];
   cardsList: StatisticsCard[] = [];
+  showChangeNeedsAssessor: boolean = false;
 
 
   constructor(
@@ -46,6 +48,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     ]).subscribe(([innovationInfo, statistics]) => {
       this.innovation = innovationInfo;
       this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
+      this.showChangeNeedsAssessor = this.innovation.status === InnovationStatusEnum.NEEDS_ASSESSMENT;
 
       this.innovationSummary = [
         { label: 'Company', value: this.innovation.owner.organisations ? this.innovation.owner.organisations[0].name : '' },
