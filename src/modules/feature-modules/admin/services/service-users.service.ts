@@ -112,9 +112,8 @@ export type changeUserTypeDTO = {
   status: string;
 };
 
-export type lockUserEndpointDTO = {
+export type AdminUserUpdateEndpointDTO = {
   id: string;
-  status: string;
 };
 
 export type searchUserEndpointInDTO = {
@@ -199,28 +198,28 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  lockUser(userId: string, securityConfirmation: { id: string, code: string }): Observable<lockUserEndpointDTO> {
+  lockUser(userId: string, securityConfirmation: { id: string, code: string }): Observable<AdminUserUpdateEndpointDTO> {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/lock').setPathParams({ userId }).setQueryParams(qp);
-    return this.http.patch<lockUserEndpointDTO>(url.buildUrl(), {}).pipe(
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId }).setQueryParams(qp);
+    return this.http.patch<AdminUserUpdateEndpointDTO>(url.buildUrl(), {accountEnabled: false}).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error.id })))
+      catchError(error => throwError(() => ({ id: error.error?.details?.id })))
     );
 
   }
 
-  unlockUser(userId: string, securityConfirmation: { id: string, code: string }): Observable<lockUserEndpointDTO> {
+  unlockUser(userId: string, securityConfirmation: { id: string, code: string }): Observable<AdminUserUpdateEndpointDTO> {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/unlock').setPathParams({ userId }).setQueryParams(qp);
-    return this.http.patch<lockUserEndpointDTO>(url.buildUrl(), {}).pipe(
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId }).setQueryParams(qp);
+    return this.http.patch<AdminUserUpdateEndpointDTO>(url.buildUrl(), {accountEnabled: true}).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error.id })))
+      catchError(error => throwError(() => ({ id: error.error?.details?.id })))
     );
 
   }
