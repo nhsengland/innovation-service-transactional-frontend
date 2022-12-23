@@ -8,7 +8,7 @@ import { FormGroup } from '@app/base/forms';
 import { RoutingHelper } from '@app/base/helpers';
 import { forkJoin } from 'rxjs';
 
-import { ServiceUsersService, getLockUserRulesOutDTO } from '../../services/service-users.service';
+import { getLockUserRulesOutDTO, ServiceUsersService } from '../../services/service-users.service';
 
 
 @Component({
