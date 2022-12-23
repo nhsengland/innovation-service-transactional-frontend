@@ -12,7 +12,13 @@ import { CoreModule } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 
 import { AuthenticationGuard } from './authentication.guard';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
+function fakeRouterState(url: string): RouterStateSnapshot {
+  return {
+    url,
+  } as RouterStateSnapshot;
+}
 
 describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
 
@@ -38,7 +44,6 @@ describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
     authenticationStore = TestBed.inject(AuthenticationStore);
 
     guard = TestBed.inject(AuthenticationGuard);
-
   });
 
   it('should deny access to the route', () => {
@@ -47,7 +52,7 @@ describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
 
     authenticationStore.initializeAuthentication$ = () => throwError('error');
 
-    guard.canActivate().subscribe(response => { expected = response; });
+    guard.canActivate(new ActivatedRouteSnapshot(), fakeRouterState('')).subscribe(response => { expected = response; });
 
     expect(expected).toBe(null); // Response from canActivate does not get returned, as it is redirected.
 
@@ -90,7 +95,7 @@ describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
 
     authenticationStore.initializeAuthentication$ = () => of(true);
 
-    guard.canActivate().subscribe(response => { expected = response; });
+    guard.canActivate(new ActivatedRouteSnapshot(), fakeRouterState('')).subscribe(response => { expected = response; });
     expect(expected).toBe(true);
 
   });
@@ -103,7 +108,7 @@ describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
     let expected: boolean | null = null;
 
     authenticationStore.initializeAuthentication$ = () => throwError('error');
-    guard.canActivate().subscribe(response => { expected = response; });
+    guard.canActivate(new ActivatedRouteSnapshot(), fakeRouterState('')).subscribe(response => { expected = response; });
 
     expect(expected).toBe(false);
     expect(window.location.assign).toBeCalledWith('http:///signout?redirectUrl=http:///error/unauthenticated');
