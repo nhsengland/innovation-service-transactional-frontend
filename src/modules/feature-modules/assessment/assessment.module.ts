@@ -19,6 +19,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { InnovationAssessmentEditComponent } from './pages/innovation/assessment/assessment-edit.component';
 import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/assessment-new.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { InnovationChangeAssessorComponent } from './pages/innovation/change-assessor/change-assessor.component';
 // // Innovations.
 import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
 
@@ -43,8 +44,9 @@ import { AssessmentService } from './services/assessment.service';
     InnovationAssessmentEditComponent,
     InnovationAssessmentNewComponent,
     InnovationOverviewComponent,
+    InnovationChangeAssessorComponent,
     // // Innovations.
-    ReviewInnovationsComponent,
+    ReviewInnovationsComponent
   ],
   providers: [
     // Services.
