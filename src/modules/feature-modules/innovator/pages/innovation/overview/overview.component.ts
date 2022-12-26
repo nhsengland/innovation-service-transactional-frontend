@@ -118,11 +118,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         count: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER].count,
         lastMessage: `Last received message`,
         date: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]?.lastSubmittedAt,
-        emptyMessageTitle: 'No messages yet'
+        emptyMessage: 'No messages yet'
       }];
 
       if (this.innovation.groupedStatus === 'RECORD_NOT_SHARED') {
-        this.cardsList = this.cardsList.filter(i => i.title === 'Actions requested');
+        this.cardsList = this.cardsList.filter(i => i.title !== 'Actions requested');
       }
 
       this.setPageStatus('READY');
