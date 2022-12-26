@@ -153,6 +153,8 @@ export class WizardOrganisationUnitActivateComponent extends CoreComponent imple
 
     if (!stepData.data.confirm) { return; } // Just a sanity check. Should never happen.
 
+    this.setPageStatus('LOADING');
+
     this.organisationsService.activateOrganisationUnit(
       this.wizard.data.organisation.id,
       this.wizard.data.organisationUnit.id,
