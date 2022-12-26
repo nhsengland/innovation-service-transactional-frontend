@@ -1,5 +1,5 @@
 
-import { FormEngineModel, FormEngineParameterModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 
@@ -67,7 +67,7 @@ export let FIRST_TIME_SIGNIN_QUESTIONS: WizardEngineModel = new WizardEngineMode
           {
             value: 'YES',
             label: 'Yes',
-            conditional: new FormEngineParameterModel({ id: 'organisationName', dataType: 'text', label: 'Company or organisation name', validations: { isRequired: [true, 'Other description is required'] } })
+            conditional: new FormEngineParameterModel({ id: 'organisationName', dataType: 'text', label: 'Company or organisation name', validations: { isRequired: [true, 'Other description is required'], maxLength: 100 } })
           },
           { value: 'NO', label: 'No' }
         ]
