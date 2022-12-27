@@ -19,16 +19,17 @@
       <h2 class="nhsuk-heading-l"> Transfer ownership of an innovation </h2>
       <p *ngIf="!haveAnyActiveInnovation"> You have currently no innovation to transfer. </p>
       <p *ngIf="haveAnyActiveInnovation"> Transfer the ownership of an innovation to someone else. You will need their email address. </p>
-      <a *ngIf="haveAnyActiveInnovation" routerLink="transfer"> Transfer innovation ownership </a>
+      <a *ngIf="haveAnyActiveInnovation" routerLink="transfer" class="nhsuk-u-font-size-19"> Transfer innovation ownership </a>
     </div>
   </div>
 
   <div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
       <h2 class="nhsuk-heading-l"> Stop sharing an innovation </h2>
-      <p *ngIf="!haveAnyActiveInnovation"> You have currently no innovation to stop sharing. </p>
-      <p *ngIf="haveAnyActiveInnovation"> Stop sharing an innovation if you want to take a break from working with your support organisations. </p>
-      <a *ngIf="haveAnyActiveInnovation" routerLink="stop-sharing"> Stop sharing an innovation </a>
+      <p *ngIf="!haveAnyInProgressInnovation"> You have currently no innovation to stop sharing. </p>
+      <p *ngIf="haveAnyInProgressInnovation"> Stop sharing an innovation if you want to take a break from working with your support organisations. </p>
+      <a *ngIf="haveAnyInProgressInnovation" routerLink="stop-sharing" class="nhsuk-u-font-size-19"> Stop sharing an innovation </a>
+      <p *ngIf="pausedInnovationsCounter > 0" class="font-color-secondary nhsuk-body-s">You have stopped sharing {{ pausedInnovationsCounter }} innovation(s).</p>
     </div>
   </div>
 
@@ -37,7 +38,7 @@
       <h2 class="nhsuk-heading-l"> Withdraw an innovation </h2>
       <p *ngIf="!haveAnyActiveInnovation"> You have currently no innovation to withdraw. </p>
       <p *ngIf="haveAnyActiveInnovation"> Withdraw an innovation you are no longer working on. You will need to enter your password. </p>
-      <a *ngIf="haveAnyActiveInnovation" routerLink="withdraw"> Withdraw an innovation </a>
+      <a *ngIf="haveAnyActiveInnovation" routerLink="withdraw" class="nhsuk-u-font-size-19"> Withdraw an innovation </a>
     </div>
   </div>
 

@@ -70,7 +70,7 @@ export class PageAccountInnovationsStopSharingComponent extends CoreComponent im
     ).subscribe(() => {
 
       this.setRedirectAlertSuccess('You have stopped sharing your innovation', { message: 'You will not be able to interact with your support organisations anymore. You can reshare your innovation in the future by submitting it to a needs reassessment.' });
-      this.redirectTo('/innovator/account/manage-innovations/stop-sharing');
+      this.redirectTo('/innovator/account/manage-innovations');
 
     });
 

@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { GetInnovationTransfersDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum, InnovationTransferStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -16,7 +16,10 @@ import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 export class PageAccountInnovationsInfoComponent extends CoreComponent implements OnInit {
 
   haveAnyActiveInnovation = false;
+  haveAnyInProgressInnovation = false;
   innovationTransfers: GetInnovationTransfersDTO = [];
+  pausedInnovationsCounter = 0;
+  
 
 
   constructor(
@@ -44,6 +47,18 @@ export class PageAccountInnovationsInfoComponent extends CoreComponent implement
     ]).subscribe(([innovationsList, innovationTransfers]) => {
 
       this.innovationTransfers = innovationTransfers;
+
+      for(const innovation of innovationsList.data) {
+        
+        if(innovation.status === InnovationStatusEnum.PAUSED) {
+          this.pausedInnovationsCounter++;
+        }
+
+        if(innovation.status === InnovationStatusEnum.IN_PROGRESS) {
+          this.haveAnyInProgressInnovation = true;
+        }
+
+      }
 
       this.haveAnyActiveInnovation = innovationsList.data.filter(i => !this.innovationTransfers.map(it => it.innovation.id).includes(i.id))
         .length
