@@ -243,7 +243,7 @@ export const locale = {
             },
             INNOVATION_PAUSE: {
               title: 'Innovation stop share',
-              message: `Innovator has stopped sharing this innovation`
+              message: `{{ actionUserName }} has stopped sharing this innovation`
             }
           },
 
