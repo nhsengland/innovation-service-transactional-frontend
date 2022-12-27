@@ -115,6 +115,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
           return {
             ...item,
+            submittedAt: item.assessment?.reassessmentCount === 0 ? item.submittedAt : item.updatedAt,
             supportingOrganisations: [...new Set(supportingOrganisations)].join(', ') // Remove duplicates and creates a string.
           };
 
