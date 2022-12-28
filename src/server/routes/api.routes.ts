@@ -21,25 +21,22 @@ function getRequestHandler(): AxiosInstance {
 
 function parseAPIUrl(url: string): string {
 
-  let urlEndingSegments = url.substring(url.indexOf('api')); // Includes api/...
+  let urlEndingSegments = url.split(/\b\/(?:users|innovations|admins)\b/gm).pop() ?? ''; // Everything after regex
   let apiUrl = ENVIRONMENT.API_URL;
 
-  if (ENVIRONMENT.LOCAL_MODE) {
-    if (ENVIRONMENT.LOCAL_API_ADMIN_ACTIVE && url.includes('api/admins')) {
-      apiUrl = ENVIRONMENT.LOCAL_API_ADMIN_BASE_URL;
-      urlEndingSegments = urlEndingSegments.replace('/admins', '');
-    } else if (ENVIRONMENT.LOCAL_API_INNOVATIONS_ACTIVE && url.includes('api/innovations')) {
-      apiUrl = ENVIRONMENT.LOCAL_API_INNOVATIONS_BASE_URL;
-      urlEndingSegments = urlEndingSegments.replace('/innovations', '');
-    } else if (ENVIRONMENT.LOCAL_API_USERS_ACTIVE && url.includes('api/users')) {
-      apiUrl = ENVIRONMENT.LOCAL_API_USERS_BASE_URL;
-      urlEndingSegments = urlEndingSegments.replace('/users', '');
-    }
+  if (url.includes('api/admins')) {
+    apiUrl = ENVIRONMENT.API_ADMINS_URL;
+  } else if (url.includes('api/innovations')) {
+    apiUrl = ENVIRONMENT.API_INNOVATIONS_URL;
+  } else if (url.includes('api/users')) {
+    apiUrl = ENVIRONMENT.API_USERS_URL;
+  } else {
+    urlEndingSegments = url.substring(url.indexOf('/api'));
   }
 
-  // console.log('Calling API: ', new URL(urlEndingSegments, apiUrl).href);
+  // console.log('Calling API: ', new URL(apiUrl + urlEndingSegments).href);
 
-  return new URL(urlEndingSegments, apiUrl).href;
+  return new URL(apiUrl + urlEndingSegments).href;
 
 }
 
@@ -109,8 +106,7 @@ apiRouter.post(`${ENVIRONMENT.BASE_PATH}/survey`, (req, res) => {
   const requestHandler = getRequestHandler();
   const body = req.body;
 
-  requestHandler.post<{ id: string }>(`${ENVIRONMENT.API_URL}/api/users/v1/survey`, body)
-    // requestHandler.post<{ id: string }>(`${ENVIRONMENT.LOCAL_API_USERS_BASE_URL}/api/v1/survey`, body)
+  requestHandler.post<{ id: string }>(`${ENVIRONMENT.API_USERS_URL}/v1/survey`, body)
     .then(response => {
       res.cookie('surveyId', response.data.id);
       res.send(response.data);
@@ -126,11 +122,10 @@ apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-transfers/:id/chec
 
   const requestHandler = getRequestHandler();
 
-  requestHandler.get<{ userExists: boolean }>(`${ENVIRONMENT.API_URL}/api/innovations/v1/transfers/${req.params.id}/check`)
-    // requestHandler.get<{ userExists: boolean }>(`${ENVIRONMENT.LOCAL_API_INNOVATIONS_BASE_URL}/api/v1/transfers/${req.params.id}/check`)
+  requestHandler.get<{ userExists: boolean }>(`${ENVIRONMENT.API_INNOVATIONS_URL}/v1/transfers/${req.params.id}/check`)
     .then(response => { res.status(response.status).send(response.data); })
     .catch((error: any) => {
-      console.error(`Error: ${ENVIRONMENT.API_URL}/api/innovations/v1/transfers/:id/check`, error);
+      console.error(`Error: ${ENVIRONMENT.API_INNOVATIONS_URL}/v1/transfers/:id/check`, error);
       res.status(500).send();
     });
 
