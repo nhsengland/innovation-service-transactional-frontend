@@ -104,6 +104,10 @@
               </tr>
             </tbody>
           </table>
+
+          <div class="nhsuk-u-padding-bottom-4">
+            <theme-pagination [currentPage]="closedActionsList.page" [pageSize]="closedActionsList.pageSize" [totalRows]="closedActionsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+          </div>
         </div>
       </details>
     </ng-container>

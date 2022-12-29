@@ -24,7 +24,6 @@ import { FirstTimeSigninInnovationTransferComponent } from './pages/first-time-s
 // // Innovation.
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
-import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
 import { PageInnovationHowToProceedComponent } from './pages/innovation/how-to-proceed/how-to-proceed.component';
 import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation/needs-reassessment/needs-reassessment-send.component';
@@ -32,6 +31,7 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
+import { InnovationExportRequestRejectComponent } from './pages/innovation/export/export-request-reject.component';
 
 // // Shared module pages.
 // // Account.
@@ -55,8 +55,9 @@ import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 import { PageExportRecordListComponent } from '@modules/shared/pages/innovation/export/export-record-list.component';
 import { PageExportRecordInfoComponent } from '@modules/shared/pages/innovation/export/export-record-info.component';
-import { InnovationExportRequestRejectComponent } from './pages/innovation/export/export-request-reject.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
+import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
+import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -71,7 +72,6 @@ import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-dat
 import { InnovationSectionDataResolver } from '@modules/shared/resolvers/innovation-section-data.resolver';
 import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers/innovation-section-evidence-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
-import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -270,7 +270,7 @@ const routes: Routes = [
                 children: [
 
                   {
-                    path: '', pathMatch: 'full', component: InnovationActionTrackerComponent,
+                    path: '', pathMatch: 'full', component: PageInnovationActionTrackerListComponent,
                     data: { breadcrumb: null }
                   },
 
