@@ -280,24 +280,12 @@ export const locale = {
           },
 
           notification_context_types: {
-            NEEDS_ASSESSMENT: {
-              title: { singular: 'Needs Assessment', plural: 'Needs Assessment' }
-            },
-            INNOVATION: {
-              title: { singular: 'Innovation', plural: 'Innovations' }
-            },
-            COMMENT: {
-              title: { singular: 'Message', plural: 'Messages' }
-            },
-            ACTION: {
-              title: { singular: 'Action', plural: 'Actions' }
-            },
-            SUPPORT: {
-              title: { singular: 'Support status change', plural: 'Support status changes' }
-            },
-            THREAD: {
-              title: { singular: 'Message', plural: 'Messages' }
-            }
+            NEEDS_ASSESSMENT: { title: { singular: 'Needs Assessment', plural: 'Needs Assessment' } },
+            INNOVATION: { title: { singular: 'Innovation', plural: 'Innovations' } },
+            SUPPORT: { title: { singular: 'Support status change', plural: 'Support status changes' } },
+            ACTION: { title: { singular: 'Action', plural: 'Actions' } },
+            THREAD: { title: { singular: 'Message', plural: 'Messages' } },
+            COMMENT: { title: { singular: 'Message', plural: 'Messages' } }
           },
           notification_context_details: {
             LOCK_USER: { title: `Innovaton "{{ innovationName }}" owner has been locked` },
@@ -310,7 +298,8 @@ export const locale = {
             NEEDS_ASSESSMENT_COMPLETED: { title: `Innovation "{{ innovationName }}" was suggested by needs assessment` },
             NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION: { title: `Assessment team suggested one or more organisations for you to share your innovation` },
             INNOVATION_SUBMISSION: { title: `Innovation "{{ innovationName }}" is available for review` },
-            SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}"` }
+            SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}"` },
+            INNOVATION_REASSESSMENT_REQUEST: { title: `Innovation "{{ innovationName }}" is available for reassessment review` }
           },
           section_status: {
             NOT_STARTED: { name: 'Not started', cssColorClass: 'nhsuk-tag--blue' },
