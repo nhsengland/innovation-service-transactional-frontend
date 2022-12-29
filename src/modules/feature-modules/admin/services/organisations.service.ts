@@ -102,7 +102,7 @@ export class OrganisationsService extends CoreService {
 
   getOrganisationsList(filters: { onlyActive: boolean }): Observable<GetOrganisationsListDTO[]> {
 
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations').setQueryParams(filters);
+    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations').setQueryParams(filters);
     return this.http.get<GetOrganisationsListDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
