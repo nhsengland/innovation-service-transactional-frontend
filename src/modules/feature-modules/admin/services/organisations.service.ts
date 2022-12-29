@@ -112,7 +112,7 @@ export class OrganisationsService extends CoreService {
 
   getOrganisationInfo(organisationId: string): Observable<GetOrganisationInfoDTO> {
 
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId').setPathParams({ organisationId });
+    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId').setPathParams({ organisationId });
     return this.http.get<GetOrganisationInfoDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         id: response.id, name: response.name, acronym: response.acronym, isActive: response.isActive,
