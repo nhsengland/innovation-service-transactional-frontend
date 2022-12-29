@@ -56,7 +56,29 @@ export type AllSectionsOutboundPayloadType = {
   }[];
 }[];
 
+export type InnovationRecordSidebar = {
+  label: string;
+  url: string; 
+  nestedSidebarItems: {
+    label: string; 
+    url: string;
+  } [];
+}
 
+export function getInnovationRecordSidebar(type: string, innovationId: string): InnovationRecordSidebar[] {
+  let sidebar: InnovationRecordSidebar[] = []; 
+
+  INNOVATION_SECTIONS.map((parentSection, i) => {
+    let nestedSidebarItems: {label: string, url: string;}[] = [];
+    parentSection.sections.map((section, k) => {
+      nestedSidebarItems.push({ label: `${i + 1}.${k + 1} ${section.title}`, url: `/${type}/innovations/${innovationId}/record/sections/${section.id}` });
+    });
+
+    sidebar.push({ label: `${i + 1}. ${parentSection.title}`, url: `/accessor/innovations/${innovationId}/record/sections/${parentSection.sections[0].id}`, nestedSidebarItems: nestedSidebarItems  });
+  });
+
+  return sidebar;
+}
 
 export function getSectionNumber(sectionId: InnovationSectionEnum): string {
 

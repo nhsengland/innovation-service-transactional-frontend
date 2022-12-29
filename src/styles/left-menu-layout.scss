@@ -51,6 +51,10 @@
           pointer-events: none;
           cursor: default;
         }
+
+        .app-side-nav__list--nested {
+          display: block;
+        }
       }
 
       .app-side-nav__item--nested-current {
@@ -88,6 +92,7 @@
       .app-side-nav__list--nested {
         margin-bottom: 8px;
         margin-top: 8px;
+        display: none;
       
         .app-side-nav__item {
           font-weight: 400;

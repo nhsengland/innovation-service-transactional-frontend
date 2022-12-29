@@ -1,25 +1,28 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { debounceTime, filter } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
-import { ContextStore, InnovationStore } from '@modules/stores';
+import { ContextStore } from '@modules/stores';
+import { getInnovationRecordSidebar, InnovationRecordSidebar } from '@modules/stores/innovation/innovation.config';
 
 @Component({
   selector: 'app-base-sidebar-innovation-menu-outlet',
   templateUrl: './sidebar-innovation-menu-outlet.component.html'
 })
-export class SidebarInnovationMenuOutletComponent implements OnDestroy {
+export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   sidebarItems: { label: string, url: string; nestedSidebarItems?: {label: string, url: string;}[] }[] = [];
   navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
-
+  
+  private sectionsSidebar: InnovationRecordSidebar[] = [];
+  private _sidebarItems: { label: string, url: string; }[] = [];
+  
   constructor(
     private router: Router,
-    private contextStore: ContextStore,
-    private innovationStore: InnovationStore,
+    private contextStore: ContextStore
   ) {
     this.subscriptions.add(
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
@@ -30,34 +33,20 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
     this.onRouteChange();   
   }
 
+  ngOnInit(): void {
+    this.generateSidebar();
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
-  
-  private onRouteChange(): void {
-    const innovation = this.contextStore.getInnovation();
-    
-    if (this.router.url.includes('sections')) {
-      const currentSection = this.router.url.split('/').pop();
-      this.showHeading = true;
-      this.sidebarItems = [];
-      
-      this.innovationStore.getSectionsSummary$(innovation.id).subscribe(response => {
 
-        response.map((parentSection, i) => {
-          this.sidebarItems.push({ label: `${i + 1}. ${parentSection.title}`, url: `/accessor/innovations/${innovation.id}/record/sections/${parentSection.sections[0].id}`, nestedSidebarItems: []  });
+  private generateSidebar(): void {    
+    if (this.sidebarItems.length === 0) {
+      const innovation = this.contextStore.getInnovation();
 
-          if (parentSection.sections.find(j => j.id === currentSection)) {
-            parentSection.sections.map((section, k) => {
-              this.sidebarItems[i].nestedSidebarItems?.push({ label: `${i + 1}.${k + 1} ${section.title}`, url: `/accessor/innovations/${innovation.id}/record/sections/${section.id}` });
-            })
-          }
-        });
-      });
-    } else {
-      this.showHeading = false;
-
-      this.sidebarItems = [
+      this.sectionsSidebar = getInnovationRecordSidebar('accessor', innovation.id);
+      this._sidebarItems = [
         { label: 'Overview', url: `/accessor/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/accessor/innovations/${innovation.id}/record` },
         { label: 'Action tracker', url: `/accessor/innovations/${innovation.id}/action-tracker` },
@@ -65,6 +54,18 @@ export class SidebarInnovationMenuOutletComponent implements OnDestroy {
         { label: 'Support status', url: `/accessor/innovations/${innovation.id}/support` },
         { label: 'Activity log', url: `/accessor/innovations/${innovation.id}/activity-log` }
       ];
+    }
+  }
+  
+  private onRouteChange(): void {
+    this.generateSidebar();
+    
+    if (this.router.url.includes('sections')) {
+      this.showHeading = true;
+      this.sidebarItems = this.sectionsSidebar;        
+    } else {
+      this.showHeading = false;
+      this.sidebarItems = this._sidebarItems;
     }
   }
 }
