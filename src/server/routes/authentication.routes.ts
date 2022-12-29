@@ -181,11 +181,11 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
 
   const body = { surveyId, token };
 
-  axios.post(`${ENVIRONMENT.API_URL}/api/users/v1/me`, body)
+  axios.post(`${ENVIRONMENT.API_USERS_URL}/v1/me`, body)
     // axios.post(`${ENVIRONMENT.LOCAL_API_USERS_BASE_URL}/api/v1/me`, body)
     .then(() => { res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`); })
     .catch((error: any) => {
-      console.error(`Error when attempting to save the user: ${ENVIRONMENT.API_URL}/api/users/v1/me. Error: ${error}`);
+      console.error(`Error when attempting to save the user: ${ENVIRONMENT.API_USERS_URL}/v1/me. Error: ${error}`);
       res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
     });
 

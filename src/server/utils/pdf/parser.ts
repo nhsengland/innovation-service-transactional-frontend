@@ -10,7 +10,7 @@ import { PDFGeneratorParserError, PDFGeneratorSectionsNotFoundError } from '../e
 
 
 export const getSections = async (innovationId: string, config: any): Promise<{ section: sectionType, data: MappedObjectType }[]> => {
-  const url = `${ENVIRONMENT.API_URL}/api/innovations/v1/${innovationId}/all-sections`;
+  const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/${innovationId}/all-sections`;
   const response = await axios.get<{
     section: sectionType;
     data: MappedObjectType
@@ -19,13 +19,13 @@ export const getSections = async (innovationId: string, config: any): Promise<{ 
 };
 
 export const getInnovation = async (innovationId: string, config: any) => {
-  const url = `${ENVIRONMENT.API_URL}/api/innovations/v1/${innovationId}`;
+  const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/${innovationId}`;
   const response = await axios.get<getInnovationInfoEndpointDTO>(url, config);
   return response.data;
 };
 
 export const generatePDFHandler = async (innovationId: string, body: any, config: any) => {
-  const url = `${ENVIRONMENT.API_URL}/api/innovations/v1/${innovationId}/pdf`;
+  const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/${innovationId}/pdf`;
   config.responseType = 'arraybuffer';
   config.responseEncoding = 'binary';
   config.headers['Content-Type'] = 'application/pdf';

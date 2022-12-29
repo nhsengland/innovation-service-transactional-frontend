@@ -88,9 +88,8 @@ fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload`, upload.single('file'), 
   const accessToken = getAccessTokenByOid(oid);
   const file = req.file;
   const reqBody = req.body;
-  
-  const baseUrl = ENVIRONMENT.LOCAL_MODE && ENVIRONMENT.LOCAL_API_INNOVATIONS_ACTIVE ? ENVIRONMENT.LOCAL_API_INNOVATIONS_BASE_URL : ENVIRONMENT.API_URL;
-  const url = new UrlModel(baseUrl).addPath('api/v1/:innovationId/upload').setPathParams({ innovationId: reqBody.innovationId }).buildUrl();
+
+  const url = new UrlModel(ENVIRONMENT.API_INNOVATIONS_URL).addPath('v1/:innovationId/upload').setPathParams({ innovationId: reqBody.innovationId }).buildUrl();
 
   if (!req.isAuthenticated() || !accessToken) {
     res.status(401).send();
