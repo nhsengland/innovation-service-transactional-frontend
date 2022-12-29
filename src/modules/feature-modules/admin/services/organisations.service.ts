@@ -102,7 +102,7 @@ export class OrganisationsService extends CoreService {
 
   getOrganisationsList(filters: { onlyActive: boolean }): Observable<GetOrganisationsListDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations').setQueryParams(filters);
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations').setQueryParams(filters);
     return this.http.get<GetOrganisationsListDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
@@ -112,7 +112,7 @@ export class OrganisationsService extends CoreService {
 
   getOrganisationInfo(organisationId: string): Observable<GetOrganisationInfoDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId').setPathParams({ organisationId });
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId').setPathParams({ organisationId });
     return this.http.get<GetOrganisationInfoDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         id: response.id, name: response.name, acronym: response.acronym, isActive: response.isActive,
@@ -124,11 +124,11 @@ export class OrganisationsService extends CoreService {
 
   }
 
-  updateOrganisation(body: MappedObjectType, securityConfirmation: { id: string, code: string }, orgId: string): Observable<updateOrganisationDTO> {
+  updateOrganisation(body: MappedObjectType, securityConfirmation: { id: string, code: string }, organisationId: string): Observable<updateOrganisationDTO> {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/organisation/:orgId').setPathParams({ orgId }).setQueryParams(qp);
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId').setPathParams({ organisationId }).setQueryParams(qp);
     return this.http.patch<updateOrganisationDTO>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response),
@@ -181,11 +181,11 @@ export class OrganisationsService extends CoreService {
 
   }
 
-  updateUnit(body: MappedObjectType, securityConfirmation: { id: string, code: string }, organisationUnitId: string): Observable<updateOrganisationDTO> {
+  updateUnit(body: MappedObjectType, securityConfirmation: { id: string, code: string }, organisationUnitId: string, organisationId: string): Observable<updateOrganisationDTO> {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/organisation-units/:organisationUnitId').setPathParams({ organisationUnitId }).setQueryParams(qp);
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId/units/:organisationUnitId').setPathParams({ organisationId, organisationUnitId }).setQueryParams(qp);
     return this.http.patch<updateOrganisationDTO>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response),
@@ -195,11 +195,7 @@ export class OrganisationsService extends CoreService {
   }
 
   activateOrganisationUnit(organisationId: string, organisationUnitId: string, userIds: string[]): Observable<boolean> {
-
-    // return of(true);
-    // return throwError('error');
-
-    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId/activate').setPathParams({ organisationId, organisationUnitId });
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId/units/:organisationUnitId/activate').setPathParams({ organisationId, organisationUnitId });
     return this.http.patch<{}>(url.buildUrl(), { organisationUnitId, userIds }).pipe(
       take(1),
       map(response => true)
@@ -208,10 +204,6 @@ export class OrganisationsService extends CoreService {
   }
 
   inactivateOrganisationUnit(organisationId: string, organisationUnitId: string): Observable<boolean> {
-
-    // return of(true);
-    // return throwError('error');
-
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId/units/:organisationUnitId/inactivate').setPathParams({ organisationId, organisationUnitId });
     return this.http.patch<{}>(url.buildUrl(), { organisationUnitId }).pipe(
       take(1),
@@ -222,7 +214,7 @@ export class OrganisationsService extends CoreService {
 
   createOrganisation(body: CreateOrganisationBodyDTO): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations');
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations');
     return this.http.post<{ id: string }>(url.buildUrl(), { organisation: body }).pipe(take(1),
       map(response => response)
     );

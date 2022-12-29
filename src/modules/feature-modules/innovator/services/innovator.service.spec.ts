@@ -179,7 +179,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.deleteUserAccount({ reason: 'Some reason' }).subscribe({ next: success => response = success, error: error => response = error });
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/delete`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_ADMIN_URL}/v1/users/UserId01/delete`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PATCH');
     expect(response).toEqual(expected);

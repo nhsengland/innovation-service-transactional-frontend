@@ -117,7 +117,7 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
         );
         break;
       case 'Unit':
-        this.organisationsService.updateUnit(body, this.securityConfirmation, this.unitId).subscribe(
+        this.organisationsService.updateUnit(body, this.securityConfirmation, this.unitId, this.organisationId).subscribe(
           response => {
             (response.id) ?
               this.redirectTo(`admin/organisations/${this.organisationId}`, { alert: 'updateUnitSuccess' })
