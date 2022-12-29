@@ -215,7 +215,7 @@ export class OrganisationsService extends CoreService {
   createOrganisation(body: CreateOrganisationBodyDTO): Observable<{ id: string }> {
 
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations');
-    return this.http.post<{ id: string }>(url.buildUrl(), { organisation: body }).pipe(take(1),
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1),
       map(response => response)
     );
 
