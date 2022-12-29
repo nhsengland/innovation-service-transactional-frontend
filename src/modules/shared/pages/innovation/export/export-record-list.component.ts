@@ -16,8 +16,10 @@ export class PageExportRecordListComponent extends CoreComponent implements OnIn
 
   innovationId: string;
 
-  validRequestTable = new TableModel<InnovationExportRequestItemType>({ pageSize: 1000 });
-  historyRequestTable = new TableModel<InnovationExportRequestItemType>({ pageSize: 1000 });
+  validRequestTable = new TableModel<InnovationExportRequestItemType>({ pageSize: 100 });
+  historyRequestTable = new TableModel<InnovationExportRequestItemType>({ pageSize: 5 });
+
+  isHistoryLoading = false;
 
   pageInformation: { [key: string]: { title: string, lead: string, secondaryTitle: string } } = {
     [UserTypeEnum.INNOVATOR]: {
@@ -80,33 +82,18 @@ export class PageExportRecordListComponent extends CoreComponent implements OnIn
     this.setPageStatus('LOADING');
 
     const queryValid = { ...this.validRequestTable.getAPIQueryParams() };
-    const queryHistory = {  ...this.historyRequestTable.getAPIQueryParams() };
 
-    if(this.stores.authentication.isInnovatorType()) {
-      queryValid.filters = { statuses: [InnovationExportRequestStatusEnum.PENDING] } 
-
-      queryHistory.filters = {
-        statuses: [
-          InnovationExportRequestStatusEnum.APPROVED,
-          InnovationExportRequestStatusEnum.CANCELLED,
-          InnovationExportRequestStatusEnum.EXPIRED,
-          InnovationExportRequestStatusEnum.REJECTED
-        ]
-      }
+    if (this.stores.authentication.isInnovatorType()) {
+      queryValid.filters = { statuses: [InnovationExportRequestStatusEnum.PENDING] }
     }
 
-    if(this.stores.authentication.isAccessorType()) {
+    if (this.stores.authentication.isAccessorType()) {
       queryValid.take = 1; // Will take just the latest request
-      queryHistory.skip = 1; // History don't want the latest request
     }
 
-    forkJoin([
-      this.innovationsService.getExportRequestsList(this.innovationId, queryValid),
-      this.innovationsService.getExportRequestsList(this.innovationId, queryHistory)
-    ]).subscribe(([validExportRequests, historyExportRequest]) => {
+    this.innovationsService.getExportRequestsList(this.innovationId, queryValid).subscribe((validExportRequests) => {
 
       this.validRequestTable.setData(validExportRequests.data, validExportRequests.data.length);
-      this.historyRequestTable.setData(historyExportRequest.data, historyExportRequest.count);
 
       this.setPageStatus('READY');
 
@@ -137,4 +124,49 @@ export class PageExportRecordListComponent extends CoreComponent implements OnIn
     this.redirectTo(`/accessor/innovations/${this.innovationId}/export/request`);
   }
 
+  handleHistoryTableClick() {
+    if(this.historyRequestTable.getTotalRowsNumber() !== 0) {
+      return;
+    }
+    this.exportRequestsHistoryList();
+  }
+
+  onPageChange(event: { pageNumber: number }): void {
+    this.historyRequestTable.setPage(event.pageNumber);
+    this.exportRequestsHistoryList();
+  }
+
+  private exportRequestsHistoryList() {
+
+    const queryHistory = { ...this.historyRequestTable.getAPIQueryParams() };
+
+    if (this.stores.authentication.isInnovatorType()) {
+      queryHistory.filters = {
+        statuses: [
+          InnovationExportRequestStatusEnum.APPROVED,
+          InnovationExportRequestStatusEnum.CANCELLED,
+          InnovationExportRequestStatusEnum.EXPIRED,
+          InnovationExportRequestStatusEnum.REJECTED
+        ]
+      }
+    }
+
+    if (this.stores.authentication.isAccessorType()) {
+      queryHistory.skip = queryHistory.skip + 1;
+    }
+
+    this.isHistoryLoading = true;
+
+    this.innovationsService.getExportRequestsList(this.innovationId, queryHistory).subscribe((historyExportRequest) => {
+
+      const count = this.stores.authentication.isAccessorType() && historyExportRequest.data.length !== 0
+        ? historyExportRequest.count - this.validRequestTable.getTotalRowsNumber()
+        : historyExportRequest.count;
+
+      this.historyRequestTable.setData(historyExportRequest.data, count);
+
+      this.isHistoryLoading = false;
+
+    });
+  }
 }
