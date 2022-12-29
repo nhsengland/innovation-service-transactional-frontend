@@ -51,7 +51,6 @@ export type GetTermsOfUseLastVersionInfoDTO = {
 export class AuthenticationService {
 
   private APP_URL = this.envVariablesStore.APP_URL;
-  private API_URL = this.envVariablesStore.API_URL;
   private API_USERS_URL = this.envVariablesStore.API_USERS_URL;
 
   constructor(
