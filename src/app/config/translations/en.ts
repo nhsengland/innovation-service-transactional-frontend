@@ -299,7 +299,8 @@ export const locale = {
             NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION: { title: `Assessment team suggested one or more organisations for you to share your innovation` },
             INNOVATION_SUBMISSION: { title: `Innovation "{{ innovationName }}" is available for review` },
             SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}"` },
-            INNOVATION_REASSESSMENT_REQUEST: { title: `Innovation "{{ innovationName }}" is available for reassessment review` }
+            INNOVATION_REASSESSMENT_REQUEST: { title: `Innovation "{{ innovationName }}" is available for reassessment review` },
+            INNOVATION_STOP_SHARING: { title: `Sharing of innovation "{{ innovationName }}" has been stopped for all supporting organisations` }
           },
           section_status: {
             NOT_STARTED: { name: 'Not started', cssColorClass: 'nhsuk-tag--blue' },
