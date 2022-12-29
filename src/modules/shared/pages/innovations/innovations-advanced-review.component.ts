@@ -192,7 +192,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.anyFilterSelected = this.filters.filter(i => i.selected.length > 0).length > 0 || !!this.form.get('assignedToMe')?.value || !!this.form.get('suggestedOnly')?.value;
 
     this.innovationsList.setFilters({
-      name: encodeURIComponent(this.form.get('search')?.value ?? ''),
+      name: this.form.get('search')?.value,
       mainCategories: this.form.get('mainCategories')?.value,
       locations: this.form.get('locations')?.value,
       engagingOrganisations: this.form.get('engagingOrganisations')?.value,
