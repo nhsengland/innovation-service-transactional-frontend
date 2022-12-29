@@ -55,18 +55,25 @@
 
       </div>
 
-      <details class="nhsuk-details nhsuk-u-padding-top-5">
+      <details class="nhsuk-details nhsuk-u-padding-top-5" (click)="handleHistoryTableClick()">
         <summary class="nhsuk-details__summary">
           <span class="nhsuk-details__summary-text">
             Previous requests
           </span>
         </summary>
         <div class="nhsuk-details__text">
-          <p *ngIf="historyRequestTable.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-4">No history yet.</p>
 
-          <ng-container *ngIf="historyRequestTable.getTotalRowsNumber() > 0" [ngTemplateOutlet]="defaultTable"
-            [ngTemplateOutletContext]="{ $implicit: historyRequestTable, isHistory: true, caption: 'Innovation record export history' }">
-          </ng-container>
+          <theme-spinner *ngIf="isHistoryLoading; else historyLoaded"></theme-spinner>
+
+          <ng-template #historyLoaded>
+            
+            <p *ngIf="historyRequestTable.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-4">No history yet.</p>
+
+            <ng-container *ngIf="historyRequestTable.getTotalRowsNumber() > 0" [ngTemplateOutlet]="defaultTable"
+              [ngTemplateOutletContext]="{ $implicit: historyRequestTable, isHistory: true, caption: 'Innovation record export history' }">
+            </ng-container>
+
+          </ng-template>
 
         </div>
       </details>
@@ -126,6 +133,11 @@
     </tbody>
 
   </table>
+
+  <div *ngIf="isHistory" class="nhsuk-u-padding-bottom-4">
+    <theme-pagination [currentPage]="table.page" [pageSize]="table.pageSize" [totalRows]="table.getTotalRowsNumber()"
+      (updatePageEvent)="onPageChange($event)"></theme-pagination>
+  </div>
 </ng-template>
 
 <ng-template #validInnovatorTable let-table let-caption="caption">
