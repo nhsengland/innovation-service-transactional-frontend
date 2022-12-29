@@ -9,6 +9,7 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -45,7 +46,8 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
         name: { label: 'Action' },
         createdAt: { label: 'Requested date' },
         status: { label: 'Status', align: 'right' }
-      }
+      },
+      pageSize: 100
     })
 
     this.closedActionsList = new TableModel({
@@ -54,40 +56,58 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
         name: { label: 'Action' },
         createdAt: { label: 'Requested date' },
         status: { label: 'Status', align: 'right' }
-      }
+      },
+      pageSize: 5
     });
-
   }
 
 
   ngOnInit(): void {
 
-    const filters = new TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>({ pageSize: 1000 });
-    filters.setFilters({ innovationId: this.innovationId, fields: ['notifications'] });
+    this.openedActionsList.setFilters({
+      innovationId: this.innovationId,
+      fields: ['notifications'],
+      status: [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.IN_REVIEW]
+    });
 
-    this.innovationsService.getActionsList(filters.getAPIQueryParams()).subscribe(response => {
+    this.closedActionsList.setFilters({
+      innovationId: this.innovationId,
+      fields: ['notifications'],
+      status: [InnovationActionStatusEnum.DECLINED, InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DELETED]
+    });
 
-      this.openedActionsList.setData(response.data
-        .filter(item => [
-          InnovationActionStatusEnum.REQUESTED,
-          // InnovationActionStatusEnum.STARTED,
-          // InnovationActionStatusEnum.CONTINUE,
-          InnovationActionStatusEnum.IN_REVIEW
-        ].includes(item.status))
-      );
+    forkJoin(
+      [
+        this.innovationsService.getActionsList(this.openedActionsList.getAPIQueryParams()),
+        this.innovationsService.getActionsList(this.closedActionsList.getAPIQueryParams())
+      ]
+    )
+    .subscribe(([openedActions, closedActions]) => {
 
-      this.closedActionsList.setData(response.data
-        .filter(item => [
-          InnovationActionStatusEnum.DECLINED,
-          InnovationActionStatusEnum.COMPLETED,
-          InnovationActionStatusEnum.DELETED
-        ].includes(item.status))
-      );
+      this.openedActionsList.setData(openedActions.data);
+
+      this.closedActionsList.setData(closedActions.data, closedActions.count);
 
       this.setPageStatus('READY');
 
     });
 
+  }
+
+  onPageChange(event: { pageNumber: number }): void {
+    this.closedActionsList.setPage(event.pageNumber);
+    this.getClosedActionsList();
+  }
+
+  private getClosedActionsList() {
+
+    this.innovationsService.getActionsList(this.closedActionsList.getAPIQueryParams()).subscribe(closedActions => {
+
+      this.closedActionsList.setData(closedActions.data, closedActions.count);
+
+      this.setPageStatus('READY');
+
+    });
   }
 
 }

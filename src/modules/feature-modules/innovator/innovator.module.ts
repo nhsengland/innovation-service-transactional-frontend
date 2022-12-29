@@ -27,7 +27,6 @@ import { FirstTimeSigninInnovationTransferComponent } from './pages/first-time-s
 // // Innovation.
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
-import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
 import { PageInnovationHowToProceedComponent } from './pages/innovation/how-to-proceed/how-to-proceed.component';
 import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation/needs-reassessment/needs-reassessment-send.component';
@@ -77,7 +76,6 @@ import { InnovatorService } from './services/innovator.service';
     // // Innovation.
     InnovationActionTrackerDeclineComponent,
     InnovationActionTrackerInfoComponent,
-    InnovationActionTrackerComponent,
     InnovationDataSharingChangeComponent,
     PageInnovationHowToProceedComponent,
     PageInnovationNeedsReassessmentSendComponent,

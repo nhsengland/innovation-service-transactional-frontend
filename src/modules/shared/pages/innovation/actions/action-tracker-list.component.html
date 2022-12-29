@@ -1,6 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <div *ngIf="!innovation.owner.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+  <div *ngIf="!innovation.owner.isActive && !stores.authentication.isInnovatorType()" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
     </div>
@@ -115,6 +115,10 @@
               </tr>
             </tbody>
           </table>
+
+          <div class="nhsuk-u-padding-bottom-4">
+            <theme-pagination [currentPage]="closedActionsList.page" [pageSize]="closedActionsList.pageSize" [totalRows]="closedActionsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+          </div>
         </div>
       </details>
     </ng-container>
