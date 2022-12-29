@@ -21,23 +21,33 @@ function getRequestHandler(): AxiosInstance {
 
 function parseAPIUrl(url: string): string {
 
-  let urlEndingSegments = url.split(/\b\/(?:users|innovations|admins)\b/gm).pop() ?? ''; // Everything after regex
-  let apiUrl = ENVIRONMENT.API_URL;
+  const match = url.match(/\/api(?:\/(innovations|users|admins))?(?:(\/.*))?$/);
+  let apiUrl: string;
 
-  if (url.includes('api/admins')) {
-    apiUrl = ENVIRONMENT.API_ADMINS_URL;
-  } else if (url.includes('api/innovations')) {
-    apiUrl = ENVIRONMENT.API_INNOVATIONS_URL;
-  } else if (url.includes('api/users')) {
-    apiUrl = ENVIRONMENT.API_USERS_URL;
-  } else {
-    urlEndingSegments = url.substring(url.indexOf('/api'));
+  if (match === null) {
+    return url;
+  }
+
+  const [functionApp, urlEndingSegments] = [match[1], match[2]];
+
+  switch (functionApp) {
+    case 'admins':
+      apiUrl = ENVIRONMENT.API_ADMINS_URL;
+      break;
+    case 'innovations':
+      apiUrl = ENVIRONMENT.API_INNOVATIONS_URL;
+      break;
+    case 'users':
+      apiUrl = ENVIRONMENT.API_USERS_URL;
+      break;
+    default:
+      // This is probably disappear in the future (legacy)
+      apiUrl = ENVIRONMENT.API_URL + '/api';
   }
 
   // console.log('Calling API: ', new URL(apiUrl + urlEndingSegments).href);
 
   return new URL(apiUrl + urlEndingSegments).href;
-
 }
 
 // Authenticated API proxy endpoints.
