@@ -106,14 +106,13 @@ export class UrlModel {
       .filter(key => this.queryParams[key] !== undefined)
       .map(key => {
 
-        let value = `${key}=`;
+        let value: string;
 
-        if (Array.isArray(this.queryParams[key])) { value += (this.queryParams[key] as any[]).join(','); }      // When queryParam is an array.
-        else if (typeof this.queryParams[key] === 'object') { value += JSON.stringify(this.queryParams[key]); } // When queryParam is an object.
-        else { value += this.queryParams[key]; }
+        if (Array.isArray(this.queryParams[key])) { value = (this.queryParams[key] as any[]).join(','); }      // When queryParam is an array.
+        else if (typeof this.queryParams[key] === 'object') { value = JSON.stringify(this.queryParams[key]); } // When queryParam is an object.
+        else { value = encodeURIComponent(this.queryParams[key]); }
 
-        return value;
-
+        return `${key}=${value}`;
       })
       .join('&');
     queryParams = (queryParams ? '?' : '') + queryParams;
