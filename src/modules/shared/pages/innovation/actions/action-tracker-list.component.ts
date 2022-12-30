@@ -28,6 +28,8 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
+  isClosedActionsLoading = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
@@ -75,18 +77,10 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
       fields: ['notifications'],
       status: [InnovationActionStatusEnum.DECLINED, InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DELETED]
     });
-
-    forkJoin(
-      [
-        this.innovationsService.getActionsList(this.openedActionsList.getAPIQueryParams()),
-        this.innovationsService.getActionsList(this.closedActionsList.getAPIQueryParams())
-      ]
-    )
-    .subscribe(([openedActions, closedActions]) => {
+    
+    this.innovationsService.getActionsList(this.openedActionsList.getAPIQueryParams()).subscribe((openedActions) => {
 
       this.openedActionsList.setData(openedActions.data);
-
-      this.closedActionsList.setData(closedActions.data, closedActions.count);
 
       this.setPageStatus('READY');
 
@@ -99,13 +93,22 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
     this.getClosedActionsList();
   }
 
+  handleClosedActionsTableClick() {
+    if(this.closedActionsList.getTotalRowsNumber() !== 0) {
+      return;
+    }
+    this.getClosedActionsList();
+  }
+
   private getClosedActionsList() {
+
+    this.isClosedActionsLoading = true;
 
     this.innovationsService.getActionsList(this.closedActionsList.getAPIQueryParams()).subscribe(closedActions => {
 
       this.closedActionsList.setData(closedActions.data, closedActions.count);
 
-      this.setPageStatus('READY');
+      this.isClosedActionsLoading = false;
 
     });
   }
