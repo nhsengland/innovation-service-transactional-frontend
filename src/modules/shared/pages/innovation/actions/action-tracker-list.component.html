@@ -63,65 +63,71 @@
       </table>
     </ng-container>
 
+    <details class="nhsuk-details nhsuk-u-padding-top-5" (click)="handleClosedActionsTableClick()">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">
+          All closed actions
+        </span>
+      </summary>
+      <div class="nhsuk-details__text">
 
-    <ng-container *ngIf="closedActionsList.getTotalRowsNumber() === 0">
-      <p> There are no closed actions </p>
-    </ng-container>
+        <theme-spinner *ngIf="isClosedActionsLoading; else closedActionsLoaded"></theme-spinner>
 
-    <ng-container *ngIf="closedActionsList.getTotalRowsNumber() > 0">
-      <details class="nhsuk-details nhsuk-u-padding-top-5">
-        <summary class="nhsuk-details__summary">
-          <span class="nhsuk-details__summary-text">
-            All closed actions
-          </span>
-        </summary>
-        <div class="nhsuk-details__text">
-          <table class="nhsuk-table-responsive app-sortable-table">
-            <caption class="nhsuk-table__caption"> Closed actions list </caption>
-            <thead class="nhsuk-table__head">
-              <tr>
-                <th *ngFor="let item of closedActionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
-                  <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-                  <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
-                  <ng-container *ngIf="item.key === 'status'">
-                    <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-1" arial-label="View status keys information"> Status key </a>
-                  </ng-container>
-                </th>
-              </tr>
-            </thead>
-            <tbody class="nhsuk-table__body">
-              <tr *ngFor="let item of closedActionsList.getRecords()" class="nhsuk-table__row">
-                <td class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('id') }} </span>
-                  <span>{{ item.displayId }}</span>
-                </td>
-                <td class="nhsuk-table__cell">
-                  <div class="d-flex">
-                    <div class="nhsuk-u-padding-right-1">
-                      <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('name') }} </span>
-                      <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ item.id }}" attr.aria-label="View {{ item.name }} action"> {{ item.name }} </a>
+
+        <ng-template #closedActionsLoaded>
+
+          <p *ngIf="closedActionsList.getTotalRowsNumber() === 0"> There are no closed actions </p>
+
+          <ng-container *ngIf="closedActionsList.getTotalRowsNumber() > 0">
+            <table class="nhsuk-table-responsive app-sortable-table">
+              <caption class="nhsuk-table__caption"> Closed actions list </caption>
+              <thead class="nhsuk-table__head">
+                <tr>
+                  <th *ngFor="let item of closedActionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                    <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+                    <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
+                    <ng-container *ngIf="item.key === 'status'">
+                      <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-1" arial-label="View status keys information"> Status key </a>
+                    </ng-container>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="nhsuk-table__body">
+                <tr *ngFor="let item of closedActionsList.getRecords()" class="nhsuk-table__row">
+                  <td class="nhsuk-table__cell">
+                    <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('id') }} </span>
+                    <span>{{ item.displayId }}</span>
+                  </td>
+                  <td class="nhsuk-table__cell">
+                    <div class="d-flex">
+                      <div class="nhsuk-u-padding-right-1">
+                        <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('name') }} </span>
+                        <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ item.id }}" attr.aria-label="View {{ item.name }} action"> {{ item.name }} </a>
+                      </div>
+                      <theme-notification-tag label="dot" *ngIf="item.notifications"></theme-notification-tag>
                     </div>
-                    <theme-notification-tag label="dot" *ngIf="item.notifications"></theme-notification-tag>
-                  </div>
-                </td>
-                <td class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('createdAt') }} </span>
-                  {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}
-                </td>
-                <td class="nhsuk-table__cell text-align-right">
-                  <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('status') }} </span>
-                  <theme-tag type="{{ 'shared.catalog.innovation.action_status.' + item.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.action_status.' + item.status + '.name' | translate }}"></theme-tag>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  </td>
+                  <td class="nhsuk-table__cell">
+                    <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('createdAt') }} </span>
+                    {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}
+                  </td>
+                  <td class="nhsuk-table__cell text-align-right">
+                    <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('status') }} </span>
+                    <theme-tag type="{{ 'shared.catalog.innovation.action_status.' + item.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.action_status.' + item.status + '.name' | translate }}"></theme-tag>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-          <div class="nhsuk-u-padding-bottom-4">
-            <theme-pagination [currentPage]="closedActionsList.page" [pageSize]="closedActionsList.pageSize" [totalRows]="closedActionsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
-          </div>
-        </div>
-      </details>
-    </ng-container>
+            <div class="nhsuk-u-padding-bottom-4">
+              <theme-pagination [currentPage]="closedActionsList.page" [pageSize]="closedActionsList.pageSize" [totalRows]="closedActionsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+            </div>
+            
+          </ng-container>
+
+        </ng-template>
+      </div>
+    </details>
 
   </ng-template>
 
