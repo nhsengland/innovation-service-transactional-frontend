@@ -228,7 +228,7 @@ export class ServiceUsersService extends CoreService {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/user').setQueryParams(qp);
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users').setQueryParams(qp);
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response),
@@ -241,7 +241,7 @@ export class ServiceUsersService extends CoreService {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/:userId/delete').setPathParams({ userId }).setQueryParams(qp);
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/delete').setPathParams({ userId }).setQueryParams(qp);
     return this.http.patch<{ id: string }>(url.buildUrl(), {}).pipe(
       take(1),
       map(response => response),
@@ -337,7 +337,7 @@ export class ServiceUsersService extends CoreService {
 
   createVersion(body: { [key: string]: any }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/tou');
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/tou');
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response),
@@ -357,7 +357,7 @@ export class ServiceUsersService extends CoreService {
   updateTermsById(id: string, data: MappedObjectType): Observable<any> {
     const body = Object.assign({}, data);
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/tou/:id').setPathParams({ id });
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/tou/:id').setPathParams({ id });
     return this.http.put<any>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)

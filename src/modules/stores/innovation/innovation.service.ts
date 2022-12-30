@@ -113,7 +113,7 @@ export class InnovationService {
       );
 
     } else {
-      const url = new UrlModel(this.API_URL).addPath('innovators/:userId/innovations/:innovationId/evidence').setPathParams({ userId: this.authenticationStore.getUserId(), innovationId });
+      const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/evidence').setPathParams({ innovationId });
       return this.http.post<MappedObjectType>(url.buildUrl(), data).pipe(
         take(1),
         map(response => response)
