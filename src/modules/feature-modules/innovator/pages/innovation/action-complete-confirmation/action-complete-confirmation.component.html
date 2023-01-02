@@ -1,0 +1,22 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <div class="nhsuk-inset-text">
+        <span class="nhsuk-u-visually-hidden">Information:</span>
+        <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0 mr-auto"> 
+          You have requested actions to this section
+        </p>
+        <p>
+          If you confirm all requested actions of this section will be submitted. 
+          If you say no this section will remain in draft until you mark as completed or 
+          decline the requested actions for this section.
+        </p>
+      </div>
+
+
+      <button (click)="onConfirmClick()" class="nhsuk-button nhsuk-u-margin-right-3"> Confirm </button>
+    </div>
+  </div>
+
+</theme-content-wrapper>
