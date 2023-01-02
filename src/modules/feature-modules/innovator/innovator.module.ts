@@ -35,6 +35,7 @@ import { InnovationSectionEvidenceEditComponent } from './pages/innovation/recor
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
 import { InnovationExportRequestRejectComponent } from './pages/innovation/export/export-request-reject.component';
+import { InnovationActionCompleteConfirmationComponent } from './pages/innovation/action-complete-confirmation/action-complete-confirmation.component';
 
 // Components.
 import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
@@ -84,6 +85,7 @@ import { InnovatorService } from './services/innovator.service';
     InnovationSectionEditComponent,
     InnovationNewComponent,
     InnovationExportRequestRejectComponent,
+    InnovationActionCompleteConfirmationComponent,
 
     // Components.
     OrganisationSuggestionsCardComponent
