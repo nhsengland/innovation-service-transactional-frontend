@@ -239,7 +239,7 @@ export const locale = {
             },
             ACTION_STATUS_CANCELLED_UPDATE: {
               title: 'Action cancelled',
-              message: `{{ totalActions }} actions for {{ sectionTitle }} section were changed to "Cancelled"`
+              message: `{{ actionUserName }} marked an action as cancelled`
             },
             INNOVATION_PAUSE: {
               title: 'Innovation stop share',
