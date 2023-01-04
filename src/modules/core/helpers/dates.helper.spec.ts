@@ -7,12 +7,14 @@ describe('Core/Helpers/DatesHelper', () => {
   });
 
   describe('DatesHelper.parseIntoValidFormat', () => {
+    const year = new Date().getFullYear();
+
     it(`should return YYYY/MM/DD when input is DD/MM`, () => {
-      expect(DatesHelper.parseIntoValidFormat('24/09')).toBe('2022/09/24');
+      expect(DatesHelper.parseIntoValidFormat('24/09')).toBe(`${year}/09/24`);
     });
 
     it(`should return YYYY/MM/DD when input is MM/DD`, () => {
-      expect(DatesHelper.parseIntoValidFormat('09/12')).toBe('2022/12/09');
+      expect(DatesHelper.parseIntoValidFormat('09/12')).toBe(`${year}/12/09`);
     });
 
     it(`should return YYYY-MM-DD when input is DD-MM-YYYY`, () => {
