@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { time } from 'console';
 
 
 @Component({
@@ -14,12 +13,14 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
 
   innovationId: string;
   sectionId: string;
-  
+
+  form = new FormGroup({
+    actionComplete: new FormControl<boolean>(true, { validators: Validators.required, updateOn: 'change' }),
+  }, { updateOn: 'blur' });
 
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private InnovationsService: InnovationsService
+    private activatedRoute: ActivatedRoute
   ) {
     super();
 
@@ -33,18 +34,28 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
     this.setPageTitle('Do you want to set requested action as completed?');
     
    
-    this.setBackLink('Innovation Record', `innovator/innovations/${this.innovationId}/record/record/sections/$${this.sectionId}`);
+    this.setBackLink('Go Back', `innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
 
     this.setPageStatus('READY');
   }
 
 
   onConfirmClick(): void {
+    const actionComplete = this.form.get('actionComplete')?.value ?? true;
+
+    actionComplete ? this.onSubmitSection() : this.onCompleteSectionLater();    
+  }
+
+  private onSubmitSection(): void {
     this.stores.innovation.submitSections$(this.innovationId, this.sectionId).subscribe({
       next: () => {
         this.setAlertSuccess('You have successfully update this section', { message: `requested for this section have neem submitted. You can update this section at any time.` });
       },
       error: () => this.setAlertUnknownError()
     });
+  }
+
+  private onCompleteSectionLater(): void {
+    this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
   }
 }

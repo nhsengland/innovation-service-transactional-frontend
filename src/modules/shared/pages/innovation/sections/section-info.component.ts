@@ -28,6 +28,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     status: { id: keyof typeof INNOVATION_SECTION_STATUS, label: string };
     isNotStarted: boolean;
     showSubmitButton: boolean;
+    showSubmitUpdateButton: boolean;
     hasEvidences: boolean;
     wizard: WizardEngineModel;
     date: string;
@@ -62,6 +63,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       status: { id: 'UNKNOWN', label: '' },
       isNotStarted: false,
       showSubmitButton: false,
+      showSubmitUpdateButton: false,
       hasEvidences: false,
       wizard: new WizardEngineModel({}),
       date: ''
@@ -133,6 +135,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       status: { id: 'UNKNOWN', label: '' },
       isNotStarted: false,
       showSubmitButton: false,
+      showSubmitUpdateButton: false,
       hasEvidences: !!section?.evidences?.steps.length,
       wizard: section?.wizard || new WizardEngineModel({}),
       date: ''
@@ -149,6 +152,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         this.section.status = { id: response.status, label: INNOVATION_SECTION_STATUS[response.status]?.label || '' };
         this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
         this.section.date = response.submittedAt;
+      
         this.getPreviousAndNextPagination();
 
         if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
@@ -158,7 +162,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data)).runRules();
 
           const validInformation = this.section.wizard.validateData();
-          this.section.showSubmitButton = validInformation.valid && ['DRAFT'].includes(this.section.status.id);
+          this.section.showSubmitButton = response.openActionsCount === 0 && validInformation.valid && ['DRAFT'].includes(this.section.status.id);
+          this.section.showSubmitUpdateButton = response.openActionsCount > 0;
+
           
           this.summaryList = this.section.wizard.runSummaryParsing();
         }
