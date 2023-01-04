@@ -21,7 +21,7 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
   actionDisplayId: string = '';
 
   form = new FormGroup({
-    message: new FormControl<string>('', { validators: CustomValidators.required('Please choose a status') })
+    message: new FormControl<string>('', { validators: CustomValidators.required('Please enter a reason') })
   }, { updateOn: 'blur' });
 
 
@@ -44,7 +44,8 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
 
       this.actionDisplayId = response.displayId;
 
-      this.setPageTitle(response.name, { hint: response.displayId });
+      this.setPageTitle(`Decline action: ${response.name.toLowerCase()}`, { size: 'l' });
+
       this.setPageStatus('READY');
 
     });
@@ -64,12 +65,9 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
       message: this.form.value.message ?? ''
     }
 
-    this.innovationsService.updateAction(this.innovationId, this.actionId, body).subscribe({
-      next: response => {
-        this.setRedirectAlertSuccess('The action was declined', { message: 'The accessor will be notified' });
-        this.redirectTo(`/innovator/innovations/${this.innovationId}/action-tracker/${response.id}`);
-      },
-      error: () => this.setAlertUnknownError()
+    this.innovationsService.updateAction(this.innovationId, this.actionId, body).subscribe((response) => {
+      this.setRedirectAlertSuccess('You have declined this requested action', { message: 'The accessor will be notified' });
+      this.redirectTo(`/innovator/innovations/${this.innovationId}/action-tracker/${response.id}`);
     });
 
   }

@@ -169,6 +169,8 @@
                 <ng-container *ngSwitchCase="'innovator'">
                   <span *ngIf="section.openActionsCount >= 1" class="float-r">
                     <theme-tag
+                      routerLink="{{ baseUrl }}/{{section.id}}/actions"
+                      class="cursor-pointer"
                       type="{{ 'shared.catalog.innovation.action_status.REQUESTED.cssColorClass' | translate }}"
                       label="{{ section.openActionsCount + ' ' + ('dictionary.action' | pluralTranslate: section.openActionsCount | translate) + ' ' + ('shared.catalog.innovation.action_status.REQUESTED.name' | translate | lowercase) }}">
                     </theme-tag>

@@ -15,6 +15,7 @@ import { InnovationStatisticsEnum } from './statistics.enum';
 import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSubmissionDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLog, InnovationSupportsLogDTO, SupportLogType } from './innovations.dtos';
+import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
 
 export enum AssessmentSupportFilterEnum {
   UNASSIGNED = 'UNASSIGNED',
@@ -377,7 +378,7 @@ export class InnovationsService extends CoreService {
         id: response.id,
         displayId: response.displayId,
         status: response.status,
-        name: `Submit '${this.stores.innovation.getSectionTitle(response.section).toLowerCase()}'`,
+        name: `Update '${this.stores.innovation.getSectionTitle(response.section).toLowerCase()}'`,
         description: response.description,
         section: response.section,
         createdAt: response.createdAt,
@@ -567,5 +568,21 @@ export class InnovationsService extends CoreService {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/export-requests/:requestId/status').setPathParams({ innovationId, requestId });
     return this.http.patch<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
+  }
+
+  // Sections
+  getSectionInfo(innovationId: string, sectionId: string, filters: { fields?: ('actions')[]}): Observable<InnovationSectionInfoDTO> {
+
+    const qp = {
+      ...(filters.fields ? { fields: filters.fields } : {})
+    };
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionId')
+      .setPathParams({
+        innovationId,
+        sectionId
+      }).setQueryParams(qp);
+    return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+    
   }
 }
