@@ -8,7 +8,7 @@ import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
 import { ENV, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
 import { CoreModule, EnvironmentVariablesStore } from '@modules/core';
-import { AuthenticationService } from '@modules/stores';
+import { AuthenticationService, AuthenticationStore, StoresModule } from '@modules/stores';
 
 
 describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
@@ -22,7 +22,8 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        CoreModule
+        CoreModule,
+        StoresModule
       ],
       providers: [
         AuthenticationService,
@@ -56,6 +57,7 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('HEAD');
     expect(httpRequest.request.headers.has('Cookie')).toEqual(true);
+    expect(httpRequest.request.headers.has('X-Context')).toEqual(true);
 
   });
 
@@ -74,7 +76,8 @@ describe('Core/Interceptors/ApiOutInterceptor running CLIENT side', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        CoreModule
+        CoreModule,
+        StoresModule
       ],
       providers: [
         AuthenticationService,

@@ -162,8 +162,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data)).runRules();
 
           const validInformation = this.section.wizard.validateData();
-          this.section.showSubmitButton = response.actionsIds.length  === 0 && validInformation.valid && ['DRAFT'].includes(this.section.status.id);
-          this.section.actions = response.actionsIds.length;
+          this.section.showSubmitButton = response.actionsIds?.length  === 0 && validInformation.valid && ['DRAFT'].includes(this.section.status.id);
+          this.section.actions = response.actionsIds?.length ?? 0;
 
           
           this.summaryList = this.section.wizard.runSummaryParsing();

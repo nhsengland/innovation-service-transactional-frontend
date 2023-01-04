@@ -8,6 +8,7 @@ import { ENV } from '@tests/app.mocks';
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 
 import { InnovationService } from './innovation.service';
+import { StoresModule } from '@modules/stores';
 
 
 describe('Core/Services/InnovationService', () => {
@@ -20,7 +21,8 @@ describe('Core/Services/InnovationService', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        CoreModule
+        CoreModule,
+        StoresModule
       ],
       providers: [
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }

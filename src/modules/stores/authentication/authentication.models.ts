@@ -5,7 +5,14 @@ import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEn
 export class AuthenticationModel {
 
   isSignIn: boolean;
-
+  userContext: {
+    type: '' | UserTypeEnum,
+    organisation?: {
+      id: string,
+      name: string,
+      organisationUnit: { id: string; name: string; acronym: string; }
+    }
+  };
   user?: {
     id: string,
     email: string,
@@ -31,7 +38,9 @@ export class AuthenticationModel {
   constructor() {
 
     this.isSignIn = false;
-
+    this.userContext = {
+      type: ''
+    }
   }
 
 }

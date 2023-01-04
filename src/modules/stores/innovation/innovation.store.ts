@@ -10,7 +10,7 @@ import { WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationService } from './innovation.service';
 
-import { INNOVATION_SECTIONS, getSectionTitle, getSectionParentTitle, getSectionParentNumber } from './innovation.config';
+import { INNOVATION_SECTIONS, getSectionTitle, getSectionParentTitle, getSectionParentNumber, getSectionNumber } from './innovation.config';
 import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
 import {
   InnovationModel,
@@ -105,6 +105,10 @@ export class InnovationStore extends Store<InnovationModel> {
 
   getSectionParentNumber(sectionId: InnovationSectionEnum): string {
     return getSectionParentNumber(sectionId);
+  }
+
+  getSectionNumber(sectionId: InnovationSectionEnum): string {
+    return getSectionNumber(sectionId);
   }
 
   getSectionTitle(sectionId: InnovationSectionEnum | null): string {

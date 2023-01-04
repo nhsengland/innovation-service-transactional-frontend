@@ -58,6 +58,7 @@ import { PageExportRecordInfoComponent } from '@modules/shared/pages/innovation/
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
+import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -257,9 +258,24 @@ const routes: Routes = [
                             ]
                           },
                           {
-                            path: 'confirm-update', pathMatch: 'full', component: InnovationActionCompleteConfirmationComponent,
-                            data: { layout: { type: 'full' } }
+                            path: 'confirm-update', 
+                            pathMatch: 'full', 
+                            component: InnovationActionCompleteConfirmationComponent,
+                            data: {
+                              breadcrumb: null,
+                              layout: { type: 'full' }
+                            }
                           },
+
+                          {
+                            path: 'actions',
+                            pathMatch: 'full',
+                            component: PageInnovationActionSectionInfoComponent,
+                            data: {
+                              breadcrumb: null,
+                              layout: { type: 'full' }
+                            }
+                          }
 
                         ]
                       }
@@ -295,12 +311,12 @@ const routes: Routes = [
                     },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: InnovationActionTrackerInfoComponent,
-                        data: { breadcrumb: null }
+                        path: '', pathMatch: 'full', component: PageInnovationActionSectionInfoComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
                         path: 'decline', pathMatch: 'full', component: InnovationActionTrackerDeclineComponent,
-                        data: { breadcrumb: 'Decline' }
+                        data: { breadcrumb: null, layout: { type: 'full' } }
                       }
                     ]
                   }

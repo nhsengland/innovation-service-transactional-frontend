@@ -34,7 +34,7 @@ export type InnovationSectionInfoDTO = {
   updatedAt: string;
   data: MappedObjectType;
   submittedAt: string;
-  actionsIds: string[]
+  actionsIds?: string[];
 }
 
 export type getInnovationInfoEndpointDTO = {
