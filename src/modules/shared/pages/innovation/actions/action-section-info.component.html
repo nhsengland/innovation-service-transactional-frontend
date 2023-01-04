@@ -24,7 +24,7 @@
         </div>
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Requested by</dt>
-          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">{{ action.createdBy }}</dd>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">{{ action.createdBy.name }}, {{ action.createdBy.organisationUnit }}</dd>
         </div>
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Section</dt>
@@ -106,8 +106,8 @@
       <div class="nhsuk-card x-card-top-border">
         <div class="nhsuk-card__content">
           <h2 class="nhsuk-card__heading nhsuk-heading-m">If you have any questions</h2>
-          <a routerLink="/accessor/innovations/{{ innovationId }}/threads">
-            Go to messages and start a new conversation with your supporting organisations
+          <a routerLink="/innovator/innovations/{{ innovationId }}/threads">
+            Go to messages and start a new conversation with your supporting organisations.
           </a>
         </div>
       </div>
