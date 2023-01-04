@@ -5,6 +5,7 @@ import { ENV } from '@tests/app.mocks';
 
 import { CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { AuthenticationService } from './authentication.service';
+import { StoresModule } from '../stores.module';
 
 describe('Stores/AuthenticationStore/AuthenticationService', () => {
 
@@ -16,7 +17,8 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        CoreModule
+        CoreModule,
+        StoresModule
       ],
       providers: [
         AuthenticationService,
