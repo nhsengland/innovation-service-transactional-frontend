@@ -68,7 +68,7 @@
         <div>
           <button *ngIf="section.showSubmitButton" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-right-3"> Confirm section answers </button>
 
-          <button *ngIf="section.showSubmitUpdateButton && module === 'innovator'" routerLink="/innovator/innovations/{{ innovation.id }}/record/sections/{{section.id}}}/confirm-update" class="nhsuk-button nhsuk-u-margin-right-3"> Submit updates </button>
+          <button *ngIf="section.actions > 0 && module === 'innovator'" routerLink="/innovator/innovations/{{ innovation.id }}/record/sections/{{ section.id }}/confirm-update" class="nhsuk-button nhsuk-u-margin-right-3"> Submit updates </button>
         </div>
       </ng-container>
 

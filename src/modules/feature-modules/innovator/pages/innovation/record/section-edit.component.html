@@ -41,7 +41,8 @@
           </ng-container>
         </dl>
 
-        <button [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmitSection()"> {{ submitButton.label }} </button>
+        <button *ngIf="!hasRequestActions" [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmitSection()"> {{ submitButton.label }} </button>
+        <button *ngIf="hasRequestActions" [disabled]="!submitRequestedActionsButton.isActive" class="nhsuk-button" routerLink="/innovator/innovations/{{ innovation.id }}/record/sections/{{ sectionId }}/confirm-update" > {{ submitRequestedActionsButton.label }} </button>
 
       </ng-container>
 

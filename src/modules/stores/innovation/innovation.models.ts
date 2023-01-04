@@ -31,10 +31,10 @@ export type InnovationSectionInfoDTO = {
   id: null | string;
   section: InnovationSectionEnum;
   status: keyof typeof INNOVATION_SECTION_STATUS;
-  openActionsCount: number;
   updatedAt: string;
   data: MappedObjectType;
   submittedAt: string;
+  actionsIds: string[]
 }
 
 export type getInnovationInfoEndpointDTO = {

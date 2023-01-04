@@ -80,7 +80,7 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   getSectionInfo$(innovationId: string, section: string): Observable<InnovationSectionInfoDTO> {
-    return this.innovationsService.getSectionInfo(innovationId, section);
+    return this.innovationsService.getSectionInfo(innovationId, section, { fields: ['actions'] });
   }
 
   updateSectionInfo$(innovationId: string, sectionKey: string, data: MappedObjectType): Observable<MappedObjectType> {

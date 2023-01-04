@@ -13,6 +13,7 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
 
   innovationId: string;
   sectionId: string;
+  requestedActionsCounter: string = '';
 
   form = new FormGroup({
     actionComplete: new FormControl<boolean>(true, { validators: Validators.required, updateOn: 'change' }),
@@ -30,13 +31,18 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
 
 
   ngOnInit(): void {
+    this.stores.innovation.getSectionInfo$(this.innovationId, this.sectionId).subscribe({
+      next: response => {
+       
+        this.setPageTitle('Do you want to set requested action as completed?');   
+        this.requestedActionsCounter = response.actionsIds.length === 1 ? `${response.actionsIds.length} requested action` : `${response.actionsIds.length} requested actions`;
+        this.setBackLink('Go Back', `innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
 
-    this.setPageTitle('Do you want to set requested action as completed?');
-    
-   
-    this.setBackLink('Go Back', `innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
+        this.setPageStatus('READY');
+      }
+    })
 
-    this.setPageStatus('READY');
+  
   }
 
 
