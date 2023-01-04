@@ -63,6 +63,7 @@ import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-dat
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
+import { InnovationActionTrackerCancelComponent } from './pages/innovation/action-tracker/action-tracker-cancel.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -233,6 +234,10 @@ const routes: Routes = [
                       {
                         path: 'edit', pathMatch: 'full', component: InnovationActionTrackerEditComponent,
                         data: { breadcrumb: 'Edit' }
+                      },
+                      {
+                        path: 'cancel', pathMatch: 'full', component: InnovationActionTrackerCancelComponent,
+                        data: { breadcrumb: 'Cancel' }
                       }
                     ]
                   }
