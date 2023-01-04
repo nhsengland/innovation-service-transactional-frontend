@@ -306,7 +306,7 @@ const routes: Routes = [
                       },
                       {
                         path: 'decline', pathMatch: 'full', component: InnovationActionTrackerDeclineComponent,
-                        data: { breadcrumb: 'Decline' }
+                        data: { breadcrumb: null, layout: { type: 'full' } }
                       }
                     ]
                   }
