@@ -14,6 +14,7 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
   innovationId: string;
   sectionId: string;
   requestedActionsCounter: string = '';
+  actionsCounter: number = 0;
 
   form = new FormGroup({
     actionComplete: new FormControl<boolean>(true, { validators: Validators.required, updateOn: 'change' }),
@@ -36,6 +37,7 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
        
         this.setPageTitle('Do you want to set requested action as completed?');   
         this.requestedActionsCounter = response.actionsIds?.length === 1 ? `${response.actionsIds.length} requested action` : `${response.actionsIds?.length} requested actions`;
+        this.actionsCounter = response.actionsIds?.length ?? 0;
         this.setBackLink('Go Back', `innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
 
         this.setPageStatus('READY');
