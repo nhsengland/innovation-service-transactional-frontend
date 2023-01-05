@@ -32,7 +32,9 @@
         <a *ngIf="action?.status === 'IN_REVIEW'" routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ action?.id }}/edit" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5">
           Update status
         </a>
-
+        <a *ngIf="action?.status === 'REQUESTED'" routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ action?.id }}/cancel" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5">
+          Cancel action
+        </a>
       </ng-container>
 
     </div>
