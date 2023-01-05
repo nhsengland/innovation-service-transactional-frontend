@@ -35,7 +35,7 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
       next: response => {
        
         this.setPageTitle('Do you want to set requested action as completed?');   
-        this.requestedActionsCounter = response.actionsIds.length === 1 ? `${response.actionsIds.length} requested action` : `${response.actionsIds.length} requested actions`;
+        this.requestedActionsCounter = response.actionsIds?.length === 1 ? `${response.actionsIds.length} requested action` : `${response.actionsIds?.length} requested actions`;
         this.setBackLink('Go Back', `innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
 
         this.setPageStatus('READY');
@@ -54,8 +54,10 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
 
   private onSubmitSection(): void {
     this.stores.innovation.submitSections$(this.innovationId, this.sectionId).subscribe({
-      next: () => {
-        this.setAlertSuccess('You have successfully update this section', { message: `requested for this section have neem submitted. You can update this section at any time.` });
+      next: () => {      
+        this.setRedirectAlertSuccess('You have successfully update this section', { message: `Actions requested for this section have been submitted. You can update this section at any time.` });
+
+        this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
       },
       error: () => this.setAlertUnknownError()
     });

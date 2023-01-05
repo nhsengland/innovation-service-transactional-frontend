@@ -65,7 +65,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
       next: response => {
-        this.hasRequestActions = response.actionsIds.length !== 0;
+        this.hasRequestActions = response.actionsIds?.length !== 0;
 
         this.wizard.setAnswers(this.wizard.runInboundParsing(response.data)).runRules();
         this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
