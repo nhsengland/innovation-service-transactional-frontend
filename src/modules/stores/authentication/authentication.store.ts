@@ -30,6 +30,21 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
         concatMap(user => {
           this.state.user = user;
           this.state.isSignIn = true;
+
+          if (user.type === UserTypeEnum.ACCESSOR) {
+            this.state.userContext = {
+              type: user.type,
+              organisation: {
+                id: user.organisations[0].id,
+                name: user.organisations[0].name,
+                organisationUnit: user.organisations[0].organisationUnits[0],
+              }
+            }
+          } else {
+            this.state.userContext = {
+              type: user.type
+            }
+          }
           return of(true);
         })
       ).subscribe({
@@ -88,6 +103,10 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
   updateUserInfo$(body: UpdateUserInfoDTO): Observable<{ id: string }> {
     return this.authenticationService.updateUserInfo(body);
+  }
+
+  getUserContextInfo(): Required<AuthenticationModel>['userContext'] {
+    return this.state.userContext;
   }
 
   getUserTypeDescription(userType: UserTypeEnum): string {

@@ -41,7 +41,8 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     const expectedResponse = true;
     const expectedState: AuthenticationModel = {
       isSignIn: true,
-      user: { id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: UserTypeEnum.INNOVATOR, roles: [], phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] }
+      user: { id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: UserTypeEnum.INNOVATOR, roles: [], phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] },
+      userContext: { type : '' }
     };
     let response: any = null;
 

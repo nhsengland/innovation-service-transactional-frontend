@@ -145,7 +145,7 @@ export type InnovationActionInfoDTO = {
   name: string,
   description: string,
   createdAt: DateISOType,
-  createdBy: string;
+  createdBy: { name: string, organisationUnit: string };
 };
 
 
