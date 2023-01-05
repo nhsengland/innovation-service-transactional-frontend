@@ -55,7 +55,7 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
   private onSubmitSection(): void {
     this.stores.innovation.submitSections$(this.innovationId, this.sectionId).subscribe({
       next: () => {      
-        this.setRedirectAlertSuccess('You have successfully update this section', { message: `Actions requested for this section have been submitted. You can update this section at any time.` });
+        this.setRedirectAlertSuccess('You have successfully updated this section', { message: `Actions requested for this section have been submitted. You can update this section at any time.` });
 
         this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
       },
