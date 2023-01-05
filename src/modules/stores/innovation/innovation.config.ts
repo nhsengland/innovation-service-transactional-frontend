@@ -74,7 +74,7 @@ export function getInnovationRecordSidebar(type: string, innovationId: string): 
       nestedSidebarItems.push({ label: `${i + 1}.${k + 1} ${section.title}`, url: `/${type}/innovations/${innovationId}/record/sections/${section.id}` });
     });
 
-    sidebar.push({ label: `${i + 1}. ${parentSection.title}`, url: `/accessor/innovations/${innovationId}/record/sections/${parentSection.sections[0].id}`, nestedSidebarItems: nestedSidebarItems  });
+    sidebar.push({ label: `${i + 1}. ${parentSection.title}`, url: `/${type}/innovations/${innovationId}/record/sections/${parentSection.sections[0].id}`, nestedSidebarItems: nestedSidebarItems  });
   });
 
   return sidebar;

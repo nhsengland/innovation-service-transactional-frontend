@@ -31,6 +31,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   saveButton = { isActive: true, label: 'Save and continue' };
   submitButton = { isActive: false, label: 'Confirm section answers' };
+  submitRequestedActionsButton = { isActive: false, label: 'Submit updates' };
+
+  hasRequestActions: boolean = false;
 
 
   constructor(
@@ -62,6 +65,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
       next: response => {
+        this.hasRequestActions = response.actionsIds?.length !== 0;
 
         this.wizard.setAnswers(this.wizard.runInboundParsing(response.data)).runRules();
         this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
@@ -190,7 +194,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
             const validInformation = this.wizard.validateData();
 
-            this.submitButton.isActive = validInformation.valid;
+
+            if (this.hasRequestActions) {
+              this.submitRequestedActionsButton.isActive = validInformation.valid;
+            } else {
+              this.submitButton.isActive = validInformation.valid;
+            }
+
             if (!validInformation.valid) {
               this.alertErrorsList = validInformation.errors;
               this.setAlertError(`Please verify what's missing with your answers`, { itemsList: this.alertErrorsList, width: '2.thirds' });

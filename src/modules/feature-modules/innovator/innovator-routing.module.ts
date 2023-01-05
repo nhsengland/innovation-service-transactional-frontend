@@ -73,6 +73,7 @@ import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-dat
 import { InnovationSectionDataResolver } from '@modules/shared/resolvers/innovation-section-data.resolver';
 import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers/innovation-section-evidence-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+import { InnovationActionCompleteConfirmationComponent } from './pages/innovation/action-complete-confirmation/action-complete-confirmation.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -255,6 +256,15 @@ const routes: Routes = [
                               }
 
                             ]
+                          },
+                          {
+                            path: 'confirm-update', 
+                            pathMatch: 'full', 
+                            component: InnovationActionCompleteConfirmationComponent,
+                            data: {
+                              breadcrumb: null,
+                              layout: { type: 'full' }
+                            }
                           },
 
                           {
