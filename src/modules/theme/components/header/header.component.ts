@@ -1,12 +1,13 @@
 import { Component, Input, OnInit, AfterViewInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { CookiesService } from '@modules/core/services/cookies.service';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
+import { UserTypeEnum } from '@app/base/enums';
 
 
 export type HeaderMenuBarItemType = {
@@ -42,7 +43,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   showCookiesBanner = false;
   showCookiesSaveSuccess = false;
 
-  user: { displayName: string; description: string; };
+  user: { displayName: string; description: string; showSwitchProfile: boolean; };
 
   menuBarItems: {
     isChildrenOpened: boolean,
@@ -60,10 +61,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
 
     const user = this.authenticationStore.getUserInfo();
+    
     this.user = {
       displayName: user.displayName,
-      description: `Signed in as ${this.authenticationStore.getUserRole()}`
-    };
+      description: `Signed in as ${this.authenticationStore.getUserRole()}`,
+      showSwitchProfile: [UserTypeEnum.ACCESSOR.toString()].includes(this.authenticationStore.getUserRole()) && this.authenticationStore.getUserInfo().organisations.length > 1    };
 
     this.signOutUrl = `${this.environmentVariablesStore.APP_URL}/signout`;
 

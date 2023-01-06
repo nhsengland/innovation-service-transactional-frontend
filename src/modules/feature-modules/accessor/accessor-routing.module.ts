@@ -57,6 +57,7 @@ import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/in
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
+import { PageSwitchContextComponent } from '@modules/shared/pages/switch-context/switch-context.component';
 
 // Resolvers.
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
@@ -92,6 +93,13 @@ const routes: Routes = [
 
       {
         path: 'terms-of-use', pathMatch: 'full', component: PageTermsOfUseAcceptanceComponent,
+        data: {
+          header: { menuBarItems: { left: [], right: [], notifications: {} } },
+          layout: { type: 'full' }
+        }
+      },
+      {
+        path: 'switch-user-context', pathMatch: 'full', component: PageSwitchContextComponent,
         data: {
           header: { menuBarItems: { left: [], right: [], notifications: {} } },
           layout: { type: 'full' }
