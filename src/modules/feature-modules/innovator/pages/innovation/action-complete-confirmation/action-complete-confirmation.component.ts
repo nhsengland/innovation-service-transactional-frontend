@@ -35,7 +35,7 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
     this.stores.innovation.getSectionInfo$(this.innovationId, this.sectionId).subscribe({
       next: response => {
        
-        this.setPageTitle('Do you want to set requested action as completed?');   
+        this.setPageTitle('Have you completed all actions for this section?');   
         this.requestedActionsCounter = response.actionsIds?.length === 1 ? `${response.actionsIds.length} requested action` : `${response.actionsIds?.length} requested actions`;
         this.actionsCounter = response.actionsIds?.length ?? 0;
         this.setBackLink('Go Back', `innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
