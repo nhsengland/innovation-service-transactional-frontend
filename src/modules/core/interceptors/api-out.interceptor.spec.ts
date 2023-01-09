@@ -57,7 +57,7 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('HEAD');
     expect(httpRequest.request.headers.has('Cookie')).toEqual(true);
-    expect(httpRequest.request.headers.has('X-Context')).toEqual(true);
+    expect(httpRequest.request.headers.has('x-is-domain-context')).toEqual(true);
 
   });
 
