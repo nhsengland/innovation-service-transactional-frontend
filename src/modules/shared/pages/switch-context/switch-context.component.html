@@ -1,14 +1,14 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-one-half">
-    <p class="nhsuk-body-l nhsuk-u-margin-bottom-6">You have more than one profile associated with your account.</p>
-    
+    <p *ngIf="initialSelection; else currentlyLoggedIn"  class="nhsuk-body-l nhsuk-u-margin-bottom-6" >You have more than one profile associated with your account.</p>
+     
     <p class="nhsuk-body-l nhsuk-u-margin-bottom-3">Which profile would you like to use?</p>
     <ng-container *ngFor="let organisation of organisations">
       <div class="nhsuk-card nhsuk-card--clickable">
         <div class="nhsuk-card__content nhsuk-u-padding-4">
           <h2 class="nhsuk-card__heading nhsuk-heading-m">
-            <a routerLink=""  class="nhsuk-card__link d-flex justify-content-space-between">
-              <span class="nhsuk-u-visually-hidden"> Go to </span> {{organisation.roleName}} ({{organisation.name}})
+            <a  class="nhsuk-card__link d-flex justify-content-space-between" (click)="redirectToHomepage(organisation)">
+              <span class="nhsuk-u-visually-hidden"> Go to </span> {{organisation.roleName}}
               <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
               </svg>
@@ -19,3 +19,8 @@
     </ng-container>
   </div>
 </div>
+
+
+<ng-template #currentlyLoggedIn>
+  <p class="nhsuk-body-l nhsuk-u-margin-bottom-6">You are currently logged in as a {{currentUserProfile}}</p>
+</ng-template>

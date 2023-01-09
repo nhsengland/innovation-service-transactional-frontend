@@ -13,6 +13,7 @@ import { PageNotFoundComponent } from '@modules/shared/pages/error/not-found.com
 import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
 import { AuthenticationRedirectionGuard } from '@modules/core/guards/authentication-redirection.guard';
 import { InnovationTransferRedirectionGuard } from '@modules/core/guards/innovation-transfer-redirection.guard';
+import { PageSwitchContextComponent } from '@modules/shared/pages/switch-context/switch-context.component';
 
 
 const routes: Routes = [
@@ -67,6 +68,12 @@ const routes: Routes = [
       {
         canActivate: [AuthenticationRedirectionGuard],
         path: 'accessor', loadChildren: () => import('@modules/feature-modules/accessor/accessor.module').then(m => m.AccessorModule)
+      },
+      
+      {
+        path: 'switch-user-context',
+        component: BaseLayoutComponent,
+        children: [{ path: '', pathMatch: 'full', component: PageSwitchContextComponent }]
       }
     ]
   },

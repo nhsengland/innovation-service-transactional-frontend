@@ -98,13 +98,6 @@ const routes: Routes = [
           layout: { type: 'full' }
         }
       },
-      {
-        path: 'switch-user-context', pathMatch: 'full', component: PageSwitchContextComponent,
-        data: {
-          header: { menuBarItems: { left: [], right: [], notifications: {} } },
-          layout: { type: 'full' }
-        }
-      },
 
       {
         path: 'innovations',

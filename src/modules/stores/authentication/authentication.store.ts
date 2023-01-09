@@ -32,12 +32,14 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           this.state.isSignIn = true;
 
           if (user.type === UserTypeEnum.ACCESSOR) {
-            this.state.userContext = {
-              type: user.type,
-              organisation: {
-                id: user.organisations[0].id,
-                name: user.organisations[0].name,
-                organisationUnit: user.organisations[0].organisationUnits[0],
+            if (user.organisations.length === 1) {              
+              this.state.userContext = {
+                type: user.organisations[0].role,
+                organisation: {
+                  id: user.organisations[0].id,
+                  name: user.organisations[0].name,
+                  organisationUnit: user.organisations[0].organisationUnits[0],
+                }
               }
             }
           } else {
@@ -107,6 +109,10 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
   getUserContextInfo(): Required<AuthenticationModel>['userContext'] {
     return this.state.userContext;
+  }
+
+  updateSelectedUserContext(userContext: Required<AuthenticationModel>['userContext']): void {
+    this.state.userContext = userContext;
   }
 
   getUserTypeDescription(userType: UserTypeEnum): string {

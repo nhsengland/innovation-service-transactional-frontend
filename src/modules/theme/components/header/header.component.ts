@@ -61,11 +61,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
 
     const user = this.authenticationStore.getUserInfo();
+    const userRole = this.authenticationStore.getUserRole();
+    let userDescription = `Logged in as ${this.authenticationStore.getUserRole()}`;
     
     this.user = {
       displayName: user.displayName,
-      description: `Signed in as ${this.authenticationStore.getUserRole()}`,
-      showSwitchProfile: [UserTypeEnum.ACCESSOR.toString()].includes(this.authenticationStore.getUserRole()) && this.authenticationStore.getUserInfo().organisations.length > 1    };
+      description: userRole === UserTypeEnum.ACCESSOR.toString() ? `${userDescription} (${this.authenticationStore.getUserContextInfo().organisation?.name})` : userDescription,
+      showSwitchProfile: [UserTypeEnum.ACCESSOR.toString()].includes(userRole) && this.authenticationStore.getUserInfo().organisations.length > 1};
 
     this.signOutUrl = `${this.environmentVariablesStore.APP_URL}/signout`;
 
