@@ -60,7 +60,7 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, (req, res) => {
   if (req.isAuthenticated() && accessToken) {
 
     const url = parseAPIUrl(req.url);
-    const config = { headers: { Authorization: `Bearer ${accessToken}`, 'x-context': req.headers['x-context'] } };
+    const config = { headers: { Authorization: `Bearer ${accessToken}`, 'x-is-domain-context': req.headers['x-is-domain-context'] } };
 
     const success = (response: any) => {
       // console.info('API CALL: ', req.url, response.data);
