@@ -46,10 +46,17 @@
 
         <a routerLink="/accessor/innovations/{{ innovationId }}/record/sections/{{ action.section }}"
           class="nhsuk-button nhsuk-u-margin-right-3"> Review section </a>
+        
         <a *ngIf="action.status === 'IN_REVIEW'"
           routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/edit"
           class="nhsuk-button nhsuk-button--secondary">
           Update status
+        </a>
+
+        <a *ngIf="action.status === 'REQUESTED'"
+          routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/cancel"
+          class="nhsuk-button nhsuk-button--secondary">
+          Cancel action
         </a>
 
       </ng-container>
