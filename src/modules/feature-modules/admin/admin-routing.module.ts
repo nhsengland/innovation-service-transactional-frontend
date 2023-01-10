@@ -46,7 +46,6 @@ import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/page
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
 import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/actions/action-status-list.component';
-import { PageInnovationActionTrackerInfoComponent } from '@modules/shared/pages/innovation/actions/action-tracker-info.component';
 import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/innovation-support-status-list.component';
@@ -55,6 +54,7 @@ import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages
 import { PageInnovationAssessmentOverviewComponent } from '../../shared/pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
+import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
 
 // Wizards.
 import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-unit-activate/organisation-unit-activate.component';
@@ -336,7 +336,7 @@ const routes: Routes = [
                     },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: PageInnovationActionTrackerInfoComponent,
+                        path: '', pathMatch: 'full', component: PageInnovationActionSectionInfoComponent,
                         data: { breadcrumb: null }
                       }
                     ]

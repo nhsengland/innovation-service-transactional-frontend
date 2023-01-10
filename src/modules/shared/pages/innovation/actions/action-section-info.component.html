@@ -53,7 +53,7 @@
           Update status
         </a>
 
-        <a *ngIf="action.status === 'REQUESTED'"
+        <a *ngIf="action.status === 'REQUESTED' && action.createdBy.id === stores.authentication.getUserId()"
           routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/cancel"
           class="nhsuk-button nhsuk-button--secondary">
           Cancel action
@@ -112,7 +112,7 @@
 
     </div>
 
-    <div class="nhsuk-grid-column-one-third">
+    <div class="nhsuk-grid-column-one-third" *ngIf="stores.authentication.isInnovatorType() || stores.authentication.isAccessorType()">
 
       <div class="nhsuk-card x-card-top-border">
         <div class="nhsuk-card__content">
