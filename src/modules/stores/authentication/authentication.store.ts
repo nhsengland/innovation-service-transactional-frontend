@@ -32,7 +32,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           this.state.isSignIn = true;
 
           if (user.type === UserTypeEnum.ACCESSOR) {
-            if (user.organisations.length === 1) {              
+            if (user.organisations.length === 1 && user.organisations[0].organisationUnits.length === 1) {              
               this.state.userContext = {
                 type: user.organisations[0].role,
                 organisation: {

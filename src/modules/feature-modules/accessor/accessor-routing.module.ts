@@ -57,7 +57,6 @@ import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/in
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
-import { PageSwitchContextComponent } from '@modules/shared/pages/switch-context/switch-context.component';
 
 // Resolvers.
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
@@ -65,6 +64,9 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 import { InnovationActionTrackerCancelComponent } from './pages/innovation/action-tracker/action-tracker-cancel.component';
+
+// Guards.
+import { SwitchUserContextGuard } from './guards/switch-user-contextguard';
 
 
 const header: RoutesDataType['header'] = {
@@ -85,6 +87,7 @@ const routes: Routes = [
 
   {
     path: '', component: TransactionalLayoutComponent,
+    canActivateChild: [SwitchUserContextGuard],
     data: { header, module: 'accessor', breadcrumb: 'Home' },
     children: [
 

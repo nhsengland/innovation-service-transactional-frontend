@@ -21,26 +21,13 @@ export class AuthenticationGuard implements CanActivate {
     @Optional() @Inject(RESPONSE) private serverResponse: Response,
     private environmentStore: EnvironmentVariablesStore,
     private authentication: AuthenticationStore,
-    private loggerService: LoggerService, private router: Router
+    private loggerService: LoggerService
   ) { }
 
   canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
 
     return this.authentication.initializeAuthentication$().pipe(
-      map(response => {
-        const userInfo = this.authentication.getUserInfo();
-        const userContext = this.authentication.getUserContextInfo();
-        const redirectToSwitchUser = !userContext && userInfo.type === UserTypeEnum.ACCESSOR && userInfo.organisations.length === 1 && !state.url.includes('/switch-user-context');
-
-        if(redirectToSwitchUser) {
-          if (isPlatformBrowser(this.platformId)) {
-            window.location.assign(`${this.environmentStore.APP_URL}/switch-user-context`); // Full reload is needed to hit SSR.
-            return true;
-          }
-        }
-
-        return response;
-      }),
+      map(response => response),
       catchError((e: HttpErrorResponse) => {
 
         this.loggerService.trackTrace('[AuthenticationGuard] Sign In Error', Severity.ERROR, { error: e });
