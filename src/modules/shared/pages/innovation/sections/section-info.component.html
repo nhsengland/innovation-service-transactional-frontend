@@ -65,10 +65,10 @@
         <div>
           <button *ngIf="section.hasEvidences && !section.isNotStarted" routerLink="evidences/new" class="nhsuk-button nhsuk-button--secondary"> Add evidence </button>
         </div>
-        <div>
+        <div *ngIf="section.status.id === 'DRAFT'">
           <button *ngIf="section.showSubmitButton" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-right-3"> Confirm section answers </button>
 
-          <button *ngIf="section.actions > 0 && module === 'innovator'" routerLink="/innovator/innovations/{{ innovation.id }}/record/sections/{{ section.id }}/confirm-update" class="nhsuk-button nhsuk-u-margin-right-3"> Submit updates </button>
+          <button *ngIf="section.actions > 0" routerLink="/innovator/innovations/{{ innovation.id }}/record/sections/{{ section.id }}/confirm-update" class="nhsuk-button nhsuk-u-margin-right-3"> Submit updates </button>
         </div>
       </ng-container>
 
