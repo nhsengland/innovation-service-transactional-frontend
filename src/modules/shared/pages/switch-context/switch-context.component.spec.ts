@@ -1,7 +1,8 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Injector } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { CoreModule } from '@modules/core';
+import { AppInjector, CoreModule } from '@modules/core';
 import { SharedModule } from '@modules/shared/shared.module';
 import { StoresModule } from '@modules/stores';
 
@@ -23,6 +24,8 @@ describe('Shared/Pages/PageSwitchContextComponent', () => {
       ]
     })
     .compileComponents();
+
+    AppInjector.setInjector(TestBed.inject(Injector));
 
     fixture = TestBed.createComponent(PageSwitchContextComponent);
     component = fixture.componentInstance;
