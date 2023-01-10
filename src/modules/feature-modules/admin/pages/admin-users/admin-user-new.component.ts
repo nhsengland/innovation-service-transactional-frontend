@@ -81,8 +81,6 @@ export class PageAdminUserNewComponent extends CoreComponent implements OnInit {
       },
       error: (error: { id: string }) => {
 
-        console.log('error', error)
-
         this.submitBtnClicked = false;
 
         if (!this.securityConfirmation.id && error.id) {
