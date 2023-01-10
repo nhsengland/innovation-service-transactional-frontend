@@ -101,7 +101,7 @@ export const locale = {
               cssColorClass: 'nhsuk-tag--blue'
             },
             IN_REVIEW: {
-              name: 'In review',
+              name: 'Submitted',
               description: 'The innovator has submitted information requested by an accessor and is waiting for the accessor to review this information.',
               cssColorClass: 'nhsuk-tag--yellow'
             },
@@ -113,7 +113,7 @@ export const locale = {
             DECLINED: {
               name: 'Declined',
               description: 'The innovator has declined the action requested.',
-              cssColorClass: 'nhsuk-tag--grey'
+              cssColorClass: 'nhsuk-tag--red'
             },
             COMPLETED: {
               name: 'Completed',
@@ -123,7 +123,7 @@ export const locale = {
             CANCELLED: {
               name: 'Cancelled',
               description: 'An accessor has cancelled the action.',
-              cssColorClass: 'nhsuk-tag--red'
+              cssColorClass: 'nhsuk-tag--dark-grey'
             }
           },
           activity_log_groups: {
@@ -222,8 +222,8 @@ export const locale = {
               message: `{{ actionUserName }} created an action for section "{{ sectionTitle }}"`
             },
             ACTION_STATUS_IN_REVIEW_UPDATE: {
-              title: 'Action changed to in review',
-              message: `{{ totalActions }} actions for "{{ sectionTitle }}" section were changed to "In review"`
+              title: 'Action changed to submitted',
+              message: `{{ totalActions }} actions for "{{ sectionTitle }}" section were changed to "Submitted"`
             },
             ACTION_STATUS_DECLINED_UPDATE: {
               title: 'Action declined',

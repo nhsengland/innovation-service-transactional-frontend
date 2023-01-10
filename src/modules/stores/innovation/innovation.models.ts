@@ -239,7 +239,7 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
     description: ''
   },
   IN_REVIEW: {
-    label: 'In review',
+    label: 'Submitted',
     cssClass: 'nhsuk-tag--yellow',
     description: 'The innovation owner has submitted information requested by an accessor and are waiting for them to review it.'
   },
@@ -250,7 +250,7 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
   },
   DECLINED: {
     label: 'Declined',
-    cssClass: 'nhsuk-tag--grey',
+    cssClass: 'nhsuk-tag--red',
     description: 'The innovation owner has declined the action requested.'
   },
   COMPLETED: {
@@ -260,7 +260,7 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
   },
   CANCELLED: {
     label: 'Cancelled',
-    cssClass: 'nhsuk-tag--red',
+    cssClass: 'nhsuk-tag--dark-grey',
     description: 'An accessor has cancelled the action.'
   }
 };
