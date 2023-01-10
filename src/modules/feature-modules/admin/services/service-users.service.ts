@@ -232,7 +232,7 @@ export class ServiceUsersService extends CoreService {
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error.id })))
+      catchError(error => throwError(() => ({ id: error.error?.details.id })))
     );
 
   }
@@ -245,7 +245,7 @@ export class ServiceUsersService extends CoreService {
     return this.http.patch<{ id: string }>(url.buildUrl(), {}).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error.id })))
+      catchError(error => throwError(() => ({ id: error.error?.details.id })))
     );
 
   }
@@ -283,7 +283,7 @@ export class ServiceUsersService extends CoreService {
     return this.http.patch<changeUserTypeDTO>(url.buildUrl(), { role: body.role }).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error.id })))
+      catchError(error => throwError(() => ({ id: error.error?.details.id })))
     );
 
   }
@@ -297,7 +297,7 @@ export class ServiceUsersService extends CoreService {
     return this.http.patch<any>(url.buildUrl(), { newOrganisationUnitAcronym: body.organisationUnitAcronym, organisationId: body.organisationId }).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error.id })))
+      catchError(error => throwError(() => ({ id: error.error?.details.id })))
     );
 
   }

@@ -95,6 +95,7 @@ export class PageServiceUserNewComponent extends CoreComponent implements OnInit
       },
       error: (error) => {
 
+        console.log('error', error)
         this.submitBtnClicked = false;
 
         if (!this.securityConfirmation.id && error.id) {

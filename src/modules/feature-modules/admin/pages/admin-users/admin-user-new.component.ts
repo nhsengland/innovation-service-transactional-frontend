@@ -79,7 +79,9 @@ export class PageAdminUserNewComponent extends CoreComponent implements OnInit {
       next: response => {
         this.redirectTo(`admin/administration-users/${response.id}`, { alert: 'adminCreationSuccess' });
       },
-      error: (error) => {
+      error: (error: { id: string }) => {
+
+        console.log('error', error)
 
         this.submitBtnClicked = false;
 
