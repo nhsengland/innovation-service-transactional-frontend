@@ -7,7 +7,7 @@ import { filter } from 'rxjs/operators';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { CookiesService } from '@modules/core/services/cookies.service';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
-import { UserTypeEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
 
 
 export type HeaderMenuBarItemType = {
@@ -62,12 +62,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const user = this.authenticationStore.getUserInfo();
     const userRole = this.authenticationStore.getUserRole();
-    let userDescription = `Logged in as ${this.authenticationStore.getUserRole()}`;
+    const userContext = this.authenticationStore.getUserContextInfo();
     
     this.user = {
       displayName: user.displayName,
-      description: userRole === UserTypeEnum.ACCESSOR.toString() ? `${userDescription} (${this.authenticationStore.getUserContextInfo().organisation?.name})` : userDescription,
-      showSwitchProfile: [UserTypeEnum.ACCESSOR.toString()].includes(userRole) && this.authenticationStore.getUserInfo().organisations.length > 1};
+      description: user.type === UserTypeEnum.ACCESSOR.toString() ? `Logged in as ${userRole} (${userContext.organisation?.organisationUnit.name})` : `Logged in as ${userRole}`,
+      showSwitchProfile: user.type === UserTypeEnum.ACCESSOR.toString() && (user.organisations.length > 1 || user.organisations[0].organisationUnits.length > 1)
+    };
 
     this.signOutUrl = `${this.environmentVariablesStore.APP_URL}/signout`;
 

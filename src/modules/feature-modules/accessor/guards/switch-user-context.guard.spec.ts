@@ -11,6 +11,7 @@ import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { SwitchUserContextGuard } from './switch-user-contextguard';
 
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
+import { of } from 'rxjs';
 
 describe('FeatureModules/Accessor/Guards/SwitchUserContextGuard', () => {
 
@@ -45,8 +46,9 @@ describe('FeatureModules/Accessor/Guards/SwitchUserContextGuard', () => {
     const routeMock: Partial<ActivatedRouteSnapshot> = {};
     const routerSpy = jest.spyOn(TestBed.inject(Router), 'navigate');
     let expected: null | boolean = null;
+    const emptyContext: Required<AuthenticationModel>['userContext'] = {type: ''}
 
-    authenticationStore.getUserContextInfo = () => undefined as unknown as Required<AuthenticationModel>['userContext'];
+    authenticationStore.getUserContextInfo = () => emptyContext;
 
     guard.canActivateChild(routeMock as any, routerStateSnapshopMock as any).subscribe(response => { expected = response; });
 

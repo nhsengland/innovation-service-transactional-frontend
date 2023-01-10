@@ -6,10 +6,11 @@ export class AuthenticationModel {
 
   isSignIn: boolean;
   userContext: {
-    type: '' | AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum | UserTypeEnum,
+    type: '' | UserTypeEnum,
     organisation?: {
       id: string,
       name: string,
+      role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
       organisationUnit: { id: string; name: string; acronym: string; }
     }
   };

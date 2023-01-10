@@ -7,7 +7,7 @@ import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { Store } from '../store.class';
 import { AuthenticationService, UpdateUserInfoDTO } from './authentication.service';
 
-import { UserRoleEnum, UserTypeEnum } from './authentication.enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum, UserTypeEnum } from './authentication.enums';
 import { AuthenticationModel } from './authentication.models';
 
 
@@ -34,10 +34,11 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           if (user.type === UserTypeEnum.ACCESSOR) {
             if (user.organisations.length === 1 && user.organisations[0].organisationUnits.length === 1) {              
               this.state.userContext = {
-                type: user.organisations[0].role,
+                type: user.type,
                 organisation: {
                   id: user.organisations[0].id,
                   name: user.organisations[0].name,
+                  role: user.organisations[0].role,
                   organisationUnit: user.organisations[0].organisationUnits[0],
                 }
               }

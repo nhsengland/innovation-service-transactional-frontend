@@ -11,8 +11,8 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
     id: string,
     name: string,
     role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
-    roleName: string,
-    organisationUnits: { id: string; name: string; acronym: string; }[]
+    profile: string,
+    organisationUnits: { id: string; name: string; acronym: string; }
   }[] = []
   initialSelection = false
   currentUserProfile = ''
@@ -25,22 +25,30 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
     const userInfo = this.authenticationStore.getUserInfo();
     const userContext = this.authenticationStore.getUserContextInfo();
 
-    this.initialSelection = userContext === undefined;
+    this.initialSelection = userContext.type === '';
 
     if(!this.initialSelection) {
-      this.currentUserProfile = `${this.authenticationStore.getRoleDescription(userContext.type).trimEnd()} (${userContext.organisation?.name.trimEnd()})`
+      this.currentUserProfile = `${this.authenticationStore.getRoleDescription(userContext.organisation?.role.toString() ?? '').trimEnd()} (${userContext.organisation?.organisationUnit.name.trimEnd()})`
     }
 
-    this.organisations = userInfo.organisations.map(i => {
-      let role = `${this.authenticationStore.getRoleDescription(i.role).trimEnd()} (${i.name.trimEnd()})`
-      if(!this.initialSelection) {
-        role = this.currentUserProfile === role ? `Continue as a ${role}` : `Switch to my ${role} profile`;
-      }
-
-      return {
-        ...i,
-        roleName: role
-      }
+    userInfo.organisations.forEach(org => {
+      org.organisationUnits.forEach((unit) => {
+        let roleName = `${this.authenticationStore.getRoleDescription(org.role).trimEnd()} (${unit.name.trimEnd()})`
+        
+        if (!this.initialSelection) {
+          roleName = this.currentUserProfile === roleName ? `Continue as a ${roleName}` : `Switch to my ${roleName} profile`;
+        }      
+        
+        this.organisations.push({
+          id: org.id,
+          name: org.name,
+          role: org.role,
+          profile: roleName,
+          organisationUnits: {
+            ...unit
+          }
+        })
+      })
     });
 
     const title = this.initialSelection ? 'Choose your profile' : 'Switch profile';
@@ -52,23 +60,32 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
     id: string,
     name: string,
     role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
-    roleName: string,
-    organisationUnits: { id: string; name: string; acronym: string; }[]
+    profile: string,
+    organisationUnits: { id: string; name: string; acronym: string; }
   }): void {
-    this.authenticationStore.updateSelectedUserContext({
-      type: organisation.role,
-      organisation: {
-        id: organisation.id,
-        name: organisation.name,
-        organisationUnit: { 
-          id: organisation.organisationUnits[0].id,
-          name: organisation.organisationUnits[0].name, 
-          acronym: organisation.organisationUnits[0].acronym,
+
+    if(this.currentUserProfile !== organisation.profile) {
+      const userInfo = this.authenticationStore.getUserInfo();
+
+      this.authenticationStore.updateSelectedUserContext({
+        type: userInfo.type,
+        organisation: {
+          id: organisation.id,
+          name: organisation.name,
+          role: organisation.role,
+          organisationUnit: { 
+            id: organisation.organisationUnits.id,
+            name: organisation.organisationUnits.name, 
+            acronym: organisation.organisationUnits.acronym,
+          }
         }
+      })
+  
+      if (!this.initialSelection) {
+        this.setRedirectAlertSuccess(`Switch successful: you are now logged in with your ${organisation.profile} profile`);
       }
-    })
+    }   
 
     this.redirectTo('accessor/dashboard');
   }
-
 }

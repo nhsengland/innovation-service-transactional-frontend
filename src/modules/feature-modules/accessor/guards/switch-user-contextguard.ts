@@ -16,7 +16,7 @@ export class SwitchUserContextGuard implements CanActivateChild {
   canActivateChild(_activatedRouteSnapshot: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean> {    
     const userContext = this.authenticationStore.getUserContextInfo();   
 
-    if (!userContext) {
+    if (userContext.type === '') {
       this.router.navigate(['/switch-user-context']);
     }
 
