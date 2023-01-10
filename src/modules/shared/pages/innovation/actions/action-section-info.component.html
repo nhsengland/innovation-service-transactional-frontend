@@ -35,6 +35,10 @@
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Description</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3 textarea-info-section">{{ action.description }}</dd>
         </div>
+        <div class="nhsuk-summary-list__row" *ngIf="action.status === 'DECLINED'">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Reason for declining</dt>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3 textarea-info-section">{{ action.declineReason ?? '' }}</dd>
+        </div>
       </dl>
 
 
@@ -105,10 +109,25 @@
 
       <div class="nhsuk-card x-card-top-border">
         <div class="nhsuk-card__content">
-          <h2 class="nhsuk-card__heading nhsuk-heading-m">If you have any questions</h2>
-          <a routerLink="/innovator/innovations/{{ innovationId }}/threads">
-            Go to messages and start a new conversation with your supporting organisations.
-          </a>
+          
+          <ng-container *ngIf="stores.authentication.isInnovatorType()">
+
+            <h2 class="nhsuk-card__heading nhsuk-heading-m">If you have any questions</h2>
+            <a routerLink="/innovator/innovations/{{ innovationId }}/threads">
+              Go to messages and start a new conversation with your supporting organisations.
+            </a>
+
+          </ng-container>
+
+          <ng-container *ngIf="stores.authentication.isAccessorType()">
+
+            <h2 class="nhsuk-card__heading nhsuk-heading-m">Message the innovator</h2>
+            <a routerLink="/innovator/innovations/{{ innovationId }}/threads">
+              Go to messages and send a message to the innovator if you need to discuss more about it.
+            </a>
+
+          </ng-container>
+
         </div>
       </div>
 

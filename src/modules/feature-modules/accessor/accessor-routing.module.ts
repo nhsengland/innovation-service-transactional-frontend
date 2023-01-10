@@ -48,9 +48,9 @@ import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/
 import { PageExportRecordListComponent } from '@modules/shared/pages/innovation/export/export-record-list.component';
 import { PageExportRecordInfoComponent } from '@modules/shared/pages/innovation/export/export-record-info.component';
 import { InnovationExportRequestComponent } from './pages/innovation/export/export-request.component';
-import { PageInnovationActionTrackerInfoComponent } from '@modules/shared/pages/innovation/actions/action-tracker-info.component';
 import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
+import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
 // // Innovations
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 // // Notifications.
@@ -186,9 +186,17 @@ const routes: Routes = [
                               }
                             ]
 
+                          },
+
+                          {
+                            path: 'actions',
+                            pathMatch: 'full',
+                            component: PageInnovationActionSectionInfoComponent,
+                            data: {
+                              breadcrumb: null,
+                              layout: { type: 'full' }
+                            }
                           }
-
-
                         ]
                       }
 
@@ -228,8 +236,8 @@ const routes: Routes = [
                     },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: PageInnovationActionTrackerInfoComponent,
-                        data: { breadcrumb: null }
+                        path: '', pathMatch: 'full', component: PageInnovationActionSectionInfoComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
                         path: 'edit', pathMatch: 'full', component: InnovationActionTrackerEditComponent,
