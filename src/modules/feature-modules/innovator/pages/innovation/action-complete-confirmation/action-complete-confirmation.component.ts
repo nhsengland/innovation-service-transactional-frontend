@@ -66,6 +66,7 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
   }
 
   private onCompleteSectionLater(): void {
+    this.setRedirectAlertInformation('Your section will be in draft until you complete all actions requested for this section.')
     this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
   }
 }

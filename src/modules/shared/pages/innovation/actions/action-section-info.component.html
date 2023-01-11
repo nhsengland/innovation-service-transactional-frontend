@@ -28,7 +28,7 @@
         </div>
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Section</dt>
-          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">{{ stores.innovation.getSectionNumber(action.section) }}: {{
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">{{ stores.innovation.getSectionNumber(action.section) }} {{
             stores.innovation.getSectionTitle(action.section) }}</dd>
         </div>
         <div class="nhsuk-summary-list__row">
@@ -129,7 +129,7 @@
           <ng-container *ngIf="stores.authentication.isAccessorType()">
 
             <h2 class="nhsuk-card__heading nhsuk-heading-m">Message the innovator</h2>
-            <a routerLink="/innovator/innovations/{{ innovationId }}/threads">
+            <a routerLink="/accessor/innovations/{{ innovationId }}/threads">
               Go to messages and send a message to the innovator if you need to discuss more about it.
             </a>
 
