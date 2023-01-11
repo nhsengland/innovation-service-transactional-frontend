@@ -190,21 +190,28 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           }
           else {
 
-            this.setPageTitle('Check your answers', { size: 'l' });
+            this.setPageStatus('LOADING');
 
-            const validInformation = this.wizard.validateData();
+            this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe((sectionInfo) => {
 
+              const validInformation = this.wizard.validateData();
 
-            if (this.hasRequestActions) {
-              this.submitRequestedActionsButton.isActive = validInformation.valid;
-            } else {
-              this.submitButton.isActive = validInformation.valid;
+              if (!validInformation.valid) {
+                this.alertErrorsList = validInformation.errors;
+                this.setAlertError(`Please verify what's missing with your answers`, { itemsList: this.alertErrorsList, width: '2.thirds' });
+              }
+
+              if (this.hasRequestActions && sectionInfo.status === 'DRAFT') {
+                this.submitRequestedActionsButton.isActive = validInformation.valid;
+              } else {
+                this.submitButton.isActive = validInformation.valid;
+              }
+
+              this.setPageTitle('Check your answers', { size: 'l' });
+
+              this.setPageStatus('READY');
             }
-
-            if (!validInformation.valid) {
-              this.alertErrorsList = validInformation.errors;
-              this.setAlertError(`Please verify what's missing with your answers`, { itemsList: this.alertErrorsList, width: '2.thirds' });
-            }
+            );
 
           }
 

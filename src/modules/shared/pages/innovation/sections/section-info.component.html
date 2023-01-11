@@ -11,7 +11,7 @@
           <span class="nhsuk-u-margin-right-2"></span>
           <span *ngIf="section.status.id === 'SUBMITTED' && section.date !== ''">Last submitted {{ section.date | date: ('app.date_formats.long_date_time' | translate) }}</span> 
           <span *ngIf="section.status.id === 'DRAFT' && ['innovator'].includes(module)">This section is in draft. Check answers and submit updates.</span> 
-          <span *ngIf="section.status.id !== 'SUBMITTED' && ['accessor'].includes(module)">This section is in {{ 'shared.catalog.innovation.section_status.' + section.status.id + '.name' | translate }}</span> 
+          <span *ngIf="section.status.id === 'NOT_STARTED'">This section has not been started yet.</span> 
         </p>
       </div>
 
@@ -65,10 +65,10 @@
         <div>
           <button *ngIf="section.hasEvidences && !section.isNotStarted" routerLink="evidences/new" class="nhsuk-button nhsuk-button--secondary"> Add evidence </button>
         </div>
-        <div *ngIf="section.status.id === 'DRAFT'">
+        <div>
           <button *ngIf="section.showSubmitButton" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-right-3"> Confirm section answers </button>
 
-          <button *ngIf="section.actions > 0" routerLink="/innovator/innovations/{{ innovation.id }}/record/sections/{{ section.id }}/confirm-update" class="nhsuk-button nhsuk-u-margin-right-3"> Submit updates </button>
+          <button *ngIf="section.showSubmitUpdatesButton" routerLink="/innovator/innovations/{{ innovation.id }}/record/sections/{{ section.id }}/confirm-update" class="nhsuk-button nhsuk-u-margin-right-3"> Submit updates </button>
         </div>
       </ng-container>
 
