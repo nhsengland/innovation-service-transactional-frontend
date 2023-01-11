@@ -99,7 +99,7 @@
   <nav class="nhsuk-pagination" role="navigation" aria-label="Pagination">
     <ul class="nhsuk-list nhsuk-pagination__list">
       <li *ngIf="previousSection.show" class="nhsuk-pagination-item--previous">
-        <a class="nhsuk-pagination__link nhsuk-pagination__link--prev" routerLink="../{{ previousSection.id }}">
+        <a class="nhsuk-pagination__link nhsuk-pagination__link--prev cursor-pointer" routerLink="../{{ previousSection.id }}">
           <span class="nhsuk-pagination__title">Previous</span>
           <span class="nhsuk-u-visually-hidden">:</span>
           <span class="nhsuk-pagination__page">{{previousSection.title}}</span>
@@ -109,7 +109,7 @@
         </a>
       </li>
       <li *ngIf="nextSection.show" class="nhsuk-pagination-item--next">
-        <a class="nhsuk-pagination__link nhsuk-pagination__link--next" routerLink="../{{ nextSection.id }}">
+        <a class="nhsuk-pagination__link nhsuk-pagination__link--next cursor-pointer" routerLink="../{{ nextSection.id }}">
           <span class="nhsuk-pagination__title">Next</span>
           <span class="nhsuk-u-visually-hidden">:</span>
           <span class="nhsuk-pagination__page">{{nextSection.title}}</span>
