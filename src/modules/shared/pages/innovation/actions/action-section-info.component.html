@@ -35,6 +35,10 @@
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Description</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3 textarea-info-section">{{ action.description }}</dd>
         </div>
+        <div class="nhsuk-summary-list__row" *ngIf="action.status === 'DECLINED'">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Reason for declining</dt>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3 textarea-info-section">{{ action.declineReason ?? '' }}</dd>
+        </div>
       </dl>
 
 
@@ -42,10 +46,17 @@
 
         <a routerLink="/accessor/innovations/{{ innovationId }}/record/sections/{{ action.section }}"
           class="nhsuk-button nhsuk-u-margin-right-3"> Review section </a>
+        
         <a *ngIf="action.status === 'IN_REVIEW'"
           routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/edit"
           class="nhsuk-button nhsuk-button--secondary">
           Update status
+        </a>
+
+        <a *ngIf="action.status === 'REQUESTED' && action.createdBy.id === stores.authentication.getUserId()"
+          routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/cancel"
+          class="nhsuk-button nhsuk-button--secondary">
+          Cancel action
         </a>
 
       </ng-container>
@@ -101,14 +112,29 @@
 
     </div>
 
-    <div class="nhsuk-grid-column-one-third">
+    <div class="nhsuk-grid-column-one-third" *ngIf="stores.authentication.isInnovatorType() || stores.authentication.isAccessorType()">
 
       <div class="nhsuk-card x-card-top-border">
         <div class="nhsuk-card__content">
-          <h2 class="nhsuk-card__heading nhsuk-heading-m">If you have any questions</h2>
-          <a routerLink="/innovator/innovations/{{ innovationId }}/threads">
-            Go to messages and start a new conversation with your supporting organisations.
-          </a>
+          
+          <ng-container *ngIf="stores.authentication.isInnovatorType()">
+
+            <h2 class="nhsuk-card__heading nhsuk-heading-m">If you have any questions</h2>
+            <a routerLink="/innovator/innovations/{{ innovationId }}/threads">
+              Go to messages and start a new conversation with your supporting organisations.
+            </a>
+
+          </ng-container>
+
+          <ng-container *ngIf="stores.authentication.isAccessorType()">
+
+            <h2 class="nhsuk-card__heading nhsuk-heading-m">Message the innovator</h2>
+            <a routerLink="/innovator/innovations/{{ innovationId }}/threads">
+              Go to messages and send a message to the innovator if you need to discuss more about it.
+            </a>
+
+          </ng-container>
+
         </div>
       </div>
 

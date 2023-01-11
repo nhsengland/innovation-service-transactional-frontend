@@ -33,6 +33,10 @@ export class InnovationActionTrackerCancelComponent extends CoreComponent implem
 
     this.innovationsService.getActionInfo(this.innovationId, this.actionId).subscribe(response => {
 
+      if(response.createdBy.id !== this.stores.authentication.getUserId()) {
+        this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${this.actionId}`);
+      }
+      
       this.setPageTitle(`Cancel action: ${response.name}`);
       this.setPageStatus('READY');
 

@@ -80,7 +80,7 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
     this.innovationsService.updateAction(this.innovationId, this.actionId, body).subscribe({
       next: response => {
         const status = this.form.get('status')!.value as InnovationActionStatusEnum;
-        this.setRedirectAlertSuccess(`You have updated the status of this action to '${this.statusItems.find(item => item.value === status)?.label}'`, { message: 'The innovator will be notified of this status change' });
+        this.setRedirectAlertSuccess(`You have updated the status of this action to '${this.statusItems.find(item => item.value === status)?.label}'`, { message: `Send a message to innovator and explain why the submitted information is not sufficient.` });
         this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`);
       },
       error: () => this.setAlertError('An error occurred when updating an action. Please try again or contact us for further help')
