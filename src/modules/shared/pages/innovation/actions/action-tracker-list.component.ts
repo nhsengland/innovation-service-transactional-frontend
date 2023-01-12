@@ -69,7 +69,7 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
     this.openedActionsList.setFilters({
       innovationId: this.innovationId,
       fields: ['notifications'],
-      status: [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.IN_REVIEW]
+      status: [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.SUBMITTED]
     });
 
     this.closedActionsList.setFilters({
@@ -77,7 +77,7 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
       fields: ['notifications'],
       status: [InnovationActionStatusEnum.DECLINED, InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DELETED, InnovationActionStatusEnum.CANCELLED]
     });
-    
+
     this.innovationsService.getActionsList(this.openedActionsList.getAPIQueryParams()).subscribe((openedActions) => {
 
       this.openedActionsList.setData(openedActions.data);
@@ -94,7 +94,7 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
   }
 
   handleClosedActionsTableClick() {
-    if(this.closedActionsList.getTotalRowsNumber() !== 0) {
+    if (this.closedActionsList.getTotalRowsNumber() !== 0) {
       return;
     }
     this.getClosedActionsList();

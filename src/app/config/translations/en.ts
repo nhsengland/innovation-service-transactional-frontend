@@ -100,7 +100,7 @@ export const locale = {
               description: '',
               cssColorClass: 'nhsuk-tag--blue'
             },
-            IN_REVIEW: {
+            SUBMITTED: {
               name: 'Submitted',
               description: 'The innovator has submitted information requested by an accessor and is waiting for the accessor to review this information.',
               cssColorClass: 'nhsuk-tag--yellow'
@@ -221,7 +221,7 @@ export const locale = {
               title: 'Action creation',
               message: `{{ actionUserName }} created an action for section "{{ sectionTitle }}"`
             },
-            ACTION_STATUS_IN_REVIEW_UPDATE: {
+            ACTION_STATUS_SUBMITTED_UPDATE: {
               title: 'Action changed to submitted',
               message: `{{ totalActions }} actions for "{{ sectionTitle }}" section were changed to "Submitted"`
             },
