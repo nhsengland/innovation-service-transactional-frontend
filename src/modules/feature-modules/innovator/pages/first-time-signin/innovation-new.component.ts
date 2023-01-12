@@ -21,6 +21,7 @@ export class FirstTimeSigninInnovationNewComponent extends CoreComponent impleme
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   wizard: WizardEngineModel = new WizardEngineModel({});
+  disableContinueButton: boolean = false;
 
 
   constructor(
@@ -78,7 +79,7 @@ export class FirstTimeSigninInnovationNewComponent extends CoreComponent impleme
   }
 
   onSubmitWizard(): void {
-
+    this.disableContinueButton = true;
     const wizardData = this.wizard.runOutboundParsing();
 
 
@@ -110,8 +111,14 @@ export class FirstTimeSigninInnovationNewComponent extends CoreComponent impleme
       concatMap(() => this.stores.authentication.initializeAuthentication$())
 
     ).subscribe({
-      next: () => this.redirectTo(`innovator/dashboard`, { alert: 'alertDisabled' }),
-      error: () => this.setAlertUnknownError()
+      next: () => {
+        this.redirectTo(`innovator/dashboard`, { alert: 'alertDisabled' });
+        this.disableContinueButton = false;
+      },
+      error: () => {
+        this.setAlertUnknownError();
+        this.disableContinueButton = false;
+      }
     });
 
   }
