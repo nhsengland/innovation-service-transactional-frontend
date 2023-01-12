@@ -15,6 +15,8 @@ import { PageAccountEmailNotificationsEditComponent } from './pages/account/emai
 import { PageAccountEmailNotificationsListComponent } from './pages/account/email-notifications/email-notifications-list.component';
 import { PageAccountManageDetailsInfoComponent } from './pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from './pages/account/manage-details/manage-details-edit.component';
+import { PageSwitchContextComponent } from './pages/switch-context/switch-context.component';
+
 // // Error.
 import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/error/not-found.component';
@@ -89,6 +91,8 @@ import { StatisticsService } from './services/statistics.service';
     PageAccountEmailNotificationsListComponent,
     PageAccountManageDetailsInfoComponent,
     PageAccountManageDetailsEditComponent,
+    PageSwitchContextComponent,
+
     // // Error.
     PageErrorComponent,
     PageNotFoundComponent,

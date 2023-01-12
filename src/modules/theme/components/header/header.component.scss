@@ -23,6 +23,11 @@
     color: var(--color_nhsuk-grey-5);
     line-height: 20px;
     margin: 0;
+
+    a,
+    a:visited {
+      color: #fff;
+    }
   }
 
 }

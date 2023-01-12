@@ -10,6 +10,7 @@ export class AuthenticationModel {
     organisation?: {
       id: string,
       name: string,
+      role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
       organisationUnit: { id: string; name: string; acronym: string; }
     }
   };

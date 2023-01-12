@@ -65,6 +65,9 @@ import { InnovationActionDataResolver } from './resolvers/innovation-action-data
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 import { InnovationActionTrackerCancelComponent } from './pages/innovation/action-tracker/action-tracker-cancel.component';
 
+// Guards.
+import { SwitchUserContextGuard } from './guards/switch-user-contextguard';
+
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -84,6 +87,7 @@ const routes: Routes = [
 
   {
     path: '', component: TransactionalLayoutComponent,
+    canActivateChild: [SwitchUserContextGuard],
     data: { header, module: 'accessor', breadcrumb: 'Home' },
     children: [
 

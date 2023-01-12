@@ -71,7 +71,7 @@
 
     <div *ngIf="showUserInformation" class="user-information">
       <p>{{ user.displayName }}</p>
-      <p>{{ user.description }}</p>
+      <p>{{ user.description }} <a routerLink="/switch-user-context" *ngIf="user.showSwitchProfile">Switch profile</a></p>
     </div>
 
   </div>

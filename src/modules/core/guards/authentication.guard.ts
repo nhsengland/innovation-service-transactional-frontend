@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 import { LoggerService, Severity } from '../services/logger.service';
 import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
+import { UserTypeEnum } from '@app/base/enums';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
