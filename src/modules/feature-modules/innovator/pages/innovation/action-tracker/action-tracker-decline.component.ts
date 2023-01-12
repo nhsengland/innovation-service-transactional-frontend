@@ -44,7 +44,7 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
 
       this.actionDisplayId = response.displayId;
 
-      this.setPageTitle(`Decline action: ${response.name.toLowerCase()}`, { size: 'l' });
+      this.setPageTitle(`Decline action: ${response.name}`);
 
       this.setPageStatus('READY');
 
