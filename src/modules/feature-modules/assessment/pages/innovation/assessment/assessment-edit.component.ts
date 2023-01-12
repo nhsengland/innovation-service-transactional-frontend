@@ -1,5 +1,5 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
@@ -40,6 +40,11 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   currentAnswers: { [key: string]: any };
 
   saveAsDraft: {
+    disabled: boolean,
+    label: string
+  } = { disabled: true, label: 'Saved' };
+
+  editAssessment: {
     disabled: boolean,
     label: string
   } = { disabled: true, label: 'Saved' };
@@ -131,7 +136,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   }
 
 
-  onSubmit(action: 'update' | 'saveAsDraft' | 'submit'): void {
+  onSubmit(action: 'update' | 'saveAsDraft' | 'submit' | 'saveAsDraftFirstSection' | 'saveAsDraftSecondSection'): void {
 
     let isValid = true;
 
@@ -170,17 +175,18 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
           case 'saveAsDraft':
             this.saveAsDraft = { disabled: true, label: 'Saved' };
             break;
+          case 'saveAsDraftFirstSection':
+            this.reuseRouteStrategy();
+            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
+            break;
+          case 'saveAsDraftSecondSection':
+            this.reuseRouteStrategy();
+            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`);
+            break;
           case 'update':
-          case 'submit':
-            switch (this.stepId) {
-              case 1:
-                this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
-                break;
-              case 2:
-                this.setRedirectAlertSuccess('Needs assessment successfully completed');
-                this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`);
-                break;
-            }
+          case 'submit':          
+            this.setRedirectAlertSuccess('Needs assessment successfully completed');
+            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`);
             break;
           default:
             break;
@@ -188,11 +194,18 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       },
       error: () => this.setAlertError('An error occurred when starting needs assessment. Please try again or contact us for further help')
     });
-
   }
 
   onFormChange(): void {
-    this.saveAsDraft = { disabled: false, label: 'Save as draft' };
+    this.saveAsDraft = { disabled: false, label: 'Save as a draft' };
+    this.editAssessment = { disabled: false, label: 'Save and continue'};
+  }
+
+  private reuseRouteStrategy(): void {
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    }
+    this.router.onSameUrlNavigation = 'reload';
   }
 
 }
