@@ -378,7 +378,7 @@ export class InnovationsService extends CoreService {
         id: response.id,
         displayId: response.displayId,
         status: response.status,
-        name: `Update '${this.stores.innovation.getSectionTitle(response.section).toLowerCase()}'`,
+        name: `Update '${this.stores.innovation.getSectionTitle(response.section)}'`,
         description: response.description,
         section: response.section,
         createdAt: response.createdAt,
