@@ -21,7 +21,6 @@ import { AppComponent } from './app.component';
     BrowserAnimationsModule,
     HttpClientModule,
     HttpClientXsrfModule,
-    TransferHttpCacheModule,
 
     CoreModule,
     StoresModule,
