@@ -238,7 +238,7 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
     cssClass: 'nhsuk-tag--blue',
     description: ''
   },
-  IN_REVIEW: {
+  SUBMITTED: {
     label: 'Submitted',
     cssClass: 'nhsuk-tag--yellow',
     description: 'The innovation owner has submitted information requested by an accessor and are waiting for them to review it.'
@@ -364,7 +364,7 @@ export const ACTIVITY_LOG_ITEMS: {
     details: 'COMMENT',
     link: 'ACTION'
   },
-  ACTION_STATUS_IN_REVIEW_UPDATE: {
+  ACTION_STATUS_SUBMITTED_UPDATE: {
     type: ActivityLogTypesEnum.ACTIONS,
     details: null,
     link: null

@@ -68,7 +68,7 @@ export class ActionsAdvancedSearchComponent extends CoreComponent implements OnI
 
     this.datasets.status = Object.entries(INNOVATION_SECTION_ACTION_STATUS).
       map(([key, item]) => ({ label: item.label, value: key })).
-      filter(i => [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.IN_REVIEW, InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DECLINED].includes(i.value as InnovationActionStatusEnum));
+      filter(i => [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.SUBMITTED, InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DECLINED].includes(i.value as InnovationActionStatusEnum));
 
     this.datasets.sections = INNOVATION_SECTIONS.reduce((sectionGroupAcc: { value: string, label: string }[], sectionGroup, i) => {
       return [
