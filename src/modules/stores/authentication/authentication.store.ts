@@ -97,7 +97,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   getAccessorOrganisationUnitName(): string {
-    return (this.state.user?.organisations[0]?.organisationUnits || [])[0]?.name || '';
+    return this.getUserContextInfo().organisation?.organisationUnit?.name || '';
   }
 
   getUserInfo(): Required<AuthenticationModel>['user'] {
