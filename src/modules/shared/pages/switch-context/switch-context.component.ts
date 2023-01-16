@@ -16,6 +16,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
   }[] = []
   initialSelection = false
   currentUserProfile = ''
+  isAccessor = false;
 
   constructor(private authenticationStore: AuthenticationStore) { 
     super();
@@ -26,13 +27,10 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
     const userContext = this.authenticationStore.getUserContextInfo();
 
     this.initialSelection = userContext.type === '';
+    this.isAccessor =  userContext.organisation?.role === AccessorOrganisationRoleEnum.ACCESSOR;
 
     if(!this.initialSelection) {
-      this.currentUserProfile = `${this.authenticationStore.getRoleDescription(userContext.organisation?.role.toString() ?? '').trimEnd()} (${userContext.organisation?.organisationUnit.name.trimEnd()})`
-
-
-      this.currentUserProfile = userContext.organisation?.role === AccessorOrganisationRoleEnum.ACCESSOR ? `an ${this.currentUserProfile }` : `a ${this.currentUserProfile }`;
-
+      this.currentUserProfile = `${this.authenticationStore.getRoleDescription(userContext.organisation?.role.toString() ?? '').trimEnd()} (${userContext.organisation?.organisationUnit.name.trimEnd()})`;
     }
 
     userInfo.organisations.forEach(org => {
