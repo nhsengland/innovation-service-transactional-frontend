@@ -16,6 +16,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
   }[] = []
   initialSelection = false
   currentUserProfile = ''
+  isAccessor = false;
 
   constructor(private authenticationStore: AuthenticationStore) { 
     super();
@@ -26,24 +27,25 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
     const userContext = this.authenticationStore.getUserContextInfo();
 
     this.initialSelection = userContext.type === '';
+    this.isAccessor =  userContext.organisation?.role === AccessorOrganisationRoleEnum.ACCESSOR;
 
     if(!this.initialSelection) {
-      this.currentUserProfile = `${this.authenticationStore.getRoleDescription(userContext.organisation?.role.toString() ?? '').trimEnd()} (${userContext.organisation?.organisationUnit.name.trimEnd()})`
+      this.currentUserProfile = `${this.authenticationStore.getRoleDescription(userContext.organisation?.role.toString() ?? '').trimEnd()} (${userContext.organisation?.organisationUnit.name.trimEnd()})`;
     }
 
     userInfo.organisations.forEach(org => {
       org.organisationUnits.forEach((unit) => {
-        let roleName = `${this.authenticationStore.getRoleDescription(org.role).trimEnd()} (${unit.name.trimEnd()})`
+        let profile = `${this.authenticationStore.getRoleDescription(org.role).trimEnd()} (${unit.name.trimEnd()})`;
         
         if (!this.initialSelection) {
-          roleName = this.currentUserProfile === roleName ? `Continue as a ${roleName}` : `Switch to my ${roleName} profile`;
+          profile = this.currentUserProfile === profile ? `Continue as a ${profile}` : `Switch to my ${profile} profile`;
         }      
         
         this.organisations.push({
           id: org.id,
           name: org.name,
           role: org.role,
-          profile: roleName,
+          profile: profile,
           organisationUnits: {
             ...unit
           }
@@ -66,6 +68,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
 
     if(this.currentUserProfile !== organisation.profile) {
       const userInfo = this.authenticationStore.getUserInfo();
+      const roleName = `${this.authenticationStore.getRoleDescription(organisation.role).trimEnd().toLowerCase()} (${organisation.organisationUnits.name.trimEnd()})`;
 
       this.authenticationStore.updateSelectedUserContext({
         type: userInfo.type,
@@ -82,7 +85,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
       })
   
       if (!this.initialSelection) {
-        this.setRedirectAlertSuccess(`Switch successful: you are now logged in with your ${organisation.profile} profile`);
+        this.setRedirectAlertSuccess(`Switch successful: you are now logged in with your ${roleName} profile.`);
       }
     }   
 
