@@ -196,7 +196,7 @@ export class OrganisationsService extends CoreService {
 
   activateOrganisationUnit(organisationId: string, organisationUnitId: string, userIds: string[]): Observable<boolean> {
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId/units/:organisationUnitId/activate').setPathParams({ organisationId, organisationUnitId });
-    return this.http.patch<{}>(url.buildUrl(), { organisationUnitId, userIds }).pipe(
+    return this.http.patch<{}>(url.buildUrl(), { userIds }).pipe(
       take(1),
       map(response => true)
     );
