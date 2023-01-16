@@ -39,7 +39,6 @@ import { PageExportRecordInfoComponent } from './pages/innovation/export/export-
 import { PageExportRecordListComponent } from './pages/innovation/export/export-record-list.component';
 import { PageInnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
 import { PageInnovationActionTrackerListComponent } from './pages/innovation/actions/action-tracker-list.component';
-import { PageInnovationActionTrackerInfoComponent } from './pages/innovation/actions/action-tracker-info.component';
 import { PageInnovationDataSharingAndSupportComponent } from './pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 import { PageInnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationActionSectionInfoComponent } from './pages/innovation/actions/action-section-info.component';
@@ -115,7 +114,6 @@ import { StatisticsService } from './services/statistics.service';
     PageExportRecordInfoComponent,
     PageInnovationsAdvancedReviewComponent,
     PageInnovationActionTrackerListComponent,
-    PageInnovationActionTrackerInfoComponent,
     PageInnovationActionSectionInfoComponent,
     PageInnovationDataSharingAndSupportComponent,
     PageInnovationAssessmentOverviewComponent,
