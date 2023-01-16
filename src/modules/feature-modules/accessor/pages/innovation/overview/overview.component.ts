@@ -60,15 +60,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovationsService.getInnovationInfo(this.innovationId),
       this.innovationsService.getInnovationStatisticsInfo(this.innovationId, qp),
     ]).subscribe(([innovationInfo, statistics]) => {
-      // console.log(statistics)
-
-      const organisationUnitId = this.stores.authentication.getUserContextInfo().organisation?.organisationUnit.id;
-      const status = innovationInfo.supports?.find(i => i.organisationUnitId === organisationUnitId)
-
-
       this.innovationSupport = {
         organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-        status: status?.status || InnovationSupportStatusEnum.UNASSIGNED
+        status: this.innovation.support?.status || InnovationSupportStatusEnum.UNASSIGNED
       };
       this.innovationSummary = [
         { label: 'Company', value: innovationInfo.owner.organisations ? innovationInfo.owner.organisations[0].name : '' },

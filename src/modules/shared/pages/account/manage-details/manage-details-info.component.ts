@@ -45,11 +45,12 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
       }
 
     } else if (this.stores.authentication.isAccessorType()) {
+      const userContext = this.stores.authentication.getUserContextInfo();
 
       this.summaryList = [
         { label: 'Name', value: user.displayName, editStepNumber: 1 },
         { label: 'Email address', value: user.email },
-        { label: 'Organisation', value: user.organisations[0].name },
+        { label: 'Organisation', value: userContext.organisation?.name ?? '' },
         { label: 'Service roles', value: user.organisations.map(item => this.stores.authentication.getRoleDescription(item.role)).join('\n') }
       ];
 
