@@ -53,6 +53,12 @@ const routes: Routes = [
         path: 'dashboard',
         pathMatch: 'full',
         children: []
+      },   
+      {
+        path: 'switch-user-context',
+        canActivate: [SwitchUserContextGuard],
+        component: BaseLayoutComponent,
+        children: [{ path: '', pathMatch: 'full', component: PageSwitchContextComponent }]
       },
       {
         canActivate: [AuthenticationRedirectionGuard],
@@ -69,13 +75,7 @@ const routes: Routes = [
       {
         canActivate: [AuthenticationRedirectionGuard],
         path: 'accessor', loadChildren: () => import('@modules/feature-modules/accessor/accessor.module').then(m => m.AccessorModule)
-      },
-      
-      {
-        path: 'switch-user-context',
-        component: BaseLayoutComponent,
-        children: [{ path: '', pathMatch: 'full', component: PageSwitchContextComponent }]
-      }
+      }   
     ]
   },
 

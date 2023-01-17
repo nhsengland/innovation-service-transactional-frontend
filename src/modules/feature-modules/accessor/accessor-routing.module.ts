@@ -85,7 +85,7 @@ const routes: Routes = [
   {
     path: '', component: TransactionalLayoutComponent,
     data: { header, module: 'accessor', breadcrumb: 'Home' },
-    canActivate: [SwitchUserContextGuard],
+    canActivateChild: [SwitchUserContextGuard],
     children: [
 
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
