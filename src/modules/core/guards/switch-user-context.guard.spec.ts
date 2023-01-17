@@ -50,7 +50,7 @@ describe('FeatureModules/Accessor/Guards/SwitchUserContextGuard', () => {
 
     guard.canActivateChild(routeMock as any, routerStateSnapshopMock as any).subscribe(response => { expected = response; });
 
-    expect<null | boolean>(expected).toBe(true);
+    expect<null | boolean>(expected).toBe(false);
     expect(routerSpy).toHaveBeenCalledWith(['/switch-user-context']);
 
   });
