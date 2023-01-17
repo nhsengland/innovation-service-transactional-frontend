@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { InnovatorOrganisationRoleEnum, AccessorOrganisationRoleEnum } from '@app/base/enums';
+import { LocalStorageHelper } from '@app/base/helpers';
 import { AuthenticationStore } from '@modules/stores';
 @Component({
   selector: 'shared-pages-switch-context',
@@ -38,7 +39,8 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
         let profile = `${this.authenticationStore.getRoleDescription(org.role).trimEnd()} (${unit.name.trimEnd()})`;
         
         if (!this.initialSelection) {
-          profile = this.currentUserProfile === profile ? `Continue as a ${profile}` : `Switch to my ${profile} profile`;
+          const article = this.isAccessor ? 'an' : 'a';
+          profile = this.currentUserProfile === profile ? `Continue as ${article} ${profile}` : `Switch to my ${profile} profile`;
         }      
         
         this.organisations.push({
@@ -83,6 +85,8 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
           }
         }
       })
+
+      LocalStorageHelper.setObjectItem("orgUnitId", {'id': organisation.organisationUnits.id});
   
       if (!this.initialSelection) {
         this.setRedirectAlertSuccess(`Switch successful: you are now logged in with your ${roleName} profile.`);

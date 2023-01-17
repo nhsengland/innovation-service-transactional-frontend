@@ -8,11 +8,9 @@ import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/ro
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 
-import { SwitchUserContextGuard } from './switch-user-contextguard';
+import { SwitchUserContextGuard } from './switch-user-context.guard';
 
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
-import { of } from 'rxjs';
-
 describe('FeatureModules/Accessor/Guards/SwitchUserContextGuard', () => {
 
   let guard: SwitchUserContextGuard;

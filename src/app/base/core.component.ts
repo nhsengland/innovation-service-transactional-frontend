@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, OnDestroy } from '@angular/core';
+import { Component, PLATFORM_ID, OnDestroy, HostListener } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Router } from '@angular/router';
@@ -18,7 +18,8 @@ import { ContextPageLayoutType, ContextPageStatusType } from '@modules/stores/co
 import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 
 import { AlertType, LinkType, MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-import { UtilsHelper } from './helpers';
+import { LocalStorageHelper, UtilsHelper } from './helpers';
+import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
 
 
 @Component({ template: '' })
@@ -103,6 +104,21 @@ export class CoreComponent implements OnDestroy {
   /* istanbul ignore next */
   get pageTitle(): string { return this.stores.context.state.pageLayoutBS.getValue().title.main ?? ''; } // Deprecated!
 
+  @HostListener('window:beforeunload') goToPage() {
+    const userContext = this.stores.authentication.getUserContextInfo();
+    if(userContext.type === UserTypeEnum.ACCESSOR.toString()) {
+      const currentOrgUnitId = LocalStorageHelper.getObjectItem("orgUnitId");
+  
+      if (userContext.type === '' && !!!currentOrgUnitId) {
+        this.router.navigate(['/switch-user-context']);
+      }
+  
+      if (userContext.type === '' && !!currentOrgUnitId) {
+        this.stores.authentication.findAndPopulateUserContextFromLocastorage(currentOrgUnitId.id);
+  
+      }
+    }
+  }
 
 
   isRunningOnBrowser(): boolean {

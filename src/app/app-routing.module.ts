@@ -14,6 +14,7 @@ import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
 import { AuthenticationRedirectionGuard } from '@modules/core/guards/authentication-redirection.guard';
 import { InnovationTransferRedirectionGuard } from '@modules/core/guards/innovation-transfer-redirection.guard';
 import { PageSwitchContextComponent } from '@modules/shared/pages/switch-context/switch-context.component';
+import { SwitchUserContextGuard } from '@modules/core/guards/switch-user-context.guard';
 
 
 const routes: Routes = [

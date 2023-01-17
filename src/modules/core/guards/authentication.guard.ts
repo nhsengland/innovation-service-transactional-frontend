@@ -11,7 +11,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 import { LoggerService, Severity } from '../services/logger.service';
 import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
-import { UserTypeEnum } from '@app/base/enums';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -24,12 +23,10 @@ export class AuthenticationGuard implements CanActivate {
     private loggerService: LoggerService
   ) { }
 
-  canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-
+  canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {    
     return this.authentication.initializeAuthentication$().pipe(
       map(response => response),
       catchError((e: HttpErrorResponse) => {
-
         this.loggerService.trackTrace('[AuthenticationGuard] Sign In Error', Severity.ERROR, { error: e });
 
         // 401: User in not authenticated on identity provider.

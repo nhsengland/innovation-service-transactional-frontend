@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { LocalStorageHelper } from '@app/base/helpers';
 
 import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 

@@ -1,13 +1,14 @@
 import { Component, Input, OnInit, AfterViewInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { CookiesService } from '@modules/core/services/cookies.service';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
-import { AccessorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
+import { UserTypeEnum } from '@app/base/enums';
+import { LocalStorageHelper } from '@app/base/helpers';
 
 
 export type HeaderMenuBarItemType = {
@@ -167,6 +168,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.menuBarItems.isChildrenOpened = menuItem.isOpen = !menuItem.isOpen;
 
   }
+
+  signOut(): void {
+    LocalStorageHelper.removeItem("orgUnitId");
+  }
+
 
 
   ngOnDestroy(): void {
