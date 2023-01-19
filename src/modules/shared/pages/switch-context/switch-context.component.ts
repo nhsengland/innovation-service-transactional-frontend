@@ -87,7 +87,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
         }
       })
 
-      LocalStorageHelper.setObjectItem("orgUnitId", {'id': organisation.organisationUnits.id});
+      LocalStorageHelper.setObjectItem("orgUnitId", {'id': organisation.organisationUnit.id});
   
       if (!this.initialSelection) {
         const message = currentOrgUnitId === organisation.organisationUnit.id ? `You are logged in as ${this.isAccessor ? 'an' : 'a'} ${roleName}.` : `Switch successful: you are now logged in with your ${roleName} profile.`
