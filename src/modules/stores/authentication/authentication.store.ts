@@ -44,7 +44,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
               const currentOrgUnitId = LocalStorageHelper.getObjectItem("orgUnitId");
               
               if(!!currentOrgUnitId) {
-                this.findAndPopulateUserContextFromLocastorage(currentOrgUnitId.id);
+                this.findAndPopulateUserContextFromLocalstorage(currentOrgUnitId.id);
               }
             }
           } else {
@@ -116,7 +116,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     return this.state.userContext;
   }
 
-  findAndPopulateUserContextFromLocastorage(currentOrgUnitId: string): void {
+  findAndPopulateUserContextFromLocalstorage(currentOrgUnitId: string): void {
     const user = this.getUserInfo();
 
     user.organisations.every((org) => {

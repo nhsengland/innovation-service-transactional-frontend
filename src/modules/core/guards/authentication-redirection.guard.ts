@@ -42,7 +42,7 @@ export class AuthenticationRedirectionGuard implements CanActivate {
     }
 
     if (userContext.type === '' && !!currentOrgUnitId) {
-      this.authentication.findAndPopulateUserContextFromLocastorage(currentOrgUnitId.id);
+      this.authentication.findAndPopulateUserContextFromLocalstorage(currentOrgUnitId.id);
       return true;
     }
 

@@ -12,6 +12,8 @@ import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { UserTypeEnum } from '@app/base/enums';
 
 import { AuthenticationRedirectionGuard } from './authentication-redirection.guard';
+import { PLATFORM_ID } from '@angular/core';
+import { type } from 'os';
 
 
 describe('Core/Guards/AuthenticationRedirectionGuard', () => {
@@ -37,6 +39,9 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
       ],
       declarations: [
         EmptyMockComponent
+      ],
+      providers: [
+        { provide: PLATFORM_ID, useValue: 'browser' }
       ]
     });
 
@@ -109,6 +114,7 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovator' } };
     authenticationStore.getUserType = () => UserTypeEnum.INNOVATOR;
     authenticationStore.isTermsOfUseAccepted = () => true;
+    authenticationStore.getUserContextInfo = () => { return {type: UserTypeEnum.INNOVATOR} }
     expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(true);
   });
 
