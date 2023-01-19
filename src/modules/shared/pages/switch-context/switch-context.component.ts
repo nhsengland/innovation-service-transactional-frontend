@@ -13,7 +13,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
     name: string,
     role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
     profile: string,
-    organisationUnits: { id: string; name: string; acronym: string; }
+    organisationUnit: { id: string; name: string; acronym: string; }
   }[] = []
   initialSelection = false
   currentUserProfile = ''
@@ -48,7 +48,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
           name: org.name,
           role: org.role,
           profile: profile,
-          organisationUnits: {
+          organisationUnit: {
             ...unit
           }
         })
@@ -65,12 +65,13 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
     name: string,
     role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
     profile: string,
-    organisationUnits: { id: string; name: string; acronym: string; }
+    organisationUnit: { id: string; name: string; acronym: string; }
   }): void {
 
     if(this.currentUserProfile !== organisation.profile) {
       const userInfo = this.authenticationStore.getUserInfo();
-      const roleName = `${this.authenticationStore.getRoleDescription(organisation.role).trimEnd().toLowerCase()} (${organisation.organisationUnits.name.trimEnd()})`;
+      const roleName = `${this.authenticationStore.getRoleDescription(organisation.role).trimEnd().toLowerCase()} (${organisation.organisationUnit.name.trimEnd()})`;
+      const currentOrgUnitId = this.authenticationStore.getUserContextInfo().organisation?.organisationUnit.id;
 
       this.authenticationStore.updateSelectedUserContext({
         type: userInfo.type,
@@ -79,9 +80,9 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
           name: organisation.name,
           role: organisation.role,
           organisationUnit: { 
-            id: organisation.organisationUnits.id,
-            name: organisation.organisationUnits.name, 
-            acronym: organisation.organisationUnits.acronym,
+            id: organisation.organisationUnit.id,
+            name: organisation.organisationUnit.name, 
+            acronym: organisation.organisationUnit.acronym,
           }
         }
       })
@@ -89,7 +90,8 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
       LocalStorageHelper.setObjectItem("orgUnitId", {'id': organisation.organisationUnits.id});
   
       if (!this.initialSelection) {
-        this.setRedirectAlertSuccess(`Switch successful: you are now logged in with your ${roleName} profile.`);
+        const message = currentOrgUnitId === organisation.organisationUnit.id ? `You are logged in as ${this.isAccessor ? 'an' : 'a'} ${roleName}.` : `Switch successful: you are now logged in with your ${roleName} profile.`
+        this.setRedirectAlertSuccess(message);
       }
     }   
 
