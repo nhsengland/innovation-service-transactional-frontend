@@ -18,8 +18,7 @@ import { ContextPageLayoutType, ContextPageStatusType } from '@modules/stores/co
 import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 
 import { AlertType, LinkType, MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-import { LocalStorageHelper, UtilsHelper } from './helpers';
-import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
+import { UtilsHelper } from './helpers';
 
 
 @Component({ template: '' })
