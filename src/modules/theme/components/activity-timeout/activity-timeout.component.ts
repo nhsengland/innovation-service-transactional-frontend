@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject, Output, EventEmitter, Input } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { interval, Subscription } from 'rxjs';
+import { LocalStorageHelper } from '@app/base/helpers';
 
 
 @Component({
@@ -101,6 +102,7 @@ export class ActivityTimeoutComponent implements OnInit, OnDestroy {
 
   signOut(): void {
     /* istanbul ignore next */
+    LocalStorageHelper.removeItem("orgUnitId");
     this.timeoutEvent.emit();
   }
 

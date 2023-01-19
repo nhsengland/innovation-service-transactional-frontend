@@ -2,14 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable, Observer, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
-import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-
 import { Store } from '../store.class';
 import { AuthenticationService, UpdateUserInfoDTO } from './authentication.service';
 
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum, UserTypeEnum } from './authentication.enums';
+import { UserRoleEnum, UserTypeEnum } from './authentication.enums';
 import { AuthenticationModel } from './authentication.models';
-
+import { LocalStorageHelper } from '@app/base/helpers';
 
 @Injectable()
 export class AuthenticationStore extends Store<AuthenticationModel> {
@@ -41,6 +39,12 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
                   role: user.organisations[0].role,
                   organisationUnit: user.organisations[0].organisationUnits[0],
                 }
+              }
+            } else {
+              const currentOrgUnitId = LocalStorageHelper.getObjectItem("orgUnitId");
+              
+              if(!!currentOrgUnitId) {
+                this.findAndPopulateUserContextFromLocalstorage(currentOrgUnitId.id);
               }
             }
           } else {
@@ -110,6 +114,33 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
   getUserContextInfo(): Required<AuthenticationModel>['userContext'] {
     return this.state.userContext;
+  }
+
+  findAndPopulateUserContextFromLocalstorage(currentOrgUnitId: string): void {
+    const user = this.getUserInfo();
+
+    user.organisations.every((org) => {
+      const unit = org.organisationUnits.find((unit) => unit.id === currentOrgUnitId);
+
+      if(!!unit) {
+        this.updateSelectedUserContext({
+          type: user.type,
+          organisation: {
+            id: org.id,
+            name: org.name,
+            role: org.role,
+            organisationUnit: { 
+              id: unit.id,
+              name: unit.name, 
+              acronym: unit.acronym,
+            }
+          }
+        });
+        return false;
+      }
+
+      return true;
+    });
   }
 
   updateSelectedUserContext(userContext: Required<AuthenticationModel>['userContext']): void {

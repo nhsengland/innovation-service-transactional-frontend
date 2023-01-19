@@ -103,8 +103,6 @@ export class CoreComponent implements OnDestroy {
   /* istanbul ignore next */
   get pageTitle(): string { return this.stores.context.state.pageLayoutBS.getValue().title.main ?? ''; } // Deprecated!
 
-
-
   isRunningOnBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
   }

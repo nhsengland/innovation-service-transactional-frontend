@@ -38,10 +38,6 @@ import { AccessorService } from './services/accessor.service';
 // Resolvers.
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 
-// Guards.
-import { SwitchUserContextGuard } from './guards/switch-user-contextguard';
-
-
 @NgModule({
   imports: [
     ThemeModule,
@@ -82,9 +78,6 @@ import { SwitchUserContextGuard } from './guards/switch-user-contextguard';
 
     // Resolvers.
     InnovationActionDataResolver,
-
-    // Guards.
-    SwitchUserContextGuard
   ]
 })
 export class AccessorModule { }
