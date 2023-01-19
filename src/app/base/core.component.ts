@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, OnDestroy, HostListener } from '@angular/core';
+import { Component, PLATFORM_ID, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Router } from '@angular/router';
