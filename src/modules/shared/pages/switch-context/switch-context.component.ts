@@ -69,6 +69,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
     if(this.currentUserProfile !== organisation.profile) {
       const userInfo = this.authenticationStore.getUserInfo();
       const roleName = `${this.authenticationStore.getRoleDescription(organisation.role).trimEnd().toLowerCase()} (${organisation.organisationUnits.name.trimEnd()})`;
+      const currentOrgUnitId = this.authenticationStore.getUserContextInfo().organisation?.organisationUnit.id;
 
       this.authenticationStore.updateSelectedUserContext({
         type: userInfo.type,
@@ -85,7 +86,8 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
       })
   
       if (!this.initialSelection) {
-        this.setRedirectAlertSuccess(`Switch successful: you are now logged in with your ${roleName} profile.`);
+        const message = currentOrgUnitId === organisation.organisationUnits.id ? `You are logged in as ${this.isAccessor ? 'an' : 'a'} ${roleName}.` : `Switch successful: you are now logged in with your ${roleName} profile.`
+        this.setRedirectAlertSuccess(message);
       }
     }   
 
