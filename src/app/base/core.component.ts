@@ -104,23 +104,6 @@ export class CoreComponent implements OnDestroy {
   /* istanbul ignore next */
   get pageTitle(): string { return this.stores.context.state.pageLayoutBS.getValue().title.main ?? ''; } // Deprecated!
 
-  @HostListener('window:beforeunload') goToPage() {
-    const userContext = this.stores.authentication.getUserContextInfo();
-    if(userContext.type === UserTypeEnum.ACCESSOR.toString()) {
-      const currentOrgUnitId = LocalStorageHelper.getObjectItem("orgUnitId");
-  
-      if (userContext.type === '' && !!!currentOrgUnitId) {
-        this.router.navigate(['/switch-user-context']);
-      }
-  
-      if (userContext.type === '' && !!currentOrgUnitId) {
-        this.stores.authentication.findAndPopulateUserContextFromLocastorage(currentOrgUnitId.id);
-  
-      }
-    }
-  }
-
-
   isRunningOnBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
   }
