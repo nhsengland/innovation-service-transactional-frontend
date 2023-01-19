@@ -68,7 +68,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
 
     if(this.currentUserProfile !== organisation.profile) {
       const userInfo = this.authenticationStore.getUserInfo();
-      const roleName = `${this.authenticationStore.getRoleDescription(organisation.role).trimEnd().toLowerCase()} (${organisation.organisationUnits.name.trimEnd()})`;
+      const roleName = `${this.authenticationStore.getRoleDescription(organisation.role).trimEnd().toLowerCase()} (${organisation.organisationUnit.name.trimEnd()})`;
       const currentOrgUnitId = this.authenticationStore.getUserContextInfo().organisation?.organisationUnit.id;
 
       this.authenticationStore.updateSelectedUserContext({
