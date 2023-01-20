@@ -19,7 +19,6 @@ import { ActionsListComponent } from './pages/actions/actions-list.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
 import { InnovationActionTrackerEditComponent } from './pages/innovation/action-tracker/action-tracker-edit.component';
-import { InnovationActionTrackerNewComponent } from './pages/innovation/action-tracker/action-tracker-new.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './pages/innovation/support/organisations-support-status-suggest.component';
 import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
@@ -51,6 +50,7 @@ import { InnovationExportRequestComponent } from './pages/innovation/export/expo
 import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
+import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/innovation/actions/action-tracker-new.component';
 // // Innovations
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 // // Notifications.
@@ -220,7 +220,7 @@ const routes: Routes = [
                   },
 
                   {
-                    path: 'new', pathMatch: 'full', component: InnovationActionTrackerNewComponent,
+                    path: 'new', pathMatch: 'full', component: PageInnovationActionTrackerNewComponent,
                     data: { breadcrumb: 'New' }
                   },
 

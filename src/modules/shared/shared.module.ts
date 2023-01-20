@@ -42,6 +42,7 @@ import { PageInnovationActionTrackerListComponent } from './pages/innovation/act
 import { PageInnovationDataSharingAndSupportComponent } from './pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 import { PageInnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationActionSectionInfoComponent } from './pages/innovation/actions/action-section-info.component';
+import { PageInnovationActionTrackerNewComponent } from './pages/innovation/actions/action-tracker-new.component';
 // // Notifications.
 import { PageNotificationsListComponent } from './pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -115,6 +116,7 @@ import { StatisticsService } from './services/statistics.service';
     PageInnovationsAdvancedReviewComponent,
     PageInnovationActionTrackerListComponent,
     PageInnovationActionSectionInfoComponent,
+    PageInnovationActionTrackerNewComponent,
     PageInnovationDataSharingAndSupportComponent,
     PageInnovationAssessmentOverviewComponent,
     // // Notifications.

@@ -7,7 +7,10 @@
     <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
   </div>
 
-  <a *ngIf="(innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED') && stores.authentication.isAccessorType()" routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/new" class="nhsuk-button nhsuk-u-margin-bottom-7">
+  <a *ngIf="
+      (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED') && stores.authentication.isAccessorType() || 
+      (['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status) && stores.authentication.isAssessmentType())"
+    routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/new" class="nhsuk-button nhsuk-u-margin-bottom-7">
     Create new action
   </a>
 
@@ -39,7 +42,7 @@
             <div class="d-flex">
               <div class="nhsuk-u-padding-right-1">
                 <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('name') }}</span>
-                <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ item.id }}" attr.aria-label="View {{ item.name }} action"> {{ item.name }} </a>
+                <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ item.id }}" attr.aria-label="View {{ item.name }} action"> {{ item.name }} </a>
               </div>
               <theme-notification-tag label="dot" *ngIf="item.notifications"></theme-notification-tag>
             </div>
@@ -96,7 +99,7 @@
                   <div class="d-flex">
                     <div class="nhsuk-u-padding-right-1">
                       <span class="nhsuk-table-responsive__heading">{{ closedActionsList.getColumnLabel('name') }} </span>
-                      <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ item.id }}" attr.aria-label="View {{ item.name }} action"> {{ item.name }} </a>
+                      <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ item.id }}" attr.aria-label="View {{ item.name }} action"> {{ item.name }} </a>
                     </div>
                     <theme-notification-tag label="dot" *ngIf="item.notifications"></theme-notification-tag>
                   </div>
