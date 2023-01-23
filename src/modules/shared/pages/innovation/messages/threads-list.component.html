@@ -62,7 +62,7 @@
                 <p class="nhsuk-body-s nhsuk-u-margin-0">{{ item.lastMessage.createdAt | date: ('app.date_formats.short_date_time' | translate) }}</p>
                 <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">
 
-                  <ng-container *ngIf="item.lastMessage.createdBy.id === selfUser.id; else notSelfUser">
+                  <ng-container *ngIf="item.lastMessage.createdBy.id === selfUser.id && item.lastMessage.createdBy.organisationUnit?.id === selfUser.organisationUnitId; else notSelfUser">
                     {{ item.lastMessage.createdBy.name }} (me)
                   </ng-container>
 
