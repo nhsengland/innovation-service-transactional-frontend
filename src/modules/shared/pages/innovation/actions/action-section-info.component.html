@@ -24,7 +24,7 @@
         </div>
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Requested by</dt>
-          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">{{ action.createdBy.name }}, {{ action.createdBy.organisationUnit }}</dd>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">{{ action.createdBy.name }}, {{ action.createdBy.organisationUnit?.name }}</dd>
         </div>
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Section</dt>
@@ -53,7 +53,11 @@
           Update status
         </a>
 
-        <a *ngIf="action.status === 'REQUESTED' && action.createdBy.id === stores.authentication.getUserId()"
+        <a *ngIf="
+            action.status === 'REQUESTED'
+            && stores.authentication.isAccessorType()
+            && action.createdBy.id === stores.authentication.getUserId()
+            && action.createdBy.organisationUnit?.id === stores.authentication.getUserContextInfo().organisation?.organisationUnit?.id"
           routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/cancel"
           class="nhsuk-button nhsuk-button--secondary">
           Cancel action
