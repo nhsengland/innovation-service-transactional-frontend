@@ -14,7 +14,7 @@ import { GetThreadsListDTO, InnovationsService } from '@modules/shared/services/
 })
 export class PageInnovationThreadsListComponent extends CoreComponent implements OnInit {
 
-  selfUser: { id: string };
+  selfUser: { id: string, organisationUnitId?: string };
   innovation: ContextInnovationType;
   tableList = new TableModel<GetThreadsListDTO['threads'][0]>({ pageSize: 10 });
 
@@ -31,7 +31,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
     super();
     this.setPageTitle('Messages');
 
-    this.selfUser = { id: this.stores.authentication.getUserId() };
+    this.selfUser = { id: this.stores.authentication.getUserId(), organisationUnitId: this.stores.authentication.getUserContextInfo().organisation?.organisationUnit.id };
 
     this.innovation = this.stores.context.getInnovation();
 
