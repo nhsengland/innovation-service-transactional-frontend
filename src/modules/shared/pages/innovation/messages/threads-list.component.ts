@@ -31,7 +31,10 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
     super();
     this.setPageTitle('Messages');
 
-    this.selfUser = { id: this.stores.authentication.getUserId(), organisationUnitId: this.stores.authentication.getUserContextInfo().organisation?.organisationUnit.id };
+    this.selfUser = {
+      id: this.stores.authentication.getUserId(),
+      organisationUnitId: this.stores.authentication.getUserContextInfo().organisation?.organisationUnit.id
+    };
 
     this.innovation = this.stores.context.getInnovation();
 
