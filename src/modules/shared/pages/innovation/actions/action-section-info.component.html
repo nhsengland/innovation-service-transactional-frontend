@@ -17,6 +17,13 @@
           </dd>
         </div>
         <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Last update</dt>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
+            <p>{{ action.updatedAt | date: ('app.date_formats.long_date' | translate) }}</p>
+            <span class="font-color-secondary">by {{ action.updatedBy.name }} ({{ this.stores.authentication.getRoleDescription(action.updatedBy.role) }})</span>
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Requested on</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
             {{ action.createdAt | date: ('app.date_formats.long_date' | translate) }}
@@ -24,7 +31,12 @@
         </div>
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Requested by</dt>
-          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">{{ action.createdBy.name }}, {{ action.createdBy.organisationUnit?.name }}</dd>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
+            <span *ngIf="action.createdBy.role === 'ACCESSOR'; else requestedByOtherRole">{{ action.createdBy.name }}, {{ action.createdBy.organisationUnit?.name }}</span>
+            <ng-template #requestedByOtherRole>
+              <span>{{ action.createdBy.name }} ({{ this.stores.authentication.getRoleDescription(action.createdBy.role) }})</span>
+            </ng-template>
+          </dd>
         </div>
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Section</dt>

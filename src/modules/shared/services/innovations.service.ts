@@ -382,6 +382,8 @@ export class InnovationsService extends CoreService {
         description: response.description,
         section: response.section,
         createdAt: response.createdAt,
+        updatedAt: response.updatedAt,
+        updatedBy: response.updatedBy,
         createdBy: response.createdBy,
         declineReason: response.declineReason
       }))

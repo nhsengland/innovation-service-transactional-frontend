@@ -1,5 +1,5 @@
 import { Params } from '@angular/router';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
 import { DateISOType } from '@app/base/types';
 
 import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
@@ -145,7 +145,9 @@ export type InnovationActionInfoDTO = {
   name: string,
   description: string,
   createdAt: DateISOType,
-  createdBy: { id: string, name: string, organisationUnit?: { id: string, name: string, acronym?: string} },
+  updatedAt: DateISOType,
+  updatedBy: { name: string, role: UserTypeEnum },
+  createdBy: { id: string, name: string, role: UserTypeEnum, organisationUnit?: { id: string, name: string, acronym?: string} },
   declineReason?: string,
 };
 
