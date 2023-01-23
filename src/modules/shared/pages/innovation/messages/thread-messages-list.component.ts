@@ -26,6 +26,8 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   threadInfo: null | GetThreadInfoDTO = null;
   messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0]>({ pageSize: 10 });
 
+  showParticipantsHideStatus: string | null = null;
+
   form = new FormGroup({
     message: new UntypedFormControl('')
   }, { updateOn: 'blur' });
@@ -85,6 +87,10 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
       }
     });
   };
+
+  onShowParticipansClick() {
+    console.log('click!')
+  }
 
 
 

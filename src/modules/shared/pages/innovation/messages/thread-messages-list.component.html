@@ -16,6 +16,50 @@
 
         <h1 class="nhsuk-heading-m nhsuk-u-margin-bottom-3"> Subject: {{ threadInfo?.subject }} </h1>
 
+
+
+
+
+
+
+
+
+
+        <a (click)="onShowParticipansClick()">
+          Show list <span class="nhsuk-u-visually-hidden"> of thread participants </span>
+        </a>
+
+        <!-- <ng-container *ngIf="showParticipantsHideStatus === 'opened'">
+          <dl class="nhsuk-u-margin-0">
+            <div *ngFor="let participant of threadInfo; let i = index;" class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
+              <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'top-border-separator': i === 0}">
+                <dt class="">{{ organisationUnit.name }}</dt>
+                <dd class="ml-auto">
+                  <strong class="nhsuk-tag ml-auto" [ngClass]="innovationSupportStatus[organisationUnit.status].cssClass">{{ innovationSupportStatus[organisationUnit.status].label }}</strong>
+                  <span class="nhsuk-u-visually-hidden">Organisation unit with support status {{ innovationSupportStatus[organisationUnit.status].label.toLowerCase() }}</span>
+                </dd>
+              </div>
+            </div>
+          </dl>
+        </ng-container> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="stores.authentication.isAdminRole() === false && innovation.status !== 'PAUSED'">
