@@ -106,11 +106,17 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
 
     const wizardData = this.wizard.runOutboundParsing();
 
-    const body: UpdateUserInfoDTO = {
-      displayName: wizardData.displayName,
-      mobilePhone: wizardData.mobilePhone || null,
-      ...(wizardData.organisation ? { organisation: wizardData.organisation } : {})
+    let body: UpdateUserInfoDTO = {
+      displayName: wizardData.displayName
     };
+
+    if(this.stores.authentication.isInnovatorType()) {
+      body = {
+        displayName: wizardData.displayName,
+        mobilePhone: wizardData.mobilePhone || null,
+        ...(wizardData.organisation ? { organisation: wizardData.organisation } : {})
+      };
+    }
 
     this.stores.authentication.updateUserInfo$(body).pipe(
       concatMap(() => this.stores.authentication.initializeAuthentication$()) // Fetch all new information.
