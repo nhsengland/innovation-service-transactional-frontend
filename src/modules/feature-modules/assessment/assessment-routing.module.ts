@@ -42,6 +42,7 @@ import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/
 import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/innovation/actions/action-tracker-new.component';
 import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
 import { PageInnovationActionTrackerCancelComponent } from '@modules/shared/pages/innovation/actions/action-tracker-cancel.component';
+import { PageInnovationActionTrackerEditComponent } from '@modules/shared/pages/innovation/actions/action-tracker-edit.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -188,6 +189,15 @@ const routes: Routes = [
                                 data: { breadcrumb: 'Evidence Info' },
                               }
                             ]
+                          },
+                          {
+                            path: 'actions',
+                            pathMatch: 'full',
+                            component: PageInnovationActionSectionInfoComponent,
+                            data: {
+                              breadcrumb: null,
+                              layout: { type: 'full' }
+                            }
                           }
                         ]
                       }
@@ -230,6 +240,10 @@ const routes: Routes = [
                       {
                         path: '', pathMatch: 'full', component: PageInnovationActionSectionInfoComponent,
                         data: { breadcrumb: null, layout: { type: 'full' } }
+                      },
+                      {
+                        path: 'edit', pathMatch: 'full', component: PageInnovationActionTrackerEditComponent,
+                        data: { breadcrumb: 'Edit' }
                       },
                       {
                         path: 'cancel', pathMatch: 'full', component: PageInnovationActionTrackerCancelComponent,
