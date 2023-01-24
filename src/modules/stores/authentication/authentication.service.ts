@@ -16,7 +16,9 @@ type GetUserInfoDTO = {
   displayName: string,
   type: UserTypeEnum,
   roles: UserRoleEnum[],
+  contactPreferences: null | string,
   phone: null | string,
+  contactDetails: null | string,
   termsOfUseAccepted: boolean,
   hasInnovationTransfers: boolean,
   passwordResetAt: null | DateISOType,
@@ -34,6 +36,7 @@ type GetUserInfoDTO = {
 
 export type UpdateUserInfoDTO = {
   displayName: string;
+  contactPreferences?: string;
   mobilePhone?: string;
   organisation?: { id: string, isShadow: boolean, name?: null | string, size?: null | string }
 };
@@ -76,7 +79,9 @@ export class AuthenticationService {
         displayName: ['unknown'].includes(response.displayName) ? '' : response.displayName,
         type: response.type,
         roles: response.roles || [],
+        contactPreferences: response.contactPreferences,
         phone: response.phone,
+        contactDetails: response.contactDetails,
         termsOfUseAccepted: response.termsOfUseAccepted,
         hasInnovationTransfers: response.hasInnovationTransfers,
         passwordResetAt: response.passwordResetAt,

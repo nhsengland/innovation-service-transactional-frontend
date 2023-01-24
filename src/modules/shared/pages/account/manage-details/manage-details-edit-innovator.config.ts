@@ -9,7 +9,9 @@ type InboundPayloadType = Required<AuthenticationModel>['user'];
 
 type StepPayloadType = {
   displayName: string,
+  contactPreferences: null | string,
   mobilePhone: null | string,
+  contactDetails: null | string,
   isCompanyOrOrganisation: 'YES' | 'NO',
   organisationName: null | string,
   organisationSize: null | string,
@@ -18,7 +20,9 @@ type StepPayloadType = {
 
 type OutboundPayloadType = {
   displayName: string,
+  contactPreferences: null | string,
   mobilePhone: null | string,
+  contactDetails: null | string,
   organisation?: {
     id: string,
     isShadow: boolean,
@@ -30,7 +34,6 @@ type OutboundPayloadType = {
 
 export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineModel({
   steps: [
-
     new FormEngineModel({
       parameters: [{
         id: 'displayName',
@@ -39,13 +42,54 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
         validations: { isRequired: [true, 'Name is required'] }
       }]
     }),
+    
+    new FormEngineModel({
+      parameters: [{ 
+        id: 'contactPreferences', 
+        dataType: 'checkbox-array', 
+        label: 'If we have any questions about your innovation, how do you want us to contact you?',
+        description: 'Select your preferred ways of contact',
+        items: [
+          {
+            value: 'By phone',
+            label: 'By phone',
+            conditional: new FormEngineParameterModel({ 
+              id: 'timeframe', 
+              dataType: 'radio-group',
+              label: 'Select the best time to reach you on week days (UK time)',
+              items: [{
+                value: '9am to 12pm',
+                label: 'Morning, 9am to 12pm',
+              }, {
+                value: '1pm to 5pm',
+                label: 'Afternoon, 1pm to 5pm'
+              }, {
+                value: 'Either',
+                label: 'Either'
+              }]
+            })
+          },
+          { value: 'By email', label: 'By email' }
+        ]
+      }]
+    }),
 
     new FormEngineModel({
       parameters: [{ 
         id: 'mobilePhone', 
         dataType: 'number', 
-        label: 'What\'s your Phone number?',
+        label: 'What is your phone number?',
+        description: 'If you would like to be contacted by phone about your innovation, please provide a contact number.',
+      }]
+    }),
 
+    new FormEngineModel({
+      parameters: [{ 
+        id: 'contactDetails', 
+        dataType: 'textarea', 
+        label: 'Is there anything else we should know about communicating with you?',
+        description: 'For example, non-working days, visual or hearing impairments, or other accessibility needs.',
+        lengthLimit: 'small',
       }]
     }),
 
@@ -77,7 +121,7 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
 
 function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary'): void {
 
-  steps.splice(3);
+  steps.splice(4);
 
   if (data.isCompanyOrOrganisation === 'NO') {
     data.organisationName = null;
@@ -108,7 +152,9 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
     displayName: data.displayName,
+    contactPreferences: data.contactPreferences,
     mobilePhone: data.phone,
+    contactDetails: data.contactDetails,
     isCompanyOrOrganisation: !data.organisations[0].isShadow ? 'YES' : 'NO',
     organisationName: data.organisations[0].name,
     organisationSize: data.organisations[0].size,
@@ -124,7 +170,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
     displayName: data.displayName,
+    contactPreferences: data.contactPreferences,
     mobilePhone: data.mobilePhone,
+    contactDetails: data.contactDetails,
     organisation: {
       id: data.organisationAdditionalInformation.id,
       isShadow: data.isCompanyOrOrganisation === 'NO',
@@ -141,15 +189,17 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   toReturn.push(
     { label: 'Name', value: data.displayName, editStepNumber: 1 },
-    { label: 'Phone number', value: data.mobilePhone, editStepNumber: 2, },
-    { label: 'Is company or organisation?', value: data.isCompanyOrOrganisation === 'YES' ? 'Yes' : 'No', editStepNumber: 3 }
+    { label: 'Contact Preference', value: data.contactPreferences, editStepNumber: 2, },
+    { label: 'Phone number', value: data.mobilePhone, editStepNumber: 3, },
+    { label: 'Contact details', value: data.contactDetails, editStepNumber: 4, },
+    { label: 'Is company or organisation?', value: data.isCompanyOrOrganisation === 'YES' ? 'Yes' : 'No', editStepNumber: 5 }
   );
 
   if (data.isCompanyOrOrganisation === 'YES') {
 
     toReturn.push(
-      { label: 'Company', value: data.organisationName, editStepNumber: 2 },
-      { label: 'Company size', value: data.organisationSize, editStepNumber: 3 }
+      { label: 'Company', value: data.organisationName, editStepNumber: 5 },
+      { label: 'Company size', value: data.organisationSize, editStepNumber: 6 }
     );
 
   }

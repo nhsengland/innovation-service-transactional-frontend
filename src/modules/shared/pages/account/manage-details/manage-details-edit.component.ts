@@ -72,7 +72,7 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
           return;
         }
 
-        this.setPageTitle(this.wizard.currentStep().parameters[0].label || '', { showPage: false });
+        this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
         this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
         this.wizard.gotoStep(Number(params.stepId));
 
@@ -113,6 +113,7 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
     if(this.stores.authentication.isInnovatorType()) {
       body = {
         displayName: wizardData.displayName,
+        contactPreferences: wizardData.contactPreferences,
         mobilePhone: wizardData.mobilePhone || null,
         ...(wizardData.organisation ? { organisation: wizardData.organisation } : {})
       };
