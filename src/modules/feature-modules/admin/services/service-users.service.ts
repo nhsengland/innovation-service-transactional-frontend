@@ -297,7 +297,7 @@ export class ServiceUsersService extends CoreService {
     return this.http.patch<any>(url.buildUrl(), { newOrganisationUnitAcronym: body.organisationUnitAcronym, organisationId: body.organisationId }).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error?.details.id })))
+      catchError(error => throwError(() => ({ id: error.error?.id })))  // Note this will need to be changed when the backend API is updated to error.error?.details?.id
     );
 
   }
