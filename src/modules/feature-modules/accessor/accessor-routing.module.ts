@@ -51,6 +51,7 @@ import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
 import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/innovation/actions/action-tracker-new.component';
+import { PageInnovationActionTrackerCancelComponent } from '@modules/shared/pages/innovation/actions/action-tracker-cancel.component';
 // // Innovations
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 // // Notifications.
@@ -63,7 +64,6 @@ import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-dat
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
-import { InnovationActionTrackerCancelComponent } from './pages/innovation/action-tracker/action-tracker-cancel.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -243,7 +243,7 @@ const routes: Routes = [
                         data: { breadcrumb: 'Edit' }
                       },
                       {
-                        path: 'cancel', pathMatch: 'full', component: InnovationActionTrackerCancelComponent,
+                        path: 'cancel', pathMatch: 'full', component: PageInnovationActionTrackerCancelComponent,
                         data: { breadcrumb: 'Cancel' }
                       }
                     ]

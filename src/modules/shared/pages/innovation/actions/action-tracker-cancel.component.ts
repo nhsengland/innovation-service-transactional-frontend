@@ -2,15 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { UserTypeEnum } from '@app/base/enums';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
-  selector: 'app-accessor-pages-innovation-action-tracker-cancel',
+  selector: 'shared-pages-innovation-action-tracker-cancel',
   templateUrl: './action-tracker-cancel.component.html'
 })
-export class InnovationActionTrackerCancelComponent extends CoreComponent implements OnInit {
+export class PageInnovationActionTrackerCancelComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
   actionId: string;
@@ -33,8 +34,12 @@ export class InnovationActionTrackerCancelComponent extends CoreComponent implem
 
     this.innovationsService.getActionInfo(this.innovationId, this.actionId).subscribe(response => {
 
-      if(response.createdBy.id !== this.stores.authentication.getUserId()) {
-        this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${this.actionId}`);
+      if (this.stores.authentication.isAccessorType() && (response.createdBy.id !== this.stores.authentication.getUserId() || response.createdBy.organisationUnit?.id !== this.stores.authentication.getUserContextInfo().organisation?.organisationUnit.id)) {
+        return this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${this.actionId}`);
+      }
+
+      if(this.stores.authentication.isAssessmentType() && response.createdBy.role === UserTypeEnum.ACCESSOR) {
+        return this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${this.actionId}`);
       }
       
       this.setPageTitle(`Cancel action: ${response.name}`);
@@ -52,9 +57,9 @@ export class InnovationActionTrackerCancelComponent extends CoreComponent implem
     };
 
     this.innovationsService.updateAction(this.innovationId, this.actionId, body).subscribe({
-      next: response => {
+      next: () => {
         this.setRedirectAlertSuccess(`You have updated the status of this action to 'Cancelled'`, { message: 'The innovator will be notified of this status change' });
-        this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${this.actionId}`);
+        this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${this.actionId}`);
       },
       error: () => this.setAlertError('An error occurred when canceling an action. Please try again or contact us for further help')
 

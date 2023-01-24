@@ -41,6 +41,7 @@ import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/
 import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/actions/action-status-list.component';
 import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/innovation/actions/action-tracker-new.component';
 import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
+import { PageInnovationActionTrackerCancelComponent } from '@modules/shared/pages/innovation/actions/action-tracker-cancel.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -229,6 +230,10 @@ const routes: Routes = [
                       {
                         path: '', pathMatch: 'full', component: PageInnovationActionSectionInfoComponent,
                         data: { breadcrumb: null, layout: { type: 'full' } }
+                      },
+                      {
+                        path: 'cancel', pathMatch: 'full', component: PageInnovationActionTrackerCancelComponent,
+                        data: { breadcrumb: 'Cancel' }
                       }
                     ]
                   }
