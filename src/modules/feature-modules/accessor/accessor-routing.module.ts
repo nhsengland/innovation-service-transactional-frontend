@@ -13,7 +13,6 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // // Account.
 import { PageAccessorAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
 // // Actions.
-import { ActionsAdvancedSearchComponent } from './pages/actions/actions-advanced-search.component';
 import { ActionsListComponent } from './pages/actions/actions-list.component';
 // // Dashboard.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
@@ -58,6 +57,8 @@ import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/in
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
+// // Actions.
+import { PageActionsAdvancedSearchComponent } from '@modules/shared/pages/actions/actions-advanced-search.component';
 
 // Resolvers.
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
@@ -351,7 +352,7 @@ const routes: Routes = [
             data: { breadcrumb: null }
           },
           { path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent },
-          { path: 'advanced-filter', pathMatch: 'full', component: ActionsAdvancedSearchComponent }
+          { path: 'advanced-filter', pathMatch: 'full', component: PageActionsAdvancedSearchComponent }
         ]
       },
 

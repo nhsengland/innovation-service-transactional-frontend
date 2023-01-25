@@ -49,6 +49,8 @@ import { PageInnovationActionTrackerEditComponent } from './pages/innovation/act
 import { PageNotificationsListComponent } from './pages/notifications/notifications-list.component';
 // // Terms of use.
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
+// // Actions.
+import { PageActionsAdvancedSearchComponent } from './pages/actions/actions-advanced-search.component';
 
 // Wizards.
 import { WizardSummaryWithConfirmStepComponent } from './wizards/steps/summary-with-confirm-step.component';
@@ -127,6 +129,8 @@ import { StatisticsService } from './services/statistics.service';
     PageNotificationsListComponent,
     // // Terms of use.
     PageTermsOfUseAcceptanceComponent,
+    // // Actions.
+    PageActionsAdvancedSearchComponent,
 
     // Wizard.
     WizardSummaryWithConfirmStepComponent,

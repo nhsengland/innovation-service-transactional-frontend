@@ -43,7 +43,9 @@ export type InnovationsActionsListFilterType = {
   innovationName?: string,
   sections?: InnovationSectionEnum[],
   status?: InnovationActionStatusEnum[],
+  innovationStatus?: InnovationStatusEnum[],
   createdByMe?: boolean,
+  allActions?: boolean,
   fields?: ('notifications')[]
 };
 
@@ -356,7 +358,9 @@ export class InnovationsService extends CoreService {
       ...(filters.innovationName ? { innovationName: filters.innovationName } : {}),
       ...(filters.sections ? { sections: filters.sections } : {}),
       ...(filters.status ? { status: filters.status } : {}),
+      ...(filters.innovationStatus ? { innovationStatus: filters.innovationStatus } : {}),
       ...(filters.createdByMe ? { createdByMe: filters.createdByMe } : {}),
+      ...(filters.allActions ? { allActions: filters.allActions } : {}),
       ...(filters.fields ? { fields: filters.fields } : {})
     };
 
@@ -364,7 +368,7 @@ export class InnovationsService extends CoreService {
     return this.http.get<InnovationActionsListInDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         count: response.count,
-        data: response.data.map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'`, } }))
+        data: response.data.map(item => ({ ...item, ...{ name: `Update '${this.stores.innovation.getSectionTitle(item.section)}'`, } }))
       }))
     );
 

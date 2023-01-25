@@ -47,6 +47,8 @@ import { PageInnovationActionTrackerEditComponent } from '@modules/shared/pages/
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
+// //  Actions.
+import { PageActionsAdvancedSearchComponent } from '@modules/shared/pages/actions/actions-advanced-search.component';
 
 // Resolvers.
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
@@ -59,6 +61,7 @@ const header: RoutesDataType['header'] = {
   menuBarItems: {
     left: [
       { id: 'innovations', label: 'Innovations', url: '/assessment/innovations' },
+      { id: 'actions', label: 'Actions', url: '/assessment/actions', },
       { id: 'notifications', label: 'Notifications', url: '/assessment/notifications' },
       { id: 'account', label: 'Your account', url: '/assessment/account' },
     ],
@@ -314,6 +317,21 @@ const routes: Routes = [
 
             ]
           }
+        ]
+      },
+
+      {
+        path: 'actions',
+        data: {
+          breadcrumb: 'Actions',
+          layout: { type: 'full', chosenMenu: 'actions', backgroundColor: 'bg-color-white' }
+        },
+        children: [
+          {
+            path: '', pathMatch: 'full', component: PageActionsAdvancedSearchComponent,
+            data: { breadcrumb: null }
+          },
+          { path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent },
         ]
       },
 
