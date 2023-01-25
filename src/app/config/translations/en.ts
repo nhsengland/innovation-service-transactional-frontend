@@ -163,7 +163,7 @@ export const locale = {
             },
             OWNERSHIP_TRANSFER: {
               title: 'Ownership transfer',
-              message: `Ownership was transfered from {{ actionUserName }} to {{ interveningUserName }}`
+              message: `Ownership was transferred from {{ actionUserName }} to {{ interveningUserName }}`
             },
             SHARING_PREFERENCES_UPDATE: {
               title: 'Sharing preferences update',
@@ -288,7 +288,7 @@ export const locale = {
             COMMENT: { title: { singular: 'Message', plural: 'Messages' } }
           },
           notification_context_details: {
-            LOCK_USER: { title: `Innovaton "{{ innovationName }}" owner has been locked` },
+            LOCK_USER: { title: `Innovation "{{ innovationName }}" owner has been locked` },
             // COMMENT_CREATION: { title: `New comment for innovation "{{ innovationName }}"` },
             // COMMENT_REPLY: { title: `New comment reply for innovation "{{ innovationName }}"` },
             THREAD_CREATION: { title: `New conversation for innovation "{{ innovationName }}"` },
@@ -392,7 +392,7 @@ export const locale = {
             WITHDRAWN: {
               name: 'Withdrawn',
               cssColorClass: 'nhsuk-tag--red',
-              description: 'This innovation has been withdrawn by the innnovator.'
+              description: 'This innovation has been withdrawn by the innovator.'
             },
           },
           export_request_status: {
@@ -472,7 +472,7 @@ export const locale = {
           invalid_url_format: 'Invalid URL',
           invalid_value: 'Invalid value',
           min: 'Value below the minimum allowed',
-          min_hexadecimal: 'Value below the minumum allowed',
+          min_hexadecimal: 'Value below the minimum allowed',
           max: 'Value above the maximum allowed',
           max_hexadecimal: 'Value above the maximum allowed',
           min_length: 'Text must have at least {{ maxLength }} characters',
