@@ -9,7 +9,8 @@ type InboundPayloadType = Required<AuthenticationModel>['user'];
 
 type StepPayloadType = {
   displayName: string,
-  contactPreferences: null | string,
+  contactPreferences: string[],
+  phoneTimePreferences: null | string,
   mobilePhone: null | string,
   contactDetails: null | string,
   isCompanyOrOrganisation: 'YES' | 'NO',
@@ -21,6 +22,7 @@ type StepPayloadType = {
 type OutboundPayloadType = {
   displayName: string,
   contactPreferences: null | string,
+  phoneTimePreferences: null | string,
   mobilePhone: null | string,
   contactDetails: null | string,
   organisation?: {
@@ -51,12 +53,13 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
         description: 'Select your preferred ways of contact',
         items: [
           {
-            value: 'By phone',
+            value: 'Phone',
             label: 'By phone',
             conditional: new FormEngineParameterModel({ 
-              id: 'timeframe', 
+              id: 'phoneTimePreferences', 
               dataType: 'radio-group',
               label: 'Select the best time to reach you on week days (UK time)',
+              validations: { isRequired: [true, 'Choose one option'] },
               items: [{
                 value: '9am to 12pm',
                 label: 'Morning, 9am to 12pm',
@@ -64,12 +67,12 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
                 value: '1pm to 5pm',
                 label: 'Afternoon, 1pm to 5pm'
               }, {
-                value: 'Either',
+                value: '9am to 12pm or 1pm to 5pm',
                 label: 'Either'
               }]
             })
           },
-          { value: 'By email', label: 'By email' }
+          { value: 'Email', label: 'By email' }
         ]
       }]
     }),
@@ -152,7 +155,8 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
     displayName: data.displayName,
-    contactPreferences: data.contactPreferences,
+    contactPreferences: data.contactPreferences?.split(',') ?? [],
+    phoneTimePreferences: data.phoneTimePreferences,
     mobilePhone: data.phone,
     contactDetails: data.contactDetails,
     isCompanyOrOrganisation: !data.organisations[0].isShadow ? 'YES' : 'NO',
@@ -170,8 +174,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
     displayName: data.displayName,
-    contactPreferences: data.contactPreferences,
+    contactPreferences: data.contactPreferences.toString(),
     mobilePhone: data.mobilePhone,
+    phoneTimePreferences: data.phoneTimePreferences,
     contactDetails: data.contactDetails,
     organisation: {
       id: data.organisationAdditionalInformation.id,
@@ -189,7 +194,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   toReturn.push(
     { label: 'Name', value: data.displayName, editStepNumber: 1 },
-    { label: 'Contact Preference', value: data.contactPreferences, editStepNumber: 2, },
+    { label: 'Contact Preference', value: getContactPreferenceValue(data), editStepNumber: 2, },
     { label: 'Phone number', value: data.mobilePhone, editStepNumber: 3, },
     { label: 'Contact details', value: data.contactDetails, editStepNumber: 4, },
     { label: 'Is company or organisation?', value: data.isCompanyOrOrganisation === 'YES' ? 'Yes' : 'No', editStepNumber: 5 }
@@ -206,4 +211,13 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   return toReturn;
 
+}
+
+function getContactPreferenceValue(data: StepPayloadType): string {
+  
+  if (data.contactPreferences.length > 0) {    
+    return data.contactPreferences.join(' ').replace('Email', 'By email.').replace('Phone', `By phone, ${data.phoneTimePreferences}.`);
+  }
+
+  return '';
 }

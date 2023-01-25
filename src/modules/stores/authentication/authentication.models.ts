@@ -21,6 +21,7 @@ export class AuthenticationModel {
     type: '' | UserTypeEnum,
     roles: UserRoleEnum[],
     contactPreferences: string | null,
+    phoneTimePreferences: string | null,
     phone: string | null,
     contactDetails: string | null,
     termsOfUseAccepted: boolean,

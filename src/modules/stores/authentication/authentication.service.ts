@@ -15,10 +15,11 @@ type GetUserInfoDTO = {
   email: string,
   displayName: string,
   type: UserTypeEnum,
-  roles: UserRoleEnum[],
-  contactPreferences: null | string,
-  phone: null | string,
-  contactDetails: null | string,
+  roles: UserRoleEnum[],    
+  contactPreferences: string | null,
+  phoneTimePreferences: string | null,
+  phone: string | null,
+  contactDetails: string | null,
   termsOfUseAccepted: boolean,
   hasInnovationTransfers: boolean,
   passwordResetAt: null | DateISOType,
@@ -37,7 +38,9 @@ type GetUserInfoDTO = {
 export type UpdateUserInfoDTO = {
   displayName: string;
   contactPreferences?: string;
+  phoneTimePreferences?: string;
   mobilePhone?: string;
+  contactDetails?: string;
   organisation?: { id: string, isShadow: boolean, name?: null | string, size?: null | string }
 };
 
@@ -80,6 +83,7 @@ export class AuthenticationService {
         type: response.type,
         roles: response.roles || [],
         contactPreferences: response.contactPreferences,
+        phoneTimePreferences: response.phoneTimePreferences,
         phone: response.phone,
         contactDetails: response.contactDetails,
         termsOfUseAccepted: response.termsOfUseAccepted,

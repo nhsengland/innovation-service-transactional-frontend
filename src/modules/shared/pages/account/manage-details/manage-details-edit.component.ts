@@ -114,7 +114,9 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
       body = {
         displayName: wizardData.displayName,
         contactPreferences: wizardData.contactPreferences,
+        phoneTimePreferences: wizardData.phoneTimePreferences || null,
         mobilePhone: wizardData.mobilePhone || null,
+        contactDetails: wizardData.contactDetails || null,
         ...(wizardData.organisation ? { organisation: wizardData.organisation } : {})
       };
     }
