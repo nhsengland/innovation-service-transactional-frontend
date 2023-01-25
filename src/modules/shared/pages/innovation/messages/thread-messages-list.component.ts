@@ -10,7 +10,7 @@ import { TableModel } from '@app/base/models';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { GetThreadInfoDTO, GetThreadMessagesListOutDTO, InnovationsService } from '@modules/shared/services/innovations.service';
+import { GetThreadInfoDTO, GetThreadMessagesListOutDTO, GetThreadParticipantsDTO, InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -27,6 +27,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0]>({ pageSize: 10 });
 
   showParticipantsHideStatus: string | null = null;
+  threadParticipants: GetThreadParticipantsDTO | null = null;
 
   form = new FormGroup({
     message: new UntypedFormControl('')
@@ -88,8 +89,28 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     });
   };
 
-  onShowParticipansClick() {
-    console.log('click!')
+  onShowParticipantsClick() {
+    if (this.showParticipantsHideStatus !== 'opened') {
+      this.setPageStatus('LOADING');
+      forkJoin([
+        this.innovationsService.getThreadParticipants(this.innovation.id, this.threadId)
+      ]).subscribe({
+        next: ([threadParticipants]) => {
+
+          this.threadParticipants = threadParticipants
+          this.showParticipantsHideStatus = 'opened';
+          console.log('threadParticipants: ', threadParticipants)
+
+          this.setPageStatus('READY');
+        },
+        error: () => {
+          this.setPageStatus('ERROR');
+          this.setAlertUnknownError();
+        }
+      });
+    } else {
+      this.showParticipantsHideStatus = 'closed'
+    }
   }
 
 
