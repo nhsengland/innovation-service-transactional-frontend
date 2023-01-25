@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { CoreComponent } from '@app/base';
-import { FormControl, FormEngineComponent, FormGroup, WizardEngineModel } from '@app/base/forms';
+import { FormEngineComponent, FormGroup, WizardEngineModel } from '@app/base/forms';
 
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 import { CREATE_NEW_USER_QUESTIONS } from './service-user-new.config';
 
@@ -40,7 +40,7 @@ export class PageServiceUserNewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    // Adds async e-mail validator to the second step.
+    // Adds async email validator to the second step.
     this.wizard.steps[1].parameters[0].validations = { ...this.wizard.steps[1].parameters[0].validations, async: [this.serviceUsersService.userEmailValidator()] };
 
     this.organisationsService.getOrganisationsList({ unitsInformation: true, withInactive: true }).subscribe({
@@ -103,7 +103,7 @@ export class PageServiceUserNewComponent extends CoreComponent implements OnInit
 
         } else {
 
-          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your e-mail' });
+          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your email' });
 
         }
 
