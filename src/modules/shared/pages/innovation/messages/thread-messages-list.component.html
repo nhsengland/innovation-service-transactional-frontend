@@ -23,25 +23,25 @@
 
 
 
-
-
-        <a (click)="onShowParticipantsClick()">
-          Show list <span class="nhsuk-u-visually-hidden"> of thread participants </span>
+        <span>
+          {{ threadParticipants?.participants?.length?.toLocaleString() }} participants.
+        </span>
+        <a href="javascript:void(0)" (click)="onShowParticipantsClick()">
+          {{ showParticipantsText }} <span class="nhsuk-u-visually-hidden"> of thread participants </span>
         </a>
 
-        <!-- <ng-container *ngIf="showParticipantsHideStatus === 'opened'">
-          <dl class="nhsuk-u-margin-0">
-            <div *ngFor="let participant of threadInfo; let i = index;" class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
-              <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'top-border-separator': i === 0}">
-                <dt class="">{{ organisationUnit.name }}</dt>
-                <dd class="ml-auto">
-                  <strong class="nhsuk-tag ml-auto" [ngClass]="innovationSupportStatus[organisationUnit.status].cssClass">{{ innovationSupportStatus[organisationUnit.status].label }}</strong>
-                  <span class="nhsuk-u-visually-hidden">Organisation unit with support status {{ innovationSupportStatus[organisationUnit.status].label.toLowerCase() }}</span>
-                </dd>
-              </div>
+        <ng-container *ngIf=" showParticipantsHideStatus === 'opened'">
+          <dl class="nhsuk-u-margin-0 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
+            <div *ngFor="let participant of threadParticipants?.participants;" class="nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
+              <dt>
+                <span>{{ participant.name }} ({{ participant.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(participant.role) }})</span>
+              </dt>
             </div>
           </dl>
-        </ng-container> -->
+        </ng-container>
+
+
+
 
 
 

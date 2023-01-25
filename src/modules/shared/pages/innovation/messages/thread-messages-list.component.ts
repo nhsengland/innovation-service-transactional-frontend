@@ -28,6 +28,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
   showParticipantsHideStatus: string | null = null;
   threadParticipants: GetThreadParticipantsDTO | null = null;
+  showParticipantsText: 'Show list' | 'Hide list' = 'Show list';
 
   form = new FormGroup({
     message: new UntypedFormControl('')
@@ -70,11 +71,13 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     forkJoin([
       this.innovationsService.getThreadInfo(this.innovation.id, this.threadId),
+      this.innovationsService.getThreadParticipants(this.innovation.id, this.threadId),
       this.innovationsService.getThreadMessagesList(this.innovation.id, this.threadId, this.messagesList.getAPIQueryParams())
     ]).subscribe({
-      next: ([threadInfo, threadMessages]) => {
+      next: ([threadInfo, threadParticipants, threadMessages]) => {
 
         this.threadInfo = threadInfo;
+        this.threadParticipants = threadParticipants;
         this.messagesList.setData(threadMessages.messages, threadMessages.count);
         // Throw notification read dismiss.
         this.stores.context.dismissNotification(this.innovation.id, {contextTypes: [NotificationContextTypeEnum.THREAD], contextIds: [this.threadInfo.id]});
@@ -91,25 +94,15 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
   onShowParticipantsClick() {
     if (this.showParticipantsHideStatus !== 'opened') {
-      this.setPageStatus('LOADING');
-      forkJoin([
-        this.innovationsService.getThreadParticipants(this.innovation.id, this.threadId)
-      ]).subscribe({
-        next: ([threadParticipants]) => {
 
-          this.threadParticipants = threadParticipants
-          this.showParticipantsHideStatus = 'opened';
-          console.log('threadParticipants: ', threadParticipants)
+      this.showParticipantsHideStatus = 'opened';
+      this.showParticipantsText = 'Hide list';
+      console.log(this.showParticipantsText)
 
-          this.setPageStatus('READY');
-        },
-        error: () => {
-          this.setPageStatus('ERROR');
-          this.setAlertUnknownError();
-        }
-      });
     } else {
-      this.showParticipantsHideStatus = 'closed'
+      this.showParticipantsHideStatus = 'closed';
+      this.showParticipantsText = 'Show list';
+      console.log(this.showParticipantsText)
     }
   }
 
