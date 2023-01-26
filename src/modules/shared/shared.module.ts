@@ -30,6 +30,7 @@ import { PageInnovationThreadMessageEditComponent } from './pages/innovation/mes
 import { PageInnovationThreadMessagesListComponent } from './pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationThreadNewComponent } from './pages/innovation/messages/thread-new.component';
 import { PageInnovationThreadsListComponent } from './pages/innovation/messages/threads-list.component';
+import { PageInnovationParticipantsComponent } from './pages/innovation/data-sharing-and-support/innovation-participants.component';
 import { PageInnovationRecordComponent } from './pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionInfoComponent } from './pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from './pages/innovation/sections/section-evidence-info.component';
@@ -105,6 +106,7 @@ import { StatisticsService } from './services/statistics.service';
     PageInnovationThreadMessagesListComponent,
     PageInnovationThreadNewComponent,
     PageInnovationThreadsListComponent,
+    PageInnovationParticipantsComponent,
     PageInnovationRecordComponent,
     PageInnovationSectionInfoComponent,
     PageInnovationSectionEvidenceInfoComponent,
