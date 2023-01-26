@@ -543,7 +543,8 @@ export class InnovationsService extends CoreService {
             params: {
               ...i.params,
               innovationName: response.innovation.name,
-              sectionTitle: getSectionTitle(i.params.sectionId || null)
+              sectionTitle: getSectionTitle(i.params.sectionId || null),
+              actionUserRole: i.params.actionUserRole ? `(${this.stores.authentication.getRoleDescription(i.params.actionUserRole)})` : ''
             },
             link
           };

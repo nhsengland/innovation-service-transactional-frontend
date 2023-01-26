@@ -165,6 +165,8 @@ export type InnovationActivityLogListInDTO = {
 
       actionUserName: string,
       interveningUserName?: string,
+      actionUserRole?: string,
+      actionUserOrganisationUnit?: string,
 
       assessmentId?: string,
       sectionId?: InnovationSectionEnum,
