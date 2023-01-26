@@ -84,8 +84,9 @@ export type GetThreadMessageInfoDTO = {
 export type GetThreadParticipantsDTO = {
   participants: {
     id: string;
+    identityId: string;
     name: string;
-    role: UserTypeEnum;
+    type: UserTypeEnum;
     organisationUnit?: { id: string, acronym: string}
   }[]
 };

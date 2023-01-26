@@ -27,7 +27,7 @@
           <dl class="nhsuk-u-margin-0 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
             <div *ngFor="let participant of threadParticipants?.participants;" class="nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
               <dt>
-                <span>{{ participant.name }} ({{ participant.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(participant.role) }})</span>
+                <span>{{ participant.name }} ({{ participant.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(participant.type) }})</span>
               </dt>
             </div>
           </dl>
