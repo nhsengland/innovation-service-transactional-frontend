@@ -15,12 +15,10 @@
         <p *ngIf="isInnovator()">Messages is your space to ask support questions and discuss your innovation with the organisations that are supporting you.</p>
         <p *ngIf="isNotInnovator()">Messages is the space to engage in conversations with the innovator and with other organisations supporting this innovation.</p>
 
-        <p *ngIf="isInnovator()">
-          When you start a new conversation, <a routerLink="../support">everyone who is currently supporting your innovation</a>
-          will be notified. They can then view and reply to your messages.
+        <p>
+          Your messages can be seen by everyone who has access to this innovation.  <a routerLink="../support">View a list of this innovation's data sharing preferences (opens in new window).</a>
         </p>
-        <p *ngIf="isNotInnovator()">When you start a new conversation, all engaging organisation units and the needs assessment team can see and reply to messages, but only the innovator will be notified.</p>
-
+        
         <button class="nhsuk-button" [disabled]="!isInnovationSubmitted()" routerLink="new"> Start a new conversation </button>
         <p *ngIf="!isInnovationSubmitted()">You must submit your innovation record before you can start a new conversation.</p>
         
