@@ -49,7 +49,12 @@
           </td>
           <td class="nhsuk-table__cell">
             <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('createdAt') }}</span>
-            {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}
+            <span>{{ item.createdAt | date: ('app.date_formats.medium_date' | translate) }}</span>
+
+            <span *ngIf="item.createdBy.role === 'ACCESSOR'; else requestedByOtherRole" class="nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">{{ item.createdBy.name }}, {{ item.createdBy.organisationUnit?.name }}</span>
+            <ng-template #requestedByOtherRole>
+              <span class="nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">{{ item.createdBy.name }} ({{ this.stores.authentication.getRoleDescription(item.createdBy.role) }})</span>
+            </ng-template>
           </td>
           <td class="nhsuk-table__cell text-align-right">
             <span class="nhsuk-table-responsive__heading">{{ openedActionsList.getColumnLabel('status') }}</span>
