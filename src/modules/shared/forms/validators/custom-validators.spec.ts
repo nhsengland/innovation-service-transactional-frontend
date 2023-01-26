@@ -101,19 +101,19 @@ describe('CustomValidators', () => {
       expect(validator).toBeNull();
     });
 
-    it('should return error with an empty e-mail', () => {
+    it('should return error with an empty email', () => {
       formControl.setValue(null);
       validator = validatorFn(formControl);
       expect(validator).toEqual({ pattern: true });
     });
 
-    it('should return error with a malformed e-mail (spaces)', () => {
+    it('should return error with a malformed email (spaces)', () => {
       formControl.setValue('test @ example.com');
       validator = validatorFn(formControl);
       expect(validator).toEqual({ pattern: true });
     });
 
-    it('should return error with a malformed e-mail (no @)', () => {
+    it('should return error with a malformed email (no @)', () => {
       formControl.setValue('test_example');
       validator = validatorFn(formControl);
       expect(validator).toEqual({ pattern: true });

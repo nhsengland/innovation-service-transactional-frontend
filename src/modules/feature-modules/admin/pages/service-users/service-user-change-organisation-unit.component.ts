@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { FormControl, FormGroup } from '@app/base/forms';
+import { FormGroup } from '@app/base/forms';
 import { RoutingHelper } from '@app/base/helpers';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
@@ -131,7 +131,7 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
 
         } else {
 
-          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your e-mail' });
+          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your email' });
 
         }
 

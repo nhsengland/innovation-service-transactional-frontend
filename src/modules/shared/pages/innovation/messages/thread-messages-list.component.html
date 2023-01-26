@@ -16,6 +16,23 @@
 
         <h1 class="nhsuk-heading-m nhsuk-u-margin-bottom-3"> Subject: {{ threadInfo?.subject }} </h1>
 
+        <span>
+          {{ threadParticipants?.participants?.length?.toLocaleString() }} participants.
+        </span>
+        <a href="javascript:void(0)" (click)="onShowParticipantsClick()">
+          {{ showParticipantsText }} <span class="nhsuk-u-visually-hidden"> of thread participants </span>
+        </a>
+
+        <ng-container *ngIf=" showParticipantsHideStatus === 'opened'">
+          <dl class="nhsuk-u-margin-0 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
+            <div *ngFor="let participant of threadParticipants?.participants;" class="nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
+              <dt>
+                <span>{{ participant.name }} ({{ participant.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(participant.type) }})</span>
+              </dt>
+            </div>
+          </dl>
+        </ng-container>
+
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="stores.authentication.isAdminRole() === false && innovation.status !== 'PAUSED'">

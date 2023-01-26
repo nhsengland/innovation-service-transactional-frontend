@@ -7,7 +7,7 @@
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-        <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">E-mail</h2>
+        <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Email</h2>
         <div class="nhsuk-form-group">
           <theme-form-input controlName="email" [pageUniqueField]="false">
             <ng-container append>
@@ -32,7 +32,7 @@
 
         <ng-container *ngIf="usersList.length === 0">
           <p class="nhsuk-u-padding-top-5">There are no results.</p>
-          <p *ngIf="formSubmitted" class="">Please, confirm the provided e-mail.</p>
+          <p *ngIf="formSubmitted" class="">Please, confirm the provided email.</p>
         </ng-container>
 
         <ng-container *ngIf="usersList.length > 0">

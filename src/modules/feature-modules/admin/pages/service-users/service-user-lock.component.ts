@@ -102,7 +102,7 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
 
         } else {
 
-          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your e-mail' });
+          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your email' });
 
         }
 

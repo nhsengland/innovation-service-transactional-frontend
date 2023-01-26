@@ -3,11 +3,16 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-      <p *ngIf="isInnovator()">
-        Start a new conversation by entering a subject and a message. Everyone who is currently supporting your innovation will be notified and be able to see and reply to your message.
+      <p>
+        Start a new conversation by entering a subject and a message.
       </p>
+
+      <p *ngIf="isInnovator()">
+        <a routerLink="../../support">Everyone who is currently working with this innovation</a> will be notified.
+      </p>
+
       <p *ngIf="isNotInnovator()">
-        Start a new conversation by entering a subject and a message. The innovator will be notified. As well as the innovator, everyone who is supporting this innovation will be able to see and reply to your message.
+        The innovator will be notified. Your messsages can be seen by everyone who has access to this innovation. <a routerLink="../../support"> View a list of this innovation's data sharing preferences (opens in new window).</a>
       </p>
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()">

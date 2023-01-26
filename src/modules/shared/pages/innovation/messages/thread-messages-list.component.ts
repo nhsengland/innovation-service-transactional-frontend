@@ -10,7 +10,7 @@ import { TableModel } from '@app/base/models';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { GetThreadInfoDTO, GetThreadMessagesListOutDTO, InnovationsService } from '@modules/shared/services/innovations.service';
+import { GetThreadInfoDTO, GetThreadMessagesListOutDTO, GetThreadParticipantsDTO, InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -25,6 +25,10 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
   threadInfo: null | GetThreadInfoDTO = null;
   messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0]>({ pageSize: 10 });
+
+  showParticipantsHideStatus: string | null = null;
+  threadParticipants: GetThreadParticipantsDTO | null = null;
+  showParticipantsText: 'Show list' | 'Hide list' = 'Show list';
 
   form = new FormGroup({
     message: new UntypedFormControl('')
@@ -67,11 +71,13 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     forkJoin([
       this.innovationsService.getThreadInfo(this.innovation.id, this.threadId),
+      this.innovationsService.getThreadParticipants(this.innovation.id, this.threadId),
       this.innovationsService.getThreadMessagesList(this.innovation.id, this.threadId, this.messagesList.getAPIQueryParams())
     ]).subscribe({
-      next: ([threadInfo, threadMessages]) => {
+      next: ([threadInfo, threadParticipants, threadMessages]) => {
 
         this.threadInfo = threadInfo;
+        this.threadParticipants = threadParticipants;
         this.messagesList.setData(threadMessages.messages, threadMessages.count);
         // Throw notification read dismiss.
         this.stores.context.dismissNotification(this.innovation.id, {contextTypes: [NotificationContextTypeEnum.THREAD], contextIds: [this.threadInfo.id]});
@@ -85,6 +91,20 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
       }
     });
   };
+
+  onShowParticipantsClick() {
+    if (this.showParticipantsHideStatus !== 'opened') {
+
+      this.showParticipantsHideStatus = 'opened';
+      this.showParticipantsText = 'Hide list';
+      console.log(this.showParticipantsText)
+
+    } else {
+      this.showParticipantsHideStatus = 'closed';
+      this.showParticipantsText = 'Show list';
+      console.log(this.showParticipantsText)
+    }
+  }
 
 
 
