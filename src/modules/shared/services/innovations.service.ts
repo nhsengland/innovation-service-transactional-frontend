@@ -86,7 +86,7 @@ export type GetThreadParticipantsDTO = {
     id: string;
     name: string;
     role: UserTypeEnum;
-    organisationUnit?: { id: string, acronym: string} | undefined
+    organisationUnit?: { id: string, acronym: string}
   }[]
 };
 
