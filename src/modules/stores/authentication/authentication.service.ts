@@ -18,7 +18,7 @@ type GetUserInfoDTO = {
   roles: UserRoleEnum[],    
   contactByPhone: boolean,
   contactByEmail:  boolean,
-  contactByPhoneTimeframe: PhoneUserPreferenceEnum,
+  contactByPhoneTimeframe: PhoneUserPreferenceEnum | null,
   phone: string | null,
   contactDetails: string | null,
   termsOfUseAccepted: boolean,

@@ -3,8 +3,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
-import { FormArray, FormControl } from '@angular/forms';
-import { of, throwError } from 'rxjs';
 
 import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 

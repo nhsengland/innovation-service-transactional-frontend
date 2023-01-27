@@ -74,7 +74,7 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
 
   }
 
-  private prepareContactPreferenceValue(contactByEmail: boolean, contactByPhone: boolean, contactByPhoneTimeframe?: PhoneUserPreferenceEnum): string {
+  private prepareContactPreferenceValue(contactByEmail: boolean, contactByPhone: boolean, contactByPhoneTimeframe: PhoneUserPreferenceEnum | null): string {
     let value = '';
   if (contactByPhone && contactByPhoneTimeframe) {
     value = `By phone, ${this.translate('shared.catalog.user.contact_user_preferences.'+ contactByPhoneTimeframe + '.confirmation')}. `;
