@@ -37,21 +37,31 @@ import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innova
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/innovation-support-status-list.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
+import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
+import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/actions/action-status-list.component';
+import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/innovation/actions/action-tracker-new.component';
+import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
+import { PageInnovationActionTrackerCancelComponent } from '@modules/shared/pages/innovation/actions/action-tracker-cancel.component';
+import { PageInnovationActionTrackerEditComponent } from '@modules/shared/pages/innovation/actions/action-tracker-edit.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
+// //  Actions.
+import { PageActionsAdvancedSearchComponent } from '@modules/shared/pages/actions/actions-advanced-search.component';
 
 // Resolvers.
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
+import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
 
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
     left: [
       { id: 'innovations', label: 'Innovations', url: '/assessment/innovations' },
+      { id: 'actions', label: 'Actions', url: '/assessment/actions', },
       { id: 'notifications', label: 'Notifications', url: '/assessment/notifications' },
       { id: 'account', label: 'Your account', url: '/assessment/account' },
     ],
@@ -182,10 +192,66 @@ const routes: Routes = [
                                 data: { breadcrumb: 'Evidence Info' },
                               }
                             ]
+                          },
+                          {
+                            path: 'actions',
+                            pathMatch: 'full',
+                            component: PageInnovationActionSectionInfoComponent,
+                            data: {
+                              breadcrumb: null,
+                              layout: { type: 'full' }
+                            }
                           }
                         ]
                       }
 
+                    ]
+                  }
+                ]
+              },
+
+              {
+                path: 'action-tracker',
+                data: { breadcrumb: 'Action Tracker' },
+                children: [
+
+                  {
+                    path: '', pathMatch: 'full', component: PageInnovationActionTrackerListComponent,
+                    data: { breadcrumb: null }
+                  },
+
+                  {
+                    path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent,
+                    data: { breadcrumb: 'Statuses' }
+                  },
+
+                  {
+                    path: 'new', pathMatch: 'full', component: PageInnovationActionTrackerNewComponent,
+                    data: { breadcrumb: 'New' }
+                  },
+
+                  {
+                    path: ':actionId',
+                    resolve: { innovationActionData: InnovationActionDataResolver },
+                    data: {
+                      breadcrumb: (data: RoutesDataType) => {
+                        const name = data.innovationActionData?.name ?? '';
+                        return name.length > 30 ? `${name.substring(0, 30)}...` : name;
+                      }
+                    },
+                    children: [
+                      {
+                        path: '', pathMatch: 'full', component: PageInnovationActionSectionInfoComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' } }
+                      },
+                      {
+                        path: 'edit', pathMatch: 'full', component: PageInnovationActionTrackerEditComponent,
+                        data: { breadcrumb: 'Edit' }
+                      },
+                      {
+                        path: 'cancel', pathMatch: 'full', component: PageInnovationActionTrackerCancelComponent,
+                        data: { breadcrumb: 'Cancel' }
+                      }
                     ]
                   }
                 ]
@@ -251,6 +317,21 @@ const routes: Routes = [
 
             ]
           }
+        ]
+      },
+
+      {
+        path: 'actions',
+        data: {
+          breadcrumb: 'Actions',
+          layout: { type: 'full', chosenMenu: 'actions', backgroundColor: 'bg-color-white' }
+        },
+        children: [
+          {
+            path: '', pathMatch: 'full', component: PageActionsAdvancedSearchComponent,
+            data: { breadcrumb: null }
+          },
+          { path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent },
         ]
       },
 

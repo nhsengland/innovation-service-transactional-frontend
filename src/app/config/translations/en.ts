@@ -219,27 +219,27 @@ export const locale = {
             },
             ACTION_CREATION: {
               title: 'Action creation',
-              message: `{{ actionUserName }} created an action for section "{{ sectionTitle }}"`
+              message: `{{ actionUserName }} {{ actionUserRole }} created an action for section "{{ sectionTitle }}"`
             },
             ACTION_STATUS_SUBMITTED_UPDATE: {
               title: 'Action changed to submitted',
-              message: `{{ totalActions }} actions for "{{ sectionTitle }}" section were changed to "Submitted"`
+              message: `{{ totalActions }} {{ actionUserRole }} actions for "{{ sectionTitle }}" section were changed to "Submitted"`
             },
             ACTION_STATUS_DECLINED_UPDATE: {
               title: 'Action declined',
-              message: `{{ actionUserName }} declined an action from {{ interveningUserName }}`
+              message: `{{ actionUserName }} {{ actionUserRole }} declined an action from {{ interveningUserName }}`
             },
             ACTION_STATUS_COMPLETED_UPDATE: {
               title: 'Action completed',
-              message: `{{ actionUserName }} marked an action as completed`
+              message: `{{ actionUserName }} {{ actionUserRole }} marked an action as completed`
             },
             ACTION_STATUS_REQUESTED_UPDATE: {
               title: 'Action requested',
-              message: `{{ actionUserName }} marked an action as requested`
+              message: `{{ actionUserName }} {{ actionUserRole }} marked an action as requested`
             },
             ACTION_STATUS_CANCELLED_UPDATE: {
               title: 'Action cancelled',
-              message: `{{ actionUserName }} marked an action as cancelled`
+              message: `{{ actionUserName }} {{ actionUserRole }} marked an action as cancelled`
             },
             INNOVATION_PAUSE: {
               title: 'Innovation stop share',
