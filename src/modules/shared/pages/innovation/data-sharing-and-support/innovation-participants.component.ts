@@ -18,7 +18,7 @@ export class PageInnovationParticipantsComponent extends CoreComponent implement
   ) {
 
     super();
-    this.setPageTitle('Everyone who is workig', { showPage: false });
+    this.setPageTitle('Everyone who is working with this innovation', { showPage: false });
 
     this.innovation = this.stores.context.getInnovation();
 
