@@ -97,12 +97,10 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
       this.showParticipantsHideStatus = 'opened';
       this.showParticipantsText = 'Hide list';
-      console.log(this.showParticipantsText)
 
     } else {
       this.showParticipantsHideStatus = 'closed';
       this.showParticipantsText = 'Show list';
-      console.log(this.showParticipantsText)
     }
   }
 
