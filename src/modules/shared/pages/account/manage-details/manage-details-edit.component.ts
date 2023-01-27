@@ -113,8 +113,9 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
     if(this.stores.authentication.isInnovatorType()) {
       body = {
         displayName: wizardData.displayName,
-        contactPreferences: wizardData.contactPreferences,
-        phoneTimePreferences: wizardData.phoneTimePreferences || null,
+        contactByPhone: wizardData.contactByPhone,
+        contactByEmail: wizardData.contactByEmail,
+        contactByPhoneTimeframe: wizardData.contactByPhoneTimeframe || null,
         mobilePhone: wizardData.mobilePhone || null,
         contactDetails: wizardData.contactDetails || null,
         ...(wizardData.organisation ? { organisation: wizardData.organisation } : {})

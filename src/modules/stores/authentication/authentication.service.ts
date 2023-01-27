@@ -16,8 +16,9 @@ type GetUserInfoDTO = {
   displayName: string,
   type: UserTypeEnum,
   roles: UserRoleEnum[],    
-  contactPreferences: string | null,
-  phoneTimePreferences: string | null,
+  contactByPhone: boolean,
+  contactByEmail:  boolean,
+  contactByPhoneTimeframe: PhoneUserPreferenceEnum,
   phone: string | null,
   contactDetails: string | null,
   termsOfUseAccepted: boolean,
@@ -37,8 +38,9 @@ type GetUserInfoDTO = {
 
 export type UpdateUserInfoDTO = {
   displayName: string;
-  contactPreferences?: string;
-  phoneTimePreferences?: string;
+  contactByPhone?: boolean;
+  contactByEmail?: boolean;
+  contactByPhoneTimeframe?: PhoneUserPreferenceEnum;
   mobilePhone?: string;
   contactDetails?: string;
   organisation?: { id: string, isShadow: boolean, name?: null | string, size?: null | string }
@@ -52,6 +54,17 @@ export type GetTermsOfUseLastVersionInfoDTO = {
   isAccepted: boolean;
 };
 
+export enum ContactUserPreferenceEnum {
+  PHONE = 'PHONE',
+  EMAIL = 'EMAIL',
+};
+
+
+export enum PhoneUserPreferenceEnum {
+  MORNING = 'MORNING',
+  AFTERNOON = 'AFTERNOON',
+  DAILY = 'DAILY'
+};
 
 @Injectable()
 export class AuthenticationService {
@@ -82,8 +95,9 @@ export class AuthenticationService {
         displayName: ['unknown'].includes(response.displayName) ? '' : response.displayName,
         type: response.type,
         roles: response.roles || [],
-        contactPreferences: response.contactPreferences,
-        phoneTimePreferences: response.phoneTimePreferences,
+        contactByPhone: response.contactByPhone,
+        contactByEmail:  response.contactByEmail,
+        contactByPhoneTimeframe: response.contactByPhoneTimeframe,
         phone: response.phone,
         contactDetails: response.contactDetails,
         termsOfUseAccepted: response.termsOfUseAccepted,

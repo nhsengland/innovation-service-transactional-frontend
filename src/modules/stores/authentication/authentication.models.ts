@@ -1,6 +1,7 @@
 import { DateISOType } from '@modules/core/interfaces/base.interfaces';
 
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum, UserTypeEnum } from './authentication.enums';
+import { PhoneUserPreferenceEnum } from './authentication.service';
 
 export class AuthenticationModel {
 
@@ -20,8 +21,9 @@ export class AuthenticationModel {
     displayName: string,
     type: '' | UserTypeEnum,
     roles: UserRoleEnum[],
-    contactPreferences: string | null,
-    phoneTimePreferences: string | null,
+    contactByPhone: boolean,
+    contactByEmail: boolean,
+    contactByPhoneTimeframe?: PhoneUserPreferenceEnum,
     phone: string | null,
     contactDetails: string | null,
     termsOfUseAccepted: boolean,

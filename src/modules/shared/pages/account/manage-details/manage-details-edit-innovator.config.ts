@@ -2,6 +2,8 @@
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
+import { ContactUserPreferenceEnum, PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
+import { locale } from '@app/config/translations/en';
 
 
 // Types.
@@ -9,8 +11,8 @@ type InboundPayloadType = Required<AuthenticationModel>['user'];
 
 type StepPayloadType = {
   displayName: string,
-  contactPreferences: string[],
-  phoneTimePreferences: null | string,
+  contactPreferences: ContactUserPreferenceEnum[],
+  contactByPhoneTimeframe: PhoneUserPreferenceEnum | null,
   mobilePhone: null | string,
   contactDetails: null | string,
   isCompanyOrOrganisation: 'YES' | 'NO',
@@ -21,8 +23,9 @@ type StepPayloadType = {
 
 type OutboundPayloadType = {
   displayName: string,
-  contactPreferences: null | string,
-  phoneTimePreferences: null | string,
+  contactByPhone: boolean,
+  contactByEmail: boolean,  
+  contactByPhoneTimeframe: PhoneUserPreferenceEnum | null,
   mobilePhone: null | string,
   contactDetails: null | string,
   organisation?: {
@@ -53,26 +56,26 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
         description: 'Select your preferred ways of contact',
         items: [
           {
-            value: 'Phone',
+            value: ContactUserPreferenceEnum.PHONE,
             label: 'By phone',
             conditional: new FormEngineParameterModel({ 
-              id: 'phoneTimePreferences', 
+              id: 'contactByPhoneTimeframe', 
               dataType: 'radio-group',
               label: 'Select the best time to reach you on week days (UK time)',
               validations: { isRequired: [true, 'Choose one option'] },
               items: [{
-                value: '9am to 12pm',
+                value: PhoneUserPreferenceEnum.MORNING,
                 label: 'Morning, 9am to 12pm',
               }, {
-                value: '1pm to 5pm',
+                value: PhoneUserPreferenceEnum.AFTERNOON,
                 label: 'Afternoon, 1pm to 5pm'
               }, {
-                value: '9am to 12pm or 1pm to 5pm',
+                value: PhoneUserPreferenceEnum.DAILY,
                 label: 'Either'
               }]
             })
           },
-          { value: 'Email', label: 'By email' }
+          { value: ContactUserPreferenceEnum.EMAIL, label: 'By email' }
         ]
       }]
     }),
@@ -155,8 +158,8 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
     displayName: data.displayName,
-    contactPreferences: data.contactPreferences?.split(',') ?? [],
-    phoneTimePreferences: data.phoneTimePreferences,
+    contactPreferences: getContactPreferences(data),
+    contactByPhoneTimeframe: data.contactByPhoneTimeframe ?? null,
     mobilePhone: data.phone,
     contactDetails: data.contactDetails,
     isCompanyOrOrganisation: !data.organisations[0].isShadow ? 'YES' : 'NO',
@@ -174,9 +177,10 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
     displayName: data.displayName,
-    contactPreferences: data.contactPreferences.toString(),
+    contactByPhone: data.contactPreferences.includes(ContactUserPreferenceEnum.PHONE),
+    contactByEmail: data.contactPreferences.includes(ContactUserPreferenceEnum.EMAIL),
     mobilePhone: data.mobilePhone,
-    phoneTimePreferences: data.phoneTimePreferences,
+    contactByPhoneTimeframe: data.contactByPhoneTimeframe,
     contactDetails: data.contactDetails,
     organisation: {
       id: data.organisationAdditionalInformation.id,
@@ -210,14 +214,31 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   }
 
   return toReturn;
-
 }
 
 function getContactPreferenceValue(data: StepPayloadType): string {
+  let value = '';
+  if (data.contactPreferences.includes(ContactUserPreferenceEnum.PHONE) && data.contactByPhoneTimeframe) {
+    value = `By phone, ${locale.data.shared.catalog.user.contact_user_preferences[data.contactByPhoneTimeframe].confirmation}. `;
+  }
   
-  if (data.contactPreferences.length > 0) {    
-    return data.contactPreferences.join(' ').replace('Email', 'By email.').replace('Phone', `By phone, ${data.phoneTimePreferences}.`);
+  if (data.contactPreferences.includes(ContactUserPreferenceEnum.EMAIL)) {
+    value += 'By email.';
   }
 
-  return '';
+  return value;
+}
+
+function getContactPreferences(data: InboundPayloadType): ContactUserPreferenceEnum[] {
+  let contactPreferences: ContactUserPreferenceEnum[] = [];
+
+  if(data.contactByEmail) {
+    contactPreferences.push(ContactUserPreferenceEnum.EMAIL)
+  }
+
+  if(data.contactByPhone) {
+    contactPreferences.push(ContactUserPreferenceEnum.PHONE)
+  }
+
+  return contactPreferences;
 }
