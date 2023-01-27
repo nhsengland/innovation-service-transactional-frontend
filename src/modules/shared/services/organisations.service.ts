@@ -47,7 +47,7 @@ export class OrganisationsService extends CoreService {
 
   }
 
-  getOrganisationUnitUsersList(organisationUnitId: string): Observable<{ id: string, organisationUnitUserId: string, name: string }[]> {
+  getOrganisationUnitUsersList(organisationUnitId: string, activeOnly = true): Observable<{ id: string, organisationUnitUserId: string, name: string }[]> {
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ organisationUnitId, fields: ['organisations', 'units'], userTypes: [UserTypeEnum.ACCESSOR] });
     return this.http.get<{
@@ -62,11 +62,12 @@ export class OrganisationsService extends CoreService {
       }[]
     }[]>(url.buildUrl()).pipe(
       take(1),
-      map(response => response.map(item => ({
-        id: item.id,
-        organisationUnitUserId: item.organisations[0].units[0].organisationUnitUserId,
-        name: item.name
-      })))
+      map(response => response.filter(r => !activeOnly || r.isActive )
+        .map(item => ({
+          id: item.id,
+          organisationUnitUserId: item.organisations[0].units[0].organisationUnitUserId,
+          name: item.name
+        })))
     );
 
   }
