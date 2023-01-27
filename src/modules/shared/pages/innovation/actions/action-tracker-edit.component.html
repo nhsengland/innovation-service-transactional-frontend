@@ -1,0 +1,41 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-column-full">
+
+    <form [formGroup]="form">
+
+      <div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': statusError}">
+        <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="statusError ? 'error-status' : null">
+          <legend class="nhsuk-fieldset__legend">Choose a status</legend>
+
+          <span *ngIf="statusError" id="error-status" class="nhsuk-error-message" role="alert"> <span
+              class="nhsuk-u-visually-hidden">Error:</span> {{ statusError | translate }} </span>
+
+          <div class="nhsuk-radios">
+            <div *ngFor="let item of statusItems; let i = index" class="nhsuk-radios__item">
+              <input formControlName="status" id="status{{ i }}" type="radio" name="status" [value]="item.value"
+                class="nhsuk-radios__input" />
+              <label for="status{{ i }}" class="nhsuk-label nhsuk-radios__label nhsuk-u-padding-top-1">
+                <theme-tag
+                  type="{{ 'shared.catalog.innovation.action_status.' + item.value + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.action_status.' + item.value + '.name' | translate }}"></theme-tag>
+              </label>
+              <div class="nhsuk-hint nhsuk-radios__hint">{{ item.description }}</div>
+            </div>
+          </div>
+
+        </fieldset>
+      </div>
+
+      <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Update
+        status</button>
+
+    </form>
+
+    <div>
+      <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ actionId }}">Cancel</a>
+    </div>
+
+  </div>
+
+</theme-content-wrapper>

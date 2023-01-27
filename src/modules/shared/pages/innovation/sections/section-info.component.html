@@ -72,8 +72,11 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="module === 'accessor' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED')">
-        <button routerLink="/accessor/innovations/{{ innovation.id }}/action-tracker/new" [queryParams]="{ section: section.id }" class="nhsuk-button"> Create action for this section </button>
+      <ng-container *ngIf="
+        (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED') && stores.authentication.isAccessorType() || 
+        (['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status) && stores.authentication.isAssessmentType())
+      ">
+        <button routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovation.id }}/action-tracker/new" [queryParams]="{ section: section.id }" class="nhsuk-button nhsuk-u-margin-right-3"> Create action for this section </button>
       </ng-container>
 
       <ng-container *ngIf="module === 'assessment'" [ngSwitch]="innovation.status">

@@ -13,7 +13,7 @@
       <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Confirm</button>
 
       <div>
-        <a routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ actionId }}">Cancel</a>
+        <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ actionId }}">Cancel</a>
       </div>
 
     </div>

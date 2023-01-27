@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
@@ -7,23 +7,25 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
-import { InnovationActionTrackerEditComponent } from './action-tracker-edit.component';
+import { PageInnovationActionTrackerEditComponent } from './action-tracker-edit.component';
 
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { SharedModule } from '@modules/shared/shared.module';
 
 
-describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponent', () => {
+describe('Shared/Pages/Innovation/PageInnovationActionTrackerEditComponent', () => {
 
   let activatedRoute: ActivatedRoute;
+  let innovationsService: InnovationsService;
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
   let accessorService: AccessorService;
 
-  let component: InnovationActionTrackerEditComponent;
-  let fixture: ComponentFixture<InnovationActionTrackerEditComponent>;
+  let component: PageInnovationActionTrackerEditComponent;
+  let fixture: ComponentFixture<PageInnovationActionTrackerEditComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -32,7 +34,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        AccessorModule
+        SharedModule
       ]
     });
 
@@ -42,13 +44,13 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
     router = TestBed.inject(Router);
     routerSpy = jest.spyOn(router, 'navigate');
 
-    accessorService = TestBed.inject(AccessorService);
+    innovationsService = TestBed.inject(InnovationsService);
 
   });
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
+    fixture = TestBed.createComponent(PageInnovationActionTrackerEditComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
@@ -69,7 +71,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
   //   };
   //   accessorService.getInnovationActionInfo = () => of(responseMock);
 
-  //   fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
+  //   fixture = TestBed.createComponent(PageInnovationActionTrackerEditComponent);
   //   component = fixture.componentInstance;
   //   fixture.detectChanges();
 
@@ -83,7 +85,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
 
   //   accessorService.getInnovationActionInfo = () => throwError('error');
 
-  //   fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
+  //   fixture = TestBed.createComponent(PageInnovationActionTrackerEditComponent);
   //   component = fixture.componentInstance;
   //   fixture.detectChanges();
 
@@ -93,7 +95,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
 
   // it('should run onSubmit() with invalid form', () => {
 
-  //   fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
+  //   fixture = TestBed.createComponent(PageInnovationActionTrackerEditComponent);
   //   component = fixture.componentInstance;
 
   //   component.onSubmit();
@@ -108,7 +110,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
   //   const responseMock = { id: 'actionId' };
   //   accessorService.updateAction = () => of(responseMock);
 
-  //   fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
+  //   fixture = TestBed.createComponent(PageInnovationActionTrackerEditComponent);
   //   component = fixture.componentInstance;
   //   component.form.get('status')?.setValue('Invalid status');
 
@@ -124,7 +126,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
   //   const responseMock = { id: 'actionId' };
   //   accessorService.updateAction = () => of(responseMock);
 
-  //   fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
+  //   fixture = TestBed.createComponent(PageInnovationActionTrackerEditComponent);
   //   component = fixture.componentInstance;
   //   component.form.get('status')?.setValue('REQUESTED');
 
@@ -139,7 +141,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerEditComponen
 
   //   accessorService.updateAction = () => throwError('error');
 
-  //   fixture = TestBed.createComponent(InnovationActionTrackerEditComponent);
+  //   fixture = TestBed.createComponent(PageInnovationActionTrackerEditComponent);
   //   component = fixture.componentInstance;
   //   component.form.get('status')?.setValue('REQUESTED');
 
