@@ -127,7 +127,7 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
 
 function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary'): void {
 
-  steps.splice(4);
+  steps.splice(5);
 
   if (data.isCompanyOrOrganisation === 'NO') {
     data.organisationName = null;
