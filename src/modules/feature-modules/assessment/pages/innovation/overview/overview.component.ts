@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { UtilsHelper } from '@app/base/helpers';
 
 import { InnovationInfoDTO, StatisticsCard } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
@@ -60,6 +61,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.innovatorSummary = [
         { label: 'Name', value: this.innovation.owner.name },
+        { label: 'Contact preference', value: UtilsHelper.getContactPreferenceValue(this.innovation.owner.contactByEmail, this.innovation.owner.contactByPhone, this.innovation.owner.contactByPhoneTimeframe) || '' },
+        { label: 'Contact details', value: this.innovation.owner.contactDetails || '' },
         { label: 'Email address', value: this.innovation.owner.email || '' },
         { label: 'Phone number', value: this.innovation.owner.mobilePhone || '' }
       ];
