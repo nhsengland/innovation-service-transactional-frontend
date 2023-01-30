@@ -457,8 +457,22 @@ export const locale = {
                 plural: '{{ supports.innovations.length }} innovations being supported',
               }
             }
-          }
-
+          },
+          contact_user_preferences: {
+            MORNING: {
+              label: 'Morning, 9am to 12pm',
+              confirmation: '9am to 12pm'
+            },
+            AFTERNOON: {
+              label: 'Afternoon, 1pm to 5pm',
+              confirmation: '1pm to 5pm'
+            },
+            DAILY: {
+              label: 'Either',
+              confirmation: '9am to 12pm or 1pm to 5pm'
+            },
+          },
+      
         }
       },
 
