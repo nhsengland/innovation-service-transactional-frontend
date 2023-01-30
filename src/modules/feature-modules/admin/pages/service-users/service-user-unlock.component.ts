@@ -3,10 +3,10 @@ import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { FormControl, FormGroup } from '@app/base/forms';
+import { FormGroup } from '@app/base/forms';
 import { RoutingHelper } from '@app/base/helpers';
 
-import { ServiceUsersService, getLockUserRulesOutDTO } from '../../services/service-users.service';
+import { getLockUserRulesOutDTO, ServiceUsersService } from '../../services/service-users.service';
 
 
 @Component({
@@ -86,7 +86,7 @@ export class PageServiceUserUnlockComponent extends CoreComponent implements OnI
 
         } else {
 
-          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your e-mail' });
+          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your email' });
 
         }
 

@@ -17,6 +17,13 @@
           </dd>
         </div>
         <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Last update</dt>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
+            <p>{{ action.updatedAt | date: ('app.date_formats.long_date' | translate) }}</p>
+            <span class="font-color-secondary">by {{ action.updatedBy.name }} ({{ this.stores.authentication.getRoleDescription(action.updatedBy.role) }})</span>
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Requested on</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
             {{ action.createdAt | date: ('app.date_formats.long_date' | translate) }}
@@ -24,7 +31,12 @@
         </div>
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Requested by</dt>
-          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">{{ action.createdBy.name }}, {{ action.createdBy.organisationUnit?.name }}</dd>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
+            <span *ngIf="action.createdBy.role === 'ACCESSOR'; else requestedByOtherRole">{{ action.createdBy.name }}, {{ action.createdBy.organisationUnit?.name }}</span>
+            <ng-template #requestedByOtherRole>
+              <span>{{ action.createdBy.name }} ({{ this.stores.authentication.getRoleDescription(action.createdBy.role) }})</span>
+            </ng-template>
+          </dd>
         </div>
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Section</dt>
@@ -42,26 +54,36 @@
       </dl>
 
 
-      <ng-container *ngIf="stores.authentication.isAccessorType()">
+      <ng-container *ngIf="stores.authentication.isAccessorType() || stores.authentication.isAssessmentType()">
 
-        <a routerLink="/accessor/innovations/{{ innovationId }}/record/sections/{{ action.section }}"
+        <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/record/sections/{{ action.section }}"
           class="nhsuk-button nhsuk-u-margin-right-3"> Review section </a>
-        
+
         <a *ngIf="action.status === 'SUBMITTED'"
-          routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/edit"
+          routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/edit"
           class="nhsuk-button nhsuk-button--secondary">
           Update status
         </a>
 
-        <a *ngIf="
-            action.status === 'REQUESTED'
-            && stores.authentication.isAccessorType()
-            && action.createdBy.id === stores.authentication.getUserId()
-            && action.createdBy.organisationUnit?.id === stores.authentication.getUserContextInfo().organisation?.organisationUnit?.id"
-          routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/cancel"
-          class="nhsuk-button nhsuk-button--secondary">
-          Cancel action
-        </a>
+        <ng-container *ngIf="action.status === 'REQUESTED'">
+        
+          <a *ngIf="
+                  stores.authentication.isAccessorType()
+                  && action.createdBy.id === stores.authentication.getUserId()
+                  && action.createdBy.organisationUnit?.id === stores.authentication.getUserContextInfo().organisation?.organisationUnit?.id"
+            routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/cancel"
+            class="nhsuk-button nhsuk-button--secondary">
+            Cancel action
+          </a>
+        
+          <a *ngIf="stores.authentication.isAssessmentType() && action.createdBy.role === 'ASSESSMENT'"
+            routerLink="/assessment/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/cancel"
+            class="nhsuk-button nhsuk-button--secondary">
+            Cancel action
+          </a>
+        
+        </ng-container>
+
 
       </ng-container>
 
@@ -116,11 +138,11 @@
 
     </div>
 
-    <div class="nhsuk-grid-column-one-third" *ngIf="stores.authentication.isInnovatorType() || stores.authentication.isAccessorType()">
+    <div class="nhsuk-grid-column-one-third" *ngIf="!stores.authentication.isAdminRole()">
 
       <div class="nhsuk-card x-card-top-border">
         <div class="nhsuk-card__content">
-          
+
           <ng-container *ngIf="stores.authentication.isInnovatorType()">
 
             <h2 class="nhsuk-card__heading nhsuk-heading-m">If you have any questions</h2>
@@ -130,10 +152,10 @@
 
           </ng-container>
 
-          <ng-container *ngIf="stores.authentication.isAccessorType()">
+          <ng-container *ngIf="stores.authentication.isAccessorType() || stores.authentication.isAssessmentType()">
 
             <h2 class="nhsuk-card__heading nhsuk-heading-m">Message the innovator</h2>
-            <a routerLink="/accessor/innovations/{{ innovationId }}/threads">
+            <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/threads">
               Go to messages and send a message to the innovator if you need to discuss more about it.
             </a>
 

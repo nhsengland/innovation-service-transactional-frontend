@@ -52,6 +52,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this._sidebarItems = [
         { label: 'Overview', url: `/assessment/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/assessment/innovations/${innovation.id}/record` },
+        { label: 'Action tracker', url: `/assessment/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/assessment/innovations/${innovation.id}/threads` },
         { label: 'Support status', url: `/assessment/innovations/${innovation.id}/support` }
       ];

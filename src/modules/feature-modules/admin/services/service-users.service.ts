@@ -133,8 +133,10 @@ export type searchUserEndpointInDTO = {
 export type searchUserEndpointOutDTO = searchUserEndpointInDTO & { typeLabel: string };
 
 export type changeUserRoleDTO = {
-  userId: string,
-  role: null | InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
+  role: {
+    name: AccessorOrganisationRoleEnum, // this used to have InnovatorOrganisationRoleEnum but I don't think it is used
+    organisationId: string,
+  },
   securityConfirmation: {
     id: string,
     code: string
@@ -275,11 +277,11 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  changeUserRole(body: changeUserRoleDTO): Observable<changeUserTypeDTO> {
+  changeUserRole(userId: string, body: changeUserRoleDTO): Observable<changeUserTypeDTO> {
 
     const qp = (body.securityConfirmation.id && body.securityConfirmation.code) ? body.securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId: body.userId }).setQueryParams(qp);
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId }).setQueryParams(qp);
     return this.http.patch<changeUserTypeDTO>(url.buildUrl(), { role: body.role }).pipe(
       take(1),
       map(response => response),

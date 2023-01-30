@@ -1,28 +1,24 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
 
-import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
-import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
+import { AppInjector, CoreModule } from '@modules/core';
+import { StoresModule } from '@modules/stores';
 
-import { ActionsAdvancedSearchComponent } from './actions-advanced-search.component';
+import { PageActionsAdvancedSearchComponent } from './actions-advanced-search.component';
 
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { AccessorService } from '../../services/accessor.service';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { SharedModule } from '@modules/shared/shared.module';
 
 
-describe('FeatureModules/Accessor/Actions/FilterActionComponent', () => {
+describe('Shared/Pages/Actions/PageActionsAdvancedSearchComponent', () => {
 
-  let authenticationStore: AuthenticationStore;
-  let accessorService: AccessorService;
-  let organisationsService: OrganisationsService;
-  let component: ActionsAdvancedSearchComponent;
-  let fixture: ComponentFixture<ActionsAdvancedSearchComponent>;
+  let innovationsService: InnovationsService;
+  let component: PageActionsAdvancedSearchComponent;
+  let fixture: ComponentFixture<PageActionsAdvancedSearchComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,22 +27,18 @@ describe('FeatureModules/Accessor/Actions/FilterActionComponent', () => {
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        AccessorModule
+        SharedModule
       ]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
-    accessorService = TestBed.inject(AccessorService);
-    organisationsService = TestBed.inject(OrganisationsService);
-
-    authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
+    innovationsService = TestBed.inject(InnovationsService);
 
   });
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(ActionsAdvancedSearchComponent);
+    fixture = TestBed.createComponent(PageActionsAdvancedSearchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
