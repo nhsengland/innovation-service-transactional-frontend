@@ -1,6 +1,7 @@
 import { Params } from '@angular/router';
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
 import { DateISOType } from '@app/base/types';
+import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 
 import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationStatisticsEnum } from './statistics.enum';
@@ -58,7 +59,11 @@ export type InnovationInfoDTO = {
     id: string,
     name: string,
     email?: string,
+    contactByEmail?: boolean,
+    contactByPhone?: boolean,
+    contactByPhoneTimeframe?: PhoneUserPreferenceEnum | null,
     mobilePhone?: null | string,
+    contactDetails?: null | string,
     isActive: boolean,
     organisations: null | { name: string, size: null | string }[],
     lastLoginAt?: DateISOType

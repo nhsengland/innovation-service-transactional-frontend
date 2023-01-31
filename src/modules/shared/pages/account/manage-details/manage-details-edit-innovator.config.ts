@@ -3,7 +3,7 @@ import { AuthenticationModel } from '@modules/stores/authentication/authenticati
 
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { ContactUserPreferenceEnum, PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
-import { locale } from '@app/config/translations/en';
+import { UtilsHelper } from '@app/base/helpers';
 
 
 // Types.
@@ -127,7 +127,7 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
 
 function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary'): void {
 
-  steps.splice(4);
+  steps.splice(5);
 
   if (data.isCompanyOrOrganisation === 'NO') {
     data.organisationName = null;
@@ -198,7 +198,11 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   toReturn.push(
     { label: 'Name', value: data.displayName, editStepNumber: 1 },
-    { label: 'Contact Preference', value: getContactPreferenceValue(data), editStepNumber: 2, },
+    { 
+      label: 'Contact Preference', 
+      value: UtilsHelper.getContactPreferenceValue(data.contactPreferences.includes(ContactUserPreferenceEnum.EMAIL), data.contactPreferences.includes(ContactUserPreferenceEnum.PHONE), data.contactByPhoneTimeframe), 
+      editStepNumber: 2, 
+    },
     { label: 'Phone number', value: data.mobilePhone, editStepNumber: 3, },
     { label: 'Contact details', value: data.contactDetails, editStepNumber: 4, },
     { label: 'Is company or organisation?', value: data.isCompanyOrOrganisation === 'YES' ? 'Yes' : 'No', editStepNumber: 5 }
@@ -214,19 +218,6 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   }
 
   return toReturn;
-}
-
-function getContactPreferenceValue(data: StepPayloadType): string {
-  let value = '';
-  if (data.contactPreferences.includes(ContactUserPreferenceEnum.PHONE) && data.contactByPhoneTimeframe) {
-    value = `By phone, ${locale.data.shared.catalog.user.contact_user_preferences[data.contactByPhoneTimeframe].confirmation}. `;
-  }
-  
-  if (data.contactPreferences.includes(ContactUserPreferenceEnum.EMAIL)) {
-    value += 'By email.';
-  }
-
-  return value;
 }
 
 function getContactPreferences(data: InboundPayloadType): ContactUserPreferenceEnum[] {
