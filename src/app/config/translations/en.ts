@@ -223,7 +223,7 @@ export const locale = {
             },
             ACTION_STATUS_SUBMITTED_UPDATE: {
               title: 'Action changed to submitted',
-              message: `{{ totalActions }} {{ actionUserRole }} actions for "{{ sectionTitle }}" section were changed to "Submitted"`
+              message: `{{ totalActions }} actions for "{{ sectionTitle }}" section were changed to "Submitted"`
             },
             ACTION_STATUS_DECLINED_UPDATE: {
               title: 'Action declined',
