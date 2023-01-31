@@ -29,6 +29,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   showParticipantsHideStatus: string | null = null;
   threadParticipants: GetThreadParticipantsDTO | null = null;
   showParticipantsText: 'Show list' | 'Hide list' = 'Show list';
+  participantNumberText: 'participant' | 'participants' = 'participant';
 
   form = new FormGroup({
     message: new UntypedFormControl('')
@@ -78,6 +79,9 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
         this.threadInfo = threadInfo;
         this.threadParticipants = threadParticipants;
+        
+        this.participantNumberText = this.threadParticipants.participants.length > 1 ? 'participants': 'participant'; 
+
         this.messagesList.setData(threadMessages.messages, threadMessages.count);
         // Throw notification read dismiss.
         this.stores.context.dismissNotification(this.innovation.id, {contextTypes: [NotificationContextTypeEnum.THREAD], contextIds: [this.threadInfo.id]});
@@ -97,12 +101,10 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
       this.showParticipantsHideStatus = 'opened';
       this.showParticipantsText = 'Hide list';
-      console.log(this.showParticipantsText)
 
     } else {
       this.showParticipantsHideStatus = 'closed';
       this.showParticipantsText = 'Show list';
-      console.log(this.showParticipantsText)
     }
   }
 

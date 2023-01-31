@@ -17,7 +17,7 @@
         <h1 class="nhsuk-heading-m nhsuk-u-margin-bottom-3"> Subject: {{ threadInfo?.subject }} </h1>
 
         <span>
-          {{ threadParticipants?.participants?.length?.toLocaleString() }} participants.
+          {{ threadParticipants?.participants?.length?.toLocaleString() }} {{ participantNumberText }}.
         </span>
         <a href="javascript:void(0)" (click)="onShowParticipantsClick()">
           {{ showParticipantsText }} <span class="nhsuk-u-visually-hidden"> of thread participants </span>

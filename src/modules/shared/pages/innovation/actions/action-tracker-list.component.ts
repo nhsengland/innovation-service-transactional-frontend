@@ -69,13 +69,15 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
     this.openedActionsList.setFilters({
       innovationId: this.innovationId,
       fields: ['notifications'],
-      status: [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.SUBMITTED]
+      status: [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.SUBMITTED],
+      allActions: true
     });
 
     this.closedActionsList.setFilters({
       innovationId: this.innovationId,
       fields: ['notifications'],
-      status: [InnovationActionStatusEnum.DECLINED, InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DELETED, InnovationActionStatusEnum.CANCELLED]
+      status: [InnovationActionStatusEnum.DECLINED, InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DELETED, InnovationActionStatusEnum.CANCELLED],
+      allActions: true
     });
 
     this.innovationsService.getActionsList(this.openedActionsList.getAPIQueryParams()).subscribe((openedActions) => {

@@ -13,13 +13,10 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // // Account.
 import { PageAccessorAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
 // // Actions.
-import { ActionsAdvancedSearchComponent } from './pages/actions/actions-advanced-search.component';
 import { ActionsListComponent } from './pages/actions/actions-list.component';
 // // Dashboard.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
-import { InnovationActionTrackerEditComponent } from './pages/innovation/action-tracker/action-tracker-edit.component';
-import { InnovationActionTrackerNewComponent } from './pages/innovation/action-tracker/action-tracker-new.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './pages/innovation/support/organisations-support-status-suggest.component';
 import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
@@ -51,19 +48,23 @@ import { InnovationExportRequestComponent } from './pages/innovation/export/expo
 import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
+import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/innovation/actions/action-tracker-new.component';
+import { PageInnovationActionTrackerCancelComponent } from '@modules/shared/pages/innovation/actions/action-tracker-cancel.component';
+import { PageInnovationActionTrackerEditComponent } from '@modules/shared/pages/innovation/actions/action-tracker-edit.component';
 // // Innovations
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
+// // Actions.
+import { PageActionsAdvancedSearchComponent } from '@modules/shared/pages/actions/actions-advanced-search.component';
 
 // Resolvers.
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
-import { InnovationActionTrackerCancelComponent } from './pages/innovation/action-tracker/action-tracker-cancel.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -220,7 +221,7 @@ const routes: Routes = [
                   },
 
                   {
-                    path: 'new', pathMatch: 'full', component: InnovationActionTrackerNewComponent,
+                    path: 'new', pathMatch: 'full', component: PageInnovationActionTrackerNewComponent,
                     data: { breadcrumb: 'New' }
                   },
 
@@ -239,11 +240,11 @@ const routes: Routes = [
                         data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
-                        path: 'edit', pathMatch: 'full', component: InnovationActionTrackerEditComponent,
+                        path: 'edit', pathMatch: 'full', component: PageInnovationActionTrackerEditComponent,
                         data: { breadcrumb: 'Edit' }
                       },
                       {
-                        path: 'cancel', pathMatch: 'full', component: InnovationActionTrackerCancelComponent,
+                        path: 'cancel', pathMatch: 'full', component: PageInnovationActionTrackerCancelComponent,
                         data: { breadcrumb: 'Cancel' }
                       }
                     ]
@@ -351,7 +352,7 @@ const routes: Routes = [
             data: { breadcrumb: null }
           },
           { path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent },
-          { path: 'advanced-filter', pathMatch: 'full', component: ActionsAdvancedSearchComponent }
+          { path: 'advanced-filter', pathMatch: 'full', component: PageActionsAdvancedSearchComponent }
         ]
       },
 

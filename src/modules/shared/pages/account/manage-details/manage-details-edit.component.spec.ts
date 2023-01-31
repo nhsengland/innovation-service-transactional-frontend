@@ -139,7 +139,10 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
       isCompanyOrOrganisation: 'YES',
       organisationName: 'organisation_1',
       organisationSize: '',
-      organisationAdditionalInformation: { id: 'org_id' }
+      organisationAdditionalInformation: { id: 'org_id' },
+      contactByPhoneTimeframe: null,
+      contactDetails: null,
+      contactPreferences: []
     };
 
     fixture = TestBed.createComponent(PageAccountManageDetailsEditComponent);

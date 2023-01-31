@@ -43,10 +43,15 @@ import { PageInnovationActionTrackerListComponent } from './pages/innovation/act
 import { PageInnovationDataSharingAndSupportComponent } from './pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 import { PageInnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationActionSectionInfoComponent } from './pages/innovation/actions/action-section-info.component';
+import { PageInnovationActionTrackerNewComponent } from './pages/innovation/actions/action-tracker-new.component';
+import { PageInnovationActionTrackerCancelComponent } from './pages/innovation/actions/action-tracker-cancel.component';
+import { PageInnovationActionTrackerEditComponent } from './pages/innovation/actions/action-tracker-edit.component';
 // // Notifications.
 import { PageNotificationsListComponent } from './pages/notifications/notifications-list.component';
 // // Terms of use.
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
+// // Actions.
+import { PageActionsAdvancedSearchComponent } from './pages/actions/actions-advanced-search.component';
 
 // Wizards.
 import { WizardSummaryWithConfirmStepComponent } from './wizards/steps/summary-with-confirm-step.component';
@@ -117,12 +122,17 @@ import { StatisticsService } from './services/statistics.service';
     PageInnovationsAdvancedReviewComponent,
     PageInnovationActionTrackerListComponent,
     PageInnovationActionSectionInfoComponent,
+    PageInnovationActionTrackerNewComponent,
+    PageInnovationActionTrackerCancelComponent,
+    PageInnovationActionTrackerEditComponent,
     PageInnovationDataSharingAndSupportComponent,
     PageInnovationAssessmentOverviewComponent,
     // // Notifications.
     PageNotificationsListComponent,
     // // Terms of use.
     PageTermsOfUseAcceptanceComponent,
+    // // Actions.
+    PageActionsAdvancedSearchComponent,
 
     // Wizard.
     WizardSummaryWithConfirmStepComponent,

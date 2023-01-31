@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 
 
 @Component({
@@ -23,9 +24,7 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
     this.setPageTitle('Your details');
 
     this.module = this.activatedRoute.snapshot.data.module;
-
   }
-
 
   ngOnInit(): void {
 
@@ -36,12 +35,14 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
       this.summaryList = [
         { label: 'Name', value: user.displayName, editStepNumber: 1 },
         { label: 'Email address', value: user.email },
-        { label: 'Phone number', value: user.phone, editStepNumber: 2 }
+        { label: 'Contact preference', value: this.prepareContactPreferenceValue(user.contactByEmail, user.contactByPhone, user.contactByPhoneTimeframe), editStepNumber: 2 },
+        { label: 'Phone number', value: user.phone, editStepNumber: 3 },
+        { label: 'Contact details', value: user.contactDetails, editStepNumber: 4 }
       ];
 
       if (!user.organisations[0].isShadow) {
-        this.summaryList.push({ label: 'Company', value: user.organisations[0].name, editStepNumber: 3 });
-        this.summaryList.push({ label: 'Company size', value: user.organisations[0].size, editStepNumber: 4 });
+        this.summaryList.push({ label: 'Company', value: user.organisations[0].name, editStepNumber: 5 });
+        this.summaryList.push({ label: 'Company size', value: user.organisations[0].size, editStepNumber: 6 });
       }
 
     } else if (this.stores.authentication.isAccessorType()) {
@@ -71,6 +72,19 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
 
     this.setPageStatus('READY');
 
+  }
+
+  private prepareContactPreferenceValue(contactByEmail: boolean, contactByPhone: boolean, contactByPhoneTimeframe: PhoneUserPreferenceEnum | null): string {
+    let value = '';
+  if (contactByPhone && contactByPhoneTimeframe) {
+    value = `By phone, ${this.translate('shared.catalog.user.contact_user_preferences.'+ contactByPhoneTimeframe + '.confirmation')}. `;
+  }
+  
+  if (contactByEmail) {
+    value += 'By email.';
+  }
+
+  return value;
   }
 
 }

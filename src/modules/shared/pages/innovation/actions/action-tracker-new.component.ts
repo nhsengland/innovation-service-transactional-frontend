@@ -4,18 +4,16 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
-import { AccessorService } from '../../../services/accessor.service';
-
-
 @Component({
-  selector: 'app-accessor-pages-innovation-action-tracker-new',
+  selector: 'shared-pages-innovation-action-tracker-new',
   templateUrl: './action-tracker-new.component.html'
 })
-export class InnovationActionTrackerNewComponent extends CoreComponent {
+export class PageInnovationActionTrackerNewComponent extends CoreComponent {
 
   innovationId: string;
 
@@ -29,7 +27,7 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService
+    private innovationsService: InnovationsService
   ) {
 
     super();
@@ -68,10 +66,10 @@ export class InnovationActionTrackerNewComponent extends CoreComponent {
       description: this.form.value.description!
     };
 
-    this.accessorService.createAction(this.innovationId, body).subscribe({
+    this.innovationsService.createAction(this.innovationId, body).subscribe({
       next: response => {
         this.setRedirectAlertSuccess('Action requested', { message: 'The innovator has been notified of your action request.' });
-        this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`);
+        this.redirectTo(`/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${response.id}`);
       },
       error: () => this.setAlertError('An error occurred when creating an action. Please try again or contact us for further help')
     });

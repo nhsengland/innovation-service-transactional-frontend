@@ -43,7 +43,9 @@ export type InnovationsActionsListFilterType = {
   innovationName?: string,
   sections?: InnovationSectionEnum[],
   status?: InnovationActionStatusEnum[],
+  innovationStatus?: InnovationStatusEnum[],
   createdByMe?: boolean,
+  allActions?: boolean,
   fields?: ('notifications')[]
 };
 
@@ -366,7 +368,9 @@ export class InnovationsService extends CoreService {
       ...(filters.innovationName ? { innovationName: filters.innovationName } : {}),
       ...(filters.sections ? { sections: filters.sections } : {}),
       ...(filters.status ? { status: filters.status } : {}),
+      ...(filters.innovationStatus ? { innovationStatus: filters.innovationStatus } : {}),
       ...(filters.createdByMe ? { createdByMe: filters.createdByMe } : {}),
+      ...(filters.allActions ? { allActions: filters.allActions } : {}),
       ...(filters.fields ? { fields: filters.fields } : {})
     };
 
@@ -374,7 +378,7 @@ export class InnovationsService extends CoreService {
     return this.http.get<InnovationActionsListInDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         count: response.count,
-        data: response.data.map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'`, } }))
+        data: response.data.map(item => ({ ...item, ...{ name: `Update '${this.stores.innovation.getSectionTitle(item.section)}'`, } }))
       }))
     );
 
@@ -392,9 +396,21 @@ export class InnovationsService extends CoreService {
         description: response.description,
         section: response.section,
         createdAt: response.createdAt,
+        updatedAt: response.updatedAt,
+        updatedBy: response.updatedBy,
         createdBy: response.createdBy,
         declineReason: response.declineReason
       }))
+    );
+
+  }
+
+  createAction(innovationId: string, body: { section: InnovationSectionEnum, description: string }): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/actions').setPathParams({ innovationId });
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
     );
 
   }
@@ -546,7 +562,8 @@ export class InnovationsService extends CoreService {
             params: {
               ...i.params,
               innovationName: response.innovation.name,
-              sectionTitle: getSectionTitle(i.params.sectionId || null)
+              sectionTitle: getSectionTitle(i.params.sectionId || null),
+              actionUserRole: i.params.actionUserRole ? `(${this.stores.authentication.getRoleDescription(i.params.actionUserRole)})` : ''
             },
             link
           };

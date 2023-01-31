@@ -4,27 +4,26 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
-import { InnovationActionTrackerNewComponent } from './action-tracker-new.component';
+import { PageInnovationActionTrackerNewComponent } from './action-tracker-new.component';
 
-import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
+import { SharedModule } from '@modules/shared/shared.module';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 
-describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent', () => {
+describe('Shared/Pages/Innovation/PageInnovationActionTrackerNewComponent', () => {
 
   let activatedRoute: ActivatedRoute;
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
-  let accessorService: AccessorService;
+  let innovationsService: InnovationsService;
 
-  let component: InnovationActionTrackerNewComponent;
-  let fixture: ComponentFixture<InnovationActionTrackerNewComponent>;
+  let component: PageInnovationActionTrackerNewComponent;
+  let fixture: ComponentFixture<PageInnovationActionTrackerNewComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -33,7 +32,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent
         RouterTestingModule,
         CoreModule,
         StoresModule,
-        AccessorModule
+        SharedModule
       ]
     });
 
@@ -43,13 +42,13 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent
     router = TestBed.inject(Router);
     routerSpy = jest.spyOn(router, 'navigate');
 
-    accessorService = TestBed.inject(AccessorService);
+    innovationsService = TestBed.inject(InnovationsService);
 
   });
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
+    fixture = TestBed.createComponent(PageInnovationActionTrackerNewComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
@@ -59,7 +58,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent
   //   activatedRoute.snapshot.params = { innovationId: 'Inno01' };
   //   activatedRoute.snapshot.queryParams = { section: 'INNOVATION_DESCRIPTION' };
 
-  //   fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
+  //   fixture = TestBed.createComponent(PageInnovationActionTrackerNewComponent);
   //   component = fixture.componentInstance;
 
   //   expect(component.form.get('section')?.value).toBe('INNOVATION_DESCRIPTION');
@@ -69,7 +68,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent
 
   // it('should run onSubmit() with invalid form', () => {
 
-  //   fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
+  //   fixture = TestBed.createComponent(PageInnovationActionTrackerNewComponent);
   //   component = fixture.componentInstance;
 
   //   component.onSubmit();
@@ -84,7 +83,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent
   //   const responseMock = { id: 'actionId' };
   //   accessorService.createAction = () => of(responseMock);
 
-  //   fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
+  //   fixture = TestBed.createComponent(PageInnovationActionTrackerNewComponent);
   //   component = fixture.componentInstance;
   //   component.form.get('section')?.setValue('A required value');
   //   component.form.get('description')?.setValue('A required value');
@@ -107,7 +106,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationActionTrackerNewComponent
   //     setFocus: true
   //   };
 
-  //   fixture = TestBed.createComponent(InnovationActionTrackerNewComponent);
+  //   fixture = TestBed.createComponent(PageInnovationActionTrackerNewComponent);
   //   component = fixture.componentInstance;
   //   component.form.get('section')?.setValue('A required value');
   //   component.form.get('description')?.setValue('A required value');
