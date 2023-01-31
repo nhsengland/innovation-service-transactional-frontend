@@ -7,7 +7,7 @@ export class AuthenticationModel {
 
   isSignIn: boolean;
   userContext: {
-    type: '' | UserTypeEnum,
+    type: '' | UserRoleEnum,
     organisation?: {
       id: string,
       name: string,

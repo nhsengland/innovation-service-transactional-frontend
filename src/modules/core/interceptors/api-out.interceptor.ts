@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Request } from 'express';
 import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { AuthenticationStore } from '@modules/stores';
+import { UserRoleEnum } from '@app/base/enums';
 
 @Injectable()
 export class ApiOutInterceptor implements HttpInterceptor {
@@ -26,7 +27,7 @@ export class ApiOutInterceptor implements HttpInterceptor {
           Cookie: this.serverRequest.headers.cookie || '',  
           'x-is-domain-context': JSON.stringify({
             user: {
-              type: userContext.type,
+              type: UserRoleEnum.INNOVATOR,
               organisationId: userContext.organisation?.id,
               organisationUnitId: userContext.organisation?.organisationUnit.id
             }
@@ -38,7 +39,7 @@ export class ApiOutInterceptor implements HttpInterceptor {
         setHeaders: {
           'x-is-domain-context': JSON.stringify({
             user: {
-              type: userContext.type,
+              type: UserRoleEnum.INNOVATOR,
               organisationId: userContext.organisation?.id,
               organisationUnitId: userContext.organisation?.organisationUnit.id
             }

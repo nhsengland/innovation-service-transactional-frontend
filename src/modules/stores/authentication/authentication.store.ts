@@ -29,10 +29,10 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           this.state.user = user;
           this.state.isSignIn = true;
 
-          if (user.type === UserTypeEnum.ACCESSOR) {
+          if (user.roles.length === 1 && user.roles[0] === UserRoleEnum.ACCESSOR) {
             if (user.organisations.length === 1 && user.organisations[0].organisationUnits.length === 1) {              
               this.state.userContext = {
-                type: user.type,
+                type: user.roles[0],
                 organisation: {
                   id: user.organisations[0].id,
                   name: user.organisations[0].name,
@@ -49,7 +49,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
             }
           } else {
             this.state.userContext = {
-              type: user.type
+              type: user.roles[0]
             }
           }
           return of(true);
@@ -124,7 +124,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
       if(!!unit) {
         this.updateSelectedUserContext({
-          type: user.type,
+          type: user.roles[0],
           organisation: {
             id: org.id,
             name: org.name,

@@ -74,7 +74,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
       const currentOrgUnitId = this.authenticationStore.getUserContextInfo().organisation?.organisationUnit.id;
 
       this.authenticationStore.updateSelectedUserContext({
-        type: userInfo.type,
+        type: userInfo.roles[0],
         organisation: {
           id: organisation.id,
           name: organisation.name,
