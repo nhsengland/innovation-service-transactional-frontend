@@ -10,9 +10,9 @@ import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'shared-pages-innovation-participants',
-  templateUrl: './innovation-participants.component.html'
+  templateUrl: './everyone-working-on-innovation.component.html'
 })
-export class PageInnovationParticipantsComponent extends CoreComponent implements OnInit {
+export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent implements OnInit {
 
   innovation: ContextInnovationType;
 

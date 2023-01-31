@@ -73,7 +73,7 @@ import { InnovationSectionDataResolver } from '@modules/shared/resolvers/innovat
 import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers/innovation-section-evidence-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationActionCompleteConfirmationComponent } from './pages/innovation/action-complete-confirmation/action-complete-confirmation.component';
-import { PageInnovationParticipantsComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/innovation-participants.component';
+import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -398,7 +398,7 @@ const routes: Routes = [
               },
 
               {
-                path: 'participants', pathMatch: 'full', component: PageInnovationParticipantsComponent
+                path: 'everyone', pathMatch: 'full', component: PageEveryoneWorkingOnInnovationComponent
               }
 
             ]

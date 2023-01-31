@@ -10,7 +10,7 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, InnovationStore } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
 
-import { PageInnovationParticipantsComponent } from './innovation-participants.component';
+import { PageEveryoneWorkingOnInnovationComponent } from './everyone-working-on-innovation.component';
 
 
 describe('Shared/Pages/Innovation/Messages/PageInnovationThreadMessagesListComponent', () => {
@@ -19,8 +19,8 @@ describe('Shared/Pages/Innovation/Messages/PageInnovationThreadMessagesListCompo
 
   let innovationStore: InnovationStore;
 
-  let component: PageInnovationParticipantsComponent;
-  let fixture: ComponentFixture<PageInnovationParticipantsComponent>;
+  let component: PageEveryoneWorkingOnInnovationComponent;
+  let fixture: ComponentFixture<PageEveryoneWorkingOnInnovationComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -45,7 +45,7 @@ describe('Shared/Pages/Innovation/Messages/PageInnovationThreadMessagesListCompo
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(PageInnovationParticipantsComponent);
+    fixture = TestBed.createComponent(PageEveryoneWorkingOnInnovationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();

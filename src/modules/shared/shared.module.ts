@@ -30,7 +30,7 @@ import { PageInnovationThreadMessageEditComponent } from './pages/innovation/mes
 import { PageInnovationThreadMessagesListComponent } from './pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationThreadNewComponent } from './pages/innovation/messages/thread-new.component';
 import { PageInnovationThreadsListComponent } from './pages/innovation/messages/threads-list.component';
-import { PageInnovationParticipantsComponent } from './pages/innovation/data-sharing-and-support/innovation-participants.component';
+import { PageEveryoneWorkingOnInnovationComponent } from './pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 import { PageInnovationRecordComponent } from './pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionInfoComponent } from './pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from './pages/innovation/sections/section-evidence-info.component';
@@ -112,7 +112,7 @@ import { UsersService } from './services/users.service';
     PageInnovationThreadMessagesListComponent,
     PageInnovationThreadNewComponent,
     PageInnovationThreadsListComponent,
-    PageInnovationParticipantsComponent,
+    PageEveryoneWorkingOnInnovationComponent,
     PageInnovationRecordComponent,
     PageInnovationSectionInfoComponent,
     PageInnovationSectionEvidenceInfoComponent,
