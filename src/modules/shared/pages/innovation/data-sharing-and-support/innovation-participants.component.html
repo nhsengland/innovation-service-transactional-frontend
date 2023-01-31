@@ -8,19 +8,65 @@
 
       <h2 class="nhsuk-heading-l">Innovators</h2>
 
+      <table class="nhsuk-table">
+        <thead role="rowgroup" class="nhsuk-table__head">
+          <tr role="row">
+            <th role="columnheader" class="" scope="col">
+              User
+            </th>
+            <th role="columnheader" class="" scope="col">
+              Role
+            </th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <ng-container *ngFor="let innovator of innovationParticipants.innovators">
+            <tr role="row" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">{{innovator.name}}</td>
+              <td class="nhsuk-table__cell ">{{innovator.role}}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+
+     
+
       <h2 class="nhsuk-heading-l">Supporting organisations</h2>
+      <p class="nhsuk-body-m">
+        See the accessors from the organisations supporting this innovation. Your messages and innovation record can be seen by everyone who has access to this innovation.
+        <a routerLink="../support" target="_blank" rel="noopener noreferrer"> 
+          View a list of this innovation's data sharing preferences (opens in new window). 
+        </a>
       <p>
-        See the accessors from the organisations supporting this innovation. Your messages and innovation record can be seen by everyone who has access to this innovation. 
-      <p>
-      <a routerLink="../support"> 
-        View a list of this innovation's data sharing preferences (opens in new window). 
-      </a>
-      <br> 
-      <a routerLink="/about-the-service/who-we-are"> 
+      
+      <a routerLink="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> 
         What does each organisation do? (opens in new window)
       </a>
-         
-      
+
+      <table class="nhsuk-table">
+        <thead role="rowgroup" class="nhsuk-table__head">
+          <tr role="row">
+            <th role="columnheader" class="" scope="col">
+              User
+            </th>
+            <th role="columnheader" class="" scope="col">
+              Organisation/unit
+            </th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <ng-container *ngFor="let accessor of innovationParticipants.accessors">
+            <tr role="row" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">{{accessor.name}}</td>
+              <td class="nhsuk-table__cell" *ngIf="accessor.organisation.name === accessor.organisation.unit.name; else notShadow">{{accessor.organisation.name}} ({{accessor.organisation.acronym}})></td>
+              <ng-template #notShadow>
+                <td class="nhsuk-table__cell">{{accessor.organisation.name}} / {{accessor.organisation.unit.acronym}}</td>
+              </ng-template>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+
       <h2 class="nhsuk-heading-l">Needs assessors</h2>
 
       <p>
