@@ -76,9 +76,9 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   isFirstTimeSignInDone(): boolean { return !!this.state.user?.firstTimeSignInAt ?? false; }
   hasInnovationTransfers(): boolean { return this.state.user?.hasInnovationTransfers || false; }
 
-  isInnovatorType(): boolean { return this.state.user?.type === 'INNOVATOR'; }
-  isAccessorType(): boolean { return this.state.user?.type === 'ACCESSOR'; }
-  isAssessmentType(): boolean { return this.state.user?.type === 'ASSESSMENT'; }
+  isInnovatorType(): boolean { return this.state.userContext?.type === 'INNOVATOR'; }
+  isAccessorType(): boolean { return this.state.userContext?.type === 'ACCESSOR'; }
+  isAssessmentType(): boolean { return this.state.userContext?.type === 'ASSESSMENT'; }
 
   isAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'ACCESSOR'; }
   isQualifyingAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'QUALIFYING_ACCESSOR'; }
