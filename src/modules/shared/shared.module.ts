@@ -75,6 +75,7 @@ import { NotificationsService } from './services/notifications.service';
 import { OrganisationsService } from './services/organisations.service';
 import { TermsOfUseService } from './services/terms-of-use.service';
 import { StatisticsService } from './services/statistics.service';
+import { UsersService } from './services/users.service';
 
 
 @NgModule({
@@ -156,7 +157,8 @@ import { StatisticsService } from './services/statistics.service';
     NotificationsService,
     OrganisationsService,
     TermsOfUseService,
-    StatisticsService
+    StatisticsService,
+    UsersService
   ],
   exports: [
     CommonModule,

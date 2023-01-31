@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
+import { UsersService } from '@modules/shared/services/users.service';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-import { throws } from 'assert';
 import { forkJoin } from 'rxjs';
 
 
@@ -32,15 +32,16 @@ export class PageInnovationParticipantsComponent extends CoreComponent implement
         }
       }
     }[];
-    needsAssessors: {
+    assessmentUsers: {
       name: string
     }[]
-  } = { innovators: [], accessors: [], needsAssessors: [] };
+  } = { innovators: [], accessors: [], assessmentUsers: [] };
 
   innovationSupportIds: string[] = [];
 
   constructor(
-    private innovationsService: InnovationsService
+    private innovationsService: InnovationsService,
+    private usersService: UsersService
   ) {
 
     super();
@@ -57,13 +58,13 @@ export class PageInnovationParticipantsComponent extends CoreComponent implement
 
     forkJoin([
       this.innovationsService.getInnovationInfo(this.innovation.id),
-      this.innovationsService.getInnovationSupportsList(this.innovation.id, true)
-    ]).subscribe(([innovationInfo, innovationSupports]) => {
+      this.innovationsService.getInnovationSupportsList(this.innovation.id, true),
+      this.usersService.getAssessmentUsersList()
+    ]).subscribe(([innovationInfo, innovationSupports, assessmentUsers]) => {
 
       this.innovationParticipants.innovators.push({ name: innovationInfo.owner.name, role: 'Owner'})
       
       for (const support of innovationSupports) {
-        const unitName = support.organisation.unit.name;
         const accessors = support.engagingAccessors.map(a => ({
           name: a.name,
           organisation: {
@@ -76,10 +77,11 @@ export class PageInnovationParticipantsComponent extends CoreComponent implement
         this.innovationParticipants.accessors.push(...accessors)
       }
 
+      this.innovationParticipants.assessmentUsers = assessmentUsers.map(u => ({ name: u.name }))
+
+      this.setPageStatus('READY')
     });
 
-
-    this.setPageStatus('READY')
   }
 
 }

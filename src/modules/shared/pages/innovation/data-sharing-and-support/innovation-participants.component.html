@@ -73,6 +73,23 @@
         Needs assessors will only be actively working on the innovation during the needs assessment process. 
       </p>
 
+      <table class="nhsuk-table">
+        <thead role="rowgroup" class="nhsuk-table__head">
+          <tr role="row">
+            <th role="columnheader" class="" scope="col">
+              User
+            </th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <ng-container *ngFor="let assessor of innovationParticipants.assessmentUsers">
+            <tr role="row" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">{{assessor.name}}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+
     </div>
   </div>
 
