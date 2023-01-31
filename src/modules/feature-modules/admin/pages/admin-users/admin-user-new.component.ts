@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
-import { FormControl, FormEngineComponent, FormGroup, WizardEngineModel } from '@app/base/forms';
+import { FormEngineComponent, FormGroup, WizardEngineModel } from '@app/base/forms';
 
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
@@ -39,7 +39,7 @@ export class PageAdminUserNewComponent extends CoreComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // Adds async e-mail validator to the second step.
+    // Adds async email validator to the second step.
     this.wizard.steps[0].parameters[0].validations = { ...this.wizard.steps[0].parameters[0].validations, async: [this.serviceUsersService.userEmailValidator()] };
 
     this.setPageStatus('READY');
@@ -79,7 +79,7 @@ export class PageAdminUserNewComponent extends CoreComponent implements OnInit {
       next: response => {
         this.redirectTo(`admin/administration-users/${response.id}`, { alert: 'adminCreationSuccess' });
       },
-      error: (error) => {
+      error: (error: { id: string }) => {
 
         this.submitBtnClicked = false;
 
@@ -89,7 +89,7 @@ export class PageAdminUserNewComponent extends CoreComponent implements OnInit {
 
         } else {
 
-          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your e-mail' });
+          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your email' });
 
         }
 

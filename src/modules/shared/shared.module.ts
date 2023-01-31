@@ -15,6 +15,8 @@ import { PageAccountEmailNotificationsEditComponent } from './pages/account/emai
 import { PageAccountEmailNotificationsListComponent } from './pages/account/email-notifications/email-notifications-list.component';
 import { PageAccountManageDetailsInfoComponent } from './pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from './pages/account/manage-details/manage-details-edit.component';
+import { PageSwitchContextComponent } from './pages/switch-context/switch-context.component';
+
 // // Error.
 import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/error/not-found.component';
@@ -37,13 +39,18 @@ import { PageExportRecordInfoComponent } from './pages/innovation/export/export-
 import { PageExportRecordListComponent } from './pages/innovation/export/export-record-list.component';
 import { PageInnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
 import { PageInnovationActionTrackerListComponent } from './pages/innovation/actions/action-tracker-list.component';
-import { PageInnovationActionTrackerInfoComponent } from './pages/innovation/actions/action-tracker-info.component';
 import { PageInnovationDataSharingAndSupportComponent } from './pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
 import { PageInnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
+import { PageInnovationActionSectionInfoComponent } from './pages/innovation/actions/action-section-info.component';
+import { PageInnovationActionTrackerNewComponent } from './pages/innovation/actions/action-tracker-new.component';
+import { PageInnovationActionTrackerCancelComponent } from './pages/innovation/actions/action-tracker-cancel.component';
+import { PageInnovationActionTrackerEditComponent } from './pages/innovation/actions/action-tracker-edit.component';
 // // Notifications.
 import { PageNotificationsListComponent } from './pages/notifications/notifications-list.component';
 // // Terms of use.
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
+// // Actions.
+import { PageActionsAdvancedSearchComponent } from './pages/actions/actions-advanced-search.component';
 
 // Wizards.
 import { WizardSummaryWithConfirmStepComponent } from './wizards/steps/summary-with-confirm-step.component';
@@ -88,6 +95,8 @@ import { StatisticsService } from './services/statistics.service';
     PageAccountEmailNotificationsListComponent,
     PageAccountManageDetailsInfoComponent,
     PageAccountManageDetailsEditComponent,
+    PageSwitchContextComponent,
+
     // // Error.
     PageErrorComponent,
     PageNotFoundComponent,
@@ -110,13 +119,18 @@ import { StatisticsService } from './services/statistics.service';
     PageExportRecordInfoComponent,
     PageInnovationsAdvancedReviewComponent,
     PageInnovationActionTrackerListComponent,
-    PageInnovationActionTrackerInfoComponent,
+    PageInnovationActionSectionInfoComponent,
+    PageInnovationActionTrackerNewComponent,
+    PageInnovationActionTrackerCancelComponent,
+    PageInnovationActionTrackerEditComponent,
     PageInnovationDataSharingAndSupportComponent,
     PageInnovationAssessmentOverviewComponent,
     // // Notifications.
     PageNotificationsListComponent,
     // // Terms of use.
     PageTermsOfUseAcceptanceComponent,
+    // // Actions.
+    PageActionsAdvancedSearchComponent,
 
     // Wizard.
     WizardSummaryWithConfirmStepComponent,

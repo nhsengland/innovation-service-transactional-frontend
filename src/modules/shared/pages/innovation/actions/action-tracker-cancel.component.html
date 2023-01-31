@@ -1,0 +1,22 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <div class="nhsuk-warning-callout">
+        <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+          <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
+        </div>
+        <p> This action will be closed and the innovator will no longer be able to respond to it. </p>
+      </div>
+
+      <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Confirm</button>
+
+      <div>
+        <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ actionId }}">Cancel</a>
+      </div>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>

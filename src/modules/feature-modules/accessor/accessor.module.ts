@@ -14,13 +14,10 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // // Account.
 import { PageAccessorAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
 // // Actions.
-import { ActionsAdvancedSearchComponent } from './pages/actions/actions-advanced-search.component';
 import { ActionsListComponent } from './pages/actions/actions-list.component';
 // // Dashboard.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
-import { InnovationActionTrackerEditComponent } from './pages/innovation/action-tracker/action-tracker-edit.component';
-import { InnovationActionTrackerNewComponent } from './pages/innovation/action-tracker/action-tracker-new.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './pages/innovation/support/organisations-support-status-suggest.component';
 import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
@@ -36,7 +33,6 @@ import { AccessorService } from './services/accessor.service';
 
 // Resolvers.
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
-
 
 @NgModule({
   imports: [
@@ -55,13 +51,10 @@ import { InnovationActionDataResolver } from './resolvers/innovation-action-data
     // // Account.
     PageAccessorAccountManageAccountInfoComponent,
     // // Actions.
-    ActionsAdvancedSearchComponent,
     ActionsListComponent,
     // // Dashboard.
     DashboardComponent,
     // // Innovation.
-    InnovationActionTrackerEditComponent,
-    InnovationActionTrackerNewComponent,
     InnovationOverviewComponent,
     InnovationSupportOrganisationsSupportStatusSuggestComponent,
     InnovationSupportInfoComponent,
@@ -76,7 +69,7 @@ import { InnovationActionDataResolver } from './resolvers/innovation-action-data
     AccessorService,
 
     // Resolvers.
-    InnovationActionDataResolver
+    InnovationActionDataResolver,
   ]
 })
 export class AccessorModule { }

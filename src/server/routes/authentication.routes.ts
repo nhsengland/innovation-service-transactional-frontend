@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
+import axios from 'axios';
 import * as dotenv from 'dotenv';
 import * as express from 'express';
 import { Router } from 'express';
@@ -181,11 +181,11 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
 
   const body = { surveyId, token };
 
-  axios.post(`${ENVIRONMENT.API_URL}/api/users/v1/me`, body)
+  axios.post(`${ENVIRONMENT.API_USERS_URL}/v1/me`, body)
     // axios.post(`${ENVIRONMENT.LOCAL_API_USERS_BASE_URL}/api/v1/me`, body)
     .then(() => { res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`); })
     .catch((error: any) => {
-      console.error(`Error when attempting to save the user: ${ENVIRONMENT.API_URL}/api/users/v1/me. Error: ${error}`);
+      console.error(`Error when attempting to save the user: ${ENVIRONMENT.API_USERS_URL}/v1/me. Error: ${error}`);
       res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
     });
 
@@ -195,7 +195,10 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
 authenticationRouter.use(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res, next) => {
   const client = getAppInsightsClient(req);
 
-  passport.authenticate('signInStrategy', (err, user, info) => {
+  passport.authenticate('signInStrategy', {
+    ...req.query.back && {customState: req.query.back}
+  } as any, (err, user, info) => {
+
     if (err) {
       client.trackTrace({
         message: '/signin - autenticate error',
@@ -235,7 +238,8 @@ authenticationRouter.use(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res, next) => 
         return next(err);
       }
 
-      return res.redirect(`${ENVIRONMENT.BASE_PATH}/dashboard`);
+      const redirectUrl = typeof req.body?.state === 'string' && req.body.state.startsWith('/') ? `${ENVIRONMENT.BASE_PATH}${req.body.state}` : `${ENVIRONMENT.BASE_PATH}/dashboard`;
+      return res.redirect(redirectUrl);
     });
   })(req, res, next);
 });

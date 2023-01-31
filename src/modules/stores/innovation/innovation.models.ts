@@ -34,6 +34,7 @@ export type InnovationSectionInfoDTO = {
   updatedAt: string;
   data: MappedObjectType;
   submittedAt: string;
+  actionsIds?: string[];
 }
 
 export type getInnovationInfoEndpointDTO = {
@@ -158,7 +159,7 @@ export const INNOVATION_STATUS = {
   // NEEDS_ASSESSMENT_REVIEW: { label: 'In review', cssClass: 'nhsuk-tag--wellow' },
   ABANDONED: { label: 'Abandoned', cssClass: 'nhsuk-tag--grey' },
   COMPLETE: { label: 'Complete', cssClass: 'nhsuk-tag--green' },
-  ARCHIVED: { label: 'Archived', cssClass: 'nhsuk-tag--dark-grey' },
+  WITHDRAWN: { label: 'Withdrawn', cssClass: 'nhsuk-tag--red' },
   PAUSED: { label: 'Paused', cssClass: 'nhsuk-tag--dark-grey' }
 };
 
@@ -237,8 +238,8 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
     cssClass: 'nhsuk-tag--blue',
     description: ''
   },
-  IN_REVIEW: {
-    label: 'In review',
+  SUBMITTED: {
+    label: 'Submitted',
     cssClass: 'nhsuk-tag--yellow',
     description: 'The innovation owner has submitted information requested by an accessor and are waiting for them to review it.'
   },
@@ -249,7 +250,7 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
   },
   DECLINED: {
     label: 'Declined',
-    cssClass: 'nhsuk-tag--grey',
+    cssClass: 'nhsuk-tag--red',
     description: 'The innovation owner has declined the action requested.'
   },
   COMPLETED: {
@@ -259,7 +260,7 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
   },
   CANCELLED: {
     label: 'Cancelled',
-    cssClass: 'nhsuk-tag--red',
+    cssClass: 'nhsuk-tag--dark-grey',
     description: 'An accessor has cancelled the action.'
   }
 };
@@ -363,7 +364,7 @@ export const ACTIVITY_LOG_ITEMS: {
     details: 'COMMENT',
     link: 'ACTION'
   },
-  ACTION_STATUS_IN_REVIEW_UPDATE: {
+  ACTION_STATUS_SUBMITTED_UPDATE: {
     type: ActivityLogTypesEnum.ACTIONS,
     details: null,
     link: null

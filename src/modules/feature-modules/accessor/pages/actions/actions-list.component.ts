@@ -80,7 +80,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
                 InnovationActionStatusEnum.REQUESTED,
                 // InnovationActionStatusEnum.STARTED,
                 // InnovationActionStatusEnum.CONTINUE,
-                InnovationActionStatusEnum.IN_REVIEW],
+                InnovationActionStatusEnum.SUBMITTED],
               createdByMe: true,
               fields: ['notifications']
             });

@@ -4,11 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { FormControl, FormGroup } from '@app/base/forms';
+import { FormGroup } from '@app/base/forms';
 import { RoutingHelper } from '@app/base/helpers';
 
-import { changeUserRoleDTO, getOrganisationRoleRulesOutDTO, ServiceUsersService } from '../../services/service-users.service';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum } from '@app/base/enums';
+import { changeUserRoleDTO, getOrganisationRoleRulesOutDTO, getUserFullInfoDTO, ServiceUsersService } from '../../services/service-users.service';
 
 
 @Component({
@@ -19,7 +19,9 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
 
   user: { id: string, name: string };
 
-  role: null | InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum;
+  organisation: null | getUserFullInfoDTO['userOrganisations'][0];
+
+  role: null | AccessorOrganisationRoleEnum;
 
   roleName: string | null;
 
@@ -45,6 +47,7 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
     };
     this.roleName = null;
     this.role = null;
+    this.organisation = null;
   }
 
   ngOnInit(): void {
@@ -57,7 +60,9 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
 
         this.rulesList = rules;
 
-        this.role = (userInfo.userOrganisations.map(org => org.role)[0] === AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR) ? AccessorOrganisationRoleEnum.ACCESSOR : AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR;
+        // TODO this needs to be changed when admin supports multiple organisations
+        this.organisation = userInfo.userOrganisations[0]
+        this.role = ( this.organisation.role === AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR) ? AccessorOrganisationRoleEnum.ACCESSOR : AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR;
 
         this.roleName = this.stores.authentication.getRoleDescription(this.role);
 
@@ -77,17 +82,23 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
 
   onSubmit(): void {
 
+    if(this.role === null || this.organisation === null) {
+      return;
+    }
+
     this.form.markAllAsTouched(); // Form is always valid.
 
     this.securityConfirmation.code = this.form.get('code')!.value;
 
     const body: changeUserRoleDTO = {
-      userId: this.user.id,
-      role: this.role,
+      role: {
+        name: this.role,
+        organisationId: this.organisation.id
+      },
       securityConfirmation: this.securityConfirmation
     };
 
-    this.serviceUsersService.changeUserRole(body).subscribe(
+    this.serviceUsersService.changeUserRole(this.user.id, body).subscribe(
       () => {
 
         this.redirectTo(`admin/service-users/${this.user.id}`, { alert: 'roleChangeSuccess' });
@@ -102,7 +113,7 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
 
         } else {
 
-          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your e-mail' });
+          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your email' });
 
         }
 

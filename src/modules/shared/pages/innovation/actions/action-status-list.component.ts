@@ -13,7 +13,7 @@ export class PageActionStatusListComponent extends CoreComponent {
 
   visibleStatus: InnovationActionStatusEnum[] = [
     InnovationActionStatusEnum.REQUESTED,
-    InnovationActionStatusEnum.IN_REVIEW,
+    InnovationActionStatusEnum.SUBMITTED,
     InnovationActionStatusEnum.COMPLETED,
     InnovationActionStatusEnum.DECLINED,
     InnovationActionStatusEnum.CANCELLED,

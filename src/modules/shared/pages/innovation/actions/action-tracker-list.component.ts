@@ -9,6 +9,7 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -26,6 +27,8 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
   innovationSummary: { label: string; value: string; }[] = [];
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
+
+  isClosedActionsLoading = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -45,7 +48,8 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
         name: { label: 'Action' },
         createdAt: { label: 'Requested date' },
         status: { label: 'Status', align: 'right' }
-      }
+      },
+      pageSize: 100
     })
 
     this.closedActionsList = new TableModel({
@@ -54,40 +58,61 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
         name: { label: 'Action' },
         createdAt: { label: 'Requested date' },
         status: { label: 'Status', align: 'right' }
-      }
+      },
+      pageSize: 5
     });
-
   }
 
 
   ngOnInit(): void {
 
-    const filters = new TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>({ pageSize: 1000 });
-    filters.setFilters({ innovationId: this.innovationId, fields: ['notifications'] });
+    this.openedActionsList.setFilters({
+      innovationId: this.innovationId,
+      fields: ['notifications'],
+      status: [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.SUBMITTED],
+      allActions: true
+    });
 
-    this.innovationsService.getActionsList(filters.getAPIQueryParams()).subscribe(response => {
+    this.closedActionsList.setFilters({
+      innovationId: this.innovationId,
+      fields: ['notifications'],
+      status: [InnovationActionStatusEnum.DECLINED, InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DELETED, InnovationActionStatusEnum.CANCELLED],
+      allActions: true
+    });
 
-      this.openedActionsList.setData(response.data
-        .filter(item => [
-          InnovationActionStatusEnum.REQUESTED,
-          // InnovationActionStatusEnum.STARTED,
-          // InnovationActionStatusEnum.CONTINUE,
-          InnovationActionStatusEnum.IN_REVIEW
-        ].includes(item.status))
-      );
+    this.innovationsService.getActionsList(this.openedActionsList.getAPIQueryParams()).subscribe((openedActions) => {
 
-      this.closedActionsList.setData(response.data
-        .filter(item => [
-          InnovationActionStatusEnum.DECLINED,
-          InnovationActionStatusEnum.COMPLETED,
-          InnovationActionStatusEnum.DELETED
-        ].includes(item.status))
-      );
+      this.openedActionsList.setData(openedActions.data);
 
       this.setPageStatus('READY');
 
     });
 
+  }
+
+  onPageChange(event: { pageNumber: number }): void {
+    this.closedActionsList.setPage(event.pageNumber);
+    this.getClosedActionsList();
+  }
+
+  handleClosedActionsTableClick() {
+    if (this.closedActionsList.getTotalRowsNumber() !== 0) {
+      return;
+    }
+    this.getClosedActionsList();
+  }
+
+  private getClosedActionsList() {
+
+    this.isClosedActionsLoading = true;
+
+    this.innovationsService.getActionsList(this.closedActionsList.getAPIQueryParams()).subscribe(closedActions => {
+
+      this.closedActionsList.setData(closedActions.data, closedActions.count);
+
+      this.isClosedActionsLoading = false;
+
+    });
   }
 
 }

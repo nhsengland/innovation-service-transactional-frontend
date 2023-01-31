@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { debounceTime } from 'rxjs/operators';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
@@ -8,17 +8,17 @@ import { TableModel } from '@app/base/models';
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
-import { InnovationsActionsListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationActionStatusEnum, InnovationSectionEnum } from '@modules/stores/innovation';
+import { InnovationsActionsListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
 
-type FilterKeysType = 'status' | 'sections';
+type FilterKeysType = 'status' | 'sections' | 'innovationStatus';
 
 @Component({
-  selector: 'app-accessor-pages-actions-advanced-search',
+  selector: 'shared-pages-actions-advanced-search',
   templateUrl: './actions-advanced-search.component.html'
 })
-export class ActionsAdvancedSearchComponent extends CoreComponent implements OnInit {
+export class PageActionsAdvancedSearchComponent extends CoreComponent implements OnInit {
 
   actionsList = new TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>({});
 
@@ -27,7 +27,9 @@ export class ActionsAdvancedSearchComponent extends CoreComponent implements OnI
   form = new FormGroup({
     innovationName: new FormControl<string>(''),
     status: new FormArray<FormControl<InnovationActionStatusEnum>>([]),
-    sections: new FormArray<FormControl<InnovationSectionEnum>>([])
+    sections: new FormArray<FormControl<InnovationSectionEnum>>([]),
+    innovationStatus: new FormArray<FormControl<InnovationStatusEnum>>([]),
+    createdByMe: new FormControl(false),
   }, { updateOn: 'change' });
 
   anyFilterSelected = false;
@@ -35,15 +37,18 @@ export class ActionsAdvancedSearchComponent extends CoreComponent implements OnI
     key: FilterKeysType,
     title: string,
     showHideStatus: 'opened' | 'closed',
-    selected: { label: string, value: string }[]
+    selected: { label: string, value: string }[],
+    active: boolean,
   }[] = [
-      { key: 'status', title: 'Status', showHideStatus: 'closed', selected: [] },
-      { key: 'sections', title: 'Innovation record section', showHideStatus: 'closed', selected: [] }
+      { key: 'status', title: 'Status', showHideStatus: 'closed', selected: [], active: false },
+      { key: 'sections', title: 'Innovation record section', showHideStatus: 'closed', selected: [], active: false },
+      { key: 'innovationStatus', title: 'Needs assessment status', showHideStatus: 'closed', selected: [], active: false }
     ];
 
-  datasets: { [key in FilterKeysType]: { label: string, value: InnovationActionStatusEnum | string }[] } = {
+  datasets: { [key in FilterKeysType]: { label: string, value: InnovationActionStatusEnum | InnovationStatusEnum |  string }[] } = {
     status: [],
-    sections: []
+    sections: [],
+    innovationStatus: []
   };
 
   innovationsList: any;
@@ -53,22 +58,38 @@ export class ActionsAdvancedSearchComponent extends CoreComponent implements OnI
   ) {
 
     super();
-    this.setPageTitle('Actions advanced search');
+
+    let title = 'Actions advanced search';
+
+    if(this.stores.authentication.isAssessmentType()) {
+      title = 'Actions';
+    }
+
+    this.setPageTitle(title);
 
     this.actionsList.setVisibleColumns({
-      section: { label: 'Action', orderable: true },
-      innovationName: { label: 'Innovation', orderable: true },
-      createdAt: { label: 'Initiated', orderable: true },
+      section: { label: 'Actions', orderable: true },
+      innovationName: { label: 'Innovations', orderable: true },
+      updatedAt: { label: 'Updated', orderable: true },
       status: { label: 'Status', align: 'right', orderable: true }
-    }).setOrderBy('createdAt', 'descending');
+    }).setOrderBy('updatedAt', 'descending');
 
   }
 
   ngOnInit(): void {
 
+    let filters: FilterKeysType[] = ['status', 'sections'];
+
     this.datasets.status = Object.entries(INNOVATION_SECTION_ACTION_STATUS).
       map(([key, item]) => ({ label: item.label, value: key })).
-      filter(i => [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.IN_REVIEW, InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DECLINED].includes(i.value as InnovationActionStatusEnum));
+      filter(i => [
+        InnovationActionStatusEnum.REQUESTED,
+        InnovationActionStatusEnum.SUBMITTED,
+        InnovationActionStatusEnum.COMPLETED,
+        InnovationActionStatusEnum.DECLINED,
+        InnovationActionStatusEnum.DELETED,
+        InnovationActionStatusEnum.CANCELLED
+      ].includes(i.value as InnovationActionStatusEnum));
 
     this.datasets.sections = INNOVATION_SECTIONS.reduce((sectionGroupAcc: { value: string, label: string }[], sectionGroup, i) => {
       return [
@@ -78,6 +99,17 @@ export class ActionsAdvancedSearchComponent extends CoreComponent implements OnI
         }, [])
       ];
     }, []);
+
+    if(this.stores.authentication.isAssessmentType()) {
+      filters.push('innovationStatus');
+
+      this.datasets.innovationStatus = [
+        { label: 'Needs assessment in progress', value: InnovationStatusEnum.NEEDS_ASSESSMENT },
+        { label: 'Needs assessment completed', value: InnovationStatusEnum.IN_PROGRESS }
+      ]
+    }
+
+    this.filters = this.filters.map(filter => ({ ...filter, active: filters.includes(filter.key) }));
 
     this.subscriptions.push(
       this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange())
@@ -115,7 +147,8 @@ export class ActionsAdvancedSearchComponent extends CoreComponent implements OnI
         ...(this.form.get('innovationName')?.value ? { innovationName: this.form.get('innovationName')?.value || '' } : {}),
         ...(this.form.get('status')?.value ? { status: this.form.get('status')?.value } : {}),
         ...(this.form.get('sections')?.value ? { sections: this.form.get('sections')?.value } : {}),
-        createdByMe: true,
+        ...(this.form.get('innovationStatus')?.value ? { innovationStatus: this.form.get('innovationStatus')?.value } : {}),
+        createdByMe: this.stores.authentication.isAssessmentType() ? this.form.get('createdByMe')?.value ?? true : true,
         fields: ['notifications']
       });
 

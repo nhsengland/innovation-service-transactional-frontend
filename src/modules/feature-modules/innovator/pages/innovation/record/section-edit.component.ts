@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { FormEngineComponent, FileTypes, WizardEngineModel } from '@app/base/forms';
+import { FileTypes, FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
 import { UrlModel } from '@app/base/models';
 
@@ -31,6 +31,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   saveButton = { isActive: true, label: 'Save and continue' };
   submitButton = { isActive: false, label: 'Confirm section answers' };
+  submitRequestedActionsButton = { isActive: false, label: 'Submit updates' };
+
+  hasRequestActions: boolean = false;
 
 
   constructor(
@@ -62,6 +65,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
       next: response => {
+        this.hasRequestActions = response.actionsIds?.length !== 0;
 
         this.wizard.setAnswers(this.wizard.runInboundParsing(response.data)).runRules();
         this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
@@ -186,15 +190,28 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           }
           else {
 
-            this.setPageTitle('Check your answers', { size: 'l' });
+            this.setPageStatus('LOADING');
 
-            const validInformation = this.wizard.validateData();
+            this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe((sectionInfo) => {
 
-            this.submitButton.isActive = validInformation.valid;
-            if (!validInformation.valid) {
-              this.alertErrorsList = validInformation.errors;
-              this.setAlertError(`Please verify what's missing with your answers`, { itemsList: this.alertErrorsList, width: '2.thirds' });
+              const validInformation = this.wizard.validateData();
+
+              if (!validInformation.valid) {
+                this.alertErrorsList = validInformation.errors;
+                this.setAlertError(`Please verify what's missing with your answers`, { itemsList: this.alertErrorsList, width: '2.thirds' });
+              }
+
+              if (this.hasRequestActions && sectionInfo.status === 'DRAFT') {
+                this.submitRequestedActionsButton.isActive = validInformation.valid;
+              } else {
+                this.submitButton.isActive = validInformation.valid;
+              }
+
+              this.setPageTitle('Check your answers', { size: 'l' });
+
+              this.setPageStatus('READY');
             }
+            );
 
           }
 

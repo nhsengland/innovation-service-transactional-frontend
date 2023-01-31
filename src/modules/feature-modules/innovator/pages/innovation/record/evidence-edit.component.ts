@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { FormEngineComponent, FormEngineModel, FileTypes } from '@app/base/forms';
+import { FileTypes, FormEngineComponent, FormEngineModel } from '@app/base/forms';
 import { UrlModel } from '@app/base/models';
 
-import { WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 

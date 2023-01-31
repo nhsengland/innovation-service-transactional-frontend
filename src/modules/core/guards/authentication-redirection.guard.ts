@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { LocalStorageHelper } from '@app/base/helpers';
 
 import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 
@@ -17,6 +19,7 @@ const userTypePaths = {
 export class AuthenticationRedirectionGuard implements CanActivate {
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: object,
     private router: Router,
     private authentication: AuthenticationStore
   ) { }
@@ -25,6 +28,23 @@ export class AuthenticationRedirectionGuard implements CanActivate {
 
     const pathSegment = activatedRouteSnapshot.routeConfig?.path || '';
     const userType = this.authentication.getUserType() || '';
+    const userContext = this.authentication.getUserContextInfo();
+    const currentOrgUnitId = LocalStorageHelper.getObjectItem("orgUnitId");
+
+    if(isPlatformServer(this.platformId)) {
+      this.router.navigate(['']);
+      return false;
+    }
+   
+    if (userContext.type === '' && !currentOrgUnitId) {
+      this.router.navigate(['/switch-user-context']);
+      return false;
+    }
+
+    if (userContext.type === '' && !!currentOrgUnitId) {
+      this.authentication.findAndPopulateUserContextFromLocalstorage(currentOrgUnitId.id);
+      return true;
+    }
 
     if (!state.url.endsWith('terms-of-use') && userType !== 'ADMIN' && !this.authentication.isTermsOfUseAccepted()) {
       const path = userTypePaths[userType] + '/terms-of-use';

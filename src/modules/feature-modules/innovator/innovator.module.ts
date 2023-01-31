@@ -14,7 +14,7 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
 import { PageAccountInfoComponent } from './pages/account/account-info.component';
-import { PageAccountInnovationsArchivalComponent } from './pages/account/innovations-archival.component';
+import { PageAccountInnovationsWithdrawComponent } from './pages/account/innovations-withdraw.component';
 import { PageAccountInnovationsInfoComponent } from './pages/account/innovations-info.component';
 import { PageAccountInnovationsTransferComponent } from './pages/account/innovations-transfer.component';
 import { PageAccountInnovationsStopSharingComponent } from './pages/account/innovations-stop-sharing.component';
@@ -26,8 +26,6 @@ import { FirstTimeSigninInnovationNewComponent } from './pages/first-time-signin
 import { FirstTimeSigninInnovationTransferComponent } from './pages/first-time-signin/innovation-transfer.component';
 // // Innovation.
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
-import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
-import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
 import { PageInnovationHowToProceedComponent } from './pages/innovation/how-to-proceed/how-to-proceed.component';
 import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation/needs-reassessment/needs-reassessment-send.component';
@@ -36,6 +34,7 @@ import { InnovationSectionEvidenceEditComponent } from './pages/innovation/recor
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
 import { InnovationExportRequestRejectComponent } from './pages/innovation/export/export-request-reject.component';
+import { InnovationActionCompleteConfirmationComponent } from './pages/innovation/action-complete-confirmation/action-complete-confirmation.component';
 
 // Components.
 import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
@@ -64,7 +63,7 @@ import { InnovatorService } from './services/innovator.service';
     // // Account.
     PageAccountDeleteComponent,
     PageAccountInfoComponent,
-    PageAccountInnovationsArchivalComponent,
+    PageAccountInnovationsWithdrawComponent,
     PageAccountInnovationsInfoComponent,
     PageAccountInnovationsTransferComponent,
     PageAccountInnovationsStopSharingComponent,
@@ -76,8 +75,6 @@ import { InnovatorService } from './services/innovator.service';
     FirstTimeSigninInnovationTransferComponent,
     // // Innovation.
     InnovationActionTrackerDeclineComponent,
-    InnovationActionTrackerInfoComponent,
-    InnovationActionTrackerComponent,
     InnovationDataSharingChangeComponent,
     PageInnovationHowToProceedComponent,
     PageInnovationNeedsReassessmentSendComponent,
@@ -86,6 +83,7 @@ import { InnovatorService } from './services/innovator.service';
     InnovationSectionEditComponent,
     InnovationNewComponent,
     InnovationExportRequestRejectComponent,
+    InnovationActionCompleteConfirmationComponent,
 
     // Components.
     OrganisationSuggestionsCardComponent

@@ -4,6 +4,8 @@ import { Router } from 'express';
 import * as multer from 'multer';
 import { IProfile } from 'passport-azure-ad';
 import * as path from 'path';
+
+import { UrlModel } from '@app/base/models';
 import { ENVIRONMENT } from '../config/constants.config';
 import { getAccessTokenByOid } from './authentication.routes';
 
@@ -86,7 +88,8 @@ fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload`, upload.single('file'), 
   const accessToken = getAccessTokenByOid(oid);
   const file = req.file;
   const reqBody = req.body;
-  const url = `${ENVIRONMENT.API_URL}/api/innovators/${reqBody.innovatorId}/innovations/${reqBody.innovationId}/upload`;
+
+  const url = new UrlModel(ENVIRONMENT.API_INNOVATIONS_URL).addPath('v1/:innovationId/upload').setPathParams({ innovationId: reqBody.innovationId }).buildUrl();
 
   if (!req.isAuthenticated() || !accessToken) {
     res.status(401).send();

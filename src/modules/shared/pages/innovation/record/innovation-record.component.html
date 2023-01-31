@@ -165,23 +165,25 @@
                 </a>
               </span>
 
-              <ng-container [ngSwitch]="stores.authentication.userUrlBasePath()">
-                <ng-container *ngSwitchCase="'innovator'">
-                  <span *ngIf="section.openActionsCount >= 1" class="float-r">
-                    <theme-tag
-                      type="{{ 'shared.catalog.innovation.action_status.REQUESTED.cssColorClass' | translate }}"
-                      label="{{ section.openActionsCount + ' ' + ('dictionary.action' | pluralTranslate: section.openActionsCount | translate) + ' ' + ('shared.catalog.innovation.action_status.REQUESTED.name' | translate | lowercase) }}">
-                    </theme-tag>
-                  </span>
-                </ng-container>
-                <ng-container *ngSwitchCase="'accessor'">
-                  <span *ngIf="section.openActionsCount >= 1" class="float-r">
-                    <theme-tag
-                      type="{{ 'shared.catalog.innovation.action_status.IN_REVIEW.cssColorClass' | translate }}"
-                      label="{{ section.openActionsCount + ' ' + ('dictionary.action' | pluralTranslate: section.openActionsCount | translate) + ' ' + ('shared.catalog.innovation.action_status.IN_REVIEW.name' | translate | lowercase) }}">
-                    </theme-tag>
-                  </span>
-                </ng-container>
+              <ng-container *ngIf="stores.authentication.isInnovatorType()">
+                <span *ngIf="section.openActionsCount >= 1" class="float-r">
+                  <theme-tag
+                    routerLink="{{ baseUrl }}/{{section.id}}/actions"
+                    class="cursor-pointer"
+                    type="{{ 'shared.catalog.innovation.action_status.REQUESTED.cssColorClass' | translate }}"
+                    label="{{ section.openActionsCount + ' ' + ('dictionary.action' | pluralTranslate: section.openActionsCount | translate) + ' ' + ('shared.catalog.innovation.action_status.REQUESTED.name' | translate | lowercase) }}">
+                  </theme-tag>
+                </span>
+              </ng-container>
+              <ng-container *ngIf="stores.authentication.isAccessorType() || stores.authentication.isAssessmentType()">
+                <span *ngIf="section.openActionsCount >= 1" class="float-r">
+                  <theme-tag
+                    routerLink="{{ baseUrl }}/{{section.id}}/actions"
+                    class="cursor-pointer"
+                    type="{{ 'shared.catalog.innovation.action_status.SUBMITTED.cssColorClass' | translate }}"
+                    label="{{ section.openActionsCount + ' ' + ('shared.catalog.innovation.action_status.SUBMITTED.name' | translate | lowercase) + ' ' + ('dictionary.action' | pluralTranslate: section.openActionsCount | translate) }}">
+                  </theme-tag>
+                </span>
               </ng-container>
 
             </li>

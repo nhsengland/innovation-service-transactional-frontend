@@ -103,8 +103,6 @@ export class CoreComponent implements OnDestroy {
   /* istanbul ignore next */
   get pageTitle(): string { return this.stores.context.state.pageLayoutBS.getValue().title.main ?? ''; } // Deprecated!
 
-
-
   isRunningOnBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
   }
@@ -165,6 +163,9 @@ export class CoreComponent implements OnDestroy {
   }
   setRedirectAlertSuccess(title: string, options?: { message?: string, width?: ContextPageLayoutType['alert']['width'] }): void {
     this.stores.context.setPageAlert({ type: 'SUCCESS', title, message: options?.message, width: options?.width, persistOneRedirect: true });
+  }
+  setRedirectAlertInformation(title: string, options?: { message?: string, width?: ContextPageLayoutType['alert']['width'] }): void {
+    this.stores.context.setPageAlert({ type: 'INFORMATION', title, message: options?.message, width: options?.width, persistOneRedirect: true });
   }
   setRedirectAlertError(message: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
     this.stores.context.setPageAlert({ type: 'ERROR', title: 'There is a problem', message, width: options?.width, persistOneRedirect: true });

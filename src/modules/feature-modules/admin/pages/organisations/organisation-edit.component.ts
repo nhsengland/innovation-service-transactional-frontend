@@ -3,14 +3,14 @@ import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { FormControl, FormGroup } from '@app/base/forms';
+import { FormGroup } from '@app/base/forms';
 import { MappedObjectType } from '@app/base/types';
 
-import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
 import { OrganisationsService, updateOrganisationDTO } from '@modules/feature-modules/admin/services/organisations.service';
+import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
 
-import { EDIT_ORGANISATIONS_QUESTIONS } from './organisation-edit.config';
 import { EDIT_ORGANISATION_UNIT_QUESTIONS } from './organisation-edit-unit.config';
+import { EDIT_ORGANISATIONS_QUESTIONS } from './organisation-edit.config';
 
 
 @Component({
@@ -117,7 +117,7 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
         );
         break;
       case 'Unit':
-        this.organisationsService.updateUnit(body, this.securityConfirmation, this.unitId).subscribe(
+        this.organisationsService.updateUnit(body, this.securityConfirmation, this.unitId, this.organisationId).subscribe(
           response => {
             (response.id) ?
               this.redirectTo(`admin/organisations/${this.organisationId}`, { alert: 'updateUnitSuccess' })
@@ -141,7 +141,7 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
 
     } else {
 
-      this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your e-mail' });
+      this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your email' });
 
     }
 

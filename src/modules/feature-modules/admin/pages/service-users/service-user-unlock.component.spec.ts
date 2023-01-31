@@ -1,19 +1,19 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { StoresModule } from '@modules/stores';
 
 import { PageServiceUserUnlockComponent } from './service-user-unlock.component';
 
-import { getUserFullInfoDTO, lockUserEndpointDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { AdminUserUpdateEndpointDTO, getUserFullInfoDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserUnlockComponent', () => {
@@ -122,7 +122,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserUnlockComponent
 
   it('should run onSubmit and call api with success', () => {
 
-    const responseMock: lockUserEndpointDTO = { id: 'User01', status: 'OK' };
+    const responseMock: AdminUserUpdateEndpointDTO = { id: 'User01' };
     serviceUsersService.unlockUser = () => of(responseMock);
 
     fixture = TestBed.createComponent(PageServiceUserUnlockComponent);

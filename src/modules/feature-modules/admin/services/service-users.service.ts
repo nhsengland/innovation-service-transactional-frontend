@@ -112,9 +112,8 @@ export type changeUserTypeDTO = {
   status: string;
 };
 
-export type lockUserEndpointDTO = {
+export type AdminUserUpdateEndpointDTO = {
   id: string;
-  status: string;
 };
 
 export type searchUserEndpointInDTO = {
@@ -134,8 +133,10 @@ export type searchUserEndpointInDTO = {
 export type searchUserEndpointOutDTO = searchUserEndpointInDTO & { typeLabel: string };
 
 export type changeUserRoleDTO = {
-  userId: string,
-  role: null | InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
+  role: {
+    name: AccessorOrganisationRoleEnum, // this used to have InnovatorOrganisationRoleEnum but I don't think it is used
+    organisationId: string,
+  },
   securityConfirmation: {
     id: string,
     code: string
@@ -199,28 +200,28 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  lockUser(userId: string, securityConfirmation: { id: string, code: string }): Observable<lockUserEndpointDTO> {
+  lockUser(userId: string, securityConfirmation: { id: string, code: string }): Observable<AdminUserUpdateEndpointDTO> {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/lock').setPathParams({ userId }).setQueryParams(qp);
-    return this.http.patch<lockUserEndpointDTO>(url.buildUrl(), {}).pipe(
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId }).setQueryParams(qp);
+    return this.http.patch<AdminUserUpdateEndpointDTO>(url.buildUrl(), {accountEnabled: false}).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error.id })))
+      catchError(error => throwError(() => ({ id: error.error?.details?.id })))
     );
 
   }
 
-  unlockUser(userId: string, securityConfirmation: { id: string, code: string }): Observable<lockUserEndpointDTO> {
+  unlockUser(userId: string, securityConfirmation: { id: string, code: string }): Observable<AdminUserUpdateEndpointDTO> {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/unlock').setPathParams({ userId }).setQueryParams(qp);
-    return this.http.patch<lockUserEndpointDTO>(url.buildUrl(), {}).pipe(
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId }).setQueryParams(qp);
+    return this.http.patch<AdminUserUpdateEndpointDTO>(url.buildUrl(), {accountEnabled: true}).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error.id })))
+      catchError(error => throwError(() => ({ id: error.error?.details?.id })))
     );
 
   }
@@ -229,11 +230,11 @@ export class ServiceUsersService extends CoreService {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/user').setQueryParams(qp);
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users').setQueryParams(qp);
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error.id })))
+      catchError(error => throwError(() => ({ id: error.error?.details.id })))
     );
 
   }
@@ -242,11 +243,11 @@ export class ServiceUsersService extends CoreService {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/:userId/delete').setPathParams({ userId }).setQueryParams(qp);
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/delete').setPathParams({ userId }).setQueryParams(qp);
     return this.http.patch<{ id: string }>(url.buildUrl(), {}).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error.id })))
+      catchError(error => throwError(() => ({ id: error.error?.details.id })))
     );
 
   }
@@ -276,15 +277,15 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  changeUserRole(body: changeUserRoleDTO): Observable<changeUserTypeDTO> {
+  changeUserRole(userId: string, body: changeUserRoleDTO): Observable<changeUserTypeDTO> {
 
     const qp = (body.securityConfirmation.id && body.securityConfirmation.code) ? body.securityConfirmation : {};
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId: body.userId }).setQueryParams(qp);
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId }).setQueryParams(qp);
     return this.http.patch<changeUserTypeDTO>(url.buildUrl(), { role: body.role }).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error.id })))
+      catchError(error => throwError(() => ({ id: error.error?.details.id })))
     );
 
   }
@@ -298,7 +299,7 @@ export class ServiceUsersService extends CoreService {
     return this.http.patch<any>(url.buildUrl(), { newOrganisationUnitAcronym: body.organisationUnitAcronym, organisationId: body.organisationId }).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error.id })))
+      catchError(error => throwError(() => ({ id: error.error?.id })))  // Note this will need to be changed when the backend API is updated to error.error?.details?.id
     );
 
   }
@@ -338,7 +339,7 @@ export class ServiceUsersService extends CoreService {
 
   createVersion(body: { [key: string]: any }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/tou');
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/tou');
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response),
@@ -358,7 +359,7 @@ export class ServiceUsersService extends CoreService {
   updateTermsById(id: string, data: MappedObjectType): Observable<any> {
     const body = Object.assign({}, data);
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/tou/:id').setPathParams({ id });
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/tou/:id').setPathParams({ id });
     return this.http.put<any>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)

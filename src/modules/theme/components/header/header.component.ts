@@ -7,6 +7,8 @@ import { filter } from 'rxjs/operators';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { CookiesService } from '@modules/core/services/cookies.service';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
+import { UserTypeEnum } from '@app/base/enums';
+import { LocalStorageHelper } from '@app/base/helpers';
 
 
 export type HeaderMenuBarItemType = {
@@ -42,7 +44,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   showCookiesBanner = false;
   showCookiesSaveSuccess = false;
 
-  user: { displayName: string; description: string; };
+  user: { displayName: string; description: string; showSwitchProfile: boolean; };
 
   menuBarItems: {
     isChildrenOpened: boolean,
@@ -60,9 +62,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
 
     const user = this.authenticationStore.getUserInfo();
+    const userRole = this.authenticationStore.getUserRole();
+    const userContext = this.authenticationStore.getUserContextInfo();
+    
     this.user = {
       displayName: user.displayName,
-      description: `Signed in as ${this.authenticationStore.getUserRole()}`
+      description: user.type === UserTypeEnum.ACCESSOR.toString() ? `Logged in as ${userRole} (${userContext.organisation?.organisationUnit.name})` : `Logged in as ${userRole}`,
+      showSwitchProfile: user.type === UserTypeEnum.ACCESSOR.toString() && (user.organisations.length > 1 || user.organisations[0].organisationUnits.length > 1)
     };
 
     this.signOutUrl = `${this.environmentVariablesStore.APP_URL}/signout`;
@@ -162,6 +168,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.menuBarItems.isChildrenOpened = menuItem.isOpen = !menuItem.isOpen;
 
   }
+
+  signOut(): void {
+    LocalStorageHelper.removeItem("orgUnitId");
+  }
+
 
 
   ngOnDestroy(): void {

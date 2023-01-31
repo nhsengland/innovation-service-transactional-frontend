@@ -27,7 +27,7 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
 
   form = new FormGroup({
     status: new FormControl<null | Partial<InnovationSupportStatusEnum>>(InnovationSupportStatusEnum.COMPLETE, { validators: Validators.required, updateOn: 'change' }),
-    message: new FormControl<string>('', CustomValidators.required('A message is required')),
+    message: new FormControl<string>('', CustomValidators.required('A comment is required')),
   }, { updateOn: 'blur' });
 
   constructor(   

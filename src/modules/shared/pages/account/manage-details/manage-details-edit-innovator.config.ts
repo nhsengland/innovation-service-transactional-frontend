@@ -2,6 +2,8 @@
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
+import { ContactUserPreferenceEnum, PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
+import { UtilsHelper } from '@app/base/helpers';
 
 
 // Types.
@@ -9,7 +11,10 @@ type InboundPayloadType = Required<AuthenticationModel>['user'];
 
 type StepPayloadType = {
   displayName: string,
+  contactPreferences: ContactUserPreferenceEnum[],
+  contactByPhoneTimeframe: PhoneUserPreferenceEnum | null,
   mobilePhone: null | string,
+  contactDetails: null | string,
   isCompanyOrOrganisation: 'YES' | 'NO',
   organisationName: null | string,
   organisationSize: null | string,
@@ -18,7 +23,11 @@ type StepPayloadType = {
 
 type OutboundPayloadType = {
   displayName: string,
+  contactByPhone: boolean,
+  contactByEmail: boolean,  
+  contactByPhoneTimeframe: PhoneUserPreferenceEnum | null,
   mobilePhone: null | string,
+  contactDetails: null | string,
   organisation?: {
     id: string,
     isShadow: boolean,
@@ -30,7 +39,6 @@ type OutboundPayloadType = {
 
 export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineModel({
   steps: [
-
     new FormEngineModel({
       parameters: [{
         id: 'displayName',
@@ -39,13 +47,55 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
         validations: { isRequired: [true, 'Name is required'] }
       }]
     }),
+    
+    new FormEngineModel({
+      parameters: [{ 
+        id: 'contactPreferences', 
+        dataType: 'checkbox-array', 
+        label: 'If we have any questions about your innovation, how do you want us to contact you?',
+        description: 'Select your preferred ways of contact',
+        items: [
+          {
+            value: ContactUserPreferenceEnum.PHONE,
+            label: 'By phone',
+            conditional: new FormEngineParameterModel({ 
+              id: 'contactByPhoneTimeframe', 
+              dataType: 'radio-group',
+              label: 'Select the best time to reach you on week days (UK time)',
+              validations: { isRequired: [true, 'Choose one option'] },
+              items: [{
+                value: PhoneUserPreferenceEnum.MORNING,
+                label: 'Morning, 9am to 12pm',
+              }, {
+                value: PhoneUserPreferenceEnum.AFTERNOON,
+                label: 'Afternoon, 1pm to 5pm'
+              }, {
+                value: PhoneUserPreferenceEnum.DAILY,
+                label: 'Either'
+              }]
+            })
+          },
+          { value: ContactUserPreferenceEnum.EMAIL, label: 'By email' }
+        ]
+      }]
+    }),
 
     new FormEngineModel({
       parameters: [{ 
         id: 'mobilePhone', 
         dataType: 'number', 
-        label: 'What\'s your Phone number?',
+        label: 'What is your phone number?',
+        description: 'If you would like to be contacted by phone about your innovation, please provide a contact number.',
+      }]
+    }),
 
+    new FormEngineModel({
+      parameters: [{ 
+        id: 'contactDetails', 
+        dataType: 'textarea', 
+        label: 'Is there anything else we should know about communicating with you?',
+        description: 'For example, non-working days, visual or hearing impairments, or other accessibility needs.',
+        lengthLimit: 'small',
       }]
     }),
 
@@ -77,7 +127,7 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
 
 function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary'): void {
 
-  steps.splice(3);
+  steps.splice(5);
 
   if (data.isCompanyOrOrganisation === 'NO') {
     data.organisationName = null;
@@ -108,7 +158,10 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
     displayName: data.displayName,
+    contactPreferences: getContactPreferences(data),
+    contactByPhoneTimeframe: data.contactByPhoneTimeframe ?? null,
     mobilePhone: data.phone,
+    contactDetails: data.contactDetails,
     isCompanyOrOrganisation: !data.organisations[0].isShadow ? 'YES' : 'NO',
     organisationName: data.organisations[0].name,
     organisationSize: data.organisations[0].size,
@@ -124,7 +177,11 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
     displayName: data.displayName,
+    contactByPhone: data.contactPreferences.includes(ContactUserPreferenceEnum.PHONE),
+    contactByEmail: data.contactPreferences.includes(ContactUserPreferenceEnum.EMAIL),
     mobilePhone: data.mobilePhone,
+    contactByPhoneTimeframe: data.contactByPhoneTimeframe,
+    contactDetails: data.contactDetails,
     organisation: {
       id: data.organisationAdditionalInformation.id,
       isShadow: data.isCompanyOrOrganisation === 'NO',
@@ -141,19 +198,38 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   toReturn.push(
     { label: 'Name', value: data.displayName, editStepNumber: 1 },
-    { label: 'Phone number', value: data.mobilePhone, editStepNumber: 2, },
-    { label: 'Is company or organisation?', value: data.isCompanyOrOrganisation === 'YES' ? 'Yes' : 'No', editStepNumber: 3 }
+    { 
+      label: 'Contact Preference', 
+      value: UtilsHelper.getContactPreferenceValue(data.contactPreferences.includes(ContactUserPreferenceEnum.EMAIL), data.contactPreferences.includes(ContactUserPreferenceEnum.PHONE), data.contactByPhoneTimeframe), 
+      editStepNumber: 2, 
+    },
+    { label: 'Phone number', value: data.mobilePhone, editStepNumber: 3, },
+    { label: 'Contact details', value: data.contactDetails, editStepNumber: 4, },
+    { label: 'Is company or organisation?', value: data.isCompanyOrOrganisation === 'YES' ? 'Yes' : 'No', editStepNumber: 5 }
   );
 
   if (data.isCompanyOrOrganisation === 'YES') {
 
     toReturn.push(
-      { label: 'Company', value: data.organisationName, editStepNumber: 2 },
-      { label: 'Company size', value: data.organisationSize, editStepNumber: 3 }
+      { label: 'Company', value: data.organisationName, editStepNumber: 5 },
+      { label: 'Company size', value: data.organisationSize, editStepNumber: 6 }
     );
 
   }
 
   return toReturn;
+}
 
+function getContactPreferences(data: InboundPayloadType): ContactUserPreferenceEnum[] {
+  let contactPreferences: ContactUserPreferenceEnum[] = [];
+
+  if(data.contactByEmail) {
+    contactPreferences.push(ContactUserPreferenceEnum.EMAIL)
+  }
+
+  if(data.contactByPhone) {
+    contactPreferences.push(ContactUserPreferenceEnum.PHONE)
+  }
+
+  return contactPreferences;
 }

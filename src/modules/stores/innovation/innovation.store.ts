@@ -10,7 +10,7 @@ import { WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationService } from './innovation.service';
 
-import { INNOVATION_SECTIONS, getSectionTitle, getSectionParentTitle, getSectionParentNumber } from './innovation.config';
+import { INNOVATION_SECTIONS, getSectionTitle, getSectionParentTitle, getSectionParentNumber, getSectionNumber } from './innovation.config';
 import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
 import {
   InnovationModel,
@@ -80,7 +80,7 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   getSectionInfo$(innovationId: string, section: string): Observable<InnovationSectionInfoDTO> {
-    return this.innovationsService.getSectionInfo(innovationId, section);
+    return this.innovationsService.getSectionInfo(innovationId, section, { fields: ['actions'] });
   }
 
   updateSectionInfo$(innovationId: string, sectionKey: string, data: MappedObjectType): Observable<MappedObjectType> {
@@ -105,6 +105,10 @@ export class InnovationStore extends Store<InnovationModel> {
 
   getSectionParentNumber(sectionId: InnovationSectionEnum): string {
     return getSectionParentNumber(sectionId);
+  }
+
+  getSectionNumber(sectionId: InnovationSectionEnum): string {
+    return getSectionNumber(sectionId);
   }
 
   getSectionTitle(sectionId: InnovationSectionEnum | null): string {
@@ -167,8 +171,8 @@ export class InnovationStore extends Store<InnovationModel> {
         : InnovationGroupedStatusEnum.AWAITING_SUPPORT;
     }
 
-    if(innovationStatus === InnovationStatusEnum.ARCHIVED) {
-      return InnovationGroupedStatusEnum.ARCHIVED;
+    if(innovationStatus === InnovationStatusEnum.WITHDRAWN) {
+      return InnovationGroupedStatusEnum.WITHDRAWN;
     }
 
     return InnovationGroupedStatusEnum.RECORD_NOT_SHARED;

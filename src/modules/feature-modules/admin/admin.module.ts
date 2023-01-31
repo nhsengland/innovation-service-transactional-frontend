@@ -26,6 +26,7 @@ import { PageOrganisationNewComponent } from './pages/organisations/organisation
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
+import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 // // Service Users.
 import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-users/service-user-change-organisation-unit.component';
 import { PageServiceUserChangeRoleComponent } from './pages/service-users/service-user-change-role.component';
@@ -82,6 +83,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageOrganisationEditComponent,
     PageOrganisationInfoComponent,
     PageOrganisationsListComponent,
+    PageOrganisationUnitNewComponent,
     // // Service Users.
     PageServiceUserChangeOrganisationUnitComponent,
     PageServiceUserChangeRoleComponent,

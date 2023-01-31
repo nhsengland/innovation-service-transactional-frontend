@@ -13,7 +13,7 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
 import { PageAccountInfoComponent } from './pages/account/account-info.component';
-import { PageAccountInnovationsArchivalComponent } from './pages/account/innovations-archival.component';
+import { PageAccountInnovationsWithdrawComponent } from './pages/account/innovations-withdraw.component';
 import { PageAccountInnovationsInfoComponent } from './pages/account/innovations-info.component';
 import { PageAccountInnovationsTransferComponent } from './pages/account/innovations-transfer.component';
 // // Dashboard.
@@ -23,8 +23,6 @@ import { FirstTimeSigninInnovationNewComponent } from './pages/first-time-signin
 import { FirstTimeSigninInnovationTransferComponent } from './pages/first-time-signin/innovation-transfer.component';
 // // Innovation.
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
-import { InnovationActionTrackerInfoComponent } from './pages/innovation/action-tracker/action-tracker-info.component';
-import { InnovationActionTrackerComponent } from './pages/innovation/action-tracker/action-tracker.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
 import { PageInnovationHowToProceedComponent } from './pages/innovation/how-to-proceed/how-to-proceed.component';
 import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation/needs-reassessment/needs-reassessment-send.component';
@@ -32,6 +30,7 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
+import { InnovationExportRequestRejectComponent } from './pages/innovation/export/export-request-reject.component';
 
 // // Shared module pages.
 // // Account.
@@ -55,8 +54,10 @@ import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 import { PageExportRecordListComponent } from '@modules/shared/pages/innovation/export/export-record-list.component';
 import { PageExportRecordInfoComponent } from '@modules/shared/pages/innovation/export/export-record-info.component';
-import { InnovationExportRequestRejectComponent } from './pages/innovation/export/export-request-reject.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
+import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
+import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
+import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -71,7 +72,7 @@ import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-dat
 import { InnovationSectionDataResolver } from '@modules/shared/resolvers/innovation-section-data.resolver';
 import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers/innovation-section-evidence-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
-import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
+import { InnovationActionCompleteConfirmationComponent } from './pages/innovation/action-complete-confirmation/action-complete-confirmation.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -174,7 +175,7 @@ const routes: Routes = [
                 children: [
                   { path: '', pathMatch: 'full', component: PageInnovationHowToProceedComponent },
                   { path: 'needs-reassessment-send', pathMatch: 'full', component: PageInnovationNeedsReassessmentSendComponent, 
-                    data: { breadcrumb: null } 
+                    data: { breadcrumb: null }
                   },
                 ]
               },
@@ -200,8 +201,8 @@ const routes: Routes = [
                         data: {
                           breadcrumb: (data: RoutesDataType) => data.innovationSectionData?.name ?? ''
                         },
-                        children: [    
-                          
+                        children: [
+
                           {
                             path: '', pathMatch: 'full', component: PageInnovationSectionInfoComponent,
                             data: { breadcrumb: null }
@@ -254,6 +255,25 @@ const routes: Routes = [
                               }
 
                             ]
+                          },
+                          {
+                            path: 'confirm-update', 
+                            pathMatch: 'full', 
+                            component: InnovationActionCompleteConfirmationComponent,
+                            data: {
+                              breadcrumb: null,
+                              layout: { type: 'full' }
+                            }
+                          },
+
+                          {
+                            path: 'actions',
+                            pathMatch: 'full',
+                            component: PageInnovationActionSectionInfoComponent,
+                            data: {
+                              breadcrumb: null,
+                              layout: { type: 'full' }
+                            }
                           }
 
                         ]
@@ -270,7 +290,7 @@ const routes: Routes = [
                 children: [
 
                   {
-                    path: '', pathMatch: 'full', component: InnovationActionTrackerComponent,
+                    path: '', pathMatch: 'full', component: PageInnovationActionTrackerListComponent,
                     data: { breadcrumb: null }
                   },
 
@@ -290,12 +310,12 @@ const routes: Routes = [
                     },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: InnovationActionTrackerInfoComponent,
-                        data: { breadcrumb: null }
+                        path: '', pathMatch: 'full', component: PageInnovationActionSectionInfoComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
                         path: 'decline', pathMatch: 'full', component: InnovationActionTrackerDeclineComponent,
-                        data: { breadcrumb: 'Decline' }
+                        data: { breadcrumb: null, layout: { type: 'full' } }
                       }
                     ]
                   }
@@ -451,11 +471,11 @@ const routes: Routes = [
                 path: 'transfer', pathMatch: 'full', component: PageAccountInnovationsTransferComponent
               },
               {
-                path: 'archive', pathMatch: 'full', component: PageAccountInnovationsArchivalComponent
+                path: 'withdraw', pathMatch: 'full', component: PageAccountInnovationsWithdrawComponent
               },
               {
                 path: 'stop-sharing',
-                data: { breadcrumb: 'Stop sharing'},
+                data: { breadcrumb: 'Stop sharing' },
                 children: [
                   {
                     path: '', pathMatch: 'full', component: PageAccountInnovationsStopSharingOverviewComponent,

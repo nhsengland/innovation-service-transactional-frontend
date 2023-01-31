@@ -12,7 +12,6 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 import {
   AccessorService,
 } from './accessor.service';
-import { InnovationSectionEnum } from '@modules/stores/innovation';
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 
 
@@ -55,22 +54,6 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
   afterEach(() => {
     httpMock.verify();
-  });
-
-
-  it('should run createAction() and return success', () => {
-
-    const responseMock = { id: 'ID01' };
-    const expected = responseMock;
-    let response: any = null;
-
-    service.createAction('Inno01', { section: InnovationSectionEnum.INNOVATION_DESCRIPTION, description: 'some description' }).subscribe({ next: success => response = success, error: error => response = error });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/Inno01/actions`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('POST');
-    expect(response).toEqual(expected);
-
   });
 
   it('should run suggestNewOrganisations() and return success', () => {

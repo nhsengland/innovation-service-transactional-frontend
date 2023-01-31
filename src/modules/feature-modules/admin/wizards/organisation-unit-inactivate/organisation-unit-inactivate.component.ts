@@ -184,6 +184,8 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
 
     if (!stepData.data.confirm) { return; } // Just a sanity check. Should never happen.
 
+    
+    this.setPageStatus('LOADING');
     this.organisationsService.inactivateOrganisationUnit(this.wizard.data.organisation.id, this.wizard.data.organisationUnit.id).subscribe(
       () => this.redirectTo(`/admin/organisations/${this.wizard.data.organisation.id}`, { alert: 'organisationUnitInactivateSuccess' }),
       () => {

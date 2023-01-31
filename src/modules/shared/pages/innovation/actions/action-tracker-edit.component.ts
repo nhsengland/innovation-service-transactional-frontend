@@ -9,10 +9,10 @@ import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
-  selector: 'app-accessor-pages-innovation-action-tracker-edit',
+  selector: 'shared-pages-innovation-action-tracker-edit',
   templateUrl: './action-tracker-edit.component.html'
 })
-export class InnovationActionTrackerEditComponent extends CoreComponent implements OnInit {
+export class PageInnovationActionTrackerEditComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
   actionId: string;
@@ -80,8 +80,13 @@ export class InnovationActionTrackerEditComponent extends CoreComponent implemen
     this.innovationsService.updateAction(this.innovationId, this.actionId, body).subscribe({
       next: response => {
         const status = this.form.get('status')!.value as InnovationActionStatusEnum;
-        this.setRedirectAlertSuccess(`You have updated the status of this action to '${this.statusItems.find(item => item.value === status)?.label}'`, { message: 'The innovator will be notified of this status change' });
-        this.redirectTo(`/accessor/innovations/${this.innovationId}/action-tracker/${response.id}`);
+
+        const message = status === InnovationActionStatusEnum.COMPLETED
+          ? 'The innovator will be notified of this status change.'
+          : 'Send a message to innovator and explain why the submitted information is not sufficient.'
+
+        this.setRedirectAlertSuccess(`You have updated the status of this action to '${this.statusItems.find(item => item.value === status)?.label}'`, { message });
+        this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${response.id}`);
       },
       error: () => this.setAlertError('An error occurred when updating an action. Please try again or contact us for further help')
 

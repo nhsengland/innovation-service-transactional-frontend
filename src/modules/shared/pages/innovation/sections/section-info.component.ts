@@ -28,6 +28,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     status: { id: keyof typeof INNOVATION_SECTION_STATUS, label: string };
     isNotStarted: boolean;
     showSubmitButton: boolean;
+    showSubmitUpdatesButton: boolean;
     hasEvidences: boolean;
     wizard: WizardEngineModel;
     date: string;
@@ -54,7 +55,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.module = RoutingHelper.getRouteData<any>(this.activatedRoute.root).module;
     this.innovation = this.stores.context.getInnovation();
-    
+
     this.section = {
       id: this.activatedRoute.snapshot.params.sectionId,
       nextSectionId: null,
@@ -62,6 +63,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       status: { id: 'UNKNOWN', label: '' },
       isNotStarted: false,
       showSubmitButton: false,
+      showSubmitUpdatesButton: false,
       hasEvidences: false,
       wizard: new WizardEngineModel({}),
       date: ''
@@ -72,7 +74,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       title: '',
       show: false
     };
-  
+
     this.nextSection = {
       id: '',
       title: '',
@@ -133,22 +135,24 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       status: { id: 'UNKNOWN', label: '' },
       isNotStarted: false,
       showSubmitButton: false,
+      showSubmitUpdatesButton: false,
       hasEvidences: !!section?.evidences?.steps.length,
       wizard: section?.wizard || new WizardEngineModel({}),
       date: ''
     };
 
-    this.setPageTitle(this.section.title, { hint: `${this.stores.innovation.getSectionParentNumber(this.section.id)}. ${this.stores.innovation.getSectionParentTitle(this.section.id)}`});
-    
-    if(this.module !== '') {
+    this.setPageTitle(this.section.title, { hint: `${this.stores.innovation.getSectionParentNumber(this.section.id)}. ${this.stores.innovation.getSectionParentTitle(this.section.id)}` });
+
+    if (this.module !== '') {
       this.setBackLink('Innovation Record', `${this.module}/innovations/${this.innovation.id}/record`);
     }
-    
+
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
       next: response => {
         this.section.status = { id: response.status, label: INNOVATION_SECTION_STATUS[response.status]?.label || '' };
         this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
         this.section.date = response.submittedAt;
+
         this.getPreviousAndNextPagination();
 
         if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
@@ -158,8 +162,13 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data)).runRules();
 
           const validInformation = this.section.wizard.validateData();
-          this.section.showSubmitButton = validInformation.valid && ['DRAFT'].includes(this.section.status.id);
-          
+          const nActions = response.actionsIds?.length ?? 0;
+
+          if (this.section.status.id === 'DRAFT' && validInformation.valid) {
+            this.section.showSubmitButton = nActions === 0;
+            this.section.showSubmitUpdatesButton = nActions > 0;
+          }
+
           this.summaryList = this.section.wizard.runSummaryParsing();
         }
 

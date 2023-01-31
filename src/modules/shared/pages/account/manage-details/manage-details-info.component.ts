@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { UtilsHelper } from '@app/base/helpers';
 
 
 @Component({
@@ -23,9 +24,7 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
     this.setPageTitle('Your details');
 
     this.module = this.activatedRoute.snapshot.data.module;
-
   }
-
 
   ngOnInit(): void {
 
@@ -36,20 +35,23 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
       this.summaryList = [
         { label: 'Name', value: user.displayName, editStepNumber: 1 },
         { label: 'Email address', value: user.email },
-        { label: 'Phone number', value: user.phone, editStepNumber: 2 }
+        { label: 'Contact preference', value: UtilsHelper.getContactPreferenceValue(user.contactByEmail, user.contactByPhone, user.contactByPhoneTimeframe), editStepNumber: 2 },
+        { label: 'Phone number', value: user.phone, editStepNumber: 3 },
+        { label: 'Contact details', value: user.contactDetails, editStepNumber: 4 }
       ];
 
       if (!user.organisations[0].isShadow) {
-        this.summaryList.push({ label: 'Company', value: user.organisations[0].name, editStepNumber: 3 });
-        this.summaryList.push({ label: 'Company size', value: user.organisations[0].size, editStepNumber: 4 });
+        this.summaryList.push({ label: 'Company', value: user.organisations[0].name, editStepNumber: 5 });
+        this.summaryList.push({ label: 'Company size', value: user.organisations[0].size, editStepNumber: 6 });
       }
 
     } else if (this.stores.authentication.isAccessorType()) {
+      const userContext = this.stores.authentication.getUserContextInfo();
 
       this.summaryList = [
         { label: 'Name', value: user.displayName, editStepNumber: 1 },
         { label: 'Email address', value: user.email },
-        { label: 'Organisation', value: user.organisations[0].name },
+        { label: 'Organisation', value: userContext.organisation?.name ?? '' },
         { label: 'Service roles', value: user.organisations.map(item => this.stores.authentication.getRoleDescription(item.role)).join('\n') }
       ];
 
@@ -71,5 +73,4 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
     this.setPageStatus('READY');
 
   }
-
 }

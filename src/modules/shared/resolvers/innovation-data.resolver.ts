@@ -32,13 +32,12 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
 
     return this.innovationsService.getInnovationInfo(route.params.innovationId).pipe(
       map(response => {
-
-        const user = this.authenticationStore.getUserInfo();
+        const userContext = this.authenticationStore.getUserContextInfo();
 
         let support: undefined | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string };
 
-        if (user.type === UserTypeEnum.ACCESSOR) {
-          support = (response.supports || []).find(item => item.organisationUnitId === user.organisations[0]?.organisationUnits[0]?.id);
+        if (userContext.type === UserTypeEnum.ACCESSOR) {
+          support = (response.supports || []).find(item => item.organisationUnitId === userContext.organisation?.organisationUnit.id);
           if (!support) {
             console.error('Accessor user type without unit id');
           }
@@ -50,6 +49,7 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
           status: response.status,
           owner: { isActive: response.owner.isActive, name: response.owner.name },
           ...(response.assessment ? { assessment: { id: response.assessment.id } } : {}),
+          ...(response.assessment?.assignedTo ? { assignedTo: { id: response.assessment.assignedTo?.id } } : {}),
           ...(support ? { support: { id: support.id, status: support.status } } : {}),
           export: response.export,
         });

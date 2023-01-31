@@ -2,14 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable, Observer, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
-import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-
 import { Store } from '../store.class';
 import { AuthenticationService, UpdateUserInfoDTO } from './authentication.service';
 
 import { UserRoleEnum, UserTypeEnum } from './authentication.enums';
 import { AuthenticationModel } from './authentication.models';
-
+import { LocalStorageHelper } from '@app/base/helpers';
 
 @Injectable()
 export class AuthenticationStore extends Store<AuthenticationModel> {
@@ -30,6 +28,30 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
         concatMap(user => {
           this.state.user = user;
           this.state.isSignIn = true;
+
+          if (user.type === UserTypeEnum.ACCESSOR) {
+            if (user.organisations.length === 1 && user.organisations[0].organisationUnits.length === 1) {              
+              this.state.userContext = {
+                type: user.type,
+                organisation: {
+                  id: user.organisations[0].id,
+                  name: user.organisations[0].name,
+                  role: user.organisations[0].role,
+                  organisationUnit: user.organisations[0].organisationUnits[0],
+                }
+              }
+            } else {
+              const currentOrgUnitId = LocalStorageHelper.getObjectItem("orgUnitId");
+              
+              if(!!currentOrgUnitId) {
+                this.findAndPopulateUserContextFromLocalstorage(currentOrgUnitId.id);
+              }
+            }
+          } else {
+            this.state.userContext = {
+              type: user.type
+            }
+          }
           return of(true);
         })
       ).subscribe({
@@ -79,15 +101,50 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   getAccessorOrganisationUnitName(): string {
-    return (this.state.user?.organisations[0]?.organisationUnits || [])[0]?.name || '';
+    return this.state.userContext.organisation?.organisationUnit.name || '';
   }
 
   getUserInfo(): Required<AuthenticationModel>['user'] {
-    return this.state.user || { id: '', email: '', displayName: '', type: '', roles: [], phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
+    return this.state.user || { id: '', email: '', displayName: '', type: '', roles: [], contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, phone: null, contactDetails: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
   }
 
   updateUserInfo$(body: UpdateUserInfoDTO): Observable<{ id: string }> {
     return this.authenticationService.updateUserInfo(body);
+  }
+
+  getUserContextInfo(): Required<AuthenticationModel>['userContext'] {
+    return this.state.userContext;
+  }
+
+  findAndPopulateUserContextFromLocalstorage(currentOrgUnitId: string): void {
+    const user = this.getUserInfo();
+
+    user.organisations.every((org) => {
+      const unit = org.organisationUnits.find((unit) => unit.id === currentOrgUnitId);
+
+      if(!!unit) {
+        this.updateSelectedUserContext({
+          type: user.type,
+          organisation: {
+            id: org.id,
+            name: org.name,
+            role: org.role,
+            organisationUnit: { 
+              id: unit.id,
+              name: unit.name, 
+              acronym: unit.acronym,
+            }
+          }
+        });
+        return false;
+      }
+
+      return true;
+    });
+  }
+
+  updateSelectedUserContext(userContext: Required<AuthenticationModel>['userContext']): void {
+    this.state.userContext = userContext;
   }
 
   getUserTypeDescription(userType: UserTypeEnum): string {

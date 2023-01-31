@@ -86,7 +86,7 @@ export class NotificationsService extends CoreService {
       unreadOnly: filters.unreadOnly ?? false
     };
 
-    const url = new UrlModel(this.API_URL).addPath('notifications').setQueryParams(qp);
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notifications').setQueryParams(qp);
     return this.http.get<NotificationsListInDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => ({
@@ -142,14 +142,14 @@ export class NotificationsService extends CoreService {
 
   dismissAllUserNotifications(): Observable<{ affected: number }> {
 
-    const url = new UrlModel(this.API_URL).addPath('notifications/dismiss');
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notifications/dismiss');
     return this.http.patch<{ affected: number }>(url.buildUrl(), { dismissAll: true }).pipe(take(1), map(response => response));
 
   }
 
   deleteNotification(notificationId: string): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('notifications/:notificationId').setPathParams({ notificationId });
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notifications/:notificationId').setPathParams({ notificationId });
     return this.http.delete<{ id: string }>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
@@ -157,7 +157,7 @@ export class NotificationsService extends CoreService {
 
   getEmailNotificationsPreferences(): Observable<EmailNotificationPreferencesDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('email-notifications');
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/email-preferences');
     return this.http.get<EmailNotificationPreferencesDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
@@ -167,8 +167,8 @@ export class NotificationsService extends CoreService {
 
   updateEmailNotificationsPreferences(body: EmailNotificationPreferencesDTO[]): Observable<boolean> {
 
-    const url = new UrlModel(this.API_URL).addPath('email-notifications');
-    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(() => true));
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/email-preferences');
+    return this.http.put(url.buildUrl(), body).pipe(take(1), map(() => true));
 
   }
 

@@ -15,6 +15,7 @@ import { InnovationStatisticsEnum } from './statistics.enum';
 import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSubmissionDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLog, InnovationSupportsLogDTO, SupportLogType } from './innovations.dtos';
+import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
 
 export enum AssessmentSupportFilterEnum {
   UNASSIGNED = 'UNASSIGNED',
@@ -42,7 +43,9 @@ export type InnovationsActionsListFilterType = {
   innovationName?: string,
   sections?: InnovationSectionEnum[],
   status?: InnovationActionStatusEnum[],
+  innovationStatus?: InnovationStatusEnum[],
   createdByMe?: boolean,
+  allActions?: boolean,
   fields?: ('notifications')[]
 };
 
@@ -78,6 +81,16 @@ export type GetThreadMessageInfoDTO = {
   id: string;
   message: string;
   createdAt: DateISOType;
+};
+
+export type GetThreadParticipantsDTO = {
+  participants: {
+    id: string;
+    identityId: string;
+    name: string;
+    type: UserTypeEnum;
+    organisationUnit?: { id: string, acronym: string}
+  }[]
 };
 
 export type GetThreadMessagesListInDTO = {
@@ -355,7 +368,9 @@ export class InnovationsService extends CoreService {
       ...(filters.innovationName ? { innovationName: filters.innovationName } : {}),
       ...(filters.sections ? { sections: filters.sections } : {}),
       ...(filters.status ? { status: filters.status } : {}),
+      ...(filters.innovationStatus ? { innovationStatus: filters.innovationStatus } : {}),
       ...(filters.createdByMe ? { createdByMe: filters.createdByMe } : {}),
+      ...(filters.allActions ? { allActions: filters.allActions } : {}),
       ...(filters.fields ? { fields: filters.fields } : {})
     };
 
@@ -363,7 +378,7 @@ export class InnovationsService extends CoreService {
     return this.http.get<InnovationActionsListInDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         count: response.count,
-        data: response.data.map(item => ({ ...item, ...{ name: `Submit '${this.stores.innovation.getSectionTitle(item.section)}'`, } }))
+        data: response.data.map(item => ({ ...item, ...{ name: `Update '${this.stores.innovation.getSectionTitle(item.section)}'`, } }))
       }))
     );
 
@@ -377,12 +392,25 @@ export class InnovationsService extends CoreService {
         id: response.id,
         displayId: response.displayId,
         status: response.status,
-        name: `Submit '${this.stores.innovation.getSectionTitle(response.section).toLowerCase()}'`,
+        name: `Update '${this.stores.innovation.getSectionTitle(response.section)}'`,
         description: response.description,
         section: response.section,
         createdAt: response.createdAt,
-        createdBy: response.createdBy
+        updatedAt: response.updatedAt,
+        updatedBy: response.updatedBy,
+        createdBy: response.createdBy,
+        declineReason: response.declineReason
       }))
+    );
+
+  }
+
+  createAction(innovationId: string, body: { section: InnovationSectionEnum, description: string }): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/actions').setPathParams({ innovationId });
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
     );
 
   }
@@ -430,6 +458,15 @@ export class InnovationsService extends CoreService {
       map(response => response)
     );
 
+  }
+
+  getThreadParticipants(innovationId: string, threadId: string): Observable<GetThreadParticipantsDTO> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/participants').setPathParams({ innovationId, threadId });
+
+    return this.http.get<GetThreadParticipantsDTO>(url.buildUrl()).pipe(take(1),
+      map(response => response)
+    );
   }
 
   getThreadMessagesList(innovationId: string, threadId: string, queryParams: APIQueryParamsType<{}>): Observable<GetThreadMessagesListOutDTO> {
@@ -525,7 +562,8 @@ export class InnovationsService extends CoreService {
             params: {
               ...i.params,
               innovationName: response.innovation.name,
-              sectionTitle: getSectionTitle(i.params.sectionId || null)
+              sectionTitle: getSectionTitle(i.params.sectionId || null),
+              actionUserRole: i.params.actionUserRole ? `(${this.stores.authentication.getRoleDescription(i.params.actionUserRole)})` : ''
             },
             link
           };
@@ -567,5 +605,21 @@ export class InnovationsService extends CoreService {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/export-requests/:requestId/status').setPathParams({ innovationId, requestId });
     return this.http.patch<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
+  }
+
+  // Sections
+  getSectionInfo(innovationId: string, sectionId: string, filters: { fields?: ('actions')[]}): Observable<InnovationSectionInfoDTO> {
+
+    const qp = {
+      ...(filters.fields ? { fields: filters.fields } : {})
+    };
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionId')
+      .setPathParams({
+        innovationId,
+        sectionId
+      }).setQueryParams(qp);
+    return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+    
   }
 }

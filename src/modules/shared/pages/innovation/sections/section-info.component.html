@@ -9,19 +9,18 @@
         <p class="d-flex">
           <ng-container *ngTemplateOutlet="icon; context: { status: section.status.id }"></ng-container>
           <span class="nhsuk-u-margin-right-2"></span>
-          <span *ngIf="section.status.id === 'SUBMITTED'">Last submitted {{ section.date | date: ('app.date_formats.long_date_time' | translate) }}</span> 
-          <span *ngIf="section.status.id !== 'SUBMITTED'">This section is in {{ 'shared.catalog.innovation.section_status.' + section.status.id + '.name' | translate }}</span> 
+          <span *ngIf="section.status.id === 'SUBMITTED' && section.date !== ''">Last submitted {{ section.date | date: ('app.date_formats.long_date_time' | translate) }}</span>
+          <span *ngIf="section.status.id === 'DRAFT'">This section is in draft. <span *ngIf="['innovator'].includes(module)">Check answers and submit updates.</span></span>
+          <span *ngIf="section.status.id === 'NOT_STARTED'">This section has not been started yet.</span>
         </p>
       </div>
-
-      <button *ngIf="section.nextSectionId && module === 'innovator'" routerLink="../{{ section.nextSectionId }}" class="nhsuk-button nhsuk-u-margin-right-3"> Continue to next section </button>
 
       <ng-container *ngIf="!section.isNotStarted">
 
         <div *ngIf="innovation.status === 'IN_PROGRESS' && section.status.id === 'DRAFT' && ['innovator','accessor'].includes(module)" class="nhsuk-inset-text">
           <span class="nhsuk-u-visually-hidden">Information:</span>
           <p *ngIf="module === 'innovator'">
-            This section is not visible to accessors because you changed it to "In draft" status, you need to submit the section if you want to share it with accessors.
+            This section is not visible to others because you changed it to the 'in draft' status. You need to 'confirm section answers' for the section to become visible.
           </p>
           <p *ngIf="module === 'accessor'">
             This section is not visible because the innovator has changed it status to "In Draft". If you need to see this section, you can create an action or comment asking them to resubmit.
@@ -68,11 +67,16 @@
         </div>
         <div>
           <button *ngIf="section.showSubmitButton" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-right-3"> Confirm section answers </button>
+
+          <button *ngIf="section.showSubmitUpdatesButton" routerLink="/innovator/innovations/{{ innovation.id }}/record/sections/{{ section.id }}/confirm-update" class="nhsuk-button nhsuk-u-margin-right-3"> Submit updates </button>
         </div>
       </ng-container>
 
-      <ng-container *ngIf="module === 'accessor' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED')">
-        <button routerLink="/accessor/innovations/{{ innovation.id }}/action-tracker/new" [queryParams]="{ section: section.id }" class="nhsuk-button"> Create action for this section </button>
+      <ng-container *ngIf="
+        (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED') && stores.authentication.isAccessorType() || 
+        (['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status) && stores.authentication.isAssessmentType())
+      ">
+        <button routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovation.id }}/action-tracker/new" [queryParams]="{ section: section.id }" class="nhsuk-button nhsuk-u-margin-right-3"> Create action for this section </button>
       </ng-container>
 
       <ng-container *ngIf="module === 'assessment'" [ngSwitch]="innovation.status">
@@ -98,7 +102,7 @@
   <nav class="nhsuk-pagination" role="navigation" aria-label="Pagination">
     <ul class="nhsuk-list nhsuk-pagination__list">
       <li *ngIf="previousSection.show" class="nhsuk-pagination-item--previous">
-        <a class="nhsuk-pagination__link nhsuk-pagination__link--prev" routerLink="../{{ previousSection.id }}">
+        <a class="nhsuk-pagination__link nhsuk-pagination__link--prev cursor-pointer" routerLink="../{{ previousSection.id }}">
           <span class="nhsuk-pagination__title">Previous</span>
           <span class="nhsuk-u-visually-hidden">:</span>
           <span class="nhsuk-pagination__page">{{previousSection.title}}</span>
@@ -108,7 +112,7 @@
         </a>
       </li>
       <li *ngIf="nextSection.show" class="nhsuk-pagination-item--next">
-        <a class="nhsuk-pagination__link nhsuk-pagination__link--next" routerLink="../{{ nextSection.id }}">
+        <a class="nhsuk-pagination__link nhsuk-pagination__link--next cursor-pointer" routerLink="../{{ nextSection.id }}">
           <span class="nhsuk-pagination__title">Next</span>
           <span class="nhsuk-u-visually-hidden">:</span>
           <span class="nhsuk-pagination__page">{{nextSection.title}}</span>

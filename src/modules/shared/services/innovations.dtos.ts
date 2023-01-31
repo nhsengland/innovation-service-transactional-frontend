@@ -1,6 +1,7 @@
 import { Params } from '@angular/router';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
 import { DateISOType } from '@app/base/types';
+import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 
 import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationStatisticsEnum } from './statistics.enum';
@@ -58,14 +59,18 @@ export type InnovationInfoDTO = {
     id: string,
     name: string,
     email?: string,
+    contactByEmail?: boolean,
+    contactByPhone?: boolean,
+    contactByPhoneTimeframe?: PhoneUserPreferenceEnum | null,
     mobilePhone?: null | string,
+    contactDetails?: null | string,
     isActive: boolean,
     organisations: null | { name: string, size: null | string }[],
     lastLoginAt?: DateISOType
   },
   lastEndSupportAt: null | DateISOType,
   export: { canUserExport: boolean, pendingRequestsCount: number },
-  assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { name: string }, reassessmentCount: number },
+  assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { id: string, name: string }, reassessmentCount: number },
   supports?: null | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string }[],
   statusUpdatedAt: null | DateISOType
 };
@@ -132,6 +137,8 @@ export type InnovationActionsListInDTO = {
     section: InnovationSectionEnum,
     createdAt: DateISOType,
     updatedAt: DateISOType,
+    updatedBy: { name: string, role: UserTypeEnum },
+    createdBy: { id: string, name: string, role: UserTypeEnum, organisationUnit?: { id: string, name: string, acronym?: string} },
     notifications: number;
   }[];
 };
@@ -145,7 +152,10 @@ export type InnovationActionInfoDTO = {
   name: string,
   description: string,
   createdAt: DateISOType,
-  createdBy: string;
+  updatedAt: DateISOType,
+  updatedBy: { name: string, role: UserTypeEnum },
+  createdBy: { id: string, name: string, role: UserTypeEnum, organisationUnit?: { id: string, name: string, acronym?: string} },
+  declineReason?: string,
 };
 
 
@@ -160,6 +170,8 @@ export type InnovationActivityLogListInDTO = {
 
       actionUserName: string,
       interveningUserName?: string,
+      actionUserRole?: string,
+      actionUserOrganisationUnit?: string,
 
       assessmentId?: string,
       sectionId?: InnovationSectionEnum,

@@ -72,7 +72,7 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
           return;
         }
 
-        this.setPageTitle(this.wizard.currentStep().parameters[0].label || '', { showPage: false });
+        this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
         this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
         this.wizard.gotoStep(Number(params.stepId));
 
@@ -106,11 +106,21 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
 
     const wizardData = this.wizard.runOutboundParsing();
 
-    const body: UpdateUserInfoDTO = {
-      displayName: wizardData.displayName,
-      mobilePhone: wizardData.mobilePhone || null,
-      ...(wizardData.organisation ? { organisation: wizardData.organisation } : {})
+    let body: UpdateUserInfoDTO = {
+      displayName: wizardData.displayName
     };
+
+    if(this.stores.authentication.isInnovatorType()) {
+      body = {
+        displayName: wizardData.displayName,
+        contactByPhone: wizardData.contactByPhone,
+        contactByEmail: wizardData.contactByEmail,
+        contactByPhoneTimeframe: wizardData.contactByPhoneTimeframe || null,
+        mobilePhone: wizardData.mobilePhone || null,
+        contactDetails: wizardData.contactDetails || null,
+        ...(wizardData.organisation ? { organisation: wizardData.organisation } : {})
+      };
+    }
 
     this.stores.authentication.updateUserInfo$(body).pipe(
       concatMap(() => this.stores.authentication.initializeAuthentication$()) // Fetch all new information.

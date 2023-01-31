@@ -1,5 +1,5 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ENV } from '@tests/app.mocks';
 
@@ -9,9 +9,9 @@ import { TableModel } from '@app/base/models';
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
-import { EmailNotificationsPreferencesEnum, EmailNotificationsTypeEnum, NotificationsListInDTO, NotificationsListOutDTO, NotificationsService } from './notifications.service';
 import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { EmailNotificationsPreferencesEnum, EmailNotificationsTypeEnum, NotificationsListInDTO, NotificationsListOutDTO, NotificationsService } from './notifications.service';
 
 
 describe('Shared/Services/NotificationsService', () => {
@@ -80,7 +80,7 @@ describe('Shared/Services/NotificationsService', () => {
 
     service.getNotificationsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&unreadOnly=false`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_USERS_URL}/v1/notifications?take=20&skip=0&unreadOnly=false`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -120,7 +120,7 @@ describe('Shared/Services/NotificationsService', () => {
 
     service.getNotificationsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&unreadOnly=false`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_USERS_URL}/v1/notifications?take=20&skip=0&unreadOnly=false`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -172,7 +172,7 @@ describe('Shared/Services/NotificationsService', () => {
 
     service.getNotificationsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&unreadOnly=false`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_USERS_URL}/v1/notifications?take=20&skip=0&unreadOnly=false`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -212,7 +212,7 @@ describe('Shared/Services/NotificationsService', () => {
 
     service.getNotificationsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&unreadOnly=false`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_USERS_URL}/v1/notifications?take=20&skip=0&unreadOnly=false`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -238,7 +238,7 @@ describe('Shared/Services/NotificationsService', () => {
 
     service.getNotificationsList(tableList.getAPIQueryParams()).subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications?take=20&skip=0&contextTypes=INNOVATION&unreadOnly=true`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_USERS_URL}/v1/notifications?take=20&skip=0&contextTypes=INNOVATION&unreadOnly=true`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -253,7 +253,7 @@ describe('Shared/Services/NotificationsService', () => {
     let response: any = null;
     service.dismissAllUserNotifications().subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications/dismiss`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_USERS_URL}/v1/notifications/dismiss`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PATCH');
     expect(response).toEqual(expected);
@@ -268,7 +268,7 @@ describe('Shared/Services/NotificationsService', () => {
     let response: any = null;
     service.deleteNotification('Notification001').subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/notifications/${responseMock.id}`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_USERS_URL}/v1/notifications/${responseMock.id}`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('DELETE');
     expect(response).toEqual(expected);
@@ -287,7 +287,7 @@ describe('Shared/Services/NotificationsService', () => {
     let response: any = null;
     service.getEmailNotificationsPreferences().subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/email-notifications`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_USERS_URL}/v1/email-preferences`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
@@ -303,7 +303,7 @@ describe('Shared/Services/NotificationsService', () => {
     let response: any = null;
     service.updateEmailNotificationsPreferences(payload).subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/email-notifications`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_USERS_URL}/v1/email-preferences`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PUT');
     expect(response).toEqual(expected);

@@ -77,7 +77,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.stepNumber = 1;
 
-    this.userOrganisationUnit = this.stores.authentication.getUserInfo().organisations[0].organisationUnits[0];
+    this.userOrganisationUnit = this.stores.authentication.getUserContextInfo().organisation?.organisationUnit || null;
 
   }
 

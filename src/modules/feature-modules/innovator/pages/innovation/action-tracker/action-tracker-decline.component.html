@@ -4,8 +4,8 @@
     <div class="nhsuk-grid-column-two-thirds">
 
       <form [formGroup]="form">
-        <theme-form-textarea controlName="message" label="Enter a message" description="Please describe why you're declining this action" [pageUniqueField]="false" lengthLimit="medium"></theme-form-textarea>
-        <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Confirm</button>
+        <theme-form-textarea controlName="message" description="Please describe the reason why you're declining this action" [pageUniqueField]="false" lengthLimit="medium"></theme-form-textarea>
+        <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmit()">Decline action</button>
       </form>
 
       <div>
