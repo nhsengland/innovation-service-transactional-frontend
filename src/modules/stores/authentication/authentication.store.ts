@@ -29,10 +29,10 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           this.state.user = user;
           this.state.isSignIn = true;
 
-          if (user.roles.length === 1 && user.roles[0] === UserRoleEnum.ACCESSOR) {
+          if (user.roles.length === 1 && user.roles[0].role === UserRoleEnum.ACCESSOR) {
             if (user.organisations.length === 1 && user.organisations[0].organisationUnits.length === 1) {              
               this.state.userContext = {
-                type: user.roles[0],
+                type: user.roles[0].role,
                 organisation: {
                   id: user.organisations[0].id,
                   name: user.organisations[0].name,
@@ -49,7 +49,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
             }
           } else {
             this.state.userContext = {
-              type: user.roles[0]
+              type: user.roles[0].role
             }
           }
           return of(true);
@@ -83,8 +83,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   isAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'ACCESSOR'; }
   isQualifyingAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'QUALIFYING_ACCESSOR'; }
 
-  isAdminRole(): boolean { return this.state.user?.roles.includes(UserRoleEnum.ADMIN) || false; }
-  isServiceTeamRole(): boolean { return this.state.user?.roles.includes(UserRoleEnum.SERVICE_TEAM) || false; }
+  isAdminRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.ADMIN) || false; }
+  isServiceTeamRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.SERVICE_TEAM) || false; }
 
   getUserId(): string { return this.state.user?.id || ''; }
   getUserType(): Required<AuthenticationModel>['userContext']['type'] {
@@ -106,7 +106,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   getUserInfo(): Required<AuthenticationModel>['user'] {
-    return this.state.user || { id: '', email: '', displayName: '', type: '', roles: [], contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, phone: null, contactDetails: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
+    return this.state.user || { id: '', email: '', displayName: '', roles: [], contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, phone: null, contactDetails: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
   }
 
   updateUserInfo$(body: UpdateUserInfoDTO): Observable<{ id: string }> {
@@ -125,7 +125,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
       if(!!unit) {
         this.updateSelectedUserContext({
-          type: user.roles[0],
+          type: user.roles[0].role,
           organisation: {
             id: org.id,
             name: org.name,
