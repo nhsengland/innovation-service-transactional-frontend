@@ -87,9 +87,10 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   isServiceTeamRole(): boolean { return this.state.user?.roles.includes(UserRoleEnum.SERVICE_TEAM) || false; }
 
   getUserId(): string { return this.state.user?.id || ''; }
-  getUserType(): Required<AuthenticationModel>['user']['type'] {
-    return this.state.user?.type || '';
+  getUserType(): Required<AuthenticationModel>['userContext']['type'] {
+    return this.state.userContext.type || '';
   }
+
   getUserRole() {
     switch (this.state.user?.type) {
       case UserTypeEnum.ADMIN: return 'Administrator';
@@ -171,10 +172,10 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
   userUrlBasePath(): string {
     switch (this.getUserType()) {
-      case UserTypeEnum.ADMIN: return 'admin';
-      case UserTypeEnum.ASSESSMENT: return 'assessment';
-      case UserTypeEnum.ACCESSOR: return 'accessor';
-      case UserTypeEnum.INNOVATOR: return 'innovator';
+      case UserRoleEnum.ADMIN: return 'admin';
+      case UserRoleEnum.ASSESSMENT: return 'assessment';
+      case UserRoleEnum.ACCESSOR: return 'accessor';
+      case UserRoleEnum.INNOVATOR: return 'innovator';
       default: return '';
     }
   }
