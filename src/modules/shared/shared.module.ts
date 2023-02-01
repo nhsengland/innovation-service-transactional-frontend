@@ -30,6 +30,7 @@ import { PageInnovationThreadMessageEditComponent } from './pages/innovation/mes
 import { PageInnovationThreadMessagesListComponent } from './pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationThreadNewComponent } from './pages/innovation/messages/thread-new.component';
 import { PageInnovationThreadsListComponent } from './pages/innovation/messages/threads-list.component';
+import { PageEveryoneWorkingOnInnovationComponent } from './pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 import { PageInnovationRecordComponent } from './pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionInfoComponent } from './pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from './pages/innovation/sections/section-evidence-info.component';
@@ -74,6 +75,7 @@ import { NotificationsService } from './services/notifications.service';
 import { OrganisationsService } from './services/organisations.service';
 import { TermsOfUseService } from './services/terms-of-use.service';
 import { StatisticsService } from './services/statistics.service';
+import { UsersService } from './services/users.service';
 
 
 @NgModule({
@@ -110,6 +112,7 @@ import { StatisticsService } from './services/statistics.service';
     PageInnovationThreadMessagesListComponent,
     PageInnovationThreadNewComponent,
     PageInnovationThreadsListComponent,
+    PageEveryoneWorkingOnInnovationComponent,
     PageInnovationRecordComponent,
     PageInnovationSectionInfoComponent,
     PageInnovationSectionEvidenceInfoComponent,
@@ -154,7 +157,8 @@ import { StatisticsService } from './services/statistics.service';
     NotificationsService,
     OrganisationsService,
     TermsOfUseService,
-    StatisticsService
+    StatisticsService,
+    UsersService
   ],
   exports: [
     CommonModule,

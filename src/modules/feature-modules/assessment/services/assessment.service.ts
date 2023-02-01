@@ -61,7 +61,7 @@ export class AssessmentService extends CoreService {
 
   getAssessmentUsersList(): Observable<{ id: string, name: string }[]> {
 
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ userTypes: [UserRoleEnum.ASSESSMENT] });
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ userTypes: [UserRoleEnum.ASSESSMENT], onlyActive: true });
     return this.http.get<{
       id: string,
       name: string,
@@ -74,7 +74,7 @@ export class AssessmentService extends CoreService {
       }[]
     }[]>(url.buildUrl()).pipe(
       take(1),
-      map(response => response.filter(item => item.isActive).map(item => ({
+      map(response => response.map(item => ({
         id: item.id,
         name: item.name
       })))
