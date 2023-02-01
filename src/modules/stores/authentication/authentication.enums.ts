@@ -1,11 +1,3 @@
-// DEPRECATE
-export enum UserTypeEnum {
-  ADMIN = 'ADMIN',
-  ASSESSMENT = 'ASSESSMENT',
-  ACCESSOR = 'ACCESSOR',
-  INNOVATOR = 'INNOVATOR'
-}
-
 export enum UserRoleEnum {
   SERVICE_TEAM = 'SERVICE_TEAM',
   ADMIN = 'ADMIN',

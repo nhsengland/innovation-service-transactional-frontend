@@ -92,11 +92,11 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   getUserRole() {
-    switch (this.state.user?.type) {
+    switch (this.state.userContext?.type) {
       case UserRoleEnum.ADMIN: return 'Administrator';
       case UserRoleEnum.ASSESSMENT: return 'Needs assessment';
       case UserRoleEnum.INNOVATOR: return 'Innovator';
-      case UserRoleEnum.ACCESSOR: return this.getRoleDescription(this.state.user.organisations.map(org => org.role)[0]);
+      case UserRoleEnum.ACCESSOR: return this.getRoleDescription(this.state.userContext?.type);
       default: return '';
     }
   }
