@@ -176,7 +176,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       case UserRoleEnum.ASSESSMENT: return 'assessment';
       case UserRoleEnum.ACCESSOR: return 'accessor';
       case UserRoleEnum.INNOVATOR: return 'innovator';
-      default: return '';
+      default: return 'innovator'; //hardcode for now
     }
   }
 
