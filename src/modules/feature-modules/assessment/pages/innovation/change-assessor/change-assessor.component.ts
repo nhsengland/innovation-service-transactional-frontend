@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
+import { UsersService } from '@modules/shared/services/users.service';
 
 @Component({
   selector: 'app-assessment-pages-innovation-assessor',
@@ -20,7 +21,8 @@ export class InnovationChangeAssessorComponent extends CoreComponent  implements
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private assessmentService: AssessmentService 
+    private assessmentService: AssessmentService, 
+    private usersService: UsersService
   ) {
     super();
 
@@ -31,7 +33,7 @@ export class InnovationChangeAssessorComponent extends CoreComponent  implements
   ngOnInit(): void {
     this.setPageTitle('Assign a new needs assessor to support this innovation');
 
-    this.assessmentService.getAssessmentUsersList().subscribe((userList) => {
+    this.usersService.getAssessmentUsersList().subscribe((userList) => {
       const innovation = this.stores.context.getInnovation();
       this.needsAssessorList = userList.filter(i => i.id !== innovation.assignedTo?.id);
 
