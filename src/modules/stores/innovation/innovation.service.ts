@@ -5,7 +5,7 @@ import { map, take } from 'rxjs/operators';
 
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
-import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
+import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 
 import {
   INNOVATION_STATUS,
@@ -28,14 +28,14 @@ export class InnovationService {
     private envVariablesStore: EnvironmentVariablesStore
   ) { }
 
-
+  //TODO: Refactor this function
   private apiUserBasePath(): string {
 
     switch (this.authenticationStore.getUserType()) {
-      case UserTypeEnum.ADMIN: return 'user-admin';
-      case UserTypeEnum.ASSESSMENT: return 'assessments';
-      case UserTypeEnum.ACCESSOR: return 'accessors';
-      case UserTypeEnum.INNOVATOR: return 'innovators';
+      case UserRoleEnum.ADMIN: return 'user-admin';
+      case UserRoleEnum.ASSESSMENT: return 'assessments';
+      case UserRoleEnum.ACCESSOR: return 'accessors';
+      case UserRoleEnum.INNOVATOR: return 'innovators';
       default: return '';
     }
 

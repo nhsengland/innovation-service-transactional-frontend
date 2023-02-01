@@ -7,7 +7,7 @@ import { Injector } from '@angular/core';
 import { CoreModule, AppInjector } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
-import { UserTypeEnum } from './enums';
+import { UserRoleEnum } from './enums';
 
 import { CoreService } from './core.service';
 
@@ -47,19 +47,19 @@ describe('App/Base/CoreService', () => {
   });
 
   it(`should run apiUserBasePath() as Admin`, () => {
-    authenticationStore.getUserType = () => UserTypeEnum.ADMIN;
+    authenticationStore.getUserType = () => UserRoleEnum.ADMIN;
     expect(service.apiUserBasePath()).toBe('user-admin');
   });
   it(`should run apiUserBasePath() as Admin`, () => {
-    authenticationStore.getUserType = () => UserTypeEnum.ASSESSMENT;
+    authenticationStore.getUserType = () => UserRoleEnum.ASSESSMENT;
     expect(service.apiUserBasePath()).toBe('assessments');
   });
   it(`should run apiUserBasePath() as Admin`, () => {
-    authenticationStore.getUserType = () => UserTypeEnum.ACCESSOR;
+    authenticationStore.getUserType = () => UserRoleEnum.ACCESSOR;
     expect(service.apiUserBasePath()).toBe('accessors');
   });
   it(`should run apiUserBasePath() as Admin`, () => {
-    authenticationStore.getUserType = () => UserTypeEnum.INNOVATOR;
+    authenticationStore.getUserType = () => UserRoleEnum.INNOVATOR;
     expect(service.apiUserBasePath()).toBe('innovators');
   });
   it(`should run apiUserBasePath() as Admin`, () => {

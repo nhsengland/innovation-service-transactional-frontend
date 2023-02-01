@@ -7,7 +7,7 @@ import { CustomValidators, FormControl, FormGroup, Validators } from '@app/base/
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { UserTypeEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 
 
 @Component({
@@ -68,7 +68,7 @@ export class PageInnovationThreadNewComponent extends CoreComponent implements O
 
         this.setRedirectAlertSuccess(
           'You have successfully started a conversation',
-          { message: this.stores.authentication.getUserType() === UserTypeEnum.INNOVATOR ? 'Everyone who is currently supporting your innovations will be notified.' : 'The innovator will be notified.' }
+          { message: this.stores.authentication.getUserType() === UserRoleEnum.INNOVATOR ? 'Everyone who is currently supporting your innovations will be notified.' : 'The innovator will be notified.' }
         );
 
         this.redirectTo(`/${this.selfUser.urlBasePath}/innovations/${this.innovation.id}/threads`)

@@ -9,7 +9,7 @@ import { of, throwError } from 'rxjs';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
-import { UserTypeEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
@@ -70,7 +70,7 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserInfoComponent', () 
 
     serviceUsersService.getUserFullInfo = () => of({
       id: 'user01', email: 'some@email.com', phone: null,
-      displayName: 'User name', type: UserTypeEnum.INNOVATOR,
+      displayName: 'User name', type: UserRoleEnum.INNOVATOR,
       lockedAt: null,
       innovations: [],
       userOrganisations: []

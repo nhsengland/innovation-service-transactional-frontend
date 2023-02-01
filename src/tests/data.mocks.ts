@@ -1,4 +1,4 @@
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum, UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
@@ -8,7 +8,7 @@ export const USER_INFO_ACCESSOR: Required<AuthenticationModel>['user'] = {
   id: '_id',
   email: 'tqa@email.com',
   displayName: 'Test qualifying Accessor',
-  type: UserTypeEnum.ACCESSOR,
+  type: UserRoleEnum.ACCESSOR,
   roles: [],
   contactByPhone: false,
   contactByEmail: false,
@@ -32,7 +32,7 @@ export const USER_INFO_INNOVATOR: Required<AuthenticationModel>['user'] = {
   id: '_id',
   email: 'some@email.com',
   displayName: 'Test innovator',
-  type: UserTypeEnum.INNOVATOR,
+  type: UserRoleEnum.INNOVATOR,
   roles: [],
   contactByPhone: false,
   contactByEmail: false,
@@ -51,7 +51,7 @@ export const USER_INFO_ADMIN: Required<AuthenticationModel>['user'] = {
   id: '_id',
   email: 'a@gmail.com',
   displayName: 'Test admin  ',
-  type: UserTypeEnum.ADMIN,
+  type: UserRoleEnum.ADMIN,
   roles: [UserRoleEnum.ADMIN, UserRoleEnum.SERVICE_TEAM],
   contactByPhone: false,
   contactByEmail: false,

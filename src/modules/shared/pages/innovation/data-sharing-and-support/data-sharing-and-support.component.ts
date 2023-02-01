@@ -11,7 +11,7 @@ import { InnovationSharesListDTO, InnovationsService } from '@modules/shared/ser
 import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { UserTypeEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
@@ -28,7 +28,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
 
   innovation: ContextInnovationType;
 
-  userType: '' | UserTypeEnum;
+  userType: '' | UserRoleEnum;
 
   organisations: {
     info: {
@@ -67,18 +67,18 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
 
-    this.isQualifyingAccessorRole = this.userType === UserTypeEnum.ACCESSOR && this.stores.authentication.isQualifyingAccessorRole();
+    this.isQualifyingAccessorRole = this.userType === UserRoleEnum.ACCESSOR && this.stores.authentication.isQualifyingAccessorRole();
 
     switch (this.userType) {
-      case UserTypeEnum.ASSESSMENT:
+      case UserRoleEnum.ASSESSMENT:
         this.setPageTitle('Support status', { hint: 'All organisations' });
         break;
 
-      case UserTypeEnum.ADMIN:
+      case UserRoleEnum.ADMIN:
         this.setPageTitle('Data sharing and support', { hint: `Innovation ${this.innovation.name}` });
         break;
 
-      case UserTypeEnum.ACCESSOR:
+      case UserRoleEnum.ACCESSOR:
         this.setPageTitle('Support status', { hint: 'All organisations' });
         break;
 
@@ -103,23 +103,23 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
       innovationSupports: this.innovationsService.getInnovationSupportsList(this.innovationId, false)
     };
 
-    if (this.userType === UserTypeEnum.INNOVATOR) {
+    if (this.userType === UserRoleEnum.INNOVATOR) {
       subscriptions.innovationShares = this.innovationsService.getInnovationSharesList(this.innovationId);
       subscriptions.organisationSuggestions = this.innovationService.getInnovationOrganisationSuggestions(this.innovationId);
     }
     
-    if(this.userType === UserTypeEnum.ADMIN || this.userType === UserTypeEnum.ASSESSMENT) {
+    if(this.userType === UserRoleEnum.ADMIN || this.userType === UserRoleEnum.ASSESSMENT) {
       subscriptions.innovationShares = this.innovationsService.getInnovationSharesList(this.innovationId);
     }
 
     forkJoin(subscriptions).subscribe((results) => {
 
-      if (this.userType === UserTypeEnum.INNOVATOR) {
+      if (this.userType === UserRoleEnum.INNOVATOR) {
         this.organisationSuggestions = results.organisationSuggestions;
         this.shares = (results.innovationShares ?? []).map(item => ({ organisationId: item.organisation.id }));
       }
 
-      if (this.userType === UserTypeEnum.ADMIN || this.userType === UserTypeEnum.ASSESSMENT) {
+      if (this.userType === UserRoleEnum.ADMIN || this.userType === UserRoleEnum.ASSESSMENT) {
         this.shares = (results.innovationShares ?? []).map(item => ({ organisationId: item.organisation.id }));
       }
 
@@ -134,7 +134,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
               organisationUnits: [],
               status: results.innovationSupports.find(item => item.organisation.id === organisation.id)?.status || InnovationSupportStatusEnum.UNASSIGNED,
             },
-            ...([UserTypeEnum.ADMIN, UserTypeEnum.INNOVATOR, UserTypeEnum.ASSESSMENT].includes(this.userType as UserTypeEnum) ? { shared: ((results.innovationShares ?? []).findIndex(item => item.organisation.id === organisation.id) > -1) } : {}),
+            ...([UserRoleEnum.ADMIN, UserRoleEnum.INNOVATOR, UserRoleEnum.ASSESSMENT].includes(this.userType as UserRoleEnum) ? { shared: ((results.innovationShares ?? []).findIndex(item => item.organisation.id === organisation.id) > -1) } : {}),
             showHideStatus: 'hidden',
             showHideText: null,
             showHideDescription: null
@@ -150,7 +150,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
                 status: results.innovationSupports.find(item => item.organisation.unit.id === organisationUnit.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
               }))
             },
-            ...([UserTypeEnum.ADMIN, UserTypeEnum.INNOVATOR, UserTypeEnum.ASSESSMENT].includes(this.userType as UserTypeEnum) ? { shared: ((results.innovationShares ?? []).findIndex(item => item.organisation.id === organisation.id) > -1) } : {}),
+            ...([UserRoleEnum.ADMIN, UserRoleEnum.INNOVATOR, UserRoleEnum.ASSESSMENT].includes(this.userType as UserRoleEnum) ? { shared: ((results.innovationShares ?? []).findIndex(item => item.organisation.id === organisation.id) > -1) } : {}),
             showHideStatus: 'closed',
             showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
             showHideDescription: `that belong to the ${organisation.name}`

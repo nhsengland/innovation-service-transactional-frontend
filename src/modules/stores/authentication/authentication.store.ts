@@ -5,7 +5,7 @@ import { concatMap } from 'rxjs/operators';
 import { Store } from '../store.class';
 import { AuthenticationService, UpdateUserInfoDTO } from './authentication.service';
 
-import { UserRoleEnum, UserTypeEnum } from './authentication.enums';
+import { UserRoleEnum } from './authentication.enums';
 import { AuthenticationModel } from './authentication.models';
 import { LocalStorageHelper } from '@app/base/helpers';
 
@@ -93,10 +93,10 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
   getUserRole() {
     switch (this.state.user?.type) {
-      case UserTypeEnum.ADMIN: return 'Administrator';
-      case UserTypeEnum.ASSESSMENT: return 'Needs assessment';
-      case UserTypeEnum.INNOVATOR: return 'Innovator';
-      case UserTypeEnum.ACCESSOR: return this.getRoleDescription(this.state.user.organisations.map(org => org.role)[0]);
+      case UserRoleEnum.ADMIN: return 'Administrator';
+      case UserRoleEnum.ASSESSMENT: return 'Needs assessment';
+      case UserRoleEnum.INNOVATOR: return 'Innovator';
+      case UserRoleEnum.ACCESSOR: return this.getRoleDescription(this.state.user.organisations.map(org => org.role)[0]);
       default: return '';
     }
   }
@@ -148,12 +148,12 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     this.state.userContext = userContext;
   }
 
-  getUserTypeDescription(userType: UserTypeEnum): string {
+  getUserTypeDescription(userType: UserRoleEnum): string {
     switch (userType) {
-      case UserTypeEnum.ADMIN: return 'Administrator';
-      case UserTypeEnum.ASSESSMENT: return 'Needs assessment';
-      case UserTypeEnum.ACCESSOR: return 'Support assessment';
-      case UserTypeEnum.INNOVATOR: return 'Innovator';
+      case UserRoleEnum.ADMIN: return 'Administrator';
+      case UserRoleEnum.ASSESSMENT: return 'Needs assessment';
+      case UserRoleEnum.ACCESSOR: return 'Support assessment';
+      case UserRoleEnum.INNOVATOR: return 'Innovator';
       default: return '';
     }
   }

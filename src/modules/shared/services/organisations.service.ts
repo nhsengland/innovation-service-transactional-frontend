@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 
 
@@ -49,11 +49,11 @@ export class OrganisationsService extends CoreService {
 
   getOrganisationUnitUsersList(organisationUnitId: string, activeOnly = true): Observable<{ id: string, organisationUnitUserId: string, name: string }[]> {
 
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ organisationUnitId, fields: ['organisations', 'units'], userTypes: [UserTypeEnum.ACCESSOR] });
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ organisationUnitId, fields: ['organisations', 'units'], userTypes: [UserRoleEnum.ACCESSOR] });
     return this.http.get<{
       id: string,
       name: string,
-      type: UserTypeEnum,
+      type: UserRoleEnum,
       isActive: boolean,
       organisations: {
         name: string;

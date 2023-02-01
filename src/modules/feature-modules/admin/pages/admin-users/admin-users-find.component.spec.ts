@@ -6,7 +6,7 @@ import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { UserTypeEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
@@ -69,7 +69,7 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserFindComponent', () 
       id: ':id',
       displayName: ':displayName',
       email: 'test@example.com',
-      type: UserTypeEnum.ACCESSOR,
+      type: UserRoleEnum.ACCESSOR,
       typeLabel: 'Accessor',
       userOrganisations: [
         {

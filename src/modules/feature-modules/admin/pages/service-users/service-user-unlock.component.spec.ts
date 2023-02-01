@@ -6,7 +6,7 @@ import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
+import { InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { StoresModule } from '@modules/stores';
@@ -66,7 +66,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserUnlockComponent
       id: 'User01',
       email: 'user@email.com',
       displayName: 'User name',
-      type: UserTypeEnum.INNOVATOR,
+      type: UserRoleEnum.INNOVATOR,
       innovations: [{ id: 'inn1', name: 'innovation' }],
       phone: '12345678',
       lockedAt: '2020-01-01T00:00:00.000Z',
@@ -90,7 +90,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserUnlockComponent
       id: 'User01',
       email: 'user@email.com',
       displayName: 'User name',
-      type: UserTypeEnum.INNOVATOR,
+      type: UserRoleEnum.INNOVATOR,
       phone: '124',
       lockedAt: null,
       innovations: [{ id: 'inn1', name: 'innovation' }],

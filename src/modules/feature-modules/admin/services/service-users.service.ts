@@ -4,7 +4,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, TermsOfUseTypeEnum, UserTypeEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, TermsOfUseTypeEnum, UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
 
@@ -19,7 +19,7 @@ export type getUserFullInfoDTO = {
   email: string;
   phone: null | string;
   displayName: string;
-  type: UserTypeEnum;
+  type: UserRoleEnum;
   lockedAt: null | string;
   innovations: {
     id: string;
@@ -120,7 +120,7 @@ export type searchUserEndpointInDTO = {
   id: string;
   email: string;
   displayName: string;
-  type: UserTypeEnum,
+  type: UserRoleEnum,
   lockedAt?: string;
   userOrganisations?: {
     id: string;

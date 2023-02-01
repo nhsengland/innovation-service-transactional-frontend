@@ -1,3 +1,4 @@
+// DEPRECATE
 export enum UserTypeEnum {
   ADMIN = 'ADMIN',
   ASSESSMENT = 'ASSESSMENT',

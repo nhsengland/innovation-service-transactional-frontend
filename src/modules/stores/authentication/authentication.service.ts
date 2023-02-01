@@ -7,14 +7,14 @@ import { DateISOType } from '@modules/core/interfaces/base.interfaces';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { UrlModel } from '@modules/core/models/url.model';
 
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum, UserTypeEnum } from './authentication.enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from './authentication.enums';
 
 
 type GetUserInfoDTO = {
   id: string,
   email: string,
   displayName: string,
-  type: UserTypeEnum,
+  type: UserRoleEnum,
   roles: UserRoleEnum[],    
   contactByPhone: boolean,
   contactByEmail:  boolean,

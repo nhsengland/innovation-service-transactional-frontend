@@ -74,7 +74,7 @@ describe('FeatureModules/Admin/Services/ServiceUsersService', () => {
   //     id: '_id',
   //     email: 'some@email.com',
   //     displayName: 'Test innovator',
-  //     type: UserTypeEnum.INNOVATOR,
+  //     type: UserRoleEnum.INNOVATOR,
   //     phone: '212000000',
   //     lockedAt: null,
   //     innovations: [],
@@ -243,7 +243,7 @@ describe('FeatureModules/Admin/Services/ServiceUsersService', () => {
   //     id: '_id',
   //     email: 'some@email.com',
   //     displayName: 'Test innovator',
-  //     type: UserTypeEnum.INNOVATOR
+  //     type: UserRoleEnum.INNOVATOR
   //   }];
   //   const expected = responseMock.map(item => ({ ...item, typeLabel: 'Innovator' }));
 
@@ -264,7 +264,7 @@ describe('FeatureModules/Admin/Services/ServiceUsersService', () => {
   //     id: '_id',
   //     email: 'some@email.com',
   //     displayName: 'Test innovator',
-  //     type: UserTypeEnum.INNOVATOR
+  //     type: UserRoleEnum.INNOVATOR
   //   }];
   //   const expected = responseMock.map(item => ({ ...item, typeLabel: 'Innovator' }));
 

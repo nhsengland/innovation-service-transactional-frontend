@@ -5,7 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Injector } from '@angular/core';
 import { of, throwError } from 'rxjs';
 
-import { UserTypeEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
@@ -54,7 +54,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserFindComponent',
       id: ':id',
       displayName: ':displayName',
       email: 'test@example.com',
-      type: UserTypeEnum.ACCESSOR,
+      type: UserRoleEnum.ACCESSOR,
       typeLabel: 'Accessor',
       userOrganisations: [
         {
