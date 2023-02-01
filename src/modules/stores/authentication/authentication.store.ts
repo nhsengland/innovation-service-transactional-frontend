@@ -28,29 +28,36 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
         concatMap(user => {
           this.state.user = user;
           this.state.isSignIn = true;
+          const roles = [...new Set(user.roles.map(({ role }) => role))];
 
-          if (user.roles.length === 1 && user.roles[0].role === UserRoleEnum.ACCESSOR) {
-            if (user.organisations.length === 1 && user.organisations[0].organisationUnits.length === 1) {              
-              this.state.userContext = {
-                type: user.roles[0].role,
-                organisation: {
-                  id: user.organisations[0].id,
-                  name: user.organisations[0].name,
-                  role: user.organisations[0].role,
-                  organisationUnit: user.organisations[0].organisationUnits[0],
+          if (roles.length === 1) {
+            if (roles[0] === UserRoleEnum.ACCESSOR) {
+              if (user.organisations.length === 1 && user.organisations[0].organisationUnits.length === 1) {              
+                this.state.userContext = {
+                  type: roles[0],
+                  organisation: {
+                    id: user.organisations[0].id,
+                    name: user.organisations[0].name,
+                    role: user.organisations[0].role,
+                    organisationUnit: user.organisations[0].organisationUnits[0],
+                  }
+                }
+              } else {
+                const currentOrgUnitId = LocalStorageHelper.getObjectItem("orgUnitId");
+                
+                if(!!currentOrgUnitId) {
+                  this.findAndPopulateUserContextFromLocalstorage(currentOrgUnitId.id);
                 }
               }
             } else {
-              const currentOrgUnitId = LocalStorageHelper.getObjectItem("orgUnitId");
-              
-              if(!!currentOrgUnitId) {
-                this.findAndPopulateUserContextFromLocalstorage(currentOrgUnitId.id);
+              this.state.userContext = {
+                type: roles[0]
               }
             }
           } else {
             this.state.userContext = {
-              type: user.roles[0].role
-            }
+              type: roles[0]
+            }            
           }
           return of(true);
         })
@@ -176,7 +183,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       case UserRoleEnum.ASSESSMENT: return 'assessment';
       case UserRoleEnum.ACCESSOR: return 'accessor';
       case UserRoleEnum.INNOVATOR: return 'innovator';
-      default: return 'innovator'; //hardcode for now
+      default: return '';
     }
   }
 
