@@ -36,12 +36,12 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   it('should run initializeAuthentication$() and return success', () => {
 
     authenticationService.verifyUserSession = () => of(true);
-    authenticationService.getUserInfo = () => of({ id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: UserRoleEnum.INNOVATOR, roles: [],  contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, contactDetails: null, phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] });
+    authenticationService.getUserInfo = () => of({ id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', roles: [],  contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, contactDetails: null, phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] });
 
     const expectedResponse = true;
     const expectedState: AuthenticationModel = {
       isSignIn: true,
-      user: { id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: UserRoleEnum.INNOVATOR, roles: [],  contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, contactDetails: null, phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] },
+      user: { id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', roles: [],  contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, contactDetails: null, phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] },
       userContext: { type : '' }
     };
     let response: any = null;
