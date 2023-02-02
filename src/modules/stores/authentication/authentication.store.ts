@@ -84,7 +84,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   hasInnovationTransfers(): boolean { return this.state.user?.hasInnovationTransfers || false; }
 
   isInnovatorType(): boolean { return this.state.userContext?.type === 'INNOVATOR'; }
-  isAccessorType(): boolean { return this.state.userContext?.type === 'ACCESSOR'; }
+  isAccessorType(): boolean { return [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(this.state.userContext?.type as UserRoleEnum); }
   isAssessmentType(): boolean { return this.state.userContext?.type === 'ASSESSMENT'; }
 
   isAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'ACCESSOR'; }
