@@ -31,7 +31,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           const roles = [...new Set(user.roles.map(({ role }) => role))];
 
           if (roles.length === 1) {
-            if (roles[0] === UserRoleEnum.ACCESSOR) {
+            if (roles[0] === UserRoleEnum.ACCESSOR || roles[0] === UserRoleEnum.QUALIFYING_ACCESSOR) {
               if (user.organisations.length === 1 && user.organisations[0].organisationUnits.length === 1) {              
                 this.state.userContext = {
                   type: roles[0],
