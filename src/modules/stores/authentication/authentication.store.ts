@@ -181,7 +181,9 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     switch (this.getUserType()) {
       case UserRoleEnum.ADMIN: return 'admin';
       case UserRoleEnum.ASSESSMENT: return 'assessment';
-      case UserRoleEnum.ACCESSOR: return 'accessor';
+      case UserRoleEnum.QUALIFYING_ACCESSOR: 
+      case UserRoleEnum.ACCESSOR: 
+        return 'accessor';
       case UserRoleEnum.INNOVATOR: return 'innovator';
       default: return '';
     }
