@@ -79,6 +79,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
         break;
 
       case UserRoleEnum.ACCESSOR:
+      case UserRoleEnum.QUALIFYING_ACCESSOR:
         this.setPageTitle('Support status', { hint: 'All organisations' });
         break;
 

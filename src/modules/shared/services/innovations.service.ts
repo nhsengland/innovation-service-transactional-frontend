@@ -217,6 +217,7 @@ export class InnovationsService extends CoreService {
           qp.fields = ['isAssessmentOverdue', 'assessment', 'supports'];
           break;
         case UserRoleEnum.ACCESSOR:
+        case UserRoleEnum.QUALIFYING_ACCESSOR:
           qp.status = [InnovationStatusEnum.IN_PROGRESS];
           qp.fields = ['assessment', 'supports', 'notifications'];
           break;
@@ -258,6 +259,7 @@ export class InnovationsService extends CoreService {
         qp.fields = ['assessment'];
         break;
       case UserRoleEnum.ACCESSOR:
+      case UserRoleEnum.QUALIFYING_ACCESSOR:
         qp.fields = ['assessment', 'supports'];
         break;
       case UserRoleEnum.ADMIN:

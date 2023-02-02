@@ -34,7 +34,9 @@ export class InnovationService {
     switch (this.authenticationStore.getUserType()) {
       case UserRoleEnum.ADMIN: return 'user-admin';
       case UserRoleEnum.ASSESSMENT: return 'assessments';
-      case UserRoleEnum.ACCESSOR: return 'accessors';
+      case UserRoleEnum.ACCESSOR: 
+      case UserRoleEnum.QUALIFYING_ACCESSOR: 
+        return 'accessors';
       case UserRoleEnum.INNOVATOR: return 'innovators';
       default: return '';
     }

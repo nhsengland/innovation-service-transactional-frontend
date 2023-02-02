@@ -103,7 +103,9 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       case UserRoleEnum.ADMIN: return 'Administrator';
       case UserRoleEnum.ASSESSMENT: return 'Needs assessment';
       case UserRoleEnum.INNOVATOR: return 'Innovator';
-      case UserRoleEnum.ACCESSOR: return this.getRoleDescription(this.state.userContext?.type);
+      case UserRoleEnum.ACCESSOR: 
+      case UserRoleEnum.QUALIFYING_ACCESSOR: 
+        return this.getRoleDescription(this.state.userContext?.type);
       default: return '';
     }
   }
@@ -159,7 +161,9 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     switch (userType) {
       case UserRoleEnum.ADMIN: return 'Administrator';
       case UserRoleEnum.ASSESSMENT: return 'Needs assessment';
-      case UserRoleEnum.ACCESSOR: return 'Support assessment';
+      case UserRoleEnum.ACCESSOR: 
+      case UserRoleEnum.QUALIFYING_ACCESSOR: 
+        return 'Support assessment';
       case UserRoleEnum.INNOVATOR: return 'Innovator';
       default: return '';
     }
