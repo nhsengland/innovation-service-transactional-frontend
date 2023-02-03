@@ -1,10 +1,10 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, interval } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { UtilsHelper } from '@app/base/helpers';
-import { MappedObjectType } from '@app/base/types';
+import { DateISOType, MappedObjectType } from '@app/base/types';
 import { FormEngineComponent, FormEngineParameterModel } from '@modules/shared/forms';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
@@ -26,6 +26,9 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   innovationName: string;
   assessmentId: string;
   stepId: number;
+
+  formChanged = false;
+  lastSavedAt = new Date().toISOString();
 
   form: {
     sections: {
@@ -133,6 +136,18 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       })
     );
 
+    this.subscriptions.push(
+      interval(300 * 60).subscribe(() => {
+        if (this.formChanged) {
+          this.onSubmit('saveAsDraft');
+          this.formChanged = false;
+        }
+
+        this.lastSavedAt = new Date().toISOString();
+
+      })
+    );
+
   }
 
 
@@ -184,7 +199,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`);
             break;
           case 'update':
-          case 'submit':          
+          case 'submit':
             this.setRedirectAlertSuccess('Needs assessment successfully completed');
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`);
             break;
@@ -197,8 +212,9 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   }
 
   onFormChange(): void {
+    this.formChanged = true;
     this.saveAsDraft = { disabled: false, label: 'Save as a draft' };
-    this.editAssessment = { disabled: false, label: 'Save and continue'};
+    this.editAssessment = { disabled: false, label: 'Save and continue' };
   }
 
   private reuseRouteStrategy(): void {

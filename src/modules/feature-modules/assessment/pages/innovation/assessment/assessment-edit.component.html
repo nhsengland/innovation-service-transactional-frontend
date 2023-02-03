@@ -3,6 +3,13 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
+      <div class="full-width-section bg-color-white">
+        <div class="nhsuk-inset-text">
+          <span class="nhsuk-u-visually-hidden">Information:</span>
+          <p>This document is autosaved every minute.</p>
+        </div>
+      </div>
+
       <ng-container *ngFor="let section of form.sections; let i = index">
 
         <div class="full-width-section" [ngClass]="{'bg-color-white': !(i % 2)}">
@@ -19,7 +26,7 @@
 
       <ng-container *ngIf="assessmentHasBeenSubmitted; else firstAssessment">
         <button *ngIf="stepId === 1" [disabled]="editAssessment.disabled" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('saveAsDraftFirstSection')">{{ editAssessment.label }}</button>
-        
+
         <ng-container *ngIf="stepId > 1">
           <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('update')">Update needs assessment</button>
           <button [disabled]="saveAsDraft.disabled" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5" (click)="onSubmit('saveAsDraft')">{{ saveAsDraft.label }}</button>
@@ -57,7 +64,11 @@
 
 
 <ng-template #firstAssessment>
-  <button *ngIf="stepId === 1" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('saveAsDraftFirstSection')">Save and continue</button>
+  <ng-container>
+    <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('saveAsDraftFirstSection')">Save and continue</button>
+    <p *ngIf="this.formChanged === false">All changes were saved at {{ this.lastSavedAt| date: ('app.date_formats.short_seconds' | translate) }}. This document is autosaved every minute.</p>
+    <p *ngIf="this.formChanged === true">There are changes that need to be saved, the most recent save was at {{ this.lastSavedAt| date: ('app.date_formats.short_date_time' | translate) }}. This document is autosaved every minute.</p>
+  </ng-container>
   <ng-container *ngIf="stepId > 1">
     <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">Submit needs assessment</button>
     <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5" (click)="onSubmit('saveAsDraft')">Save as a draft</button>
