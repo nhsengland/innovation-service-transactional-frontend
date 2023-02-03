@@ -37,9 +37,14 @@
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="stores.authentication.isAdminRole() === false && innovation.status !== 'PAUSED'">
           <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
-          <p class="nhsuk-body-s font-color-secondary">
-            Once sent, all participants in this conversation will be notified. As well as the innovator, everyone who is supporting this innovation will be able to see and reply to your message.
+          <p class="nhsuk-body-s font-color-secondary" *ngIf="stores.authentication.isInnovatorType(); else notInnovator" >
+            Once sent, all participants in this conversation will be notified. Your message can be seen and replied to by everyone who has access to this innovation.
           </p>
+          <ng-template #notInnovator>
+            <p class="nhsuk-body-s font-color-secondary">
+              Once sent, the innovator and other participants in this conversation will be notified. Your message can be seen and replied to by everyone who has access to this innovation.
+            </p>
+          </ng-template>
           <button type="submit" class="nhsuk-button button-small nhsuk-u-margin-bottom-5">
             Send message <span class="nhsuk-u-visually-hidden"> for conversation with subject {{ threadInfo?.subject }} created at {{ threadInfo?.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </span>
           </button>
