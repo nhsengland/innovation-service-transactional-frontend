@@ -55,6 +55,7 @@ import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-dat
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
+import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -313,6 +314,10 @@ const routes: Routes = [
                   breadcrumb: 'Activity Log',
                   layout: { type: 'full', backgroundColor: 'bg-color-white' }
                 }
+              },
+
+              {
+                path: 'everyone', pathMatch: 'full', component: PageEveryoneWorkingOnInnovationComponent
               }
 
             ]

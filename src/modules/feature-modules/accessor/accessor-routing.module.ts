@@ -65,6 +65,7 @@ import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-dat
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
+import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -332,6 +333,10 @@ const routes: Routes = [
                   { path: 'list', pathMatch: 'full', component: PageExportRecordListComponent, data: { breadcrumb: null } },
                   { path: ':requestId', pathMatch: 'full', component: PageExportRecordInfoComponent, data: { breadcrumb: 'Export information' } }
                 ]
+              },
+
+              {
+                path: 'everyone', pathMatch: 'full', component: PageEveryoneWorkingOnInnovationComponent
               }
             ]
           }
