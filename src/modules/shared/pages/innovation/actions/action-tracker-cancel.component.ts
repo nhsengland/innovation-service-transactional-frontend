@@ -38,7 +38,7 @@ export class PageInnovationActionTrackerCancelComponent extends CoreComponent im
         return this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${this.actionId}`);
       }
 
-      if(this.stores.authentication.isAssessmentType() && response.createdBy.role === UserRoleEnum.ACCESSOR) {
+      if(this.stores.authentication.isAssessmentType() && (response.createdBy.role === UserRoleEnum.ACCESSOR || response.createdBy.role === UserRoleEnum.QUALIFYING_ACCESSOR)) {
         return this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${this.actionId}`);
       }
       

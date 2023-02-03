@@ -67,7 +67,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
 
-    this.isQualifyingAccessorRole = this.userType === UserRoleEnum.ACCESSOR && this.stores.authentication.isQualifyingAccessorRole();
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
     switch (this.userType) {
       case UserRoleEnum.ASSESSMENT:

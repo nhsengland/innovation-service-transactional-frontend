@@ -67,8 +67,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     
     this.user = {
       displayName: user.displayName,
-      description: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(userContext.type as UserRoleEnum) ? `Logged in as ${userRole} (${userContext.organisation?.organisationUnit.name})` : `Logged in as ${userRole}`,
-      showSwitchProfile: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(userContext.type as UserRoleEnum) && (user.organisations.length > 1 || user.organisations[0].organisationUnits.length > 1)
+      description: this.authenticationStore.isAccessorType() ? `Logged in as ${userRole} (${userContext.organisation?.organisationUnit.name})` : `Logged in as ${userRole}`,
+      showSwitchProfile: this.authenticationStore.isAccessorType() && (user.organisations.length > 1 || user.organisations[0].organisationUnits.length > 1)
     };
 
     this.signOutUrl = `${this.environmentVariablesStore.APP_URL}/signout`;

@@ -53,7 +53,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
     this.innovation = this.stores.context.getInnovation();
 
-    if(this.userType === UserRoleEnum.ACCESSOR) {
+    if(this.stores.authentication.isAccessorType()) {
       this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
     }
   }
