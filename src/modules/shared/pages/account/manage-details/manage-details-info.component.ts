@@ -66,7 +66,7 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
       this.summaryList = [
         { label: 'Name', value: user.displayName, editStepNumber: 1 },
         { label: 'Email address', value: user.email },
-        { label: 'User type', value: this.stores.authentication.getRoleDescription(user.type as 'ADMIN') }
+        { label: 'User type', value: this.stores.authentication.getRoleDescription(user.roles[0].role as 'ADMIN') }
       ];
     }
 

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Request } from 'express';
 import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { AuthenticationStore } from '@modules/stores';
+import { UserRoleEnum } from '@app/base/enums';
 
 @Injectable()
 export class ApiOutInterceptor implements HttpInterceptor {

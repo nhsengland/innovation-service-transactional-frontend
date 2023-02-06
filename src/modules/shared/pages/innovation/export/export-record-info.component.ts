@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { UserTypeEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 import { InnovationExportRequestItemType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationExportRequestStatusEnum } from '@modules/stores/innovation/innovation.enums';
@@ -20,7 +20,7 @@ export class PageExportRecordInfoComponent extends CoreComponent implements OnIn
 
   innovationExport: ContextInnovationType['export'];
 
-  userType: UserTypeEnum.ACCESSOR | UserTypeEnum.INNOVATOR = this.stores.authentication.isAccessorType() ? UserTypeEnum.ACCESSOR : UserTypeEnum.INNOVATOR;
+  userType: UserRoleEnum.ACCESSOR | UserRoleEnum.INNOVATOR = this.stores.authentication.isAccessorType() ? UserRoleEnum.ACCESSOR : UserRoleEnum.INNOVATOR;
 
   constructor(
     private activatedRoute: ActivatedRoute,

@@ -8,8 +8,7 @@ import { AuthenticationStore, AuthenticationService } from '@modules/stores';
 
 import { InnovationService } from './innovation.service';
 
-import { InnovationSectionEnum } from './innovation.enums';
-import { UserTypeEnum } from '../authentication/authentication.enums';
+import { UserRoleEnum } from '../authentication/authentication.enums';
 
 describe('Stores/Innovation/InnovationService', () => {
 
@@ -39,7 +38,7 @@ describe('Stores/Innovation/InnovationService', () => {
 
     service = TestBed.inject(InnovationService);
 
-    authenticationStore.getUserType = () => UserTypeEnum.INNOVATOR;
+    authenticationStore.getUserType = () => UserRoleEnum.INNOVATOR;
     authenticationStore.getUserId = () => 'user001';
 
   });
