@@ -71,8 +71,8 @@ const header: RoutesDataType['header'] = {
   menuBarItems: {
     left: [
       { id: 'innovations', label: 'Innovations', url: '/accessor/innovations' },
+      { id: 'actions', label: 'Actions', url: '/accessor/actions' },
       { id: 'notifications', label: 'Notifications', url: '/accessor/notifications' },
-      { id: 'actions', label: 'Actions', url: '/accessor/actions', },
       { id: 'account', label: 'Your account', url: '/accessor/account' }
     ],
     right: []
