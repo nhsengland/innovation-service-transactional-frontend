@@ -1,6 +1,6 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { forkJoin, interval } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { UtilsHelper } from '@app/base/helpers';
@@ -10,8 +10,8 @@ import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/ne
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
-import { AssessmentService } from '../../../services/assessment.service';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { AssessmentService } from '../../../services/assessment.service';
 
 
 @Component({
@@ -26,6 +26,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   innovationName: string;
   assessmentId: string;
   stepId: number;
+
+  formChanged = false;
 
   form: {
     sections: {
@@ -133,10 +135,18 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       })
     );
 
+    this.subscriptions.push(
+      interval(1000 * 60).subscribe(() => {
+        if (this.formChanged) {
+          this.onSubmit('autosave');
+        }
+      })
+    );
+
   }
 
 
-  onSubmit(action: 'update' | 'saveAsDraft' | 'submit' | 'saveAsDraftFirstSection' | 'saveAsDraftSecondSection'): void {
+  onSubmit(action: 'update' | 'saveAsDraft' | 'submit' | 'saveAsDraftFirstSection' | 'saveAsDraftSecondSection' | 'autosave'): void {
 
     let isValid = true;
 
@@ -145,7 +155,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
       let formData: MappedObjectType;
 
-      if (action === 'saveAsDraft') {
+      if (action === 'autosave' || action === 'saveAsDraft') {
         formData = engine.getFormValues(false);
       } else {
 
@@ -172,11 +182,16 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && (action === 'submit' || action === 'update')), this.currentAnswers).subscribe({
       next: () => {
         switch (action) {
+          case 'autosave': 
+            this.saveAsDraft = { disabled: true, label: 'Saved' };
+            break;
           case 'saveAsDraft':
+            this.setAlertSuccess('Changes have been saved.');
             this.saveAsDraft = { disabled: true, label: 'Saved' };
             break;
           case 'saveAsDraftFirstSection':
             this.reuseRouteStrategy();
+            this.setRedirectAlertSuccess('Changes have been saved.')
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
             break;
           case 'saveAsDraftSecondSection':
@@ -184,21 +199,23 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`);
             break;
           case 'update':
-          case 'submit':          
+          case 'submit':
             this.setRedirectAlertSuccess('Needs assessment successfully completed');
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`);
             break;
           default:
             break;
         }
+        this.formChanged = false;
       },
       error: () => this.setAlertError('An error occurred when starting needs assessment. Please try again or contact us for further help')
     });
   }
 
   onFormChange(): void {
+    this.formChanged = true;
     this.saveAsDraft = { disabled: false, label: 'Save as a draft' };
-    this.editAssessment = { disabled: false, label: 'Save and continue'};
+    this.editAssessment = { disabled: false, label: 'Save' };
   }
 
   private reuseRouteStrategy(): void {
