@@ -87,8 +87,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   isAccessorType(): boolean { return [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(this.state.userContext?.type as UserRoleEnum); }
   isAssessmentType(): boolean { return this.state.userContext?.type === 'ASSESSMENT'; }
 
-  isAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'ACCESSOR'; }
-  isQualifyingAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'QUALIFYING_ACCESSOR'; }
+  isAccessorRole(): boolean { return this.state.userContext.organisation?.role === 'ACCESSOR'; }
+  isQualifyingAccessorRole(): boolean { return this.state.userContext.organisation?.role === 'QUALIFYING_ACCESSOR'; }
 
   isAdminRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.ADMIN) || false; }
   isServiceTeamRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.SERVICE_TEAM) || false; }
