@@ -28,7 +28,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   stepId: number;
 
   formChanged = false;
-  lastSavedAt = new Date().toISOString();
 
   form: {
     sections: {
@@ -137,21 +136,17 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     );
 
     this.subscriptions.push(
-      interval(300 * 60).subscribe(() => {
+      interval(1000 * 60).subscribe(() => {
         if (this.formChanged) {
-          this.onSubmit('saveAsDraft');
-          this.formChanged = false;
+          this.onSubmit('autosave');
         }
-
-        this.lastSavedAt = new Date().toISOString();
-
       })
     );
 
   }
 
 
-  onSubmit(action: 'update' | 'saveAsDraft' | 'submit' | 'saveAsDraftFirstSection' | 'saveAsDraftSecondSection'): void {
+  onSubmit(action: 'update' | 'saveAsDraft' | 'submit' | 'saveAsDraftFirstSection' | 'saveAsDraftSecondSection' | 'autosave'): void {
 
     let isValid = true;
 
@@ -160,7 +155,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
       let formData: MappedObjectType;
 
-      if (action === 'saveAsDraft') {
+      if (action === 'autosave' || action === 'saveAsDraft') {
         formData = engine.getFormValues(false);
       } else {
 
@@ -187,11 +182,14 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && (action === 'submit' || action === 'update')), this.currentAnswers).subscribe({
       next: () => {
         switch (action) {
+          case 'autosave': break;
           case 'saveAsDraft':
+            this.setAlertSuccess('Changes have been saved.');
             this.saveAsDraft = { disabled: true, label: 'Saved' };
             break;
           case 'saveAsDraftFirstSection':
             this.reuseRouteStrategy();
+            this.setRedirectAlertSuccess('Changes have been saved.')
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
             break;
           case 'saveAsDraftSecondSection':
@@ -206,6 +204,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
           default:
             break;
         }
+        this.formChanged = false;
       },
       error: () => this.setAlertError('An error occurred when starting needs assessment. Please try again or contact us for further help')
     });
