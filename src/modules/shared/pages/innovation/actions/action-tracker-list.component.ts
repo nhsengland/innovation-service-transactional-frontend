@@ -9,7 +9,7 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
-import { forkJoin } from 'rxjs';
+import { UserRoleEnum } from '@app/base/enums';
 
 
 @Component({
@@ -100,6 +100,10 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
       return;
     }
     this.getClosedActionsList();
+  }
+
+  getUserType() {
+    return this.stores.authentication.isAccessorType() ? UserRoleEnum.ACCESSOR : this.stores.authentication.getUserType();
   }
 
   private getClosedActionsList() {
