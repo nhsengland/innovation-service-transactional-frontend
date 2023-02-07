@@ -6,7 +6,7 @@ import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { AccessorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { StoresModule } from '@modules/stores';
@@ -84,7 +84,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserLockComponent',
       email: 'user@email.com',
       displayName: 'User name',
       phone: '12345',
-      type: UserTypeEnum.ACCESSOR,
+      type: UserRoleEnum.ACCESSOR,
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
@@ -128,7 +128,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserLockComponent',
       email: 'user@email.com',
       displayName: 'User name',
       phone: '12345',
-      type: UserTypeEnum.INNOVATOR,
+      type: UserRoleEnum.INNOVATOR,
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
@@ -173,7 +173,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserLockComponent',
       email: 'user@email.com',
       displayName: 'User name',
       phone: '12345',
-      type: UserTypeEnum.ACCESSOR,
+      type: UserRoleEnum.ACCESSOR,
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [

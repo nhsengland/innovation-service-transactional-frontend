@@ -1,5 +1,5 @@
 import { Params } from '@angular/router';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { DateISOType } from '@app/base/types';
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 
@@ -137,8 +137,8 @@ export type InnovationActionsListInDTO = {
     section: InnovationSectionEnum,
     createdAt: DateISOType,
     updatedAt: DateISOType,
-    updatedBy: { name: string, role: UserTypeEnum },
-    createdBy: { id: string, name: string, role: UserTypeEnum, organisationUnit?: { id: string, name: string, acronym?: string} },
+    updatedBy: { name: string, role: UserRoleEnum },
+    createdBy: { id: string, name: string, role: UserRoleEnum, organisationUnit?: { id: string, name: string, acronym?: string} },
     notifications: number;
   }[];
 };
@@ -153,8 +153,8 @@ export type InnovationActionInfoDTO = {
   description: string,
   createdAt: DateISOType,
   updatedAt: DateISOType,
-  updatedBy: { name: string, role: UserTypeEnum },
-  createdBy: { id: string, name: string, role: UserTypeEnum, organisationUnit?: { id: string, name: string, acronym?: string} },
+  updatedBy: { name: string, role: UserRoleEnum },
+  createdBy: { id: string, name: string, role: UserRoleEnum, organisationUnit?: { id: string, name: string, acronym?: string} },
   declineReason?: string,
 };
 

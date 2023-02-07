@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { UserTypeEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 import { TableModel } from '@app/base/models';
 import { InnovationExportRequestItemType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationExportRequestStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'shared-pages-innovation-export-record-list',
@@ -22,19 +21,19 @@ export class PageExportRecordListComponent extends CoreComponent implements OnIn
   isHistoryLoading = false;
 
   pageInformation: { [key: string]: { title: string, lead: string, secondaryTitle: string } } = {
-    [UserTypeEnum.INNOVATOR]: {
+    [UserRoleEnum.INNOVATOR]: {
       title: 'Innovation record export requests',
       lead: 'View requests from organisation units to download and share PDF versions of your innovation record.',
       secondaryTitle: 'New requests'
     },
-    [UserTypeEnum.ACCESSOR]: {
+    [UserRoleEnum.ACCESSOR]: {
       title: 'Export innovation record',
       lead: 'You need to request permission from the innovator to download and share their innovation record in PDF format.',
       secondaryTitle: 'Innovation record export requests'
     },
   };
 
-  userType: UserTypeEnum.ACCESSOR | UserTypeEnum.INNOVATOR = this.stores.authentication.isAccessorType() ? UserTypeEnum.ACCESSOR : UserTypeEnum.INNOVATOR;
+  userType: UserRoleEnum.ACCESSOR | UserRoleEnum.INNOVATOR = this.stores.authentication.isAccessorType() ? UserRoleEnum.ACCESSOR : UserRoleEnum.INNOVATOR;
 
   private tableConfigs = {
     "DEFAULT": {

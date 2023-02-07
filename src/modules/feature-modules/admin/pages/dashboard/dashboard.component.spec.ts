@@ -12,7 +12,7 @@ import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 
 import { PageDashboardComponent } from './dashboard.component';
 
-import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
+import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 
 
 describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
@@ -57,7 +57,7 @@ describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
 
     authenticationStore.getUserInfo = () => ({
       ...USER_INFO_INNOVATOR,
-      type: UserTypeEnum.ADMIN,
+      type: UserRoleEnum.ADMIN,
       passwordResetAt: new Date(new Date().getTime() - 1 * 60000).toString()
     });
 

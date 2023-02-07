@@ -1,6 +1,5 @@
 // Authentication store.
 export {
-  UserTypeEnum,
   UserRoleEnum,
   InnovatorOrganisationRoleEnum,
   AccessorOrganisationRoleEnum

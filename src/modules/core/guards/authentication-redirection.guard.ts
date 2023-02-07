@@ -5,16 +5,6 @@ import { LocalStorageHelper } from '@app/base/helpers';
 
 import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 
-
-const userTypePaths = {
-  '': 'innovator',
-  ADMIN: 'admin',
-  ASSESSMENT: 'assessment',
-  ACCESSOR: 'accessor',
-  INNOVATOR: 'innovator'
-};
-
-
 @Injectable()
 export class AuthenticationRedirectionGuard implements CanActivate {
 
@@ -47,20 +37,20 @@ export class AuthenticationRedirectionGuard implements CanActivate {
     }
 
     if (!state.url.endsWith('terms-of-use') && userType !== 'ADMIN' && !this.authentication.isTermsOfUseAccepted()) {
-      const path = userTypePaths[userType] + '/terms-of-use';
+      const path = this.authentication.userUrlBasePath() + '/terms-of-use';
       this.router.navigateByUrl(path);
       return false;
     }
 
     if (pathSegment === 'dashboard') {
-      this.router.navigateByUrl(userTypePaths[userType]);
+      this.router.navigateByUrl(this.authentication.userUrlBasePath());
       return false;
     }
 
-    if (pathSegment === userTypePaths[userType]) {
+    if (pathSegment === this.authentication.userUrlBasePath()) {
       return true;
     } else {
-      this.router.navigateByUrl(userTypePaths[this.authentication.getUserType()]);
+      this.router.navigateByUrl(this.authentication.userUrlBasePath());
       return false;
     }
 
