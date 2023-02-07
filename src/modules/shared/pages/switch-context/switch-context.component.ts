@@ -67,8 +67,14 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
 
 
     userInfo.roles.filter(i => ![UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(i.role)).forEach((j) => {
+      let profile =  this.authenticationStore.getRoleDescription(j.role);
+
+      if (!this.initialSelection) {
+        profile = this.currentUserProfile === profile ? `Continue as ${profile}` : `Switch to my ${profile} profile`;
+      }  
+
       this.roles.push({
-        profile: this.authenticationStore.getRoleDescription(j.role),
+        profile: profile,
         type: j.role
       });
     })

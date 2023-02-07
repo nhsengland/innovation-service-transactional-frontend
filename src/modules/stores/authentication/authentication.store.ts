@@ -119,13 +119,14 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
   findAndPopulateUserContextFromLocalstorage(currentOrgUnitId: string): void {
     const user = this.getUserInfo();
+    const currentRole = LocalStorageHelper.getObjectItem("role");
 
     user.organisations.every((org) => {
       const unit = org.organisationUnits.find((unit) => unit.id === currentOrgUnitId);
 
       if(!!unit) {
         this.updateSelectedUserContext({
-          type: user.roles[0].role,
+          type: currentRole?.id,
           organisation: {
             id: org.id,
             name: org.name,

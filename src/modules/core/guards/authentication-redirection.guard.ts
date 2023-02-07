@@ -42,7 +42,6 @@ export class AuthenticationRedirectionGuard implements CanActivate {
           type: currentRole.id
         });
       }
-      return true;
     }
 
     if (!state.url.endsWith('terms-of-use') && userType !== 'ADMIN' && !this.authentication.isTermsOfUseAccepted()) {
