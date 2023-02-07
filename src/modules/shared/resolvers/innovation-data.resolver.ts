@@ -36,7 +36,7 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
 
         let support: undefined | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string };
 
-        if (this.authenticationStore.isAccessorRole()) {
+        if (this.authenticationStore.isAccessorType()) {
           support = (response.supports || []).find(item => item.organisationUnitId === userContext.organisation?.organisationUnit.id);
           if (!support) {
             console.error('Accessor user type without unit id');
