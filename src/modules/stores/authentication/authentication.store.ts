@@ -73,13 +73,12 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   isFirstTimeSignInDone(): boolean { return !!this.state.user?.firstTimeSignInAt ?? false; }
   hasInnovationTransfers(): boolean { return this.state.user?.hasInnovationTransfers || false; }
 
-  isInnovatorType(): boolean { return this.state.userContext?.type === 'INNOVATOR'; }
   isAccessorType(): boolean { return [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(this.state.userContext?.type as UserRoleEnum); }
-  isAssessmentType(): boolean { return this.state.userContext?.type === 'ASSESSMENT'; }
 
-  isAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'ACCESSOR'; }
-  isQualifyingAccessorRole(): boolean { return this.state.user?.organisations[0].role === 'QUALIFYING_ACCESSOR'; }
-
+  isInnovatorType(): boolean { return this.state.userContext?.type === UserRoleEnum.INNOVATOR; }
+  isAssessmentType(): boolean { return this.state.userContext?.type === UserRoleEnum.ASSESSMENT; }
+  isAccessorRole(): boolean { return this.state.userContext.type === UserRoleEnum.ACCESSOR; }
+  isQualifyingAccessorRole(): boolean { return this.state.userContext.type === UserRoleEnum.QUALIFYING_ACCESSOR; }
   isAdminRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.ADMIN) || false; }
   isServiceTeamRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.SERVICE_TEAM) || false; }
 
