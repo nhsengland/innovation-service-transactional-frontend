@@ -38,27 +38,17 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
                   organisation: {
                     id: user.organisations[0].id,
                     name: user.organisations[0].name,
-                    role: user.organisations[0].role,
                     organisationUnit: user.organisations[0].organisationUnits[0],
                   }
                 }
-              } else {
-                const currentOrgUnitId = LocalStorageHelper.getObjectItem("orgUnitId");
-                
-                if(!!currentOrgUnitId) {
-                  this.findAndPopulateUserContextFromLocalstorage(currentOrgUnitId.id);
-                }
-              }
+              } 
             } else {
               this.state.userContext = {
                 type: roles[0]
               }
             }
-          } else {
-            this.state.userContext = {
-              type: roles[0]
-            }            
           }
+          
           return of(true);
         })
       ).subscribe({
@@ -93,6 +83,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   isAdminRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.ADMIN) || false; }
   isServiceTeamRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.SERVICE_TEAM) || false; }
 
+  hasMultipleRoles(): boolean { return  (this.state.user && this.state.user?.roles.length > 1) ?? false; }
+  
   getUserId(): string { return this.state.user?.id || ''; }
   getUserType(): Required<AuthenticationModel>['userContext']['type'] {
     return this.state.userContext.type || '';
@@ -101,7 +93,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   getUserRole() {
     switch (this.state.userContext?.type) {
       case UserRoleEnum.ADMIN: return 'Administrator';
-      case UserRoleEnum.ASSESSMENT: return 'Needs assessment';
+      case UserRoleEnum.ASSESSMENT: return 'Needs Assessor';
       case UserRoleEnum.INNOVATOR: return 'Innovator';
       case UserRoleEnum.ACCESSOR: 
       case UserRoleEnum.QUALIFYING_ACCESSOR: 
@@ -138,7 +130,6 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           organisation: {
             id: org.id,
             name: org.name,
-            role: org.role,
             organisationUnit: { 
               id: unit.id,
               name: unit.name, 

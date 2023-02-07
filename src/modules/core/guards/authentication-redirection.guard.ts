@@ -2,6 +2,7 @@ import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { LocalStorageHelper } from '@app/base/helpers';
+import * as e from 'express';
 
 import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 
@@ -19,20 +20,28 @@ export class AuthenticationRedirectionGuard implements CanActivate {
     const pathSegment = activatedRouteSnapshot.routeConfig?.path || '';
     const userType = this.authentication.getUserType() || '';
     const userContext = this.authentication.getUserContextInfo();
-    const currentOrgUnitId = LocalStorageHelper.getObjectItem("orgUnitId");
+    const currentRole = LocalStorageHelper.getObjectItem("role");
 
     if(isPlatformServer(this.platformId)) {
       this.router.navigate(['']);
       return false;
     }
    
-    if (userContext.type === '' && !currentOrgUnitId) {
+    if (userContext.type === '' && !currentRole) {
       this.router.navigate(['/switch-user-context']);
       return false;
     }
 
-    if (userContext.type === '' && !!currentOrgUnitId) {
-      this.authentication.findAndPopulateUserContextFromLocalstorage(currentOrgUnitId.id);
+    if (userContext.type === '' && !!currentRole) {
+      const currentOrgUnitId = LocalStorageHelper.getObjectItem("orgUnitId");
+
+      if(!!currentOrgUnitId) {
+        this.authentication.findAndPopulateUserContextFromLocalstorage(currentOrgUnitId.id);
+      } else {
+        this.authentication.updateSelectedUserContext({
+          type: currentRole.id
+        });
+      }
       return true;
     }
 

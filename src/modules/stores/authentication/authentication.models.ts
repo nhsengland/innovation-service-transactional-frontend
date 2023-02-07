@@ -11,7 +11,6 @@ export class AuthenticationModel {
     organisation?: {
       id: string,
       name: string,
-      role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
       organisationUnit: { id: string; name: string; acronym: string; }
     }
   };
@@ -21,13 +20,7 @@ export class AuthenticationModel {
     displayName: string,
     roles: {
       id: string,
-      activeSince: string | null,
-      createdAt: string | null,
-      createdBy: string | null,
-      deletedAt: string | null,
       role: UserRoleEnum,
-      updatedAt: string | null,
-      updatedBy: string | null,
     }[],    
     contactByPhone: boolean,
     contactByEmail: boolean,

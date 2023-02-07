@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
-import { InnovatorOrganisationRoleEnum, AccessorOrganisationRoleEnum } from '@app/base/enums';
+import { InnovatorOrganisationRoleEnum, AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { LocalStorageHelper } from '@app/base/helpers';
 import { AuthenticationStore } from '@modules/stores';
 @Component({
@@ -8,16 +8,20 @@ import { AuthenticationStore } from '@modules/stores';
   templateUrl: './switch-context.component.html'
 })
 export class PageSwitchContextComponent  extends CoreComponent implements OnInit {
-  organisations: {
-    id: string,
-    name: string,
-    role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
+  roles: {
     profile: string,
-    organisationUnit: { id: string; name: string; acronym: string; }
+    type: UserRoleEnum,
+    organisation?: {
+      id: string,
+      name: string,
+      organisationUnit: { id: string; name: string; acronym: string; }
+    },
   }[] = []
+
   initialSelection = false
   currentUserProfile = ''
   isAccessor = false;
+
 
   constructor(private authenticationStore: AuthenticationStore) { 
     super();
@@ -28,10 +32,14 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
     const userContext = this.authenticationStore.getUserContextInfo();
 
     this.initialSelection = userContext.type === '';
-    this.isAccessor =  userContext.organisation?.role === AccessorOrganisationRoleEnum.ACCESSOR;
+    this.isAccessor =  this.authenticationStore.isAccessorType();
 
     if(!this.initialSelection) {
-      this.currentUserProfile = `${this.authenticationStore.getRoleDescription(userContext.organisation?.role.toString() ?? '').trimEnd()} (${userContext.organisation?.organisationUnit.name.trimEnd()})`;
+      if (this.isAccessor) {
+        this.currentUserProfile = `${this.authenticationStore.getRoleDescription(userContext.type.toString() ?? '').trimEnd()} (${userContext.organisation?.organisationUnit.name.trimEnd()})`;
+      } else {
+        this.currentUserProfile = `${this.authenticationStore.getRoleDescription(userContext.type.toString() ?? '').trimEnd()}`;
+      }
     }
 
     userInfo.organisations.forEach(org => {
@@ -43,58 +51,76 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
           profile = this.currentUserProfile === profile ? `Continue as ${article} ${profile}` : `Switch to my ${profile} profile`;
         }      
         
-        this.organisations.push({
-          id: org.id,
-          name: org.name,
-          role: org.role,
+        this.roles.push({
           profile: profile,
-          organisationUnit: {
-            ...unit
+          type: org.role as string as UserRoleEnum,
+          organisation: {
+            id: org.id,
+            name: org.name,
+            organisationUnit: {
+              ...unit
+            }
           }
         })
       })
     });
+
+
+    userInfo.roles.filter(i => ![UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(i.role)).forEach((j) => {
+      this.roles.push({
+        profile: this.authenticationStore.getRoleDescription(j.role),
+        type: j.role
+      });
+    })
 
     const title = this.initialSelection ? 'Choose your profile' : 'Switch profile';
     this.setPageTitle(title);
     this.setPageStatus('READY');
   }
 
-  redirectToHomepage(organisation: {
-    id: string,
-    name: string,
-    role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
+  redirectToHomepage(role: {
     profile: string,
-    organisationUnit: { id: string; name: string; acronym: string; }
+    type: UserRoleEnum,
+    organisation?: {
+      id: string,
+      name: string,
+      organisationUnit: { id: string; name: string; acronym: string; }
+    },
   }): void {
 
-    if(this.currentUserProfile !== organisation.profile) {
-      const userInfo = this.authenticationStore.getUserInfo();
-      const roleName = `${this.authenticationStore.getRoleDescription(organisation.role).trimEnd().toLowerCase()} (${organisation.organisationUnit.name.trimEnd()})`;
-      const currentOrgUnitId = this.authenticationStore.getUserContextInfo().organisation?.organisationUnit.id;
+    if (this.currentUserProfile !== role.profile) {
+      let message = '';
+      const currentUserContext = this.authenticationStore.getUserContextInfo();
 
-      this.authenticationStore.updateSelectedUserContext({
-        type: userInfo.roles[0].role,
-        organisation: {
-          id: organisation.id,
-          name: organisation.name,
-          role: organisation.role,
-          organisationUnit: { 
-            id: organisation.organisationUnit.id,
-            name: organisation.organisationUnit.name, 
-            acronym: organisation.organisationUnit.acronym,
+      if (role.organisation) {
+        const roleName = `${this.authenticationStore.getRoleDescription(role.type).trimEnd().toLowerCase()} (${role.organisation.organisationUnit.name.trimEnd()})`;
+  
+        this.authenticationStore.updateSelectedUserContext({
+          type: role.type,
+          organisation: {
+            ...role.organisation
           }
-        }
-      })
+        });
 
-      LocalStorageHelper.setObjectItem("orgUnitId", {'id': organisation.organisationUnit.id});
+        message = currentUserContext.organisation?.organisationUnit.id === role.organisation.organisationUnit.id ? `You are logged in as ${this.isAccessor ? 'an' : 'a'} ${roleName}.` : `Switch successful: you are now logged in with your ${roleName} profile.`
+        LocalStorageHelper.setObjectItem("orgUnitId", {'id': role.organisation.organisationUnit.id});
+      } else {
+        const roleName = `${this.authenticationStore.getRoleDescription(role.type).trimEnd().toLowerCase()}`;
+        message = currentUserContext.type === role.type? `You are logged in as a ${roleName}.` : `Switch successful: you are now logged in with your ${roleName} profile.`
+        
+        this.authenticationStore.updateSelectedUserContext({
+          type: role.type
+        });
+      }
+     
+
+      LocalStorageHelper.setObjectItem("role", {'id': role.type});
   
       if (!this.initialSelection) {
-        const message = currentOrgUnitId === organisation.organisationUnit.id ? `You are logged in as ${this.isAccessor ? 'an' : 'a'} ${roleName}.` : `Switch successful: you are now logged in with your ${roleName} profile.`
         this.setRedirectAlertSuccess(message);
       }
     }   
 
-    this.redirectTo('accessor/dashboard');
+    this.redirectTo(`${this.authenticationStore.userUrlBasePath()}/dashboard`);
   }
 }
