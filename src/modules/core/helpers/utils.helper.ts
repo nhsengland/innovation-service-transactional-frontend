@@ -6,7 +6,6 @@ export class UtilsHelper {
 
   static isEmpty = (obj: any) => [Object, Array].includes((obj || {}).constructor) && !Object.entries((obj || {})).length;
 
-
   static arrayFullTextSearch(items: string[], searchText: string): string[] {
 
     const searchWords = searchText.trim().replace(/\s\s/g, ' ').toLowerCase().split(' '); // Removes more than on space to just one, and split by words.
@@ -36,4 +35,11 @@ export class UtilsHelper {
     return value;
   }
 
+  static indefiniteArticle(word: string): string {
+    const regex = new RegExp('^[aeiou].*', 'i');
+    const startWithVowel = regex.test(word);
+
+   return startWithVowel ? `an ${word}` : `a ${word}`;
+
+  }
 }

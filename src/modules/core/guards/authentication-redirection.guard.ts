@@ -33,15 +33,7 @@ export class AuthenticationRedirectionGuard implements CanActivate {
     }
 
     if (userContext.type === '' && !!currentRole) {
-      const currentOrgUnitId = LocalStorageHelper.getObjectItem("orgUnitId");
-
-      if(!!currentOrgUnitId) {
-        this.authentication.findAndPopulateUserContextFromLocalstorage(currentOrgUnitId.id);
-      } else {
-        this.authentication.updateSelectedUserContext({
-          type: currentRole.id
-        });
-      }
+      this.authentication.findAndPopulateUserContextFromLocalstorage();
     }
 
     if (!state.url.endsWith('terms-of-use') && userType !== 'ADMIN' && !this.authentication.isTermsOfUseAccepted()) {

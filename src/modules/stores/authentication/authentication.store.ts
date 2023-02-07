@@ -47,6 +47,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
                 type: roles[0]
               }
             }
+          } else {
+            this.findAndPopulateUserContextFromLocalstorage()
           }
           
           return of(true);
@@ -117,31 +119,40 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     return this.state.userContext;
   }
 
-  findAndPopulateUserContextFromLocalstorage(currentOrgUnitId: string): void {
+  findAndPopulateUserContextFromLocalstorage(): void {
     const user = this.getUserInfo();
     const currentRole = LocalStorageHelper.getObjectItem("role");
-
-    user.organisations.every((org) => {
-      const unit = org.organisationUnits.find((unit) => unit.id === currentOrgUnitId);
-
-      if(!!unit) {
-        this.updateSelectedUserContext({
-          type: currentRole?.id,
-          organisation: {
-            id: org.id,
-            name: org.name,
-            organisationUnit: { 
-              id: unit.id,
-              name: unit.name, 
-              acronym: unit.acronym,
+    const accessorRole = [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(currentRole?.id);
+    
+    if (accessorRole) {
+      const currentOrgUnit = LocalStorageHelper.getObjectItem("orgUnitId");
+      
+      user.organisations.every((org) => {
+        const unit = org.organisationUnits.find((unit) => unit.id === currentOrgUnit?.id);
+  
+        if(!!unit) {
+          this.updateSelectedUserContext({
+            type: currentRole?.id,
+            organisation: {
+              id: org.id,
+              name: org.name,
+              organisationUnit: { 
+                id: unit.id,
+                name: unit.name, 
+                acronym: unit.acronym,
+              }
             }
-          }
-        });
-        return false;
+          });
+          return false;
+        }
+  
+        return true;
+      });
+    } else {
+      this.state.userContext = {
+        type: currentRole?.id
       }
-
-      return true;
-    });
+    }
   }
 
   updateSelectedUserContext(userContext: Required<AuthenticationModel>['userContext']): void {
