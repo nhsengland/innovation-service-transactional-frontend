@@ -1,17 +1,17 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { forkJoin, interval } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { UtilsHelper } from '@app/base/helpers';
-import { DateISOType, MappedObjectType } from '@app/base/types';
+import { MappedObjectType } from '@app/base/types';
 import { FormEngineComponent, FormEngineParameterModel } from '@modules/shared/forms';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
-import { AssessmentService } from '../../../services/assessment.service';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { AssessmentService } from '../../../services/assessment.service';
 
 
 @Component({
@@ -182,7 +182,9 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && (action === 'submit' || action === 'update')), this.currentAnswers).subscribe({
       next: () => {
         switch (action) {
-          case 'autosave': break;
+          case 'autosave': 
+            this.saveAsDraft = { disabled: true, label: 'Saved' };
+            break;
           case 'saveAsDraft':
             this.setAlertSuccess('Changes have been saved.');
             this.saveAsDraft = { disabled: true, label: 'Saved' };
@@ -213,7 +215,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   onFormChange(): void {
     this.formChanged = true;
     this.saveAsDraft = { disabled: false, label: 'Save as a draft' };
-    this.editAssessment = { disabled: false, label: 'Save and continue' };
+    this.editAssessment = { disabled: false, label: 'Save' };
   }
 
   private reuseRouteStrategy(): void {
