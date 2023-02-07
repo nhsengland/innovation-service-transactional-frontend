@@ -171,6 +171,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   signOut(): void {
     LocalStorageHelper.removeItem("orgUnitId");
+    LocalStorageHelper.removeItem("role");
   }
 
 

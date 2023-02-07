@@ -117,6 +117,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
         this.authenticationStore.updateSelectedUserContext({
           type: role.type
         });
+        LocalStorageHelper.removeItem("orgUnitId");
       }
      
 
