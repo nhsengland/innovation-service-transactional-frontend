@@ -27,7 +27,7 @@ export class ApiOutInterceptor implements HttpInterceptor {
           Cookie: this.serverRequest.headers.cookie || '',  
           'x-is-domain-context': JSON.stringify({
             user: {
-              type: userContext.type,
+              role: userContext.type,
               organisationId: userContext.organisation?.id,
               organisationUnitId: userContext.organisation?.organisationUnit.id
             }
@@ -39,7 +39,7 @@ export class ApiOutInterceptor implements HttpInterceptor {
         setHeaders: {
           'x-is-domain-context': JSON.stringify({
             user: {
-              type: userContext.type,
+              role: userContext.type,
               organisationId: userContext.organisation?.id,
               organisationUnitId: userContext.organisation?.organisationUnit.id
             }

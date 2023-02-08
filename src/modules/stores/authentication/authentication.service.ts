@@ -16,13 +16,7 @@ type GetUserInfoDTO = {
   displayName: string,
   roles: {
     id: string,
-    activeSince: string | null,
-    createdAt: string | null,
-    createdBy: string | null,
-    deletedAt: string | null,
     role: UserRoleEnum,
-    updatedAt: string | null,
-    updatedBy: string | null,
   }[],    
   contactByPhone: boolean,
   contactByEmail:  boolean,

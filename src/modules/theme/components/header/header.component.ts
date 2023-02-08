@@ -68,7 +68,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.user = {
       displayName: user.displayName,
       description: this.authenticationStore.isAccessorType() ? `Logged in as ${userRole} (${userContext.organisation?.organisationUnit.name})` : `Logged in as ${userRole}`,
-      showSwitchProfile: this.authenticationStore.isAccessorType() && (user.organisations.length > 1 || user.organisations[0].organisationUnits.length > 1)
+      showSwitchProfile: this.authenticationStore.hasMultipleRoles()
     };
 
     this.signOutUrl = `${this.environmentVariablesStore.APP_URL}/signout`;
@@ -171,6 +171,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   signOut(): void {
     LocalStorageHelper.removeItem("orgUnitId");
+    LocalStorageHelper.removeItem("role");
   }
 
 

@@ -19,21 +19,20 @@ export class AuthenticationRedirectionGuard implements CanActivate {
     const pathSegment = activatedRouteSnapshot.routeConfig?.path || '';
     const userType = this.authentication.getUserType() || '';
     const userContext = this.authentication.getUserContextInfo();
-    const currentOrgUnitId = LocalStorageHelper.getObjectItem("orgUnitId");
+    const currentRole = LocalStorageHelper.getObjectItem("role");
 
     if(isPlatformServer(this.platformId)) {
       this.router.navigate(['']);
       return false;
     }
    
-    if (userContext.type === '' && !currentOrgUnitId) {
+    if (userContext.type === '' && !currentRole) {
       this.router.navigate(['/switch-user-context']);
       return false;
     }
 
-    if (userContext.type === '' && !!currentOrgUnitId) {
-      this.authentication.findAndPopulateUserContextFromLocalstorage(currentOrgUnitId.id);
-      return true;
+    if (userContext.type === '' && !!currentRole) {
+      this.authentication.findAndPopulateUserContextFromLocalstorage();
     }
 
     if (!state.url.endsWith('terms-of-use') && userType !== 'ADMIN' && !this.authentication.isTermsOfUseAccepted()) {
