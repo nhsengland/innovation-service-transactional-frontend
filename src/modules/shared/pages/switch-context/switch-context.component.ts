@@ -28,7 +28,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
     const userInfo = this.authenticationStore.getUserInfo();
     const userContext = this.authenticationStore.getUserContextInfo();
 
-    this.initialSelection = userContext.type === '';
+    this.initialSelection = !userContext.type;
 
     if(!this.initialSelection) { 
       if (this.authenticationStore.isAccessorType()) {
