@@ -31,7 +31,8 @@
             </ul>
             <p>
               For more information, please
-              <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">see the terms of use.</a>
+              <!-- TODO: this needs to be updated with roles in dev -->
+              <a href="{{ this.userType === 'INNOVATOR' ? '/terms-of-use/innovator-terms-of-use' : '/terms-of-use/support-organisation-terms-of-use' }}" target="_blank" rel="noopener noreferrer">see the terms of use.</a>
             </p>
           </div>
         </details>
