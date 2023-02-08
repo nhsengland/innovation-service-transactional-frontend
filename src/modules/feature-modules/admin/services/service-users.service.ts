@@ -353,7 +353,7 @@ export class ServiceUsersService extends CoreService {
 
   getTermsById(id: string): Observable<GetListByIdDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/tou/:id').setPathParams({ id });
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/tou/:id').setPathParams({ id });
     return this.http.get<GetListByIdDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
