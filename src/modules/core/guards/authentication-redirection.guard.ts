@@ -26,13 +26,13 @@ export class AuthenticationRedirectionGuard implements CanActivate {
       return false;
     }
    
-    if (userContext.type === '' && !currentRole) {
-      this.router.navigate(['/switch-user-context']);
-      return false;
-    }
-
-    if (userContext.type === '' && !!currentRole) {
-      this.authentication.findAndPopulateUserContextFromLocalstorage();
+    if (!userContext.type) {
+      if (currentRole) {
+        this.authentication.findAndPopulateUserContextFromLocalstorage();
+      } else {
+        this.router.navigate(['/switch-user-context']);
+        return false;
+      }
     }
 
     if (!state.url.endsWith('terms-of-use') && userType !== 'ADMIN' && !this.authentication.isTermsOfUseAccepted()) {
