@@ -27,8 +27,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   assessmentId: string;
   stepId: number;
 
-  formChanged = false;
-
   form: {
     sections: {
       title: string;
@@ -41,15 +39,10 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   currentAnswers: { [key: string]: any };
 
-  saveAsDraft: {
+  saveButton: {
     disabled: boolean,
-    label: string
-  } = { disabled: true, label: 'Saved' };
-
-  editAssessment: {
-    disabled: boolean,
-    label: string
-  } = { disabled: true, label: 'Saved' };
+    label: 'Save changes' | 'All changes are saved'
+  } = { disabled: true, label: 'All changes are saved' };
 
   isValidStepId(): boolean {
     const id = this.stepId;
@@ -111,24 +104,23 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
           return;
         }
 
-        this.saveAsDraft = { disabled: true, label: 'Saved' };
-
         switch (this.stepId) {
           case 1:
             this.form.sections = [
               { title: 'The innovation', parameters: NEEDS_ASSESSMENT_QUESTIONS.innovation },
               { title: 'The innovator', parameters: NEEDS_ASSESSMENT_QUESTIONS.innovator }
             ];
+            this.setBackLink('Back to innovation', `/assessment/innovations/${this.innovationId}`);
             break;
           case 2:
             this.form.sections = [
               { title: 'Support need summary', parameters: NEEDS_ASSESSMENT_QUESTIONS.summary },
               { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds }
             ];
+            this.setBackLink('Go back', `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`);
             break;
         }
 
-        this.setBackLink('Back to innovation', `/assessment/innovations/${this.innovationId}`);
         this.setPageTitle('Needs assessment', { hint: `${this.stepId} of 2` });
         this.setPageStatus('READY');
 
@@ -137,7 +129,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     this.subscriptions.push(
       interval(1000 * 60).subscribe(() => {
-        if (this.formChanged) {
+        if (!this.saveButton.disabled) {
           this.onSubmit('autosave');
         }
       })
@@ -146,7 +138,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   }
 
 
-  onSubmit(action: 'update' | 'saveAsDraft' | 'submit' | 'saveAsDraftFirstSection' | 'saveAsDraftSecondSection' | 'autosave'): void {
+  onSubmit(action: 'saveAsDraft' | 'submit' | 'saveAsDraftFirstSection' | 'saveAsDraftSecondSection' | 'autosave'): void {
 
     let isValid = true;
 
@@ -179,26 +171,21 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       return;
     }
 
-    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && (action === 'submit' || action === 'update')), this.currentAnswers).subscribe({
+    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit'), this.currentAnswers).subscribe({
       next: () => {
         switch (action) {
-          case 'autosave': 
-            this.saveAsDraft = { disabled: true, label: 'Saved' };
-            break;
+          case 'autosave':
           case 'saveAsDraft':
-            this.setAlertSuccess('Changes have been saved.');
-            this.saveAsDraft = { disabled: true, label: 'Saved' };
+            this.saveButton = { disabled: true, label: 'All changes are saved' };
             break;
           case 'saveAsDraftFirstSection':
             this.reuseRouteStrategy();
-            this.setRedirectAlertSuccess('Changes have been saved.')
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
             break;
           case 'saveAsDraftSecondSection':
             this.reuseRouteStrategy();
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`);
             break;
-          case 'update':
           case 'submit':
             this.setRedirectAlertSuccess('Needs assessment successfully completed');
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`);
@@ -206,16 +193,13 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
           default:
             break;
         }
-        this.formChanged = false;
       },
       error: () => this.setAlertError('An error occurred when starting needs assessment. Please try again or contact us for further help')
     });
   }
 
   onFormChange(): void {
-    this.formChanged = true;
-    this.saveAsDraft = { disabled: false, label: 'Save as a draft' };
-    this.editAssessment = { disabled: false, label: 'Save' };
+    this.saveButton = { disabled: false, label: 'Save changes' };
   }
 
   private reuseRouteStrategy(): void {
