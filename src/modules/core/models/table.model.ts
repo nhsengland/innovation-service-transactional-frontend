@@ -145,6 +145,8 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
       take: this.pageSize,
       skip: (this.page - 1) * this.pageSize,
       order: this.orderBy ? { [this.orderBy]: (['none', 'ascending'].includes(this.orderDir) ? 'ASC' : 'DESC') } : undefined,
+      // TODO - maybe use this in the future
+      // ...(this.filters && { filters: this.filters})
       filters: this.filters || ({} as F)
     };
 
