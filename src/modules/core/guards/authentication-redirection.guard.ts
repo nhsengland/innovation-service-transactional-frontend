@@ -2,7 +2,6 @@ import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { LocalStorageHelper } from '@app/base/helpers';
-import * as e from 'express';
 
 import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 
