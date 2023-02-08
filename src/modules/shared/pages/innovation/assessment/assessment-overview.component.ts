@@ -40,6 +40,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
 
   shouldShowUpdatedAt = false;
   isQualifyingAccessorRole = false;
+  userRole = UserRoleEnum;
 
   constructor(
     private activatedRoute: ActivatedRoute,

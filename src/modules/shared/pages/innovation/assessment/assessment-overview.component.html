@@ -3,10 +3,10 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <ng-container *ngIf="userType !== 'ADMIN'; else assessmentOverview">
+      <ng-container *ngIf="userType !== userRole.ADMIN; else assessmentOverview">
         <div class="app-pane" >
           <div class="app-pane__side-bar">
-            <div *ngIf="userType === 'ASSESSMENT'" class="nhsuk-u-padding-top-8">
+            <div *ngIf="userType === userRole.ASSESSMENT" class="nhsuk-u-padding-top-8">
               <ng-container *ngIf="assessmentHasBeenSubmitted && shouldShowUpdatedAt">
                 <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">Updated: {{ assessment?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</p>
                 <p class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.updatedBy?.name }}</p>
@@ -18,13 +18,13 @@
               <p class="nhsuk-body-s nhsuk-u-margin-bottom-5">Needs assessment team</p>  
             </div>
 
-            <ng-container *ngIf="userType === 'ACCESSOR'">
+            <ng-container *ngIf="userType === userRole.QUALIFYING_ACCESSOR || userType === userRole.ACCESSOR">
               <p class="nhsuk-heading-xs">{{ assessment?.finishedAt | date: ('app.date_formats.long_date' | translate) }}</p>
               <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.assignTo?.name }}</p>
               <p class="nhsuk-hint">Needs assessment team</p>
             </ng-container>
 
-            <ng-container *ngIf="userType === 'INNOVATOR'">
+            <ng-container *ngIf="userType === userRole.INNOVATOR">
               <p class="nhsuk-heading-xs">Updated: {{ assessment?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</p>
               <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.updatedBy?.name }}</p>
               <p class="nhsuk-hint">Needs assessment team</p>
@@ -44,7 +44,7 @@
         </div>
       </ng-container>
 
-      <div *ngIf="logHistory.length > 0" [class]="userType === 'ADMIN' ? 'ignore-app-pane__side-bar nhsuk-grid-row nhsuk-u-margin-top-5' : 'nhsuk-grid-row nhsuk-u-margin-top-5'">
+      <div *ngIf="logHistory.length > 0" [class]="userType === userRole.ADMIN ? 'ignore-app-pane__side-bar nhsuk-grid-row nhsuk-u-margin-top-5' : 'nhsuk-grid-row nhsuk-u-margin-top-5'">
         <div class="nhsuk-grid-column-full">
 
           <div class="full-width-section bg-color-white">
@@ -109,7 +109,7 @@
         </dl>
       </ng-container>
 
-      <div *ngIf="userType === 'ADMIN'">
+      <div *ngIf="userType === userRole.ADMIN">
         <ng-container *ngIf="assessmentHasBeenSubmitted && shouldShowUpdatedAt">
           <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">{{ assessment?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</p>
           <p class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.updatedBy?.name }}</p>
@@ -174,19 +174,19 @@
         </div>
       </div>
 
-      <ng-container *ngIf="userType === 'ASSESSMENT'">
+      <ng-container *ngIf="userType === userRole.ASSESSMENT">
         <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
         <a routerLink="/assessment/innovations/{{ innovationId }}/assessments/{{ assessmentId }}/edit" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"> Edit assessment </a>
       </ng-container>
 
-      <ng-container *ngIf="userType === 'ACCESSOR'">
+      <ng-container *ngIf="userType === userRole.QUALIFYING_ACCESSOR || userType === userRole.ACCESSOR">
         <a routerLink="/accessor/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
         <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary">
           Update support status
         </a>
       </ng-container>
 
-      <ng-container *ngIf="userType === 'INNOVATOR'">
+      <ng-container *ngIf="userType === userRole.INNOVATOR">
         <a routerLink="/innovator/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"> Continue to innovation </a>
       </ng-container>
 
