@@ -19,6 +19,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
   }[] = [];
   initialSelection = false;
   currentUserProfile = '';
+  title = '';
 
   constructor(private authenticationStore: AuthenticationStore) { 
     super();
@@ -73,9 +74,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
       });
     })
 
-    const title = this.initialSelection ? 'Choose your profile' : 'Switch profile';
-    this.setPageTitle(title);
-    this.setPageStatus('READY');
+    this.title = this.initialSelection ? 'Choose your profile' : 'Switch profile';
   }
 
   redirectToHomepage(role: {
