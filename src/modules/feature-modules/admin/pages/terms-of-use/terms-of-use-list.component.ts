@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 import { TableModel } from '@app/base/models';
+import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 
 @Component({
@@ -55,7 +55,7 @@ export class PageTermsOfUseListComponent extends CoreComponent implements OnInit
       },
       error: () => {
         this.setPageStatus('ERROR');
-        this.setAlertError('Unable to fetch organisations information', { message: 'Please try again or contact us for further help'})
+        this.setAlertError('Unable to fetch terms of use', { message: 'Please try again or contact us for further help'})
       }
     });
   }

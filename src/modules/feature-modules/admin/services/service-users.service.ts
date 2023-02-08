@@ -318,8 +318,9 @@ export class ServiceUsersService extends CoreService {
   }
 
   getListOfTerms(queryParams: APIQueryParamsType): Observable<getListOfTerms> {
+    const {filters, ...qp} = queryParams;
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/tou').setQueryParams({ ...queryParams });
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/tou').setQueryParams(qp);
 
     return this.http.get<getListOfTerms>(url.buildUrl()).pipe(
       take(1),
