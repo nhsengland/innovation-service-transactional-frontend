@@ -52,9 +52,6 @@ export const USER_INFO_ADMIN: Required<AuthenticationModel>['user'] = {
   roles: [{
     id: '',
     role: UserRoleEnum.ADMIN,
-  }, {
-    id: '',
-    role: UserRoleEnum.SERVICE_TEAM,
   }],
   contactByPhone: false,
   contactByEmail: false,

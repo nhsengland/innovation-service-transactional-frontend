@@ -3,8 +3,9 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
+import { UserSearchDTO } from '../dtos/users.dto';
 
 
 export type getAccessorsOrganisationsDTO = {
@@ -47,26 +48,23 @@ export class OrganisationsService extends CoreService {
 
   }
 
+  // this could probably be a envelop for a shared getUsersList method and moved to the usersService
   getOrganisationUnitUsersList(organisationUnitId: string, activeOnly = true): Observable<{ id: string, organisationUnitUserId: string, name: string }[]> {
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ organisationUnitId, fields: ['organisations', 'units'], userTypes: [UserRoleEnum.ACCESSOR], onlyActive: activeOnly });
-    return this.http.get<{
-      id: string,
-      name: string,
-      type: UserRoleEnum,
-      isActive: boolean,
-      organisations: {
-        name: string;
-        role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum;
-        units: { name: string, organisationUnitUserId: string }[]
-      }[]
-    }[]>(url.buildUrl()).pipe(
+    return this.http.get<UserSearchDTO[]>(url.buildUrl()).pipe(
       take(1),
-      map(response => response.map(item => ({
-        id: item.id,
-        organisationUnitUserId: item.organisations[0].units[0].organisationUnitUserId,
-        name: item.name
-      })))
+      map(response => response.map(item => {
+        // this will probably be easier once we use the roles instead of organisations
+        const organisation = item.organisations?.find( o => o.units?.find( u => u.id === organisationUnitId));
+        const organisationUnit = organisation?.units?.find( u => u.id === organisationUnitId);
+        
+        return {
+          id: item.id,
+          organisationUnitUserId: organisationUnit?.organisationUnitUserId ?? '', // it should never be null or it wouldn't have been returned. This logic to identify the users should probably be revised
+          name: item.name
+        };
+      }))
     );
 
   }
