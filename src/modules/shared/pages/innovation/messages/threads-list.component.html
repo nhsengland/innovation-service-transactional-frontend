@@ -72,6 +72,9 @@
                       <ng-container *ngSwitchCase="'ACCESSOR'">
                         {{ item.lastMessage.createdBy.name }}, {{ item.lastMessage.createdBy.organisationUnit?.acronym }}
                       </ng-container>
+                      <ng-container *ngSwitchCase="'QUALIFYING_ACCESSOR'">
+                        {{ item.lastMessage.createdBy.name }}, {{ item.lastMessage.createdBy.organisationUnit?.acronym }}
+                      </ng-container>
                       <ng-container *ngSwitchCase="'INNOVATOR'">
                         {{ item.lastMessage.createdBy.name }} (innovator)
                       </ng-container>

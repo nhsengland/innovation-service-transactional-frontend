@@ -51,7 +51,7 @@ export class OrganisationsService extends CoreService {
   // this could probably be a envelop for a shared getUsersList method and moved to the usersService
   getOrganisationUnitUsersList(organisationUnitId: string, activeOnly = true): Observable<{ id: string, organisationUnitUserId: string, name: string }[]> {
 
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ organisationUnitId, fields: ['organisations', 'units'], userTypes: [UserRoleEnum.ACCESSOR], onlyActive: activeOnly });
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ organisationUnitId, fields: ['organisations', 'units'], userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR], onlyActive: activeOnly });
     return this.http.get<UserSearchDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response.map(item => {
