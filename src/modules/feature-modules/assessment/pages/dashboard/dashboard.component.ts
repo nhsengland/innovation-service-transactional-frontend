@@ -91,7 +91,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
 
   getFooter(counter: number): string {
-    return counter === 1 ? `${counter} is overdue` : `${counter} are overdue`
+    return counter === 1 ? `${counter} innovation is overdue` : `${counter} innovations are overdue`
   }
 
 
