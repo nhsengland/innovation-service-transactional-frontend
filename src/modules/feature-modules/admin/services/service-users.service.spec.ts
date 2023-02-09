@@ -61,7 +61,7 @@ describe('FeatureModules/Admin/Services/ServiceUsersService', () => {
     let response: any = null;
     service.getUserMinimalInfo('_user01').subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/user-admin/users/_user01?model=minimal`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_USERS_URL}/v1/_user01?model=minimal`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
