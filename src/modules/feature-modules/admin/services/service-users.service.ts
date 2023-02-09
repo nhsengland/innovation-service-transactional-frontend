@@ -32,7 +32,7 @@ export type getUserFullInfoDTO = {
     size: null | string;
     role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum;
     isShadow: boolean;
-    units: { id: string, name: string, acronym: string, supportCount: null | string }[];
+    units: { id: string, name: string, acronym: string, supportCount: null | number }[];
   }[];
 };
 
@@ -173,14 +173,14 @@ export class ServiceUsersService extends CoreService {
 
   getUserMinimalInfo(userId: string): Observable<getUserMinimalInfoDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('/user-admin/users/:userId').setPathParams({ userId }).setQueryParams({ model: 'minimal' });
+    const url = new UrlModel(this.API_USERS_URL).addPath('/v1/:userId').setPathParams({ userId }).setQueryParams({ model: 'minimal' });
     return this.http.get<getUserMinimalInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 
   getUserFullInfo(userId: string): Observable<getUserFullInfoDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('/user-admin/users/:userId').setPathParams({ userId }).setQueryParams({ model: 'full' });
+    const url = new UrlModel(this.API_USERS_URL).addPath('/v1/:userId').setPathParams({ userId }).setQueryParams({ model: 'full' });
     return this.http.get<getUserFullInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }

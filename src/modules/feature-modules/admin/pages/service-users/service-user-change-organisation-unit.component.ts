@@ -23,7 +23,7 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
   user: { id: string, name: string, role?: string; };
   pageStep: 'CODE_REQUEST' | 'SUCCESS' | 'RULES_LIST' | 'UNIT_LIST' = 'RULES_LIST';
   rulesList: getOrganisationUnitRulesOutDTO[] = [];
-  oldOrganisationUnits: { id: string, name: string, acronym: string, supportCount: null | string }[] = [];
+  oldOrganisationUnits: { id: string, name: string, acronym: string, supportCount: null | number }[] = [];
   titleHint = '';
   submitBtnClicked = false;
   isRulesValid = false;
