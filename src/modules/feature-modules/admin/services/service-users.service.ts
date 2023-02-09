@@ -7,6 +7,7 @@ import { CoreService } from '@app/base';
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, TermsOfUseTypeEnum, UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
+import { UserSearchDTO } from '@modules/shared/dtos/users.dto';
 
 
 export type getUserMinimalInfoDTO = {
@@ -252,12 +253,34 @@ export class ServiceUsersService extends CoreService {
 
   }
 
+  // The search user isAdmin distinction is because of frontend pages and this should actually either accept a role|role[] or nothing and search for all roles
+  // keeping this way not to change current behavior
   searchUser(email: string, isAdmin: boolean): Observable<searchUserEndpointOutDTO[]> {
+    const roles = isAdmin ? [UserRoleEnum.ADMIN] : [UserRoleEnum.ACCESSOR, UserRoleEnum.ASSESSMENT, UserRoleEnum.INNOVATOR, UserRoleEnum.QUALIFYING_ACCESSOR]
 
-    const url = new UrlModel(this.API_URL).addPath('/user-admin/users').setQueryParams({ email, isAdmin });
-    return this.http.get<searchUserEndpointInDTO[]>(url.buildUrl()).pipe(
+    // this could probably be a call for a shared getUsersList method
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ email, userTypes: roles });
+    return this.http.get<UserSearchDTO[]>(url.buildUrl()).pipe(
       take(1),
-      map(response => response.map(item => ({ ...item, typeLabel: this.stores.authentication.getRoleDescription(item.type) })))
+      map(response => response.map(item => ({
+         id: item.id,
+         email: item.email,
+         displayName: item.name,
+         type: item.roles[0].role, // TODO: this is a hack while we are supporting only one role in the admin
+         typeLabel: this.stores.authentication.getRoleDescription(item.roles[0].role),   
+         ...(item.lockedAt && { lockedAt: item.lockedAt }),
+         ...(item.organisations && { userOrganisations: item.organisations.map(org => ({
+            id: org.id,
+            name: org.name,
+            acronym: org.acronym,
+            role: org.role,
+            ...(org.units && { units: org.units.map(unit => ({
+              id: unit.id,
+              name: unit.name,
+              acronym: unit.acronym
+            }))})
+         }))})
+        })))
     );
 
   }

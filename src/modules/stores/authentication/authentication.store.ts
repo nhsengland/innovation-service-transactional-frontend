@@ -5,9 +5,9 @@ import { concatMap } from 'rxjs/operators';
 import { Store } from '../store.class';
 import { AuthenticationService, UpdateUserInfoDTO } from './authentication.service';
 
+import { LocalStorageHelper } from '@app/base/helpers';
 import { UserRoleEnum } from './authentication.enums';
 import { AuthenticationModel } from './authentication.models';
-import { LocalStorageHelper } from '@app/base/helpers';
 
 @Injectable()
 export class AuthenticationStore extends Store<AuthenticationModel> {
@@ -82,7 +82,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   isAccessorRole(): boolean { return this.state.userContext.type === UserRoleEnum.ACCESSOR; }
   isQualifyingAccessorRole(): boolean { return this.state.userContext.type === UserRoleEnum.QUALIFYING_ACCESSOR; }
   isAdminRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.ADMIN) || false; }
-  isServiceTeamRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.SERVICE_TEAM) || false; }
+  // remove and or change logic to use the other roles 
+  // isServiceTeamRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.SERVICE_TEAM) || false; }
 
   hasMultipleRoles(): boolean { return  (this.state.user && this.state.user?.roles.length > 1) ?? false; }
   
