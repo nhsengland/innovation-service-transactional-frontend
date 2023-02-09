@@ -14,12 +14,12 @@ export class AssessmentService extends CoreService {
   constructor() { super(); }
 
 
-  getOverdueAssessments(status: InnovationStatusEnum[]): Observable<{ overdue: number }> {
+  getOverdueAssessments(status: InnovationStatusEnum[], assignedToMe?: boolean): Observable<{ overdue: number }> {
 
     // Overdue assessments only exists on these 2 statuses. If more is passed, is removed.
     status = status.filter(item => [InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT, InnovationStatusEnum.NEEDS_ASSESSMENT].includes(item));
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/overdue-assessments').setQueryParams({ status });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/overdue-assessments').setQueryParams({ status, assignedToMe });
     return this.http.get<{ overdue: number }>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
