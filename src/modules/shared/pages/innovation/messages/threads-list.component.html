@@ -66,13 +66,13 @@
 
                   <ng-template #notSelfUser>
                     <ng-container [ngSwitch]="item.lastMessage.createdBy.type">
-                      <ng-container *ngSwitchCase="'ASSESSMENT'">
+                      <ng-container *ngSwitchCase="userRole.ASSESSMENT">
                         {{ item.lastMessage.createdBy.name }} (Assessment team)
                       </ng-container>
-                      <ng-container *ngSwitchCase="'ACCESSOR'">
+                      <ng-container *ngSwitchCase="userRole.ACCESSOR || userRole.QUALIFYING_ACCESSOR">
                         {{ item.lastMessage.createdBy.name }}, {{ item.lastMessage.createdBy.organisationUnit?.acronym }}
                       </ng-container>
-                      <ng-container *ngSwitchCase="'INNOVATOR'">
+                      <ng-container *ngSwitchCase="userRole.INNOVATOR">
                         {{ item.lastMessage.createdBy.name }} (innovator)
                       </ng-container>
                     </ng-container>

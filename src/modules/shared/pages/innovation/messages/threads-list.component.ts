@@ -6,6 +6,7 @@ import { TableModel } from '@app/base/models';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { GetThreadsListDTO, InnovationsService } from '@modules/shared/services/innovations.service';
+import { UserRoleEnum } from '@app/base/enums';
 
 
 @Component({
@@ -17,6 +18,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
   selfUser: { id: string, organisationUnitId?: string };
   innovation: ContextInnovationType;
   tableList = new TableModel<GetThreadsListDTO['threads'][0]>({ pageSize: 10 });
+  userRole = UserRoleEnum
 
   isInnovator(): boolean { return this.stores.authentication.isInnovatorType(); }
   isNotInnovator(): boolean { return !this.stores.authentication.isInnovatorType(); }
