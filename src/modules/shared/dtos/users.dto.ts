@@ -1,3 +1,4 @@
+import { UserRoleEnum } from "@app/base/enums";
 import { DateISOType } from "@app/base/types";
 import { RoleDTO } from "./roles.dto";
 
@@ -12,7 +13,7 @@ export type UserSearchDTO = {
     id: string;
     name: string;
     acronym: string;
-    role: string;
+    role: UserRoleEnum.ACCESSOR | UserRoleEnum.QUALIFYING_ACCESSOR;
     units?: { 
       id: string,
       name: string,
