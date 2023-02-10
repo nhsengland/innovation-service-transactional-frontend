@@ -8,8 +8,8 @@ import { MappedObjectType, WizardStepComponentType, WizardStepEventType } from '
 
 import { UsersStepInputType, UsersStepOutputType } from './users-step.types';
 
-import { GetOrganisationUnitUsersOutDTO, OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
-import { AccessorOrganisationRoleEnum } from '@modules/stores/authentication/authentication.enums';
+import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
+import { GetOrganisationUnitUsersDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class WizardOrganisationUnitActivateUsersStepComponent extends CoreCompon
   @Output() submitEvent = new EventEmitter<WizardStepEventType<UsersStepOutputType>>();
 
 
-  tableList = new TableModel<GetOrganisationUnitUsersOutDTO['data'][0], { onlyActive: boolean }>({
+  tableList = new TableModel<GetOrganisationUnitUsersDTO[0], { onlyActive: boolean }>({
     pageSize: 1000
   });
 
@@ -73,9 +73,9 @@ export class WizardOrganisationUnitActivateUsersStepComponent extends CoreCompon
 
   getUsersList(): void {
 
-    this.organisationsService.getOrganisationUnitUsers(this.data.organisation.id, this.data.organisationUnit.id, this.tableList.getAPIQueryParams()).subscribe(
+    this.organisationsService.getOrganisationUnitUsersList(this.data.organisation.id, { email: true }).subscribe(
       response => {
-        this.tableList.setData(response.data, response.count);
+        this.tableList.setData(response);
         this.setPageStatus('READY');
       },
       () => {
@@ -124,12 +124,12 @@ export class WizardOrganisationUnitActivateUsersStepComponent extends CoreCompon
           .map(item => ({
             id: item!.id,
             name: item!.name,
-            organisationRole: item!.organisationRole
+            organisationRole: item!.role
           }))
       }
     };
 
-    if (!outputData.data.users.some(item => item.organisationRole === AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR)) {
+    if (!outputData.data.users.some(item => item.organisationRole === UserRoleEnum.QUALIFYING_ACCESSOR)) {
       hasError = true;
       this.form.get('users')!.setErrors({ customError: true, message: 'You need to choose at least one Qualifying accessor' });
     }

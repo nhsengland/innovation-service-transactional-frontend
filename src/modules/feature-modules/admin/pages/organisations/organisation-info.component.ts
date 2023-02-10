@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { TableModel } from '@app/base/models';
 
-import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 @Component({
@@ -112,10 +111,9 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
         unit.isLoading = false;
         break;
       case 'closed':
-        const qp = new TableModel<{}, { onlyActive: boolean }>({ pageSize: 1000 }).setFilters({ onlyActive: true }).getAPIQueryParams();
-        this.organisationsService.getOrganisationUnitUsers(organisationId, organisationUnitId, qp).subscribe(
+        this.organisationsService.getOrganisationUnitUsersList(organisationUnitId, { onlyActive: true }).subscribe(
           response => {
-            unit.users = response.data.map(item => ({ name: item.name, roleDescription: item.organisationRoleDescription }));
+            unit.users = response.map(item => ({ name: item.name, roleDescription: this.stores.authentication.getRoleDescription(item.role) }));
             unit.showHideStatus = 'opened';
             unit.showHideText = `Hide users`;
             unit.showHideDescription = `that belong to the ${unit.name}`;
@@ -126,6 +124,7 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
             unit.isLoading = false;
           }
         );
+        console.log(unit.users);
         break;
       default:
         break;

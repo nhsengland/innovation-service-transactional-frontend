@@ -5,10 +5,9 @@ import { CoreComponent } from '@app/base';
 import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
+import { GetOrganisationUnitUsersDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 
 import { UsersStepInputType, UsersStepOutputType } from './users-step.types';
-
-import { GetOrganisationUnitUsersOutDTO, OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
 
 
 @Component({
@@ -30,7 +29,7 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
 
   // submitButton = { isActive: true, label: 'Confirm and notify organisations' };
 
-  tableList = new TableModel<GetOrganisationUnitUsersOutDTO['data'][0], { onlyActive: boolean }>({
+  tableList = new TableModel<GetOrganisationUnitUsersDTO[0]>({
     pageSize: 10
   });
 
@@ -62,9 +61,9 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
 
   getUsersList(): void {
 
-    this.organisationsService.getOrganisationUnitUsers(this.data.organisation.id, this.data.organisationUnit.id, this.tableList.getAPIQueryParams()).subscribe(
+    this.organisationsService.getOrganisationUnitUsersList(this.data.organisationUnit.id, { email: true }).subscribe(
       response => {
-        this.tableList.setData(response.data, response.count);
+        this.tableList.setData(response);
         this.setPageStatus('READY');
       },
       () => {
@@ -72,6 +71,8 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
         this.setAlertUnknownError();
       }
     );
+
+    console.log(this.tableList.totalRows, this.tableList.getRecords())
 
   }
 
