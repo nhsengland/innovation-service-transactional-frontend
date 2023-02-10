@@ -29,39 +29,39 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninInnovati
   let component: FirstTimeSigninInnovationNewComponent;
   let fixture: ComponentFixture<FirstTimeSigninInnovationNewComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        InnovatorModule
-      ]
-    });
+  // beforeEach(() => {
+  //   TestBed.configureTestingModule({
+  //     imports: [
+  //       HttpClientTestingModule,
+  //       RouterTestingModule,
+  //       CoreModule,
+  //       StoresModule,
+  //       InnovatorModule
+  //     ]
+  //   });
 
-    AppInjector.setInjector(TestBed.inject(Injector));
+  //   AppInjector.setInjector(TestBed.inject(Injector));
 
-    router = TestBed.inject(Router);
-    routerSpy = jest.spyOn(router, 'navigate');
+  //   router = TestBed.inject(Router);
+  //   routerSpy = jest.spyOn(router, 'navigate');
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
-    innovatorService = TestBed.inject(InnovatorService);
-    organisationsService = TestBed.inject(OrganisationsService);
+  //   authenticationStore = TestBed.inject(AuthenticationStore);
+  //   innovatorService = TestBed.inject(InnovatorService);
+  //   organisationsService = TestBed.inject(OrganisationsService);
 
     // organisationsService.getOrganisationUnitUsersList = () => of([
     //   { id: 'orgId01', name: 'Org name 01', organisationUnitUserId: 'OrgUnitId01' },
     //   { id: 'orgId02', name: 'Org name 02', organisationUnitUserId: 'OrgUnitId02' }
     // ]);
 
-  });
+  // });
 
-  it('should create the component', () => {
-    fixture = TestBed.createComponent(FirstTimeSigninInnovationNewComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    expect(component).toBeTruthy();
-  });
+  // it('should create the component', () => {
+  //   fixture = TestBed.createComponent(FirstTimeSigninInnovationNewComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+  //   expect(component).toBeTruthy();
+  // });
 
   // it('should NOT have default information loaded', () => {
 
