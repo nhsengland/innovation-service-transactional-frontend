@@ -46,7 +46,7 @@ export type GetOrganisationUnitUsersDTO = {
   id: string,
   organisationUnitUserId: string,
   name: string,
-  email: string,
+  email?: string,
   role: UserRoleEnum
   roleDescription: string,
   isActive: boolean,

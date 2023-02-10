@@ -15,6 +15,7 @@ import { FirstTimeSigninInnovationNewComponent } from './innovation-new.componen
 import { InnovatorService } from '../../services/innovator.service';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { UserRoleEnum } from '@app/base/enums';
 
 
 describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninInnovationNewComponent', () => {
@@ -29,39 +30,39 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninInnovati
   let component: FirstTimeSigninInnovationNewComponent;
   let fixture: ComponentFixture<FirstTimeSigninInnovationNewComponent>;
 
-  // beforeEach(() => {
-  //   TestBed.configureTestingModule({
-  //     imports: [
-  //       HttpClientTestingModule,
-  //       RouterTestingModule,
-  //       CoreModule,
-  //       StoresModule,
-  //       InnovatorModule
-  //     ]
-  //   });
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        CoreModule,
+        StoresModule,
+        InnovatorModule
+      ]
+    });
 
-  //   AppInjector.setInjector(TestBed.inject(Injector));
+    AppInjector.setInjector(TestBed.inject(Injector));
 
-  //   router = TestBed.inject(Router);
-  //   routerSpy = jest.spyOn(router, 'navigate');
+    router = TestBed.inject(Router);
+    routerSpy = jest.spyOn(router, 'navigate');
 
-  //   authenticationStore = TestBed.inject(AuthenticationStore);
-  //   innovatorService = TestBed.inject(InnovatorService);
-  //   organisationsService = TestBed.inject(OrganisationsService);
+    authenticationStore = TestBed.inject(AuthenticationStore);
+    innovatorService = TestBed.inject(InnovatorService);
+    organisationsService = TestBed.inject(OrganisationsService);
 
-    // organisationsService.getOrganisationUnitUsersList = () => of([
-    //   { id: 'orgId01', name: 'Org name 01', organisationUnitUserId: 'OrgUnitId01' },
-    //   { id: 'orgId02', name: 'Org name 02', organisationUnitUserId: 'OrgUnitId02' }
-    // ]);
+    organisationsService.getOrganisationUnitUsersList = () => of([
+      { id: 'orgId01', name: 'Org name 01', organisationUnitUserId: 'OrgUnitId01', role: UserRoleEnum.QUALIFYING_ACCESSOR, roleDescription: 'Qualifying accessor', isActive: true, lockedAt: undefined  },
+      { id: 'orgId02', name: 'Org name 02', organisationUnitUserId: 'OrgUnitId02', role: UserRoleEnum.ACCESSOR, roleDescription: 'Accessor', isActive: true, lockedAt: undefined   }
+    ]);
 
-  // });
+  });
 
-  // it('should create the component', () => {
-  //   fixture = TestBed.createComponent(FirstTimeSigninInnovationNewComponent);
-  //   component = fixture.componentInstance;
-  //   fixture.detectChanges();
-  //   expect(component).toBeTruthy();
-  // });
+  it('should create the component', () => {
+    fixture = TestBed.createComponent(FirstTimeSigninInnovationNewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    expect(component).toBeTruthy();
+  });
 
   // it('should NOT have default information loaded', () => {
 
