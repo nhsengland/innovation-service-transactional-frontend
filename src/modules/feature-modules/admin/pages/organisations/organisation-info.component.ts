@@ -111,8 +111,7 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
         unit.isLoading = false;
         break;
       case 'closed':
-        const qp = { organisationUnitId, onlyActive: true };
-        this.organisationsService.getOrganisationUnitUsersList(qp.organisationUnitId, qp.onlyActive).subscribe(
+        this.organisationsService.getOrganisationUnitUsersList(organisationUnitId, { onlyActive: true }).subscribe(
           response => {
             unit.users = response.map(item => ({ name: item.name, roleDescription: this.stores.authentication.getRoleDescription(item.role) }));
             unit.showHideStatus = 'opened';

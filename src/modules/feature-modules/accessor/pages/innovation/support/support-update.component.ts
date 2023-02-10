@@ -108,7 +108,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     }
 
-    this.organisationsService.getOrganisationUnitUsersList(this.userOrganisationUnit?.id ?? '').subscribe(
+    this.organisationsService.getOrganisationUnitUsersList(this.userOrganisationUnit?.id ?? '', { onlyActive: true }).subscribe(
       response => {
 
         this.accessorsList = response;

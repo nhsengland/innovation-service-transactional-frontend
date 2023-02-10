@@ -61,7 +61,7 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
 
   getUsersList(): void {
 
-    this.organisationsService.getOrganisationUnitUsersList(this.data.organisationUnit.id).subscribe(
+    this.organisationsService.getOrganisationUnitUsersList(this.data.organisationUnit.id, { email: true }).subscribe(
       response => {
         this.tableList.setData(response);
         this.setPageStatus('READY');
