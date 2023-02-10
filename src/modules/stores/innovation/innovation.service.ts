@@ -177,15 +177,9 @@ export class InnovationService {
   }
 
   getInnovationOrganisationSuggestions(innovationId: string): Observable<OrganisationSuggestionModel> {
-
-    const url = new UrlModel(this.API_URL).addPath(':endpointModule/:userId/innovations/:innovationId/suggestions').setPathParams({
-      endpointModule: this.apiUserBasePath(),
-      userId: this.authenticationStore.getUserId(),
-      innovationId
-    });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/suggestions').setPathParams({ innovationId });
 
     return this.http.get<OrganisationSuggestionModel>(url.buildUrl()).pipe(take(1), map(response => response));
-
   }
 
 }
