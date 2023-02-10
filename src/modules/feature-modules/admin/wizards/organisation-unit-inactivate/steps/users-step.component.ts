@@ -72,8 +72,6 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
       }
     );
 
-    console.log(this.tableList.totalRows, this.tableList.getRecords())
-
   }
 
   onTableOrder(column: string): void {
