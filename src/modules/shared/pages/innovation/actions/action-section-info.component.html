@@ -59,7 +59,7 @@
         <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/record/sections/{{ action.section }}"
           class="nhsuk-button nhsuk-u-margin-right-3"> Review section </a>
 
-        <a *ngIf="action.status === 'SUBMITTED'"
+        <a *ngIf="canUpdateActionStatus()"
           routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/edit"
           class="nhsuk-button nhsuk-button--secondary">
           Update status

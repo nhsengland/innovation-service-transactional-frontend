@@ -1,21 +1,21 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { StoresModule } from '@modules/stores';
 
 import { PageServiceUserChangeOrganisationUnitComponent } from './service-user-change-organisation-unit.component';
 
 import { changeUserTypeDTO, getOrganisationUnitRulesOutDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { FormEngineComponent } from '@modules/shared/forms';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisationUnitComponent', () => {
@@ -61,7 +61,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: '2' }] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: 2 }] }
       ]
     });
 

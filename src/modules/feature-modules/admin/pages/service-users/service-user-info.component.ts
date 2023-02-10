@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { LinkType } from '@app/base/types';
 import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { RoutingHelper } from '@app/base/helpers';
+import { LinkType } from '@app/base/types';
 
 import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
@@ -28,11 +28,12 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
     innovations: string[];
     organisation: {
       id: string; name: string; role: null | string;
-      units: { id: string; name: string; supportCount: null | string; }[];
+      units: { id: string; name: string; supportCount: null | number; }[];
     }[];
   } = { userInfo: [], innovations: [], organisation: [] };
 
   unitLength = 0;
+  userRoleEnum = UserRoleEnum;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -107,7 +108,7 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
           this.unitLength = organisations.filter(org => (response.userOrganisations[0].id === org.id))[0].organisationUnits.length;
         }
 
-        if (response.type === UserRoleEnum.ACCESSOR && response.userOrganisations.length > 0) {
+        if ((response.type === UserRoleEnum.ACCESSOR || response.type === UserRoleEnum.QUALIFYING_ACCESSOR) && response.userOrganisations.length > 0) {
           this.sections.userInfo = [
             { label: 'Name', value: response.displayName },
             { label: 'Type', value: 'Authorised person' },
@@ -137,7 +138,7 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
           }
         }
 
-        if (response.type === UserRoleEnum.ACCESSOR) {
+        if (response.type === UserRoleEnum.ACCESSOR || response.type === UserRoleEnum.QUALIFYING_ACCESSOR) {
           this.sections.organisation = response.userOrganisations;
         }
 
