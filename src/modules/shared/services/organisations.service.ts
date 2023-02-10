@@ -92,7 +92,6 @@ export class OrganisationsService extends CoreService {
         const organisation = item.organisations?.find( o => o.units?.find( u => u.id === organisationUnitId));
         const organisationUnit = organisation?.units?.find( u => u.id === organisationUnitId);
         
-        console.log(organisation)
         return {
           id: item.id,
           organisationUnitUserId: organisationUnit?.organisationUnitUserId ?? '', // it should never be null or it wouldn't have been returned. This logic to identify the users should probably be revised
