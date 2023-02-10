@@ -131,7 +131,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
       lockedAt: null,
       innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: '2' }] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: 2 }] }
       ]
     };
 
@@ -175,7 +175,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: '2' }] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: 2 }] }
       ]
     };
 
@@ -222,7 +222,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
       lockedAt: null,
       innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: '2' }] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: 2 }] }
       ]
     };
     serviceUsersService.getUserFullInfo = () => of(responseMock);
