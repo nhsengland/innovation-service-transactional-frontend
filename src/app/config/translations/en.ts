@@ -87,7 +87,7 @@ export const locale = {
           action_status: {
             REQUESTED: {
               name: 'Requested',
-              description: 'An accessor has requested that the innovator should submit information to a specific section of their innovation record.',
+              description: 'The innovator has been asked to provide additional information on their innovation record.',
               cssColorClass: 'nhsuk-tag--blue'
             },
             STARTED: {
@@ -102,27 +102,27 @@ export const locale = {
             },
             SUBMITTED: {
               name: 'Submitted',
-              description: 'The innovator has submitted information requested by an accessor and is waiting for the accessor to review this information.',
+              description: 'The innovator has submitted the requested information and is waiting for it to be reviewed.',
               cssColorClass: 'nhsuk-tag--yellow'
             },
             DELETED: {
               name: 'Deleted',
-              description: 'The action has been deleted as it is no longer relevant due to a change to the innovation or innovator account.',
+              description: 'The action has been deleted as it is no longer relevant. ',
               cssColorClass: 'nhsuk-tag--grey'
             },
             DECLINED: {
               name: 'Declined',
-              description: 'The innovator has declined the action requested.',
+              description: 'The innovator has declined the action request.',
               cssColorClass: 'nhsuk-tag--red'
             },
             COMPLETED: {
-              name: 'Completed',
-              description: 'An accessor has closed the action after reviewing the information.',
+              name: 'Complete',
+              description: 'The information has been reviewed and the action has been marked as complete.',
               cssColorClass: 'nhsuk-tag--green'
             },
             CANCELLED: {
               name: 'Cancelled',
-              description: 'An accessor has cancelled the action.',
+              description: 'The requested action has been cancelled.',
               cssColorClass: 'nhsuk-tag--dark-grey'
             }
           },
@@ -472,7 +472,7 @@ export const locale = {
               confirmation: '9am to 12pm or 1pm to 5pm'
             },
           },
-      
+
         }
       },
 
