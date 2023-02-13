@@ -38,7 +38,7 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    this.organisationsService.getOrganisationsList({ onlyActive: false }).subscribe({
+    this.organisationsService.getOrganisationsList({ withInactive: true }).subscribe({
       next: (organisationUnits) => {
 
         this.organisations = organisationUnits.map(organisation => {

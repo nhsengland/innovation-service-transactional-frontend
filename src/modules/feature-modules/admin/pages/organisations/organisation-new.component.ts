@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
-import { FormControl, FormEngineComponent, FormGroup, WizardEngineModel } from '@app/base/forms';
+import { FormEngineComponent, FormGroup, WizardEngineModel } from '@app/base/forms';
 
 import { CreateOrganisationBodyDTO, OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
 
@@ -40,7 +40,7 @@ export class PageOrganisationNewComponent extends CoreComponent implements OnIni
 
   ngOnInit(): void {
 
-    this.organisationsService.getOrganisationsList({ onlyActive: false }).subscribe(
+    this.organisationsService.getOrganisationsList({ withInactive: true }).subscribe(
       response => {
 
         const organisationsList = response.map(o => ({ acronym: o.acronym, name: o.name, units: o.organisationUnits.map(u => ({ acronym: u.acronym, name: u.name })) }));
