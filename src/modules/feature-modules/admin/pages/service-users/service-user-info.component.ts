@@ -70,7 +70,7 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
   ngOnInit(): void {
     forkJoin([
       this.serviceUsersService.getUserFullInfo(this.user.id),
-      this.organisationService.getOrganisationsList({ onlyActive: false })
+      this.organisationService.getOrganisationsList({ withInactive: true })
     ]).subscribe({
 
       next: ([response, organisations]) => {

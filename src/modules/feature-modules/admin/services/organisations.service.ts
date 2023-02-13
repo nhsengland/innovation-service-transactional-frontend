@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -100,9 +100,12 @@ export class OrganisationsService extends CoreService {
 
   constructor() { super(); }
 
-  getOrganisationsList(filters: { onlyActive: boolean }): Observable<GetOrganisationsListDTO[]> {
+  getOrganisationsList(filters: { withInactive: boolean }): Observable<GetOrganisationsListDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations').setQueryParams(filters);
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/organisations').setQueryParams({
+      withInactive: filters.withInactive,
+      fields: ['organisationUnits'] // always get the organisation units to keep previous behaviour
+    });
     return this.http.get<GetOrganisationsListDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response)

@@ -1,5 +1,5 @@
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 
 import { ENV } from '@tests/app.mocks';
 
@@ -8,10 +8,7 @@ import { Injector } from '@angular/core';
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
-import { GetOrganisationInfoDTO, GetOrganisationsListDTO, GetOrganisationUnitInfoDTO, GetOrganisationUnitInnovationsListDTO, GetOrganisationUnitUsersInDTO, GetOrganisationUnitUsersOutDTO, OrganisationsService, updateOrganisationDTO } from './organisations.service';
-import { TableModel } from '@app/base/models';
-import { AccessorOrganisationRoleEnum } from '@app/base/enums';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { GetOrganisationsListDTO, OrganisationsService } from './organisations.service';
 
 
 describe('FeatureModules/Admin/Services/OrganisationsService', () => {
@@ -54,9 +51,9 @@ describe('FeatureModules/Admin/Services/OrganisationsService', () => {
     const expected = responseMock;
 
     let response: any = null;
-    service.getOrganisationsList({ onlyActive: true }).subscribe({ next: success => response = success, error: error => response = error});
+    service.getOrganisationsList({ withInactive: false }).subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/user-admin/organisations?onlyActive=true`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/user-admin/organisations?withInactive=false`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
