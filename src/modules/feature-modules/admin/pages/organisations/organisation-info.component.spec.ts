@@ -12,7 +12,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageOrganisationInfoComponent } from './organisation-info.component';
 
-import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
+import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { USER_INFO_ADMIN } from '@tests/data.mocks';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
