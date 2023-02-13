@@ -53,7 +53,7 @@ describe('FeatureModules/Admin/Services/OrganisationsService', () => {
     let response: any = null;
     service.getOrganisationsList({ withInactive: false }).subscribe({ next: success => response = success, error: error => response = error});
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/user-admin/organisations?withInactive=false`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_USERS_URL}/v1/organisations?withInactive=false&fields=organisationUnits`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('GET');
     expect(response).toEqual(expected);
