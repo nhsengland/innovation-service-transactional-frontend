@@ -4,7 +4,7 @@ import { RoleDTO } from "./roles.dto";
 
 export type UserSearchDTO = {
   id: string;
-  email?: string;
+  email: string;
   name: string;
   roles: RoleDTO[];
   isActive: boolean;
