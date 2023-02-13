@@ -39,7 +39,7 @@ export class AccessorService extends CoreService {
 
   suggestNewOrganisations(innovationId: string, body: { organisationUnits: string[], type: SupportLogType, description: string }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_URL).addPath('accessors/:userId/innovations/:innovationId/support-logs').setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-logs').setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
