@@ -107,7 +107,7 @@ export const locale = {
             },
             DELETED: {
               name: 'Deleted',
-              description: 'The action has been deleted as it is no longer relevant. ',
+              description: 'The action has been deleted as it is no longer relevant.',
               cssColorClass: 'nhsuk-tag--grey'
             },
             DECLINED: {
@@ -116,8 +116,8 @@ export const locale = {
               cssColorClass: 'nhsuk-tag--red'
             },
             COMPLETED: {
-              name: 'Complete',
-              description: 'The information has been reviewed and the action has been marked as complete.',
+              name: 'Completed',
+              description: 'The information has been reviewed and the action has been marked as completed.',
               cssColorClass: 'nhsuk-tag--green'
             },
             CANCELLED: {
