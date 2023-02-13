@@ -124,7 +124,6 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
             unit.isLoading = false;
           }
         );
-        console.log(unit.users);
         break;
       default:
         break;
