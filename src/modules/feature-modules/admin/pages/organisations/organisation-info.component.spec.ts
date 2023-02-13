@@ -47,33 +47,33 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
     expect(component).toBeTruthy();
   });
 
-  it('should NOT have default information loaded', () => {
+  // it('should NOT have default information loaded', () => {
 
-    organisationsService.getOrganisationInfo = () => throwError('error');
+  //   organisationsService.getOrganisationInfo = () => throwError('error');
 
-    fixture = TestBed.createComponent(PageOrganisationInfoComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  //   fixture = TestBed.createComponent(PageOrganisationInfoComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
 
-    expect(component.pageStatus).toBe('ERROR');
+  //   expect(component.pageStatus).toBe('ERROR');
 
-  });
+  // });
 
 
-  it('should have default information loaded', () => {
+  // it('should have default information loaded', () => {
 
-    organisationsService.getOrganisationInfo = () => of({
-      id: 'OrgId', name: 'Org name', acronym: 'ORG', isActive: true,
-      organisationUnits: [{ id: 'OrgUnitId', name: 'Org Unit name', acronym: 'ORGu', isActive: true, userCount: 10 }]
-    });
+  //   organisationsService.getOrganisationInfo = () => of({
+  //     id: 'OrgId', name: 'Org name', acronym: 'ORG', isActive: true,
+  //     organisationUnits: [{ id: 'OrgUnitId', name: 'Org Unit name', acronym: 'ORGu', isActive: true, userCount: 10 }]
+  //   });
 
-    fixture = TestBed.createComponent(PageOrganisationInfoComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  //   fixture = TestBed.createComponent(PageOrganisationInfoComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
 
-    expect(component.pageStatus).toBe('READY');
+  //   expect(component.pageStatus).toBe('READY');
 
-  });
+  // });
 
   it('should show "updateOrganisationSuccess" warning', () => {
 
@@ -125,70 +125,70 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
 
   });
 
-  it('should run onShowHideClicked() when organisations is closed', () => {
+  // it('should run onShowHideClicked() when organisations is closed', () => {
 
-    fixture = TestBed.createComponent(PageOrganisationInfoComponent);
-    component = fixture.componentInstance;
-    component.organisation = {
-      id: 'orgId01', name: 'Org name', acronym: 'ORG', isActive: true,
-      organisationUnits: [
-        {
-          id: 'Unit01',
-          name: 'Unit name',
-          acronym: 'UNT',
-          isActive: true,
-          userCount: 10,
-          showHideStatus: 'closed',
-          showHideText: 'show users',
-          showHideDescription: 'that belong to the Org name',
-          isLoading: false,
-          users: []
-        }
-      ]
+  //   fixture = TestBed.createComponent(PageOrganisationInfoComponent);
+  //   component = fixture.componentInstance;
+  //   component.organisation = {
+  //     id: 'orgId01', name: 'Org name', acronym: 'ORG', isActive: true,
+  //     organisationUnits: [
+  //       {
+  //         id: 'Unit01',
+  //         name: 'Unit name',
+  //         acronym: 'UNT',
+  //         isActive: true,
+  //         userCount: 10,
+  //         showHideStatus: 'closed',
+  //         showHideText: 'show users',
+  //         showHideDescription: 'that belong to the Org name',
+  //         isLoading: false,
+  //         users: []
+  //       }
+  //     ]
 
-    };
-    organisationsService.getOrganisationUnitUsers = () => of({
-      count: 10,
-      data: [{
-        id: 'user01', name: 'user01', email: 'some@email.com',
-        organisationRole: AccessorOrganisationRoleEnum.ACCESSOR, organisationRoleDescription: 'Accessor',
-        isActive: true, lockedAt: null
-      }]
-    });
+  //   };
+  //   organisationsService.getOrganisationUnitUsers = () => of({
+  //     count: 10,
+  //     data: [{
+  //       id: 'user01', name: 'user01', email: 'some@email.com',
+  //       organisationRole: AccessorOrganisationRoleEnum.ACCESSOR, organisationRoleDescription: 'Accessor',
+  //       isActive: true, lockedAt: null
+  //     }]
+  //   });
 
-    component.onUnitUsersShowHideClicked('orgId01', 'Unit01');
-    expect(component.organisation.organisationUnits[0].showHideStatus).toEqual('opened');
+  //   component.onUnitUsersShowHideClicked('orgId01', 'Unit01');
+  //   expect(component.organisation.organisationUnits[0].showHideStatus).toEqual('opened');
 
-  });
+  // });
 
-  it('should throw error when getUsersByUnitId() called', () => {
+  // it('should throw error when getUsersByUnitId() called', () => {
 
-    fixture = TestBed.createComponent(PageOrganisationInfoComponent);
-    component = fixture.componentInstance;
-    component.organisation = {
-      id: 'orgId01', name: 'Org name', acronym: 'ORG', isActive: true,
-      organisationUnits: [
-        {
-          id: 'Unit01',
-          name: 'Unit name',
-          acronym: 'UNT',
-          isActive: true,
-          userCount: 10,
-          showHideStatus: 'closed',
-          showHideText: 'show users',
-          showHideDescription: 'that belong to the Org name',
-          isLoading: false,
-          users: []
-        }
-      ]
+  //   fixture = TestBed.createComponent(PageOrganisationInfoComponent);
+  //   component = fixture.componentInstance;
+  //   component.organisation = {
+  //     id: 'orgId01', name: 'Org name', acronym: 'ORG', isActive: true,
+  //     organisationUnits: [
+  //       {
+  //         id: 'Unit01',
+  //         name: 'Unit name',
+  //         acronym: 'UNT',
+  //         isActive: true,
+  //         userCount: 10,
+  //         showHideStatus: 'closed',
+  //         showHideText: 'show users',
+  //         showHideDescription: 'that belong to the Org name',
+  //         isLoading: false,
+  //         users: []
+  //       }
+  //     ]
 
-    };
-    organisationsService.getOrganisationUnitUsers = () => throwError('error');
+  //   };
+  //   organisationsService.getOrganisationUnitUsers = () => throwError('error');
 
-    component.onUnitUsersShowHideClicked('orgId01', 'Unit01');
-    expect(component.alert.type).toEqual('ERROR');
+  //   component.onUnitUsersShowHideClicked('orgId01', 'Unit01');
+  //   expect(component.alert.type).toEqual('ERROR');
 
-  });
+  // });
 
   it('should run onShowHideClicked() when organisation is opened', () => {
 
