@@ -396,11 +396,13 @@ export class ServiceUsersService extends CoreService {
 
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
 
-      const url = new UrlModel(this.API_URL).addPath('user-admin/users').setQueryParams({ email: control.value });
+      const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ email: control.value });
       return this.http.head(url.buildUrl()).pipe(
         take(1),
         map(() => ({ customError: true, message: 'Email already exist' })),
-        catchError(() => of(null))
+        catchError((e) => {
+          return e.status === 404 ? of(null) : of({ customError: true, message: 'An error has occurred' });
+        })
       );
 
     };
