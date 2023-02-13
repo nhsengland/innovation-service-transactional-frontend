@@ -67,9 +67,8 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
 
   ngOnInit(): void {
 
-    this.organisationsService.getOrganisationInfo(this.organisationId).subscribe(
-      organisation => {
-
+    this.organisationsService.getOrganisationInfo(this.organisationId).subscribe({
+      next: organisation => {
         this.organisation = {
           ...organisation,
           organisationUnits: organisation.organisationUnits.map(u => ({
@@ -83,21 +82,20 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
         };
 
         if (this.organisation.organisationUnits.length === 1) {
-          this.onUnitUsersShowHideClicked(this.organisation.id, this.organisation.organisationUnits[0].id);
+          this.onUnitUsersShowHideClicked(this.organisation.organisationUnits[0].id);
         }
 
         this.setPageStatus('READY');
-
       },
-      () => {
+      error: error => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
+        this.logger.error(error);
       }
-    );
-
+    });
   }
 
-  onUnitUsersShowHideClicked(organisationId: string, organisationUnitId: string): void {
+  onUnitUsersShowHideClicked(organisationUnitId: string): void {
 
     const unit = this.organisation.organisationUnits.find(item => item.id === organisationUnitId);
 
@@ -124,7 +122,6 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
             unit.isLoading = false;
           }
         );
-        console.log(unit.users);
         break;
       default:
         break;

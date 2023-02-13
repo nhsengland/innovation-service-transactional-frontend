@@ -137,7 +137,7 @@
                       ? 'Inactivate' : 'Activate' }} unit</a>
                   </li>
                   <li *ngIf="unit.userCount > 0">
-                    <a href="javascript:void(0)" (click)="onUnitUsersShowHideClicked(organisation.id, unit.id)">{{
+                    <a href="javascript:void(0)" (click)="onUnitUsersShowHideClicked(unit.id)">{{
                       unit.showHideText }}<span class="nhsuk-u-visually-hidden">{{ unit.showHideDescription
                         }}</span></a>
                   </li>
