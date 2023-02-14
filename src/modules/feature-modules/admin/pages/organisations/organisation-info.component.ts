@@ -67,7 +67,7 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
 
   ngOnInit(): void {
 
-    this.organisationsService.getOrganisationInfo(this.organisationId).subscribe({
+    this.organisationsService.getOrganisationInfo(this.organisationId, { onlyActiveUsers: true }).subscribe({
       next: organisation => {
         this.organisation = {
           ...organisation,
