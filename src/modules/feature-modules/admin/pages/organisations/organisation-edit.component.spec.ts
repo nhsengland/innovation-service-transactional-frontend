@@ -49,6 +49,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     authenticationStore = TestBed.inject(AuthenticationStore);
     serviceUserService = TestBed.inject(ServiceUsersService);
     organisationsService = TestBed.inject(OrganisationsService);
+    adminOrganisationsService = TestBed.inject(AdminOrganisationsService);
   });
 
   it('should create the component', () => {
