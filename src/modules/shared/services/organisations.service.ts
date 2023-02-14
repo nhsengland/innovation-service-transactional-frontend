@@ -19,6 +19,7 @@ export type OrganisationsListDTO = {
   id: string,
   name: string,
   acronym: string,
+  isActive: boolean,
   organisationUnits: { id: string, name: string, acronym: string, isActive: boolean }[];
 };
 
@@ -89,6 +90,7 @@ export class OrganisationsService extends CoreService {
         id: item.id,
         name: item.name,
         acronym: item.acronym,
+        isActive: item.isActive,
         organisationUnits: query.unitsInformation ? item.organisationUnits : []
       })))
     );
