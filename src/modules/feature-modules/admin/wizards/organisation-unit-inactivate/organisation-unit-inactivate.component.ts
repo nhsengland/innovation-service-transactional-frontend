@@ -12,7 +12,8 @@ import { InnovationsStepInputType, InnovationsStepOutputType } from './steps/inn
 import { SummaryWithConfirmStepInputType, SummaryWithConfirmStepOutputType } from '@modules/shared/wizards/steps/summary-with-confirm-step.types';
 import { WizardSummaryWithConfirmStepComponent } from '@modules/shared/wizards/steps/summary-with-confirm-step.component';
 
-import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { OrganisationsService as AdminOrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 @Component({
@@ -31,7 +32,8 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private organisationsService: OrganisationsService
+    private organisationsService: OrganisationsService,
+    private adminOrganisationsService: AdminOrganisationsService
   ) {
 
     super();
@@ -186,7 +188,7 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
 
     
     this.setPageStatus('LOADING');
-    this.organisationsService.inactivateOrganisationUnit(this.wizard.data.organisation.id, this.wizard.data.organisationUnit.id).subscribe(
+    this.adminOrganisationsService.inactivateOrganisationUnit(this.wizard.data.organisation.id, this.wizard.data.organisationUnit.id).subscribe(
       () => this.redirectTo(`/admin/organisations/${this.wizard.data.organisation.id}`, { alert: 'organisationUnitInactivateSuccess' }),
       () => {
         this.onSummaryStepIn();
