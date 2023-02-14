@@ -1,15 +1,15 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
-import { FormEngineComponent } from '@modules/shared/forms';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { FormEngineComponent } from '@modules/shared/forms';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { PageOrganisationEditComponent } from './organisation-edit.component';
 
@@ -160,7 +160,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
   it('should run onSubmitWizard() with API success when updating organisation', () => {
     activatedRoute.snapshot.data = { module: 'Organisation' };
     authenticationStore.initializeAuthentication$ = () => of(true);
-    adminOrganisationsService.updateOrganisation = () => of({ id: 'Org01', status: 'OK' });
+    adminOrganisationsService.updateOrganisation = () => of({ organisationId: 'Org01', status: 'OK' });
 
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;
@@ -174,7 +174,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     activatedRoute.snapshot.params = { organisationId: 'Org01', organisationUnitId: 'Unit01' };
     activatedRoute.snapshot.data = { module: 'Unit' };
     authenticationStore.initializeAuthentication$ = () => of(true);
-    adminOrganisationsService.updateUnit = () => of({ id: 'Unit01', status: 'OK' });
+    adminOrganisationsService.updateUnit = () => of({ unitId: 'Unit01' });
 
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;

@@ -10,9 +10,11 @@ import { AccessorOrganisationRoleEnum } from '@modules/stores/authentication/aut
 
 
 export type updateOrganisationDTO = {
-  id: string;
-  status: string;
-  error?: string;
+  organisationId: string;
+};
+
+export type updateOrganisationUnitDTO = {
+  unitId: string;
 };
 
 
@@ -35,7 +37,6 @@ export type CreateOrganisationUnitBodyDTO = {
 }
 
 
-
 @Injectable()
 export class OrganisationsService extends CoreService {
 
@@ -55,12 +56,12 @@ export class OrganisationsService extends CoreService {
   }
 
 
-  updateUnit(body: MappedObjectType, securityConfirmation: { id: string, code: string }, organisationUnitId: string, organisationId: string): Observable<updateOrganisationDTO> {
+  updateUnit(body: MappedObjectType, securityConfirmation: { id: string, code: string }, organisationUnitId: string, organisationId: string): Observable<updateOrganisationUnitDTO> {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId/units/:organisationUnitId').setPathParams({ organisationId, organisationUnitId }).setQueryParams(qp);
-    return this.http.patch<updateOrganisationDTO>(url.buildUrl(), body).pipe(
+    return this.http.patch<updateOrganisationUnitDTO>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response),
       catchError(error => throwError(() => ({ id: error.error.id })))
