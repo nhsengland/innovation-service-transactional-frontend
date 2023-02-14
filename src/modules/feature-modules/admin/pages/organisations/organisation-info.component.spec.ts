@@ -1,20 +1,20 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { PageOrganisationInfoComponent } from './organisation-info.component';
 
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { USER_INFO_ADMIN } from '@tests/data.mocks';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent', () => {
