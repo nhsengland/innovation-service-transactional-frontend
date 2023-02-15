@@ -38,7 +38,7 @@ export type CreateOrganisationUnitBodyDTO = {
 
 
 @Injectable()
-export class OrganisationsService extends CoreService {
+export class AdminOrganisationsService extends CoreService {
 
   constructor() { super(); }
 

@@ -12,7 +12,7 @@ import { InnovationsStepInputType, InnovationsStepOutputType } from './steps/inn
 import { SummaryWithConfirmStepInputType, SummaryWithConfirmStepOutputType } from '@modules/shared/wizards/steps/summary-with-confirm-step.types';
 import { WizardSummaryWithConfirmStepComponent } from '@modules/shared/wizards/steps/summary-with-confirm-step.component';
 
-import { OrganisationsService as AdminOrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { AdminOrganisationsService } from '@modules/feature-modules/admin/services/admin-organisations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 

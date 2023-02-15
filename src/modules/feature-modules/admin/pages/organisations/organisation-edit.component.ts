@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 import { FormGroup } from '@app/base/forms';
 import { MappedObjectType } from '@app/base/types';
 
-import { OrganisationsService as AdminOrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { AdminOrganisationsService } from '@modules/feature-modules/admin/services/admin-organisations.service';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 

@@ -8,14 +8,14 @@ import { Injector } from '@angular/core';
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
-import { OrganisationsService, updateOrganisationDTO } from './organisations.service';
+import { AdminOrganisationsService, updateOrganisationDTO } from './admin-organisations.service';
 
 
 describe('FeatureModules/Admin/Services/OrganisationsService', () => {
 
   let httpMock: HttpTestingController;
   let envVariablesStore: EnvironmentVariablesStore;
-  let service: OrganisationsService;
+  let service: AdminOrganisationsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,7 +25,7 @@ describe('FeatureModules/Admin/Services/OrganisationsService', () => {
         StoresModule
       ],
       providers: [
-        OrganisationsService,
+        AdminOrganisationsService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
@@ -34,7 +34,7 @@ describe('FeatureModules/Admin/Services/OrganisationsService', () => {
 
     httpMock = TestBed.inject(HttpTestingController);
     envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
-    service = TestBed.inject(OrganisationsService);
+    service = TestBed.inject(AdminOrganisationsService);
 
   });
 

@@ -48,7 +48,7 @@ import { WizardOrganisationUnitInactivateUsersStepComponent } from './wizards/or
 import { WizardOrganisationUnitInactivateInnovationsStepComponent } from './wizards/organisation-unit-inactivate/steps/innovations-step.component';
 
 // Services.
-import { OrganisationsService } from './services/organisations.service';
+import { AdminOrganisationsService } from './services/admin-organisations.service';
 import { ServiceUsersService } from './services/service-users.service';
 
 // Resolvers.
@@ -106,7 +106,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
   ],
   providers: [
     // Services.
-    OrganisationsService,
+    AdminOrganisationsService,
     ServiceUsersService,
 
     // Resolvers.

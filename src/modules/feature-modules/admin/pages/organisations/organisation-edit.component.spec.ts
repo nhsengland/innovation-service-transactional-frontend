@@ -13,7 +13,7 @@ import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { PageOrganisationEditComponent } from './organisation-edit.component';
 
-import { OrganisationsService as AdminOrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { AdminOrganisationsService } from '@modules/feature-modules/admin/services/admin-organisations.service';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
