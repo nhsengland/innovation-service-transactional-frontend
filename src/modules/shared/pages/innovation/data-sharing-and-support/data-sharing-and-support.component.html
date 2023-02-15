@@ -13,7 +13,7 @@
 
       </ng-container>
 
-      <ng-container *ngIf="stores.authentication.isAssessmentType() && !innovation.owner.isActive">
+      <ng-container *ngIf="(stores.authentication.isAssessmentType() || stores.authentication.isAccessorType()) && !innovation.owner.isActive">
 
         <div *ngIf="!innovation.owner.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
           <div class="nhsuk-heading-m nhsuk-warning-callout__label">
@@ -23,6 +23,18 @@
         </div>
 
       </ng-container>
+
+      <ul class="nhsuk-list">
+        <li>
+          <ng-container *ngTemplateOutlet="icon; context: { shared: true }"></ng-container>
+          Organisations that have access to the innovation because they have been invited to support it or the innovator has shared their data with them.
+        </li>
+        <li>
+          <ng-container *ngTemplateOutlet="icon; context: { shared: false }"></ng-container>
+          Organisations that do not have access to the innovation.
+        </li>
+      </ul>
+      
 
 
       <ul class="nhsuk-list">
@@ -48,7 +60,7 @@
             <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3" [ngClass]="{'bottom-border-separator': organisation.showHideStatus !== 'opened'}">
               <dt class="d-flex nhsuk-u-font-weight-normal">
 
-                <ng-container *ngIf="['ADMIN','INNOVATOR','ASSESSMENT'].includes(userType)">
+                <ng-container>
                   <ng-container *ngTemplateOutlet="icon; context: { shared: organisation.shared }"></ng-container>
                 </ng-container>
                 
@@ -56,7 +68,7 @@
               </dt>
               <dd class="ml-auto">
 
-                <span *ngIf="!organisation.shared && ['INNOVATOR','ADMIN','ASSESSMENT'].includes(userType)">Not shared</span>
+                <span *ngIf="!organisation.shared">Not shared</span>
 
                 <ng-container *ngIf="organisation.shared !== false">
 

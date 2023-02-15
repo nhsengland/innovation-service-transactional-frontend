@@ -69,24 +69,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
 
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
-    switch (this.userType) {
-      case UserRoleEnum.ASSESSMENT:
-        this.setPageTitle('Support status', { hint: 'All organisations' });
-        break;
-
-      case UserRoleEnum.ADMIN:
-        this.setPageTitle('Data sharing and support', { hint: `Innovation ${this.innovation.name}` });
-        break;
-
-      case UserRoleEnum.ACCESSOR:
-      case UserRoleEnum.QUALIFYING_ACCESSOR:
-        this.setPageTitle('Support status', { hint: 'All organisations' });
-        break;
-
-      default:
-        this.setPageTitle('Data sharing and support');
-    }
-
+    this.setPageTitle('Data sharing and support', { hint: 'All organisations' });
   }
 
   ngOnInit(): void {
@@ -109,7 +92,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
       subscriptions.organisationSuggestions = this.innovationService.getInnovationOrganisationSuggestions(this.innovationId);
     }
     
-    if(this.userType === UserRoleEnum.ADMIN || this.userType === UserRoleEnum.ASSESSMENT) {
+    if(this.userType === UserRoleEnum.ADMIN || this.userType === UserRoleEnum.ASSESSMENT || this.userType === UserRoleEnum.ACCESSOR || this.userType === UserRoleEnum.QUALIFYING_ACCESSOR) {
       subscriptions.innovationShares = this.innovationsService.getInnovationSharesList(this.innovationId);
     }
 
@@ -120,7 +103,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
         this.shares = (results.innovationShares ?? []).map(item => ({ organisationId: item.organisation.id }));
       }
 
-      if (this.userType === UserRoleEnum.ADMIN || this.userType === UserRoleEnum.ASSESSMENT) {
+      if (this.userType === UserRoleEnum.ADMIN || this.userType === UserRoleEnum.ASSESSMENT || this.userType === UserRoleEnum.ACCESSOR || this.userType === UserRoleEnum.QUALIFYING_ACCESSOR) {
         this.shares = (results.innovationShares ?? []).map(item => ({ organisationId: item.organisation.id }));
       }
 
@@ -135,7 +118,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
               organisationUnits: [],
               status: results.innovationSupports.find(item => item.organisation.id === organisation.id)?.status || InnovationSupportStatusEnum.UNASSIGNED,
             },
-            ...([UserRoleEnum.ADMIN, UserRoleEnum.INNOVATOR, UserRoleEnum.ASSESSMENT].includes(this.userType as UserRoleEnum) ? { shared: ((results.innovationShares ?? []).findIndex(item => item.organisation.id === organisation.id) > -1) } : {}),
+            ...([UserRoleEnum.ADMIN, UserRoleEnum.INNOVATOR, UserRoleEnum.ASSESSMENT, UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(this.userType as UserRoleEnum) ? { shared: ((results.innovationShares ?? []).findIndex(item => item.organisation.id === organisation.id) > -1) } : {}),
             showHideStatus: 'hidden',
             showHideText: null,
             showHideDescription: null
@@ -151,7 +134,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
                 status: results.innovationSupports.find(item => item.organisation.unit.id === organisationUnit.id)?.status || InnovationSupportStatusEnum.UNASSIGNED
               }))
             },
-            ...([UserRoleEnum.ADMIN, UserRoleEnum.INNOVATOR, UserRoleEnum.ASSESSMENT].includes(this.userType as UserRoleEnum) ? { shared: ((results.innovationShares ?? []).findIndex(item => item.organisation.id === organisation.id) > -1) } : {}),
+            ...([UserRoleEnum.ADMIN, UserRoleEnum.INNOVATOR, UserRoleEnum.ASSESSMENT, UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(this.userType as UserRoleEnum) ? { shared: ((results.innovationShares ?? []).findIndex(item => item.organisation.id === organisation.id) > -1) } : {}),
             showHideStatus: 'closed',
             showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
             showHideDescription: `that belong to the ${organisation.name}`
