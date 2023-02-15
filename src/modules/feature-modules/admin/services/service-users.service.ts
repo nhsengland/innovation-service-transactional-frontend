@@ -38,24 +38,16 @@ export type getUserFullInfoDTO = {
 
 
 export type getLockUserRulesInDTO = {
-  lastAssessmentUserOnPlatform: { valid: boolean, meta?: {} },
-  lastAccessorUserOnOrganisation: {
-    valid: boolean,
-    meta?: { organisation: { id: string, name: string } }
-  },
-  lastAccessorUserOnOrganisationUnit: {
-    valid: boolean,
-    meta?: { unit: { id: string, name: string } }
-  },
-  lastAccessorFromUnitProvidingSupport: {
+  validations: {
+    operation: string,
     valid: boolean,
     meta?: {
       supports: {
         count: number;
         innovations: { innovationId: string, innovationName: string; unitId: string; unitName: string }[]
       }
-    }
-  }
+    } | { organisation: { id: string, name: string } } | {}
+  }[]
 };
 export type getLockUserRulesOutDTO = {
   key: keyof getLockUserRulesInDTO;
@@ -189,14 +181,13 @@ export class ServiceUsersService extends CoreService {
       .setQueryParams({ operation: 'LOCK_USER' })
     return this.http.get<getLockUserRulesInDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => Object.entries(response).map(([operation, item]) => ({
-        key: operation as keyof getLockUserRulesInDTO,
-        valid: item.valid,
-        meta: item.meta || {}
+      map(response => { 
+        return response.validations.map(v => ({
+        key: v.operation as keyof getLockUserRulesInDTO,
+        valid: v.valid,
+        meta: v.meta || {}
       }))
-      )
-    );
-
+    }));
   }
 
   lockUser(userId: string, securityConfirmation: { id: string, code: string }): Observable<AdminUserUpdateEndpointDTO> {
