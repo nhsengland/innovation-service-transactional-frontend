@@ -102,7 +102,7 @@ export type GetThreadMessagesListInDTO = {
     createdBy: {
       id: string;
       name: string;
-      type: UserRoleEnum;
+      role: UserRoleEnum;
       organisation?: { id: string, name: string, acronym: string; };
       organisationUnit?: { id: string, name: string, acronym: string; };
     };
@@ -481,7 +481,7 @@ export class InnovationsService extends CoreService {
         count: response.count,
         messages: response.messages.map(message => ({
           ...message,
-          createdBy: { ...message.createdBy, typeDescription: this.stores.authentication.getUserTypeDescription(message.createdBy.type) }
+          createdBy: { ...message.createdBy, typeDescription: this.stores.authentication.getRoleDescription(message.createdBy.role) }
         }))
       }))
     );
