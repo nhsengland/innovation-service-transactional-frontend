@@ -82,24 +82,36 @@ export type getOrgnisationRoleRulesInDTO = {
 };
 
 export type getOrganisationUnitRulesInDTO = {
-  lastAccessorUserOnOrganisation: {
-    valid: boolean,
-    meta?: { organisation: { id: string, name: string } }
-  },
-  lastAccessorFromUnitProvidingSupport: {
-    valid: boolean,
-    meta?: {
+  validations : {
+    operation: string;
+    valid: boolean;
+    meta? : { organisation: { id: string, name: string } } | 
+    {
       supports: {
         count: number;
         innovations: { innovationId: string, innovationName: string; unitId: string; unitName: string }[]
       }
-    }
-  }
-  lastAccessorUserOnOrganisationUnit: {
-    valid: boolean,
-    meta?: { unit: { id: string, name: string } }
-  },
-};
+    } | { unit: { id: string, name: string } }
+  }[]
+}
+  // lastAccessorUserOnOrganisation: {
+  //   valid: boolean,
+  //   meta?: { organisation: { id: string, name: string } }
+  // },
+  // lastAccessorFromUnitProvidingSupport: {
+  //   valid: boolean,
+  //   meta?: {
+  //     supports: {
+  //       count: number;
+  //       innovations: { innovationId: string, innovationName: string; unitId: string; unitName: string }[]
+  //     }
+  //   }
+  // }
+  // lastAccessorUserOnOrganisationUnit: {
+  //   valid: boolean,
+  //   meta?: { unit: { id: string, name: string } }
+  // },
+
 
 export type getOrganisationUnitRulesOutDTO = {
 
@@ -188,11 +200,13 @@ export class ServiceUsersService extends CoreService {
 
   getLockUserRules(userId: string): Observable<getLockUserRulesOutDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/lock').setPathParams({ userId });
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate')
+      .setPathParams({ userId })
+      .setQueryParams({ operation: 'LOCK_USER' })
     return this.http.get<getLockUserRulesInDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => Object.entries(response).map(([key, item]) => ({
-        key: key as keyof getLockUserRulesInDTO,
+      map(response => Object.entries(response).map(([operation, item]) => ({
+        key: operation as keyof getLockUserRulesInDTO,
         valid: item.valid,
         meta: item.meta || {}
       }))
@@ -327,17 +341,20 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  getOrgnisationUnitRules(userId: string): Observable<getOrganisationUnitRulesOutDTO[]> {
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-unit').setPathParams({ userId });
+  getOrganisationUnitRules(userId: string): Observable<getOrganisationUnitRulesOutDTO[]> {
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate')
+      .setPathParams({ userId })
+      .setQueryParams({ operation: 'CHANGE_UNIT' });
     return this.http.get<getOrganisationUnitRulesInDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => Object.entries(response).map(([key, item]) => ({
-        key: key as keyof getOrganisationUnitRulesInDTO,
-        valid: item.valid,
-        meta: item.meta || {}
+      map(response => {
+        return response.validations.map(v => ({
+          key: v.operation as keyof getOrganisationUnitRulesInDTO,
+          valid: v.valid,
+          meta: v.meta
+        }))
       }))
-      )
-    );
+
   }
 
   getListOfTerms(queryParams: APIQueryParamsType): Observable<getListOfTerms> {
