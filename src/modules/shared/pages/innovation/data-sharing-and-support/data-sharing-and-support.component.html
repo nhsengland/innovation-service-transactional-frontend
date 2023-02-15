@@ -24,18 +24,17 @@
 
       </ng-container>
 
-      <ng-container *ngIf="stores.authentication.isAccessorType()">
-
-        <div class="nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">
+      <ul class="nhsuk-list">
+        <li>
           <ng-container *ngTemplateOutlet="icon; context: { shared: true }"></ng-container>
           Organisations that have access to the innovation because they have been invited to support it or the innovator has shared their data with them.
-        </div>
-        <div class="nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-bottom-5">
+        </li>
+        <li>
           <ng-container *ngTemplateOutlet="icon; context: { shared: false }"></ng-container>
           Organisations that do not have access to the innovation.
-        </div>
-
-      </ng-container>
+        </li>
+      </ul>
+      
 
 
       <ul class="nhsuk-list">
