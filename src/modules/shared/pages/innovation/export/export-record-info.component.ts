@@ -52,7 +52,6 @@ export class PageExportRecordInfoComponent extends CoreComponent implements OnIn
 
     this.innovationsService.getExportRequestInfo(this.innovationId, this.requestId).subscribe(response => {
 
-      // console.log(response);
       this.request = response;
 
       this.setPageStatus('READY');

@@ -71,9 +71,6 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
         this.setAlertUnknownError();
       }
     );
-
-    console.log(this.tableList.totalRows, this.tableList.getRecords())
-
   }
 
   onTableOrder(column: string): void {

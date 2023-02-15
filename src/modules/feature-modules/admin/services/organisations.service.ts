@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -33,9 +33,11 @@ export type GetOrganisationInfoDTO = {
 };
 
 export type updateOrganisationDTO = {
-  id: string;
-  status: string;
-  error?: string;
+  organisationId: string;
+};
+
+export type updateOrganisationUnitDTO = {
+  unitId: string;
 };
 
 export type GetOrganisationUnitInfoDTO = {
@@ -100,9 +102,12 @@ export class OrganisationsService extends CoreService {
 
   constructor() { super(); }
 
-  getOrganisationsList(filters: { onlyActive: boolean }): Observable<GetOrganisationsListDTO[]> {
+  getOrganisationsList(filters: { withInactive: boolean }): Observable<GetOrganisationsListDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations').setQueryParams(filters);
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/organisations').setQueryParams({
+      withInactive: filters.withInactive,
+      fields: ['organisationUnits'] // always get the organisation units to keep previous behaviour
+    });
     return this.http.get<GetOrganisationsListDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
@@ -181,12 +186,12 @@ export class OrganisationsService extends CoreService {
 
   }
 
-  updateUnit(body: MappedObjectType, securityConfirmation: { id: string, code: string }, organisationUnitId: string, organisationId: string): Observable<updateOrganisationDTO> {
+  updateUnit(body: MappedObjectType, securityConfirmation: { id: string, code: string }, organisationUnitId: string, organisationId: string): Observable<updateOrganisationUnitDTO> {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
 
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId/units/:organisationUnitId').setPathParams({ organisationId, organisationUnitId }).setQueryParams(qp);
-    return this.http.patch<updateOrganisationDTO>(url.buildUrl(), body).pipe(
+    return this.http.patch<updateOrganisationUnitDTO>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response),
       catchError(error => throwError(() => ({ id: error.error.id })))

@@ -46,7 +46,7 @@ export type GetOrganisationUnitUsersDTO = {
   id: string,
   organisationUnitUserId: string,
   name: string,
-  email: string,
+  email?: string,
   role: UserRoleEnum
   roleDescription: string,
   isActive: boolean,
@@ -92,7 +92,6 @@ export class OrganisationsService extends CoreService {
         const organisation = item.organisations?.find( o => o.units?.find( u => u.id === organisationUnitId));
         const organisationUnit = organisation?.units?.find( u => u.id === organisationUnitId);
         
-        console.log(organisation)
         return {
           id: item.id,
           organisationUnitUserId: organisationUnit?.organisationUnitUserId ?? '', // it should never be null or it wouldn't have been returned. This logic to identify the users should probably be revised
@@ -107,9 +106,11 @@ export class OrganisationsService extends CoreService {
     );
   }
 
-  getOrganisationInfo(organisationId: string): Observable<GetOrganisationInfoDTO> {
+  getOrganisationInfo(organisationId: string, queryParams?: { onlyActiveUsers?: boolean }): Observable<GetOrganisationInfoDTO> {
 
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1/organisations/:organisationId').setPathParams({ organisationId });
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/organisations/:organisationId')
+      .setPathParams({ organisationId })
+      .setQueryParams({ onlyActiveUsers: queryParams?.onlyActiveUsers })
     return this.http.get<GetOrganisationInfoDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         id: response.id, name: response.name, acronym: response.acronym, isActive: response.isActive,
@@ -118,6 +119,7 @@ export class OrganisationsService extends CoreService {
         }))
       }))
     );
+
   }
 
   getOrganisationUnitInfo(organisationId: string, organisationUnitId: string): Observable<GetOrganisationUnitInfoDTO> {
