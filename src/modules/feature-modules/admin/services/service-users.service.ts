@@ -93,24 +93,8 @@ export type getOrganisationUnitRulesInDTO = {
       }
     } | { unit: { id: string, name: string } }
   }[]
-}
-  // lastAccessorUserOnOrganisation: {
-  //   valid: boolean,
-  //   meta?: { organisation: { id: string, name: string } }
-  // },
-  // lastAccessorFromUnitProvidingSupport: {
-  //   valid: boolean,
-  //   meta?: {
-  //     supports: {
-  //       count: number;
-  //       innovations: { innovationId: string, innovationName: string; unitId: string; unitName: string }[]
-  //     }
-  //   }
-  // }
-  // lastAccessorUserOnOrganisationUnit: {
-  //   valid: boolean,
-  //   meta?: { unit: { id: string, name: string } }
-  // },
+};
+
 
 
 export type getOrganisationUnitRulesOutDTO = {
