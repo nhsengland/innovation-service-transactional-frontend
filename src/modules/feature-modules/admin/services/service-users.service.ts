@@ -50,7 +50,7 @@ export type getLockUserRulesInDTO = {
   }[]
 };
 export type getLockUserRulesOutDTO = {
-  key: keyof getLockUserRulesInDTO;
+  key: string;
   valid: boolean;
   meta: { [key: string]: any }
 };
@@ -87,11 +87,9 @@ export type getOrganisationUnitRulesInDTO = {
   }[]
 };
 
-
-
 export type getOrganisationUnitRulesOutDTO = {
 
-  key: keyof getOrganisationUnitRulesInDTO;
+  key: string;
   valid: boolean;
   meta?: { [key: string]: any }
 };
@@ -183,7 +181,7 @@ export class ServiceUsersService extends CoreService {
       take(1),
       map(response => { 
         return response.validations.map(v => ({
-        key: v.operation as keyof getLockUserRulesInDTO,
+        key: v.operation,
         valid: v.valid,
         meta: v.meta || {}
       }))
@@ -324,7 +322,7 @@ export class ServiceUsersService extends CoreService {
       take(1),
       map(response => {
         return response.validations.map(v => ({
-          key: v.operation as keyof getOrganisationUnitRulesInDTO,
+          key: v.operation,
           valid: v.valid,
           meta: v.meta
         }))
