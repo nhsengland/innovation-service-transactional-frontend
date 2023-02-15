@@ -67,6 +67,7 @@ import { PageOrganisationNewComponent } from './pages/organisations/organisation
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -411,6 +412,9 @@ const routes: Routes = [
                 path: 'statuses', pathMatch: 'full', component: PageInnovationStatusListComponent,
                 data: { breadcrumb: 'Statuses' }
               },
+              {
+                path: 'everyone', pathMatch: 'full', component: PageEveryoneWorkingOnInnovationComponent
+              }
             ]
           }
         ]
