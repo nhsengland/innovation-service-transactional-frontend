@@ -73,7 +73,7 @@
                 {{ message.updatedAt | date: ('app.date_formats.long_date_time' | translate) }})</span>
             </p>
   
-            <a *ngIf="message.isEditable && message.createdBy.id === selfUser.id && innovation.status !== 'PAUSED'" routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/threads/{{ threadInfo?.id }}/messages/{{ message.id }}"
+            <a *ngIf="message.isEditable && message.createdBy.id === selfUser.id && innovation.status !== 'PAUSED' && message.createdBy.role === selfUser.role" routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/threads/{{ threadInfo?.id }}/messages/{{ message.id }}"
               class="nhsuk-body-s nhsuk-u-margin-bottom-0 d-inline-block">
               Edit this message
             </a>
