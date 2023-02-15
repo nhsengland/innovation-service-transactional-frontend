@@ -67,18 +67,18 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
 
     organisationsService.getOrganisationsList = () => of([
       {
-        id: 'Org01', name: 'Org name 01', acronym: 'ORG01',
+        id: 'Org01', name: 'Org name 01', acronym: 'ORG01', isActive: true,
         organisationUnits: [
-          { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01' },
-          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02' },
-          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03' }
+          { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', isActive: true },
+          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02', isActive: true },
+          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03', isActive: true }
         ]
       },
       {
-        id: 'Org02', name: 'Org name 02', acronym: 'ORG02',
+        id: 'Org02', name: 'Org name 02', acronym: 'ORG02', isActive: true,
         organisationUnits: [
-          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02' },
-          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03' }
+          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02', isActive: true },
+          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03', isActive: true }
         ]
       }
     ]);

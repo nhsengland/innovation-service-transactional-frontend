@@ -49,8 +49,8 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserNewComponent', () =
     organisationsService = TestBed.inject(OrganisationsService);
 
     organisationsService.getOrganisationsList = () => of([
-      { id: 'orgId', acronym: 'orgId01', name: 'Org name 01', organisationUnits: [{ id: 'orgId', acronym: 'orgId01', name: 'Org name 01' }] },
-      { id: 'orgId', acronym: 'orgId02', name: 'Org name 02', organisationUnits: [{ id: 'orgId', acronym: 'orgId01', name: 'Org name 01' }] }
+      { id: 'orgId', acronym: 'orgId01', name: 'Org name 01', isActive: true, organisationUnits: [{ id: 'orgId', acronym: 'orgId01', name: 'Org name 01', isActive: true }] },
+      { id: 'orgId', acronym: 'orgId02', name: 'Org name 02', isActive: true, organisationUnits: [{ id: 'orgId', acronym: 'orgId01', name: 'Org name 01', isActive: true }] }
     ]);
 
   });

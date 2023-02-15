@@ -10,7 +10,7 @@ import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageOrganisationsListComponent } from './organisations-list.component';
-import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { AlertType } from '@app/base/types';
 
 

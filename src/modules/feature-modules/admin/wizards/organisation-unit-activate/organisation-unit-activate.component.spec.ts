@@ -15,7 +15,7 @@ import { WizardOrganisationUnitActivateComponent } from './organisation-unit-act
 import { WizardOrganisationUnitActivateUsersStepComponent } from './steps/users-step.component';
 import { WizardSummaryWithConfirmStepComponent } from '@modules/shared/wizards/steps/summary-with-confirm-step.component';
 
-import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitActivateComponent', () => {

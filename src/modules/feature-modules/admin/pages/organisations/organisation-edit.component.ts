@@ -6,8 +6,9 @@ import { CoreComponent } from '@app/base';
 import { FormGroup } from '@app/base/forms';
 import { MappedObjectType } from '@app/base/types';
 
-import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { AdminOrganisationsService } from '@modules/feature-modules/admin/services/admin-organisations.service';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 import { EDIT_ORGANISATION_UNIT_QUESTIONS } from './organisation-edit-unit.config';
 import { EDIT_ORGANISATIONS_QUESTIONS } from './organisation-edit.config';
@@ -37,6 +38,7 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private adminOrganisationsService: AdminOrganisationsService,
     private organisationsService: OrganisationsService
   ) {
     super();
@@ -107,7 +109,7 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
 
     switch (this.module) {
       case 'Organisation':
-        this.organisationsService.updateOrganisation(body, this.securityConfirmation, this.organisationId).subscribe(
+        this.adminOrganisationsService.updateOrganisation(body, this.securityConfirmation, this.organisationId).subscribe(
           response => {
             (response.organisationId) ?
               this.redirectTo(`admin/organisations/${response.organisationId}`, { alert: 'updateOrganisationSuccess' })
@@ -118,7 +120,7 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
         );
         break;
       case 'Unit':
-        this.organisationsService.updateUnit(body, this.securityConfirmation, this.unitId, this.organisationId).subscribe(
+        this.adminOrganisationsService.updateUnit(body, this.securityConfirmation, this.unitId, this.organisationId).subscribe(
           response => {
             (response.unitId) ?
               this.redirectTo(`admin/organisations/${this.organisationId}`, { alert: 'updateUnitSuccess' })

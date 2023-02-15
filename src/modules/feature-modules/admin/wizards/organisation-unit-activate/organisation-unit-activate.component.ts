@@ -10,7 +10,8 @@ import { UsersStepInputType, UsersStepOutputType } from './steps/users-step.type
 import { SummaryWithConfirmStepInputType, SummaryWithConfirmStepOutputType } from '@modules/shared/wizards/steps/summary-with-confirm-step.types';
 import { WizardSummaryWithConfirmStepComponent } from '@modules/shared/wizards/steps/summary-with-confirm-step.component';
 
-import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { AdminOrganisationsService } from '@modules/feature-modules/admin/services/admin-organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 @Component({
@@ -28,7 +29,8 @@ export class WizardOrganisationUnitActivateComponent extends CoreComponent imple
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private organisationsService: OrganisationsService
+    private organisationsService: OrganisationsService,
+    private adminOrganisationsService: AdminOrganisationsService
   ) {
 
     super();
@@ -155,7 +157,7 @@ export class WizardOrganisationUnitActivateComponent extends CoreComponent imple
 
     this.setPageStatus('LOADING');
 
-    this.organisationsService.activateOrganisationUnit(
+    this.adminOrganisationsService.activateOrganisationUnit(
       this.wizard.data.organisation.id,
       this.wizard.data.organisationUnit.id,
       this.wizard.data.usersStep.users.map(item => item.id)

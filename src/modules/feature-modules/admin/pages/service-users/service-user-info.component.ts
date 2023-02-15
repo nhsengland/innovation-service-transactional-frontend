@@ -7,7 +7,7 @@ import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { RoutingHelper } from '@app/base/helpers';
 import { LinkType } from '@app/base/types';
 
-import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 
@@ -70,7 +70,7 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
   ngOnInit(): void {
     forkJoin([
       this.serviceUsersService.getUserFullInfo(this.user.id),
-      this.organisationService.getOrganisationsList({ withInactive: true })
+      this.organisationService.getOrganisationsList({ unitsInformation: true, withInactive: true })
     ]).subscribe({
 
       next: ([response, organisations]) => {

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
-import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { AdminOrganisationsService } from '@modules/feature-modules/admin/services/admin-organisations.service';
 
 import { NEW_UNIT_CONFIG, OutboundPayloadType } from './organisation-unit-new.config';
 
@@ -28,7 +28,7 @@ export class PageOrganisationUnitNewComponent extends CoreComponent implements O
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private organisationsService: OrganisationsService
+    private adminOrganisationsService: AdminOrganisationsService
   ) {
 
     super();
@@ -114,7 +114,7 @@ export class PageOrganisationUnitNewComponent extends CoreComponent implements O
 
     const body = this.wizard.runOutboundParsing() as OutboundPayloadType;
 
-    this.organisationsService.createOrganisationUnit(this.organisationId, body).subscribe({
+    this.adminOrganisationsService.createOrganisationUnit(this.organisationId, body).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('You have successfully created a new organisation unit attached to this organisation');
         this.redirectTo(`${this.stores.authentication.userUrlBasePath()}/organisations/${this.organisationId}`)

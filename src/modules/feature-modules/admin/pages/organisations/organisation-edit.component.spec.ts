@@ -13,8 +13,9 @@ import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { PageOrganisationEditComponent } from './organisation-edit.component';
 
-import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { AdminOrganisationsService } from '@modules/feature-modules/admin/services/admin-organisations.service';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent', () => {
@@ -27,6 +28,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
   let authenticationStore: AuthenticationStore;
   let serviceUserService: ServiceUsersService;
   let organisationsService: OrganisationsService;
+  let adminOrganisationsService: AdminOrganisationsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -47,6 +49,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     authenticationStore = TestBed.inject(AuthenticationStore);
     serviceUserService = TestBed.inject(ServiceUsersService);
     organisationsService = TestBed.inject(OrganisationsService);
+    adminOrganisationsService = TestBed.inject(AdminOrganisationsService);
   });
 
   it('should create the component', () => {
@@ -158,7 +161,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
   it('should run onSubmitWizard() with API success when updating organisation', () => {
     activatedRoute.snapshot.data = { module: 'Organisation' };
     authenticationStore.initializeAuthentication$ = () => of(true);
-    organisationsService.updateOrganisation = () => of({ organisationId: 'Org01' });
+    adminOrganisationsService.updateOrganisation = () => of({ organisationId: 'Org01', status: 'OK' });
 
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;
@@ -172,7 +175,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     activatedRoute.snapshot.params = { organisationId: 'Org01', organisationUnitId: 'Unit01' };
     activatedRoute.snapshot.data = { module: 'Unit' };
     authenticationStore.initializeAuthentication$ = () => of(true);
-    organisationsService.updateUnit = () => of({ unitId: 'Unit01' });
+    adminOrganisationsService.updateUnit = () => of({ unitId: 'Unit01' });
 
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;
@@ -188,7 +191,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     activatedRoute.snapshot.data = { module: 'Organisation' };
     authenticationStore.initializeAuthentication$ = () => of(true);
 
-    organisationsService.updateOrganisation = () => throwError({ id: '123456ABCDFG' });
+    adminOrganisationsService.updateOrganisation = () => throwError({ id: '123456ABCDFG' });
 
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;
@@ -204,7 +207,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     activatedRoute.snapshot.data = { module: 'Unit' };
     authenticationStore.initializeAuthentication$ = () => of(true);
 
-    organisationsService.updateUnit = () => throwError({ id: '123456ABCDFG' });
+    adminOrganisationsService.updateUnit = () => throwError({ id: '123456ABCDFG' });
 
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;
@@ -217,7 +220,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
   it('should run onSubmitWizard() with API error when updating organisation', () => {
     activatedRoute.snapshot.params = { organisationId: 'Org01' };
     activatedRoute.snapshot.data = { module: 'Organisation' };
-    organisationsService.updateOrganisation = () => throwError('error');
+    adminOrganisationsService.updateOrganisation = () => throwError('error');
 
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;
@@ -230,7 +233,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
   it('should run onSubmitWizard() with API error when updating unit', () => {
     activatedRoute.snapshot.params = { organisationId: 'Org01', organisationUnitId: 'Unit01' };
     activatedRoute.snapshot.data = { module: 'Unit' };
-    organisationsService.updateUnit = () => throwError('error');
+    adminOrganisationsService.updateUnit = () => throwError('error');
 
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;
