@@ -69,24 +69,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
 
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
-    switch (this.userType) {
-      case UserRoleEnum.ASSESSMENT:
-        this.setPageTitle('Support status', { hint: 'All organisations' });
-        break;
-
-      case UserRoleEnum.ADMIN:
-        this.setPageTitle('Data sharing and support', { hint: `Innovation ${this.innovation.name}` });
-        break;
-
-      case UserRoleEnum.ACCESSOR:
-      case UserRoleEnum.QUALIFYING_ACCESSOR:
-        this.setPageTitle('Data sharing and support', { hint: 'All organisations' });
-        break;
-
-      default:
-        this.setPageTitle('Data sharing and support');
-    }
-
+    this.setPageTitle('Data sharing and support', { hint: 'All organisations' });
   }
 
   ngOnInit(): void {
