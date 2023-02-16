@@ -67,10 +67,10 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
     forkJoin([
       this.organisationsService.getOrganisationsList({ unitsInformation: true }),
       this.serviceUsersService.getUserFullInfo(this.user.id),
-      this.serviceUsersService.getOrgnisationUnitRules(this.user.id)
-    ]).subscribe(([organisations, userInfo, orgnisationUnitRules]) => {
+      this.serviceUsersService.getOrganisationUnitRules(this.user.id)
+    ]).subscribe(([organisations, userInfo, organisationUnitRules]) => {
 
-      this.rulesList = orgnisationUnitRules;
+      this.rulesList = organisationUnitRules;
       this.user.role = this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role).toLowerCase();
       this.titleHint = `${this.user.name} (${this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role)})`;
       this.isRulesValid = this.rulesList.some(rule => rule.valid === false);

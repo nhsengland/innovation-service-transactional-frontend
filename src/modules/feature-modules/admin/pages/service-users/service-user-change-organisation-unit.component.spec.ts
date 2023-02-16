@@ -89,7 +89,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
       { key: 'lastAccessorFromUnitProvidingSupport', valid: true, meta: {} }
     ];
 
-    serviceUsersService.getOrgnisationUnitRules = () => of(responseMock);
+    serviceUsersService.getOrganisationUnitRules = () => of(responseMock);
 
   });
 
@@ -116,7 +116,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
 
     serviceUsersService.getUserFullInfo = () => throwError('error');
     organisationsService.getOrganisationsList = () => throwError('error');
-    serviceUsersService.getOrgnisationUnitRules = () => throwError('error');
+    serviceUsersService.getOrganisationUnitRules = () => throwError('error');
 
     fixture = TestBed.createComponent(PageServiceUserChangeOrganisationUnitComponent);
     component = fixture.componentInstance;
