@@ -384,6 +384,11 @@ export const locale = {
               cssColorClass: 'nhsuk-tag--green',
               description: 'At least one organisation unit is engaging with this innovation.'
             },
+            NO_ACTIVE_SUPPORT: {
+              name: 'No active support',
+              cssColorClass: 'nhsuk-tag--white',
+              description: 'There are no organisations units providing support for this innovation anymore. The organisations support status are "unassigned", "waiting", "not yet", "unsuitable" or "completed".'
+            },
             AWAITING_NEEDS_REASSESSMENT: {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
