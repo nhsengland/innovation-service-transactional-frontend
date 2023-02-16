@@ -150,7 +150,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.setPageStatus('LOADING');
 
-    this.innovationsService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(response => {
+    this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams(), fields: ['groupedStatus']}).subscribe(response => {
       this.innovationsList.setData(
         response.data.map(innovation => {
           let status = null;
@@ -168,7 +168,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
                 status,
               }
             }),
-            groupedStatus: this.getGroupedStatus(innovation),
+            groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED, // default never happens
             engagingOrgs: innovation.supports?.filter((support) => support.status === InnovationSupportStatusEnum.ENGAGING),
           }
         }),
@@ -248,14 +248,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.innovationsList.setPage(event.pageNumber);
     this.getInnovationsList();
 
-  }
-
-  private getGroupedStatus(innovation: InnovationsListDTO['data'][0]) {
-    return this.stores.innovation.getGroupedInnovationStatus(
-      innovation.status,
-      (innovation.supports ?? []).map(support => support.status),
-      innovation.assessment?.reassessmentCount ?? 0
-    );
   }
 
 }

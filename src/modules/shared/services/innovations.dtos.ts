@@ -3,7 +3,7 @@ import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEn
 import { DateISOType } from '@app/base/types';
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 
-import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationStatisticsEnum } from './statistics.enum';
 
 
@@ -14,6 +14,7 @@ export type InnovationsListDTO = {
     name: string,
     description: null | string,
     status: InnovationStatusEnum,
+    groupedStatus?: InnovationGroupedStatusEnum,
     submittedAt: null | DateISOType,
     updatedAt: null | DateISOType,
     countryName: null | string,
@@ -50,6 +51,7 @@ export type InnovationInfoDTO = {
   name: string,
   description: null | string,
   status: InnovationStatusEnum,
+  groupedStatus: InnovationGroupedStatusEnum,
   submittedAt: null | DateISOType,
   countryName: null | string,
   postCode: null | string,

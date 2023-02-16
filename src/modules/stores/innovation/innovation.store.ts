@@ -1,23 +1,18 @@
 import { Injectable } from '@angular/core';
+import { cloneDeep } from 'lodash';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { cloneDeep } from 'lodash';
 
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 
-import { Store } from '../store.class';
 import { WizardEngineModel } from '@modules/shared/forms';
+import { Store } from '../store.class';
 
 import { InnovationService } from './innovation.service';
 
-import { INNOVATION_SECTIONS, getSectionTitle, getSectionParentTitle, getSectionParentNumber, getSectionNumber } from './innovation.config';
-import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
-import {
-  InnovationModel,
-  INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS,
-  SectionsSummaryModel, InnovationSectionConfigType,
-  GetInnovationEvidenceDTO, getInnovationCommentsDTO, InnovationSectionInfoDTO
-} from './innovation.models';
+import { getSectionNumber, getSectionParentNumber, getSectionParentTitle, getSectionTitle, INNOVATION_SECTIONS } from './innovation.config';
+import { InnovationSectionEnum } from './innovation.enums';
+import { getInnovationCommentsDTO, GetInnovationEvidenceDTO, InnovationModel, InnovationSectionConfigType, InnovationSectionInfoDTO, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, SectionsSummaryModel } from './innovation.models';
 
 
 @Injectable()
@@ -143,39 +138,4 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.updateInnovationComment(innovationId, body, commentId);
   }
 
-  // Grouped Innovation Status methods
-  getGroupedInnovationStatus(
-    innovationStatus: InnovationStatusEnum,
-    supportStatus: InnovationSupportStatusEnum[],
-    reassessmentCount: number
-  ): InnovationGroupedStatusEnum {
-
-    if (innovationStatus === InnovationStatusEnum.CREATED || innovationStatus === InnovationStatusEnum.PAUSED) {
-      return InnovationGroupedStatusEnum.RECORD_NOT_SHARED;
-    }
-
-    if (innovationStatus === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
-      return reassessmentCount === 0
-        ? InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT
-        : InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT;
-    }
-
-    if (innovationStatus === InnovationStatusEnum.NEEDS_ASSESSMENT) {
-      return InnovationGroupedStatusEnum.NEEDS_ASSESSMENT;
-    }
-
-    if (innovationStatus === InnovationStatusEnum.IN_PROGRESS) {
-      const isReceivingSupport = !!supportStatus.some(status => status === InnovationSupportStatusEnum.ENGAGING || status === InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED);
-      return isReceivingSupport === true
-        ? InnovationGroupedStatusEnum.RECEIVING_SUPPORT
-        : InnovationGroupedStatusEnum.AWAITING_SUPPORT;
-    }
-
-    if(innovationStatus === InnovationStatusEnum.WITHDRAWN) {
-      return InnovationGroupedStatusEnum.WITHDRAWN;
-    }
-
-    return InnovationGroupedStatusEnum.RECORD_NOT_SHARED;
-
-  }
 }
