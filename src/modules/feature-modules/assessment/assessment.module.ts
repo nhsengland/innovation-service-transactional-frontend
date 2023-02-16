@@ -22,6 +22,7 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { InnovationChangeAssessorComponent } from './pages/innovation/change-assessor/change-assessor.component';
 // // Innovations.
 import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
+import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
 
 // Services.
 import { AssessmentService } from './services/assessment.service';
@@ -46,7 +47,8 @@ import { AssessmentService } from './services/assessment.service';
     InnovationOverviewComponent,
     InnovationChangeAssessorComponent,
     // // Innovations.
-    ReviewInnovationsComponent
+    ReviewInnovationsComponent,
+    InnovationsListComponent
   ],
   providers: [
     // Services.
