@@ -56,13 +56,14 @@ export type getLockUserRulesOutDTO = {
 };
 
 export type getOrganisationRoleRulesOutDTO = {
-  key: keyof getOrgnisationRoleRulesInDTO;
+  key: string;
   valid: boolean;
   meta: { [key: string]: any }
 };
 
 export type getOrgnisationRoleRulesInDTO = {
-  lastAccessorUserOnOrganisationUnit: {
+  validations: {
+    operation: string,
     valid: boolean,
     meta?: {
       supports: {
@@ -70,7 +71,7 @@ export type getOrgnisationRoleRulesInDTO = {
         innovations: { innovationId: string, innovationName: string; unitId: string; unitName: string }[]
       }
     }
-  }
+  }[]
 };
 
 export type getOrganisationUnitRulesInDTO = {
@@ -274,17 +275,19 @@ export class ServiceUsersService extends CoreService {
 
   getUserRoleRules(userId: string): Observable<getOrganisationRoleRulesOutDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId });
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate')
+      .setPathParams({ userId })
+      .setQueryParams({ operation: 'UPDATE_USER_ROLE' });
     return this.http.get<getOrgnisationRoleRulesInDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => Object.entries(response).map(([key, item]) => ({
-        key: key as keyof getOrgnisationRoleRulesInDTO,
-        valid: item.valid,
-        meta: item.meta || {}
-      }))
-      )
+      map(response => {
+        return response.validations.map(v => ({
+          key: v.operation,
+          valid: v.valid,
+          meta: v.meta || {}
+        }))
+      })
     );
-
   }
 
   changeUserRole(userId: string, body: changeUserRoleDTO): Observable<changeUserTypeDTO> {
