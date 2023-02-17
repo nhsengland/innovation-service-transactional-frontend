@@ -13,7 +13,8 @@ import { StoresModule } from '@modules/stores';
 
 import { PageServiceUserChangeOrganisationUnitComponent } from './service-user-change-organisation-unit.component';
 
-import { changeUserTypeDTO, getOrganisationUnitRulesOutDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { changeUserTypeDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { getOrganisationUnitRulesOutDTO, UsersValidationRulesService } from '@modules/feature-modules/admin/services/users-validation-rules.service';
 import { FormEngineComponent } from '@modules/shared/forms';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
@@ -25,6 +26,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
   let routerSpy: jest.SpyInstance;
 
   let serviceUsersService: ServiceUsersService;
+  let usersValidationRulesService: UsersValidationRulesService;
   let organisationsService: OrganisationsService;
   let component: PageServiceUserChangeOrganisationUnitComponent;
   let fixture: ComponentFixture<PageServiceUserChangeOrganisationUnitComponent>;
@@ -47,6 +49,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
     routerSpy = jest.spyOn(router, 'navigate');
 
     serviceUsersService = TestBed.inject(ServiceUsersService);
+    usersValidationRulesService = TestBed.inject(UsersValidationRulesService);
     organisationsService = TestBed.inject(OrganisationsService);
 
     activatedRoute.snapshot.params = { userId: 'User01' };
@@ -89,7 +92,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
       { key: 'lastAccessorFromUnitProvidingSupport', valid: true, meta: {} }
     ];
 
-    serviceUsersService.getOrganisationUnitRules = () => of(responseMock);
+    usersValidationRulesService.getOrganisationUnitRules = () => of(responseMock);
 
   });
 
@@ -116,7 +119,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
 
     serviceUsersService.getUserFullInfo = () => throwError('error');
     organisationsService.getOrganisationsList = () => throwError('error');
-    serviceUsersService.getOrganisationUnitRules = () => throwError('error');
+    usersValidationRulesService.getOrganisationUnitRules = () => throwError('error');
 
     fixture = TestBed.createComponent(PageServiceUserChangeOrganisationUnitComponent);
     component = fixture.componentInstance;

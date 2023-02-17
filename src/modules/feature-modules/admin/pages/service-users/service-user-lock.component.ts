@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-
-import { CoreComponent } from '@app/base';
-import { FormGroup } from '@app/base/forms';
-
-import { RoutingHelper } from '@app/base/helpers';
 import { forkJoin } from 'rxjs';
 
-import { getLockUserRulesOutDTO, ServiceUsersService } from '../../services/service-users.service';
+import { CoreComponent } from '@app/base';
+import { RoutingHelper } from '@app/base/helpers';
+
+import { ServiceUsersService } from '../../services/service-users.service';
+import { AdminValidationResponseDTO, UsersValidationRulesService } from '../../services/users-validation-rules.service';
 
 
 @Component({
@@ -17,30 +15,26 @@ import { getLockUserRulesOutDTO, ServiceUsersService } from '../../services/serv
 })
 export class PageServiceUserLockComponent extends CoreComponent implements OnInit {
 
-  user: { id: string, name: string };
+  user: { id: string, name: string, role: null | string };
 
-  pageStep: 'RULES_LIST' | 'CODE_REQUEST' | 'SUCCESS' = 'RULES_LIST';
+  pageStep: 'RULES' | 'LOCK_USER' = 'RULES';
 
-  rulesList: getLockUserRulesOutDTO[] = [];
+  rulesList: AdminValidationResponseDTO['validations'] = [];
 
-  securityConfirmation = { id: '', code: '' };
-
-  form = new FormGroup({
-    code: new UntypedFormControl('')
-  }, { updateOn: 'blur' });
-
-  pageType: 'RULES' | 'LOCK_USER' = 'RULES';
-
-  userType = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private serviceUsersService: ServiceUsersService
+    private serviceUsersService: ServiceUsersService,
+    private usersValidationRulesService: UsersValidationRulesService
   ) {
 
     super();
-    
-    this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName };
+
+    this.user = {
+      id: this.activatedRoute.snapshot.params.userId,
+      name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName,
+      role: null
+    };
 
     this.setPageTitle('Lock user', { hint: this.user.name });
 
@@ -48,64 +42,41 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
 
 
   ngOnInit(): void {
+
     forkJoin([
       this.serviceUsersService.getUserFullInfo(this.user.id),
-      this.serviceUsersService.getLockUserRules(this.user.id)
+      this.usersValidationRulesService.getLockUserRules(this.user.id)
     ]).subscribe({
       next: ([userInfo, response]) => {
+
+        this.rulesList = response.validations;
+        this.user.role = this.stores.authentication.getRoleDescription(userInfo.type);
+
+        if (this.rulesList.length === 0) { this.pageStep = 'LOCK_USER'; }
+        else { this.pageStep = 'RULES'; }
+
         this.setPageStatus('READY');
-        if (userInfo.type === 'INNOVATOR') {
-          this.userType = this.stores.authentication.getRoleDescription(userInfo.type);
-          this.pageType = 'LOCK_USER';
-        }
-        else {
-          this.pageType = 'RULES';
-          this.rulesList = response;
-          if (userInfo.type === 'ACCESSOR' && userInfo.userOrganisations.length > 0) {
-            this.userType = this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role);
-          }
-          else {
-            this.userType = this.stores.authentication.getRoleDescription(userInfo.type);
-          }
-        }
+
       },
       error: () => {
         this.setPageStatus('ERROR');
-        this.setAlertError('Unable to fetch the necessary information', { message: 'Please try again or contact us for further help'})
+        this.setAlertUnknownError();
       }
     });
 
   }
 
   nextStep(): void {
-    this.pageType = 'LOCK_USER';
+    this.pageStep = 'LOCK_USER';
   }
 
   onSubmit(): void {
 
-    this.form.markAllAsTouched(); // Form is always valid.
-
-    this.securityConfirmation.code = this.form.get('code')!.value;
-
-    this.serviceUsersService.lockUser(this.user.id, this.securityConfirmation).subscribe({
-      next: () => {
-
-        this.redirectTo(`admin/service-users/${this.user.id}`, { alert: 'lockSuccess' });
-
-      },
-      error: (error: { id: string }) => {
-
-        if (!this.securityConfirmation.id && error.id) {
-
-          this.securityConfirmation.id = error.id;
-          this.pageStep = 'CODE_REQUEST';
-
-        } else {
-
-          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your email' });
-
-        }
-
+    this.serviceUsersService.lockUser(this.user.id).subscribe({
+      next: () => this.redirectTo(`admin/service-users/${this.user.id}`, { alert: 'lockSuccess' }),
+      error: () => {
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
       }
     });
 

@@ -50,6 +50,7 @@ import { WizardOrganisationUnitInactivateInnovationsStepComponent } from './wiza
 // Services.
 import { AdminOrganisationsService } from './services/admin-organisations.service';
 import { ServiceUsersService } from './services/service-users.service';
+import { UsersValidationRulesService } from './services/users-validation-rules.service';
 
 // Resolvers.
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
@@ -66,7 +67,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     // Base
     ContextInnovationOutletComponent,
     SidebarInnovationMenuOutletComponent,
-    
+
     // Pages.
     PageAccountManageAccountInfoComponent,
     // // Admin Users.
@@ -108,6 +109,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     // Services.
     AdminOrganisationsService,
     ServiceUsersService,
+    UsersValidationRulesService,
 
     // Resolvers.
     OrganisationDataResolver,

@@ -4,11 +4,13 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
+import { AccessorOrganisationRoleEnum } from '@app/base/enums';
 import { FormGroup } from '@app/base/forms';
 import { RoutingHelper } from '@app/base/helpers';
 
-import { AccessorOrganisationRoleEnum } from '@app/base/enums';
-import { changeUserRoleDTO, getOrganisationRoleRulesOutDTO, getUserFullInfoDTO, ServiceUsersService } from '../../services/service-users.service';
+
+import { changeUserRoleDTO, getUserFullInfoDTO, ServiceUsersService } from '../../services/service-users.service';
+import { AdminValidationResponseDTO, getOrganisationRoleRulesOutDTO, UsersValidationRulesService } from '../../services/users-validation-rules.service';
 
 
 @Component({
@@ -38,6 +40,7 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
   constructor(
     private activatedRoute: ActivatedRoute,
     private serviceUsersService: ServiceUsersService,
+    private usersValidationRulesService: UsersValidationRulesService
   ) {
 
     super();
@@ -53,10 +56,10 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
   ngOnInit(): void {
 
     forkJoin([
-      this.serviceUsersService.getUserRoleRules(this.user.id),
-      this.serviceUsersService.getUserFullInfo(this.user.id)
+      this.serviceUsersService.getUserFullInfo(this.user.id),
+      this.usersValidationRulesService.getUserRoleRules(this.user.id)
     ]).subscribe({
-      next: ([rules, userInfo]) => {
+      next: ([userInfo, rules]) => {
 
         this.rulesList = rules;
 
