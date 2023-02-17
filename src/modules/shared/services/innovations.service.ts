@@ -211,18 +211,18 @@ export class InnovationsService extends CoreService {
     if(!filters.latestWorkedByMe) {
       switch (requestUserType) {
         case UserRoleEnum.INNOVATOR:
-          qp.fields = [...fields, 'statistics', 'assessment', 'supports'];
+          qp.fields.push('statistics', 'assessment', 'supports');
           break;
         case UserRoleEnum.ASSESSMENT:
-          qp.fields = [...fields, 'isAssessmentOverdue', 'assessment', 'supports'];
+          qp.fields.push('isAssessmentOverdue', 'assessment', 'supports')
           break;
         case UserRoleEnum.ACCESSOR:
         case UserRoleEnum.QUALIFYING_ACCESSOR:
           qp.status = [InnovationStatusEnum.IN_PROGRESS];
-          qp.fields = [...fields, 'assessment', 'supports', 'notifications'];
+          qp.fields.push('assessment', 'supports', 'notifications');
           break;
         case UserRoleEnum.ADMIN:
-          qp.fields = [...fields, 'assessment', 'supports'];
+          qp.fields.push('assessment', 'supports');
           break;
         default:
           break;
