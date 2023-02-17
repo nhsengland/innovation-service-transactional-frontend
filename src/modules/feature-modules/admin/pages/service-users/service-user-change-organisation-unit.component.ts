@@ -58,8 +58,7 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
     super();
     this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName, };
     this.pageStep = 'RULES_LIST';
-
-    this.setPageTitle(`Change organisation unit`);
+    this.setPageTitle('Change organisation unit')
   }
 
   ngOnInit(): void {
@@ -78,6 +77,7 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
       this.organisation = organisations.filter(org => (userInfo.userOrganisations[0].id === org.id))[0];
       this.wizard.steps[0].parameters[0].items = this.organisation.organisationUnits.map(unit => ({ value: unit.acronym, label: unit.name }));
       this.wizard.gotoStep(1).setAnswers(this.wizard.runInboundParsing({ organisation: this.organisation, assignedUnit: this.oldOrganisationUnits })).runRules();
+      this.setPageTitle('Change organisation unit', { hint: this.titleHint })
       this.setPageStatus('READY');
     },
       () => {
