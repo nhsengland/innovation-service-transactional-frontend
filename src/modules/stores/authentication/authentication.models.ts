@@ -3,9 +3,11 @@ import { DateISOType } from '@modules/core/interfaces/base.interfaces';
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from './authentication.enums';
 import { PhoneUserPreferenceEnum } from './authentication.service';
 
+
 export class AuthenticationModel {
 
   isSignIn: boolean;
+
   userContext: {
     type: '' | UserRoleEnum,
     organisation?: {
@@ -14,6 +16,7 @@ export class AuthenticationModel {
       organisationUnit: { id: string; name: string; acronym: string; }
     }
   };
+
   user?: {
     id: string,
     email: string,
@@ -21,7 +24,7 @@ export class AuthenticationModel {
     roles: {
       id: string,
       role: UserRoleEnum,
-    }[],    
+    }[],
     contactByPhone: boolean,
     contactByEmail: boolean,
     contactByPhoneTimeframe: PhoneUserPreferenceEnum | null,

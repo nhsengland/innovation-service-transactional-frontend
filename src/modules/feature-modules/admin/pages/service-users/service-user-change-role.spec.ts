@@ -13,7 +13,8 @@ import { StoresModule } from '@modules/stores';
 
 import { PageServiceUserChangeRoleComponent } from './service-user-change-role.component';
 
-import { getOrganisationRoleRulesOutDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { getOrganisationRoleRulesOutDTO, UsersValidationRulesService } from '@modules/feature-modules/admin/services/users-validation-rules.service';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleComponent', () => {
@@ -23,6 +24,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
   let routerSpy: jest.SpyInstance;
 
   let serviceUsersService: ServiceUsersService;
+  let usersValidationRulesService: UsersValidationRulesService;
 
   let component: PageServiceUserChangeRoleComponent;
   let fixture: ComponentFixture<PageServiceUserChangeRoleComponent>;
@@ -45,6 +47,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
     routerSpy = jest.spyOn(router, 'navigate');
 
     serviceUsersService = TestBed.inject(ServiceUsersService);
+    usersValidationRulesService = TestBed.inject(UsersValidationRulesService);
 
     activatedRoute.snapshot.params = { userId: 'User01' };
     activatedRoute.snapshot.data = { user: { userId: 'User01', displayName: 'User Name' } };
@@ -79,7 +82,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
         meta: {}
       }
     ];
-    serviceUsersService.getUserRoleRules = () => of(responseMock);
+    usersValidationRulesService.getUserRoleRules = () => of(responseMock);
     const expected = responseMock;
 
     fixture = TestBed.createComponent(PageServiceUserChangeRoleComponent);
@@ -110,7 +113,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
         { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [] }
       ]
     });
-    serviceUsersService.getUserRoleRules = () => of(responseMock);
+    usersValidationRulesService.getUserRoleRules = () => of(responseMock);
     const expected = responseMock;
 
     fixture = TestBed.createComponent(PageServiceUserChangeRoleComponent);
@@ -123,7 +126,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
 
   it('should NOT have initial information loaded', () => {
 
-    serviceUsersService.getUserRoleRules = () => throwError('error');
+    usersValidationRulesService.getUserRoleRules = () => throwError('error');
 
     fixture = TestBed.createComponent(PageServiceUserChangeRoleComponent);
     component = fixture.componentInstance;
