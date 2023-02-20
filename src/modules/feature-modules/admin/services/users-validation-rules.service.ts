@@ -100,7 +100,7 @@ export class UsersValidationRulesService extends CoreService {
 
   getUserRoleRules(userId: string): Observable<getOrganisationRoleRulesOutDTO[]> {
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId });
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'UPDATE_USER_ROLE' });
     return this.http.get<getOrgnisationRoleRulesInDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => Object.entries(response).map(([key, item]) => ({
@@ -115,7 +115,7 @@ export class UsersValidationRulesService extends CoreService {
 
 
   getOrganisationUnitRules(userId: string): Observable<getOrganisationUnitRulesOutDTO[]> {
-
+    
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'CHANGE_UNIT' });
     return this.http.get<getOrganisationUnitRulesInDTO>(url.buildUrl()).pipe(
       take(1),
