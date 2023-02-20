@@ -35,7 +35,7 @@ export class PageAccountInnovationsStopSharingOverviewComponent extends CoreComp
 
   ngOnInit() {
 
-    this.innovationsService.getInnovationsList({ take: 100, skip: 0, filters: { status: [InnovationStatusEnum.PAUSED] } }).subscribe((innovations) => {
+    this.innovationsService.getInnovationsList({ queryParams: { take: 100, skip: 0, filters: { status: [InnovationStatusEnum.PAUSED] } } }).subscribe((innovations) => {
 
       this.innovations.setData(innovations.data.map(item => ({ id: item.id, name: item.name, statusUpdatedAt: item.statusUpdatedAt })))
 

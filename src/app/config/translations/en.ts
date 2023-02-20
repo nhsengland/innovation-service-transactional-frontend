@@ -384,6 +384,11 @@ export const locale = {
               cssColorClass: 'nhsuk-tag--green',
               description: 'At least one organisation unit is engaging with this innovation.'
             },
+            NO_ACTIVE_SUPPORT: {
+              name: 'No active support',
+              cssColorClass: 'nhsuk-tag--white',
+              description: 'There are no organisations units providing support for this innovation anymore. The organisations support status are "unassigned", "waiting", "not yet", "unsuitable" or "completed".'
+            },
             AWAITING_NEEDS_REASSESSMENT: {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
@@ -414,48 +419,23 @@ export const locale = {
           }
         },
         user: {
-          lock_user_validations: {
-            lastAssessmentUserOnPlatform: {
-              label: 'User is not the only needs assessor on the service'
-            },
-            lastAccessorUserOnOrganisation: {
-              label: 'User is not the only qualifying accessor within their organisation',
-              description: '{{ organisation.name }}'
-            },
-            lastAccessorUserOnOrganisationUnit: {
-              label: 'User is not the only qualifying accessor within their unit',
-              description: '{{ unit.name }}'
-            },
-            lastAccessorFromUnitProvidingSupport: {
-              label: 'User is not the person in their unit who is supporting an innovator',
-              description: {
-                none: 'No innovation is being supported',
-                singular: '{{ supports.innovations.length }} innovation being supported',
-                plural: '{{ supports.innovations.length }} innovations being supported',
-              }
-            }
+          AssessmentUserIsNotTheOnlyOne: {
+            label: 'Is not the only assessment user on the service'
           },
-          change_organisation_user_role_validations: {
-            lastAccessorUserOnOrganisationUnit: {
-              label: 'User cannot be the last Qualifying Accessor on the organisation unit'
-            }
+          lastAccessorUserOnOrganisation: {
+            label: 'User is not the only qualifying accessor within their organisation',
+            description: '{{ organisation.name }}'
           },
-          change_organisation_user_unit: {
-            lastAccessorUserOnOrganisation: {
-              label: 'User is not the only {{ role }} within their organisation',
-              description: '{{ organisation.name }}'
-            },
-            lastAccessorUserOnOrganisationUnit: {
-              label: 'User is not the only {{ role }} within their organisation unit',
-              description: '{{ unit.name }}'
-            },
-            lastAccessorFromUnitProvidingSupport: {
-              label: 'User is not the person in their organisation or unit who is supporting an innovator',
-              description: {
-                none: 'No innovation is being supported',
-                singular: '{{ supports.innovations.length }} innovation being supported',
-                plural: '{{ supports.innovations.length }} innovations being supported',
-              }
+          lastAccessorUserOnOrganisationUnit: {
+            label: 'User is not the only qualifying accessor within their unit',
+            description: '{{ unit.name }}'
+          },
+          lastAccessorFromUnitProvidingSupport: {
+            label: 'User is not the person in their unit who is supporting an innovator',
+            description: {
+              none: 'No innovation is being supported',
+              singular: '{{ supports.innovations.length }} innovation being supported',
+              plural: '{{ supports.innovations.length }} innovations being supported',
             }
           },
           contact_user_preferences: {

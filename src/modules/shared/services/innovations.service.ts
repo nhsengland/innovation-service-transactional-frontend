@@ -35,7 +35,7 @@ export type InnovationsListFiltersType = {
   assignedToMe?: boolean,
   suggestedOnly?: boolean,
   latestWorkedByMe?: boolean,
-  fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications' | 'statistics')[]
+  fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications' | 'statistics' | 'groupedStatus')[]
 }
 
 export type InnovationsActionsListFilterType = {
@@ -183,7 +183,7 @@ export class InnovationsService extends CoreService {
   constructor() { super(); }
 
 
-  getInnovationsList(queryParams?: APIQueryParamsType<InnovationsListFiltersType>): Observable<InnovationsListDTO> {
+    getInnovationsList({ queryParams, fields = [] }: { queryParams?: APIQueryParamsType<InnovationsListFiltersType>, fields?: InnovationsListFiltersType['fields']} = {}): Observable<InnovationsListDTO> {
 
     if (!queryParams) {
       queryParams = { take: 100, skip: 0, order: { name: 'ASC' }, filters: {} };
@@ -205,24 +205,24 @@ export class InnovationsService extends CoreService {
       ...(filters.assignedToMe !== undefined ? { assignedToMe: filters.assignedToMe } : {}),
       ...(filters.suggestedOnly != undefined ? { suggestedOnly: filters.suggestedOnly } : {}),
       ...(filters.latestWorkedByMe != undefined ? { latestWorkedByMe: filters.latestWorkedByMe } : {}),
-      fields: [] as InnovationsListFiltersType['fields']
+      fields
     };
 
     if(!filters.latestWorkedByMe) {
       switch (requestUserType) {
         case UserRoleEnum.INNOVATOR:
-          qp.fields = ['statistics', 'assessment', 'supports'];
+          qp.fields.push('statistics', 'assessment', 'supports');
           break;
         case UserRoleEnum.ASSESSMENT:
-          qp.fields = ['isAssessmentOverdue', 'assessment', 'supports'];
+          qp.fields.push('isAssessmentOverdue', 'assessment', 'supports')
           break;
         case UserRoleEnum.ACCESSOR:
         case UserRoleEnum.QUALIFYING_ACCESSOR:
           qp.status = [InnovationStatusEnum.IN_PROGRESS];
-          qp.fields = ['assessment', 'supports', 'notifications'];
+          qp.fields.push('assessment', 'supports', 'notifications');
           break;
         case UserRoleEnum.ADMIN:
-          qp.fields = ['assessment', 'supports'];
+          qp.fields.push('assessment', 'supports');
           break;
         default:
           break;
