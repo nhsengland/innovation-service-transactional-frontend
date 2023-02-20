@@ -23,9 +23,6 @@ import { PageNotFoundComponent } from './pages/error/not-found.component';
 // // Innovation.
 import { PageActionStatusListComponent } from './pages/innovation/actions/action-status-list.component';
 import { PageInnovationActivityLogComponent } from './pages/innovation/activity-log/innovation-activity-log.component';
-import { PageInnovationCommentsEditComponent } from './pages/innovation/comments/comments-edit.component';
-import { PageInnovationCommentsListComponent } from './pages/innovation/comments/comments-list.component';
-import { PageInnovationCommentsNewComponent } from './pages/innovation/comments/comments-new.component';
 import { PageInnovationThreadMessageEditComponent } from './pages/innovation/messages/thread-message-edit.component';
 import { PageInnovationThreadMessagesListComponent } from './pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationThreadNewComponent } from './pages/innovation/messages/thread-new.component';
@@ -105,9 +102,6 @@ import { UsersService } from './services/users.service';
     // // Innovation.
     PageActionStatusListComponent,
     PageInnovationActivityLogComponent,
-    PageInnovationCommentsEditComponent,
-    PageInnovationCommentsListComponent,
-    PageInnovationCommentsNewComponent,
     PageInnovationThreadMessageEditComponent,
     PageInnovationThreadMessagesListComponent,
     PageInnovationThreadNewComponent,
