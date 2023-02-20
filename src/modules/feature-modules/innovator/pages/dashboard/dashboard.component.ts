@@ -7,8 +7,8 @@ import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
@@ -51,7 +51,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   ngOnInit(): void {
 
     forkJoin([
-      this.innovationsService.getInnovationsList().pipe(map(response => response), catchError(() => of(null))),
+      this.innovationsService.getInnovationsList({ fields: ['groupedStatus'] }).pipe(map(response => response), catchError(() => of(null))),
       this.innovatorService.getInnovationTransfers(true).pipe(map(response => response), catchError(() => of(null)))
     ]).subscribe(([innovationsList, innovationsTransfers]) => {
 
@@ -61,7 +61,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
           id: innovation.id,
           name: innovation.name,
           description: this.buildDescriptionString(innovation),
-          groupedStatus: this.getGroupedStatus(innovation),
+          groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
         }))
       } else {
         this.setPageStatus('ERROR');
@@ -100,7 +100,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         forkJoin([
           this.stores.authentication.initializeAuthentication$(), // Initialize authentication in order to update First Time SignIn information.
           this.innovatorService.getInnovationTransfers(true),
-          this.innovationsService.getInnovationsList()
+          this.innovationsService.getInnovationsList({ fields: ['groupedStatus'] })
         ])
       )
     ).subscribe(([_authentication, innovationsTransfers, innovationsList]) => {
@@ -110,7 +110,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         id: innovation.id,
         name: innovation.name,
         description: this.buildDescriptionString(innovation),
-        groupedStatus: this.getGroupedStatus(innovation),
+        groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
       }));
 
       this.setAlertSuccess(accept ? `You have successfully accepted ownership` : `You have successfully rejected ownership`);
@@ -136,14 +136,6 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     }
 
     return description.length !== 0 ? `${description.join(', ')}.` : null;
-  }
-
-  private getGroupedStatus(innovation: InnovationsListDTO['data'][0]) {
-    return this.stores.innovation.getGroupedInnovationStatus(
-      innovation.status,
-      (innovation.supports ?? []).map(support => support.status),
-      innovation.assessment?.reassessmentCount ?? 0
-    );
   }
 
 }

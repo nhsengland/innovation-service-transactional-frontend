@@ -82,7 +82,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       
       this.innovation = {
         ...this.innovation,
-        groupedStatus: this.getGroupedStatus(innovation),
+        groupedStatus: innovation.groupedStatus,
         organisationsStatusDescription: Object.entries(occurrences).map(([_, item]) => `${item.count} ${item.text}`).join(', ')
       }
 
@@ -99,11 +99,4 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     return statuses.length;
   }
 
-  private getGroupedStatus(innovation: InnovationInfoDTO) {
-    return this.stores.innovation.getGroupedInnovationStatus(
-      innovation.status,
-      (innovation.supports ?? []).map(support => support.status),
-      innovation.assessment?.reassessmentCount ?? 0
-    );
-  }
 }
