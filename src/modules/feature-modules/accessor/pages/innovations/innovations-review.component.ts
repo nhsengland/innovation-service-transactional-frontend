@@ -183,7 +183,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
     this.setPageStatus('LOADING');
 
-    this.innovationsService.getInnovationsList(this.innovationsList.getAPIQueryParams()).subscribe(response => {
+    this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() }).subscribe(response => {
       this.innovationsList.setData(
         response.data.map(item => {
 

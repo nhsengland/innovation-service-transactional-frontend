@@ -46,7 +46,7 @@ export class PageAccountInnovationsStopSharingComponent extends CoreComponent im
 
   ngOnInit(): void {
 
-    this.innovationsService.getInnovationsList({ take: 100, skip: 0, filters: { status: [InnovationStatusEnum.IN_PROGRESS] } }).subscribe((innovations) => {
+    this.innovationsService.getInnovationsList({ queryParams: { take: 100, skip: 0, filters: { status: [InnovationStatusEnum.IN_PROGRESS] } } }).subscribe((innovations) => {
 
       this.formInnovationsItems = innovations.data.map(item => ({ value: item.id, label: item.name }));
 

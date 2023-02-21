@@ -6,6 +6,8 @@ import { CoreService } from '@app/base';
 import { UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { UserSearchDTO } from '../dtos/users.dto';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { APIQueryParamsType } from '@app/base/types';
 
 
 export type getAccessorsOrganisationsDTO = {
@@ -17,7 +19,8 @@ export type OrganisationsListDTO = {
   id: string,
   name: string,
   acronym: string,
-  organisationUnits: { id: string, name: string, acronym: string }[];
+  isActive: boolean,
+  organisationUnits: { id: string, name: string, acronym: string, isActive: boolean }[];
 };
 
 export type GetOrganisationInfoDTO = {
@@ -53,6 +56,19 @@ export type GetOrganisationUnitUsersDTO = {
   lockedAt: string | undefined
 }[];
 
+export type GetOrganisationUnitInnovationsListDTO = {
+  count: number;
+  innovationsByStatus: {
+    status: InnovationSupportStatusEnum,
+    count: number
+  }[];
+  innovationsList: {
+    id: string,
+    name: string,
+    status: InnovationSupportStatusEnum
+  }[];
+};
+
 @Injectable()
 export class OrganisationsService extends CoreService {
 
@@ -74,6 +90,7 @@ export class OrganisationsService extends CoreService {
         id: item.id,
         name: item.name,
         acronym: item.acronym,
+        isActive: item.isActive,
         organisationUnits: query.unitsInformation ? item.organisationUnits : []
       })))
     );
@@ -106,9 +123,11 @@ export class OrganisationsService extends CoreService {
     );
   }
 
-  getOrganisationInfo(organisationId: string): Observable<GetOrganisationInfoDTO> {
+  getOrganisationInfo(organisationId: string, queryParams?: { onlyActiveUsers?: boolean }): Observable<GetOrganisationInfoDTO> {
 
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1/organisations/:organisationId').setPathParams({ organisationId });
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/organisations/:organisationId')
+      .setPathParams({ organisationId })
+      .setQueryParams({ onlyActiveUsers: queryParams?.onlyActiveUsers })
     return this.http.get<GetOrganisationInfoDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         id: response.id, name: response.name, acronym: response.acronym, isActive: response.isActive,
@@ -117,6 +136,7 @@ export class OrganisationsService extends CoreService {
         }))
       }))
     );
+
   }
 
   getOrganisationUnitInfo(organisationId: string, organisationUnitId: string): Observable<GetOrganisationUnitInfoDTO> {
@@ -125,6 +145,22 @@ export class OrganisationsService extends CoreService {
     return this.http.get<GetOrganisationUnitInfoDTO>(url.buildUrl()).pipe(take(1),
       map(response => response)
     );
+  }
+
+  
+  getOrganisationUnitInnovationsList(organisationId: string, organisationUnitId: string, queryParams: APIQueryParamsType<{ onlyOpen: boolean }>): Observable<GetOrganisationUnitInnovationsListDTO> {
+
+    const { filters, ...qParams } = queryParams;
+    const qp = {
+      ...qParams,
+      onlyOpen: filters.onlyOpen ? 'true' : 'false'
+    };
+
+    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId/innovations').setPathParams({ organisationId, organisationUnitId }).setQueryParams(qp);
+    return this.http.get<GetOrganisationUnitInnovationsListDTO>(url.buildUrl()).pipe(take(1),
+      map(response => response)
+    );
+
   }
 
 }

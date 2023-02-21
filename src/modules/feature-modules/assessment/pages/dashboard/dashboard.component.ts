@@ -63,7 +63,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
     forkJoin([
       this.statisticsService.getUserStatisticsInfo(qp), 
-      this.innovationsService.getInnovationsList(this.latestInnovations.getAPIQueryParams())
+      this.innovationsService.getInnovationsList({ queryParams: this.latestInnovations.getAPIQueryParams() })
     ]).subscribe(([statistics, innovationsList]) => {
 
       this.latestInnovations.setData(innovationsList.data, innovationsList.count);

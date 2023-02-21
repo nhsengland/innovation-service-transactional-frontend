@@ -7,10 +7,7 @@
 
 
 <div *ngIf="pageStatus === 'READY'" aria-live="polite">
-
   <div *ngIf="pageStep === 'RULES_LIST'">
-    <theme-page-title [title]="pageTitle" [titleHint]="titleHint"></theme-page-title>
-
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
         <table class="nhsuk-table">
@@ -24,10 +21,10 @@
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of rulesList" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
-                {{ 'shared.catalog.user.change_organisation_user_unit.' + item.key + '.label' | translate: user }}
-                <div *ngIf="!item.valid && translationExists('shared.catalog.user.change_organisation_user_unit.' + item.key + '.description')" class="nhsuk-hint nhsuk-u-margin-0">
-                  {{ (item.meta?.unit || item.meta?.organisation) ? ('shared.catalog.user.change_organisation_user_unit.' + item.key + '.description' | translate: item?.meta) : 'shared.catalog.user.change_organisation_user_unit.' + item.key + '.description' | pluralTranslate: item?.meta?.supports?.innovations?.length | translate: item?.meta }}
-                </div>
+                {{ 'shared.catalog.user.' + item.key + '.label' | translate: user }}
+                <!-- <div *ngIf="!item.valid && translationExists('shared.catalog.user.' + item.key + '.description')" class="nhsuk-hint nhsuk-u-margin-0">
+                  {{ (item.meta?.unit || item.meta?.organisation) ? ('shared.catalog.user.' + item.key + '.description' | translate: item?.meta) : 'shared.catalog.user.' + item.key + '.description' | pluralTranslate: item?.meta?.supports?.innovations?.length | translate: item?.meta }}
+                </div> -->
               </td>
               <td class="nhsuk-table__cell text-align-right">
                 <strong class="nhsuk-tag" [ngClass]="{'nhsuk-tag--green': item.valid, 'nhsuk-tag--red': !item.valid}">{{ item.valid ? 'Valid' : 'Invalid' }}</strong>

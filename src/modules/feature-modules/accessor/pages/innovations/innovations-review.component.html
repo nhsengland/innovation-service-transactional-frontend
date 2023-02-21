@@ -67,7 +67,7 @@
 
               <td *ngIf="innovationsList.getColumnLabel('updatedAt')" class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('updatedAt') }} </span>
-                {{ item.supportInfo.updatedAt | date: ('app.date_formats.long_date' | translate) }}
+                {{ item.updatedAt | date: ('app.date_formats.long_date' | translate) }}
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('mainCategory')" class="nhsuk-table__cell">

@@ -19,20 +19,9 @@ export class PageAdminUserNewComponent extends CoreComponent implements OnInit {
 
   wizard: WizardEngineModel = new WizardEngineModel(CREATE_NEW_USER_QUESTIONS);
 
-  submitBtnClicked = false;
-
-  pageStep: 'RULES_LIST' | 'CODE_REQUEST' | 'SUCCESS' = 'RULES_LIST';
-
-  securityConfirmation = { id: '', code: '' };
-
-  form = new FormGroup({
-    code: new UntypedFormControl('')
-  }, { updateOn: 'blur' });
-
   constructor(
     private serviceUsersService: ServiceUsersService
   ) {
-
     super();
     this.setPageTitle('Create new admin');
   }
@@ -43,6 +32,7 @@ export class PageAdminUserNewComponent extends CoreComponent implements OnInit {
     this.wizard.steps[0].parameters[0].validations = { ...this.wizard.steps[0].parameters[0].validations, async: [this.serviceUsersService.userEmailValidator()] };
 
     this.setPageStatus('READY');
+
   }
 
 
@@ -72,27 +62,13 @@ export class PageAdminUserNewComponent extends CoreComponent implements OnInit {
 
   onSubmitWizard(): void {
 
-    this.submitBtnClicked = true;
     const body = this.wizard.runOutboundParsing();
-    this.securityConfirmation.code = this.form.get('code')!.value;
-    this.serviceUsersService.createUser(body, this.securityConfirmation).subscribe({
-      next: response => {
-        this.redirectTo(`admin/administration-users/${response.id}`, { alert: 'adminCreationSuccess' });
-      },
-      error: (error: { id: string }) => {
 
-        this.submitBtnClicked = false;
-
-        if (!this.securityConfirmation.id && error.id) {
-          this.securityConfirmation.id = error.id;
-          this.pageStep = 'CODE_REQUEST';
-
-        } else {
-
-          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your email' });
-
-        }
-
+    this.serviceUsersService.createUser(body).subscribe({
+      next: response => this.redirectTo(`admin/administration-users/${response.id}`, { alert: 'adminCreationSuccess' }),
+      error: () => {
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
       }
     });
 

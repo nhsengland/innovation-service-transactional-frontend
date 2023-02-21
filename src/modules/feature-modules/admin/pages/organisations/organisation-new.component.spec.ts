@@ -4,15 +4,13 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
-import { FormEngineComponent } from '@modules/shared/forms';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { PageOrganisationNewComponent } from './organisation-new.component';
-import { OrganisationsService } from '../../services/organisations.service';
+import { AdminOrganisationsService } from '../../services/admin-organisations.service';
 import { ServiceUsersService } from '../../services/service-users.service';
 
 describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationNewComponent', () => {
@@ -22,7 +20,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationNewComponent'
   let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
-  let organisationsService: OrganisationsService;
+  let adminOrganisationsService: AdminOrganisationsService;
   let serviceUserService: ServiceUsersService;
 
   beforeEach(() => {
@@ -43,7 +41,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationNewComponent'
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     serviceUserService = TestBed.inject(ServiceUsersService);
-    organisationsService = TestBed.inject(OrganisationsService);
+    adminOrganisationsService = TestBed.inject(AdminOrganisationsService);
 
   });
 

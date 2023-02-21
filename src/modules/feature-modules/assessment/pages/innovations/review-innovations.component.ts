@@ -102,7 +102,7 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
     }
 
     forkJoin([
-      this.innovationsService.getInnovationsList(this.innovationsList.getAPIQueryParams()),
+      this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() }),
 
       ([InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT, InnovationStatusEnum.NEEDS_ASSESSMENT].includes(this.currentTab.status) ?
         this.assessmentService.getOverdueAssessments([this.currentTab.status], assignedToMe)

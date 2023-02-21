@@ -9,7 +9,8 @@ import { RoutingHelper } from '@app/base/helpers';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
-import { getOrganisationUnitRulesOutDTO, ServiceUsersService } from '../../services/service-users.service';
+import { ServiceUsersService } from '../../services/service-users.service';
+import { getOrganisationUnitRulesOutDTO, UsersValidationRulesService } from '../../services/users-validation-rules.service';
 
 import { CHANGE_USER_ORGANISATION_UNIT } from './service-user-change-organisation-unit.config';
 
@@ -52,14 +53,14 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
   constructor(
     private activatedRoute: ActivatedRoute,
     private organisationsService: OrganisationsService,
-    private serviceUsersService: ServiceUsersService
+    private serviceUsersService: ServiceUsersService,
+    private usersValidationRulesService: UsersValidationRulesService
   ) {
 
     super();
     this.user = { id: this.activatedRoute.snapshot.params.userId, name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName, };
     this.pageStep = 'RULES_LIST';
-
-    this.setPageTitle(`Change organisation unit`);
+    this.setPageTitle('Change organisation unit')
   }
 
   ngOnInit(): void {
@@ -67,10 +68,10 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
     forkJoin([
       this.organisationsService.getOrganisationsList({ unitsInformation: true }),
       this.serviceUsersService.getUserFullInfo(this.user.id),
-      this.serviceUsersService.getOrgnisationUnitRules(this.user.id)
-    ]).subscribe(([organisations, userInfo, orgnisationUnitRules]) => {
+      this.usersValidationRulesService.getOrganisationUnitRules(this.user.id)
+    ]).subscribe(([organisations, userInfo, organisationUnitRules]) => {
 
-      this.rulesList = orgnisationUnitRules;
+      this.rulesList = organisationUnitRules;
       this.user.role = this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role).toLowerCase();
       this.titleHint = `${this.user.name} (${this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role)})`;
       this.isRulesValid = this.rulesList.some(rule => rule.valid === false);
@@ -78,6 +79,7 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
       this.organisation = organisations.filter(org => (userInfo.userOrganisations[0].id === org.id))[0];
       this.wizard.steps[0].parameters[0].items = this.organisation.organisationUnits.map(unit => ({ value: unit.acronym, label: unit.name }));
       this.wizard.gotoStep(1).setAnswers(this.wizard.runInboundParsing({ organisation: this.organisation, assignedUnit: this.oldOrganisationUnits })).runRules();
+      this.setPageTitle('Change organisation unit', { hint: this.titleHint })
       this.setPageStatus('READY');
     },
       () => {
