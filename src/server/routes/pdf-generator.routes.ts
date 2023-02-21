@@ -26,6 +26,13 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
         client.trackTrace({
           message: 'PDFGenerator Success',
           severity: 0,
+          properties: {
+            params: req.params,
+            query: req.query,
+            path: req.path,
+            route: req.route,
+            authenticatedUser: (req.user as any)?.oid,
+          }
         });
 
         res
@@ -42,19 +49,34 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
         client.trackException({
           exception: error,
           severity: 3,
+          properties: {
+            params: req.params,
+            query: req.query,
+            path: req.path,
+            route: req.route,
+            authenticatedUser: (req.user as any)?.oid,
+            stack: error.stack,
+          }
         })
         // console.log(error);
         // console.log(`Error when attempting to generate the PDF from innovation ${innovationId}`);
         res.status(500).send();
       });
 
-  } catch (error) {
+  } catch (error: any) {
 
     const client = getAppInsightsClient(req);
-    client.trackTrace({
-      message: 'PDFGenerator Unhandled Error',
+    client.trackException({
+      exception: error,
       severity: 3,
-      properties: error as any
+      properties: {
+        params: req.params,
+        query: req.query,
+        path: req.path,
+        route: req.route,
+        authenticatedUser: (req.user as any)?.oid,
+        stack: error.stack,
+      }
     });
 
   }
