@@ -63,7 +63,7 @@ export class InnovationExportRequestRejectComponent extends CoreComponent implem
 
     this.innovationsService.updateExportRequestStatus(this.innovationId, this.requestId, body).subscribe(() => {
 
-      this.setRedirectAlertSuccess('You\'ve rejected the export request', { message: `${ this.request?.organisation.organisationUnit.name } will be notified.` });
+      this.setRedirectAlertSuccess('You\'ve rejected the export request', { message: `${this.request?.createdBy.name} at ${ this.request?.organisation.organisationUnit.name } will be notified.` });
       this.redirectTo(`/innovator/innovations/${this.innovationId}/export/list`);
 
     });
