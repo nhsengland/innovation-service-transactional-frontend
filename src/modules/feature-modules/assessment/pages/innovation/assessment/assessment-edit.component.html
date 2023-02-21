@@ -14,7 +14,7 @@
 
         <div class="full-width-section nhsuk-u-padding-top-5" [ngClass]="{'bg-color-white': (i % 2)}">
           <h2 *ngIf="section.title" class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ section.title }}</h2>
-          <theme-form-engine [parameters]="section.parameters" [values]="form.data" (formChanges)="onFormChange()"></theme-form-engine>
+          <theme-form-engine [parameters]="section.parameters" [values]="form.data" (formChanges)="onFormChange()" (formLoaded)="onFormLoaded()"></theme-form-engine>
         </div>
 
       </ng-container>
@@ -34,7 +34,7 @@
           <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">{{assessmentHasBeenSubmitted ? 'Update' : 'Submit'}} needs assessment</button>
           <button [disabled]="this.saveButton.disabled" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5" (click)="onSubmit('saveAsDraft')">{{ saveButton.label }}</button>
         </ng-container>
-        
+
         <p>This document is autosaved every minute.</p>
 
         <nav class="nhsuk-pagination" role="navigation" aria-label="Pagination">

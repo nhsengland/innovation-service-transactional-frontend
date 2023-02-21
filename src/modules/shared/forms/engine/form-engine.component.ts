@@ -33,6 +33,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
   @Input() parameters: FormEngineParameterModel[] = [];
   @Input() values?: { [key: string]: any } = {};
   @Output() formChanges: any = new EventEmitter<{ [key: string]: any }>();
+  @Output() formLoaded: any = new EventEmitter<{ [key: string]: any }>();
 
   private formChangeSubscription = new Subscription();
   private loggerContext = 'Catalog::FormsModule::EngineComponent::';
@@ -76,6 +77,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
       // this.logger.debug(this.loggerContext + 'OnChanges: Parameters', this.parameters);
       // this.logger.debug(this.loggerContext + 'OnChanges: Values', this.values);
       this.buildForm();
+      this.formLoaded.emit(this.form.value);
     }
 
   }

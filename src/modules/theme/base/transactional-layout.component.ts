@@ -145,7 +145,7 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
     // console.log('onBackLinkClicked', this.pageLayout.backLink);
 
     if (this.pageLayout.backLink.url) {
-      this.router.navigate([this.pageLayout.backLink.url]);
+      this.router.navigateByUrl(this.pageLayout.backLink.url);
     } else if (this.pageLayout.backLink.callback) {
       this.pageLayout.backLink.callback.call(this);
     }

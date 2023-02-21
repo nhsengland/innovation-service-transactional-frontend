@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, PLATFORM_ID, Inject, ChangeDetectionStrate
 import { isPlatformBrowser } from '@angular/common';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -21,11 +22,13 @@ export class AlertComponent implements OnChanges {
 
   borderColorCSS = '';
   widthCSS = '';
+  fontItemColorCSS = '';
 
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router,
   ) {
 
     this.id = RandomGeneratorHelper.generateRandom();
@@ -42,11 +45,15 @@ export class AlertComponent implements OnChanges {
         case 'INFORMATION': this.borderColorCSS = 'border-color-neutral'; break;
         case 'SUCCESS': this.borderColorCSS = 'border-color-success'; break;
         case 'WARNING': this.borderColorCSS = 'border-color-warning'; break;
-        case 'ERROR': this.borderColorCSS = 'border-color-error'; break;
+        case 'ERROR':
+          this.borderColorCSS = 'border-color-error';
+          this.fontItemColorCSS = 'font-color-error ';
+          break;
         case null:
         case '':
         default:
           this.borderColorCSS = '';
+          this.fontItemColorCSS = '';
           break;
       }
 
@@ -75,6 +82,20 @@ export class AlertComponent implements OnChanges {
     }
 
     this.cdr.detectChanges();
+
+  }
+
+  onItemClick(callback?: string | ((...p: any) => void)) {
+
+    if (!callback) {
+      return;
+    }
+
+    if (typeof callback === 'string') {
+      this.router.navigateByUrl(callback);
+    } else {
+      callback.call(this);
+    }
 
   }
 
