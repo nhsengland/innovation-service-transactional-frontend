@@ -26,9 +26,10 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
-
+    
     super();
-
+    this.setPageTitle('Actions');
+    
     this.tabs = [
       {
         key: 'openActions',
@@ -114,7 +115,6 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
       this.actionsList.setData(response.data, response.count);
       this.currentTab.description = `${response.count} ${this.tabs[this.currentTab.index].title.toLowerCase()} created by you`;
 
-      this.setPageTitle('Actions');
       this.setPageStatus('READY');
     }
 
