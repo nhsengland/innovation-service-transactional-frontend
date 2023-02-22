@@ -25,7 +25,8 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
   currentTab: { key: InnovationStatusEnum, status: InnovationStatusEnum, description: string, overdueInnovations: number };
 
   form = new FormGroup({
-    assessmentSupportStatus: new FormControl<AssessmentSupportFilterEnum>(AssessmentSupportFilterEnum.UNASSIGNED)
+    assessmentSupportStatus: new FormControl<AssessmentSupportFilterEnum>(AssessmentSupportFilterEnum.UNASSIGNED),
+    assignedToMe: new FormControl<boolean>(true)
   }, { updateOn: 'change' });
   formFilterItems: FormEngineParameterModel['items'] = [];
 
@@ -95,12 +96,16 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
 
     this.setPageStatus('LOADING');
 
+    let assignedToMe: boolean | undefined = undefined;
+    if(this.currentTab.status === InnovationStatusEnum.NEEDS_ASSESSMENT) {
+      assignedToMe = this.form.value.assignedToMe ?? undefined;
+    }
 
     forkJoin([
-      this.innovationsService.getInnovationsList(this.innovationsList.getAPIQueryParams()),
+      this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() }),
 
       ([InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT, InnovationStatusEnum.NEEDS_ASSESSMENT].includes(this.currentTab.status) ?
-        this.assessmentService.getOverdueAssessments([this.currentTab.status])
+        this.assessmentService.getOverdueAssessments([this.currentTab.status], assignedToMe)
         : of(null)
 
       )
@@ -167,7 +172,10 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
       case InnovationStatusEnum.NEEDS_ASSESSMENT:
         this.innovationsList
           .clearData()
-          .setFilters({ status: [this.currentTab.status] })
+          .setFilters({
+            status: [this.currentTab.status],
+            assignedToMe: this.form.value.assignedToMe ?? true
+          })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
             reassessmentsCount: { label: 'Type', orderable: false },
@@ -209,7 +217,10 @@ export class ReviewInnovationsComponent extends CoreComponent implements OnInit 
       status: [this.currentTab.key],
       ...(this.currentTab.status !== InnovationStatusEnum.IN_PROGRESS ? {} : {
         assessmentSupportStatus: this.form.value.assessmentSupportStatus || AssessmentSupportFilterEnum.UNASSIGNED
-      })
+      }),
+      ...(this.currentTab.status === InnovationStatusEnum.NEEDS_ASSESSMENT ? {
+        assignedToMe: this.form.value.assignedToMe ?? true
+      } : {})
     });
     this.getInnovationsList();
 

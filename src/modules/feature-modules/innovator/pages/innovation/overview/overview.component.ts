@@ -70,11 +70,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovation.statusUpdatedAt = innovation.statusUpdatedAt;
       this.innovation.lastEndSupportAt = innovation.lastEndSupportAt;
 
-      this.innovation.groupedStatus = this.stores.innovation.getGroupedInnovationStatus(
-        innovation.status,
-        (innovation.supports ?? []).map(support => support.status),
-        innovation.assessment?.reassessmentCount ?? 0
-      );
+      this.innovation.groupedStatus = innovation.groupedStatus;
 
       this.isSubmitted.submittedAllSections = submit.submittedAllSections.valueOf();
       this.isSubmitted.submittedForNeedsAssessment = submit.submittedForNeedsAssessment.valueOf();

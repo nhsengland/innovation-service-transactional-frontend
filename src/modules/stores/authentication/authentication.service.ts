@@ -7,15 +7,17 @@ import { DateISOType } from '@modules/core/interfaces/base.interfaces';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { UrlModel } from '@modules/core/models/url.model';
 
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum, UserTypeEnum } from './authentication.enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from './authentication.enums';
 
 
 type GetUserInfoDTO = {
   id: string,
   email: string,
   displayName: string,
-  type: UserTypeEnum,
-  roles: UserRoleEnum[],    
+  roles: {
+    id: string,
+    role: UserRoleEnum,
+  }[],    
   contactByPhone: boolean,
   contactByEmail:  boolean,
   contactByPhoneTimeframe: PhoneUserPreferenceEnum | null,
@@ -93,7 +95,6 @@ export class AuthenticationService {
         id: response.id,
         email: response.email,
         displayName: ['unknown'].includes(response.displayName) ? '' : response.displayName,
-        type: response.type,
         roles: response.roles || [],
         contactByPhone: response.contactByPhone,
         contactByEmail:  response.contactByEmail,

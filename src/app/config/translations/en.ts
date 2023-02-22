@@ -87,7 +87,7 @@ export const locale = {
           action_status: {
             REQUESTED: {
               name: 'Requested',
-              description: 'An accessor has requested that the innovator should submit information to a specific section of their innovation record.',
+              description: 'The innovator has been asked to provide additional information on their innovation record.',
               cssColorClass: 'nhsuk-tag--blue'
             },
             STARTED: {
@@ -102,27 +102,27 @@ export const locale = {
             },
             SUBMITTED: {
               name: 'Submitted',
-              description: 'The innovator has submitted information requested by an accessor and is waiting for the accessor to review this information.',
+              description: 'The innovator has submitted the requested information and is waiting for it to be reviewed.',
               cssColorClass: 'nhsuk-tag--yellow'
             },
             DELETED: {
               name: 'Deleted',
-              description: 'The action has been deleted as it is no longer relevant due to a change to the innovation or innovator account.',
+              description: 'The action has been deleted as it is no longer relevant.',
               cssColorClass: 'nhsuk-tag--grey'
             },
             DECLINED: {
               name: 'Declined',
-              description: 'The innovator has declined the action requested.',
+              description: 'The innovator has declined the action request.',
               cssColorClass: 'nhsuk-tag--red'
             },
             COMPLETED: {
               name: 'Completed',
-              description: 'An accessor has closed the action after reviewing the information.',
+              description: 'The information has been reviewed and the action has been marked as completed.',
               cssColorClass: 'nhsuk-tag--green'
             },
             CANCELLED: {
               name: 'Cancelled',
-              description: 'An accessor has cancelled the action.',
+              description: 'The requested action has been cancelled.',
               cssColorClass: 'nhsuk-tag--dark-grey'
             }
           },
@@ -384,6 +384,11 @@ export const locale = {
               cssColorClass: 'nhsuk-tag--green',
               description: 'At least one organisation unit is engaging with this innovation.'
             },
+            NO_ACTIVE_SUPPORT: {
+              name: 'No active support',
+              cssColorClass: 'nhsuk-tag--white',
+              description: 'There are no organisations units providing support for this innovation anymore. The organisations support status are "unassigned", "waiting", "not yet", "unsuitable" or "completed".'
+            },
             AWAITING_NEEDS_REASSESSMENT: {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
@@ -414,48 +419,23 @@ export const locale = {
           }
         },
         user: {
-          lock_user_validations: {
-            lastAssessmentUserOnPlatform: {
-              label: 'User is not the only needs assessor on the service'
-            },
-            lastAccessorUserOnOrganisation: {
-              label: 'User is not the only qualifying accessor within their organisation',
-              description: '{{ organisation.name }}'
-            },
-            lastAccessorUserOnOrganisationUnit: {
-              label: 'User is not the only qualifying accessor within their unit',
-              description: '{{ unit.name }}'
-            },
-            lastAccessorFromUnitProvidingSupport: {
-              label: 'User is not the person in their unit who is supporting an innovator',
-              description: {
-                none: 'No innovation is being supported',
-                singular: '{{ supports.innovations.length }} innovation being supported',
-                plural: '{{ supports.innovations.length }} innovations being supported',
-              }
-            }
+          AssessmentUserIsNotTheOnlyOne: {
+            label: 'Is not the only assessment user on the service'
           },
-          change_organisation_user_role_validations: {
-            lastAccessorUserOnOrganisationUnit: {
-              label: 'User cannot be the last Qualifying Accessor on the organisation unit'
-            }
+          lastAccessorUserOnOrganisation: {
+            label: 'User is not the only qualifying accessor within their organisation',
+            description: '{{ organisation.name }}'
           },
-          change_organisation_user_unit: {
-            lastAccessorUserOnOrganisation: {
-              label: 'User is not the only {{ role }} within their organisation',
-              description: '{{ organisation.name }}'
-            },
-            lastAccessorUserOnOrganisationUnit: {
-              label: 'User is not the only {{ role }} within their organisation unit',
-              description: '{{ unit.name }}'
-            },
-            lastAccessorFromUnitProvidingSupport: {
-              label: 'User is not the person in their organisation or unit who is supporting an innovator',
-              description: {
-                none: 'No innovation is being supported',
-                singular: '{{ supports.innovations.length }} innovation being supported',
-                plural: '{{ supports.innovations.length }} innovations being supported',
-              }
+          lastAccessorUserOnOrganisationUnit: {
+            label: 'User is not the only qualifying accessor within their unit',
+            description: '{{ unit.name }}'
+          },
+          lastAccessorFromUnitProvidingSupport: {
+            label: 'User is not the person in their unit who is supporting an innovator',
+            description: {
+              none: 'No innovation is being supported',
+              singular: '{{ supports.innovations.length }} innovation being supported',
+              plural: '{{ supports.innovations.length }} innovations being supported',
             }
           },
           contact_user_preferences: {
@@ -472,7 +452,7 @@ export const locale = {
               confirmation: '9am to 12pm or 1pm to 5pm'
             },
           },
-      
+
         }
       },
 

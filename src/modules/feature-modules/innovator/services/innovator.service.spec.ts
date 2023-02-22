@@ -1,5 +1,5 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ENV } from '@tests/app.mocks';
 
@@ -83,7 +83,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.submitOrganisationSharing('Inno01', { some: 'parameters' }).subscribe({ next: success => response = success, error: error => response = error });
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/innovations/Inno01/shares`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/Inno01/shares`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PUT');
     expect(response).toEqual(expected);
@@ -179,7 +179,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     let response: any = null;
     service.deleteUserAccount({ reason: 'Some reason' }).subscribe({ next: success => response = success, error: error => response = error });
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_URL}/innovators/UserId01/delete`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_USERS_URL}/v1/me/delete`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('PATCH');
     expect(response).toEqual(expected);

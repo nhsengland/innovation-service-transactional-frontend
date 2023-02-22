@@ -8,11 +8,14 @@
       </p>
 
       <p *ngIf="isInnovator()">
-        <a routerLink="../../support">Everyone who is currently working with this innovation</a> will be notified.
+        <a routerLink="../../everyone">Everyone who is currently working with this innovation</a> will be notified.
       </p>
 
       <p *ngIf="isNotInnovator()">
-        The innovator will be notified. Your messsages can be seen by everyone who has access to this innovation. <a routerLink="../../support"> View a list of this innovation's data sharing preferences (opens in new window).</a>
+        The innovator will be notified. Your messages can be seen by everyone who has access to this innovation.
+        <a [routerLink]="stores.authentication.isAccessorType() ? '../../support/organisations' : '../../support'" target="_blank" rel="noopener noreferrer">
+          View a list of this innovation's data sharing preferences (opens in new window).
+        </a>
       </p>
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()">

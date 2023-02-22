@@ -8,7 +8,7 @@ import { AuthenticationStore } from '@modules/stores/authentication/authenticati
 import { ContextStore } from '@modules/stores/context/context.store';
 import { InnovationsService } from '../services/innovations.service';
 
-import { UserTypeEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
@@ -36,11 +36,8 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
 
         let support: undefined | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string };
 
-        if (userContext.type === UserTypeEnum.ACCESSOR) {
+        if (this.authenticationStore.isAccessorType()) {
           support = (response.supports || []).find(item => item.organisationUnitId === userContext.organisation?.organisationUnit.id);
-          if (!support) {
-            console.error('Accessor user type without unit id');
-          }
         }
 
         this.contextStore.setInnovation({

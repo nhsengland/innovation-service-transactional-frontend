@@ -19,16 +19,6 @@ export class PageServiceUserNewComponent extends CoreComponent implements OnInit
 
   wizard: WizardEngineModel = new WizardEngineModel(CREATE_NEW_USER_QUESTIONS);
 
-  submitBtnClicked = false;
-
-  pageStep: 'RULES_LIST' | 'CODE_REQUEST' | 'SUCCESS' = 'RULES_LIST';
-
-  securityConfirmation = { id: '', code: '' };
-
-  form = new FormGroup({
-    code: new UntypedFormControl('')
-  }, { updateOn: 'blur' });
-
   constructor(
     private organisationsService: OrganisationsService,
     private serviceUsersService: ServiceUsersService
@@ -86,27 +76,13 @@ export class PageServiceUserNewComponent extends CoreComponent implements OnInit
 
   onSubmitWizard(): void {
 
-    this.submitBtnClicked = true;
     const body = this.wizard.runOutboundParsing();
-    this.securityConfirmation.code = this.form.get('code')!.value;
-    this.serviceUsersService.createUser(body, this.securityConfirmation).subscribe({
-      next: response => {
-        this.redirectTo(`admin/service-users/${response.id}`, { alert: 'userCreationSuccess' });
-      },
-      error: (error) => {
 
-        this.submitBtnClicked = false;
-
-        if (!this.securityConfirmation.id && error.id) {
-          this.securityConfirmation.id = error.id;
-          this.pageStep = 'CODE_REQUEST';
-
-        } else {
-
-          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your email' });
-
-        }
-
+    this.serviceUsersService.createUser(body).subscribe({
+      next: response => this.redirectTo(`admin/service-users/${response.id}`, { alert: 'userCreationSuccess' }),
+      error: () => {
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
       }
     });
 

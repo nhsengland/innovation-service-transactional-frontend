@@ -6,7 +6,7 @@ import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
@@ -14,7 +14,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { PageServiceUserInfoComponent } from './service-user-info.component';
 
 import { getUserFullInfoDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
-import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { AlertType } from '@app/base/types';
 
 
@@ -127,11 +127,11 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
       email: 'user@email.com',
       displayName: 'User name',
       phone: null,
-      type: UserTypeEnum.ACCESSOR,
+      type: UserRoleEnum.ACCESSOR,
       lockedAt: null,
       innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: '2' }] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: 2 }] }
       ]
     };
 
@@ -171,11 +171,11 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
       email: 'user@email.com',
       displayName: 'User name',
       phone: '12345',
-      type: UserTypeEnum.INNOVATOR,
+      type: UserRoleEnum.INNOVATOR,
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: '2' }] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: 2 }] }
       ]
     };
 
@@ -218,11 +218,11 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
       email: 'user@email.com',
       displayName: 'User name',
       phone: '12345',
-      type: UserTypeEnum.INNOVATOR,
+      type: UserRoleEnum.INNOVATOR,
       lockedAt: null,
       innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: '2' }] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: 2 }] }
       ]
     };
     serviceUsersService.getUserFullInfo = () => of(responseMock);

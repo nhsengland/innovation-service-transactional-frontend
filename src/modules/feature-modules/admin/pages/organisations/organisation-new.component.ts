@@ -2,9 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
-import { FormControl, FormEngineComponent, FormGroup, WizardEngineModel } from '@app/base/forms';
+import { FormEngineComponent, FormGroup, WizardEngineModel } from '@app/base/forms';
 
-import { CreateOrganisationBodyDTO, OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { CreateOrganisationBodyDTO, AdminOrganisationsService} from '@modules/feature-modules/admin/services/admin-organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 import { CREATE_NEW_ORGANISATION_QUESTIONS } from './organisation-new.config';
 
@@ -32,6 +33,7 @@ export class PageOrganisationNewComponent extends CoreComponent implements OnIni
 
   constructor(
     private organisationsService: OrganisationsService,
+    private adminOrganisationsService: AdminOrganisationsService
   ) {
 
     super();
@@ -40,7 +42,7 @@ export class PageOrganisationNewComponent extends CoreComponent implements OnIni
 
   ngOnInit(): void {
 
-    this.organisationsService.getOrganisationsList({ onlyActive: false }).subscribe(
+    this.organisationsService.getOrganisationsList({ unitsInformation: true, withInactive: true }).subscribe(
       response => {
 
         const organisationsList = response.map(o => ({ acronym: o.acronym, name: o.name, units: o.organisationUnits.map(u => ({ acronym: u.acronym, name: u.name })) }));
@@ -93,7 +95,7 @@ export class PageOrganisationNewComponent extends CoreComponent implements OnIni
       units: data.units
     };
 
-    this.organisationsService.createOrganisation(body).subscribe(
+    this.adminOrganisationsService.createOrganisation(body).subscribe(
       response => {
         this.redirectTo(`admin/organisations/${response.id}`, { alert: 'organisationCreationSuccess' });
       },

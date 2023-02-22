@@ -4,7 +4,7 @@ import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { DatesHelper } from '@app/base/helpers';
-import { NotificationContextTypeEnum, UserTypeEnum } from '@app/base/enums';
+import { NotificationContextTypeEnum, UserRoleEnum } from '@app/base/enums';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
@@ -28,7 +28,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
   assessmentHasBeenSubmitted = false;
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
-  userType: '' | UserTypeEnum;
+  userType: '' | UserRoleEnum;
 
   logHistory: InnovationSupportsLogDTO[] = [];
   supportLogType = SupportLogType;
@@ -40,6 +40,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
 
   shouldShowUpdatedAt = false;
   isQualifyingAccessorRole = false;
+  userRole = UserRoleEnum;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -53,7 +54,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
     this.innovation = this.stores.context.getInnovation();
 
-    if(this.userType === UserTypeEnum.ACCESSOR) {
+    if(this.stores.authentication.isAccessorType()) {
       this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
     }
   }

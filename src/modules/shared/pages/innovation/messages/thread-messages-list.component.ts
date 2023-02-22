@@ -19,7 +19,7 @@ import { GetThreadInfoDTO, GetThreadMessagesListOutDTO, GetThreadParticipantsDTO
 })
 export class PageInnovationThreadMessagesListComponent extends CoreComponent implements OnInit {
 
-  selfUser: { id: string, urlBasePath: string };
+  selfUser: { id: string, urlBasePath: string, role: string };
   innovation: ContextInnovationType;
   threadId: string;
 
@@ -50,7 +50,8 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     this.selfUser = {
       id: this.stores.authentication.getUserId(),
-      urlBasePath: this.stores.authentication.userUrlBasePath()
+      urlBasePath: this.stores.authentication.userUrlBasePath(),
+      role: this.stores.authentication.getUserContextInfo().type
     };
 
     this.innovation = this.stores.context.getInnovation();

@@ -1,19 +1,20 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { PageOrganisationInfoComponent } from './organisation-info.component';
 
-import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
-import { AccessorOrganisationRoleEnum } from '@modules/stores/authentication/authentication.enums';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
+import { USER_INFO_ADMIN } from '@tests/data.mocks';
 
 
 describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent', () => {
@@ -22,6 +23,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
   let fixture: ComponentFixture<PageOrganisationInfoComponent>;
   let activatedRoute: ActivatedRoute;
   let organisationsService: OrganisationsService;
+  let authenticationStore: AuthenticationStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -35,8 +37,12 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
+    
+    authenticationStore = TestBed.inject(AuthenticationStore);
     activatedRoute = TestBed.inject(ActivatedRoute);
     organisationsService = TestBed.inject(OrganisationsService);
+
+    authenticationStore.getUserInfo = () => USER_INFO_ADMIN;
   });
 
 
@@ -49,12 +55,12 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
 
   it('should NOT have default information loaded', () => {
 
-    organisationsService.getOrganisationInfo = () => throwError('error');
+    organisationsService.getOrganisationInfo = () => throwError(() => new Error('error'));
 
     fixture = TestBed.createComponent(PageOrganisationInfoComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
 
+    fixture.detectChanges();
     expect(component.pageStatus).toBe('ERROR');
 
   });
@@ -120,7 +126,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
 
     };
 
-    component.onUnitUsersShowHideClicked('orgId01', 'invalidOrg');
+    component.onUnitUsersShowHideClicked('invalidOrg');
     expect(component.organisation.organisationUnits[0].showHideStatus).toEqual('closed');
 
   });
@@ -147,21 +153,27 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
       ]
 
     };
-    organisationsService.getOrganisationUnitUsers = () => of({
-      count: 10,
-      data: [{
-        id: 'user01', name: 'user01', email: 'some@email.com',
-        organisationRole: AccessorOrganisationRoleEnum.ACCESSOR, organisationRoleDescription: 'Accessor',
-        isActive: true, lockedAt: null
-      }]
-    });
+    organisationsService.getOrganisationUnitUsersList = () => of([
+  
+      {
+        id: 'user01',
+        organisationUnitUserId: '',
+        name: 'user01',
+        email: 'some@email.com',
+        role: UserRoleEnum.ACCESSOR,
+        roleDescription: 'Accessor',
+        isActive: true,
+        lockedAt: undefined
+      }
+    ]);
 
-    component.onUnitUsersShowHideClicked('orgId01', 'Unit01');
+    component.onUnitUsersShowHideClicked('Unit01');
     expect(component.organisation.organisationUnits[0].showHideStatus).toEqual('opened');
 
   });
 
   it('should throw error when getUsersByUnitId() called', () => {
+    organisationsService.getOrganisationUnitUsersList = () => throwError(()=> { new Error('error')});
 
     fixture = TestBed.createComponent(PageOrganisationInfoComponent);
     component = fixture.componentInstance;
@@ -183,9 +195,8 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
       ]
 
     };
-    organisationsService.getOrganisationUnitUsers = () => throwError('error');
 
-    component.onUnitUsersShowHideClicked('orgId01', 'Unit01');
+    component.onUnitUsersShowHideClicked('Unit01');
     expect(component.alert.type).toEqual('ERROR');
 
   });
@@ -213,7 +224,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
 
     };
 
-    component.onUnitUsersShowHideClicked('orgId01', 'Unit01');
+    component.onUnitUsersShowHideClicked('Unit01');
     expect(component.organisation.organisationUnits[0].showHideStatus).toEqual('closed');
 
   });
@@ -241,7 +252,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
 
     };
 
-    component.onUnitUsersShowHideClicked('orgId01', 'Unit01');
+    component.onUnitUsersShowHideClicked('Unit01');
     expect(component.organisation.organisationUnits[0].showHideStatus).toEqual('hidden');
 
   });

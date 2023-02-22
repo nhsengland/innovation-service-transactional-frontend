@@ -73,6 +73,7 @@ import { InnovationSectionDataResolver } from '@modules/shared/resolvers/innovat
 import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers/innovation-section-evidence-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationActionCompleteConfirmationComponent } from './pages/innovation/action-complete-confirmation/action-complete-confirmation.component';
+import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -394,6 +395,10 @@ const routes: Routes = [
                   { path: ':requestId', pathMatch: 'full', component: PageExportRecordInfoComponent, data: { breadcrumb: 'Export information' } },
                   { path: ':requestId/reject', pathMatch: 'full', component: InnovationExportRequestRejectComponent, data: { breadcrumb: 'Reject Export' } }
                 ]
+              },
+
+              {
+                path: 'everyone', pathMatch: 'full', component: PageEveryoneWorkingOnInnovationComponent
               }
 
             ]

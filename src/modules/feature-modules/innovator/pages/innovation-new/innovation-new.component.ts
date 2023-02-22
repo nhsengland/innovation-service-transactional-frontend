@@ -10,6 +10,8 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 import { InnovatorService } from '../../services/innovator.service';
 
 import { NEW_INNOVATION_QUESTIONS } from './innovation-new.config';
+import { HttpErrorResponse } from '@angular/common/http';
+import { InnovationErrorsEnum } from '@app/base/enums';
 
 
 @Component({
@@ -87,8 +89,12 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
         this.setRedirectAlertSuccess(`You have successfully registered the innovation '${body.name}'`);
         this.redirectTo(`innovator/innovations/${response.id}`)
       },
-      error: () => {
-        this.setAlertError('An error occurred when creating the innovation, Please try again or contact us for further help');
+      error: (err: HttpErrorResponse) => {
+        if(err.error.error === InnovationErrorsEnum.INNOVATION_ALREADY_EXISTS) {
+          this.setAlertError('An innovation with that name already exists. Try again with a new name.');
+        } else {
+          this.setAlertError('An error occurred when creating the innovation. Please try again or contact us for further help');
+        }
       }
     });
 

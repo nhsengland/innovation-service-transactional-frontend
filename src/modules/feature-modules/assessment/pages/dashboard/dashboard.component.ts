@@ -63,7 +63,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
     forkJoin([
       this.statisticsService.getUserStatisticsInfo(qp), 
-      this.innovationsService.getInnovationsList(this.latestInnovations.getAPIQueryParams())
+      this.innovationsService.getInnovationsList({ queryParams: this.latestInnovations.getAPIQueryParams() })
     ]).subscribe(([statistics, innovationsList]) => {
 
       this.latestInnovations.setData(innovationsList.data, innovationsList.count);
@@ -91,7 +91,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
 
   getFooter(counter: number): string {
-    return counter === 1 ? `${counter} is overdue` : `${counter} are overdue`
+    return counter === 1 ? `${counter} innovation is overdue` : `${counter} innovations are overdue`
   }
 
 

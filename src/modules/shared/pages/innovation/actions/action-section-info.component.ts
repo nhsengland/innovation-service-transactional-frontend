@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { UserRoleEnum } from '@app/base/enums';
 import { InnovationActionInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
@@ -85,6 +86,12 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
     this.getActionInfo();
 
+  }
+
+  canUpdateActionStatus(): boolean {
+    const accessorValidations = (this.stores.authentication.isAccessorType() && [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(this.action?.createdBy.role as UserRoleEnum));
+
+    return this.action?.status === 'SUBMITTED' && (this.action?.createdBy.role === this.stores.authentication.getUserType() || accessorValidations);
   }
 
   private getActionInfo() {

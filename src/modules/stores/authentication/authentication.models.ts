@@ -1,26 +1,30 @@
 import { DateISOType } from '@modules/core/interfaces/base.interfaces';
 
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum, UserTypeEnum } from './authentication.enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from './authentication.enums';
 import { PhoneUserPreferenceEnum } from './authentication.service';
+
 
 export class AuthenticationModel {
 
   isSignIn: boolean;
+
   userContext: {
-    type: '' | UserTypeEnum,
+    type: '' | UserRoleEnum,
     organisation?: {
       id: string,
       name: string,
-      role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
       organisationUnit: { id: string; name: string; acronym: string; }
     }
   };
+
   user?: {
     id: string,
     email: string,
     displayName: string,
-    type: '' | UserTypeEnum,
-    roles: UserRoleEnum[],
+    roles: {
+      id: string,
+      role: UserRoleEnum,
+    }[],
     contactByPhone: boolean,
     contactByEmail: boolean,
     contactByPhoneTimeframe: PhoneUserPreferenceEnum | null,

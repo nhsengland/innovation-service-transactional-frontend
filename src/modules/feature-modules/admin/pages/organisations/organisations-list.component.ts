@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 
-import { OrganisationsService } from '@modules/feature-modules/admin/services/organisations.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 @Component({
   selector: 'app-admin-pages-organisations-organisations-list',
@@ -38,7 +38,7 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    this.organisationsService.getOrganisationsList({ onlyActive: false }).subscribe({
+    this.organisationsService.getOrganisationsList({ unitsInformation: true, withInactive: true }).subscribe({
       next: (organisationUnits) => {
 
         this.organisations = organisationUnits.map(organisation => {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { UserTypeEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
@@ -38,7 +38,7 @@ export class PageInnovationActionTrackerCancelComponent extends CoreComponent im
         return this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${this.actionId}`);
       }
 
-      if(this.stores.authentication.isAssessmentType() && response.createdBy.role === UserTypeEnum.ACCESSOR) {
+      if(this.stores.authentication.isAssessmentType() && (response.createdBy.role === UserRoleEnum.ACCESSOR || response.createdBy.role === UserRoleEnum.QUALIFYING_ACCESSOR)) {
         return this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${this.actionId}`);
       }
       

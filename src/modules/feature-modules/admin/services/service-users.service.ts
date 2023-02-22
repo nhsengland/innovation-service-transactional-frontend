@@ -4,9 +4,10 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, TermsOfUseTypeEnum, UserTypeEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, TermsOfUseTypeEnum, UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
+import { UserSearchDTO } from '@modules/shared/dtos/users.dto';
 
 
 export type getUserMinimalInfoDTO = {
@@ -19,7 +20,7 @@ export type getUserFullInfoDTO = {
   email: string;
   phone: null | string;
   displayName: string;
-  type: UserTypeEnum;
+  type: UserRoleEnum;
   lockedAt: null | string;
   innovations: {
     id: string;
@@ -31,80 +32,8 @@ export type getUserFullInfoDTO = {
     size: null | string;
     role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum;
     isShadow: boolean;
-    units: { id: string, name: string, acronym: string, supportCount: null | string }[];
+    units: { id: string, name: string, acronym: string, supportCount: null | number }[];
   }[];
-};
-
-
-export type getLockUserRulesInDTO = {
-  lastAssessmentUserOnPlatform: { valid: boolean, meta?: {} },
-  lastAccessorUserOnOrganisation: {
-    valid: boolean,
-    meta?: { organisation: { id: string, name: string } }
-  },
-  lastAccessorUserOnOrganisationUnit: {
-    valid: boolean,
-    meta?: { unit: { id: string, name: string } }
-  },
-  lastAccessorFromUnitProvidingSupport: {
-    valid: boolean,
-    meta?: {
-      supports: {
-        count: number;
-        innovations: { innovationId: string, innovationName: string; unitId: string; unitName: string }[]
-      }
-    }
-  }
-};
-export type getLockUserRulesOutDTO = {
-  key: keyof getLockUserRulesInDTO;
-  valid: boolean;
-  meta: { [key: string]: any }
-};
-
-export type getOrganisationRoleRulesOutDTO = {
-  key: keyof getOrgnisationRoleRulesInDTO;
-  valid: boolean;
-  meta: { [key: string]: any }
-};
-
-export type getOrgnisationRoleRulesInDTO = {
-  lastAccessorUserOnOrganisationUnit: {
-    valid: boolean,
-    meta?: {
-      supports: {
-        count: number;
-        innovations: { innovationId: string, innovationName: string; unitId: string; unitName: string }[]
-      }
-    }
-  }
-};
-
-export type getOrganisationUnitRulesInDTO = {
-  lastAccessorUserOnOrganisation: {
-    valid: boolean,
-    meta?: { organisation: { id: string, name: string } }
-  },
-  lastAccessorFromUnitProvidingSupport: {
-    valid: boolean,
-    meta?: {
-      supports: {
-        count: number;
-        innovations: { innovationId: string, innovationName: string; unitId: string; unitName: string }[]
-      }
-    }
-  }
-  lastAccessorUserOnOrganisationUnit: {
-    valid: boolean,
-    meta?: { unit: { id: string, name: string } }
-  },
-};
-
-export type getOrganisationUnitRulesOutDTO = {
-
-  key: keyof getOrganisationUnitRulesInDTO;
-  valid: boolean;
-  meta?: { [key: string]: any }
 };
 
 export type changeUserTypeDTO = {
@@ -112,15 +41,12 @@ export type changeUserTypeDTO = {
   status: string;
 };
 
-export type AdminUserUpdateEndpointDTO = {
-  id: string;
-};
 
 export type searchUserEndpointInDTO = {
   id: string;
   email: string;
   displayName: string;
-  type: UserTypeEnum,
+  type: UserRoleEnum,
   lockedAt?: string;
   userOrganisations?: {
     id: string;
@@ -172,70 +98,37 @@ export class ServiceUsersService extends CoreService {
 
   getUserMinimalInfo(userId: string): Observable<getUserMinimalInfoDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('/user-admin/users/:userId').setPathParams({ userId }).setQueryParams({ model: 'minimal' });
+    const url = new UrlModel(this.API_USERS_URL).addPath('/v1/:userId').setPathParams({ userId }).setQueryParams({ model: 'minimal' });
     return this.http.get<getUserMinimalInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 
   getUserFullInfo(userId: string): Observable<getUserFullInfoDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('/user-admin/users/:userId').setPathParams({ userId }).setQueryParams({ model: 'full' });
+    const url = new UrlModel(this.API_USERS_URL).addPath('/v1/:userId').setPathParams({ userId }).setQueryParams({ model: 'full' });
     return this.http.get<getUserFullInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 
+  lockUser(userId: string): Observable<{ id: string }> {
 
-  getLockUserRules(userId: string): Observable<getLockUserRulesOutDTO[]> {
-
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/lock').setPathParams({ userId });
-    return this.http.get<getLockUserRulesInDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => Object.entries(response).map(([key, item]) => ({
-        key: key as keyof getLockUserRulesInDTO,
-        valid: item.valid,
-        meta: item.meta || {}
-      }))
-      )
-    );
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId });
+    return this.http.patch<{ id: string }>(url.buildUrl(), { accountEnabled: false }).pipe(take(1), map(response => response));
 
   }
 
-  lockUser(userId: string, securityConfirmation: { id: string, code: string }): Observable<AdminUserUpdateEndpointDTO> {
+  unlockUser(userId: string): Observable<{ id: string }> {
 
-    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
-
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId }).setQueryParams(qp);
-    return this.http.patch<AdminUserUpdateEndpointDTO>(url.buildUrl(), {accountEnabled: false}).pipe(
-      take(1),
-      map(response => response),
-      catchError(error => throwError(() => ({ id: error.error?.details?.id })))
-    );
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId });
+    return this.http.patch<{ id: string }>(url.buildUrl(), { accountEnabled: true }).pipe(take(1), map(response => response));
 
   }
 
-  unlockUser(userId: string, securityConfirmation: { id: string, code: string }): Observable<AdminUserUpdateEndpointDTO> {
 
-    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
+  createUser(body: { [key: string]: any }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId }).setQueryParams(qp);
-    return this.http.patch<AdminUserUpdateEndpointDTO>(url.buildUrl(), {accountEnabled: true}).pipe(
-      take(1),
-      map(response => response),
-      catchError(error => throwError(() => ({ id: error.error?.details?.id })))
-    );
-
-  }
-
-  createUser(body: { [key: string]: any }, securityConfirmation: { id: string, code: string }): Observable<{ id: string }> {
-
-    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
-
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users').setQueryParams(qp);
-    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response),
-      catchError(error => throwError(() => ({ id: error.error?.details.id })))
-    );
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users');
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
 
@@ -252,30 +145,42 @@ export class ServiceUsersService extends CoreService {
 
   }
 
+  // The search user isAdmin distinction is because of frontend pages and this should actually either accept a role|role[] or nothing and search for all roles
+  // keeping this way not to change current behavior
   searchUser(email: string, isAdmin: boolean): Observable<searchUserEndpointOutDTO[]> {
+    const roles = isAdmin ? [UserRoleEnum.ADMIN] : [UserRoleEnum.ACCESSOR, UserRoleEnum.ASSESSMENT, UserRoleEnum.INNOVATOR, UserRoleEnum.QUALIFYING_ACCESSOR]
 
-    const url = new UrlModel(this.API_URL).addPath('/user-admin/users').setQueryParams({ email, isAdmin });
-    return this.http.get<searchUserEndpointInDTO[]>(url.buildUrl()).pipe(
+    // this could probably be a call for a shared getUsersList method
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ email, userTypes: roles });
+    return this.http.get<UserSearchDTO[]>(url.buildUrl()).pipe(
       take(1),
-      map(response => response.map(item => ({ ...item, typeLabel: this.stores.authentication.getRoleDescription(item.type) })))
+      map(response => response.map(item => ({
+        id: item.id,
+        email: item.email,
+        displayName: item.name,
+        type: item.roles[0].role, // TODO: this is a hack while we are supporting only one role in the admin
+        typeLabel: this.stores.authentication.getRoleDescription(item.roles[0].role),
+        ...(item.lockedAt && { lockedAt: item.lockedAt }),
+        ...(item.organisations && {
+          userOrganisations: item.organisations.map(org => ({
+            id: org.id,
+            name: org.name,
+            acronym: org.acronym,
+            role: org.role,
+            ...(org.units && {
+              units: org.units.map(unit => ({
+                id: unit.id,
+                name: unit.name,
+                acronym: unit.acronym
+              }))
+            })
+          }))
+        })
+      })))
     );
 
   }
 
-  getUserRoleRules(userId: string): Observable<getOrganisationRoleRulesOutDTO[]> {
-
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-role').setPathParams({ userId });
-    return this.http.get<getOrgnisationRoleRulesInDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => Object.entries(response).map(([key, item]) => ({
-        key: key as keyof getOrgnisationRoleRulesInDTO,
-        valid: item.valid,
-        meta: item.meta || {}
-      }))
-      )
-    );
-
-  }
 
   changeUserRole(userId: string, body: changeUserRoleDTO): Observable<changeUserTypeDTO> {
 
@@ -304,22 +209,11 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  getOrgnisationUnitRules(userId: string): Observable<getOrganisationUnitRulesOutDTO[]> {
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-unit').setPathParams({ userId });
-    return this.http.get<getOrganisationUnitRulesInDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => Object.entries(response).map(([key, item]) => ({
-        key: key as keyof getOrganisationUnitRulesInDTO,
-        valid: item.valid,
-        meta: item.meta || {}
-      }))
-      )
-    );
-  }
 
   getListOfTerms(queryParams: APIQueryParamsType): Observable<getListOfTerms> {
+    const { filters, ...qp } = queryParams;
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/tou').setQueryParams({ ...queryParams });
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/tou').setQueryParams(qp);
 
     return this.http.get<getListOfTerms>(url.buildUrl()).pipe(
       take(1),
@@ -352,7 +246,7 @@ export class ServiceUsersService extends CoreService {
 
   getTermsById(id: string): Observable<GetListByIdDTO> {
 
-    const url = new UrlModel(this.API_URL).addPath('user-admin/tou/:id').setPathParams({ id });
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/tou/:id').setPathParams({ id });
     return this.http.get<GetListByIdDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
@@ -372,11 +266,13 @@ export class ServiceUsersService extends CoreService {
 
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
 
-      const url = new UrlModel(this.API_URL).addPath('user-admin/users').setQueryParams({ email: control.value });
+      const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ email: control.value });
       return this.http.head(url.buildUrl()).pipe(
         take(1),
         map(() => ({ customError: true, message: 'Email already exist' })),
-        catchError(() => of(null))
+        catchError((e) => {
+          return e.status === 404 ? of(null) : of({ customError: true, message: 'An error has occurred' });
+        })
       );
 
     };

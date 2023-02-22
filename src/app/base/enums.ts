@@ -1,6 +1,5 @@
 // Authentication store.
 export {
-  UserTypeEnum,
   UserRoleEnum,
   InnovatorOrganisationRoleEnum,
   AccessorOrganisationRoleEnum
@@ -11,3 +10,5 @@ export { TermsOfUseTypeEnum } from '@modules/stores/authentication/authenticatio
 
 // Environment store.
 export { NotificationContextTypeEnum, NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
+
+export { InnovationErrorsEnum } from '@modules/shared/enums/innovation-errors.enum'

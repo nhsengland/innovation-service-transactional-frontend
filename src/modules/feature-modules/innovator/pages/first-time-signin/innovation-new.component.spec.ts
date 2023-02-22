@@ -1,20 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { FirstTimeSigninInnovationNewComponent } from './innovation-new.component';
 
 import { InnovatorService } from '../../services/innovator.service';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { UserRoleEnum } from '@app/base/enums';
 
 
 describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninInnovationNewComponent', () => {
@@ -50,8 +51,8 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninInnovati
     organisationsService = TestBed.inject(OrganisationsService);
 
     organisationsService.getOrganisationUnitUsersList = () => of([
-      { id: 'orgId01', name: 'Org name 01', organisationUnitUserId: 'OrgUnitId01' },
-      { id: 'orgId02', name: 'Org name 02', organisationUnitUserId: 'OrgUnitId02' }
+      { id: 'orgId01', name: 'Org name 01', organisationUnitUserId: 'OrgUnitId01', role: UserRoleEnum.QUALIFYING_ACCESSOR, roleDescription: 'Qualifying accessor', isActive: true, lockedAt: undefined  },
+      { id: 'orgId02', name: 'Org name 02', organisationUnitUserId: 'OrgUnitId02', role: UserRoleEnum.ACCESSOR, roleDescription: 'Accessor', isActive: true, lockedAt: undefined   }
     ]);
 
   });

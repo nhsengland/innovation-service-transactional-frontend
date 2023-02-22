@@ -1,21 +1,22 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { AccessorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { StoresModule } from '@modules/stores';
 
 import { PageServiceUserChangeOrganisationUnitComponent } from './service-user-change-organisation-unit.component';
 
-import { changeUserTypeDTO, getOrganisationUnitRulesOutDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { changeUserTypeDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { getOrganisationUnitRulesOutDTO, UsersValidationRulesService } from '@modules/feature-modules/admin/services/users-validation-rules.service';
 import { FormEngineComponent } from '@modules/shared/forms';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisationUnitComponent', () => {
@@ -25,6 +26,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
   let routerSpy: jest.SpyInstance;
 
   let serviceUsersService: ServiceUsersService;
+  let usersValidationRulesService: UsersValidationRulesService;
   let organisationsService: OrganisationsService;
   let component: PageServiceUserChangeOrganisationUnitComponent;
   let fixture: ComponentFixture<PageServiceUserChangeOrganisationUnitComponent>;
@@ -47,6 +49,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
     routerSpy = jest.spyOn(router, 'navigate');
 
     serviceUsersService = TestBed.inject(ServiceUsersService);
+    usersValidationRulesService = TestBed.inject(UsersValidationRulesService);
     organisationsService = TestBed.inject(OrganisationsService);
 
     activatedRoute.snapshot.params = { userId: 'User01' };
@@ -57,28 +60,28 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
       email: 'user@email.com',
       displayName: 'User name',
       phone: '12345',
-      type: UserTypeEnum.ACCESSOR,
+      type: UserRoleEnum.ACCESSOR,
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
-        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: '2' }] }
+        { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: 2 }] }
       ]
     });
 
     organisationsService.getOrganisationsList = () => of([
       {
-        id: 'Org01', name: 'Org name 01', acronym: 'ORG01',
+        id: 'Org01', name: 'Org name 01', acronym: 'ORG01', isActive: true,
         organisationUnits: [
-          { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01' },
-          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02' },
-          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03' }
+          { id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', isActive: true },
+          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02', isActive: true },
+          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03', isActive: true }
         ]
       },
       {
-        id: 'Org02', name: 'Org name 02', acronym: 'ORG02',
+        id: 'Org02', name: 'Org name 02', acronym: 'ORG02', isActive: true,
         organisationUnits: [
-          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02' },
-          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03' }
+          { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02', isActive: true },
+          { id: 'orgUnitId03', name: 'Org Unit name 03', acronym: 'ORGu03', isActive: true }
         ]
       }
     ]);
@@ -89,7 +92,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
       { key: 'lastAccessorFromUnitProvidingSupport', valid: true, meta: {} }
     ];
 
-    serviceUsersService.getOrgnisationUnitRules = () => of(responseMock);
+    usersValidationRulesService.getOrganisationUnitRules = () => of(responseMock);
 
   });
 
@@ -116,7 +119,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
 
     serviceUsersService.getUserFullInfo = () => throwError('error');
     organisationsService.getOrganisationsList = () => throwError('error');
-    serviceUsersService.getOrgnisationUnitRules = () => throwError('error');
+    usersValidationRulesService.getOrganisationUnitRules = () => throwError('error');
 
     fixture = TestBed.createComponent(PageServiceUserChangeOrganisationUnitComponent);
     component = fixture.componentInstance;

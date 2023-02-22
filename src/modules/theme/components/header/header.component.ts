@@ -7,8 +7,8 @@ import { filter } from 'rxjs/operators';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { CookiesService } from '@modules/core/services/cookies.service';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
-import { UserTypeEnum } from '@app/base/enums';
 import { LocalStorageHelper } from '@app/base/helpers';
+import { UserRoleEnum } from '@app/base/enums';
 
 
 export type HeaderMenuBarItemType = {
@@ -67,8 +67,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     
     this.user = {
       displayName: user.displayName,
-      description: user.type === UserTypeEnum.ACCESSOR.toString() ? `Logged in as ${userRole} (${userContext.organisation?.organisationUnit.name})` : `Logged in as ${userRole}`,
-      showSwitchProfile: user.type === UserTypeEnum.ACCESSOR.toString() && (user.organisations.length > 1 || user.organisations[0].organisationUnits.length > 1)
+      description: this.authenticationStore.isAccessorType() ? `Logged in as ${userRole} (${userContext.organisation?.organisationUnit.name})` : `Logged in as ${userRole}`,
+      showSwitchProfile: this.authenticationStore.hasMultipleRoles()
     };
 
     this.signOutUrl = `${this.environmentVariablesStore.APP_URL}/signout`;
@@ -171,6 +171,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   signOut(): void {
     LocalStorageHelper.removeItem("orgUnitId");
+    LocalStorageHelper.removeItem("role");
   }
 
 

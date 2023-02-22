@@ -3,8 +3,11 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
+import { UserSearchDTO } from '../dtos/users.dto';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { APIQueryParamsType } from '@app/base/types';
 
 
 export type getAccessorsOrganisationsDTO = {
@@ -16,9 +19,55 @@ export type OrganisationsListDTO = {
   id: string,
   name: string,
   acronym: string,
-  organisationUnits: { id: string, name: string, acronym: string }[];
+  isActive: boolean,
+  organisationUnits: { id: string, name: string, acronym: string, isActive: boolean }[];
 };
 
+export type GetOrganisationInfoDTO = {
+  id: string;
+  name: string;
+  acronym: string;
+  isActive: boolean;
+  organisationUnits: {
+    id: string;
+    name: string;
+    acronym: string;
+    isActive: boolean;
+    userCount: number;
+  }[];
+};
+
+export type GetOrganisationUnitInfoDTO = {
+  id: string;
+  name: string;
+  acronym: string;
+  isActive: boolean;
+  userCount: number;
+};
+
+export type GetOrganisationUnitUsersDTO = {
+  id: string,
+  organisationUnitUserId: string,
+  name: string,
+  email?: string,
+  role: UserRoleEnum
+  roleDescription: string,
+  isActive: boolean,
+  lockedAt: string | undefined
+}[];
+
+export type GetOrganisationUnitInnovationsListDTO = {
+  count: number;
+  innovationsByStatus: {
+    status: InnovationSupportStatusEnum,
+    count: number
+  }[];
+  innovationsList: {
+    id: string,
+    name: string,
+    status: InnovationSupportStatusEnum
+  }[];
+};
 
 @Injectable()
 export class OrganisationsService extends CoreService {
@@ -41,33 +90,75 @@ export class OrganisationsService extends CoreService {
         id: item.id,
         name: item.name,
         acronym: item.acronym,
+        isActive: item.isActive,
         organisationUnits: query.unitsInformation ? item.organisationUnits : []
       })))
     );
 
   }
 
-  getOrganisationUnitUsersList(organisationUnitId: string, activeOnly = true): Observable<{ id: string, organisationUnitUserId: string, name: string }[]> {
+  // this could probably be a envelop for a shared getUsersList method and moved to the usersService
+  getOrganisationUnitUsersList(organisationUnitId: string, query: { email?: boolean, onlyActive?: boolean } ): Observable<GetOrganisationUnitUsersDTO> {
 
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ organisationUnitId, fields: ['organisations', 'units'], userTypes: [UserTypeEnum.ACCESSOR] });
-    return this.http.get<{
-      id: string,
-      name: string,
-      type: UserTypeEnum,
-      isActive: boolean,
-      organisations: {
-        name: string;
-        role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum;
-        units: { name: string, organisationUnitUserId: string }[]
-      }[]
-    }[]>(url.buildUrl()).pipe(
+    const fields = query.email ? ['email', 'organisations', 'units'] : ['organisations', 'units'];
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ organisationUnitId, fields, userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR], onlyActive: query.onlyActive ?? false });
+    return this.http.get<UserSearchDTO[]>(url.buildUrl()).pipe(
       take(1),
-      map(response => response.filter(r => !activeOnly || r.isActive )
-        .map(item => ({
+      map(response => response.map(item => {
+        // this will probably be easier once we use the roles instead of organisations
+        const organisation = item.organisations?.find( o => o.units?.find( u => u.id === organisationUnitId));
+        const organisationUnit = organisation?.units?.find( u => u.id === organisationUnitId);
+        
+        return {
           id: item.id,
-          organisationUnitUserId: item.organisations[0].units[0].organisationUnitUserId,
-          name: item.name
-        })))
+          organisationUnitUserId: organisationUnit?.organisationUnitUserId ?? '', // it should never be null or it wouldn't have been returned. This logic to identify the users should probably be revised
+          name: item.name,
+          email: item.email,
+          role: organisation!.role, //should always have a role
+          roleDescription: this.stores.authentication.getRoleDescription(organisation!.role),
+          isActive: item.isActive,
+          lockedAt: item.lockedAt
+        };
+      }))
+    );
+  }
+
+  getOrganisationInfo(organisationId: string, queryParams?: { onlyActiveUsers?: boolean }): Observable<GetOrganisationInfoDTO> {
+
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/organisations/:organisationId')
+      .setPathParams({ organisationId })
+      .setQueryParams({ onlyActiveUsers: queryParams?.onlyActiveUsers })
+    return this.http.get<GetOrganisationInfoDTO>(url.buildUrl()).pipe(take(1),
+      map(response => ({
+        id: response.id, name: response.name, acronym: response.acronym, isActive: response.isActive,
+        organisationUnits: response.organisationUnits.map(item => ({
+          id: item.id, name: item.name, acronym: item.acronym, isActive: item.isActive, userCount: item.userCount
+        }))
+      }))
+    );
+
+  }
+
+  getOrganisationUnitInfo(organisationId: string, organisationUnitId: string): Observable<GetOrganisationUnitInfoDTO> {
+
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/organisations/:organisationId/units/:organisationUnitId').setPathParams({ organisationId, organisationUnitId });
+    return this.http.get<GetOrganisationUnitInfoDTO>(url.buildUrl()).pipe(take(1),
+      map(response => response)
+    );
+  }
+
+  
+  getOrganisationUnitInnovationsList(organisationId: string, organisationUnitId: string, queryParams: APIQueryParamsType<{ onlyOpen: boolean }>): Observable<GetOrganisationUnitInnovationsListDTO> {
+
+    const { filters, ...qParams } = queryParams;
+    const qp = {
+      ...qParams,
+      onlyOpen: filters.onlyOpen ? 'true' : 'false'
+    };
+
+    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId/innovations').setPathParams({ organisationId, organisationUnitId }).setQueryParams(qp);
+    return this.http.get<GetOrganisationUnitInnovationsListDTO>(url.buildUrl()).pipe(take(1),
+      map(response => response)
     );
 
   }

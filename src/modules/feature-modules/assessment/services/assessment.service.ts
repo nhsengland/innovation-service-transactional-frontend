@@ -3,23 +3,22 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { MappedObjectType } from '@app/base/types';
 import { UrlModel } from '@app/base/models';
+import { MappedObjectType } from '@app/base/types';
 
 import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
 @Injectable()
 export class AssessmentService extends CoreService {
 
   constructor() { super(); }
 
 
-  getOverdueAssessments(status: InnovationStatusEnum[]): Observable<{ overdue: number }> {
+  getOverdueAssessments(status: InnovationStatusEnum[], assignedToMe?: boolean): Observable<{ overdue: number }> {
 
     // Overdue assessments only exists on these 2 statuses. If more is passed, is removed.
     status = status.filter(item => [InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT, InnovationStatusEnum.NEEDS_ASSESSMENT].includes(item));
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/overdue-assessments').setQueryParams({ status });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/overdue-assessments').setQueryParams({ status, assignedToMe });
     return this.http.get<{ overdue: number }>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
@@ -59,26 +58,4 @@ export class AssessmentService extends CoreService {
     );
   }
 
-  getAssessmentUsersList(): Observable<{ id: string, name: string }[]> {
-
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ userTypes: [UserTypeEnum.ASSESSMENT] });
-    return this.http.get<{
-      id: string,
-      name: string,
-      type: UserTypeEnum,
-      isActive: boolean,
-      organisations: {
-        name: string;
-        role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum;
-        units: { name: string, organisationUnitUserId: string }[]
-      }[]
-    }[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response.filter(item => item.isActive).map(item => ({
-        id: item.id,
-        name: item.name
-      })))
-    );
-
-  }
 }

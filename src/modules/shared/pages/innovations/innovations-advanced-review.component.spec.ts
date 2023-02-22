@@ -84,7 +84,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
   it('should have default values', () => {
 
     organisationsService.getOrganisationsList = () => of([
-      { id: 'orgId01', name: 'Org name 01', acronym: 'OrgAcronym01', organisationUnits: [] }
+      { id: 'orgId01', name: 'Org name 01', acronym: 'OrgAcronym01', isActive: true, organisationUnits: [] }
     ]);
 
     fixture = TestBed.createComponent(PageInnovationsAdvancedReviewComponent);

@@ -23,13 +23,11 @@ import { PageNotFoundComponent } from './pages/error/not-found.component';
 // // Innovation.
 import { PageActionStatusListComponent } from './pages/innovation/actions/action-status-list.component';
 import { PageInnovationActivityLogComponent } from './pages/innovation/activity-log/innovation-activity-log.component';
-import { PageInnovationCommentsEditComponent } from './pages/innovation/comments/comments-edit.component';
-import { PageInnovationCommentsListComponent } from './pages/innovation/comments/comments-list.component';
-import { PageInnovationCommentsNewComponent } from './pages/innovation/comments/comments-new.component';
 import { PageInnovationThreadMessageEditComponent } from './pages/innovation/messages/thread-message-edit.component';
 import { PageInnovationThreadMessagesListComponent } from './pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationThreadNewComponent } from './pages/innovation/messages/thread-new.component';
 import { PageInnovationThreadsListComponent } from './pages/innovation/messages/threads-list.component';
+import { PageEveryoneWorkingOnInnovationComponent } from './pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 import { PageInnovationRecordComponent } from './pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionInfoComponent } from './pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from './pages/innovation/sections/section-evidence-info.component';
@@ -74,6 +72,7 @@ import { NotificationsService } from './services/notifications.service';
 import { OrganisationsService } from './services/organisations.service';
 import { TermsOfUseService } from './services/terms-of-use.service';
 import { StatisticsService } from './services/statistics.service';
+import { UsersService } from './services/users.service';
 
 
 @NgModule({
@@ -103,13 +102,11 @@ import { StatisticsService } from './services/statistics.service';
     // // Innovation.
     PageActionStatusListComponent,
     PageInnovationActivityLogComponent,
-    PageInnovationCommentsEditComponent,
-    PageInnovationCommentsListComponent,
-    PageInnovationCommentsNewComponent,
     PageInnovationThreadMessageEditComponent,
     PageInnovationThreadMessagesListComponent,
     PageInnovationThreadNewComponent,
     PageInnovationThreadsListComponent,
+    PageEveryoneWorkingOnInnovationComponent,
     PageInnovationRecordComponent,
     PageInnovationSectionInfoComponent,
     PageInnovationSectionEvidenceInfoComponent,
@@ -154,7 +151,8 @@ import { StatisticsService } from './services/statistics.service';
     NotificationsService,
     OrganisationsService,
     TermsOfUseService,
-    StatisticsService
+    StatisticsService,
+    UsersService
   ],
   exports: [
     CommonModule,

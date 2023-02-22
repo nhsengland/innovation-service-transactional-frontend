@@ -6,14 +6,15 @@ import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { AccessorOrganisationRoleEnum, UserTypeEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { StoresModule } from '@modules/stores';
 
 import { PageServiceUserChangeRoleComponent } from './service-user-change-role.component';
 
-import { getOrganisationRoleRulesOutDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { getOrganisationRoleRulesOutDTO, UsersValidationRulesService } from '@modules/feature-modules/admin/services/users-validation-rules.service';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleComponent', () => {
@@ -23,6 +24,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
   let routerSpy: jest.SpyInstance;
 
   let serviceUsersService: ServiceUsersService;
+  let usersValidationRulesService: UsersValidationRulesService;
 
   let component: PageServiceUserChangeRoleComponent;
   let fixture: ComponentFixture<PageServiceUserChangeRoleComponent>;
@@ -45,6 +47,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
     routerSpy = jest.spyOn(router, 'navigate');
 
     serviceUsersService = TestBed.inject(ServiceUsersService);
+    usersValidationRulesService = TestBed.inject(UsersValidationRulesService);
 
     activatedRoute.snapshot.params = { userId: 'User01' };
     activatedRoute.snapshot.data = { user: { userId: 'User01', displayName: 'User Name' } };
@@ -54,7 +57,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
       email: 'user@email.com',
       displayName: 'User name',
       phone: '12345',
-      type: UserTypeEnum.ACCESSOR,
+      type: UserRoleEnum.ACCESSOR,
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
@@ -79,7 +82,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
         meta: {}
       }
     ];
-    serviceUsersService.getUserRoleRules = () => of(responseMock);
+    usersValidationRulesService.getUserRoleRules = () => of(responseMock);
     const expected = responseMock;
 
     fixture = TestBed.createComponent(PageServiceUserChangeRoleComponent);
@@ -103,14 +106,14 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
       email: 'user@email.com',
       displayName: 'User name',
       phone: '12345',
-      type: UserTypeEnum.ACCESSOR,
+      type: UserRoleEnum.ACCESSOR,
       lockedAt: '2020-01-01T00:00:00.000Z',
       innovations: [{ id: 'inn1', name: 'innovation' }],
       userOrganisations: [
         { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: true, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR, units: [] }
       ]
     });
-    serviceUsersService.getUserRoleRules = () => of(responseMock);
+    usersValidationRulesService.getUserRoleRules = () => of(responseMock);
     const expected = responseMock;
 
     fixture = TestBed.createComponent(PageServiceUserChangeRoleComponent);
@@ -123,7 +126,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
 
   it('should NOT have initial information loaded', () => {
 
-    serviceUsersService.getUserRoleRules = () => throwError('error');
+    usersValidationRulesService.getUserRoleRules = () => throwError('error');
 
     fixture = TestBed.createComponent(PageServiceUserChangeRoleComponent);
     component = fixture.componentInstance;

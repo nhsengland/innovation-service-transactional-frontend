@@ -7,7 +7,7 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
-import { UserTypeEnum } from '@modules/stores/authentication/authentication.enums';
+import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { getSectionTitle } from '@modules/stores/innovation/innovation.config';
 
@@ -35,7 +35,7 @@ export type InnovationsListFiltersType = {
   assignedToMe?: boolean,
   suggestedOnly?: boolean,
   latestWorkedByMe?: boolean,
-  fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications' | 'statistics')[]
+  fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications' | 'statistics' | 'groupedStatus')[]
 }
 
 export type InnovationsActionsListFilterType = {
@@ -63,7 +63,7 @@ export type GetThreadsListDTO = {
       createdBy: {
         id: string;
         name: string;
-        type: UserTypeEnum;
+        type: UserRoleEnum;
         organisationUnit?: { id: string, name: string, acronym: string; };
       };
     };
@@ -74,7 +74,7 @@ export type GetThreadInfoDTO = {
   id: string;
   subject: string;
   createdAt: DateISOType;
-  createdBy: { id: string, name: string, type: UserTypeEnum; };
+  createdBy: { id: string, name: string, type: UserRoleEnum; };
 };
 
 export type GetThreadMessageInfoDTO = {
@@ -88,7 +88,7 @@ export type GetThreadParticipantsDTO = {
     id: string;
     identityId: string;
     name: string;
-    type: UserTypeEnum;
+    type: UserRoleEnum;
     organisationUnit?: { id: string, acronym: string}
   }[]
 };
@@ -102,7 +102,7 @@ export type GetThreadMessagesListInDTO = {
     createdBy: {
       id: string;
       name: string;
-      type: UserTypeEnum;
+      role: UserRoleEnum;
       organisation?: { id: string, name: string, acronym: string; };
       organisationUnit?: { id: string, name: string, acronym: string; };
     };
@@ -183,7 +183,7 @@ export class InnovationsService extends CoreService {
   constructor() { super(); }
 
 
-  getInnovationsList(queryParams?: APIQueryParamsType<InnovationsListFiltersType>): Observable<InnovationsListDTO> {
+    getInnovationsList({ queryParams, fields = [] }: { queryParams?: APIQueryParamsType<InnovationsListFiltersType>, fields?: InnovationsListFiltersType['fields']} = {}): Observable<InnovationsListDTO> {
 
     if (!queryParams) {
       queryParams = { take: 100, skip: 0, order: { name: 'ASC' }, filters: {} };
@@ -205,23 +205,24 @@ export class InnovationsService extends CoreService {
       ...(filters.assignedToMe !== undefined ? { assignedToMe: filters.assignedToMe } : {}),
       ...(filters.suggestedOnly != undefined ? { suggestedOnly: filters.suggestedOnly } : {}),
       ...(filters.latestWorkedByMe != undefined ? { latestWorkedByMe: filters.latestWorkedByMe } : {}),
-      fields: [] as InnovationsListFiltersType['fields']
+      fields
     };
 
     if(!filters.latestWorkedByMe) {
       switch (requestUserType) {
-        case UserTypeEnum.INNOVATOR:
-          qp.fields = ['statistics', 'assessment', 'supports'];
+        case UserRoleEnum.INNOVATOR:
+          qp.fields.push('statistics', 'assessment', 'supports');
           break;
-        case UserTypeEnum.ASSESSMENT:
-          qp.fields = ['isAssessmentOverdue', 'assessment', 'supports'];
+        case UserRoleEnum.ASSESSMENT:
+          qp.fields.push('isAssessmentOverdue', 'assessment', 'supports')
           break;
-        case UserTypeEnum.ACCESSOR:
+        case UserRoleEnum.ACCESSOR:
+        case UserRoleEnum.QUALIFYING_ACCESSOR:
           qp.status = [InnovationStatusEnum.IN_PROGRESS];
-          qp.fields = ['assessment', 'supports', 'notifications'];
+          qp.fields.push('assessment', 'supports', 'notifications');
           break;
-        case UserTypeEnum.ADMIN:
-          qp.fields = ['assessment', 'supports'];
+        case UserRoleEnum.ADMIN:
+          qp.fields.push('assessment', 'supports');
           break;
         default:
           break;
@@ -251,16 +252,17 @@ export class InnovationsService extends CoreService {
     };
 
     switch (requestUserType) {
-      case UserTypeEnum.INNOVATOR:
+      case UserRoleEnum.INNOVATOR:
         qp.fields = ['assessment', 'supports'];
         break;
-      case UserTypeEnum.ASSESSMENT:
+      case UserRoleEnum.ASSESSMENT:
         qp.fields = ['assessment'];
         break;
-      case UserTypeEnum.ACCESSOR:
+      case UserRoleEnum.ACCESSOR:
+      case UserRoleEnum.QUALIFYING_ACCESSOR:
         qp.fields = ['assessment', 'supports'];
         break;
-      case UserTypeEnum.ADMIN:
+      case UserRoleEnum.ADMIN:
         qp.fields = ['assessment', 'supports'];
         break;
       default:
@@ -479,7 +481,7 @@ export class InnovationsService extends CoreService {
         count: response.count,
         messages: response.messages.map(message => ({
           ...message,
-          createdBy: { ...message.createdBy, typeDescription: this.stores.authentication.getUserTypeDescription(message.createdBy.type) }
+          createdBy: { ...message.createdBy, typeDescription: this.stores.authentication.getRoleDescription(message.createdBy.role) }
         }))
       }))
     );

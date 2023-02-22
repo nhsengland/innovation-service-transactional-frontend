@@ -128,7 +128,15 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
     client.trackTrace({
       severity: SeverityLevel.Information,
       message: '/session called and user is authenticated',
-      properties: { data: req.user }
+      properties: {
+        params: req.params,
+        query: req.query,
+        path: req.path,
+        route: req.route,
+        authenticatedUser: (req.user as any)?.oid,
+        session: req.session,
+        sessionId: req.sessionID
+      }
     });
     res.send('OK');
 
@@ -137,7 +145,13 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
     client.trackTrace({
       severity: SeverityLevel.Information,
       message: '/session called and user is NOT authenticated',
-      properties: { data: { session: req.session, sessionId: req.sessionID, headers: req.headers, path: req.path } }
+      properties: {
+        params: req.params,
+        query: req.query,
+        path: req.path,
+        route: req.route,
+        authenticatedUser: (req.user as any)?.oid,
+      }
     });
     res.status(401).send();
 
@@ -193,18 +207,23 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
 
 // Login endpoint - AD OpenIdConnect
 authenticationRouter.use(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res, next) => {
-  const client = getAppInsightsClient(req);
-
   passport.authenticate('signInStrategy', {
     ...req.query.back && {customState: req.query.back}
   } as any, (err, user, info) => {
 
     if (err) {
+      const client = getAppInsightsClient(req);
       client.trackTrace({
         message: '/signin - autenticate error',
         severity: SeverityLevel.Error,
         properties: {
-          data: { session: req.session, sessionId: req.sessionID, headers: req.headers, path: req.path },
+          params: req.params,
+          query: req.query,
+          path: req.path,
+          route: req.route,
+          authenticatedUser: (req.user as any)?.oid,
+          session: req.session,
+          sessionId: req.sessionID
         }
       });
 
@@ -213,11 +232,18 @@ authenticationRouter.use(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res, next) => 
     }
 
     if (!user) {
+      const client = getAppInsightsClient(req);
       client.trackTrace({
         message: '/signin - user profile undefined',
         severity: SeverityLevel.Information,
         properties: {
-          data: { session: req.session, sessionId: req.sessionID, headers: req.headers, path: req.path },
+          params: req.params,
+          query: req.query,
+          path: req.path,
+          route: req.route,
+          authenticatedUser: (req.user as any)?.oid,
+          session: req.session,
+          sessionId: req.sessionID
         }
       });
 
@@ -226,11 +252,18 @@ authenticationRouter.use(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res, next) => 
 
     req.login(user, (err) => {
       if (err) {
+        const client = getAppInsightsClient(req);
         client.trackTrace({
           message: '/signin - login error',
           severity: SeverityLevel.Error,
           properties: {
-            data: { session: req.session, sessionId: req.sessionID, headers: req.headers, path: req.path },
+            params: req.params,
+            query: req.query,
+            path: req.path,
+            route: req.route,
+            authenticatedUser: (req.user as any)?.oid,
+            session: req.session,
+            sessionId: req.sessionID
           }
         });
 

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
-import { FormControl, FormGroup } from '@app/base/forms';
+import { UserRoleEnum } from '@app/base/enums';
+import { FormGroup } from '@app/base/forms';
 import { LinkType } from '@app/base/types';
 
 import { searchUserEndpointOutDTO, ServiceUsersService } from '../../services/service-users.service';
@@ -24,6 +25,7 @@ export class PageServiceUserFindComponent extends CoreComponent {
   }, { updateOn: 'change' }); // Needs to be 'change' to allow submtitting using the enter key.
 
   usersList: searchUserEndpointOutDTO[] = [];
+  userRoleEnum = UserRoleEnum
 
 
   constructor(
