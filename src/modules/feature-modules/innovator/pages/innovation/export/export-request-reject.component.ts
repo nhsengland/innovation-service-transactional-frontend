@@ -37,7 +37,7 @@ export class InnovationExportRequestRejectComponent extends CoreComponent implem
   ngOnInit(): void {
 
     this.setPageTitle('Reject request', { size: 'l', width: '2.thirds' });
-    this.setBackLink('Go back', `/innovator/innovations/${this.innovationId}/export/request/${this.requestId}`);
+    this.setBackLink('Go back', `/innovator/innovations/${this.innovationId}/export/${this.requestId}`);
 
     this.innovationsService.getExportRequestInfo(this.innovationId, this.requestId).subscribe(response => {
 
