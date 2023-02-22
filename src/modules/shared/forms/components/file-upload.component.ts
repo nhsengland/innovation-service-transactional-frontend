@@ -9,7 +9,7 @@ import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.he
 import { LoggerService, Severity } from '@modules/core/services/logger.service';
 
 import { FileTypes, FileUploadType } from '../engine/types/form-engine.types';
-import { CoreComponent } from '@app/base';
+import { FormEngineHelper } from '@app/base/forms';
 
 
 @Component({
@@ -19,7 +19,7 @@ import { CoreComponent } from '@app/base';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class FormFileUploadComponent extends CoreComponent implements OnInit {
+export class FormFileUploadComponent implements OnInit {
 
   @Input() id?: string;
   @Input() arrayName = '';
@@ -52,6 +52,8 @@ export class FormFileUploadComponent extends CoreComponent implements OnInit {
   files: { id: string, file: File }[] = [];
   previousUploadedFiles: FileUploadType[] = [];
 
+  hasError = false;
+  error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
   isLoadingFile = false;
 
   fileConfig: {
@@ -70,14 +72,20 @@ export class FormFileUploadComponent extends CoreComponent implements OnInit {
   get fieldArrayControl(): FormArray { return this.parentFieldControl?.get(this.arrayName) as FormArray; }
   get fieldArrayValues(): { id: string, name: string, url: string }[] { return this.fieldArrayControl.value as { id: string, name: string, url: string }[]; }
 
+  // Accessibility.
+  get ariaDescribedBy(): null | string {
+    let s = '';
+    if (this.description) { s += `hint-${this.id}`; }
+    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    return s || null;
+  }
+
   constructor(
     private injector: Injector,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private loggerService: LoggerService
-  ) {
-    super();
-   }
+  ) {}
 
   ngOnInit(): void {
 
@@ -107,8 +115,6 @@ export class FormFileUploadComponent extends CoreComponent implements OnInit {
   }
 
   onChange(event: NgxDropzoneChangeEvent): void {
-    this.resetAlert();
-    
     if (!this.fileConfig.httpUploadUrl) {
       console.error('No httpUploadUrl provided for file upload.');
     }
@@ -117,12 +123,14 @@ export class FormFileUploadComponent extends CoreComponent implements OnInit {
       const sizeExceeded = event.rejectedFiles.find((i) => i.reason === 'size');
 
       if (sizeExceeded) {
-        this.setAlertError('The file exceed the maximum size of 9MB.');
+        this.hasError = true;
+        this.error = FormEngineHelper.getValidationMessage({maxFileSize: 'true'});
       }
     }
 
     if (event.addedFiles.length > 0) {
       this.isLoadingFile = true;
+      this.hasError = false;
     }
 
     event.addedFiles.forEach(file => {
