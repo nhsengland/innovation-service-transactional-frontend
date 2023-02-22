@@ -114,7 +114,9 @@ export class FormFileUploadComponent implements OnInit {
     );
   }
 
-  onChange(event: NgxDropzoneChangeEvent): void {
+  onChange(event: NgxDropzoneChangeEvent): void { 
+    this.hasError = false;
+    
     if (!this.fileConfig.httpUploadUrl) {
       console.error('No httpUploadUrl provided for file upload.');
     }
@@ -129,8 +131,15 @@ export class FormFileUploadComponent implements OnInit {
     }
 
     if (event.addedFiles.length > 0) {
-      this.isLoadingFile = true;
-      this.hasError = false;
+      const emptyFile = event.addedFiles.find((i) => i.size === 0);
+
+      if (emptyFile) {
+        event.addedFiles = event.addedFiles.filter(i => i.size !== 0);
+        this.hasError = true;
+        this.error = FormEngineHelper.getValidationMessage({emptyFile: 'true'});
+      } else {
+        this.isLoadingFile = true;
+      }
     }
 
     event.addedFiles.forEach(file => {
