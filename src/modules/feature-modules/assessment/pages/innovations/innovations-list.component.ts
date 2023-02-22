@@ -11,7 +11,7 @@ import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.
 import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { DatesHelper } from '@app/base/helpers';
 import { DateISOType } from '@app/base/types';
 import { CustomValidators } from '@modules/shared/forms';
@@ -71,10 +71,10 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
   anyFilterSelected = false;
 
   filters: FiltersType[] = [
-    { key: 'groupedStatuses', title: 'Status', showHideStatus: 'closed', type: FilterTypeEnum.CHECKBOX, selected: [], active: false },
-    { key: 'submittedDate', title: 'Filter by date', showHideStatus: 'closed', type: FilterTypeEnum.DATERANGE, selected: [], active: false },
-    { key: 'mainCategories', title: 'Primary category', showHideStatus: 'closed', type: FilterTypeEnum.CHECKBOX, selected: [], active: false },
-    { key: 'locations', title: 'Location', showHideStatus: 'closed', type: FilterTypeEnum.CHECKBOX, selected: [], active: false },
+    { key: 'groupedStatuses', title: 'Status', showHideStatus: 'closed', type: FilterTypeEnum.CHECKBOX, selected: [], active: true },
+    { key: 'submittedDate', title: 'Filter by date', showHideStatus: 'closed', type: FilterTypeEnum.DATERANGE, selected: [], active: true },
+    { key: 'mainCategories', title: 'Primary category', showHideStatus: 'closed', type: FilterTypeEnum.CHECKBOX, selected: [], active: true },
+    { key: 'locations', title: 'Location', showHideStatus: 'closed', type: FilterTypeEnum.CHECKBOX, selected: [], active: true },
   ];
 
   datasets: DatasetType = {
@@ -117,31 +117,40 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
     this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT, InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
 
-    this.subscriptions.push(this.activatedRoute.queryParams
-      .subscribe(({ status }) => {
+    this.subscriptions.push(
+      this.activatedRoute.queryParams
+        .subscribe(({ status }: Params) => {
 
-        let preSelectedStatus: InnovationGroupedStatusEnum[] = [];
+          let preSelectedStatus: InnovationGroupedStatusEnum[] | undefined;
 
-        switch (status) {
-          case 'COMPLETED':
-            this.showOnlyCompleted = true;
-            this.setPageTitle('Assessment completed innovations');
-            this.setBackLink('Go back', `${this.userUrlBasePath()}/innovations`);
-            this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_SUPPORT, InnovationGroupedStatusEnum.RECEIVING_SUPPORT, InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT];
-            break;
-          case 'NEEDS_ASSESSMENT':
-            this.form.get('assignedToMe')?.setValue(true);
-            preSelectedStatus = [InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
-            break;
-          case 'WAITING_NEEDS_ASSESSMENT':
-            preSelectedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT];
-            break;
-          default:
-        }
+          switch (status) {
+            case 'COMPLETED':
+              this.showOnlyCompleted = true;
+              this.setPageTitle('Assessment completed innovations');
+              this.setBackLink('Go back', `${this.userUrlBasePath()}/innovations`);
+              this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_SUPPORT, InnovationGroupedStatusEnum.RECEIVING_SUPPORT, InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT];
+              break;
+            case 'NEEDS_ASSESSMENT':
+              this.form.get('assignedToMe')?.setValue(true);
+              preSelectedStatus = [InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
+              break;
+            case 'WAITING_NEEDS_ASSESSMENT':
+              preSelectedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT];
+              break;
+            default:
+          }
 
-        preSelectedStatus.forEach(status => (this.form.get('groupedStatuses') as FormArray).push(new FormControl(status)))
+          if (preSelectedStatus) {
+            preSelectedStatus.forEach(status => (this.form.get('groupedStatuses') as FormArray).push(new FormControl(status)));
 
-      })
+            const groupedStatusesFilter = this.filters.find(f => f.key === 'groupedStatuses');
+            if (groupedStatusesFilter) {
+              groupedStatusesFilter.showHideStatus = 'opened';
+            }
+          }
+
+
+        })
     );
 
     this.innovationsList.setVisibleColumns({
@@ -152,11 +161,10 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     }).setOrderBy('submittedAt', 'descending');
 
     this.reuseRouteStrategy();
+
   }
 
   ngOnInit(): void {
-
-    let filters: FilterKeysType[] = ['groupedStatuses', 'locations', 'mainCategories'];
 
     const descriptions = new Map([
       [InnovationGroupedStatusEnum.AWAITING_SUPPORT, 'Waiting for an organisation unit to start supporting this innovation.'],
@@ -167,8 +175,6 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     this.datasets.groupedStatuses = this.availableGroupedStatus
       .map(groupedStatus => ({ label: this.translate(`shared.catalog.innovation.grouped_status.${groupedStatus}.name`), value: groupedStatus, description: descriptions.get(groupedStatus) }))
 
-    this.filters = this.filters.map(filter => ({ ...filter, active: filters.includes(filter.key) }));
-
     this.subscriptions.push(
       this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange())
     );
@@ -176,7 +182,6 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     this.onFormChange();
 
   }
-
 
   getInnovationsList(): void {
 

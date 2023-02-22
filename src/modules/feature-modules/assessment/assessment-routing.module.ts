@@ -20,7 +20,7 @@ import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationChangeAssessorComponent } from './pages/innovation/change-assessor/change-assessor.component';
 // // Innovations.
-import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
+import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
 
 // Shared module pages.
 // // Account.
@@ -57,7 +57,6 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
 import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
-import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
 
 
 const header: RoutesDataType['header'] = {
