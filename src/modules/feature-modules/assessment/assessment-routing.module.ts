@@ -96,15 +96,7 @@ const routes: Routes = [
         data: { breadcrumb: 'Innovations' },
         children: [
           {
-            path: '', pathMatch: 'full', component: ReviewInnovationsComponent,
-            data: {
-              breadcrumb: null,
-              layout: { type: 'full', backgroundColor: 'bg-color-white' }
-            }
-          },
-
-          {
-            path: 'list', pathMatch: 'full', component: InnovationsListComponent,
+            path: '', pathMatch: 'full', component: InnovationsListComponent,
             data: {
               breadcrumb: null,
               layout: { type: 'full', backgroundColor: 'bg-color-white' }
@@ -163,9 +155,9 @@ const routes: Routes = [
                       },
                       {
                         path: 'change-assessor', pathMatch: 'full', component: InnovationChangeAssessorComponent,
-                        data: { 
+                        data: {
                           breadcrumb: null,
-                          layout: { type: 'full' } 
+                          layout: { type: 'full' }
                         }
                       }]
                   }
@@ -351,7 +343,7 @@ const routes: Routes = [
           { path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent },
         ]
       },
-      
+
 
       {
         path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent,

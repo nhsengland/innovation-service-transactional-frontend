@@ -373,22 +373,22 @@ export const locale = {
             AWAITING_NEEDS_ASSESSMENT: {
               name: 'Awaiting needs assessment',
               cssColorClass: 'nhsuk-tag--yellow',
-              description: 'The needs assessment team will review the innovation record within 5 working days from submission.'
+              description: 'The innovation has been submitted for needs assessment. The needs assessment team must start the assessment process within 2 working days.'
             },
             NEEDS_ASSESSMENT: {
-              name: 'Needs assessment',
+              name: 'Needs assessment in progress',
               cssColorClass: 'nhsuk-tag--blue',
-              description: 'Needs assessment is in progress.'
+              description: 'A needs assessor has started the needs assessment process.'
             },
             AWAITING_SUPPORT: {
               name: 'Awaiting support',
               cssColorClass: 'nhsuk-tag--grey',
-              description: 'Waiting for an organisation unit to start supporting this innovation.'
+              description: 'Needs assessment is completed. Waiting for an organisation unit to start supporting this innovation.'
             },
             RECEIVING_SUPPORT: {
               name: 'Receiving support',
               cssColorClass: 'nhsuk-tag--green',
-              description: 'At least one organisation unit is engaging with this innovation.'
+              description: 'At least one organisation unit is supporting  this innovation with an "engaging" or "further info" support status.'
             },
             NO_ACTIVE_SUPPORT: {
               name: 'No active support',
@@ -398,7 +398,7 @@ export const locale = {
             AWAITING_NEEDS_REASSESSMENT: {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
-              description: 'This innovation has been resent for a needs assessment review.'
+              description: 'The innovation has been resent for needs assessment review.'
             },
             WITHDRAWN: {
               name: 'Withdrawn',

@@ -11,6 +11,7 @@ import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.
 import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
 
+import { ActivatedRoute } from '@angular/router';
 import { DatesHelper } from '@app/base/helpers';
 import { DateISOType } from '@app/base/types';
 import { CustomValidators } from '@modules/shared/forms';
@@ -59,8 +60,8 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
   form = new FormGroup({
     search: new FormControl(''),
-    assignedToMe: new FormControl(true),
-    groupedStatuses: new FormArray([]),
+    assignedToMe: new FormControl(false),
+    groupedStatuses: new FormArray<FormControl<InnovationGroupedStatusEnum>>([]),
     mainCategories: new FormArray([]),
     locations: new FormArray([]),
     submittedStartDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
@@ -68,6 +69,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
   }, { updateOn: 'blur' });
 
   anyFilterSelected = false;
+
   filters: FiltersType[] = [
     { key: 'groupedStatuses', title: 'Status', showHideStatus: 'closed', type: FilterTypeEnum.CHECKBOX, selected: [], active: false },
     { key: 'submittedDate', title: 'Filter by date', showHideStatus: 'closed', type: FilterTypeEnum.DATERANGE, selected: [], active: false },
@@ -100,13 +102,47 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     return this.filters.filter(i => i.selected.length > 0);
   }
 
+  showOnlyCompleted = false;
+
+  availableGroupedStatus: InnovationGroupedStatusEnum[];
+
   constructor(
+    private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
 
     super();
 
     this.setPageTitle('Innovations');
+
+    this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT, InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
+
+    this.subscriptions.push(this.activatedRoute.queryParams
+      .subscribe(({ status }) => {
+
+        let preSelectedStatus: InnovationGroupedStatusEnum[] = [];
+
+        switch (status) {
+          case 'COMPLETED':
+            this.showOnlyCompleted = true;
+            this.setPageTitle('Assessment completed innovations');
+            this.setBackLink('Go back', `${this.userUrlBasePath()}/innovations`);
+            this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_SUPPORT, InnovationGroupedStatusEnum.RECEIVING_SUPPORT, InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT];
+            break;
+          case 'NEEDS_ASSESSMENT':
+            this.form.get('assignedToMe')?.setValue(true);
+            preSelectedStatus = [InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
+            break;
+          case 'WAITING_NEEDS_ASSESSMENT':
+            preSelectedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT];
+            break;
+          default:
+        }
+
+        preSelectedStatus.forEach(status => (this.form.get('groupedStatuses') as FormArray).push(new FormControl(status)))
+
+      })
+    );
 
     this.innovationsList.setVisibleColumns({
       name: { label: 'Innovation', orderable: true },
@@ -115,14 +151,21 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       groupedStatus: { label: 'Status', orderable: false, align: 'right' },
     }).setOrderBy('submittedAt', 'descending');
 
+    this.reuseRouteStrategy();
   }
 
   ngOnInit(): void {
 
     let filters: FilterKeysType[] = ['groupedStatuses', 'locations', 'mainCategories'];
 
-    this.datasets.groupedStatuses = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT, InnovationGroupedStatusEnum.NEEDS_ASSESSMENT]
-      .map(groupedStatus => ({ label: this.translate(`shared.catalog.innovation.grouped_status.${groupedStatus}.name`), value: groupedStatus }))
+    const descriptions = new Map([
+      [InnovationGroupedStatusEnum.AWAITING_SUPPORT, 'Waiting for an organisation unit to start supporting this innovation.'],
+      [InnovationGroupedStatusEnum.RECEIVING_SUPPORT, 'At least one organisation is supporting the innovation.'],
+      [InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT, 'There are no organisations supporting this innovation.']
+    ]);
+
+    this.datasets.groupedStatuses = this.availableGroupedStatus
+      .map(groupedStatus => ({ label: this.translate(`shared.catalog.innovation.grouped_status.${groupedStatus}.name`), value: groupedStatus, description: descriptions.get(groupedStatus) }))
 
     this.filters = this.filters.map(filter => ({ ...filter, active: filters.includes(filter.key) }));
 
@@ -196,7 +239,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       locations: this.form.get('locations')?.value,
       groupedStatuses: groupedStatusesFilter && groupedStatusesFilter.length > 0
         ? groupedStatusesFilter
-        : [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT, InnovationGroupedStatusEnum.NEEDS_ASSESSMENT],
+        : this.availableGroupedStatus,
       assignedToMe: this.form.get('assignedToMe')?.value ?? false,
       ...(startDate || endDate ? {
         dateFilter: [{
@@ -288,4 +331,10 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     return DatesHelper.parseIntoValidFormat(value);
   }
 
+  private reuseRouteStrategy(): void {
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    }
+    this.router.onSameUrlNavigation = 'reload';
+  }
 }

@@ -2,10 +2,14 @@
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full nhsuk-u-margin-bottom-5">
-      <p>
+      <p *ngIf="this.showOnlyCompleted === false; else completedLeadDescription">
         List of all innovations submitted by their owner that are awaiting or have a needs assessment in progress. You
-        can also see a list of all <a href="#">innovations with needs assessment completed</a>.
+        can also see a list of all <a routerLink="/assessment/innovations" [queryParams]="{ status: 'COMPLETED' }">innovations with needs assessment completed</a>.
       </p>
+      <ng-template #completedLeadDescription>
+        Needs assessment has been completed for these innovations. They are visible to all organisations that the 
+        innovator choose to share their data with.
+      </ng-template>
     </div>
 
     <div class="nhsuk-grid-column-one-quarter">
@@ -76,7 +80,9 @@
     <div class="nhsuk-grid-column-three-quarters">
 
       <p class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">
-        {{ innovationsList.getTotalRowsNumber() }} innovations awaiting or with need assessment in progress
+        {{ innovationsList.getTotalRowsNumber() }}
+        <ng-container *ngIf="this.showOnlyCompleted === false; else completedFilterDescription">innovations awaiting or with need assessment in progress</ng-container>
+        <ng-template #completedFilterDescription>innovations with completed needs assessment</ng-template>
       </p>
 
       <dl class="nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1 nhsuk-u-padding-2 bg-color-grey">
