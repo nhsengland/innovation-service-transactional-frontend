@@ -198,6 +198,13 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       if (!form.valid) /* istanbul ignore next */ {
         isValid = false;
       }
+
+      (this.formEngineComponent?.toArray() || []).forEach(engine => /* istanbul ignore next */ {
+        engine.form.markAllAsTouched();
+        if (!engine.form.valid) /* istanbul ignore next */ {
+          isValid = false;
+        }
+      });
     }
 
     // This section is not easy to test. TOIMPROVE: Include this code on unit test.
@@ -217,7 +224,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     });
 
-    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit'), this.currentAnswers).subscribe({
+    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit' && isValid), this.currentAnswers).subscribe({
       next: () => {
         switch (action) {
           case 'autosave':
