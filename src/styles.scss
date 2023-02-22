@@ -102,6 +102,8 @@ $service-manual-container-size: 1100px; // Container width variable.
   }
 }
 
+.word-break { word-break: break-word; }
+
 .bg-color-white { background-color: var(--white); }
 .bg-color-grey { background-color: var(--color_nhsuk-grey-5); }
 .bg-color-warning { background-color: var(--warning-color); }

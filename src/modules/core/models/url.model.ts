@@ -108,7 +108,9 @@ export class UrlModel {
 
         let value: string;
 
-        if (Array.isArray(this.queryParams[key])) { value = (this.queryParams[key] as any[]).join(','); }      // When queryParam is an array.
+        if (Array.isArray(this.queryParams[key])) { // When queryParam is an array.
+          value = (this.queryParams[key] as any[]).map(qp => typeof qp === 'object' ? JSON.stringify(qp) : qp).join(','); 
+        }
         else if (typeof this.queryParams[key] === 'object') { value = JSON.stringify(this.queryParams[key]); } // When queryParam is an object.
         else { value = encodeURIComponent(this.queryParams[key]); }
 

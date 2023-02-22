@@ -1,0 +1,13 @@
+.td-fixed-width {
+  max-width: 100%;
+}
+
+/**
+* This media query is needed so the responsivity is not changed in tablet/mobile.
+* This value is the same used by nhsuk for tables.
+*/
+@media (min-width: 48.0625em) {
+  .td-fixed-width {
+    max-width: 200px;
+  }
+}

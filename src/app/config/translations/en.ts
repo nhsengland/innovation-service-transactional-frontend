@@ -29,6 +29,12 @@ export const locale = {
         plural: 'actions'
       },
       yes: 'yes',
+      day: {
+        _: 'day',
+        none: 'day',
+        singular: 'day',
+        plural: 'days'
+      }
     },
 
     // Forms (fields) related translations.

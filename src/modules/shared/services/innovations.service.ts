@@ -35,6 +35,11 @@ export type InnovationsListFiltersType = {
   assignedToMe?: boolean,
   suggestedOnly?: boolean,
   latestWorkedByMe?: boolean,
+  dateFilter?: {
+    field: 'submittedAt',
+    startDate?: DateISOType,
+    endDate?: DateISOType
+  }[],
   fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications' | 'statistics' | 'groupedStatus')[]
 }
 
@@ -205,6 +210,7 @@ export class InnovationsService extends CoreService {
       ...(filters.assignedToMe !== undefined ? { assignedToMe: filters.assignedToMe } : {}),
       ...(filters.suggestedOnly != undefined ? { suggestedOnly: filters.suggestedOnly } : {}),
       ...(filters.latestWorkedByMe != undefined ? { latestWorkedByMe: filters.latestWorkedByMe } : {}),
+      ...(filters.dateFilter ? { dateFilter: filters.dateFilter } : {}),
       fields
     };
 
