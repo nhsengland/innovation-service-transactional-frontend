@@ -12,7 +12,7 @@ import { InnovationService } from './innovation.service';
 
 import { getSectionNumber, getSectionParentNumber, getSectionParentTitle, getSectionTitle, INNOVATION_SECTIONS } from './innovation.config';
 import { InnovationSectionEnum } from './innovation.enums';
-import { getInnovationCommentsDTO, GetInnovationEvidenceDTO, InnovationModel, InnovationSectionConfigType, InnovationSectionInfoDTO, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, SectionsSummaryModel } from './innovation.models';
+import { GetInnovationEvidenceDTO, InnovationModel, InnovationSectionConfigType, InnovationSectionInfoDTO, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, SectionsSummaryModel } from './innovation.models';
 
 
 @Injectable()
@@ -122,20 +122,6 @@ export class InnovationStore extends Store<InnovationModel> {
     return cloneDeep(
       INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId)?.wizard || new WizardEngineModel({})
     );
-  }
-
-
-  // Innovation comments methods.
-  getInnovationComments$(innovationId: string, createdOrder: 'asc' | 'desc'): Observable<getInnovationCommentsDTO[]> {
-    return this.innovationsService.getInnovationComments(innovationId, createdOrder);
-  }
-
-  createInnovationComment$(innovationId: string, body: { comment: string, replyTo?: string }): Observable<{ id: string }> {
-    return this.innovationsService.createInnovationComment(innovationId, body);
-  }
-
-  updateInnovationComment$(innovationId: string, body: { comment: string, replyTo?: string }, commentId: string): Observable<{ id: string }> {
-    return this.innovationsService.updateInnovationComment(innovationId, body, commentId);
   }
 
 }

@@ -125,16 +125,10 @@ export class ServiceUsersService extends CoreService {
   }
 
 
-  createUser(body: { [key: string]: any }, securityConfirmation: { id: string, code: string }): Observable<{ id: string }> {
+  createUser(body: { [key: string]: any }): Observable<{ id: string }> {
 
-    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
-
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users').setQueryParams(qp);
-    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response),
-      catchError(error => throwError(() => ({ id: error.error?.details.id })))
-    );
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users');
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
 
