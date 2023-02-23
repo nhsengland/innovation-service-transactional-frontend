@@ -7,7 +7,7 @@
         can also see a list of all <a routerLink="/assessment/innovations" [queryParams]="{ status: 'COMPLETED' }">innovations with needs assessment completed</a>.
       </p>
       <ng-template #completedLeadDescription>
-        Needs assessment has been completed for these innovations. They are visible to all organisations that the 
+        Needs assessment has been completed for these innovations. They are visible to all organisations that the
         innovator choose to share their data with.
       </ng-template>
     </div>
@@ -79,15 +79,11 @@
 
     <div class="nhsuk-grid-column-three-quarters">
 
-      <p class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">
-        {{ innovationsList.getTotalRowsNumber() }}
-        <ng-container *ngIf="this.showOnlyCompleted === false; else completedFilterDescription">innovations awaiting or with need assessment in progress</ng-container>
-        <ng-template #completedFilterDescription>innovations with completed needs assessment</ng-template>
-      </p>
+      <p class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">{{ innovationsList.getTotalRowsNumber() }} {{ showOnlyCompleted === false ? 'innovations awaiting or with need assessment in progress' : 'innovations with completed needs assessment' }}</p>
 
       <dl class="nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1 nhsuk-u-padding-2 bg-color-grey">
 
-        <dt *ngIf="!anyFilterSelected" class="nhsuk-u-font-size-16"> No filter has been selected </dt>
+        <dt *ngIf="!anyFilterSelected" class="nhsuk-u-font-size-16">No filter selected</dt>
 
         <ng-container *ngIf="anyFilterSelected">
 
@@ -174,8 +170,8 @@
 
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('name') }}</span>
-                <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovation.id }}"
-                  attr.aria-label="View {{ innovation.name }} innovation"> {{ innovation.name }} </a>
+                <a *ngIf="!innovation.assessment?.id" routerLink="/assessment/innovations/{{ innovation.id }}" attr.aria-label="View {{ innovation.name }} innovation"> {{ innovation.name }}</a>
+                <a *ngIf="innovation.assessment?.id" routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{innovation.assessment?.id}}" attr.aria-label="View {{ innovation.name }} innovation assessment details">{{ innovation.name }}</a>
               </td>
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('submittedAt') }}</span>
