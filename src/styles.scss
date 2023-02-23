@@ -506,3 +506,18 @@ $service-manual-container-size: 1100px; // Container width variable.
     top: 5px;
   }
 }
+
+// Tables
+td {
+  .nhsuk-tag { white-space: pre-line; }
+
+  &.fixed-width-150, &.fixed-width-175, &.fixed-width-200 {
+    max-width: 100%;
+  }
+
+  @media (min-width: 48.0625em) {
+    &.fixed-width-150 { max-width: 150px; };
+    &.fixed-width-175 { max-width: 175px; };
+    &.fixed-width-200 { max-width: 200px; };
+  }
+}

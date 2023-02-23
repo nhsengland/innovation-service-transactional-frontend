@@ -4,7 +4,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@a
 @Component({
   selector: 'theme-tag',
   templateUrl: './tag.component.html',
-  styleUrls: ['./tag.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TagComponent {

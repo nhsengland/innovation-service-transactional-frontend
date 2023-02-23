@@ -49,7 +49,6 @@ type FiltersType = {
 @Component({
   selector: 'app-assessment-pages-innovations-list',
   templateUrl: './innovations-list.component.html',
-  styleUrls: ['./innovations-list.component.scss']
 })
 export class InnovationsListComponent extends CoreComponent implements OnInit {
 

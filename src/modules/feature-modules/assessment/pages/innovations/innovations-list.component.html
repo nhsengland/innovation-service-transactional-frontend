@@ -186,11 +186,11 @@
                   {{ innovation.submittedAtDaysDiff + ' ' + ('dictionary.day' | pluralTranslate: innovation.submittedAtDaysDiff | translate) + ' ago' }}
                 </span>
               </td>
-              <td class="nhsuk-table__cell word-break td-fixed-width">
+              <td class="nhsuk-table__cell fixed-width-200 word-break">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('assessedBy') }}</span>
                 {{ innovation.assessment?.assignedTo?.name ?? 'Unassigned'}}
               </td>
-              <td class="nhsuk-table__cell text-align-right">
+              <td class="nhsuk-table__cell text-align-right fixed-width-175">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('groupedStatus') }}</span>
                 <theme-tag
                   type="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.cssColorClass' | translate }}"
