@@ -70,7 +70,7 @@
           <a *ngIf="
                   stores.authentication.isAccessorType()
                   && action.createdBy.id === stores.authentication.getUserId()
-                  && action.createdBy.organisationUnit?.id === stores.authentication.getUserContextInfo().organisation?.organisationUnit?.id"
+                  && action.createdBy.organisationUnit?.id === stores.authentication.getUserContextInfo()?.organisation?.organisationUnit?.id"
             routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/cancel"
             class="nhsuk-button nhsuk-button--secondary">
             Cancel action

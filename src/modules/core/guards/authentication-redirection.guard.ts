@@ -2,6 +2,7 @@ import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { LocalStorageHelper } from '@app/base/helpers';
+import { RoleType } from '@modules/shared/dtos/roles.dto';
 
 import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 
@@ -17,25 +18,24 @@ export class AuthenticationRedirectionGuard implements CanActivate {
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
     const pathSegment = activatedRouteSnapshot.routeConfig?.path || '';
-    const userType = this.authentication.getUserType() || '';
     const userContext = this.authentication.getUserContextInfo();
-    const currentRole = LocalStorageHelper.getObjectItem("role");
+    const currentRole = LocalStorageHelper.getObjectItem<RoleType>("role");
 
     if(isPlatformServer(this.platformId)) {
       this.router.navigate(['']);
       return false;
     }
    
-    if (!userContext.type) {
+    if (!userContext?.type) {
       if (currentRole) {
-        this.authentication.findAndPopulateUserContextFromLocalstorage();
+        this.authentication.findAndPopulateUserContextFromLocalStorage();
       } else {
         this.router.navigate(['/switch-user-context']);
         return false;
       }
     }
 
-    if (!state.url.endsWith('terms-of-use') && userType !== 'ADMIN' && !this.authentication.isTermsOfUseAccepted()) {
+    if (!state.url.endsWith('terms-of-use') && userContext?.type !== 'ADMIN' && !this.authentication.isTermsOfUseAccepted()) {
       const path = this.authentication.userUrlBasePath() + '/terms-of-use';
       this.router.navigateByUrl(path);
       return false;

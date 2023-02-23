@@ -51,7 +51,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.selfUser = {
       id: this.stores.authentication.getUserId(),
       urlBasePath: this.stores.authentication.userUrlBasePath(),
-      role: this.stores.authentication.getUserContextInfo().type
+      role: this.stores.authentication.getUserContextInfo()?.type ?? ''
     };
 
     this.innovation = this.stores.context.getInnovation();

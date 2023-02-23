@@ -4,16 +4,16 @@ import { forkJoin, ObservableInput } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 
-import { InnovationService } from '@modules/stores/innovation/innovation.service';
 import { OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
+import { InnovationService } from '@modules/stores/innovation/innovation.service';
 
 import { InnovationSharesListDTO, InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { UserRoleEnum } from '@app/base/enums';
 import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -63,7 +63,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
 
     super();
 
-    this.userType = this.stores.authentication.getUserType();
+    this.userType = this.stores.authentication.getUserType() ?? '';
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
 

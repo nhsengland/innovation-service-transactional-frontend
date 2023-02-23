@@ -33,7 +33,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
     this.user = {
       displayName: this.stores.authentication.getUserInfo().displayName,
-      organisation: this.stores.authentication.getUserContextInfo().organisation?.organisationUnit.name || '',
+      organisation: this.stores.authentication.getUserContextInfo()?.organisation?.organisationUnit?.name || '',
       passwordResetAt: this.stores.authentication.getUserInfo().passwordResetAt
     };
   }

@@ -1,14 +1,13 @@
-import { Component, Input, OnInit, AfterViewInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { AfterViewInit, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
+import { LocalStorageHelper } from '@app/base/helpers';
 import { CookiesService } from '@modules/core/services/cookies.service';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
-import { LocalStorageHelper } from '@app/base/helpers';
-import { UserRoleEnum } from '@app/base/enums';
+import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
 
 export type HeaderMenuBarItemType = {
@@ -67,7 +66,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     
     this.user = {
       displayName: user.displayName,
-      description: this.authenticationStore.isAccessorType() ? `Logged in as ${userRole} (${userContext.organisation?.organisationUnit.name})` : `Logged in as ${userRole}`,
+      // TODO improve
+      description: this.authenticationStore.isAccessorType() ? `Logged in as ${userRole} (${userContext?.organisation?.organisationUnit?.name})` : `Logged in as ${userRole}`,
       showSwitchProfile: this.authenticationStore.hasMultipleRoles()
     };
 
