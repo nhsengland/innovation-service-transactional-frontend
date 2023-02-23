@@ -59,7 +59,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
   form = new FormGroup({
     search: new FormControl(''),
-    assignedToMe: new FormControl(false),
+    assignedToMe: new FormControl(false, { updateOn: 'change' }),
     groupedStatuses: new FormArray<FormControl<InnovationGroupedStatusEnum>>([]),
     mainCategories: new FormArray([]),
     locations: new FormArray([]),
