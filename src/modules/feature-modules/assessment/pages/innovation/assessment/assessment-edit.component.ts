@@ -101,7 +101,9 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
         const parameters = [...NEEDS_ASSESSMENT_QUESTIONS.innovation, ...NEEDS_ASSESSMENT_QUESTIONS.innovator, ...NEEDS_ASSESSMENT_QUESTIONS.summary, ...NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds];
 
-        this.errors = Object.entries(FormEngineHelper.getErrors(this.buildEntireForm())).map(([key]) => this.errorObject(key, parameters));
+        const entireForm = FormEngineHelper.buildForm(parameters, this.form.data);
+
+        this.errors = Object.entries(FormEngineHelper.getErrors(entireForm)).map(([key]) => this.errorObject(key, parameters));
 
         this.displayAlertError();
       }
@@ -182,29 +184,16 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     if (this.errors.length >= 1) this.setAlertError('Review and complete these questions.', { itemsList: this.errors });
   }
 
-  buildEntireForm(): FormGroup<any> {
-    const parameters = [...NEEDS_ASSESSMENT_QUESTIONS.innovation, ...NEEDS_ASSESSMENT_QUESTIONS.innovator, ...NEEDS_ASSESSMENT_QUESTIONS.summary, ...NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds];
-    return FormEngineHelper.buildForm(parameters, this.form.data);
-  }
-
   onSubmit(action: 'saveAsDraft' | 'submit' | 'saveAsDraftFirstSection' | 'saveAsDraftSecondSection' | 'autosave'): void {
 
     let isValid = true;
 
     if (action === 'submit') {
 
-      const form = this.buildEntireForm();
+      const parameters = [...NEEDS_ASSESSMENT_QUESTIONS.innovation, ...NEEDS_ASSESSMENT_QUESTIONS.innovator];
+      const firstPageForm = FormEngineHelper.buildForm(parameters, this.form.data);
 
-      if (!form.valid) /* istanbul ignore next */ {
-        isValid = false;
-      }
-
-      (this.formEngineComponent?.toArray() || []).forEach(engine => /* istanbul ignore next */ {
-        engine.form.markAllAsTouched();
-        if (!engine.form.valid) /* istanbul ignore next */ {
-          isValid = false;
-        }
-      });
+      if (!firstPageForm.valid) { isValid = false; }
     }
 
     // This section is not easy to test. TOIMPROVE: Include this code on unit test.
@@ -212,7 +201,12 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
       let formData: MappedObjectType;
 
-      formData = engine.getFormValues(false);
+      if(action === 'submit'){
+        formData = engine.getFormValues(true);
+        if (!formData?.valid) { isValid = false; }
+      } else {
+        formData = engine.getFormValues(false);
+      }
 
       this.currentAnswers = {
         ...this.currentAnswers,
