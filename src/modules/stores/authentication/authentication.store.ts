@@ -6,9 +6,8 @@ import { Store } from '../store.class';
 import { AuthenticationService, UpdateUserInfoDTO } from './authentication.service';
 
 import { LocalStorageHelper } from '@app/base/helpers';
-import { RoleType } from '@modules/shared/dtos/roles.dto';
 import { UserRoleEnum } from './authentication.enums';
-import { AuthenticationModel } from './authentication.models';
+import { AuthenticationModel, UserContext } from './authentication.models';
 
 @Injectable()
 export class AuthenticationStore extends Store<AuthenticationModel> {
@@ -110,13 +109,12 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   findAndPopulateUserContextFromLocalStorage(): void {
-    const user = this.getUserInfo();
-    const currentRole = LocalStorageHelper.getObjectItem<RoleType>("role");
+    const currentRole = LocalStorageHelper.getObjectItem<UserContext>("role");
 
     if(currentRole) {
       this.state.userContext = {
-        roleId: currentRole.id,
-        type: currentRole.role,
+        roleId: currentRole.roleId,
+        type: currentRole.type,
         ...currentRole.organisation && { organisation: currentRole.organisation}
       };
     } else {

@@ -4,21 +4,23 @@ import { RoleType } from '@modules/shared/dtos/roles.dto';
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from './authentication.enums';
 import { PhoneUserPreferenceEnum } from './authentication.service';
 
+export type UserContext = {
+  roleId: string,
+  type: UserRoleEnum,
+  organisation?: {
+    id: string,
+    acronym: string | null,
+    name: string,
+    organisationUnit?: { id: string; name: string; acronym: string; }
+  }
+};
+
 
 export class AuthenticationModel {
 
   isSignIn: boolean = false;
 
-  userContext?: {
-    roleId: string,
-    type: UserRoleEnum,
-    organisation?: {
-      id: string,
-      acronym: string | null,
-      name: string,
-      organisationUnit?: { id: string; name: string; acronym: string; }
-    }
-  };
+  userContext?: UserContext;
 
   user?: {
     id: string,

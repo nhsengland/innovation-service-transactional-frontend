@@ -2,7 +2,7 @@ import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { LocalStorageHelper } from '@app/base/helpers';
-import { RoleType } from '@modules/shared/dtos/roles.dto';
+import { UserContext } from '@modules/stores/authentication/authentication.models';
 
 import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 
@@ -19,7 +19,7 @@ export class AuthenticationRedirectionGuard implements CanActivate {
 
     const pathSegment = activatedRouteSnapshot.routeConfig?.path || '';
     const userContext = this.authentication.getUserContextInfo();
-    const currentRole = LocalStorageHelper.getObjectItem<RoleType>("role");
+    const currentRole = LocalStorageHelper.getObjectItem<UserContext>("role");
 
     if(isPlatformServer(this.platformId)) {
       this.router.navigate(['']);

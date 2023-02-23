@@ -70,7 +70,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
   }
 
   redirectToHomepage(role: {
-    profile: string,  // TODO validate what is this profile
+    profile: string,
     roleId: string,
     type: UserRoleEnum,
     organisation?: {
@@ -95,14 +95,7 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
         `You are logged in as ${UtilsHelper.indefiniteArticle(roleName)}.`:
         `Switch successful: you are now logged in with your ${roleName} profile.`;
 
-      if(role.organisation?.organisationUnit) {
-        LocalStorageHelper.setObjectItem("orgUnitId", {'id': role.organisation.organisationUnit.id});
-      } else {
-        LocalStorageHelper.removeItem("orgUnitId");
-      }
-
-      // TODO review this LocalStorageHelper (probably save the whole role)
-      LocalStorageHelper.setObjectItem("role", {'id': role.type});
+      LocalStorageHelper.setObjectItem("role", role);
   
       if (!this.initialSelection) {
         this.setRedirectAlertSuccess(message);
