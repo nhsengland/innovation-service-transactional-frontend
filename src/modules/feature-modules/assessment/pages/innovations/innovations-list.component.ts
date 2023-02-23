@@ -58,7 +58,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
   >({ pageSize: 20 });
 
   form = new FormGroup({
-    search: new FormControl(''),
+    search: new FormControl('', { updateOn: 'change' }),
     assignedToMe: new FormControl(false, { updateOn: 'change' }),
     groupedStatuses: new FormArray<FormControl<InnovationGroupedStatusEnum>>([]),
     mainCategories: new FormArray([]),
@@ -155,7 +155,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     this.innovationsList.setVisibleColumns({
       name: { label: 'Innovation', orderable: true },
       submittedAt: { label: 'Submitted', orderable: true },
-      assessedBy: { label: 'Assessed by', orderable: true },
+      assessedBy: { label: 'Assessed by', orderable: false },
       groupedStatus: { label: 'Status', orderable: false, align: 'right' },
     }).setOrderBy('submittedAt', 'descending');
 
@@ -202,8 +202,11 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
   onFormChange(): void {
 
-    this.setPageStatus('LOADING');
-
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    
     for (const filter of this.filters) {
 
       if (filter.type === FilterTypeEnum.CHECKBOX) {
@@ -236,7 +239,6 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     const startDate = this.getDateByControlName('submittedStartDate') ?? undefined;
     const endDate = this.getDateByControlName('submittedEndDate') ?? undefined;
 
-    console.log(groupedStatusesFilter);
     this.innovationsList.setFilters({
       name: this.form.get('search')?.value,
       mainCategories: this.form.get('mainCategories')?.value,
