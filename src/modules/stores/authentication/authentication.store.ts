@@ -7,7 +7,7 @@ import { AuthenticationService, UpdateUserInfoDTO } from './authentication.servi
 
 import { LocalStorageHelper } from '@app/base/helpers';
 import { UserRoleEnum } from './authentication.enums';
-import { AuthenticationModel } from './authentication.models';
+import { AuthenticationModel, UserContext } from './authentication.models';
 
 @Injectable()
 export class AuthenticationStore extends Store<AuthenticationModel> {
@@ -28,27 +28,15 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
         concatMap(user => {
           this.state.user = user;
           this.state.isSignIn = true;
-          const roles = [...new Set(user.roles.map(({ role }) => role))];
 
-          if (roles.length === 1) {
-            if (roles[0] === UserRoleEnum.ACCESSOR || roles[0] === UserRoleEnum.QUALIFYING_ACCESSOR) {
-              if (user.organisations.length === 1 && user.organisations[0].organisationUnits.length === 1) {
-                this.state.userContext = {
-                  type: roles[0],
-                  organisation: {
-                    id: user.organisations[0].id,
-                    name: user.organisations[0].name,
-                    organisationUnit: user.organisations[0].organisationUnits[0],
-                  }
-                }
-              }
-            } else {
-              this.state.userContext = {
-                type: roles[0]
-              }
+          if (user.roles.length === 1) {
+            this.state.userContext = {
+              roleId: user.roles[0].id,
+              type: user.roles[0].role,
+              ...user.roles[0].organisation && { organisation: user.roles[0].organisation }
             }
           } else {
-            this.findAndPopulateUserContextFromLocalstorage()
+            this.findAndPopulateUserContextFromLocalStorage()
           }
 
           return of(true);
@@ -79,19 +67,19 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
   isInnovatorType(): boolean { return this.state.userContext?.type === UserRoleEnum.INNOVATOR; }
   isAssessmentType(): boolean { return this.state.userContext?.type === UserRoleEnum.ASSESSMENT; }
-  isAccessorRole(): boolean { return this.state.userContext.type === UserRoleEnum.ACCESSOR; }
-  isQualifyingAccessorRole(): boolean { return this.state.userContext.type === UserRoleEnum.QUALIFYING_ACCESSOR; }
+  isAccessorRole(): boolean { return this.state.userContext?.type === UserRoleEnum.ACCESSOR; }
+  isQualifyingAccessorRole(): boolean { return this.state.userContext?.type === UserRoleEnum.QUALIFYING_ACCESSOR; }
   isAdminRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.ADMIN) || false; }
   // remove and or change logic to use the other roles
   // isServiceTeamRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.SERVICE_TEAM) || false; }
 
-  isFromOrganisationUnit(orgUnitId?: string): boolean { return orgUnitId !== undefined && this.state.userContext.organisation?.organisationUnit.id === orgUnitId; }
+  isFromOrganisationUnit(orgUnitId?: string): boolean { return orgUnitId !== undefined && this.state.userContext?.organisation?.organisationUnit?.id === orgUnitId; }
 
   hasMultipleRoles(): boolean { return (this.state.user && this.state.user?.roles.length > 1) ?? false; }
 
   getUserId(): string { return this.state.user?.id || ''; }
-  getUserType(): Required<AuthenticationModel>['userContext']['type'] {
-    return this.state.userContext.type || '';
+  getUserType(): UserRoleEnum | undefined {
+    return this.state.userContext?.type;
   }
 
   getUserRole() {
@@ -107,7 +95,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   getAccessorOrganisationUnitName(): string {
-    return this.state.userContext.organisation?.organisationUnit.name || '';
+    return this.state.userContext?.organisation?.organisationUnit?.name || '';
   }
 
   getUserInfo(): Required<AuthenticationModel>['user'] {
@@ -118,43 +106,21 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     return this.authenticationService.updateUserInfo(body);
   }
 
-  getUserContextInfo(): Required<AuthenticationModel>['userContext'] {
+  getUserContextInfo(): AuthenticationModel['userContext'] {
     return this.state.userContext;
   }
 
-  findAndPopulateUserContextFromLocalstorage(): void {
-    const user = this.getUserInfo();
-    const currentRole = LocalStorageHelper.getObjectItem("role");
-    const accessorRole = [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(currentRole?.id);
+  findAndPopulateUserContextFromLocalStorage(): void {
+    const currentRole = LocalStorageHelper.getObjectItem<UserContext>("role");
 
-    if (accessorRole) {
-      const currentOrgUnit = LocalStorageHelper.getObjectItem("orgUnitId");
-
-      user.organisations.every((org) => {
-        const unit = org.organisationUnits.find((unit) => unit.id === currentOrgUnit?.id);
-
-        if (!!unit) {
-          this.updateSelectedUserContext({
-            type: currentRole?.id,
-            organisation: {
-              id: org.id,
-              name: org.name,
-              organisationUnit: {
-                id: unit.id,
-                name: unit.name,
-                acronym: unit.acronym,
-              }
-            }
-          });
-          return false;
-        }
-
-        return true;
-      });
-    } else {
+    if (currentRole) {
       this.state.userContext = {
-        type: currentRole?.id
-      }
+        roleId: currentRole.roleId,
+        type: currentRole.type,
+        ...currentRole.organisation && { organisation: currentRole.organisation}
+      };
+    } else {
+      this.state.userContext = undefined;
     }
   }
 

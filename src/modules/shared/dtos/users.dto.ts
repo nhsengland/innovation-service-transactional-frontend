@@ -1,12 +1,12 @@
 import { UserRoleEnum } from "@app/base/enums";
 import { DateISOType } from "@app/base/types";
-import { RoleDTO } from "./roles.dto";
+import { RoleType } from "./roles.dto";
 
 export type UserSearchDTO = {
   id: string;
   email: string;
   name: string;
-  roles: RoleDTO[];
+  roles: RoleType[];
   isActive: boolean;
   lockedAt?: DateISOType;
   organisations?: {

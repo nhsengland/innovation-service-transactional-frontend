@@ -6,11 +6,11 @@ import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
-import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 
-import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
@@ -157,7 +157,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
           if (this.stores.authentication.isAdminRole() === false) {
             status = (innovation.supports || []).find(s =>
-              s.organisation.unit.id === this.stores.authentication.getUserContextInfo().organisation?.organisationUnit.id
+              s.organisation.unit.id === this.stores.authentication.getUserContextInfo()?.organisation?.organisationUnit?.id
             )?.status ?? InnovationSupportStatusEnum.UNASSIGNED
           }
 
