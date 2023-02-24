@@ -38,7 +38,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           } else {
             this.findAndPopulateUserContextFromLocalStorage()
           }
-          
+
           return of(true);
         })
       ).subscribe({
@@ -70,11 +70,13 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   isAccessorRole(): boolean { return this.state.userContext?.type === UserRoleEnum.ACCESSOR; }
   isQualifyingAccessorRole(): boolean { return this.state.userContext?.type === UserRoleEnum.QUALIFYING_ACCESSOR; }
   isAdminRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.ADMIN) || false; }
-  // remove and or change logic to use the other roles 
+  // remove and or change logic to use the other roles
   // isServiceTeamRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.SERVICE_TEAM) || false; }
 
-  hasMultipleRoles(): boolean { return  (this.state.user && this.state.user?.roles.length > 1) ?? false; }
-  
+  isFromOrganisationUnit(orgUnitId?: string): boolean { return orgUnitId !== undefined && this.state.userContext?.organisation?.organisationUnit?.id === orgUnitId; }
+
+  hasMultipleRoles(): boolean { return (this.state.user && this.state.user?.roles.length > 1) ?? false; }
+
   getUserId(): string { return this.state.user?.id || ''; }
   getUserType(): UserRoleEnum | undefined {
     return this.state.userContext?.type;
@@ -85,8 +87,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       case UserRoleEnum.ADMIN: return 'Administrator';
       case UserRoleEnum.ASSESSMENT: return 'Needs Assessor';
       case UserRoleEnum.INNOVATOR: return 'Innovator';
-      case UserRoleEnum.ACCESSOR: 
-      case UserRoleEnum.QUALIFYING_ACCESSOR: 
+      case UserRoleEnum.ACCESSOR:
+      case UserRoleEnum.QUALIFYING_ACCESSOR:
         return this.getRoleDescription(this.state.userContext?.type);
       default: return '';
     }
@@ -111,7 +113,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   findAndPopulateUserContextFromLocalStorage(): void {
     const currentRole = LocalStorageHelper.getObjectItem<UserContext>("role");
 
-    if(currentRole) {
+    if (currentRole) {
       this.state.userContext = {
         roleId: currentRole.roleId,
         type: currentRole.type,
@@ -130,8 +132,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     switch (userType) {
       case UserRoleEnum.ADMIN: return 'Administrator';
       case UserRoleEnum.ASSESSMENT: return 'Needs assessment';
-      case UserRoleEnum.ACCESSOR: 
-      case UserRoleEnum.QUALIFYING_ACCESSOR: 
+      case UserRoleEnum.ACCESSOR:
+      case UserRoleEnum.QUALIFYING_ACCESSOR:
         return 'Support assessment';
       case UserRoleEnum.INNOVATOR: return 'Innovator';
       default: return '';
@@ -154,8 +156,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     switch (this.getUserType()) {
       case UserRoleEnum.ADMIN: return 'admin';
       case UserRoleEnum.ASSESSMENT: return 'assessment';
-      case UserRoleEnum.QUALIFYING_ACCESSOR: 
-      case UserRoleEnum.ACCESSOR: 
+      case UserRoleEnum.QUALIFYING_ACCESSOR:
+      case UserRoleEnum.ACCESSOR:
         return 'accessor';
       case UserRoleEnum.INNOVATOR: return 'innovator';
       default: return '';

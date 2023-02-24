@@ -34,7 +34,7 @@
           <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">{{assessmentHasBeenSubmitted ? 'Update' : 'Submit'}} needs assessment</button>
           <button [disabled]="this.saveButton.disabled" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5" (click)="onSubmit('saveAsDraft')">{{ saveButton.label }}</button>
         </ng-container>
-        
+
         <p>This document is autosaved every minute.</p>
 
         <nav class="nhsuk-pagination" role="navigation" aria-label="Pagination">

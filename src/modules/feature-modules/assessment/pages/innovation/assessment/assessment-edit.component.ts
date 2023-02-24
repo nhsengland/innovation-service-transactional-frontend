@@ -5,14 +5,13 @@ import { forkJoin, interval } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { UtilsHelper } from '@app/base/helpers';
 import { MappedObjectType } from '@app/base/types';
-import { FormEngineComponent, FormEngineParameterModel } from '@modules/shared/forms';
+import { FormEngineComponent, FormEngineHelper, FormEngineParameterModel } from '@modules/shared/forms';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { AssessmentService } from '../../../services/assessment.service';
-
 
 @Component({
   selector: 'app-assessment-pages-innovation-assessment-edit',
@@ -88,6 +87,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
         ...needsAssessment,
         suggestedOrganisationUnitsIds: needsAssessment.suggestedOrganisations.reduce((unitsAcc: string[], o) => [...unitsAcc, ...o.units.map(u => u.id)], [])
       };
+
       this.assessmentHasBeenSubmitted = !!needsAssessment.finishedAt;
 
       this.setPageStatus('READY');
@@ -95,6 +95,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     });
 
     this.subscriptions.push(
+
       this.activatedRoute.params.subscribe(params => {
 
         this.stepId = Number(params.stepId);
@@ -121,6 +122,13 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
             break;
         }
 
+        const error = Boolean(this.activatedRoute.snapshot.queryParams['error']);
+        if (this.stepId === 1 && error) {
+          (this.formEngineComponent?.toArray() || []).forEach(engine => /* istanbul ignore next */ {
+            engine.getFormValues(true);
+          });
+        }
+
         this.setPageTitle('Needs assessment', { hint: `${this.stepId} of 2` });
         this.setPageStatus('READY');
 
@@ -137,24 +145,21 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   }
 
-
   onSubmit(action: 'saveAsDraft' | 'submit' | 'saveAsDraftFirstSection' | 'saveAsDraftSecondSection' | 'autosave'): void {
 
-    let isValid = true;
+    let isFirstStepValid = true;
+    let isSecondStepValid = true;
 
     // This section is not easy to test. TOIMPROVE: Include this code on unit test.
     (this.formEngineComponent?.toArray() || []).forEach(engine => /* istanbul ignore next */ {
 
       let formData: MappedObjectType;
 
-      if (action === 'autosave' || action === 'saveAsDraft') {
-        formData = engine.getFormValues(false);
-      } else {
-
+      if (action === 'submit') {
         formData = engine.getFormValues(true);
-
-        if (!formData?.valid) { isValid = false; }
-
+        if (!formData?.valid) { isSecondStepValid = false; }
+      } else {
+        formData = engine.getFormValues(false);
       }
 
       this.currentAnswers = {
@@ -167,11 +172,24 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     });
 
-    if (!isValid) /* istanbul ignore next */ {
-      return;
+    if (action === 'saveAsDraftFirstSection' || action === 'saveAsDraftSecondSection') {
+      // Update form.data only if the user navigates between steps
+      this.form.data = {
+        ...this.form.data,
+        ...this.currentAnswers
+      };
     }
 
-    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit'), this.currentAnswers).subscribe({
+    if (action === 'submit') {
+      const firstStepParameters = [...NEEDS_ASSESSMENT_QUESTIONS.innovation, ...NEEDS_ASSESSMENT_QUESTIONS.innovator];
+      const firstStepForm = FormEngineHelper.buildForm(firstStepParameters, this.form.data);
+
+      if (!firstStepForm.valid) { isFirstStepValid = false; }
+    }
+
+    const isValid = isFirstStepValid && isSecondStepValid;
+
+    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit' && isValid), this.currentAnswers).subscribe({
       next: () => {
         switch (action) {
           case 'autosave':
@@ -179,16 +197,29 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
             this.saveButton = { disabled: true, label: 'All changes are saved' };
             break;
           case 'saveAsDraftFirstSection':
-            this.reuseRouteStrategy();
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
             break;
           case 'saveAsDraftSecondSection':
-            this.reuseRouteStrategy();
             this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`);
             break;
           case 'submit':
-            this.setRedirectAlertSuccess('Needs assessment successfully completed');
-            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`);
+            if (isValid) {
+              this.setRedirectAlertSuccess('Needs assessment successfully completed');
+              this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`);
+            }
+            else {
+              if (isFirstStepValid) {
+                this.setAlertError('All questions must be completed before submit');
+              }
+              else {
+                this.setAlertError('All questions must be completed before submit', {
+                  itemsList: [{
+                    title: "Go to step 1 and start filling in all incomplete questions",
+                    callback: `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1?error=true`,
+                  }]
+                });
+              }
+            }
             break;
           default:
             break;
@@ -200,13 +231,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   onFormChange(): void {
     this.saveButton = { disabled: false, label: 'Save changes' };
-  }
-
-  private reuseRouteStrategy(): void {
-    this.router.routeReuseStrategy.shouldReuseRoute = function () {
-      return false;
-    }
-    this.router.onSameUrlNavigation = 'reload';
   }
 
 }

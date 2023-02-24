@@ -55,36 +55,27 @@
 
 
       <ng-container *ngIf="stores.authentication.isAccessorType() || stores.authentication.isAssessmentType()">
-
+      
         <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/record/sections/{{ action.section }}"
           class="nhsuk-button nhsuk-u-margin-right-3"> Review section </a>
-
-        <a *ngIf="canUpdateActionStatus()"
-          routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/edit"
-          class="nhsuk-button nhsuk-button--secondary">
-          Update status
-        </a>
-
-        <ng-container *ngIf="action.status === 'REQUESTED'">
-        
-          <a *ngIf="
-                  stores.authentication.isAccessorType()
-                  && action.createdBy.id === stores.authentication.getUserId()
-                  && action.createdBy.organisationUnit?.id === stores.authentication.getUserContextInfo()?.organisation?.organisationUnit?.id"
-            routerLink="/accessor/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/cancel"
+      
+        <ng-container
+          *ngIf="(stores.authentication.isAccessorType() && stores.authentication.isFromOrganisationUnit(action.createdBy.organisationUnit?.id)) || (stores.authentication.isAssessmentType() && action.createdBy.role === 'ASSESSMENT')">
+      
+          <a *ngIf="action.status === 'SUBMITTED'"
+            routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/edit"
+            class="nhsuk-button nhsuk-button--secondary">
+            Update status
+          </a>
+      
+          <a *ngIf="action.status === 'REQUESTED'"
+            routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/cancel"
             class="nhsuk-button nhsuk-button--secondary">
             Cancel action
           </a>
-        
-          <a *ngIf="stores.authentication.isAssessmentType() && action.createdBy.role === 'ASSESSMENT'"
-            routerLink="/assessment/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/cancel"
-            class="nhsuk-button nhsuk-button--secondary">
-            Cancel action
-          </a>
-        
+      
         </ng-container>
-
-
+      
       </ng-container>
 
       <ng-container *ngIf="stores.authentication.isInnovatorType()">
