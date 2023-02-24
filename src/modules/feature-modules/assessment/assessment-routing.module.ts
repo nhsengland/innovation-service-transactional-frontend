@@ -20,7 +20,7 @@ import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationChangeAssessorComponent } from './pages/innovation/change-assessor/change-assessor.component';
 // // Innovations.
-import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
+import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
 
 // Shared module pages.
 // // Account.
@@ -43,6 +43,7 @@ import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/i
 import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
 import { PageInnovationActionTrackerCancelComponent } from '@modules/shared/pages/innovation/actions/action-tracker-cancel.component';
 import { PageInnovationActionTrackerEditComponent } from '@modules/shared/pages/innovation/actions/action-tracker-edit.component';
+import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -94,12 +95,14 @@ const routes: Routes = [
         data: { breadcrumb: 'Innovations' },
         children: [
           {
-            path: '', pathMatch: 'full', component: ReviewInnovationsComponent,
+            path: '', pathMatch: 'full', component: InnovationsListComponent,
             data: {
               breadcrumb: null,
               layout: { type: 'full', backgroundColor: 'bg-color-white' }
             }
           },
+
+          { path: 'statuses', pathMatch: 'full', component: PageInnovationStatusListComponent },
 
           {
             path: ':innovationId',
@@ -151,9 +154,9 @@ const routes: Routes = [
                       },
                       {
                         path: 'change-assessor', pathMatch: 'full', component: InnovationChangeAssessorComponent,
-                        data: { 
+                        data: {
                           breadcrumb: null,
-                          layout: { type: 'full' } 
+                          layout: { type: 'full' }
                         }
                       }]
                   }
@@ -339,6 +342,7 @@ const routes: Routes = [
           { path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent },
         ]
       },
+
 
       {
         path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent,

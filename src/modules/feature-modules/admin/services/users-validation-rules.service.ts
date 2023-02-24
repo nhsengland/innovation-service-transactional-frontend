@@ -7,16 +7,12 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 
 
-type AdminOperationType = 'LOCK_USER' | 'UPDATE_USER_ROLE' | 'CHANGE_UNIT';
-type AdminOperationRuleType = 'AssessmentUserIsNotTheOnlyOne' | 'LastAccessorUserOnOrganisationUnit' | 'LastAccessorFromUnitProvidingSupport';
-
 export type AdminValidationResponseDTO = {
   validations: {
-    rule: AdminOperationRuleType,
+    rule: 'AssessmentUserIsNotTheOnlyOne' | 'LastQualifyingAccessorUserOnOrganisationUnit' | 'LastUserOnOrganisationUnit' | 'NoInnovationsSupportedOnlyByThisUser',
     valid: boolean,
     data?: {
-      // organisationUnit?: { id: string, name: string, acronym: string },
-      // supports?: { count: number, innovations: { id: string, name: string }[] }
+      supports?: { count: number, innovations: { id: string, name: string }[] }
     }
   }[]
 };
@@ -115,7 +111,7 @@ export class UsersValidationRulesService extends CoreService {
 
 
   getOrganisationUnitRules(userId: string): Observable<getOrganisationUnitRulesOutDTO[]> {
-    
+
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'CHANGE_UNIT' });
     return this.http.get<getOrganisationUnitRulesInDTO>(url.buildUrl()).pipe(
       take(1),
