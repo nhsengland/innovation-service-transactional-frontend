@@ -7,8 +7,9 @@ import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
 
 import { ENV, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
+import { UserRoleEnum } from '@app/base/enums';
 import { CoreModule, EnvironmentVariablesStore } from '@modules/core';
-import { AuthenticationService, StoresModule } from '@modules/stores';
+import { AuthenticationService, AuthenticationStore, StoresModule } from '@modules/stores';
 
 
 describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
@@ -16,6 +17,7 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
   let httpMock: HttpTestingController;
   let envVariablesStore: EnvironmentVariablesStore;
   let authenticationService: AuthenticationService;
+  let authenticationStore: AuthenticationStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -37,6 +39,7 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
 
     httpMock = TestBed.inject(HttpTestingController);
     envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
+    authenticationStore = TestBed.inject(AuthenticationStore);
     authenticationService = TestBed.inject(AuthenticationService);
 
   });
@@ -50,9 +53,13 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
 
     const responseMock = true;
     let response: any = null;
-
+    
+    authenticationStore.getUserContextInfo = () => ({
+      roleId: '123',
+      type: UserRoleEnum.ADMIN
+    });
     authenticationService.verifyUserSession().subscribe({ next: success => response = success, error: error => response = error});
-
+    
     const httpRequest = httpMock.expectOne(`${envVariablesStore.APP_URL}/session`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('HEAD');
