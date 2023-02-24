@@ -12,8 +12,6 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { AssessmentService } from '../../../services/assessment.service';
-import { FormGroup } from '@angular/forms';
-
 
 @Component({
   selector: 'app-assessment-pages-innovation-assessment-edit',
@@ -27,7 +25,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   innovationName: string;
   assessmentId: string;
   stepId: number;
-  errorParameter: boolean = false;
 
   form: {
     sections: {
@@ -36,12 +33,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     }[];
     data: { [key: string]: any };
   };
-
-  errors: {
-    id: string;
-    title: string;
-    callback: string;
-  }[] = [];
 
   assessmentHasBeenSubmitted: null | boolean;
 
@@ -97,17 +88,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
         suggestedOrganisationUnitsIds: needsAssessment.suggestedOrganisations.reduce((unitsAcc: string[], o) => [...unitsAcc, ...o.units.map(u => u.id)], [])
       };
 
-      if (this.errorParameter && this.stepId === 2) {
-
-        const parameters = [...NEEDS_ASSESSMENT_QUESTIONS.innovation, ...NEEDS_ASSESSMENT_QUESTIONS.innovator, ...NEEDS_ASSESSMENT_QUESTIONS.summary, ...NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds];
-
-        const entireForm = FormEngineHelper.buildForm(parameters, this.form.data);
-
-        this.errors = Object.entries(FormEngineHelper.getErrors(entireForm)).map(([key]) => this.errorObject(key, parameters));
-
-        this.displayAlertError();
-      }
-
       this.assessmentHasBeenSubmitted = !!needsAssessment.finishedAt;
 
       this.setPageStatus('READY');
@@ -115,11 +95,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     });
 
     this.subscriptions.push(
-
-      this.activatedRoute.queryParamMap
-        .subscribe(params => {
-          this.errorParameter = Boolean(params.get('error'));
-        }),
 
       this.activatedRoute.params.subscribe(params => {
 
@@ -143,12 +118,15 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               { title: 'Support need summary', parameters: NEEDS_ASSESSMENT_QUESTIONS.summary },
               { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds }
             ];
-            if (this.errorParameter) {
-              this.setBackLink('Go back', `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1?error=true`);
-            } else {
-              this.setBackLink('Go back', `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`);
-            }
+            this.setBackLink('Go back', `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`);
             break;
+        }
+
+        const error = Boolean(this.activatedRoute.snapshot.queryParams['error']);
+        if (this.stepId === 1 && error) {
+          (this.formEngineComponent?.toArray() || []).forEach(engine => /* istanbul ignore next */ {
+            engine.getFormValues(true);
+          });
         }
 
         this.setPageTitle('Needs assessment', { hint: `${this.stepId} of 2` });
@@ -167,43 +145,19 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   }
 
-  errorObject(key: string, parameters: FormEngineParameterModel[]): {
-    id: string;
-    title: string;
-    callback: string;
-  } {
-    return {
-      id: key,
-      title: `${parameters.find(p => p.id === key)?.label} (on step ${[...NEEDS_ASSESSMENT_QUESTIONS.innovation, ...NEEDS_ASSESSMENT_QUESTIONS.innovator].find(question => question.id === key) ? 1 : 2})` || '',
-      callback: `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/${[...NEEDS_ASSESSMENT_QUESTIONS.innovation, ...NEEDS_ASSESSMENT_QUESTIONS.innovator].find(question => question.id === key) ? 1 : 2}?error=true`,
-    }
-  }
-
-  displayAlertError(): void {
-    this.resetAlert();
-    if (this.errors.length >= 1) this.setAlertError('Review and complete these questions.', { itemsList: this.errors });
-  }
-
   onSubmit(action: 'saveAsDraft' | 'submit' | 'saveAsDraftFirstSection' | 'saveAsDraftSecondSection' | 'autosave'): void {
 
-    let isValid = true;
-
-    if (action === 'submit') {
-
-      const parameters = [...NEEDS_ASSESSMENT_QUESTIONS.innovation, ...NEEDS_ASSESSMENT_QUESTIONS.innovator];
-      const firstPageForm = FormEngineHelper.buildForm(parameters, this.form.data);
-
-      if (!firstPageForm.valid) { isValid = false; }
-    }
+    let isFirstStepValid = true;
+    let isSecondStepValid = true;
 
     // This section is not easy to test. TOIMPROVE: Include this code on unit test.
     (this.formEngineComponent?.toArray() || []).forEach(engine => /* istanbul ignore next */ {
 
       let formData: MappedObjectType;
 
-      if(action === 'submit'){
+      if (action === 'submit') {
         formData = engine.getFormValues(true);
-        if (!formData?.valid) { isValid = false; }
+        if (!formData?.valid) { isSecondStepValid = false; }
       } else {
         formData = engine.getFormValues(false);
       }
@@ -218,6 +172,23 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     });
 
+    if (action === 'saveAsDraftFirstSection' || action === 'saveAsDraftSecondSection') {
+      // Update form.data only if the user navigates between steps
+      this.form.data = {
+        ...this.form.data,
+        ...this.currentAnswers
+      };
+    }
+
+    if (action === 'submit') {
+      const firstStepParameters = [...NEEDS_ASSESSMENT_QUESTIONS.innovation, ...NEEDS_ASSESSMENT_QUESTIONS.innovator];
+      const firstStepForm = FormEngineHelper.buildForm(firstStepParameters, this.form.data);
+
+      if (!firstStepForm.valid) { isFirstStepValid = false; }
+    }
+
+    const isValid = isFirstStepValid && isSecondStepValid;
+
     this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit' && isValid), this.currentAnswers).subscribe({
       next: () => {
         switch (action) {
@@ -226,28 +197,28 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
             this.saveButton = { disabled: true, label: 'All changes are saved' };
             break;
           case 'saveAsDraftFirstSection':
-            this.reuseRouteStrategy();
-            if (this.errorParameter) {
-              this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`, { error: true });
-            } else {
-              this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
-            }
+            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
             break;
           case 'saveAsDraftSecondSection':
-            this.reuseRouteStrategy();
-            if (this.errorParameter) {
-              this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`, { error: true });
-            } else {
-              this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`);
-            }
+            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`);
             break;
           case 'submit':
             if (isValid) {
               this.setRedirectAlertSuccess('Needs assessment successfully completed');
               this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`);
-            } else {
-              this.reuseRouteStrategy();
-              this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`, { error: true });
+            }
+            else {
+              if (isFirstStepValid) {
+                this.setAlertError('All questions must be completed before submit');
+              }
+              else {
+                this.setAlertError('All questions must be completed before submit', {
+                  itemsList: [{
+                    title: "Go to step 1 and start filling in all incomplete questions",
+                    callback: `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1?error=true`,
+                  }]
+                });
+              }
             }
             break;
           default:
@@ -258,50 +229,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     });
   }
 
-  onFormLoaded(): void {
-    if (this.errorParameter) {
-      (this.formEngineComponent?.toArray() || []).forEach(engine => /* istanbul ignore next */ {
-        engine.form.markAllAsTouched();
-      });
-    }
-  }
-
   onFormChange(): void {
-
     this.saveButton = { disabled: false, label: 'Save changes' };
-
-    (this.formEngineComponent?.toArray() || []).forEach(engine => /* istanbul ignore next */ {
-
-      let formData: MappedObjectType;
-      formData = engine.getFormValues(false);
-
-      const indexOfError = this.errors.map(e => e.id).indexOf(Object.keys(formData.data)[0]);
-
-      if (formData.valid && indexOfError !== -1) {
-
-        this.errors.splice(indexOfError, 1);
-
-      } else if (formData.valid === false && indexOfError === -1) {
-
-        const key = Object.keys(formData.data)[0];
-        const parameters = [...NEEDS_ASSESSMENT_QUESTIONS.summary, ...NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds];
-
-        const error = this.errorObject(key, parameters);
-
-        this.errors.push(error);
-      }
-    });
-
-    if (this.stepId === 2 && this.errorParameter) {
-      this.displayAlertError();
-    }
-  }
-
-  private reuseRouteStrategy(): void {
-    this.router.routeReuseStrategy.shouldReuseRoute = function () {
-      return false;
-    }
-    this.router.onSameUrlNavigation = 'reload';
   }
 
 }
