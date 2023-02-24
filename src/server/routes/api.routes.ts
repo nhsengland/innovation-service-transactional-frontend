@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
-import * as https from 'https';
 import * as express from 'express';
+import * as https from 'https';
 import { IProfile } from 'passport-azure-ad';
 
 import { ENVIRONMENT } from '../config/constants.config';
@@ -63,7 +63,8 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, (req, res) => {
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        ...req.headers['x-is-domain-context'] && { 'x-is-domain-context': req.headers['x-is-domain-context'] }
+        ...req.headers['x-is-domain-context'] && { 'x-is-domain-context': req.headers['x-is-domain-context'] },
+        ...req.headers['x-is-role'] && { 'x-is-role': req.headers['x-is-role'] }
       }
     };
 
