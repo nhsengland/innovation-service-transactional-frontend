@@ -88,12 +88,6 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
   }
 
-  canUpdateActionStatus(): boolean {
-    const accessorValidations = (this.stores.authentication.isAccessorType() && [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(this.action?.createdBy.role as UserRoleEnum));
-
-    return this.action?.status === 'SUBMITTED' && (this.action?.createdBy.role === this.stores.authentication.getUserType() || accessorValidations);
-  }
-
   private getActionInfo() {
 
     this.setPageStatus('LOADING');

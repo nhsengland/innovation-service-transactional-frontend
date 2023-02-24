@@ -32,7 +32,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
           if (roles.length === 1) {
             if (roles[0] === UserRoleEnum.ACCESSOR || roles[0] === UserRoleEnum.QUALIFYING_ACCESSOR) {
-              if (user.organisations.length === 1 && user.organisations[0].organisationUnits.length === 1) {              
+              if (user.organisations.length === 1 && user.organisations[0].organisationUnits.length === 1) {
                 this.state.userContext = {
                   type: roles[0],
                   organisation: {
@@ -41,7 +41,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
                     organisationUnit: user.organisations[0].organisationUnits[0],
                   }
                 }
-              } 
+              }
             } else {
               this.state.userContext = {
                 type: roles[0]
@@ -50,7 +50,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
           } else {
             this.findAndPopulateUserContextFromLocalstorage()
           }
-          
+
           return of(true);
         })
       ).subscribe({
@@ -82,11 +82,13 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   isAccessorRole(): boolean { return this.state.userContext.type === UserRoleEnum.ACCESSOR; }
   isQualifyingAccessorRole(): boolean { return this.state.userContext.type === UserRoleEnum.QUALIFYING_ACCESSOR; }
   isAdminRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.ADMIN) || false; }
-  // remove and or change logic to use the other roles 
+  // remove and or change logic to use the other roles
   // isServiceTeamRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.SERVICE_TEAM) || false; }
 
-  hasMultipleRoles(): boolean { return  (this.state.user && this.state.user?.roles.length > 1) ?? false; }
-  
+  isFromOrganisationUnit(orgUnitId?: string): boolean { return orgUnitId !== undefined && this.state.userContext.organisation?.organisationUnit.id === orgUnitId; }
+
+  hasMultipleRoles(): boolean { return (this.state.user && this.state.user?.roles.length > 1) ?? false; }
+
   getUserId(): string { return this.state.user?.id || ''; }
   getUserType(): Required<AuthenticationModel>['userContext']['type'] {
     return this.state.userContext.type || '';
@@ -97,8 +99,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       case UserRoleEnum.ADMIN: return 'Administrator';
       case UserRoleEnum.ASSESSMENT: return 'Needs Assessor';
       case UserRoleEnum.INNOVATOR: return 'Innovator';
-      case UserRoleEnum.ACCESSOR: 
-      case UserRoleEnum.QUALIFYING_ACCESSOR: 
+      case UserRoleEnum.ACCESSOR:
+      case UserRoleEnum.QUALIFYING_ACCESSOR:
         return this.getRoleDescription(this.state.userContext?.type);
       default: return '';
     }
@@ -124,29 +126,29 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     const user = this.getUserInfo();
     const currentRole = LocalStorageHelper.getObjectItem("role");
     const accessorRole = [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(currentRole?.id);
-    
+
     if (accessorRole) {
       const currentOrgUnit = LocalStorageHelper.getObjectItem("orgUnitId");
-      
+
       user.organisations.every((org) => {
         const unit = org.organisationUnits.find((unit) => unit.id === currentOrgUnit?.id);
-  
-        if(!!unit) {
+
+        if (!!unit) {
           this.updateSelectedUserContext({
             type: currentRole?.id,
             organisation: {
               id: org.id,
               name: org.name,
-              organisationUnit: { 
+              organisationUnit: {
                 id: unit.id,
-                name: unit.name, 
+                name: unit.name,
                 acronym: unit.acronym,
               }
             }
           });
           return false;
         }
-  
+
         return true;
       });
     } else {
@@ -164,8 +166,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     switch (userType) {
       case UserRoleEnum.ADMIN: return 'Administrator';
       case UserRoleEnum.ASSESSMENT: return 'Needs assessment';
-      case UserRoleEnum.ACCESSOR: 
-      case UserRoleEnum.QUALIFYING_ACCESSOR: 
+      case UserRoleEnum.ACCESSOR:
+      case UserRoleEnum.QUALIFYING_ACCESSOR:
         return 'Support assessment';
       case UserRoleEnum.INNOVATOR: return 'Innovator';
       default: return '';
@@ -188,8 +190,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     switch (this.getUserType()) {
       case UserRoleEnum.ADMIN: return 'admin';
       case UserRoleEnum.ASSESSMENT: return 'assessment';
-      case UserRoleEnum.QUALIFYING_ACCESSOR: 
-      case UserRoleEnum.ACCESSOR: 
+      case UserRoleEnum.QUALIFYING_ACCESSOR:
+      case UserRoleEnum.ACCESSOR:
         return 'accessor';
       case UserRoleEnum.INNOVATOR: return 'innovator';
       default: return '';
