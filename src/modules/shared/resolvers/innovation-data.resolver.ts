@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
+import { NGXLogger } from 'ngx-logger';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { NGXLogger } from 'ngx-logger';
 
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { ContextStore } from '@modules/stores/context/context.store';
 import { InnovationsService } from '../services/innovations.service';
 
-import { UserRoleEnum } from '@app/base/enums';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 /**
  * Note: With the creation of the environment store, this can be changed to a guard in the future,
- * as it is also assuming that responsability now (verifying access to the innovation).
+ * as it is also assuming that responsibility now (verifying access to the innovation).
  */
 @Injectable()
 export class InnovationDataResolver implements Resolve<null | { id: string, name: string }> {
@@ -37,7 +36,7 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
         let support: undefined | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string };
 
         if (this.authenticationStore.isAccessorType()) {
-          support = (response.supports || []).find(item => item.organisationUnitId === userContext.organisation?.organisationUnit.id);
+          support = (response.supports || []).find(item => item.organisationUnitId === userContext?.organisation?.organisationUnit?.id);
         }
 
         this.contextStore.setInnovation({

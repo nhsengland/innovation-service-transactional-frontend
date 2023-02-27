@@ -1,6 +1,6 @@
 export class LocalStorageHelper {
 
-  static getObjectItem(key: string): null | { [key: string]: any } {
+  static getObjectItem<T = { [key: string]: any }>(key: string): null | T {
 
     try {
 

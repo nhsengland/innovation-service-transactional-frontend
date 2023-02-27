@@ -29,6 +29,12 @@ export const locale = {
         plural: 'actions'
       },
       yes: 'yes',
+      day: {
+        _: 'day',
+        none: 'day',
+        singular: 'day',
+        plural: 'days'
+      }
     },
 
     // Forms (fields) related translations.
@@ -367,22 +373,22 @@ export const locale = {
             AWAITING_NEEDS_ASSESSMENT: {
               name: 'Awaiting needs assessment',
               cssColorClass: 'nhsuk-tag--yellow',
-              description: 'The needs assessment team will review the innovation record within 5 working days from submission.'
+              description: 'The innovation has been submitted for needs assessment. The needs assessment team must start the assessment process within 2 working days.'
             },
             NEEDS_ASSESSMENT: {
-              name: 'Needs assessment',
+              name: 'Needs assessment in progress',
               cssColorClass: 'nhsuk-tag--blue',
-              description: 'Needs assessment is in progress.'
+              description: 'A needs assessor has started the needs assessment process.'
             },
             AWAITING_SUPPORT: {
               name: 'Awaiting support',
               cssColorClass: 'nhsuk-tag--grey',
-              description: 'Waiting for an organisation unit to start supporting this innovation.'
+              description: 'Needs assessment is completed. Waiting for an organisation unit to start supporting this innovation.'
             },
             RECEIVING_SUPPORT: {
               name: 'Receiving support',
               cssColorClass: 'nhsuk-tag--green',
-              description: 'At least one organisation unit is engaging with this innovation.'
+              description: 'At least one organisation unit is supporting  this innovation with an "engaging" or "further info" support status.'
             },
             NO_ACTIVE_SUPPORT: {
               name: 'No active support',
@@ -392,7 +398,7 @@ export const locale = {
             AWAITING_NEEDS_REASSESSMENT: {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
-              description: 'This innovation has been resent for a needs assessment review.'
+              description: 'The innovation has been resent for needs assessment review.'
             },
             WITHDRAWN: {
               name: 'Withdrawn',
@@ -422,16 +428,14 @@ export const locale = {
           AssessmentUserIsNotTheOnlyOne: {
             label: 'Is not the only assessment user on the service'
           },
-          lastAccessorUserOnOrganisation: {
-            label: 'User is not the only qualifying accessor within their organisation',
-            description: '{{ organisation.name }}'
+          LastQualifyingAccessorUserOnOrganisationUnit: {
+            label: 'User is not the only qualifying accessor within a organisation unit'
           },
-          lastAccessorUserOnOrganisationUnit: {
-            label: 'User is not the only qualifying accessor within their unit',
-            description: '{{ unit.name }}'
+          LastUserOnOrganisationUnit: {
+            label: 'User is not the only one within their unit(s)'
           },
-          lastAccessorFromUnitProvidingSupport: {
-            label: 'User is not the person in their unit who is supporting an innovator',
+          NoInnovationsSupportedOnlyByThisUser: {
+            label: 'User is not the only one supporting a given innovation',
             description: {
               none: 'No innovation is being supported',
               singular: '{{ supports.innovations.length }} innovation being supported',
@@ -475,7 +479,9 @@ export const locale = {
           password_regex: 'The password must contain at least minimum 8 characters: one uppercase, one lowercase, one number and one special character',
           required: 'Required',
           existsIn: 'Value already exists',
-          invalid_parse_date: 'Please enter a valid date format'
+          invalid_parse_date: 'Please enter a valid date format',
+          max_file_size: 'The file exceed the maximum size of 9MB',
+          empty_file: 'Uploaded files cannot be empty'
         }
       }
 

@@ -1,23 +1,21 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { DateISOType } from '@modules/core/interfaces/base.interfaces';
-import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { UrlModel } from '@modules/core/models/url.model';
+import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from './authentication.enums';
+import { RoleType } from '@modules/shared/dtos/roles.dto';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from './authentication.enums';
 
 
 type GetUserInfoDTO = {
   id: string,
   email: string,
   displayName: string,
-  roles: {
-    id: string,
-    role: UserRoleEnum,
-  }[],    
+  roles: RoleType[],
   contactByPhone: boolean,
   contactByEmail:  boolean,
   contactByPhoneTimeframe: PhoneUserPreferenceEnum | null,
@@ -31,6 +29,7 @@ type GetUserInfoDTO = {
     id: string,
     name: string,
     role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
+    acronym: string | null,
     isShadow: boolean,
     size: null | string,
     organisationUnits: { id: string; name: string; acronym: string; }[]

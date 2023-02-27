@@ -1,14 +1,13 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
 
 import { CoreModule } from '@modules/core';
 
-import { AuthenticationStore } from './authentication.store';
-import { AuthenticationService } from './authentication.service';
 import { AuthenticationModel } from './authentication.models';
-import { UserRoleEnum } from './authentication.enums';
+import { AuthenticationService } from './authentication.service';
+import { AuthenticationStore } from './authentication.store';
 
 
 describe('Stores/AuthenticationStore/AuthenticationStore', () => {
@@ -42,7 +41,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
     const expectedState: AuthenticationModel = {
       isSignIn: true,
       user: { id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', roles: [],  contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, contactDetails: null, phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] },
-      userContext: { type : '' }
+      userContext: undefined
     };
     let response: any = null;
 

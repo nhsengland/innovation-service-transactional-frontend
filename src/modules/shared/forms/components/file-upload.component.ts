@@ -9,6 +9,7 @@ import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.he
 import { LoggerService, Severity } from '@modules/core/services/logger.service';
 
 import { FileTypes, FileUploadType } from '../engine/types/form-engine.types';
+import { FormEngineHelper } from '@app/base/forms';
 
 
 @Component({
@@ -51,6 +52,8 @@ export class FormFileUploadComponent implements OnInit {
   files: { id: string, file: File }[] = [];
   previousUploadedFiles: FileUploadType[] = [];
 
+  hasError = false;
+  error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
   isLoadingFile = false;
 
   fileConfig: {
@@ -69,12 +72,20 @@ export class FormFileUploadComponent implements OnInit {
   get fieldArrayControl(): FormArray { return this.parentFieldControl?.get(this.arrayName) as FormArray; }
   get fieldArrayValues(): { id: string, name: string, url: string }[] { return this.fieldArrayControl.value as { id: string, name: string, url: string }[]; }
 
+  // Accessibility.
+  get ariaDescribedBy(): null | string {
+    let s = '';
+    if (this.description) { s += `hint-${this.id}`; }
+    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    return s || null;
+  }
+
   constructor(
     private injector: Injector,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private loggerService: LoggerService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
 
@@ -103,14 +114,32 @@ export class FormFileUploadComponent implements OnInit {
     );
   }
 
-  onChange(event: NgxDropzoneChangeEvent): void {
-
+  onChange(event: NgxDropzoneChangeEvent): void { 
+    this.hasError = false;
+    
     if (!this.fileConfig.httpUploadUrl) {
       console.error('No httpUploadUrl provided for file upload.');
     }
 
+    if (event.rejectedFiles.length > 0) {
+      const sizeExceeded = event.rejectedFiles.find((i) => i.reason === 'size');
+
+      if (sizeExceeded) {
+        this.hasError = true;
+        this.error = FormEngineHelper.getValidationMessage({maxFileSize: 'true'});
+      }
+    }
+
     if (event.addedFiles.length > 0) {
-      this.isLoadingFile = true;
+      const emptyFile = event.addedFiles.find((i) => i.size === 0);
+
+      if (emptyFile) {
+        event.addedFiles = event.addedFiles.filter(i => i.size !== 0);
+        this.hasError = true;
+        this.error = FormEngineHelper.getValidationMessage({emptyFile: 'true'});
+      } else {
+        this.isLoadingFile = true;
+      }
     }
 
     event.addedFiles.forEach(file => {

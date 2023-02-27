@@ -1,30 +1,32 @@
 import { DateISOType } from '@modules/core/interfaces/base.interfaces';
+import { RoleType } from '@modules/shared/dtos/roles.dto';
 
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from './authentication.enums';
 import { PhoneUserPreferenceEnum } from './authentication.service';
 
+export type UserContext = {
+  roleId: string,
+  type: UserRoleEnum,
+  organisation?: {
+    id: string,
+    acronym: string | null,
+    name: string,
+    organisationUnit?: { id: string; name: string; acronym: string; }
+  }
+};
+
 
 export class AuthenticationModel {
 
-  isSignIn: boolean;
+  isSignIn: boolean = false;
 
-  userContext: {
-    type: '' | UserRoleEnum,
-    organisation?: {
-      id: string,
-      name: string,
-      organisationUnit: { id: string; name: string; acronym: string; }
-    }
-  };
+  userContext?: UserContext;
 
   user?: {
     id: string,
     email: string,
     displayName: string,
-    roles: {
-      id: string,
-      role: UserRoleEnum,
-    }[],
+    roles: RoleType[],
     contactByPhone: boolean,
     contactByEmail: boolean,
     contactByPhoneTimeframe: PhoneUserPreferenceEnum | null,
@@ -37,6 +39,7 @@ export class AuthenticationModel {
     organisations: {
       id: string,
       name: string,
+      acronym: string | null,
       role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
       isShadow: boolean,
       size: null | string,
@@ -44,13 +47,5 @@ export class AuthenticationModel {
     }[]
   };
 
-
-  constructor() {
-
-    this.isSignIn = false;
-    this.userContext = {
-      type: ''
-    }
-  }
 
 }

@@ -34,7 +34,7 @@ export class PageInnovationActionTrackerCancelComponent extends CoreComponent im
 
     this.innovationsService.getActionInfo(this.innovationId, this.actionId).subscribe(response => {
 
-      if (this.stores.authentication.isAccessorType() && (response.createdBy.id !== this.stores.authentication.getUserId() || response.createdBy.organisationUnit?.id !== this.stores.authentication.getUserContextInfo().organisation?.organisationUnit.id)) {
+      if (this.stores.authentication.isAccessorType() && (response.createdBy.id !== this.stores.authentication.getUserId() || response.createdBy.organisationUnit?.id !== this.stores.authentication.getUserContextInfo()?.organisation?.organisationUnit?.id)) {
         return this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${this.actionId}`);
       }
 

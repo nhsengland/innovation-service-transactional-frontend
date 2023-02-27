@@ -1,5 +1,5 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
@@ -7,13 +7,12 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { EmptyMockComponent } from '@tests/app.mocks';
 
 import { CoreModule } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { UserRoleEnum } from '@app/base/enums';
 
-import { AuthenticationRedirectionGuard } from './authentication-redirection.guard';
 import { PLATFORM_ID } from '@angular/core';
-import { type } from 'os';
+import { AuthenticationRedirectionGuard } from './authentication-redirection.guard';
 
 
 describe('Core/Guards/AuthenticationRedirectionGuard', () => {
@@ -63,7 +62,7 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
 
   it('should deny access and redirect when user type is empty or path is empty', () => {
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = {};
-    authenticationStore.getUserType = () => '';
+    authenticationStore.getUserType = () => undefined;
     expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(false);
   });
 
@@ -114,7 +113,7 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovator' } };
     authenticationStore.getUserType = () => UserRoleEnum.INNOVATOR;
     authenticationStore.isTermsOfUseAccepted = () => true;
-    authenticationStore.getUserContextInfo = () => { return {type: UserRoleEnum.INNOVATOR} }
+    authenticationStore.getUserContextInfo = () => { return {roleId: 'id', type: UserRoleEnum.INNOVATOR} }
     expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(true);
   });
 

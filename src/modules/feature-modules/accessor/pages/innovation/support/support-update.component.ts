@@ -5,9 +5,9 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
 
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { AccessorService } from '../../../services/accessor.service';
 
@@ -77,7 +77,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.stepNumber = 1;
 
-    this.userOrganisationUnit = this.stores.authentication.getUserContextInfo().organisation?.organisationUnit || null;
+    this.userOrganisationUnit = this.stores.authentication.getUserContextInfo()?.organisation?.organisationUnit || null;
 
   }
 

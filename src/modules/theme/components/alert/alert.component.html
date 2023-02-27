@@ -8,7 +8,10 @@
           <ng-content></ng-content>
 
           <ul *ngIf="(itemsList || []).length > 0" class="nhsuk-list nhsuk-error-summary__list">
-            <li *ngFor="let item of itemsList">{{ item.title }}<br />({{ (item.description || '') | translate }})</li>
+            <li [ngClass]="fontItemColorCSS" *ngFor="let item of itemsList">
+                <a href="javascript:;" *ngIf="item.callback !== undefined" (click)="onItemClick(item.callback)">{{ item.title }}<br />{{ (item.description || '') | translate }}</a>
+                <span *ngIf="item.callback === undefined">{{ item.title }}<br />{{ (item.description || '') | translate }}</span>
+            </li>
           </ul>
 
         </div>

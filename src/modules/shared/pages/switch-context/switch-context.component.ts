@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
-import { InnovatorOrganisationRoleEnum, AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 import { LocalStorageHelper, UtilsHelper } from '@app/base/helpers';
 import { AuthenticationStore } from '@modules/stores';
+import { sortBy } from 'lodash';
 @Component({
   selector: 'shared-pages-switch-context',
   templateUrl: './switch-context.component.html'
@@ -10,11 +11,13 @@ import { AuthenticationStore } from '@modules/stores';
 export class PageSwitchContextComponent  extends CoreComponent implements OnInit {
   roles: {
     profile: string,
+    roleId: string,
     type: UserRoleEnum,
     organisation?: {
       id: string,
       name: string,
-      organisationUnit: { id: string; name: string; acronym: string; }
+      acronym: string | null,
+      organisationUnit?: { id: string; name: string; acronym: string; }
     },
   }[] = [];
   initialSelection = false;
@@ -29,61 +32,52 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
     const userInfo = this.authenticationStore.getUserInfo();
     const userContext = this.authenticationStore.getUserContextInfo();
 
-    this.initialSelection = !userContext.type;
+    this.initialSelection = !userContext;
 
-    if(!this.initialSelection) { 
+    if(userContext) { 
       if (this.authenticationStore.isAccessorType()) {
-        this.currentUserProfile = `${this.authenticationStore.getRoleDescription(userContext.type.toString() ?? '').trimEnd()} (${userContext.organisation?.organisationUnit.name.trimEnd()})`;
+        this.currentUserProfile = `${this.authenticationStore.getRoleDescription(userContext.type.toString() ?? '').trimEnd()} (${userContext.organisation?.organisationUnit?.name.trimEnd()})`;
       } else {
         this.currentUserProfile = `${this.authenticationStore.getRoleDescription(userContext.type.toString() ?? '').trimEnd()}`;
       }
     }
 
-    userInfo.organisations.forEach(org => {
-      org.organisationUnits.forEach((unit) => {
-        let profile = `${this.authenticationStore.getRoleDescription(org.role).trimEnd()} (${unit.name.trimEnd()})`;
-        
-        if (!this.initialSelection) {
-          profile = this.currentUserProfile === profile ? `Continue as ${UtilsHelper.indefiniteArticle(profile)}` : `Switch to my ${profile} profile`;
-        }      
-        
-        this.roles.push({
-          profile: profile,
-          type: org.role as string as UserRoleEnum,
-          organisation: {
-            id: org.id,
-            name: org.name,
-            organisationUnit: {
-              ...unit
-            }
-          }
-        })
-      })
-    });
-
-    userInfo.roles.filter(i => ![UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(i.role)).forEach((j) => {
-      let profile =  this.authenticationStore.getRoleDescription(j.role);
-
+    // I'm not considering if innovator roles + others should be sorted by organisation or have some special order, that can be changed in the future
+    // since it never happens nowadays. Previous code didn't order by organisation name but kept units together with organisation and other cases in the end
+    sortBy(userInfo.roles, ['organisation', 'organisationUnit']).forEach((role) => {
+      let profile = role.organisationUnit ?
+        `${this.authenticationStore.getRoleDescription(role.role).trimEnd()} (${role.organisationUnit.name.trimEnd()})` :
+        this.authenticationStore.getRoleDescription(role.role);
+      
       if (!this.initialSelection) {
         profile = this.currentUserProfile === profile ? `Continue as ${UtilsHelper.indefiniteArticle(profile)}` : `Switch to my ${profile} profile`;
-      }  
+      }
 
       this.roles.push({
         profile: profile,
-        type: j.role
-      });
-    })
+        roleId: role.id,
+        type: role.role,
+        ...role.organisation && { organisation: {
+          name: role.organisation.name,
+          id: role.organisation.id,
+          acronym: role.organisation.acronym,
+          ...role.organisationUnit && { organisationUnit: role.organisationUnit }
+          } }
+      })
+    });
 
     this.title = this.initialSelection ? 'Choose your profile' : 'Switch profile';
   }
 
   redirectToHomepage(role: {
     profile: string,
+    roleId: string,
     type: UserRoleEnum,
     organisation?: {
       id: string,
       name: string,
-      organisationUnit: { id: string; name: string; acronym: string; }
+      acronym: string | null,
+      organisationUnit?: { id: string; name: string; acronym: string; }
     },
   }): void {
 
@@ -91,30 +85,17 @@ export class PageSwitchContextComponent  extends CoreComponent implements OnInit
       let message = '';
       const currentUserContext = this.authenticationStore.getUserContextInfo();
 
-      if (role.organisation) {
-        const roleName = `${this.authenticationStore.getRoleDescription(role.type).trimEnd().toLowerCase()} (${role.organisation.organisationUnit.name.trimEnd()})`;
-  
-        this.authenticationStore.updateSelectedUserContext({
-          type: role.type,
-          organisation: {
-            ...role.organisation
-          }
-        });
+      const roleName = role.organisation?.organisationUnit ? 
+        `${this.authenticationStore.getRoleDescription(role.type).trimEnd().toLowerCase()} (${role.organisation.organisationUnit.name.trimEnd()})` :
+        `${this.authenticationStore.getRoleDescription(role.type).trimEnd().toLowerCase()}`;
 
-        message = currentUserContext.organisation?.organisationUnit.id === role.organisation.organisationUnit.id ? `You are logged in as ${UtilsHelper.indefiniteArticle(roleName)}.` : `Switch successful: you are now logged in with your ${roleName} profile.`
-        LocalStorageHelper.setObjectItem("orgUnitId", {'id': role.organisation.organisationUnit.id});
-      } else {
-        const roleName = `${this.authenticationStore.getRoleDescription(role.type).trimEnd().toLowerCase()}`;
-        message = currentUserContext.type === role.type? `You are logged in as ${UtilsHelper.indefiniteArticle(roleName)}.` : `Switch successful: you are now logged in with your ${roleName} profile.`
-        
-        this.authenticationStore.updateSelectedUserContext({
-          type: role.type
-        });
-        LocalStorageHelper.removeItem("orgUnitId");
-      }
-     
+      this.authenticationStore.updateSelectedUserContext(role);
 
-      LocalStorageHelper.setObjectItem("role", {'id': role.type});
+      message = (currentUserContext?.type === role.type && currentUserContext?.organisation?.organisationUnit?.id === role.organisation?.organisationUnit?.id) ? 
+        `You are logged in as ${UtilsHelper.indefiniteArticle(roleName)}.`:
+        `Switch successful: you are now logged in with your ${roleName} profile.`;
+
+      LocalStorageHelper.setObjectItem("role", role);
   
       if (!this.initialSelection) {
         this.setRedirectAlertSuccess(message);

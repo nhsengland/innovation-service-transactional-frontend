@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
-import { ThemeModule } from '@modules/theme/theme.module';
 import { SharedModule } from '@modules/shared/shared.module';
+import { ThemeModule } from '@modules/theme/theme.module';
 
 import { AssessmentRoutingModule } from './assessment-routing.module';
 
@@ -18,10 +18,10 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
 import { InnovationAssessmentEditComponent } from './pages/innovation/assessment/assessment-edit.component';
 import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/assessment-new.component';
-import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationChangeAssessorComponent } from './pages/innovation/change-assessor/change-assessor.component';
+import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 // // Innovations.
-import { ReviewInnovationsComponent } from './pages/innovations/review-innovations.component';
+import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
 
 // Services.
 import { AssessmentService } from './services/assessment.service';
@@ -46,7 +46,7 @@ import { AssessmentService } from './services/assessment.service';
     InnovationOverviewComponent,
     InnovationChangeAssessorComponent,
     // // Innovations.
-    ReviewInnovationsComponent
+    InnovationsListComponent
   ],
   providers: [
     // Services.

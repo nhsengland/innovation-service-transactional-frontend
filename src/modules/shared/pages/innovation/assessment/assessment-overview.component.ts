@@ -3,14 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { DatesHelper } from '@app/base/helpers';
 import { NotificationContextTypeEnum, UserRoleEnum } from '@app/base/enums';
+import { DatesHelper } from '@app/base/helpers';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
-import { maturityLevelItems, yesNoItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationNeedsAssessmentInfoDTO, InnovationSupportsLogDTO, SupportLogType } from '@modules/shared/services/innovations.dtos';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { maturityLevelItems, yesNoItems, yesPartiallyNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
@@ -49,7 +49,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
 
     super();
 
-    this.userType = this.stores.authentication.getUserType();
+    this.userType = this.stores.authentication.getUserType() ?? '';
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
     this.innovation = this.stores.context.getInnovation();
