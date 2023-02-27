@@ -25,12 +25,7 @@ export class ApiOutInterceptor implements HttpInterceptor {
         setHeaders: { 
           Cookie: this.serverRequest.headers.cookie || '',
           ...userContext && { 
-            'x-is-role': userContext.roleId,
-            'x-is-domain-context': JSON.stringify({user: {
-              role: userContext.type,
-              organisationId: userContext.organisation?.id,
-              organisationUnitId: userContext.organisation?.organisationUnit?.id
-            }})
+            'x-is-role': userContext.roleId
           },
         }
       });
@@ -38,12 +33,7 @@ export class ApiOutInterceptor implements HttpInterceptor {
       request = request.clone({
         setHeaders: {
           ...userContext && { 
-            'x-is-role': userContext.roleId,
-            'x-is-domain-context': JSON.stringify({user: {
-              role: userContext.type,
-              organisationId: userContext.organisation?.id,
-              organisationUnitId: userContext.organisation?.organisationUnit?.id
-            }})
+            'x-is-role': userContext.roleId
           },
         }
       });
