@@ -148,4 +148,25 @@ export class ContextStore extends Store<ContextModel> {
 
   }
 
+  /**
+   * sets the current url and the previous url if it is different from the current url
+   * @param url The url to set as the current url.
+   */
+  setCurrentUrl(url: string): void {
+    // failsafe to avoid setting the same url twice
+    if(this.state.currentUrl !== url) {
+      this.state.previousUrl = this.state.currentUrl;
+      this.state.currentUrl = url;
+      this.setState();
+    }
+  }
+
+  /**
+   * gets the previous url
+   * @returns The previous url.
+   */
+  getPreviousUrl(): string | null {
+    return this.state.previousUrl;
+  }
+
 }
