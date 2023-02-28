@@ -1,13 +1,13 @@
-import { Component, PLATFORM_ID, OnDestroy } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer, Location } from '@angular/common';
+import { Component, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { NGXLogger } from 'ngx-logger';
+import { Subscription } from 'rxjs';
 
-import { Request, Response } from 'express';
 import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
+import { Request, Response } from 'express';
 
 import { AppInjector } from '@modules/core/injectors/app-injector';
 
@@ -34,6 +34,9 @@ export class CoreComponent implements OnDestroy {
   private translateService: TranslateService;
   protected router: Router;
   protected logger: NGXLogger;
+  protected location: Location;
+  protected currentUrl?: string;
+  protected previousUrl?: string;
 
   protected CONSTANTS: {
     APP_URL: string;
@@ -74,6 +77,7 @@ export class CoreComponent implements OnDestroy {
     this.router = injector.get(Router);
     this.translateService = injector.get(TranslateService);
     this.logger = injector.get(NGXLogger);
+    this.location = injector.get(Location);
 
     this.CONSTANTS = {
       APP_URL: this.envVariablesStore.APP_URL,
@@ -87,6 +91,8 @@ export class CoreComponent implements OnDestroy {
       context: injector.get(ContextStore),
       innovation: injector.get(InnovationStore)
     };
+
+    this.stores.context.setCurrentUrl(this.location.path());
 
     this.subscriptions.push(
       this.stores.context.pageLayoutStatus$().subscribe(item => { this.pageStatus = item; })
@@ -144,7 +150,19 @@ export class CoreComponent implements OnDestroy {
   resetBackLink() {
     this.stores.context.setPageBackLink({ label: null });
   }
-  setBackLink(label: string, urlOrCallback: string | ((...p: any) => void), hiddenLabel?: string): void {
+
+  /**
+   * This function sets the back link for the current page. If none is provided, it will use the previous url or default to the dashboard.
+   * 
+   * @param label label for the back button
+   * @param urlOrCallback either a string url or a callback function to be called
+   * @param hiddenLabel hidden label for the back button
+   */
+  setBackLink(label: string, urlOrCallback?: string | ((...p: any) => void), hiddenLabel?: string): void {
+    // If no url is provided, use the previous url or default to the dashboard to avoid getting out of the app.
+    if (!urlOrCallback) {
+      urlOrCallback = this.stores.context.getPreviousUrl() ?? `/${this.stores.authentication.userUrlBasePath()}/dashboard`;
+    }
 
     if (typeof urlOrCallback === 'string') {
       this.stores.context.setPageBackLink({ label, url: urlOrCallback, hiddenLabel });
