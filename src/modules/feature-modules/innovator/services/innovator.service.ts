@@ -20,19 +20,20 @@ export type GetInnovationCollaboratorDTO = {
   id: string;
   email: string;
   user?: { id: string, name: string };
-  status: InvitationStatusEnum;
+  status: InnovationCollaboratorStatusEnum;
   innovation: { id: string, name: string, owner: string; description: string };
   collaboratorRole: string;
   invitedAt: string;
 }[];
 
-export enum InvitationStatusEnum {
+export enum InnovationCollaboratorStatusEnum {
   PENDING = 'PENDING',
   ACTIVE = 'ACTIVE',
   DECLINED = 'DECLINED',
-  CANCELED = 'CANCELED',
+  CANCELLED = 'CANCELLED',
   REMOVED = 'REMOVED',
   LEFT = 'LEFT',
+  EXPIRED = 'EXPIRED'
 }
 
 @Injectable()
@@ -72,7 +73,7 @@ export class InnovatorService extends CoreService {
     return of([{
       id: 'asdasd',
       email: '',
-      status: InvitationStatusEnum.PENDING,
+      status: InnovationCollaboratorStatusEnum.PENDING,
       innovation: {
         id: 'asdasd',
         name: 'test',
@@ -84,7 +85,7 @@ export class InnovatorService extends CoreService {
     }, {
       id: 'asdasd',
       email: '',
-      status: InvitationStatusEnum.PENDING,
+      status: InnovationCollaboratorStatusEnum.PENDING,
       innovation: {
         id: 'asdasd2',
         name: 'test2',
@@ -93,7 +94,8 @@ export class InnovatorService extends CoreService {
       },
       collaboratorRole: '',
       invitedAt: ''
-    }])
+    }]);
+    
     return this.http.get<any>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
