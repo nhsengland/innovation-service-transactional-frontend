@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -16,6 +16,24 @@ export type GetInnovationTransfersDTO = {
   innovation: { id: string, name: string, owner: string };
 }[];
 
+export type GetInnovationCollaboratorDTO = {
+  id: string;
+  email: string;
+  user?: { id: string, name: string };
+  status: InvitationStatusEnum;
+  innovation: { id: string, name: string, owner: string; description: string };
+  collaboratorRole: string;
+  invitedAt: string;
+}[];
+
+export enum InvitationStatusEnum {
+  PENDING = 'PENDING',
+  ACTIVE = 'ACTIVE',
+  DECLINED = 'DECLINED',
+  CANCELED = 'CANCELED',
+  REMOVED = 'REMOVED',
+  LEFT = 'LEFT',
+}
 
 @Injectable()
 export class InnovatorService extends CoreService {
@@ -47,6 +65,36 @@ export class InnovatorService extends CoreService {
       take(1),
       map(response => response)
     );
+  }
+
+  getInnovationInviteCollaborations(): Observable<GetInnovationCollaboratorDTO> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/invites');
+    return of([{
+      id: 'asdasd',
+      email: '',
+      status: InvitationStatusEnum.PENDING,
+      innovation: {
+        id: 'asdasd',
+        name: 'test',
+        owner: 'owen',
+        description: 'dasasd'
+      },
+      collaboratorRole: '',
+      invitedAt: ''
+    }, {
+      id: 'asdasd',
+      email: '',
+      status: InvitationStatusEnum.PENDING,
+      innovation: {
+        id: 'asdasd2',
+        name: 'test2',
+        owner: 'owen2',
+        description: 'dasasd2'
+      },
+      collaboratorRole: '',
+      invitedAt: ''
+    }])
+    return this.http.get<any>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
   getInnovationTransfers(assignToMe = false): Observable<GetInnovationTransfersDTO> {
