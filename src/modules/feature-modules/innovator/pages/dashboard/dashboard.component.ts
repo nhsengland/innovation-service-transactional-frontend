@@ -11,7 +11,7 @@ import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-import { GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
+import { GetInnovationCollaboratorDTO, GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
 
 
 @Component({
@@ -27,6 +27,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   };
 
   innovationTransfers: GetInnovationTransfersDTO = [];
+  inviteCollaborations: GetInnovationCollaboratorDTO = []
 
 
   constructor(
@@ -52,11 +53,11 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
     forkJoin([
       this.innovationsService.getInnovationsList({ fields: ['groupedStatus'] }).pipe(map(response => response), catchError(() => of(null))),
-      this.innovatorService.getInnovationTransfers(true).pipe(map(response => response), catchError(() => of(null)))
-    ]).subscribe(([innovationsList, innovationsTransfers]) => {
+      this.innovatorService.getInnovationTransfers(true).pipe(map(response => response), catchError(() => of(null))),
+      this.innovatorService.getInnovationInviteCollaborations().pipe(map(response => response), catchError(() => of(null)))
+    ]).subscribe(([innovationsList, innovationsTransfers, inviteCollaborations]) => {
 
       if (innovationsList) {
-
         this.user.innovations = innovationsList.data.map(innovation => ({
           id: innovation.id,
           name: innovation.name,
@@ -73,6 +74,12 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         this.innovationTransfers = innovationsTransfers;
       } else {
         this.setAlertUnknownError();
+      }
+
+      if (inviteCollaborations) {
+        this.inviteCollaborations = inviteCollaborations;
+      } else {
+        this.setAlertUnknownError();        
       }
 
       this.setPageStatus('READY');
