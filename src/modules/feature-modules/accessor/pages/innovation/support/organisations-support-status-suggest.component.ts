@@ -59,9 +59,8 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
     forkJoin([
       this.organisationsService.getOrganisationsList({ unitsInformation: true }),
-      this.innovationsService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment?.id || ''),
-      this.innovationsService.getInnovationSupportsList(this.innovation.id, false)
-    ]).subscribe(([organisations, needsAssessment, innovationSupportsList]) => {
+      this.innovationsService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment?.id || '')
+    ]).subscribe(([organisations, needsAssessment]) => {
 
       const needsAssessmentSuggestedOrganisations = needsAssessment.suggestedOrganisations.map(item => item.id);
 
