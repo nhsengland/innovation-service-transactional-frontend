@@ -33,7 +33,12 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
             this.state.userContext = {
               roleId: user.roles[0].id,
               type: user.roles[0].role,
-              ...user.roles[0].organisation && { organisation: user.roles[0].organisation }
+              ...user.roles[0].organisation && { organisation: {
+                id: user.roles[0].organisation.id,
+                name: user.roles[0].organisation.name,
+                acronym: user.roles[0].organisation.acronym,
+                ...user.roles[0].organisationUnit && { organisationUnit: user.roles[0].organisationUnit }
+              }}
             }
           } else {
             this.findAndPopulateUserContextFromLocalStorage()

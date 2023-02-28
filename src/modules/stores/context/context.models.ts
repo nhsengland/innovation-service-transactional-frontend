@@ -16,6 +16,9 @@ export class ContextModel {
   // If has value, user is navigating within the context of a innovation.
   innovation: null | ContextInnovationType = null;
 
+  // For back link navigation
+  currentUrl: string | null = null;
+  previousUrl: string | null = null;
 
   constructor() {
 
