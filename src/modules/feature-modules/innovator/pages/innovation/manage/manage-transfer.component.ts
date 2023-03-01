@@ -30,7 +30,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
   ) {
 
     super();
-    this.setPageTitle('Transfer ownership of this innovation');
+    this.setPageTitle('Transfer ownership');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
