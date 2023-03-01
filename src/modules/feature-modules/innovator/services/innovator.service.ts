@@ -20,17 +20,6 @@ export type GetInnovationCollaboratorInvitesDTO = {
   id: string;
   innovation: { id: string, name: string, owner: string; description: string };
 }[];
-
-export enum InnovationCollaboratorStatusEnum {
-  PENDING = 'PENDING',
-  ACTIVE = 'ACTIVE',
-  DECLINED = 'DECLINED',
-  CANCELLED = 'CANCELLED',
-  REMOVED = 'REMOVED',
-  LEFT = 'LEFT',
-  EXPIRED = 'EXPIRED'
-}
-
 @Injectable()
 export class InnovatorService extends CoreService {
 
