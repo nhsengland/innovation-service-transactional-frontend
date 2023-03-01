@@ -110,3 +110,13 @@ export enum InnovationExportRequestStatusEnum {
   CANCELLED = 'CANCELLED',
   EXPIRED = 'EXPIRED',
 }
+
+export enum InnovationCollaboratorStatusEnum {
+  PENDING = 'PENDING',
+  ACTIVE = 'ACTIVE',
+  DECLINED = 'DECLINED',
+  CANCELLED = 'CANCELLED',
+  REMOVED = 'REMOVED',
+  LEFT = 'LEFT',
+  EXPIRED = 'EXPIRED'
+}

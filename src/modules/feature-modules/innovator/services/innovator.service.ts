@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -16,7 +16,10 @@ export type GetInnovationTransfersDTO = {
   innovation: { id: string, name: string, owner: string };
 }[];
 
-
+export type GetInnovationCollaboratorInvitesDTO = {
+  id: string;
+  innovation: { id: string, name: string, owner: string; description: string };
+}[];
 @Injectable()
 export class InnovatorService extends CoreService {
 
@@ -47,6 +50,12 @@ export class InnovatorService extends CoreService {
       take(1),
       map(response => response)
     );
+  }
+
+  getInnovationInviteCollaborations(): Observable<GetInnovationCollaboratorInvitesDTO> {
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/invites');
+    
+    return this.http.get<GetInnovationCollaboratorInvitesDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
   getInnovationTransfers(assignToMe = false): Observable<GetInnovationTransfersDTO> {
