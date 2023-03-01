@@ -16,14 +16,9 @@ export type GetInnovationTransfersDTO = {
   innovation: { id: string, name: string, owner: string };
 }[];
 
-export type GetInnovationCollaboratorDTO = {
+export type GetInnovationCollaboratorInvitesDTO = {
   id: string;
-  email: string;
-  user?: { id: string, name: string };
-  status: InnovationCollaboratorStatusEnum;
   innovation: { id: string, name: string, owner: string; description: string };
-  collaboratorRole: string;
-  invitedAt: string;
 }[];
 
 export enum InnovationCollaboratorStatusEnum {
@@ -68,35 +63,10 @@ export class InnovatorService extends CoreService {
     );
   }
 
-  getInnovationInviteCollaborations(): Observable<GetInnovationCollaboratorDTO> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/invites');
-    return of([{
-      id: 'asdasd',
-      email: '',
-      status: InnovationCollaboratorStatusEnum.PENDING,
-      innovation: {
-        id: 'asdasd',
-        name: 'test',
-        owner: 'owen',
-        description: 'dasasd'
-      },
-      collaboratorRole: '',
-      invitedAt: ''
-    }, {
-      id: 'asdasd',
-      email: '',
-      status: InnovationCollaboratorStatusEnum.PENDING,
-      innovation: {
-        id: 'asdasd2',
-        name: 'test2',
-        owner: 'owen2',
-        description: 'dasasd2'
-      },
-      collaboratorRole: '',
-      invitedAt: ''
-    }]);
+  getInnovationInviteCollaborations(): Observable<GetInnovationCollaboratorInvitesDTO> {
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/invites');
     
-    return this.http.get<any>(url.buildUrl()).pipe(take(1), map(response => response));
+    return this.http.get<GetInnovationCollaboratorInvitesDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
   getInnovationTransfers(assignToMe = false): Observable<GetInnovationTransfersDTO> {

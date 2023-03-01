@@ -11,7 +11,7 @@ import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-import { GetInnovationCollaboratorDTO, GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
+import { GetInnovationCollaboratorInvitesDTO, GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
 
 
 @Component({
@@ -27,7 +27,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   };
 
   innovationTransfers: GetInnovationTransfersDTO = [];
-  inviteCollaborations: GetInnovationCollaboratorDTO = []
+  inviteCollaborations: GetInnovationCollaboratorInvitesDTO = []
 
 
   constructor(
