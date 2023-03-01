@@ -11,11 +11,11 @@ import { UserRoleEnum } from '@modules/stores/authentication/authentication.enum
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { getSectionTitle } from '@modules/stores/innovation/innovation.config';
 
-import { InnovationStatisticsEnum } from './statistics.enum';
 import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSubmissionDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLog, InnovationSupportsLogDTO, SupportLogType } from './innovations.dtos';
-import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
+import { InnovationStatisticsEnum } from './statistics.enum';
 
 export enum AssessmentSupportFilterEnum {
   UNASSIGNED = 'UNASSIGNED',
@@ -69,6 +69,7 @@ export type GetThreadsListDTO = {
         id: string;
         name: string;
         type: UserRoleEnum;
+        isOwner?: boolean;
         organisationUnit?: { id: string, name: string, acronym: string; };
       };
     };
