@@ -148,6 +148,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   getRoleDescription(role: string): string {
     switch (role) {
       case 'ADMIN': return 'Administrator';
+      // Think this one is not used
       case 'INNOVATOR_OWNER': return 'Owner';
       case 'ASSESSMENT': return 'Needs Assessor';
       case 'INNOVATOR': return 'Innovator';

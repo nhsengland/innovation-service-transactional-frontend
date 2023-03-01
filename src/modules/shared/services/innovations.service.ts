@@ -95,6 +95,7 @@ export type GetThreadParticipantsDTO = {
     identityId: string;
     name: string;
     type: UserRoleEnum;
+    isOwner?: boolean;
     organisationUnit?: { id: string, acronym: string}
   }[]
 };
@@ -109,6 +110,7 @@ export type GetThreadMessagesListInDTO = {
       id: string;
       name: string;
       role: UserRoleEnum;
+      isOwner?: boolean;
       organisation?: { id: string, name: string, acronym: string; };
       organisationUnit?: { id: string, name: string, acronym: string; };
     };
@@ -488,7 +490,9 @@ export class InnovationsService extends CoreService {
         count: response.count,
         messages: response.messages.map(message => ({
           ...message,
-          createdBy: { ...message.createdBy, typeDescription: this.stores.authentication.getRoleDescription(message.createdBy.role) }
+          createdBy: { ...message.createdBy, typeDescription: message.createdBy.role === 'INNOVATOR' ? 
+            ( message.createdBy.isOwner ? 'Owner' : 'Collaborator' ) :
+            this.stores.authentication.getRoleDescription(message.createdBy.role) }
         }))
       }))
     );
