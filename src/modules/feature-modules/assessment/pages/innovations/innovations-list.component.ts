@@ -159,7 +159,6 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       groupedStatus: { label: 'Status', orderable: false, align: 'right' },
     }).setOrderBy('submittedAt', 'descending');
 
-    this.reuseRouteStrategy();
 
   }
 
@@ -206,7 +205,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    
+
     for (const filter of this.filters) {
 
       if (filter.type === FilterTypeEnum.CHECKBOX) {
@@ -337,10 +336,4 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     return DatesHelper.parseIntoValidFormat(value);
   }
 
-  private reuseRouteStrategy(): void {
-    this.router.routeReuseStrategy.shouldReuseRoute = function () {
-      return false;
-    }
-    this.router.onSameUrlNavigation = 'reload';
-  }
 }
