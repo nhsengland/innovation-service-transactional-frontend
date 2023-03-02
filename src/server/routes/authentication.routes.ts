@@ -56,7 +56,8 @@ const signInOptions: IOIDCStrategyOptionWithoutRequest = {
   redirectUrl: OAUTH_CONFIGURATION.signinRedirectUrl,
   allowHttpForRedirectUrl: OAUTH_CONFIGURATION.allowHttpForRedirectUrl,
   passReqToCallback: OAUTH_CONFIGURATION.passReqToCallback,
-  scope: OAUTH_CONFIGURATION.scope
+  scope: OAUTH_CONFIGURATION.scope,
+  nonceLifetime: 3600000
 };
 const userSessions: UserSession[] = [];
 
