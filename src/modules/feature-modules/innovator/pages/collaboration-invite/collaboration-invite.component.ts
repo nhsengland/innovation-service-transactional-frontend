@@ -41,7 +41,7 @@ export class PageCollaborationInviteComponent extends CoreComponent implements O
         `You have declined the invitation to join "${this.collaborationInfo?.innovation.name}" innovation as a collaborator.`;
 
       this.setRedirectAlertSuccess(alertMessage);
-      this.redirectTo(`/innovator/homepage`);
+      this.redirectTo(`/innovator/dashboard`);
     })
 
   }
