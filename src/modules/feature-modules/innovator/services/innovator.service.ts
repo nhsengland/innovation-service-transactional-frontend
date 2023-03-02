@@ -63,12 +63,6 @@ export class InnovatorService extends CoreService {
   getInviteCollaborationInfo(innovationId: string, collaboratorId: string): Observable<GetInnovationCollaboratorInvitesDTO> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/collaborators/:collaboratorId').setPathParams({ innovationId, collaboratorId });
 
-    return of({
-      id: 'test',
-      inviteAt: 'adasd',
-      innovation: { id: 'asdasd', name: 'asdasdas', owner: 'ssss', description: 'adsadasd' }
-    })
-
     return this.http.get<GetInnovationCollaboratorInvitesDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
