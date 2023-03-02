@@ -55,6 +55,7 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
     let response: any = null;
     
     authenticationStore.getUserContextInfo = () => ({
+      id: 'userId',
       roleId: '123',
       type: UserRoleEnum.ADMIN
     });

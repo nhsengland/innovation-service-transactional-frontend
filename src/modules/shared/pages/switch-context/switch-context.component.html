@@ -1,36 +1,28 @@
-<div class="nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5">
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-two-thirds">
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-      <theme-page-title [title]="title"></theme-page-title>
-    </div>
+    <h1>{{ pageTitle }}</h1>
+
+    <p *ngIf="currentRole">You're currently logged in as {{ currentRole.description }}.</p>
+    <p *ngIf="user.roles.length > 1">You have more than one profile associated with your account.</p>
+    <p>Which profile would you like to use?</p>
+
   </div>
-
-
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-one-half">
-      <p *ngIf="initialSelection; else currentlyLoggedIn"  class="nhsuk-body-l nhsuk-u-margin-bottom-6" >You have more than one profile associated with your account.</p>
-      
-      <p class="nhsuk-body-l nhsuk-u-margin-bottom-3">Which profile would you like to use?</p>
-      <ng-container *ngFor="let role of roles">
-        <div class="nhsuk-card nhsuk-card--clickable">
-          <div class="nhsuk-card__content nhsuk-u-padding-4">
-            <h2 class="nhsuk-card__heading nhsuk-heading-m">
-              <a  class="nhsuk-card__link d-flex justify-content-space-between" (click)="redirectToHomepage(role)">
-                <span class="nhsuk-u-visually-hidden"> Go to </span> {{role.profile}}
-                <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
-                </svg>
-              </a>
-            </h2>
-          </div>
-        </div>      
-      </ng-container>
-    </div>
-  </div>
-
 </div>
 
-<ng-template #currentlyLoggedIn>
-  <p class="nhsuk-body-l nhsuk-u-margin-bottom-6">{{currentlyLoggedMessage()}}</p>
-</ng-template>
+<ul class="nhsuk-grid-row nhsuk-card-group nhsuk-u-padding-top-5">
+  <li *ngFor="let role of user.roles" class="nhsuk-grid-column-two-thirds nhsuk-card-group__item">
+    <div class="nhsuk-card nhsuk-card--clickable">
+      <div class="nhsuk-card__content">
+        <h2 class="nhsuk-card__heading nhsuk-heading-m">
+          <a class="nhsuk-card__link d-flex justify-content-space-between" (click)="onSubmit(role.id)">
+            <span class="nhsuk-u-visually-hidden">Go to </span> {{ role.label }}
+            <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
+            </svg>
+          </a>
+        </h2>
+      </div>
+    </div>
+  </li>
+</ul>

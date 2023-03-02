@@ -1,10 +1,9 @@
 import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import { LocalStorageHelper } from '@app/base/helpers';
-import { UserContext } from '@modules/stores/authentication/authentication.models';
 
-import { AuthenticationStore } from '../../stores/authentication/authentication.store';
+import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
+
 
 @Injectable()
 export class AuthenticationRedirectionGuard implements CanActivate {
@@ -19,20 +18,15 @@ export class AuthenticationRedirectionGuard implements CanActivate {
 
     const pathSegment = activatedRouteSnapshot.routeConfig?.path || '';
     const userContext = this.authentication.getUserContextInfo();
-    const currentRole = LocalStorageHelper.getObjectItem<UserContext>("role");
 
-    if(isPlatformServer(this.platformId)) {
+    if (isPlatformServer(this.platformId)) {
       this.router.navigate(['']);
       return false;
     }
-   
-    if (!userContext?.type) {
-      if (currentRole) {
-        this.authentication.findAndPopulateUserContextFromLocalStorage();
-      } else {
-        this.router.navigate(['/switch-user-context']);
-        return false;
-      }
+
+    if (!userContext) {
+      this.router.navigate(['/switch-user-context']);
+      return false;
     }
 
     if (!state.url.endsWith('terms-of-use') && userContext?.type !== 'ADMIN' && !this.authentication.isTermsOfUseAccepted()) {
