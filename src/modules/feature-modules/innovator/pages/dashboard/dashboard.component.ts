@@ -27,7 +27,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   };
 
   innovationTransfers: GetInnovationTransfersDTO = [];
-  inviteCollaborations: GetInnovationCollaboratorInvitesDTO = []
+  inviteCollaborations: GetInnovationCollaboratorInvitesDTO[] = []
 
 
   constructor(
