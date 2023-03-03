@@ -103,7 +103,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
   showOnlyCompleted = false;
 
-  availableGroupedStatus: InnovationGroupedStatusEnum[];
+  availableGroupedStatus: InnovationGroupedStatusEnum[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -111,8 +111,6 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
   ) {
 
     super();
-
-    this.setPageTitle('Innovations');
 
     this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT, InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
 
@@ -123,20 +121,22 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       groupedStatus: { label: 'Status', orderable: false, align: 'right' },
     }).setOrderBy('submittedAt', 'descending');
 
-
   }
 
   ngOnInit(): void {
 
-
     this.setDatasetGroupedStatuses();
+
+    this.onFormChange();
 
     this.subscriptions.push(
 
       this.activatedRoute.queryParams
       .subscribe(({ status }: Params) => {
 
+        this.setPageTitle('Innovations');
         let preSelectedStatus: InnovationGroupedStatusEnum[] | undefined;
+        this.setDefaultFilters();
 
         switch (status) {
           case 'COMPLETED':
@@ -144,7 +144,6 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
             this.setPageTitle('Assessment completed innovations');
             this.setBackLink('Go back', `${this.userUrlBasePath()}/innovations`);
             this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_SUPPORT, InnovationGroupedStatusEnum.RECEIVING_SUPPORT, InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT];
-            this.setDatasetGroupedStatuses();
             break;
           case 'NEEDS_ASSESSMENT':
             this.form.get('assignedToMe')?.setValue(true);
@@ -156,16 +155,16 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
           default:
         }
 
+        this.setDatasetGroupedStatuses();
+
         if (preSelectedStatus) {
           preSelectedStatus.forEach(status => (this.form.get('groupedStatuses') as FormArray).push(new FormControl(status)));
 
-          const groupedStatusesFilter = this.filters.find(f => f.key === 'groupedStatuses');
+          const groupedStatusesFilter: FiltersType | undefined = this.filters.find(f => f.key === 'groupedStatuses');
           if (groupedStatusesFilter) {
             groupedStatusesFilter.showHideStatus = 'opened';
           }
         }
-
-        this.onFormChange();
 
       }),
 
@@ -173,6 +172,13 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
     );
 
+  }
+
+  setDefaultFilters(): void{
+    this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT, InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
+    this.form.get('assignedToMe')?.setValue(false);
+    (this.form.get('groupedStatuses') as FormArray).clear();
+    this.showOnlyCompleted = false;
   }
 
   setDatasetGroupedStatuses(): void {
