@@ -103,7 +103,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
   showOnlyCompleted = false;
 
-  availableGroupedStatus: InnovationGroupedStatusEnum[] = [];
+  availableGroupedStatus: InnovationGroupedStatusEnum[];
 
   constructor(
     private activatedRoute: ActivatedRoute,
