@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { DatesHelper } from '@app/base/helpers';
 import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { GetInnovationCollaboratorInvitesDTO, InnovatorService } from '../../services/innovator.service';
@@ -30,13 +31,16 @@ export class PageCollaborationInviteComponent extends CoreComponent implements O
 
   ngOnInit(): void {
     this.innovatorService.getInviteCollaborationInfo(this.innovationId, this.collaboratorId).subscribe(response => {
-      this.collaborationInfo = response;
+      this.collaborationInfo = {
+        ...response,
+        invitedAt: DatesHelper.addDaysToDate(response.invitedAt?? '', 30).toString()
+      }
       this.setPageStatus('READY');
-    })
+    });
   }
 
-  onSubmit(status: InnovationCollaboratorStatusEnum): void {
-    this.innovatorService.updateInnovationCollaborationStatus(this.innovationId, this.collaboratorId, status).subscribe(() => {
+  onSubmit(status: InnovationCollaboratorStatusEnum.ACTIVE | InnovationCollaboratorStatusEnum.DECLINED): void {
+    this.innovatorService.updateCollaborationStatusByCollaborator(this.innovationId, status).subscribe(() => {
       const alertMessage = status === InnovationCollaboratorStatusEnum.ACTIVE ? `You have joined "${this.collaborationInfo?.innovation.name}" innovation as a collaborator.` :
         `You have declined the invitation to join "${this.collaborationInfo?.innovation.name}" innovation as a collaborator.`;
 

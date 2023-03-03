@@ -141,7 +141,9 @@ const routes: Routes = [
             path: ':innovationId/collaborations/:collaboratorId', 
             pathMatch: 'full',
             component: PageCollaborationInviteComponent,
-            data: { breadcrumb: null },
+            data: { 
+              breadcrumb: 'Collaboration Invite',
+            },
           },
           {
             path: ':innovationId',
