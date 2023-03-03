@@ -17,7 +17,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   sidebarItems: { label: string, url: string; nestedSidebarItems?: {label: string, url: string;}[] }[] = [];
   navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
-  
+
   private sectionsSidebar: InnovationRecordSidebar[] = [];
   private _sidebarItems: { label: string, url: string; }[] = [];
 
@@ -31,7 +31,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.onRouteChange();   
+    this.onRouteChange();
   }
 
   ngOnInit(): void {
@@ -42,7 +42,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  private generateSidebar(): void {    
+  private generateSidebar(): void {
     if (this.sidebarItems.length === 0) {
       const innovation = this.contextStore.getInnovation();
 
@@ -53,17 +53,18 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
         { label: 'Action tracker', url: `/innovator/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/innovator/innovations/${innovation.id}/threads` },
         { label: 'Data sharing and support', url: `/innovator/innovations/${innovation.id}/support` },
-        { label: 'Activity log', url: `/innovator/innovations/${innovation.id}/activity-log` }
+        { label: 'Activity log', url: `/innovator/innovations/${innovation.id}/activity-log` },
+        { label: 'Manage innovation', url: `/innovator/innovations/${innovation.id}/manage-innovation` }
       ];
     }
   }
 
   private onRouteChange(): void {
     this.generateSidebar();
-    
+
     if (this.router.url.includes('sections')) {
       this.showHeading = true;
-      this.sidebarItems = this.sectionsSidebar;        
+      this.sidebarItems = this.sectionsSidebar;
     } else {
       this.showHeading = false;
       this.sidebarItems = this._sidebarItems;

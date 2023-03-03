@@ -14,11 +14,10 @@ import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.mo
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { PageInnovationManageInfoComponent } from './manage-info.component';
 
-import { PageAccountInnovationsInfoComponent } from './innovations-info.component';
 
-
-describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsInfoComponent', () => {
+describe('FeatureModules/Innovator/Pages/Innovation/Manage/InnovationManageInfoComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
@@ -26,8 +25,8 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsInfoCompo
   let innovationsService: InnovationsService;
   let innovatorService: InnovatorService;
 
-  let component: PageAccountInnovationsInfoComponent;
-  let fixture: ComponentFixture<PageAccountInnovationsInfoComponent>;
+  let component: PageInnovationManageInfoComponent;
+  let fixture: ComponentFixture<PageInnovationManageInfoComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -54,7 +53,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsInfoCompo
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(PageAccountInnovationsInfoComponent);
+    fixture = TestBed.createComponent(PageInnovationManageInfoComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });

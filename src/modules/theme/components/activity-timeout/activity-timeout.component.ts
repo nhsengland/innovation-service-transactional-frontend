@@ -101,7 +101,6 @@ export class ActivityTimeoutComponent implements OnInit, OnDestroy {
   }
 
   signOut(): void {
-    LocalStorageHelper.removeItem("role");
     this.timeoutEvent.emit();
   }
 

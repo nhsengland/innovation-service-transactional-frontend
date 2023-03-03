@@ -20,7 +20,10 @@
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Last update</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
             <p>{{ action.updatedAt | date: ('app.date_formats.long_date' | translate) }}</p>
-            <span class="font-color-secondary">by {{ action.updatedBy.name }} ({{ this.stores.authentication.getRoleDescription(action.updatedBy.role) }})</span>
+            <span *ngIf="action.updatedBy.role === 'INNOVATOR'; else notInnovator" class="font-color-secondary">by {{ action.updatedBy.name }} ({{ action.updatedBy.isOwner ? 'Owner' : 'Collaborator' }})</span>
+            <ng-template #notInnovator>
+              <span class="font-color-secondary">by {{ action.updatedBy.name }} ({{ this.stores.authentication.getRoleDescription(action.updatedBy.role) }})</span>
+            </ng-template>
           </dd>
         </div>
         <div class="nhsuk-summary-list__row">

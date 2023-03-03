@@ -4,9 +4,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { LocalStorageHelper } from '@app/base/helpers';
 import { CookiesService } from '@modules/core/services/cookies.service';
-import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
+
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
 
@@ -22,6 +21,7 @@ export type HeaderMenuBarItemType = {
 
 export type HeaderNotificationsType = { [key: string]: number };
 
+
 @Component({
   selector: 'theme-header',
   templateUrl: './header.component.html',
@@ -35,10 +35,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() rightMenuBarItems: HeaderMenuBarItemType[] = [];
   @Input() notifications: HeaderNotificationsType = {};
 
-
-  private subscriptions: Subscription[] = [];
-
-  signOutUrl: string;
+  private subscriptions = new Subscription();
 
   showCookiesBanner = false;
   showCookiesSaveSuccess = false;
@@ -56,7 +53,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
     private authenticationStore: AuthenticationStore,
-    private environmentVariablesStore: EnvironmentVariablesStore,
     private coockiesService: CookiesService
   ) {
 
@@ -66,13 +62,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     
     this.user = {
       displayName: user.displayName,
-      description: this.authenticationStore.isAccessorType() ? `Logged in as ${userRole} (${userContext?.organisation?.organisationUnit?.name})` : `Logged in as ${userRole}`,
+      description: this.authenticationStore.isAccessorType() ? `Logged in as ${userRole} (${userContext?.organisationUnit?.name})` : `Logged in as ${userRole}`,
       showSwitchProfile: this.authenticationStore.hasMultipleRoles()
     };
 
-    this.signOutUrl = `${this.environmentVariablesStore.APP_URL}/signout`;
-
-    this.subscriptions.push(
+    this.subscriptions.add(
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
     );
 
@@ -169,13 +163,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   signOut(): void {
-    LocalStorageHelper.removeItem("role");
+    this.authenticationStore.signOut();
   }
 
 
-
   ngOnDestroy(): void {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.unsubscribe();
   }
 
 }

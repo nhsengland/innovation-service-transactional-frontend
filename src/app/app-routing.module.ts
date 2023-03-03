@@ -8,12 +8,12 @@ import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
 import { PageAccountDeleteMessageComponent } from '@modules/shared/pages/account/delete-message/delete-message.component';
 import { PageErrorComponent } from '@modules/shared/pages/error/error.component';
 import { PageNotFoundComponent } from '@modules/shared/pages/error/not-found.component';
+import { PageSwitchContextComponent } from '@modules/shared/pages/switch-context/switch-context.component';
 
 // Guards.
 import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
 import { AuthenticationRedirectionGuard } from '@modules/core/guards/authentication-redirection.guard';
 import { InnovationTransferRedirectionGuard } from '@modules/core/guards/innovation-transfer-redirection.guard';
-import { PageSwitchContextComponent } from '@modules/shared/pages/switch-context/switch-context.component';
 
 const routes: Routes = [
 

@@ -1,3 +1,8 @@
+import { PageInnovationManageWithdrawComponent } from './pages/innovation/manage/manage-withdraw.component';
+import { PageInnovationManageTransferComponent } from './pages/innovation/manage/manage-transfer.component';
+import { PageInnovationManageStopSharingComponent } from './pages/innovation/manage/manage-stop-sharing.component';
+import { PageInnovationManageStopSharingOverviewComponent } from './pages/innovation/manage/manage-stop-sharing-overview.component';
+import { PageInnovationManageInfoComponent } from './pages/innovation/manage/manage-info.component';
 import { NgModule } from '@angular/core';
 
 import { ThemeModule } from '@modules/theme/theme.module';
@@ -14,11 +19,6 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
 import { PageAccountInfoComponent } from './pages/account/account-info.component';
-import { PageAccountInnovationsWithdrawComponent } from './pages/account/innovations-withdraw.component';
-import { PageAccountInnovationsInfoComponent } from './pages/account/innovations-info.component';
-import { PageAccountInnovationsTransferComponent } from './pages/account/innovations-transfer.component';
-import { PageAccountInnovationsStopSharingComponent } from './pages/account/innovations-stop-sharing.component';
-import { PageAccountInnovationsStopSharingOverviewComponent } from './pages/account/innovations-stop-sharing-overview.component';
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // First time signin.
@@ -64,11 +64,6 @@ import { InnovatorService } from './services/innovator.service';
     // // Account.
     PageAccountDeleteComponent,
     PageAccountInfoComponent,
-    PageAccountInnovationsWithdrawComponent,
-    PageAccountInnovationsInfoComponent,
-    PageAccountInnovationsTransferComponent,
-    PageAccountInnovationsStopSharingComponent,
-    PageAccountInnovationsStopSharingOverviewComponent,
     // // Dashboard.
     PageDashboardComponent,
     // // First time signin.
@@ -86,6 +81,11 @@ import { InnovatorService } from './services/innovator.service';
     InnovationExportRequestRejectComponent,
     InnovationActionCompleteConfirmationComponent,
     PageCollaborationInviteComponent,
+    PageInnovationManageInfoComponent,
+    PageInnovationManageStopSharingOverviewComponent,
+    PageInnovationManageStopSharingComponent,
+    PageInnovationManageTransferComponent,
+    PageInnovationManageWithdrawComponent,
 
     // Components.
     OrganisationSuggestionsCardComponent

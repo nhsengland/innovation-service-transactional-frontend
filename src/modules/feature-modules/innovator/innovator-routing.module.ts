@@ -13,9 +13,6 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
 import { PageAccountInfoComponent } from './pages/account/account-info.component';
-import { PageAccountInnovationsWithdrawComponent } from './pages/account/innovations-withdraw.component';
-import { PageAccountInnovationsInfoComponent } from './pages/account/innovations-info.component';
-import { PageAccountInnovationsTransferComponent } from './pages/account/innovations-transfer.component';
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // First time signin.
@@ -38,8 +35,6 @@ import { PageAccountEmailNotificationsEditComponent } from '@modules/shared/page
 import { PageAccountEmailNotificationsListComponent } from '@modules/shared/pages/account/email-notifications/email-notifications-list.component';
 import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
 import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
-import { PageAccountInnovationsStopSharingComponent } from './pages/account/innovations-stop-sharing.component';
-import { PageAccountInnovationsStopSharingOverviewComponent } from './pages/account/innovations-stop-sharing-overview.component';
 // // Innovation.
 import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/actions/action-status-list.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
@@ -75,6 +70,11 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 import { InnovationActionCompleteConfirmationComponent } from './pages/innovation/action-complete-confirmation/action-complete-confirmation.component';
 import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 import { PageCollaborationInviteComponent } from './pages/collaboration-invite/collaboration-invite.component';
+import { PageInnovationManageInfoComponent } from './pages/innovation/manage/manage-info.component';
+import { PageInnovationManageTransferComponent } from './pages/innovation/manage/manage-transfer.component';
+import { PageInnovationManageWithdrawComponent } from './pages/innovation/manage/manage-withdraw.component';
+import { PageInnovationManageStopSharingOverviewComponent } from './pages/innovation/manage/manage-stop-sharing-overview.component';
+import { PageInnovationManageStopSharingComponent } from './pages/innovation/manage/manage-stop-sharing.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -180,7 +180,7 @@ const routes: Routes = [
                 },
                 children: [
                   { path: '', pathMatch: 'full', component: PageInnovationHowToProceedComponent },
-                  { path: 'needs-reassessment-send', pathMatch: 'full', component: PageInnovationNeedsReassessmentSendComponent, 
+                  { path: 'needs-reassessment-send', pathMatch: 'full', component: PageInnovationNeedsReassessmentSendComponent,
                     data: { breadcrumb: null }
                   },
                 ]
@@ -263,8 +263,8 @@ const routes: Routes = [
                             ]
                           },
                           {
-                            path: 'confirm-update', 
-                            pathMatch: 'full', 
+                            path: 'confirm-update',
+                            pathMatch: 'full',
                             component: InnovationActionCompleteConfirmationComponent,
                             data: {
                               breadcrumb: null,
@@ -392,6 +392,37 @@ const routes: Routes = [
               },
 
               {
+                path: 'manage-innovation',
+                data: { breadcrumb: 'Manage innovation' },
+                children: [
+                  {
+                    path: '', pathMatch: 'full', component: PageInnovationManageInfoComponent,
+                    data: { breadcrumb: null }
+                  },
+                  {
+                    path: 'transfer', pathMatch: 'full', component: PageInnovationManageTransferComponent
+                  },
+                  {
+                    path: 'withdraw', pathMatch: 'full', component: PageInnovationManageWithdrawComponent
+                  },
+                  {
+                    path: 'stop-sharing',
+                    data: { breadcrumb: 'Stop sharing' },
+                    children: [
+                      {
+                        path: '', pathMatch: 'full', component: PageInnovationManageStopSharingOverviewComponent,
+                        data: { breadcrumb: null }
+                      },
+                      {
+                        path: 'request', pathMatch: 'full', component: PageInnovationManageStopSharingComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' } }
+                      }
+                    ]
+                  }
+                ]
+              },
+
+              {
                 path: 'export',
                 data: { breadcrumb: 'Export', layout: { type: 'full' } },
                 children: [
@@ -466,36 +497,6 @@ const routes: Routes = [
                   breadcrumb: 'Edit',
                   layout: { type: 'full' }
                 }
-              }
-            ]
-          },
-          {
-            path: 'manage-innovations',
-            data: { breadcrumb: 'Manage innovations' },
-            children: [
-              {
-                path: '', pathMatch: 'full', component: PageAccountInnovationsInfoComponent,
-                data: { breadcrumb: null }
-              },
-              {
-                path: 'transfer', pathMatch: 'full', component: PageAccountInnovationsTransferComponent
-              },
-              {
-                path: 'withdraw', pathMatch: 'full', component: PageAccountInnovationsWithdrawComponent
-              },
-              {
-                path: 'stop-sharing',
-                data: { breadcrumb: 'Stop sharing' },
-                children: [
-                  {
-                    path: '', pathMatch: 'full', component: PageAccountInnovationsStopSharingOverviewComponent,
-                    data: { breadcrumb: null }
-                  },
-                  {
-                    path: 'request', pathMatch: 'full', component: PageAccountInnovationsStopSharingComponent,
-                    data: { breadcrumb: null, layout: { type: 'full' } }
-                  }
-                ]
               }
             ]
           },

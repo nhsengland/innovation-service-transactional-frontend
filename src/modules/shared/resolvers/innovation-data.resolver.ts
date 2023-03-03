@@ -12,7 +12,7 @@ import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 /**
- * Note: With the creation of the environment store, this can be changed to a guard in the future,
+ * Note: With the creation of the context store, this can be changed to a guard in the future,
  * as it is also assuming that responsibility now (verifying access to the innovation).
  */
 @Injectable()
@@ -31,12 +31,13 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
 
     return this.innovationsService.getInnovationInfo(route.params.innovationId).pipe(
       map(response => {
+
         const userContext = this.authenticationStore.getUserContextInfo();
 
         let support: undefined | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string };
 
         if (this.authenticationStore.isAccessorType()) {
-          support = (response.supports || []).find(item => item.organisationUnitId === userContext?.organisation?.organisationUnit?.id);
+          support = (response.supports || []).find(item => item.organisationUnitId === userContext?.organisationUnit?.id);
         }
 
         this.contextStore.setInnovation({
@@ -44,10 +45,11 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
           name: response.name,
           status: response.status,
           owner: { isActive: response.owner.isActive, name: response.owner.name },
+          loggedUser: { isOwner: response.owner.id === userContext?.id },
           ...(response.assessment ? { assessment: { id: response.assessment.id } } : {}),
           ...(response.assessment?.assignedTo ? { assignedTo: { id: response.assessment.assignedTo?.id } } : {}),
           ...(support ? { support: { id: support.id, status: support.status } } : {}),
-          export: response.export,
+          export: response.export
         });
 
         return {
@@ -61,9 +63,7 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
         this.contextStore.clearInnovation();
         this.router.navigateByUrl('error/forbidden-innovation');
 
-        /* istanbul ignore next */
         this.logger.error('Error fetching data innovation data', error);
-        /* istanbul ignore next */
         return of(null);
 
       })

@@ -157,7 +157,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
           if (this.stores.authentication.isAdminRole() === false) {
             status = (innovation.supports || []).find(s =>
-              s.organisation.unit.id === this.stores.authentication.getUserContextInfo()?.organisation?.organisationUnit?.id
+              s.organisation.unit.id === this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
             )?.status ?? InnovationSupportStatusEnum.UNASSIGNED
           }
 
