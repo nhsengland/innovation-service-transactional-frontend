@@ -113,7 +113,7 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovator' } };
     authenticationStore.getUserType = () => UserRoleEnum.INNOVATOR;
     authenticationStore.isTermsOfUseAccepted = () => true;
-    authenticationStore.getUserContextInfo = () => { return {roleId: 'id', type: UserRoleEnum.INNOVATOR} }
+    authenticationStore.getUserContextInfo = () => { return { id: 'userId', roleId: 'id', type: UserRoleEnum.INNOVATOR } }
     expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(true);
   });
 

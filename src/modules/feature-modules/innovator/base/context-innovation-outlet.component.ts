@@ -3,8 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { ContextStore } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { AuthenticationStore, ContextStore } from '@modules/stores';
 
 
 @Component({
@@ -15,14 +14,16 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
   private subscriptions = new Subscription();
 
-  data: {
-    innovation: null | { id: string, name: string, status: InnovationStatusEnum, assessmentId?: string },
-    link: null | { label: string, url: string }
-  } = { innovation: null, link: null };
+  innovation: {
+    id: string,
+    name: string,
+    userIsOwner: boolean
+  } = { id: '', name: '', userIsOwner: false };
 
 
   constructor(
     private router: Router,
+    private authenticationStore: AuthenticationStore,
     private contextStore: ContextStore
   ) {
 
@@ -39,8 +40,13 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
   private onRouteChange(_event: NavigationEnd): void {
 
+    const user = this.authenticationStore.getUserInfo();
     const innovation = this.contextStore.getInnovation();
-    this.data.innovation = { id: innovation.id, name: innovation.name, status: innovation.status, assessmentId: innovation.assessment?.id };
+    this.innovation = {
+      id: innovation.id,
+      name: innovation.name,
+      userIsOwner: innovation.loggedUser.isOwner
+    };
 
   }
 
