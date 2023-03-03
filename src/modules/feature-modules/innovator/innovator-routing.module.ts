@@ -69,6 +69,7 @@ import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationActionCompleteConfirmationComponent } from './pages/innovation/action-complete-confirmation/action-complete-confirmation.component';
 import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
+import { PageCollaborationInviteComponent } from './pages/collaboration-invite/collaboration-invite.component';
 import { PageInnovationManageInfoComponent } from './pages/innovation/manage/manage-info.component';
 import { PageInnovationManageTransferComponent } from './pages/innovation/manage/manage-transfer.component';
 import { PageInnovationManageWithdrawComponent } from './pages/innovation/manage/manage-withdraw.component';
@@ -98,7 +99,6 @@ const routes: Routes = [
 
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', pathMatch: 'full', component: PageDashboardComponent },
-
       {
         path: 'terms-of-use', pathMatch: 'full', component: PageTermsOfUseAcceptanceComponent,
         data: {
@@ -137,6 +137,14 @@ const routes: Routes = [
           { path: '', pathMatch: 'full', redirectTo: '../dashboard' },
 
           { path: 'new', pathMatch: 'full', component: InnovationNewComponent },
+          { 
+            path: ':innovationId/collaborations/:collaboratorId', 
+            pathMatch: 'full',
+            component: PageCollaborationInviteComponent,
+            data: { 
+              breadcrumb: 'Collaboration Invite',
+            },
+          },
           {
             path: ':innovationId',
             resolve: { innovationData: InnovationDataResolver },
@@ -158,7 +166,6 @@ const routes: Routes = [
                 path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent,
                 data: { breadcrumb: null }
               },
-
               {
                 path: 'assessments/:assessmentId', pathMatch: 'full', component: PageInnovationAssessmentOverviewComponent,
                 data: {

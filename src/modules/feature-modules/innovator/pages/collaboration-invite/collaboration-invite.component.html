@@ -1,0 +1,36 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds" *ngIf="collaborationInfo">
+      <p class="nhsuk-u-margin-bottom-0">
+        You have been invited to collaborate on this innovation by its owner.
+      </p>
+      <p>You have until {{collaborationInfo.invitedAt | date: ('app.date_formats.medium_date' | translate)}} to respond to this invite.</p>
+
+      <dl class="nhsuk-summary-list">
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-bottom-3 nhsuk-u-padding-top-3">Innovation name</dt>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-bottom-3 nhsuk-u-padding-top-3">
+            {{collaborationInfo.innovation.name}}
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-bottom-3 nhsuk-u-padding-top-3">Owner</dt>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-bottom-3 nhsuk-u-padding-top-3">
+            {{collaborationInfo.innovation.owner?.name}}
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-bottom-3 nhsuk-u-padding-top-3">Description</dt>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-bottom-3 nhsuk-u-padding-top-3">
+            {{collaborationInfo.innovation.description}}
+          </dd>
+        </div>
+      </dl>
+
+      <a class="nhsuk-button nhsuk-u-margin-right-3" (click)="onSubmit(status.ACTIVE)">Accept invitation</a>
+      <a class="nhsuk-button nhsuk-button--secondary" (click)="onSubmit(status.DECLINED)">Decline</a>
+    </div>
+  </div>
+
+</theme-content-wrapper>

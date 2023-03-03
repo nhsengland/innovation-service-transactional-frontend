@@ -21,10 +21,10 @@
         <li *ngFor="let item of inviteCollaborations" class="nhsuk-grid-column-full nhsuk-card-group__item">
           <div class="nhsuk-card">
             <div class="nhsuk-card__content">
-              <h2 class="nhsuk-card__heading nhsuk-heading-m">You have been invited to collaborate on '{{item.innovation.name}}' innovation by its owner '{{ item.innovation.owner }} '</h2>
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">You have been invited to collaborate on '{{item.innovation.name}}' innovation by its owner</h2>
 
-              <p class="nhsuk-card__description nhsuk-u-margin-bottom-0 font-color-secondary">You have 30 days to respond before the invitation expires.</p>
-              <a routerLink="/innovator/invitations/{{ item.id }}" class="nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-margin-right-2 nhsuk-action-link__text">
+              <p class="nhsuk-card__description nhsuk-u-margin-bottom-0 font-color-secondary">You have until {{item.invitedAt | date: ('app.date_formats.medium_date' | translate)}} to respond to this invite.</p>
+              <a routerLink="/innovator/innovations/{{ item.innovation.id }}/collaborations/{{ item.id }}" class="nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-margin-right-2 nhsuk-action-link__text">
                 See invitation <span class="nhsuk-u-visually-hidden"> Access collaboration invites </span>
               </a>
             </div>

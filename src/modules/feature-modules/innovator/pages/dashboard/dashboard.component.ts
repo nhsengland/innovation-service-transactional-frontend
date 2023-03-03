@@ -12,6 +12,7 @@ import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { GetInnovationCollaboratorInvitesDTO, GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
+import { DatesHelper } from '@app/base/helpers';
 
 
 @Component({
@@ -27,7 +28,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   };
 
   innovationTransfers: GetInnovationTransfersDTO = [];
-  inviteCollaborations: GetInnovationCollaboratorInvitesDTO = []
+  inviteCollaborations: GetInnovationCollaboratorInvitesDTO[] = []
 
 
   constructor(
@@ -77,7 +78,12 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       }
 
       if (inviteCollaborations) {
-        this.inviteCollaborations = inviteCollaborations;
+        this.inviteCollaborations = inviteCollaborations.map(i => {
+          return {
+            ...i,
+            invitedAt: DatesHelper.addDaysToDate(i.invitedAt?? '', 30).toString()
+          }
+        });
       } else {
         this.setAlertUnknownError();        
       }

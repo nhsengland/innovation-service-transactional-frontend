@@ -8,6 +8,7 @@ import { UrlModel } from '@app/base/models';
 import { MappedObjectType } from '@app/base/types';
 
 import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
+import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 export type GetInnovationTransfersDTO = {
@@ -18,8 +19,17 @@ export type GetInnovationTransfersDTO = {
 
 export type GetInnovationCollaboratorInvitesDTO = {
   id: string;
-  innovation: { id: string, name: string, owner: string; description: string };
-}[];
+  invitedAt: string;
+  innovation: { 
+    id: string, 
+    name: string,  
+    description: string 
+    owner?: {
+      id: string;
+      name: string;
+    }
+  };
+};
 @Injectable()
 export class InnovatorService extends CoreService {
 
@@ -52,10 +62,25 @@ export class InnovatorService extends CoreService {
     );
   }
 
-  getInnovationInviteCollaborations(): Observable<GetInnovationCollaboratorInvitesDTO> {
+  getInnovationInviteCollaborations(): Observable<GetInnovationCollaboratorInvitesDTO[]> {
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/invites');
     
+    return this.http.get<GetInnovationCollaboratorInvitesDTO[]>(url.buildUrl()).pipe(take(1), map(response => response));
+  }
+
+  getInviteCollaborationInfo(innovationId: string, collaboratorId: string): Observable<GetInnovationCollaboratorInvitesDTO> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/collaborators/:collaboratorId').setPathParams({ innovationId, collaboratorId });
+
     return this.http.get<GetInnovationCollaboratorInvitesDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+  }
+
+  updateCollaborationStatusByCollaborator(
+    innovationId: string, 
+    status: InnovationCollaboratorStatusEnum.ACTIVE | InnovationCollaboratorStatusEnum.DECLINED | InnovationCollaboratorStatusEnum.LEFT
+  ): Observable<{ id: string }> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/collaborators/invites').setPathParams({ innovationId });
+
+    return this.http.patch<{ id: string }>(url.buildUrl(), { status }).pipe(take(1), map(response => response));
   }
 
   getInnovationTransfers(assignToMe = false): Observable<GetInnovationTransfersDTO> {
