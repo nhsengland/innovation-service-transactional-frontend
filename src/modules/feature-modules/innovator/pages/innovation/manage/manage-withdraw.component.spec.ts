@@ -13,9 +13,9 @@ import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { PageAccountInnovationsWithdrawComponent } from './innovations-withdraw.component';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { PageInnovationManageWithdrawComponent } from './manage-withdraw.component';
 
 
 describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsWithdrawComponent', () => {
@@ -27,8 +27,8 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsWithdrawC
   let innovationsService: InnovationsService;
   let innovatorService: InnovatorService;
 
-  let component: PageAccountInnovationsWithdrawComponent;
-  let fixture: ComponentFixture<PageAccountInnovationsWithdrawComponent>;
+  let component: PageInnovationManageWithdrawComponent;
+  let fixture: ComponentFixture<PageInnovationManageWithdrawComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -56,7 +56,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsWithdrawC
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(PageAccountInnovationsWithdrawComponent);
+    fixture = TestBed.createComponent(PageInnovationManageWithdrawComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
 

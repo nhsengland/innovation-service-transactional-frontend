@@ -16,29 +16,29 @@
 
   <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
-      <h2 class="nhsuk-heading-l"> Transfer ownership of an innovation </h2>
-      <p *ngIf="!haveAnyActiveInnovation"> You have currently no innovation to transfer. </p>
-      <p *ngIf="haveAnyActiveInnovation"> Transfer the ownership of an innovation to someone else. You will need their email address. </p>
-      <a *ngIf="haveAnyActiveInnovation" routerLink="transfer" class="nhsuk-u-font-size-19"> Transfer innovation ownership </a>
+      <h2 class="nhsuk-heading-l"> Transfer ownership </h2>
+      <p *ngIf="!isActiveInnovation"> You have already requested to transfer ownership of this innovation. </p>
+      <p *ngIf="isActiveInnovation"> To transfer the ownership of an innovation to someone else, you will need their email address. </p>
+      <a *ngIf="isActiveInnovation" routerLink="transfer" class="nhsuk-u-font-size-19"> Transfer innovation ownership </a>
     </div>
   </div>
 
   <div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
-      <h2 class="nhsuk-heading-l"> Stop sharing an innovation </h2>
-      <p *ngIf="!haveAnyInProgressInnovation"> You have currently no innovation to stop sharing. </p>
-      <p *ngIf="haveAnyInProgressInnovation"> Stop sharing an innovation if you want to take a break from working with your support organisations. </p>
-      <a *ngIf="haveAnyInProgressInnovation" routerLink="stop-sharing" class="nhsuk-u-font-size-19"> Stop sharing an innovation </a>
+      <h2 class="nhsuk-heading-l"> Stop sharing this innovation </h2>
+      <p *ngIf="!isInProgressInnovation"> You have not shared this innovation. </p>
+      <p *ngIf="isInProgressInnovation"> If you want to take a break, you can stop sharing your innovation with your support organisations.  </p>
+      <a *ngIf="isInProgressInnovation" routerLink="stop-sharing" class="nhsuk-u-font-size-19"> Stop sharing this innovation </a>
       <p *ngIf="pausedInnovationsCounter > 0" class="font-color-secondary nhsuk-body-s">You have stopped sharing {{ pausedInnovationsCounter }} innovation(s).</p>
     </div>
   </div>
 
   <div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
-      <h2 class="nhsuk-heading-l"> Withdraw an innovation </h2>
-      <p *ngIf="!haveAnyActiveInnovation"> You have currently no innovation to withdraw. </p>
-      <p *ngIf="haveAnyActiveInnovation"> Withdraw an innovation you are no longer working on. You will need to enter your password. </p>
-      <a *ngIf="haveAnyActiveInnovation" routerLink="withdraw" class="nhsuk-u-font-size-19"> Withdraw an innovation </a>
+      <h2 class="nhsuk-heading-l"> Withdraw this innovation </h2>
+      <p *ngIf="!isActiveInnovation"> You can not withdraw this innovation since it is currently waiting for the transfer of ownership to complete. </p>
+      <p *ngIf="isActiveInnovation"> To withdraw an innovation you are no longer working on, you will need to enter your password. </p>
+      <a *ngIf="isActiveInnovation" routerLink="withdraw" class="nhsuk-u-font-size-19"> Withdraw this innovation </a>
     </div>
   </div>
 

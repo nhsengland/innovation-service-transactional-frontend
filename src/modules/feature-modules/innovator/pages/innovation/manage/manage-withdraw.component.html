@@ -6,22 +6,11 @@
       <form [formGroup]="form" (ngSubmit)="onSubmitForm()">
 
         <ng-container *ngIf="stepNumber === 1">
-          <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
-            <div class="nhsuk-heading-m nhsuk-warning-callout__label">
-              <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Warning </span>
-            </div>
-            <p> You will no longer have access to your innovation. If you want to keep a copy, you should download a PDF from the innovation record page before proceeding. </p>
-          </div>
-          <theme-form-radio-group controlName="innovation" label="Choose which innovation to withdraw:" [items]="formInnovationsItems" [pageUniqueField]="false"></theme-form-radio-group>
-          <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3"> Continue </button>
-        </ng-container>
-
-        <ng-container *ngIf="stepNumber === 2">
           <theme-form-textarea controlName="reason" label="What's your reason for withdrawing this innovation?" [pageUniqueField]="false" lengthLimit="small"></theme-form-textarea>
           <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3"> Continue </button>
         </ng-container>
 
-        <ng-container *ngIf="stepNumber === 3">
+        <ng-container *ngIf="stepNumber === 2">
           <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
             <div class="nhsuk-heading-m nhsuk-warning-callout__label">
               <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
@@ -34,7 +23,7 @@
         </ng-container>
 
         <div>
-          <a routerLink="/innovator/account/manage-innovations">Cancel</a>
+          <a routerLink="..">Cancel</a>
         </div>
 
       </form>
