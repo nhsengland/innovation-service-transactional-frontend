@@ -127,8 +127,6 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
     this.setDatasetGroupedStatuses();
 
-    this.onFormChange();
-
     this.subscriptions.push(
 
       this.activatedRoute.queryParams
@@ -171,6 +169,8 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange())
 
     );
+
+    this.onFormChange();
 
   }
 
