@@ -71,5 +71,6 @@ export const CONTEXT_INNOVATION_INFO: ContextInnovationType = {
   name: 'Test innovation',
   status: InnovationStatusEnum.IN_PROGRESS,
   owner: { name: 'User name 01', isActive: true },
+  loggedUser: { isOwner: true },
   assessment: { id: 'assessment01' }
 };

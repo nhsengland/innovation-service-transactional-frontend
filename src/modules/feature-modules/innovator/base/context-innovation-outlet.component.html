@@ -1,8 +1,11 @@
-<div *ngIf="data.innovation" class="nhsuk-u-padding-top-3">
+<div *ngIf="innovation" class="nhsuk-u-padding-top-3">
 
   <div class="d-flex align-items-center justify-content-space-between nhsuk-u-padding-bottom-3">
-    <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ data.innovation.name }}</p>
-    <a *ngIf="data.link" [routerLink]="data.link.url">{{ data.link.label }}</a>
+    <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation.name }}</p>
+    <div class="text-align-right">
+      <p class="nhsuk-caption-m nhsuk-u-margin-0">{{ innovation.userIsOwner ? 'Innovation owner' : 'Collaborator'}}</p>
+      <a routerLink="manage-innovation">Manage innovation</a>
+    </div>
   </div>
 
   <hr class="nhsuk-section-break nhsuk-section-break--visible" />

@@ -45,7 +45,7 @@ export class ContextStore extends Store<ContextModel> {
 
   }
 
-  dismissNotification(innovationId: string, conditions: {notificationIds?: string[], contextTypes?: NotificationContextTypeEnum[], contextIds?: string[]}): void {
+  dismissNotification(innovationId: string, conditions: { notificationIds?: string[], contextTypes?: NotificationContextTypeEnum[], contextIds?: string[] }): void {
 
     this.contextService.dismissNotification(innovationId, conditions).subscribe({
       next: () => this.updateUserUnreadNotifications(),
@@ -120,7 +120,7 @@ export class ContextStore extends Store<ContextModel> {
   getInnovation(): ContextInnovationType {
     if (!this.state.innovation) {
       console.error('Context has NO innovation');
-      return { id: '', name: '', status: InnovationStatusEnum.CREATED, owner: { isActive: false, name: '' } };
+      return { id: '', name: '', status: InnovationStatusEnum.CREATED, owner: { isActive: false, name: '' }, loggedUser: { isOwner: false } };
     }
     return this.state.innovation;
   }
@@ -154,7 +154,7 @@ export class ContextStore extends Store<ContextModel> {
    */
   setCurrentUrl(url: string): void {
     // failsafe to avoid setting the same url twice
-    if(this.state.currentUrl !== url) {
+    if (this.state.currentUrl !== url) {
       this.state.previousUrl = this.state.currentUrl;
       this.state.currentUrl = url;
       this.setState();

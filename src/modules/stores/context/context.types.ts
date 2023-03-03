@@ -39,16 +39,12 @@ export type ContextPageLayoutType = {
 };
 
 
-
-
 export type ContextInnovationType = {
   id: string,
   name: string,
   status: InnovationStatusEnum,
-  owner: {
-    name: string,
-    isActive: boolean
-  },
+  owner: { name: string, isActive: boolean },
+  loggedUser: { isOwner: boolean },
   assessment?: { id: string },
   assignedTo?: { id: string },
   support?: { id: string, status: InnovationSupportStatusEnum },

@@ -1,16 +1,17 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { RESPONSE } from '@nguniversal/express-engine/tokens';
 import { Response } from 'express';
 
-import { HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 import { LoggerService, Severity } from '../services/logger.service';
 import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
+
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -23,7 +24,8 @@ export class AuthenticationGuard implements CanActivate {
     private loggerService: LoggerService
   ) { }
 
-  canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {    
+  canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+
     return this.authentication.initializeAuthentication$().pipe(
       map(response => response),
       catchError((e: HttpErrorResponse) => {
@@ -39,9 +41,7 @@ export class AuthenticationGuard implements CanActivate {
         }
 
         this.serverResponse.status(303).setHeader('Location', redirectUrl);
-        /* istanbul ignore next */
         this.serverResponse.end();
-        /* istanbul ignore next */
         return of(false);
 
       })
