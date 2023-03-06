@@ -27,8 +27,8 @@
     <div class="nhsuk-grid-column-two-thirds">
       <h2 class="nhsuk-heading-l"> Stop sharing this innovation </h2>
       <p *ngIf="!isActiveInnovation"> You cannot stop sharing this innovation as you have requested to transfer its ownership.  </p>
-      <p *ngIf="!isInProgressInnovation && isActiveInnovation && !innovation?.updatedAt"> You are not sharing your innovation with any support organisations yet. When you have submitted your innovation record and the needs assessment process has been completed, you can stop sharing your innovation with your support organisations whenever you decide. </p>
-      <p *ngIf="!isInProgressInnovation && isActiveInnovation && innovation?.updatedAt"> You stopped sharing this innovation on {{ innovation.updatedAt | date: ('app.date_formats.long_date' | translate)}}. If you want support with your innovation, go to your innovation record and submit it for a needs reassessment. </p>
+      <p *ngIf="!isInProgressInnovation && !isInPause && isActiveInnovation"> You are not sharing your innovation with any support organisations yet. When you have submitted your innovation record and the needs assessment process has been completed, you can stop sharing your innovation with your support organisations whenever you decide. </p>
+      <p *ngIf="isInPause && isActiveInnovation"> You stopped sharing this innovation on {{ innovation.statusUpdatedAt | date: ('app.date_formats.long_date' | translate)}}. If you want support with your innovation, go to your innovation record and submit it for a needs reassessment. </p>
       <p *ngIf="isInProgressInnovation && isActiveInnovation"> If you want to take a break, you can stop sharing your innovation with your support organisations.  </p>
       <a *ngIf="isInProgressInnovation && isActiveInnovation" routerLink="stop-sharing" class="nhsuk-u-font-size-19"> Stop sharing this innovation </a>
     </div>
