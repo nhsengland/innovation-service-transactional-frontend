@@ -77,7 +77,7 @@ export class InnovatorService extends CoreService {
   updateCollaborationStatus(
     innovationId: string, 
     collaboratorId: string,
-    status: InnovationCollaboratorStatusEnum.ACTIVE | InnovationCollaboratorStatusEnum.DECLINED | InnovationCollaboratorStatusEnum.LEFT
+    status: InnovationCollaboratorStatusEnum
   ): Observable<{ id: string }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/collaborators/:collaboratorId ').setPathParams({ innovationId, collaboratorId });
 
