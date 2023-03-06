@@ -6,9 +6,11 @@ import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { GetInnovationTransfersDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { InnovationStatusEnum, InnovationTransferStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTransferStatusEnum } from '@modules/stores/innovation';
 import { ActivatedRoute } from '@angular/router';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { DateISOType } from '@app/base/types';
+import { NotificationContextTypeEnum } from '@app/base/enums';
 
 
 @Component({
@@ -18,13 +20,23 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 export class PageInnovationManageInfoComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
-  innovation: ContextInnovationType;
+  innovation: {
+    id: string,
+    name: string,
+    status: InnovationStatusEnum,
+    owner: { name: string, isActive: boolean },
+    loggedUser: { isOwner: boolean },
+    assessment?: { id: string },
+    assignedTo?: { id: string },
+    support?: { id: string, status: InnovationSupportStatusEnum },
+    notifications?: { [key in NotificationContextTypeEnum]?: number },
+    export?: { canUserExport: boolean, pendingRequestsCount: number },
+    updatedAt?: null | DateISOType,
+  };
 
   isActiveInnovation = false;
   isInProgressInnovation = false;
   innovationTransfers: GetInnovationTransfersDTO = [];
-  pausedInnovationsCounter = 0;
-
 
 
   constructor(
@@ -40,7 +52,7 @@ export class PageInnovationManageInfoComponent extends CoreComponent implements 
 
     this.innovation = this.stores.context.getInnovation();
 
-    if(this.innovation.status === InnovationStatusEnum.IN_PROGRESS) {
+    if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS) {
       this.isInProgressInnovation = true;
     }
 
@@ -62,22 +74,20 @@ export class PageInnovationManageInfoComponent extends CoreComponent implements 
 
       this.innovationTransfers = innovationTransfers.filter(innovationTransfer => innovationTransfer.innovation.id === this.innovationId);
 
-      for(const innovation of innovationsList.data) {
-
-        if(innovation.status === InnovationStatusEnum.PAUSED) {
-          this.pausedInnovationsCounter++;
-        }
-
-      }
-
       this.isActiveInnovation = innovationsList.data.filter(i => !this.innovationTransfers.map(it => it.innovation.id).includes(this.innovationId))
-      .length
-      > 0;
+        .length
+        > 0;
+
+      const innovation = innovationsList.data.filter(i => i.id === this.innovationId).shift();
+      if (innovation) {
+        this.innovation.updatedAt = innovation.updatedAt;
+      }
 
       this.setPageStatus('READY');
 
     }
     );
+
   }
 
 
