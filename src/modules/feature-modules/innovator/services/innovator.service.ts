@@ -74,11 +74,12 @@ export class InnovatorService extends CoreService {
     return this.http.get<GetInnovationCollaboratorInvitesDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
-  updateCollaborationStatusByCollaborator(
+  updateCollaborationStatus(
     innovationId: string, 
+    collaboratorId: string,
     status: InnovationCollaboratorStatusEnum.ACTIVE | InnovationCollaboratorStatusEnum.DECLINED | InnovationCollaboratorStatusEnum.LEFT
   ): Observable<{ id: string }> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/collaborators/invites').setPathParams({ innovationId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/collaborators/:collaboratorId ').setPathParams({ innovationId, collaboratorId });
 
     return this.http.patch<{ id: string }>(url.buildUrl(), { status }).pipe(take(1), map(response => response));
   }
