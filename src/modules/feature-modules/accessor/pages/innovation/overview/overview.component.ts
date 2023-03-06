@@ -37,7 +37,13 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   cardsList: StatisticsCard[] = [];
   showCards: boolean = false;
 
-  innovationCollaborators: GetInnovationCollaboratorsDTO['data'] | null = null;
+  innovationCollaborators: {
+    id: string;
+    status: InnovationCollaboratorStatusEnum;
+    name: string;
+    collaboratorRole?: string;
+  }[] | null =  null;
+
   showCollaboratorsHideStatus: 'opened' | 'closed' = 'closed';
   isCollaboratorsLoading: boolean = false;
 

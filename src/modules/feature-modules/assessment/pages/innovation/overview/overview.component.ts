@@ -9,6 +9,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { forkJoin } from 'rxjs';
 
@@ -27,6 +28,15 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   cardsList: StatisticsCard[] = [];
   showChangeNeedsAssessor: boolean = false;
 
+  innovationCollaborators: {
+    id: string;
+    status: InnovationCollaboratorStatusEnum;
+    name: string;
+    collaboratorRole?: string;
+  }[] | null =  null;
+
+  showCollaboratorsHideStatus: 'opened' | 'closed' = 'closed';
+  isCollaboratorsLoading: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -93,6 +103,30 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.setPageStatus('READY');
 
     });
+
+  }
+  
+  onShowCollaboratorsClick() {
+    if (this.showCollaboratorsHideStatus === 'opened') {
+      this.showCollaboratorsHideStatus = 'closed';
+    } else {
+      this.showCollaboratorsHideStatus = 'opened';
+      if (!this.innovationCollaborators) {
+        this.getInnovationCollaborators();
+      }
+    }
+  }
+
+  getInnovationCollaborators(): void {
+
+    this.isCollaboratorsLoading = true
+    const qp: { status: InnovationCollaboratorStatusEnum[] } = { status: [InnovationCollaboratorStatusEnum.ACTIVE] };
+    
+    this.innovationsService.getInnovationCollaborators(this.innovationId, qp)
+      .subscribe((innovationCollaborators) => {
+      this.innovationCollaborators = innovationCollaborators.data
+      this.isCollaboratorsLoading = false;
+    })
 
   }
 
