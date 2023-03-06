@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { GetInnovationCollaboratorsDTO, InnovationsService } from '@modules/shared/services/innovations.service';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
@@ -12,6 +12,7 @@ import { StatisticsCard } from '@modules/shared/services/innovations.dtos';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { forkJoin } from 'rxjs';
+import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 @Component({
@@ -36,6 +37,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   cardsList: StatisticsCard[] = [];
   showCards: boolean = false;
 
+  innovationCollaborators: GetInnovationCollaboratorsDTO['data'] | null = null;
+  showCollaboratorsHideStatus: 'opened' | 'closed' = 'closed';
+  isCollaboratorsLoading: boolean = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
@@ -51,11 +56,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   }
 
-
   ngOnInit(): void {
 
     const qp: { statistics: InnovationStatisticsEnum[] } = { statistics: [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER, InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER] };
-
+    
     forkJoin([
       this.innovationsService.getInnovationInfo(this.innovationId),
       this.innovationsService.getInnovationStatisticsInfo(this.innovationId, qp),
@@ -103,4 +107,27 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   }
 
+  onShowCollaboratorsClick() {
+    if (this.showCollaboratorsHideStatus === 'opened') {
+      this.showCollaboratorsHideStatus = 'closed';
+    } else {
+      this.showCollaboratorsHideStatus = 'opened';
+      if (!this.innovationCollaborators) {
+        this.getInnovationCollaborators();
+      }
+    }
+  }
+
+  getInnovationCollaborators(): void {
+
+    this.isCollaboratorsLoading = true
+    const qp: { status: InnovationCollaboratorStatusEnum[] } = { status: [InnovationCollaboratorStatusEnum.ACTIVE] };
+    
+    this.innovationsService.getInnovationCollaborators(this.innovationId, qp)
+      .subscribe((innovationCollaborators) => {
+      this.innovationCollaborators = innovationCollaborators.data
+      this.isCollaboratorsLoading = false;
+    })
+
+  }
 }

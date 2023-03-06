@@ -11,7 +11,7 @@ import { UserRoleEnum } from '@modules/stores/authentication/authentication.enum
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { getSectionTitle } from '@modules/stores/innovation/innovation.config';
 
-import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
 import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSubmissionDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLog, InnovationSupportsLogDTO, SupportLogType } from './innovations.dtos';
@@ -185,6 +185,16 @@ export type GetExportRequestsListDTO = {
 
 export type GetExportRequestInfoDto = InnovationExportRequestItemType;
 
+export type GetInnovationCollaboratorsDTO = {
+  count: number;
+  data: {
+    id: string;
+    email?: string;
+    status: InnovationCollaboratorStatusEnum;
+    name: string;
+    collaboratorRole?: string;
+  }[]
+}
 @Injectable()
 export class InnovationsService extends CoreService {
 
@@ -634,5 +644,13 @@ export class InnovationsService extends CoreService {
       }).setQueryParams(qp);
     return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
     
+  }
+
+  getInnovationCollaborators(innovationId: string, qp: { status: InnovationCollaboratorStatusEnum[] }): Observable<GetInnovationCollaboratorsDTO> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/collaborators')
+      .setPathParams({ innovationId })
+      .setQueryParams(qp);
+    
+    return this.http.get<GetInnovationCollaboratorsDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 }
