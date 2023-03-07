@@ -4,9 +4,8 @@ import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
-import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { GetInnovationTransfersDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { InnovationStatusEnum, InnovationTransferStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTransferStatusEnum } from '@modules/stores/innovation';
 import { ActivatedRoute } from '@angular/router';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
@@ -22,14 +21,12 @@ export class PageInnovationManageInfoComponent extends CoreComponent implements 
 
   isActiveInnovation = false;
   isInProgressInnovation = false;
+  isInPause = false;
   innovationTransfers: GetInnovationTransfersDTO = [];
-  pausedInnovationsCounter = 0;
-
 
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovationsService: InnovationsService,
     private innovatorService: InnovatorService
   ) {
 
@@ -40,8 +37,11 @@ export class PageInnovationManageInfoComponent extends CoreComponent implements 
 
     this.innovation = this.stores.context.getInnovation();
 
-    if(this.innovation.status === InnovationStatusEnum.IN_PROGRESS) {
+    if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS) {
       this.isInProgressInnovation = true;
+    }
+    else if(this.innovation.status === InnovationStatusEnum.PAUSED) {
+      this.isInPause = true;
     }
 
   }
@@ -56,28 +56,18 @@ export class PageInnovationManageInfoComponent extends CoreComponent implements 
   getInnovationsTransfers(): void {
 
     forkJoin([
-      this.innovationsService.getInnovationsList(),
       this.innovatorService.getInnovationTransfers()
-    ]).subscribe(([innovationsList, innovationTransfers]) => {
+    ]).subscribe(([innovationTransfers]) => {
 
       this.innovationTransfers = innovationTransfers.filter(innovationTransfer => innovationTransfer.innovation.id === this.innovationId);
 
-      for(const innovation of innovationsList.data) {
-
-        if(innovation.status === InnovationStatusEnum.PAUSED) {
-          this.pausedInnovationsCounter++;
-        }
-
-      }
-
-      this.isActiveInnovation = innovationsList.data.filter(i => !this.innovationTransfers.map(it => it.innovation.id).includes(this.innovationId))
-      .length
-      > 0;
+      this.isActiveInnovation = this.innovationTransfers.length === 0;
 
       this.setPageStatus('READY');
 
     }
     );
+
   }
 
 
