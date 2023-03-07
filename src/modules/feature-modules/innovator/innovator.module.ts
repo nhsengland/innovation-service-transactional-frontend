@@ -45,6 +45,7 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
 // Services.
 import { InnovatorService } from './services/innovator.service';
+import { ManageInnovationGuard } from './guards/manage-innovation.guard';
 
 
 @NgModule({
@@ -93,6 +94,7 @@ import { InnovatorService } from './services/innovator.service';
   providers: [
     // Guards.
     FirstTimeSigninGuard,
+    ManageInnovationGuard,
 
     // Services.
     InnovatorService

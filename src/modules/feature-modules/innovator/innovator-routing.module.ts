@@ -75,6 +75,7 @@ import { PageInnovationManageTransferComponent } from './pages/innovation/manage
 import { PageInnovationManageWithdrawComponent } from './pages/innovation/manage/manage-withdraw.component';
 import { PageInnovationManageStopSharingOverviewComponent } from './pages/innovation/manage/manage-stop-sharing-overview.component';
 import { PageInnovationManageStopSharingComponent } from './pages/innovation/manage/manage-stop-sharing.component';
+import { ManageInnovationGuard } from './guards/manage-innovation.guard';
 
 
 const header: RoutesDataType['header'] = {
@@ -137,11 +138,11 @@ const routes: Routes = [
           { path: '', pathMatch: 'full', redirectTo: '../dashboard' },
 
           { path: 'new', pathMatch: 'full', component: InnovationNewComponent },
-          { 
-            path: ':innovationId/collaborations/:collaboratorId', 
+          {
+            path: ':innovationId/collaborations/:collaboratorId',
             pathMatch: 'full',
             component: PageCollaborationInviteComponent,
-            data: { 
+            data: {
               breadcrumb: 'Collaboration Invite',
             },
           },
@@ -396,6 +397,7 @@ const routes: Routes = [
               {
                 path: 'manage-innovation',
                 data: { breadcrumb: 'Manage innovation' },
+                canActivate: [ManageInnovationGuard],
                 children: [
                   {
                     path: '', pathMatch: 'full', component: PageInnovationManageInfoComponent,
