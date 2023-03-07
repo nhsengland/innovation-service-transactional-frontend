@@ -71,7 +71,7 @@
       </ng-container>
 
       <ng-container *ngIf="innovation.owner.isActive === true">
-        
+
         <ng-container *ngIf="stores.authentication.isAccessorType() && innovationExport">
 
           <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
@@ -83,12 +83,12 @@
 
               <span>
                 You need to request permission from the innovator to download their innovation record pdf.
-                
+
                 <ng-container *ngIf="innovationExport.pendingRequestsCount === 0">
                   <a routerLink="/accessor/innovations/{{ innovationId }}/export/request" class="nhsuk-link--no-visited-state">Request permission</a>
-                  or 
+                  or
                 </ng-container>
-                
+
                 <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/export/list" class="nhsuk-link--no-visited-state">
                   {{ innovationExport.pendingRequestsCount === 0 ? 'v' : 'V'}}iew requests.
                 </a>
@@ -114,10 +114,10 @@
         <ng-container *ngIf="stores.authentication.isInnovatorType() && innovationExport">
 
           <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
-            
+
             <span class="nhsuk-u-visually-hidden">Information: </span>
             <a routerLink="/innovator/innovations/{{ innovationId }}/export/list" class="nhsuk-link--no-visited-state nhsuk-u-font-size-22 text-decoration-none nhsuk-u-font-weight-bold">Innovation record export requests</a>
-              
+
             <ng-container *ngIf="innovationExport.pendingRequestsCount === 0">
               <p class="nhsuk-body-s">No new requests.</p>
             </ng-container>
@@ -137,7 +137,7 @@
         Please complete all sections, providing as much information as possible. As you are developing your innovation,
         we do not expect the information to be finalised at this stage, and you can return to update your Innovation
         record once shared for review.
-      <p>
+      </p>
 
       <ol class="app-task-list">
         <li *ngFor="let sectionGroup of innovationSections; let i = index">
@@ -184,6 +184,10 @@
                     label="{{ section.openActionsCount + ' ' + ('shared.catalog.innovation.action_status.SUBMITTED.name' | translate | lowercase) + ' ' + ('dictionary.action' | pluralTranslate: section.openActionsCount | translate) }}">
                   </theme-tag>
                 </span>
+              </ng-container>
+
+              <ng-container *ngIf="section.submittedAt">
+                <span class="font-color-secondary">Last submitted by {{ section.submittedBy?.name }} ({{ section.submittedBy?.isOwner ? 'Owner' : 'Collaborator' }}) on {{ section.submittedAt | date: ('app.date_formats.long_date' | translate)}}</span>
               </ng-container>
 
             </li>
