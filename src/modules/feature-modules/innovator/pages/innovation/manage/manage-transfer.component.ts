@@ -115,7 +115,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
 
     const body: { innovationId: string, email: string, isCollaborator: boolean } = {
       innovationId: this.innovationId,
-      email: wizardData.value,
+      email: wizardData.email,
       isCollaborator: wizardData.isCollaborator
     };
 
