@@ -6,7 +6,12 @@ describe('ManageInnovationGuard', () => {
   let guard: ManageInnovationGuard;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        ManageInnovationGuard
+      ]
+    });
+
     guard = TestBed.inject(ManageInnovationGuard);
   });
 
