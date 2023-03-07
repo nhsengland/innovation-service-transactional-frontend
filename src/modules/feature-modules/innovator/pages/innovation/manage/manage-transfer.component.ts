@@ -7,7 +7,8 @@ import { CustomValidators, FormGroup, FormEngineParameterModel, Validators, Wiza
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormEngineModel, WizardSummaryType } from '@modules/shared/forms';
-import { COLLABORATORS_TRANSFERS, NO_COLLABORATORS_TRANSFERS } from './manage-transfer.config';
+import { COLLABORATORS_TRANSFERS, NO_COLLABORATORS_TRANSFERS, otherEmailItem } from './manage-transfer.config';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -33,7 +34,8 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService
+    private innovatorService: InnovatorService,    
+    private innovationsService: InnovationsService
   ) {
 
     super();
@@ -44,16 +46,22 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
   ngOnInit(): void {
     this.wizard = NO_COLLABORATORS_TRANSFERS;
 
-    this.innovatorService.getInnovationCollaborationInfo(this.innovationId).subscribe(response => {
+    this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']).subscribe(response => {
+
       if (response.count === 0) {
         this.wizard = NO_COLLABORATORS_TRANSFERS;
       } else {
         this.wizard = COLLABORATORS_TRANSFERS;
+        const collaborators: {
+          value: string,
+          label: string  
+        }[] = response.data.map((i) => ({
+          value: i.email,
+          label: i.name ?? ''
+        }))
+
         //add collaborators
-        this.wizard.steps[0].parameters[0].items?.unshift({
-          value: 'emasd@aa.com',
-          label: 'Test'  
-        });
+        this.wizard.steps[0].parameters[0].items = [...collaborators, otherEmailItem];
 
         // Updates wizard configuration step 1 description.
         this.wizard.setAnswers(this.wizard.runInboundParsing({})).runRules();
@@ -122,7 +130,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
   }
   
   private getNavigationUrl(action: 'previous' | 'next'): string {
-    let url = `/innovator/innovations/${this.innovationId}/manage-innovation`;
+    let url = `/innovator/innovations/${this.innovationId}/manage`;
 
     switch (action) {
       case 'previous':

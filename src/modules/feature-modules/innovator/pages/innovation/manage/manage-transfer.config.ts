@@ -63,21 +63,7 @@ export const COLLABORATORS_TRANSFERS: WizardEngineModel = new WizardEngineModel(
         label: 'Who do you want to transfer ownership to?',
         description: 'Choose a collaborator or enter another person\'s email',
         validations: { isRequired: [true, 'Email is required'] },
-        items: [
-          {
-            value: 'other',
-            label: 'Other',
-            conditional: new FormEngineParameterModel({ 
-              id: 'email', 
-              dataType: 'text', 
-              label: 'Enter new owner\'s email', 
-              validations: {
-                isRequired: [true, 'Email is required'],
-                pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'
-              }
-            })
-          }
-        ]
+        items: []
       }]
     }),
     new FormEngineModel({
@@ -99,6 +85,19 @@ export const COLLABORATORS_TRANSFERS: WizardEngineModel = new WizardEngineModel(
   outboundParsing: (data: StepPayloadType) => outboundParsing(data)
 });
 
+export const otherEmailItem = {
+  value: 'other',
+  label: 'Other',
+  conditional: new FormEngineParameterModel({ 
+    id: 'email', 
+    dataType: 'text', 
+    label: 'Enter new owner\'s email', 
+    validations: {
+      isRequired: [true, 'Email is required'],
+      pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'
+    }
+  })
+};
 
 function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary'): void {}
 
