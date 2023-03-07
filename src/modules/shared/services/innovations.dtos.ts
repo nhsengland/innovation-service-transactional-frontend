@@ -123,11 +123,6 @@ export type InnovationSupportInfoDTO = {
   engagingAccessors: { id: string, organisationUnitUserId: string, name: string; }[];
 };
 
-export type InnovationSubmissionDTO = {
-  submittedAllSections: boolean,
-  submittedForNeedsAssessment: boolean
-};
-
 export type InnovationActionsListInDTO = {
   count: number,
   data: {
