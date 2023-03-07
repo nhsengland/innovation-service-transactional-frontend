@@ -55,7 +55,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
 
     this.innovatorService.transferInnovation(body).subscribe({
       next: () => {
-        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage-innovation`);
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage`);
       },
       error: () => {
         this.setAlertError('An error occurred when transferring innovation ownership. Please check the details and try again or contact us for further info.');

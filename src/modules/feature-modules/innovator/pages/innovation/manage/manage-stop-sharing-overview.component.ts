@@ -26,7 +26,7 @@ export class PageInnovationManageStopSharingOverviewComponent extends CoreCompon
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
     this.setPageTitle('Stop sharing this innovation');
-    this.setBackLink('Go back', `/innovator/innovations/${this.innovationId}/manage-innovation`);
+    this.setBackLink('Go back', `/innovator/innovations/${this.innovationId}/manage`);
 
      this.innovations = new TableModel({
       visibleColumns: {

@@ -82,7 +82,7 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
 
     switch (this.form.get('action')?.value) {
       case FormFieldActionsEnum.WITHDRAW:
-        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage-innovation/withdraw`);
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/withdraw`);
         break;
 
       case FormFieldActionsEnum.DELETE_ACCOUNT:
