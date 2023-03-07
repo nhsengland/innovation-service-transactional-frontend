@@ -410,9 +410,6 @@ const routes: Routes = [
                     data: { breadcrumb: null }
                   },
                   {
-                    path: 'withdraw', pathMatch: 'full', component: PageInnovationManageWithdrawComponent
-                  },
-                  {
                     path: 'collaborators',
                     data: { breadcrumb: 'Collaborators' },
                     children: [
