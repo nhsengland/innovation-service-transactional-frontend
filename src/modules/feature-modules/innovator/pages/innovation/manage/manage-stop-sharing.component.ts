@@ -61,7 +61,7 @@ export class PageInnovationManageStopSharingComponent extends CoreComponent impl
     ).subscribe(() => {
 
       this.setRedirectAlertSuccess('You have stopped sharing your innovation', { message: 'You will not be able to interact with your support organisations anymore. You can reshare your innovation in the future by submitting it to a needs reassessment.' });
-      this.redirectTo(`/innovator/innovations/${this.innovationId}/manage-innovation`);
+      this.redirectTo(`/innovator/innovations/${this.innovationId}/manage`);
 
     });
 
@@ -72,7 +72,7 @@ export class PageInnovationManageStopSharingComponent extends CoreComponent impl
     this.stepNumber--;
 
     if (this.stepNumber === 0) {
-      this.redirectTo(`/innovator/innovations/${this.innovationId}/manage-innovation/stop-sharing`);
+      this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/stop-sharing`);
     }
 
   }
