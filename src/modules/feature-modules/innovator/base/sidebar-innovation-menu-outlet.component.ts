@@ -57,7 +57,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       ];
 
       if(innovation.loggedUser.isOwner) {
-        this._sidebarItems.push({ label: 'Manage innovation', url: `/innovator/innovations/${innovation.id}/manage-innovation` });
+        this._sidebarItems.push({ label: 'Manage innovation', url: `/innovator/innovations/${innovation.id}/manage` });
       }
 
     }
