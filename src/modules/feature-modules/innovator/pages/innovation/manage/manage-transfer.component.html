@@ -1,37 +1,29 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-      <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-two-thirds">
-    
-          <ng-container *ngIf="isQuestionStep()">
-            <theme-form-engine formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
-            <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <ng-container *ngIf="isQuestionStep()">
+        <theme-form-engine formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
+        <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
+      </ng-container>
+
+      <ng-container *ngIf="isSummaryStep()">
+        <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+          <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+            <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
+          </div>
+          <ng-container *ngIf="stayAsCollaborator; else leaveInnovation">
+            <p>If you transfer ownership of your innovation you will not be able to manage collaborators, stop sharing it with support organisations, or withdraw it. You will still be able to access and edit your innovation record and messages as a collaborator.</p>
           </ng-container>
-    
-          <ng-container *ngIf="isSummaryStep()">
-            <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
-              <div class="nhsuk-heading-m nhsuk-warning-callout__label">
-                <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
-              </div>
-              <ng-container *ngIf="stayAsCollaborator; else leaveInnovation">
-                <p>If you transfer ownership of your innovation you will not be able to manage collaborators, stop sharing it with support organisations, or withdraw it. You will still be able to access and edit your innovation record and messages as a collaborator.</p>
-              </ng-container>
-            </div>
-            <form [formGroup]="form">
-              <theme-form-input controlName="confirmation" description="To confirm, please type the following: transfer my innovation" [pageUniqueField]="false"></theme-form-input>
-              <button class="nhsuk-button" (click)="onSubmitWizard()"> Transfer ownership </button>
-            </form>          
-          </ng-container>
-    
         </div>
-      </div>
-      
+        <form [formGroup]="form">
+          <theme-form-input controlName="confirmation" description="To confirm, please type the following: transfer my innovation" [pageUniqueField]="false"></theme-form-input>
+          <button class="nhsuk-button" (click)="onSubmitWizard()"> Transfer ownership </button>
+        </form>          
+      </ng-container>
 
     </div>
   </div>
-
 </theme-content-wrapper>
 
 <ng-template #leaveInnovation>
