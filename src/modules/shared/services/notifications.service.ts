@@ -55,6 +55,7 @@ export type NotificationsListOutDTO = {
       params: null | {
         innovationId: string;
         innovationName: string;
+        innovationOwnerName: string;
         innovationStatus: string;
         sectionNumber?: string;
         actionStatusName?: string;
