@@ -9,7 +9,7 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationCollaboratorStatusEnum, InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { DatePipe } from '@angular/common';
 
@@ -33,6 +33,17 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovatorDetails: { label: string; value: null | string; }[] = [];
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+
+  innovationCollaborators: {
+    id: string;
+    status: InnovationCollaboratorStatusEnum;
+    name: string;
+    email: string;
+    collaboratorRole?: string;
+  }[] | null =  null;
+
+  showCollaboratorsHideStatus: 'opened' | 'closed' = 'closed';
+  isCollaboratorsLoading: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -97,6 +108,30 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   getSupportStatusCount(supports: InnovationSupportStatusEnum[], status: keyof typeof InnovationSupportStatusEnum) {
     const statuses = supports.filter(cur => cur === status);
     return statuses.length;
+  }
+  
+  onShowCollaboratorsClick() {
+    if (this.showCollaboratorsHideStatus === 'opened') {
+      this.showCollaboratorsHideStatus = 'closed';
+    } else {
+      this.showCollaboratorsHideStatus = 'opened';
+      if (!this.innovationCollaborators) {
+        this.getInnovationCollaborators();
+      }
+    }
+  }
+
+  getInnovationCollaborators(): void {
+
+    this.isCollaboratorsLoading = true
+    const qp: { status: InnovationCollaboratorStatusEnum[] } = { status: [InnovationCollaboratorStatusEnum.ACTIVE] };
+    
+    this.innovationsService.getInnovationCollaborators(this.innovationId, qp)
+      .subscribe((innovationCollaborators) => {
+      this.innovationCollaborators = innovationCollaborators.data.map(collaborator => ({ email: collaborator.email || '', ...collaborator}))
+      this.isCollaboratorsLoading = false;
+    })
+
   }
 
 }

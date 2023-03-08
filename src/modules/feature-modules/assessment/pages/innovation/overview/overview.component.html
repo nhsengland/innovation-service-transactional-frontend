@@ -65,7 +65,7 @@
   </dl>
 
   <div class="full-width-section bg-color-white">
-    <h2 class="nhsuk-heading-m nhsuk-u-padding-top-5">Innovator contact details</h2>
+    <h2 class="nhsuk-heading-m nhsuk-u-padding-top-5">Innovator details</h2>
     <dl class="nhsuk-summary-list">
       <div *ngFor="let item of innovatorSummary" class="nhsuk-summary-list__row">
         <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
@@ -92,6 +92,9 @@
                     Name
                   </th>
                   <th role="columnheader" class="" scope="col">
+                    Email 
+                  </th>
+                  <th role="columnheader" class="" scope="col">
                     Role
                   </th>
                 </tr>
@@ -100,6 +103,7 @@
                 <ng-container *ngFor="let collaborator of innovationCollaborators">
                   <tr role="row" class="nhsuk-table__row">
                     <td class="nhsuk-table__cell">{{collaborator.name}}</td>
+                    <td class="nhsuk-table__cell">{{collaborator.email}}</td>
                     <td class="nhsuk-table__cell ">{{collaborator.collaboratorRole}}</td>
                   </tr>
                 </ng-container>

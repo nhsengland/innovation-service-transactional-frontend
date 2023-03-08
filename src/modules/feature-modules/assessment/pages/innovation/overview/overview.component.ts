@@ -32,6 +32,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     id: string;
     status: InnovationCollaboratorStatusEnum;
     name: string;
+    email: string;
     collaboratorRole?: string;
   }[] | null =  null;
 
@@ -124,7 +125,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     
     this.innovationsService.getInnovationCollaborators(this.innovationId, qp)
       .subscribe((innovationCollaborators) => {
-      this.innovationCollaborators = innovationCollaborators.data
+      this.innovationCollaborators = innovationCollaborators.data.map(collaborator => ({ email: collaborator.email || '', ...collaborator}))
       this.isCollaboratorsLoading = false;
     })
 
