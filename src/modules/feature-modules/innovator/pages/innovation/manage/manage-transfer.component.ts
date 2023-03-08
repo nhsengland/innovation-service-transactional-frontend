@@ -77,7 +77,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
 
           if (this.isSummaryStep()) {
             const wizardData = this.wizard.runOutboundParsing();
-            this.stayAsCollaborator = wizardData.isCollaborator;
+            this.stayAsCollaborator = wizardData.ownerToCollaborator;
             this.setPageTitle(`Transfer ownership of this innovation to ${wizardData.email} ${this.stayAsCollaborator ? 'but continue to collaborate on it' : ''}`, { size: 'l' });
 
             this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
@@ -113,10 +113,10 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
   onSubmitWizard(): void {
     const wizardData = this.wizard.runOutboundParsing();
 
-    const body: { innovationId: string, email: string, isCollaborator: boolean } = {
+    const body: { innovationId: string, email: string, ownerToCollaborator: boolean } = {
       innovationId: this.innovationId,
       email: wizardData.email,
-      isCollaborator: wizardData.isCollaborator
+      ownerToCollaborator: wizardData.ownerToCollaborator
     };
 
     this.innovatorService.transferInnovation(body).subscribe({

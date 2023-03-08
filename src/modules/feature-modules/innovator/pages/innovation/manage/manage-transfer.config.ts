@@ -3,19 +3,19 @@ import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardSum
 // Types.
 type InboundPayloadType = {
   email: string;
-  isCollaborator: boolean;
+  ownerToCollaborator: boolean;
 };
 
 type StepPayloadType = {
   email: string,
-  isCollaborator: string,
+  ownerToCollaborator: string,
   collaboratorEmail?: string
 
 };
 
 type OutboundPayloadType = {
   email: string,
-  isCollaborator: boolean,
+  ownerToCollaborator: boolean,
 };
 
 
@@ -37,7 +37,7 @@ export const NO_COLLABORATORS_TRANSFERS: WizardEngineModel = new WizardEngineMod
     new FormEngineModel({
       label: 'Do you want to continue to collaborate on this innovation?',
       parameters: [{
-        id: 'isCollaborator',
+        id: 'ownerToCollaborator',
         dataType: 'radio-group',
         label: 'This means you can work on the innovation but are not the owner and do not have owner privileges.', 
         validations: { isRequired: [true, 'Choose one option'] },
@@ -69,7 +69,7 @@ export const COLLABORATORS_TRANSFERS: WizardEngineModel = new WizardEngineModel(
     new FormEngineModel({
       label: 'Do you want to continue to collaborate on this innovation?',
       parameters: [{
-        id: 'isCollaborator',
+        id: 'ownerToCollaborator',
         dataType: 'radio-group',
         label: 'This means you can work on the innovation but are not the owner and do not have owner privileges.', 
         validations: { isRequired: [true, 'Choose one option'] },
@@ -104,7 +104,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
     email: '',
-    isCollaborator: '',
+    ownerToCollaborator: '',
   };
 }
 
@@ -113,7 +113,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   
   return {
     email: email,
-    isCollaborator: data.isCollaborator === 'YES',
+    ownerToCollaborator: data.ownerToCollaborator === 'YES',
   };
 }
 
