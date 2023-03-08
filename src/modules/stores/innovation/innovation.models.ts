@@ -34,6 +34,10 @@ export type InnovationSectionInfoDTO = {
   updatedAt: string;
   data: MappedObjectType;
   submittedAt: string;
+  submittedBy: null | {
+    name: string,
+    isOwner: boolean,
+  },
   actionsIds?: string[];
 }
 

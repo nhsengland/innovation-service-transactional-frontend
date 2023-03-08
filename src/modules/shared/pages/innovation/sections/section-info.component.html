@@ -9,7 +9,8 @@
         <p class="d-flex">
           <ng-container *ngTemplateOutlet="icon; context: { status: section.status.id }"></ng-container>
           <span class="nhsuk-u-margin-right-2"></span>
-          <span *ngIf="section.status.id === 'SUBMITTED' && section.date !== ''">Last submitted {{ section.date | date: ('app.date_formats.long_date_time' | translate) }}</span>
+          <span *ngIf="section.status.id === 'SUBMITTED' && section.date !== '' && section.submittedBy !== null">This section was submitted by {{ section.submittedBy.name }} on {{ section.date | date: ('app.date_formats.long_date' | translate) }}.<br>
+          <span *ngIf="section.status.id === 'SUBMITTED' && section.date !== '' && section.submittedBy !== null && module === 'innovator'">You can update this section at any time.</span></span>
           <span *ngIf="section.status.id === 'DRAFT'">This section is in draft. <span *ngIf="['innovator'].includes(module)">Check answers and submit updates.</span></span>
           <span *ngIf="section.status.id === 'NOT_STARTED'">This section has not been started yet.</span>
         </p>
@@ -73,7 +74,7 @@
       </ng-container>
 
       <ng-container *ngIf="
-        (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED') && stores.authentication.isAccessorType() || 
+        (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED') && stores.authentication.isAccessorType() ||
         (['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status) && stores.authentication.isAssessmentType())
       ">
         <button routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovation.id }}/action-tracker/new" [queryParams]="{ section: section.id }" class="nhsuk-button nhsuk-u-margin-right-3"> Create action for this section </button>

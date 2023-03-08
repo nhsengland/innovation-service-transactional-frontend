@@ -32,6 +32,10 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     hasEvidences: boolean;
     wizard: WizardEngineModel;
     date: string;
+    submittedBy: null | {
+      name: string,
+      isOwner: boolean,
+    },
   };
 
   summaryList: WizardSummaryType[] = [];
@@ -66,7 +70,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       showSubmitUpdatesButton: false,
       hasEvidences: false,
       wizard: new WizardEngineModel({}),
-      date: ''
+      date: '',
+      submittedBy: null
     };
 
     this.previousSection = {
@@ -138,7 +143,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       showSubmitUpdatesButton: false,
       hasEvidences: !!section?.evidences?.steps.length,
       wizard: section?.wizard || new WizardEngineModel({}),
-      date: ''
+      date: '',
+      submittedBy: null
     };
 
     this.setPageTitle(this.section.title, { hint: `${this.stores.innovation.getSectionParentNumber(this.section.id)}. ${this.stores.innovation.getSectionParentTitle(this.section.id)}` });
@@ -152,6 +158,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         this.section.status = { id: response.status, label: INNOVATION_SECTION_STATUS[response.status]?.label || '' };
         this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
         this.section.date = response.submittedAt;
+        this.section.submittedBy = response.submittedBy;
 
         this.getPreviousAndNextPagination();
 
