@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -59,7 +59,7 @@ type getInnovationCollaboratorsListDTO = {
   data: {
     id: string,
     name?: string,
-    collaboratorRole?: string,
+    role?: string,
     email: string,
     status: InnovationCollaboratorStatusEnum
   }[]
@@ -68,12 +68,14 @@ type getInnovationCollaboratorsListDTO = {
 type getInnovationCollaboratorInfoDTO = {
   id: string,
   name?: string,
-  collaboratorRole?: string,
+  role?: string,
   email: string,
   status: InnovationCollaboratorStatusEnum,
   invitedAt: DateISOType,
   innovation: { id: string, name: string, description: null | string, owner: { id: string, name?: string } }
 };
+
+type getInnovationSubmissionDTO = { submittedAllSections: boolean, submittedForNeedsAssessment: boolean };
 
 export type GetThreadsListDTO = {
   count: number;
@@ -337,6 +339,13 @@ export class InnovationsService extends CoreService {
 
   }
 
+  updateInnovationCollaborator(innovationId: string, collaborationId: string, body: { status?: InnovationCollaboratorStatusEnum, role?: string }): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/collaborators/:collaborationId').setPathParams({ innovationId, collaborationId });
+    return this.http.patch<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
+
+  }
+
   getInnovationSharesList(innovationId: string): Observable<InnovationSharesListDTO> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/shares').setPathParams({ innovationId });
@@ -408,9 +417,9 @@ export class InnovationsService extends CoreService {
     );
   }
 
-  getInnovationSubmission(innovationId: string): Observable<{ submittedAllSections: boolean, submittedForNeedsAssessment: boolean }> {
+  getInnovationSubmission(innovationId: string): Observable<getInnovationSubmissionDTO> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/submissions').setPathParams({ innovationId });
-    return this.http.get<{ submittedAllSections: boolean, submittedForNeedsAssessment: boolean }>(url.buildUrl()).pipe(take(1), map(response => response));
+    return this.http.get<getInnovationSubmissionDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
   // Needs Assessment
