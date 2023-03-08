@@ -13,6 +13,7 @@ import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.en
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { forkJoin } from 'rxjs';
 import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { UtilsHelper } from '@app/base/helpers';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   } = { organisationUnit: '', status: InnovationSupportStatusEnum.UNASSIGNED };
 
   innovationSummary: { label: string; value: null | string; }[] = [];
+  innovatorSummary: { label: string; value: string; }[] = [];
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   cardsList: StatisticsCard[] = [];
@@ -80,6 +82,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         { label: 'Description', value: innovationInfo.description },
         { label: 'Categories', value: innovationInfo.categories.map(v => v === 'OTHER' ? innovationInfo.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
       ];
+
+      this.innovatorSummary = [
+        { label: 'Name', value: this.innovation.owner.name },
+      ];
+
       this.showCards = [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(this.innovationSupport.status);
 
       this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.INNOVATION]});
