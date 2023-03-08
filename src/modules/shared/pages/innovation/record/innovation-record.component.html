@@ -186,8 +186,8 @@
                 </span>
               </ng-container>
 
-              <ng-container *ngIf="section.submittedAt">
-                <span class="font-color-secondary">Last submitted by {{ section.submittedBy?.name }} ({{ section.submittedBy?.isOwner ? 'Owner' : 'Collaborator' }}) on {{ section.submittedAt | date: ('app.date_formats.long_date' | translate)}}</span>
+              <ng-container *ngIf="stores.authentication.isInnovatorType() && section.submittedAt">
+                <span class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">Last submitted by {{ section.submittedBy?.name }} ({{ section.submittedBy?.isOwner ? 'Owner' : 'Collaborator' }}) on {{ section.submittedAt | date: ('app.date_formats.long_date' | translate)}}</span>
               </ng-container>
 
             </li>
