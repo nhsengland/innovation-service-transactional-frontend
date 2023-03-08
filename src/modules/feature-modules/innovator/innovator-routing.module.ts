@@ -73,6 +73,7 @@ import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-o
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
+import { ManageInnovationGuard } from './guards/manage-innovation.guard';
 
 // Resolvers.
 import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
@@ -142,11 +143,11 @@ const routes: Routes = [
           { path: '', pathMatch: 'full', redirectTo: '../dashboard' },
 
           { path: 'new', pathMatch: 'full', component: InnovationNewComponent },
-          { 
-            path: ':innovationId/collaborations/:collaboratorId', 
+          {
+            path: ':innovationId/collaborations/:collaboratorId',
             pathMatch: 'full',
             component: PageCollaborationInviteComponent,
-            data: { 
+            data: {
               breadcrumb: 'Collaboration Invite',
             },
           },
@@ -404,6 +405,7 @@ const routes: Routes = [
               {
                 path: 'manage',
                 data: { breadcrumb: 'Manage innovation' },
+                canActivate: [ManageInnovationGuard],
                 children: [
                   {
                     path: '', pathMatch: 'full', component: PageInnovationManageOverviewComponent,
