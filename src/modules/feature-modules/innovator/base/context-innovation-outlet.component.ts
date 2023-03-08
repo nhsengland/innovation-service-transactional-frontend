@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { AuthenticationStore, ContextStore } from '@modules/stores';
+import { ContextStore } from '@modules/stores';
 
 
 @Component({
@@ -23,13 +23,14 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
   constructor(
     private router: Router,
-    private authenticationStore: AuthenticationStore,
     private contextStore: ContextStore
   ) {
 
     this.subscriptions.add(
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
     );
+
+    this.onRouteChange();
 
   }
 
@@ -38,9 +39,8 @@ export class ContextInnovationOutletComponent implements OnDestroy {
   }
 
 
-  private onRouteChange(_event: NavigationEnd): void {
+  private onRouteChange(_event?: NavigationEnd): void {
 
-    const user = this.authenticationStore.getUserInfo();
     const innovation = this.contextStore.getInnovation();
     this.innovation = {
       id: innovation.id,

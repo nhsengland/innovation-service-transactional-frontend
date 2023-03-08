@@ -1,22 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { forkJoin, of } from 'rxjs';
+import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
+import { ContextInnovationType } from '@modules/stores';
+import { InnovationStatusEnum, InnovationTransferStatusEnum } from '@modules/stores/innovation';
+
 import { GetInnovationTransfersDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTransferStatusEnum } from '@modules/stores/innovation';
-import { ActivatedRoute } from '@angular/router';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 
 @Component({
-  selector: 'app-innovator-pages-innovation-manage-info',
-  templateUrl: './manage-info.component.html'
+  selector: 'app-innovator-pages-innovation-manage-overview',
+  templateUrl: './manage-overview.component.html'
 })
-export class PageInnovationManageInfoComponent extends CoreComponent implements OnInit {
+export class PageInnovationManageOverviewComponent extends CoreComponent implements OnInit {
 
-  innovationId: string;
   innovation: ContextInnovationType;
 
   isActiveInnovation = false;
@@ -24,23 +23,18 @@ export class PageInnovationManageInfoComponent extends CoreComponent implements 
   isInPause = false;
   innovationTransfers: GetInnovationTransfersDTO = [];
 
-
   constructor(
-    private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService
   ) {
 
     super();
     this.setPageTitle('Manage innovation');
 
-    this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-
     this.innovation = this.stores.context.getInnovation();
 
     if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS) {
       this.isInProgressInnovation = true;
-    }
-    else if(this.innovation.status === InnovationStatusEnum.PAUSED) {
+    } else if (this.innovation.status === InnovationStatusEnum.PAUSED) {
       this.isInPause = true;
     }
 
@@ -53,23 +47,20 @@ export class PageInnovationManageInfoComponent extends CoreComponent implements 
 
   }
 
+
   getInnovationsTransfers(): void {
 
-    forkJoin([
-      this.innovatorService.getInnovationTransfers()
-    ]).subscribe(([innovationTransfers]) => {
+    this.innovatorService.getInnovationTransfers().subscribe((response) => {
 
-      this.innovationTransfers = innovationTransfers.filter(innovationTransfer => innovationTransfer.innovation.id === this.innovationId);
+      this.innovationTransfers = response.filter(innovationTransfer => innovationTransfer.innovation.id === this.innovation.id);
 
       this.isActiveInnovation = this.innovationTransfers.length === 0;
 
       this.setPageStatus('READY');
 
-    }
-    );
+    });
 
   }
-
 
   cancelInnovationTransfer(transferId: string, innovation: { id: string, name: string }): void {
 

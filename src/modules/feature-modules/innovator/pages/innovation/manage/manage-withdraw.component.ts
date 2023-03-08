@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
-import { forkJoin } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormEngineParameterModel } from '@app/base/forms';
+import { CustomValidators } from '@app/base/forms';
 
-import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
 
@@ -28,7 +26,6 @@ export class PageInnovationManageWithdrawComponent extends CoreComponent impleme
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovationsService: InnovationsService,
     private innovatorService: InnovatorService
   ) {
 

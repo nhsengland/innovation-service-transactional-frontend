@@ -61,6 +61,11 @@ export const locale = {
             title: 'It appears that something went wrong!',
             message: 'It seems that you don\'t have access to the service. Please contact us for further help.',
             button_label: 'Go back to home'
+          },
+          forbidden_manage_innovation_resources: {
+            title: 'It appears that something went wrong!',
+            message: 'Only the innovation owner can access the requested resource.',
+            button_label: 'Go back to home'
           }
         },
         page_not_found: {

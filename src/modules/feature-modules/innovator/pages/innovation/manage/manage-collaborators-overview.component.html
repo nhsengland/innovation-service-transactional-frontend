@@ -1,0 +1,58 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-twp-thirds">
+
+      <p>You can collaborate with others on your innovation. Collaborators can do almost everything but they can't change who owns the innovation, manage collaborators, stop sharing it support organisations, or withdraw it.</p>
+
+      <div class="nhsuk-warning-callout">
+        <h2 class="nhsuk-warning-callout__label">
+          <span role="text"><span class="nhsuk-u-visually-hidden">Important: </span>Warning</span>
+        </h2>
+        <p>If you invite a new user they have access to all the information in your record and your messages.</p>
+      </div>
+
+      <div class="nhsuk-action-link">
+        <a routerLink="new" class="nhsuk-action-link__link">
+          <theme-svg-icon type="action"></theme-svg-icon>
+          <span class="nhsuk-action-link__text">Invite a new user</span>
+        </a>
+      </div>
+
+      <ng-container *ngIf="activeCollaborators.getTotalRowsNumber() > 0">
+
+        <h2>{{ innovation.name }} users</h2>
+        <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-5">
+          <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">{{ innovation.name }} users</caption>
+          <thead class="nhsuk-table__head">
+            <tr>
+              <th *ngFor="let item of activeCollaborators.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr *ngFor="let activeCollaborator of activeCollaborators.getRecords()" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ activeCollaborators.getColumnLabel('user') }}</span>
+                <span>{{ activeCollaborator.name }}</span>
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ activeCollaborators.getColumnLabel('role') }}</span>
+                {{ activeCollaborator.role }}
+              </td>
+              <td class="nhsuk-table__cell text-align-right">
+                <span class="nhsuk-table-responsive__heading">{{ activeCollaborators.getColumnLabel('actions') }} </span>
+                <a *ngIf="activeCollaborator.action" [routerLink]="activeCollaborator.action.url">{{ activeCollaborator.action.label}}</a>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+
+      </ng-container>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>
