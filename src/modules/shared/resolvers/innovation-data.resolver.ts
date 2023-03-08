@@ -44,6 +44,7 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
           id: response.id,
           name: response.name,
           status: response.status,
+          statusUpdatedAt: response.statusUpdatedAt,
           owner: { isActive: response.owner.isActive, name: response.owner.name },
           loggedUser: { isOwner: response.owner.id === userContext?.id },
           ...(response.assessment ? { assessment: { id: response.assessment.id } } : {}),

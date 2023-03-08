@@ -40,7 +40,7 @@ export class PageCollaborationInviteComponent extends CoreComponent implements O
   }
 
   onSubmit(status: InnovationCollaboratorStatusEnum.ACTIVE | InnovationCollaboratorStatusEnum.DECLINED): void {
-    this.innovatorService.updateCollaborationStatusByCollaborator(this.innovationId, status).subscribe(() => {
+    this.innovatorService.updateCollaborationStatus(this.innovationId, this.collaboratorId, status).subscribe(() => {
       const alertMessage = status === InnovationCollaboratorStatusEnum.ACTIVE ? `You have joined "${this.collaborationInfo?.innovation.name}" innovation as a collaborator.` :
         `You have declined the invitation to join "${this.collaborationInfo?.innovation.name}" innovation as a collaborator.`;
 
