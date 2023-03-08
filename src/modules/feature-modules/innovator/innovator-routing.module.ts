@@ -453,7 +453,22 @@ const routes: Routes = [
                     ]
                   },
                   {
-                    path: 'transfer', pathMatch: 'full', component: PageInnovationManageTransferComponent
+                    path: 'transfer', 
+                    data: { breadcrumb: null },
+                    children: [
+                      { 
+                        path: '', 
+                        pathMatch: 'full', 
+                        redirectTo: '1',
+                      },
+                      {
+                        path: ':stepId', pathMatch: 'full', component: PageInnovationManageTransferComponent,
+                        data: {
+                          data: { breadcrumb: null },
+                          layout: { type: 'full' }
+                        }
+                      }
+                    ]
                   },
                   {
                     path: 'withdraw', pathMatch: 'full', component: PageInnovationManageWithdrawComponent
