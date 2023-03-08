@@ -64,7 +64,8 @@ describe('FeatureModules/Innovator/Pages/Innovations/Sections/InnovationSectionE
       status: 'DRAFT' as keyof typeof INNOVATION_SECTION_STATUS,
       updatedAt: '2020-01-01T00:00:00.000Z',
       data: {},
-      submittedAt: ''
+      submittedAt: '',
+      submittedBy: null
     });
   });
 
