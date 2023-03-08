@@ -41,10 +41,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     name: string;
     email: string;
     collaboratorRole?: string;
-  }[] | null =  null;
+  }[] = [];
 
   showCollaboratorsHideStatus: 'opened' | 'closed' = 'closed';
   isCollaboratorsLoading: boolean = false;
+  collaboratorsLoaded: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -118,7 +119,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.showCollaboratorsHideStatus = 'closed';
     } else {
       this.showCollaboratorsHideStatus = 'opened';
-      if (!this.innovationCollaborators) {
+      if (!this.collaboratorsLoaded) {
         this.getInnovationCollaborators();
       }
     }
@@ -133,6 +134,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       .subscribe((innovationCollaborators) => {
       this.innovationCollaborators = innovationCollaborators.data.map(collaborator => ({ email: collaborator.email || '', ...collaborator}))
       this.isCollaboratorsLoading = false;
+      this.collaboratorsLoaded = true;
     })
 
   }

@@ -44,10 +44,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     status: InnovationCollaboratorStatusEnum;
     name: string;
     collaboratorRole?: string;
-  }[] | null =  null;
+  }[] = [];
 
   showCollaboratorsHideStatus: 'opened' | 'closed' = 'closed';
   isCollaboratorsLoading: boolean = false;
+  collaboratorsLoaded: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -125,7 +126,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.showCollaboratorsHideStatus = 'closed';
     } else {
       this.showCollaboratorsHideStatus = 'opened';
-      if (!this.innovationCollaborators) {
+      if (!this.collaboratorsLoaded) {
         this.getInnovationCollaborators();
       }
     }
@@ -140,6 +141,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       .subscribe((innovationCollaborators) => {
       this.innovationCollaborators = innovationCollaborators.data
       this.isCollaboratorsLoading = false;
+      this.collaboratorsLoaded = true;
     })
 
   }

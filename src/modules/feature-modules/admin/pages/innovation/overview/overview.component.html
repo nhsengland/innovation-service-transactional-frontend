@@ -71,7 +71,10 @@
         <theme-spinner *ngIf="isCollaboratorsLoading; else collaboratorsLoaded"></theme-spinner>
 
         <ng-template #collaboratorsLoaded>
-          <ng-container *ngIf=" showCollaboratorsHideStatus === 'opened'">
+          
+          <p *ngIf=" showCollaboratorsHideStatus === 'opened' && innovationCollaborators.length === 0">There are no collaborators</p>
+
+          <ng-container *ngIf=" showCollaboratorsHideStatus === 'opened' && innovationCollaborators.length > 0">
             <table class="nhsuk-table">
               <thead role="rowgroup" class="nhsuk-table__head">
                 <tr role="row">
