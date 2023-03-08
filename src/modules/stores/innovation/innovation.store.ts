@@ -43,12 +43,23 @@ export class InnovationStore extends Store<InnovationModel> {
       map(response => INNOVATION_SECTIONS.map(item => ({
         title: item.title,
         sections: item.sections.map(ss => {
-          const sectionState = response.find(a => a.section === ss.id) || { status: 'UNKNOWN', actionStatus: '', openActionsCount: 0 };
+          const sectionState = response.find(a => a.section === ss.id) || {
+            status: 'UNKNOWN',
+            actionStatus: '',
+            submittedAt: null,
+            submittedBy: null,
+            openActionsCount: 0
+          };
           return {
             id: ss.id,
             title: ss.title,
             status: sectionState.status,
             isCompleted: INNOVATION_SECTION_STATUS[sectionState.status]?.isCompleteState || false,
+            submittedAt: sectionState.submittedAt,
+            submittedBy: sectionState.submittedBy === null ? null : {
+              name: sectionState.submittedBy.name,
+              isOwner: sectionState.submittedBy.isOwner
+            },
             openActionsCount: sectionState.openActionsCount
           };
         })
@@ -65,6 +76,8 @@ export class InnovationStore extends Store<InnovationModel> {
               status: 'UNKNOWN' as keyof typeof INNOVATION_SECTION_STATUS,
               actionStatus: '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
               isCompleted: false,
+              submittedAt: null,
+              submittedBy: null,
               openActionsCount: 0
             }))
           }))
