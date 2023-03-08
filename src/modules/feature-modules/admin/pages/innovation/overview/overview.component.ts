@@ -12,6 +12,7 @@ import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationCollaboratorStatusEnum, InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { DatePipe } from '@angular/common';
+import { UtilsHelper } from '@app/base/helpers';
 
 
 @Component({
@@ -79,6 +80,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovatorDetails = [
         { label: 'Name', value: innovation.owner.name },
         { label: 'Last login', value: this.datePipe.transform(innovation.owner.lastLoginAt ?? '', this.translate('app.date_formats.long_date_time')) },
+        { label: 'Contact preference', value: UtilsHelper.getContactPreferenceValue(innovation.owner.contactByEmail, innovation.owner.contactByPhone, innovation.owner.contactByPhoneTimeframe) || '' },
+        { label: 'Contact details', value: innovation.owner.contactDetails || '' },
         { label: 'Email address', value: innovation.owner.email ?? '' },
         { label: 'Phone number', value: innovation.owner.mobilePhone ?? '' },
       ]
