@@ -53,9 +53,13 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
         { label: 'Action tracker', url: `/innovator/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/innovator/innovations/${innovation.id}/threads` },
         { label: 'Data sharing and support', url: `/innovator/innovations/${innovation.id}/support` },
-        { label: 'Activity log', url: `/innovator/innovations/${innovation.id}/activity-log` },
-        { label: 'Manage innovation', url: `/innovator/innovations/${innovation.id}/manage` }
+        { label: 'Activity log', url: `/innovator/innovations/${innovation.id}/activity-log` }
       ];
+
+      if(innovation.loggedUser.isOwner) {
+        this._sidebarItems.push({ label: 'Manage innovation', url: `/innovator/innovations/${innovation.id}/manage` });
+      }
+
     }
   }
 
