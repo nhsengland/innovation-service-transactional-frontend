@@ -72,7 +72,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       ];
 
       this.innovatorSummary = [
-        { label: 'Name', value: this.innovation.owner.name },
+        { label: 'Owner', value: this.innovation.owner.name },
         { label: 'Contact preference', value: UtilsHelper.getContactPreferenceValue(this.innovation.owner.contactByEmail, this.innovation.owner.contactByPhone, this.innovation.owner.contactByPhoneTimeframe) || '' },
         { label: 'Contact details', value: this.innovation.owner.contactDetails || '' },
         { label: 'Email address', value: this.innovation.owner.email || '' },
