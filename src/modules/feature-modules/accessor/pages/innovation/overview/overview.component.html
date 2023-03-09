@@ -39,43 +39,33 @@
     </div>
   </dl>
 
-  <details class="nhsuk-details">
-    <summary class="nhsuk-details__summary" (click)="onShowCollaboratorsClick()">
+  <details class="nhsuk-details" *ngIf="innovationCollaborators.length > 0">
+    <summary class="nhsuk-details__summary">
       <span class="nhsuk-details__summary-text">
         Collaborators
       </span>
     </summary>
     <div class="nhsuk-details__text">
-
-      <theme-spinner *ngIf="isCollaboratorsLoading; else collaboratorsLoaded"></theme-spinner>
-
-      <ng-template #collaboratorsLoaded>
-        
-        <p *ngIf=" showCollaboratorsHideStatus === 'opened' && innovationCollaborators.length === 0">There are no collaborators</p>
-
-        <ng-container *ngIf=" showCollaboratorsHideStatus === 'opened' && innovationCollaborators.length > 0">
-          <table class="nhsuk-table">
-            <thead role="rowgroup" class="nhsuk-table__head">
-              <tr role="row">
-                <th role="columnheader" class="" scope="col">
-                  Name
-                </th>
-                <th role="columnheader" class="" scope="col">
-                  Role
-                </th>
-              </tr>
-            </thead>
-            <tbody class="nhsuk-table__body">
-              <ng-container *ngFor="let collaborator of innovationCollaborators">
-                <tr role="row" class="nhsuk-table__row">
-                  <td class="nhsuk-table__cell">{{collaborator.name ?? ''}}</td>
-                  <td class="nhsuk-table__cell ">{{collaborator.role ?? ''}}</td>
-                </tr>
-              </ng-container>
-            </tbody>
-          </table>
-        </ng-container>
-        </ng-template>
+      <table class="nhsuk-table">
+        <thead role="rowgroup" class="nhsuk-table__head">
+          <tr role="row">
+            <th role="columnheader" class="" scope="col">
+              Name
+            </th>
+            <th role="columnheader" class="" scope="col">
+              Role
+            </th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <ng-container *ngFor="let collaborator of innovationCollaborators">
+            <tr role="row" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">{{collaborator.name ?? ''}}</td>
+              <td class="nhsuk-table__cell ">{{collaborator.role ?? ''}}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
     </div>
   </details>
 
