@@ -3,27 +3,38 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-      <dl class="nhsuk-summary-list">
+      <dl *ngIf="!removeCollaboratorWarningVisible" class="nhsuk-summary-list">
+
+        <div *ngIf="innovationCollaboration?.name" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Name</dt>
+          <dd class="nhsuk-summary-list__value">{{ innovationCollaboration?.name }}</dd>
+          <dd class="nhsuk-summary-list__actions"></dd>
+        </div>
 
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Email</dt>
-          <dd class="nhsuk-summary-list__value">{{ innovationCollaboration.email }}</dd>
-          <!-- <dd class="nhsuk-summary-list__actions">
-            <a href="#"> Change<span class="nhsuk-u-visually-hidden"> name</span> </a>
-          </dd> -->
+          <dd class="nhsuk-summary-list__value">{{ innovationCollaboration?.email }}</dd>
+          <dd class="nhsuk-summary-list__actions"></dd>
         </div>
 
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Role</dt>
-          <dd class="nhsuk-summary-list__value">{{ innovationCollaboration.role }}</dd>
-          <!-- <dd class="nhsuk-summary-list__actions">
-            <a href="#"> Change<span class="nhsuk-u-visually-hidden"> name</span> </a>
-          </dd> -->
+          <dd class="nhsuk-summary-list__value">{{ innovationCollaboration?.role }}</dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a routerLink="edit"> Change<span class="nhsuk-u-visually-hidden"> role</span></a>
+          </dd>
         </div>
 
       </dl>
 
-      <!-- <button class="nhsuk-button" (click)="onSubmitWizard()">Add new user</button> -->
+      <div *ngIf="removeCollaboratorWarningVisible" class="nhsuk-warning-callout">
+        <h2 class="nhsuk-warning-callout__label">
+          <span role="text"><span class="nhsuk-u-visually-hidden">Important: </span>Are you sure?</span>
+        </h2>
+        <p>This collaborator will no longer be able to access or work on this innovation.</p>
+      </div>
+
+      <button *ngIf="actionButton" class="nhsuk-button" (click)="onActionButtonClicked(actionButton.action, $event)">{{ actionButton.label }}</button>
 
     </div>
   </div>

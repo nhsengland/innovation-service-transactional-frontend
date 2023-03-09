@@ -413,7 +413,7 @@ const routes: Routes = [
                   },
                   {
                     path: 'collaborators',
-                    data: { breadcrumb: 'Collaborators' },
+                    data: { breadcrumb: 'Collaborators', layout: { type: 'full' } },
                     children: [
                       {
                         path: '', pathMatch: 'full', component: PageInnovationManageCollaboratorsOverviewComponent,
@@ -421,7 +421,7 @@ const routes: Routes = [
                       },
                       {
                         path: 'new', pathMatch: 'full', component: PageInnovationManageCollaboratorsWizardComponent,
-                        data: { breadcrumb: null, layout: { type: 'full' } }
+                        data: { breadcrumb: null }
                       },
                       {
                         path: ':collaboratorId',
@@ -431,8 +431,12 @@ const routes: Routes = [
                             data: { breadcrumb: null }
                           },
                           {
+                            path: 'invite-again', pathMatch: 'full', component: PageInnovationManageCollaboratorsWizardComponent,
+                            data: { breadcrumb: null }
+                          },
+                          {
                             path: 'edit', pathMatch: 'full', component: PageInnovationManageCollaboratorsWizardComponent,
-                            data: { breadcrumb: null, layout: { type: 'full' } }
+                            data: { breadcrumb: null }
                           }
                         ]
                       }
