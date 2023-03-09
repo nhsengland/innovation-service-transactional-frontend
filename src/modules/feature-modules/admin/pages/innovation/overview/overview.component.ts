@@ -10,7 +10,6 @@ import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.co
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationCollaboratorStatusEnum, InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { DatePipe } from '@angular/common';
 import { UtilsHelper } from '@app/base/helpers';
 
@@ -38,9 +37,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationCollaborators: {
     id: string;
     status: InnovationCollaboratorStatusEnum;
-    name: string;
-    email: string;
-    collaboratorRole?: string;
+    name?: string;
+    email?: string;
+    role?: string;
   }[] = [];
 
   showCollaboratorsHideStatus: 'opened' | 'closed' = 'closed';
@@ -128,11 +127,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   getInnovationCollaborators(): void {
 
     this.isCollaboratorsLoading = true
-    const qp: { status: InnovationCollaboratorStatusEnum[] } = { status: [InnovationCollaboratorStatusEnum.ACTIVE] };
     
-    this.innovationsService.getInnovationCollaborators(this.innovationId, qp)
+    this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ["active"])
       .subscribe((innovationCollaborators) => {
-      this.innovationCollaborators = innovationCollaborators.data.map(collaborator => ({ email: collaborator.email || '', ...collaborator}))
+      this.innovationCollaborators = innovationCollaborators.data;
       this.isCollaboratorsLoading = false;
       this.collaboratorsLoaded = true;
     })

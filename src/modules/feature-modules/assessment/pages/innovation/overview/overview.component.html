@@ -105,9 +105,9 @@
               <tbody class="nhsuk-table__body">
                 <ng-container *ngFor="let collaborator of innovationCollaborators">
                   <tr role="row" class="nhsuk-table__row">
-                    <td class="nhsuk-table__cell">{{collaborator.name}}</td>
-                    <td class="nhsuk-table__cell">{{collaborator.email}}</td>
-                    <td class="nhsuk-table__cell ">{{collaborator.collaboratorRole}}</td>
+                    <td class="nhsuk-table__cell">{{collaborator.name ?? ''}}</td>
+                    <td class="nhsuk-table__cell">{{collaborator.email ?? ''}}</td>
+                    <td class="nhsuk-table__cell ">{{collaborator.role ?? ''}}</td>
                   </tr>
                 </ng-container>
               </tbody>

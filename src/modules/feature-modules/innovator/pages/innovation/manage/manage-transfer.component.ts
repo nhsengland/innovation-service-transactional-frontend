@@ -56,7 +56,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
           value: string,
           label: string  
         }[] = response.data.map((i) => ({
-          value: i.email,
+          value: i.email ?? '',
           label: i.name ?? ''
         }))
 

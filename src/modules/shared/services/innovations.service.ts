@@ -60,7 +60,7 @@ type getInnovationCollaboratorsListDTO = {
     id: string,
     name?: string,
     role?: string,
-    email: string,
+    email?: string,
     status: InnovationCollaboratorStatusEnum
   }[]
 };
@@ -208,16 +208,6 @@ export type GetExportRequestsListDTO = {
 
 export type GetExportRequestInfoDto = InnovationExportRequestItemType;
 
-export type GetInnovationCollaboratorsDTO = {
-  count: number;
-  data: {
-    id: string;
-    email?: string;
-    status: InnovationCollaboratorStatusEnum;
-    name: string;
-    collaboratorRole?: string;
-  }[]
-}
 @Injectable()
 export class InnovationsService extends CoreService {
 
@@ -709,13 +699,5 @@ export class InnovationsService extends CoreService {
       }).setQueryParams(qp);
     return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
-  }
-
-  getInnovationCollaborators(innovationId: string, qp: { status: InnovationCollaboratorStatusEnum[] }): Observable<GetInnovationCollaboratorsDTO> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/collaborators')
-      .setPathParams({ innovationId })
-      .setQueryParams(qp);
-    
-    return this.http.get<GetInnovationCollaboratorsDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 }

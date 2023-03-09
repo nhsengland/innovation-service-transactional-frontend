@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { GetInnovationCollaboratorsDTO, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
@@ -13,7 +13,6 @@ import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.en
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { forkJoin } from 'rxjs';
 import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { UtilsHelper } from '@app/base/helpers';
 
 
 @Component({
@@ -42,8 +41,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationCollaborators: {
     id: string;
     status: InnovationCollaboratorStatusEnum;
-    name: string;
-    collaboratorRole?: string;
+    name?: string;
+    role?: string;
   }[] = [];
 
   showCollaboratorsHideStatus: 'opened' | 'closed' = 'closed';
@@ -135,9 +134,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   getInnovationCollaborators(): void {
 
     this.isCollaboratorsLoading = true
-    const qp: { status: InnovationCollaboratorStatusEnum[] } = { status: [InnovationCollaboratorStatusEnum.ACTIVE] };
     
-    this.innovationsService.getInnovationCollaborators(this.innovationId, qp)
+    this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ["active"])
       .subscribe((innovationCollaborators) => {
       this.innovationCollaborators = innovationCollaborators.data
       this.isCollaboratorsLoading = false;
