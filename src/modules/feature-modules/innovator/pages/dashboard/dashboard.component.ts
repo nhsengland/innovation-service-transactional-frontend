@@ -11,8 +11,8 @@ import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-import { GetInnovationCollaboratorInvitesDTO, GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
 import { DatesHelper } from '@app/base/helpers';
+import { GetInnovationCollaboratorInvitesDTO, GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
 
 
 @Component({
@@ -23,7 +23,8 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   user: {
     displayName: string,
-    innovations: { id: string, name: string, description: null | string, groupedStatus: keyof typeof InnovationGroupedStatusEnum }[],
+    innovationsOwner: { id: string, name: string, description: null | string, groupedStatus: keyof typeof InnovationGroupedStatusEnum }[],
+    innovationsCollaborator: { id: string, name: string, description: null | string, groupedStatus: keyof typeof InnovationGroupedStatusEnum }[],
     passwordResetAt: string
   };
 
@@ -42,7 +43,8 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     const user = this.stores.authentication.getUserInfo();
     this.user = {
       displayName: user.displayName,
-      innovations: [],
+      innovationsOwner: [],
+      innovationsCollaborator: [],
       passwordResetAt: user.passwordResetAt || ''
     };
 
@@ -53,23 +55,20 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   ngOnInit(): void {
 
     forkJoin([
-      this.innovationsService.getInnovationsList({ fields: ['groupedStatus'] }).pipe(map(response => response), catchError(() => of(null))),
+      this.innovationsService.getInnovationsList({ fields: ['groupedStatus', 'statistics'], queryParams: { filters: { hasAccessThrough: ['owner'] }, take: 100, skip: 0 } }).pipe(map(response => response), catchError(() => of(null))),
+      this.innovationsService.getInnovationsList({ fields: ['groupedStatus', 'statistics'], queryParams: { filters: { hasAccessThrough: ['collaborator'] }, take: 100, skip: 0 } }).pipe(map(response => response), catchError(() => of(null))),
       this.innovatorService.getInnovationTransfers(true).pipe(map(response => response), catchError(() => of(null))),
       this.innovatorService.getInnovationInviteCollaborations().pipe(map(response => response), catchError(() => of(null)))
-    ]).subscribe(([innovationsList, innovationsTransfers, inviteCollaborations]) => {
+    ]).subscribe(([innovationsListOwner, innovationsListCollaborator, innovationsTransfers, inviteCollaborations]) => {
 
-      if (innovationsList) {
-        this.user.innovations = innovationsList.data.map(innovation => ({
-          id: innovation.id,
-          name: innovation.name,
-          description: this.buildDescriptionString(innovation),
-          groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
-        }))
-      } else {
+      if (!innovationsListOwner || !innovationsListCollaborator) {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
         return;
       }
+
+      this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner);
+      this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator);
 
       if (innovationsTransfers) {
         this.innovationTransfers = innovationsTransfers;
@@ -81,11 +80,11 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         this.inviteCollaborations = inviteCollaborations.map(i => {
           return {
             ...i,
-            invitedAt: DatesHelper.addDaysToDate(i.invitedAt?? '', 30).toString()
+            invitedAt: DatesHelper.addDaysToDate(i.invitedAt ?? '', 30).toString()
           }
         });
       } else {
-        this.setAlertUnknownError();        
+        this.setAlertUnknownError();
       }
 
       this.setPageStatus('READY');
@@ -113,18 +112,15 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         forkJoin([
           this.stores.authentication.initializeAuthentication$(), // Initialize authentication in order to update First Time SignIn information.
           this.innovatorService.getInnovationTransfers(true),
-          this.innovationsService.getInnovationsList({ fields: ['groupedStatus'] })
+          this.innovationsService.getInnovationsList({ fields: ['groupedStatus', 'statistics'], queryParams: { filters: { hasAccessThrough: ['owner'] }, take: 100, skip: 0 } }),
+          this.innovationsService.getInnovationsList({ fields: ['groupedStatus', 'statistics'], queryParams: { filters: { hasAccessThrough: ['collaborator'] }, take: 100, skip: 0 } })
         ])
       )
-    ).subscribe(([_authentication, innovationsTransfers, innovationsList]) => {
+    ).subscribe(([_authentication, innovationsTransfers, innovationsListOwner, innovationsListCollaborator]) => {
 
       this.innovationTransfers = innovationsTransfers;
-      this.user.innovations = innovationsList.data.map(innovation => ({
-        id: innovation.id,
-        name: innovation.name,
-        description: this.buildDescriptionString(innovation),
-        groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
-      }));
+      this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner);
+      this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator);
 
       this.setAlertSuccess(accept ? `You have successfully accepted ownership` : `You have successfully rejected ownership`);
 
@@ -149,6 +145,15 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     }
 
     return description.length !== 0 ? `${description.join(', ')}.` : null;
+  }
+
+  private getInnovationsListInformation(innovationList: InnovationsListDTO) {
+    return innovationList.data.map(innovation => ({
+      id: innovation.id,
+      name: innovation.name,
+      description: this.buildDescriptionString(innovation),
+      groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
+    }));
   }
 
 }

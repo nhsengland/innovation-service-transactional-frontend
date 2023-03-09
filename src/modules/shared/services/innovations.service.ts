@@ -35,6 +35,7 @@ export type InnovationsListFiltersType = {
   assignedToMe?: boolean,
   suggestedOnly?: boolean,
   latestWorkedByMe?: boolean,
+  hasAccessThrough?: ('owner' | 'collaborator')[],
   dateFilter?: {
     field: 'submittedAt',
     startDate?: DateISOType,
@@ -236,6 +237,7 @@ export class InnovationsService extends CoreService {
       ...(filters.assignedToMe !== undefined ? { assignedToMe: filters.assignedToMe } : {}),
       ...(filters.suggestedOnly != undefined ? { suggestedOnly: filters.suggestedOnly } : {}),
       ...(filters.latestWorkedByMe != undefined ? { latestWorkedByMe: filters.latestWorkedByMe } : {}),
+      ...(filters.hasAccessThrough != undefined ? { hasAccessThrough: filters.hasAccessThrough } : {}),
       ...(filters.dateFilter ? { dateFilter: filters.dateFilter } : {}),
       fields
     };

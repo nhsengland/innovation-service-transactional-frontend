@@ -38,29 +38,24 @@
       </div>
 
       <ul class="nhsuk-grid-row nhsuk-card-group">
-        <li *ngFor="let innovation of user.innovations" class="nhsuk-grid-column-full nhsuk-card-group__item">
-          <div class="nhsuk-card nhsuk-card">
-            <div class="nhsuk-card__content">
-
-              <div class="d-flex justify-content-space-between">
-
-                <div>
-                  <a routerLink="/innovator/innovations/{{ innovation.id }}" class="nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-margin-right-2">
-                    {{ innovation.name }} <span class="nhsuk-u-visually-hidden"> Access {{ innovation.name }} innovation </span>
-                  </a>
-                  <div class="nhsuk-card__description nhsuk-body-s nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-0" *ngIf="innovation.description !== null">{{ innovation.description }}</div>
-                </div>
-
-                <div>
-                  <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}"></theme-tag>
-                </div>
-
-              </div>
-
-            </div>
-          </div>
+        <li *ngFor="let innovation of user.innovationsOwner" class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <ng-container *ngTemplateOutlet="innovationCard; context: { $implicit: innovation }"></ng-container>
         </li>
       </ul>
+
+      <p *ngIf="user.innovationsOwner.length === 0">You have no innovations.</p>
+
+      <div class="d-flex align-items-center justify-content-space-between">
+        <h2>Innovations you are working on as a collaborator</h2>
+      </div>
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+        <li *ngFor="let innovation of user.innovationsCollaborator" class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <ng-container *ngTemplateOutlet="innovationCard; context: { $implicit: innovation }"></ng-container>
+        </li>
+      </ul>
+
+      <p *ngIf="user.innovationsCollaborator.length === 0">You are not working in any innovation as a collaborator.</p>
 
     </div>
 
@@ -87,3 +82,26 @@
   </div>
 
 </theme-content-wrapper>
+
+<ng-template #innovationCard let-innovation>
+  <div class="nhsuk-card nhsuk-card">
+    <div class="nhsuk-card__content">
+
+      <div class="d-flex justify-content-space-between">
+
+        <div>
+          <a routerLink="/innovator/innovations/{{ innovation.id }}" class="nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-margin-right-2">
+            {{ innovation.name }} <span class="nhsuk-u-visually-hidden"> Access {{ innovation.name }} innovation </span>
+          </a>
+          <div class="nhsuk-card__description nhsuk-body-s nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-0" *ngIf="innovation.description !== null">{{ innovation.description }}</div>
+        </div>
+
+        <div>
+          <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}"></theme-tag>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</ng-template>
