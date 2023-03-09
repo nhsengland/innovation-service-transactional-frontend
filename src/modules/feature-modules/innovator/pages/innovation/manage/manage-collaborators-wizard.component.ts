@@ -9,6 +9,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 
 import { MANAGE_COLLABORATORS_CONFIG_EDIT, MANAGE_COLLABORATORS_CONFIG_NEW } from './manage-collaborators-wizard.config';
 import { HttpErrorResponse } from '@angular/common/http';
+import { UtilsHelper } from '@app/base/helpers';
 
 
 type ActionsType = 'create' | 'update';
@@ -129,7 +130,7 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
 
       const body = {
         email: this.wizard.currentAnswers.email,
-        role: this.wizard.currentAnswers.role ?? null
+        role: UtilsHelper.isEmpty(this.wizard.currentAnswers.role) ? null : this.wizard.currentAnswers.role
       };
 
       this.innovationsService.createInnovationCollaborator(this.innovation.id, body).subscribe({
