@@ -60,7 +60,7 @@ type getInnovationCollaboratorsListDTO = {
     id: string,
     name?: string,
     role?: string,
-    email: string,
+    email?: string,
     status: InnovationCollaboratorStatusEnum
   }[]
 };
@@ -700,5 +700,4 @@ export class InnovationsService extends CoreService {
     return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
-
 }

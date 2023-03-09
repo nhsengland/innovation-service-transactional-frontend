@@ -30,6 +30,7 @@ export type GetInnovationCollaboratorInvitesDTO = {
     }
   };
 };
+
 @Injectable()
 export class InnovatorService extends CoreService {
 

@@ -12,7 +12,7 @@ import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/inn
 
 type TableListsType = {
   id: string,
-  name: string,
+  name?: string,
   role: string,
   action: null | { label: string, url: string }
 };
