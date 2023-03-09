@@ -24,7 +24,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovation: null | {
     owner: { name: string },
     loggedUser: { isOwner: boolean },
-    collaborators: { name: string }[],
+    collaborators: { nameOrEmail: string }[],
     status: InnovationStatusEnum,
     groupedStatus: InnovationGroupedStatusEnum,
     organisationsStatusDescription: string,
@@ -77,7 +77,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovation = {
         owner: { name: innovationInfo.owner.name },
         loggedUser: {isOwner: innovationContext.loggedUser.isOwner },
-        collaborators: innovationCollaborators.data.map(item => ({ name: `${item.name} (${item.collaboratorRole})` })),
+        collaborators: innovationCollaborators.data.map(item => ({ nameOrEmail: `${item.name ?? item.email} (${item.role})` })),
         status: innovationInfo.status,
         groupedStatus: innovationInfo.groupedStatus,
         organisationsStatusDescription: Object.entries(occurrences).map(([status, item]) => `${item.count} ${item.text}`).join(', '),
@@ -86,7 +86,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       };
 
       this.isSubmitted = { submittedAllSections: submit.submittedAllSections, submittedForNeedsAssessment: submit.submittedForNeedsAssessment };
-      // (submit.submittedAllSections && submit.submittedForNeedsAssessment) ? this.showBanner = false : this.showBanner = true;
       this.showBanner = !(submit.submittedAllSections && submit.submittedForNeedsAssessment);
 
       const lastSectionSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection!];

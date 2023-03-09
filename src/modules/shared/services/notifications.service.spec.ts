@@ -53,7 +53,7 @@ describe('Shared/Services/NotificationsService', () => {
       count: 20,
       data: [{
         id: 'Notification001',
-        innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
+        innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS, ownerName: 'Innovation owner' },
         contextType: NotificationContextTypeEnum.NEEDS_ASSESSMENT, contextDetail: NotificationContextDetailEnum.NEEDS_ASSESSMENT_COMPLETED, contextId: 'NeedsAssessment001',
         createdAt: '2020-01-01T00:00:00.000Z', createdBy: 'User name', readAt: null,
         params: null
@@ -67,7 +67,7 @@ describe('Shared/Services/NotificationsService', () => {
         contextType: item.contextType, contextDetail: item.contextDetail, contextId: item.contextId,
         createdAt: item.createdAt, createdBy: item.createdBy, readAt: item.readAt,
         link: { label: 'Click to go to innovation assessment', url: '//innovations/Innovation001/assessments/NeedsAssessment001' },
-        params: { innovationId: item.innovation.id, innovationName: item.innovation.name, innovationStatus: item.innovation.status }
+        params: { innovationId: item.innovation.id, innovationName: item.innovation.name, innovationOwnerName: item.innovation.ownerName, innovationStatus: item.innovation.status }
       }))
     };
 
@@ -93,7 +93,7 @@ describe('Shared/Services/NotificationsService', () => {
       count: 20,
       data: [{
         id: 'Notification001',
-        innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
+        innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS, ownerName: 'Innovation owner' },
         contextType: NotificationContextTypeEnum.INNOVATION, contextDetail: NotificationContextDetailEnum.INNOVATION_SUBMISSION, contextId: 'Innovation001',
         createdAt: '2020-01-01T00:00:00.000Z', createdBy: 'User name', readAt: null,
         params: {}
@@ -107,7 +107,7 @@ describe('Shared/Services/NotificationsService', () => {
         contextType: item.contextType, contextDetail: item.contextDetail, contextId: item.contextId,
         createdAt: item.createdAt, createdBy: item.createdBy, readAt: item.readAt,
         link: { label: 'Click to go to innovation', url: '//innovations/Innovation001/overview' },
-        params: { innovationId: item.innovation.id, innovationName: item.innovation.name, innovationStatus: item.innovation.status }
+        params: { innovationId: item.innovation.id, innovationName: item.innovation.name, innovationOwnerName: item.innovation.ownerName, innovationStatus: item.innovation.status }
       }))
     };
 
@@ -133,7 +133,7 @@ describe('Shared/Services/NotificationsService', () => {
       count: 20,
       data: [{
         id: 'Notification001',
-        innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
+        innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS, ownerName: 'Innovation owner'},
         contextType: NotificationContextTypeEnum.ACTION, contextDetail: NotificationContextDetailEnum.ACTION_CREATION, contextId: 'Action001',
         createdAt: '2020-01-01T00:00:00.000Z', createdBy: 'User name', readAt: null,
         params: {
@@ -152,7 +152,7 @@ describe('Shared/Services/NotificationsService', () => {
         createdAt: item.createdAt, createdBy: item.createdBy, readAt: item.readAt,
         link: { label: 'Click to go to action', url: '//innovations/Innovation001/action-tracker/Action001' },
         params: {
-          innovationId: item.innovation.id, innovationName: item.innovation.name, innovationStatus: item.innovation.status,
+          innovationId: item.innovation.id, innovationName: item.innovation.name, innovationOwnerName: item.innovation.ownerName, innovationStatus: item.innovation.status,
           section: item.params?.section,
           sectionNumber: '1.1',
           actionStatus: item.params?.actionStatus,
@@ -185,7 +185,7 @@ describe('Shared/Services/NotificationsService', () => {
       count: 20,
       data: [{
         id: 'Notification001',
-        innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
+        innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS, ownerName: 'Innovation owner' },
         contextType: NotificationContextTypeEnum.THREAD, contextDetail: NotificationContextDetailEnum.THREAD_CREATION, contextId: 'Thread001',
         createdAt: '2020-01-01T00:00:00.000Z', createdBy: 'User name', readAt: null,
         params: null
@@ -199,7 +199,7 @@ describe('Shared/Services/NotificationsService', () => {
         contextType: item.contextType, contextDetail: item.contextDetail, contextId: item.contextId,
         createdAt: item.createdAt, createdBy: item.createdBy, readAt: item.readAt,
         link: { label: 'Click to go to message', url: '//innovations/Innovation001/threads/Thread001' },
-        params: { innovationId: item.innovation.id, innovationName: item.innovation.name, innovationStatus: item.innovation.status }
+        params: { innovationId: item.innovation.id, innovationName: item.innovation.name, innovationOwnerName: item.innovation.ownerName, innovationStatus: item.innovation.status }
       }))
     };
 

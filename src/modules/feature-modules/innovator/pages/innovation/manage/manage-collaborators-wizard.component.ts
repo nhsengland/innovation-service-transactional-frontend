@@ -6,9 +6,12 @@ import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { ContextInnovationType } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
-import { MANAGE_COLLABORATORS_CONFIG } from './manage-collaborators-wizard.config';
+import { MANAGE_COLLABORATORS_CONFIG_EDIT, MANAGE_COLLABORATORS_CONFIG_NEW } from './manage-collaborators-wizard.config';
+import { HttpErrorResponse } from '@angular/common/http';
+
+
+type ActionsType = 'create' | 'update';
 
 
 @Component({
@@ -22,22 +25,24 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
   innovationCollaboratorId: null | string;
   innovation: ContextInnovationType;
   baseUrl: string;
+  action: ActionsType;
+  submitButton = { isActive: true, label: '' };
 
-  wizard = new WizardEngineModel(MANAGE_COLLABORATORS_CONFIG);
-
-
+  wizard = new WizardEngineModel({});
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService,
     private innovationsService: InnovationsService
   ) {
 
     super();
 
     this.innovationCollaboratorId = this.activatedRoute.snapshot.params.collaboratorId ?? null;
+
     this.innovation = this.stores.context.getInnovation();
     this.baseUrl = `innovator/innovations/${this.innovation.id}/manage/collaborators`;
+    this.action = this.router.url.endsWith('edit') ? 'update' : 'create';
+    this.submitButton.label = this.action === 'create' ? 'Add new user' : 'Update user';
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
 
@@ -46,18 +51,20 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
 
   ngOnInit(): void {
 
-    if (!this.innovationCollaboratorId) {
-
-      this.setPageStatus('READY');
-
+    if (this.action === 'create') {
+      this.wizard = new WizardEngineModel(MANAGE_COLLABORATORS_CONFIG_NEW);
     } else {
+      this.wizard = new WizardEngineModel(MANAGE_COLLABORATORS_CONFIG_EDIT);
+    }
+
+    if (this.innovationCollaboratorId) {
 
       this.innovationsService.getInnovationCollaboratorInfo(this.innovation.id, this.innovationCollaboratorId).subscribe({
         next: response => {
 
           this.wizard.setAnswers({
             email: response.email,
-            collaboratorRole: response.collaboratorRole
+            role: response.role
           }).runRules();
 
           this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
@@ -71,6 +78,10 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
         }
 
       });
+
+    } else {
+
+      this.setPageStatus('READY');
 
     }
 
@@ -88,15 +99,13 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
 
   onSubmitStep(action: 'previous' | 'next'): void {
 
-    // this.alertErrorsList = [];
     this.resetAlert();
-
 
     const formData = this.formEngineComponent?.getFormValues();
 
     if (action === 'previous') {
       this.wizard.addAnswers(formData?.data || {}).runRules();
-      if (this.wizard.isFirstStep()) { this.redirectTo(this.baseUrl); }
+      if (this.wizard.isFirstStep()) { this.redirectTo(this.stores.context.getPreviousUrl() ?? this.baseUrl); }
       else { this.wizard.previousStep(); }
       this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
       return;
@@ -110,35 +119,53 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
     this.wizard.nextStep();
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
 
-    // this.saveButton = { isActive: false, label: 'Saving...' };
-
   }
 
   onSubmitWizard(): void {
 
-    // if (!this.parseForm()) { return; }
+    this.submitButton = { isActive: false, label: 'Saving...' };
 
-    // if (!this.form.valid) { return; }
+    if (this.action === 'create') {
 
-    console.log(this.wizard.currentAnswers);
+      const body = {
+        email: this.wizard.currentAnswers.email,
+        role: this.wizard.currentAnswers.role ?? null
+      };
 
+      this.innovationsService.createInnovationCollaborator(this.innovation.id, body).subscribe({
+        next: () => {
+          this.setRedirectAlertSuccess(`An invitation has been sent to ${body.email} to collaborate on ${this.innovation.name}`, { message: 'This invitation will expire in 30 days if not accepted.' });
+          this.redirectTo(this.baseUrl);
+        },
+        error: (error: HttpErrorResponse) => {
 
-    const body = {
-      email: this.wizard.currentAnswers.email,
-      role: this.wizard.currentAnswers.role ?? null
-    };
+          if (error.status === 409) {
+            this.setAlertError(`Make sure that the person that you're inviting is not already an collaborator on this innovation.`)
+          } else {
+            this.setAlertUnknownError();
+          }
 
+          this.submitButton = { isActive: true, label: 'Add new user' };
 
-    this.innovationsService.createInnovationCollaborator(this.innovation.id, body).subscribe({
-      next: () => {
-        this.setRedirectAlertSuccess('Organisation suggestions sent', { message: 'Your suggestions were saved and notifications sent.' });
-        this.redirectTo(this.baseUrl);
-      },
-      error: () => {
-        // this.submitButton = { isActive: true, label: 'Confirm and notify organisations' };
-        this.setAlertUnknownError();
-      }
-    });
+        }
+      });
+
+    } else {
+
+      const body = { role: this.wizard.currentAnswers.role ?? null };
+
+      this.innovationsService.updateInnovationCollaborator(this.innovation.id, this.innovationCollaboratorId ?? '', body).subscribe({
+        next: () => {
+          this.setRedirectAlertSuccess(`The collaborator information has been updated`);
+          this.redirectTo(this.baseUrl);
+        },
+        error: () => {
+          this.setAlertUnknownError();
+          this.submitButton = { isActive: true, label: 'Update user' };
+        }
+      });
+
+    }
 
   }
 

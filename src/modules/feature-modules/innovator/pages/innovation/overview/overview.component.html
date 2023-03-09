@@ -10,7 +10,7 @@
       </div>
 
       <div class="nhsuk-card__content">
-        <p> There are no organisation units currently supporting your innovation?. There are also no more outstanding suggestions from your original needs assessment or from other organisations. </p>
+        <p> There are no organisation units currently supporting your innovation. There are also no more outstanding suggestions from your original needs assessment or from other organisations. </p>
         <p> Don't worry, there are a few options available to you. </p>
         <p>
           <a routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed"> Choose how you want to proceed with your innovation </a>
@@ -53,11 +53,11 @@
       <dt class="nhsuk-summary-list__key">Collaborators</dt>
       <dd class="nhsuk-summary-list__value">
         <ul class="nhsuk-list">
-          <li *ngFor="let item of innovation?.collaborators">{{ item.name }}</li>
+          <li *ngFor="let item of innovation?.collaborators">{{ item.nameOrEmail }}</li>
         </ul>
       </dd>
       <dd class="nhsuk-summary-list__actions nhsuk-u-font-size-16">
-        <a *ngIf="innovation?.loggedUser?.isOwner" routerLink="#">Manage users</a>
+        <a *ngIf="innovation?.loggedUser?.isOwner" routerLink="../manage">Manage users</a>
       </dd>
     </div>
   </dl>
