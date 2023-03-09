@@ -79,7 +79,7 @@ export class InnovatorService extends CoreService {
     collaboratorId: string,
     status: InnovationCollaboratorStatusEnum
   ): Observable<{ id: string }> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/collaborators/:collaboratorId ').setPathParams({ innovationId, collaboratorId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/collaborators/:collaboratorId').setPathParams({ innovationId, collaboratorId });
 
     return this.http.patch<{ id: string }>(url.buildUrl(), { status }).pipe(take(1), map(response => response));
   }
