@@ -29,7 +29,7 @@
   }
 }
 
-.app-task-list__items {  
+.app-task-list__items {
   @include govuk-responsive-margin(9, "bottom");
   font-size: 19px;
   list-style: none;
@@ -77,6 +77,12 @@
   @include govuk-media-query($from: 450px) {
     float: left;
   }
+}
+
+.app-task-list__task-info-submitted {
+  float: left;
+  clear: left;
+  margin: 0;
 }
 
 .app-task-list__tag {

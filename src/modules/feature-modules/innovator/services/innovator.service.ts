@@ -94,7 +94,7 @@ export class InnovatorService extends CoreService {
 
   }
 
-  transferInnovation(body: { innovationId: string, email: string }): Observable<{ id: string }> {
+  transferInnovation(body: { innovationId: string, email: string, ownerToCollaborator: boolean }): Observable<{ id: string }> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/transfers');
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
