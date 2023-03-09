@@ -45,10 +45,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     role?: string;
   }[] = [];
 
-  showCollaboratorsHideStatus: 'opened' | 'closed' = 'closed';
-  isCollaboratorsLoading: boolean = false;
-  collaboratorsLoaded: boolean = false;
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
@@ -84,7 +80,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       ];
 
       this.innovatorSummary = [
-        { label: 'Name', value: this.innovation.owner.name },
+        { label: 'Owner', value: this.innovation.owner.name },
       ];
 
       this.showCards = [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(this.innovationSupport.status);
@@ -117,30 +113,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.setPageStatus('READY');
 
     });
-
-  }
-
-  onShowCollaboratorsClick() {
-    if (this.showCollaboratorsHideStatus === 'opened') {
-      this.showCollaboratorsHideStatus = 'closed';
-    } else {
-      this.showCollaboratorsHideStatus = 'opened';
-      if (!this.collaboratorsLoaded) {
-        this.getInnovationCollaborators();
-      }
-    }
-  }
-
-  getInnovationCollaborators(): void {
-
-    this.isCollaboratorsLoading = true
     
     this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ["active"])
       .subscribe((innovationCollaborators) => {
       this.innovationCollaborators = innovationCollaborators.data
-      this.isCollaboratorsLoading = false;
-      this.collaboratorsLoaded = true;
-    })
+    });
 
   }
 }

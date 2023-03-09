@@ -42,10 +42,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     role?: string;
   }[] = [];
 
-  showCollaboratorsHideStatus: 'opened' | 'closed' = 'closed';
-  isCollaboratorsLoading: boolean = false;
-  collaboratorsLoaded: boolean = false;
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
@@ -78,7 +74,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       ];
 
       this.innovatorDetails = [
-        { label: 'Name', value: innovation.owner.name },
+        { label: 'Owner', value: innovation.owner.name },
         { label: 'Last login', value: this.datePipe.transform(innovation.owner.lastLoginAt ?? '', this.translate('app.date_formats.long_date_time')) },
         { label: 'Contact preference', value: UtilsHelper.getContactPreferenceValue(innovation.owner.contactByEmail, innovation.owner.contactByPhone, innovation.owner.contactByPhoneTimeframe) || '' },
         { label: 'Contact details', value: innovation.owner.contactDetails || '' },
@@ -106,35 +102,15 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
     });
 
+    this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ["active"])
+      .subscribe((innovationCollaborators) => {
+      this.innovationCollaborators = innovationCollaborators.data;
+    });
   }
 
   getSupportStatusCount(supports: InnovationSupportStatusEnum[], status: keyof typeof InnovationSupportStatusEnum) {
     const statuses = supports.filter(cur => cur === status);
     return statuses.length;
-  }
-  
-  onShowCollaboratorsClick() {
-    if (this.showCollaboratorsHideStatus === 'opened') {
-      this.showCollaboratorsHideStatus = 'closed';
-    } else {
-      this.showCollaboratorsHideStatus = 'opened';
-      if (!this.collaboratorsLoaded) {
-        this.getInnovationCollaborators();
-      }
-    }
-  }
-
-  getInnovationCollaborators(): void {
-
-    this.isCollaboratorsLoading = true
-    
-    this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ["active"])
-      .subscribe((innovationCollaborators) => {
-      this.innovationCollaborators = innovationCollaborators.data;
-      this.isCollaboratorsLoading = false;
-      this.collaboratorsLoaded = true;
-    })
-
   }
 
 }
