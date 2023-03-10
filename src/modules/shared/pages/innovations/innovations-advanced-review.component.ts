@@ -198,8 +198,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       engagingOrganisations: this.form.get('engagingOrganisations')?.value,
       supportStatuses: this.form.get('supportStatuses')?.value,
       groupedStatuses: this.form.get('groupedStatuses')?.value,
-      assignedToMe: this.form.get('assignedToMe')?.value ?? false,
-      suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
+      ...this.stores.authentication.isAccessorRole() && { 
+        assignedToMe: this.form.get('assignedToMe')?.value ?? false,
+        suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
+      },
     });
 
     this.innovationsList.setPage(1);

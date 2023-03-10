@@ -1,5 +1,5 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
@@ -8,14 +8,14 @@ import { of, throwError } from 'rxjs';
 
 import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { PageInnovationsAdvancedReviewComponent } from './innovations-advanced-review.component';
 
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () => {
@@ -124,9 +124,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
       locations: [],
       engagingOrganisations: [],
       supportStatuses: [],
-      groupedStatuses: [],
-      assignedToMe: false,
-      suggestedOnly: true,
+      groupedStatuses: []
     });
 
   }));
