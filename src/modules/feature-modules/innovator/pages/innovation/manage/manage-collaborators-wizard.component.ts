@@ -141,12 +141,12 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
         error: (error: HttpErrorResponse) => {
 
           if (error.status === 409) {
-            this.setAlertError(`Make sure that the person that you're inviting is not already an collaborator on this innovation.`)
+            this.setAlertError(`Please, make sure that the user you're inviting does not have already access to this innovation.`);
           } else {
             this.setAlertUnknownError();
           }
 
-          this.submitButton = { isActive: true, label: 'Add new user' };
+          this.submitButton = { isActive: true, label: 'Add new collaborator' };
 
         }
       });
