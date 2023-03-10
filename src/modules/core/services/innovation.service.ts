@@ -7,7 +7,6 @@ import { EnvironmentVariablesStore } from '../stores/environment-variables.store
 
 import { UrlModel } from '../models/url.model';
 
-
 @Injectable()
 export class InnovationService {
 
@@ -29,6 +28,13 @@ export class InnovationService {
       map(response => response)
     );
 
+  }
+
+  
+  getInnovationCollaboration(id: string): Observable<{collaboratorExists: boolean}> {
+    const url = new UrlModel(this.APP_URL).addPath('innovators/innovation-collaborations/:id/check').setPathParams({ id });
+
+    return this.http.get<{collaboratorExists: boolean}>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
 }

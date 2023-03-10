@@ -146,4 +146,17 @@ apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-transfers/:id/chec
 
 });
 
+apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-collaborations/:id/check`, (req, res) => {
+
+  const requestHandler = getRequestHandler();
+
+  requestHandler.get<{ collaboratorExists: boolean }>(`${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/${req.params.id}/check`)
+    .then(response => { res.status(response.status).send(response.data); })
+    .catch((error: any) => {
+      console.error(`Error: ${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/:id/check`, error);
+      res.status(500).send();
+    });
+
+});
+
 export default apiRouter;
