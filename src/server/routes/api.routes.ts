@@ -147,10 +147,9 @@ apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-transfers/:id/chec
 });
 
 apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-collaborations/:id/check`, (req, res) => {
-
   const requestHandler = getRequestHandler();
 
-  requestHandler.get<{ collaboratorExists: boolean }>(`${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/${req.params.id}/check`)
+  requestHandler.head<void>(`${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/${req.params.id}/check`)
     .then(response => { res.status(response.status).send(); })
     .catch((error: any) => {
       console.error(`Error: ${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/:id/check`, error);
