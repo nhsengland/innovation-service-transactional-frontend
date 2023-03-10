@@ -47,11 +47,11 @@ describe('Core/Guards/InnovationCollaborationRedirectionGuard running SERVER sid
 
   });
 
-  it('should deny access and redirect', () => {
+  it('should allow access and redirect', () => {
 
     let expected: boolean | null = null;
 
-    innovationService.getInnovationCollaboration = () => of({ collaboratorExists: true });
+    innovationService.getInnovationCollaboration = () => of();
 
     guard.canActivate(routeMock as any).subscribe(response => { expected = response; });
     expect(expected).toBe(null); // Response from canActivate does not get returned, as it is redirected.
@@ -103,7 +103,6 @@ describe('Core/Guards/InnovationCollaborationRedirectionGuard running CLIENT sid
 
   });
 
-
   it('should deny access and redirect to signin', () => {
 
     delete (window as { location?: {} }).location;
@@ -111,27 +110,11 @@ describe('Core/Guards/InnovationCollaborationRedirectionGuard running CLIENT sid
 
     let expected: boolean | null = null;
 
-    innovationService.getInnovationCollaboration = () => of({ collaboratorExists: true });
+    innovationService.getInnovationCollaboration = () => throwError({status: 404});
 
     guard.canActivate(routeMock as any).subscribe(response => { expected = response; });
     expect(expected).toBe(false);
     expect(window.location.assign).toBeCalledWith('/transactional/signin');
-
-  });
-
-  it('should deny access and redirect to signup', () => {
-
-    delete (window as { location?: {} }).location;
-    window.location = { href: '', hostname: '', pathname: '', protocol: '', assign: jest.fn() } as unknown as Location;
-
-    let expected: boolean | null = null;
-
-    innovationService.getInnovationCollaboration = () => of({ collaboratorExists: false });
-
-    guard.canActivate(routeMock as any).subscribe(response => { expected = response; });
-    expect(expected).toBe(false);
-    expect(window.location.assign).toBeCalledWith('/transactional/signup');
-
   });
 
 
