@@ -76,8 +76,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.innovation = {
         owner: { name: innovationInfo.owner.name },
-        loggedUser: {isOwner: innovationContext.loggedUser.isOwner },
-        collaborators: innovationCollaborators.data.map(item => ({ nameOrEmail: `${item.name ?? item.email} (${item.role})` })),
+        loggedUser: { isOwner: innovationContext.loggedUser.isOwner },
+        collaborators: innovationCollaborators.data.map(item => ({ nameOrEmail: `${item.name ?? item.email}${item.role ? `(${item.role})` : ''}` })),
         status: innovationInfo.status,
         groupedStatus: innovationInfo.groupedStatus,
         organisationsStatusDescription: Object.entries(occurrences).map(([status, item]) => `${item.count} ${item.text}`).join(', '),
