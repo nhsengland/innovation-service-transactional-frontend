@@ -79,8 +79,7 @@
 
   <ng-container *ngIf="leftMenuBarItems.length > 0 || rightMenuBarItems.length > 0 || showSignOut">
 
-    <nav id="header-navigation" role="navigation" class="nhsuk-header__navigation app-header__navigation app-multilevel-navigation" [ngClass]="{'children-items-height': menuBarItems.isChildrenOpened}" aria-label="Primary navigation"
-      aria-labelledby="label-navigation">
+    <nav id="header-navigation" role="navigation" class="nhsuk-header__navigation app-header__navigation app-multilevel-navigation" [ngClass]="{'children-items-height': menuBarItems.isChildrenOpened}" aria-label="Primary navigation" aria-labelledby="label-navigation">
       <div class="nhsuk-width-container app-width-container">
 
         <p class="nhsuk-header__navigation-title"><span id="label-navigation">Menu</span>
@@ -102,7 +101,7 @@
 
           <ng-container *ngIf="showSignOut">
             <li class="nhsuk-header__navigation-item" [ngClass]="{'ml-auto': rightMenuBarItems.length === 0}">
-              <a class="nhsuk-header__navigation-link" (click)="signOut()">Sign out</a>
+              <a href="javascript:void(0)" class="nhsuk-header__navigation-link" (click)="signOut()">Sign out</a>
             </li>
           </ng-container>
 

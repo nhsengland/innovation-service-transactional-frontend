@@ -37,25 +37,21 @@
         <a routerLink="/innovator/innovation-statuses" class="float-r nhsuk-u-margin-bottom-4" arial-label="View innovation status information">What does this status mean?</a>
       </div>
 
-      <ul class="nhsuk-grid-row nhsuk-card-group">
+      <p *ngIf="user.innovationsOwner.length === 0">You have no innovations.</p>
+      <ul *ngIf="user.innovationsOwner.length > 0" class="nhsuk-grid-row nhsuk-card-group">
         <li *ngFor="let innovation of user.innovationsOwner" class="nhsuk-grid-column-full nhsuk-card-group__item">
           <ng-container *ngTemplateOutlet="innovationCard; context: { $implicit: innovation }"></ng-container>
         </li>
       </ul>
 
-      <p *ngIf="user.innovationsOwner.length === 0">You have no innovations.</p>
-
-      <div class="d-flex align-items-center justify-content-space-between">
+      <ng-container *ngIf="user.innovationsCollaborator.length > 0">
         <h2>Innovations you are working on as a collaborator</h2>
-      </div>
-
-      <ul class="nhsuk-grid-row nhsuk-card-group">
-        <li *ngFor="let innovation of user.innovationsCollaborator" class="nhsuk-grid-column-full nhsuk-card-group__item">
-          <ng-container *ngTemplateOutlet="innovationCard; context: { $implicit: innovation }"></ng-container>
-        </li>
-      </ul>
-
-      <p *ngIf="user.innovationsCollaborator.length === 0">You are not working in any innovation as a collaborator.</p>
+        <ul class="nhsuk-grid-row nhsuk-card-group">
+          <li *ngFor="let innovation of user.innovationsCollaborator" class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <ng-container *ngTemplateOutlet="innovationCard; context: { $implicit: innovation }"></ng-container>
+          </li>
+        </ul>
+      </ng-container>
 
     </div>
 

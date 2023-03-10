@@ -32,7 +32,7 @@ export const MANAGE_COLLABORATORS_CONFIG_NEW: WizardEngineModel = new WizardEngi
         dataType: 'text',
         label: stepsLabels.l2,
         description: 'This will help the needs assessment team and support organisations to understand your team structure and who to direct specific questions to.',
-        validations: { maxLength: 255 },
+        validations: { maxLength: 25 },
       }]
     })
   ],

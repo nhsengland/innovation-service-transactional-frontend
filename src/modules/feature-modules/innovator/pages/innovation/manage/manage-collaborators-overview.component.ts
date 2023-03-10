@@ -40,12 +40,12 @@ export class PageInnovationManageCollaboratorsOverviewComponent extends CoreComp
     const user = this.stores.authentication.getUserInfo();
     this.user = { id: user.id, name: user.displayName, email: user.email };
 
-    this.setPageTitle('Invite or manage users');
+    this.setPageTitle('Invite or manage collaborators');
     this.setBackLink('Go back', `innovator/innovations/${this.innovation.id}/manage`);
 
     this.activeCollaborators = new TableModel({
       visibleColumns: {
-        user: { label: 'User' },
+        user: { label: 'Innovator' },
         role: { label: 'Role' },
         actions: { label: '', align: 'right' }
       }
@@ -53,7 +53,7 @@ export class PageInnovationManageCollaboratorsOverviewComponent extends CoreComp
 
     this.historyCollaborators = new TableModel({
       visibleColumns: {
-        innovations: { label: 'User' },
+        innovations: { label: 'Innovator' },
         statusUpdatedAt: { label: 'Role' },
         actions: { label: '', align: 'right' }
       }
