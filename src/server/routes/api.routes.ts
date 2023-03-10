@@ -146,7 +146,7 @@ apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-transfers/:id/chec
 
 });
 
-apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-collaborations/:id/check`, (req, res) => {
+apiRouter.head(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-collaborations/:id/check`, (req, res) => {
   const requestHandler = getRequestHandler();
 
   requestHandler.head<void>(`${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/${req.params.id}/check`)

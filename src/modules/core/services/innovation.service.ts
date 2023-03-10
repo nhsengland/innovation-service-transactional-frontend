@@ -34,7 +34,7 @@ export class InnovationService {
   getInnovationCollaboration(id: string): Observable<void> {
     const url = new UrlModel(this.APP_URL).addPath('innovators/innovation-collaborations/:id/check').setPathParams({ id });
 
-    return this.http.get<void>(url.buildUrl()).pipe(take(1));
+    return this.http.head<void>(url.buildUrl()).pipe(take(1));
   }
 
 }
