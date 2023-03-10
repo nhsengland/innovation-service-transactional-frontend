@@ -56,12 +56,12 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
       this.formfieldAction.items.push({
         value: FormFieldActionsEnum.WITHDRAW,
         label: `Withdraw your innovation`,
-        description: `You might want to withdraw your innovation if you no longer need support from the organisations. Your current innovation will be closed, but you will keep your Innovation service account.`
+        description: `You might want to withdraw your innovation if you no longer need support from the organisations. Your current innovation will be closed, but you will keep your Innovation Service account.`
       },
       {
         value: FormFieldActionsEnum.DELETE_ACCOUNT,
         label: `Delete your account`,
-        description: `If you delete your account your innovation will be withdrawn and you will no longer have access to the Innovation service.`
+        description: `If you delete your account your innovation will be withdrawn and you will no longer have access to the Innovation Service.`
       });
     }
 
