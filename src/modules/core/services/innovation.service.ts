@@ -31,10 +31,10 @@ export class InnovationService {
   }
 
   
-  getInnovationCollaboration(id: string): Observable<{collaboratorExists: boolean}> {
+  getInnovationCollaboration(id: string): Observable<void> {
     const url = new UrlModel(this.APP_URL).addPath('innovators/innovation-collaborations/:id/check').setPathParams({ id });
 
-    return this.http.get<{collaboratorExists: boolean}>(url.buildUrl()).pipe(take(1), map(response => response));
+    return this.http.get<void>(url.buildUrl()).pipe(take(1));
   }
 
 }

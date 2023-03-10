@@ -25,13 +25,9 @@ export class InnovationCollaborationRedirectionGuard implements CanActivate {
     const collaboratorId = activatedRouteSnapshot.params.id;
 
     return this.innovationService.getInnovationCollaboration(collaboratorId).pipe(
-      map(response => {
-
-        let redirectUrl = '';
-      console.log(response.collaboratorExists)
-        if (response.collaboratorExists) { redirectUrl = '/transactional/signin'; }
-        else { redirectUrl = '/transactional/signup'; }
-
+      map(_ => {
+        const redirectUrl = '/transactional/signup'; 
+       
         if (isPlatformBrowser(this.platformId)) {
           window.location.assign(redirectUrl); // Full reload is needed to hit SSR.
         } else {
@@ -41,13 +37,17 @@ export class InnovationCollaborationRedirectionGuard implements CanActivate {
         }
 
         return false;
-
       }),
       catchError((e) => { // Request no longer valid, redirect to error.
+        let redirectUrl = '';
+        
+        if (e.status === 404) {
+          redirectUrl = '/transactional/signin';
+        } else {
+          this.loggerService.trackTrace('[InnovationCollaborationRedirectionGuard] error', Severity.ERROR, { error: e });
 
-        this.loggerService.trackTrace('[InnovationCollaborationRedirectionGuard] error', Severity.ERROR, { error: e });
-
-        const redirectUrl = '/transactional/error';
+          redirectUrl = '/transactional/error';
+        }
 
         if (isPlatformBrowser(this.platformId)) {
           window.location.assign(redirectUrl); // Full reload is needed to hit SSR.
