@@ -11,8 +11,7 @@
         <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Filters</h2>
 
         <ng-container *ngFor="let filter of filters">
-          <a href="javascript:void(0)" (click)="onOpenCloseFilter(filter.key)" class="d-flex align-items-center nhsuk-u-font-size-19 text-decoration-none nhsuk-u-margin-bottom-0"
-            [attr.aria-expanded]="filter.showHideStatus === 'opened' ? 'true' : 'false'">
+          <a href="javascript:void(0)" (click)="onOpenCloseFilter(filter.key)" class="d-flex align-items-center nhsuk-u-font-size-19 text-decoration-none nhsuk-u-margin-bottom-0" [attr.aria-expanded]="filter.showHideStatus === 'opened' ? 'true' : 'false'">
             <ng-container *ngTemplateOutlet="filterIcon; context: { showHideStatus: filter.showHideStatus }"></ng-container>
             <span class="nhsuk-u-padding-left-2"> {{ filter.title }} <span class="nhsuk-u-visually-hidden"> filter section </span></span>
           </a>
@@ -89,7 +88,7 @@
                 <span *ngIf="!item.link" class="nhsuk-table-responsive__text">
                   {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }}
                 </span>
-                <a *ngIf="item.link" [routerLink]="item.link.url">
+                <a *ngIf="item.link" href="javascript:void(0)" (click)="onNotificationClick(item.params?.innovationId ?? '', item.contextType, item.contextId , item.link.url)">
                   {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }}
                   <span class="nhsuk-u-visually-hidden"> {{ item.link.label }} </span>
                 </a>

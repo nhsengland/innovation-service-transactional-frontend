@@ -99,6 +99,13 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
   }
 
+  onNotificationClick(innovationId: string, contextType: NotificationContextTypeEnum, contextId: string, url: string): void {
+
+    this.stores.context.dismissNotification(innovationId, { contextTypes: [contextType], contextIds: [contextId] });
+    this.redirectTo(url);
+
+  }
+
   onDeleteNotification(notificationId: string): void {
 
     this.resetAlert();
