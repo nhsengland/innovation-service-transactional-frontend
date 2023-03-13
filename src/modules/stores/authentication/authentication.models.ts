@@ -29,6 +29,7 @@ export class AuthenticationModel {
     contactDetails: string | null,
     termsOfUseAccepted: boolean,
     hasInnovationTransfers: boolean,
+    hasInnovationCollaborations: boolean,
     passwordResetAt: null | DateISOType,
     firstTimeSignInAt: null | DateISOType,
     organisations: {
