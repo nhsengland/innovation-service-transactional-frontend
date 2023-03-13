@@ -127,14 +127,43 @@ const routes: Routes = [
                 data: { module: 'Organisation' }
               },
               {
-                path: 'unit/new', pathMatch: 'full', component: PageOrganisationUnitNewComponent,
-              },
-              {
-                path: 'unit/:organisationUnitId/edit', pathMatch: 'full', component: PageOrganisationEditComponent,
-                data: { module: 'Unit' }
-              },
-              { path: 'unit/:organisationUnitId/activate', pathMatch: 'full', component: WizardOrganisationUnitActivateComponent },
-              { path: 'unit/:organisationUnitId/inactivate', pathMatch: 'full', component: WizardOrganisationUnitInactivateComponent }
+                path: 'unit',
+                children: [       
+                  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },           
+                  {
+                    path: 'new', 
+                    pathMatch: 'full', 
+                    component: PageOrganisationUnitNewComponent
+                  },
+                  {
+                    path: ':organisationUnitId',
+                    children: [
+                      {
+                        path: '',
+                        pathMatch: 'full',
+                        component: PageOrganisationUnitNewComponent,
+                        data: { breadcrumb: 'Unit information' }
+                      },
+                      {
+                        path: 'edit', 
+                        pathMatch: 'full', 
+                        component: PageOrganisationEditComponent,
+                        data: { module: 'Unit' }
+                      },
+                      {  
+                        path: 'activate', 
+                        pathMatch: 'full', 
+                        component: WizardOrganisationUnitActivateComponent 
+                      },
+                      { 
+                        path: 'inactivate',
+                        pathMatch: 'full', 
+                        component: WizardOrganisationUnitInactivateComponent 
+                      }
+                    ]
+                  },
+                ]
+              }
             ]
           }
         ]
