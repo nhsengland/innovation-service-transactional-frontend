@@ -24,6 +24,7 @@ import { PageOrganisationEditComponent } from './pages/organisations/organisatio
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
+import { PageOrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info/organisation-unit-info.component';
 // // Service Users.
 import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-users/service-user-change-organisation-unit.component';
 import { PageServiceUserChangeRoleComponent } from './pages/service-users/service-user-change-role.component';
@@ -128,6 +129,7 @@ const routes: Routes = [
               },
               {
                 path: 'unit',
+                data: { breadcrumb: null },
                 children: [       
                   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },           
                   {
@@ -141,7 +143,7 @@ const routes: Routes = [
                       {
                         path: '',
                         pathMatch: 'full',
-                        component: PageOrganisationUnitNewComponent,
+                        component: PageOrganisationUnitInfoComponent,
                         data: { breadcrumb: 'Unit information' }
                       },
                       {
