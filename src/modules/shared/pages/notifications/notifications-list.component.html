@@ -88,7 +88,7 @@
                 <span *ngIf="!item.link" class="nhsuk-table-responsive__text">
                   {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }}
                 </span>
-                <a *ngIf="item.link" href="javascript:void(0)" (click)="onNotificationClick(item.params?.innovationId ?? '', item.contextType, item.contextId ,  item.link.url)">
+                <a *ngIf="item.link" href="javascript:void(0)" (click)="onNotificationClick(item.id , item.link.url)">
                   {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }}
                   <span class="nhsuk-u-visually-hidden"> {{ item.link.label }} </span>
                 </a>
