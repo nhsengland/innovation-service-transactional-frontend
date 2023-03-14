@@ -82,6 +82,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   isTermsOfUseAccepted(): boolean { return this.state.user?.termsOfUseAccepted ?? false; }
   isFirstTimeSignInDone(): boolean { return !!this.state.user?.firstTimeSignInAt ?? false; }
   hasInnovationTransfers(): boolean { return this.state.user?.hasInnovationTransfers || false; }
+  hasInnovationCollaborations(): boolean { return this.state.user?.hasInnovationCollaborations || false;  }
 
   isAccessorType(): boolean { return [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(this.state.userContext?.type as UserRoleEnum); }
 
@@ -119,7 +120,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   getUserInfo(): Required<AuthenticationModel>['user'] {
-    return this.state.user || { id: '', email: '', displayName: '', roles: [], contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, phone: null, contactDetails: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
+    return this.state.user || { id: '', email: '', displayName: '', roles: [], contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, phone: null, contactDetails: null, termsOfUseAccepted: false, hasInnovationTransfers: false, hasInnovationCollaborations: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
   }
 
   updateUserInfo$(body: UpdateUserInfoDTO): Observable<{ id: string }> {

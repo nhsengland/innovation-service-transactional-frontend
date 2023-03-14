@@ -54,6 +54,15 @@ export class ContextStore extends Store<ContextModel> {
 
   }
 
+  dismissUserNotification(notificationId: string): void {
+
+    this.contextService.dismissUserNotification(notificationId).subscribe({
+      next: () => this.updateUserUnreadNotifications(),
+      error: (error) => this.logger.error('Error dismissing user notification', error)
+    });
+
+  }
+
   updateInnovationNotifications(): void {
 
     if (this.state.innovation?.id) {

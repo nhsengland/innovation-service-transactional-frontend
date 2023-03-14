@@ -153,8 +153,8 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
 
     } else {
 
-      const body = { role: this.wizard.currentAnswers.role ?? null };
-
+      const body = { role: UtilsHelper.isEmpty(this.wizard.currentAnswers.role) ? null : this.wizard.currentAnswers.role }
+      
       this.innovationsService.updateInnovationCollaborator(this.innovation.id, this.innovationCollaboratorId ?? '', body).subscribe({
         next: () => {
           this.setRedirectAlertSuccess(`The collaborator information has been updated`);
