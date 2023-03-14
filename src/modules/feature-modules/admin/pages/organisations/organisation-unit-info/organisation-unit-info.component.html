@@ -1,22 +1,21 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <section>
+  <section class="nhsuk-u-padding-bottom-7">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
-        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3 border-bottom-neutral">Unit</h2>
-      </div>
-    </div>
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Unit</h2>
 
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-two-thirds">
         <dl class="nhsuk-summary-list">
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Name</dt>
-            <dd class="nhsuk-summary-list__value">{{ unit.name }} <span
-                class="nhsuk-hint nhsuk-u-margin-bottom-0"> ({{ unit.acronym }}) </span></dd>
+            <dd class="nhsuk-summary-list__value">{{ unit.name }} ({{ unit.acronym }})</dd>
             <dd class="nhsuk-summary-list__actions">
-              <a routerLink="edit"> Change <span class="nhsuk-u-visually-hidden"> {{ unit.name | lowercase }}
-                  information</span></a>
+              <a routerLink="edit">
+                Change 
+                <span class="nhsuk-u-visually-hidden"> 
+                  {{ unit.name | lowercase }} information
+                </span>
+              </a>
             </dd>
           </div>
           <div class="nhsuk-summary-list__row">
@@ -25,22 +24,94 @@
               <theme-tag type="{{ unit.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
                 label="{{ unit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
             </dd>
+            <dd class="nhsuk-summary-list__actions"></dd>
           </div>
         </dl>
       </div>
-    </div>
+    </div>    
+
+    <!-- TODO: In another US -->
+    <!-- <div class="nhsuk-action-link nhsuk-u-margin-bottom-4">
+      <a class="nhsuk-action-link__link" routerLink="/admin/organisations/{{ organisationId }}/unit/">
+        <theme-svg-icon type="action"></theme-svg-icon>
+        <span class="nhsuk-action-link__text">Manage unit</span>
+      </a>
+    </div> -->
   </section>
-  <section>
+
+  <section class="nhsuk-u-padding-bottom-7">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
-        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3 border-bottom-neutral">Users</h2>
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Users</h2>
+        <p class="nhsuk-body-m">{{unit.userCount}} users associated to this organisation unit</p>
+
+        <div class="nhsuk-action-link nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5">
+          <a class="nhsuk-action-link__link" routerLink="/admin/organisations/{{ organisationId }}/unit/new">
+            <theme-svg-icon type="action"></theme-svg-icon>
+            <span class="nhsuk-action-link__text">Create a new user</span>
+          </a>
+        </div>
+
+        <table *ngIf="unit.userCount > 0" class="nhsuk-table">
+          <thead role="rowgroup" class="nhsuk-table__head">
+            <tr role="row">
+              <th role="columnheader" class="" scope="col">
+                User account
+              </th>
+              <th role="columnheader" class="" scope="col"></th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <ng-container *ngFor="let user of users">
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">
+                  {{user.name}} ({{user.roleDescription}})
+                  <span class="nhsuk-hint nhsuk-u-margin-bottom-0">{{user.email}}</span>
+                </td>
+                <td class="nhsuk-table__cell text-align-right">
+                  <a routerLink="edit"> 
+                    Change 
+                    <span class="nhsuk-u-visually-hidden"> 
+                      {{ user.name | lowercase }} information
+                    </span>
+                  </a>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
-  <section>
+
+  <section class="nhsuk-u-padding-bottom-7">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
-        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3 border-bottom-neutral">Innovations</h2>
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Innovations</h2>
+        <p class="nhsuk-body-m">{{innovations.count}} innovations asssociated to this organisation unit</p>
+    
+        <table *ngIf="innovations.count > 0" class="nhsuk-table">
+          <thead role="rowgroup" class="nhsuk-table__head">
+            <tr role="row">
+              <th role="columnheader" class="" scope="col">
+                Innovation
+              </th>
+              <th role="columnheader" class="text-align-right" scope="col">
+                Status
+              </th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <ng-container *ngFor="let innovation of innovations.data">
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">{{innovation.name}}</td>
+                <td class="nhsuk-table__cell text-align-right">
+                  <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + getUnitStatusSupport(innovation.supports) + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + getUnitStatusSupport(innovation.supports) + '.name' | translate }}"></theme-tag>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>

@@ -147,7 +147,7 @@ export class OrganisationsService extends CoreService {
     );
   }
 
-  
+  //@deprecated  
   getOrganisationUnitInnovationsList(organisationId: string, organisationUnitId: string, queryParams: APIQueryParamsType<{ onlyOpen: boolean }>): Observable<GetOrganisationUnitInnovationsListDTO> {
 
     const { filters, ...qParams } = queryParams;
