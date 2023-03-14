@@ -50,6 +50,8 @@ import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 // Services.
 import { InnovatorService } from './services/innovator.service';
 import { ManageInnovationGuard } from './guards/manage-innovation.guard';
+import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
+import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 
 
 @NgModule({
@@ -95,6 +97,8 @@ import { ManageInnovationGuard } from './guards/manage-innovation.guard';
     InnovationSectionEvidenceEditComponent,
     InnovationSectionEditComponent,
     InnovationNewComponent,
+    PageInnovationManageAccessOverviewComponent,
+    PageInnovationManageAccessLeaveInnovationComponent,
 
     // Components.
     OrganisationSuggestionsCardComponent

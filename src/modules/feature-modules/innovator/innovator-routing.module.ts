@@ -81,6 +81,8 @@ import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-dat
 import { InnovationSectionDataResolver } from '@modules/shared/resolvers/innovation-section-data.resolver';
 import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers/innovation-section-evidence-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
+import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -457,12 +459,12 @@ const routes: Routes = [
                     ]
                   },
                   {
-                    path: 'transfer', 
+                    path: 'transfer',
                     data: { breadcrumb: null },
                     children: [
-                      { 
-                        path: '', 
-                        pathMatch: 'full', 
+                      {
+                        path: '',
+                        pathMatch: 'full',
                         redirectTo: '1',
                       },
                       {
@@ -477,6 +479,21 @@ const routes: Routes = [
                   {
                     path: 'withdraw', pathMatch: 'full', component: PageInnovationManageWithdrawComponent
                   }
+                ]
+              },
+
+              {
+                path: 'manage-access',
+                data: { breadcrumb: 'Manage access' },
+                children: [
+                  {
+                    path: '', pathMatch: 'full', component: PageInnovationManageAccessOverviewComponent,
+                    data: { breadcrumb: null }
+                  },
+                  {
+                    path: 'leave', pathMatch: 'full', component: PageInnovationManageAccessLeaveInnovationComponent,
+                    data: { breadcrumb: 'Leave innovation', layout: { type: 'full' } }
+                  },
                 ]
               },
 
