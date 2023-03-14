@@ -18,7 +18,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     displayName: string;
     organisation: string;
     passwordResetAt: string;
-    firstTimeSignInAt: string;
+    firstTimeSignInAt: string | null;
   };
 
   cardsList: StatisticsCard[] = [];
@@ -39,7 +39,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       displayName: this.stores.authentication.getUserInfo().displayName,
       organisation: 'Needs assessment team',
       passwordResetAt: this.stores.authentication.getUserInfo().passwordResetAt || '',
-      firstTimeSignInAt: this.stores.authentication.getUserInfo().firstTimeSignInAt || ''
+      firstTimeSignInAt: this.stores.authentication.getUserInfo().firstTimeSignInAt
     };
 
 

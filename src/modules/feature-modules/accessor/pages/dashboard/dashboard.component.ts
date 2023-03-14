@@ -36,7 +36,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       displayName: this.stores.authentication.getUserInfo().displayName,
       organisation: this.stores.authentication.getUserContextInfo()?.organisationUnit?.name || '',
       passwordResetAt: this.stores.authentication.getUserInfo().passwordResetAt,
-      firstTimeSignInAt: this.stores.authentication.getUserInfo().firstTimeSignInAt || ''
+      firstTimeSignInAt: this.stores.authentication.getUserInfo().firstTimeSignInAt
     };
   }
 

@@ -26,7 +26,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     innovationsOwner: { id: string, name: string, description: null | string, groupedStatus: keyof typeof InnovationGroupedStatusEnum }[],
     innovationsCollaborator: { id: string, name: string, description: null | string, groupedStatus: keyof typeof InnovationGroupedStatusEnum }[],
     passwordResetAt: string,
-    firstTimeSignInAt: string
+    firstTimeSignInAt: string | null
   };
 
   innovationTransfers: GetInnovationTransfersDTO = [];
@@ -47,7 +47,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       innovationsOwner: [],
       innovationsCollaborator: [],
       passwordResetAt: user.passwordResetAt || '',
-      firstTimeSignInAt: user.firstTimeSignInAt || ''
+      firstTimeSignInAt: user.firstTimeSignInAt
     };
 
     this.setPageTitle('Home', { hint: `Hello${user.displayName ? ' ' + user.displayName : ''}` });
