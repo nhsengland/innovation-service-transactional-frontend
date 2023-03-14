@@ -25,7 +25,8 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     displayName: string,
     innovationsOwner: { id: string, name: string, description: null | string, groupedStatus: keyof typeof InnovationGroupedStatusEnum }[],
     innovationsCollaborator: { id: string, name: string, description: null | string, groupedStatus: keyof typeof InnovationGroupedStatusEnum }[],
-    passwordResetAt: string
+    passwordResetAt: string,
+    firstTimeSignInAt: string | null
   };
 
   innovationTransfers: GetInnovationTransfersDTO = [];
@@ -45,7 +46,8 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       displayName: user.displayName,
       innovationsOwner: [],
       innovationsCollaborator: [],
-      passwordResetAt: user.passwordResetAt || ''
+      passwordResetAt: user.passwordResetAt || '',
+      firstTimeSignInAt: user.firstTimeSignInAt
     };
 
     this.setPageTitle('Home', { hint: `Hello${user.displayName ? ' ' + user.displayName : ''}` });
@@ -92,10 +94,8 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     });
 
     const startTime = new Date();
-    const endTime = new Date(this.user.passwordResetAt);
-    const timediffer = startTime.getTime() - endTime.getTime();
-    const resultInMinutes = Math.round(timediffer / 60000);
-    if (resultInMinutes <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {
+
+    if (this.timeDifferInMinutes(startTime, this.user.firstTimeSignInAt) > 5 && this.timeDifferInMinutes(startTime, this.user.passwordResetAt) <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {
       this.setAlertSuccess('You have successfully changed your password.');
     }
 
@@ -154,6 +154,12 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       description: this.buildDescriptionString(innovation),
       groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
     }));
+  }
+
+  timeDifferInMinutes(startTime: Date, date: null | string ): number{
+    const endTime = new Date(date ?? '');
+    const timediffer = startTime.getTime() - endTime.getTime();
+    return Math.round(timediffer / 60000);
   }
 
 }

@@ -16,6 +16,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     displayName: string;
     organisation: string;
     passwordResetAt: null | string;
+    firstTimeSignInAt: null | string;
   };
 
   cardsList: StatisticsCard[] = [];
@@ -34,17 +35,16 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     this.user = {
       displayName: this.stores.authentication.getUserInfo().displayName,
       organisation: this.stores.authentication.getUserContextInfo()?.organisationUnit?.name || '',
-      passwordResetAt: this.stores.authentication.getUserInfo().passwordResetAt
+      passwordResetAt: this.stores.authentication.getUserInfo().passwordResetAt,
+      firstTimeSignInAt: this.stores.authentication.getUserInfo().firstTimeSignInAt
     };
   }
 
   ngOnInit(): void {
-    const startTime = new Date();
-    const endTime = new Date(this.user.passwordResetAt ?? '');
-    const timediffer = startTime.getTime() - endTime.getTime();
-    const resultInMinutes = Math.round(timediffer / 60000);
 
-    if (resultInMinutes <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {
+    const startTime = new Date();
+
+    if (this.timeDifferInMinutes(startTime, this.user.firstTimeSignInAt) > 5 && this.timeDifferInMinutes(startTime, this.user.passwordResetAt) <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {
       this.setAlertSuccess('You have successfully changed your password.');
     }
 
@@ -75,7 +75,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           emptyMessageTitle: 'No actions opened by you yet',
           emptyMessage: 'Start requesting actions from innovators'
         }]
-  
+
         if (this.isQualifyingAccessorRole) {
           this.cardsList.unshift({
             title: 'Review innovations',
@@ -88,10 +88,16 @@ export class DashboardComponent extends CoreComponent implements OnInit {
             emptyMessageTitle: 'No engaging innovations assigned to you'
           })
         }
-  
+
         this.setPageStatus('READY');
       }
     })
+  }
+
+  timeDifferInMinutes(startTime: Date, date: null | string ): number{
+    const endTime = new Date(date ?? '');
+    const timediffer = startTime.getTime() - endTime.getTime();
+    return Math.round(timediffer / 60000);
   }
 
 }
