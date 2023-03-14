@@ -10,6 +10,7 @@ import { FIRST_TIME_SIGNIN_QUESTIONS } from './innovation-new.config';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovatorService } from '../../services/innovator.service';
 import { UtilsHelper } from '@modules/core/helpers/utils.helper';
+import { FIRST_TIME_SIGNIN_ACCOUNT_ONLY_QUESTIONS } from './innovation-new-account.config';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class FirstTimeSigninInnovationNewComponent extends CoreComponent impleme
 
   wizard: WizardEngineModel = new WizardEngineModel({});
   disableContinueButton: boolean = false;
-
+  hasInnovationCollaborations: boolean = false;
 
   constructor(
     private organisationsService: OrganisationsService,
@@ -31,20 +32,27 @@ export class FirstTimeSigninInnovationNewComponent extends CoreComponent impleme
 
 
   ngOnInit(): void {
+    this.hasInnovationCollaborations = this.stores.authentication.hasInnovationCollaborations();
 
-    this.wizard = FIRST_TIME_SIGNIN_QUESTIONS;
-    this.wizard.setAnswers(this.wizard.runInboundParsing({})).runRules();
+    if (this.hasInnovationCollaborations) {
+      this.wizard = FIRST_TIME_SIGNIN_ACCOUNT_ONLY_QUESTIONS;
+      this.wizard.setAnswers(this.wizard.runInboundParsing({})).runRules();
 
-    // Update last step with the organisations list with description and pre-select all checkboxes.
-    this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe(response => {
-
-      this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
-      this.wizard.addAnswers({ organisationShares: response.map(item => item.id) });
-
+      this.setPageTitle('Welcome to the Innovation Service')
       this.setPageStatus('READY');
-
-    });
-
+    } else {
+      this.wizard = FIRST_TIME_SIGNIN_QUESTIONS;
+      this.wizard.setAnswers(this.wizard.runInboundParsing({})).runRules();
+      // Update last step with the organisations list with description and pre-select all checkboxes.
+      this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe(response => {
+  
+        this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
+        this.wizard.addAnswers({ organisationShares: response.map(item => item.id) });
+  
+        this.setPageStatus('READY');
+  
+      });
+    }
   }
 
 
@@ -88,7 +96,8 @@ export class FirstTimeSigninInnovationNewComponent extends CoreComponent impleme
       concatMap(() => this.stores.authentication.updateUserInfo$({
         displayName: wizardData.innovatorName,
         mobilePhone: UtilsHelper.isEmpty(wizardData.mobilePhone) ? null : wizardData.mobilePhone,
-        organisation: wizardData.isCompanyOrOrganisation.toUpperCase() === 'YES' ? {
+      
+        organisation: wizardData.isCompanyOrOrganisation && wizardData.isCompanyOrOrganisation.toUpperCase() === 'YES' ? {
           id: this.stores.authentication.getUserInfo().organisations[0].id,
           isShadow: false,
           name: wizardData.organisationName,
@@ -96,16 +105,24 @@ export class FirstTimeSigninInnovationNewComponent extends CoreComponent impleme
         } : {
           id: this.stores.authentication.getUserInfo().organisations[0].id,
           isShadow: true
-        }
+        } 
+        
       })),
 
-      concatMap(() => this.innovatorService.createInnovation({
-        name: wizardData.innovationName,
-        description: wizardData.innovationDescription,
-        countryName: wizardData.locationCountryName || wizardData.location,
-        postcode: wizardData.englandPostCode,
-        organisationShares: wizardData.organisationShares
-      }, true)),
+      concatMap(() => {
+        if(this.hasInnovationCollaborations) {
+          return of(true);
+        }
+
+        return this.innovatorService.createInnovation({
+          name: wizardData.innovationName,
+          description: wizardData.innovationDescription,
+          countryName: wizardData.locationCountryName || wizardData.location,
+          postcode: wizardData.englandPostCode,
+          organisationShares: wizardData.organisationShares
+        }, true);
+      }),
+
 
       // Initialize authentication in order to update First Time SignIn information.
       concatMap(() => this.stores.authentication.initializeAuthentication$())
@@ -121,6 +138,5 @@ export class FirstTimeSigninInnovationNewComponent extends CoreComponent impleme
       }
     });
 
-  }
-
+  }   
 }
