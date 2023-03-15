@@ -7,7 +7,7 @@ import { UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { UserSearchDTO } from '../dtos/users.dto';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { APIQueryParamsType } from '@app/base/types';
+import { InnovationStatisticsEnum } from './statistics.enum';
 
 
 export type getAccessorsOrganisationsDTO = {
@@ -146,21 +146,4 @@ export class OrganisationsService extends CoreService {
       map(response => response)
     );
   }
-
-  //@deprecated  
-  getOrganisationUnitInnovationsList(organisationId: string, organisationUnitId: string, queryParams: APIQueryParamsType<{ onlyOpen: boolean }>): Observable<GetOrganisationUnitInnovationsListDTO> {
-
-    const { filters, ...qParams } = queryParams;
-    const qp = {
-      ...qParams,
-      onlyOpen: filters.onlyOpen ? 'true' : 'false'
-    };
-
-    const url = new UrlModel(this.API_URL).addPath('user-admin/organisations/:organisationId/units/:organisationUnitId/innovations').setPathParams({ organisationId, organisationUnitId }).setQueryParams(qp);
-    return this.http.get<GetOrganisationUnitInnovationsListDTO>(url.buildUrl()).pipe(take(1),
-      map(response => response)
-    );
-
-  }
-
 }
