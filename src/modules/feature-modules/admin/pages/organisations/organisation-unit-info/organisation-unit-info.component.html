@@ -49,34 +49,41 @@
           </a>
         </div> -->
 
-        <table *ngIf="unit.userCount > 0" class="nhsuk-table">
-          <thead role="rowgroup" class="nhsuk-table__head">
-            <tr role="row">
-              <th role="columnheader" class="" scope="col">
-                User account
-              </th>
-              <th role="columnheader" class="" scope="col"></th>
-            </tr>
-          </thead>
-          <tbody class="nhsuk-table__body">
-            <ng-container *ngFor="let user of users">
-              <tr role="row" class="nhsuk-table__row">
+        <div *ngIf="usersList.getTotalRowsNumber() > 0">
+          <table class="nhsuk-table-responsive app-sortable-table">
+            <caption class="nhsuk-u-visually-hidden"> Users list </caption>
+            <thead class="nhsuk-table__head">
+              <tr>
+                <th *ngFor="let item of usersList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                  {{ item.label }}
+                </th>
+              </tr>
+            </thead>
+            <tbody class="nhsuk-table__body">
+              <tr *ngFor="let item of usersList.getRecords()" class="nhsuk-table__row">
                 <td class="nhsuk-table__cell">
-                  {{user.name}} ({{user.roleDescription}})
-                  <span class="nhsuk-hint nhsuk-u-margin-bottom-0">{{user.email}}</span>
+                  <span class="nhsuk-table-responsive__heading">{{ usersList.getColumnLabel('account') }}</span>
+                  <span>
+                    {{item.name}} ({{item.roleDescription}})
+                    <span class="nhsuk-hint nhsuk-u-margin-bottom-0">{{item.email}}</span>
+                  </span>
+                  
                 </td>
                 <td class="nhsuk-table__cell text-align-right">
-                  <a routerLink="edit"> 
+                  <span class="nhsuk-table-responsive__heading"></span>
+                  <a routerLink="/admin/service-users/{{item.id}}"> 
                     Change 
                     <span class="nhsuk-u-visually-hidden"> 
-                      {{ user.name | lowercase }} information
+                      {{ item.name | lowercase }} information
                     </span>
                   </a>
                 </td>
               </tr>
-            </ng-container>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
+    
+        <theme-pagination [currentPage]="usersList.page" [pageSize]="usersList.pageSize" [totalRows]="usersList.getTotalRowsNumber()" (updatePageEvent)="onUsersPageChange($event)"></theme-pagination>
       </div>
     </div>
   </section>
@@ -85,30 +92,34 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
         <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Innovations</h2>
-        <p class="nhsuk-body-m">{{innovations.count}} innovations asssociated to this organisation unit</p>
-    
-        <table *ngIf="innovations.count > 0" class="nhsuk-table">
-          <thead role="rowgroup" class="nhsuk-table__head">
-            <tr role="row">
-              <th role="columnheader" class="" scope="col">
-                Innovation
-              </th>
-              <th role="columnheader" class="text-align-right" scope="col">
-                Status
-              </th>
-            </tr>
-          </thead>
-          <tbody class="nhsuk-table__body">
-            <ng-container *ngFor="let innovation of innovations.data">
-              <tr role="row" class="nhsuk-table__row">
-                <td class="nhsuk-table__cell">{{innovation.name}}</td>
+        <p class="nhsuk-body-m">{{innovationsList.getTotalRowsNumber()}} innovations asssociated to this organisation unit</p>
+  
+        <div *ngIf="innovationsList.getTotalRowsNumber() > 0">
+          <table class="nhsuk-table-responsive app-sortable-table">
+            <caption class="nhsuk-u-visually-hidden"> Innovation list </caption>
+            <thead class="nhsuk-table__head">
+              <tr>
+                <th *ngFor="let item of innovationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                  {{ item.label }}
+                </th>
+              </tr>
+            </thead>
+            <tbody class="nhsuk-table__body">
+              <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">
+                  <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('innovation') }}</span>
+                  <span>{{ item.name }}</span>
+                </td>
                 <td class="nhsuk-table__cell text-align-right">
-                  <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + getUnitStatusSupport(innovation.supports) + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + getUnitStatusSupport(innovation.supports) + '.name' | translate }}"></theme-tag>
+                  <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('status') }}</span>
+                  <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + getUnitStatusSupport(item.supports) + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + getUnitStatusSupport(item.supports) + '.name' | translate }}"></theme-tag>
                 </td>
               </tr>
-            </ng-container>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
+    
+        <theme-pagination [currentPage]="innovationsList.page" [pageSize]="innovationsList.pageSize" [totalRows]="innovationsList.getTotalRowsNumber()" (updatePageEvent)="onInnovationsPageChange($event)"></theme-pagination>
       </div>
     </div>
   </section>

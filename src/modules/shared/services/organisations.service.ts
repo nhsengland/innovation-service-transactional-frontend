@@ -113,7 +113,7 @@ export class OrganisationsService extends CoreService {
           id: item.id,
           organisationUnitUserId: organisationUnit?.organisationUnitUserId ?? '', // it should never be null or it wouldn't have been returned. This logic to identify the users should probably be revised
           name: item.name,
-          email: item.email,
+          email: item.email ?? '',
           role: organisation!.role, //should always have a role
           roleDescription: this.stores.authentication.getRoleDescription(organisation!.role),
           isActive: item.isActive,
