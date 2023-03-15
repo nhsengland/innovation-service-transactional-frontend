@@ -23,6 +23,7 @@ type GetUserInfoDTO = {
   contactDetails: string | null,
   termsOfUseAccepted: boolean,
   hasInnovationTransfers: boolean,
+  hasInnovationCollaborations: boolean,
   passwordResetAt: null | DateISOType,
   firstTimeSignInAt: null | DateISOType,
   organisations: {
@@ -102,6 +103,7 @@ export class AuthenticationService {
         contactDetails: response.contactDetails,
         termsOfUseAccepted: response.termsOfUseAccepted,
         hasInnovationTransfers: response.hasInnovationTransfers,
+        hasInnovationCollaborations: response.hasInnovationCollaborations,
         passwordResetAt: response.passwordResetAt,
         firstTimeSignInAt: response.firstTimeSignInAt,
         organisations: response.organisations
