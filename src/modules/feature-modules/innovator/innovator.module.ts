@@ -40,18 +40,18 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
+import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
+import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 
 // Components.
 import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
+import { ManageGuard } from './guards/manage.guard';
 
 // Services.
 import { InnovatorService } from './services/innovator.service';
-import { ManageInnovationGuard } from './guards/manage-innovation.guard';
-import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
-import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 
 
 @NgModule({
@@ -106,7 +106,7 @@ import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/inno
   providers: [
     // Guards.
     FirstTimeSigninGuard,
-    ManageInnovationGuard,
+    ManageGuard,
 
     // Services.
     InnovatorService

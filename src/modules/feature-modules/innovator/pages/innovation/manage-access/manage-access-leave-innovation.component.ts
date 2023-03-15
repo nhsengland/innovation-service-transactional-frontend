@@ -13,7 +13,6 @@ export class PageInnovationManageAccessLeaveInnovationComponent extends CoreComp
 
   innovationId: string;
   innovation: ContextInnovationType;
-  innovationCollaboratorId: null | string;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -24,10 +23,9 @@ export class PageInnovationManageAccessLeaveInnovationComponent extends CoreComp
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
-    this.innovationCollaboratorId = this.activatedRoute.snapshot.params.collaboratorId ?? null;
 
     this.setPageTitle(`Leave "${this.innovation.name}" innovation`);
-    this.setBackLink('Go back', `innovator/innovations/${this.innovation.id}/manage-access`);
+    this.setBackLink('Go back', `innovator/innovations/${this.innovation.id}/manage/access`);
 
   }
 
@@ -37,17 +35,21 @@ export class PageInnovationManageAccessLeaveInnovationComponent extends CoreComp
 
   onSubmit(): void {
 
-    const body: { status?: InnovationCollaboratorStatusEnum, role?: string } = {status: InnovationCollaboratorStatusEnum.LEFT};
+    if(this.innovation.collaboratorId) {
 
-    this.innovationsService.updateInnovationCollaborator(this.innovation.id, this.innovationCollaboratorId ?? '', body).subscribe({
-      next: () => {
-        this.setRedirectAlertSuccess(`You have left the "${this.innovation.name}" innovation.`);
-        this.redirectTo(`/innovator/dashboard`);
-      },
-      error: () => {
-        this.setAlertUnknownError();
-      }
-    });
+      const body: { status?: InnovationCollaboratorStatusEnum, role?: string } = {status: InnovationCollaboratorStatusEnum.LEFT};
+
+      this.innovationsService.updateInnovationCollaborator(this.innovationId, this.innovation.collaboratorId, body).subscribe({
+        next: () => {
+          this.setRedirectAlertSuccess(`You have left the "${this.innovation.name}" innovation.`);
+          this.redirectTo(`/innovator/dashboard`);
+        },
+        error: () => {
+          this.setAlertUnknownError();
+        }
+      });
+
+    }
 
   }
 
