@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
@@ -8,7 +9,9 @@ import { CoreComponent } from '@app/base';
 })
 export class PageDashboardComponent extends CoreComponent implements OnInit {
 
-  constructor() {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+  ) {
 
     super();
     this.setPageTitle('Dashboard');
@@ -21,15 +24,19 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     const user = this.stores.authentication.getUserInfo();
 
     const startTime = new Date();
-    const endTime = new Date(user.passwordResetAt ?? '');
-    const timediffer = startTime.getTime() - endTime.getTime();
-    const resultInMinutes = Math.round(timediffer / 60000);
-    if (resultInMinutes <= 2) {
-      this.setAlertSuccess('You have successfully changed your password.')
+
+    if (this.timeDifferInMinutes(startTime, user.firstTimeSignInAt) > 5 && this.timeDifferInMinutes(startTime, user.passwordResetAt) <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {
+      this.setAlertSuccess('You have successfully changed your password.');
     }
 
     this.setPageStatus('READY');
 
+  }
+
+  timeDifferInMinutes(startTime: Date, date: null | string ): number{
+    const endTime = new Date(date ?? '');
+    const timediffer = startTime.getTime() - endTime.getTime();
+    return Math.round(timediffer / 60000);
   }
 
 }

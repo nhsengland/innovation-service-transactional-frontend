@@ -117,7 +117,10 @@
 
             <div class="d-flex">
               <dt class="mr-auto">
-                {{ unit.name }}
+                <a routerLink="unit/{{unit.id}}" title="View"> 
+                  {{ unit.name }}
+                  <span class="nhsuk-u-visually-hidden">organisation unit</span>
+                </a>
                 <div class="nhsuk-hint nhsuk-u-margin-bottom-0"> ({{ unit.acronym }}) </div>
               </dt>
               <dd class="width-20 nhsuk-u-margin-0">

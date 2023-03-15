@@ -18,6 +18,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     displayName: string;
     organisation: string;
     passwordResetAt: string;
+    firstTimeSignInAt: string | null;
   };
 
   cardsList: StatisticsCard[] = [];
@@ -25,8 +26,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   latestInnovations: TableModel<InnovationsListDTO['data'][0], InnovationsListFiltersType>;
 
   constructor(
-    private activatedRoute: ActivatedRoute,    
-    private statisticsService: StatisticsService,    
+    private activatedRoute: ActivatedRoute,
+    private statisticsService: StatisticsService,
     private innovationsService: InnovationsService
   ) {
 
@@ -37,7 +38,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     this.user = {
       displayName: this.stores.authentication.getUserInfo().displayName,
       organisation: 'Needs assessment team',
-      passwordResetAt: this.stores.authentication.getUserInfo().passwordResetAt || ''
+      passwordResetAt: this.stores.authentication.getUserInfo().passwordResetAt || '',
+      firstTimeSignInAt: this.stores.authentication.getUserInfo().firstTimeSignInAt
     };
 
 
@@ -47,11 +49,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   ngOnInit(): void {
 
     const startTime = new Date();
-    const endTime = new Date(this.user.passwordResetAt);
-    const timediffer = startTime.getTime() - endTime.getTime();
-    const resultInMinutes = Math.round(timediffer / 60000);
 
-    if (resultInMinutes <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {
+    if (this.timeDifferInMinutes(startTime, this.user.firstTimeSignInAt) > 5 && this.timeDifferInMinutes(startTime, this.user.passwordResetAt) <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {
       this.setAlertSuccess('You have successfully changed your password.');
     }
 
@@ -62,7 +61,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     })
 
     forkJoin([
-      this.statisticsService.getUserStatisticsInfo(qp), 
+      this.statisticsService.getUserStatisticsInfo(qp),
       this.innovationsService.getInnovationsList({ queryParams: this.latestInnovations.getAPIQueryParams() })
     ]).subscribe(([statistics, innovationsList]) => {
 
@@ -94,5 +93,10 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     return counter === 1 ? `${counter} innovation is overdue` : `${counter} innovations are overdue`
   }
 
+  timeDifferInMinutes(startTime: Date, date: null | string ): number{
+    const endTime = new Date(date ?? '');
+    const timediffer = startTime.getTime() - endTime.getTime();
+    return Math.round(timediffer / 60000);
+  }
 
 }
