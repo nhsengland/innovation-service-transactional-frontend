@@ -22,6 +22,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   alertErrorsList: { title: string, description: string }[] = [];
+  errorOnSubmitStep: boolean = false;
 
   innovation: ContextInnovationType;
   sectionId: InnovationSectionEnum;
@@ -147,7 +148,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     of(true).pipe(
       concatMap(() => {
 
-        if (shouldUpdateInformation) {
+        if (shouldUpdateInformation || this.errorOnSubmitStep) {
           return this.stores.innovation.updateSectionInfo$(this.innovation.id, this.sectionId, this.wizard.runOutboundParsing());
         } else {
           return of(true);
@@ -215,11 +216,12 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
           }
 
+          this.errorOnSubmitStep = false;
           this.saveButton = { isActive: true, label: 'Save and continue' };
 
         },
         error: () => {
-
+          this.errorOnSubmitStep = true;
           this.saveButton = { isActive: true, label: 'Save and continue' };
           this.alertErrorsList = [];
           this.setAlertUnknownError();
