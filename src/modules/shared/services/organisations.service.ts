@@ -87,8 +87,8 @@ export type GetOrganisationUnitInnovationsListDTO = {
 };
 
 export type UserListFiltersType = {
-  email: boolean,
   onlyActive: boolean,
+  email?: boolean,
   organisationUnitId?: string,
 };
 

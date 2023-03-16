@@ -109,9 +109,9 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
         unit.isLoading = false;
         break;
       case 'closed':
-        this.organisationsService.getOrganisationUnitUsersList(organisationUnitId, { onlyActive: true }).subscribe(
+        this.organisationsService.getOrganisationUnitUsersList({queryParams: { take: 100, skip: 0, filters: { onlyActive: true, organisationUnitId: organisationUnitId }}}).subscribe(
           response => {
-            unit.users = response.map(item => ({ name: item.name, roleDescription: this.stores.authentication.getRoleDescription(item.role) }));
+            unit.users = response.data.map(item => ({ name: item.name, roleDescription: item.roleDescription }));
             unit.showHideStatus = 'opened';
             unit.showHideText = `Hide users`;
             unit.showHideDescription = `that belong to the ${unit.name}`;
