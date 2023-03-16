@@ -11,6 +11,7 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 import { InnovatorService } from '../../services/innovator.service';
 import { UtilsHelper } from '@modules/core/helpers/utils.helper';
 import { FIRST_TIME_SIGNIN_ACCOUNT_ONLY_QUESTIONS } from './innovation-new-account.config';
+import { FIRST_TIME_SIGNIN_QUESTIONS_TEST } from './first-time-signin.config';
 
 
 @Component({
@@ -41,13 +42,14 @@ export class FirstTimeSigninInnovationNewComponent extends CoreComponent impleme
       this.setPageTitle('Welcome to the Innovation Service')
       this.setPageStatus('READY');
     } else {
-      this.wizard = FIRST_TIME_SIGNIN_QUESTIONS;
+      // this.wizard = FIRST_TIME_SIGNIN_QUESTIONS;
+      this.wizard = FIRST_TIME_SIGNIN_QUESTIONS_TEST;
       this.wizard.setAnswers(this.wizard.runInboundParsing({})).runRules();
       // Update last step with the organisations list with description and pre-select all checkboxes.
       this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe(response => {
   
-        this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
-        this.wizard.addAnswers({ organisationShares: response.map(item => item.id) });
+        // this.wizard.steps[this.wizard.steps.length - 1].parameters[0].items = response.map(item => ({ value: item.id, label: item.name }));
+        // this.wizard.addAnswers({ organisationShares: response.map(item => item.id) });
   
         this.setPageStatus('READY');
   
