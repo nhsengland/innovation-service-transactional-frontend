@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
-import { GetOrganisationUnitUsersDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
+import { GetOrganisationUnitUsersDTO, OrganisationsService, UserListFiltersType } from '@modules/shared/services/organisations.service';
 
 import { UsersStepInputType, UsersStepOutputType } from './users-step.types';
 
@@ -29,9 +29,7 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
 
   // submitButton = { isActive: true, label: 'Confirm and notify organisations' };
 
-  tableList = new TableModel<GetOrganisationUnitUsersDTO[0]>({
-    pageSize: 10
-  });
+  tableList = new TableModel<GetOrganisationUnitUsersDTO['data'][0], UserListFiltersType>({ pageSize: 10 });
 
   form = new FormGroup({
     agreeUsers: new UntypedFormControl(false, CustomValidators.required('You need to confirm to proceed'))
@@ -50,7 +48,11 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
 
     this.tableList.setVisibleColumns({
       userAccount: { label: 'User details', orderable: false }
-    }).setFilters({ onlyActive: true });
+    }).setFilters({ 
+      onlyActive: true,
+      email: true,
+      organisationUnitId: this.data.organisationUnit.id
+    });
 
     this.form.get('agreeUsers')!.setValue(this.data.agreeUsers);
 
@@ -60,10 +62,10 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
 
 
   getUsersList(): void {
-
-    this.organisationsService.getOrganisationUnitUsersList(this.data.organisationUnit.id, { email: true }).subscribe(
+    
+    this.organisationsService.getOrganisationUnitUsersList({ queryParams: this.tableList.getAPIQueryParams() }).subscribe(
       response => {
-        this.tableList.setData(response);
+        this.tableList.setData(response.data, response.count);
         this.setPageStatus('READY');
       },
       () => {

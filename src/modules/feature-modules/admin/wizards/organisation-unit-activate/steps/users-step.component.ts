@@ -8,8 +8,8 @@ import { MappedObjectType, WizardStepComponentType, WizardStepEventType } from '
 
 import { UsersStepInputType, UsersStepOutputType } from './users-step.types';
 
-import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
-import { GetOrganisationUnitUsersDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
+import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
+import { GetOrganisationUnitUsersDTO, OrganisationsService, UserListFiltersType } from '@modules/shared/services/organisations.service';
 
 
 @Component({
@@ -30,10 +30,7 @@ export class WizardOrganisationUnitActivateUsersStepComponent extends CoreCompon
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<UsersStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<UsersStepOutputType>>();
 
-
-  tableList = new TableModel<GetOrganisationUnitUsersDTO[0], { onlyActive: boolean }>({
-    pageSize: 1000
-  });
+  tableList = new TableModel<GetOrganisationUnitUsersDTO['data'][0], UserListFiltersType>({ pageSize: 100 });
 
   form = new FormGroup({
     users: new UntypedFormArray([]),
@@ -61,7 +58,11 @@ export class WizardOrganisationUnitActivateUsersStepComponent extends CoreCompon
       name: { label: 'Name', orderable: false },
       role: { label: 'Role', orderable: false },
       isActive: { label: 'Active', orderable: false, align: 'right' }
-    }).setFilters({ onlyActive: false });
+    }).setFilters({ 
+      onlyActive: false,
+      email: true,
+      organisationUnitId: this.data.organisationUnit.id
+    });
 
     this.form.get('agreeUsers')!.setValue(this.data.agreeUsers);
     this.data.users.forEach(item => this.fieldArrayControl.push(new FormControl(item.id)));
@@ -73,9 +74,9 @@ export class WizardOrganisationUnitActivateUsersStepComponent extends CoreCompon
 
   getUsersList(): void {
 
-    this.organisationsService.getOrganisationUnitUsersList(this.data.organisation.id, { email: true }).subscribe(
+    this.organisationsService.getOrganisationUnitUsersList({ queryParams: this.tableList.getAPIQueryParams() }).subscribe(
       response => {
-        this.tableList.setData(response);
+        this.tableList.setData(response.data, response.count);
         this.setPageStatus('READY');
       },
       () => {

@@ -7,7 +7,7 @@ import { UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { UserSearchDTO } from '../dtos/users.dto';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { APIQueryParamsType } from '@app/base/types';
+import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 
 export type getAccessorsOrganisationsDTO = {
@@ -53,6 +53,8 @@ export type GetOrganisationUnitUsersDTO = {
     name: string,  
     role: UserRoleEnum
     roleDescription: string,
+    lockedAt: DateISOType,  
+    organisationUnitUserId: string,
     email?: string,
   }[]
 };
@@ -62,7 +64,9 @@ export type GetOrganisationUnitUsersRequestDTO = {
   data: {
     id: string,
     isActive: boolean,
-    name: string,  
+    name: string,
+    lockedAt: DateISOType,  
+    organisationUnitUserId: string,
     email?: string,
     roles: {
       id: string,
@@ -147,6 +151,8 @@ export class OrganisationsService extends CoreService {
               id: item.id,
               isActive: item.isActive,
               name: item.name,  
+              lockedAt: item.lockedAt,
+              organisationUnitUserId: item.organisationUnitUserId,
               role: item.roles[0].role,
               roleDescription: this.stores.authentication.getRoleDescription(item.roles[0].role),
               email: item.email ?? '',
