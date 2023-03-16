@@ -1,5 +1,5 @@
-import { FormEngineHelper } from '../helpers/form-engine.helper';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
+import { FormEngineHelper } from '../helpers/form-engine.helper';
 import { FormEngineModel, FormEngineParameterModel } from './form-engine.models';
 
 
@@ -12,7 +12,7 @@ export type WizardSummaryType = {
   label: string;
   value?: null | string;
   editStepNumber?: number;
-  evidenceId?: string;
+  evidenceId?: number;
   allowHTML?: boolean;
   isFile?: boolean;
 };

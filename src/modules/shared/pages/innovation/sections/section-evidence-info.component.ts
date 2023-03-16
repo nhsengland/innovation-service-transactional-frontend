@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 
 import { InnovationSectionEnum } from '@modules/stores/innovation';
 
@@ -66,6 +66,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   }
 
   onDeleteEvidence(): void {
+    // TODO HERE
     this.stores.innovation.deleteEvidence$(this.innovationId, this.evidence.id).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('Your evidence has been deleted');
