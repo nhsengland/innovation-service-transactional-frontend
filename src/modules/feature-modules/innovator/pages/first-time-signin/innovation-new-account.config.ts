@@ -23,23 +23,24 @@ export let FIRST_TIME_SIGNIN_ACCOUNT_ONLY_QUESTIONS: WizardEngineModel = new Wiz
         dataType: 'text',
         label: 'What is your name?',
         description: 'Enter your name',
-        validations: { isRequired: [true, 'Name is required'] }
+        validations: { isRequired: [true, 'Name is required'], maxLength: 100 }
       }]
     }),
 
     new FormEngineModel({
       parameters: [{
         id: 'mobilePhone',
-        dataType: 'number',
+        dataType: 'text',
         label: 'What is your phone number (optional)',
-        description: 'If you would like to be contacted by phone about your innovation, please provide a contact number.'
+        description: 'If you would like to be contacted by phone about your innovation, please provide a contact number.',
+        validations: { maxLength: 20 }
       }]
     }),
 
     new FormEngineModel({
-      parameters: [{ 
-        id: 'contactDetails', 
-        dataType: 'textarea', 
+      parameters: [{
+        id: 'contactDetails',
+        dataType: 'textarea',
         label: 'Is there anything else we should know about communicating with you?',
         description: 'For example, non-working days, visual or hearing impairments, or other accessibility needs.',
         lengthLimit: 'small',
