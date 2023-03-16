@@ -4,7 +4,7 @@ import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
-import { GetOrganisationUnitInfoDTO, GetOrganisationUnitUsersDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
+import { GetOrganisationUnitInfoDTO, GetOrganisationUnitUsersDTO, OrganisationsService, UserListFiltersType } from '@modules/shared/services/organisations.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { forkJoin } from 'rxjs';
 
@@ -18,7 +18,7 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
 
   unit: GetOrganisationUnitInfoDTO = { id: '', name: '', acronym: '', isActive: false, userCount: 0};
   innovationsList = new TableModel<InnovationsListDTO['data'][0], InnovationsListFiltersType>({ pageSize: 5 });
-  usersList = new TableModel<GetOrganisationUnitUsersDTO[0]>({ pageSize: 5 });
+  usersList = new TableModel<GetOrganisationUnitUsersDTO['data'][0], UserListFiltersType>({ pageSize: 5 });
 
   constructor(    
     private activatedRoute: ActivatedRoute,
@@ -30,10 +30,15 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
     
     this.organisationId = this.activatedRoute.snapshot.params.organisationId;
     this.organisationUnitId = this.activatedRoute.snapshot.params.organisationUnitId;
-  }
 
-  ngOnInit(): void {
-    this.setPageStatus('LOADING');
+    this.usersList.setVisibleColumns({
+      account: { label: 'User account', orderable: false },
+      action: { label: '', orderable: false, align: 'right' }
+    }).setFilters({
+      email: true, 
+      onlyActive: true,
+      organisationUnitId: this.organisationUnitId
+    });
 
     this.innovationsList.setVisibleColumns({
       innovation: { label: 'Innovation', orderable: false },
@@ -41,26 +46,20 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
     }).setFilters({      
       engagingOrganisationUnits: [this.organisationUnitId]
     });
+  }
 
-    this.usersList.setVisibleColumns({
-      account: { label: 'User account', orderable: false },
-      action: { label: '', orderable: false, align: 'right' }
-    });
+  ngOnInit(): void {
+    this.setPageStatus('LOADING');   
 
     forkJoin([
       this.organisationsService.getOrganisationUnitInfo(this.organisationId, this.organisationUnitId),
-      this.organisationsService.getOrganisationUnitUsersList(this.organisationUnitId, { email: true }),
+      this.organisationsService.getOrganisationUnitUsersList({ queryParams: this.usersList.getAPIQueryParams() }),
       this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() })
     ]).subscribe({
       next: ([unitInfo, users, innovations]) => {
         this.unit = unitInfo;
         this.innovationsList.setData(innovations.data, innovations.count);
-        this.usersList.setData(users.map(item => 
-          ({ 
-            ...item,
-            roleDescription: this.stores.authentication.getRoleDescription(item.role)
-          })
-        ), users.length);
+        this.usersList.setData(users.data, users.count);
         
         this.setPageStatus('READY');
       },
@@ -86,14 +85,9 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
   onUsersPageChange(event: { pageNumber: number }): void {
     this.usersList.setPage(event.pageNumber);
 
-    this.organisationsService.getOrganisationUnitUsersList(this.organisationUnitId, { email: true }).subscribe({
+    this.organisationsService.getOrganisationUnitUsersList({ queryParams: this.usersList.getAPIQueryParams() }).subscribe({
       next: (users) => {        
-        this.usersList.setData(users.map(item => 
-          ({ 
-            ...item,
-            roleDescription: this.stores.authentication.getRoleDescription(item.role)
-          })
-        ), users.length);
+        this.usersList.setData(users.data, users.count);
       }
     });
   }

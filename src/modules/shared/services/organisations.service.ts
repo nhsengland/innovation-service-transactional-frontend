@@ -46,15 +46,32 @@ export type GetOrganisationUnitInfoDTO = {
 };
 
 export type GetOrganisationUnitUsersDTO = {
-  id: string,
-  organisationUnitUserId: string,
-  name: string,
-  email?: string,
-  role: UserRoleEnum
-  roleDescription: string,
-  isActive: boolean,
-  lockedAt: string | undefined
-}[];
+  count: number,
+  data: {
+    id: string,
+    isActive: boolean,
+    name: string,  
+    role: UserRoleEnum
+    roleDescription: string,
+    email?: string,
+  }[]
+};
+
+export type GetOrganisationUnitUsersRequestDTO = {
+  count: number,
+  data: {
+    id: string,
+    isActive: boolean,
+    name: string,  
+    email?: string,
+    roles: {
+      id: string,
+      organisationId: string,
+      organisationUnitId: string,
+      role: UserRoleEnum
+    }[]
+  }[]
+};
 
 export type GetOrganisationUnitInnovationsListDTO = {
   count: number;
@@ -67,6 +84,12 @@ export type GetOrganisationUnitInnovationsListDTO = {
     name: string,
     status: InnovationSupportStatusEnum
   }[];
+};
+
+export type UserListFiltersType = {
+  email: boolean,
+  onlyActive: boolean,
+  organisationUnitId?: string,
 };
 
 @Injectable()
@@ -98,28 +121,39 @@ export class OrganisationsService extends CoreService {
   }
 
   // this could probably be a envelop for a shared getUsersList method and moved to the usersService
-  getOrganisationUnitUsersList(organisationUnitId: string, query: { email?: boolean, onlyActive?: boolean } ): Observable<GetOrganisationUnitUsersDTO> {
+  getOrganisationUnitUsersList({ queryParams }: { queryParams?: APIQueryParamsType<UserListFiltersType> } = {}): Observable<GetOrganisationUnitUsersDTO> {
 
-    const fields = query.email ? ['email', 'organisations', 'units'] : ['organisations', 'units'];
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ organisationUnitId, fields, userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR], onlyActive: query.onlyActive ?? false });
-    return this.http.get<UserSearchDTO[]>(url.buildUrl()).pipe(
+    if (!queryParams) {
+      queryParams = { take: 100, skip: 0, filters: { email: false, onlyActive: false} };
+    }
+    const { filters, ...qParams } = queryParams;
+
+    const qp = {
+      ...qParams,
+      userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR],
+      fields: filters.email ? ['email', 'organisations', 'units'] : ['organisations', 'units'],
+      onlyActive: filters.onlyActive ?? false,
+      ...(filters.organisationUnitId ? { organisationUnitId: filters.organisationUnitId } : {}),
+    }
+
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams(qp);
+    return this.http.get<GetOrganisationUnitUsersRequestDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => response.map(item => {
-        // this will probably be easier once we use the roles instead of organisations
-        const organisation = item.organisations?.find( o => o.units?.find( u => u.id === organisationUnitId));
-        const organisationUnit = organisation?.units?.find( u => u.id === organisationUnitId);
-        
+      map(response => {
         return {
-          id: item.id,
-          organisationUnitUserId: organisationUnit?.organisationUnitUserId ?? '', // it should never be null or it wouldn't have been returned. This logic to identify the users should probably be revised
-          name: item.name,
-          email: item.email ?? '',
-          role: organisation!.role, //should always have a role
-          roleDescription: this.stores.authentication.getRoleDescription(organisation!.role),
-          isActive: item.isActive,
-          lockedAt: item.lockedAt
-        };
-      }))
+          count: response.count,
+          data: response.data.map((item) => {
+            return {
+              id: item.id,
+              isActive: item.isActive,
+              name: item.name,  
+              role: item.roles[0].role,
+              roleDescription: this.stores.authentication.getRoleDescription(item.roles[0].role),
+              email: item.email ?? '',
+            }
+          })
+        }
+      })
     );
   }
 
