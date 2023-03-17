@@ -25,13 +25,15 @@
 
     <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-3">
 
-      <div class="nhsuk-summary-list__row">
+      <div class="nhsuk-summary-list__row" *ngIf="innovationStatistics.length > 0">
         <dt class="nhsuk-summary-list__key">Innovations status</dt>
         <dd class="nhsuk-summary-list__value">
           <ul class="nhsuk-list">
-            <li *ngFor="let item of innovationStatusCounters">
-              <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + item.status + '.cssColorClass' | translate }}" label="{{ item.count }} {{ 'shared.catalog.innovation.support_status.' + item.status + '.name' | translate }}">
-              </theme-tag>
+            <li *ngFor="let item of innovationStatistics">
+              <theme-tag 
+                type="{{ 'shared.catalog.innovation.support_status.' + item.status + '.cssColorClass' | translate }}" 
+                label="{{ item.count }} {{ 'shared.catalog.innovation.support_status.' + item.status + '.name' | translate }}"
+              ></theme-tag>
             </li>
           </ul>
         </dd>
@@ -42,37 +44,37 @@
 
   <div class="nhsuk-grid-column-three-quarters">
 
-    <p class="nhsuk-body-s nhsuk-u-margin-bottom-1">Showing {{ tableList.getVisibleRowsNumber() }} innovations of {{ tableList.getTotalRowsNumber() }}</p>
+    <p class="nhsuk-body-s nhsuk-u-margin-bottom-1">Showing {{ innovationsList.getVisibleRowsNumber() }} innovations of {{ innovationsList.getTotalRowsNumber() }}</p>
 
-    <p *ngIf="tableList.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-4">There are no matching results.</p>
+    <p *ngIf="innovationsList.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-4">There are no matching results.</p>
 
-    <div *ngIf="tableList.getTotalRowsNumber() > 0" class="bg-color-white nhsuk-u-padding-3">
+    <div *ngIf="innovationsList.getTotalRowsNumber() > 0" class="bg-color-white nhsuk-u-padding-3">
       <table class="nhsuk-table-responsive app-sortable-table">
         <caption class="nhsuk-u-visually-hidden"> Users list </caption>
         <thead class="nhsuk-table__head">
           <tr>
-            <th *ngFor="let item of tableList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+            <th *ngFor="let item of innovationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
               <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
               <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
             </th>
           </tr>
         </thead>
         <tbody class="nhsuk-table__body">
-          <tr *ngFor="let item of tableList.getRecords()" class="nhsuk-table__row">
+          <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
             <td class="nhsuk-table__cell">
-              <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('innovation') }}</span>
+              <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('innovation') }}</span>
               <span class="nhsuk-u-font-weight-bold">{{ item.name }}</span>
             </td>
             <td class="nhsuk-table__cell">
-              <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('status') }}</span>
-              <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + item.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + item.status + '.name' | translate }}"></theme-tag>
+              <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('status') }}</span>
+              <theme-tag type="{{ 'shared.catalog.innovation.support_status.' +  getUnitStatusSupport(item.supports) + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + getUnitStatusSupport(item.supports) + '.name' | translate }}"></theme-tag>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <theme-pagination [currentPage]="tableList.page" [pageSize]="tableList.pageSize" [totalRows]="tableList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+    <theme-pagination [currentPage]="innovationsList.page" [pageSize]="innovationsList.pageSize" [totalRows]="innovationsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
 
   </div>
 

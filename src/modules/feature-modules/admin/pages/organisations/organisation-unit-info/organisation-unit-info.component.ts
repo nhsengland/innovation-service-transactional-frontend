@@ -77,12 +77,6 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
       }
     }
   }[]): InnovationSupportStatusEnum {
-    if (supports) {
-      const unitSupport = supports.filter(i => i.organisation.unit.id !== this.organisationUnitId);
-
-      return unitSupport.length === 0 ? InnovationSupportStatusEnum.NOT_YET : unitSupport[0].status;
-    }
-    
-    return InnovationSupportStatusEnum.NOT_YET;
+    return supports && supports.length > 0 ? supports[0].status : InnovationSupportStatusEnum.NOT_YET;
   }
 }
