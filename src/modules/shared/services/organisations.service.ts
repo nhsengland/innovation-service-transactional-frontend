@@ -52,7 +52,7 @@ export type GetOrganisationUnitUsersDTO = {
     name: string,  
     role: UserRoleEnum
     roleDescription: string,
-    lockedAt: DateISOType,  
+    lockedAt: null | string,  
     organisationUnitUserId: string,
     email: string,
   }[]
