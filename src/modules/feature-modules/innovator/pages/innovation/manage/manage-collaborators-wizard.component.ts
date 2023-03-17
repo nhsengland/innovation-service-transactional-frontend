@@ -135,7 +135,7 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
 
       this.innovationsService.createInnovationCollaborator(this.innovation.id, body).subscribe({
         next: () => {
-          this.setRedirectAlertSuccess(`An invitation has been sent to ${body.email} to collaborate on ${this.innovation.name}`, { message: 'This invitation will expire in 30 days if not accepted.' });
+          this.setRedirectAlertSuccess(`An invitation has been sent to '${body.email}' to collaborate on '${this.innovation.name}'`, { message: 'This invitation will expire in 30 days if not accepted.' });
           this.redirectTo(this.baseUrl);
         },
         error: (error: HttpErrorResponse) => {
