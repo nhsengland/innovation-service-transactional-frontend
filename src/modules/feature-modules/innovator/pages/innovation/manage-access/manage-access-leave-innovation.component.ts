@@ -14,6 +14,8 @@ export class PageInnovationManageAccessLeaveInnovationComponent extends CoreComp
   innovationId: string;
   innovation: ContextInnovationType;
 
+  submitButton = { isActive: true, label: 'Leave innovation' };
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
@@ -37,6 +39,8 @@ export class PageInnovationManageAccessLeaveInnovationComponent extends CoreComp
 
     if(this.innovation.collaboratorId) {
 
+      this.submitButton = { isActive: false, label: 'Saving...' };
+
       const body: { status?: InnovationCollaboratorStatusEnum, role?: string } = {status: InnovationCollaboratorStatusEnum.LEFT};
 
       this.innovationsService.updateInnovationCollaborator(this.innovationId, this.innovation.collaboratorId, body).subscribe({
@@ -45,6 +49,7 @@ export class PageInnovationManageAccessLeaveInnovationComponent extends CoreComp
           this.redirectTo(`/innovator/dashboard`);
         },
         error: () => {
+          this.submitButton = { isActive: true, label: 'Leave innovation' };
           this.setAlertUnknownError();
         }
       });

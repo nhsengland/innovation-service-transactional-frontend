@@ -7,10 +7,10 @@
         <div class="nhsuk-heading-m nhsuk-warning-callout__label">
           <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
         </div>
-        <p>You will not be able to access or work on this innovation going forward.   </p>
+        <p>You will not be able to access or work on this innovation going forward.</p>
       </div>
 
-      <button class="nhsuk-button" (click)="onSubmit()">Leave innovation</button>
+      <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button"> {{ submitButton.label }} </button>
 
     </div>
   </div>
