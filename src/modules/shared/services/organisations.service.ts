@@ -54,7 +54,7 @@ export type GetOrganisationUnitUsersDTO = {
     roleDescription: string,
     lockedAt: DateISOType,  
     organisationUnitUserId: string,
-    email?: string,
+    email: string,
   }[]
 };
 
@@ -64,15 +64,15 @@ export type GetOrganisationUnitUsersRequestDTO = {
     id: string,
     isActive: boolean,
     name: string,
-    lockedAt: DateISOType,  
-    organisationUnitUserId: string,
-    email?: string,
+    lockedAt: DateISOType,
     roles: {
       id: string,
       organisationId: string,
       organisationUnitId: string,
       role: UserRoleEnum
-    }[]
+    }[],
+    email?: string,
+    organisationUnitUserId?: string
   }[]
 };
 
@@ -151,10 +151,10 @@ export class OrganisationsService extends CoreService {
               isActive: item.isActive,
               name: item.name,  
               lockedAt: item.lockedAt,
-              organisationUnitUserId: item.organisationUnitUserId,
               role: item.roles[0].role,
               roleDescription: this.stores.authentication.getRoleDescription(item.roles[0].role),
               email: item.email ?? '',
+              organisationUnitUserId: item.organisationUnitUserId ?? '',
             }
           })
         }
