@@ -26,7 +26,7 @@ export class PageInnovationManageAccessLeaveInnovationComponent extends CoreComp
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
 
-    this.setPageTitle(`Leave "${this.innovation.name}" innovation`);
+    this.setPageTitle(`Leave '${this.innovation.name}' innovation`);
     this.setBackLink('Go back', `innovator/innovations/${this.innovation.id}/manage/access`);
 
   }
@@ -45,7 +45,7 @@ export class PageInnovationManageAccessLeaveInnovationComponent extends CoreComp
 
       this.innovationsService.updateInnovationCollaborator(this.innovationId, this.innovation.collaboratorId, body).subscribe({
         next: () => {
-          this.setRedirectAlertSuccess(`You have left the "${this.innovation.name}" innovation.`);
+          this.setRedirectAlertSuccess(`You have left the '${this.innovation.name}' innovation.`);
           this.redirectTo(`/innovator/dashboard`);
         },
         error: () => {
