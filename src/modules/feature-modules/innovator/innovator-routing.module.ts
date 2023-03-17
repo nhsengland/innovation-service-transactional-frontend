@@ -450,7 +450,7 @@ const routes: Routes = [
                       },
                       {
                         path: 'stop-sharing',
-                        data: { breadcrumb: 'Stop sharing' },
+                        data: { breadcrumb: 'Stop sharing', layout: { type: 'full' }},
                         children: [
                           {
                             path: '', pathMatch: 'full', component: PageInnovationManageStopSharingOverviewComponent,
@@ -458,30 +458,29 @@ const routes: Routes = [
                           },
                           {
                             path: 'request', pathMatch: 'full', component: PageInnovationManageStopSharingComponent,
-                            data: { breadcrumb: null, layout: { type: 'full' } }
+                            data: { breadcrumb: null }
                           }
                         ]
                       },
                       {
                         path: 'transfer',
-                        data: { breadcrumb: null },
+                        data: { breadcrumb: 'Transfer ownership', layout: { type: 'full' } },
                         children: [
                           {
                             path: '',
                             pathMatch: 'full',
                             redirectTo: '1',
+                            data: { breadcrumb: null }
                           },
                           {
                             path: ':stepId', pathMatch: 'full', component: PageInnovationManageTransferComponent,
-                            data: {
-                              data: { breadcrumb: null },
-                              layout: { type: 'full' }
-                            }
+                            data: { breadcrumb: null }
                           }
                         ]
                       },
                       {
-                        path: 'withdraw', pathMatch: 'full', component: PageInnovationManageWithdrawComponent
+                        path: 'withdraw', pathMatch: 'full', component: PageInnovationManageWithdrawComponent,
+                        data: { breadcrumb: 'Withdraw', layout: { type: 'full' } }
                       }
                     ]
                   },
