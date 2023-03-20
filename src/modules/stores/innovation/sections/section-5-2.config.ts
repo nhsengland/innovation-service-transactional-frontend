@@ -19,7 +19,6 @@ const stepsLabels = {
 type BaseType = {
   hasTests: null | 'YES' | 'IN_PROCESS' | 'NOT_YET';
   userTests: {
-    id: null | string;
     kind: string;
     feedback: null | string;
   }[];
@@ -72,7 +71,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
   if (['NOT_YET'].includes(currentValues.hasTests || 'NOT_YET')) {
     currentValues.userTests = currentValues.userTests.map(item => ({
-      id: item.id, kind: item.kind, feedback: null
+      kind: item.kind, feedback: null
     }));
     Object.keys(currentValues).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => { delete currentValues[key]; });
     return;
@@ -98,7 +97,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         description: 'This can include any testing that you have done with people who would use your innovation. For example, patients, nurses or administrative staff.',
         fieldsGroupConfig: {
           fields: [
-            { id: 'id', dataType: 'text', isVisible: false },
             { id: 'kind', dataType: 'text', label: 'User test', validations: { isRequired: true } },
             { id: 'feedback', dataType: 'text', isVisible: false }
           ],
