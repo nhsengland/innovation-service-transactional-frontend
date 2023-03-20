@@ -11,6 +11,7 @@ import { UrlModel } from '@app/base/models';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationSectionEnum } from '@modules/stores/innovation';
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
+import { UtilsHelper } from '@app/base/helpers';
 
 
 @Component({
@@ -119,6 +120,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.resetAlert();
 
     const formData = this.formEngineComponent?.getFormValues();
+
+    Object.keys(formData?.data || {}).forEach(key => {
+      const value = formData!.data[key];
+      if (typeof value === "string") {
+        formData!.data[key] = UtilsHelper.isEmpty(value) ? null : value;
+      }
+    });
 
     if (action === 'previous') {
       this.wizard.addAnswers(formData?.data || {}).runRules();
