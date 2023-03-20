@@ -47,7 +47,7 @@ export class FormEngineParameterModel {
     async?: AsyncValidatorFn[];
     existsIn?: string[] | [string[], string];
   };
-  lengthLimit?: 'small' | 'medium' | 'large';
+  lengthLimit?: 'small' | 'medium' | 'mediumUp' | 'largeDown' | 'large'; // TODO: Refactor these names!!!!
 
   additional?: FormEngineParameterModel[];
 

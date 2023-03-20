@@ -10,6 +10,12 @@ import { ContextInnovationOutletComponent } from './base/context-innovation-outl
 import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
 import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
 
+// Components.
+import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
+
+// Experiments.
+import { ExperimentsInnovationSectionEditComponent } from './experiments/innovation-sections/section-edit.component';
+
 // Pages.
 // // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
@@ -41,9 +47,6 @@ import { InnovationSectionEvidenceEditComponent } from './pages/innovation/recor
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
 
-// Components.
-import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
-
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
@@ -64,6 +67,12 @@ import { ManageInnovationGuard } from './guards/manage-innovation.guard';
     ContextInnovationOutletComponent,
     SidebarAccountMenuOutletComponent,
     SidebarInnovationMenuOutletComponent,
+
+    // Components.
+    OrganisationSuggestionsCardComponent,
+
+    // Experiments.
+    ExperimentsInnovationSectionEditComponent,
 
     // Pages.
     // // Account.
@@ -94,10 +103,7 @@ import { ManageInnovationGuard } from './guards/manage-innovation.guard';
     InnovationOverviewComponent,
     InnovationSectionEvidenceEditComponent,
     InnovationSectionEditComponent,
-    InnovationNewComponent,
-
-    // Components.
-    OrganisationSuggestionsCardComponent
+    InnovationNewComponent
   ],
   providers: [
     // Guards.

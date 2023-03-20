@@ -9,8 +9,10 @@ import { ContextInnovationOutletComponent } from './base/context-innovation-outl
 import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
 import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
 
+// Experiments.
+import { ExperimentsInnovationSectionEditComponent } from './experiments/innovation-sections/section-edit.component';
+
 // Innovator module pages.
-// Pages.
 // // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
 import { PageAccountInfoComponent } from './pages/account/account-info.component';
@@ -249,6 +251,9 @@ const routes: Routes = [
                     children: [
 
                       { path: '', pathMatch: 'full', redirectTo: '../record' },
+
+                      { path: 'experiments/:sectionId', pathMatch: 'full', component: ExperimentsInnovationSectionEditComponent },
+
                       {
                         path: ':sectionId',
                         resolve: { innovationSectionData: InnovationSectionDataResolver },
