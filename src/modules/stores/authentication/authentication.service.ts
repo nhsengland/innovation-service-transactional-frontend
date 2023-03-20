@@ -17,7 +17,7 @@ type GetUserInfoDTO = {
   displayName: string,
   roles: UserRoleType[],
   contactByPhone: boolean,
-  contactByEmail:  boolean,
+  contactByEmail: boolean,
   contactByPhoneTimeframe: PhoneUserPreferenceEnum | null,
   phone: string | null,
   contactDetails: string | null,
@@ -45,7 +45,7 @@ export type UpdateUserInfoDTO = {
   contactByPhoneTimeframe?: PhoneUserPreferenceEnum;
   mobilePhone?: string;
   contactDetails?: string;
-  organisation?: { id: string, isShadow: boolean, name?: null | string, size?: null | string }
+  organisation?: { id: string, isShadow: boolean, name?: string, size?: string, description?: string, registrationNumber?: string }
 };
 
 export type GetTermsOfUseLastVersionInfoDTO = {
@@ -97,7 +97,7 @@ export class AuthenticationService {
         displayName: ['unknown'].includes(response.displayName) ? '' : response.displayName,
         roles: response.roles || [],
         contactByPhone: response.contactByPhone,
-        contactByEmail:  response.contactByEmail,
+        contactByEmail: response.contactByEmail,
         contactByPhoneTimeframe: response.contactByPhoneTimeframe,
         phone: response.phone,
         contactDetails: response.contactDetails,

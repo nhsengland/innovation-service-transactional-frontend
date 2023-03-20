@@ -1,13 +1,13 @@
 
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 
-const organisationTypes = ['Sole trader', 'Unincorporated association', 'Partnership', 'Limited partnership', 'Trust', 'Limited company', 'Limited liability partnership', 'Community interest company', 'Charitable incorporated organisation', 'Co-operative society', 'Community benefit society'] as const;
+const organisationDescriptions = ['Sole trader', 'Unincorporated association', 'Partnership', 'Limited partnership', 'Trust', 'Limited company', 'Limited liability partnership', 'Community interest company', 'Charitable incorporated organisation', 'Co-operative society', 'Community benefit society'] as const;
 
 type StepPayloadType = {
   innovatorName: string,
   isCompanyOrOrganisation: 'YES' | 'NO',
   organisationName: string;
-  organisationType: null | typeof organisationTypes[number],
+  organisationDescription: null | typeof organisationDescriptions[number],
   organisationSize: null | string,
   hasRegistrationNumber: 'YES' | 'NO',
   organisationRegistrationNumber: null | string, // Add this on BE
@@ -18,13 +18,13 @@ type OutboundPayloadType = {
   mobilePhone: null | string,
   organisation?: {
     name: string,
-    type: typeof organisationTypes[number],
+    description: typeof organisationDescriptions[number],
     size: string,
     registrationNumber?: string
   }
 };
 
-export const FIRST_TIME_SIGNIN_QUESTIONS_TEST: WizardEngineModel = new WizardEngineModel({
+export const FIRST_TIME_SIGNIN_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   showSummary: true,
   steps: [
     new FormEngineModel({
@@ -73,11 +73,11 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
     steps.push(
       new FormEngineModel({
         parameters: [{
-          id: 'organisationType',
+          id: 'organisationDescription',
           dataType: 'radio-group',
           label: 'How would you describe your company or organisation?',
-          validations: { isRequired: [true, 'Organisation type is required'] },
-          items: organisationTypes.map(type => ({ value: type, label: type }))
+          validations: { isRequired: [true, 'Organisation description is required'] },
+          items: organisationDescriptions.map(description => ({ value: description, label: description }))
         }]
       })
     );
@@ -124,7 +124,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
     new FormEngineModel({
       parameters: [{
         id: 'mobilePhone',
-        dataType: 'text',
+        dataType: 'number',
         label: 'What is your phone number? (optional)',
         description: 'If you would like to be contacted by phone about your innovation, provide a contact number.',
         validations: { maxLength: 20 }
@@ -141,7 +141,7 @@ function inboundParsing(): StepPayloadType {
     isCompanyOrOrganisation: 'NO',
     organisationName: '',
     organisationSize: null,
-    organisationType: null,
+    organisationDescription: null,
     hasRegistrationNumber: 'NO',
     organisationRegistrationNumber: null,
     mobilePhone: null,
@@ -156,9 +156,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     mobilePhone: data.mobilePhone,
     ...(data.isCompanyOrOrganisation === 'YES' && {
       organisation: {
-        name: data.organisationName ?? '',
-        size: data.organisationSize ?? '',
-        type: data.organisationType ?? 'Sole trader',
+        name: data.organisationName ?? '', // default never happens at this point
+        size: data.organisationSize ?? '', // default never happens at this point
+        description: data.organisationDescription ?? 'Sole trader', // default never happens at this point
         registrationNumber: (data.hasRegistrationNumber === 'YES' && data.organisationRegistrationNumber) ? data.organisationRegistrationNumber : undefined
       }
     })
@@ -180,7 +180,7 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Wizard
   if (data.isCompanyOrOrganisation === 'YES') {
     toReturn.push(
       { label: 'Company', value: data.organisationName, editStepNumber: 2 },
-      { label: 'How would you describe your company or organisation?', value: data.organisationType, editStepNumber: 3 },
+      { label: 'How would you describe your company or organisation?', value: data.organisationDescription, editStepNumber: 3 },
       { label: 'What is the size of your company or organisation?', value: data.organisationSize, editStepNumber: 4 },
       { label: 'Do you have a UK company registration number?', value: data.hasRegistrationNumber === 'YES' ? 'Yes' : 'No', editStepNumber: 5 },
     );

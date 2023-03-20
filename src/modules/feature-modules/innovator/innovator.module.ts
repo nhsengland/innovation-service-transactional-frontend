@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
-import { ThemeModule } from '@modules/theme/theme.module';
 import { SharedModule } from '@modules/shared/shared.module';
+import { ThemeModule } from '@modules/theme/theme.module';
 
 import { InnovatorRoutingModule } from './innovator-routing.module';
 
@@ -19,9 +19,9 @@ import { PageCollaborationInviteComponent } from './pages/collaboration-invite/c
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // First time signin.
-import { FirstTimeSigninInnovationNewComponent } from './pages/first-time-signin/innovation-new.component';
-import { FirstTimeSigninInnovationTransferComponent } from './pages/first-time-signin/innovation-transfer.component';
+import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
 // // Innovation.
+import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
 import { InnovationActionCompleteConfirmationComponent } from './pages/innovation/action-complete-confirmation/action-complete-confirmation.component';
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
@@ -39,7 +39,6 @@ import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
-import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
 
 // Components.
 import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
@@ -48,8 +47,8 @@ import { OrganisationSuggestionsCardComponent } from './components/organisation-
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 
 // Services.
-import { InnovatorService } from './services/innovator.service';
 import { ManageInnovationGuard } from './guards/manage-innovation.guard';
+import { InnovatorService } from './services/innovator.service';
 
 
 @NgModule({
@@ -74,8 +73,7 @@ import { ManageInnovationGuard } from './guards/manage-innovation.guard';
     // // Dashboard.
     PageDashboardComponent,
     // // First time signin.
-    FirstTimeSigninInnovationNewComponent,
-    FirstTimeSigninInnovationTransferComponent,
+    FirstTimeSigninComponent,
     // // Innovation.
     InnovationActionCompleteConfirmationComponent,
     InnovationActionTrackerDeclineComponent,

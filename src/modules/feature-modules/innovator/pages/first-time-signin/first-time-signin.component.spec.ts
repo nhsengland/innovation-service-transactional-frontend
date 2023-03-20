@@ -4,31 +4,27 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
-import { FirstTimeSigninInnovationNewComponent } from './innovation-new.component';
+import { FirstTimeSigninComponent } from './first-time-signin.component';
 
 import { InnovatorService } from '../../services/innovator.service';
 
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { UserRoleEnum } from '@app/base/enums';
 
 
-describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninInnovationNewComponent', () => {
+describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninComponent', () => {
 
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
   let innovatorService: InnovatorService;
-  let organisationsService: OrganisationsService;
 
-  let component: FirstTimeSigninInnovationNewComponent;
-  let fixture: ComponentFixture<FirstTimeSigninInnovationNewComponent>;
+  let component: FirstTimeSigninComponent;
+  let fixture: ComponentFixture<FirstTimeSigninComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -48,17 +44,11 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninInnovati
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     innovatorService = TestBed.inject(InnovatorService);
-    organisationsService = TestBed.inject(OrganisationsService);
-
-    organisationsService.getOrganisationUnitUsersList = () => of([
-      { id: 'orgId01', name: 'Org name 01', organisationUnitUserId: 'OrgUnitId01', role: UserRoleEnum.QUALIFYING_ACCESSOR, roleDescription: 'Qualifying accessor', isActive: true, lockedAt: undefined  },
-      { id: 'orgId02', name: 'Org name 02', organisationUnitUserId: 'OrgUnitId02', role: UserRoleEnum.ACCESSOR, roleDescription: 'Accessor', isActive: true, lockedAt: undefined   }
-    ]);
 
   });
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(FirstTimeSigninInnovationNewComponent);
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
