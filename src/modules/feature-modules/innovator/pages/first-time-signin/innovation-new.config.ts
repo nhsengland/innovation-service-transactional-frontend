@@ -128,7 +128,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
     new FormEngineModel({
       parameters: [{
         id: 'mobilePhone',
-        dataType: 'text',
+        dataType: 'number',
         label: 'What\'s your phone number (Optional)',
         description: 'If you\'d like to be contacted by phone about your innovation, please provide a contact number',
         validations: { maxLength: 20 }
