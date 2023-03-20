@@ -92,12 +92,12 @@ export class PageInnovationManageCollaboratorsInfoComponent extends CoreComponen
 
       case 'cancel':
         body.status = InnovationCollaboratorStatusEnum.CANCELLED;
-        successMessage = `You have cancelled the invite sent to '${this.innovationCollaboration?.name ?? this.innovationCollaboration?.email}'`;
+        successMessage = `You have cancelled the invite sent to ${this.innovationCollaboration?.name ?? this.innovationCollaboration?.email}`;
         break;
 
       case 'remove':
         body.status = InnovationCollaboratorStatusEnum.REMOVED;
-        successMessage = `You have removed '${this.innovationCollaboration?.name ?? this.innovationCollaboration?.email}' from '${this.innovation.name}'`;
+        successMessage = `You have removed ${this.innovationCollaboration?.name ?? this.innovationCollaboration?.email} from '${this.innovation.name}'`;
         break;
 
       default:
