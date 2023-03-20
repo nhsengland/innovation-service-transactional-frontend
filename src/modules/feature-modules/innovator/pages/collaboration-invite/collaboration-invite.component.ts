@@ -41,11 +41,11 @@ export class PageCollaborationInviteComponent extends CoreComponent implements O
 
   onSubmit(status: InnovationCollaboratorStatusEnum.ACTIVE | InnovationCollaboratorStatusEnum.DECLINED): void {
     this.innovatorService.updateCollaborationStatus(this.innovationId, this.collaboratorId, status).subscribe(() => {
-      if (status === InnovationCollaboratorStatusEnum.ACTIVE) {
-        this.setRedirectAlertSuccess(`You have joined '${this.collaborationInfo?.innovation.name}' innovation as a collaborator.`);
-      } else {
-        this.setRedirectAlertInformation(`You have declined the invitation to join '${this.collaborationInfo?.innovation.name}' innovation as a collaborator.`);
-      }
+      const successMessage = status === InnovationCollaboratorStatusEnum.ACTIVE ? 
+        `You have joined '${this.collaborationInfo?.innovation.name}' innovation as a collaborator.` 
+        : `You have declined the invitation to join '${this.collaborationInfo?.innovation.name}' innovation as a collaborator.`;
+    
+      this.setRedirectAlertSuccess(successMessage);
       this.redirectTo(`/innovator/dashboard`);
     })
 
