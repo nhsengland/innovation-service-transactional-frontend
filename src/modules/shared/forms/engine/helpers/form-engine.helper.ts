@@ -68,7 +68,7 @@ export class FormEngineHelper {
           break;
 
         default: // Creates a standard FormControl.
-          form.addControl(parameter.id, FormEngineHelper.createParameterFormControl(parameter, parameterValue, { updateOn: 'change' }));
+          form.addControl(parameter.id, FormEngineHelper.createParameterFormControl(parameter, parameterValue, { updateOn: 'blur' }));
           break;
       }
 
