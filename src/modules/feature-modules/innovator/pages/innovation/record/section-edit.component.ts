@@ -120,6 +120,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     const formData = this.formEngineComponent?.getFormValues();
 
+    Object.keys(formData?.data || {}).forEach(key => {
+      const value = formData!.data[key];
+      if (typeof value === "string") {
+        formData!.data[key] = value === '' ? null : value;
+      }
+    });
+
     if (action === 'previous') {
       this.wizard.addAnswers(formData?.data || {}).runRules();
       if (this.wizard.isFirstStep()) { this.redirectTo(this.baseUrl); }
