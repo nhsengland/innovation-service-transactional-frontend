@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { UntypedFormControl, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormGroup } from '@app/base/forms';
@@ -24,7 +24,7 @@ export class PageTermsOfUseNewComponent extends CoreComponent implements OnInit 
   form = new FormGroup({
     name: new UntypedFormControl('', [Validators.maxLength(500), CustomValidators.required('Please enter the name of terms of use')]),
     touType: new UntypedFormControl('', [CustomValidators.required('Please select one of the options')]),
-    summary: new UntypedFormControl(''),
+    summary: new UntypedFormControl('', [Validators.maxLength(2000), CustomValidators.required('Please enter the summary of terms of use')]),
     notifyUser: new UntypedFormControl(0, { updateOn: 'change' })
   }, { updateOn: 'blur' });
 
