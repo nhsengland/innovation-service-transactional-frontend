@@ -161,14 +161,16 @@ export class WizardOrganisationUnitActivateComponent extends CoreComponent imple
       this.wizard.data.organisation.id,
       this.wizard.data.organisationUnit.id,
       this.wizard.data.usersStep.users.map(item => item.id)
-    ).subscribe(
-      () => this.redirectTo(`/admin/organisations/${this.wizard.data.organisation.id}`, { alert: 'organisationUnitActivateSuccess' }),
-      () => {
+    ).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('You have successfully activated the organisation unit.');
+        this.redirectTo(`/admin/organisations/${this.wizard.data.organisation.id}/unit/${this.wizard.data.organisationUnit.id}`);
+      },
+      error: () => {
         this.onSummaryStepIn();
         this.setAlertUnknownError();
       }
-    );
-
+    });
   }
 
 }

@@ -50,10 +50,31 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninInnovati
     innovatorService = TestBed.inject(InnovatorService);
     organisationsService = TestBed.inject(OrganisationsService);
 
-    organisationsService.getOrganisationUnitUsersList = () => of([
-      { id: 'orgId01', name: 'Org name 01', organisationUnitUserId: 'OrgUnitId01', role: UserRoleEnum.QUALIFYING_ACCESSOR, roleDescription: 'Qualifying accessor', isActive: true, lockedAt: undefined  },
-      { id: 'orgId02', name: 'Org name 02', organisationUnitUserId: 'OrgUnitId02', role: UserRoleEnum.ACCESSOR, roleDescription: 'Accessor', isActive: true, lockedAt: undefined   }
-    ]);
+    organisationsService.getOrganisationUnitUsersList = () => of({
+      count: 2,
+      data: [
+        {
+          id: 'orgId01',
+          isActive: true,
+          name: 'Org name 01',  
+          role: UserRoleEnum.QUALIFYING_ACCESSOR,
+          roleDescription: 'Qualifying accessor',
+          lockedAt: null,  
+          organisationUnitUserId: 'OrgUnitId01',
+          email: '',
+        },
+        {
+          id: 'orgId02',
+          isActive: true,
+          name: 'Org name 02',  
+          role: UserRoleEnum.ACCESSOR,
+          roleDescription: 'Accessor',
+          lockedAt: null,  
+          organisationUnitUserId: 'OrgUnitId02',
+          email: '',
+        }
+      ]
+    });
 
   });
 
