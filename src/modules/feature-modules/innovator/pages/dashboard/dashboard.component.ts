@@ -21,6 +21,8 @@ import { GetInnovationCollaboratorInvitesDTO, GetInnovationTransfersDTO, Innovat
 })
 export class PageDashboardComponent extends CoreComponent implements OnInit {
 
+  userResearchLink: string = 'https://forms.office.com/Pages/ResponsePage.aspx?id=kp4VA8ZyI0umSq9Q55CtvztdgIut6i1ClsC8hAncvh9UN0E2UEVON09BNjNMS1daRjZVMFJHRkNaMCQlQCN0PWcu';
+
   user: {
     displayName: string,
     innovationsOwner: { id: string, name: string, description: null | string, groupedStatus: keyof typeof InnovationGroupedStatusEnum }[],

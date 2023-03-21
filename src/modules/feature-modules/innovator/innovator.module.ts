@@ -39,15 +39,17 @@ import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
+import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
+import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 
 // Components.
 import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
+import { ManageGuard } from './guards/manage.guard';
 
 // Services.
-import { ManageInnovationGuard } from './guards/manage-innovation.guard';
 import { InnovatorService } from './services/innovator.service';
 
 
@@ -93,6 +95,8 @@ import { InnovatorService } from './services/innovator.service';
     InnovationSectionEvidenceEditComponent,
     InnovationSectionEditComponent,
     InnovationNewComponent,
+    PageInnovationManageAccessOverviewComponent,
+    PageInnovationManageAccessLeaveInnovationComponent,
 
     // Components.
     OrganisationSuggestionsCardComponent
@@ -100,7 +104,7 @@ import { InnovatorService } from './services/innovator.service';
   providers: [
     // Guards.
     FirstTimeSigninGuard,
-    ManageInnovationGuard,
+    ManageGuard,
 
     // Services.
     InnovatorService

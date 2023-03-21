@@ -1,6 +1,6 @@
 <ul class="nhsuk-grid-row nhsuk-card-group">
   <li *ngFor="let item of cardsList" class="{{gridClass}} nhsuk-card-group__item">
-    <div class="nhsuk-card nhsuk-card--clickable">
+    <div class="nhsuk-card nhsuk-card">
       <div class="nhsuk-card__content nhsuk-u-padding-4 height-100 d-flex flex-direction-column justify-content-space-between">
         <h2 class="nhsuk-card__heading nhsuk-heading-m">
           <a routerLink="{{ item.link }}" [queryParams]=item.queryParams class="nhsuk-card__link">

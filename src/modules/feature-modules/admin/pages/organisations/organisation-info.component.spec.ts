@@ -15,6 +15,7 @@ import { PageOrganisationInfoComponent } from './organisation-info.component';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { USER_INFO_ADMIN } from '@tests/data.mocks';
+import { UsersService } from '@modules/shared/services/users.service';
 
 
 describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent', () => {
@@ -23,6 +24,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
   let fixture: ComponentFixture<PageOrganisationInfoComponent>;
   let activatedRoute: ActivatedRoute;
   let organisationsService: OrganisationsService;
+  let usersService: UsersService;
   let authenticationStore: AuthenticationStore;
 
   beforeEach(() => {
@@ -41,6 +43,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
     authenticationStore = TestBed.inject(AuthenticationStore);
     activatedRoute = TestBed.inject(ActivatedRoute);
     organisationsService = TestBed.inject(OrganisationsService);
+    usersService = TestBed.inject(UsersService);
 
     authenticationStore.getUserInfo = () => USER_INFO_ADMIN;
   });
@@ -151,21 +154,21 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
           users: []
         }
       ]
-
     };
-    organisationsService.getOrganisationUnitUsersList = () => of([
-  
-      {
+
+    usersService.getUsersList = () => of({
+      count: 1,
+      data: [{
         id: 'user01',
-        organisationUnitUserId: '',
-        name: 'user01',
-        email: 'some@email.com',
+        isActive: true,
+        name: 'user01',  
         role: UserRoleEnum.ACCESSOR,
         roleDescription: 'Accessor',
-        isActive: true,
-        lockedAt: undefined
-      }
-    ]);
+        lockedAt: null,  
+        organisationUnitUserId: '',
+        email: 'some@email.com',
+      }]
+    });
 
     component.onUnitUsersShowHideClicked('Unit01');
     expect(component.organisation.organisationUnits[0].showHideStatus).toEqual('opened');
@@ -173,7 +176,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
   });
 
   it('should throw error when getUsersByUnitId() called', () => {
-    organisationsService.getOrganisationUnitUsersList = () => throwError(()=> { new Error('error')});
+    usersService.getUsersList = () => throwError(()=> { new Error('error')});
 
     fixture = TestBed.createComponent(PageOrganisationInfoComponent);
     component = fixture.componentInstance;

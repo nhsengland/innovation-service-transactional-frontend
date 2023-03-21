@@ -33,9 +33,9 @@ export class InnovationChangeAssessorComponent extends CoreComponent  implements
   ngOnInit(): void {
     this.setPageTitle('Assign a new needs assessor to support this innovation');
 
-    this.usersService.getAssessmentUsersList().subscribe((userList) => {
+    this.usersService.getUsersList().subscribe((userList) => {
       const innovation = this.stores.context.getInnovation();
-      this.needsAssessorList = userList.filter(i => i.id !== innovation.assignedTo?.id);
+      this.needsAssessorList = userList.data.filter(i => i.id !== innovation.assignedTo?.id);
 
       this.setBackLink('Go Back', `/assessment/innovations/${this.innovationId}/overview`, `Innovation Overview page`);
       this.setPageStatus('READY');

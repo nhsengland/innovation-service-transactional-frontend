@@ -11,6 +11,7 @@ import { UrlModel } from '@app/base/models';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationSectionEnum } from '@modules/stores/innovation';
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
+import { UtilsHelper } from '@app/base/helpers';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   alertErrorsList: { title: string, description: string }[] = [];
+  errorOnSubmitStep: boolean = false;
 
   innovation: ContextInnovationType;
   sectionId: InnovationSectionEnum;
@@ -119,6 +121,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     const formData = this.formEngineComponent?.getFormValues();
 
+    Object.keys(formData?.data || {}).forEach(key => {
+      const value = formData!.data[key];
+      if (typeof value === "string") {
+        formData!.data[key] = UtilsHelper.isEmpty(value) ? null : value;
+      }
+    });
+
     if (action === 'previous') {
       this.wizard.addAnswers(formData?.data || {}).runRules();
       if (this.wizard.isFirstStep()) { this.redirectTo(this.baseUrl); }
@@ -147,7 +156,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     of(true).pipe(
       concatMap(() => {
 
-        if (shouldUpdateInformation) {
+        if (shouldUpdateInformation || this.errorOnSubmitStep) {
           return this.stores.innovation.updateSectionInfo$(this.innovation.id, this.sectionId, this.wizard.runOutboundParsing());
         } else {
           return of(true);
@@ -215,11 +224,12 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
           }
 
+          this.errorOnSubmitStep = false;
           this.saveButton = { isActive: true, label: 'Save and continue' };
 
         },
         error: () => {
-
+          this.errorOnSubmitStep = true;
           this.saveButton = { isActive: true, label: 'Save and continue' };
           this.alertErrorsList = [];
           this.setAlertUnknownError();

@@ -41,7 +41,7 @@ export class PageInnovationManageCollaboratorsOverviewComponent extends CoreComp
     this.user = { id: user.id, name: user.displayName, email: user.email };
 
     this.setPageTitle('Invite or manage collaborators');
-    this.setBackLink('Go back', `innovator/innovations/${this.innovation.id}/manage`);
+    this.setBackLink('Go back', `innovator/innovations/${this.innovation.id}/manage/innovation`);
 
     this.activeCollaborators = new TableModel({
       visibleColumns: {

@@ -66,6 +66,11 @@ export const locale = {
             title: 'It appears that something went wrong!',
             message: 'Only the innovation owner can access the requested resource.',
             button_label: 'Go back to home'
+          },
+          forbidden_manage_access: {
+            title: 'It appears that something went wrong!',
+            message: 'Only the collaborator can access the requested resource.',
+            button_label: 'Go back to home'
           }
         },
         page_not_found: {

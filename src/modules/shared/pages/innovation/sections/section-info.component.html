@@ -24,7 +24,7 @@
             This section is not visible to others because you changed it to the 'in draft' status. You need to 'confirm section answers' for the section to become visible.
           </p>
           <p *ngIf="module === 'accessor'">
-            This section is not visible because the innovator has changed it status to "In Draft". If you need to see this section, you can create an action or comment asking them to resubmit.
+            You cannot see this section because it is in draft.<span *ngIf="innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED'"> If you need to see this section, create an action or send a message to the innovator asking them to resubmit it.</span>
           </p>
         </div>
 
