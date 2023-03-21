@@ -9,6 +9,7 @@ import { ContextStore } from '@modules/stores/context/context.store';
 import { InnovationsService } from '../services/innovations.service';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationGroupedStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 /**
@@ -43,7 +44,7 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
         this.contextStore.setInnovation({
           id: response.id,
           name: response.name,
-          status: response.status,
+          status: response.groupedStatus === InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT ? InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT : response.status,
           statusUpdatedAt: response.statusUpdatedAt,
           owner: { isActive: response.owner.isActive, name: response.owner.name },
           loggedUser: { isOwner: response.owner.id === userContext?.id },
