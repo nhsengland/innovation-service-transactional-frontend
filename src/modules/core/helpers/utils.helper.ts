@@ -25,11 +25,11 @@ export class UtilsHelper {
   static getContactPreferenceValue(contactByEmail: boolean = false, contactByPhone: boolean = false, contactByPhoneTimeframe: PhoneUserPreferenceEnum | null = null): string {
     let value = '';
     if (contactByPhone && contactByPhoneTimeframe) {
-      value = `By phone, ${locale.data.shared.catalog.user.contact_user_preferences[contactByPhoneTimeframe].confirmation}. `;
+      value = `By phone, ${locale.data.shared.catalog.user.contact_user_preferences[contactByPhoneTimeframe].confirmation}`;
     }
     
     if (contactByEmail) {
-      value += 'By email.';
+      value += 'By email';
     }
   
     return value;
