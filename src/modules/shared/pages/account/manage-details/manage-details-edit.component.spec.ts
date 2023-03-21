@@ -1,6 +1,6 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -8,15 +8,15 @@ import { of } from 'rxjs';
 
 import { USER_INFO_ACCESSOR } from '@tests/data.mocks';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
-import { SharedModule } from '@modules/shared/shared.module';
+import { AppInjector, CoreModule } from '@modules/core';
 import { FormEngineComponent } from '@modules/shared/forms';
+import { SharedModule } from '@modules/shared/shared.module';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { PageAccountManageDetailsEditComponent } from './manage-details-edit.component';
 
-import { ACCOUNT_DETAILS_INNOVATOR } from './manage-details-edit-innovator.config';
 import { ACCOUNT_DETAILS_ACCESSOR } from './manage-details-edit-accessor.config';
+import { ACCOUNT_DETAILS_INNOVATOR } from './manage-details-edit-innovator.config';
 
 describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditComponent', () => {
 
@@ -133,7 +133,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
     activatedRoute.params = of({ stepId: 1 }); // Simulate activatedRoute.params subscription.
     authenticationStore.isInnovatorType = () => true;
 
-    const expected =   {
+    const expected = {
       displayName: 'Test qualifying Accessor',
       mobilePhone: '212000000',
       isCompanyOrOrganisation: 'YES',
@@ -142,6 +142,9 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
       organisationAdditionalInformation: { id: 'org_id' },
       contactByPhoneTimeframe: null,
       contactDetails: null,
+      hasRegistrationNumber: 'NO',
+      organisationDescription: 'Sole trader',
+      organisationRegistrationNumber: null,
       contactPreferences: []
     };
 
