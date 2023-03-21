@@ -4,6 +4,17 @@
 
     <div class="nhsuk-grid-column-two-thirds">
 
+      <div *ngIf="user.innovationsOwner.length === 0 && innovationTransfers.length === 0 && inviteCollaborations.length === 0" class="nhsuk-grid-row">
+        <div class="nhsuk-card">
+          <div class="nhsuk-card__content">
+            <h2 class="nhsuk-card__heading nhsuk-heading-m">Welcome to the Innovation Service</h2>
+
+            <p class="nhsuk-card__description nhsuk-u-margin-bottom-0 font-color-secondary">Add your innovation and answer questions about it to complete your innovation record.</p>
+            <a routerLink="/innovator/innovations/new" class="nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-action-link__text nhsuk-u-margin-top-2">Add innovation</a>
+          </div>
+        </div>
+      </div>
+
       <ul *ngIf="innovationTransfers.length > 0" class="nhsuk-grid-row nhsuk-card-group">
         <li *ngFor="let item of innovationTransfers" class="nhsuk-grid-column-full nhsuk-card-group__item">
           <div class="nhsuk-card">
@@ -24,7 +35,7 @@
               <h2 class="nhsuk-card__heading nhsuk-heading-m">You have been invited to collaborate on '{{item.innovation.name}}' innovation by its owner</h2>
 
               <p class="nhsuk-card__description nhsuk-u-margin-bottom-0 font-color-secondary">You have until {{item.invitedAt | date: ('app.date_formats.medium_date' | translate)}} to respond to this invite.</p>
-              <a routerLink="/innovator/innovations/{{ item.innovation.id }}/collaborations/{{ item.id }}" class="nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-margin-right-2 nhsuk-action-link__text">
+              <a routerLink="/innovator/innovations/{{ item.innovation.id }}/collaborations/{{ item.id }}" class="nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-action-link__text">
                 See invitation <span class="nhsuk-u-visually-hidden"> Access collaboration invites </span>
               </a>
             </div>
@@ -59,7 +70,7 @@
 
       <a routerLink="/innovator/innovations/new" class="nhsuk-action-link__link nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-3">
         <theme-svg-icon type="action"></theme-svg-icon>
-        <span class="nhsuk-action-link__text"> Add another innovation </span>
+        <span class="nhsuk-action-link__text">Add innovation</span>
       </a>
 
       <div class="nhsuk-card x-card-top-border">

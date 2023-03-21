@@ -1,12 +1,12 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { FirstTimeSigninGuard } from './first-time-signin.guard';
 
@@ -34,7 +34,7 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
 
     guard = TestBed.inject(FirstTimeSigninGuard);
     authenticationStore = TestBed.inject(AuthenticationStore);
-    
+
     routerStateSnapshopMock = { url: '' };
 
   });
@@ -70,18 +70,6 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
 
   describe('User is NOT valid tests', () => {
 
-    it('should allow to access the route WITH innovations transfer pending', () => {
-
-      const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovation-transfer-acceptance' } };
-      let expected: null | boolean = null;
-
-      authenticationStore.hasInnovationTransfers = () => true;
-
-      guard.canActivateChild(routeMock as any, routerStateSnapshopMock as any).subscribe(response => { expected = response; });
-      expect<null | boolean>(expected).toBe(true);
-
-    });
-
     it('should redirect to the Innovation Transfer Acceptance WITH innovations transfer pending', () => {
 
       const routeMock: Partial<ActivatedRouteSnapshot> = {};
@@ -93,7 +81,7 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
       guard.canActivateChild(routeMock as any, routerStateSnapshopMock as any).subscribe(response => { expected = response; });
 
       expect<null | boolean>(expected).toBe(false);
-      expect(routerSpy).toHaveBeenCalledWith(['/innovator/innovation-transfer-acceptance']);
+      expect(routerSpy).toHaveBeenCalledWith(['/innovator/first-time-signin']);
 
     });
 
@@ -125,11 +113,11 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
     });
 
   });
-  
+
   it('should allow access to terms of use', () => {
 
     const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'terms-of-use' } };
-    const routerStateSnapshopMock: Partial<RouterStateSnapshot> = {url: 'terms-of-use'};
+    const routerStateSnapshopMock: Partial<RouterStateSnapshot> = { url: 'terms-of-use' };
     let expected: null | boolean = null;
 
     authenticationStore.hasInnovationTransfers = () => false;
