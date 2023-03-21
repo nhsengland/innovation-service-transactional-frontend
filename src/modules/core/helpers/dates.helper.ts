@@ -29,9 +29,9 @@ export class DatesHelper {
       "dd/MM/yyyy",
       "yyyy/MM/dd",
       "MM/dd/yyyy",
-      "d/MM/yyyy",
-      "dd/MM",
-      "MM/dd",
+      "d/M/yyyy",
+      "d/M",
+      "M/d",
       "yyyy"
     ];
 
