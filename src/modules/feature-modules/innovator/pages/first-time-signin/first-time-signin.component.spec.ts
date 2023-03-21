@@ -13,12 +13,6 @@ import { FirstTimeSigninComponent } from './first-time-signin.component';
 
 import { InnovatorService } from '../../services/innovator.service';
 
-<<<<<<< HEAD:src/modules/feature-modules/innovator/pages/first-time-signin/first-time-signin.component.spec.ts
-=======
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { UserRoleEnum } from '@app/base/enums';
-import { UsersService } from '@modules/shared/services/users.service';
->>>>>>> fa351be7555d84422c1c6a12af9ab54257796b20:src/modules/feature-modules/innovator/pages/first-time-signin/innovation-new.component.spec.ts
 
 
 describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninComponent', () => {
@@ -28,11 +22,6 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninComponen
 
   let authenticationStore: AuthenticationStore;
   let innovatorService: InnovatorService;
-<<<<<<< HEAD:src/modules/feature-modules/innovator/pages/first-time-signin/first-time-signin.component.spec.ts
-=======
-  let organisationsService: OrganisationsService;
-  let usersService: UsersService;
->>>>>>> fa351be7555d84422c1c6a12af9ab54257796b20:src/modules/feature-modules/innovator/pages/first-time-signin/innovation-new.component.spec.ts
 
   let component: FirstTimeSigninComponent;
   let fixture: ComponentFixture<FirstTimeSigninComponent>;
@@ -55,37 +44,6 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninComponen
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     innovatorService = TestBed.inject(InnovatorService);
-<<<<<<< HEAD:src/modules/feature-modules/innovator/pages/first-time-signin/first-time-signin.component.spec.ts
-=======
-    organisationsService = TestBed.inject(OrganisationsService);
-    usersService = TestBed.inject(UsersService);
-
-    usersService.getUsersList = () => of({
-      count: 2,
-      data: [
-        {
-          id: 'orgId01',
-          isActive: true,
-          name: 'Org name 01',  
-          role: UserRoleEnum.QUALIFYING_ACCESSOR,
-          roleDescription: 'Qualifying accessor',
-          lockedAt: null,  
-          organisationUnitUserId: 'OrgUnitId01',
-          email: '',
-        },
-        {
-          id: 'orgId02',
-          isActive: true,
-          name: 'Org name 02',  
-          role: UserRoleEnum.ACCESSOR,
-          roleDescription: 'Accessor',
-          lockedAt: null,  
-          organisationUnitUserId: 'OrgUnitId02',
-          email: '',
-        }
-      ]
-    });
->>>>>>> fa351be7555d84422c1c6a12af9ab54257796b20:src/modules/feature-modules/innovator/pages/first-time-signin/innovation-new.component.spec.ts
 
   });
 
