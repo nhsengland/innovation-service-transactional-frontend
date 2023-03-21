@@ -112,7 +112,7 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
       parameters: [{
         id: 'isCompanyOrOrganisation',
         dataType: 'radio-group',
-        label: 'Are you signing up to the service as part of a company or organisation?',
+        label: 'Are you part of a company or organisation?',
         validations: { isRequired: [true, 'Choose one option'] },
         items: [
           {
