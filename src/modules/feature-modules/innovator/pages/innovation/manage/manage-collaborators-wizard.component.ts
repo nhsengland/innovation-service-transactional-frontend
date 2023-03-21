@@ -43,7 +43,7 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
     this.innovation = this.stores.context.getInnovation();
     this.baseUrl = `innovator/innovations/${this.innovation.id}/manage/innovation/collaborators`;
     this.action = this.router.url.endsWith('edit') ? 'update' : 'create';
-    this.submitButton.label = this.action === 'create' ? 'Add new user' : 'Update user';
+    this.submitButton.label = this.action === 'create' ? 'Send invitation' : 'Update collaborator';
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
 
@@ -135,7 +135,7 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
 
       this.innovationsService.createInnovationCollaborator(this.innovation.id, body).subscribe({
         next: () => {
-          this.setRedirectAlertSuccess(`An invitation has been sent to ${body.email} to collaborate on ${this.innovation.name}`, { message: 'This invitation will expire in 30 days if not accepted.' });
+          this.setRedirectAlertSuccess(`An invitation has been sent to ${body.email} to collaborate on '${this.innovation.name}'`, { message: 'This invitation will expire in 30 days if not accepted.' });
           this.redirectTo(this.baseUrl);
         },
         error: (error: HttpErrorResponse) => {

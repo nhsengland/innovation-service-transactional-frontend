@@ -108,11 +108,11 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     }
 
-    this.organisationsService.getOrganisationUnitUsersList(this.userOrganisationUnit?.id ?? '', { onlyActive: true }).subscribe(
+    this.organisationsService.getOrganisationUnitUsersList({ queryParams: { take: 100, skip: 0, filters: { email: false, onlyActive: true, organisationUnitId: this.userOrganisationUnit?.id ?? ''} }}).subscribe(
       response => {
 
-        this.accessorsList = response;
-        this.formAccessorsList = response.map((r) => ({ value: r.id, label: r.name }));
+        this.accessorsList = response.data.map((item) => ({ id: item.id, organisationUnitUserId: item.organisationUnitUserId, name: item.name }));
+        this.formAccessorsList = response.data.map((r) => ({ value: r.id, label: r.name }));
 
       }
     );

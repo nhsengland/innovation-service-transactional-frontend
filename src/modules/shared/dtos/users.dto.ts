@@ -22,3 +22,9 @@ export type UserSearchDTO = {
     }[]
   }[]
 };
+
+
+export type UsersListDTO = {
+  count: number;
+  data: UserSearchDTO[];
+}

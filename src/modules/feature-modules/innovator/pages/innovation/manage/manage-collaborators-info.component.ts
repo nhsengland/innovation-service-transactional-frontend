@@ -93,11 +93,14 @@ export class PageInnovationManageCollaboratorsInfoComponent extends CoreComponen
       case 'cancel':
         body.status = InnovationCollaboratorStatusEnum.CANCELLED;
         successMessage = `You have cancelled the invite sent to ${this.innovationCollaboration?.name ?? this.innovationCollaboration?.email}`;
+        this.setRedirectAlertInformation(successMessage);
         break;
 
       case 'remove':
         body.status = InnovationCollaboratorStatusEnum.REMOVED;
-        successMessage = `You have removed ${this.innovationCollaboration?.name ?? this.innovationCollaboration?.email} from ${this.innovation.name}`;
+        successMessage = `You have removed ${this.innovationCollaboration?.name ?? this.innovationCollaboration?.email} from '${this.innovation.name}'`;
+        this.setRedirectAlertSuccess(successMessage);
+
         break;
 
       default:
@@ -107,7 +110,6 @@ export class PageInnovationManageCollaboratorsInfoComponent extends CoreComponen
 
     this.innovationsService.updateInnovationCollaborator(this.innovation.id, this.innovationCollaboratorId, body).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess(successMessage);
         this.redirectTo(this.baseUrl);
       },
       error: () => {

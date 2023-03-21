@@ -30,7 +30,7 @@ export let FIRST_TIME_SIGNIN_ACCOUNT_ONLY_QUESTIONS: WizardEngineModel = new Wiz
     new FormEngineModel({
       parameters: [{
         id: 'mobilePhone',
-        dataType: 'text',
+        dataType: 'number',
         label: 'What is your phone number (optional)',
         description: 'If you would like to be contacted by phone about your innovation, please provide a contact number.',
         validations: { maxLength: 20 }

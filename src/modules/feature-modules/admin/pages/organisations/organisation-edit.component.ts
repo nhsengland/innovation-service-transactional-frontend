@@ -120,15 +120,19 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
         );
         break;
       case 'Unit':
-        this.adminOrganisationsService.updateUnit(body, this.securityConfirmation, this.unitId, this.organisationId).subscribe(
-          response => {
-            (response.unitId) ?
-              this.redirectTo(`admin/organisations/${this.organisationId}`, { alert: 'updateUnitSuccess' })
-              : this.alert = { type: 'ERROR', title: 'Error updating unit' };
+        this.adminOrganisationsService.updateUnit(body, this.securityConfirmation, this.unitId, this.organisationId).subscribe({
+          next: (response) => {
+            if (response.unitId) {
+              this.setRedirectAlertSuccess('You have successfully updated the organisation unit.');
+            } else {
+              this.setRedirectAlertError('Error updating unit')
+            }
+            this.redirectTo(`admin/organisations/${this.organisationId}/unit/${this.unitId}`);
+
             this.submitBtnClicked = false;
           },
-          error => this.errorResponse(error)
-        );
+          error: (err) => this.errorResponse(err)
+        });
         break;
       default:
         break;
