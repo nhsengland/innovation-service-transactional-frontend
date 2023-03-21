@@ -151,21 +151,21 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
           users: []
         }
       ]
-
     };
-    organisationsService.getOrganisationUnitUsersList = () => of([
-  
-      {
+
+    organisationsService.getOrganisationUnitUsersList = () => of({
+      count: 1,
+      data: [{
         id: 'user01',
-        organisationUnitUserId: '',
-        name: 'user01',
-        email: 'some@email.com',
+        isActive: true,
+        name: 'user01',  
         role: UserRoleEnum.ACCESSOR,
         roleDescription: 'Accessor',
-        isActive: true,
-        lockedAt: undefined
-      }
-    ]);
+        lockedAt: null,  
+        organisationUnitUserId: '',
+        email: 'some@email.com',
+      }]
+    });
 
     component.onUnitUsersShowHideClicked('Unit01');
     expect(component.organisation.organisationUnits[0].showHideStatus).toEqual('opened');
