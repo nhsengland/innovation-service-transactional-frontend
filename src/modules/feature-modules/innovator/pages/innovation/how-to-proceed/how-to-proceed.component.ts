@@ -1,3 +1,4 @@
+import { getUserMinimalInfoDTO } from './../../../../admin/services/service-users.service';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -38,16 +39,6 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
         value: FormFieldActionsEnum.NEEDS_REASSESSMENT,
         label: `See if you qualify for a needs reassessment`,
         description: `You might want to submit your innovation for a needs reassessment if you have significantly progressed your innovation or introduced major changes since the first Needs Assessment. This might mean you need a different type of support.`
-      },
-      {
-        value: FormFieldActionsEnum.WITHDRAW,
-        label: `Withdraw your innovation`,
-        description: `You might want to withdraw your innovation if you no longer need support from the organisations. Your current innovation will be closed, but you will keep your Innovation service account.`
-      },
-      {
-        value: FormFieldActionsEnum.DELETE_ACCOUNT,
-        label: `Delete your account`,
-        description: `If you delete your account your innovation will be withdrawn and you will no longer have access to the Innovation service.`
       }
     ]
   };
@@ -59,6 +50,21 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
 
     super();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    const isOwner = this.stores.context.getInnovation().loggedUser.isOwner;
+
+    if (isOwner) {
+      this.formfieldAction.items.push({
+        value: FormFieldActionsEnum.WITHDRAW,
+        label: `Withdraw your innovation`,
+        description: `You might want to withdraw your innovation if you no longer need support from the organisations. Your current innovation will be closed, but you will keep your Innovation Service account.`
+      },
+      {
+        value: FormFieldActionsEnum.DELETE_ACCOUNT,
+        label: `Delete your account`,
+        description: `If you delete your account your innovation will be withdrawn and you will no longer have access to the Innovation Service.`
+      });
+    }
+
     this.baseUrl = `/innovator/innovations/${this.innovationId}`;
 
     this.setPageTitle(this.formfieldAction.title, { showPage: false });
@@ -82,7 +88,7 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
 
     switch (this.form.get('action')?.value) {
       case FormFieldActionsEnum.WITHDRAW:
-        this.redirectTo('/innovator/account/manage-innovations/withdraw', { innovationId: this.innovationId });
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/withdraw`);
         break;
 
       case FormFieldActionsEnum.DELETE_ACCOUNT:

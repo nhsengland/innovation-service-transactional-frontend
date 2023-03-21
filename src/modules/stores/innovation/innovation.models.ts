@@ -34,6 +34,10 @@ export type InnovationSectionInfoDTO = {
   updatedAt: string;
   data: MappedObjectType;
   submittedAt: string;
+  submittedBy: null | {
+    name: string,
+    isOwner: boolean,
+  },
   actionsIds?: string[];
 }
 
@@ -63,6 +67,10 @@ export type InnovationSectionsListDTO = {
   section: InnovationSectionEnum,
   status: keyof typeof INNOVATION_SECTION_STATUS,
   submittedAt: null | DateISOType,
+  submittedBy: null | {
+      name: string,
+      isOwner: boolean
+  },
   openActionsCount: number
 }[];
 
@@ -82,6 +90,11 @@ export type SectionsSummaryModel = {
     id: InnovationSectionEnum,
     title: string,
     status: keyof typeof INNOVATION_SECTION_STATUS,
+    submittedAt: null | DateISOType,
+    submittedBy: null | {
+        name: string,
+        isOwner: boolean
+    },
     isCompleted: boolean,
     openActionsCount: number
   }[]

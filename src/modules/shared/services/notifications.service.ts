@@ -27,7 +27,7 @@ export type NotificationsListInDTO = {
   count: number;
   data: {
     id: string;
-    innovation: { id: string, name: string, status: InnovationStatusEnum };
+    innovation: { id: string, name: string, status: InnovationStatusEnum, ownerName: string };
     contextType: NotificationContextTypeEnum;
     contextDetail: NotificationContextDetailEnum;
     contextId: string;
@@ -55,6 +55,7 @@ export type NotificationsListOutDTO = {
       params: null | {
         innovationId: string;
         innovationName: string;
+        innovationOwnerName: string;
         innovationStatus: string;
         sectionNumber?: string;
         actionStatusName?: string;
@@ -100,6 +101,15 @@ export class NotificationsService extends CoreService {
               link = { label: 'Click to go to innovation assessment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/assessments/${item.contextId}` };
               break;
             case NotificationContextTypeEnum.INNOVATION:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.COLLABORATOR_INVITE:
+                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.contextId}` };
+                  break;
+                default:
+                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
+                  break;
+              };
+              break;
             case NotificationContextTypeEnum.SUPPORT:
               link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
               break;
@@ -127,6 +137,7 @@ export class NotificationsService extends CoreService {
               innovationId: item.innovation.id,
               innovationName: item.innovation.name,
               innovationStatus: item.innovation.status,
+              innovationOwnerName: item.innovation.ownerName,
               sectionNumber: item.params?.section ? getSectionNumber(item.params.section) : undefined,
               actionStatusName: item.params?.actionStatus ? this.translate(`shared.catalog.innovation.action_status.${item.params?.actionStatus}.name`) : undefined,
               supportStatusName: item.params?.supportStatus ? this.translate(`shared.catalog.innovation.support_status.${item.params?.supportStatus}.name`) : undefined,

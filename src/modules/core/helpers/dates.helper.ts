@@ -12,6 +12,14 @@ export class DatesHelper {
 
   }
 
+  static addDaysToDate(startDate: string, days: number): string {
+    let sDate = new Date(startDate);
+
+    sDate.setDate(sDate.getDate() + days);
+
+    return sDate.toString();
+  }
+
   static parseIntoValidFormat(dateStr: string | null, format = "yyyy/MM/dd"): string | null {
     if (dateStr === null) {
       return null;

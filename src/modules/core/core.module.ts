@@ -13,6 +13,7 @@ import { ApiOutInterceptor } from './interceptors/api-out.interceptor';
 import { AuthenticationGuard } from './guards/authentication.guard';
 import { AuthenticationRedirectionGuard } from './guards/authentication-redirection.guard';
 import { InnovationTransferRedirectionGuard } from './guards/innovation-transfer-redirection.guard';
+import { InnovationCollaborationRedirectionGuard } from './guards/innovation-collaboration-redirection.guard';
 
 // Stores.
 import { EnvironmentVariablesStore } from './stores/environment-variables.store';
@@ -46,6 +47,7 @@ import { LoggerService } from './services/logger.service';
     AuthenticationGuard,
     AuthenticationRedirectionGuard,
     InnovationTransferRedirectionGuard,
+    InnovationCollaborationRedirectionGuard,
 
     // Stores.
     EnvironmentVariablesStore,

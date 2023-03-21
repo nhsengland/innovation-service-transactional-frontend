@@ -16,6 +16,7 @@ export const USER_INFO_ACCESSOR: Required<AuthenticationModel>['user'] = {
   phone: '212000000',
   termsOfUseAccepted: true,
   hasInnovationTransfers: false,
+  hasInnovationCollaborations: false,
   passwordResetAt: '2020-01-01T00:00:00.000Z',
   firstTimeSignInAt: '2020-01-01T00:00:00.000Z',
   organisations: [{
@@ -39,6 +40,7 @@ export const USER_INFO_INNOVATOR: Required<AuthenticationModel>['user'] = {
   phone: '212000000',
   termsOfUseAccepted: true,
   hasInnovationTransfers: false,
+  hasInnovationCollaborations: false,
   passwordResetAt: '2020-01-01T00:00:00.000Z',
   firstTimeSignInAt: '2020-01-01T00:00:00.000Z',
   organisations: [
@@ -60,6 +62,7 @@ export const USER_INFO_ADMIN: Required<AuthenticationModel>['user'] = {
   phone: '212000000',
   termsOfUseAccepted: true,
   hasInnovationTransfers: false,
+  hasInnovationCollaborations: false,
   passwordResetAt: '2020-01-01T00:00:00.000Z',
   firstTimeSignInAt: '2020-01-01T00:00:00.000Z',
   organisations: []
@@ -70,6 +73,8 @@ export const CONTEXT_INNOVATION_INFO: ContextInnovationType = {
   id: 'innovationId01',
   name: 'Test innovation',
   status: InnovationStatusEnum.IN_PROGRESS,
+  statusUpdatedAt: '2020-01-01T00:00:00.000Z',
   owner: { name: 'User name 01', isActive: true },
+  loggedUser: { isOwner: true },
   assessment: { id: 'assessment01' }
 };

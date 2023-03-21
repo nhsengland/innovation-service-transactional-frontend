@@ -1,18 +1,24 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Observable, Observer, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
+import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
+import { LocalStorageHelper } from '@modules/core/helpers/local-storage.helper';
+
 import { Store } from '../store.class';
+
+import { UserRoleEnum } from './authentication.enums';
+import { AuthenticationModel } from './authentication.models';
 import { AuthenticationService, UpdateUserInfoDTO } from './authentication.service';
 
-import { LocalStorageHelper } from '@app/base/helpers';
-import { UserRoleEnum } from './authentication.enums';
-import { AuthenticationModel, UserContext } from './authentication.models';
 
 @Injectable()
 export class AuthenticationStore extends Store<AuthenticationModel> {
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: object,
+    private envVariablesStore: EnvironmentVariablesStore,
     private authenticationService: AuthenticationService
   ) {
     super('store::authentication', new AuthenticationModel());
@@ -26,25 +32,26 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       this.authenticationService.verifyUserSession().pipe(
         concatMap(() => this.authenticationService.getUserInfo()),
         concatMap(user => {
+
           this.state.user = user;
           this.state.isSignIn = true;
 
           if (user.roles.length === 1) {
-            this.state.userContext = {
+
+            this.setUserContext({
+              id: user.id,
               roleId: user.roles[0].id,
               type: user.roles[0].role,
-              ...user.roles[0].organisation && { organisation: {
-                id: user.roles[0].organisation.id,
-                name: user.roles[0].organisation.name,
-                acronym: user.roles[0].organisation.acronym,
-                ...user.roles[0].organisationUnit && { organisationUnit: user.roles[0].organisationUnit }
-              }}
-            }
+              ...user.roles[0].organisation && { organisation: user.roles[0].organisation },
+              ...user.roles[0].organisationUnit && { organisationUnit: user.roles[0].organisationUnit }
+            });
+
           } else {
-            this.findAndPopulateUserContextFromLocalStorage()
+            this.setUserContextFromStorage();
           }
 
           return of(true);
+
         })
       ).subscribe({
         next: () => {
@@ -63,10 +70,19 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
   }
 
+  signOut() {
+
+    LocalStorageHelper.removeItem('userContext');
+    window.location.assign(`${this.envVariablesStore.APP_URL}/signout`); // Full reload to hit SSR.
+
+  }
+
+
   isSignIn(): boolean { return this.state.isSignIn; }
   isTermsOfUseAccepted(): boolean { return this.state.user?.termsOfUseAccepted ?? false; }
   isFirstTimeSignInDone(): boolean { return !!this.state.user?.firstTimeSignInAt ?? false; }
   hasInnovationTransfers(): boolean { return this.state.user?.hasInnovationTransfers || false; }
+  hasInnovationCollaborations(): boolean { return this.state.user?.hasInnovationCollaborations || false;  }
 
   isAccessorType(): boolean { return [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(this.state.userContext?.type as UserRoleEnum); }
 
@@ -78,7 +94,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   // remove and or change logic to use the other roles
   // isServiceTeamRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.SERVICE_TEAM) || false; }
 
-  isFromOrganisationUnit(orgUnitId?: string): boolean { return orgUnitId !== undefined && this.state.userContext?.organisation?.organisationUnit?.id === orgUnitId; }
+  isFromOrganisationUnit(orgUnitId?: string): boolean { return orgUnitId !== undefined && this.state.userContext?.organisationUnit?.id === orgUnitId; }
 
   hasMultipleRoles(): boolean { return (this.state.user && this.state.user?.roles.length > 1) ?? false; }
 
@@ -100,37 +116,42 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   getAccessorOrganisationUnitName(): string {
-    return this.state.userContext?.organisation?.organisationUnit?.name || '';
+    return this.state.userContext?.organisationUnit?.name || '';
   }
 
   getUserInfo(): Required<AuthenticationModel>['user'] {
-    return this.state.user || { id: '', email: '', displayName: '', roles: [], contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, phone: null, contactDetails: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
+    return this.state.user || { id: '', email: '', displayName: '', roles: [], contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, phone: null, contactDetails: null, termsOfUseAccepted: false, hasInnovationTransfers: false, hasInnovationCollaborations: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
   }
 
   updateUserInfo$(body: UpdateUserInfoDTO): Observable<{ id: string }> {
     return this.authenticationService.updateUserInfo(body);
   }
 
+
   getUserContextInfo(): AuthenticationModel['userContext'] {
     return this.state.userContext;
   }
 
-  findAndPopulateUserContextFromLocalStorage(): void {
-    const currentRole = LocalStorageHelper.getObjectItem<UserContext>("role");
+  setUserContextFromStorage(): void {
+
+    const currentRole = LocalStorageHelper.getObjectItem<AuthenticationModel['userContext']>('userContext');
 
     if (currentRole) {
-      this.state.userContext = {
-        roleId: currentRole.roleId,
-        type: currentRole.type,
-        ...currentRole.organisation && { organisation: currentRole.organisation}
-      };
+      this.setUserContext(currentRole);
     } else {
       this.state.userContext = undefined;
     }
+
   }
 
-  updateSelectedUserContext(userContext: Required<AuthenticationModel>['userContext']): void {
+  setUserContext(userContext: Required<AuthenticationModel>['userContext']): void {
+
+    if (isPlatformBrowser(this.platformId)) {
+      LocalStorageHelper.setObjectItem('userContext', userContext);
+    }
+
     this.state.userContext = userContext;
+
   }
 
   getUserTypeDescription(userType: UserRoleEnum): string {
@@ -148,6 +169,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   getRoleDescription(role: string): string {
     switch (role) {
       case 'ADMIN': return 'Administrator';
+      // Think this one is not used
       case 'INNOVATOR_OWNER': return 'Owner';
       case 'ASSESSMENT': return 'Needs Assessor';
       case 'INNOVATOR': return 'Innovator';

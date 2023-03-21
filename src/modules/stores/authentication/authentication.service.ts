@@ -7,7 +7,7 @@ import { DateISOType } from '@modules/core/interfaces/base.interfaces';
 import { UrlModel } from '@modules/core/models/url.model';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
-import { RoleType } from '@modules/shared/dtos/roles.dto';
+import { UserRoleType } from '@modules/shared/dtos/roles.dto';
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from './authentication.enums';
 
 
@@ -15,7 +15,7 @@ type GetUserInfoDTO = {
   id: string,
   email: string,
   displayName: string,
-  roles: RoleType[],
+  roles: UserRoleType[],
   contactByPhone: boolean,
   contactByEmail:  boolean,
   contactByPhoneTimeframe: PhoneUserPreferenceEnum | null,
@@ -23,16 +23,17 @@ type GetUserInfoDTO = {
   contactDetails: string | null,
   termsOfUseAccepted: boolean,
   hasInnovationTransfers: boolean,
+  hasInnovationCollaborations: boolean,
   passwordResetAt: null | DateISOType,
   firstTimeSignInAt: null | DateISOType,
   organisations: {
     id: string,
     name: string,
     role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
-    acronym: string | null,
+    acronym: string,
     isShadow: boolean,
     size: null | string,
-    organisationUnits: { id: string; name: string; acronym: string; }[]
+    organisationUnits: { id: string, name: string, acronym: string }[]
   }[]
 };
 
@@ -102,6 +103,7 @@ export class AuthenticationService {
         contactDetails: response.contactDetails,
         termsOfUseAccepted: response.termsOfUseAccepted,
         hasInnovationTransfers: response.hasInnovationTransfers,
+        hasInnovationCollaborations: response.hasInnovationCollaborations,
         passwordResetAt: response.passwordResetAt,
         firstTimeSignInAt: response.firstTimeSignInAt,
         organisations: response.organisations

@@ -27,6 +27,8 @@ import { PageOrganisationEditComponent } from './pages/organisations/organisatio
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
+import { PageOrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info/organisation-unit-info.component';
+
 // // Service Users.
 import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-users/service-user-change-organisation-unit.component';
 import { PageServiceUserChangeRoleComponent } from './pages/service-users/service-user-change-role.component';
@@ -85,6 +87,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageOrganisationInfoComponent,
     PageOrganisationsListComponent,
     PageOrganisationUnitNewComponent,
+    PageOrganisationUnitInfoComponent,
     // // Service Users.
     PageServiceUserChangeOrganisationUnitComponent,
     PageServiceUserChangeRoleComponent,
@@ -103,7 +106,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     WizardOrganisationUnitActivateUsersStepComponent,
     WizardOrganisationUnitInactivateComponent,
     WizardOrganisationUnitInactivateUsersStepComponent,
-    WizardOrganisationUnitInactivateInnovationsStepComponent
+    WizardOrganisationUnitInactivateInnovationsStepComponent,
   ],
   providers: [
     // Services.

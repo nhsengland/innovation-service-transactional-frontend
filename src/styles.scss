@@ -395,6 +395,17 @@ $service-manual-container-size: 1100px; // Container width variable.
     }
 
   }
+
+  &.x-card-border-unset {
+    border: unset;
+    background: unset;
+
+    .nhsuk-card__content {
+      padding: 0;
+    }
+
+  }
+
 }
 
 

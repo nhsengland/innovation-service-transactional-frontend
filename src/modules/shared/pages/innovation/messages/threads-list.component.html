@@ -64,13 +64,13 @@
                 <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">
 
                   <ng-container *ngIf="item.lastMessage.createdBy.id === selfUser.id && item.lastMessage.createdBy.organisationUnit?.id === selfUser.organisationUnitId; else notSelfUser">
-                    {{ item.lastMessage.createdBy.name }} (me)
+                    {{ item.lastMessage.createdBy.name }} (Me)
                   </ng-container>
 
                   <ng-template #notSelfUser>
                     <ng-container [ngSwitch]="item.lastMessage.createdBy.type">
                       <ng-container *ngSwitchCase="'ASSESSMENT'">
-                        {{ item.lastMessage.createdBy.name }} (Assessment team)
+                        {{ item.lastMessage.createdBy.name }} (Needs Assessor)
                       </ng-container>
                       <ng-container *ngSwitchCase="'ACCESSOR'">
                         {{ item.lastMessage.createdBy.name }}, {{ item.lastMessage.createdBy.organisationUnit?.acronym }}
@@ -79,7 +79,7 @@
                         {{ item.lastMessage.createdBy.name }}, {{ item.lastMessage.createdBy.organisationUnit?.acronym }}
                       </ng-container>
                       <ng-container *ngSwitchCase="'INNOVATOR'">
-                        {{ item.lastMessage.createdBy.name }} (innovator)
+                        {{ item.lastMessage.createdBy.name }} ({{ item.lastMessage.createdBy.isOwner ? 'Owner' : 'Collaborator' }})
                       </ng-container>
                     </ng-container>
                   </ng-template>

@@ -8,12 +8,13 @@ import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
 import { PageAccountDeleteMessageComponent } from '@modules/shared/pages/account/delete-message/delete-message.component';
 import { PageErrorComponent } from '@modules/shared/pages/error/error.component';
 import { PageNotFoundComponent } from '@modules/shared/pages/error/not-found.component';
+import { PageSwitchContextComponent } from '@modules/shared/pages/switch-context/switch-context.component';
 
 // Guards.
 import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
 import { AuthenticationRedirectionGuard } from '@modules/core/guards/authentication-redirection.guard';
 import { InnovationTransferRedirectionGuard } from '@modules/core/guards/innovation-transfer-redirection.guard';
-import { PageSwitchContextComponent } from '@modules/shared/pages/switch-context/switch-context.component';
+import { InnovationCollaborationRedirectionGuard } from '@modules/core/guards/innovation-collaboration-redirection.guard';
 
 const routes: Routes = [
 
@@ -30,6 +31,14 @@ const routes: Routes = [
   {
     canActivate: [InnovationTransferRedirectionGuard],
     path: 'transfers/:id',
+    pathMatch: 'full',
+    children: []
+  },
+
+  
+  {
+    canActivate: [InnovationCollaborationRedirectionGuard],
+    path: 'innovations/:innovationId/collaborations/:id',
     pathMatch: 'full',
     children: []
   },

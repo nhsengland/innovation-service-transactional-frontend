@@ -123,11 +123,6 @@ export type InnovationSupportInfoDTO = {
   engagingAccessors: { id: string, organisationUnitUserId: string, name: string; }[];
 };
 
-export type InnovationSubmissionDTO = {
-  submittedAllSections: boolean,
-  submittedForNeedsAssessment: boolean
-};
-
 export type InnovationActionsListInDTO = {
   count: number,
   data: {
@@ -155,7 +150,7 @@ export type InnovationActionInfoDTO = {
   description: string,
   createdAt: DateISOType,
   updatedAt: DateISOType,
-  updatedBy: { name: string, role: UserRoleEnum },
+  updatedBy: { name: string, role: UserRoleEnum, isOwner?: boolean },
   createdBy: { id: string, name: string, role: UserRoleEnum, organisationUnit?: { id: string, name: string, acronym?: string} },
   declineReason?: string,
 };

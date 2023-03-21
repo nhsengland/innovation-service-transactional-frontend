@@ -221,7 +221,7 @@ export class PDFGenerator {
     this.currentPosition = (this.documentHeight / 2) - 3.2;
     this.addText('Innovation record export', 48, { color: '#005eb7' }).addVerticalSpace(0.19);
     this.addText(innovationName, 24, { color: '#005eb7' }).addVerticalSpace(0.39);
-    this.addText('NHS Innovation service', 18, { color: '#585858' });
+    this.addText('NHS Innovation Service', 18, { color: '#585858' });
 
     const d = new Date();
     const date = [d.getDate(), d.toLocaleDateString('en-GB', { month: 'long' }), d.getFullYear()].join(' ') + ' at ' + [d.getHours(), d.getMinutes()].join(':');

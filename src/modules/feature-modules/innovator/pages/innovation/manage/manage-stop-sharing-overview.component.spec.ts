@@ -12,9 +12,8 @@ import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.mo
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
-import { PageAccountInnovationsStopSharingComponent } from './innovations-stop-sharing.component';
-
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { PageInnovationManageStopSharingComponent } from './manage-stop-sharing.component';
 
 
 describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsStopSharingComponent', () => {
@@ -26,8 +25,8 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsStopShari
   let innovationsService: InnovationsService;
   let innovatorService: InnovatorService;
 
-  let component: PageAccountInnovationsStopSharingComponent;
-  let fixture: ComponentFixture<PageAccountInnovationsStopSharingComponent>;
+  let component: PageInnovationManageStopSharingComponent;
+  let fixture: ComponentFixture<PageInnovationManageStopSharingComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -55,7 +54,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsStopShari
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(PageAccountInnovationsStopSharingComponent);
+    fixture = TestBed.createComponent(PageInnovationManageStopSharingComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
 

@@ -112,45 +112,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
     super();
 
-    this.setPageTitle('Innovations');
-
     this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT, InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
-
-    this.subscriptions.push(
-      this.activatedRoute.queryParams
-        .subscribe(({ status }: Params) => {
-
-          let preSelectedStatus: InnovationGroupedStatusEnum[] | undefined;
-
-          switch (status) {
-            case 'COMPLETED':
-              this.showOnlyCompleted = true;
-              this.setPageTitle('Assessment completed innovations');
-              this.setBackLink('Go back', `${this.userUrlBasePath()}/innovations`);
-              this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_SUPPORT, InnovationGroupedStatusEnum.RECEIVING_SUPPORT, InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT];
-              break;
-            case 'NEEDS_ASSESSMENT':
-              this.form.get('assignedToMe')?.setValue(true);
-              preSelectedStatus = [InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
-              break;
-            case 'WAITING_NEEDS_ASSESSMENT':
-              preSelectedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT];
-              break;
-            default:
-          }
-
-          if (preSelectedStatus) {
-            preSelectedStatus.forEach(status => (this.form.get('groupedStatuses') as FormArray).push(new FormControl(status)));
-
-            const groupedStatusesFilter = this.filters.find(f => f.key === 'groupedStatuses');
-            if (groupedStatusesFilter) {
-              groupedStatusesFilter.showHideStatus = 'opened';
-            }
-          }
-
-
-        })
-    );
 
     this.innovationsList.setVisibleColumns({
       name: { label: 'Innovation', orderable: true },
@@ -159,12 +121,67 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       groupedStatus: { label: 'Status', orderable: false, align: 'right' },
     }).setOrderBy('submittedAt', 'descending');
 
-    this.reuseRouteStrategy();
-
   }
 
   ngOnInit(): void {
 
+    this.setDatasetGroupedStatuses();
+
+    this.subscriptions.push(
+
+      this.activatedRoute.queryParams
+      .subscribe(({ status }: Params) => {
+
+        this.setPageTitle('Innovations');
+        let preSelectedStatus: InnovationGroupedStatusEnum[] | undefined;
+        this.setDefaultFilters();
+
+        switch (status) {
+          case 'COMPLETED':
+            this.showOnlyCompleted = true;
+            this.setPageTitle('Assessment completed innovations');
+            this.setBackLink('Go back', `${this.userUrlBasePath()}/innovations`);
+            this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_SUPPORT, InnovationGroupedStatusEnum.RECEIVING_SUPPORT, InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT];
+            break;
+          case 'NEEDS_ASSESSMENT':
+            this.form.get('assignedToMe')?.setValue(true);
+            preSelectedStatus = [InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
+            break;
+          case 'WAITING_NEEDS_ASSESSMENT':
+            preSelectedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT];
+            break;
+          default:
+        }
+
+        this.setDatasetGroupedStatuses();
+
+        if (preSelectedStatus) {
+          preSelectedStatus.forEach(status => (this.form.get('groupedStatuses') as FormArray).push(new FormControl(status)));
+
+          const groupedStatusesFilter: FiltersType | undefined = this.filters.find(f => f.key === 'groupedStatuses');
+          if (groupedStatusesFilter) {
+            groupedStatusesFilter.showHideStatus = 'opened';
+          }
+        }
+
+      }),
+
+      this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange())
+
+    );
+
+    this.onFormChange();
+
+  }
+
+  setDefaultFilters(): void{
+    this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT, InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
+    this.form.get('assignedToMe')?.setValue(false);
+    (this.form.get('groupedStatuses') as FormArray).clear();
+    this.showOnlyCompleted = false;
+  }
+
+  setDatasetGroupedStatuses(): void {
     const descriptions = new Map([
       [InnovationGroupedStatusEnum.AWAITING_SUPPORT, 'Waiting for an organisation unit to start supporting this innovation.'],
       [InnovationGroupedStatusEnum.RECEIVING_SUPPORT, 'At least one organisation is supporting the innovation.'],
@@ -172,14 +189,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     ]);
 
     this.datasets.groupedStatuses = this.availableGroupedStatus
-      .map(groupedStatus => ({ label: this.translate(`shared.catalog.innovation.grouped_status.${groupedStatus}.name`), value: groupedStatus, description: descriptions.get(groupedStatus) }))
-
-    this.subscriptions.push(
-      this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange())
-    );
-
-    this.onFormChange();
-
+              .map(groupedStatus => ({ label: this.translate(`shared.catalog.innovation.grouped_status.${groupedStatus}.name`), value: groupedStatus, description: descriptions.get(groupedStatus) }));
   }
 
   getInnovationsList(): void {
@@ -206,7 +216,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    
+
     for (const filter of this.filters) {
 
       if (filter.type === FilterTypeEnum.CHECKBOX) {
@@ -337,10 +347,4 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     return DatesHelper.parseIntoValidFormat(value);
   }
 
-  private reuseRouteStrategy(): void {
-    this.router.routeReuseStrategy.shouldReuseRoute = function () {
-      return false;
-    }
-    this.router.onSameUrlNavigation = 'reload';
-  }
 }

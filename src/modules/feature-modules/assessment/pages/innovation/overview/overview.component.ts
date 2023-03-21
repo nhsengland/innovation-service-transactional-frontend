@@ -9,6 +9,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
 import { forkJoin } from 'rxjs';
 
@@ -27,6 +28,13 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   cardsList: StatisticsCard[] = [];
   showChangeNeedsAssessor: boolean = false;
 
+  innovationCollaborators: {
+    id: string;
+    status: InnovationCollaboratorStatusEnum;
+    name?: string;
+    email?: string;
+    role?: string;
+  }[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -60,7 +68,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       ];
 
       this.innovatorSummary = [
-        { label: 'Name', value: this.innovation.owner.name },
+        { label: 'Owner', value: this.innovation.owner.name },
         { label: 'Contact preference', value: UtilsHelper.getContactPreferenceValue(this.innovation.owner.contactByEmail, this.innovation.owner.contactByPhone, this.innovation.owner.contactByPhoneTimeframe) || '' },
         { label: 'Contact details', value: this.innovation.owner.contactDetails || '' },
         { label: 'Email address', value: this.innovation.owner.email || '' },
@@ -94,6 +102,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
     });
 
+    this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ["active"])
+      .subscribe((innovationCollaborators) => {
+      this.innovationCollaborators = innovationCollaborators.data;
+    });
   }
-
 }

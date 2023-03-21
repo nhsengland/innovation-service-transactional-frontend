@@ -9,9 +9,9 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationCollaboratorStatusEnum, InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { DatePipe } from '@angular/common';
+import { UtilsHelper } from '@app/base/helpers';
 
 
 @Component({
@@ -33,6 +33,14 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovatorDetails: { label: string; value: null | string; }[] = [];
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+
+  innovationCollaborators: {
+    id: string;
+    status: InnovationCollaboratorStatusEnum;
+    name?: string;
+    email?: string;
+    role?: string;
+  }[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -66,8 +74,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       ];
 
       this.innovatorDetails = [
-        { label: 'Name', value: innovation.owner.name },
+        { label: 'Owner', value: innovation.owner.name },
         { label: 'Last login', value: this.datePipe.transform(innovation.owner.lastLoginAt ?? '', this.translate('app.date_formats.long_date_time')) },
+        { label: 'Contact preference', value: UtilsHelper.getContactPreferenceValue(innovation.owner.contactByEmail, innovation.owner.contactByPhone, innovation.owner.contactByPhoneTimeframe) || '' },
+        { label: 'Contact details', value: innovation.owner.contactDetails || '' },
         { label: 'Email address', value: innovation.owner.email ?? '' },
         { label: 'Phone number', value: innovation.owner.mobilePhone ?? '' },
       ]
@@ -92,6 +102,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
     });
 
+    this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ["active"])
+      .subscribe((innovationCollaborators) => {
+      this.innovationCollaborators = innovationCollaborators.data;
+    });
   }
 
   getSupportStatusCount(supports: InnovationSupportStatusEnum[], status: keyof typeof InnovationSupportStatusEnum) {

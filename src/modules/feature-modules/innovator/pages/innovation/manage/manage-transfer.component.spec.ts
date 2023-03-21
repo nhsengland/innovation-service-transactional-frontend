@@ -11,9 +11,9 @@ import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { PageAccountInnovationsTransferComponent } from './innovations-transfer.component';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { PageInnovationManageTransferComponent } from './manage-transfer.component';
 
 
 describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountInnovationsTransferComponent', () => {
@@ -25,8 +25,8 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountIn
   let innovationsService: InnovationsService;
   let innovatorService: InnovatorService;
 
-  let component: PageAccountInnovationsTransferComponent;
-  let fixture: ComponentFixture<PageAccountInnovationsTransferComponent>;
+  let component: PageInnovationManageTransferComponent;
+  let fixture: ComponentFixture<PageInnovationManageTransferComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -52,7 +52,7 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountIn
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(PageAccountInnovationsTransferComponent);
+    fixture = TestBed.createComponent(PageInnovationManageTransferComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });

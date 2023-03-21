@@ -61,6 +61,11 @@ export const locale = {
             title: 'It appears that something went wrong!',
             message: 'It seems that you don\'t have access to the service. Please contact us for further help.',
             button_label: 'Go back to home'
+          },
+          forbidden_manage_innovation_resources: {
+            title: 'It appears that something went wrong!',
+            message: 'Only the innovation owner can access the requested resource.',
+            button_label: 'Go back to home'
           }
         },
         page_not_found: {
@@ -291,7 +296,7 @@ export const locale = {
             SUPPORT: { title: { singular: 'Support status change', plural: 'Support status changes' } },
             ACTION: { title: { singular: 'Action', plural: 'Actions' } },
             THREAD: { title: { singular: 'Message', plural: 'Messages' } },
-            COMMENT: { title: { singular: 'Message', plural: 'Messages' } }
+            COMMENT: { title: { singular: 'Message', plural: 'Messages' } },
           },
           notification_context_details: {
             LOCK_USER: { title: `Innovation "{{ innovationName }}" owner has been locked` },
@@ -306,7 +311,9 @@ export const locale = {
             INNOVATION_SUBMISSION: { title: `Innovation "{{ innovationName }}" is available for review` },
             SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}"` },
             INNOVATION_REASSESSMENT_REQUEST: { title: `Innovation "{{ innovationName }}" is available for reassessment review` },
-            INNOVATION_STOP_SHARING: { title: `Sharing of innovation "{{ innovationName }}" has been stopped for all supporting organisations` }
+            INNOVATION_STOP_SHARING: { title: `Sharing of innovation "{{ innovationName }}" has been stopped for all supporting organisations` },
+            COLLABORATOR_INVITE: { title: `You have been invited to collaborate on {{ innovationName }} innovation by its owner {{ innovationOwnerName }}. You have 30 days to respond before the invitation expires. See invitation.` },
+            COLLABORATOR_UPDATE: { title: `Your invitation to collaborate on {{ innovationName }} innovation has been cancelled.` },
           },
           section_status: {
             NOT_STARTED: { name: 'Not started', cssColorClass: 'nhsuk-tag--blue' },

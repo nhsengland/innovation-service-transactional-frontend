@@ -3,14 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
+import { DateISOType } from '@app/base/types';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-
-import { InnovationSubmissionDTO, StatisticsCard } from '@modules/shared/services/innovations.dtos';
+import { StatisticsCard } from '@modules/shared/services/innovations.dtos';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
+
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { DateISOType } from '@app/base/types';
 
 
 @Component({
@@ -21,23 +21,24 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   innovationId: string;
 
-  cardsList: StatisticsCard[] = [];
-
-  actionLabelMapping: {[k: string]: string} = {'=1': 'requested action to submit', 'other': 'requested actions to submit'};
-  messageLabelMapping: {[k: string]: string} = {'=1': 'unread message', 'other': 'unread messages'};
-
-  innovation: {
-    groupedStatus: null | InnovationGroupedStatusEnum,
-    organisationsStatusDescription: null | string,
-    status: null | InnovationStatusEnum
+  innovation: null | {
+    owner: { name: string },
+    loggedUser: { isOwner: boolean },
+    collaborators: { nameOrEmail: string }[],
+    status: InnovationStatusEnum,
+    groupedStatus: InnovationGroupedStatusEnum,
+    organisationsStatusDescription: string,
     statusUpdatedAt: null | DateISOType,
     lastEndSupportAt: null | DateISOType
-  } = { groupedStatus: null, organisationsStatusDescription: null, status: null, statusUpdatedAt: null, lastEndSupportAt: null };
+  } = null;
 
-  isSubmitted: InnovationSubmissionDTO = {
+  cardsList: StatisticsCard[] = [];
+
+  isSubmitted = {
     submittedAllSections: false,
     submittedForNeedsAssessment: false
   };
+
   showBanner = true;
 
 
@@ -45,46 +46,47 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
+
     super();
     this.setPageTitle('Overview', { hint: 'Your innovation' });
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-  }
 
+  }
 
   ngOnInit(): void {
 
-    const qp: { statistics: InnovationStatisticsEnum[] } = { statistics: [] };
-
-    qp.statistics = [InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER, InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER, InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER];
-
     forkJoin([
       this.innovationsService.getInnovationInfo(this.innovationId),
-      this.innovationsService.getInnovationStatisticsInfo(this.innovationId, qp),
+      this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']),
+      this.innovationsService.getInnovationStatisticsInfo(this.innovationId, { statistics: [InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER, InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER, InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER] }),
       this.innovationsService.getInnovationSubmission(this.innovationId)
-    ]).subscribe(([innovation, statistics, submit]) => {
+    ]).subscribe(([innovationInfo, innovationCollaborators, statistics, submit]) => {
 
       this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT] });
 
-      this.innovation.status = innovation.status;
-      this.innovation.statusUpdatedAt = innovation.statusUpdatedAt;
-      this.innovation.lastEndSupportAt = innovation.lastEndSupportAt;
+      const innovationContext = this.stores.context.getInnovation();
 
-      this.innovation.groupedStatus = innovation.groupedStatus;
-
-      this.isSubmitted.submittedAllSections = submit.submittedAllSections.valueOf();
-      this.isSubmitted.submittedForNeedsAssessment = submit.submittedForNeedsAssessment.valueOf();
-
-      (submit.submittedAllSections && submit.submittedForNeedsAssessment) ? this.showBanner = false : this.showBanner = true;
-
-      const occurrences = (innovation.supports ?? []).map(item => item.status)
+      const occurrences = (innovationInfo.supports ?? []).map(item => item.status)
         .filter(status => [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(status))
         .reduce((acc, status) => (
           acc[status] ? ++acc[status].count : acc[status] = { count: 1, text: this.translate('shared.catalog.innovation.support_status.' + status + '.name').toLowerCase() }, acc),
           {} as { [a in InnovationSupportStatusEnum]: { count: number, text: string } });
-
-      this.innovation.organisationsStatusDescription = Object.entries(occurrences).map(([status, item]) => `${item.count} ${item.text}`).join(', ');
       // console.log(occurrences) // => {2: 5, 4: 1, 5: 3, 9: 1}
+
+      this.innovation = {
+        owner: { name: innovationInfo.owner.name },
+        loggedUser: { isOwner: innovationContext.loggedUser.isOwner },
+        collaborators: innovationCollaborators.data.map(item => ({ nameOrEmail: `${item.name ?? item.email}${item.role ? `(${item.role})` : ''}` })),
+        status: innovationInfo.status,
+        groupedStatus: innovationInfo.groupedStatus,
+        organisationsStatusDescription: Object.entries(occurrences).map(([status, item]) => `${item.count} ${item.text}`).join(', '),
+        statusUpdatedAt: innovationInfo.statusUpdatedAt,
+        lastEndSupportAt: innovationInfo.lastEndSupportAt
+      };
+
+      this.isSubmitted = { submittedAllSections: submit.submittedAllSections, submittedForNeedsAssessment: submit.submittedForNeedsAssessment };
+      this.showBanner = !(submit.submittedAllSections && submit.submittedForNeedsAssessment);
 
       const lastSectionSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection!];
       const lastActionSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER].lastSubmittedSection!];

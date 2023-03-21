@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormArray, FormControl, FormGroup, FormEngineParameterModel } from '@app/base/forms';
+import { CustomValidators, FormArray, FormControl, FormEngineParameterModel, FormGroup } from '@app/base/forms';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
@@ -10,7 +10,6 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { AccessorService } from '../../../services/accessor.service';
 
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 
 
@@ -60,9 +59,8 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
     forkJoin([
       this.organisationsService.getOrganisationsList({ unitsInformation: true }),
-      this.innovationsService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment?.id || ''),
-      this.innovationsService.getInnovationSupportsList(this.innovation.id, false)
-    ]).subscribe(([organisations, needsAssessment, innovationSupportsList]) => {
+      this.innovationsService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment?.id || '')
+    ]).subscribe(([organisations, needsAssessment]) => {
 
       const needsAssessmentSuggestedOrganisations = needsAssessment.suggestedOrganisations.map(item => item.id);
 
@@ -81,20 +79,6 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
             isEditable: true
           })),
         };
-
-      });
-
-      innovationSupportsList.filter(s => s.status === InnovationSupportStatusEnum.ENGAGING).forEach(s => {
-
-        (this.form.get('organisationUnits') as FormArray).push(new FormControl(s.organisation.id));
-
-        this.groupedItems.forEach(o => {
-          const ou = o.items.find(i => i.value === s.organisation.id);
-          if (ou) {
-            ou.isEditable = false;
-            ou.label += ` (currently engaging)`;
-          }
-        });
 
       });
 

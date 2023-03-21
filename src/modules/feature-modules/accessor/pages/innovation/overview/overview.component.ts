@@ -12,6 +12,7 @@ import { StatisticsCard } from '@modules/shared/services/innovations.dtos';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { forkJoin } from 'rxjs';
+import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 @Component({
@@ -31,10 +32,18 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   } = { organisationUnit: '', status: InnovationSupportStatusEnum.UNASSIGNED };
 
   innovationSummary: { label: string; value: null | string; }[] = [];
+  innovatorSummary: { label: string; value: string; }[] = [];
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   cardsList: StatisticsCard[] = [];
   showCards: boolean = false;
+
+  innovationCollaborators: {
+    id: string;
+    status: InnovationCollaboratorStatusEnum;
+    name?: string;
+    role?: string;
+  }[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -51,11 +60,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   }
 
-
   ngOnInit(): void {
 
     const qp: { statistics: InnovationStatisticsEnum[] } = { statistics: [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER, InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER] };
-
+    
     forkJoin([
       this.innovationsService.getInnovationInfo(this.innovationId),
       this.innovationsService.getInnovationStatisticsInfo(this.innovationId, qp),
@@ -70,6 +78,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         { label: 'Description', value: innovationInfo.description },
         { label: 'Categories', value: innovationInfo.categories.map(v => v === 'OTHER' ? innovationInfo.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
       ];
+
+      this.innovatorSummary = [
+        { label: 'Owner', value: this.innovation.owner.name },
+      ];
+
       this.showCards = [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(this.innovationSupport.status);
 
       this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.INNOVATION]});
@@ -100,7 +113,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.setPageStatus('READY');
 
     });
+    
+    this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ["active"])
+      .subscribe((innovationCollaborators) => {
+      this.innovationCollaborators = innovationCollaborators.data
+    });
 
   }
-
 }

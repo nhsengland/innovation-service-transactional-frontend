@@ -17,35 +17,41 @@
         </li>
       </ul>
 
+      <ul *ngIf="inviteCollaborations.length > 0" class="nhsuk-grid-row nhsuk-card-group">
+        <li *ngFor="let item of inviteCollaborations" class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">You have been invited to collaborate on '{{item.innovation.name}}' innovation by its owner</h2>
+
+              <p class="nhsuk-card__description nhsuk-u-margin-bottom-0 font-color-secondary">You have until {{item.invitedAt | date: ('app.date_formats.medium_date' | translate)}} to respond to this invite.</p>
+              <a routerLink="/innovator/innovations/{{ item.innovation.id }}/collaborations/{{ item.id }}" class="nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-margin-right-2 nhsuk-action-link__text">
+                See invitation <span class="nhsuk-u-visually-hidden"> Access collaboration invites </span>
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+
       <div class="d-flex align-items-center justify-content-space-between">
         <h2>Your innovations</h2>
         <a routerLink="/innovator/innovation-statuses" class="float-r nhsuk-u-margin-bottom-4" arial-label="View innovation status information">What does this status mean?</a>
       </div>
 
-      <ul class="nhsuk-grid-row nhsuk-card-group">
-        <li *ngFor="let innovation of user.innovations" class="nhsuk-grid-column-full nhsuk-card-group__item">
-          <div class="nhsuk-card nhsuk-card">
-            <div class="nhsuk-card__content">
-
-              <div class="d-flex justify-content-space-between">
-
-                <div>
-                  <a routerLink="/innovator/innovations/{{ innovation.id }}" class="nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-margin-right-2">
-                    {{ innovation.name }} <span class="nhsuk-u-visually-hidden"> Access {{ innovation.name }} innovation </span>
-                  </a>
-                  <div class="nhsuk-card__description nhsuk-body-s nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-0" *ngIf="innovation.description !== null">{{ innovation.description }}</div>
-                </div>
-
-                <div>
-                  <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}"></theme-tag>
-                </div>
-
-              </div>
-
-            </div>
-          </div>
+      <p *ngIf="user.innovationsOwner.length === 0">You have no innovations.</p>
+      <ul *ngIf="user.innovationsOwner.length > 0" class="nhsuk-grid-row nhsuk-card-group">
+        <li *ngFor="let innovation of user.innovationsOwner" class="nhsuk-grid-column-full nhsuk-card-group__item">
+          <ng-container *ngTemplateOutlet="innovationCard; context: { $implicit: innovation }"></ng-container>
         </li>
       </ul>
+
+      <ng-container *ngIf="user.innovationsCollaborator.length > 0">
+        <h2>Innovations you are working on as a collaborator</h2>
+        <ul class="nhsuk-grid-row nhsuk-card-group">
+          <li *ngFor="let innovation of user.innovationsCollaborator" class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <ng-container *ngTemplateOutlet="innovationCard; context: { $implicit: innovation }"></ng-container>
+          </li>
+        </ul>
+      </ng-container>
 
     </div>
 
@@ -67,8 +73,42 @@
         </div>
       </div>
 
+      <div class="nhsuk-card x-card-border-unset">
+        <div class="nhsuk-card__content">
+
+          <h2 class="nhsuk-card__heading nhsuk-heading-m">Help us improve the service</h2>
+          <ul class="nhsuk-list">
+            <li><a [href]="userResearchLink" target="_blank" rel="noopener noreferrer">Sign up to take part in user research.</a></li>
+          </ul>
+
+        </div>
+      </div>
+
     </div>
 
   </div>
 
 </theme-content-wrapper>
+
+<ng-template #innovationCard let-innovation>
+  <div class="nhsuk-card nhsuk-card">
+    <div class="nhsuk-card__content">
+
+      <div class="d-flex justify-content-space-between">
+
+        <div>
+          <a routerLink="/innovator/innovations/{{ innovation.id }}" class="nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-margin-right-2">
+            {{ innovation.name }} <span class="nhsuk-u-visually-hidden"> Access {{ innovation.name }} innovation </span>
+          </a>
+          <div class="nhsuk-card__description nhsuk-body-s nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-0" *ngIf="innovation.description !== null">{{ innovation.description }}</div>
+        </div>
+
+        <div>
+          <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}"></theme-tag>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</ng-template>

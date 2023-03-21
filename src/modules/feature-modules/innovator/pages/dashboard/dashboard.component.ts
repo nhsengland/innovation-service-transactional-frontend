@@ -11,7 +11,8 @@ import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-import { GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
+import { DatesHelper } from '@app/base/helpers';
+import { GetInnovationCollaboratorInvitesDTO, GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
 
 
 @Component({
@@ -20,13 +21,18 @@ import { GetInnovationTransfersDTO, InnovatorService } from '../../services/inno
 })
 export class PageDashboardComponent extends CoreComponent implements OnInit {
 
+  userResearchLink: string = 'https://forms.office.com/Pages/ResponsePage.aspx?id=kp4VA8ZyI0umSq9Q55CtvztdgIut6i1ClsC8hAncvh9UN0E2UEVON09BNjNMS1daRjZVMFJHRkNaMCQlQCN0PWcu';
+
   user: {
     displayName: string,
-    innovations: { id: string, name: string, description: null | string, groupedStatus: keyof typeof InnovationGroupedStatusEnum }[],
-    passwordResetAt: string
+    innovationsOwner: { id: string, name: string, description: null | string, groupedStatus: keyof typeof InnovationGroupedStatusEnum }[],
+    innovationsCollaborator: { id: string, name: string, description: null | string, groupedStatus: keyof typeof InnovationGroupedStatusEnum }[],
+    passwordResetAt: string,
+    firstTimeSignInAt: string | null
   };
 
   innovationTransfers: GetInnovationTransfersDTO = [];
+  inviteCollaborations: GetInnovationCollaboratorInvitesDTO[] = []
 
 
   constructor(
@@ -40,8 +46,10 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     const user = this.stores.authentication.getUserInfo();
     this.user = {
       displayName: user.displayName,
-      innovations: [],
-      passwordResetAt: user.passwordResetAt || ''
+      innovationsOwner: [],
+      innovationsCollaborator: [],
+      passwordResetAt: user.passwordResetAt || '',
+      firstTimeSignInAt: user.firstTimeSignInAt
     };
 
     this.setPageTitle('Home', { hint: `Hello${user.displayName ? ' ' + user.displayName : ''}` });
@@ -51,26 +59,34 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   ngOnInit(): void {
 
     forkJoin([
-      this.innovationsService.getInnovationsList({ fields: ['groupedStatus'] }).pipe(map(response => response), catchError(() => of(null))),
-      this.innovatorService.getInnovationTransfers(true).pipe(map(response => response), catchError(() => of(null)))
-    ]).subscribe(([innovationsList, innovationsTransfers]) => {
+      this.innovationsService.getInnovationsList({ fields: ['groupedStatus', 'statistics'], queryParams: { filters: { hasAccessThrough: ['owner'] }, take: 100, skip: 0 } }).pipe(map(response => response), catchError(() => of(null))),
+      this.innovationsService.getInnovationsList({ fields: ['groupedStatus', 'statistics'], queryParams: { filters: { hasAccessThrough: ['collaborator'] }, take: 100, skip: 0 } }).pipe(map(response => response), catchError(() => of(null))),
+      this.innovatorService.getInnovationTransfers(true).pipe(map(response => response), catchError(() => of(null))),
+      this.innovatorService.getInnovationInviteCollaborations().pipe(map(response => response), catchError(() => of(null)))
+    ]).subscribe(([innovationsListOwner, innovationsListCollaborator, innovationsTransfers, inviteCollaborations]) => {
 
-      if (innovationsList) {
-
-        this.user.innovations = innovationsList.data.map(innovation => ({
-          id: innovation.id,
-          name: innovation.name,
-          description: this.buildDescriptionString(innovation),
-          groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
-        }))
-      } else {
+      if (!innovationsListOwner || !innovationsListCollaborator) {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
         return;
       }
 
+      this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner);
+      this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator);
+
       if (innovationsTransfers) {
         this.innovationTransfers = innovationsTransfers;
+      } else {
+        this.setAlertUnknownError();
+      }
+
+      if (inviteCollaborations) {
+        this.inviteCollaborations = inviteCollaborations.map(i => {
+          return {
+            ...i,
+            invitedAt: DatesHelper.addDaysToDate(i.invitedAt ?? '', 30).toString()
+          }
+        });
       } else {
         this.setAlertUnknownError();
       }
@@ -80,10 +96,8 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     });
 
     const startTime = new Date();
-    const endTime = new Date(this.user.passwordResetAt);
-    const timediffer = startTime.getTime() - endTime.getTime();
-    const resultInMinutes = Math.round(timediffer / 60000);
-    if (resultInMinutes <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {
+
+    if (this.timeDifferInMinutes(startTime, this.user.firstTimeSignInAt) > 5 && this.timeDifferInMinutes(startTime, this.user.passwordResetAt) <= 2 && this.activatedRoute.snapshot.queryParams.alert !== 'alertDisabled') {
       this.setAlertSuccess('You have successfully changed your password.');
     }
 
@@ -100,18 +114,15 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         forkJoin([
           this.stores.authentication.initializeAuthentication$(), // Initialize authentication in order to update First Time SignIn information.
           this.innovatorService.getInnovationTransfers(true),
-          this.innovationsService.getInnovationsList({ fields: ['groupedStatus'] })
+          this.innovationsService.getInnovationsList({ fields: ['groupedStatus', 'statistics'], queryParams: { filters: { hasAccessThrough: ['owner'] }, take: 100, skip: 0 } }),
+          this.innovationsService.getInnovationsList({ fields: ['groupedStatus', 'statistics'], queryParams: { filters: { hasAccessThrough: ['collaborator'] }, take: 100, skip: 0 } })
         ])
       )
-    ).subscribe(([_authentication, innovationsTransfers, innovationsList]) => {
+    ).subscribe(([_authentication, innovationsTransfers, innovationsListOwner, innovationsListCollaborator]) => {
 
       this.innovationTransfers = innovationsTransfers;
-      this.user.innovations = innovationsList.data.map(innovation => ({
-        id: innovation.id,
-        name: innovation.name,
-        description: this.buildDescriptionString(innovation),
-        groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
-      }));
+      this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner);
+      this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator);
 
       this.setAlertSuccess(accept ? `You have successfully accepted ownership` : `You have successfully rejected ownership`);
 
@@ -136,6 +147,21 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     }
 
     return description.length !== 0 ? `${description.join(', ')}.` : null;
+  }
+
+  private getInnovationsListInformation(innovationList: InnovationsListDTO) {
+    return innovationList.data.map(innovation => ({
+      id: innovation.id,
+      name: innovation.name,
+      description: this.buildDescriptionString(innovation),
+      groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
+    }));
+  }
+
+  timeDifferInMinutes(startTime: Date, date: null | string ): number{
+    const endTime = new Date(date ?? '');
+    const timediffer = startTime.getTime() - endTime.getTime();
+    return Math.round(timediffer / 60000);
   }
 
 }

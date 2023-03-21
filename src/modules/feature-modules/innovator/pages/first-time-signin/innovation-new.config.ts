@@ -33,7 +33,7 @@ export let FIRST_TIME_SIGNIN_QUESTIONS: WizardEngineModel = new WizardEngineMode
         dataType: 'text',
         label: 'Welcome to the NHS innovation service!',
         description: 'What\'s your name?',
-        validations: { isRequired: [true, 'Name is required'] }
+        validations: { isRequired: [true, 'Name is required'], maxLength: 100 }
       }]
     }),
 
@@ -130,7 +130,8 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
         id: 'mobilePhone',
         dataType: 'number',
         label: 'What\'s your phone number (Optional)',
-        description: 'If you\'d like to be contacted by phone about your innovation, please provide a contact number'
+        description: 'If you\'d like to be contacted by phone about your innovation, please provide a contact number',
+        validations: { maxLength: 20 }
       }]
     }),
 

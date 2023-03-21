@@ -6,7 +6,7 @@
       <p>There are two ways to stop sharing an innovation. The easiest way is to send a message to your support
         organisations to let them know you are taking a break.</p>
 
-      <p><a routerLink="/innovator">Go to your innovation</a> and send a message.</p>
+      <p><a [routerLink]="['/innovator/innovations', innovationId]" >Go to your innovation</a> and send a message.</p>
 
       <p class="nhsuk-u-margin-bottom-0">
         Alternatively you can stop sharing your innovation with your support organisations. This option means they will
@@ -69,7 +69,7 @@
 
       <a class="nhsuk-action-link__link" routerLink="request" >
         <theme-svg-icon type="action"></theme-svg-icon>
-        <span class="nhsuk-action-link__text">Stop sharing an innovation</span>
+        <span class="nhsuk-action-link__text">Stop sharing this innovation</span>
       </a>
 
     </div>

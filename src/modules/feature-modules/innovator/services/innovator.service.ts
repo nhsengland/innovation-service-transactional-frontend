@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -8,6 +8,7 @@ import { UrlModel } from '@app/base/models';
 import { MappedObjectType } from '@app/base/types';
 
 import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
+import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 export type GetInnovationTransfersDTO = {
@@ -16,6 +17,19 @@ export type GetInnovationTransfersDTO = {
   innovation: { id: string, name: string, owner: string };
 }[];
 
+export type GetInnovationCollaboratorInvitesDTO = {
+  id: string;
+  invitedAt: string;
+  innovation: { 
+    id: string, 
+    name: string,  
+    description: string 
+    owner?: {
+      id: string;
+      name: string;
+    }
+  };
+};
 
 @Injectable()
 export class InnovatorService extends CoreService {
@@ -49,6 +63,28 @@ export class InnovatorService extends CoreService {
     );
   }
 
+  getInnovationInviteCollaborations(): Observable<GetInnovationCollaboratorInvitesDTO[]> {
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/invites');
+    
+    return this.http.get<GetInnovationCollaboratorInvitesDTO[]>(url.buildUrl()).pipe(take(1), map(response => response));
+  }
+
+  getInviteCollaborationInfo(innovationId: string, collaboratorId: string): Observable<GetInnovationCollaboratorInvitesDTO> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/collaborators/:collaboratorId').setPathParams({ innovationId, collaboratorId });
+
+    return this.http.get<GetInnovationCollaboratorInvitesDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+  }
+
+  updateCollaborationStatus(
+    innovationId: string, 
+    collaboratorId: string,
+    status: InnovationCollaboratorStatusEnum
+  ): Observable<{ id: string }> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/collaborators/:collaboratorId').setPathParams({ innovationId, collaboratorId });
+
+    return this.http.patch<{ id: string }>(url.buildUrl(), { status }).pipe(take(1), map(response => response));
+  }
+
   getInnovationTransfers(assignToMe = false): Observable<GetInnovationTransfersDTO> {
 
     const qp: { assignedToMe?: boolean } = assignToMe ? { assignedToMe: true } : {};
@@ -58,7 +94,7 @@ export class InnovatorService extends CoreService {
 
   }
 
-  transferInnovation(body: { innovationId: string, email: string }): Observable<{ id: string }> {
+  transferInnovation(body: { innovationId: string, email: string, ownerToCollaborator: boolean }): Observable<{ id: string }> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/transfers');
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));

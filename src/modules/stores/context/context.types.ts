@@ -1,4 +1,4 @@
-import { LinkType } from '@app/base/types';
+import { DateISOType, LinkType } from '@app/base/types';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '../innovation/innovation.enums';
 
 import { NotificationContextTypeEnum } from './context.enums';
@@ -39,16 +39,13 @@ export type ContextPageLayoutType = {
 };
 
 
-
-
 export type ContextInnovationType = {
   id: string,
   name: string,
   status: InnovationStatusEnum,
-  owner: {
-    name: string,
-    isActive: boolean
-  },
+  statusUpdatedAt: null | DateISOType,
+  owner: { name: string, isActive: boolean },
+  loggedUser: { isOwner: boolean },
   assessment?: { id: string },
   assignedTo?: { id: string },
   support?: { id: string, status: InnovationSupportStatusEnum },
