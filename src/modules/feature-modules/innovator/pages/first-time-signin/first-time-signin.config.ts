@@ -10,7 +10,7 @@ type StepPayloadType = {
   organisationDescription: null | typeof organisationDescriptions[number],
   organisationSize: null | string,
   hasRegistrationNumber: 'YES' | 'NO',
-  organisationRegistrationNumber: null | string, // Add this on BE
+  organisationRegistrationNumber: null | string,
   mobilePhone: null | string;
 };
 type OutboundPayloadType = {
