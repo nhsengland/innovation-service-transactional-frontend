@@ -11,7 +11,7 @@
   <ng-container [ngSwitch]="getUserType()">
 
       <ng-container *ngSwitchCase="'ASSESSMENT'">
-        <ng-container *ngIf="['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status); then requestActionBtn"></ng-container>
+        <ng-container *ngIf="['AWAITING_NEEDS_REASSESSMENT', 'NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status); then requestActionBtn"></ng-container>
 
         <p *ngIf="['CREATED', 'WAITING_NEEDS_ASSESSMENT'].includes(innovation.status); else actionTrackerList">
           Once you have started the needs assessment process, you can request innovators
