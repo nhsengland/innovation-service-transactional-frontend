@@ -31,8 +31,7 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: WizardEngineModel = new WizardEngineMo
       parameters: [{
         id: 'innovatorName',
         dataType: 'text',
-        label: 'Welcome to the NHS innovation service!',
-        description: 'What is your name?',
+        label: 'What is your name?',
         validations: { isRequired: [true, 'Name is required'], maxLength: 100 }
       }]
     }),
@@ -41,13 +40,13 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: WizardEngineModel = new WizardEngineMo
       parameters: [{
         id: 'isCompanyOrOrganisation',
         dataType: 'radio-group',
-        label: 'Are you creating this innovation as part of a company or organisation?',
+        label: 'Are you signing up to the service as part of a company or organisation?',
         validations: { isRequired: [true, 'Choose one option'] },
         items: [
           {
             value: 'YES',
             label: 'Yes',
-            conditional: new FormEngineParameterModel({ id: 'organisationName', dataType: 'text', label: 'Company or organisation name', validations: { isRequired: [true, 'Other description is required'], maxLength: 100 } })
+            conditional: new FormEngineParameterModel({ id: 'organisationName', dataType: 'text', label: 'Enter the company or organisation name', validations: { isRequired: [true, 'Organisation/Company name is required'], maxLength: 100 } })
           },
           { value: 'NO', label: 'No' }
         ]
@@ -110,7 +109,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
             {
               value: 'YES',
               label: 'Yes',
-              conditional: new FormEngineParameterModel({ id: 'organisationRegistrationNumber', dataType: 'text', label: 'Registration number', validations: { isRequired: [true, 'Registration number is required'], minLength: 8, maxLength: 8 } })
+              conditional: new FormEngineParameterModel({ id: 'organisationRegistrationNumber', dataType: 'text', label: 'Enter the company registration number', validations: { isRequired: [true, 'Registration number is required'], minLength: 8, maxLength: 8 } })
             },
             { value: 'NO', label: 'No' }
           ]
@@ -126,7 +125,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
         id: 'mobilePhone',
         dataType: 'number',
         label: 'What is your phone number? (optional)',
-        description: 'If you would like to be contacted by phone about your innovation, provide a contact number.',
+        description: 'If you’d like to be contacted by phone about your innovation, enter your phone number.',
         validations: { maxLength: 20 }
       }]
     })
@@ -172,24 +171,17 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Wizard
 
   toReturn.push(
     { label: 'What is your name?', value: data.innovatorName, editStepNumber: 1 },
-    { label: 'Are you creating this innovation as part of a company or organisation?', value: data.isCompanyOrOrganisation === 'YES' ? 'Yes' : 'No', editStepNumber: 2 }
+    { label: 'Are you signing up to the service as part of a company or organisation?', value: data.isCompanyOrOrganisation === 'YES' ? `Yes, ${data.organisationName}` : 'No', editStepNumber: 2 }
   )
 
   let lastMarkStep = 2;
 
   if (data.isCompanyOrOrganisation === 'YES') {
     toReturn.push(
-      { label: 'Company', value: data.organisationName, editStepNumber: 2 },
       { label: 'How would you describe your company or organisation?', value: data.organisationDescription, editStepNumber: 3 },
       { label: 'What is the size of your company or organisation?', value: data.organisationSize, editStepNumber: 4 },
-      { label: 'Do you have a UK company registration number?', value: data.hasRegistrationNumber === 'YES' ? 'Yes' : 'No', editStepNumber: 5 },
+      { label: 'Do you have a UK company registration number?', value: data.hasRegistrationNumber === 'YES' ? `Yes, ${data.organisationRegistrationNumber}` : 'No', editStepNumber: 5 },
     );
-
-    if (data.hasRegistrationNumber === 'YES') {
-      toReturn.push(
-        { label: 'UK company registration number?', value: data.organisationRegistrationNumber, editStepNumber: 5 },
-      );
-    }
 
     lastMarkStep = 5;
   }
