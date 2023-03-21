@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
+import { UserRoleEnum } from '@app/base/enums';
 import { TableModel } from '@app/base/models';
+import { UsersListDTO } from '@modules/shared/dtos/users.dto';
 import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
-import { GetOrganisationUnitInfoDTO, GetOrganisationUnitUsersDTO, OrganisationsService, UserListFiltersType } from '@modules/shared/services/organisations.service';
+import { GetOrganisationUnitInfoDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
+import { UserListFiltersType, UsersService } from '@modules/shared/services/users.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { forkJoin } from 'rxjs';
 
@@ -18,12 +21,13 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
 
   unit: GetOrganisationUnitInfoDTO = { id: '', name: '', acronym: '', isActive: false, userCount: 0};
   innovationsList = new TableModel<InnovationsListDTO['data'][0], InnovationsListFiltersType>({ pageSize: 5 });
-  usersList = new TableModel<GetOrganisationUnitUsersDTO['data'][0], UserListFiltersType>({ pageSize: 5 });
+  usersList = new TableModel<UsersListDTO['data'][0], UserListFiltersType>({ pageSize: 5 });
 
   constructor(    
     private activatedRoute: ActivatedRoute,
     private organisationsService: OrganisationsService,
-    private innovationsService: InnovationsService
+    private innovationsService: InnovationsService,
+    private usersService: UsersService
   ) { 
     super();
     this.setPageTitle('Unit Information');
@@ -37,7 +41,8 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
     }).setFilters({
       email: true, 
       onlyActive: true,
-      organisationUnitId: this.organisationUnitId
+      organisationUnitId: this.organisationUnitId,
+      userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]
     });
 
     this.innovationsList.setVisibleColumns({
@@ -53,7 +58,7 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
 
     forkJoin([
       this.organisationsService.getOrganisationUnitInfo(this.organisationId, this.organisationUnitId),
-      this.organisationsService.getOrganisationUnitUsersList({ queryParams: this.usersList.getAPIQueryParams() }),
+      this.usersService.getUsersList({ queryParams: this.usersList.getAPIQueryParams() }),
       this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() })
     ]).subscribe({
       next: ([unitInfo, users, innovations]) => {
@@ -85,7 +90,7 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
   onUsersPageChange(event: { pageNumber: number }): void {
     this.usersList.setPage(event.pageNumber);
 
-    this.organisationsService.getOrganisationUnitUsersList({ queryParams: this.usersList.getAPIQueryParams() }).subscribe({
+    this.usersService.getUsersList({ queryParams: this.usersList.getAPIQueryParams() }).subscribe({
       next: (users) => {        
         this.usersList.setData(users.data, users.count);
       }

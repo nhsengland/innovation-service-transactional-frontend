@@ -16,13 +16,14 @@ import { PageInnovationsAdvancedReviewComponent } from './innovations-advanced-r
 
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { UsersService } from '@modules/shared/services/users.service';
 
 
 describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () => {
 
   let authenticationStore: AuthenticationStore;
-  let accessorService: AccessorService;
   let organisationsService: OrganisationsService;
+  let usersService: UsersService;
 
 
   let component: PageInnovationsAdvancedReviewComponent;
@@ -42,7 +43,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
     AppInjector.setInjector(TestBed.inject(Injector));
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-    accessorService = TestBed.inject(AccessorService);
+    usersService = TestBed.inject(UsersService);
     organisationsService = TestBed.inject(OrganisationsService);
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
@@ -97,7 +98,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   it('should NOT have default values', () => {
 
-    organisationsService.getOrganisationUnitUsersList = () => throwError('error');
+    usersService.getUsersList = () => throwError('error');
 
     fixture = TestBed.createComponent(PageInnovationsAdvancedReviewComponent);
     component = fixture.componentInstance;
