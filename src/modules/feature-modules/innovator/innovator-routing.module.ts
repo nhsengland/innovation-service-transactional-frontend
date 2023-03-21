@@ -502,8 +502,8 @@ const routes: Routes = [
                     ]
                   },
                   {
-                    path: 'access',
-                    data: { breadcrumb: 'Manage access' },
+                    path: 'stop-sharing',
+                    data: { breadcrumb: 'Stop sharing', layout: { type: 'full' } },
                     children: [
                       {
                         path: '', pathMatch: 'full', component: PageInnovationManageAccessOverviewComponent,

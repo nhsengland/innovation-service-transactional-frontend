@@ -109,12 +109,7 @@ import { InnovatorService } from './services/innovator.service';
     InnovationOverviewComponent,
     InnovationSectionEvidenceEditComponent,
     InnovationSectionEditComponent,
-    InnovationNewComponent,
-    PageInnovationManageAccessOverviewComponent,
-    PageInnovationManageAccessLeaveInnovationComponent,
-
-    // Components.
-    OrganisationSuggestionsCardComponent
+    InnovationNewComponent
   ],
   providers: [
     // Guards.
