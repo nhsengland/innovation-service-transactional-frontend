@@ -16,6 +16,7 @@ import { InnovatorService } from '../../services/innovator.service';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { UserRoleEnum } from '@app/base/enums';
+import { UsersService } from '@modules/shared/services/users.service';
 
 
 describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninInnovationNewComponent', () => {
@@ -26,6 +27,7 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninInnovati
   let authenticationStore: AuthenticationStore;
   let innovatorService: InnovatorService;
   let organisationsService: OrganisationsService;
+  let usersService: UsersService;
 
   let component: FirstTimeSigninInnovationNewComponent;
   let fixture: ComponentFixture<FirstTimeSigninInnovationNewComponent>;
@@ -49,8 +51,9 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninInnovati
     authenticationStore = TestBed.inject(AuthenticationStore);
     innovatorService = TestBed.inject(InnovatorService);
     organisationsService = TestBed.inject(OrganisationsService);
+    usersService = TestBed.inject(UsersService);
 
-    organisationsService.getOrganisationUnitUsersList = () => of({
+    usersService.getUsersList = () => of({
       count: 2,
       data: [
         {

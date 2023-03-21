@@ -9,7 +9,8 @@ import { MappedObjectType, WizardStepComponentType, WizardStepEventType } from '
 import { UsersStepInputType, UsersStepOutputType } from './users-step.types';
 
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
-import { GetOrganisationUnitUsersDTO, OrganisationsService, UserListFiltersType } from '@modules/shared/services/organisations.service';
+import { UserListFiltersType, UsersService } from '@modules/shared/services/users.service';
+import { UsersListDTO } from '@modules/shared/dtos/users.dto';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class WizardOrganisationUnitActivateUsersStepComponent extends CoreCompon
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<UsersStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<UsersStepOutputType>>();
 
-  tableList = new TableModel<GetOrganisationUnitUsersDTO['data'][0], UserListFiltersType>({ pageSize: 100 });
+  tableList = new TableModel<UsersListDTO['data'][0], UserListFiltersType>({ pageSize: 100 });
 
   form = new FormGroup({
     users: new UntypedFormArray([]),
@@ -44,7 +45,7 @@ export class WizardOrganisationUnitActivateUsersStepComponent extends CoreCompon
 
 
   constructor(
-    private organisationsService: OrganisationsService
+    private usersService: UsersService
   ) {
 
     super();
@@ -61,7 +62,8 @@ export class WizardOrganisationUnitActivateUsersStepComponent extends CoreCompon
     }).setFilters({ 
       onlyActive: false,
       email: true,
-      organisationUnitId: this.data.organisationUnit.id
+      organisationUnitId: this.data.organisationUnit.id,
+      userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]
     });
 
     this.form.get('agreeUsers')!.setValue(this.data.agreeUsers);
@@ -74,7 +76,7 @@ export class WizardOrganisationUnitActivateUsersStepComponent extends CoreCompon
 
   getUsersList(): void {
 
-    this.organisationsService.getOrganisationUnitUsersList({ queryParams: this.tableList.getAPIQueryParams() }).subscribe(
+    this.usersService.getUsersList({ queryParams: this.tableList.getAPIQueryParams() }).subscribe(
       response => {
         this.tableList.setData(response.data, response.count);
         this.setPageStatus('READY');

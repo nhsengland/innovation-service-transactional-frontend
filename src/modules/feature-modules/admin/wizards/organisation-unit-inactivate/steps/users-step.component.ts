@@ -2,10 +2,12 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
+import { UserRoleEnum } from '@app/base/enums';
 import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
-import { GetOrganisationUnitUsersDTO, OrganisationsService, UserListFiltersType } from '@modules/shared/services/organisations.service';
+import { UsersListDTO } from '@modules/shared/dtos/users.dto';
+import { UserListFiltersType, UsersService } from '@modules/shared/services/users.service';
 
 import { UsersStepInputType, UsersStepOutputType } from './users-step.types';
 
@@ -29,14 +31,14 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
 
   // submitButton = { isActive: true, label: 'Confirm and notify organisations' };
 
-  tableList = new TableModel<GetOrganisationUnitUsersDTO['data'][0], UserListFiltersType>({ pageSize: 10 });
+  tableList = new TableModel<UsersListDTO['data'][0], UserListFiltersType>({ pageSize: 10 });
 
   form = new FormGroup({
     agreeUsers: new UntypedFormControl(false, CustomValidators.required('You need to confirm to proceed'))
   }, { updateOn: 'blur' });
 
   constructor(
-    private organisationsService: OrganisationsService
+    private usersService: UsersService
   ) {
 
     super();
@@ -51,19 +53,18 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
     }).setFilters({ 
       onlyActive: true,
       email: true,
-      organisationUnitId: this.data.organisationUnit.id
+      organisationUnitId: this.data.organisationUnit.id,
+      userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]
     });
 
     this.form.get('agreeUsers')!.setValue(this.data.agreeUsers);
 
     this.getUsersList();
-
   }
-
 
   getUsersList(): void {
     
-    this.organisationsService.getOrganisationUnitUsersList({ queryParams: this.tableList.getAPIQueryParams() }).subscribe(
+    this.usersService.getUsersList({ queryParams: this.tableList.getAPIQueryParams() }).subscribe(
       response => {
         this.tableList.setData(response.data, response.count);
         this.setPageStatus('READY');
