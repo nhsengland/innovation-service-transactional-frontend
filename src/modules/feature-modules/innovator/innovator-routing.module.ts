@@ -77,7 +77,7 @@ import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-o
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
-import { ManageInnovationGuard } from './guards/manage-innovation.guard';
+import { ManageGuard } from './guards/manage.guard';
 
 // Resolvers.
 import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
@@ -85,6 +85,8 @@ import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-dat
 import { InnovationSectionDataResolver } from '@modules/shared/resolvers/innovation-section-data.resolver';
 import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers/innovation-section-evidence-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
+import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -421,77 +423,97 @@ const routes: Routes = [
 
               {
                 path: 'manage',
-                data: { breadcrumb: 'Manage innovation' },
-                canActivate: [ManageInnovationGuard],
+                data: { breadcrumb: null },
+                canActivate: [ManageGuard],
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: PageInnovationManageOverviewComponent,
-                    data: { breadcrumb: null }
-                  },
-                  {
-                    path: 'collaborators',
-                    data: { breadcrumb: 'Collaborators', layout: { type: 'full' } },
+                    path: 'innovation',
+                    data: { breadcrumb: 'Manage innovation' },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: PageInnovationManageCollaboratorsOverviewComponent,
+                        path: '', pathMatch: 'full', component: PageInnovationManageOverviewComponent,
                         data: { breadcrumb: null }
                       },
                       {
-                        path: 'new', pathMatch: 'full', component: PageInnovationManageCollaboratorsWizardComponent,
-                        data: { breadcrumb: null }
-                      },
-                      {
-                        path: ':collaboratorId',
+                        path: 'collaborators',
+                        data: { breadcrumb: 'Collaborators', layout: { type: 'full' } },
                         children: [
                           {
-                            path: '', pathMatch: 'full', component: PageInnovationManageCollaboratorsInfoComponent,
+                            path: '', pathMatch: 'full', component: PageInnovationManageCollaboratorsOverviewComponent,
                             data: { breadcrumb: null }
                           },
                           {
-                            path: 'invite-again', pathMatch: 'full', component: PageInnovationManageCollaboratorsWizardComponent,
+                            path: 'new', pathMatch: 'full', component: PageInnovationManageCollaboratorsWizardComponent,
                             data: { breadcrumb: null }
                           },
                           {
-                            path: 'edit', pathMatch: 'full', component: PageInnovationManageCollaboratorsWizardComponent,
+                            path: ':collaboratorId',
+                            children: [
+                              {
+                                path: '', pathMatch: 'full', component: PageInnovationManageCollaboratorsInfoComponent,
+                                data: { breadcrumb: null }
+                              },
+                              {
+                                path: 'invite-again', pathMatch: 'full', component: PageInnovationManageCollaboratorsWizardComponent,
+                                data: { breadcrumb: null }
+                              },
+                              {
+                                path: 'edit', pathMatch: 'full', component: PageInnovationManageCollaboratorsWizardComponent,
+                                data: { breadcrumb: null }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        path: 'stop-sharing',
+                        data: { breadcrumb: 'Stop sharing', layout: { type: 'full' }},
+                        children: [
+                          {
+                            path: '', pathMatch: 'full', component: PageInnovationManageStopSharingOverviewComponent,
+                            data: { breadcrumb: null }
+                          },
+                          {
+                            path: 'request', pathMatch: 'full', component: PageInnovationManageStopSharingComponent,
                             data: { breadcrumb: null }
                           }
                         ]
+                      },
+                      {
+                        path: 'transfer',
+                        data: { breadcrumb: 'Transfer ownership', layout: { type: 'full' } },
+                        children: [
+                          {
+                            path: '',
+                            pathMatch: 'full',
+                            redirectTo: '1',
+                            data: { breadcrumb: null }
+                          },
+                          {
+                            path: ':stepId', pathMatch: 'full', component: PageInnovationManageTransferComponent,
+                            data: { breadcrumb: null }
+                          }
+                        ]
+                      },
+                      {
+                        path: 'withdraw', pathMatch: 'full', component: PageInnovationManageWithdrawComponent,
+                        data: { breadcrumb: 'Withdraw', layout: { type: 'full' } }
                       }
                     ]
                   },
                   {
-                    path: 'stop-sharing',
-                    data: { breadcrumb: 'Stop sharing', layout: { type: 'full' } },
+                    path: 'access',
+                    data: { breadcrumb: 'Manage access' },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: PageInnovationManageStopSharingOverviewComponent,
+                        path: '', pathMatch: 'full', component: PageInnovationManageAccessOverviewComponent,
                         data: { breadcrumb: null }
                       },
                       {
-                        path: 'request', pathMatch: 'full', component: PageInnovationManageStopSharingComponent,
-                        data: { breadcrumb: null }
-                      }
-                    ]
-                  },
-                  {
-                    path: 'transfer',
-                    data: { breadcrumb: 'Transfer ownership', layout: { type: 'full' } },
-                    children: [
-                      {
-                        path: '',
-                        pathMatch: 'full',
-                        redirectTo: '1',
-                        data: { breadcrumb: null }
+                        path: 'leave', pathMatch: 'full', component: PageInnovationManageAccessLeaveInnovationComponent,
+                        data: { breadcrumb: 'Leave innovation', layout: { type: 'full' } }
                       },
-                      {
-                        path: ':stepId', pathMatch: 'full', component: PageInnovationManageTransferComponent,
-                        data: { breadcrumb: null }
-                      }
                     ]
-                  },
-                  {
-                    path: 'withdraw', pathMatch: 'full', component: PageInnovationManageWithdrawComponent,
-                    data: { breadcrumb: 'Withdraw', layout: { type: 'full' } }
                   }
                 ]
               },

@@ -74,7 +74,8 @@ export type InnovationInfoDTO = {
   export: { canUserExport: boolean, pendingRequestsCount: number },
   assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { id: string, name: string }, reassessmentCount: number },
   supports?: null | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string }[],
-  statusUpdatedAt: null | DateISOType
+  statusUpdatedAt: null | DateISOType,
+  collaboratorId?: string
 };
 
 export type InnovationNeedsAssessmentInfoDTO = {
