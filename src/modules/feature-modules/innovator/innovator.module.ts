@@ -10,6 +10,14 @@ import { ContextInnovationOutletComponent } from './base/context-innovation-outl
 import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
 import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
 
+// Components.
+import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
+
+// Experiments.
+import { ExperimentsInnovationSectionEditComponent } from './experiments/innovation-sections/section-edit.component';
+import { ExperimentsInnovationSectionInfoComponent } from './experiments/innovation-sections/section-info.component';
+import { ExperimentsInnovationSectionEvidenceInfoComponent } from './experiments/innovation-sections/section-evidence-info.component';
+
 // Pages.
 // // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
@@ -42,9 +50,6 @@ import { InnovationSectionEditComponent } from './pages/innovation/record/sectio
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 
-// Components.
-import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
-
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 import { ManageGuard } from './guards/manage.guard';
@@ -65,6 +70,14 @@ import { InnovatorService } from './services/innovator.service';
     ContextInnovationOutletComponent,
     SidebarAccountMenuOutletComponent,
     SidebarInnovationMenuOutletComponent,
+
+    // Components.
+    OrganisationSuggestionsCardComponent,
+
+    // Experiments.
+    ExperimentsInnovationSectionEditComponent,
+    ExperimentsInnovationSectionInfoComponent,
+    ExperimentsInnovationSectionEvidenceInfoComponent,
 
     // Pages.
     // // Account.
@@ -96,10 +109,7 @@ import { InnovatorService } from './services/innovator.service';
     InnovationSectionEditComponent,
     InnovationNewComponent,
     PageInnovationManageAccessOverviewComponent,
-    PageInnovationManageAccessLeaveInnovationComponent,
-
-    // Components.
-    OrganisationSuggestionsCardComponent
+    PageInnovationManageAccessLeaveInnovationComponent
   ],
   providers: [
     // Guards.

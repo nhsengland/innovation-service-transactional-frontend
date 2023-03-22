@@ -9,8 +9,12 @@ import { ContextInnovationOutletComponent } from './base/context-innovation-outl
 import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
 import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
 
+// Experiments.
+import { ExperimentsInnovationSectionEditComponent } from './experiments/innovation-sections/section-edit.component';
+import { ExperimentsInnovationSectionInfoComponent } from './experiments/innovation-sections/section-info.component';
+import { ExperimentsInnovationSectionEvidenceInfoComponent } from './experiments/innovation-sections/section-evidence-info.component';
+
 // Innovator module pages.
-// Pages.
 // // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
 import { PageAccountInfoComponent } from './pages/account/account-info.component';
@@ -235,6 +239,19 @@ const routes: Routes = [
                     children: [
 
                       { path: '', pathMatch: 'full', redirectTo: '../record' },
+
+                      {
+                        path: 'experiments/:sectionId/edit',
+                        pathMatch: 'full',
+                        component: ExperimentsInnovationSectionEditComponent,
+                        data: { layout: { type: 'full' } }
+                      },
+                      {
+                        path: 'experiments/:sectionId',
+                        pathMatch: 'full',
+                        component: ExperimentsInnovationSectionInfoComponent
+                      },
+                      
                       {
                         path: ':sectionId',
                         resolve: { innovationSectionData: InnovationSectionDataResolver },
@@ -469,6 +486,7 @@ const routes: Routes = [
                     ]
                   },
                   {
+
                     path: 'access',
                     data: { breadcrumb: 'Manage access' },
                     children: [
