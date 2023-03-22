@@ -114,6 +114,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     // Only show cookies banner if NOT on policies pages.
     this.showCookiesBanner = (this.coockiesService.shouldAskForCookies() && !event.url.startsWith('/policies'));
 
+    if(event.url.includes('manage-details') && this.user.displayName !== this.authenticationStore.getUserInfo().displayName) {
+      this.user = {
+        ...this.user,
+        displayName: this.authenticationStore.getUserInfo().displayName
+      }
+    }
+
     // // Always reset focus to body.
     // if (isPlatformBrowser(this.platformId)) {
     //   setTimeout(() => {
