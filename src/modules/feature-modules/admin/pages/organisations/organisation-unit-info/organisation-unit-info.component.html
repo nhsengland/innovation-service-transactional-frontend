@@ -25,7 +25,9 @@
                 label="{{ unit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
             </dd>
             <dd class="nhsuk-summary-list__actions">
-              <a routerLink="{{ unit.isActive ? 'inactivate' : 'activate' }}"> 
+              <a 
+                *ngIf="usersList.getTotalRowsNumber() > 0 && !unit.isActive" 
+                routerLink="{{ unit.isActive ? 'inactivate' : 'activate' }}"> 
                 {{ unit.isActive ? 'Inactivate' : 'Activate' }} unit
               </a>
             </dd>
@@ -43,7 +45,7 @@
 
         <!-- TODO: In another US -->
         <!-- <div class="nhsuk-action-link nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5">
-          <a class="nhsuk-action-link__link" routerLink="/admin/organisations/{{ organisationId }}/unit/{{organisationUnitId}}/new">
+          <a class="nhsuk-action-link__link" routerLink="">
             <theme-svg-icon type="action"></theme-svg-icon>
             <span class="nhsuk-action-link__text">Create a new user</span>
           </a>
@@ -70,13 +72,14 @@
                   
                 </td>
                 <td class="nhsuk-table__cell text-align-right">
-                  <span class="nhsuk-table-responsive__heading"></span>
-                  <a routerLink="/admin/service-users/{{item.id}}"> 
+                  <!-- TODO: In another US -->
+                  <!-- <span class="nhsuk-table-responsive__heading"></span>
+                  <a routerLink=""> 
                     Change 
                     <span class="nhsuk-u-visually-hidden"> 
                       {{ item.name | lowercase }} information
                     </span>
-                  </a>
+                  </a> -->
                 </td>
               </tr>
             </tbody>
@@ -92,7 +95,7 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
         <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Innovations</h2>
-        <p class="nhsuk-body-m">{{innovationsList.getTotalRowsNumber()}} innovations asssociated to this organisation unit</p>
+        <p class="nhsuk-body-m">{{innovationsList.getTotalRowsNumber()}} innovations associated to this organisation unit</p>
   
         <div *ngIf="innovationsList.getTotalRowsNumber() > 0">
           <table class="nhsuk-table-responsive app-sortable-table">
