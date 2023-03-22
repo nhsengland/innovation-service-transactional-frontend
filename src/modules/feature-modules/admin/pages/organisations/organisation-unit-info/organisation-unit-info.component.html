@@ -26,7 +26,7 @@
             </dd>
             <dd class="nhsuk-summary-list__actions">
               <a 
-                *ngIf="usersList.getTotalRowsNumber() > 0 && !unit.isActive" 
+                *ngIf="unit.isActive || usersList.getTotalRowsNumber() > 0" 
                 routerLink="{{ unit.isActive ? 'inactivate' : 'activate' }}"> 
                 {{ unit.isActive ? 'Inactivate' : 'Activate' }} unit
               </a>
@@ -41,7 +41,7 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
         <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Users</h2>
-        <p class="nhsuk-body-m">{{unit.userCount}} users associated to this organisation unit</p>
+        <p class="nhsuk-body-m">{{usersList.getTotalRowsNumber()}} users associated to this organisation unit</p>
 
         <!-- TODO: In another US -->
         <!-- <div class="nhsuk-action-link nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5">
@@ -61,28 +61,7 @@
                 </th>
               </tr>
             </thead>
-            <tbody class="nhsuk-table__body">
-              <tr *ngFor="let item of usersList.getRecords()" class="nhsuk-table__row">
-                <td class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ usersList.getColumnLabel('account') }}</span>
-                  <span>
-                    {{item.name}} ({{item.roleDescription}})
-                    <span class="nhsuk-hint nhsuk-u-margin-bottom-0">{{item.email}}</span>
-                  </span>
-                  
-                </td>
-                <td class="nhsuk-table__cell text-align-right">
-                  <!-- TODO: In another US -->
-                  <!-- <span class="nhsuk-table-responsive__heading"></span>
-                  <a routerLink=""> 
-                    Change 
-                    <span class="nhsuk-u-visually-hidden"> 
-                      {{ item.name | lowercase }} information
-                    </span>
-                  </a> -->
-                </td>
-              </tr>
-            </tbody>
+            <theme-spinner *ngIf="usersLoading; else users" cssClass="nhsuk-u-margin-9" message="Loading users. Please wait..."></theme-spinner>
           </table>
         </div>
     
@@ -107,18 +86,7 @@
                 </th>
               </tr>
             </thead>
-            <tbody class="nhsuk-table__body">
-              <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
-                <td class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('innovation') }}</span>
-                  <span>{{ item.name }}</span>
-                </td>
-                <td class="nhsuk-table__cell text-align-right">
-                  <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('status') }}</span>
-                  <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + getUnitStatusSupport(item.supports) + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + getUnitStatusSupport(item.supports) + '.name' | translate }}"></theme-tag>
-                </td>
-              </tr>
-            </tbody>
+            <theme-spinner *ngIf="innovationsLoading; else innovations" cssClass="nhsuk-u-margin-9" message="Loading innovations. Please wait..."></theme-spinner>
           </table>
         </div>
     
@@ -127,3 +95,44 @@
     </div>
   </section>
 </theme-content-wrapper>
+
+
+<ng-template #users>
+  <tbody class="nhsuk-table__body">
+    <tr *ngFor="let item of usersList.getRecords()" class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <span class="nhsuk-table-responsive__heading">{{ usersList.getColumnLabel('account') }}</span>
+        <span>
+          {{item.name}} ({{item.roleDescription}})
+          <span class="nhsuk-hint nhsuk-u-margin-bottom-0">{{item.email}}</span>
+        </span>
+        
+      </td>
+      <td class="nhsuk-table__cell text-align-right">
+        <!-- TODO: In another US -->
+        <!-- <span class="nhsuk-table-responsive__heading"></span>
+        <a routerLink=""> 
+          Change 
+          <span class="nhsuk-u-visually-hidden"> 
+            {{ item.name | lowercase }} information
+          </span>
+        </a> -->
+      </td>
+    </tr>
+  </tbody>
+</ng-template>
+
+<ng-template #innovations>
+  <tbody class="nhsuk-table__body">
+    <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('innovation') }}</span>
+        <span>{{ item.name }}</span>
+      </td>
+      <td class="nhsuk-table__cell text-align-right">
+        <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('status') }}</span>
+        <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + item.supports?.[0]?.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + item.supports?.[0]?.status + '.name' | translate }}"></theme-tag>
+      </td>
+    </tr>
+  </tbody>
+</ng-template>
