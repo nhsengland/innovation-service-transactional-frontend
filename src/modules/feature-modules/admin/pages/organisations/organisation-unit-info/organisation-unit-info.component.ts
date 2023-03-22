@@ -19,6 +19,9 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
   organisationId: string;
   organisationUnitId: string;
 
+  usersLoading: boolean = false;
+  innovationsLoading: boolean = false;
+
   unit: GetOrganisationUnitInfoDTO = { id: '', name: '', acronym: '', isActive: false, userCount: 0};
   innovationsList = new TableModel<InnovationsListDTO['data'][0], InnovationsListFiltersType>({ pageSize: 5 });
   usersList = new TableModel<UsersListDTO['data'][0], UserListFiltersType>({ pageSize: 5 });
@@ -49,7 +52,8 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
       innovation: { label: 'Innovation', orderable: false },
       status: { label: 'Status', orderable: false, align: 'right' }
     }).setFilters({      
-      engagingOrganisationUnits: [this.organisationUnitId]
+      engagingOrganisationUnits: [this.organisationUnitId],
+      supportStatuses: [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED]
     });
   }
 
@@ -74,35 +78,30 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
     });
   }
 
-  getUnitStatusSupport(supports?: {
-    id: string,
-    status: InnovationSupportStatusEnum,
-    organisation: {
-      id: string,
-      unit: {
-        id: string,
-      }
-    }
-  }[]): InnovationSupportStatusEnum {
-    return supports && supports.length > 0 ? supports[0].status : InnovationSupportStatusEnum.NOT_YET;
-  }
-
   onUsersPageChange(event: { pageNumber: number }): void {
+    this.usersLoading = true;
     this.usersList.setPage(event.pageNumber);
 
     this.usersService.getUsersList({ queryParams: this.usersList.getAPIQueryParams() }).subscribe({
       next: (users) => {        
         this.usersList.setData(users.data, users.count);
+      },
+      complete: () => {
+        this.usersLoading = false;
       }
     });
   }
   
   onInnovationsPageChange(event: { pageNumber: number }): void {
+    this.innovationsLoading = true;
     this.innovationsList.setPage(event.pageNumber);
 
     this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() }).subscribe({
       next: (innovations) => {        
         this.innovationsList.setData(innovations.data, innovations.count);
+      },
+      complete: () => {
+        this.innovationsLoading = false;
       }
     });
   }
