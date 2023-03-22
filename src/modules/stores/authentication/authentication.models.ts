@@ -39,6 +39,8 @@ export class AuthenticationModel {
       role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum,
       isShadow: boolean,
       size: null | string,
+      registrationNumber: null | string,
+      description: null | string,
       organisationUnits: { id: string, name: string, acronym: string }[]
     }[]
   };

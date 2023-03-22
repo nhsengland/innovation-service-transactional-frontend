@@ -42,7 +42,9 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
 
       if (!user.organisations[0].isShadow) {
         this.summaryList.push({ label: 'Company', value: user.organisations[0].name, editStepNumber: 5 });
-        this.summaryList.push({ label: 'Company size', value: user.organisations[0].size, editStepNumber: 6 });
+        this.summaryList.push({ label: 'Company description', value: user.organisations[0].description, editStepNumber: 6 });
+        this.summaryList.push({ label: 'Company size', value: user.organisations[0].size, editStepNumber: 7 });
+        this.summaryList.push({ label: 'Company UK registration number', value: user.organisations[0].registrationNumber ?? '', editStepNumber: 8 });
       }
 
     } else if (this.stores.authentication.isAccessorType()) {
