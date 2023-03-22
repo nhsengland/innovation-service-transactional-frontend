@@ -40,7 +40,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   showCookiesBanner = false;
   showCookiesSaveSuccess = false;
 
-  user: { displayName: string; description: string; showSwitchProfile: boolean; };
+  user: { displayName: string; description: string; showSwitchProfile: boolean; } = {displayName: '', description: '', showSwitchProfile: false};
 
   menuBarItems: {
     isChildrenOpened: boolean,
@@ -55,17 +55,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     private authenticationStore: AuthenticationStore,
     private coockiesService: CookiesService
   ) {
-
-    const user = this.authenticationStore.getUserInfo();
-    const userRole = this.authenticationStore.getUserRole();
-    const userContext = this.authenticationStore.getUserContextInfo();
-    
-    this.user = {
-      displayName: user.displayName,
-      description: this.authenticationStore.isAccessorType() ? `Logged in as ${userRole} (${userContext?.organisationUnit?.name})` : `Logged in as ${userRole}`,
-      showSwitchProfile: this.authenticationStore.hasMultipleRoles()
-    };
-
     this.subscriptions.add(
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
     );
@@ -79,6 +68,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       right: this.rightMenuBarItems,
       isChildrenOpened: false
     };
+
+    this.authenticationStore.state$.subscribe(state => {
+      const hasMultipleRoles = (state.user && state.user?.roles.length > 1) ?? false;
+      const userRole = this.authenticationStore.getUserRole();
+      const orgUnitName =  state.userContext?.organisationUnit?.name;
+
+      this.user = {
+        displayName: state.user?.displayName ?? '',
+        description: this.authenticationStore.isAccessorType() ? `Logged in as ${userRole} (${orgUnitName})` : `Logged in as ${userRole}`,
+        showSwitchProfile: hasMultipleRoles
+      };
+    })
 
   }
 
@@ -113,13 +114,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Only show cookies banner if NOT on policies pages.
     this.showCookiesBanner = (this.coockiesService.shouldAskForCookies() && !event.url.startsWith('/policies'));
-
-    if(event.url.includes('manage-details') && this.user.displayName !== this.authenticationStore.getUserInfo().displayName) {
-      this.user = {
-        ...this.user,
-        displayName: this.authenticationStore.getUserInfo().displayName
-      }
-    }
 
     // // Always reset focus to body.
     // if (isPlatformBrowser(this.platformId)) {
