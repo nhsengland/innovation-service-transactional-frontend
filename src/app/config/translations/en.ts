@@ -80,13 +80,13 @@ export const locale = {
         }
       },
 
-      admin: {    
+      admin: {
         organisation_unit: {
           innovations: {
             none: `0 innovations associated to this organisation unit`,
             plural: `{{ count }} innovations associated to this organisation unit`,
             singular: '1 innovation associated to this organisation unit'
-          },          
+          },
           users: {
             none: `0 users associated to this organisation unit`,
             plural: `{{ count }} users associated to this organisation unit`,
@@ -501,6 +501,7 @@ export const locale = {
           max_hexadecimal: 'Value above the maximum allowed',
           min_length: 'Text must have at least {{ minLength }} characters',
           max_length: 'Text cannot exceed {{ maxLength }} characters',
+          equal_to_length: 'Text must have {{ equalToLength }} characters',
           password_mismatch: 'Passwords don\'t appear to match',
           password_regex: 'The password must contain at least minimum 8 characters: one uppercase, one lowercase, one number and one special character',
           required: 'Required',

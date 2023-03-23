@@ -109,7 +109,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
             {
               value: 'YES',
               label: 'Yes',
-              conditional: new FormEngineParameterModel({ id: 'organisationRegistrationNumber', dataType: 'text', label: 'Enter the company registration number', validations: { isRequired: [true, 'Registration number is required'], minLength: 8, maxLength: 8 } })
+              conditional: new FormEngineParameterModel({ id: 'organisationRegistrationNumber', dataType: 'text', label: 'Enter the company registration number', validations: { isRequired: [true, 'Registration number is required'], equalToLength: 8 } })
             },
             { value: 'NO', label: 'No' }
           ]

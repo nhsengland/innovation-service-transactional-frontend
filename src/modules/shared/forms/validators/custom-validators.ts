@@ -31,6 +31,10 @@ export class CustomValidators {
     return (control: AbstractControl): ValidationErrors | null => control.value === value ? null : { equalTo: (message ? { message } : true) };
   }
 
+  static equalToLength(length: number, message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => (control.value ?? '').length === length ? null : { equalToLength: (message ? { message, length } : { length }) };
+  }
+
   static hexadecimalFormatValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) { return null; }
@@ -62,7 +66,7 @@ export class CustomValidators {
 
   static parsedDateStringValidator(message?: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      if(!control.value) { return null; }
+      if (!control.value) { return null; }
       return DatesHelper.parseIntoValidFormat(control.value) !== null ? null : { parsedDateString: (message ? { message } : true) };
     }
   }
