@@ -44,6 +44,7 @@ export class FormEngineParameterModel {
     max?: number | [number, string];
     minLength?: number;
     maxLength?: number;
+    equalToLength?: number | [number, string];
     async?: AsyncValidatorFn[];
     existsIn?: string[] | [string[], string];
   };

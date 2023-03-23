@@ -1,5 +1,4 @@
-import { FormGroup, FormControl, ValidationErrors, FormArray, Validators, ValidatorFn, AsyncValidatorFn, AbstractControlOptions } from '@angular/forms';
-// import { sortBy } from 'lodash';
+import { AbstractControlOptions, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 import { FormEngineParameterModel } from '../models/form-engine.models';
 
@@ -167,6 +166,7 @@ export class FormEngineHelper {
     if (error.max) { return { message: error.max.message || 'shared.forms_module.validations.max', params: { max: error.max.max } }; }
     if (error.minlength) { return { message: 'shared.forms_module.validations.min_length', params: { minLength: error.minlength.requiredLength } }; }
     if (error.maxlength) { return { message: 'shared.forms_module.validations.max_length', params: { maxLength: error.maxlength.requiredLength } }; }
+    if (error.equalToLength) { return { message: error.equalToLength.message || 'shared.forms_module.validations.equal_to_length', params: { equalToLength: error.equalToLength.length } }; }
     if (error.pattern) { return { message: error.pattern.message || 'shared.forms_module.validations.invalid_format', params: {} }; }
     if (error.existsIn) { return { message: error.existsIn.message || 'shared.forms_module.validations.existsIn', params: {} }; }
 
@@ -174,8 +174,8 @@ export class FormEngineHelper {
     if (error.minHexadecimal) { return { message: 'shared.forms_module.validations.min_hexadecimal' + ` (${error.minHexadecimal.min})`, params: {} }; }
     if (error.maxHexadecimal) { return { message: 'shared.forms_module.validations.max_hexadecimal' + ` (${error.maxHexadecimal.max})`, params: {} }; }
     if (error.parsedDateString) { return { message: error.parsedDateString.message || "shared.forms_module.validations.invalid_parse_date", params: {} } }
-    if (error.maxFileSize) { return { message: 'shared.forms_module.validations.max_file_size', params: {} }}
-    if (error.emptyFile) { return { message: 'shared.forms_module.validations.empty_file', params: {} }}
+    if (error.maxFileSize) { return { message: 'shared.forms_module.validations.max_file_size', params: {} } }
+    if (error.emptyFile) { return { message: 'shared.forms_module.validations.empty_file', params: {} } }
     if (error.customError) { return { message: error.message, params: {} }; }
     return { message: '', params: {} };
 
@@ -220,6 +220,10 @@ export class FormEngineHelper {
 
     if (parameter.validations?.minLength) { validators.push(Validators.minLength(parameter.validations.minLength)); }
     if (parameter.validations?.maxLength) { validators.push(Validators.maxLength(parameter.validations.maxLength)); }
+    if (parameter.validations?.equalToLength) {
+      validation = (typeof parameter.validations.equalToLength === 'number' ? [parameter.validations.equalToLength, null] : parameter.validations.equalToLength);
+      validators.push(CustomValidators.equalToLength(validation[0] as number, validation[1]));
+    }
 
     if (parameter.validations?.min) {
       validation = (typeof parameter.validations.min === 'number' ? [parameter.validations.min, null] : parameter.validations.min);
