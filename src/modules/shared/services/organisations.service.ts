@@ -3,10 +3,8 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 
 export type getAccessorsOrganisationsDTO = {
@@ -42,6 +40,7 @@ export type GetOrganisationUnitInfoDTO = {
   acronym: string;
   isActive: boolean;
   userCount: number;
+  canActivate: boolean;
 };
 
 export type GetOrganisationUnitInnovationsListDTO = {

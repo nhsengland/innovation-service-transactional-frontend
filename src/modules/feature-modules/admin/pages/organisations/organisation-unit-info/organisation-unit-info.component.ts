@@ -22,7 +22,7 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
   usersLoading: boolean = false;
   innovationsLoading: boolean = false;
 
-  unit: GetOrganisationUnitInfoDTO = { id: '', name: '', acronym: '', isActive: false, userCount: 0};
+  unit: GetOrganisationUnitInfoDTO = { id: '', name: '', acronym: '', isActive: false, userCount: 0, canActivate: false};
   innovationsList = new TableModel<InnovationsListDTO['data'][0], InnovationsListFiltersType>({ pageSize: 5 });
   usersList = new TableModel<UsersListDTO['data'][0], UserListFiltersType>({ pageSize: 5 });
 
@@ -43,7 +43,7 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
       action: { label: '', orderable: false, align: 'right' }
     }).setFilters({
       email: true, 
-      onlyActive: true,
+      onlyActive: false,
       organisationUnitId: this.organisationUnitId,
       userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]
     });
