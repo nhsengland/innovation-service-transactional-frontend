@@ -78,6 +78,19 @@ export const locale = {
           message: 'Give us time while we investigate what happened that took you to here.',
           button_label: 'Go back to home'
         }
+      },
+
+      admin: {    
+        organisation_unit: {
+          innovations: {
+            plural: `{{ count }} innovations associated to this organisation unit`,
+            singular: '1 innovation associated to this organisation unit'
+          },          
+          users: {
+            plural: `{{ count }} users associated to this organisation unit`,
+            singular: '1 user associated to this organisation unit'
+          }
+        }
       }
 
     },
@@ -467,8 +480,7 @@ export const locale = {
               label: 'Either',
               confirmation: '9am to 12pm or 1pm to 5pm'
             },
-          },
-
+          }
         }
       },
 
