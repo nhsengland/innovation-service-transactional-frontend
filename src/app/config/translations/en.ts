@@ -83,10 +83,12 @@ export const locale = {
       admin: {    
         organisation_unit: {
           innovations: {
+            none: `0 innovations associated to this organisation unit`,
             plural: `{{ count }} innovations associated to this organisation unit`,
             singular: '1 innovation associated to this organisation unit'
           },          
           users: {
+            none: `0 users associated to this organisation unit`,
             plural: `{{ count }} users associated to this organisation unit`,
             singular: '1 user associated to this organisation unit'
           }

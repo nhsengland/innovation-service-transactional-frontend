@@ -26,7 +26,7 @@
             </dd>
             <dd class="nhsuk-summary-list__actions">
               <a 
-                *ngIf="unit.isActive || usersList.getTotalRowsNumber() > 0" 
+                *ngIf="unit.isActive || unit.canActivate" 
                 routerLink="{{ unit.isActive ? 'inactivate' : 'activate' }}"> 
                 {{ unit.isActive ? 'Inactivate' : 'Activate' }} unit
               </a>
@@ -41,7 +41,7 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
         <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Users</h2>
-        <p  *ngIf="usersList.getTotalRowsNumber() > 0" class="nhsuk-body-m">{{ 'features.admin.organisation_unit.users' | pluralTranslate: usersList.getTotalRowsNumber() | translate:  { count: usersList.getTotalRowsNumber() } }}</p>
+        <p class="nhsuk-body-m">{{ 'features.admin.organisation_unit.users' | pluralTranslate: usersList.getTotalRowsNumber() | translate:  { count: usersList.getTotalRowsNumber() } }}</p>
 
         <!-- TODO: In another US -->
         <!-- <div class="nhsuk-action-link nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5">
@@ -74,7 +74,7 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
         <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Innovations</h2>
-        <p *ngIf="innovationsList.getTotalRowsNumber() > 0" class="nhsuk-body-m">{{ 'features.admin.organisation_unit.innovations' | pluralTranslate: innovationsList.getTotalRowsNumber() | translate:  { count: innovationsList.getTotalRowsNumber() } }}</p>
+        <p class="nhsuk-body-m">{{ 'features.admin.organisation_unit.innovations' | pluralTranslate: innovationsList.getTotalRowsNumber() | translate:  { count: innovationsList.getTotalRowsNumber() } }}</p>
         
         <div *ngIf="innovationsList.getTotalRowsNumber() > 0">
           <table class="nhsuk-table-responsive app-sortable-table">
