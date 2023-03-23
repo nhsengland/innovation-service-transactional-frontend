@@ -45,7 +45,7 @@
 
       <div class="d-flex align-items-center justify-content-space-between">
         <h2>Your innovations</h2>
-        <a routerLink="/innovator/innovation-statuses" class="float-r nhsuk-u-margin-bottom-4" arial-label="View innovation status information">What does this status mean?</a>
+        <a *ngIf="user.innovationsOwner.length > 0 || user.innovationsCollaborator.length > 0" routerLink="/innovator/innovation-statuses" class="float-r nhsuk-u-margin-bottom-4" arial-label="View innovation status information">What does this status mean?</a>
       </div>
 
       <p *ngIf="user.innovationsOwner.length === 0">You have no innovations.</p>
