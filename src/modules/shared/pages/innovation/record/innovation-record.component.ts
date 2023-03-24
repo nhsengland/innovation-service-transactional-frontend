@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { INNOVATION_STATUS, SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { INNOVATION_STATUS, SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
 
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
@@ -60,7 +60,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
     this.baseUrl = `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
     this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
-    this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${this.activatedRoute.snapshot.params.innovationId}/pdf`;
+    this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${this.activatedRoute.snapshot.params.innovationId}/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
     this.innovationName = this.innovation.name;
