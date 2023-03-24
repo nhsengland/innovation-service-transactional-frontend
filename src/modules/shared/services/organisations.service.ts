@@ -39,7 +39,6 @@ export type GetOrganisationUnitInfoDTO = {
   name: string;
   acronym: string;
   isActive: boolean;
-  userCount: number;
   canActivate: boolean;
 };
 
