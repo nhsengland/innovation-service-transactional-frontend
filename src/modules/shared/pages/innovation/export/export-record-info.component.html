@@ -80,8 +80,8 @@
           </ng-container>
 
           <ng-container *ngSwitchCase="'APPROVED'">
-            <a href="{{ CONSTANTS.APP_URL }}/exports/{{ innovationId }}/pdf" class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-font-size-19">
-              Export innovation record (PDF)
+            <a href="{{ CONSTANTS.APP_URL }}/exports/{{ innovationId }}/pdf?role={{userRoleId}}" class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-font-size-19">
+              Export innovation record (PDF) bbb
             </a>
 
             <ng-container *ngTemplateOutlet="usesOfInnovationRecordData"></ng-container>

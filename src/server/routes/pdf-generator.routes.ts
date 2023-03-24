@@ -16,7 +16,10 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
     const user: IProfile = req.user || {};
     const oid: string = user.oid || '';
     const accessToken = getAccessTokenByOid(oid);
-    const config = { headers: { Authorization: `Bearer ${accessToken}` } };
+    const config = { headers: { 
+      Authorization: `Bearer ${accessToken}`,
+      ...req.query.role && { 'x-is-role': req.query.role }
+    } };
 
     generatePDF(req.params.innovationId, config)
       .then((response: any) => {
