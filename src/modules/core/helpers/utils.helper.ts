@@ -24,11 +24,14 @@ export class UtilsHelper {
 
   static getContactPreferenceValue(contactByEmail: boolean = false, contactByPhone: boolean = false, contactByPhoneTimeframe: PhoneUserPreferenceEnum | null = null): string {
     let value = '';
+    let newLine = false;
     if (contactByPhone && contactByPhoneTimeframe) {
       value = `By phone, ${locale.data.shared.catalog.user.contact_user_preferences[contactByPhoneTimeframe].confirmation}`;
+      newLine = true;
     }
     
     if (contactByEmail) {
+      if (newLine) { value += '\n'}
       value += 'By email';
     }
   
