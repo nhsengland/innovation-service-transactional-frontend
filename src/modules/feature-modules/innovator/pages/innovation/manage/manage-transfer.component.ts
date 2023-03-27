@@ -16,7 +16,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
   templateUrl: './manage-transfer.component.html'
 })
 export class PageInnovationManageTransferComponent extends CoreComponent implements OnInit {
-  
+
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   innovationId: string;
@@ -34,7 +34,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService,    
+    private innovatorService: InnovatorService,
     private innovationsService: InnovationsService
   ) {
 
@@ -54,7 +54,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
         this.wizard = COLLABORATORS_TRANSFERS;
         const collaborators: {
           value: string,
-          label: string  
+          label: string
         }[] = response.data.map((i) => ({
           value: i.email ?? '',
           label: i.name ?? ''
@@ -87,7 +87,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
 
           this.wizard.gotoStep(Number(params.stepId));
           this.setPageTitle(this.wizard.currentStepTitle() || '');
-          this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));         
+          this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
           this.setPageStatus('READY');
 
         })
@@ -121,16 +121,16 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
 
     this.innovatorService.transferInnovation(body).subscribe({
       next: () => {
-        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage`);
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation`);
       },
       error: () => {
         this.setAlertError('An error occurred when transferring innovation ownership. Please check the details and try again or contact us for further info.');
       }
     });
   }
-  
+
   private getNavigationUrl(action: 'previous' | 'next'): string {
-    let url = `/innovator/innovations/${this.innovationId}/manage`;
+    let url = `/innovator/innovations/${this.innovationId}/manage/innovation`;
 
     switch (action) {
       case 'previous':
@@ -149,7 +149,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
         url += '';
         break;
     }
-    
+
     return url;
   }
 }

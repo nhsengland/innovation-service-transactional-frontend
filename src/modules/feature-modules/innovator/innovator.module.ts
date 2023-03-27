@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
-import { ThemeModule } from '@modules/theme/theme.module';
 import { SharedModule } from '@modules/shared/shared.module';
+import { ThemeModule } from '@modules/theme/theme.module';
 
 import { InnovatorRoutingModule } from './innovator-routing.module';
 
@@ -9,6 +9,14 @@ import { InnovatorRoutingModule } from './innovator-routing.module';
 import { ContextInnovationOutletComponent } from './base/context-innovation-outlet.component';
 import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
 import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
+
+// Components.
+import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
+
+// Experiments.
+import { ExperimentsInnovationSectionEditComponent } from './experiments/innovation-sections/section-edit.component';
+import { ExperimentsInnovationSectionInfoComponent } from './experiments/innovation-sections/section-info.component';
+import { ExperimentsInnovationSectionEvidenceInfoComponent } from './experiments/innovation-sections/section-evidence-info.component';
 
 // Pages.
 // // Account.
@@ -19,9 +27,9 @@ import { PageCollaborationInviteComponent } from './pages/collaboration-invite/c
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // First time signin.
-import { FirstTimeSigninInnovationNewComponent } from './pages/first-time-signin/innovation-new.component';
-import { FirstTimeSigninInnovationTransferComponent } from './pages/first-time-signin/innovation-transfer.component';
+import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
 // // Innovation.
+import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
 import { InnovationActionCompleteConfirmationComponent } from './pages/innovation/action-complete-confirmation/action-complete-confirmation.component';
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
@@ -39,17 +47,15 @@ import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
-import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
-
-// Components.
-import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
+import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
+import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
+import { ManageGuard } from './guards/manage.guard';
 
 // Services.
 import { InnovatorService } from './services/innovator.service';
-import { ManageInnovationGuard } from './guards/manage-innovation.guard';
 
 
 @NgModule({
@@ -65,6 +71,14 @@ import { ManageInnovationGuard } from './guards/manage-innovation.guard';
     SidebarAccountMenuOutletComponent,
     SidebarInnovationMenuOutletComponent,
 
+    // Components.
+    OrganisationSuggestionsCardComponent,
+
+    // Experiments.
+    ExperimentsInnovationSectionEditComponent,
+    ExperimentsInnovationSectionInfoComponent,
+    ExperimentsInnovationSectionEvidenceInfoComponent,
+
     // Pages.
     // // Account.
     PageAccountDeleteComponent,
@@ -74,8 +88,7 @@ import { ManageInnovationGuard } from './guards/manage-innovation.guard';
     // // Dashboard.
     PageDashboardComponent,
     // // First time signin.
-    FirstTimeSigninInnovationNewComponent,
-    FirstTimeSigninInnovationTransferComponent,
+    FirstTimeSigninComponent,
     // // Innovation.
     InnovationActionCompleteConfirmationComponent,
     InnovationActionTrackerDeclineComponent,
@@ -95,14 +108,13 @@ import { ManageInnovationGuard } from './guards/manage-innovation.guard';
     InnovationSectionEvidenceEditComponent,
     InnovationSectionEditComponent,
     InnovationNewComponent,
-
-    // Components.
-    OrganisationSuggestionsCardComponent
+    PageInnovationManageAccessOverviewComponent,
+    PageInnovationManageAccessLeaveInnovationComponent
   ],
   providers: [
     // Guards.
     FirstTimeSigninGuard,
-    ManageInnovationGuard,
+    ManageGuard,
 
     // Services.
     InnovatorService

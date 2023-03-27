@@ -59,7 +59,7 @@ describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitActivateComponent'
     activatedRoute.snapshot.params = { organisationId: '_org01', organisationUnitId: '_orgUnit01' };
 
     organisationsService.getOrganisationUnitInfo = () => of({
-      id: '_org01', name: 'Org name', acronym: 'ORG', isActive: true, userCount: 10
+      id: '_org01', name: 'Org name', acronym: 'ORG', isActive: true, canActivate: false,
     });
 
   });

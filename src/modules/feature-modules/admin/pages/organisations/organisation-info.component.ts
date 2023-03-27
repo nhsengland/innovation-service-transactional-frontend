@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { UserRoleEnum } from '@app/base/enums';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { UsersService } from '@modules/shared/services/users.service';
 
 
 @Component({
@@ -35,7 +37,8 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private organisationsService: OrganisationsService
+    private organisationsService: OrganisationsService,
+    private usersService: UsersService
   ) {
 
     super();
@@ -109,9 +112,18 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
         unit.isLoading = false;
         break;
       case 'closed':
-        this.organisationsService.getOrganisationUnitUsersList(organisationUnitId, { onlyActive: true }).subscribe(
+        this.usersService.getUsersList({
+          queryParams: { 
+            take: 100, 
+            skip: 0, 
+            filters: { 
+              onlyActive: true, 
+              organisationUnitId: organisationUnitId,
+              userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR] 
+            }
+          }}).subscribe(
           response => {
-            unit.users = response.map(item => ({ name: item.name, roleDescription: this.stores.authentication.getRoleDescription(item.role) }));
+            unit.users = response.data.map(item => ({ name: item.name, roleDescription: item.roleDescription }));
             unit.showHideStatus = 'opened';
             unit.showHideText = `Hide users`;
             unit.showHideDescription = `that belong to the ${unit.name}`;

@@ -182,7 +182,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     fixture.detectChanges();
 
     component.onSubmitWizard();
-    expect(routerSpy).toHaveBeenCalledWith(['admin/organisations/Org01'], { queryParams: { alert: 'updateUnitSuccess' } });
+    expect(routerSpy).toHaveBeenCalledWith(["admin/organisations/Org01/unit/Unit01"], {});
 
   });
 

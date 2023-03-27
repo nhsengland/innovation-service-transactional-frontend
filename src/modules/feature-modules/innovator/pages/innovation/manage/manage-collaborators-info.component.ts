@@ -36,7 +36,7 @@ export class PageInnovationManageCollaboratorsInfoComponent extends CoreComponen
 
     this.innovationCollaboratorId = this.activatedRoute.snapshot.params.collaboratorId ?? null;
     this.innovation = this.stores.context.getInnovation();
-    this.baseUrl = `innovator/innovations/${this.innovation.id}/manage/collaborators`;
+    this.baseUrl = `innovator/innovations/${this.innovation.id}/manage/innovation/collaborators`;
 
     this.setPageTitle('Manage collaborator');
     this.setBackLink('Go back', this.baseUrl);

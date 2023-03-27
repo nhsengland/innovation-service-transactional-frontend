@@ -20,7 +20,7 @@ export const USER_INFO_ACCESSOR: Required<AuthenticationModel>['user'] = {
   passwordResetAt: '2020-01-01T00:00:00.000Z',
   firstTimeSignInAt: '2020-01-01T00:00:00.000Z',
   organisations: [{
-    id: 'org_id', isShadow: false, name: 'organisation_1', acronym: 'O1', size: '', role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR,
+    id: 'org_id', isShadow: false, name: 'organisation_1', acronym: 'O1', size: '', description: 'Sole trader', registrationNumber: null, role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR,
     organisationUnits: [
       { id: '_unit_id', name: 'ORG_UNIT', acronym: 'ORG' }
     ]
@@ -44,7 +44,7 @@ export const USER_INFO_INNOVATOR: Required<AuthenticationModel>['user'] = {
   passwordResetAt: '2020-01-01T00:00:00.000Z',
   firstTimeSignInAt: '2020-01-01T00:00:00.000Z',
   organisations: [
-    { id: 'org_id', isShadow: true, name: '', size: '', acronym: 'O1', role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER, organisationUnits: [] }]
+    { id: 'org_id', isShadow: true, name: '', size: '', acronym: 'O1', description: null, registrationNumber: null, role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER, organisationUnits: [] }]
 };
 
 export const USER_INFO_ADMIN: Required<AuthenticationModel>['user'] = {

@@ -3,10 +3,12 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { UserRoleEnum } from '@app/base/enums';
 import { CustomValidators } from '@app/base/forms';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { UsersService } from '@modules/shared/services/users.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { AccessorService } from '../../../services/accessor.service';
@@ -66,7 +68,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
-    private organisationsService: OrganisationsService,
+    private usersService: UsersService,
     private accessorService: AccessorService
   ) {
 
@@ -108,11 +110,11 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     }
 
-    this.organisationsService.getOrganisationUnitUsersList(this.userOrganisationUnit?.id ?? '', { onlyActive: true }).subscribe(
+    this.usersService.getUsersList({ queryParams: { take: 100, skip: 0, filters: { email: false, onlyActive: true, organisationUnitId: this.userOrganisationUnit?.id ?? '', userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]} }}).subscribe(
       response => {
 
-        this.accessorsList = response;
-        this.formAccessorsList = response.map((r) => ({ value: r.id, label: r.name }));
+        this.accessorsList = response.data.map((item) => ({ id: item.id, organisationUnitUserId: item.organisationUnitUserId, name: item.name }));
+        this.formAccessorsList = response.data.map((r) => ({ value: r.id, label: r.name }));
 
       }
     );

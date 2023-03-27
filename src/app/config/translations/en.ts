@@ -66,12 +66,32 @@ export const locale = {
             title: 'It appears that something went wrong!',
             message: 'Only the innovation owner can access the requested resource.',
             button_label: 'Go back to home'
+          },
+          forbidden_manage_access: {
+            title: 'It appears that something went wrong!',
+            message: 'Only the collaborator can access the requested resource.',
+            button_label: 'Go back to home'
           }
         },
         page_not_found: {
           title: 'It appears that something went wrong!',
           message: 'Give us time while we investigate what happened that took you to here.',
           button_label: 'Go back to home'
+        }
+      },
+
+      admin: {
+        organisation_unit: {
+          innovations: {
+            none: `0 innovations associated to this organisation unit`,
+            plural: `{{ count }} innovations associated to this organisation unit`,
+            singular: '1 innovation associated to this organisation unit'
+          },
+          users: {
+            none: `0 users associated to this organisation unit`,
+            plural: `{{ count }} users associated to this organisation unit`,
+            singular: '1 user associated to this organisation unit'
+          }
         }
       }
 
@@ -462,8 +482,7 @@ export const locale = {
               label: 'Either',
               confirmation: '9am to 12pm or 1pm to 5pm'
             },
-          },
-
+          }
         }
       },
 
@@ -480,8 +499,9 @@ export const locale = {
           min_hexadecimal: 'Value below the minimum allowed',
           max: 'Value above the maximum allowed',
           max_hexadecimal: 'Value above the maximum allowed',
-          min_length: 'Text must have at least {{ maxLength }} characters',
+          min_length: 'Text must have at least {{ minLength }} characters',
           max_length: 'Text cannot exceed {{ maxLength }} characters',
+          equal_to_length: 'Text must have {{ equalToLength }} characters',
           password_mismatch: 'Passwords don\'t appear to match',
           password_regex: 'The password must contain at least minimum 8 characters: one uppercase, one lowercase, one number and one special character',
           required: 'Required',

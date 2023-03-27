@@ -25,7 +25,7 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
   @Input() label?: string;
   @Input() description?: string;
   @Input() placeholder?: string;
-  @Input() lengthLimit?: 'small' | 'medium' | 'large';
+  @Input() lengthLimit?: 'small' | 'medium' | 'mediumUp' | 'largeDown' | 'large'; // TODO: Refactor these names!!!!
   @Input() pageUniqueField = true;
   @Input() cssOverride?: string;
 
@@ -64,6 +64,12 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
     switch (this.lengthLimit) {
       case 'large':
         this.lengthLimitCharacters = 2000;
+        break;
+      case 'largeDown':
+        this.lengthLimitCharacters = 1500;
+        break;
+      case 'mediumUp':
+        this.lengthLimitCharacters = 1000;
         break;
       case 'medium':
         this.lengthLimitCharacters = 500;

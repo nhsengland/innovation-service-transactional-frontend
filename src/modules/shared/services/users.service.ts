@@ -5,26 +5,56 @@ import { map, take } from 'rxjs/operators';
 import { CoreService } from '@app/base';
 import { UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
-import { UserSearchDTO } from '../dtos/users.dto';
+import { GetUsersRequestDTO, UsersListDTO } from '../dtos/users.dto';
+import { APIQueryParamsType } from '@app/base/types';
 
+export type UserListFiltersType = {
+  onlyActive: boolean,
+  userTypes: UserRoleEnum[]
+  email?: boolean,
+  organisationUnitId?: string,
+};
 
 @Injectable()
 export class UsersService extends CoreService {
 
   constructor() { super(); }
 
-  // this could probably be a envelop for a shared getUsersList method
-  getAssessmentUsersList(): Observable<{ id: string, name: string }[]> {
+  getUsersList({ queryParams }: { queryParams?: APIQueryParamsType<UserListFiltersType> } = {}): Observable<UsersListDTO> {
+    if (!queryParams) {
+      queryParams = { take: 100, skip: 0, filters: { email: false, onlyActive: true, userTypes: [UserRoleEnum.ASSESSMENT]} };
+    }
+    const { filters, ...qParams } = queryParams;
 
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ userTypes: [UserRoleEnum.ASSESSMENT], onlyActive: true });
-    return this.http.get<UserSearchDTO[]>(url.buildUrl()).pipe(
+    const qp = {
+      ...qParams,
+      userTypes: filters.userTypes,
+      fields: filters.email ? ['email'] : [],
+      onlyActive: filters.onlyActive ?? false,
+      ...(filters.organisationUnitId ? { organisationUnitId: filters.organisationUnitId } : {}),
+    }
+
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams(qp);
+    return this.http.get<GetUsersRequestDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => response.map(item => ({
-        id: item.id,
-        name: item.name
-      })))
+      map(response => {
+        return {
+          count: response.count,
+          data: response.data.map((item) => {
+            return {
+              id: item.id,
+              isActive: item.isActive,
+              name: item.name,  
+              lockedAt: item.lockedAt,
+              role: item.roles[0].role,
+              roleDescription: this.stores.authentication.getRoleDescription(item.roles[0].role),
+              email: item.email ?? '',
+              organisationUnitUserId: item.organisationUnitUserId ?? '',
+            }
+          })
+        }
+      })
     );
-
   }
 
 }

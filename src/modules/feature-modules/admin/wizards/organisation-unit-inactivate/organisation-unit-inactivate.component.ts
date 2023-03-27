@@ -186,16 +186,17 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
 
     if (!stepData.data.confirm) { return; } // Just a sanity check. Should never happen.
 
-    
     this.setPageStatus('LOADING');
-    this.adminOrganisationsService.inactivateOrganisationUnit(this.wizard.data.organisation.id, this.wizard.data.organisationUnit.id).subscribe(
-      () => this.redirectTo(`/admin/organisations/${this.wizard.data.organisation.id}`, { alert: 'organisationUnitInactivateSuccess' }),
-      () => {
+    this.adminOrganisationsService.inactivateOrganisationUnit(this.wizard.data.organisation.id, this.wizard.data.organisationUnit.id).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('You have successfully inactivated the organisation unit.');
+        this.redirectTo(`/admin/organisations/${this.wizard.data.organisation.id}/unit/${this.wizard.data.organisationUnit.id}`);
+      },
+      error: () => {
         this.onSummaryStepIn();
         this.setAlertUnknownError();
       }
-    );
-
+    });
   }
 
 }

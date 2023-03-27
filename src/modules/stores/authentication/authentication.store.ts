@@ -73,7 +73,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   signOut() {
 
     LocalStorageHelper.removeItem('userContext');
-    window.location.assign(`${this.envVariablesStore.APP_URL}/signout`); // Full reload to hit SSR.
+    window.location.replace(`${this.envVariablesStore.APP_URL}/signout`); // Full reload to hit SSR.
 
   }
 

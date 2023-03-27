@@ -59,7 +59,7 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
     forkJoin([
       this.innovationsService.getInnovationInfo(this.innovation.id),
       this.innovationsService.getInnovationSupportsList(this.innovation.id, true),
-      this.usersService.getAssessmentUsersList()
+      this.usersService.getUsersList()
     ]).subscribe(([innovationInfo, innovationSupports, assessmentUsers]) => {
 
       this.innovationParticipants.innovators.push({ name: innovationInfo.owner.name, role: 'Owner'})
@@ -77,7 +77,7 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
         this.innovationParticipants.accessors.push(...accessors)
       }
 
-      this.innovationParticipants.assessmentUsers = assessmentUsers.map(u => ({ name: u.name }))
+      this.innovationParticipants.assessmentUsers = assessmentUsers.data.map(u => ({ name: u.name }))
 
       this.setPageStatus('READY')
     });
