@@ -1,14 +1,13 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { SharedModule } from '@modules/shared/shared.module';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { EmailNotificationsPreferencesEnum, EmailNotificationsTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 
@@ -17,7 +16,7 @@ import { PageAccountEmailNotificationsEditComponent } from './email-notification
 
 const EmailNotificationsListMock = [
   { notificationType: EmailNotificationsTypeEnum.ACTION, preference: EmailNotificationsPreferencesEnum.INSTANTLY },
-  { notificationType: EmailNotificationsTypeEnum.COMMENT, preference: EmailNotificationsPreferencesEnum.NEVER },
+  { notificationType: EmailNotificationsTypeEnum.MESSAGE, preference: EmailNotificationsPreferencesEnum.NEVER },
   { notificationType: EmailNotificationsTypeEnum.SUPPORT, preference: EmailNotificationsPreferencesEnum.DAILY }
 ];
 

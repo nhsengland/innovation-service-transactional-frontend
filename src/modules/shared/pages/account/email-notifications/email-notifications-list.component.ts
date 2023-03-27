@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { EmailNotificationsTypeEnum, EmailNotificationsPreferencesEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import { EmailNotificationsPreferencesEnum, EmailNotificationsTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 @Component({
@@ -17,7 +16,6 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
   isAnySubscribed = true;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private notificationsService: NotificationsService
   ) {
 
@@ -59,7 +57,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
     const body = [
       { notificationType: EmailNotificationsTypeEnum.ACTION, preference: EmailNotificationsPreferencesEnum.NEVER },
-      { notificationType: EmailNotificationsTypeEnum.COMMENT, preference: EmailNotificationsPreferencesEnum.NEVER },
+      { notificationType: EmailNotificationsTypeEnum.MESSAGE, preference: EmailNotificationsPreferencesEnum.NEVER },
       { notificationType: EmailNotificationsTypeEnum.SUPPORT, preference: EmailNotificationsPreferencesEnum.NEVER }
     ];
 
