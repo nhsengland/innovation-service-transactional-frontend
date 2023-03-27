@@ -18,7 +18,6 @@ type BaseType = {
   impactPatients: boolean;
   impactClinicians: boolean;
   subgroups: {
-    id: null | string;
     name: string;
   }[];
   diseasesConditionsImpact: null | string[];
@@ -65,7 +64,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     currentValues.diseasesConditionsImpact = null;
   } else {
 
-    currentValues.subgroups = currentValues.subgroups.filter(group => group.id || group.name); // This will prevent empty subgroups when user go back (where validations are not triggered).
+    currentValues.subgroups = currentValues.subgroups.filter(group => group.name); // This will prevent empty subgroups when user go back (where validations are not triggered).
 
     steps.push(
 
@@ -90,7 +89,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
             validations: { isRequired: true },
             fieldsGroupConfig: {
               fields: [
-                { id: 'id', dataType: 'text', isVisible: false },
                 { id: 'name', dataType: 'text', label: 'Population or subgroup', validations: { isRequired: true, maxLength: 50 } }
               ],
               addNewLabel: 'Add new population or subgroup'
@@ -133,7 +131,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
     impacts,
-    subgroups: (data.subgroups ?? []).map(item => ({ id: item.id, name: item.name })),
+    subgroups: (data.subgroups ?? []).map(item => ({ name: item.name })),
     diseasesConditionsImpact: data.diseasesConditionsImpact ?? null,
     cliniciansImpactDetails: data.cliniciansImpactDetails ?? null
   };
