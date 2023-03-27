@@ -13,7 +13,7 @@ import { getSectionNumber } from '@modules/stores/innovation/innovation.config';
 
 export enum EmailNotificationsTypeEnum { // Subset of NotificationContextTypeEnum.
   ACTION = 'ACTION',
-  COMMENT = 'COMMENT',
+  MESSAGE = 'MESSAGE',
   SUPPORT = 'SUPPORT'
 }
 export enum EmailNotificationsPreferencesEnum {

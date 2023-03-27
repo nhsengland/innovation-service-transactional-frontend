@@ -317,6 +317,7 @@ export const locale = {
             ACTION: { title: { singular: 'Action', plural: 'Actions' } },
             THREAD: { title: { singular: 'Message', plural: 'Messages' } },
             COMMENT: { title: { singular: 'Message', plural: 'Messages' } },
+            MESSAGE: { title: { singular: 'Message', plural: 'Messages' } },
           },
           notification_context_details: {
             LOCK_USER: { title: `Innovation "{{ innovationName }}" owner has been locked` },
