@@ -55,7 +55,7 @@
           <ng-container *ngFor="let accessor of innovationParticipants.accessors">
             <tr role="row" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">{{accessor.name}}</td>
-              <td class="nhsuk-table__cell" *ngIf="accessor.organisation.name === accessor.organisation.unit.name; else notShadow">{{accessor.organisation.name}} ({{accessor.organisation.acronym}})></td>
+              <td class="nhsuk-table__cell" *ngIf="accessor.organisation.name === accessor.organisation.unit.name; else notShadow">{{accessor.organisation.name}} ({{accessor.organisation.acronym}})</td>
               <ng-template #notShadow>
                 <td class="nhsuk-table__cell">{{accessor.organisation.name}} / {{accessor.organisation.unit.acronym}}</td>
               </ng-template>
