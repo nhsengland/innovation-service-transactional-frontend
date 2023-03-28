@@ -17,14 +17,12 @@ const stepsLabels = {
 type BaseType = {
   impactPatients: boolean;
   impactClinicians: boolean;
-  subgroups: {
-    name: string;
-  }[];
+  subgroups: null | string[];
   diseasesConditionsImpact: null | string[];
   cliniciansImpactDetails: null | string;
 };
 type InboundPayloadType = Partial<BaseType>;
-type StepPayloadType = Omit<BaseType, 'impactPatients' | 'impactClinicians'> & { impacts: ('PATIENTS' | 'CLINICIANS')[] };
+type StepPayloadType = Omit<BaseType, 'impactPatients' | 'impactClinicians' | 'subgroups'> & { impacts: ('PATIENTS' | 'CLINICIANS')[], subgroups: { name: string }[] };
 type OutboundPayloadType = BaseType;
 
 
@@ -131,7 +129,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
     impacts,
-    subgroups: (data.subgroups ?? []).map(item => ({ name: item.name })),
+    subgroups: (data.subgroups ?? []).map(subgroup => ({ name: subgroup })),
     diseasesConditionsImpact: data.diseasesConditionsImpact ?? null,
     cliniciansImpactDetails: data.cliniciansImpactDetails ?? null
   };
@@ -143,7 +141,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     impactPatients: data.impacts?.includes('PATIENTS') || false,
     impactClinicians: data.impacts?.includes('CLINICIANS') || false,
-    subgroups: data.subgroups,
+    subgroups: data.subgroups.map(subgroup => subgroup.name),
     diseasesConditionsImpact: data.diseasesConditionsImpact,
     cliniciansImpactDetails: data.cliniciansImpactDetails
   };
@@ -170,7 +168,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
     toReturn.push({
       label: stepsLabels.l3,
-      value: data.subgroups?.map(group => group.name).join('\n'),
+      value: data.subgroups?.map(s => s.name).join('\n'),
       editStepNumber: toReturn.length + 1
     });
 
