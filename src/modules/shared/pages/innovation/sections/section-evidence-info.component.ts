@@ -66,7 +66,6 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   }
 
   onDeleteEvidence(): void {
-    // TODO HERE
     this.stores.innovation.deleteEvidence$(this.innovationId, this.evidence.id).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('Your evidence has been deleted');
