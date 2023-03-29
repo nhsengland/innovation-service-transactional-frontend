@@ -9,8 +9,8 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { getSectionNumber, INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
-import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
 import { RoutingHelper } from '@app/base/helpers';
+import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-section-info',

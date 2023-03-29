@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 
 import { InnovationSectionEnum } from '@modules/stores/innovation';
 

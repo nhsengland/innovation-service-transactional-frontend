@@ -18,7 +18,6 @@ const stepsLabels = {
 type BaseType = {
   hasRegulationKnowledge: null | 'YES_ALL' | 'YES_SOME' | 'NO' | 'NOT_RELEVANT';
   standards: {
-    id: null | string;
     type: null | 'CE_UKCA_NON_MEDICAL' | 'CE_UKCA_CLASS_I' | 'CE_UKCA_CLASS_II_A' | 'CE_UKCA_CLASS_II_B' | 'CE_UKCA_CLASS_III' | 'IVD_GENERAL' | 'IVD_SELF_TEST' | 'IVD_ANNEX_LIST_A' | 'IVD_ANNEX_LIST_B' | 'MARKETING' | 'CQC' | 'DTAC' | 'OTHER';
     hasMet: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET';
   }[];
@@ -75,8 +74,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   steps.splice(1);
 
   if (['NO', 'NOT_RELEVANT'].includes(currentValues.hasRegulationKnowledge || 'NO')) {
-    currentValues.standards = currentValues.standards.map(item => ({
-      id: item.id, type: null, hasMet: null
+    currentValues.standards = currentValues.standards.map(() => ({
+      type: null, hasMet: null
     }));
     currentValues.otherRegulationDescription = null;
     currentValues.files = [];
@@ -108,7 +107,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   });
 
   currentValues.standards = (currentValues.standardsType || []).map(s => {
-    return currentValues.standards.find(item => item.type === s) || { id: null, type: s, hasMet: null } as BaseType['standards'][0];
+    return currentValues.standards.find(item => item.type === s) || { type: s, hasMet: null } as BaseType['standards'][0];
   });
 
   (currentValues.standards || []).forEach((standard, i) => {

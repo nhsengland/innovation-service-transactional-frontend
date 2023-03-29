@@ -21,7 +21,6 @@ type BaseType = {
   hasDeployPlan: null | 'YES' | 'NO';
   isDeployed: null | 'YES' | 'NO';
   deploymentPlans: {
-    id: null | string;
     name: string;
     commercialBasis: null | string;
     orgDeploymentAffect: null | string;
@@ -112,7 +111,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           // validations: { isRequired: true }
           fieldsGroupConfig: {
             fields: [
-              { id: 'id', dataType: 'text', isVisible: false },
               { id: 'name', dataType: 'text', label: 'Organisation and department', validations: { isRequired: [true, 'Organisation and department are required'] } },
               { id: 'commercialBasis', dataType: 'text', isVisible: false },
               { id: 'orgDeploymentAffect', dataType: 'text', isVisible: false }

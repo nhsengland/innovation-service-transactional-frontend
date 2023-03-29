@@ -17,15 +17,12 @@ const stepsLabels = {
 type BaseType = {
   impactPatients: boolean;
   impactClinicians: boolean;
-  subgroups: {
-    id: null | string;
-    name: string;
-  }[];
+  subgroups: null | string[];
   diseasesConditionsImpact: null | string[];
   cliniciansImpactDetails: null | string;
 };
 type InboundPayloadType = Partial<BaseType>;
-type StepPayloadType = Omit<BaseType, 'impactPatients' | 'impactClinicians'> & { impacts: ('PATIENTS' | 'CLINICIANS')[] };
+type StepPayloadType = Omit<BaseType, 'impactPatients' | 'impactClinicians' | 'subgroups'> & { impacts: ('PATIENTS' | 'CLINICIANS')[], subgroups: { name: string }[] };
 type OutboundPayloadType = BaseType;
 
 
@@ -65,7 +62,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     currentValues.diseasesConditionsImpact = null;
   } else {
 
-    currentValues.subgroups = currentValues.subgroups.filter(group => group.id || group.name); // This will prevent empty subgroups when user go back (where validations are not triggered).
+    currentValues.subgroups = currentValues.subgroups.filter(group => group.name); // This will prevent empty subgroups when user go back (where validations are not triggered).
 
     steps.push(
 
@@ -90,7 +87,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
             validations: { isRequired: true },
             fieldsGroupConfig: {
               fields: [
-                { id: 'id', dataType: 'text', isVisible: false },
                 { id: 'name', dataType: 'text', label: 'Population or subgroup', validations: { isRequired: true, maxLength: 50 } }
               ],
               addNewLabel: 'Add new population or subgroup'
@@ -133,7 +129,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
     impacts,
-    subgroups: (data.subgroups ?? []).map(item => ({ id: item.id, name: item.name })),
+    subgroups: (data.subgroups ?? []).map(subgroup => ({ name: subgroup })),
     diseasesConditionsImpact: data.diseasesConditionsImpact ?? null,
     cliniciansImpactDetails: data.cliniciansImpactDetails ?? null
   };
@@ -145,7 +141,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     impactPatients: data.impacts?.includes('PATIENTS') || false,
     impactClinicians: data.impacts?.includes('CLINICIANS') || false,
-    subgroups: data.subgroups,
+    subgroups: data.subgroups.map(subgroup => subgroup.name),
     diseasesConditionsImpact: data.diseasesConditionsImpact,
     cliniciansImpactDetails: data.cliniciansImpactDetails
   };
@@ -172,7 +168,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
     toReturn.push({
       label: stepsLabels.l3,
-      value: data.subgroups?.map(group => group.name).join('\n'),
+      value: data.subgroups?.map(s => s.name).join('\n'),
       editStepNumber: toReturn.length + 1
     });
 
