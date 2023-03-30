@@ -210,7 +210,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
 authenticationRouter.use(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res, next) => {
   passport.authenticate('signInStrategy', {
     ...req.query.back && {customState: req.query.back}
-  } as any, (err, user, info) => {
+  } as any, (err: any, user: Express.User, _info: any) => {
 
     if (err) {
       const client = getAppInsightsClient(req);

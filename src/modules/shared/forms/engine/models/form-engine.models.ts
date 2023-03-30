@@ -7,21 +7,14 @@ export class FormEngineModel {
 
   label?: string;
   description?: string;
-  details?: { title: string; content: string; };
   parameters: FormEngineParameterModel[];
-  visibility?: {
-    parameter: string,
-    values: string[]
-  };
-  defaultData?: { [key: string]: any };
+  defaultData: Record<string, any>; // { [key: string]: any };
 
-  constructor(data: FormEngineModel) {
+  constructor(data: Partial<FormEngineModel>) {
     this.label = data.label;
     this.description = data.description;
-    this.details = data.details;
-    this.parameters = (data.parameters || []).map(p => new FormEngineParameterModel(p));
-    this.visibility = data.visibility;
-    this.defaultData = data.defaultData || {};
+    this.parameters = (data.parameters ?? []).map(item => new FormEngineParameterModel(item));
+    this.defaultData = data.defaultData ?? {};
   }
 
 }

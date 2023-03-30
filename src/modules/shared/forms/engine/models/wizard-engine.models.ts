@@ -3,18 +3,16 @@ import { FormEngineHelper } from '../helpers/form-engine.helper';
 import { FormEngineModel, FormEngineParameterModel } from './form-engine.models';
 
 
-export type WizardStepType = FormEngineModel & {
-  saveStrategy?: 'updateAndWait';
-};
+export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 
 export type WizardSummaryType = {
-  type?: 'keyValueLink' | 'button';
-  label: string;
-  value?: null | string;
-  editStepNumber?: number;
-  evidenceId?: number;
-  allowHTML?: boolean;
-  isFile?: boolean;
+  type?: 'keyValueLink' | 'button',
+  label: string,
+  value?: null | string,
+  editStepNumber?: number,
+  evidenceId?: number,
+  allowHTML?: boolean,
+  isFile?: boolean
 };
 
 
@@ -173,22 +171,5 @@ export class WizardEngineModel {
     };
 
   }
-
-  validateDataLegacy(): { valid: boolean, errors: { label: string, error: string }[] } {
-
-    const parameters = this.steps.flatMap(step => step.parameters);
-    const form = FormEngineHelper.buildForm(parameters, this.currentAnswers);
-
-    return {
-      valid: form.valid,
-      errors: Object.entries(FormEngineHelper.getErrors(form)).map(([key, value]) => ({
-        label: parameters.find(p => p.id === key)?.label || '',
-        error: value || ''
-      }))
-    };
-
-  }
-
-
 
 }
