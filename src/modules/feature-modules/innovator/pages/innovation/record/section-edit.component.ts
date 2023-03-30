@@ -5,13 +5,11 @@ import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { FileTypes, FormEngineComponent, WizardEngineModel } from '@app/base/forms';
-
+import { UtilsHelper } from '@app/base/helpers';
 import { UrlModel } from '@app/base/models';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationSectionEnum } from '@modules/stores/innovation';
-import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
-import { UtilsHelper } from '@app/base/helpers';
 
 
 @Component({
@@ -29,6 +27,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   sectionId: InnovationSectionEnum;
   baseUrl: string;
 
+  sectionsIdsList: string[];
   wizard: WizardEngineModel;
 
   saveButton = { isActive: true, label: 'Save and continue' };
@@ -48,6 +47,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.baseUrl = `innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
+    this.sectionsIdsList = this.stores.innovation.getInnovationRecordConfig().flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
     this.wizard = this.stores.innovation.getSectionWizard(this.sectionId);
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
@@ -56,9 +56,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   private getNextSectionId(): string | null {
 
-    const sectionsIdsList = INNOVATION_SECTIONS.flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
-    const currentSectionIndex = sectionsIdsList.indexOf(this.sectionId);
-    return sectionsIdsList[currentSectionIndex + 1] || null;
+    const currentSectionIndex = this.sectionsIdsList.indexOf(this.sectionId);
+    return this.sectionsIdsList[currentSectionIndex + 1] || null;
 
   }
 
@@ -123,7 +122,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     Object.keys(formData?.data || {}).forEach(key => {
       const value = formData!.data[key];
-      if (typeof value === "string") {
+      if (typeof value === 'string') {
         formData!.data[key] = UtilsHelper.isEmpty(value) ? null : value;
       }
     });
@@ -168,7 +167,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         // NOTE: This is a very specific operation that updates the context (store) innovation name.
         // If more exceptions appears, a wizard configurations should be considered.
         if (this.sectionId === 'INNOVATION_DESCRIPTION' && this.wizard.currentStepId === 1) {
-          this.stores.context.updateInnovation({ name: this.wizard.getAnswers().innovationName });
+          this.stores.context.updateInnovation({ name: this.wizard.getAnswers().name });
         }
         return of(true);
 
