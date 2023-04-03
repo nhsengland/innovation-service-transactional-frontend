@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-
-import { ContextStore } from '@modules/stores';
-import { getInnovationRecordSidebar, InnovationRecordSidebar } from '@modules/stores/innovation/innovation.config';
 import { filter, Subscription } from 'rxjs';
+
+import { ContextStore, InnovationStore } from '@modules/stores';
 
 
 @Component({
@@ -14,16 +13,17 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
 
-  sidebarItems: { label: string, url: string; nestedSidebarItems?: {label: string, url: string;}[] }[] = [];
+  sidebarItems: { label: string, url: string, children?: { label: string, url: string }[] }[] = [];
   navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
 
-  private sectionsSidebar: InnovationRecordSidebar[] = [];
+  private sectionsSidebar: { label: string, url: string, children?: { label: string, url: string }[] }[] = [];
   private _sidebarItems: { label: string, url: string; }[] = [];
 
   constructor(
     private router: Router,
     private contextStore: ContextStore,
+    private innovationStore: InnovationStore
   ) {
     this.subscriptions.add(
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
@@ -46,7 +46,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
       const innovation = this.contextStore.getInnovation();
 
-      this.sectionsSidebar = getInnovationRecordSidebar('innovator', innovation.id);
+      this.sectionsSidebar = this.innovationStore.getInnovationRecordSectionsTree('innovator', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/innovator/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/innovator/innovations/${innovation.id}/record` },
@@ -56,7 +56,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
         { label: 'Activity log', url: `/innovator/innovations/${innovation.id}/activity-log` }
       ];
 
-      if(innovation.loggedUser.isOwner) {
+      if (innovation.loggedUser.isOwner) {
         this._sidebarItems.push({ label: 'Manage innovation', url: `/innovator/innovations/${innovation.id}/manage/innovation` });
       } else {
         this._sidebarItems.push({ label: 'Manage access', url: `/innovator/innovations/${innovation.id}/manage/access` });
@@ -66,6 +66,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   }
 
   private onRouteChange(): void {
+
     this.generateSidebar();
 
     if (this.router.url.includes('sections')) {

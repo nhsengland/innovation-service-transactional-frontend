@@ -1,19 +1,19 @@
 // Sections.
 export const InnovationSections = [
   'INNOVATION_DESCRIPTION',
-  'VALUE_PROPOSITION',
-  'UNDERSTANDING_OF_NEEDS',
+  // 'VALUE_PROPOSITION',
+  // 'UNDERSTANDING_OF_NEEDS',
   // 'UNDERSTANDING_OF_BENEFITS',
-  'EVIDENCE_OF_EFFECTIVENESS',
+  // 'EVIDENCE_OF_EFFECTIVENESS',
   'MARKET_RESEARCH',
-  'INTELLECTUAL_PROPERTY',
-  'REGULATIONS_AND_STANDARDS',
   'CURRENT_CARE_PATHWAY',
-  'TESTING_WITH_USERS',
-  'COST_OF_INNOVATION',
-  'COMPARATIVE_COST_BENEFIT',
-  'REVENUE_MODEL',
-  'IMPLEMENTATION_PLAN'
+  // 'INTELLECTUAL_PROPERTY',
+  // 'REGULATIONS_AND_STANDARDS',
+  // 'TESTING_WITH_USERS',
+  // 'COST_OF_INNOVATION',
+  // 'COMPARATIVE_COST_BENEFIT',
+  // 'REVENUE_MODEL',
+  // 'IMPLEMENTATION_PLAN'
 ] as const;
 export type InnovationSections = typeof InnovationSections[number];
 
@@ -78,9 +78,16 @@ export type catalogClinicalEvidence = typeof catalogClinicalEvidence[number];
 
 
 // Section 3.
+// // Section 3.1.
+export const catalogOptionBestDescribesInnovation = ['ONE_OFF_INNOVATION', 'BETTER_ALTERNATIVE', 'EQUIVALENT_ALTERNATIVE', 'COST_EFFECT_ALTERNATIVE', 'NOT_SURE'] as const;
+export type catalogOptionBestDescribesInnovation = typeof catalogOptionBestDescribesInnovation[number];
+
 // // Section 3.2.
-export const catalogHasPatents = ['HAS_AT_LEAST_ONE', 'APPLIED_AT_LEAST_ONE', 'HAS_NONE'] as const;
-export type catalogHasPatents = typeof catalogHasPatents[number];
+export const catalogPathwayKnowledge = ['PATHWAY_EXISTS_AND_CHANGED', 'PATHWAY_EXISTS_AND_FITS', 'NO_PATHWAY', 'DONT_KNOW', 'NOT_PART_PATHWAY'] as const;
+export type catalogPathwayKnowledge = typeof catalogPathwayKnowledge[number];
+
+// export const catalogHasPatents = ['HAS_AT_LEAST_ONE', 'APPLIED_AT_LEAST_ONE', 'HAS_NONE'] as const;
+// export type catalogHasPatents = typeof catalogHasPatents[number];
 
 
 // Section 4.
@@ -94,8 +101,6 @@ export type catalogStandardsType = typeof catalogStandardsType[number];
 
 // Section 5.
 // // Section 5.1.
-export const catalogPathwayKnowledge = ['PATHWAY_EXISTS_AND_CHANGED', 'PATHWAY_EXISTS_AND_FITS', 'NO_PATHWAY'] as const;
-export type catalogPathwayKnowledge = typeof catalogPathwayKnowledge[number];
 
 export const catalogCarePathway = ['ONLY_OPTION', 'BETTER_OPTION', 'EQUIVALENT_OPTION', 'FIT_LESS_COSTS', 'NO_KNOWLEDGE'] as const;
 export type catalogCarePathway = typeof catalogCarePathway[number];

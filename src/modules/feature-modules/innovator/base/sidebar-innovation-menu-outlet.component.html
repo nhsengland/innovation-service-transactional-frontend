@@ -6,8 +6,8 @@
 
     <a class="app-side-nav__link nhsuk-u-padding-right-1" [routerLink]="item.url">{{ item.label }}</a>
 
-    <ul *ngIf="(item.nestedSidebarItems ?? []).length > 0" class="app-side-nav__list--nested">
-      <li *ngFor="let nestedItem of item.nestedSidebarItems" [routerLinkActive]="'app-side-nav__item--nested-current'" class="app-side-nav__item">
+    <ul *ngIf="(item.children ?? []).length > 0" class="app-side-nav__list--nested">
+      <li *ngFor="let nestedItem of item.children" [routerLinkActive]="'app-side-nav__item--nested-current'" class="app-side-nav__item">
         <a [routerLink]="nestedItem.url" class="app-side-nav__link--nested nhsuk-u-padding-right-1">{{ nestedItem.label }}</a>
       </li>
     </ul>
