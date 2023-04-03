@@ -7,6 +7,7 @@ import { CoreComponent } from '@app/base';
 import { CustomValidators, FormEngineParameterModel } from '@app/base/forms';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { ContextInnovationType } from '@modules/stores';
 
 
 @Component({
@@ -16,6 +17,7 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
 export class PageInnovationManageStopSharingComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
+  innovation: ContextInnovationType;
 
   stepNumber: 1 | 2 = 1;
 
@@ -30,8 +32,9 @@ export class PageInnovationManageStopSharingComponent extends CoreComponent impl
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.innovation = this.stores.context.getInnovation();
 
-    this.setPageTitle('Stop sharing this innovation', { size: 'l' });
+    this.setPageTitle(`Stop sharing '${this.innovation.name}' innovation`, { size: 'l' });
     this.setBackLink('Go back', this.handleGoBack.bind(this));
 
     this.form = new FormGroup({
@@ -60,7 +63,7 @@ export class PageInnovationManageStopSharingComponent extends CoreComponent impl
       })
     ).subscribe(() => {
 
-      this.setRedirectAlertSuccess('You have stopped sharing your innovation', { message: 'You will not be able to interact with your support organisations anymore. You can reshare your innovation in the future by submitting it to a needs reassessment.' });
+      this.setRedirectAlertSuccess('You have stopped sharing your innovation', { message: 'You will not be able to interact with your support organisations anymore. If you would like support in the future, you can resubmit your innovation record for a needs reassessment.' });
       this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation`);
 
     });
