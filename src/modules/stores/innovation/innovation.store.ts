@@ -16,6 +16,7 @@ import { GetInnovationEvidenceDTO, InnovationModel, InnovationSectionConfigType 
 import { InnovationSectionConfigType, sectionType } from './innovation-record/shared.types';
 
 import { INNOVATION_SECTIONS as SECTIONS_202209 } from './innovation-record/202209/main.config';
+import { INNOVATION_SECTIONS as SECTIONS_202304 } from './innovation-record/202304/main.config';
 
 
 @Injectable()
@@ -146,8 +147,9 @@ export class InnovationStore extends Store<InnovationModel> {
     switch (version) {
       case '202209':
         return SECTIONS_202209;
+      case '202304':
       default:
-        return SECTIONS_202209;
+        return SECTIONS_202304;
     }
 
   }

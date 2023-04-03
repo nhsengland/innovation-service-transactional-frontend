@@ -166,7 +166,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     toReturn.push({
       label: stepsLabels.l3,
       // value: data.subgroups?.map(group => group.name).join('\n'),
-      value: data.subgroups.join('\n'),
+      value: data.subgroups?.join('\n'),
       editStepNumber: toReturn.length + 1
     });
 

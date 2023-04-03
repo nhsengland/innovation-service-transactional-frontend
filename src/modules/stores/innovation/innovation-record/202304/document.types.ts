@@ -1,23 +1,25 @@
-import type { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogMainPurpose, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogsupportTypes, catalogYesInProcessNotYet, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
+import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
 
-export type DocumentType202209 = {
-  version: '202209';
+export type DocumentType202304 = {
+  version: '202304';
   INNOVATION_DESCRIPTION: {
     name: string,
     description?: string,
     postcode?: string,
     countryName?: string,
+    website?: string, // New field.
     hasFinalProduct?: catalogYesNo,
-    categories?: catalogCategory[],
+    categories?: catalogCategory[], // Items list changed.
     otherCategoryDescription?: string,
-    mainCategory?: catalogCategory,
+    mainCategory?: catalogCategory, // Items list changed.
     otherMainCategoryDescription?: string,
-    areas?: catalogAreas[],
-    careSettings?: catalogCareSettings[],
+    areas?: catalogAreas[], // Items list changed.
+    careSettings?: catalogCareSettings[], // Items list changed.
     otherCareSetting?: string,
-    mainPurpose?: catalogMainPurpose,
-    supportTypes?: catalogsupportTypes[],
-    moreSupportDescription?: string
+    mainPurpose?: catalogMainPurpose, // Items list changed.
+    supportDescription?: string, // Renamed from "moreSupportDescription" field.
+    currentlyReceivingSupport?: string, // New field.
+    involvedAACProgrammes?: cataloginvolvedAACProgrammes[] // New field.
   },
   VALUE_PROPOSITION: {
     hasProblemTackleKnowledge?: catalogYesNotYetNotSure,
@@ -29,7 +31,7 @@ export type DocumentType202209 = {
   UNDERSTANDING_OF_NEEDS: {
     impactPatients?: boolean,
     impactClinicians?: boolean,
-    subgroups?: string[],
+    subgroups: string[],
     cliniciansImpactDetails?: string,
     diseasesConditionsImpact?: string[]
   },
@@ -78,8 +80,8 @@ export type DocumentType202209 = {
     carePathway?: catalogCarePathway
   },
   TESTING_WITH_USERS: {
-    hasTests?: catalogYesInProcessNotYet,
-    userTests?: {
+    hasTests: catalogYesInProgressNotYet,
+    userTests: {
       kind: string,
       feedback?: string
     }[],

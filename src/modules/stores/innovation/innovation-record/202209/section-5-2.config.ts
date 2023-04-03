@@ -73,14 +73,14 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   steps.splice(1);
 
   if (['NOT_YET'].includes(currentValues.hasTests || 'NOT_YET')) {
-    currentValues.userTests = currentValues.userTests.map(item => ({ kind: item.kind }));
+    currentValues.userTests = currentValues.userTests?.map(item => ({ kind: item.kind }));
     Object.keys(currentValues).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => { delete currentValues[key]; });
     return;
   }
 
-  if (currentStep > 2) { // Updates userTests.feedback value.
+  if (typeof currentStep === 'number' && currentStep > 2) { // Updates userTests.feedback value.
     Object.keys(currentValues).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => {
-      currentValues.userTests[Number(key.split('_')[1])].feedback = currentValues[key];
+      (currentValues.userTests ?? [])[Number(key.split('_')[1])].feedback = currentValues[key];
     });
   }
 
@@ -108,7 +108,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     })
   });
 
-  currentValues.userTests.forEach((item, i) => {
+  currentValues.userTests?.forEach((item, i) => {
     steps.push(
       new FormEngineModel({
         parameters: [{
@@ -192,7 +192,7 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
       editStepNumber: 2
     });
 
-    data.userTests.forEach(item => {
+    data.userTests?.forEach(item => {
       toReturn.push({
         label: `Please describe the testing and feedback for ${item.kind}`,
         value: item.feedback,
