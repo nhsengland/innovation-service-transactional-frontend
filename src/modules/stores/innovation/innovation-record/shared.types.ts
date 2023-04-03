@@ -18,11 +18,11 @@ export type FormSelectableFieldType<T> = {
 }[];
 
 
-export type sectionType<T> = {
+export type sectionType<T = ExistingDocumentTypes> = {
   id: T,
   title: string,
   wizard: WizardEngineModel,
   evidences?: WizardEngineModel
 };
 
-export type InnovationSectionConfigType<T = ExistingDocumentTypes> = { title: string, sections: sectionType<T>[] }[];
+export type InnovationSectionConfigType = { title: string, sections: sectionType[] }[];
