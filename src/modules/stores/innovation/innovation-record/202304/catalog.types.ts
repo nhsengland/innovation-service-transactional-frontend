@@ -1,0 +1,22 @@
+// Sections.
+export const InnovationSections = [
+  'INNOVATION_DESCRIPTION',
+  'VALUE_PROPOSITION',
+  'UNDERSTANDING_OF_NEEDS',
+  // 'UNDERSTANDING_OF_BENEFITS',
+  'EVIDENCE_OF_EFFECTIVENESS',
+  'MARKET_RESEARCH',
+  'INTELLECTUAL_PROPERTY',
+  'REGULATIONS_AND_STANDARDS',
+  'CURRENT_CARE_PATHWAY',
+  'TESTING_WITH_USERS',
+  'COST_OF_INNOVATION',
+  'COMPARATIVE_COST_BENEFIT',
+  'REVENUE_MODEL',
+  'IMPLEMENTATION_PLAN'
+] as const;
+export type InnovationSections = typeof InnovationSections[number];
+
+
+// Section 1.
+// Section 1.1.

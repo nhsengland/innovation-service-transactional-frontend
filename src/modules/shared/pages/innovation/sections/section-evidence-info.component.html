@@ -3,7 +3,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <h2>{{ module === 'innovator' ? 'Submitted' : 'Your' }} answers</h2>
+      <h2>{{ stores.authentication.isInnovatorType() ? 'Submitted' : 'Your' }} answers</h2>
 
       <dl class="nhsuk-summary-list">
         <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
@@ -12,13 +12,13 @@
             <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
             <span *ngIf="!item.allowHTML">{{ item.value }}</span>
           </dd>
-          <dd *ngIf="module === 'innovator'" class="nhsuk-summary-list__actions">
-            <a routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+          <dd *ngIf="stores.authentication.isInnovatorType()" class="nhsuk-summary-list__actions">
+            <a routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden">{{ item.label | lowercase }}</span></a>
           </dd>
         </div>
       </dl>
 
-      <button *ngIf="module === 'innovator'" class="nhsuk-button nhsuk-button--secondary" (click)="onDeleteEvidence()"> Delete this entry </button>
+      <button *ngIf="stores.authentication.isInnovatorType()" class="nhsuk-button nhsuk-button--secondary" (click)="onDeleteEvidence()">Delete this entry</button>
 
     </div>
   </div>

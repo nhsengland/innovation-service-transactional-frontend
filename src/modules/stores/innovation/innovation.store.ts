@@ -12,7 +12,10 @@ import { InnovationService } from './innovation.service';
 
 import { getSectionNumber, getSectionParentNumber, getSectionParentTitle, getSectionTitle, INNOVATION_SECTIONS } from './innovation.config';
 import { InnovationSectionEnum } from './innovation.enums';
-import { GetInnovationEvidenceDTO, InnovationModel, InnovationSectionConfigType, InnovationSectionInfoDTO, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, SectionsSummaryModel } from './innovation.models';
+import { GetInnovationEvidenceDTO, InnovationModel, InnovationSectionConfigType as InnovationSectionConfigTypeLegacy, InnovationSectionInfoDTO, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, SectionsSummaryModel } from './innovation.models';
+import { InnovationSectionConfigType, sectionType } from './innovation-record/shared.types';
+
+import { INNOVATION_SECTIONS as SECTIONS_202209 } from './innovation-record/202209/main.config';
 
 
 @Injectable()
@@ -99,8 +102,8 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitSections(innovationId, sectionKey);
   }
 
-  getSectionEvidence$(innovationId: string, evidenceId: string): Observable<GetInnovationEvidenceDTO> {
-    return this.innovationsService.getSectionEvidenceInfo(innovationId, evidenceId);
+  getSectionEvidence$(innovationId: string, evidenceOffset: string): Observable<GetInnovationEvidenceDTO> {
+    return this.innovationsService.getSectionEvidenceInfo(innovationId, evidenceOffset);
   }
 
   upsertSectionEvidenceInfo$(innovationId: string, data: MappedObjectType, evidenceId?: string): Observable<MappedObjectType> {
@@ -127,7 +130,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return getSectionParentTitle(sectionId);
   }
 
-  getSection(sectionId: InnovationSectionEnum): InnovationSectionConfigType['sections'][0] | undefined {
+  getSection(sectionId: InnovationSectionEnum): InnovationSectionConfigTypeLegacy['sections'][0] | undefined {
     return cloneDeep(INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId));
   }
 
@@ -137,4 +140,33 @@ export class InnovationStore extends Store<InnovationModel> {
     );
   }
 
+
+  getInnovationRecordConfig(version?: string): InnovationSectionConfigType {
+
+    switch (version) {
+      case '202209':
+        return SECTIONS_202209;
+      default:
+        return SECTIONS_202209;
+    }
+
+  }
+
+  getInnovationRecordSection(sectionId: string, version?: string): sectionType<string> {
+
+    const section = this.getInnovationRecordConfig(version).find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId);
+
+    if (!section) {
+      throw new Error("gdfgdsfg"); // TODO: Improve this excpetion!
+    }
+
+    return section;
+
+  }
+
+  getInnovationRecordSectionWizard(sectionId: string, version?: string): WizardEngineModel {
+
+    return cloneDeep(this.getInnovationRecordSection(sectionId, version)?.wizard);
+
+  }
 }

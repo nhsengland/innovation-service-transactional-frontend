@@ -15,18 +15,7 @@
   <ng-container *ngIf="isQuestionStep()">
     <div class="nhsuk-grid-column-two-thirds">
       <div class="nhsuk-hint nhsuk-u-margin-bottom-0">Question {{ currentStep.number }} of {{ totalNumberOfSteps }}</div>
-
-      <ng-container *ngIf="currentStep.data.details">
-        <details class="nhsuk-details">
-          <summary class="nhsuk-details__summary">
-            <span class="nhsuk-details__summary-text">{{ currentStep.data.details.title }}</span>
-          </summary>
-          <div class="nhsuk-details__text" [innerHTML]="currentStep.data.details.content"></div>
-        </details>
-      </ng-container>
-
       <theme-form-engine formId="SurveyForm" [parameters]="currentStep.data.parameters" [values]="currentStep.data.defaultData"></theme-form-engine>
-
       <button type="submit" form="SurveyForm" [formAction]="getDataSubmissionUrl('next')" class="nhsuk-button" (click)="onSubmitStep('next')"> Continue </button>
     </div>
   </ng-container>

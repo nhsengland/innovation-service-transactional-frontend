@@ -1,10 +1,12 @@
 import { FormEngineModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
-import { InnovationSectionEnum } from '../innovation.enums';
-import { InnovationSectionConfigType } from '../innovation.models';
 
-import { hasEvidenceItems } from './catalogs.config';
+import { sectionType } from '../shared.types';
 
-import { clinicalEvidenceItems, SECTION_2_EVIDENCES } from './section-2-3-evidences.config';
+import { catalogYesInProgressNotYet, InnovationSections } from './catalog.types';
+import { DocumentType202209 } from './document.types';
+import { clinicalEvidenceItems, hasEvidenceItems } from './forms.config';
+
+import { SECTION_2_EVIDENCES } from './section-2-3-evidences.config';
 
 
 // Labels.
@@ -14,25 +16,17 @@ const stepsLabels = {
 
 
 // Types.
-type BaseType = {
-  hasEvidence: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET',
-  evidences: {
-    id: string,
-    evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER',
-    clinicalEvidenceType: null | 'DATA_PUBLISHED' | 'NON_RANDOMISED_COMPARATIVE_DATA' | 'NON_RANDOMISED_NON_COMPARATIVE_DATA' | 'CONFERENCE' | 'RANDOMISED_CONTROLLED_TRIAL' | 'UNPUBLISHED_DATA' | 'OTHER',
-    description: string,
-    summary: string
-  }[];
-};
-type StepPayloadType = BaseType;
+type InboundPayloadType = Omit<DocumentType202209['EVIDENCE_OF_EFFECTIVENESS'], 'files'> & { files: { id: string; name: string; url: string; }[] };
+type StepPayloadType = InboundPayloadType;
 type OutboundPayloadType = {
-  hasEvidence: null | 'YES' | 'IN_PROGRESS' | 'NOT_YET';
+  hasEvidence: catalogYesInProgressNotYet
 };
 
 
-export const SECTION_2_3: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS,
+export const SECTION_2_3: sectionType<InnovationSections> = {
+  id: 'EVIDENCE_OF_EFFECTIVENESS',
   title: 'Evidence of effectiveness',
+  evidences: SECTION_2_EVIDENCES,
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
@@ -46,19 +40,18 @@ export const SECTION_2_3: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
+    showSummary: true,
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
-    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data),
-    showSummary: true
-  }),
-  evidences: SECTION_2_EVIDENCES
+    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
+  })
 };
 
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
-    hasEvidence: data.hasEvidence
+    hasEvidence: data.hasEvidence ?? 'NOT_YET'
   };
 
 }

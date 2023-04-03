@@ -279,7 +279,7 @@ describe('Shared/Services/NotificationsService', () => {
 
     const responseMock = [
       { notificationType: EmailNotificationsTypeEnum.ACTION, preference: EmailNotificationsPreferencesEnum.INSTANTLY },
-      { notificationType: EmailNotificationsTypeEnum.COMMENT, preference: EmailNotificationsPreferencesEnum.NEVER },
+      { notificationType: EmailNotificationsTypeEnum.MESSAGE, preference: EmailNotificationsPreferencesEnum.NEVER },
       { notificationType: EmailNotificationsTypeEnum.SUPPORT, preference: EmailNotificationsPreferencesEnum.DAILY }
     ];
     const expected = responseMock;

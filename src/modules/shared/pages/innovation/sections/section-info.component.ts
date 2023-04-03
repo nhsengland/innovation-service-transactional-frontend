@@ -3,14 +3,13 @@ import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
+import { ContextInnovationType } from '@app/base/types';
 
 import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { getSectionNumber, INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
-
 import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
-import { RoutingHelper } from '@app/base/helpers';
+
 
 @Component({
   selector: 'shared-pages-innovation-section-info',
@@ -18,38 +17,27 @@ import { RoutingHelper } from '@app/base/helpers';
 })
 export class PageInnovationSectionInfoComponent extends CoreComponent implements OnInit {
 
-  module: '' | 'innovator' | 'accessor' | 'assessment' | 'admin' = '';
   innovation: ContextInnovationType;
 
   section: {
-    id: InnovationSectionEnum;
+    id: InnovationSectionEnum,
     nextSectionId: null | string,
-    title: string;
-    status: { id: keyof typeof INNOVATION_SECTION_STATUS, label: string };
-    isNotStarted: boolean;
-    showSubmitButton: boolean;
-    showSubmitUpdatesButton: boolean;
-    hasEvidences: boolean;
-    wizard: WizardEngineModel;
-    date: string;
-    submittedBy: null | {
-      name: string,
-      isOwner: boolean,
-    },
+    title: string,
+    status: { id: keyof typeof INNOVATION_SECTION_STATUS, label: string },
+    isNotStarted: boolean,
+    showSubmitButton: boolean,
+    showSubmitUpdatesButton: boolean,
+    hasEvidences: boolean,
+    wizard: WizardEngineModel,
+    date: string,
+    submittedBy: null | { name: string, isOwner: boolean }
   };
 
   summaryList: WizardSummaryType[] = [];
-  previousSection: {
-    id: string;
-    title: string;
-    show: boolean;
-  };
 
-  nextSection: {
-    id: string;
-    title: string;
-    show: boolean;
-  };
+  previousSection: { id: string, title: string, show: boolean };
+  nextSection: { id: string, title: string, show: boolean };
+
 
   constructor(
     private activatedRoute: ActivatedRoute
@@ -57,7 +45,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     super();
 
-    this.module = RoutingHelper.getRouteData<any>(this.activatedRoute.root).module;
     this.innovation = this.stores.context.getInnovation();
 
     this.section = {
@@ -74,17 +61,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       submittedBy: null
     };
 
-    this.previousSection = {
-      id: '',
-      title: '',
-      show: false
-    };
+    this.previousSection = { id: '', title: '', show: false };
+    this.nextSection = { id: '', title: '', show: false };
 
-    this.nextSection = {
-      id: '',
-      title: '',
-      show: false
-    };
   }
 
   ngOnInit(): void {
@@ -132,7 +111,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.setPageStatus('LOADING');
 
-    const section = this.stores.innovation.getSection(this.activatedRoute.snapshot.params.sectionId);
+    const section = this.stores.innovation.getInnovationRecordSection(this.activatedRoute.snapshot.params.sectionId);
     this.section = {
       id: this.activatedRoute.snapshot.params.sectionId,
       nextSectionId: null,
@@ -148,10 +127,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     };
 
     this.setPageTitle(this.section.title, { hint: `${this.stores.innovation.getSectionParentNumber(this.section.id)}. ${this.stores.innovation.getSectionParentTitle(this.section.id)}` });
-
-    if (this.module !== '') {
-      this.setBackLink('Innovation Record', `${this.module}/innovations/${this.innovation.id}/record`);
-    }
+    this.setBackLink('Innovation Record', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/record`);
 
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
       next: response => {
@@ -162,10 +138,11 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
         this.getPreviousAndNextPagination();
 
-        if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
+        if (this.stores.authentication.isAccessorType() && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
           // If accessor, only view information if section is submitted.
           this.summaryList = [];
         } else {
+
           this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data)).runRules();
 
           const validInformation = this.section.wizard.validateData();
@@ -177,10 +154,11 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           }
 
           this.summaryList = this.section.wizard.runSummaryParsing();
+
         }
 
-
         this.setPageStatus('READY');
+
       }
     });
 
@@ -199,4 +177,5 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     });
 
   }
+
 }

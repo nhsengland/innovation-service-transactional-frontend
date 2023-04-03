@@ -1,10 +1,13 @@
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
-import { InnovationSectionEnum } from '../innovation.enums';
-import { InnovationSectionConfigType } from '../innovation.models';
 
-import { innovationDiseasesConditionsImpactItems, innovationImpactItems } from './catalogs.config';
+import { sectionType } from '../shared.types';
+import { InnovationSections } from './catalog.types';
+import { DocumentType202209 } from './document.types';
+
+import { diseasesConditionsImpactItems, innovationImpactItems } from './forms.config';
 
 
+// Labels.
 const stepsLabels = {
   l1: 'Who does your innovation impact?',
   l2: 'What diseases or conditions does your innovation impact?',
@@ -14,20 +17,13 @@ const stepsLabels = {
 
 
 // Types.
-type BaseType = {
-  impactPatients: boolean;
-  impactClinicians: boolean;
-  subgroups: null | string[];
-  diseasesConditionsImpact: null | string[];
-  cliniciansImpactDetails: null | string;
-};
-type InboundPayloadType = Partial<BaseType>;
-type StepPayloadType = Omit<BaseType, 'impactPatients' | 'impactClinicians' | 'subgroups'> & { impacts: ('PATIENTS' | 'CLINICIANS')[], subgroups: { name: string }[] };
-type OutboundPayloadType = BaseType;
+type InboundPayloadType = DocumentType202209['UNDERSTANDING_OF_NEEDS'];
+type StepPayloadType = Omit<InboundPayloadType, 'impactPatients' | 'impactClinicians'> & { impacts: ('PATIENTS' | 'CLINICIANS')[] };
+type OutboundPayloadType = InboundPayloadType;
 
 
-export const SECTION_2_1: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionEnum.UNDERSTANDING_OF_NEEDS,
+export const SECTION_2_1: sectionType<InnovationSections> = {
+  id: 'UNDERSTANDING_OF_NEEDS',
   title: 'Detailed understanding of needs',
   wizard: new WizardEngineModel({
     steps: [
@@ -42,27 +38,29 @@ export const SECTION_2_1: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
+    showSummary: true,
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
-    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data),
-    showSummary: true
+    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
   })
 };
 
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
+  console.log(currentValues);
+
   steps.splice(1);
 
   // PATIENTS.
   if (!currentValues.impacts?.includes('PATIENTS')) { // Removes all subgroups if no PATIENTS has been selected.
     currentValues.subgroups = [];
-    currentValues.diseasesConditionsImpact = null;
+    delete currentValues.diseasesConditionsImpact;
   } else {
 
-    currentValues.subgroups = currentValues.subgroups.filter(group => group.name); // This will prevent empty subgroups when user go back (where validations are not triggered).
+    // currentValues.subgroups = currentValues.subgroups.filter(group => group.id || group.name); // This will prevent empty subgroups when user go back (where validations are not triggered).
 
     steps.push(
 
@@ -73,7 +71,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           label: stepsLabels.l2,
           description: 'Start typing to filter and choose from the available options up to 5 diseases or conditions',
           validations: { isRequired: [true, 'You must choose at least one disease or condition'], max: [5, 'You can only choose up to 5 diseases or conditions'] },
-          items: innovationDiseasesConditionsImpactItems
+          items: diseasesConditionsImpactItems
         }]
       }),
       {
@@ -87,6 +85,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
             validations: { isRequired: true },
             fieldsGroupConfig: {
               fields: [
+                // { id: 'id', dataType: 'text', isVisible: false },
                 { id: 'name', dataType: 'text', label: 'Population or subgroup', validations: { isRequired: true, maxLength: 50 } }
               ],
               addNewLabel: 'Add new population or subgroup'
@@ -101,7 +100,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
   // CLINICIANS.
   if (!currentValues.impacts?.includes('CLINICIANS')) {
-    currentValues.cliniciansImpactDetails = null;
+    delete currentValues.cliniciansImpactDetails;
   } else {
     steps.push(
       new FormEngineModel({
@@ -128,10 +127,8 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
   if (data.impactClinicians) { impacts.push('CLINICIANS'); }
 
   return {
-    impacts,
-    subgroups: (data.subgroups ?? []).map(subgroup => ({ name: subgroup })),
-    diseasesConditionsImpact: data.diseasesConditionsImpact ?? null,
-    cliniciansImpactDetails: data.cliniciansImpactDetails ?? null
+    ...data, impacts
+    // subgroups: data.subgroups.map(item => ({ id: null, name: item })),
   };
 
 }
@@ -141,7 +138,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     impactPatients: data.impacts?.includes('PATIENTS') || false,
     impactClinicians: data.impacts?.includes('CLINICIANS') || false,
-    subgroups: data.subgroups.map(subgroup => subgroup.name),
+    subgroups: data.subgroups,
     diseasesConditionsImpact: data.diseasesConditionsImpact,
     cliniciansImpactDetails: data.cliniciansImpactDetails
   };
@@ -162,13 +159,14 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
     toReturn.push({
       label: stepsLabels.l2,
-      value: data.diseasesConditionsImpact?.map(impact => innovationDiseasesConditionsImpactItems.find(item => item.value === impact)?.label).join('\n'),
+      value: data.diseasesConditionsImpact?.map(impact => diseasesConditionsImpactItems.find(item => item.value === impact)?.label).join('\n'),
       editStepNumber: toReturn.length + 1
     });
 
     toReturn.push({
       label: stepsLabels.l3,
-      value: data.subgroups?.map(s => s.name).join('\n'),
+      // value: data.subgroups?.map(group => group.name).join('\n'),
+      value: data.subgroups.join('\n'),
       editStepNumber: toReturn.length + 1
     });
 

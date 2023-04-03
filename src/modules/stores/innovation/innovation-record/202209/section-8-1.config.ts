@@ -1,9 +1,12 @@
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { cloneDeep } from 'lodash';
-import { InnovationSectionEnum } from '../innovation.enums';
-import { InnovationSectionConfigType } from '../innovation.models';
 
-import { hasDeployPlanItems, hasResourcesToScaleItems } from './catalogs.config';
+import { sectionType } from '../shared.types';
+import { InnovationSections } from './catalog.types';
+
+import { DocumentType202209 } from './document.types';
+import { hasDeployPlanItems, hasResourcesToScaleItems } from './forms.config';
+
 
 
 // Labels.
@@ -17,31 +20,17 @@ const stepsLabels = {
 
 
 // Types.
-type BaseType = {
-  hasDeployPlan: null | 'YES' | 'NO';
-  isDeployed: null | 'YES' | 'NO';
-  deploymentPlans: {
-    name: string;
-    commercialBasis: null | string;
-    orgDeploymentAffect: null | string;
-  }[];
-  hasResourcesToScale: null | 'YES' | 'NO' | 'NOT_SURE';
-  files: { id: string, displayFileName: string, url: string }[];
-};
-
-type InboundPayloadType = Partial<BaseType>;
+type InboundPayloadType = Omit<DocumentType202209['IMPLEMENTATION_PLAN'], 'files'> & { files: { id: string; name: string; url: string; }[] };
 
 // [key: string] is needed to support deploymentPlansComercialBasis_${number}  and deploymentPlansOrgDeploymentAffect_${number} properties.
-type StepPayloadType = Omit<BaseType, 'files'>
-  & { files: { id: string; name: string; url: string; }[] }
-  & { [key: string]: null | string };
+type StepPayloadType = InboundPayloadType & { [key: string]: null | string };
 
-type OutboundPayloadType = Omit<BaseType, 'files'> & { files: string[] };
+type OutboundPayloadType = DocumentType202209['IMPLEMENTATION_PLAN'];
 
 
 
-export const SECTION_8_1: InnovationSectionConfigType['sections'][0] = {
-  id: InnovationSectionEnum.IMPLEMENTATION_PLAN,
+export const SECTION_8_1: sectionType<InnovationSections> = {
+  id: 'IMPLEMENTATION_PLAN',
   title: 'Implementation plan and deployment',
   wizard: new WizardEngineModel({
     steps: [
@@ -65,12 +54,12 @@ export const SECTION_8_1: InnovationSectionConfigType['sections'][0] = {
         }]
       })
     ],
+    showSummary: true,
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
     summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data),
-    showSummary: true
   })
 };
 
@@ -87,11 +76,11 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   }
 
   Object.keys(currentValues).filter(key => key.startsWith('deploymentPlansComercialBasis_')).forEach((key) => {
-    currentValues.deploymentPlans[Number(key.split('_')[1])].commercialBasis = currentValues[key];
+    (currentValues.deploymentPlans ?? [])[Number(key.split('_')[1])].commercialBasis = currentValues[key] as any;
     delete currentValues[key];
   });
   Object.keys(currentValues).filter(key => key.startsWith('deploymentPlansOrgDeploymentAffect_')).forEach((key) => {
-    currentValues.deploymentPlans[Number(key.split('_')[1])].orgDeploymentAffect = currentValues[key];
+    (currentValues.deploymentPlans ?? [])[Number(key.split('_')[1])].orgDeploymentAffect = currentValues[key] as any;
     delete currentValues[key];
   });
 
@@ -111,6 +100,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           // validations: { isRequired: true }
           fieldsGroupConfig: {
             fields: [
+              { id: 'id', dataType: 'text', isVisible: false },
               { id: 'name', dataType: 'text', label: 'Organisation and department', validations: { isRequired: [true, 'Organisation and department are required'] } },
               { id: 'commercialBasis', dataType: 'text', isVisible: false },
               { id: 'orgDeploymentAffect', dataType: 'text', isVisible: false }
@@ -182,7 +172,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     parsedData[`deploymentPlansComercialBasis_${i}`] = item.commercialBasis;
     parsedData[`deploymentPlansOrgDeploymentAffect_${i}`] = item.orgDeploymentAffect;
   });
-  parsedData.files = (data.files || []).map(item => ({ id: item.id, name: item.displayFileName, url: item.url }));
+  parsedData.files = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
 
   return parsedData;
 
