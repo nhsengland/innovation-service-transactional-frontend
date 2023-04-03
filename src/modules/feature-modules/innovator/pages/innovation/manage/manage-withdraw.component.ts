@@ -73,7 +73,7 @@ export class PageInnovationManageWithdrawComponent extends CoreComponent impleme
       })
     ).subscribe(() => {
 
-      this.setRedirectAlertSuccess(`You have withdrawn the innovation '${this.innovation.name}'`);
+      this.setRedirectAlertInformation(`Your '${this.innovation.name}' innovation has been withdrawn`);
       this.redirectTo('/innovator/dashboard');
 
     });
