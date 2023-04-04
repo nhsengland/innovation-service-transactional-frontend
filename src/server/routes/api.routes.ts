@@ -151,7 +151,7 @@ apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-collaborations/:id
   const requestHandler = getRequestHandler();
 
   requestHandler.get<{ userExists: boolean, collaboratorStatus: InnovationCollaboratorStatusEnum }>(`${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/${req.params.id}/check`)
-    .then(response => { res.status(response.status).send(response.data); console.log(response.data) })
+    .then(response => { res.status(response.status).send(response.data) })
     .catch((error: any) => {
       console.error(`Error: ${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/:id/check`, error);
       res.status(error.response.status).send();
