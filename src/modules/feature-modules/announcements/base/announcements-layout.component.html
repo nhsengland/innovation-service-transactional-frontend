@@ -1,0 +1,15 @@
+<theme-header></theme-header>
+
+<div class="nhsuk-width-container app-width-container">
+  <main id="maincontent" role="main" class="nhsuk-main-wrapper">
+
+    <div *ngIf="title.main" [ngClass]="{'nhsuk-grid-column-full': title.width === 'full', 'nhsuk-grid-column-two-thirds': title.width === '2.thirds'}">
+      <theme-page-title [title]="title.main" [titleHint]="title.secondary" [size]="title.size" [actions]="title.actions"></theme-page-title>
+    </div>
+
+    <router-outlet></router-outlet>
+
+  </main>
+</div>
+
+<theme-footer></theme-footer>
