@@ -7,9 +7,9 @@ export const InnovationSections = [
   // 'EVIDENCE_OF_EFFECTIVENESS',
   'MARKET_RESEARCH',
   'CURRENT_CARE_PATHWAY',
+  'TESTING_WITH_USERS',
   // 'INTELLECTUAL_PROPERTY',
   // 'REGULATIONS_AND_STANDARDS',
-  // 'TESTING_WITH_USERS',
   // 'COST_OF_INNOVATION',
   // 'COMPARATIVE_COST_BENEFIT',
   // 'REVENUE_MODEL',
@@ -92,11 +92,19 @@ export type catalogPathwayKnowledge = typeof catalogPathwayKnowledge[number];
 
 // Section 4.
 // // Section 4.1.
-export const catalogHasRegulationKnowledge = ['YES_ALL', 'YES_SOME', 'NO', 'NOT_RELEVANT'] as const;
-export type catalogHasRegulationKnowledge = typeof catalogHasRegulationKnowledge[number];
+export const catalogIntendedUserGroupsEngaged = ['CLINICAL_SOCIAL_CARE_WORKING_INSIDE_UK', 'CLINICAL_SOCIAL_CARE_WORKING_OUTSIDE_UK', 'NON_CLINICAL_HEALTHCARE', 'PATIENTS', 'SERVICE_USERS', 'CARERS', 'OTHER'] as const;
+export type catalogIntendedUserGroupsEngaged = typeof catalogIntendedUserGroupsEngaged[number];
 
-export const catalogStandardsType = ['CE_UKCA_NON_MEDICAL', 'CE_UKCA_CLASS_I', 'CE_UKCA_CLASS_II_A', 'CE_UKCA_CLASS_II_B', 'CE_UKCA_CLASS_III', 'IVD_GENERAL', 'IVD_SELF_TEST', 'IVD_ANNEX_LIST_A', 'IVD_ANNEX_LIST_B', 'MARKETING', 'CQC', 'DTAC', 'OTHER'] as const;
-export type catalogStandardsType = typeof catalogStandardsType[number];
+
+
+
+
+
+// export const catalogHasRegulationKnowledge = ['YES_ALL', 'YES_SOME', 'NO', 'NOT_RELEVANT'] as const;
+// export type catalogHasRegulationKnowledge = typeof catalogHasRegulationKnowledge[number];
+
+// export const catalogStandardsType = ['CE_UKCA_NON_MEDICAL', 'CE_UKCA_CLASS_I', 'CE_UKCA_CLASS_II_A', 'CE_UKCA_CLASS_II_B', 'CE_UKCA_CLASS_III', 'IVD_GENERAL', 'IVD_SELF_TEST', 'IVD_ANNEX_LIST_A', 'IVD_ANNEX_LIST_B', 'MARKETING', 'CQC', 'DTAC', 'OTHER'] as const;
+// export type catalogStandardsType = typeof catalogStandardsType[number];
 
 
 // Section 5.

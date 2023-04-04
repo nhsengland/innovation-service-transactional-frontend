@@ -1,4 +1,4 @@
-import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasRegulationKnowledge, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
+import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogIntendedUserGroupsEngaged, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
 
 export type DocumentType202304 = {
   version: '202304';
@@ -67,6 +67,17 @@ export type DocumentType202304 = {
     potentialPathway?: string, // Moved from section 5.1.
     // carePathway?: catalogCarePathway
   },
+  TESTING_WITH_USERS: {
+    involvedUsersDesignProcess?: catalogYesInProgressNotYet,
+    testedWithIntendedUsers?: string, // Renamed from section 5.2, "hasTests" field.
+    intendedUserGroupsEngaged?: catalogIntendedUserGroupsEngaged[],
+    otherIntendedUserGroupsEngaged?: string
+    userTests?: { // Moved from section 5.2.
+      kind: string,
+      feedback?: string
+    }[],
+    files?: string[] // Moved from section 5.2.
+  },
 
 
 
@@ -77,22 +88,15 @@ export type DocumentType202304 = {
     otherIntellectual?: string
   },
   REGULATIONS_AND_STANDARDS: {
-    hasRegulationKnowledge?: catalogHasRegulationKnowledge,
+    // hasRegulationKnowledge?: catalogHasRegulationKnowledge,
     otherRegulationDescription?: string,
     standards?: {
-      type: catalogStandardsType,
+      // type: catalogStandardsType,
       hasMet?: catalogYesInProgressNotYet
     }[],
     files?: string[]
   },
-  TESTING_WITH_USERS: {
-    hasTests: catalogYesInProgressNotYet,
-    userTests: {
-      kind: string,
-      feedback?: string
-    }[],
-    files?: string[]
-  },
+
   COST_OF_INNOVATION: {
     hasCostKnowledge?: catalogHasCostKnowledge,
     costDescription?: string,

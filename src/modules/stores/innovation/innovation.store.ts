@@ -185,4 +185,21 @@ export class InnovationStore extends Store<InnovationModel> {
 
   }
 
+  getInnovationRecordSectionIdentification(sectionId: string): { group: { number: number, title: string }, section: { number: number, title: string } } {
+
+    const irConfig = this.getInnovationRecordConfig();
+
+    const groupIndex = irConfig.findIndex(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId));
+    if (groupIndex === -1) { throw new Error("gdfgdsfg"); } // TODO: Improve this excpetion!
+
+    const sectionIndex = irConfig[groupIndex].sections.findIndex(section => section.id === sectionId);
+    if (sectionIndex === -1) { throw new Error("gdfgdsfg"); } // TODO: Improve this excpetion!
+
+    return {
+      group: { number: groupIndex + 1, title: irConfig[groupIndex].title },
+      section: { number: sectionIndex + 1, title: irConfig[groupIndex].sections[sectionIndex].title }
+    };
+
+  }
+
 }
