@@ -2,7 +2,7 @@ import { FormEngineParameterModel } from '@app/base/forms';
 
 import { FormSelectableFieldType } from '../shared.types';
 
-import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOfficeLocation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
+import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasRegulationKnowledge, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOfficeLocation, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
 
 
 // Section 1.
@@ -285,14 +285,6 @@ export const involvedAACProgrammesItems: FormSelectableFieldType<cataloginvolved
 ];
 
 
-// // Section 1.2.
-export const hasProblemTackleKnowledgeItems: FormSelectableFieldType<catalogYesNotYetNotSure> = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NOT_YET', label: 'Not yet' },
-  { value: 'NOT_SURE', label: 'I\'m not sure' }
-];
-
-
 // Section 2.
 // // Section 2.1.
 export const innovationImpactItems: FormSelectableFieldType<'PATIENTS' | 'CLINICIANS'> = [
@@ -554,16 +546,33 @@ export const hasMarketResearchItems: FormSelectableFieldType<catalogYesInProgres
   { value: 'NOT_YET', label: 'Not yet' }
 ];
 
+export const optionBestDescribesInnovationItems: FormSelectableFieldType<catalogOptionBestDescribesInnovation> = [
+  { value: 'ONE_OFF_INNOVATION', label: 'A one-off innovation, or the first of its kind' },
+  { value: 'BETTER_ALTERNATIVE', label: 'A better alternative to those that already exist' },
+  { value: 'EQUIVALENT_ALTERNATIVE', label: 'An equivalent alternative to those that already exist' },
+  { value: 'COST_EFFECT_ALTERNATIVE', label: 'A more cost-effect alternative to those that already exist' },
+  { value: 'NOT_SURE', label: 'I am not sure' }
+];
+
 // // Section 3.2.
-export const hasPatentsItems: FormSelectableFieldType<catalogHasPatents> = [
-  { value: 'HAS_AT_LEAST_ONE', label: 'I have one or more patents' },
-  { value: 'APPLIED_AT_LEAST_ONE', label: 'I have applied for one or more patents' },
-  { value: 'HAS_NONE', label: 'I don\'t have any patents, but believe I have freedom to operate' }
+export const innovationPathwayKnowledgeItems: FormSelectableFieldType<catalogPathwayKnowledge> = [
+  { value: 'PATHWAY_EXISTS_AND_CHANGED', label: 'There is a pathway, and my innovation changes it' },
+  { value: 'PATHWAY_EXISTS_AND_FITS', label: 'There is a pathway, and my innovation fits in to it' },
+  { value: 'NO_PATHWAY', label: 'There is no current care pathway' },
+  { value: 'DONT_KNOW', label: 'I do not know' },
+  { value: 'NOT_PART_PATHWAY', label: 'Does not form part of a care pathway' }
 ];
-export const hasOtherIntellectualItems: FormSelectableFieldType<catalogYesNo> = [
-  { value: 'YES', label: 'Yes', conditional: new FormEngineParameterModel({ id: 'otherIntellectual', dataType: 'text', label: 'Intellectual property name', validations: { isRequired: [true, 'Intellectual property name is required'] } }) },
-  { value: 'NO', label: 'No' }
-];
+
+
+// export const hasPatentsItems: FormSelectableFieldType<catalogHasPatents> = [
+//   { value: 'HAS_AT_LEAST_ONE', label: 'I have one or more patents' },
+//   { value: 'APPLIED_AT_LEAST_ONE', label: 'I have applied for one or more patents' },
+//   { value: 'HAS_NONE', label: 'I don\'t have any patents, but believe I have freedom to operate' }
+// ];
+// export const hasOtherIntellectualItems: FormSelectableFieldType<catalogYesNo> = [
+//   { value: 'YES', label: 'Yes', conditional: new FormEngineParameterModel({ id: 'otherIntellectual', dataType: 'text', label: 'Intellectual property name', validations: { isRequired: [true, 'Intellectual property name is required'] } }) },
+//   { value: 'NO', label: 'No' }
+// ];
 
 
 // Section 4.
@@ -603,11 +612,7 @@ export const hasUKPathwayKnowledgeItems: FormSelectableFieldType<catalogYesNoNot
   { value: 'NO', label: 'No' },
   { value: 'NOT_RELEVANT', label: 'Not relevant' }
 ];
-export const innovationPathwayKnowledgeItems: FormSelectableFieldType<catalogPathwayKnowledge> = [
-  { value: 'PATHWAY_EXISTS_AND_CHANGED', label: 'There is a pathway, and my innovation changes it' },
-  { value: 'PATHWAY_EXISTS_AND_FITS', label: 'There is a pathway, and my innovation fits in it' },
-  { value: 'NO_PATHWAY', label: 'There is no current care pathway' }
-];
+
 export const carePathwayItems: FormSelectableFieldType<catalogCarePathway> = [
   { value: 'ONLY_OPTION', label: 'The only option, or first of its kind' },
   { value: 'BETTER_OPTION', label: 'A better option to those that already exist' },

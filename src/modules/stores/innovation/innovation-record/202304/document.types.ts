@@ -1,4 +1,4 @@
-import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
+import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasRegulationKnowledge, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
 
 export type DocumentType202304 = {
   version: '202304';
@@ -21,46 +21,58 @@ export type DocumentType202304 = {
     currentlyReceivingSupport?: string, // New field.
     involvedAACProgrammes?: cataloginvolvedAACProgrammes[] // New field.
   },
-  VALUE_PROPOSITION: {
-    hasProblemTackleKnowledge?: catalogYesNotYetNotSure,
-    problemsTackled?: string,
-    problemsConsequences?: string,
-    intervention?: string,
-    interventionImpact?: string
-  },
-  UNDERSTANDING_OF_NEEDS: {
-    impactPatients?: boolean,
-    impactClinicians?: boolean,
-    subgroups: string[],
-    cliniciansImpactDetails?: string,
-    diseasesConditionsImpact?: string[]
-  },
-  UNDERSTANDING_OF_BENEFITS: {
-    hasBenefits?: catalogYesNotYetNotSure,
-    patientsCitizensBenefits?: catalogPatientsCitizensBenefit[],
-    generalBenefits?: catalogGeneralBenefit[],
-    otherGeneralBenefit?: string,
-    environmentalBenefits?: catalogEnvironmentalBenefit[],
-    otherEnvironmentalBenefit?: string,
-    accessibilityImpactDetails?: string,
-    accessibilityStepsDetails?: string,
-  },
-  EVIDENCE_OF_EFFECTIVENESS: {
-    hasEvidence?: catalogYesInProgressNotYet;
-    evidences?: {
-      evidenceType: catalogEvidenceType,
-      clinicalEvidenceType?: catalogClinicalEvidence,
-      description?: string,
-      summary?: string,
-      files?: string[]
-    }[]
-  },
+  // VALUE_PROPOSITION: {
+  //   hasProblemTackleKnowledge?: catalogYesNotYetNotSure,
+  //   problemsTackled?: string,
+  //   problemsConsequences?: string,
+  //   intervention?: string,
+  //   interventionImpact?: string
+  // },
+  // UNDERSTANDING_OF_NEEDS: {
+  //   impactPatients?: boolean,
+  //   impactClinicians?: boolean,
+  //   subgroups: string[],
+  //   cliniciansImpactDetails?: string,
+  //   diseasesConditionsImpact?: string[]
+  // },
+  // UNDERSTANDING_OF_BENEFITS: {
+  //   hasBenefits?: catalogYesNotYetNotSure,
+  //   patientsCitizensBenefits?: catalogPatientsCitizensBenefit[],
+  //   generalBenefits?: catalogGeneralBenefit[],
+  //   otherGeneralBenefit?: string,
+  //   environmentalBenefits?: catalogEnvironmentalBenefit[],
+  //   otherEnvironmentalBenefit?: string,
+  //   accessibilityImpactDetails?: string,
+  //   accessibilityStepsDetails?: string,
+  // },
+  // EVIDENCE_OF_EFFECTIVENESS: {
+  //   hasEvidence?: catalogYesInProgressNotYet;
+  //   evidences?: {
+  //     evidenceType: catalogEvidenceType,
+  //     clinicalEvidenceType?: catalogClinicalEvidence,
+  //     description?: string,
+  //     summary?: string,
+  //     files?: string[]
+  //   }[]
+  // },
   MARKET_RESEARCH: {
-    hasMarketResearch?: catalogYesInProgressNotYet;
-    marketResearch?: string
+    hasMarketResearch?: catalogYesInProgressNotYet,
+    marketResearch?: string,
+    optionBestDescribesInnovation?: catalogOptionBestDescribesInnovation, // New field.
+    whatCompetitorsAlternativesExist?: string // New field.
   },
+  CURRENT_CARE_PATHWAY: {
+    // hasUKPathwayKnowledge?: catalogYesNoNotRelevant,
+    innovationPathwayKnowledge?: catalogPathwayKnowledge, // Moved from section 5.1 and items list changed.
+    potentialPathway?: string, // Moved from section 5.1.
+    // carePathway?: catalogCarePathway
+  },
+
+
+
+
   INTELLECTUAL_PROPERTY: {
-    hasPatents?: catalogHasPatents,
+    // hasPatents?: catalogHasPatents,
     hasOtherIntellectual?: catalogYesNo,
     otherIntellectual?: string
   },
@@ -72,12 +84,6 @@ export type DocumentType202304 = {
       hasMet?: catalogYesInProgressNotYet
     }[],
     files?: string[]
-  },
-  CURRENT_CARE_PATHWAY: {
-    hasUKPathwayKnowledge?: catalogYesNoNotRelevant,
-    innovationPathwayKnowledge?: catalogPathwayKnowledge,
-    potentialPathway?: string,
-    carePathway?: catalogCarePathway
   },
   TESTING_WITH_USERS: {
     hasTests: catalogYesInProgressNotYet,

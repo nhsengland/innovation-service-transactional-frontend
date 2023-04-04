@@ -3,9 +3,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { ContextStore } from '@modules/stores';
+import { ContextStore, InnovationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { getInnovationRecordSidebar, InnovationRecordSidebar } from '@modules/stores/innovation/innovation.config';
 
 
 @Component({
@@ -16,16 +15,17 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
 
-  sidebarItems: { label: string, url: string; nestedSidebarItems?: {label: string, url: string;}[] }[] = [];
+  sidebarItems: { label: string, url: string, children?: { label: string, url: string }[] }[]= [];
   navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
 
-  private sectionsSidebar: InnovationRecordSidebar[] = [];
+  private sectionsSidebar: { label: string, url: string, children?: { label: string, url: string }[] }[] = [];
   private _sidebarItems: { label: string, url: string; }[] = [];
 
   constructor(
     private router: Router,
-    private contextStore: ContextStore
+    private contextStore: ContextStore,
+    private innovationStore: InnovationStore
   ) {
     this.subscriptions.add(
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
@@ -48,7 +48,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
       const innovation = this.contextStore.getInnovation();
 
-      this.sectionsSidebar = getInnovationRecordSidebar('assessment', innovation.id);
+      this.sectionsSidebar = this.innovationStore.getInnovationRecordSectionsTree('assessment', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/assessment/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/assessment/innovations/${innovation.id}/record` },

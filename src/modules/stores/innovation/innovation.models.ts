@@ -3,6 +3,7 @@ import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { WizardEngineModel } from '@modules/shared/forms';
 
 import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum, InnovationStatusEnum } from './innovation.enums';
+import { InnovationSectionsVersions } from './innovation-record/shared.types';
 
 
 // Store state model.
@@ -64,7 +65,7 @@ export type getInnovationInfoResponse = {
 
 export type InnovationSectionsListDTO = {
   id: null | string,
-  section: InnovationSectionEnum,
+  section: InnovationSectionsVersions,
   status: keyof typeof INNOVATION_SECTION_STATUS,
   submittedAt: null | DateISOType,
   submittedBy: null | {
@@ -87,7 +88,7 @@ export type GetInnovationEvidenceDTO = {
 export type SectionsSummaryModel = {
   title: string,
   sections: {
-    id: InnovationSectionEnum,
+    id: InnovationSectionsVersions,
     title: string,
     status: keyof typeof INNOVATION_SECTION_STATUS,
     submittedAt: null | DateISOType,
