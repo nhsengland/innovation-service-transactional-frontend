@@ -86,6 +86,7 @@ import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
+import { InnovationCollaborationRedirectionGuard } from '@modules/core/guards/innovation-collaboration-redirection.guard';
 
 
 const header: RoutesDataType['header'] = {
@@ -134,6 +135,7 @@ const routes: Routes = [
 
           { path: 'new', pathMatch: 'full', component: InnovationNewComponent },
           {
+            canActivate: [InnovationCollaborationRedirectionGuard],
             path: ':innovationId/collaborations/:collaboratorId',
             pathMatch: 'full',
             component: PageCollaborationInviteComponent,

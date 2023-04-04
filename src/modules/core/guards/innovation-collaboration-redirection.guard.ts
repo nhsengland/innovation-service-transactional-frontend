@@ -22,7 +22,7 @@ export class InnovationCollaborationRedirectionGuard implements CanActivate {
   ) { }
 
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<boolean> {
-    const collaboratorId = activatedRouteSnapshot.params.id;
+    const collaboratorId = activatedRouteSnapshot.params.collaboratorId;
 
     return this.innovationService.getInnovationCollaboration(collaboratorId).pipe(
       map(_ => {
@@ -42,7 +42,7 @@ export class InnovationCollaborationRedirectionGuard implements CanActivate {
         let redirectUrl = '';
         
         if (e.status === 404) {
-          redirectUrl = '/transactional/signin';
+          redirectUrl = '/transactional/error/forbidden-collaborator';
         } else {
           this.loggerService.trackTrace('[InnovationCollaborationRedirectionGuard] error', Severity.ERROR, { error: e });
 
