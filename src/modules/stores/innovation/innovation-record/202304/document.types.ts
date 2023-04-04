@@ -1,4 +1,4 @@
-import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogIntendedUserGroupsEngaged, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
+import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
 
 export type DocumentType202304 = {
   version: '202304';
@@ -78,24 +78,22 @@ export type DocumentType202304 = {
     }[],
     files?: string[] // Moved from section 5.2.
   },
-
-
-
-
+  REGULATIONS_AND_STANDARDS: {
+    hasRegulationKnowledge?: catalogHasRegulationKnowledge,
+    standards?: {
+      type: catalogStandardsType,
+      hasMet?: catalogYesInProgressNotYet
+    }[],
+    otherRegulationDescription?: string,
+    files?: string[]
+  },
   INTELLECTUAL_PROPERTY: {
-    // hasPatents?: catalogHasPatents,
+    hasPatents?: catalogHasPatents,
     hasOtherIntellectual?: catalogYesNo,
     otherIntellectual?: string
   },
-  REGULATIONS_AND_STANDARDS: {
-    // hasRegulationKnowledge?: catalogHasRegulationKnowledge,
-    otherRegulationDescription?: string,
-    standards?: {
-      // type: catalogStandardsType,
-      hasMet?: catalogYesInProgressNotYet
-    }[],
-    files?: string[]
-  },
+
+
 
   COST_OF_INNOVATION: {
     hasCostKnowledge?: catalogHasCostKnowledge,

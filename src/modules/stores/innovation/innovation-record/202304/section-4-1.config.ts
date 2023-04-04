@@ -86,9 +86,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     })
   );
 
-  if (typeof currentStep === 'number' && currentStep > 3) { // Updates userTests.feedback value.
+  if (Number(currentStep) > 3) { // Updates userTests.feedback value.
     Object.keys(currentValues).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => {
-
       const index = (currentValues.userTests ?? []).findIndex(item => StringsHelper.slugify(item.kind) === key.split('_')[1]);
       if (index > -1) {
         (currentValues.userTests ?? [])[index].feedback = currentValues[key as any];
@@ -152,7 +151,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     files: data.files
   } as StepPayloadType;
 
-  (parsedData.userTests ?? []).forEach((item, i) => { parsedData[`userTestFeedback_${i}`] = item.kind; });
+  (parsedData.userTests ?? []).forEach((item, i) => { parsedData[`userTestFeedback_${i}`] = item.feedback; });
 
   return parsedData;
 
@@ -161,7 +160,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
-  const parsedData = {
+  return  {
     involvedUsersDesignProcess: data.involvedUsersDesignProcess,
     testedWithIntendedUsers: data.testedWithIntendedUsers,
     intendedUserGroupsEngaged: data.intendedUserGroupsEngaged,
@@ -169,8 +168,6 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     userTests: data.userTests,
     files: data.files?.map(item => item.id)
   };
-
-  return parsedData;
 
 }
 
@@ -215,14 +212,14 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     });
 
     const stepNumber = toReturn.length + 1;
-    const allFiles = (data.files || []).map((item) => ({ id: item.id, name: item.name, url: item.url }));
+    const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
     allFiles.forEach((item, i) => {
       toReturn.push({
         label: `Attachment ${i + 1}`,
         value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
         editStepNumber: stepNumber,
         allowHTML: true,
-        isFile: true,
+        isFile: true
       });
     });
 

@@ -2,7 +2,7 @@ import { FormEngineParameterModel } from '@app/base/forms';
 
 import { FormSelectableFieldType } from '../shared.types';
 
-import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogIntendedUserGroupsEngaged, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOfficeLocation, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
+import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOfficeLocation, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
 
 
 // Section 1.
@@ -563,16 +563,6 @@ export const innovationPathwayKnowledgeItems: FormSelectableFieldType<catalogPat
   { value: 'NOT_PART_PATHWAY', label: 'Does not form part of a care pathway' }
 ];
 
-// export const hasPatentsItems: FormSelectableFieldType<catalogHasPatents> = [
-//   { value: 'HAS_AT_LEAST_ONE', label: 'I have one or more patents' },
-//   { value: 'APPLIED_AT_LEAST_ONE', label: 'I have applied for one or more patents' },
-//   { value: 'HAS_NONE', label: 'I don\'t have any patents, but believe I have freedom to operate' }
-// ];
-// export const hasOtherIntellectualItems: FormSelectableFieldType<catalogYesNo> = [
-//   { value: 'YES', label: 'Yes', conditional: new FormEngineParameterModel({ id: 'otherIntellectual', dataType: 'text', label: 'Intellectual property name', validations: { isRequired: [true, 'Intellectual property name is required'] } }) },
-//   { value: 'NO', label: 'No' }
-// ];
-
 
 // Section 4.
 // // Section 4.1.
@@ -597,36 +587,63 @@ export const intendedUserGroupsEngagedItems: FormSelectableFieldType<catalogInte
   { value: 'CARERS', label: 'Carers' },
 ];
 
-// export const hasRegulationKnowledgeItems: FormSelectableFieldType<catalogHasRegulationKnowledge> = [
-//   { value: 'YES_ALL', label: 'Yes, I know all of them' },
-//   { value: 'YES_SOME', label: 'Yes, I know some of them' },
-//   { value: 'NO', label: 'No' },
-//   { value: 'NOT_RELEVANT', label: 'Not relevant' }
-// ];
-// export const standardsTypeItems: FormSelectableFieldType<catalogStandardsType> = [
-//   { value: 'CE_UKCA_NON_MEDICAL', label: 'Non-medical device', group: 'UKCA / CE' },
-//   { value: 'CE_UKCA_CLASS_I', label: 'Class I medical device', group: 'UKCA / CE' },
-//   { value: 'CE_UKCA_CLASS_II_A', label: 'Class IIa medical device', group: 'UKCA / CE' },
-//   { value: 'CE_UKCA_CLASS_II_B', label: 'Class IIb medical device', group: 'UKCA / CE' },
-//   { value: 'CE_UKCA_CLASS_III', label: 'Class III medical device', group: 'UKCA / CE' },
-//   { value: 'IVD_GENERAL', label: 'IVD general', group: 'In-vitro diagnostics' },
-//   { value: 'IVD_SELF_TEST', label: 'IVD self-test', group: 'In-vitro diagnostics' },
-//   { value: 'IVD_ANNEX_LIST_A', label: 'IVD Annex II List A', group: 'In-vitro diagnostics' },
-//   { value: 'IVD_ANNEX_LIST_B', label: 'IVD Annex II List B', group: 'In-vitro diagnostics' },
-//   { value: 'MARKETING', label: 'Marketing authorisation' },
-//   { value: 'CQC', label: 'Care Quality Commission (CQC) registration' },
-//   { value: 'DTAC', label: 'Digital Technology Assessment Criteria (DTAC)' },
-//   { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRegulationDescription', dataType: 'text', label: 'Other standards and certifications that apply', validations: { isRequired: [true, 'Other standards and certifications is required'] } }) }
-// ];
+
+// Section 5.
+// // Section 5.1.
+export const hasRegulationKnowledgeItems: FormSelectableFieldType<catalogHasRegulationKnowledge> = [
+  { value: 'YES_ALL', label: 'Yes, I know all of them' },
+  { value: 'YES_SOME', label: 'Yes, I know some of them' },
+  { value: 'NO', label: 'No' },
+  { value: 'NOT_RELEVANT', label: 'Not relevant' }
+];
+export const standardsTypeItems: FormSelectableFieldType<catalogStandardsType> = [
+  { value: 'CE_UKCA_NON_MEDICAL', label: 'Non-medical device', group: 'UKCA / CE' },
+  { value: 'CE_UKCA_CLASS_I', label: 'Class I medical device', group: 'UKCA / CE' },
+  { value: 'CE_UKCA_CLASS_II_A', label: 'Class IIa medical device', group: 'UKCA / CE' },
+  { value: 'CE_UKCA_CLASS_II_B', label: 'Class IIb medical device', group: 'UKCA / CE' },
+  { value: 'CE_UKCA_CLASS_III', label: 'Class III medical device', group: 'UKCA / CE' },
+  { value: 'IVD_GENERAL', label: 'IVD general', group: 'In-vitro diagnostics' },
+  { value: 'IVD_SELF_TEST', label: 'IVD self-test', group: 'In-vitro diagnostics' },
+  { value: 'IVD_ANNEX_LIST_A', label: 'IVD Annex II List A', group: 'In-vitro diagnostics' },
+  { value: 'IVD_ANNEX_LIST_B', label: 'IVD Annex II List B', group: 'In-vitro diagnostics' },
+  { value: 'MARKETING', label: 'Marketing authorisation for medicines' },
+  { value: 'CQC', label: 'Care Quality Commission (CQC) registration, as I am providing a regulated activity' },
+  { value: 'DTAC', label: 'Digital Technology Assessment Criteria (DTAC)' }
+];
+
+// // Section 5.2.
+export const hasPatentsItems: FormSelectableFieldType<catalogHasPatents> = [
+  { value: 'HAS_AT_LEAST_ONE', label: 'I have one or more patents' },
+  { value: 'APPLIED_AT_LEAST_ONE', label: 'I have applied for one or more patents' },
+  { value: 'HAS_NONE', label: 'I don\'t have any patents, but believe I have freedom to operate' }
+];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const standardsHasMetItems: FormSelectableFieldType<catalogYesInProgressNotYet> = [
   { value: 'YES', label: 'Yes' },
   { value: 'IN_PROGRESS', label: 'I\'m in the process of gaining approval' },
   { value: 'NOT_YET', label: 'Not yet' },
 ];
-
-
-// Section 5.
-// // Section 5.1.
 export const hasUKPathwayKnowledgeItems: FormSelectableFieldType<catalogYesNoNotRelevant> = [
   { value: 'YES', label: 'Yes' },
   { value: 'NO', label: 'No' },
@@ -641,7 +658,7 @@ export const carePathwayItems: FormSelectableFieldType<catalogCarePathway> = [
   { value: 'NO_KNOWLEDGE', label: 'I don\'t know' }
 ];
 
-// // Section 5.2.
+
 export const hasTestsItems: FormSelectableFieldType<catalogYesInProgressNotYet> = [
   { value: 'YES', label: 'Yes' },
   { value: 'IN_PROGRESS', label: 'I\'m in the process of testing with users' },

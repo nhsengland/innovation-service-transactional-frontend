@@ -8,8 +8,8 @@ export const InnovationSections = [
   'MARKET_RESEARCH',
   'CURRENT_CARE_PATHWAY',
   'TESTING_WITH_USERS',
-  // 'INTELLECTUAL_PROPERTY',
-  // 'REGULATIONS_AND_STANDARDS',
+  'REGULATIONS_AND_STANDARDS',
+  'INTELLECTUAL_PROPERTY',
   // 'COST_OF_INNOVATION',
   // 'COMPARATIVE_COST_BENEFIT',
   // 'REVENUE_MODEL',
@@ -86,9 +86,6 @@ export type catalogOptionBestDescribesInnovation = typeof catalogOptionBestDescr
 export const catalogPathwayKnowledge = ['PATHWAY_EXISTS_AND_CHANGED', 'PATHWAY_EXISTS_AND_FITS', 'NO_PATHWAY', 'DONT_KNOW', 'NOT_PART_PATHWAY'] as const;
 export type catalogPathwayKnowledge = typeof catalogPathwayKnowledge[number];
 
-// export const catalogHasPatents = ['HAS_AT_LEAST_ONE', 'APPLIED_AT_LEAST_ONE', 'HAS_NONE'] as const;
-// export type catalogHasPatents = typeof catalogHasPatents[number];
-
 
 // Section 4.
 // // Section 4.1.
@@ -96,22 +93,20 @@ export const catalogIntendedUserGroupsEngaged = ['CLINICAL_SOCIAL_CARE_WORKING_I
 export type catalogIntendedUserGroupsEngaged = typeof catalogIntendedUserGroupsEngaged[number];
 
 
-
-
-
-
-// export const catalogHasRegulationKnowledge = ['YES_ALL', 'YES_SOME', 'NO', 'NOT_RELEVANT'] as const;
-// export type catalogHasRegulationKnowledge = typeof catalogHasRegulationKnowledge[number];
-
-// export const catalogStandardsType = ['CE_UKCA_NON_MEDICAL', 'CE_UKCA_CLASS_I', 'CE_UKCA_CLASS_II_A', 'CE_UKCA_CLASS_II_B', 'CE_UKCA_CLASS_III', 'IVD_GENERAL', 'IVD_SELF_TEST', 'IVD_ANNEX_LIST_A', 'IVD_ANNEX_LIST_B', 'MARKETING', 'CQC', 'DTAC', 'OTHER'] as const;
-// export type catalogStandardsType = typeof catalogStandardsType[number];
-
-
 // Section 5.
 // // Section 5.1.
+export const catalogHasRegulationKnowledge = ['YES_ALL', 'YES_SOME', 'NO', 'NOT_RELEVANT'] as const;
+export type catalogHasRegulationKnowledge = typeof catalogHasRegulationKnowledge[number];
+
+export const catalogStandardsType = ['CE_UKCA_NON_MEDICAL', 'CE_UKCA_CLASS_I', 'CE_UKCA_CLASS_II_A', 'CE_UKCA_CLASS_II_B', 'CE_UKCA_CLASS_III', 'IVD_GENERAL', 'IVD_SELF_TEST', 'IVD_ANNEX_LIST_A', 'IVD_ANNEX_LIST_B', 'MARKETING', 'CQC', 'DTAC', 'OTHER'] as const;
+export type catalogStandardsType = typeof catalogStandardsType[number];
 
 export const catalogCarePathway = ['ONLY_OPTION', 'BETTER_OPTION', 'EQUIVALENT_OPTION', 'FIT_LESS_COSTS', 'NO_KNOWLEDGE'] as const;
 export type catalogCarePathway = typeof catalogCarePathway[number];
+
+// // Section 5.2.
+export const catalogHasPatents = ['HAS_AT_LEAST_ONE', 'APPLIED_AT_LEAST_ONE', 'HAS_NONE'] as const;
+export type catalogHasPatents = typeof catalogHasPatents[number];
 
 
 // Section 6.
