@@ -619,6 +619,25 @@ export const hasPatentsItems: FormSelectableFieldType<catalogHasPatents> = [
 ];
 
 
+// Section 6.
+// // Section 6.1.
+export const hasRevenueModelItems: FormSelectableFieldType<catalogYesNo> = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'NO', label: 'No or I do not know' }
+];
+export const revenuesItems: FormSelectableFieldType<catalogRevenues> = [
+  { value: 'ADVERTISING', label: 'Advertising' },
+  { value: 'DIRECT_PRODUCT_SALES', label: 'Direct product sales' },
+  { value: 'FEE_FOR_SERVICE', label: 'Fee for service' },
+  { value: 'LEASE', label: 'Lease' },
+  { value: 'SALES_OF_CONSUMABLES_OR_ACCESSORIES', label: 'Sales of consumables or accessories' },
+  { value: 'SUBSCRIPTION', label: 'Subscription' }
+];
+export const hasFundindItems: FormSelectableFieldType<catalogYesNoNotRelevant> = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'NO', label: 'No' },
+  { value: 'NOT_RELEVANT', label: 'Not relevant' }
+];
 
 
 
@@ -666,8 +685,6 @@ export const hasTestsItems: FormSelectableFieldType<catalogYesInProgressNotYet> 
 ];
 
 
-// Section 6.
-// // Section 6.1.
 export const hasCostKnowledgeItems: FormSelectableFieldType<catalogHasCostKnowledge> = [
   { value: 'DETAILED_ESTIMATE', label: 'Yes, I have a detailed estimate' },
   { value: 'ROUGH_IDEA', label: 'Yes, I have a rough idea' },
@@ -692,26 +709,6 @@ export const costComparisonItems: FormSelectableFieldType<catalogCostComparison>
 
 // Section 7.
 // // Section 7.1.
-export const hasRevenueModelItems: FormSelectableFieldType<catalogYesNo> = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' }
-];
-export const revenuesItems: FormSelectableFieldType<catalogRevenues> = [
-  { value: 'ADVERTISING', label: 'Advertising' },
-  { value: 'DIRECT_PRODUCT_SALES', label: 'Direct product sales' },
-  { value: 'FEE_FOR_SERVICE', label: 'Fee for service' },
-  { value: 'LEASE', label: 'Lease' },
-  { value: 'SALES_OF_CONSUMABLES_OR_ACCESSORIES', label: 'Sales of consumables or accessories' },
-  { value: 'SUBSCRIPTION', label: 'Subscription' },
-  {
-    value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRevenueDescription', dataType: 'text', label: 'Other revenue model', validations: { isRequired: [true, 'Other revenue model is required'] } })
-  }
-];
-export const hasFundindItems: FormSelectableFieldType<catalogYesNoNotRelevant> = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' },
-  { value: 'NOT_RELEVANT', label: 'Not relevant' }
-];
 
 
 // Section 8.

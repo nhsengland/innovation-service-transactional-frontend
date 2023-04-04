@@ -92,8 +92,21 @@ export type DocumentType202304 = {
     hasOtherIntellectual?: catalogYesNo,
     otherIntellectual?: string
   },
+  REVENUE_MODEL: {
+    hasRevenueModel?: catalogYesNo,
+    revenues?: catalogRevenues[],
+    otherRevenueDescription?: string,
+    payingOrganisations?: string,
+    benefittingOrganisations?: string,
+    hasFunding?: catalogYesNoNotRelevant,
+    fundingDescription?: string
+  },
 
 
+
+
+
+  
 
   COST_OF_INNOVATION: {
     hasCostKnowledge?: catalogHasCostKnowledge,
@@ -107,15 +120,7 @@ export type DocumentType202304 = {
     hasCostCareKnowledge?: catalogHasCostKnowledge,
     costComparison?: catalogCostComparison
   },
-  REVENUE_MODEL: {
-    hasRevenueModel?: catalogYesNo,
-    revenues?: catalogRevenues[],
-    otherRevenueDescription?: string,
-    payingOrganisations?: string,
-    benefittingOrganisations?: string,
-    hasFunding?: catalogYesNoNotRelevant,
-    fundingDescription?: string
-  },
+
   IMPLEMENTATION_PLAN: {
     hasDeployPlan?: catalogYesNo,
     isDeployed?: catalogYesNo,

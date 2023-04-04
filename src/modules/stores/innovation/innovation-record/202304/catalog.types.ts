@@ -10,9 +10,9 @@ export const InnovationSections = [
   'TESTING_WITH_USERS',
   'REGULATIONS_AND_STANDARDS',
   'INTELLECTUAL_PROPERTY',
+  'REVENUE_MODEL',
   // 'COST_OF_INNOVATION',
   // 'COMPARATIVE_COST_BENEFIT',
-  // 'REVENUE_MODEL',
   // 'IMPLEMENTATION_PLAN'
 ] as const;
 export type InnovationSections = typeof InnovationSections[number];
