@@ -37,7 +37,7 @@ export class PageInnovationManageWithdrawComponent extends CoreComponent impleme
     this.innovation = this.stores.context.getInnovation();
     this.roleIdUser = this.stores.authentication.getUserContextInfo()?.roleId;
 
-    this.setPageTitle(`Withdraw '${this.innovation.name}' innovation`);
+    this.setPageTitle(`Withdraw '${this.innovation.name}'`);
     this.setBackLink('Go back', this.handleGoBack.bind(this));
 
     const user = this.stores.authentication.getUserInfo();
