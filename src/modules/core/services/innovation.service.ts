@@ -6,6 +6,7 @@ import { map, take } from 'rxjs/operators';
 import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
 
 import { UrlModel } from '../models/url.model';
+import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 @Injectable()
 export class InnovationService {
@@ -31,10 +32,10 @@ export class InnovationService {
   }
 
   
-  getInnovationCollaboration(id: string): Observable<void> {
+  getInnovationCollaboration(id: string): Observable<{ userExists: boolean, collaboratorStatus: InnovationCollaboratorStatusEnum }> {
     const url = new UrlModel(this.APP_URL).addPath('innovators/innovation-collaborations/:id/check').setPathParams({ id });
 
-    return this.http.head<void>(url.buildUrl()).pipe(take(1));
+    return this.http.get<{ userExists: boolean, collaboratorStatus: InnovationCollaboratorStatusEnum }>(url.buildUrl()).pipe(take(1));
   }
 
 }

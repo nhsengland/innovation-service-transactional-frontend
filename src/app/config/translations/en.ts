@@ -54,7 +54,7 @@ export const locale = {
           },
           forbidden_collaborator: {
             title: 'It appears that something went wrong!',
-            message: 'Your invitation to collaborate on this innovation has been cancelled.',
+            message: 'Your invitation to collaborate on this innovation is no longer valid.',
             button_label: 'Go back to home'
           },
           generic: {

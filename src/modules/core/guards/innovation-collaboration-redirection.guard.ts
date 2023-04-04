@@ -9,6 +9,8 @@ import { RESPONSE } from '@nguniversal/express-engine/tokens';
 
 import { LoggerService, Severity } from '../services/logger.service';
 import { InnovationService } from '../services/innovation.service';
+import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { CANCELLED } from 'dns';
 
 
 @Injectable()
@@ -25,9 +27,17 @@ export class InnovationCollaborationRedirectionGuard implements CanActivate {
     const collaboratorId = activatedRouteSnapshot.params.collaboratorId;
 
     return this.innovationService.getInnovationCollaboration(collaboratorId).pipe(
-      map(_ => {
-        const redirectUrl = '/transactional/signup'; 
-       
+      map(response => {
+
+        let redirectUrl = '';
+
+        if (!response.userExists) {
+          redirectUrl = 'transactional/signup';
+        } else if (response.collaboratorStatus !== InnovationCollaboratorStatusEnum.PENDING) {
+          redirectUrl = 'transactional/error/forbidden-collaborator';
+        } else {
+          return true;
+        }
         if (isPlatformBrowser(this.platformId)) {
           window.location.assign(redirectUrl); // Full reload is needed to hit SSR.
         } else {
@@ -41,13 +51,9 @@ export class InnovationCollaborationRedirectionGuard implements CanActivate {
       catchError((e) => { // Request no longer valid, redirect to error.
         let redirectUrl = '';
         
-        if (e.status === 404) {
-          redirectUrl = '/transactional/error/forbidden-collaborator';
-        } else {
-          this.loggerService.trackTrace('[InnovationCollaborationRedirectionGuard] error', Severity.ERROR, { error: e });
+        this.loggerService.trackTrace('[InnovationCollaborationRedirectionGuard] error', Severity.ERROR, { error: e });
 
-          redirectUrl = '/transactional/error';
-        }
+        redirectUrl = '/transactional/error';
 
         if (isPlatformBrowser(this.platformId)) {
           window.location.assign(redirectUrl); // Full reload is needed to hit SSR.

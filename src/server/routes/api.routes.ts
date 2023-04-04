@@ -1,3 +1,4 @@
+import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import axios, { AxiosInstance } from 'axios';
 import * as express from 'express';
 import * as https from 'https';
@@ -146,11 +147,11 @@ apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-transfers/:id/chec
 
 });
 
-apiRouter.head(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-collaborations/:id/check`, (req, res) => {
+apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-collaborations/:id/check`, (req, res) => {
   const requestHandler = getRequestHandler();
 
-  requestHandler.head<void>(`${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/${req.params.id}/check`)
-    .then(response => { res.status(response.status).send(); })
+  requestHandler.get<{ userExists: boolean, collaboratorStatus: InnovationCollaboratorStatusEnum }>(`${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/${req.params.id}/check`)
+    .then(response => { res.status(response.status).send(response.data); console.log(response.data) })
     .catch((error: any) => {
       console.error(`Error: ${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/:id/check`, error);
       res.status(error.response.status).send();
