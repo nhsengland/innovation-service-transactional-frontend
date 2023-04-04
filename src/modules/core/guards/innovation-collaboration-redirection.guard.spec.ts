@@ -114,7 +114,7 @@ describe('Core/Guards/InnovationCollaborationRedirectionGuard running CLIENT sid
 
     guard.canActivate(routeMock as any).subscribe(response => { expected = response; });
     expect(expected).toBe(false);
-    expect(window.location.assign).toBeCalledWith('/transactional/signin');
+    expect(window.location.assign).toBeCalledWith('/transactional/error/forbidden-collaborator');
   });
 
 
