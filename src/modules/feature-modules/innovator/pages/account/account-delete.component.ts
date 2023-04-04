@@ -107,6 +107,7 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit{
     if (action === 'previous') {
       if (this.stepNumber === this.firstStep) {
         this.redirectTo('/innovator/account/manage-account');
+        return;
       }
       else if(this.stepNumber === 3 && !this.innovator.hasPendingTransfer) {
         this.stepNumber = 1;
@@ -121,11 +122,20 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit{
       }
       else if (this.stepNumber === 3 && !this.form.get('reason')?.valid) {
         this.form.get('reason')?.markAsTouched();
+        return;
       }
       else {
         this.stepNumber++;
       }
     }
+
+    if (this.stepNumber === 1) {
+      this.setPageTitle('You have innovations linked to this account');
+    }
+    else {
+      this.setPageTitle('Delete your account');
+    }
+
   }
 
   onSubmitForm(): void {
