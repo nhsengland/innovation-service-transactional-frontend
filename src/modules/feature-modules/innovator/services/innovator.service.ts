@@ -15,7 +15,7 @@ import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/inn
 export type GetInnovationTransfersDTO = {
   id: string;
   email: string;
-  innovation: { id: string, name: string, owner: string };
+  innovation: { id: string, name: string, owner?: string };
 }[];
 
 export type GetInnovationCollaboratorInvitesDTO = {
