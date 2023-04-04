@@ -16,11 +16,11 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 })
 export class PageInnovationRecordComponent extends CoreComponent implements OnInit {
 
+  innovation: ContextInnovationType;
   baseUrl = '';
   documentUrl = '';
   pdfDocumentUrl = '';
 
-  innovation: ContextInnovationType;
 
   innovationId: string;
   innovationName: string;
@@ -58,11 +58,11 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     super();
     this.setPageTitle('Innovation record');
 
+    this.innovation = this.stores.context.getInnovation();
     this.baseUrl = `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
     this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${this.activatedRoute.snapshot.params.innovationId}/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = this.stores.context.getInnovation();
     this.innovationName = this.innovation.name;
     this.innovationStatus = this.innovation.status;
     this.innovationExport = this.innovation.export;

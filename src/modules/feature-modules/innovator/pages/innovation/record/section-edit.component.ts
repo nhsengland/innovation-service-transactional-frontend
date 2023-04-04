@@ -48,7 +48,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.baseUrl = `innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
     this.sectionsIdsList = this.stores.innovation.getInnovationRecordConfig().flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
-    this.wizard = this.stores.innovation.getSectionWizard(this.sectionId);
+    this.wizard = this.stores.innovation.getInnovationRecordSectionWizard(this.sectionId);
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
 

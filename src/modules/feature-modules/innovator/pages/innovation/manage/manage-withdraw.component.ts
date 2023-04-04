@@ -7,6 +7,7 @@ import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { ContextInnovationType } from '@modules/stores';
 
 
 @Component({
@@ -17,12 +18,12 @@ export class PageInnovationManageWithdrawComponent extends CoreComponent impleme
 
   innovationId: string;
   stepNumber: 1 | 2 = 1;
+  innovation: ContextInnovationType;
+  roleIdUser: string | undefined;
 
   user: { email: string };
 
   form: FormGroup;
-
-  innovationName = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -33,10 +34,11 @@ export class PageInnovationManageWithdrawComponent extends CoreComponent impleme
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.innovationName = this.stores.context.getInnovation().name;
+    this.innovation = this.stores.context.getInnovation();
+    this.roleIdUser = this.stores.authentication.getUserContextInfo()?.roleId;
 
-    this.setPageTitle('Withdraw this innovation');
-    this.setBackLink('Go back', `/innovator/innovations/${this.innovationId}/manage/innovation`);
+    this.setPageTitle(`Withdraw '${this.innovation.name}' innovation`);
+    this.setBackLink('Go back', this.handleGoBack.bind(this));
 
     const user = this.stores.authentication.getUserInfo();
     this.user = {
@@ -44,7 +46,7 @@ export class PageInnovationManageWithdrawComponent extends CoreComponent impleme
     };
 
     this.form = new FormGroup({
-      reason: new FormControl<string>(''),
+      reason: new FormControl<string>('', CustomValidators.required('A reason is required')),
       email: new FormControl<string>('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')]),
       confirmation: new FormControl<string>('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('withdraw my innovation')])
     }, { updateOn: 'blur' }
@@ -71,10 +73,20 @@ export class PageInnovationManageWithdrawComponent extends CoreComponent impleme
       })
     ).subscribe(() => {
 
-      this.setRedirectAlertSuccess(`You have withdrawn the innovation '${this.innovationName}'`);
+      this.setRedirectAlertInformation(`Your '${this.innovation.name}' innovation has been withdrawn`);
       this.redirectTo('/innovator/dashboard');
 
     });
+
+  }
+
+  private handleGoBack() {
+
+    this.stepNumber--;
+
+    if (this.stepNumber === 0) {
+      this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation`);
+    }
 
   }
 
@@ -84,6 +96,7 @@ export class PageInnovationManageWithdrawComponent extends CoreComponent impleme
     switch (this.stepNumber) {
       case 1:
         this.form.get('reason')!.markAsTouched();
+        if (!this.form.get('reason')!.valid) { return false; }
         this.stepNumber++;
         break;
 

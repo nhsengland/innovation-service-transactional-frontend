@@ -16,6 +16,7 @@ import { GetInnovationEvidenceDTO, InnovationModel, InnovationSectionConfigType 
 import { InnovationSectionConfigType, sectionType } from './innovation-record/shared.types';
 
 import { INNOVATION_SECTIONS as SECTIONS_202209 } from './innovation-record/202209/main.config';
+import { INNOVATION_SECTIONS as SECTIONS_202304 } from './innovation-record/202304/main.config';
 
 
 @Injectable()
@@ -43,7 +44,7 @@ export class InnovationStore extends Store<InnovationModel> {
   getSectionsSummary$(innovationId: string): Observable<SectionsSummaryModel> {
 
     return this.innovationsService.getInnovationSections(innovationId).pipe(
-      map(response => INNOVATION_SECTIONS.map(item => ({
+      map(response => this.getInnovationRecordConfig().map(item => ({
         title: item.title,
         sections: item.sections.map(ss => {
           const sectionState = response.find(a => a.section === ss.id) || {
@@ -71,7 +72,7 @@ export class InnovationStore extends Store<InnovationModel> {
       catchError(() => {
         // this.logger.error('Unable to fetch sections information');
         return of(
-          INNOVATION_SECTIONS.map(item => ({
+          this.getInnovationRecordConfig().map(item => ({
             title: item.title,
             sections: item.sections.map(ss => ({
               id: ss.id,
@@ -146,9 +147,23 @@ export class InnovationStore extends Store<InnovationModel> {
     switch (version) {
       case '202209':
         return SECTIONS_202209;
+      case '202304':
       default:
-        return SECTIONS_202209;
+        return SECTIONS_202304;
     }
+
+  }
+
+  getInnovationRecordSectionsTree(type: string, innovationId: string): { label: string, url: string, children: { label: string, url: string }[] }[] {
+
+    return this.getInnovationRecordConfig().map((parentSection, i) => ({
+      label: `${i + 1}. ${parentSection.title}`,
+      url: `/${type}/innovations/${innovationId}/record/sections/${parentSection.sections[0].id}`,
+      children: parentSection.sections.map((section, k) => ({
+        label: `${i + 1}.${k + 1} ${section.title}`,
+        url: `/${type}/innovations/${innovationId}/record/sections/${section.id}`
+      }))
+    }));
 
   }
 
@@ -169,4 +184,5 @@ export class InnovationStore extends Store<InnovationModel> {
     return cloneDeep(this.getInnovationRecordSection(sectionId, version)?.wizard);
 
   }
+
 }

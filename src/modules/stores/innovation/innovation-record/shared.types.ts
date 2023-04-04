@@ -6,7 +6,7 @@ import { InnovationSections as InnovationSection_202209 } from './202209/catalog
 import { InnovationSections as InnovationSection_202304 } from './202304/catalog.types';
 
 
-type ExistingDocumentTypes = InnovationSection_202209 | InnovationSection_202304;
+export type InnovationSectionsVersions = InnovationSection_202209 | InnovationSection_202304;
 
 
 export type FormSelectableFieldType<T> = {
@@ -18,11 +18,11 @@ export type FormSelectableFieldType<T> = {
 }[];
 
 
-export type sectionType<T> = {
+export type sectionType<T = InnovationSectionsVersions> = {
   id: T,
   title: string,
   wizard: WizardEngineModel,
   evidences?: WizardEngineModel
 };
 
-export type InnovationSectionConfigType<T = ExistingDocumentTypes> = { title: string, sections: sectionType<T>[] }[];
+export type InnovationSectionConfigType = { title: string, sections: sectionType[] }[];

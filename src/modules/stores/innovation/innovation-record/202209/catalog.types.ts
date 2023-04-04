@@ -28,9 +28,11 @@ export type catalogYesNotYetNotSure = typeof catalogYesNotYetNotSure[number];
 export const catalogYesNoNotSure = ['YES', 'NO', 'NOT_SURE'] as const;
 export type catalogYesNoNotSure = typeof catalogYesNoNotSure[number];
 
-
 export const catalogYesInProgressNotYet = ['YES', 'IN_PROGRESS', 'NOT_YET'] as const;
 export type catalogYesInProgressNotYet = typeof catalogYesInProgressNotYet[number];
+
+export const catalogYesInProcessNotYet = ['YES', 'IN_PROCESS', 'NOT_YET'] as const;
+export type catalogYesInProcessNotYet = typeof catalogYesInProcessNotYet[number];
 
 export const catalogYesNoNotRelevant = ['YES', 'NO', 'NOT_RELEVANT'] as const;
 export type catalogYesNoNotRelevant = typeof catalogYesNoNotRelevant[number];

@@ -1,4 +1,4 @@
-import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogMainPurpose, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogsupportTypes, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
+import type { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogMainPurpose, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogsupportTypes, catalogYesInProcessNotYet, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
 
 export type DocumentType202209 = {
   version: '202209';
@@ -29,7 +29,7 @@ export type DocumentType202209 = {
   UNDERSTANDING_OF_NEEDS: {
     impactPatients?: boolean,
     impactClinicians?: boolean,
-    subgroups: string[],
+    subgroups?: string[],
     cliniciansImpactDetails?: string,
     diseasesConditionsImpact?: string[]
   },
@@ -78,8 +78,8 @@ export type DocumentType202209 = {
     carePathway?: catalogCarePathway
   },
   TESTING_WITH_USERS: {
-    hasTests: catalogYesInProgressNotYet,
-    userTests: {
+    hasTests?: catalogYesInProcessNotYet,
+    userTests?: {
       kind: string,
       feedback?: string
     }[],
