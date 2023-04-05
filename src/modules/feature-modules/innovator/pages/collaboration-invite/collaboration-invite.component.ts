@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { DatesHelper } from '@app/base/helpers';
 import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { catchError, EMPTY } from 'rxjs';
 
 import { GetInnovationCollaboratorInvitesDTO, InnovatorService } from '../../services/innovator.service';
 
@@ -40,7 +41,9 @@ export class PageCollaborationInviteComponent extends CoreComponent implements O
   }
 
   onSubmit(status: InnovationCollaboratorStatusEnum.ACTIVE | InnovationCollaboratorStatusEnum.DECLINED): void {
-    this.innovatorService.updateCollaborationStatus(this.innovationId, this.collaboratorId, status).subscribe(() => {
+    this.innovatorService.updateCollaborationStatus(this.innovationId, this.collaboratorId, status)
+    .pipe(catchError(() => { this.redirectTo('/error/forbidden-collaborator'); return EMPTY }))
+    .subscribe(() => {
       const successMessage = status === InnovationCollaboratorStatusEnum.ACTIVE ? 
         `You have joined '${this.collaborationInfo?.innovation.name}' innovation as a collaborator.` 
         : `You have declined the invitation to join '${this.collaborationInfo?.innovation.name}' innovation as a collaborator.`;
