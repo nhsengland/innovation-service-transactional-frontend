@@ -111,7 +111,7 @@ describe('Core/Guards/InnovationCollaborationRedirectionGuard running CLIENT sid
 
     guard.canActivate(routeMock as any).subscribe(response => { expected = response; });
     expect(expected).toBe(false);
-    expect(window.location.assign).toBeCalledWith('transactional/signup');
+    expect(window.location.assign).toBeCalledWith('/transactional/signup');
   });
 
   it('should deny access and redirect to forbidden-collaborator error page', () => {
@@ -125,7 +125,7 @@ describe('Core/Guards/InnovationCollaborationRedirectionGuard running CLIENT sid
 
     guard.canActivate(routeMock as any).subscribe(response => { expected = response; });
     expect(expected).toBe(false);
-    expect(window.location.assign).toBeCalledWith('transactional/error/forbidden-collaborator');
+    expect(window.location.assign).toBeCalledWith('/transactional/error/forbidden-collaborator');
 
   });
 
