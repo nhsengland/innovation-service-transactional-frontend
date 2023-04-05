@@ -31,10 +31,10 @@ export class InnovationCollaborationRedirectionGuard implements CanActivate {
 
         let redirectUrl = '';
 
-        if (!response.userExists) {
-          redirectUrl = '/transactional/signup';
-        } else if (response.collaboratorStatus !== InnovationCollaboratorStatusEnum.PENDING) {
+        if (response.collaboratorStatus !== InnovationCollaboratorStatusEnum.PENDING) {
           redirectUrl = '/transactional/error/forbidden-collaborator';
+        } else if (!response.userExists) {
+          redirectUrl = '/transactional/signup';
         } else {
           return true;
         }
