@@ -55,6 +55,7 @@ type StepPayloadType = InboundPayloadType & { hasWebsite: catalogYesNo, officeLo
 type OutboundPayloadType = InboundPayloadType;
 
 
+// Logic.
 export const SECTION_1_1: sectionType<InnovationSections> = {
   id: 'INNOVATION_DESCRIPTION',
   title: 'Description of innovation',

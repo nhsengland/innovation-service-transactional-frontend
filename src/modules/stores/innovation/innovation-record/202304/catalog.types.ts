@@ -7,13 +7,13 @@ export const InnovationSections = [
   // 'EVIDENCE_OF_EFFECTIVENESS',
   'MARKET_RESEARCH',
   'CURRENT_CARE_PATHWAY',
-  // 'INTELLECTUAL_PROPERTY',
-  // 'REGULATIONS_AND_STANDARDS',
-  // 'TESTING_WITH_USERS',
-  // 'COST_OF_INNOVATION',
+  'TESTING_WITH_USERS',
+  'REGULATIONS_AND_STANDARDS',
+  'INTELLECTUAL_PROPERTY',
+  'REVENUE_MODEL',
+  'COST_OF_INNOVATION',
+  'DEPLOYMENT' // Renamed from 'IMPLEMENTATION_PLAN'
   // 'COMPARATIVE_COST_BENEFIT',
-  // 'REVENUE_MODEL',
-  // 'IMPLEMENTATION_PLAN'
 ] as const;
 export type InnovationSections = typeof InnovationSections[number];
 
@@ -86,12 +86,15 @@ export type catalogOptionBestDescribesInnovation = typeof catalogOptionBestDescr
 export const catalogPathwayKnowledge = ['PATHWAY_EXISTS_AND_CHANGED', 'PATHWAY_EXISTS_AND_FITS', 'NO_PATHWAY', 'DONT_KNOW', 'NOT_PART_PATHWAY'] as const;
 export type catalogPathwayKnowledge = typeof catalogPathwayKnowledge[number];
 
-// export const catalogHasPatents = ['HAS_AT_LEAST_ONE', 'APPLIED_AT_LEAST_ONE', 'HAS_NONE'] as const;
-// export type catalogHasPatents = typeof catalogHasPatents[number];
-
 
 // Section 4.
 // // Section 4.1.
+export const catalogIntendedUserGroupsEngaged = ['CLINICAL_SOCIAL_CARE_WORKING_INSIDE_UK', 'CLINICAL_SOCIAL_CARE_WORKING_OUTSIDE_UK', 'NON_CLINICAL_HEALTHCARE', 'PATIENTS', 'SERVICE_USERS', 'CARERS', 'OTHER'] as const;
+export type catalogIntendedUserGroupsEngaged = typeof catalogIntendedUserGroupsEngaged[number];
+
+
+// Section 5.
+// // Section 5.1.
 export const catalogHasRegulationKnowledge = ['YES_ALL', 'YES_SOME', 'NO', 'NOT_RELEVANT'] as const;
 export type catalogHasRegulationKnowledge = typeof catalogHasRegulationKnowledge[number];
 
@@ -99,15 +102,19 @@ export const catalogStandardsType = ['CE_UKCA_NON_MEDICAL', 'CE_UKCA_CLASS_I', '
 export type catalogStandardsType = typeof catalogStandardsType[number];
 
 
-// Section 5.
-// // Section 5.1.
-
-export const catalogCarePathway = ['ONLY_OPTION', 'BETTER_OPTION', 'EQUIVALENT_OPTION', 'FIT_LESS_COSTS', 'NO_KNOWLEDGE'] as const;
-export type catalogCarePathway = typeof catalogCarePathway[number];
+// // Section 5.2.
+export const catalogHasPatents = ['HAS_AT_LEAST_ONE', 'APPLIED_AT_LEAST_ONE', 'HAS_NONE'] as const;
+export type catalogHasPatents = typeof catalogHasPatents[number];
 
 
 // Section 6.
 // // Section 6.1.
+export const catalogRevenues = ['ADVERTISING', 'DIRECT_PRODUCT_SALES', 'FEE_FOR_SERVICE', 'LEASE', 'SALES_OF_CONSUMABLES_OR_ACCESSORIES', 'SUBSCRIPTION', 'OTHER'] as const;
+export type catalogRevenues = typeof catalogRevenues[number];
+
+
+// Section 7.
+// // Section 7.1.
 export const catalogHasCostKnowledge = ['DETAILED_ESTIMATE', 'ROUGH_IDEA', 'NO'] as const;
 export type catalogHasCostKnowledge = typeof catalogHasCostKnowledge[number];
 
@@ -118,7 +125,32 @@ export const catalogCostComparison = ['CHEAPER', 'COSTS_MORE_WITH_SAVINGS', 'COS
 export type catalogCostComparison = typeof catalogCostComparison[number];
 
 
-// Section 7.
-// // Section 7.1.
-export const catalogRevenues = ['ADVERTISING', 'DIRECT_PRODUCT_SALES', 'FEE_FOR_SERVICE', 'LEASE', 'SALES_OF_CONSUMABLES_OR_ACCESSORIES', 'SUBSCRIPTION', 'OTHER'] as const;
-export type catalogRevenues = typeof catalogRevenues[number];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// export const catalogCarePathway = ['ONLY_OPTION', 'BETTER_OPTION', 'EQUIVALENT_OPTION', 'FIT_LESS_COSTS', 'NO_KNOWLEDGE'] as const;
+// export type catalogCarePathway = typeof catalogCarePathway[number];

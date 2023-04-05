@@ -1,4 +1,4 @@
-import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasRegulationKnowledge, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
+import { catalogAreas, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
 
 export type DocumentType202304 = {
   version: '202304';
@@ -55,6 +55,11 @@ export type DocumentType202304 = {
   //     files?: string[]
   //   }[]
   // },
+  // COMPARATIVE_COST_BENEFIT: {
+  //   hasCostSavingKnowledge?: catalogHasCostKnowledge,
+  //   hasCostCareKnowledge?: catalogHasCostKnowledge,
+  //   costComparison?: catalogCostComparison
+  // },
   MARKET_RESEARCH: {
     hasMarketResearch?: catalogYesInProgressNotYet,
     marketResearch?: string,
@@ -67,43 +72,30 @@ export type DocumentType202304 = {
     potentialPathway?: string, // Moved from section 5.1.
     // carePathway?: catalogCarePathway
   },
-
-
-
-
-  INTELLECTUAL_PROPERTY: {
-    // hasPatents?: catalogHasPatents,
-    hasOtherIntellectual?: catalogYesNo,
-    otherIntellectual?: string
+  TESTING_WITH_USERS: {
+    involvedUsersDesignProcess?: catalogYesInProgressNotYet,
+    testedWithIntendedUsers?: string, // Renamed from section 5.2, "hasTests" field.
+    intendedUserGroupsEngaged?: catalogIntendedUserGroupsEngaged[],
+    otherIntendedUserGroupsEngaged?: string
+    userTests?: { // Moved from section 5.2.
+      kind: string,
+      feedback?: string
+    }[],
+    files?: string[] // Moved from section 5.2.
   },
   REGULATIONS_AND_STANDARDS: {
     hasRegulationKnowledge?: catalogHasRegulationKnowledge,
-    otherRegulationDescription?: string,
     standards?: {
       type: catalogStandardsType,
       hasMet?: catalogYesInProgressNotYet
     }[],
+    otherRegulationDescription?: string,
     files?: string[]
   },
-  TESTING_WITH_USERS: {
-    hasTests: catalogYesInProgressNotYet,
-    userTests: {
-      kind: string,
-      feedback?: string
-    }[],
-    files?: string[]
-  },
-  COST_OF_INNOVATION: {
-    hasCostKnowledge?: catalogHasCostKnowledge,
-    costDescription?: string,
-    patientsRange?: catalogPatientRange,
-    sellExpectations?: string,
-    usageExpectations?: string
-  },
-  COMPARATIVE_COST_BENEFIT: {
-    hasCostSavingKnowledge?: catalogHasCostKnowledge,
-    hasCostCareKnowledge?: catalogHasCostKnowledge,
-    costComparison?: catalogCostComparison
+  INTELLECTUAL_PROPERTY: {
+    hasPatents?: catalogHasPatents,
+    hasOtherIntellectual?: catalogYesNo,
+    otherIntellectual?: string
   },
   REVENUE_MODEL: {
     hasRevenueModel?: catalogYesNo,
@@ -114,14 +106,23 @@ export type DocumentType202304 = {
     hasFunding?: catalogYesNoNotRelevant,
     fundingDescription?: string
   },
-  IMPLEMENTATION_PLAN: {
+  COST_OF_INNOVATION: {
+    hasCostKnowledge?: catalogHasCostKnowledge,
+    costDescription?: string,
+    patientsRange?: catalogPatientRange,
+    elibilityCriteria?: string,
+    sellExpectations?: string,
+    usageExpectations?: string,
+    costComparison?: catalogCostComparison // Moved from COMPARATIVE_COST_BENEFIT section.
+  },
+  DEPLOYMENT: { // Renamed from IMPLEMENTATION_PLAN section.
     hasDeployPlan?: catalogYesNo,
     isDeployed?: catalogYesNo,
     deploymentPlans?: {
-      name: string,
-      commercialBasis: string,
-      orgDeploymentAffect: string
+      name: string
     }[],
+    commercialBasis?: string, // New field.
+    organisationDeploymentAffect?: string // New field.
     hasResourcesToScale?: catalogYesNoNotSure,
     files?: string[]
   }
