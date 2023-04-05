@@ -12,8 +12,8 @@ export const InnovationSections = [
   'INTELLECTUAL_PROPERTY',
   'REVENUE_MODEL',
   'COST_OF_INNOVATION',
+  'DEPLOYMENT' // Renamed from 'IMPLEMENTATION_PLAN'
   // 'COMPARATIVE_COST_BENEFIT',
-  // 'IMPLEMENTATION_PLAN'
 ] as const;
 export type InnovationSections = typeof InnovationSections[number];
 

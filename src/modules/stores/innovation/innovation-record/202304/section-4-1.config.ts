@@ -176,16 +176,18 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   const toReturn: WizardSummaryType[] = [];
 
+  let editStepNumber = 1;
+
   toReturn.push(
     {
       label: stepsLabels.q1.label,
       value: involvedUsersDesignProcessItems.find(item => item.value === data.involvedUsersDesignProcess)?.label,
-      editStepNumber: 1
+      editStepNumber: editStepNumber++
     },
     {
       label: stepsLabels.q2.label,
       value: testedWithIntendedUsersItems.find(item => item.value === data.testedWithIntendedUsers)?.label,
-      editStepNumber: 2
+      editStepNumber: editStepNumber++
     }
   );
 
@@ -194,24 +196,24 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     toReturn.push({
       label: stepsLabels.q3.label,
       value: data.intendedUserGroupsEngaged?.map(v => v === 'OTHER' ? data.otherIntendedUserGroupsEngaged : intendedUserGroupsEngagedItems.find(item => item.value === v)?.label).join('\n'),
-      editStepNumber: 3
+      editStepNumber: editStepNumber++
     });
 
     toReturn.push({
       label: stepsLabels.q4.label,
       value: data.userTests?.map(item => item.kind).join('\n'),
-      editStepNumber: 4
+      editStepNumber: editStepNumber++
     });
 
     data.userTests?.forEach(item => {
       toReturn.push({
         label: `Describe the testing and feedback for ${item.kind}`,
         value: item.feedback,
-        editStepNumber: toReturn.length + 1
+        editStepNumber: editStepNumber++
       });
     });
 
-    const stepNumber = toReturn.length + 1;
+    const stepNumber = editStepNumber++
     const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
     allFiles.forEach((item, i) => {
       toReturn.push({

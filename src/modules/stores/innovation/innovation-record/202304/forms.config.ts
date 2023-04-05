@@ -5,6 +5,13 @@ import { FormSelectableFieldType } from '../shared.types';
 import { catalogAreas, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOfficeLocation, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
 
 
+// Shared.
+export const yesNoItems: FormSelectableFieldType<catalogYesNo> = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'NO', label: 'No' }
+];
+
+
 // Section 1.
 // Section 1.1.
 export const locationItems: FormSelectableFieldType<catalogOfficeLocation | ''> = [
@@ -659,6 +666,15 @@ export const costComparisonItems: FormSelectableFieldType<catalogCostComparison>
 
 
 
+// Section 8.
+// // Section 8.1.
+export const hasResourcesToScaleItems: FormSelectableFieldType<catalogYesNoNotSure> = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'NO', label: 'No' },
+  { value: 'NOT_SURE', label: 'I am not sure' }
+];
+
+
 
 
 
@@ -692,25 +708,4 @@ export const hasTestsItems: FormSelectableFieldType<catalogYesInProgressNotYet> 
   { value: 'YES', label: 'Yes' },
   { value: 'IN_PROGRESS', label: 'I\'m in the process of testing with users' },
   { value: 'NOT_YET', label: 'Not yet' }
-];
-
-
-
-
-
-// // Section 6.2.
-
-
-
-// Section 8.
-// // Section 8.1.
-export const hasDeployPlanItems: FormSelectableFieldType<catalogYesNo> = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' }
-];
-
-export const hasResourcesToScaleItems: FormSelectableFieldType<catalogYesNoNotSure> = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' },
-  { value: 'NOT_SURE', label: 'I\'m not sure' }
 ];

@@ -55,6 +55,11 @@ export type DocumentType202304 = {
   //     files?: string[]
   //   }[]
   // },
+  // COMPARATIVE_COST_BENEFIT: {
+  //   hasCostSavingKnowledge?: catalogHasCostKnowledge,
+  //   hasCostCareKnowledge?: catalogHasCostKnowledge,
+  //   costComparison?: catalogCostComparison
+  // },
   MARKET_RESEARCH: {
     hasMarketResearch?: catalogYesInProgressNotYet,
     marketResearch?: string,
@@ -110,26 +115,14 @@ export type DocumentType202304 = {
     usageExpectations?: string,
     costComparison?: catalogCostComparison // Moved from COMPARATIVE_COST_BENEFIT section.
   },
-
-
-
-
-
-
-  COMPARATIVE_COST_BENEFIT: {
-    hasCostSavingKnowledge?: catalogHasCostKnowledge,
-    hasCostCareKnowledge?: catalogHasCostKnowledge,
-    costComparison?: catalogCostComparison
-  },
-
-  IMPLEMENTATION_PLAN: {
+  DEPLOYMENT: { // Renamed from IMPLEMENTATION_PLAN section.
     hasDeployPlan?: catalogYesNo,
     isDeployed?: catalogYesNo,
     deploymentPlans?: {
-      name: string,
-      commercialBasis: string,
-      orgDeploymentAffect: string
+      name: string
     }[],
+    commercialBasis?: string, // New field.
+    organisationDeploymentAffect?: string // New field.
     hasResourcesToScale?: catalogYesNoNotSure,
     files?: string[]
   }
