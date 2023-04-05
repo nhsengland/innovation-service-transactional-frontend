@@ -17,6 +17,9 @@ import { AnnouncementGenericComponent } from './components/announcement-generic/
 // Services
 import { AnnouncementsService } from './services/announcements.service';
 
+// Guards
+import { AnnouncementsAccessGuard } from './guards/announcements-access.guard';
+
 
 @NgModule({
   imports: [
@@ -35,7 +38,11 @@ import { AnnouncementsService } from './services/announcements.service';
     AnnouncementsListComponent
   ],
   providers: [
-    AnnouncementsService
+    // Services
+    AnnouncementsService,
+
+    // Guards
+    AnnouncementsAccessGuard
   ]
 })
 export class AnnouncementsModule { }

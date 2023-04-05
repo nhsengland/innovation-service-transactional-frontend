@@ -4,11 +4,15 @@ import { RouterModule, Routes } from '@angular/router';
 // Base layout.
 import { AnnouncementsLayoutComponent } from './base/announcements-layout.component';
 
+// Guards
+import { AnnouncementsAccessGuard } from './guards/announcements-access.guard';
+
 // Pages
 import { AnnouncementsListComponent } from './pages/announcements-list/announcements-list.component';
 
 const routes: Routes = [
   {
+    canActivate: [AnnouncementsAccessGuard],
     path: '',
     component: AnnouncementsLayoutComponent,
     children: [
