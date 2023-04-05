@@ -27,7 +27,7 @@ export type GetInnovationCollaboratorInvitesDTO = {
     description: string
     owner?: {
       id: string;
-      name: string;
+      name?: string;
     }
   };
 };
