@@ -35,7 +35,7 @@ const routes: Routes = [
     children: []
   },
 
-  
+
   {
     canActivate: [InnovationCollaborationRedirectionGuard],
     path: 'innovations/:innovationId/collaborations/:collaboratorId',
@@ -60,11 +60,14 @@ const routes: Routes = [
         path: 'dashboard',
         pathMatch: 'full',
         children: []
-      },   
+      },
       {
         path: 'switch-user-context',
         component: BaseLayoutComponent,
         children: [{ path: '', pathMatch: 'full', component: PageSwitchContextComponent }]
+      },
+      {
+        path: 'announcements', loadChildren: () => import('@modules/feature-modules/announcements/announcements.module').then(m => m.AnnouncementsModule)
       },
       {
         canActivate: [AuthenticationRedirectionGuard],
@@ -81,7 +84,7 @@ const routes: Routes = [
       {
         canActivate: [AuthenticationRedirectionGuard],
         path: 'accessor', loadChildren: () => import('@modules/feature-modules/accessor/accessor.module').then(m => m.AccessorModule)
-      }   
+      }
     ]
   },
 

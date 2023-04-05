@@ -24,6 +24,7 @@ type GetUserInfoDTO = {
   termsOfUseAccepted: boolean,
   hasInnovationTransfers: boolean,
   hasInnovationCollaborations: boolean,
+  hasAnnouncements: boolean,
   passwordResetAt: null | DateISOType,
   firstTimeSignInAt: null | DateISOType,
   organisations: {
@@ -106,6 +107,7 @@ export class AuthenticationService {
         termsOfUseAccepted: response.termsOfUseAccepted,
         hasInnovationTransfers: response.hasInnovationTransfers,
         hasInnovationCollaborations: response.hasInnovationCollaborations,
+        hasAnnouncements: response.hasAnnouncements,
         passwordResetAt: response.passwordResetAt,
         firstTimeSignInAt: response.firstTimeSignInAt,
         organisations: response.organisations
