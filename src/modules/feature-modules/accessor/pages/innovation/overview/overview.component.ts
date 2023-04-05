@@ -73,7 +73,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         status: this.innovation.support?.status || InnovationSupportStatusEnum.UNASSIGNED
       };
       this.innovationSummary = [
-        { label: 'Company', value: innovationInfo.owner.organisations ? innovationInfo.owner.organisations[0].name : '' },
+        { label: 'Company', value: innovationInfo.owner && innovationInfo.owner.organisations ? innovationInfo.owner.organisations[0].name : '' },
         { label: 'Location', value: `${innovationInfo.countryName}${innovationInfo.postCode ? ', ' + innovationInfo.postCode : ''}` },
         { label: 'Description', value: innovationInfo.description },
         { label: 'Categories', value: innovationInfo.categories.map(v => v === 'OTHER' ? innovationInfo.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }

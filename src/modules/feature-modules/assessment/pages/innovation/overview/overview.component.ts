@@ -60,19 +60,19 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.showChangeNeedsAssessor = this.innovation.status === InnovationStatusEnum.NEEDS_ASSESSMENT;
 
       this.innovationSummary = [
-        { label: 'Company', value: this.innovation.owner.organisations ? this.innovation.owner.organisations[0].name : '' },
-        { label: 'Company size', value: this.innovation.owner.organisations ? this.innovation.owner.organisations[0].size : '' },
+        { label: 'Company', value: this.innovation.owner && this.innovation.owner.organisations ? this.innovation.owner.organisations[0].name : '' },
+        { label: 'Company size', value: this.innovation.owner && this.innovation.owner.organisations ? this.innovation.owner.organisations[0].size : '' },
         { label: 'Location', value: `${this.innovation.countryName}${this.innovation.postCode ? ', ' + this.innovation.postCode : ''}` },
         { label: 'Description', value: this.innovation.description },
         { label: 'Categories', value: this.innovation.categories.map(v => v === 'OTHER' ? this.innovation?.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
       ];
 
       this.innovatorSummary = [
-        { label: 'Owner', value: this.innovation.owner.name },
-        { label: 'Contact preference', value: UtilsHelper.getContactPreferenceValue(this.innovation.owner.contactByEmail, this.innovation.owner.contactByPhone, this.innovation.owner.contactByPhoneTimeframe) || '' },
-        { label: 'Contact details', value: this.innovation.owner.contactDetails || '' },
-        { label: 'Email address', value: this.innovation.owner.email || '' },
-        { label: 'Phone number', value: this.innovation.owner.mobilePhone || '' }
+        { label: 'Owner', value: this.innovation.owner?.name ?? '' },
+        { label: 'Contact preference', value: UtilsHelper.getContactPreferenceValue(this.innovation.owner?.contactByEmail, this.innovation.owner?.contactByPhone, this.innovation.owner?.contactByPhoneTimeframe) || '' },
+        { label: 'Contact details', value: this.innovation.owner?.contactDetails || '' },
+        { label: 'Email address', value: this.innovation.owner?.email || '' },
+        { label: 'Phone number', value: this.innovation.owner?.mobilePhone || '' }
       ];
 
       this.cardsList = [{

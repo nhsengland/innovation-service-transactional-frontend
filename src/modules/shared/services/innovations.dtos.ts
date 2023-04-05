@@ -57,7 +57,7 @@ export type InnovationInfoDTO = {
   postCode: null | string,
   categories: string[],
   otherCategoryDescription: null | string,
-  owner: {
+  owner?: {
     id: string,
     name: string,
     email?: string,

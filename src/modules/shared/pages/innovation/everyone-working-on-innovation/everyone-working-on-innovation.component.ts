@@ -62,7 +62,9 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
       this.usersService.getUsersList()
     ]).subscribe(([innovationInfo, innovationSupports, assessmentUsers]) => {
 
-      this.innovationParticipants.innovators.push({ name: innovationInfo.owner.name, role: 'Owner'})
+      if (innovationInfo.owner) {
+        this.innovationParticipants.innovators.push({ name: innovationInfo.owner.name, role: 'Owner'});
+      }
       
       for (const support of innovationSupports) {
         const accessors = support.engagingAccessors.map(a => ({

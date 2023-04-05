@@ -75,7 +75,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       // console.log(occurrences) // => {2: 5, 4: 1, 5: 3, 9: 1}
 
       this.innovation = {
-        owner: { name: innovationInfo.owner.name },
+        owner: { name: innovationInfo.owner?.name ?? '' },
         loggedUser: { isOwner: innovationContext.loggedUser.isOwner },
         collaborators: innovationCollaborators.data.map(item => ({ nameOrEmail: `${item.name ?? item.email}${item.role ? `(${item.role})` : ''}` })),
         status: innovationInfo.status,
