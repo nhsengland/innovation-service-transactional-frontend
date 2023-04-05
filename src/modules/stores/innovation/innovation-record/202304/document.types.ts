@@ -1,4 +1,4 @@
-import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
+import { catalogAreas, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
 
 export type DocumentType202304 = {
   version: '202304';
@@ -101,20 +101,21 @@ export type DocumentType202304 = {
     hasFunding?: catalogYesNoNotRelevant,
     fundingDescription?: string
   },
-
-
-
-
-
-  
-
   COST_OF_INNOVATION: {
     hasCostKnowledge?: catalogHasCostKnowledge,
     costDescription?: string,
     patientsRange?: catalogPatientRange,
+    elibilityCriteria?: string,
     sellExpectations?: string,
-    usageExpectations?: string
+    usageExpectations?: string,
+    costComparison?: catalogCostComparison // Moved from COMPARATIVE_COST_BENEFIT section.
   },
+
+
+
+
+
+
   COMPARATIVE_COST_BENEFIT: {
     hasCostSavingKnowledge?: catalogHasCostKnowledge,
     hasCostCareKnowledge?: catalogHasCostKnowledge,

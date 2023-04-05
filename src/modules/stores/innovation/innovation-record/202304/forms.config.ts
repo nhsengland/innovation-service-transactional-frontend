@@ -2,7 +2,7 @@ import { FormEngineParameterModel } from '@app/base/forms';
 
 import { FormSelectableFieldType } from '../shared.types';
 
-import { catalogAreas, catalogCarePathway, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOfficeLocation, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
+import { catalogAreas, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOfficeLocation, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
 
 
 // Section 1.
@@ -287,11 +287,6 @@ export const involvedAACProgrammesItems: FormSelectableFieldType<cataloginvolved
 
 // Section 2.
 // // Section 2.1.
-export const innovationImpactItems: FormSelectableFieldType<'PATIENTS' | 'CLINICIANS'> = [
-  { value: 'PATIENTS', label: 'Patients or citizens' },
-  { value: 'CLINICIANS', label: 'Clinicians, carers or administrative staff' }
-];
-
 export const diseasesConditionsImpactItems: FormSelectableFieldType<string> = [
   { value: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS', label: `Blood and immune system conditions` },
   { value: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_ALLERGIES', label: `Blood and immune system conditions - Allergies` },
@@ -639,13 +634,28 @@ export const hasFundindItems: FormSelectableFieldType<catalogYesNoNotRelevant> =
   { value: 'NOT_RELEVANT', label: 'Not relevant' }
 ];
 
+// Section 7.
+// // Section 7.1.
+export const hasCostKnowledgeItems: FormSelectableFieldType<catalogHasCostKnowledge> = [
+  { value: 'DETAILED_ESTIMATE', label: 'Yes, I have a detailed estimate' },
+  { value: 'ROUGH_IDEA', label: 'Yes, I have a rough idea' },
+  { value: 'NO', label: 'No' }
+];
 
+export const patientRangeItems: FormSelectableFieldType<catalogPatientRange> = [
+  { value: 'UP_10000', label: 'Up to 10,000 per year' },
+  { value: 'BETWEEN_10000_500000', label: '10,000 to half a million per year' },
+  { value: 'MORE_THAN_500000', label: 'More than half a million per year' },
+  { value: 'NOT_SURE', label: 'I am not sure' },
+  { value: 'NOT_RELEVANT', label: 'Not relevant to my innovation' }
+];
 
-
-
-
-
-
+export const costComparisonItems: FormSelectableFieldType<catalogCostComparison> = [
+  { value: 'CHEAPER', label: 'My innovation is cheaper to purchase' },
+  { value: 'COSTS_MORE_WITH_SAVINGS', label: 'My innovation costs more to purchase, but has greater benefits that will lead to overall cost savings' },
+  { value: 'COSTS_MORE', label: 'My innovation costs more to purchase and has greater benefits, but will lead to higher costs overall' },
+  { value: 'NOT_SURE', label: 'I am not sure' }
+];
 
 
 
@@ -669,13 +679,13 @@ export const hasUKPathwayKnowledgeItems: FormSelectableFieldType<catalogYesNoNot
   { value: 'NOT_RELEVANT', label: 'Not relevant' }
 ];
 
-export const carePathwayItems: FormSelectableFieldType<catalogCarePathway> = [
-  { value: 'ONLY_OPTION', label: 'The only option, or first of its kind' },
-  { value: 'BETTER_OPTION', label: 'A better option to those that already exist' },
-  { value: 'EQUIVALENT_OPTION', label: 'An equivalent option to those that already exist' },
-  { value: 'FIT_LESS_COSTS', label: 'Fit for purpose and costs less' },
-  { value: 'NO_KNOWLEDGE', label: 'I don\'t know' }
-];
+// export const carePathwayItems: FormSelectableFieldType<catalogCarePathway> = [
+//   { value: 'ONLY_OPTION', label: 'The only option, or first of its kind' },
+//   { value: 'BETTER_OPTION', label: 'A better option to those that already exist' },
+//   { value: 'EQUIVALENT_OPTION', label: 'An equivalent option to those that already exist' },
+//   { value: 'FIT_LESS_COSTS', label: 'Fit for purpose and costs less' },
+//   { value: 'NO_KNOWLEDGE', label: 'I don\'t know' }
+// ];
 
 
 export const hasTestsItems: FormSelectableFieldType<catalogYesInProgressNotYet> = [
@@ -685,30 +695,11 @@ export const hasTestsItems: FormSelectableFieldType<catalogYesInProgressNotYet> 
 ];
 
 
-export const hasCostKnowledgeItems: FormSelectableFieldType<catalogHasCostKnowledge> = [
-  { value: 'DETAILED_ESTIMATE', label: 'Yes, I have a detailed estimate' },
-  { value: 'ROUGH_IDEA', label: 'Yes, I have a rough idea' },
-  { value: 'NO', label: 'No' }
-];
-export const patientRangeItems: FormSelectableFieldType<catalogPatientRange> = [
-  { value: 'UP_10000', label: 'Up to 10,000 per year' },
-  { value: 'BETWEEN_10000_500000', label: '10,000 to half a million per year' },
-  { value: 'MORE_THAN_500000', label: 'More than half a million per year' },
-  { value: 'NOT_SURE', label: 'I\'m not sure' },
-  { value: 'NOT_RELEVANT', label: 'Not relevant to my innovation' }
-];
+
+
 
 // // Section 6.2.
-export const costComparisonItems: FormSelectableFieldType<catalogCostComparison> = [
-  { value: 'CHEAPER', label: 'My innovation is cheaper to purchase' },
-  { value: 'COSTS_MORE_WITH_SAVINGS', label: 'My innovation costs more to purchase but has greater benefits that will lead to overall cost savings' },
-  { value: 'COSTS_MORE', label: 'My innovation costs more to purchase and has greater benefits but will lead to higher costs overall' },
-  { value: 'NOT_SURE', label: 'I\'m not sure' }
-];
 
-
-// Section 7.
-// // Section 7.1.
 
 
 // Section 8.

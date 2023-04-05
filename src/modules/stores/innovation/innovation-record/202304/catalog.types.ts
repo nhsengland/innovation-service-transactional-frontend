@@ -11,7 +11,7 @@ export const InnovationSections = [
   'REGULATIONS_AND_STANDARDS',
   'INTELLECTUAL_PROPERTY',
   'REVENUE_MODEL',
-  // 'COST_OF_INNOVATION',
+  'COST_OF_INNOVATION',
   // 'COMPARATIVE_COST_BENEFIT',
   // 'IMPLEMENTATION_PLAN'
 ] as const;
@@ -101,8 +101,6 @@ export type catalogHasRegulationKnowledge = typeof catalogHasRegulationKnowledge
 export const catalogStandardsType = ['CE_UKCA_NON_MEDICAL', 'CE_UKCA_CLASS_I', 'CE_UKCA_CLASS_II_A', 'CE_UKCA_CLASS_II_B', 'CE_UKCA_CLASS_III', 'IVD_GENERAL', 'IVD_SELF_TEST', 'IVD_ANNEX_LIST_A', 'IVD_ANNEX_LIST_B', 'MARKETING', 'CQC', 'DTAC', 'OTHER'] as const;
 export type catalogStandardsType = typeof catalogStandardsType[number];
 
-export const catalogCarePathway = ['ONLY_OPTION', 'BETTER_OPTION', 'EQUIVALENT_OPTION', 'FIT_LESS_COSTS', 'NO_KNOWLEDGE'] as const;
-export type catalogCarePathway = typeof catalogCarePathway[number];
 
 // // Section 5.2.
 export const catalogHasPatents = ['HAS_AT_LEAST_ONE', 'APPLIED_AT_LEAST_ONE', 'HAS_NONE'] as const;
@@ -111,6 +109,12 @@ export type catalogHasPatents = typeof catalogHasPatents[number];
 
 // Section 6.
 // // Section 6.1.
+export const catalogRevenues = ['ADVERTISING', 'DIRECT_PRODUCT_SALES', 'FEE_FOR_SERVICE', 'LEASE', 'SALES_OF_CONSUMABLES_OR_ACCESSORIES', 'SUBSCRIPTION', 'OTHER'] as const;
+export type catalogRevenues = typeof catalogRevenues[number];
+
+
+// Section 7.
+// // Section 7.1.
 export const catalogHasCostKnowledge = ['DETAILED_ESTIMATE', 'ROUGH_IDEA', 'NO'] as const;
 export type catalogHasCostKnowledge = typeof catalogHasCostKnowledge[number];
 
@@ -121,7 +125,32 @@ export const catalogCostComparison = ['CHEAPER', 'COSTS_MORE_WITH_SAVINGS', 'COS
 export type catalogCostComparison = typeof catalogCostComparison[number];
 
 
-// Section 7.
-// // Section 7.1.
-export const catalogRevenues = ['ADVERTISING', 'DIRECT_PRODUCT_SALES', 'FEE_FOR_SERVICE', 'LEASE', 'SALES_OF_CONSUMABLES_OR_ACCESSORIES', 'SUBSCRIPTION', 'OTHER'] as const;
-export type catalogRevenues = typeof catalogRevenues[number];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// export const catalogCarePathway = ['ONLY_OPTION', 'BETTER_OPTION', 'EQUIVALENT_OPTION', 'FIT_LESS_COSTS', 'NO_KNOWLEDGE'] as const;
+// export type catalogCarePathway = typeof catalogCarePathway[number];
