@@ -251,7 +251,7 @@ const routes: Routes = [
                         pathMatch: 'full',
                         component: ExperimentsInnovationSectionInfoComponent
                       },
-                      
+
                       {
                         path: ':sectionId',
                         resolve: { innovationSectionData: InnovationSectionDataResolver },
@@ -589,7 +589,9 @@ const routes: Routes = [
                 path: '', pathMatch: 'full', component: PageAccountInfoComponent,
                 data: { breadcrumb: null }
               },
-              { path: 'delete', pathMatch: 'full', component: PageAccountDeleteComponent }
+              { path: 'delete', pathMatch: 'full', component: PageAccountDeleteComponent,
+                data: { breadcrumb: 'Delete your account', layout: { type: 'full' } }
+              }
             ]
           }
         ]

@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
+import { DateISOType } from '@app/base/types';
 
 import { UrlModel } from '@app/base/models';
 import { MappedObjectType } from '@app/base/types';
@@ -14,21 +15,28 @@ import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/inn
 export type GetInnovationTransfersDTO = {
   id: string;
   email: string;
-  innovation: { id: string, name: string, owner: string };
+  innovation: { id: string, name: string, owner?: string };
 }[];
 
 export type GetInnovationCollaboratorInvitesDTO = {
   id: string;
   invitedAt: string;
-  innovation: { 
-    id: string, 
-    name: string,  
-    description: string 
+  innovation: {
+    id: string,
+    name: string,
+    description: string
     owner?: {
       id: string;
       name: string;
     }
   };
+};
+
+export type GetOwnedInnovations = {
+  id: string,
+  name: string,
+  collaboratorsCount: number,
+  expirationTransferDate: DateISOType | null
 };
 
 @Injectable()
@@ -65,7 +73,7 @@ export class InnovatorService extends CoreService {
 
   getInnovationInviteCollaborations(): Observable<GetInnovationCollaboratorInvitesDTO[]> {
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/invites');
-    
+
     return this.http.get<GetInnovationCollaboratorInvitesDTO[]>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
@@ -76,7 +84,7 @@ export class InnovatorService extends CoreService {
   }
 
   updateCollaborationStatus(
-    innovationId: string, 
+    innovationId: string,
     collaboratorId: string,
     status: InnovationCollaboratorStatusEnum
   ): Observable<{ id: string }> {
@@ -131,5 +139,11 @@ export class InnovatorService extends CoreService {
     return this.http.patch<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
+
+  getOwnedInnovations(): Observable<GetOwnedInnovations[]> {
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/me/innovations');
+    return this.http.get<GetOwnedInnovations[]>(url.buildUrl()).pipe(take(1), map(response => response));
+  }
+
 
 }

@@ -1,35 +1,100 @@
 <theme-content-wrapper [status]="pageStatus">
 
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+    <div class="nhsuk-grid-column-three-quarters">
 
       <form [formGroup]="form">
 
-        <ng-container *ngIf="stepNumber === 1">
-          <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
-            <div class="nhsuk-heading-m nhsuk-warning-callout__label">
-              <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Warning </span>
-            </div>
-            <p> By deleting your account, you will no longer have access to your innovations. If you want to keep copies, you should download a PDF from each Innovation Record page before proceeding. </p>
+        <ng-container *ngIf="stepNumber === 1 && innovator.isOwner">
+          <p *ngIf="!innovator.hasCollaborators && !innovator.hasPendingTransfer">Your innovations will be withdrawn if you delete your account.</p>
+          <p *ngIf="innovator.hasCollaborators || innovator.hasPendingTransfer">If you delete your account, your innovations will be withdrawn and everyone working on them will lose access to them. <span *ngIf="innovator.hasPendingTransfer"> Unless they are pending transfer of ownership.</span></p>
+          <div class="d-flex align-items-center justify-content-space-between">
+            <h2 class="nhsuk-heading-m">Your innovations</h2>
           </div>
-          <theme-form-textarea controlName="reason" label="What's the reason for deleting your account?" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
-          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
+
+          <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-section-break--s" />
+
+          <dl class="nhsuk-summary-list">
+            <div *ngFor="let innovation of innovator.ownedInnovations" class="nhsuk-summary-list__row">
+              <dt class="nhsuk-summary-list__key"> {{ innovation.name }} </dt>
+              <dd class="nhsuk-summary-list__value text-pre-wrap">
+                <ng-container *ngIf="innovation.expirationTransferDate === null; else innovationHasPendingTransfer">
+                  <p *ngIf="innovation.collaboratorsCount === 0">There are no collaborators working on this innovation.</p>
+                  <p *ngIf="innovation.collaboratorsCount > 0">You have {{ innovation.collaboratorsCount }} {{ innovation.collaboratorsCount > 1 ? 'collaborators' : 'collaborator' }} working on this innovation.</p>
+                  <p>If you do not want this innovation to be withdrawn, you can transfer its ownership.</p>
+                </ng-container>
+                <ng-template #innovationHasPendingTransfer>
+                  <p>You have requested to transfer ownership of this innovation.</p>
+                  <p>This request is pending. If your request is rejected or hasn't been accepted within {{ getDeadlineForPendingTransferInDays(innovation.expirationTransferDate!) }} {{ getDeadlineForPendingTransferInDays(innovation.expirationTransferDate!) > 1 ? 'collaborators' : 'collaborator' }}, your innovation will be withdrawn.</p>
+                </ng-template>
+              </dd>
+              <dd class="nhsuk-summary-list__actions  nhsuk-u-font-size-16">
+                <a *ngIf="innovation.expirationTransferDate === null" routerLink="/innovator/innovations/{{ innovation.id}}/manage/innovation/transfer">Transfer ownership</a>
+              </dd>
+            </div>
+          </dl>
+
+          <div class="nhsuk-u-margin-bottom-3">
+            <theme-form-checkbox controlName="confirm" label="I understand that my innovations will be withdrawn, if I delete my account."></theme-form-checkbox>
+          </div>
         </ng-container>
 
         <ng-container *ngIf="stepNumber === 2">
-          <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
-            <div class="nhsuk-heading-m nhsuk-warning-callout__label">
-              <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
+          <ng-container *ngFor="let innovation of innovator.ownedInnovations">
+            <div *ngIf="innovation.expirationTransferDate" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+              <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+                <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> You have requested to transfer ownership of your
+                {{ innovation.name }} innovation </span>
+              </div>
+              <p>This transfer is waiting to be accepted by its new owner.</p>
+              <p>If you delete your account, and the transfer is rejected or expires, your innovation will be withdrawn and everyone will lose access to it.</p>
             </div>
-            <p> By deleting your account, you will no longer have access to your innovations. If you want to keep copies, you should download a PDF from each Innovation Record page before proceeding. </p>
-          </div>
-          <theme-form-input controlName="email" label="Enter your email" [pageUniqueField]="false"></theme-form-input>
-          <theme-form-input controlName="confirmation" label="Are you sure that you want to delete?" description="To confirm, please type the following: delete my account" [pageUniqueField]="false"></theme-form-input>
-          <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3" (click)="onSubmitForm()"> Delete account </button>
+          </ng-container>
         </ng-container>
 
-        <div>
-          <a routerLink="/innovator/account/manage-account">Cancel</a>
+        <ng-container *ngIf="(stepNumber === 3 || stepNumber === 4) && (innovator.isOwner || innovator.isCollaborator)">
+          <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+            <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+              <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> When you delete your account </span>
+            </div>
+            <p *ngIf="!innovator.isOwner && innovator.isCollaborator">You will lose access to any innovations you are working on as a collaborator.</p>
+            <ng-container *ngIf="innovator.isOwner">
+              <ng-container *ngIf="!innovator.isCollaborator; else innovatorIsCollaborator">
+                <p *ngIf="!innovator.hasCollaborators">Your innovations will be withdrawn and you will no longer have access to them.</p>
+                <p *ngIf="innovator.hasCollaborators">Your innovations will be withdrawn and everyone working on them will lose access to them.</p>
+              </ng-container>
+              <ng-template #innovatorIsCollaborator>
+                <ul>
+                  <li *ngIf="!innovator.hasCollaborators">your innovations will be withdrawn and you will no longer have access to them</li>
+                  <li *ngIf="innovator.hasCollaborators">your innovations will be withdrawn and everyone working on them will lose access to them</li>
+                  <li *ngIf="innovator.isCollaborator">you will lose access to any innovations you are working on as a collaborator</li>
+                  <li *ngIf="innovator.hasPendingTransfer">innovations that are pending transfer of ownership will be withdrawn if the transfer is rejected or has expired as it hasn't been accepted within 30 days</li>
+                </ul>
+              </ng-template>
+          </ng-container>
+          </div>
+          <ng-container *ngIf="innovator.isOwner">
+            <p>If you want to keep a copy of your innovation record, you should download a PDF version before you delete your account.</p>
+            <div *ngFor="let innovation of innovator.ownedInnovations">
+              <p><a href="{{ CONSTANTS.APP_URL }}/exports/{{ innovation.id }}/pdf?role={{ innovator.roleId }}">Download {{ innovation.name }} innovation record (PDF)</a></p>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="stepNumber === 3">
+          <theme-form-textarea controlName="reason" label="Why have you decided to delete your account?" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
+        </ng-container>
+
+        <ng-container *ngIf="stepNumber === 4">
+          <theme-form-input controlName="email" label="Enter your email" [pageUniqueField]="false"></theme-form-input>
+          <theme-form-input controlName="confirmation" label="Are you sure that you want to delete?" description="To confirm, please type the following: delete my account" [pageUniqueField]="false"></theme-form-input>
+          <button class="nhsuk-button nhsuk-u-margin-top-3" [disabled]="!submitButton.isActive" (click)="onSubmitForm()"> {{ submitButton.label }} </button>
+        </ng-container>
+
+        <button *ngIf="stepNumber !== 4" [disabled]="stepNumber === 1 && !form.controls.confirm.value" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep('next')"> {{ stepNumber === 2 ? 'Continue to delete account' : 'Continue' }} </button>
+
+        <div *ngIf="stepNumber === 2 || stepNumber === 4" >
+          <a routerLink="/innovator/account/manage-account">{{ stepNumber === 2 ? 'Cancel and wait to delete after transfer' : 'Cancel' }}</a>
         </div>
 
       </form>
