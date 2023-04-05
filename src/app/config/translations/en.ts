@@ -52,6 +52,11 @@ export const locale = {
             message: 'You don\'t have access to the requested innovation. Changes in the innovation status may have caused this situation.',
             button_label: 'Go back to home'
           },
+          forbidden_collaborator: {
+            title: 'It appears that something went wrong!',
+            message: 'Your invitation to collaborate on this innovation is no longer valid.',
+            button_label: 'Go back to home'
+          },
           generic: {
             title: 'It appears that something went wrong!',
             message: 'The operation you are trying to do is no longer available.',

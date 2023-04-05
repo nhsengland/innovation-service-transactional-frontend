@@ -10,7 +10,7 @@ import { CoreComponent } from '@app/base';
 })
 export class PageErrorComponent extends CoreComponent {
 
-  errorType: 'generic' | 'forbidden_innovation' | 'unauthenticated' | 'forbidden_manage_innovation_resources' | 'forbidden_manage_access';
+  errorType: 'generic' | 'forbidden_collaborator' | 'forbidden_innovation' | 'unauthenticated' | 'forbidden_manage_innovation_resources' | 'forbidden_manage_access';
   message: string;
   buttonLabel: string;
 
@@ -36,6 +36,10 @@ export class PageErrorComponent extends CoreComponent {
 
       case 'forbidden-manage-access':
         this.errorType = 'forbidden_manage_access';
+        break;
+
+      case 'forbidden-collaborator':
+        this.errorType = 'forbidden_collaborator';
         break;
 
       case 'generic':

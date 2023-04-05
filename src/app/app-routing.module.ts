@@ -38,7 +38,7 @@ const routes: Routes = [
   
   {
     canActivate: [InnovationCollaborationRedirectionGuard],
-    path: 'innovations/:innovationId/collaborations/:id',
+    path: 'innovations/:innovationId/collaborations/:collaboratorId',
     pathMatch: 'full',
     children: []
   },
