@@ -53,7 +53,7 @@ export const locale = {
             button_label: 'Go back to home'
           },
           forbidden_collaborator: {
-            title: 'It appears that something went wrong!',
+            title: 'Something went wrong',
             message: 'Your invitation to collaborate on this innovation is no longer valid.',
             button_label: 'Go back to home'
           },
