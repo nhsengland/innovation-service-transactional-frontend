@@ -59,11 +59,11 @@
             </div>
             <p *ngIf="!innovator.isOwner && innovator.isCollaborator">You will lose access to any innovations you are working on as a collaborator.</p>
             <ng-container *ngIf="innovator.isOwner">
-              <ng-container *ngIf="!innovator.isCollaborator; else innovatorIsCollaborator">
+              <ng-container *ngIf="!innovator.isCollaborator && !innovator.hasPendingTransfer else innovatorIsCollaboratorOrHasPendingTransfer">
                 <p *ngIf="!innovator.hasCollaborators">Your innovations will be withdrawn and you will no longer have access to them.</p>
                 <p *ngIf="innovator.hasCollaborators">Your innovations will be withdrawn and everyone working on them will lose access to them.</p>
               </ng-container>
-              <ng-template #innovatorIsCollaborator>
+              <ng-template #innovatorIsCollaboratorOrHasPendingTransfer>
                 <ul>
                   <li *ngIf="!innovator.hasCollaborators">your innovations will be withdrawn and you will no longer have access to them</li>
                   <li *ngIf="innovator.hasCollaborators">your innovations will be withdrawn and everyone working on them will lose access to them</li>
