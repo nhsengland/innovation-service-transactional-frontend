@@ -283,7 +283,7 @@ export const mainPurposeItems: FormSelectableFieldType<catalogMainPurpose> = [
   { value: 'RISKS_CLIMATE_CHANGE', label: 'Supporting the NHS to mitigate the risks or effects of climate change and severe weather conditions' }
 ];
 
-export const involvedAACProgrammesItems: FormSelectableFieldType<cataloginvolvedAACProgrammes> = [
+export const involvedAACProgrammesItems: FormSelectableFieldType<catalogInvolvedAACProgrammes> = [
   { value: 'No', label: 'No' },
   { value: 'Academic Health Science Network', label: 'Academic Health Science Network' },
   { value: 'Artificial Intelligence in Health and Care Award', label: 'Artificial Intelligence in Health and Care Award' },
