@@ -1,13 +1,21 @@
-import { FormEngineParameterModel } from '@app/base/forms';
-
 import { FormSelectableFieldType } from '../shared.types';
-
-import { catalogAreas, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOfficeLocation, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
+import { catalogAreas, catalogCarbonReductionPlan, catalogCareSettings, catalogCategory, catalogEvidenceType, catalogCostComparison, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, catalogInvolvedAACProgrammes, catalogKeyHealthInequalities, catalogMainPurpose, catalogNeedsSupportAnyArea, catalogOfficeLocation, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogRevenues, catalogStandardsType, catalogEvidenceSubmitType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYet, catalogYesNotYetNo } from './catalog.types';
 
 
 // Shared.
 export const yesNoItems: FormSelectableFieldType<catalogYesNo> = [
   { value: 'YES', label: 'Yes' },
+  { value: 'NO', label: 'No' }
+];
+
+export const yesNotYetItems: FormSelectableFieldType<catalogYesNotYet> = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'NOT_YET', label: 'Not yet' }
+];
+
+export const yesNotYetNoItems:FormSelectableFieldType<catalogYesNotYetNo> = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'NOT_YET', label: 'Not yet' },
   { value: 'NO', label: 'No' }
 ];
 
@@ -275,7 +283,7 @@ export const mainPurposeItems: FormSelectableFieldType<catalogMainPurpose> = [
   { value: 'RISKS_CLIMATE_CHANGE', label: 'Supporting the NHS to mitigate the risks or effects of climate change and severe weather conditions' }
 ];
 
-export const involvedAACProgrammesItems: FormSelectableFieldType<cataloginvolvedAACProgrammes> = [
+export const involvedAACProgrammesItems: FormSelectableFieldType<catalogInvolvedAACProgrammes> = [
   { value: 'No', label: 'No' },
   { value: 'Academic Health Science Network', label: 'Academic Health Science Network' },
   { value: 'Artificial Intelligence in Health and Care Award', label: 'Artificial Intelligence in Health and Care Award' },
@@ -294,6 +302,37 @@ export const involvedAACProgrammesItems: FormSelectableFieldType<cataloginvolved
 
 // Section 2.
 // // Section 2.1.
+export const benefitsOrImpactItems: FormSelectableFieldType<string> = [
+  { value: 'Benefits for patients and people - Reduces mortality', label: 'Benefits for patients and people - Reduces mortality' },
+  { value: 'Benefits for patients and people - Reduces need for further treatment', label: 'Benefits for patients and people - Reduces need for further treatment' },
+  { value: 'Benefits for patients and people - Reduces adverse events', label: 'Benefits for patients and people - Reduces adverse events' },
+  { value: 'Benefits for patients and people - Enables earlier or more accurate diagnosis', label: 'Benefits for patients and people - Enables earlier or more accurate diagnosis' },
+  { value: 'Benefits for patients and people - Reduces risks, side effects or complications', label: 'Benefits for patients and people - Reduces risks, side effects or complications' },
+  { value: 'Benefits for patients and people - Prevents a condition occurring or exacerbating', label: 'Benefits for patients and people - Prevents a condition occurring or exacerbating' },
+  { value: 'Benefits for patients and people - Avoids a test, procedure or unnecessary treatment', label: 'Benefits for patients and people - Avoids a test, procedure or unnecessary treatment' },
+  { value: 'Benefits for patients and people - Enables a test, procedure or treatment to be done non-invasively', label: 'Benefits for patients and people - Enables a test, procedure or treatment to be done non-invasively' },
+  { value: 'Benefits for patients and people - Increases self-management', label: 'Benefits for patients and people - Increases self-management' },
+  { value: 'Benefits for patients and people - Increases quality of life', label: 'Benefits for patients and people - Increases quality of life' },
+  { value: 'Benefits for patients and people - Enables shared care', label: 'Benefits for patients and people - Enables shared care' },
+  { value: 'Benefits for patients and people - Alleviates pain', label: 'Benefits for patients and people - Alleviates pain' },
+  { value: 'Benefits for the NHS and social care - Reduces the length of stay or enables earlier discharge', label: 'Benefits for the NHS and social care - Reduces the length of stay or enables earlier discharge' },
+  { value: 'Benefits for the NHS and social care - Reduces need for adult or paediatric critical care', label: 'Benefits for the NHS and social care - Reduces need for adult or paediatric critical care' },
+  { value: 'Benefits for the NHS and social care - Reduces emergency admissions', label: 'Benefits for the NHS and social care - Reduces emergency admissions' },
+  { value: 'Benefits for the NHS and social care - Changes delivery of care from secondary care(for example hospitals) to primary care(for example GP or community services)', label: 'Benefits for the NHS and social care - Changes delivery of care from secondary care(for example hospitals) to primary care(for example GP or community services)' },
+  { value: 'Benefits for the NHS and social care - Change in delivery of care from inpatient to day case', label: 'Benefits for the NHS and social care - Change in delivery of care from inpatient to day case' },
+  { value: 'Benefits for the NHS and social care - Increases compliance', label: 'Benefits for the NHS and social care - Increases compliance' },
+  { value: 'Benefits for the NHS and social care - Improves patient management or coordination of care or services', label: 'Benefits for the NHS and social care - Improves patient management or coordination of care or services' },
+  { value: 'Benefits for the NHS and social care - Reduces referrals', label: 'Benefits for the NHS and social care - Reduces referrals' },
+  { value: 'Benefits for the NHS and social care - Takes less time', label: 'Benefits for the NHS and social care - Takes less time' },
+  { value: 'Benefits for the NHS and social care - Uses no staff or a lower grade of staff', label: 'Benefits for the NHS and social care - Uses no staff or a lower grade of staff' },
+  { value: 'Benefits for the NHS and social care - Leads to fewer appointments', label: 'Benefits for the NHS and social care - Leads to fewer appointments' },
+  { value: 'Benefits for the NHS and social care - Is cost saving', label: 'Benefits for the NHS and social care - Is cost saving' },
+  { value: 'Benefits for the NHS and social care - Increases efficiency', label: 'Benefits for the NHS and social care - Increases efficiency' },
+  { value: 'Benefits for the NHS and social care - Improves performance', label: 'Benefits for the NHS and social care - Improves performance' },
+  { value: 'Benefits for the NHS and social care - Reduces carbon emissions and supports the NHS to achieve net zero', label: 'Benefits for the NHS and social care - Reduces carbon emissions and supports the NHS to achieve net zero' },
+  { value: 'Benefits for the NHS and social care - Other environmental benefits', label: 'Benefits for the NHS and social care - Other environmental benefits' }
+];
+
 export const diseasesConditionsImpactItems: FormSelectableFieldType<string> = [
   { value: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS', label: `Blood and immune system conditions` },
   { value: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_ALLERGIES', label: `Blood and immune system conditions - Allergies` },
@@ -462,81 +501,45 @@ export const diseasesConditionsImpactItems: FormSelectableFieldType<string> = [
   { value: 'UROLOGICAL_CONDITIONS_URINARY_TRACT_INFECTION', label: `Urological conditions - Urinary tract infection` }
 ];
 
+export const carbonReductionPlanItems: FormSelectableFieldType<catalogCarbonReductionPlan> = [
+  { value: 'YES', label: 'Yes, I have one' },
+  { value: 'WORKING_ON', label: 'I am working on one' },
+  { value: 'NO', label: 'No, I do not have one' }
+];
+
+export const keyHealthInequalitiesItems: FormSelectableFieldType<catalogKeyHealthInequalities> = [
+  { value: 'MATERNITY', label: 'Maternity' },
+  { value: 'SEVER_MENTAL_ILLNESS', label: 'Severe mental illness' },
+  { value: 'CHRONIC_RESPIRATORY_DISEASE', label: 'Chronic respiratory disease' },
+  { value: 'EARLY_CANCER_DIAGNOSIS', label: 'Early cancer diagnosis' },
+  { value: 'HYPERTENSION_CASE_FINDING', label: 'Hypertension case finding and optimal management and lipid optimal management' },
+  { value: 'NONE', label: 'None of those listed' }
+];
+
 // // Section 2.2.
-export const hasBenefitsItems: FormSelectableFieldType<catalogYesNotYetNotSure> = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NOT_YET', label: 'Not yet' },
-  { value: 'NOT_SURE', label: 'Not sure' }
-];
-export const patientsCitizensBenefitItems: FormSelectableFieldType<catalogPatientsCitizensBenefit> = [
-  { value: 'REDUCE_MORTALITY', label: 'Reduces mortality' },
-  { value: 'REDUCE_FURTHER_TREATMENT', label: 'Reduces need for further treatment' },
-  { value: 'REDUCE_ADVERSE_EVENTS', label: 'Reduces adverse events' },
-  { value: 'ENABLE_EARLIER_DIAGNOSIS', label: 'Enables earlier or more accurate diagnosis' },
-  { value: 'REDUCE_RISKS', label: 'Reduces risks, side effects or complications' },
-  { value: 'PREVENTS_CONDITION_OCCURRING', label: 'Prevents a condition occurring or exacerbating' },
-  { value: 'AVOIDS_UNNECESSARY_TREATMENT', label: 'Avoids a test, procedure or unnecessary treatment' },
-  { value: 'ENABLES_NON_INVASIVELY_TEST', label: 'Enables a test, procedure or treatment to be done non-invasively' },
-  { value: 'INCREASES_SELF_MANAGEMENT', label: 'Increases self-management' },
-  { value: 'INCREASES_LIFE_QUALITY', label: 'Increases quality of life' },
-  { value: 'ENABLES_SHARED_CARE', label: 'Enables shared care' }
-];
-export const generalBenefitItems: FormSelectableFieldType<catalogGeneralBenefit> = [
-  { value: 'REDUCE_LENGTH_STAY', label: 'Reduces the length of stay or enables earlier discharge' },
-  { value: 'REDUCE_CRITICAL_CARE', label: 'Reduces need for adult or paediatric critical care' },
-  { value: 'REDUCE_EMERGENCY_ADMISSIONS', label: 'Reduces emergency admissions' },
-  { value: 'CHANGES_DELIVERY_SECONDARY_TO_PRIMARY', label: 'Changes delivery of care from secondary care (e.g. hospitals) to primary care (e.g. GP or community services)' },
-  { value: 'CHANGES_DELIVERY_INPATIENT_TO_DAY_CASE', label: 'Change in delivery of care from inpatient to day case' },
-  { value: 'INCREASES_COMPLIANCE', label: 'Increases compliance' },
-  { value: 'IMPROVES_COORDINATION', label: 'Improves patient management or coordination of care or services' },
-  { value: 'REDUCES_REFERRALS', label: 'Reduces referrals' },
-  { value: 'LESS_TIME', label: 'Takes less time' },
-  { value: 'FEWER_STAFF', label: 'Uses no staff or a lower grade of staff' },
-  { value: 'FEWER_APPOINTMENTS', label: 'Leads to fewer appointments' },
-  { value: 'COST_SAVING', label: 'Is cost saving' },
-  { value: 'INCREASES_EFFICIENCY', label: 'Increases efficiency' },
-  { value: 'IMPROVES_PERFORMANCE', label: 'Improves performance' },
-  { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherGeneralBenefit', dataType: 'text', label: 'Other NHS or social care benefit', validations: { isRequired: [true, 'Other MHS pr social care benefit is required'] } }) }
-];
-export const environmentalBenefitItems: FormSelectableFieldType<catalogEnvironmentalBenefit> = [
-  { value: 'NO_SIGNIFICANT_BENEFITS', label: 'There are no significant environmental sustainability benefits associated with my technology' },
-  { value: 'LESS_ENERGY', label: 'Less energy is used' },
-  { value: 'LESS_RAW_MATERIALS', label: 'Less raw materials are used' },
-  { value: 'REDUCES_GAS_EMISSIONS', label: 'Reduces greenhouse gas emissions (including CO2 emissions)' },
-  { value: 'REDUCES_PLASTICS_USE', label: 'Reduces the use of single use plastics' },
-  { value: 'MINIMISES_WASTE', label: 'Minimises waste' },
-  { value: 'LOWER_ENVIRONMENTAL_IMPACT', label: 'Lower environmental impact (e.g. less travel, better use of NHS resources)' },
-  { value: 'OPTIMIZES_FINITE_RESOURCE_USE', label: 'Reduces or optimizes finite resource use (e.g. water, metals)' },
-  { value: 'USES_RECYCLED_MATERIALS', label: 'Can be readily recycled or uses recycled materials' },
-  {
-    value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherEnvironmentalBenefit', dataType: 'text', label: 'Other environmental sustainability benefit', validations: { isRequired: [true, 'Other environmental sustainability benefit is required'] } })
-  }
+export const needsSupportAnyAreaItems: FormSelectableFieldType<catalogNeedsSupportAnyArea> = [
+  { value: 'RESEARCH_GOVERNANCE', label: 'Research governance, including research ethics approvals' },
+  { value: 'DATA_SHARING', label: 'Data sharing' },
+  { value: 'CONFIDENTIAL_PATIENT_DATA', label: 'Use of confidential patient data' },
+  { value: 'DO_NOT_NEED_SUPPORT', label: 'No, I do not need support' }
 ];
 
-// // Section 2.3.
-export const hasEvidenceItems: FormSelectableFieldType<catalogYesInProgressNotYet> = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'IN_PROGRESS', label: 'In progress' },
-  { value: 'NOT_YET', label: 'Not yet' }
+// // Section 2.2. Evidences.
+export const evidenceSubmitTypeItems: FormSelectableFieldType<catalogEvidenceSubmitType> = [
+  { value: 'CLINICAL_OR_CARE', label: 'Evidence of clinical or care outcomes' },
+  { value: 'COST_IMPACT_OR_ECONOMIC', label: 'Evidence of cost impact, efficiency gains and/or economic modelling' },
+  { value: 'OTHER_EFFECTIVENESS', label: 'Other evidence of effectiveness (for example environmental or social)' },
+  { value: 'PRE_CLINICAL', label: 'Pre-clinical evidence' },
+  { value: 'REAL_WORLD', label: 'Real world evidence' }
 ];
 
-// // Section 2.3. Evidences.
 export const evidenceTypeItems: FormSelectableFieldType<catalogEvidenceType> = [
-  { value: 'CLINICAL', label: 'Clinical evidence' },
-  { value: 'ECONOMIC', label: 'Economic evidence' },
-  { value: 'OTHER', label: 'Other evidence of effectiveness' }
-];
-
-export const clinicalEvidenceItems: FormSelectableFieldType<catalogClinicalEvidence> = [
   { value: 'DATA_PUBLISHED', label: 'Data published, but not in a peer reviewed journal' },
   { value: 'NON_RANDOMISED_COMPARATIVE_DATA', label: 'Non-randomised comparative data published in a peer reviewed journal' },
   { value: 'NON_RANDOMISED_NON_COMPARATIVE_DATA', label: 'Non-randomised non-comparative data published in a peer reviewed journal' },
   { value: 'CONFERENCE', label: 'Poster or abstract presented at a conference' },
   { value: 'RANDOMISED_CONTROLLED_TRIAL', label: 'Randomised controlled trial published in a peer reviewed journal' },
-  { value: 'UNPUBLISHED_DATA', label: 'Unpublished data' },
-  {
-    value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'description', dataType: 'text', label: 'Other clinical evidence', validations: { isRequired: [true, 'Other description is required'] } })
-  }
+  { value: 'UNPUBLISHED_DATA', label: 'Unpublished data' }
 ];
 
 
@@ -613,6 +616,12 @@ export const standardsTypeItems: FormSelectableFieldType<catalogStandardsType> =
   { value: 'DTAC', label: 'Digital Technology Assessment Criteria (DTAC)' }
 ];
 
+export const standardsHasMetItems: FormSelectableFieldType<catalogYesInProgressNotYet> = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'IN_PROGRESS', label: 'I am actively working towards it' },
+  { value: 'NOT_YET', label: 'Not yet' },
+];
+
 // // Section 5.2.
 export const hasPatentsItems: FormSelectableFieldType<catalogHasPatents> = [
   { value: 'HAS_AT_LEAST_ONE', label: 'I have one or more patents' },
@@ -672,40 +681,4 @@ export const hasResourcesToScaleItems: FormSelectableFieldType<catalogYesNoNotSu
   { value: 'YES', label: 'Yes' },
   { value: 'NO', label: 'No' },
   { value: 'NOT_SURE', label: 'I am not sure' }
-];
-
-
-
-
-
-
-
-
-
-
-
-export const standardsHasMetItems: FormSelectableFieldType<catalogYesInProgressNotYet> = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'IN_PROGRESS', label: 'I\'m in the process of gaining approval' },
-  { value: 'NOT_YET', label: 'Not yet' },
-];
-export const hasUKPathwayKnowledgeItems: FormSelectableFieldType<catalogYesNoNotRelevant> = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No' },
-  { value: 'NOT_RELEVANT', label: 'Not relevant' }
-];
-
-// export const carePathwayItems: FormSelectableFieldType<catalogCarePathway> = [
-//   { value: 'ONLY_OPTION', label: 'The only option, or first of its kind' },
-//   { value: 'BETTER_OPTION', label: 'A better option to those that already exist' },
-//   { value: 'EQUIVALENT_OPTION', label: 'An equivalent option to those that already exist' },
-//   { value: 'FIT_LESS_COSTS', label: 'Fit for purpose and costs less' },
-//   { value: 'NO_KNOWLEDGE', label: 'I don\'t know' }
-// ];
-
-
-export const hasTestsItems: FormSelectableFieldType<catalogYesInProgressNotYet> = [
-  { value: 'YES', label: 'Yes' },
-  { value: 'IN_PROGRESS', label: 'I\'m in the process of testing with users' },
-  { value: 'NOT_YET', label: 'Not yet' }
 ];

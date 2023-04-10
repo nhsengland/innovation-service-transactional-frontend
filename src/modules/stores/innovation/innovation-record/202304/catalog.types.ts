@@ -1,10 +1,8 @@
 // Sections.
 export const InnovationSections = [
   'INNOVATION_DESCRIPTION',
-  // 'VALUE_PROPOSITION',
-  // 'UNDERSTANDING_OF_NEEDS',
-  // 'UNDERSTANDING_OF_BENEFITS',
-  // 'EVIDENCE_OF_EFFECTIVENESS',
+  'UNDERSTANDING_OF_NEEDS',
+  'EVIDENCE_OF_IMPACT', // Renamed from 'EVIDENCE_OF_EFFECTIVENESS'.
   'MARKET_RESEARCH',
   'CURRENT_CARE_PATHWAY',
   'TESTING_WITH_USERS',
@@ -13,7 +11,6 @@ export const InnovationSections = [
   'REVENUE_MODEL',
   'COST_OF_INNOVATION',
   'DEPLOYMENT' // Renamed from 'IMPLEMENTATION_PLAN'
-  // 'COMPARATIVE_COST_BENEFIT',
 ] as const;
 export type InnovationSections = typeof InnovationSections[number];
 
@@ -22,8 +19,14 @@ export type InnovationSections = typeof InnovationSections[number];
 export const catalogYesNo = ['YES', 'NO'] as const;
 export type catalogYesNo = typeof catalogYesNo[number];
 
+export const catalogYesNotYet = ['YES', 'NOT_YET'] as const;
+export type catalogYesNotYet = typeof catalogYesNotYet[number];
+
 export const catalogYesNotYetNotSure = ['YES', 'NOT_YET', 'NOT_SURE'] as const;
 export type catalogYesNotYetNotSure = typeof catalogYesNotYetNotSure[number];
+
+export const catalogYesNotYetNo = ['YES', 'NOT_YET', 'NO'] as const;
+export type catalogYesNotYetNo = typeof catalogYesNotYetNo[number];
 
 export const catalogYesNoNotSure = ['YES', 'NO', 'NOT_SURE'] as const;
 export type catalogYesNoNotSure = typeof catalogYesNoNotSure[number];
@@ -52,29 +55,28 @@ export type catalogCareSettings = typeof catalogCareSettings[number];
 export const catalogMainPurpose = ['PREVENT_CONDITION', 'PREDICT_CONDITION', 'DIAGNOSE_CONDITION', 'MONITOR_CONDITION', 'PROVIDE_TREATMENT', 'MANAGE_CONDITION', 'ENABLING_CARE', 'RISKS_CLIMATE_CHANGE'] as const;
 export type catalogMainPurpose = typeof catalogMainPurpose[number];
 
-export const cataloginvolvedAACProgrammes = ['No', 'Academic Health Science Network', 'Artificial Intelligence in Health and Care Award', 'Clinical Entrepreneur Programme', 'Early Access to Medicines Scheme', 'Innovation for Healthcare Inequalities Programme', 'Innovation and Technology Payment Programme', 'NHS Innovation Accelerator', 'NHS Insights Prioritisation Programme', 'Pathway Transformation Fund', 'Rapid Uptake Products Programme', 'Small Business Research Initiative for Healthcare', 'Test beds'] as const;
-export type cataloginvolvedAACProgrammes = typeof cataloginvolvedAACProgrammes[number];
+export const catalogInvolvedAACProgrammes = ['No', 'Academic Health Science Network', 'Artificial Intelligence in Health and Care Award', 'Clinical Entrepreneur Programme', 'Early Access to Medicines Scheme', 'Innovation for Healthcare Inequalities Programme', 'Innovation and Technology Payment Programme', 'NHS Innovation Accelerator', 'NHS Insights Prioritisation Programme', 'Pathway Transformation Fund', 'Rapid Uptake Products Programme', 'Small Business Research Initiative for Healthcare', 'Test beds'] as const;
+export type catalogInvolvedAACProgrammes = typeof catalogInvolvedAACProgrammes[number];
 
 
 // Section 2.
 // // Section 2.1.
+export const catalogCarbonReductionPlan = ['YES', 'WORKING_ON', 'NO'] as const;
+export type catalogCarbonReductionPlan = typeof catalogCarbonReductionPlan[number];
+
+export const catalogKeyHealthInequalities = ['MATERNITY', 'SEVER_MENTAL_ILLNESS', 'CHRONIC_RESPIRATORY_DISEASE', 'EARLY_CANCER_DIAGNOSIS', 'HYPERTENSION_CASE_FINDING', 'NONE'] as const;
+export type catalogKeyHealthInequalities = typeof catalogKeyHealthInequalities[number];
 
 // // Section 2.2.
-export const catalogPatientsCitizensBenefit = ['REDUCE_MORTALITY', 'REDUCE_FURTHER_TREATMENT', 'REDUCE_ADVERSE_EVENTS', 'ENABLE_EARLIER_DIAGNOSIS', 'REDUCE_RISKS', 'PREVENTS_CONDITION_OCCURRING', 'AVOIDS_UNNECESSARY_TREATMENT', 'ENABLES_NON_INVASIVELY_TEST', 'INCREASES_SELF_MANAGEMENT', 'INCREASES_LIFE_QUALITY', 'ENABLES_SHARED_CARE'] as const;
-export type catalogPatientsCitizensBenefit = typeof catalogPatientsCitizensBenefit[number];
+export const catalogNeedsSupportAnyArea = ['RESEARCH_GOVERNANCE', 'DATA_SHARING', 'CONFIDENTIAL_PATIENT_DATA', 'DO_NOT_NEED_SUPPORT'] as const;
+export type catalogNeedsSupportAnyArea = typeof catalogNeedsSupportAnyArea[number];
 
-export const catalogGeneralBenefit = ['REDUCE_LENGTH_STAY', 'REDUCE_CRITICAL_CARE', 'REDUCE_EMERGENCY_ADMISSIONS', 'CHANGES_DELIVERY_SECONDARY_TO_PRIMARY', 'CHANGES_DELIVERY_INPATIENT_TO_DAY_CASE', 'INCREASES_COMPLIANCE', 'IMPROVES_COORDINATION', 'REDUCES_REFERRALS', 'LESS_TIME', 'FEWER_STAFF', 'FEWER_APPOINTMENTS', 'COST_SAVING', 'INCREASES_EFFICIENCY', 'IMPROVES_PERFORMANCE', 'OTHER'] as const;
-export type catalogGeneralBenefit = typeof catalogGeneralBenefit[number];
+// // Section 2.2. Evidences.
+export const catalogEvidenceSubmitType = ['CLINICAL_OR_CARE', 'COST_IMPACT_OR_ECONOMIC', 'OTHER_EFFECTIVENESS', 'PRE_CLINICAL', 'REAL_WORLD'] as const;
+export type catalogEvidenceSubmitType = typeof catalogEvidenceSubmitType[number];
 
-export const catalogEnvironmentalBenefit = ['NO_SIGNIFICANT_BENEFITS', 'LESS_ENERGY', 'LESS_RAW_MATERIALS', 'REDUCES_GAS_EMISSIONS', 'REDUCES_PLASTICS_USE', 'MINIMISES_WASTE', 'LOWER_ENVIRONMENTAL_IMPACT', 'OPTIMIZES_FINITE_RESOURCE_USE', 'USES_RECYCLED_MATERIALS', 'OTHER'] as const;
-export type catalogEnvironmentalBenefit = typeof catalogEnvironmentalBenefit[number];
-
-// // Section 2.3. Evidences.
-export const catalogEvidenceType = ['CLINICAL', 'ECONOMIC', 'OTHER'] as const;
+export const catalogEvidenceType = ['DATA_PUBLISHED', 'NON_RANDOMISED_COMPARATIVE_DATA', 'NON_RANDOMISED_NON_COMPARATIVE_DATA', 'CONFERENCE', 'RANDOMISED_CONTROLLED_TRIAL', 'UNPUBLISHED_DATA', 'OTHER'] as const;
 export type catalogEvidenceType = typeof catalogEvidenceType[number];
-
-export const catalogClinicalEvidence = ['DATA_PUBLISHED', 'NON_RANDOMISED_COMPARATIVE_DATA', 'NON_RANDOMISED_NON_COMPARATIVE_DATA', 'CONFERENCE', 'RANDOMISED_CONTROLLED_TRIAL', 'UNPUBLISHED_DATA', 'OTHER'] as const;
-export type catalogClinicalEvidence = typeof catalogClinicalEvidence[number];
 
 
 // Section 3.
@@ -123,34 +125,3 @@ export type catalogPatientRange = typeof catalogPatientRange[number];
 
 export const catalogCostComparison = ['CHEAPER', 'COSTS_MORE_WITH_SAVINGS', 'COSTS_MORE', 'NOT_SURE'] as const;
 export type catalogCostComparison = typeof catalogCostComparison[number];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// export const catalogCarePathway = ['ONLY_OPTION', 'BETTER_OPTION', 'EQUIVALENT_OPTION', 'FIT_LESS_COSTS', 'NO_KNOWLEDGE'] as const;
-// export type catalogCarePathway = typeof catalogCarePathway[number];

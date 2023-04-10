@@ -1,4 +1,4 @@
-import { catalogAreas, catalogCareSettings, catalogCategory, catalogClinicalEvidence, catalogCostComparison, catalogEnvironmentalBenefit, catalogEvidenceType, catalogGeneralBenefit, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, cataloginvolvedAACProgrammes, catalogMainPurpose, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogPatientsCitizensBenefit, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYetNotSure } from './catalog.types';
+import { catalogAreas, catalogCarbonReductionPlan, catalogCareSettings, catalogCategory, catalogEvidenceType, catalogCostComparison, catalogEvidenceSubmitType, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, catalogInvolvedAACProgrammes, catalogKeyHealthInequalities, catalogMainPurpose, catalogNeedsSupportAnyArea, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYet, catalogYesNotYetNo } from './catalog.types';
 
 export type DocumentType202304 = {
   version: '202304';
@@ -19,47 +19,36 @@ export type DocumentType202304 = {
     mainPurpose?: catalogMainPurpose, // Items list changed.
     supportDescription?: string, // Renamed from "moreSupportDescription" field.
     currentlyReceivingSupport?: string, // New field.
-    involvedAACProgrammes?: cataloginvolvedAACProgrammes[] // New field.
+    involvedAACProgrammes?: catalogInvolvedAACProgrammes[] // New field.
   },
-  // VALUE_PROPOSITION: {
-  //   hasProblemTackleKnowledge?: catalogYesNotYetNotSure,
-  //   problemsTackled?: string,
-  //   problemsConsequences?: string,
-  //   intervention?: string,
-  //   interventionImpact?: string
-  // },
-  // UNDERSTANDING_OF_NEEDS: {
-  //   impactPatients?: boolean,
-  //   impactClinicians?: boolean,
-  //   subgroups: string[],
-  //   cliniciansImpactDetails?: string,
-  //   diseasesConditionsImpact?: string[]
-  // },
-  // UNDERSTANDING_OF_BENEFITS: {
-  //   hasBenefits?: catalogYesNotYetNotSure,
-  //   patientsCitizensBenefits?: catalogPatientsCitizensBenefit[],
-  //   generalBenefits?: catalogGeneralBenefit[],
-  //   otherGeneralBenefit?: string,
-  //   environmentalBenefits?: catalogEnvironmentalBenefit[],
-  //   otherEnvironmentalBenefit?: string,
-  //   accessibilityImpactDetails?: string,
-  //   accessibilityStepsDetails?: string,
-  // },
-  // EVIDENCE_OF_EFFECTIVENESS: {
-  //   hasEvidence?: catalogYesInProgressNotYet;
-  //   evidences?: {
-  //     evidenceType: catalogEvidenceType,
-  //     clinicalEvidenceType?: catalogClinicalEvidence,
-  //     description?: string,
-  //     summary?: string,
-  //     files?: string[]
-  //   }[]
-  // },
-  // COMPARATIVE_COST_BENEFIT: {
-  //   hasCostSavingKnowledge?: catalogHasCostKnowledge,
-  //   hasCostCareKnowledge?: catalogHasCostKnowledge,
-  //   costComparison?: catalogCostComparison
-  // },
+  UNDERSTANDING_OF_NEEDS: {
+    problemsTackled?: string, // Moved from section VALUE_PROPOSITION
+    howInnovationWork?: string, // New field.
+    benefitsOrImpact?: string[], // New field.
+    impactDiseaseCondition?: catalogYesNo, // New field.
+    diseasesConditionsImpact?: string[],
+    estimatedCarbonReductionSavings?: catalogYesNotYetNo, // New field.
+    estimatedCarbonReductionSavingsDescription?: string, // New field.
+    carbonReductionPlan?: catalogCarbonReductionPlan, // New field.
+    keyHealthInequalities?: catalogKeyHealthInequalities[], // New field.
+    completedHealthInequalitiesImpactAssessment?: catalogYesNo, // New field.
+    files?: string[]
+  },
+  EVIDENCE_OF_IMPACT: { // Renamed from EVIDENCE_OF_EFFECTIVENESS section.
+    hasEvidence?: catalogYesNotYet,
+    currentlyCollectingEvidence?: catalogYesNo,
+    summaryOngoingEvidenceGathering?: string,
+    files?: string[]
+    needsSupportAnyArea?: catalogNeedsSupportAnyArea[],
+    evidences?: {
+      id: string,
+      evidenceSubmitType: catalogEvidenceSubmitType, // Similar to previous "evidenceType", but with a new list of options.
+      evidenceType?: catalogEvidenceType, // Previous clinicalEvidenteType field.
+      description?: string,
+      summary?: string,
+      files?: string[]
+    }[];
+  },
   MARKET_RESEARCH: {
     hasMarketResearch?: catalogYesInProgressNotYet,
     marketResearch?: string,
@@ -67,13 +56,11 @@ export type DocumentType202304 = {
     whatCompetitorsAlternativesExist?: string // New field.
   },
   CURRENT_CARE_PATHWAY: {
-    // hasUKPathwayKnowledge?: catalogYesNoNotRelevant,
     innovationPathwayKnowledge?: catalogPathwayKnowledge, // Moved from section 5.1 and items list changed.
     potentialPathway?: string, // Moved from section 5.1.
-    // carePathway?: catalogCarePathway
   },
   TESTING_WITH_USERS: {
-    involvedUsersDesignProcess?: catalogYesInProgressNotYet,
+    involvedUsersDesignProcess?: catalogYesInProgressNotYet, // New field.
     testedWithIntendedUsers?: string, // Renamed from section 5.2, "hasTests" field.
     intendedUserGroupsEngaged?: catalogIntendedUserGroupsEngaged[],
     otherIntendedUserGroupsEngaged?: string
@@ -110,7 +97,7 @@ export type DocumentType202304 = {
     hasCostKnowledge?: catalogHasCostKnowledge,
     costDescription?: string,
     patientsRange?: catalogPatientRange,
-    elibilityCriteria?: string,
+    eligibilityCriteria?: string,
     sellExpectations?: string,
     usageExpectations?: string,
     costComparison?: catalogCostComparison // Moved from COMPARATIVE_COST_BENEFIT section.
@@ -118,9 +105,7 @@ export type DocumentType202304 = {
   DEPLOYMENT: { // Renamed from IMPLEMENTATION_PLAN section.
     hasDeployPlan?: catalogYesNo,
     isDeployed?: catalogYesNo,
-    deploymentPlans?: {
-      name: string
-    }[],
+    deploymentPlans?: string[],
     commercialBasis?: string, // New field.
     organisationDeploymentAffect?: string // New field.
     hasResourcesToScale?: catalogYesNoNotSure,

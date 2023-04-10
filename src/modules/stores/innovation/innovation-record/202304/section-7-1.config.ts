@@ -84,7 +84,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   );
 
   if (['NOT_RELEVANT'].includes(currentValues.patientsRange || '')) {
-    delete currentValues.elibilityCriteria;
+    delete currentValues.eligibilityCriteria;
   } else {
     steps.push(
       new FormEngineModel({
@@ -152,7 +152,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   if (['NOT_RELEVANT'].includes(data.patientsRange || '')) {
     toReturn.push({
       label: stepsLabels.q4.label,
-      value: data.elibilityCriteria,
+      value: data.eligibilityCriteria,
       editStepNumber: editStepNumber++
     });
   }
