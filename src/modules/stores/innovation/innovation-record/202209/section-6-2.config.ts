@@ -1,6 +1,6 @@
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 import { InnovationSections } from './catalog.types';
 
 import { DocumentType202209 } from './document.types';
@@ -21,7 +21,7 @@ type StepPayloadType = InboundPayloadType;
 type OutboundPayloadType = InboundPayloadType;
 
 
-export const SECTION_6_2: sectionType<InnovationSections> = {
+export const SECTION_6_2: InnovationSectionConfigType<InnovationSections> = {
   id: 'COMPARATIVE_COST_BENEFIT',
   title: 'Comparative cost benefit',
   wizard: new WizardEngineModel({

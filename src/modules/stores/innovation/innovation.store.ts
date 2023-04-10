@@ -13,7 +13,7 @@ import { InnovationService } from './innovation.service';
 import { getSectionNumber, getSectionParentNumber, getSectionParentTitle, getSectionTitle, INNOVATION_SECTIONS } from './innovation.config';
 import { InnovationSectionEnum } from './innovation.enums';
 import { GetInnovationEvidenceDTO, InnovationModel, InnovationSectionConfigType as InnovationSectionConfigTypeLegacy, InnovationSectionInfoDTO, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, SectionsSummaryModel } from './innovation.models';
-import { InnovationSectionConfigType, sectionType } from './innovation-record/shared.types';
+import { InnovationSectionsListType, InnovationSectionConfigType } from './innovation-record/shared.types';
 
 import { INNOVATION_SECTIONS as SECTIONS_202209 } from './innovation-record/202209/main.config';
 import { INNOVATION_SECTIONS as SECTIONS_202304 } from './innovation-record/202304/main.config';
@@ -142,7 +142,7 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
 
-  getInnovationRecordConfig(version?: string): InnovationSectionConfigType {
+  getInnovationRecordConfig(version?: string): InnovationSectionsListType {
 
     switch (version) {
       case '202209':
@@ -167,7 +167,7 @@ export class InnovationStore extends Store<InnovationModel> {
 
   }
 
-  getInnovationRecordSection(sectionId: string, version?: string): sectionType<string> {
+  getInnovationRecordSection(sectionId: string, version?: string): InnovationSectionConfigType<string> {
 
     const section = this.getInnovationRecordConfig(version).find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId);
 

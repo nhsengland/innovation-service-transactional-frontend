@@ -1,6 +1,6 @@
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 
 import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
@@ -34,7 +34,7 @@ type StepPayloadType = InboundPayloadType;
 
 
 // Logic.
-export const SECTION_7_1: sectionType<InnovationSections> = {
+export const SECTION_7_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'COST_OF_INNOVATION',
   title: 'Cost of your innovation',
   wizard: new WizardEngineModel({

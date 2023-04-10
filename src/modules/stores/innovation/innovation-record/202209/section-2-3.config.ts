@@ -1,6 +1,6 @@
 import { FormEngineModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 
 import { catalogYesInProgressNotYet, InnovationSections } from './catalog.types';
 import { DocumentType202209 } from './document.types';
@@ -23,7 +23,7 @@ type OutboundPayloadType = {
 };
 
 
-export const SECTION_2_3: sectionType<InnovationSections> = {
+export const SECTION_2_3: InnovationSectionConfigType<InnovationSections> = {
   id: 'EVIDENCE_OF_EFFECTIVENESS',
   title: 'Evidence of effectiveness',
   evidences: SECTION_2_EVIDENCES,

@@ -1,7 +1,7 @@
 import { StringsHelper } from '@app/base/helpers';
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 
 import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
@@ -29,7 +29,7 @@ type StepPayloadType = InboundPayloadType & { [key in `userTestFeedback_${string
 type OutboundPayloadType = DocumentType202304['TESTING_WITH_USERS'];
 
 
-export const SECTION_4_1: sectionType<InnovationSections> = {
+export const SECTION_4_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'TESTING_WITH_USERS',
   title: 'Testing with users',
   wizard: new WizardEngineModel({

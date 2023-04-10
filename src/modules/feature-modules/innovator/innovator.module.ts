@@ -13,11 +13,6 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // Components.
 import { OrganisationSuggestionsCardComponent } from './components/organisation-suggestion-card.component';
 
-// Experiments.
-import { ExperimentsInnovationSectionEditComponent } from './experiments/innovation-sections/section-edit.component';
-import { ExperimentsInnovationSectionInfoComponent } from './experiments/innovation-sections/section-info.component';
-import { ExperimentsInnovationSectionEvidenceInfoComponent } from './experiments/innovation-sections/section-evidence-info.component';
-
 // Pages.
 // // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
@@ -73,11 +68,6 @@ import { InnovatorService } from './services/innovator.service';
 
     // Components.
     OrganisationSuggestionsCardComponent,
-
-    // Experiments.
-    ExperimentsInnovationSectionEditComponent,
-    ExperimentsInnovationSectionInfoComponent,
-    ExperimentsInnovationSectionEvidenceInfoComponent,
 
     // Pages.
     // // Account.

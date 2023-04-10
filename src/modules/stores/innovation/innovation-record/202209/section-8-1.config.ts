@@ -1,7 +1,7 @@
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { cloneDeep } from 'lodash';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 import { InnovationSections } from './catalog.types';
 
 import { DocumentType202209 } from './document.types';
@@ -29,7 +29,7 @@ type OutboundPayloadType = DocumentType202209['IMPLEMENTATION_PLAN'];
 
 
 
-export const SECTION_8_1: sectionType<InnovationSections> = {
+export const SECTION_8_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'IMPLEMENTATION_PLAN',
   title: 'Implementation plan and deployment',
   wizard: new WizardEngineModel({
