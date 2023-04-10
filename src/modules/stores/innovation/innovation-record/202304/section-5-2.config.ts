@@ -40,7 +40,7 @@ export const SECTION_5_2: sectionType<InnovationSections> = {
           id: 'hasOtherIntellectual', dataType: 'radio-group', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
           validations: { isRequired: [true, 'Choose one option'] },
           items: [
-            { value: 'YES', label: 'Yes', conditional: new FormEngineParameterModel({ id: 'otherIntellectual', dataType: 'text', label: 'Type of intellectual property', validations: { isRequired: [true, 'Type of intellectual property is required'] } }) },
+            { value: 'YES', label: 'Yes', conditional: new FormEngineParameterModel({ id: 'otherIntellectual', dataType: 'text', label: 'Type of intellectual property', validations: { isRequired: [true, 'Type of intellectual property is required'], maxLength: 100 } }) },
             { value: 'NO', label: 'No' }
           ]
         }]

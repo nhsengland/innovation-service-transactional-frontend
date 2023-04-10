@@ -91,7 +91,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           // validations: { isRequired: true }
           fieldsGroupConfig: {
             fields: [
-              { id: 'name', dataType: 'text', label: 'Organisation and department', validations: { isRequired: [true, 'Organisation and department are required'] } }
+              { id: 'name', dataType: 'text', label: 'Organisation and department', validations: { isRequired: [true, 'Organisation and department are required'], maxLength: 100 } }
             ],
             addNewLabel: 'Add new organisations and department'
           }
@@ -172,7 +172,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     toReturn.push(
       {
         label: stepsLabels.q3.label,
-        value: data.deploymentPlans?.map(item => item.name).join('\n'),
+        value: data.deploymentPlans?.map(item => item).join('\n'),
         editStepNumber: editStepNumber++
       },
       {

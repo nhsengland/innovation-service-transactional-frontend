@@ -80,7 +80,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         validations: { isRequired: [true, 'Choose at least one group'] },
         items: [
           ...intendedUserGroupsEngagedItems,
-          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherIntendedUserGroupsEngaged', dataType: 'text', label: 'Other group', validations: { isRequired: [true, 'Other group description is required'] } }) }
+          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherIntendedUserGroupsEngaged', dataType: 'text', label: 'Other group', validations: { isRequired: [true, 'Other group description is required'], maxLength: 100 } }) }
         ]
       }]
     })
@@ -105,7 +105,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'userTests', dataType: 'fields-group', label: stepsLabels.q4.label, description: stepsLabels.q4.description,
         fieldsGroupConfig: {
           fields: [
-            { id: 'kind', dataType: 'text', label: 'User test', validations: { isRequired: true } },
+            { id: 'kind', dataType: 'text', label: 'User test', validations: { isRequired: true, maxLength: 100 } },
             { id: 'feedback', dataType: 'text', isVisible: false }
           ],
           addNewLabel: 'Add new user test'

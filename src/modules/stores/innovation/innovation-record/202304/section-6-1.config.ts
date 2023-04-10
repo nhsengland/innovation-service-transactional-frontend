@@ -73,7 +73,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
         validations: { isRequired: [true, 'Choose at least one revenue model'] },
         items: [
           ...revenuesItems,
-          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRevenueDescription', dataType: 'text', label: 'Other revenue model', validations: { isRequired: [true, 'Other revenue model is required'] } }) }
+          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRevenueDescription', dataType: 'text', label: 'Other revenue model', validations: { isRequired: [true, 'Other revenue model is required'], maxLength: 100 } }) }
         ]
       }]
     }),
