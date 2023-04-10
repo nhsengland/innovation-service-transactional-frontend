@@ -17,7 +17,9 @@
   </ng-container>
 
   <!-- Description -->
-  <p>{{ params.description }}</p>
+  <ng-container *ngFor="let description of params.description">
+    <p>{{ description }}</p>
+  </ng-container>
 
   <!-- Secondary Action -->
   <ng-container *ngIf="params.secondaryAction">
