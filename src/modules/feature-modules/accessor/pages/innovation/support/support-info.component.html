@@ -1,10 +1,16 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <div *ngIf="!innovation.owner.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+  <div *ngIf="innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
     </div>
     <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
+  </div>
+
+  <div *ngIf="!innovation.owner" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+    <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+      <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Owner Account Deleted </span>
+    </div>
   </div>
 
   <p class="nhsuk-heading-m">{{ innovationSupport.organisationUnit }}</p>

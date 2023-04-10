@@ -44,7 +44,7 @@ export type ContextInnovationType = {
   name: string,
   status: InnovationStatusEnum,
   statusUpdatedAt: null | DateISOType,
-  owner: { name: string, isActive: boolean },
+  owner?: { name: string, isActive: boolean },
   loggedUser: { isOwner: boolean },
   assessment?: { id: string },
   assignedTo?: { id: string },

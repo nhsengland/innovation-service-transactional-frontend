@@ -46,7 +46,7 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
           name: response.name,
           status: response.groupedStatus === InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT ? InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT : response.status,
           statusUpdatedAt: response.statusUpdatedAt,
-          owner: { isActive: response.owner?.isActive ?? false, name: response.owner?.name ?? '' },
+          ...(response.owner ? {owner: { isActive: response.owner.isActive, name: response.owner.name}} : {}),
           loggedUser: { isOwner: response.owner ? response.owner?.id === userContext?.id : false },
           ...(response.assessment ? { assessment: { id: response.assessment.id } } : {}),
           ...(response.assessment?.assignedTo ? { assignedTo: { id: response.assessment.assignedTo?.id } } : {}),
