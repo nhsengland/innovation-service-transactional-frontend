@@ -1,6 +1,6 @@
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 
 import { InnovationSections } from './catalog.types';
 import { DocumentType202209 } from './document.types';
@@ -29,7 +29,7 @@ type StepPayloadType = InboundPayloadType & { location: string };
 type OutboundPayloadType = InboundPayloadType;
 
 
-export const SECTION_1_1: sectionType<InnovationSections> = {
+export const SECTION_1_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'INNOVATION_DESCRIPTION',
   title: 'Description of innovation',
   wizard: new WizardEngineModel({

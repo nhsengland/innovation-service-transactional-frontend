@@ -1,6 +1,6 @@
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { FormSelectableFieldType, InnovationSectionConfigType } from '../shared.types';
 
 import { catalogOfficeLocation, catalogYesNo, InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
@@ -56,7 +56,7 @@ type OutboundPayloadType = InboundPayloadType;
 
 
 // Logic.
-export const SECTION_1_1: sectionType<InnovationSections> = {
+export const SECTION_1_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'INNOVATION_DESCRIPTION',
   title: 'Description of innovation',
   wizard: new WizardEngineModel({
@@ -95,12 +95,9 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
   steps.splice(3);
 
-  // BUG HERE!!!!
-
   if (currentValues.officeLocation !== 'Based outside UK') {
 
     currentValues.countryLocation = null;
-    currentValues.countryName = currentValues.officeLocation;
 
     steps.push(new FormEngineModel({
       parameters: [{
@@ -112,11 +109,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   } else {
 
     delete currentValues.postcode;
-
-    // if (currentValues.countryName && locationItems.filter(item => !['', 'Based outside UK'].includes(item.value)).map(item => item.value as string).includes(currentValues.countryName)) {
-    //   delete currentValues.countryName; // Clears country if changing from 1 of other countries to "other".
-    //   currentValues.countryLocation = null;
-    // }
 
     steps.push(new FormEngineModel({
       parameters: [{
@@ -158,14 +150,13 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   } else {
 
     // Set chosen categories adding OTHER if also chosen.
-    const selectedCategories = categoriesItems.filter(item => currentValues.categories?.some(e => e === item.value));
-    if (currentValues.categories?.includes('OTHER')) {
-      //TODO = BUG?????
-      selectedCategories.push({ value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherMainCategoryDescription', dataType: 'text', label: 'Other main category', validations: { isRequired: [true, 'Other main category description is required'], maxLength: 100 } }) });
+    const selectedCategories: FormSelectableFieldType<string> = categoriesItems.filter(item => currentValues.categories?.some(e => e === item.value));
+    if (currentValues.categories?.includes('OTHER') && currentValues.otherCategoryDescription) {
+      selectedCategories.push({ value: currentValues.otherCategoryDescription, label: currentValues.otherCategoryDescription });
     }
 
     // Clears previous value if it doesn't exist on new chosen list.
-    if (currentValues.mainCategory && !currentValues.categories?.includes(currentValues.mainCategory)) {
+    if (currentValues.mainCategory && !currentValues.categories?.some(item => item === currentValues.mainCategory) && currentValues.mainCategory !== currentValues.otherCategoryDescription) {
       delete currentValues.mainCategory;
     }
 
@@ -239,22 +230,20 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     name: data.name.trim(),
-    ...(data.description && { description: data.description }),
-    ...(data.postcode && { postcode: data.postcode }),
-    ...(data.countryName && { countryName: data.countryName }),
-    ...(data.website && { website: data.website }),
-    ...(data.hasFinalProduct && { hasFinalProduct: data.hasFinalProduct }),
-    ...((data.categories ?? []).length > 0 && { categories: data.categories }),
-    ...(data.otherCategoryDescription && { otherCategoryDescription: data.otherCategoryDescription }),
-    ...(data.mainCategory && { mainCategory: data.mainCategory }),
-    ...(data.otherMainCategoryDescription && { otherMainCategoryDescription: data.otherMainCategoryDescription }),
-    ...((data.areas ?? []).length > 0 && { areas: data.areas }),
-    ...((data.careSettings ?? []).length > 0 && { careSettings: data.careSettings }),
-    ...(data.otherCareSetting && { otherCareSetting: data.otherCareSetting }),
-    ...(data.mainPurpose && { mainPurpose: data.mainPurpose }),
-    ...(data.supportDescription && { supportDescription: data.supportDescription }),
-    ...(data.currentlyReceivingSupport && { currentlyReceivingSupport: data.currentlyReceivingSupport }),
-    ...((data.involvedAACProgrammes ?? []).length > 0 && { involvedAACProgrammes: data.involvedAACProgrammes })
+    description: data.description,
+    postcode: data.postcode,
+    countryName: (data.officeLocation === 'Based outside UK' && data.countryLocation ? data.countryLocation[0] : data.officeLocation),
+    website: data.website,
+    hasFinalProduct: data.hasFinalProduct,
+    categories: data.categories,
+    mainCategory: data.mainCategory,
+    areas: data.areas,
+    careSettings: data.careSettings,
+    otherCareSetting: data.otherCareSetting,
+    mainPurpose: data.mainPurpose,
+    supportDescription: data.supportDescription,
+    currentlyReceivingSupport: data.currentlyReceivingSupport,
+    involvedAACProgrammes: data.involvedAACProgrammes
   };
 }
 
@@ -300,7 +289,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   if (data.categories && data.categories.length > 1) {
     toReturn.push({
       label: stepsLabels.q8.label,
-      value: data.otherMainCategoryDescription || categoriesItems.find(item => item.value === data.mainCategory)?.label,
+      value: categoriesItems.find(item => item.value === data.mainCategory)?.label ?? data.mainCategory,
       editStepNumber: editStepNumber++
     });
   }
@@ -332,7 +321,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       editStepNumber: editStepNumber++
     },
     {
-      label: stepsLabels.q12.label,
+      label: stepsLabels.q14.label,
       value: data.involvedAACProgrammes?.map(v => involvedAACProgrammesItems.find(item => item.value === v)?.label).join('\n'),
       editStepNumber: editStepNumber++
     }

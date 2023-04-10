@@ -11,8 +11,7 @@ export type DocumentType202304 = {
     hasFinalProduct?: catalogYesNo,
     categories?: catalogCategory[], // Items list changed.
     otherCategoryDescription?: string,
-    mainCategory?: catalogCategory, // Items list changed.
-    otherMainCategoryDescription?: string,
+    mainCategory?: string,
     areas?: catalogAreas[], // Items list changed.
     careSettings?: catalogCareSettings[], // Items list changed.
     otherCareSetting?: string,
@@ -41,7 +40,7 @@ export type DocumentType202304 = {
     files?: string[]
     needsSupportAnyArea?: catalogNeedsSupportAnyArea[],
     evidences?: {
-      id: string,
+      id: string, // TODO: To remove!
       evidenceSubmitType: catalogEvidenceSubmitType, // Similar to previous "evidenceType", but with a new list of options.
       evidenceType?: catalogEvidenceType, // Previous clinicalEvidenteType field.
       description?: string,

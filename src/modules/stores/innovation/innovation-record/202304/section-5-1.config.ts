@@ -1,6 +1,6 @@
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 
 import { InnovationSections, catalogStandardsType, catalogYesInProgressNotYet } from './catalog.types';
 import { DocumentType202304 } from './document.types';
@@ -44,7 +44,7 @@ type OutboundPayloadType = DocumentType202304['REGULATIONS_AND_STANDARDS'];
 
 
 
-export const SECTION_5_1: sectionType<InnovationSections> = {
+export const SECTION_5_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'REGULATIONS_AND_STANDARDS',
   title: 'Regulatory approvals, standards and certifications',
   wizard: new WizardEngineModel({

@@ -1,6 +1,6 @@
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 
 import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
@@ -32,7 +32,7 @@ type InboundPayloadType = DocumentType202304['REVENUE_MODEL'];
 type StepPayloadType = InboundPayloadType;
 
 
-export const SECTION_6_1: sectionType<InnovationSections> = {
+export const SECTION_6_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'REVENUE_MODEL',
   title: 'Revenue model',
   wizard: new WizardEngineModel({
