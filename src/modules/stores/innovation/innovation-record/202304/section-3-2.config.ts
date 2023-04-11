@@ -25,6 +25,7 @@ type InboundPayloadType = DocumentType202304['CURRENT_CARE_PATHWAY'];
 type StepPayloadType = InboundPayloadType;
 
 
+// Logic.
 export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
   id: 'CURRENT_CARE_PATHWAY',
   title: 'Current care pathway',
@@ -38,10 +39,10 @@ export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
         }]
       })
     ],
+    showSummary: true,
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
-    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data),
-    showSummary: true
+    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
   })
 };
 
@@ -70,7 +71,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   const toReturn: WizardSummaryType[] = [];
-
 
   toReturn.push({
     label: stepsLabels.q1.label,

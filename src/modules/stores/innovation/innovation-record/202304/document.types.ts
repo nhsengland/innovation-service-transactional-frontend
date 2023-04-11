@@ -8,10 +8,9 @@ export type DocumentType202304 = {
     postcode?: string,
     countryName?: string,
     website?: string, // New field.
-    hasFinalProduct?: catalogYesNo,
     categories?: catalogCategory[], // Items list changed.
     otherCategoryDescription?: string,
-    mainCategory?: string,
+    mainCategory?: catalogCategory,
     areas?: catalogAreas[], // Items list changed.
     careSettings?: catalogCareSettings[], // Items list changed.
     otherCareSetting?: string,
@@ -33,30 +32,22 @@ export type DocumentType202304 = {
     completedHealthInequalitiesImpactAssessment?: catalogYesNo, // New field.
     files?: string[]
   },
-  EVIDENCE_OF_IMPACT: { // Renamed from EVIDENCE_OF_EFFECTIVENESS section.
+  EVIDENCE_OF_EFFECTIVENESS: {
     hasEvidence?: catalogYesNotYet,
     currentlyCollectingEvidence?: catalogYesNo,
     summaryOngoingEvidenceGathering?: string,
     files?: string[]
-    needsSupportAnyArea?: catalogNeedsSupportAnyArea[],
-    evidences?: {
-      id: string, // TODO: To remove!
-      evidenceSubmitType: catalogEvidenceSubmitType, // Similar to previous "evidenceType", but with a new list of options.
-      evidenceType?: catalogEvidenceType, // Previous clinicalEvidenteType field.
-      description?: string,
-      summary?: string,
-      files?: string[]
-    }[];
+    needsSupportAnyArea?: catalogNeedsSupportAnyArea[]
   },
   MARKET_RESEARCH: {
-    hasMarketResearch?: catalogYesInProgressNotYet,
+    hasMarketResearch: catalogYesInProgressNotYet,
     marketResearch?: string,
     optionBestDescribesInnovation?: catalogOptionBestDescribesInnovation, // New field.
     whatCompetitorsAlternativesExist?: string // New field.
   },
   CURRENT_CARE_PATHWAY: {
-    innovationPathwayKnowledge?: catalogPathwayKnowledge, // Moved from section 5.1 and items list changed.
-    potentialPathway?: string, // Moved from section 5.1.
+    innovationPathwayKnowledge: catalogPathwayKnowledge, // Moved from section 5.1 and items list changed.
+    potentialPathway?: string // Moved from section 5.1.
   },
   TESTING_WITH_USERS: {
     involvedUsersDesignProcess?: catalogYesInProgressNotYet, // New field.
@@ -109,5 +100,12 @@ export type DocumentType202304 = {
     organisationDeploymentAffect?: string // New field.
     hasResourcesToScale?: catalogYesNoNotSure,
     files?: string[]
-  }
+  },
+  evidences?: {
+    evidenceSubmitType: catalogEvidenceSubmitType, // Similar to previous "evidenceType", but with a new list of options.
+    evidenceType?: catalogEvidenceType, // Previous clinicalEvidenteType field.
+    description?: string,
+    summary: string,
+    files: string[]
+  }[]
 };

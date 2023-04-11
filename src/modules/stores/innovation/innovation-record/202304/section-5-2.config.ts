@@ -7,7 +7,6 @@ import { DocumentType202304 } from './document.types';
 import { hasPatentsItems } from './forms.config';
 
 
-
 // Labels.
 const stepsLabels = {
   q1: { label: 'Do you have any patents for your innovation?' },
@@ -23,6 +22,7 @@ type InboundPayloadType = DocumentType202304['INTELLECTUAL_PROPERTY'];
 type StepPayloadType = InboundPayloadType;
 
 
+// Logic.
 export const SECTION_5_2: InnovationSectionConfigType<InnovationSections> = {
   id: 'INTELLECTUAL_PROPERTY',
   title: 'Intellectual property',
@@ -51,8 +51,6 @@ export const SECTION_5_2: InnovationSectionConfigType<InnovationSections> = {
     summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
   })
 };
-
-
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
