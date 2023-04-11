@@ -95,6 +95,8 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
       this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.formChanges.emit(this.form.value))
     );
 
+
+    // To avoid missing vital information for SR, position the focus at the top of newly generated content
     if (isPlatformBrowser(this.platformId) && this.onlyOneField) {
       setTimeout(() => {
         const h = document.querySelector(`#${this.formId}`) as HTMLFormElement;
