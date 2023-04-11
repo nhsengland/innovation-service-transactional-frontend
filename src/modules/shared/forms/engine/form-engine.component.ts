@@ -98,7 +98,6 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
     if (isPlatformBrowser(this.platformId) && this.onlyOneField) {
       setTimeout(() => {
         const h = document.querySelector(`#${this.formId}`) as HTMLFormElement;
-        console.log(h);
         if (h) {
           h.setAttribute('tabIndex', '-1');
           h.focus();
