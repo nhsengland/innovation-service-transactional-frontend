@@ -1,6 +1,6 @@
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 
 import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
@@ -16,15 +16,15 @@ const stepsLabels = {
   q2: {
     label: 'Describe the market research you have done, or are doing, within the UK market',
     description: `There are different methodologies available and could include a mix of the following:
-    <ul class="nhsuk-list">
-    <li>* in-depth interviews</li>
-    <li>* focus groups </li>
-    <li>* telephone interviews</li>
-    <li>* patient record forms</li>
-    <li>* computer-assisted telephone interviews</li>
-    <li>* online surveys</li>
-    <li>* market research online communities</li>
-    <li>* ethnography"</li>
+    <ul>
+    <li>in-depth interviews</li>
+    <li>focus groups </li>
+    <li>telephone interviews</li>
+    <li>patient record forms</li>
+    <li>computer-assisted telephone interviews</li>
+    <li>online surveys</li>
+    <li>market research online communities</li>
+    <li>ethnography"</li>
     </ul>`
   },
   q3: { label: 'Which option best describes your innovation?' },
@@ -40,7 +40,8 @@ type InboundPayloadType = DocumentType202304['MARKET_RESEARCH'];
 type StepPayloadType = InboundPayloadType;
 
 
-export const SECTION_3_1: sectionType<InnovationSections> = {
+// Logic.
+export const SECTION_3_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'MARKET_RESEARCH',
   title: 'Market research',
   wizard: new WizardEngineModel({
@@ -98,7 +99,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   );
 
 }
-
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 

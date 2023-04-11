@@ -1,6 +1,6 @@
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 import { InnovationSections } from './catalog.types';
 
 import { DocumentType202209 } from './document.types';
@@ -41,7 +41,7 @@ type SummaryPayloadType = Omit<DocumentType202209['TESTING_WITH_USERS'], 'files'
 
 
 
-export const SECTION_5_2: sectionType<InnovationSections> = {
+export const SECTION_5_2: InnovationSectionConfigType<InnovationSections> = {
   id: 'TESTING_WITH_USERS',
   title: 'Testing with users',
   wizard: new WizardEngineModel({

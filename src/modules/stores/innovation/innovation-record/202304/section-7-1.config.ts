@@ -1,6 +1,6 @@
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 
 import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
@@ -34,7 +34,7 @@ type StepPayloadType = InboundPayloadType;
 
 
 // Logic.
-export const SECTION_7_1: sectionType<InnovationSections> = {
+export const SECTION_7_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'COST_OF_INNOVATION',
   title: 'Cost of your innovation',
   wizard: new WizardEngineModel({
@@ -84,7 +84,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   );
 
   if (['NOT_RELEVANT'].includes(currentValues.patientsRange || '')) {
-    delete currentValues.elibilityCriteria;
+    delete currentValues.eligibilityCriteria;
   } else {
     steps.push(
       new FormEngineModel({
@@ -152,7 +152,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   if (['NOT_RELEVANT'].includes(data.patientsRange || '')) {
     toReturn.push({
       label: stepsLabels.q4.label,
-      value: data.elibilityCriteria,
+      value: data.eligibilityCriteria,
       editStepNumber: editStepNumber++
     });
   }

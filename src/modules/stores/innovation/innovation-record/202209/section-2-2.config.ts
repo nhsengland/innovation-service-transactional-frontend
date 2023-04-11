@@ -1,7 +1,7 @@
 import { UtilsHelper } from '@app/base/helpers';
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 import { InnovationSections } from './catalog.types';
 import { DocumentType202209 } from './document.types';
 
@@ -25,7 +25,7 @@ type StepPayloadType = InboundPayloadType;
 type OutboundPayloadType = DocumentType202209['UNDERSTANDING_OF_BENEFITS'];
 
 
-export const SECTION_2_2: sectionType<InnovationSections> = {
+export const SECTION_2_2: InnovationSectionConfigType<InnovationSections> = {
   id: 'UNDERSTANDING_OF_BENEFITS',
   title: 'Detailed understanding of benefits',
   wizard: new WizardEngineModel({

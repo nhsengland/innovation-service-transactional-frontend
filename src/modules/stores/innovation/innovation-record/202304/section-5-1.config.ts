@@ -1,12 +1,11 @@
+import { StringsHelper } from '@app/base/helpers';
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 
 import { InnovationSections, catalogStandardsType, catalogYesInProgressNotYet } from './catalog.types';
 import { DocumentType202304 } from './document.types';
 import { hasRegulationKnowledgeItems, standardsHasMetItems, standardsTypeItems } from './forms.config';
-import { StringsHelper } from '@app/base/helpers';
-
 
 
 // Labels.
@@ -43,8 +42,8 @@ type OutboundPayloadType = DocumentType202304['REGULATIONS_AND_STANDARDS'];
 //   & { [key: string]: undefined | string };
 
 
-
-export const SECTION_5_1: sectionType<InnovationSections> = {
+// Logic.
+export const SECTION_5_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'REGULATIONS_AND_STANDARDS',
   title: 'Regulatory approvals, standards and certifications',
   wizard: new WizardEngineModel({
@@ -65,8 +64,6 @@ export const SECTION_5_1: sectionType<InnovationSections> = {
     summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
   })
 };
-
-
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
@@ -103,7 +100,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         validations: { isRequired: [true, 'Choose at least one certification/standard'] },
         items: [
           ...standardsTypeItems,
-          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRegulationDescription', dataType: 'text', label: 'Other standards and certifications that apply', validations: { isRequired: [true, 'Other standards and certifications is required'] } }) }
+          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRegulationDescription', dataType: 'text', label: 'Other standards and certifications that apply', validations: { isRequired: [true, 'Other standards and certifications is required'], maxLength: 100 } }) }
         ]
       }]
     })
@@ -139,7 +136,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
 }
 
-
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   const parsedData = {
@@ -155,7 +151,6 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
 }
 
-
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
@@ -166,7 +161,6 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   };
 
 }
-
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 

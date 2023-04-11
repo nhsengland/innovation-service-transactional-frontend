@@ -1,6 +1,6 @@
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 
 import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
@@ -32,7 +32,8 @@ type InboundPayloadType = DocumentType202304['REVENUE_MODEL'];
 type StepPayloadType = InboundPayloadType;
 
 
-export const SECTION_6_1: sectionType<InnovationSections> = {
+// Logic.
+export const SECTION_6_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'REVENUE_MODEL',
   title: 'Revenue model',
   wizard: new WizardEngineModel({
@@ -73,7 +74,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
         validations: { isRequired: [true, 'Choose at least one revenue model'] },
         items: [
           ...revenuesItems,
-          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRevenueDescription', dataType: 'text', label: 'Other revenue model', validations: { isRequired: [true, 'Other revenue model is required'] } }) }
+          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRevenueDescription', dataType: 'text', label: 'Other revenue model', validations: { isRequired: [true, 'Other revenue model is required'], maxLength: 100 } }) }
         ]
       }]
     }),
@@ -115,7 +116,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
   }
 
 }
-
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 

@@ -1,7 +1,7 @@
 import { StringsHelper } from '@app/base/helpers';
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { InnovationSectionConfigType } from '../shared.types';
 
 import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
@@ -29,7 +29,8 @@ type StepPayloadType = InboundPayloadType & { [key in `userTestFeedback_${string
 type OutboundPayloadType = DocumentType202304['TESTING_WITH_USERS'];
 
 
-export const SECTION_4_1: sectionType<InnovationSections> = {
+// Logic.
+export const SECTION_4_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'TESTING_WITH_USERS',
   title: 'Testing with users',
   wizard: new WizardEngineModel({
@@ -58,8 +59,6 @@ export const SECTION_4_1: sectionType<InnovationSections> = {
   })
 };
 
-
-
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(2);
@@ -80,7 +79,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         validations: { isRequired: [true, 'Choose at least one group'] },
         items: [
           ...intendedUserGroupsEngagedItems,
-          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherIntendedUserGroupsEngaged', dataType: 'text', label: 'Other group', validations: { isRequired: [true, 'Other group description is required'] } }) }
+          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherIntendedUserGroupsEngaged', dataType: 'text', label: 'Other group', validations: { isRequired: [true, 'Other group description is required'], maxLength: 100 } }) }
         ]
       }]
     })
@@ -105,7 +104,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'userTests', dataType: 'fields-group', label: stepsLabels.q4.label, description: stepsLabels.q4.description,
         fieldsGroupConfig: {
           fields: [
-            { id: 'kind', dataType: 'text', label: 'User test', validations: { isRequired: true } },
+            { id: 'kind', dataType: 'text', label: 'User test', validations: { isRequired: true, maxLength: 100 } },
             { id: 'feedback', dataType: 'text', isVisible: false }
           ],
           addNewLabel: 'Add new user test'
@@ -140,7 +139,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
 }
 
-
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   const parsedData = {
@@ -157,7 +155,6 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
 }
 
-
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return  {
@@ -170,7 +167,6 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   };
 
 }
-
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 

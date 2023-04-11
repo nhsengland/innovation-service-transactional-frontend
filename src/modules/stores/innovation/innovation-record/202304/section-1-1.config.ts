@@ -1,6 +1,6 @@
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { sectionType } from '../shared.types';
+import { FormSelectableFieldType, InnovationSectionConfigType } from '../shared.types';
 
 import { catalogOfficeLocation, catalogYesNo, InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
@@ -28,16 +28,16 @@ const stepsLabels = {
   q12: {
     label: 'What support are you seeking from the Innovation Service?',
     description: `For example, support with:
-    <ul class="nhsuk-list">
-    <li>* adoption</li>
-    <li>* health technology assessment</li>
-    <li>* bringing your product to or from the UK</li>
-    <li>* clinical trials and testing</li>
-    <li>* commercial support and advice</li>
-    <li>* procurement</li>
-    <li>* product development and regulatory advice</li>
-    <li>* real-world evidence and evaluation</li>
-    <li>* understanding funding channels</li>
+    <ul>
+    <li>adoption</li>
+    <li>health technology assessment</li>
+    <li>bringing your product to or from the UK</li>
+    <li>clinical trials and testing</li>
+    <li>commercial support and advice</li>
+    <li>procurement</li>
+    <li>product development and regulatory advice</li>
+    <li>real-world evidence and evaluation</li>
+    <li>understanding funding channels</li>
     </ul>
     You will have opportunity to explain how your innovation works and its benefits later in the record.`
   },
@@ -56,7 +56,7 @@ type OutboundPayloadType = InboundPayloadType;
 
 
 // Logic.
-export const SECTION_1_1: sectionType<InnovationSections> = {
+export const SECTION_1_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'INNOVATION_DESCRIPTION',
   title: 'Description of innovation',
   wizard: new WizardEngineModel({
@@ -98,7 +98,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   if (currentValues.officeLocation !== 'Based outside UK') {
 
     currentValues.countryLocation = null;
-    currentValues.countryName = currentValues.officeLocation;
 
     steps.push(new FormEngineModel({
       parameters: [{
@@ -110,11 +109,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   } else {
 
     delete currentValues.postcode;
-
-    // if (currentValues.countryName && locationItems.filter(item => !['', 'Based outside UK'].includes(item.value)).map(item => item.value as string).includes(currentValues.countryName)) {
-    //   delete currentValues.countryName; // Clears country if changing from 1 of other countries to "other".
-    //   currentValues.countryLocation = null;
-    // }
 
     steps.push(new FormEngineModel({
       parameters: [{
@@ -143,7 +137,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         validations: { isRequired: [true, 'Choose at least one category'] },
         items: [
           ...categoriesItems,
-          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCategoryDescription', dataType: 'text', label: 'Other category', validations: { isRequired: [true, 'Other category description is required'] } }) }
+          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCategoryDescription', dataType: 'text', label: 'Other category', validations: { isRequired: [true, 'Other category description is required'], maxLength: 100 } }) }
         ]
       }]
     })
@@ -156,13 +150,13 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   } else {
 
     // Set chosen categories adding OTHER if also chosen.
-    const selectedCategories = categoriesItems.filter(item => currentValues.categories?.some(e => e === item.value));
-    if (currentValues.categories?.includes('OTHER')) {
-      selectedCategories.push({ value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCategoryDescription', dataType: 'text', label: 'Other category', validations: { isRequired: [true, 'Other category description is required'] } }) });
+    const selectedCategories: FormSelectableFieldType<string> = categoriesItems.filter(item => currentValues.categories?.some(e => e === item.value));
+    if (currentValues.categories?.includes('OTHER') && currentValues.otherCategoryDescription) {
+      selectedCategories.push({ value: 'OTHER', label: currentValues.otherCategoryDescription });
     }
 
     // Clears previous value if it doesn't exist on new chosen list.
-    if (currentValues.mainCategory && !currentValues.categories?.includes(currentValues.mainCategory)) {
+    if (currentValues.mainCategory && !currentValues.categories?.some(item => item === currentValues.mainCategory) && currentValues.mainCategory !== currentValues.otherCategoryDescription) {
       delete currentValues.mainCategory;
     }
 
@@ -188,7 +182,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'careSettings', dataType: 'checkbox-array', label: stepsLabels.q10.label, description: stepsLabels.q10.description,
         items: [
           ...careSettingsItems,
-          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCareSetting', dataType: 'text', label: 'Other care setting', validations: { isRequired: [true, 'Other care setting description is required'] } }) }
+          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCareSetting', dataType: 'text', label: 'Other care setting', validations: { isRequired: [true, 'Other care setting description is required'], maxLength: 100 } }) }
         ]
       }]
     }),
@@ -209,6 +203,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     new FormEngineModel({
       parameters: [{
         id: 'currentlyReceivingSupport', dataType: 'textarea', label: stepsLabels.q13.label, description: stepsLabels.q13.description,
+        validations: { isRequired: [true, 'Description is required'] },
         lengthLimit: 'large'
       }]
     }),
@@ -234,10 +229,23 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
-
-  const { officeLocation, hasWebsite, countryLocation, ...parsedData } = data;
-  return parsedData;
-
+  return {
+    name: data.name.trim(),
+    description: data.description,
+    ...(data.postcode && { postcode: data.postcode }),
+    ...(data.officeLocation && { countryName: (data.officeLocation === 'Based outside UK' && data.countryLocation ? data.countryLocation[0] : data.officeLocation) }),
+    ...(data.website && { website: data.website }),
+    ...((data.categories ?? []).length > 0 && { categories: data.categories }),
+    ...(data.otherCategoryDescription && { otherCategoryDescription: data.otherCategoryDescription }),
+    ...(data.mainCategory && { mainCategory: data.mainCategory }),
+    ...((data.areas ?? []).length > 0 && { areas: data.areas }),
+    ...((data.careSettings ?? []).length > 0 && { careSettings: data.careSettings }),
+    ...(data.otherCareSetting && { otherCareSetting: data.otherCareSetting }),
+    ...(data.mainPurpose && { mainPurpose: data.mainPurpose }),
+    ...(data.supportDescription && { supportDescription: data.supportDescription }),
+    ...(data.currentlyReceivingSupport && { currentlyReceivingSupport: data.currentlyReceivingSupport }),
+    ...((data.involvedAACProgrammes ?? []).length > 0 && { involvedAACProgrammes: data.involvedAACProgrammes })
+  };
 }
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
@@ -259,12 +267,12 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     },
     {
       label: stepsLabels.q3.label,
-      value: `${data.officeLocation}, ${data.postcode ?? data.countryName}`,
+      value: data.postcode ? `${data.countryName}, ${data.postcode}` : data.countryName,
       editStepNumber: editStepNumber++
     }
   );
 
-  editStepNumber++;
+  editStepNumber++; // Needed as location uses 2 steps.
 
   toReturn.push(
     {
@@ -282,7 +290,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   if (data.categories && data.categories.length > 1) {
     toReturn.push({
       label: stepsLabels.q8.label,
-      value: data.otherMainCategoryDescription || categoriesItems.find(item => item.value === data.mainCategory)?.label,
+      value: data.mainCategory === 'OTHER' ? data.otherCategoryDescription : categoriesItems.find(item => item.value === data.mainCategory)?.label,
       editStepNumber: editStepNumber++
     });
   }
@@ -314,7 +322,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       editStepNumber: editStepNumber++
     },
     {
-      label: stepsLabels.q12.label,
+      label: stepsLabels.q14.label,
       value: data.involvedAACProgrammes?.map(v => involvedAACProgrammesItems.find(item => item.value === v)?.label).join('\n'),
       editStepNumber: editStepNumber++
     }
