@@ -34,8 +34,8 @@ export class AuthenticationRedirectionGuard implements CanActivate {
       this.router.navigateByUrl(path);
       return false;
     }
-
-    if (!state.url.endsWith('announcements') && userContext.type !== 'ADMIN' && this.authentication.hasAnnouncements()) {
+    
+    if (!state.url.endsWith('announcements') && !state.url.includes('terms-of-use') && userContext.type !== 'ADMIN' && this.authentication.hasAnnouncements()) {
       this.router.navigate(['announcements']);
       return false;
     }

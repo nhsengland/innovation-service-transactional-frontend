@@ -14,6 +14,12 @@ export class AnnouncementsAccessGuard implements CanActivate {
 
   canActivate(): boolean {
 
+    if (!this.authentication.isTermsOfUseAccepted()) {
+      const path = this.authentication.userUrlBasePath() + '/terms-of-use';
+      this.router.navigateByUrl(path);
+      return false;
+    }
+
     if (!this.authentication.hasAnnouncements()) {
       this.router.navigateByUrl(this.authentication.userUrlBasePath());
       return false;
