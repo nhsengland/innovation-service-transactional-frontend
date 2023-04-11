@@ -13,14 +13,16 @@
 
       </ng-container>
 
-      <ng-container *ngIf="(stores.authentication.isAssessmentType() || stores.authentication.isAccessorType()) && !innovation.owner.isActive">
+      <ng-container *ngIf="(stores.authentication.isAssessmentType() || stores.authentication.isAccessorType()) && !innovation.owner?.isActive">
 
-        <div *ngIf="!innovation.owner.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+        <div *ngIf="innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
           <div class="nhsuk-heading-m nhsuk-warning-callout__label">
             <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
           </div>
           <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
         </div>
+
+        <!--TODO: Banner for owner with account delete (new US)-->
 
       </ng-container>
 

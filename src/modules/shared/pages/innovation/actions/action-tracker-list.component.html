@@ -1,11 +1,13 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <div *ngIf="!innovation.owner.isActive && !stores.authentication.isInnovatorType()" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+  <div *ngIf="innovation.owner && !innovation.owner?.isActive && !stores.authentication.isInnovatorType()" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
     </div>
     <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
   </div>
+
+ <!--TODO: Banner for owner with account delete (new US)-->
 
   <!-- Use this container to orchestrate different states acording to different types -->
   <ng-container [ngSwitch]="getUserType()">
