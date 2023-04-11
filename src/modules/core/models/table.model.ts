@@ -53,6 +53,10 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
 
   }
 
+  isSortable(): boolean {
+    return this.orderBy !== '' ? true : false;
+  }
+
   setVisibleColumns(visibleColumns: { [key: string]: (string | { label: string; align?: AlignType; orderable?: boolean; }) }): this {
 
     this.visibleColumns = {};

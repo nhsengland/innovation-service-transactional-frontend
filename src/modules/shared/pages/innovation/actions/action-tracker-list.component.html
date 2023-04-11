@@ -40,12 +40,18 @@
 
     <ng-container *ngIf="openedActionsList.getTotalRowsNumber() > 0">
       <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-5">
-        <caption class="nhsuk-table__caption nhsuk-u-visually-hidden"> Open actions list </caption>
+        <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">
+          Open actions list
+          <span *ngIf="openedActionsList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+        </caption>
         <thead class="nhsuk-table__head">
           <tr>
             <th *ngFor="let item of openedActionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
               <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-              <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
+              <button *ngIf="item.orderable" type="button">
+                {{ item.label }}
+                <span aria-hidden="true"></span>
+              </button>
               <ng-container *ngIf="item.key === 'status'">
                 <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-1" arial-label="View status keys information"> Status key </a>
               </ng-container>
@@ -103,12 +109,17 @@
 
           <ng-container *ngIf="closedActionsList.getTotalRowsNumber() > 0">
             <table class="nhsuk-table-responsive app-sortable-table">
-              <caption class="nhsuk-table__caption nhsuk-u-visually-hidden"> Closed actions list </caption>
+              <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">Closed actions list
+                <span *ngIf="closedActionsList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+              </caption>
               <thead class="nhsuk-table__head">
                 <tr>
                   <th *ngFor="let item of closedActionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                     <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-                    <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
+                    <button *ngIf="item.orderable" type="button">
+                      {{ item.label }}
+                      <span aria-hidden="true"></span>
+                    </button>
                     <ng-container *ngIf="item.key === 'status'">
                       <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-1" arial-label="View status keys information"> Status key </a>
                     </ng-container>

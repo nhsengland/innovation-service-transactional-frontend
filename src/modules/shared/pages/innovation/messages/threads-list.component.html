@@ -21,10 +21,10 @@
             View a list of this innovation's data sharing preferences (opens in new window).
           </a>
         </p>
-        
+
         <button class="nhsuk-button" [disabled]="!isInnovationSubmitted()" routerLink="new"> Start a new conversation </button>
         <p *ngIf="!isInnovationSubmitted()">You must submit your innovation record before you can start a new conversation.</p>
-        
+
       </ng-container>
 
       <p class="nhsuk-body-s nhsuk-u-margin-bottom-1">Showing {{ tableList.getVisibleRowsNumber() }} conversations of {{ tableList.getTotalRowsNumber() }}</p>
@@ -35,12 +35,18 @@
 
       <div *ngIf="tableList.getTotalRowsNumber() > 0" class="bg-color-white">
         <table class="nhsuk-table-responsive app-sortable-table app-table-inside-card">
-          <caption class="nhsuk-u-visually-hidden"> Conversations list </caption>
+          <caption class="nhsuk-u-visually-hidden">
+            Conversations list
+            <span *ngIf="tableList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+          </caption>
           <thead class="nhsuk-table__head">
             <tr>
               <th *ngFor="let item of tableList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                 <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-                <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
+                <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">
+                  {{ item.label }}
+                  <span aria-hidden="true"></span>
+                </button>
               </th>
             </tr>
           </thead>
