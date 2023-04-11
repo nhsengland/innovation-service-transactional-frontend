@@ -32,6 +32,7 @@ type InboundPayloadType = DocumentType202304['REVENUE_MODEL'];
 type StepPayloadType = InboundPayloadType;
 
 
+// Logic.
 export const SECTION_6_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'REVENUE_MODEL',
   title: 'Revenue model',
@@ -115,7 +116,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
   }
 
 }
-
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 

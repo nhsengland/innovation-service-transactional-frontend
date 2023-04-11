@@ -62,6 +62,7 @@ type InboundPayloadType = Omit<DocumentType202304['UNDERSTANDING_OF_NEEDS'], 'fi
 type StepPayloadType = InboundPayloadType;
 type OutboundPayloadType = DocumentType202304['UNDERSTANDING_OF_NEEDS'];
 
+
 // Logic.
 export const SECTION_2_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'UNDERSTANDING_OF_NEEDS',

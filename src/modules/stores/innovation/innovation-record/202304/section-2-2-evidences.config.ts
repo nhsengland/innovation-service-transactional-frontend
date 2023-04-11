@@ -22,9 +22,9 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = Omit<Required<DocumentType202304['EVIDENCE_OF_IMPACT']>['evidences'][number], 'files'> & { files?: { id: string; name: string, url: string }[] };
+type InboundPayloadType = Omit<Required<DocumentType202304>['evidences'][number], 'files'> & { files: { id: string; name: string, url: string }[] };
 type StepPayloadType = InboundPayloadType;
-type OutboundPayloadType = Required<DocumentType202304['EVIDENCE_OF_IMPACT']>['evidences'][number];
+type OutboundPayloadType = Required<DocumentType202304>['evidences'][number];
 
 
 // Logic.
@@ -119,12 +119,11 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
-      id: data.id,
       evidenceSubmitType: data.evidenceSubmitType,
       evidenceType: data.evidenceType,
       description: data.description,
       summary: data.summary,
-      files: data.files?.map(item => item.id)
+      files: data.files.map(item => item.id)
   };
 }
 

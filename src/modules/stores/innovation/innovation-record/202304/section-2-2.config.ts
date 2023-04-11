@@ -2,7 +2,7 @@ import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType }
 
 import { InnovationSectionConfigType } from '../shared.types';
 
-import { InnovationSections } from './catalog.types';
+import { InnovationSections, catalogEvidenceSubmitType } from './catalog.types';
 import { DocumentType202304 } from './document.types';
 import { evidenceSubmitTypeItems, needsSupportAnyAreaItems, yesNoItems, yesNotYetItems } from './forms.config';
 import { SECTION_2_EVIDENCES } from './section-2-2-evidences.config';
@@ -22,13 +22,16 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = Omit<DocumentType202304['EVIDENCE_OF_IMPACT'], 'files'> & { files?: { id: string; name: string, url: string }[] };
+type InboundPayloadType = Omit<DocumentType202304['EVIDENCE_OF_EFFECTIVENESS'], 'files'> & {
+  files?: { id: string; name: string, url: string }[],
+  evidences?: { evidenceSubmitType: catalogEvidenceSubmitType, description?: string }[]
+};
 type StepPayloadType = InboundPayloadType;
-type OutboundPayloadType = DocumentType202304['EVIDENCE_OF_IMPACT'];
+type OutboundPayloadType = DocumentType202304['EVIDENCE_OF_EFFECTIVENESS'];
 
 // Logic.
 export const SECTION_2_2: InnovationSectionConfigType<InnovationSections> = {
-  id: 'EVIDENCE_OF_IMPACT',
+  id: 'EVIDENCE_OF_EFFECTIVENESS',
   title: 'Evidence of impact and benefit',
   wizard: new WizardEngineModel({
     steps: [
@@ -117,8 +120,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     currentlyCollectingEvidence: data.currentlyCollectingEvidence,
     summaryOngoingEvidenceGathering: data.summaryOngoingEvidenceGathering,
     files: data.files?.map(item => item.id),
-    needsSupportAnyArea: data.needsSupportAnyArea,
-    evidences: data.evidences
+    needsSupportAnyArea: data.needsSupportAnyArea
   };
 
 }

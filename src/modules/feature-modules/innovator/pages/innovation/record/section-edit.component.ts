@@ -152,9 +152,12 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     this.saveButton = { isActive: false, label: 'Saving...' };
 
+    console.log('Payload', this.wizard.currentAnswers);
+
     of(true).pipe(
       concatMap(() => {
 
+        console.log('Outbound', this.wizard.runOutboundParsing());
         if (shouldUpdateInformation || this.errorOnSubmitStep) {
           return this.stores.innovation.updateSectionInfo$(this.innovation.id, this.sectionId, this.wizard.runOutboundParsing());
         } else {

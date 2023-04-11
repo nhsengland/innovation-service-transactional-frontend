@@ -29,6 +29,7 @@ type StepPayloadType = InboundPayloadType & { [key in `userTestFeedback_${string
 type OutboundPayloadType = DocumentType202304['TESTING_WITH_USERS'];
 
 
+// Logic.
 export const SECTION_4_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'TESTING_WITH_USERS',
   title: 'Testing with users',
@@ -57,8 +58,6 @@ export const SECTION_4_1: InnovationSectionConfigType<InnovationSections> = {
     summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
   })
 };
-
-
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
@@ -140,7 +139,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
 }
 
-
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   const parsedData = {
@@ -157,7 +155,6 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
 }
 
-
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return  {
@@ -170,7 +167,6 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   };
 
 }
-
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 

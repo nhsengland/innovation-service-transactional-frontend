@@ -28,7 +28,7 @@ const stepsLabels = {
   q12: {
     label: 'What support are you seeking from the Innovation Service?',
     description: `For example, support with:
-    <ul class="nhsuk-list">
+    <ul>
     <li>adoption</li>
     <li>health technology assessment</li>
     <li>bringing your product to or from the UK</li>
@@ -152,7 +152,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     // Set chosen categories adding OTHER if also chosen.
     const selectedCategories: FormSelectableFieldType<string> = categoriesItems.filter(item => currentValues.categories?.some(e => e === item.value));
     if (currentValues.categories?.includes('OTHER') && currentValues.otherCategoryDescription) {
-      selectedCategories.push({ value: currentValues.otherCategoryDescription, label: currentValues.otherCategoryDescription });
+      selectedCategories.push({ value: 'OTHER', label: currentValues.otherCategoryDescription });
     }
 
     // Clears previous value if it doesn't exist on new chosen list.
@@ -203,6 +203,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     new FormEngineModel({
       parameters: [{
         id: 'currentlyReceivingSupport', dataType: 'textarea', label: stepsLabels.q13.label, description: stepsLabels.q13.description,
+        validations: { isRequired: [true, 'Description is required'] },
         lengthLimit: 'large'
       }]
     }),
@@ -231,19 +232,19 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     name: data.name.trim(),
     description: data.description,
-    postcode: data.postcode,
-    countryName: (data.officeLocation === 'Based outside UK' && data.countryLocation ? data.countryLocation[0] : data.officeLocation),
-    website: data.website,
-    hasFinalProduct: data.hasFinalProduct,
-    categories: data.categories,
-    mainCategory: data.mainCategory,
-    areas: data.areas,
-    careSettings: data.careSettings,
-    otherCareSetting: data.otherCareSetting,
-    mainPurpose: data.mainPurpose,
-    supportDescription: data.supportDescription,
-    currentlyReceivingSupport: data.currentlyReceivingSupport,
-    involvedAACProgrammes: data.involvedAACProgrammes
+    ...(data.postcode && { postcode: data.postcode }),
+    ...(data.officeLocation && { countryName: (data.officeLocation === 'Based outside UK' && data.countryLocation ? data.countryLocation[0] : data.officeLocation) }),
+    ...(data.website && { website: data.website }),
+    ...((data.categories ?? []).length > 0 && { categories: data.categories }),
+    ...(data.otherCategoryDescription && { otherCategoryDescription: data.otherCategoryDescription }),
+    ...(data.mainCategory && { mainCategory: data.mainCategory }),
+    ...((data.areas ?? []).length > 0 && { areas: data.areas }),
+    ...((data.careSettings ?? []).length > 0 && { careSettings: data.careSettings }),
+    ...(data.otherCareSetting && { otherCareSetting: data.otherCareSetting }),
+    ...(data.mainPurpose && { mainPurpose: data.mainPurpose }),
+    ...(data.supportDescription && { supportDescription: data.supportDescription }),
+    ...(data.currentlyReceivingSupport && { currentlyReceivingSupport: data.currentlyReceivingSupport }),
+    ...((data.involvedAACProgrammes ?? []).length > 0 && { involvedAACProgrammes: data.involvedAACProgrammes })
   };
 }
 
@@ -289,7 +290,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   if (data.categories && data.categories.length > 1) {
     toReturn.push({
       label: stepsLabels.q8.label,
-      value: categoriesItems.find(item => item.value === data.mainCategory)?.label ?? data.mainCategory,
+      value: data.mainCategory === 'OTHER' ? data.otherCategoryDescription : categoriesItems.find(item => item.value === data.mainCategory)?.label,
       editStepNumber: editStepNumber++
     });
   }
