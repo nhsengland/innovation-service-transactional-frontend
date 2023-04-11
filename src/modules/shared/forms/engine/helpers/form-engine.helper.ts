@@ -200,6 +200,7 @@ export class FormEngineHelper {
           case 'autocomplete-array':
           case 'checkbox-array':
           case 'fields-group':
+          case 'file-upload':
             validators.push(CustomValidators.requiredCheckboxArray(validation[1]));
             break;
           case 'checkbox-group':
@@ -233,11 +234,9 @@ export class FormEngineHelper {
           case 'autocomplete-array':
           case 'checkbox-array':
           case 'fields-group':
+          case 'file-upload':
             validators.push(CustomValidators.minCheckboxArray(validation[0] as number, validation[1] as string));
             break;
-          // case 'checkbox-group':
-          //   validators.push(CustomValidators.requiredCheckboxGroup(validation[1]));
-          //   break;
           default:
             validators.push(Validators.min(validation[0] as number));
             break;
@@ -254,11 +253,9 @@ export class FormEngineHelper {
           case 'autocomplete-array':
           case 'checkbox-array':
           case 'fields-group':
+          case 'file-upload':
             validators.push(CustomValidators.maxCheckboxArray(validation[0] as number, validation[1] as string));
             break;
-          // case 'checkbox-group':
-          //   validators.push(CustomValidators.requiredCheckboxGroup(validation[1]));
-          //   break;
           default:
             validators.push(Validators.max(validation[0] as number));
             break;
@@ -274,13 +271,8 @@ export class FormEngineHelper {
       }
     }
 
-
-    // if (parameter.validations?.min) { validators.push(Validators.min(parameter.validations.min as number)); }
-    // if (parameter.validations?.max) { validators.push(Validators.max(parameter.validations.max as number)); }
-
     return validators;
 
   }
-
 
 }

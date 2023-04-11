@@ -95,11 +95,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     });
   }
 
-  steps.push({
-
-    // saveStrategy: 'updateAndWait',
-
-    ...new FormEngineModel({
+  steps.push(
+    new FormEngineModel({
       parameters: [{
         id: 'userTests', dataType: 'fields-group', label: stepsLabels.q4.label, description: stepsLabels.q4.description,
         fieldsGroupConfig: {
@@ -111,7 +108,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         }
       }]
     })
-  });
+  );
 
   currentValues.userTests?.forEach((item, i) => {
     steps.push(
@@ -146,10 +143,11 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     testedWithIntendedUsers: data.testedWithIntendedUsers,
     intendedUserGroupsEngaged: data.intendedUserGroupsEngaged,
     otherIntendedUserGroupsEngaged: data.otherIntendedUserGroupsEngaged,
+    userTests: data.userTests,
     files: data.files
   } as StepPayloadType;
 
-  (parsedData.userTests ?? []).forEach((item, i) => { parsedData[`userTestFeedback_${i}`] = item.feedback; });
+  (data.userTests ?? []).forEach((item, i) => { parsedData[`userTestFeedback_${StringsHelper.slugify(item.kind)}`] = item.feedback; });
 
   return parsedData;
 
@@ -157,13 +155,16 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
-  return  {
+  return {
     involvedUsersDesignProcess: data.involvedUsersDesignProcess,
     testedWithIntendedUsers: data.testedWithIntendedUsers,
     intendedUserGroupsEngaged: data.intendedUserGroupsEngaged,
     otherIntendedUserGroupsEngaged: data.otherIntendedUserGroupsEngaged,
-    userTests: data.userTests,
-    files: data.files?.map(item => item.id)
+    userTests: data.userTests?.map(item => ({
+      kind: item.kind,
+      ...(item.feedback && { feedback: item.feedback })
+    })),
+    ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
   };
 
 }

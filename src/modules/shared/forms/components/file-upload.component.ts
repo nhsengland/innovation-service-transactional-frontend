@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Injector, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AbstractControl, ControlContainer, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
@@ -9,7 +9,7 @@ import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.he
 import { LoggerService, Severity } from '@modules/core/services/logger.service';
 
 import { FileTypes, FileUploadType } from '../engine/types/form-engine.types';
-import { FormEngineHelper } from '@app/base/forms';
+import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
 
 @Component({
@@ -19,7 +19,7 @@ import { FormEngineHelper } from '@app/base/forms';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class FormFileUploadComponent implements OnInit {
+export class FormFileUploadComponent implements OnInit, DoCheck {
 
   @Input() id?: string;
   @Input() arrayName = '';
@@ -53,6 +53,7 @@ export class FormFileUploadComponent implements OnInit {
   previousUploadedFiles: FileUploadType[] = [];
 
   hasError = false;
+  hasUploadError = false;
   error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
   isLoadingFile = false;
 
@@ -85,13 +86,26 @@ export class FormFileUploadComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private loggerService: LoggerService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
 
     this.previousUploadedFiles = [...this.fieldArrayValues]; // Need to clone here!
+
+  }
+
+  ngDoCheck(): void {
+
+    if (this.hasUploadError) {
+      this.hasError = this.hasUploadError;
+      this.hasUploadError = false;
+    } else if (!this.isLoadingFile) {
+      this.hasError = (this.fieldArrayControl.invalid && (this.fieldArrayControl.touched || this.fieldArrayControl.dirty));
+      this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldArrayControl.errors) : { message: '', params: {} };
+      this.cdr.detectChanges();
+    }
 
   }
 
@@ -114,54 +128,65 @@ export class FormFileUploadComponent implements OnInit {
     );
   }
 
-  onChange(event: NgxDropzoneChangeEvent): void { 
+  onChange(event: NgxDropzoneChangeEvent): void {
+
     this.hasError = false;
-    
+    this.hasUploadError = false;
+
     if (!this.fileConfig.httpUploadUrl) {
       console.error('No httpUploadUrl provided for file upload.');
+      return;
     }
 
     if (event.rejectedFiles.length > 0) {
+
       const sizeExceeded = event.rejectedFiles.find((i) => i.reason === 'size');
 
       if (sizeExceeded) {
-        this.hasError = true;
-        this.error = FormEngineHelper.getValidationMessage({maxFileSize: 'true'});
+        this.hasUploadError = true;
+        this.error = FormEngineHelper.getValidationMessage({ maxFileSize: 'true' });
       }
+
+      event.rejectedFiles.forEach(file => {
+        this.loggerService.trackTrace(`File Upload failed for file`, Severity.ERROR, file);
+      });
+
+      return; // If any file gives error, abort everything!
+
     }
 
     if (event.addedFiles.length > 0) {
-      const emptyFile = event.addedFiles.find((i) => i.size === 0);
 
+      const emptyFile = event.addedFiles.find((i) => i.size === 0);
       if (emptyFile) {
         event.addedFiles = event.addedFiles.filter(i => i.size !== 0);
-        this.hasError = true;
-        this.error = FormEngineHelper.getValidationMessage({emptyFile: 'true'});
+        this.hasUploadError = true;
+        this.error = FormEngineHelper.getValidationMessage({ emptyFile: 'true' });
       } else {
         this.isLoadingFile = true;
       }
+
+      event.addedFiles.forEach(file => {
+
+        this.uploadFile(file).subscribe({
+          next: response => {
+            this.files.push({ id: response.id, file });
+            this.fieldArrayControl.push(new FormGroup({ id: new FormControl(response.id), name: new FormControl(response.name), url: new FormControl(response.url) }));
+            this.evaluateDropZoneTabIndex();
+            this.setAuxMessageAndFocus(`${file.name} added.`);
+            this.isLoadingFile = false;
+            this.cdr.detectChanges();
+          },
+          error: error => {
+            this.isLoadingFile = false;
+            this.loggerService.trackTrace('upload error', Severity.ERROR, { error });
+          }
+        });
+
+      });
+
     }
 
-    event.addedFiles.forEach(file => {
-      this.uploadFile(file).subscribe({
-        next: response => {
-          this.files.push({ id: response.id, file });
-          this.fieldArrayControl.push(new FormGroup({ id: new FormControl(response.id), name: new FormControl(response.name), url: new FormControl(response.url) }));
-          this.evaluateDropZoneTabIndex();
-          this.setAuxMessageAndFocus(`${file.name} added.`);
-          this.isLoadingFile = false;
-          this.cdr.detectChanges();
-        },
-        error: error => {
-          this.isLoadingFile = false;
-          this.loggerService.trackTrace('upload error', Severity.ERROR, { error });
-        }
-      });
-    });
-
-    event.rejectedFiles.forEach(file => {
-      this.loggerService.trackTrace(`File Upload failed for file`, Severity.ERROR, file);
-    });
   }
 
   onRemove(id: string): void {
