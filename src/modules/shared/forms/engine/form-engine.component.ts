@@ -1,10 +1,10 @@
-import { Component, OnInit, OnChanges, Input, ChangeDetectionStrategy, ChangeDetectorRef, SimpleChanges, PLATFORM_ID, Inject, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
-import { Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, PLATFORM_ID, SimpleChanges } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
+import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 import { FormEngineHelper } from './helpers/form-engine.helper';
 
@@ -94,6 +94,22 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
     this.formChangeSubscription.add(
       this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.formChanges.emit(this.form.value))
     );
+
+
+    // To avoid missing vital information for SR, position the focus at the top of newly generated content
+    if (isPlatformBrowser(this.platformId) && this.onlyOneField) {
+      setTimeout(() => {
+        const h = document.querySelector(`#${this.formId}`) as HTMLFormElement;
+        if (h) {
+          h.setAttribute('tabIndex', '-1');
+          h.focus();
+          h.addEventListener('blur', (e) => {
+            e.preventDefault();
+            h.removeAttribute('tabIndex');
+          });
+        }
+      });
+    }
 
     this.cdr.detectChanges();
 
