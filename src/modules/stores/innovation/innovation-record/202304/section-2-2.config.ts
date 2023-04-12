@@ -48,7 +48,7 @@ export const SECTION_2_2: InnovationSectionConfigType<InnovationSections> = {
     // inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
-    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data),
+    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
   }),
   evidences: SECTION_2_EVIDENCES
 };
@@ -108,19 +108,32 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
     delete data.currentlyCollectingEvidence;
     delete data.summaryOngoingEvidenceGathering;
     delete data.needsSupportAnyArea;
+    delete data.files;
 
   }
 
 }
 
+// function inboundParsing(data: InboundPayloadType): StepPayloadType {
+
+//   // if (data.hasEvidence === 'YES') {
+//   //   SECTION_2_2.evidences = SECTION_2_EVIDENCES;
+//   // } else {
+//   //   delete SECTION_2_2.evidences;
+//   // }
+
+//   return data;
+
+// }
+
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
-    hasEvidence: data.hasEvidence,
-    currentlyCollectingEvidence: data.currentlyCollectingEvidence,
-    summaryOngoingEvidenceGathering: data.summaryOngoingEvidenceGathering,
-    files: data.files?.map(item => item.id),
-    needsSupportAnyArea: data.needsSupportAnyArea
+    ...(data.hasEvidence && { hasEvidence: data.hasEvidence }),
+    ...(data.currentlyCollectingEvidence && { currentlyCollectingEvidence: data.currentlyCollectingEvidence }),
+    ...(data.summaryOngoingEvidenceGathering && { summaryOngoingEvidenceGathering: data.summaryOngoingEvidenceGathering }),
+    ...((data.needsSupportAnyArea ?? []).length > 0 && { needsSupportAnyArea: data.needsSupportAnyArea }),
+    ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
   };
 
 }

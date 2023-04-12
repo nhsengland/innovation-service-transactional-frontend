@@ -32,8 +32,12 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.evidence = { id: this.activatedRoute.snapshot.params.evidenceId, title: '' };
 
-    const evidence = this.stores.innovation.getSection(this.activatedRoute.snapshot.params.sectionId)?.evidences;
-    this.wizard = evidence || new WizardEngineModel({});
+    this.wizard = this.stores.innovation.getInnovationRecordSection(this.sectionId).evidences ?? new WizardEngineModel({});
+
+    // Protection from direct url access.
+    if (this.wizard.steps.length === 0) {
+      this.redirectTo(`innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`);
+    }
 
   }
 

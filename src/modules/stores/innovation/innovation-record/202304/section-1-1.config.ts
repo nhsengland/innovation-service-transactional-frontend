@@ -231,7 +231,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     name: data.name.trim(),
-    description: data.description,
+    ...(data.description && { description: data.description }),
     ...(data.postcode && { postcode: data.postcode }),
     ...(data.officeLocation && { countryName: (data.officeLocation === 'Based outside UK' && data.countryLocation ? data.countryLocation[0] : data.officeLocation) }),
     ...(data.website && { website: data.website }),

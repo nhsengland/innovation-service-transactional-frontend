@@ -112,21 +112,12 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.setPageStatus('LOADING');
 
     const sectionId = this.activatedRoute.snapshot.params.sectionId;
-    const sectionIdentification =  this.stores.innovation.getInnovationRecordSectionIdentification(sectionId);
+    const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(sectionId);
     const section = this.stores.innovation.getInnovationRecordSection(sectionId);
-    this.section = {
-      id: sectionId,
-      nextSectionId: null,
-      title: section?.title || '',
-      status: { id: 'UNKNOWN', label: '' },
-      isNotStarted: false,
-      showSubmitButton: false,
-      showSubmitUpdatesButton: false,
-      hasEvidences: !!section?.evidences?.steps.length,
-      wizard: section?.wizard || new WizardEngineModel({}),
-      date: '',
-      submittedBy: null
-    };
+
+    this.section.id = sectionId;
+    this.section.title = section.title;
+    this.section.wizard = section.wizard;
 
     this.setPageTitle(this.section.title, { hint: `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` });
     this.setBackLink('Innovation Record', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/record`);
@@ -144,6 +135,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           // If accessor, only view information if section is submitted.
           this.summaryList = [];
         } else {
+
+          // Special business rule around section 2.2.
+          this.section.hasEvidences = !!(section.evidences && response.data.hasEvidence && response.data.hasEvidence === 'YES');
 
           this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data)).runRules();
 

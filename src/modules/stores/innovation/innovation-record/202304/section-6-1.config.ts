@@ -30,6 +30,7 @@ const stepsLabels = {
 // Types.
 type InboundPayloadType = DocumentType202304['REVENUE_MODEL'];
 type StepPayloadType = InboundPayloadType;
+type OutboundPayloadType = DocumentType202304['REVENUE_MODEL'];
 
 
 // Logic.
@@ -48,6 +49,7 @@ export const SECTION_6_1: InnovationSectionConfigType<InnovationSections> = {
     ],
     showSummary: true,
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+    outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
     summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
   })
@@ -114,6 +116,20 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
       })
     );
   }
+
+}
+
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
+
+  return {
+    ...(data.hasRevenueModel && { hasRevenueModel: data.hasRevenueModel }),
+    ...((data.revenues ?? []).length > 0 && { revenues: data.revenues }),
+    ...(data.otherRevenueDescription && { otherRevenueDescription: data.otherRevenueDescription }),
+    ...(data.payingOrganisations && { payingOrganisations: data.payingOrganisations }),
+    ...(data.benefittingOrganisations && { benefittingOrganisations: data.benefittingOrganisations }),
+    ...(data.hasFunding && { hasFunding: data.hasFunding }),
+    ...(data.fundingDescription && { fundingDescription: data.fundingDescription })
+  };
 
 }
 

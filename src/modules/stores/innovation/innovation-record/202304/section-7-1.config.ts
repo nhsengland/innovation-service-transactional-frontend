@@ -31,6 +31,7 @@ const stepsLabels = {
 // Types.
 type InboundPayloadType = DocumentType202304['COST_OF_INNOVATION'];
 type StepPayloadType = InboundPayloadType;
+type OutboundPayloadType = DocumentType202304['COST_OF_INNOVATION'];
 
 
 // Logic.
@@ -49,6 +50,7 @@ export const SECTION_7_1: InnovationSectionConfigType<InnovationSections> = {
     ],
     showSummary: true,
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+    outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
     summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
   })
@@ -89,7 +91,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     steps.push(
       new FormEngineModel({
         parameters: [{
-          id: 'elibilityCriteria', dataType: 'textarea', label: stepsLabels.q4.label, description: stepsLabels.q4.description,
+          id: 'eligibilityCriteria', dataType: 'textarea', label: stepsLabels.q4.label, description: stepsLabels.q4.description,
           validations: { isRequired: [true, 'Description is required'] },
           lengthLimit: 'mediumUp'
         }]
@@ -123,6 +125,20 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
 }
 
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
+
+  return {
+    ...(data.hasCostKnowledge && { hasCostKnowledge: data.hasCostKnowledge }),
+    ...(data.costDescription && { costDescription: data.costDescription }),
+    ...(data.patientsRange && { patientsRange: data.patientsRange }),
+    ...(data.eligibilityCriteria && { eligibilityCriteria: data.eligibilityCriteria }),
+    ...(data.sellExpectations && { sellExpectations: data.sellExpectations }),
+    ...(data.usageExpectations && { usageExpectations: data.usageExpectations }),
+    ...(data.costComparison && { costComparison: data.costComparison })
+  };
+
+}
+
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   const toReturn: WizardSummaryType[] = [];
@@ -149,7 +165,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     editStepNumber: editStepNumber++
   });
 
-  if (['NOT_RELEVANT'].includes(data.patientsRange || '')) {
+  if (!['NOT_RELEVANT'].includes(data.patientsRange || '')) {
     toReturn.push({
       label: stepsLabels.q4.label,
       value: data.eligibilityCriteria,
