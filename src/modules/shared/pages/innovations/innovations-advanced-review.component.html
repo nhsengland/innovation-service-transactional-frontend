@@ -104,12 +104,18 @@
 
       <ng-container *ngIf="innovationsList.getTotalRowsNumber() > 0">
         <table class="nhsuk-table-responsive app-sortable-table">
-          <caption class="nhsuk-u-visually-hidden"> Innovations list </caption>
+          <caption class="nhsuk-u-visually-hidden">
+            Innovations list
+            <span *ngIf="innovationsList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+          </caption>
           <thead class="nhsuk-table__head">
             <tr class="">
               <th *ngFor="let item of innovationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                 <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-                <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
+                <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">
+                  {{ item.label }}
+                  <span aria-hidden="true"></span>
+                </button>
               </th>
             </tr>
           </thead>
@@ -118,7 +124,7 @@
             <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
 
               <ng-container [ngSwitch]="stores.authentication.getUserType()">
-                
+
                 <ng-container *ngSwitchCase="'ADMIN'">
 
                   <td class="nhsuk-table__cell">
@@ -140,7 +146,7 @@
                     <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + item.groupedStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + item.groupedStatus + '.name' | translate }}"></theme-tag>
                   </td>
                   <td class="nhsuk-table__cell text-align-right">
-                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('engagingOrgs') }}</span>                    
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('engagingOrgs') }}</span>
                     <ng-container *ngFor="let support of item.engagingOrgs; let i = index">
                       <ng-container *ngIf="i < 2">
                         <theme-tag type="{{ 'WHITE' }}" label="{{ support.organisation.acronym }}" class="nhsuk-u-margin-left-1"></theme-tag>

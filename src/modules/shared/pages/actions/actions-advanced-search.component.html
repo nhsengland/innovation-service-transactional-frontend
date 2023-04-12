@@ -101,12 +101,18 @@
 
       <ng-container *ngIf="actionsList.getTotalRowsNumber() > 0">
         <table class="nhsuk-table-responsive app-sortable-table">
-          <caption class="nhsuk-u-visually-hidden"> Action list </caption>
+          <caption class="nhsuk-u-visually-hidden">
+            Action list
+            <span *ngIf="actionsList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+          </caption>
           <thead class="nhsuk-table__head">
             <tr>
               <th *ngFor="let item of actionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                 <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-                <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
+                <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">
+                  {{ item.label }}
+                  <span aria-hidden="true"></span>
+                </button>
                 <ng-container *ngIf="item.key === 'status'">
                   <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-1" arial-label="View status keys information"> Status key </a>
                 </ng-container>
