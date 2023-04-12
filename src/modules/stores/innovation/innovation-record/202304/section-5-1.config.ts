@@ -36,11 +36,6 @@ type StepPayloadType = InboundPayloadType
   & { [key in `standardHasMet_${string}`]?: catalogYesInProgressNotYet };
 type OutboundPayloadType = DocumentType202304['REGULATIONS_AND_STANDARDS'];
 
-// type SummaryPayloadType = Omit<DocumentType202304['REGULATIONS_AND_STANDARDS'], 'files'>
-//   & { standardsType: string[] }
-//   & { files: ({ id: string, displayFileName: string, url: string } | { id: string, name: string })[] }
-//   & { [key: string]: undefined | string };
-
 
 // Logic.
 export const SECTION_5_1: InnovationSectionConfigType<InnovationSections> = {
@@ -88,13 +83,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     });
   }
 
-  // Object.keys(currentValues).filter(key => key.startsWith('standardHasMet_')).forEach((key) => { delete currentValues[key]; });
-
-  steps.push({
-
-    // saveStrategy: 'updateAndWait',
-
-    ...new FormEngineModel({
+  steps.push(
+    new FormEngineModel({
       parameters: [{
         id: 'standardsType', dataType: 'checkbox-array', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
         validations: { isRequired: [true, 'Choose at least one certification/standard'] },
@@ -104,7 +94,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         ]
       }]
     })
-  });
+  );
 
   currentValues.standards = (currentValues.standardsType || []).map(s => {
     return currentValues.standards?.find(item => item.type === s) || { type: s } as Required<StepPayloadType>['standards'][number];
@@ -140,12 +130,13 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   const parsedData = {
     hasRegulationKnowledge: data.hasRegulationKnowledge,
+    standards: data.standards,
     otherRegulationDescription: data.otherRegulationDescription,
     files: data.files,
     standardsType: data.standards?.map(item => item.type)
   } as StepPayloadType;
 
-  (parsedData.standards ?? []).forEach((item, i) => { parsedData[`standardHasMet_${i}`] = item.hasMet; });
+  (data.standards ?? []).forEach((item, i) => { parsedData[`standardHasMet_${StringsHelper.slugify(item.type)}`] = item.hasMet; });
 
   return parsedData;
 
@@ -155,9 +146,15 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
     hasRegulationKnowledge: data.hasRegulationKnowledge,
-    standards: data.standards,
+    ...((data.standards ?? []).length > 0 && {
+      standards: data.standards?.map(item => ({
+        type: item.type,
+        ...(item.hasMet && { hasMet: item.hasMet })
+      }))
+    }),
     otherRegulationDescription: data.otherRegulationDescription,
-    files: data.files?.map(item => item.id)
+    ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
+
   };
 
 }

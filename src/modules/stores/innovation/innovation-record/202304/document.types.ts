@@ -40,13 +40,13 @@ export type DocumentType202304 = {
     needsSupportAnyArea?: catalogNeedsSupportAnyArea[]
   },
   MARKET_RESEARCH: {
-    hasMarketResearch: catalogYesInProgressNotYet,
+    hasMarketResearch?: catalogYesInProgressNotYet,
     marketResearch?: string,
     optionBestDescribesInnovation?: catalogOptionBestDescribesInnovation, // New field.
     whatCompetitorsAlternativesExist?: string // New field.
   },
   CURRENT_CARE_PATHWAY: {
-    innovationPathwayKnowledge: catalogPathwayKnowledge, // Moved from section 5.1 and items list changed.
+    innovationPathwayKnowledge?: catalogPathwayKnowledge, // Moved from section 5.1 and items list changed.
     potentialPathway?: string // Moved from section 5.1.
   },
   TESTING_WITH_USERS: {

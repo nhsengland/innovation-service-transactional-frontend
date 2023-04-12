@@ -20,6 +20,7 @@ const stepsLabels = {
 // Types.
 type InboundPayloadType = DocumentType202304['INTELLECTUAL_PROPERTY'];
 type StepPayloadType = InboundPayloadType;
+type OutboundPayloadType = DocumentType202304['INTELLECTUAL_PROPERTY'];
 
 
 // Logic.
@@ -47,10 +48,21 @@ export const SECTION_5_2: InnovationSectionConfigType<InnovationSections> = {
       })
     ],
     showSummary: true,
+    outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
     summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
   })
 };
+
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
+
+  return {
+    hasPatents: data.hasPatents,
+    ...(data.hasOtherIntellectual && { hasOtherIntellectual: data.hasOtherIntellectual }),
+    ...(data.otherIntellectual && { otherIntellectual: data.otherIntellectual })
+  };
+
+}
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
