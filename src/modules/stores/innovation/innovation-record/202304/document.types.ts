@@ -36,8 +36,8 @@ export type DocumentType202304 = {
     hasEvidence?: catalogYesNotYet,
     currentlyCollectingEvidence?: catalogYesNo,
     summaryOngoingEvidenceGathering?: string,
+    needsSupportAnyArea?: catalogNeedsSupportAnyArea[],
     files?: string[]
-    needsSupportAnyArea?: catalogNeedsSupportAnyArea[]
   },
   MARKET_RESEARCH: {
     hasMarketResearch?: catalogYesInProgressNotYet,

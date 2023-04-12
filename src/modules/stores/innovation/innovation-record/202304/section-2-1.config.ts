@@ -101,7 +101,6 @@ export const SECTION_2_1: InnovationSectionConfigType<InnovationSections> = {
     ],
     showSummary: true,
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
-    // inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
     summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
@@ -190,38 +189,20 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
 
 }
 
-// function inboundParsing(data: InboundPayloadType): StepPayloadType {
-
-//   return {
-//     problemsTackled: data.problemsTackled ?? null,
-//     howInnovationWork: data.howInnovationWork ?? null,
-//     benefitsOrImpact: data.benefitsOrImpact ?? [],
-//     impactDiseaseCondition: data.impactDiseaseCondition ?? null,
-//     diseasesConditionsImpact: data.diseasesConditionsImpact ?? null,
-//     estimatedCarbonReductionSavings: data.estimatedCarbonReductionSavings ?? null,
-//     estimatedCarbonReductionSavingsDescription: data.estimatedCarbonReductionSavingsDescription ?? null,
-//     carbonReductionPlan: data.carbonReductionPlan ?? null,
-//     keyHealthInequalities: data.keyHealthInequalities ?? null,
-//     completedHealthInequalitiesImpactAssessment: data.completedHealthInequalitiesImpactAssessment ?? null,
-//     healthInequalitiesFiles: data.healthInequalitiesFiles ?? []
-//   };
-
-// }
-
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
-    problemsTackled: data.problemsTackled,
-    howInnovationWork: data.howInnovationWork,
-    benefitsOrImpact: data.benefitsOrImpact,
-    impactDiseaseCondition: data.impactDiseaseCondition,
-    diseasesConditionsImpact: data.diseasesConditionsImpact,
-    estimatedCarbonReductionSavings: data.estimatedCarbonReductionSavings,
-    estimatedCarbonReductionSavingsDescription: data.estimatedCarbonReductionSavingsDescription,
-    carbonReductionPlan: data.carbonReductionPlan,
-    keyHealthInequalities: data.keyHealthInequalities,
-    completedHealthInequalitiesImpactAssessment: data.completedHealthInequalitiesImpactAssessment,
-    files: data.files?.map(item => item.id)
+    ...(data.problemsTackled && { problemsTackled: data.problemsTackled }),
+    ...(data.howInnovationWork && { howInnovationWork: data.howInnovationWork }),
+    ...((data.benefitsOrImpact ?? []).length > 0 && { benefitsOrImpact: data.benefitsOrImpact }),
+    ...(data.impactDiseaseCondition && { impactDiseaseCondition: data.impactDiseaseCondition }),
+    ...((data.diseasesConditionsImpact ?? []).length > 0 && { diseasesConditionsImpact: data.diseasesConditionsImpact }),
+    ...(data.estimatedCarbonReductionSavings && { estimatedCarbonReductionSavings: data.estimatedCarbonReductionSavings }),
+    ...(data.estimatedCarbonReductionSavingsDescription && { estimatedCarbonReductionSavingsDescription: data.estimatedCarbonReductionSavingsDescription }),
+    ...(data.carbonReductionPlan && { carbonReductionPlan: data.carbonReductionPlan }),
+    ...((data.keyHealthInequalities ?? []).length > 0 && { keyHealthInequalities: data.keyHealthInequalities }),
+    ...(data.completedHealthInequalitiesImpactAssessment && { completedHealthInequalitiesImpactAssessment: data.completedHealthInequalitiesImpactAssessment }),
+    ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
   };
 
 }

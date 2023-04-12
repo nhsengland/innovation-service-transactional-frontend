@@ -85,7 +85,12 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     })
   );
 
-  if (Number(currentStep) > 3) { // Updates userTests.feedback value.
+  if (Number(currentStep) > 3) {
+
+    // Delete any userTests item without 'kind' value. Can happen when user goes back!
+    currentValues.userTests = currentValues.userTests?.filter(item => item.kind);
+
+    // Updates userTests.feedback value.
     Object.keys(currentValues).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => {
       const index = (currentValues.userTests ?? []).findIndex(item => StringsHelper.slugify(item.kind) === key.split('_')[1]);
       if (index > -1) {
@@ -93,6 +98,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
       }
       delete currentValues[key as any];
     });
+
   }
 
   steps.push(
@@ -156,14 +162,16 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
-    involvedUsersDesignProcess: data.involvedUsersDesignProcess,
-    testedWithIntendedUsers: data.testedWithIntendedUsers,
-    intendedUserGroupsEngaged: data.intendedUserGroupsEngaged,
-    otherIntendedUserGroupsEngaged: data.otherIntendedUserGroupsEngaged,
-    userTests: data.userTests?.map(item => ({
-      kind: item.kind,
-      ...(item.feedback && { feedback: item.feedback })
-    })),
+    ...(data.involvedUsersDesignProcess && { involvedUsersDesignProcess: data.involvedUsersDesignProcess }),
+    ...(data.testedWithIntendedUsers && { testedWithIntendedUsers: data.testedWithIntendedUsers }),
+    ...((data.intendedUserGroupsEngaged ?? []).length > 0 && { intendedUserGroupsEngaged: data.intendedUserGroupsEngaged }),
+    ...(data.otherIntendedUserGroupsEngaged && { otherIntendedUserGroupsEngaged: data.otherIntendedUserGroupsEngaged }),
+    ...((data.userTests ?? []).length > 0 && {
+      userTests: data.userTests?.map(item => ({
+        kind: item.kind,
+        ...(item.feedback && { feedback: item.feedback })
+      }))
+    }),
     ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
   };
 
