@@ -19,19 +19,19 @@
       </span>
     </ng-container>
 
-    <div [formGroup]="fieldGroupControl" class="nhsuk-checkboxes nhsuk-checkboxes--conditional">
+    <ul [formGroup]="fieldGroupControl" class="nhsuk-checkboxes nhsuk-checkboxes--conditional">
 
       <ng-container *ngFor="let item of items; let i = index">
 
         <ng-container [ngSwitch]="item.label">
 
           <ng-container *ngSwitchCase="'SEPARATOR'">
-            <div class="nhsuk-radios__divider">or</div>
+            <li class="nhsuk-radios__divider">or</li>
           </ng-container>
 
           <ng-container *ngSwitchDefault>
 
-            <div class="nhsuk-checkboxes__item">
+            <li class="nhsuk-checkboxes__item">
               <ng-container *ngIf="isRunningOnBrowser">
                 <input [formControlName]="item.value" id="{{ id }}{{ i }}" type="checkbox" name="{{ groupName }}[{{item.value}}] }" class="nhsuk-checkboxes__input" />
               </ng-container>
@@ -40,7 +40,7 @@
               </ng-container>
               <label for="{{ id }}{{ i }}" class="nhsuk-label nhsuk-checkboxes__label">{{ item.label }}</label>
               <div *ngIf="item.description" class="nhsuk-hint nhsuk-checkboxes__hint">{{ item.description }}</div>
-            </div>
+            </li>
 
           </ng-container>
 
@@ -48,7 +48,7 @@
 
       </ng-container>
 
-    </div>
+    </ul>
 
   </fieldset>
 
