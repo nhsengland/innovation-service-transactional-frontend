@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-import { AllSectionsOutboundPayloadType, getAllSectionsSummary } from '@modules/stores/innovation/innovation.config';
-import { getInnovationInfoEndpointDTO, sectionType } from '@modules/stores/innovation/innovation.models';
+import { AllSectionsOutboundPayloadType, getAllSectionsSummary } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import { sectionType } from '@modules/stores/innovation/innovation.models';
 
 import { ENVIRONMENT } from '../../config/constants.config';
 
@@ -11,16 +11,7 @@ import { PDFGeneratorParserError, PDFGeneratorSectionsNotFoundError } from '../e
 
 export const getSections = async (innovationId: string, config: any): Promise<{ section: sectionType, data: MappedObjectType }[]> => {
   const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/${innovationId}/all-sections`;
-  const response = await axios.get<{
-    section: sectionType;
-    data: MappedObjectType
-  }[]>(url, config);
-  return response.data;
-};
-
-export const getInnovation = async (innovationId: string, config: any) => {
-  const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/${innovationId}`;
-  const response = await axios.get<getInnovationInfoEndpointDTO>(url, config);
+  const response = await axios.get<{ section: sectionType, data: MappedObjectType }[]>(url, config);
   return response.data;
 };
 
@@ -49,7 +40,7 @@ export const generatePDF = async (innovationId: string, config: any) => {
   } catch (error: any) {
     throw new PDFGeneratorParserError(error);
   }
-  
+
   const response = await generatePDFHandler(innovationId, content, config);
 
 

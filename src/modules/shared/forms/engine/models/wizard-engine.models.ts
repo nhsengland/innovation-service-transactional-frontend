@@ -39,7 +39,6 @@ export class WizardEngineModel {
     this.inboundParsing = data.inboundParsing;
     this.outboundParsing = data.outboundParsing;
     this.summaryParsing = data.summaryParsing;
-    this.summaryPDFParsing = data.summaryPDFParsing;
   }
 
   runRules(data?: MappedObjectType): this {
@@ -61,16 +60,6 @@ export class WizardEngineModel {
     if (!this.summaryParsing) { return []; }
 
     this.summary = this.summaryParsing(data || this.currentAnswers, this.steps);
-
-    return this.summary;
-
-  }
-
-  runSummaryPDFParsing(data?: MappedObjectType): WizardSummaryType[] {
-
-    if (!this.summaryPDFParsing) { return []; }
-
-    this.summary = this.summaryPDFParsing(data || this.currentAnswers, this.steps);
 
     return this.summary;
 

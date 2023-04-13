@@ -7,6 +7,7 @@ import { ContextInnovationType } from '@app/base/types';
 
 import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
+import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 
 @Component({
@@ -60,7 +61,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       submittedBy: null
     };
 
-    this.sectionsIdsList = this.stores.innovation.getInnovationRecordConfig().flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
+    this.sectionsIdsList = getInnovationRecordConfig().flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
 
   }
 

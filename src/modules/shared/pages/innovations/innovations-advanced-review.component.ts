@@ -7,7 +7,7 @@ import { TableModel } from '@app/base/models';
 
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
-import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
@@ -57,7 +57,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     ];
 
   datasets: { [key in FilterKeysType]: { label: string, value: string }[] } = {
-    mainCategories: mainCategoryItems.map(i => ({ label: i.label, value: i.value })),
+    mainCategories: irVersionsMainCategoryItems.map(i => ({ label: i.label, value: i.value })),
     locations: locationItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ label: i.label, value: i.value })),
     engagingOrganisations: [],
     supportStatuses: [],

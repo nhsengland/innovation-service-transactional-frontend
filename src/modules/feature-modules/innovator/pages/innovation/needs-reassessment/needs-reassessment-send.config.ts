@@ -1,6 +1,5 @@
 import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { yesNoItems } from '@modules/stores/innovation/sections/catalogs.config';
 
 
 // Labels.
@@ -13,6 +12,13 @@ const stepsLabelsInnovationPaused = {
   l1: 'Have you updated your innovation record since you stopped sharing it?',
   l2: 'How has your innovation changed?'
 };
+
+
+// Catalogs.
+export const yesNoItems = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'NO', label: 'No' }
+];
 
 // Types.
 type InboundPayloadType = { status: InnovationStatusEnum };
