@@ -50,7 +50,7 @@
           <tr>
             <th *ngFor="let item of openedActionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
               <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-              <button [id]="'openedActions'+item.key" *ngIf="item.orderable" type="button">
+              <button *ngIf="item.orderable" type="button">
                 {{ item.label }}
                 <span aria-hidden="true"></span>
               </button>
@@ -118,7 +118,7 @@
                 <tr>
                   <th *ngFor="let item of closedActionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                     <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-                    <button [id]="'closedActions'+item.key" *ngIf="item.orderable" type="button">
+                    <button *ngIf="item.orderable" type="button">
                       {{ item.label }}
                       <span aria-hidden="true"></span>
                     </button>
