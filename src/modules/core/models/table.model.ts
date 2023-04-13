@@ -63,7 +63,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
       const button = document.querySelector('button#'+column) as HTMLButtonElement;
       const caption = button.closest("table")?.firstChild as HTMLTableCaptionElement;
       caption.setAttribute('aria-hidden', 'true');
-      if (button) {
+      if (button && caption) {
         button.setAttribute('tabIndex', '-1');
         button.focus();
         button.addEventListener('blur', (e) => {
