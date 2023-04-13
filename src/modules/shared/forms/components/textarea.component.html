@@ -25,11 +25,11 @@
     {{ fieldControl.value }}
   </textarea>
 
-  <div aria-hidden="true" class="nhsuk-hint" *ngIf="lengthLimitCharacters - (fieldControl.value || '').length > -1">
+  <div [attr.aria-hidden]="textAreaValue !== ''" class="nhsuk-hint" *ngIf="lengthLimitCharacters - (fieldControl.value || '').length > -1">
     You have {{ lengthLimitCharacters - (fieldControl.value || '').length }} characters remaining
   </div> 
 
-  <div [attr.aria-live]="textAreaValue !== '' ? 'polite' : 'off'" class="nhsuk-u-visually-hidden" *ngIf="lengthLimitCharacters - (this.textAreaValue).length > -1">
+  <div aria-live="polite" class="nhsuk-u-visually-hidden" *ngIf="(lengthLimitCharacters - (this.textAreaValue).length > -1) && (this.textAreaValue).length > 0 ">
     You have {{ lengthLimitCharacters - (textAreaValue || '').length }} characters remaining
   </div>
 
