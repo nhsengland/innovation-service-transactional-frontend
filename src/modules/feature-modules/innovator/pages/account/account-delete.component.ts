@@ -60,8 +60,8 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit{
     this.form = new FormGroup({
       confirm: new FormControl<boolean>(false, CustomValidators.required('You need to confirm to proceed')),
       reason: new FormControl<string>('', [CustomValidators.required('A reason is required')]),
-      email: new FormControl<string>('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(this.innovator.email, 'The email is incorrect')]),
-      confirmation: new FormControl<string>('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('delete my account')]),
+      email: new FormControl<string>('', [CustomValidators.required('Your email is required'), CustomValidators.equalTo(this.innovator.email, 'The email is incorrect')]),
+      confirmation: new FormControl<string>('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('delete account')]),
     }, { updateOn: 'change' });
 
   }
