@@ -315,6 +315,7 @@ export const benefitsOrImpactItems: FormSelectableFieldType<string> = [
   { value: 'Benefits for patients and people - Increases quality of life', label: 'Benefits for patients and people - Increases quality of life' },
   { value: 'Benefits for patients and people - Enables shared care', label: 'Benefits for patients and people - Enables shared care' },
   { value: 'Benefits for patients and people - Alleviates pain', label: 'Benefits for patients and people - Alleviates pain' },
+  { value: 'Benefits for patients and people - Other benefits', label: 'Benefits for patients and people - Other benefits' },
   { value: 'Benefits for the NHS and social care - Reduces the length of stay or enables earlier discharge', label: 'Benefits for the NHS and social care - Reduces the length of stay or enables earlier discharge' },
   { value: 'Benefits for the NHS and social care - Reduces need for adult or paediatric critical care', label: 'Benefits for the NHS and social care - Reduces need for adult or paediatric critical care' },
   { value: 'Benefits for the NHS and social care - Reduces emergency admissions', label: 'Benefits for the NHS and social care - Reduces emergency admissions' },

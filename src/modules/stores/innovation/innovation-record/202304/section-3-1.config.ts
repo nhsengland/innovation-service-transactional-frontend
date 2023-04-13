@@ -38,6 +38,7 @@ const stepsLabels = {
 // Types.
 type InboundPayloadType = DocumentType202304['MARKET_RESEARCH'];
 type StepPayloadType = InboundPayloadType;
+type OutboundPayloadType = DocumentType202304['MARKET_RESEARCH'];
 
 
 // Logic.
@@ -56,12 +57,11 @@ export const SECTION_3_1: InnovationSectionConfigType<InnovationSections> = {
     ],
     showSummary: true,
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+    outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
     summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
   })
 };
-
-
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
@@ -97,6 +97,17 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
       }]
     })
   );
+
+}
+
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
+
+  return {
+    ...(data.hasMarketResearch && { hasMarketResearch: data.hasMarketResearch }),
+    ...(data.marketResearch && { marketResearch: data.marketResearch }),
+    ...(data.optionBestDescribesInnovation && { optionBestDescribesInnovation: data.optionBestDescribesInnovation }),
+    ...(data.whatCompetitorsAlternativesExist && { whatCompetitorsAlternativesExist: data.whatCompetitorsAlternativesExist })
+  };
 
 }
 

@@ -169,7 +169,7 @@ export class InnovationStore extends Store<InnovationModel> {
 
   getInnovationRecordSection(sectionId: string, version?: string): InnovationSectionConfigType<string> {
 
-    const section = this.getInnovationRecordConfig(version).find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId);
+    const section = cloneDeep(this.getInnovationRecordConfig(version)).find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId);
 
     if (!section) {
       throw new Error("gdfgdsfg"); // TODO: Improve this excpetion!
@@ -181,7 +181,7 @@ export class InnovationStore extends Store<InnovationModel> {
 
   getInnovationRecordSectionWizard(sectionId: string, version?: string): WizardEngineModel {
 
-    return cloneDeep(this.getInnovationRecordSection(sectionId, version)?.wizard);
+    return this.getInnovationRecordSection(sectionId, version)?.wizard;
 
   }
 

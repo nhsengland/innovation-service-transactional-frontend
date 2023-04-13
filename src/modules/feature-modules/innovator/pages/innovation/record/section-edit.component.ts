@@ -7,8 +7,8 @@ import { CoreComponent } from '@app/base';
 import { FileTypes, FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { UtilsHelper } from '@app/base/helpers';
 import { UrlModel } from '@app/base/models';
+import { ContextInnovationType } from '@app/base/types';
 
-import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 
@@ -120,12 +120,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     const formData = this.formEngineComponent?.getFormValues();
 
-    Object.keys(formData?.data || {}).forEach(key => {
-      const value = formData!.data[key];
-      if (typeof value === 'string') {
-        formData!.data[key] = UtilsHelper.isEmpty(value) ? null : value;
-      }
-    });
 
     if (action === 'previous') {
       this.wizard.addAnswers(formData?.data || {}).runRules();

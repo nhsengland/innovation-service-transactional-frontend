@@ -23,6 +23,7 @@ const stepsLabels = {
 // Types.
 type InboundPayloadType = DocumentType202304['CURRENT_CARE_PATHWAY'];
 type StepPayloadType = InboundPayloadType;
+type OutboundPayloadType = DocumentType202304['CURRENT_CARE_PATHWAY'];
 
 
 // Logic.
@@ -41,6 +42,7 @@ export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
     ],
     showSummary: true,
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+    outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
     summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
   })
@@ -65,6 +67,15 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
       }]
     })
   );
+
+}
+
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
+
+  return {
+    innovationPathwayKnowledge: data.innovationPathwayKnowledge,
+    ...(data.potentialPathway && { potentialPathway: data.potentialPathway })
+  };
 
 }
 

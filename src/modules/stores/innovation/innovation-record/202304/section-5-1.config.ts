@@ -152,7 +152,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
         ...(item.hasMet && { hasMet: item.hasMet })
       }))
     }),
-    otherRegulationDescription: data.otherRegulationDescription,
+    ...(data.otherRegulationDescription && { otherRegulationDescription: data.otherRegulationDescription }),
     ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
 
   };

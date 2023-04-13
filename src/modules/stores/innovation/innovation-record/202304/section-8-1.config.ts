@@ -40,7 +40,7 @@ const stepsLabels = {
 
 // Types.
 type InboundPayloadType = Omit<DocumentType202304['DEPLOYMENT'], 'files'> & { files?: { id: string; name: string, url: string }[] };
-type StepPayloadType = InboundPayloadType;
+type StepPayloadType = InboundPayloadType & { stepDeploymentPlans: { name: string }[] };
 type OutboundPayloadType = DocumentType202304['DEPLOYMENT'];
 
 
@@ -67,7 +67,7 @@ export const SECTION_8_1: InnovationSectionConfigType<InnovationSections> = {
     ],
     showSummary: true,
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
-    // inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+    inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
     summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
@@ -87,8 +87,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     steps.push(
       new FormEngineModel({
         parameters: [{
-          id: 'deploymentPlans', dataType: 'fields-group', label: stepsLabels.q3.label, description: stepsLabels.q3.description,
-          // validations: { isRequired: true }
+          id: 'stepDeploymentPlans', dataType: 'fields-group', label: stepsLabels.q3.label, description: stepsLabels.q3.description,
           fieldsGroupConfig: {
             fields: [
               { id: 'name', dataType: 'text', label: 'Organisation and department', validations: { isRequired: [true, 'Organisation and department are required'], maxLength: 100 } }
@@ -125,24 +124,39 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     }),
     new FormEngineModel({
       parameters: [{
-        id: 'files', dataType: 'file-upload', label: stepsLabels.q7.label, description: stepsLabels.q7.description,
-        validations: { isRequired: [true, 'Upload at least one file'] }
+        id: 'files', dataType: 'file-upload', label: stepsLabels.q7.label, description: stepsLabels.q7.description
       }]
     })
   );
 
 }
 
-function outboundParsing(data: StepPayloadType): OutboundPayloadType {
+
+function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
   return {
     hasDeployPlan: data.hasDeployPlan,
     isDeployed: data.isDeployed,
-    deploymentPlans: data.deploymentPlans,
+    stepDeploymentPlans: data.deploymentPlans?.map(item => ({ name: item })) ?? [],
     commercialBasis: data.commercialBasis,
     organisationDeploymentAffect: data.organisationDeploymentAffect,
     hasResourcesToScale: data.hasResourcesToScale,
-    files: data.files?.map(item => item.id)
+    files: data.files,
+  };
+
+}
+
+
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
+
+  return {
+    ...(data.hasDeployPlan && { hasDeployPlan: data.hasDeployPlan }),
+    ...(data.isDeployed && { isDeployed: data.isDeployed }),
+    ...((data.deploymentPlans ?? []).length > 0 && { deploymentPlans: data.stepDeploymentPlans?.map(item => item.name) }),
+    ...(data.commercialBasis && { commercialBasis: data.commercialBasis }),
+    ...(data.organisationDeploymentAffect && { organisationDeploymentAffect: data.organisationDeploymentAffect }),
+    ...(data.hasResourcesToScale && { hasResourcesToScale: data.hasResourcesToScale }),
+    ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
   };
 
 }

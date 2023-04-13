@@ -25,38 +25,38 @@
       </span>
     </ng-container>
 
-    <div class="nhsuk-checkboxes nhsuk-u-padding-top-3">
+    <ul class="nhsuk-checkboxes nhsuk-u-padding-top-3">
 
       <ng-container *ngFor="let fgi of filteredGI; let i = index;">
 
-        <div class="nhsuk-checkboxes__item">
+        <li class="nhsuk-checkboxes__item">
           <input id="{{ id }}{{ fgi.gItem.value }}" type="checkbox" [value]="fgi.gItem.value" [checked]="isChecked(fgi.gItem.value) || fgi.selectedChildren > 0"
             [disabled]="fgi.gItem.isEditable !== undefined && fgi.gItem.isEditable === false" (change)="onChanged($event)" class="nhsuk-checkboxes__input" />
           <label for="{{ id }}{{ fgi.gItem.value }}" class="nhsuk-label nhsuk-checkboxes__label d-flex" [ngClass]="{'undertermined-checkbox': fgi.selectedChildren > 0 && fgi.selectedChildren < fgi.gItem.items.length }">
             <div> {{ fgi.gItem.label }}</div>
-            <a href="javascript:void(0)" (click)="onShowHideClicked(fgi.gItem.value)" class="ml-auto">
+            <a *ngIf="fgi.showHideDescription" href="javascript:void(0)" (click)="onShowHideClicked(fgi.gItem.value)" class="ml-auto">
               {{ fgi.showHideText }} <span class="nhsuk-u-visually-hidden"> {{ fgi.showHideDescription }} </span>
             </a>
           </label>
           <div *ngIf="fgi.gItem.description" class="nhsuk-hint nhsuk-checkboxes__hint">{{ fgi.gItem.description }}</div>
-        </div>
+        </li>
 
-        <div class="nhsuk-u-margin-left-3 nhsuk-u-padding-left-4 border-left-inset-neutral" [ngClass]="{'nhsuk-u-visually-hidden': fgi.showHideStatus !== 'opened'}">
+        <ul class="nhsuk-u-margin-left-3 nhsuk-u-padding-left-4 border-left-inset-neutral" [ngClass]="{'nhsuk-u-visually-hidden': fgi.showHideStatus !== 'opened'}">
           <ng-container *ngFor="let item of fgi.gItem.items; let j = index;">
-            <div class="nhsuk-checkboxes__item">
+            <li class="nhsuk-checkboxes__item">
               <input id="{{ id }}{{ item.value }}" type="checkbox" [value]="item.value" [checked]="isChecked(item.value)" [disabled]="item.isEditable !== undefined && item.isEditable === false"
                 (change)="onChanged($event)" class="nhsuk-checkboxes__input" />
               <label for="{{ id }}{{ item.value }}" class="nhsuk-label nhsuk-checkboxes__label">{{ item.label }}</label>
               <div *ngIf="item.description" class="nhsuk-hint nhsuk-checkboxes__hint">{{ item.description }}</div>
-            </div>
+            </li>
           </ng-container>
-        </div>
+        </ul>
 
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" />
 
       </ng-container>
 
-    </div>
+    </ul>
 
   </fieldset>
 

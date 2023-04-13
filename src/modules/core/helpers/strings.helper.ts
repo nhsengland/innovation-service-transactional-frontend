@@ -2,6 +2,8 @@ export class StringsHelper {
 
   static slugify(str: string, separator?: string) {
 
+    if (!str) { return ''; }
+
     return str
       .toString()
       .normalize('NFD')                 // split an accented letter in the base letter and the acent

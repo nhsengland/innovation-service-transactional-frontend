@@ -45,8 +45,6 @@ export const SECTION_2_EVIDENCES = new WizardEngineModel({
   summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
 });
 
-
-
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
   steps.splice(1);
@@ -119,14 +117,13 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
-      evidenceSubmitType: data.evidenceSubmitType,
-      evidenceType: data.evidenceType,
-      description: data.description,
-      summary: data.summary,
-      files: data.files.map(item => item.id)
+    evidenceSubmitType: data.evidenceSubmitType,
+    ...(data.evidenceType && { evidenceType: data.evidenceType }),
+    ...(data.description && { description: data.description }),
+    summary: data.summary,
+    files: data.files.map(item => item.id)
   };
 }
-
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
@@ -152,7 +149,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
         editStepNumber: editStepNumber++
       });
       break;
-      case 'COST_IMPACT_OR_ECONOMIC':
+    case 'COST_IMPACT_OR_ECONOMIC':
       toReturn.push({
         label: stepsLabels.q3.label,
         value: data.description,
@@ -160,7 +157,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       });
       break;
 
-      case 'OTHER_EFFECTIVENESS':
+    case 'OTHER_EFFECTIVENESS':
       toReturn.push({
         label: stepsLabels.q4.label,
         value: data.description,
