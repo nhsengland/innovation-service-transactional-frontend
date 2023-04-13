@@ -1,6 +1,6 @@
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { InnovationSectionConfigType } from '../shared.types';
+import { InnovationSectionConfigType } from '../ir-versions.types';
 
 import { InnovationSections, catalogEvidenceSubmitType } from './catalog.types';
 import { DocumentType202304 } from './document.types';
@@ -45,10 +45,8 @@ export const SECTION_2_2: InnovationSectionConfigType<InnovationSections> = {
     ],
     showSummary: true,
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
-    // inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-    summaryParsing: (data: StepPayloadType) => summaryParsing(data),
-    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   }),
   evidences: SECTION_2_EVIDENCES
 };
@@ -113,18 +111,6 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
   }
 
 }
-
-// function inboundParsing(data: InboundPayloadType): StepPayloadType {
-
-//   // if (data.hasEvidence === 'YES') {
-//   //   SECTION_2_2.evidences = SECTION_2_EVIDENCES;
-//   // } else {
-//   //   delete SECTION_2_2.evidences;
-//   // }
-
-//   return data;
-
-// }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
@@ -200,8 +186,4 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   return toReturn;
 
-}
-
-function summaryPDFParsing(data: StepPayloadType): WizardSummaryType[] {
-  return summaryParsing(data);
 }

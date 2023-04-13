@@ -6,8 +6,8 @@ import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationSectionEnum } from '@modules/stores/innovation';
+import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
-import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 
 @Component({
   selector: 'shared-pages-innovation-action-tracker-new',
@@ -35,7 +35,7 @@ export class PageInnovationActionTrackerNewComponent extends CoreComponent {
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.sectionItems = INNOVATION_SECTIONS.reduce((sectionGroupAcc: { value: string, label: string }[], sectionGroup, i) => {
+    this.sectionItems = getInnovationRecordConfig().reduce((sectionGroupAcc: { value: string, label: string }[], sectionGroup, i) => {
       return [
         ...sectionGroupAcc,
         ...sectionGroup.sections.reduce((sectionAcc: { value: string, label: string }[], section, j) => {

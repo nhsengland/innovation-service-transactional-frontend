@@ -1,6 +1,6 @@
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { InnovationSectionConfigType } from '../shared.types';
+import { InnovationSectionConfigType } from '../ir-versions.types';
 import { InnovationSections } from './catalog.types';
 
 import { DocumentType202209 } from './document.types';
@@ -40,10 +40,8 @@ export const SECTION_6_1: InnovationSectionConfigType<InnovationSections> = {
       })
     ],
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
-    // inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data),
-    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data),
     showSummary: true
   })
 };
@@ -119,19 +117,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
 }
 
-// function inboundParsing(data: InboundPayloadType): StepPayloadType {
-
-//   return {
-//     impactPatients: data.impactPatients ?? null,
-//     hasCostKnowledge: data.hasCostKnowledge ?? null,
-//     costDescription: data.costDescription ?? null,
-//     patientsRange: data.patientsRange ?? null,
-//     sellExpectations: data.sellExpectations ?? null,
-//     usageExpectations: data.usageExpectations ?? null
-//   };
-
-// }
-
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
@@ -173,8 +158,4 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   return toReturn;
 
-}
-
-function summaryPDFParsing(data: StepPayloadType): WizardSummaryType[] {
-  return summaryParsing(data);
 }
