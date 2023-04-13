@@ -2,11 +2,11 @@
   <div class="nhsuk-checkboxes__item" [ngClass]="cssClass">
 
     <ng-container *ngIf="isRunningOnBrowser">
-      <input [formControl]="fieldControl" [id]="id" type="checkbox" [name]="controlName" class="nhsuk-checkboxes__input" />
+      <input [formControl]="fieldControl" [id]="id" type="checkbox" [name]="controlName" class="nhsuk-checkboxes__input" [attr.aria-describedby]="description ? '{{ id }}-hint' : null" />
     </ng-container>
 
     <ng-container *ngIf="isRunningOnServer">
-      <input [id]="id" type="checkbox" [name]="controlName" [value]="true" [checked]="fieldControl.value === true" class="nhsuk-checkboxes__input" />
+      <input [id]="id" type="checkbox" [name]="controlName" [value]="true" [checked]="fieldControl.value === true" class="nhsuk-checkboxes__input" [attr.aria-describedby]="description ? '{{ id }}-hint' : null" />
     </ng-container>
 
     <label for="{{ id }}" class="nhsuk-label nhsuk-checkboxes__label">{{ label }}</label>

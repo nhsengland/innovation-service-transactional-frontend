@@ -43,7 +43,8 @@
               <ng-container *ngIf="isRunningOnBrowser">
                 <input [formControl]="fieldControl" id="{{ id }}{{ i }}" type="radio" [name]="controlName" [value]="item.value" class="nhsuk-radios__input"
                   [attr.aria-controls]="item.conditional ? 'conditional-' + id + i : null"
-                  [attr.aria-expanded]="item.conditional ? (isConditionalFieldVisible(item.conditional.id) ? 'true' : 'false') : null" />
+                  [attr.aria-expanded]="item.conditional ? (isConditionalFieldVisible(item.conditional.id) ? 'true' : 'false') : null" 
+                  [attr.aria-describedby]="item.description ? 'status{{ i }}-hint' : null"/>
               </ng-container>
               <ng-container *ngIf="isRunningOnServer">
                 <input id="{{ id }}{{ i }}" type="radio" [name]="controlName" [value]="item.value" [checked]="fieldControl.value === item.value" class="nhsuk-radios__input" />
