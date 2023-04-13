@@ -10,7 +10,7 @@
     </legend>
 
     <ng-container *ngIf="description">
-      <div id="hint-{{ id }}" class="nhsuk-hint" [innerHTML]="description"></div>
+      <div id="hint-{{ id }}-hint" class="nhsuk-hint" [innerHTML]="description"></div>
     </ng-container>
 
     <ng-container *ngIf="hasError">
@@ -46,7 +46,7 @@
                 <input id="{{ id }}{{ i }}" type="checkbox" name="{{ arrayName }}[]" [value]="item.value" [checked]="isChecked(item.value)" class="nhsuk-checkboxes__input" />
               </ng-container>
               <label for="{{ id }}{{ i }}" class="nhsuk-label nhsuk-checkboxes__label">{{ item.label }}</label>
-              <div *ngIf="item.description" class="nhsuk-hint nhsuk-checkboxes__hint" id="{{ id }}{{ i }}">{{ item.description }}</div>
+              <div *ngIf="item.description" class="nhsuk-hint nhsuk-checkboxes__hint" id="{{ id }}{{ i }}-hint">{{ item.description }}</div>
             </li>
 
             <ng-container *ngIf="item.conditional">

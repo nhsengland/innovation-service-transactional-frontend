@@ -16,7 +16,7 @@
     </legend>
 
     <ng-container *ngIf="description">
-      <div id="hint-{{ id }}" class="nhsuk-hint" [innerHTML]="description"></div>
+      <div id="hint-{{ id }}-hint" class="nhsuk-hint" [innerHTML]="description"></div>
     </ng-container>
 
     <ng-container *ngIf="hasError">
@@ -38,7 +38,7 @@
               {{ fgi.showHideText }} <span class="nhsuk-u-visually-hidden"> {{ fgi.showHideDescription }} </span>
             </a>
           </label>
-          <div *ngIf="fgi.gItem.description" class="nhsuk-hint nhsuk-checkboxes__hint" id="{{ id }}">{{ fgi.gItem.description }}</div>
+          <div *ngIf="fgi.gItem.description" class="nhsuk-hint nhsuk-checkboxes__hint" id="{{ id }}-hint">{{ fgi.gItem.description }}</div>
         </li>
 
         <ul class="nhsuk-u-margin-left-3 nhsuk-u-padding-left-4 border-left-inset-neutral" [ngClass]="{'nhsuk-u-visually-hidden': fgi.showHideStatus !== 'opened'}">
@@ -47,7 +47,7 @@
               <input id="{{ id }}{{ item.value }}" type="checkbox" [value]="item.value" [checked]="isChecked(item.value)" [disabled]="item.isEditable !== undefined && item.isEditable === false"
                 (change)="onChanged($event)" class="nhsuk-checkboxes__input" />
               <label for="{{ id }}{{ item.value }}" class="nhsuk-label nhsuk-checkboxes__label">{{ item.label }}</label>
-              <div *ngIf="item.description" class="nhsuk-hint nhsuk-checkboxes__hint" id="{{ id }}{{ item.value }}">{{ item.description }}</div>
+              <div *ngIf="item.description" class="nhsuk-hint nhsuk-checkboxes__hint" id="{{ id }}{{ item.value }}-hint">{{ item.description }}</div>
             </li>
           </ng-container>
         </ul>

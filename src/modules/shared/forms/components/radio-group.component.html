@@ -10,7 +10,7 @@
     </legend>
 
     <ng-container *ngIf="description">
-      <div id="hint-{{ id }}" class="nhsuk-hint" [innerHTML]="description"></div>
+      <div id="hint-{{ id }}-hint" class="nhsuk-hint" [innerHTML]="description"></div>
     </ng-container>
 
     <ng-container *ngIf="hasError">
@@ -49,7 +49,7 @@
                 <input id="{{ id }}{{ i }}" type="radio" [name]="controlName" [value]="item.value" [checked]="fieldControl.value === item.value" class="nhsuk-radios__input" />
               </ng-container>
               <label for="{{ id }}{{ i }}" class="nhsuk-label nhsuk-radios__label">{{ item.label }}</label>
-              <div *ngIf="item.description" class="nhsuk-hint nhsuk-radios__hint" id="{{ id }}{{ i }}">{{ item.description }}</div>
+              <div *ngIf="item.description" class="nhsuk-hint nhsuk-radios__hint" id="{{ id }}{{ i }}-hint">{{ item.description }}</div>
             </div>
 
             <ng-container *ngIf="item.conditional">
