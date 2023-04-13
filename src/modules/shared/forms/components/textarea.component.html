@@ -21,12 +21,16 @@
 
   <textarea [formControl]="fieldControl" [id]="id" [name]="controlName" [placeholder]="placeholder" rows="5" [maxlength]="lengthLimitCharacters" class="nhsuk-textarea"
   [attr.aria-invalid]="hasError ? 'true' : null"
-  [attr.aria-describedby]="ariaDescribedBy">
+  [attr.aria-describedby]="ariaDescribedBy" #textArea>
     {{ fieldControl.value }}
   </textarea>
 
-  <ng-container *ngIf="lengthLimitCharacters - (fieldControl.value || '').length > -1">
+  <div [attr.aria-hidden]="textAreaValue !== ''" class="nhsuk-hint" *ngIf="lengthLimitCharacters - (fieldControl.value || '').length > -1">
     You have {{ lengthLimitCharacters - (fieldControl.value || '').length }} characters remaining
-  </ng-container>
+  </div> 
+
+  <div aria-live="polite" class="nhsuk-u-visually-hidden" *ngIf="(lengthLimitCharacters - (this.textAreaValue).length > -1) && (this.textAreaValue).length > 0 ">
+    You have {{ lengthLimitCharacters - (textAreaValue || '').length }} characters remaining
+  </div>
 
 </div>
