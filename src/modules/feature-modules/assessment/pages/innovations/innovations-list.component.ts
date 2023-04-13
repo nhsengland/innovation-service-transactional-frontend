@@ -192,7 +192,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
               .map(groupedStatus => ({ label: this.translate(`shared.catalog.innovation.grouped_status.${groupedStatus}.name`), value: groupedStatus, description: descriptions.get(groupedStatus) }));
   }
 
-  getInnovationsList(): void {
+  getInnovationsList(column?: string): void {
 
     this.setPageStatus('LOADING');
 
@@ -204,6 +204,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
         })
         ),
         response.count);
+      if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
     });
 
@@ -275,7 +276,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
   onTableOrder(column: string): void {
 
     this.innovationsList.setOrderBy(column);
-    this.getInnovationsList();
+    this.getInnovationsList(column);
   }
 
 

@@ -146,7 +146,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   }
 
 
-  getInnovationsList(): void {
+  getInnovationsList(column?: string): void {
 
     this.setPageStatus('LOADING');
 
@@ -173,6 +173,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           }
         }),
         response.count);
+      if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
     });
 
@@ -198,7 +199,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       engagingOrganisations: this.form.get('engagingOrganisations')?.value,
       supportStatuses: this.form.get('supportStatuses')?.value,
       groupedStatuses: this.form.get('groupedStatuses')?.value,
-      ...this.stores.authentication.isAccessorRole() && { 
+      ...this.stores.authentication.isAccessorRole() && {
         assignedToMe: this.form.get('assignedToMe')?.value ?? false,
         suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
       },
@@ -213,7 +214,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   onTableOrder(column: string): void {
 
     this.innovationsList.setOrderBy(column);
-    this.getInnovationsList();
+    this.getInnovationsList(column);
   }
 
 

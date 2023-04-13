@@ -26,10 +26,10 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
-    
+
     super();
     this.setPageTitle('Actions');
-    
+
     this.tabs = [
       {
         key: 'openActions',
@@ -107,14 +107,14 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
   }
 
 
-  getActionsList(): void {
+  getActionsList(column?: string): void {
 
     this.setPageStatus('LOADING');
 
     this.innovationsService.getActionsList(this.actionsList.getAPIQueryParams()).subscribe(response => {
       this.actionsList.setData(response.data, response.count);
       this.currentTab.description = `${response.count} ${this.tabs[this.currentTab.index].title.toLowerCase()} created by you`;
-
+      if (this.isRunningOnBrowser() && column) this.actionsList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
     }
 
@@ -125,7 +125,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
   onTableOrder(column: string): void {
 
     this.actionsList.setOrderBy(column);
-    this.getActionsList();
+    this.getActionsList(column);
 
   }
 

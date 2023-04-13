@@ -57,16 +57,14 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
   }
 
-  getThreadsList(): void {
+  getThreadsList(column?: string): void {
 
     this.setPageStatus('LOADING');
 
     this.innovationsService.getThreadsList(this.innovation.id, this.tableList.getAPIQueryParams()).subscribe(response => {
-
       this.tableList.setData(response.threads, response.count);
-
+      if (this.isRunningOnBrowser() && column) this.tableList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
-
     });
 
   }
@@ -74,7 +72,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
   onTableOrder(column: string): void {
     this.tableList.setOrderBy(column);
-    this.getThreadsList();
+    this.getThreadsList(column);
   }
 
   onPageChange(event: { pageNumber: number }): void {

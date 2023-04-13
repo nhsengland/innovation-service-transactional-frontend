@@ -119,12 +119,13 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
 
   }
 
-  getActionsList(): void {
+  getActionsList(column?: string): void {
 
     this.setPageStatus('LOADING');
 
     this.innovationsService.getActionsList(this.actionsList.getAPIQueryParams()).subscribe(response => {
       this.actionsList.setData(response.data, response.count);
+      if (this.isRunningOnBrowser() && column) this.actionsList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
     });
 
@@ -159,7 +160,7 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
 
   onTableOrder(column: string): void {
     this.actionsList.setOrderBy(column);
-    this.getActionsList();
+    this.getActionsList(column);
   }
 
 
