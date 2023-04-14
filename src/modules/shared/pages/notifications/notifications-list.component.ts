@@ -88,12 +88,13 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
   // API methods.
 
-  getNotificationsList(): void {
+  getNotificationsList(column?: string): void {
 
     this.setPageStatus('LOADING');
 
     this.notificationsService.getNotificationsList(this.notificationsList.getAPIQueryParams()).subscribe(response => {
       this.notificationsList.setData(response.data, response.count);
+      if (this.isRunningOnBrowser() && column) this.notificationsList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
     });
 
@@ -201,7 +202,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     this.resetAlert();
 
     this.notificationsList.setOrderBy(column);
-    this.getNotificationsList();
+    this.getNotificationsList(column);
   }
 
   onPageChange(event: { pageNumber: number }): void {

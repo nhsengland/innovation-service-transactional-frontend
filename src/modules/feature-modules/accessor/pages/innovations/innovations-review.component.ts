@@ -179,7 +179,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
   }
 
-  getInnovationsList(): void {
+  getInnovationsList(column?: string): void {
 
     this.setPageStatus('LOADING');
 
@@ -203,6 +203,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         }),
         response.count);
       this.currentTab.numberDescription = `${response.count} ${this.currentTab.numberDescription}`;
+      if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
     });
 
@@ -307,7 +308,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   onTableOrder(column: string): void {
 
     this.innovationsList.setOrderBy(column);
-    this.getInnovationsList();
+    this.getInnovationsList(column);
 
   }
 
