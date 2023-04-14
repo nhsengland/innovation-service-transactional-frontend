@@ -30,6 +30,7 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit{
     isCollaborator:  boolean,
     hasCollaborators: boolean,
     hasPendingTransfer: boolean,
+    hasOnlyPendingTransfers: boolean,
     ownedInnovations: GetOwnedInnovations[],
   };
 
@@ -54,11 +55,13 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit{
       isCollaborator: false,
       hasCollaborators: false,
       hasPendingTransfer: false,
+      hasOnlyPendingTransfers: false,
       ownedInnovations: [],
     };
 
     this.form = new FormGroup({
       confirm: new FormControl<boolean>(false, CustomValidators.required('You need to confirm to proceed')),
+      confirmPendingTransfer: new FormControl<boolean>(false, CustomValidators.required('You need to confirm to proceed')),
       reason: new FormControl<string>('', [CustomValidators.required('A reason is required')]),
       email: new FormControl<string>('', [CustomValidators.required('Your email is required'), CustomValidators.equalTo(this.innovator.email, 'The email is incorrect')]),
       confirmation: new FormControl<string>('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('delete account')]),
@@ -87,6 +90,8 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit{
         if(innovation.collaboratorsCount > 0) this.innovator.hasCollaborators = true;
         if(innovation.expirationTransferDate !== null) this.innovator.hasPendingTransfer = true;
       });
+
+      this.innovator.hasOnlyPendingTransfers = this.innovator.ownedInnovations.every(innovation => innovation.expirationTransferDate !== null);
 
       if(this.innovator.ownedInnovations.length > 0) {
         this.setPageTitle('You have innovations linked to this account');
