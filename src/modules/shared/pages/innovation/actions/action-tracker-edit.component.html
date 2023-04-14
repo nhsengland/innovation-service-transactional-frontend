@@ -14,13 +14,13 @@
           <div class="nhsuk-radios">
             <div *ngFor="let item of statusItems; let i = index" class="nhsuk-radios__item">
               <input formControlName="status" id="status{{ i }}" type="radio" name="status" [value]="item.value"
-                class="nhsuk-radios__input" />
+                class="nhsuk-radios__input" [attr.aria-describedby]="'status{{ i }}-hint'"/>
               <label for="status{{ i }}" class="nhsuk-label nhsuk-radios__label nhsuk-u-padding-top-1">
                 <theme-tag
                   type="{{ 'shared.catalog.innovation.action_status.' + item.value + '.cssColorClass' | translate }}"
                   label="{{ 'shared.catalog.innovation.action_status.' + item.value + '.name' | translate }}"></theme-tag>
               </label>
-              <div class="nhsuk-hint nhsuk-radios__hint">{{ item.description }}</div>
+              <div class="nhsuk-hint nhsuk-radios__hint" id="status{{ i }}-hint">{{ item.description }}</div>
             </div>
           </div>
 
