@@ -11,7 +11,7 @@ import { hasResourcesToScaleItems, yesNoItems } from './forms.config';
 const stepsLabels = {
   q1: {
     label: 'Is your innovation ready for wider adoption across the health and care system?',
-    description: 'Find out more about commissioning and adoption on the <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a>'
+    description: 'Find out more about <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">commissioning and adoption (opens in new window)</a>.'
   },
   q2: {
     label: 'Has your innovation been deployed in a NHS or care setting?',
@@ -151,7 +151,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     ...(data.hasDeployPlan && { hasDeployPlan: data.hasDeployPlan }),
     ...(data.isDeployed && { isDeployed: data.isDeployed }),
-    ...((data.deploymentPlans ?? []).length > 0 && { deploymentPlans: data.stepDeploymentPlans?.map(item => item.name) }),
+    ...(data.stepDeploymentPlans.length > 0 && { deploymentPlans: data.stepDeploymentPlans?.map(item => item.name) }),
     ...(data.commercialBasis && { commercialBasis: data.commercialBasis }),
     ...(data.organisationDeploymentAffect && { organisationDeploymentAffect: data.organisationDeploymentAffect }),
     ...(data.hasResourcesToScale && { hasResourcesToScale: data.hasResourcesToScale }),
@@ -179,13 +179,12 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     }
   );
 
-
   if (!['NO'].includes(data.isDeployed || 'NO')) {
 
     toReturn.push(
       {
         label: stepsLabels.q3.label,
-        value: data.deploymentPlans?.map(item => item).join('\n'),
+        value: data.stepDeploymentPlans?.map(item => item.name).join('\n'),
         editStepNumber: editStepNumber++
       },
       {

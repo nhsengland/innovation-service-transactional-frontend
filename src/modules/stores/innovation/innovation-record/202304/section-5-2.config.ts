@@ -65,17 +65,28 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
-  return [
-    {
-      label: stepsLabels.q1.label,
-      value: hasPatentsItems.find(item => item.value === data.hasPatents)?.label,
+  const toReturn: WizardSummaryType[] = [];
+
+  toReturn.push({
+    label: stepsLabels.q1.label,
+    value: hasPatentsItems.find(item => item.value === data.hasPatents)?.label,
+    editStepNumber: 1
+  });
+
+  if (data.hasPatents === 'HAS_AT_LEAST_ONE') {
+    toReturn.push({
+      label: 'Patent number(s)',
+      value: data.patentNumbers,
       editStepNumber: 1
-    },
-    {
-      label: stepsLabels.q2.label,
-      value: data.otherIntellectual || 'No',
-      editStepNumber: 2
-    }
-  ];
+    });
+  }
+
+  toReturn.push({
+    label: stepsLabels.q2.label,
+    value: data.otherIntellectual || 'No',
+    editStepNumber: 2
+  });
+
+  return toReturn;
 
 }

@@ -123,7 +123,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           label: `Describe the testing and feedback for ${item.kind}`,
           description: 'Provide a brief summary of the method and key findings. You can upload any documents that showcase your user testing next.',
           validations: { isRequired: [true, 'Description is required'] },
-          lengthLimit: 'small'
+          lengthLimit: 'medium'
         }]
       })
     );

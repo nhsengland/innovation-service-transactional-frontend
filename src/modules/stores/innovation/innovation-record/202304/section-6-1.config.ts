@@ -21,7 +21,7 @@ const stepsLabels = {
   },
   q5: { label: 'Have you secured funding for the next stage of development?' },
   q6: {
-    label: 'Describe what funding you have secured for the next stage of development',
+    label: 'Describe the funding you have secured for the next stage of development',
     description: 'For example, venture capital, angel investor, seed funding, grant funding, government funding or similar.'
   }
 };
@@ -58,7 +58,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
 
   steps.splice(1);
 
-  if (['NO'].includes(currentValues.hasRevenueModel || 'NO')) {
+  if (['NO', 'DONT_KNOW'].includes(currentValues.hasRevenueModel || 'NO')) {
     delete currentValues.revenues;
     delete currentValues.otherRevenueDescription;
     delete currentValues.payingOrganisations;
