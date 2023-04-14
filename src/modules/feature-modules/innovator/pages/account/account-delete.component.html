@@ -34,9 +34,14 @@
             </div>
           </dl>
 
-          <div class="nhsuk-u-margin-bottom-3">
-            <theme-form-checkbox controlName="confirm"
-            [label]="innovator.hasPendingTransfer ? 'I understand that my innovations could be withdrawn, if I delete my account. Innovations that are pending transfer of ownership will be withdrawn after 30 days if the new owner does not accept it.' : 'I understand that my innovations will be withdrawn, if I delete my account.'"></theme-form-checkbox>
+          <div *ngIf="((!innovator.hasCollaborators && !innovator.hasPendingTransfer) || (innovator.hasCollaborators && !innovator.hasPendingTransfer) ||  ((innovator.hasCollaborators || !innovator.hasCollaborators) && !innovator.hasPendingTransfer) || ((innovator.hasCollaborators || !innovator.hasCollaborators) && innovator.hasPendingTransfer))" class="nhsuk-u-margin-bottom-3">
+            <theme-form-checkbox  controlName="confirm"
+            label="I understand that my innovations will be withdrawn, if I delete my account."></theme-form-checkbox>
+          </div>
+
+          <div *ngIf="innovator.hasPendingTransfer" class="nhsuk-u-margin-bottom-3">
+            <theme-form-checkbox controlName="confirmPendingTransfer"
+            label="I understand that any innovations that are pending transfer of ownership will be withdrawn after 30 days, if the new owner does not accept it."></theme-form-checkbox>
           </div>
         </ng-container>
 
