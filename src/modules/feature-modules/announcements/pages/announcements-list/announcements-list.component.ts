@@ -36,19 +36,25 @@ export class AnnouncementsListComponent extends CoreComponent implements OnInit 
 
     this.isBtnDisabled = true;
 
-    this.announcementsService.readAnnouncement(announcementId).subscribe(() => {
-      this.#announcementNumber++;
-
-      if (this.#announcementNumber < this.#announcements.length) {
-        this.announcement = this.#announcements[this.#announcementNumber];
-
-        this.setTitle();
-      } else {
-        // All announcements are read
-        window.location.assign(`${this.CONSTANTS.APP_URL}/dashboard`);
+    this.announcementsService.readAnnouncement(announcementId).subscribe({
+      next: () => {
+        this.#announcementNumber++;
+  
+        if (this.#announcementNumber < this.#announcements.length) {
+          this.announcement = this.#announcements[this.#announcementNumber];
+  
+          this.setTitle();
+        } else {
+          // All announcements are read
+          window.location.assign(`${this.CONSTANTS.APP_URL}/dashboard`);
+        }
+  
+        this.isBtnDisabled = false;
+      },
+      error: () => {
+        this.isBtnDisabled = false;
+        this.setAlertError('An error occured while reading an announcement. Please try again or contact us for further help.', { width: '2.thirds' })
       }
-
-      this.isBtnDisabled = false;
     });
 
   }
