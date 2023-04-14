@@ -13,6 +13,8 @@ export class AnnouncementsListComponent extends CoreComponent implements OnInit 
 
   announcement?: Announcement;
 
+  isBtnDisabled = false;
+
   constructor(
     private announcementsService: AnnouncementsService,
   ) { super(); }
@@ -30,6 +32,10 @@ export class AnnouncementsListComponent extends CoreComponent implements OnInit 
   }
 
   onContinue(announcementId: string) {
+    if (this.isBtnDisabled) { return; }
+
+    this.isBtnDisabled = true;
+
     this.announcementsService.readAnnouncement(announcementId).subscribe(() => {
       this.#announcementNumber++;
 
@@ -41,6 +47,8 @@ export class AnnouncementsListComponent extends CoreComponent implements OnInit 
         // All announcements are read
         window.location.assign(`${this.CONSTANTS.APP_URL}/dashboard`);
       }
+
+      this.isBtnDisabled = false;
     });
 
   }
