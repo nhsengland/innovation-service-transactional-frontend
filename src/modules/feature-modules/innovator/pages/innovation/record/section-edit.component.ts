@@ -5,11 +5,11 @@ import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { FileTypes, FormEngineComponent, WizardEngineModel } from '@app/base/forms';
-import { UtilsHelper } from '@app/base/helpers';
 import { UrlModel } from '@app/base/models';
 import { ContextInnovationType } from '@app/base/types';
 
 import { InnovationSectionEnum } from '@modules/stores/innovation';
+import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 
 @Component({
@@ -47,7 +47,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.baseUrl = `innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
-    this.sectionsIdsList = this.stores.innovation.getInnovationRecordConfig().flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
+    this.sectionsIdsList = getInnovationRecordConfig().flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
     this.wizard = this.stores.innovation.getInnovationRecordSectionWizard(this.sectionId);
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));

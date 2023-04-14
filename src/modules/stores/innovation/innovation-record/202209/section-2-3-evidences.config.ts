@@ -54,8 +54,7 @@ export const SECTION_2_EVIDENCES = new WizardEngineModel({
   runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-  summaryParsing: (data: SummaryPayloadType) => summaryParsing(data),
-  summaryPDFParsing: (data: SummaryPayloadType) => summaryPDFParsing(data),
+  summaryParsing: (data: SummaryPayloadType) => summaryParsing(data)
 });
 
 
@@ -221,12 +220,4 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
 
   return toReturn;
 
-}
-
-function summaryPDFParsing(data: SummaryPayloadType): WizardSummaryType[] {
-  const summaryData = summaryParsing(data)
-  .filter(item => item.type !== 'button')
-  .filter(item => !item.isFile);
-
-  return summaryData.filter(item => item.type !== 'button');
 }

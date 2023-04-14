@@ -16,12 +16,13 @@ import { AuthenticationRedirectionGuard } from '@modules/core/guards/authenticat
 import { InnovationTransferRedirectionGuard } from '@modules/core/guards/innovation-transfer-redirection.guard';
 import { InnovationCollaborationRedirectionGuard } from '@modules/core/guards/innovation-collaboration-redirection.guard';
 
+
 const routes: Routes = [
 
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: '/triage-innovator-pack'
+    redirectTo: '/home'
   },
 
   {
@@ -35,7 +36,6 @@ const routes: Routes = [
     children: []
   },
 
-
   {
     canActivate: [InnovationCollaborationRedirectionGuard],
     path: 'innovations/:innovationId/collaborations/:collaboratorId',
@@ -44,7 +44,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'triage-innovator-pack', loadChildren: () => import('@modules/feature-modules/triage-innovator-pack/triage-innovator-pack.module').then(m => m.TriageInnovatorPackModule)
+    path: 'home', loadChildren: () => import('@modules/feature-modules/home/home.module').then(m => m.HomeModule)
   },
 
   {

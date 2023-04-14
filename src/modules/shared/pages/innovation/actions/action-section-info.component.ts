@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { UserRoleEnum } from '@app/base/enums';
 import { InnovationActionInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
@@ -21,6 +20,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
   actionId: string;
 
   action?: InnovationActionInfoDTO;
+  sectionTitle = '' ;
 
   actionsIds: string[] = [];
 
@@ -45,6 +45,9 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
     if (this.sectionId) {
 
       this.innovationsService.getSectionInfo(this.innovationId, this.sectionId, { fields: ['actions'] }).subscribe(sectionInfo => {
+
+        const section = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
+        this.sectionTitle = `${section.group.number}.${section.section.number} ${section.section.title}`;
 
         this.actionsIds = sectionInfo.actionsIds ?? [];
 
@@ -92,7 +95,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
     this.setPageStatus('LOADING');
 
-    if(this.sectionId) {
+    if (this.sectionId) {
       this.actionId = this.actionsIds[this.actionNumber];
     }
 

@@ -72,31 +72,38 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe(response => {
+    this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe({
+      next: response => {
 
-      this.innovationSections = response;
+        this.innovationSections = response;
 
-      this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
-        return [...acc, ...item.sections.map(s => {
-          switch (s.status) {
-            case 'SUBMITTED': return '1:active';
-            case 'DRAFT': return '2:warning';
-            case 'NOT_STARTED':
-            default:
-              return '3:inactive';
-          }
-        })];
-      }, []);
+        this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
+          return [...acc, ...item.sections.map(s => {
+            switch (s.status) {
+              case 'SUBMITTED': return '1:active';
+              case 'DRAFT': return '2:warning';
+              case 'NOT_STARTED':
+              default:
+                return '3:inactive';
+            }
+          })];
+        }, []);
 
-      this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
-      this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
-      this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
+        this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
+        this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
+        this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
 
-      if (!this.innovationName) { // This means that an API error occurred.
-        this.setAlertError('There is a problem', { message: 'Unable to fetch full innovation record information' })
+        if (!this.innovationName) { // This means that an API error occurred.
+          this.setAlertError('There is a problem', { message: 'Unable to fetch full innovation record information' })
+        }
+
+        this.setPageStatus('READY');
+
+      },
+      error: () => {
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
       }
-
-      this.setPageStatus('READY');
 
     });
 

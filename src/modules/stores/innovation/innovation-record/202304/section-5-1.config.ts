@@ -1,7 +1,7 @@
 import { StringsHelper } from '@app/base/helpers';
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { InnovationSectionConfigType } from '../shared.types';
+import { InnovationSectionConfigType } from '../ir-versions.types';
 
 import { InnovationSections, catalogStandardsType, catalogYesInProgressNotYet } from './catalog.types';
 import { DocumentType202304 } from './document.types';
@@ -55,8 +55,7 @@ export const SECTION_5_1: InnovationSectionConfigType<InnovationSections> = {
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-    summaryParsing: (data: StepPayloadType) => summaryParsing(data),
-    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   })
 };
 
@@ -203,14 +202,5 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   }
 
   return toReturn;
-
-}
-
-function summaryPDFParsing(data: StepPayloadType): WizardSummaryType[] {
-  const summaryData = summaryParsing(data)
-    .filter(item => item.type !== 'button')
-    .filter(item => !item.isFile);
-
-  return summaryData.filter(item => item.type !== 'button');
 
 }

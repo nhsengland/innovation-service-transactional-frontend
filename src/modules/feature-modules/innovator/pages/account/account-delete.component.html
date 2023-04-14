@@ -93,7 +93,7 @@
 
         <ng-container *ngIf="stepNumber === 4">
           <theme-form-input controlName="email" label="Enter your email" [pageUniqueField]="false"></theme-form-input>
-          <theme-form-input controlName="confirmation" label="Are you sure that you want to delete?" description="To confirm, please type the following: delete my account" [pageUniqueField]="false"></theme-form-input>
+          <theme-form-input controlName="confirmation" label="Are you sure you want to delete your account?" description="To confirm type: delete account" [pageUniqueField]="false"></theme-form-input>
           <button class="nhsuk-button nhsuk-u-margin-top-3" [disabled]="!submitButton.isActive" (click)="onSubmitForm()"> {{ submitButton.label }} </button>
         </ng-container>
 

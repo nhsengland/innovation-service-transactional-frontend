@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { UtilsHelper } from '@app/base/helpers';
 
+import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { InnovationInfoDTO, StatisticsCard } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
-import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -64,7 +64,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         { label: 'Company size', value: this.innovation.owner && this.innovation.owner.organisations ? this.innovation.owner.organisations[0].size : '' },
         { label: 'Location', value: `${this.innovation.countryName}${this.innovation.postCode ? ', ' + this.innovation.postCode : ''}` },
         { label: 'Description', value: this.innovation.description },
-        { label: 'Categories', value: this.innovation.categories.map(v => v === 'OTHER' ? this.innovation?.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
+        { label: 'Categories', value: this.innovation.categories.map(v => v === 'OTHER' ? this.innovation?.otherCategoryDescription : irVersionsMainCategoryItems.find(item => item.value === v)?.label).join('\n') }
       ];
 
       this.innovatorSummary = [

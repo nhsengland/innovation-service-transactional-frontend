@@ -9,11 +9,10 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
-import { getSectionTitle } from '@modules/stores/innovation/innovation.config';
 
 import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
-import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLog, InnovationSupportsLogDTO, SupportLogType } from './innovations.dtos';
 import { InnovationStatisticsEnum } from './statistics.enum';
 
@@ -272,7 +271,7 @@ export class InnovationsService extends CoreService {
         count: response.count,
         data: response.data.map(item => ({
           ...item,
-          mainCategory: item.otherMainCategoryDescription || mainCategoryItems.find(i => i.value === item.mainCategory)?.label || '',
+          mainCategory: item.otherMainCategoryDescription || irVersionsMainCategoryItems.find(i => i.value === item.mainCategory)?.label || '',
         }))
       }))
 
@@ -456,7 +455,7 @@ export class InnovationsService extends CoreService {
     return this.http.get<InnovationActionsListInDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         count: response.count,
-        data: response.data.map(item => ({ ...item, ...{ name: `Update '${this.stores.innovation.getSectionTitle(item.section)}'`, } }))
+        data: response.data.map(item => ({ ...item, ...{ name: `Update '${this.stores.innovation.getInnovationRecordSectionIdentification(item.section).section.title}'`, } }))
       }))
     );
 
@@ -470,7 +469,7 @@ export class InnovationsService extends CoreService {
         id: response.id,
         displayId: response.displayId,
         status: response.status,
-        name: `Update '${this.stores.innovation.getSectionTitle(response.section)}'`,
+        name: `Update '${this.stores.innovation.getInnovationRecordSectionIdentification(response.section).section.title}'`,
         description: response.description,
         section: response.section,
         createdAt: response.createdAt,
@@ -644,7 +643,7 @@ export class InnovationsService extends CoreService {
             params: {
               ...i.params,
               innovationName: response.innovation.name,
-              sectionTitle: getSectionTitle(i.params.sectionId || null),
+              sectionTitle: i.params.sectionId ? this.stores.innovation.getInnovationRecordSectionIdentification(i.params.sectionId).section.title : '',
               actionUserRole: i.params.actionUserRole ? `(${this.stores.authentication.getRoleDescription(i.params.actionUserRole)})` : ''
             },
             link

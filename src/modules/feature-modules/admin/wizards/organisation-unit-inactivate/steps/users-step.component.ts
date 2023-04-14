@@ -50,7 +50,7 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
 
     this.tableList.setVisibleColumns({
       userAccount: { label: 'User details', orderable: false }
-    }).setFilters({ 
+    }).setFilters({
       onlyActive: true,
       email: true,
       organisationUnitId: this.data.organisationUnit.id,
@@ -62,11 +62,12 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
     this.getUsersList();
   }
 
-  getUsersList(): void {
-    
+  getUsersList(column?: string): void {
+
     this.usersService.getUsersList({ queryParams: this.tableList.getAPIQueryParams() }).subscribe(
       response => {
         this.tableList.setData(response.data, response.count);
+        if (this.isRunningOnBrowser() && column) this.tableList.setFocusOnSortedColumnHeader(column);
         this.setPageStatus('READY');
       },
       () => {
@@ -78,7 +79,7 @@ export class WizardOrganisationUnitInactivateUsersStepComponent extends CoreComp
 
   onTableOrder(column: string): void {
     this.tableList.setOrderBy(column);
-    this.getUsersList();
+    this.getUsersList(column);
   }
 
   onPageChange(event: { pageNumber: number }): void {

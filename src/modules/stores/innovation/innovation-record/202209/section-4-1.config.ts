@@ -2,7 +2,7 @@ import { cloneDeep } from 'lodash';
 
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { InnovationSectionConfigType } from '../shared.types';
+import { InnovationSectionConfigType } from '../ir-versions.types';
 
 import { InnovationSections } from './catalog.types';
 import { DocumentType202209 } from './document.types';
@@ -54,12 +54,9 @@ export const SECTION_4_1: InnovationSectionConfigType<InnovationSections> = {
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-    summaryParsing: (data: StepPayloadType) => summaryParsing(data),
-    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   })
 };
-
-
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
@@ -209,14 +206,5 @@ function summaryParsing(data: SummaryPayloadType): WizardSummaryType[] {
   }
 
   return toReturn;
-
-}
-
-function summaryPDFParsing(data: StepPayloadType): WizardSummaryType[] {
-  const summaryData = summaryParsing(data)
-    .filter(item => item.type !== 'button')
-    .filter(item => !item.isFile);
-
-  return summaryData.filter(item => item.type !== 'button');
 
 }

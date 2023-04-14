@@ -10,13 +10,9 @@ import { Store } from '../store.class';
 
 import { InnovationService } from './innovation.service';
 
-import { getSectionNumber, getSectionParentNumber, getSectionParentTitle, getSectionTitle, INNOVATION_SECTIONS } from './innovation.config';
-import { InnovationSectionEnum } from './innovation.enums';
-import { GetInnovationEvidenceDTO, InnovationModel, InnovationSectionConfigType as InnovationSectionConfigTypeLegacy, InnovationSectionInfoDTO, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, SectionsSummaryModel } from './innovation.models';
-import { InnovationSectionsListType, InnovationSectionConfigType } from './innovation-record/shared.types';
-
-import { INNOVATION_SECTIONS as SECTIONS_202209 } from './innovation-record/202209/main.config';
-import { INNOVATION_SECTIONS as SECTIONS_202304 } from './innovation-record/202304/main.config';
+import { GetInnovationEvidenceDTO, InnovationModel, InnovationSectionInfoDTO, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, SectionsSummaryModel } from './innovation.models';
+import { getInnovationRecordConfig } from './innovation-record/ir-versions.config';
+import { InnovationSectionConfigType } from './innovation-record/ir-versions.types';
 
 
 @Injectable()
@@ -44,7 +40,7 @@ export class InnovationStore extends Store<InnovationModel> {
   getSectionsSummary$(innovationId: string): Observable<SectionsSummaryModel> {
 
     return this.innovationsService.getInnovationSections(innovationId).pipe(
-      map(response => this.getInnovationRecordConfig().map(item => ({
+      map(response => getInnovationRecordConfig().map(item => ({
         title: item.title,
         sections: item.sections.map(ss => {
           const sectionState = response.find(a => a.section === ss.id) || {
@@ -67,26 +63,7 @@ export class InnovationStore extends Store<InnovationModel> {
             openActionsCount: sectionState.openActionsCount
           };
         })
-      }))
-      ),
-      catchError(() => {
-        // this.logger.error('Unable to fetch sections information');
-        return of(
-          this.getInnovationRecordConfig().map(item => ({
-            title: item.title,
-            sections: item.sections.map(ss => ({
-              id: ss.id,
-              title: ss.title,
-              status: 'UNKNOWN' as keyof typeof INNOVATION_SECTION_STATUS,
-              actionStatus: '' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
-              isCompleted: false,
-              submittedAt: null,
-              submittedBy: null,
-              openActionsCount: 0
-            }))
-          }))
-        );
-      })
+      })))
     );
 
   }
@@ -115,48 +92,10 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.deleteEvidence(innovationId, evidenceId);
   }
 
-  getSectionParentNumber(sectionId: InnovationSectionEnum): string {
-    return getSectionParentNumber(sectionId);
-  }
-
-  getSectionNumber(sectionId: InnovationSectionEnum): string {
-    return getSectionNumber(sectionId);
-  }
-
-  getSectionTitle(sectionId: InnovationSectionEnum | null): string {
-    return getSectionTitle(sectionId);
-  }
-
-  getSectionParentTitle(sectionId: InnovationSectionEnum): string {
-    return getSectionParentTitle(sectionId);
-  }
-
-  getSection(sectionId: InnovationSectionEnum): InnovationSectionConfigTypeLegacy['sections'][0] | undefined {
-    return cloneDeep(INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId));
-  }
-
-  getSectionWizard(sectionId: InnovationSectionEnum): WizardEngineModel {
-    return cloneDeep(
-      INNOVATION_SECTIONS.find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId)?.wizard || new WizardEngineModel({})
-    );
-  }
-
-
-  getInnovationRecordConfig(version?: string): InnovationSectionsListType {
-
-    switch (version) {
-      case '202209':
-        return SECTIONS_202209;
-      case '202304':
-      default:
-        return SECTIONS_202304;
-    }
-
-  }
 
   getInnovationRecordSectionsTree(type: string, innovationId: string): { label: string, url: string, children: { label: string, url: string }[] }[] {
 
-    return this.getInnovationRecordConfig().map((parentSection, i) => ({
+    return getInnovationRecordConfig().map((parentSection, i) => ({
       label: `${i + 1}. ${parentSection.title}`,
       url: `/${type}/innovations/${innovationId}/record/sections/${parentSection.sections[0].id}`,
       children: parentSection.sections.map((section, k) => ({
@@ -169,10 +108,10 @@ export class InnovationStore extends Store<InnovationModel> {
 
   getInnovationRecordSection(sectionId: string, version?: string): InnovationSectionConfigType<string> {
 
-    const section = cloneDeep(this.getInnovationRecordConfig(version)).find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId);
+    const section = cloneDeep(getInnovationRecordConfig(version)).find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))?.sections.find(s => s.id === sectionId);
 
     if (!section) {
-      throw new Error("gdfgdsfg"); // TODO: Improve this excpetion!
+      throw new Error(`Innovation record section "${sectionId}" NOT FOUND`);
     }
 
     return section;
@@ -187,13 +126,13 @@ export class InnovationStore extends Store<InnovationModel> {
 
   getInnovationRecordSectionIdentification(sectionId: string): { group: { number: number, title: string }, section: { number: number, title: string } } {
 
-    const irConfig = this.getInnovationRecordConfig();
+    const irConfig = getInnovationRecordConfig();
 
     const groupIndex = irConfig.findIndex(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId));
-    if (groupIndex === -1) { throw new Error("gdfgdsfg"); } // TODO: Improve this excpetion!
+    if (groupIndex === -1) { throw new Error(`Innovation record group NOT FOUND for section "${sectionId}"`); }
 
     const sectionIndex = irConfig[groupIndex].sections.findIndex(section => section.id === sectionId);
-    if (sectionIndex === -1) { throw new Error("gdfgdsfg"); } // TODO: Improve this excpetion!
+    if (sectionIndex === -1) { throw new Error(`Innovation record section "${sectionId}" NOT FOUND`); }
 
     return {
       group: { number: groupIndex + 1, title: irConfig[groupIndex].title },

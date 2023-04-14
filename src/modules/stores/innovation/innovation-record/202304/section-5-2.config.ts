@@ -1,6 +1,6 @@
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 
-import { InnovationSectionConfigType } from '../shared.types';
+import { InnovationSectionConfigType } from '../ir-versions.types';
 
 import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
@@ -49,8 +49,7 @@ export const SECTION_5_2: InnovationSectionConfigType<InnovationSections> = {
     ],
     showSummary: true,
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-    summaryParsing: (data: StepPayloadType) => summaryParsing(data),
-    summaryPDFParsing: (data: StepPayloadType) => summaryPDFParsing(data)
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   })
 };
 
@@ -79,8 +78,4 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     }
   ];
 
-}
-
-function summaryPDFParsing(data: StepPayloadType): WizardSummaryType[] {
-  return summaryParsing(data);
 }

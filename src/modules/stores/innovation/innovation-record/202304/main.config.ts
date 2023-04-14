@@ -1,4 +1,4 @@
-import { InnovationSectionsListType } from '../shared.types';
+import { InnovationSectionsListType } from '../ir-versions.types';
 
 import { SECTION_1_1 } from './section-1-1.config';
 import { SECTION_2_1 } from './section-2-1.config';
