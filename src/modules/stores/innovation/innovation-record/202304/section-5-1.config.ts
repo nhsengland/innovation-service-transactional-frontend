@@ -105,7 +105,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         parameters: [{
           id: `standardHasMet_${StringsHelper.slugify(item.type)}`,
           dataType: 'radio-group',
-          label: `Do you have a certification for ${item.type === 'OTHER' ? currentValues.otherRegulationDescription : standardsTypeItems.find(i => i.value === item.type)?.label}`,
+          label: `Do you have a certification for ${item.type === 'OTHER' ? currentValues.otherRegulationDescription : standardsTypeItems.find(i => i.value === item.type)?.label}?`,
           validations: { isRequired: [true, 'Choose one option'] },
           items: standardsHasMetItems
         }]
@@ -114,14 +114,19 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     currentValues[`standardHasMet_${StringsHelper.slugify(item.type)}`] = item.hasMet;
   });
 
-  steps.push(
-    new FormEngineModel({
-      parameters: [{
-        id: 'files', dataType: 'file-upload', label: stepsLabels.q3.label, description: stepsLabels.q3.description,
-        validations: { isRequired: [true, 'Upload at least one file'] }
-      }],
-    })
-  );
+  // Only diplay files if answered YES to all standard questions.
+  if (currentValues.standards.every(item => item.hasMet === 'YES')) {
+    steps.push(
+      new FormEngineModel({
+        parameters: [{
+          id: 'files', dataType: 'file-upload', label: stepsLabels.q3.label, description: stepsLabels.q3.description,
+          validations: { isRequired: [true, 'Upload at least one file'] }
+        }],
+      })
+    );
+  } else {
+    delete currentValues.files;
+  }
 
 }
 
@@ -178,26 +183,30 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
     data.standards?.forEach(standard => {
       toReturn.push({
-        label: `Do you have a certification for ${standard.type === 'OTHER' ? data.otherRegulationDescription : standardsTypeItems.find(item => item.value === standard.type)?.label}`,
+        label: `Do you have a certification for ${standard.type === 'OTHER' ? data.otherRegulationDescription : standardsTypeItems.find(item => item.value === standard.type)?.label}?`,
         value: standardsHasMetItems.find(item => item.value === standard.hasMet)?.label,
         editStepNumber: toReturn.length + 1
       });
     });
 
-    const stepNumber = toReturn.length + 1;
-    const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
-    allFiles.forEach((item, i) => {
-      toReturn.push({
-        label: `Attachment ${i + 1}`,
-        value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-        editStepNumber: stepNumber,
-        allowHTML: true,
-        isFile: true
-      });
-    });
+    if (data.standards?.every(item => item.hasMet === 'YES')) {
 
-    // Add a button to the end of the list.
-    toReturn.push({ type: 'button', label: 'Add certification documents', editStepNumber: stepNumber });
+      const stepNumber = toReturn.length + 1;
+      const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
+      allFiles.forEach((item, i) => {
+        toReturn.push({
+          label: `Attachment ${i + 1}`,
+          value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
+          editStepNumber: stepNumber,
+          allowHTML: true,
+          isFile: true
+        });
+      });
+
+      // Add a button to the end of the list.
+      toReturn.push({ type: 'button', label: 'Add certification documents', editStepNumber: stepNumber });
+
+    }
 
   }
 

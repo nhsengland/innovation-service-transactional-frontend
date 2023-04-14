@@ -49,8 +49,6 @@ export const SECTION_2_1: InnovationSectionConfigType<InnovationSections> = {
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
 
-  console.log(currentValues);
-
   steps.splice(1);
 
   // PATIENTS.

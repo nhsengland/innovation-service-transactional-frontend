@@ -235,7 +235,15 @@ $service-manual-container-size: 1100px; // Container width variable.
     cursor: pointer;
     display: block;
     position: relative;
+    height: unset;
+    padding: 0.8rem;
+    overflow: visible;
+    line-height: initial;
+    word-wrap: break-word;
+    white-space: pre-wrap;
 
+    .mat-option-text { white-space: normal; }
+  
     &:first-of-type { border-top-width: 0; }
     &:last-of-type { border-bottom-width: 0; }
     &:nth-child(odd) { background-color: var(--color_nhsuk-grey-5); }
@@ -361,6 +369,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 
 .form-items-group {
+  list-style: none;
   width: unset;
   text-align: left;
 }

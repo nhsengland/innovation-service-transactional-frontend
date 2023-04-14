@@ -13,17 +13,18 @@ const stepsLabels = {
   q2: { label: 'Provide a short description of your innovation', description: 'Provide a high-level overview of your innovation. You will have the opportunity to explain its impact, target population, testing and revenue model later in the innovation record.' },
   q3: {
     label: 'Where is your head office located?',
-    description: `<div>If your head office if overseas but you have a UK office, use the UK address.</div>
-                  <div>If you are not part of a company or organisation, put where you are based.</div>
-                  <div>We ask this to identify the organisations and people who are in the best position to support you.</div>`,
+    description: `
+      <p>If your head office is overseas but you have a UK office, use the UK address.</p>
+      <p>If you are not part of a company or organisation, put where you are based.</p>
+      <p>We ask this to identify the organisations and people who are in the best position to support you.</p>`
   },
-  q4: { label: 'Please, insert the postcode' },
-  q5: { label: 'Please, insert the country' },
+  q4: { label: 'What is your head office postcode?' },
+  q5: { label: 'Which country is your head office located in?' },
   q6: { label: 'Does your innovation have a website?' },
   q7: { label: 'Select all the categories that can be used to describe your innovation' },
-  q8: { label: 'Select a primary category to describe your innovation', description: 'Your innovation may be a combination of various categories. Selecting the primary category will help us find the right people to support you.' },
+  q8: { label: 'Select a primary category to describe your innovation'},
   q9: { label: 'Is your innovation relevant to any of the following areas?', description: 'We ask this to identify the organisations and people who are in the best position to support you.' },
-  q10: { label: 'In which care settings is your innovation relevant?', description: 'We\'re asking this so that we can find the organisations and people who are in the best position to support you.' },
+  q10: { label: 'In which care settings is your innovation relevant?' },
   q11: { label: 'What is the main purpose of your innovation?', description: 'We ask this to identify the organisations and people who are in the best position to support you.' },
   q12: {
     label: 'What support are you seeking from the Innovation Service?',
@@ -45,7 +46,7 @@ const stepsLabels = {
     label: 'Are you currently receiving any support for your innovation?',
     description: `This can include any UK funding to support the development of your innovation, or any support you are currently receiving from <a href="about-the-service/who-we-are#The%20organisations%20behind%20the%20service" target="_blank" rel="noopener noreferrer">NHS Innovation Service organisations (opens in new window)</a>.`
   },
-  q14: { label: 'Are you involved with any Accelerated Access Collaborative programmes?' }
+  q14: { label: 'Are you involved with any Accelerated Access Collaborative programmes?', description: 'Select all programmes that apply or select no.' }
 };
 
 
@@ -101,7 +102,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     steps.push(new FormEngineModel({
       parameters: [{
         id: 'postcode', dataType: 'text', label: stepsLabels.q4.label,
-        validations: { isRequired: [true, 'Postcode is required'], maxLength: 20 }
+        validations: { isRequired: [true, 'Postcode is required'], maxLength: 8 }
       }]
     }));
 
@@ -161,7 +162,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
     steps.push(new FormEngineModel({
       parameters: [{
-        id: 'mainCategory', dataType: 'radio-group', label: stepsLabels.q8.label, description: stepsLabels.q8.description,
+        id: 'mainCategory', dataType: 'radio-group', label: stepsLabels.q8.label,
         validations: { isRequired: [true, 'Choose one option'] },
         items: selectedCategories
       }]
@@ -178,7 +179,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     }),
     new FormEngineModel({
       parameters: [{
-        id: 'careSettings', dataType: 'checkbox-array', label: stepsLabels.q10.label, description: stepsLabels.q10.description,
+        id: 'careSettings', dataType: 'checkbox-array', label: stepsLabels.q10.label,
         items: [
           ...careSettingsItems,
           { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCareSetting', dataType: 'text', label: 'Other care setting', validations: { isRequired: [true, 'Other care setting description is required'], maxLength: 100 } }) }
@@ -208,7 +209,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     }),
     new FormEngineModel({
       parameters: [{
-        id: 'involvedAACProgrammes', dataType: 'checkbox-array', label: stepsLabels.q14.label,
+        id: 'involvedAACProgrammes', dataType: 'checkbox-array', label: stepsLabels.q14.label, description: stepsLabels.q14.description,
         items: involvedAACProgrammesItems
       }]
     })
