@@ -30,6 +30,7 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit{
     isCollaborator:  boolean,
     hasCollaborators: boolean,
     hasPendingTransfer: boolean,
+    hasOnlyPendingTransfers: boolean,
     ownedInnovations: GetOwnedInnovations[],
   };
 
@@ -54,6 +55,7 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit{
       isCollaborator: false,
       hasCollaborators: false,
       hasPendingTransfer: false,
+      hasOnlyPendingTransfers: false,
       ownedInnovations: [],
     };
 
@@ -88,6 +90,8 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit{
         if(innovation.collaboratorsCount > 0) this.innovator.hasCollaborators = true;
         if(innovation.expirationTransferDate !== null) this.innovator.hasPendingTransfer = true;
       });
+
+      this.innovator.hasOnlyPendingTransfers = this.innovator.ownedInnovations.every(innovation => innovation.expirationTransferDate !== null);
 
       if(this.innovator.ownedInnovations.length > 0) {
         this.setPageTitle('You have innovations linked to this account');

@@ -34,7 +34,7 @@
             </div>
           </dl>
 
-          <div *ngIf="((!innovator.hasCollaborators && !innovator.hasPendingTransfer) || (innovator.hasCollaborators && !innovator.hasPendingTransfer) ||  ((innovator.hasCollaborators || !innovator.hasCollaborators) && !innovator.hasPendingTransfer) || ((innovator.hasCollaborators || !innovator.hasCollaborators) && innovator.hasPendingTransfer))" class="nhsuk-u-margin-bottom-3">
+          <div *ngIf="!innovator.hasOnlyPendingTransfers" class="nhsuk-u-margin-bottom-3">
             <theme-form-checkbox  controlName="confirm"
             label="I understand that my innovations will be withdrawn, if I delete my account."></theme-form-checkbox>
           </div>
@@ -97,7 +97,7 @@
           <button class="nhsuk-button nhsuk-u-margin-top-3" [disabled]="!submitButton.isActive" (click)="onSubmitForm()"> {{ submitButton.label }} </button>
         </ng-container>
 
-        <button *ngIf="stepNumber !== 4" [disabled]="stepNumber === 1 && !form.controls.confirm.value" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep('next')"> {{ stepNumber === 2 ? 'Continue to delete account' : 'Continue' }} </button>
+        <button *ngIf="stepNumber !== 4" [disabled]="stepNumber === 1 && ((!innovator.hasOnlyPendingTransfers && !form.controls.confirm.value) || (innovator.hasPendingTransfer && !form.controls.confirmPendingTransfer.value))" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep('next')"> {{ stepNumber === 2 ? 'Continue to delete account' : 'Continue' }} </button>
 
         <div *ngIf="stepNumber === 2 || stepNumber === 4" >
           <a routerLink="/innovator/account/manage-account">{{ stepNumber === 2 ? 'Cancel and wait to delete after transfer' : 'Cancel' }}</a>
