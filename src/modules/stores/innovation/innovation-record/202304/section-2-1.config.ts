@@ -143,7 +143,7 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
       new FormEngineModel({
         parameters: [{
           id: 'estimatedCarbonReductionSavingsDescription', dataType: 'textarea', label: data.estimatedCarbonReductionSavings === 'YES' ? stepsLabels.q7.labelYES : stepsLabels.q7.labelNOTYET,
-          validations: { isRequired: true },
+          validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'large'
         }]
       })

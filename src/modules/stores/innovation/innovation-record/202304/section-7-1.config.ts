@@ -74,7 +74,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         parameters: [{
           id: 'costDescription',
           dataType: 'textarea', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
-          validations: { isRequired: [true, 'Description is required'] },
+          validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'mediumUp'
         }]
       })
@@ -98,7 +98,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
       new FormEngineModel({
         parameters: [{
           id: 'eligibilityCriteria', dataType: 'textarea', label: stepsLabels.q4.label, description: stepsLabels.q4.description,
-          validations: { isRequired: [true, 'Description is required'] },
+          validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'mediumUp'
         }]
       })
@@ -109,14 +109,14 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     new FormEngineModel({
       parameters: [{
         id: 'sellExpectations', dataType: 'textarea', label: stepsLabels.q5.label,
-        validations: { isRequired: [true, 'Description is required'] },
+        validations: { isRequired: [true, 'A description is required'] },
         lengthLimit: 'medium'
       }]
     }),
     new FormEngineModel({
       parameters: [{
         id: 'usageExpectations', dataType: 'textarea', label: stepsLabels.q6.label, description: stepsLabels.q6.description,
-        validations: { isRequired: [true, 'Description is required'] },
+        validations: { isRequired: [true, 'A description is required'] },
         lengthLimit: 'mediumUp'
       }]
     }),

@@ -85,7 +85,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
             id: 'description',
             dataType: 'text',
             label: stepsLabels.l3,
-            validations: { isRequired: [true, 'Description is required'] }
+            validations: { isRequired: [true, 'A description is required'] }
           }]
         }),
       );

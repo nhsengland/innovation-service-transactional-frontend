@@ -71,7 +71,7 @@ export const SECTION_1_1: InnovationSectionConfigType<InnovationSections> = {
       new FormEngineModel({
         parameters: [{
           id: 'description', dataType: 'textarea', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
-          validations: { isRequired: [true, 'Description is required'] },
+          validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'medium'
         }]
       }),
@@ -196,14 +196,14 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     new FormEngineModel({
       parameters: [{
         id: 'supportDescription', dataType: 'textarea', label: stepsLabels.q12.label, description: stepsLabels.q12.description,
-        validations: { isRequired: [true, 'Description is required'] },
+        validations: { isRequired: [true, 'A description is required'] },
         lengthLimit: 'large'
       }]
     }),
     new FormEngineModel({
       parameters: [{
         id: 'currentlyReceivingSupport', dataType: 'textarea', label: stepsLabels.q13.label, description: stepsLabels.q13.description,
-        validations: { isRequired: [true, 'Description is required'] },
+        validations: { isRequired: [true, 'A description is required'] },
         lengthLimit: 'large'
       }]
     }),

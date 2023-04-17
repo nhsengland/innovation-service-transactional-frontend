@@ -115,7 +115,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           dataType: 'textarea',
           label: `Please describe the testing and feedback for ${item.kind}`,
           description: 'Please provide a brief summary of the method and key findings. You\'ll have the option to upload documents demonstrating your activities next.',
-          validations: { isRequired: [true, 'Description is required'] },
+          validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'medium'
         }]
       })

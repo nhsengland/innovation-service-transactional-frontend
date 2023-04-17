@@ -71,7 +71,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         dataType: 'textarea',
         label: stepsLabels.l3,
         description: 'Please focus on any areas that will be impacted by introducing your innovation to the care pathway.',
-        validations: { isRequired: [true, 'Description is required'] },
+        validations: { isRequired: [true, 'A description is required'] },
         lengthLimit: 'medium'
       }]
     }),

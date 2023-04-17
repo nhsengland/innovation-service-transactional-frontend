@@ -12,7 +12,7 @@ const stepsLabels = {
   q1: { label: 'Do you have any patents for your innovation?' },
   q2: {
     label: 'Do you have any other intellectual property for your innovation?',
-    description: 'Find out more about intellectual property on the <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a>.'
+    description: 'Find out more about <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">intellectual property (opens in new window)</a>.'
   }
 };
 

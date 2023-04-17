@@ -72,7 +72,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         new FormEngineModel({
           parameters: [{
             id: 'description', dataType: 'text', label: stepsLabels.q3.label,
-            validations: { isRequired: [true, 'Description is required'], maxLength: 50 }
+            validations: { isRequired: [true, 'A description is required'], maxLength: 50 }
           }]
         }),
       );
