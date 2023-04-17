@@ -38,6 +38,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   innovationSectionStatus = this.stores.innovation.INNOVATION_SECTION_STATUS;
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
+  showDownloadOldIR: boolean;
+
   isInnovationInCreatedStatus(): boolean {
     return this.innovationStatus === 'CREATED';
   }
@@ -67,6 +69,14 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.innovationStatus = this.innovation.status;
     this.innovationExport = this.innovation.export;
 
+
+    // TODO: remove after 31/05/2023
+    const deployDateMs = new Date('2023-04-26T17:00:00').getTime();
+    const finalDateMs = new Date('2023-05-31T23:59:59').getTime();
+    const createdAtMs = new Date(this.innovation.createdAt ?? '').getTime();
+    const nowMs = new Date().getTime();
+    this.showDownloadOldIR =
+      this.stores.authentication.isInnovatorType() && (createdAtMs <= deployDateMs) && (nowMs <= finalDateMs);
   }
 
 

@@ -16,12 +16,15 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
     const user: IProfile = req.user || {};
     const oid: string = user.oid || '';
     const accessToken = getAccessTokenByOid(oid);
-    const config = { headers: { 
-      Authorization: `Bearer ${accessToken}`,
-      ...req.query.role && { 'x-is-role': req.query.role }
-    } };
+    const config = { 
+      headers: { 
+        Authorization: `Bearer ${accessToken}`,
+        ...req.query.role && { 'x-is-role': req.query.role }
+      }
+    };
+    const version = req.query.version && typeof req.query.version === 'string' ? req.query.version : undefined;
 
-    generatePDF(req.params.innovationId, config)
+    generatePDF(req.params.innovationId, config, version)
       .then((response: any) => {
 
         const client = getAppInsightsClient(req);

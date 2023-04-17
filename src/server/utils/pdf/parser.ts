@@ -9,9 +9,9 @@ import { ENVIRONMENT } from '../../config/constants.config';
 import { PDFGeneratorParserError, PDFGeneratorSectionsNotFoundError } from '../errors';
 
 
-export const getSections = async (innovationId: string, config: any): Promise<{ section: sectionType, data: MappedObjectType }[]> => {
+export const getSections = async (innovationId: string, config: any, version?: string): Promise<{ section: sectionType, data: MappedObjectType }[]> => {
   const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/${innovationId}/all-sections`;
-  const response = await axios.get<{ section: sectionType, data: MappedObjectType }[]>(url, config);
+  const response = await axios.get<{ section: sectionType, data: MappedObjectType }[]>(url, { ...config, ...version && { params: { version } } });
   return response.data;
 };
 
@@ -24,19 +24,19 @@ export const generatePDFHandler = async (innovationId: string, body: any, config
   return response.data;
 }
 
-export const generatePDF = async (innovationId: string, config: any) => {
+export const generatePDF = async (innovationId: string, config: any, version?: string) => {
 
   let content: AllSectionsOutboundPayloadType;
   let sections: { section: sectionType, data: MappedObjectType }[];
 
   try {
-    sections = await getSections(innovationId, config);
+    sections = await getSections(innovationId, config, version);
   } catch (error: any) {
     throw new PDFGeneratorSectionsNotFoundError(error);
   }
 
   try {
-    content = getAllSectionsSummary(sections);
+    content = getAllSectionsSummary(sections, version);
   } catch (error: any) {
     throw new PDFGeneratorParserError(error);
   }
