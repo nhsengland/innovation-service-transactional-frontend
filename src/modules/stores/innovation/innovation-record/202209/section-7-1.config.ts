@@ -79,7 +79,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
         dataType: 'textarea',
         label: stepsLabels.l3,
         description: 'The more specific you can be with your answer, the better.',
-        validations: { isRequired: [true, 'Description is required'] },
+        validations: { isRequired: [true, 'A description is required'] },
         lengthLimit: 'medium'
       }]
     }),
@@ -89,7 +89,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
         dataType: 'textarea',
         label: stepsLabels.l4,
         description: 'The more specific you can be with your answer, the better.',
-        validations: { isRequired: [true, 'Description is required'] },
+        validations: { isRequired: [true, 'A description is required'] },
         lengthLimit: 'medium'
       }]
     }),
@@ -113,7 +113,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
           id: 'fundingDescription',
           dataType: 'textarea',
           label: stepsLabels.l6,
-          validations: { isRequired: [true, 'Description is required'] },
+          validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'medium'
         }]
       })

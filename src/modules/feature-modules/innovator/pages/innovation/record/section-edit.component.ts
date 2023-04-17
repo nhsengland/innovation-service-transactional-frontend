@@ -96,7 +96,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           innovatorId: this.stores.authentication.getUserId(),
           innovationId: this.innovation.id
         },
-        maxFileSize: 10,
+        maxFileSize: 20,
         acceptedFiles: [FileTypes.CSV, FileTypes.DOCX, FileTypes.XLSX, FileTypes.PDF]
       };
     }

@@ -122,7 +122,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           id: `userTestFeedback_${StringsHelper.slugify(item.kind)}`, dataType: 'textarea',
           label: `Describe the testing and feedback for ${item.kind}`,
           description: 'Provide a brief summary of the method and key findings. You can upload any documents that showcase your user testing next.',
-          validations: { isRequired: [true, 'Description is required'] },
+          validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'medium'
         }]
       })

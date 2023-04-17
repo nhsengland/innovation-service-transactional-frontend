@@ -248,7 +248,7 @@ export const categoriesItems: FormSelectableFieldType<catalogCategory> = [
 
 export const areasItems: FormSelectableFieldType<catalogAreas> = [
   { value: 'COVID_19', label: 'COVID-19' },
-  { value: 'DATA_ANALYTICS_AND_RESEARCH', label: 'Data Analytics and research' },
+  { value: 'DATA_ANALYTICS_AND_RESEARCH', label: 'Data, analytics and research' },
   { value: 'DIGITALISING_SYSTEM', label: 'Digitalising the system' },
   { value: 'IMPROVING_SYSTEM_FLOW', label: 'Improving system flow' },
   { value: 'INDEPENDENCE_AND_PREVENTION', label: 'Independence and prevention' },
@@ -639,7 +639,7 @@ export const standardsHasMetItems: FormSelectableFieldType<catalogYesInProgressN
 export const hasPatentsItems: FormSelectableFieldType<catalogHasPatents> = [
   { value: 'HAS_AT_LEAST_ONE', label: 'I have one or more patents', conditional: new FormEngineParameterModel({ id: 'patentNumbers', dataType: 'text', label: 'Patent number(s)', validations: { isRequired: [true, 'Patent number(s) required'], maxLength: 100 } }) },
   { value: 'APPLIED_AT_LEAST_ONE', label: 'I have applied for one or more patents' },
-  { value: 'HAS_NONE', label: 'I don\'t have any patents, but believe I have freedom to operate' }
+  { value: 'HAS_NONE', label: 'I do not have any patents, but believe I have freedom to operate' }
 ];
 
 

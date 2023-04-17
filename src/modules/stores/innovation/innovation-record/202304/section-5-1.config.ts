@@ -12,7 +12,7 @@ import { hasRegulationKnowledgeItems, standardsHasMetItems, standardsTypeItems }
 const stepsLabels = {
   q1: {
     label: 'Do you know which regulations, standards and certifications apply to your innovation?',
-    description: 'Find out more about regulations on the <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a>'
+    description: 'Find out more about <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">regulations (opens in new window)</a>.'
   },
   q2: {
     label: 'Which regulations, standards and certifications apply to your innovation?',
@@ -86,10 +86,10 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     new FormEngineModel({
       parameters: [{
         id: 'standardsType', dataType: 'checkbox-array', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
-        validations: { isRequired: [true, 'Choose at least one certification/standard'] },
+        validations: { isRequired: [true, 'Choose at least one option'] },
         items: [
           ...standardsTypeItems,
-          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRegulationDescription', dataType: 'text', label: 'Other standards and certifications that apply', validations: { isRequired: [true, 'Other standards and certifications is required'], maxLength: 100 } }) }
+          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRegulationDescription', dataType: 'text', label: 'Other regulations, standards and certifications that apply', validations: { isRequired: [true, 'Other regulations, standards and certifications is required'], maxLength: 100 } }) }
         ]
       }]
     })
@@ -114,8 +114,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     currentValues[`standardHasMet_${StringsHelper.slugify(item.type)}`] = item.hasMet;
   });
 
-  // Only diplay files if answered YES to all standard questions.
-  if (currentValues.standards.every(item => item.hasMet === 'YES')) {
+  // Only diplay files if answered YES to at least on "standard" question.
+  if (currentValues.standards.some(item => item.hasMet === 'YES')) {
     steps.push(
       new FormEngineModel({
         parameters: [{
@@ -189,7 +189,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       });
     });
 
-    if (data.standards?.every(item => item.hasMet === 'YES')) {
+    if (data.standards?.some(item => item.hasMet === 'YES')) {
 
       const stepNumber = toReturn.length + 1;
       const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
