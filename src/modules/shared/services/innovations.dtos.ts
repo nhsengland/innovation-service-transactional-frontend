@@ -75,7 +75,8 @@ export type InnovationInfoDTO = {
   assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { id: string, name: string }, reassessmentCount: number },
   supports?: null | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string }[],
   statusUpdatedAt: null | DateISOType,
-  collaboratorId?: string
+  collaboratorId?: string,
+  createdAt: DateISOType
 };
 
 export type InnovationNeedsAssessmentInfoDTO = {

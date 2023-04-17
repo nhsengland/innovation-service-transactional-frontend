@@ -34,10 +34,11 @@ export function getAllSectionsSummary(
   data: {
     section: { id: null | string, section: InnovationSectionEnum, status: keyof typeof INNOVATION_SECTION_STATUS, updatedAt: string },
     data: MappedObjectType
-  }[]
+  }[],
+  version?: string
 ): AllSectionsOutboundPayloadType {
 
-  return getInnovationRecordConfig().map(i => ({
+  return getInnovationRecordConfig(version).map(i => ({
     title: i.title,
     sections: i.sections.map(s => ({
       section: s.title,
