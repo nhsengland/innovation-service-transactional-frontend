@@ -81,7 +81,7 @@
         <ul>
           <li>You may want to <a [href]="documentUrl">download all questions (DOCX, 820KB)</a> you will be asked to
             answer in your innovation record</li>
-          <li>You can also <a [href]="pdfDocumentUrl">export your current innovation record (pdf)</a></li>
+          <li *ngIf="innovationStatus !== 'CREATED'">You can also <a [href]="pdfDocumentUrl">export your current innovation record (pdf)</a></li>
         </ul>
 
       </ng-container>
@@ -127,7 +127,7 @@
 
         </ng-container>
 
-        <ng-container *ngIf="stores.authentication.isInnovatorType() && innovationExport">
+        <ng-container *ngIf="stores.authentication.isInnovatorType() && innovationExport && innovationStatus !== 'CREATED'">
 
           <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
 
