@@ -127,7 +127,7 @@
 
         </ng-container>
 
-        <ng-container *ngIf="stores.authentication.isInnovatorType() && innovationExport">
+        <ng-container *ngIf="stores.authentication.isInnovatorType() && innovationExport && innovationStatus !== 'CREATED'">
 
           <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
 
