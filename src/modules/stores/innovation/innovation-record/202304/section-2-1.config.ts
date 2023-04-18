@@ -18,7 +18,7 @@ const stepsLabels = {
   q2: {
     label: 'Give an overview of how your innovation works',
     description: `
-      <p>If this is or might be a medical device, include the <a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/medical-devices-intended-purpose-statement" target="_blank" rel="noopener noreferrer">intended purpose statement (opens in new window)</a>.</p>
+      <p>If this is or might be a medical device, include the <a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/medical-devices-intended-purpose-statement" target="_blank" rel="noopener noreferrer">intended purpose statement (opens in a new window)</a>.</p>
       <p>For example, GPs will identify patients with suspected atrial fibrillation from their history and reported symptoms. This innovation is a portable device that patients wear over a 7-day period. The device will monitor the patient’s heart rate continuously whilst they are wearing it. GPs will need to be trained in using the device and interpreting the results. GP practices will need to store the device and consumables.</p>`
   },
   q3: { label: 'What are the benefits or impact of your innovation?' },
@@ -30,7 +30,7 @@ const stepsLabels = {
   q6: {
     label: 'Have you estimated the carbon reduction or savings that your innovation will bring?',
     description: `
-    <p>All NHS suppliers will be expected to provide the carbon footprint associated with the use of their innovation, as outlined in the <a href="https://www.england.nhs.uk/greenernhs/wp-content/uploads/sites/51/2022/07/B1728-delivering-a-net-zero-nhs-july-2022.pdf" target="_blank" rel="noopener noreferrer">Delivering a Net Zero NHS report (opens in new window)</a>.</p>
+    <p>All NHS suppliers will be expected to provide the carbon footprint associated with the use of their innovation, as outlined in the <a href="https://www.england.nhs.uk/greenernhs/wp-content/uploads/sites/51/2022/07/B1728-delivering-a-net-zero-nhs-july-2022.pdf" target="_blank" rel="noopener noreferrer">Delivering a Net Zero NHS report (opens in a new window)</a>.</p>
     <p>If this is something you are unsure of, the NHS Innovation Service can support you with this.</p>`
   },
   q7: {
@@ -39,19 +39,19 @@ const stepsLabels = {
   },
   q8: {
     label: 'Do you have or are you working on a carbon reduction plan (CRP)?',
-    description: `All NHS suppliers will require a carbon reduction plan (CRP), as outlined in the <a href="https://www.england.nhs.uk/greenernhs/get-involved/suppliers/" target="_blank" rel="noopener noreferrer">NHS Suppliers Roadmap plan (opens in new window)</a>.`
+    description: `All NHS suppliers will require a carbon reduction plan (CRP), as outlined in the <a href="https://www.england.nhs.uk/greenernhs/get-involved/suppliers/" target="_blank" rel="noopener noreferrer">NHS Suppliers Roadmap plan (opens in a new window)</a>.`
   },
   q9: {
     label: 'Which key health inequalities does your innovation impact?',
     description: `
     <p>Core20PLUS5 is a national NHS England approach to support the reduction of health inequalities, defining target populations and clinical areas that require improvement.</p>
-    <p>More information is available on the <a href="https://www.england.nhs.uk/about/equality/equality-hub/national-healthcare-inequalities-improvement-programme/core20plus5" target="_blank" rel="noopener noreferrer">Core20PLUS5 web page (opens in new window)</a>.</p>`
+    <p>More information is available on the <a href="https://www.england.nhs.uk/about/equality/equality-hub/national-healthcare-inequalities-improvement-programme/core20plus5" target="_blank" rel="noopener noreferrer">Core20PLUS5 web page (opens in a new window)</a>.</p>`
   },
   q10: {
     label: 'Have you completed a health inequalities impact assessment?',
     description: `
       <p>By this, we mean a document or template which asks you about the impact of your innovation on health inequalities.</p>
-      <p>One example is the Equality Impact Assessment Standard produced by the <a href="https://www.nhsrho.org" target="_blank" rel="noopener noreferrer">NHS Race and Health Observatory (opens in new window)</a>.</p>`
+      <p>One example is the Equality Impact Assessment Standard produced by the <a href="https://www.nhsrho.org" target="_blank" rel="noopener noreferrer">NHS Race and Health Observatory (opens in a new window)</a>.</p>`
   },
   q11: {
     label: 'Upload the health inequalities impact assessment, or any relevant documents',
