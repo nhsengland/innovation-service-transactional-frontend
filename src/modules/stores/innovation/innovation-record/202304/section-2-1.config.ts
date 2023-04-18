@@ -180,8 +180,7 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
     steps.push(
       new FormEngineModel({
         parameters: [{
-          id: 'files', dataType: 'file-upload', label: stepsLabels.q11.label, description: stepsLabels.q11.description,
-          validations: { isRequired: [true, 'Upload at least one file'] }
+          id: 'files', dataType: 'file-upload', label: stepsLabels.q11.label, description: stepsLabels.q11.description
         }]
       })
     );
@@ -280,7 +279,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   );
 
   if (data.completedHealthInequalitiesImpactAssessment === 'YES') {
-    const stepNumber = editStepNumber++
+    const stepNumber = editStepNumber++;
     const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
     allFiles.forEach((item, i) => {
       toReturn.push({

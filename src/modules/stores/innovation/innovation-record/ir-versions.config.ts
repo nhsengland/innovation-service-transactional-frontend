@@ -44,7 +44,7 @@ export function getAllSectionsSummary(
       section: s.title,
       answers: s.wizard
         .runSummaryParsing(s.wizard.runInboundParsing(data.find(d => d.section.section === s.id)?.data ?? {}))
-        .filter(item => item.type !== 'button' || !item.isFile)
+        .filter(item => item.type !== 'button' && !item.isFile)
         .map(a => ({ label: a.label, value: a.value || '' }))
     }))
   }));

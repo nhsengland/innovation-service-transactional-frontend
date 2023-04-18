@@ -16,12 +16,7 @@ const stepsLabels = {
   },
   q2: {
     label: 'Which regulations, standards and certifications apply to your innovation?',
-    description: `Find out more information on:
-    <ul class="nhsuk-list">
-    <li><a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/uk-mdr-2002-understanding-regulations-medical-devices/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">UKCA / CE marking (opens in new window)</a></li>
-    <li><a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/understanding-cqc-regulations/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">CQC registration (opens in new window)</a></li>
-    <li><a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/nhs-digital-technology-assessment-criteria-dtac/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">DTAC (opens in new window)</a></li>
-    </ul>`
+    description: `Find out more about <a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/uk-mdr-2002-understanding-regulations-medical-devices/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">UKCA / CE marking (opens in new window)</a>, <a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/understanding-cqc-regulations/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">CQC registration (opens in new window)</a>, or <a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/nhs-digital-technology-assessment-criteria-dtac/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">DTAC (opens in new window)</a>.`
   },
   q3: {
     label: 'Upload all certification documents', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.'
@@ -119,8 +114,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     steps.push(
       new FormEngineModel({
         parameters: [{
-          id: 'files', dataType: 'file-upload', label: stepsLabels.q3.label, description: stepsLabels.q3.description,
-          validations: { isRequired: [true, 'Upload at least one file'] }
+          id: 'files', dataType: 'file-upload', label: stepsLabels.q3.label, description: stepsLabels.q3.description
         }],
       })
     );

@@ -8,7 +8,9 @@ import { evidenceSubmitTypeItems, evidenceTypeItems } from './forms.config';
 const stepsLabels = {
   q1: {
     label: 'What type of evidence or research do you want to submit?',
-    description: 'Evidence can include clinical and economic evidence, as well as service evaluation, environmental and social impact or other proven benefits such as staff and system benefits. You will be able to add several pieces of evidence one at a time. We will ask about user testing and regulatory approval in later sections.'
+    description: `
+    <p>Evidence can include clinical and economic evidence, as well as service evaluation, environmental and social impact or other proven benefits such as staff and system benefits. You will be able to add several pieces of evidence one at a time.</p>
+    <p>We will ask about user testing and regulatory approval in later sections.</p>`
   },
   q2: { label: 'What type of evidence do you have?' },
   q3: { label: 'What type of economic evidence do you have?' },
@@ -106,8 +108,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     }),
     new FormEngineModel({
       parameters: [{
-        id: 'files', dataType: 'file-upload', label: stepsLabels.q6.label, description: stepsLabels.q6.description,
-        validations: { isRequired: [true, 'Upload at least one file'] }
+        id: 'files', dataType: 'file-upload', label: stepsLabels.q6.label, description: stepsLabels.q6.description
       }]
     })
   );
