@@ -57,6 +57,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
     hasPatents: data.hasPatents,
+    ...(data.patentNumbers && { patentNumbers: data.patentNumbers }),
     ...(data.hasOtherIntellectual && { hasOtherIntellectual: data.hasOtherIntellectual }),
     ...(data.otherIntellectual && { otherIntellectual: data.otherIntellectual })
   };

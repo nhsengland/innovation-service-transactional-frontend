@@ -28,25 +28,15 @@ const stepsLabels = {
   q11: { label: 'What is the main purpose of your innovation?', description: 'We ask this to identify the organisations and people who are in the best position to support you.' },
   q12: {
     label: 'What support are you seeking from the Innovation Service?',
-    description: `For example, support with:
-    <ul>
-    <li>adoption</li>
-    <li>health technology assessment</li>
-    <li>bringing your product to or from the UK</li>
-    <li>clinical trials and testing</li>
-    <li>commercial support and advice</li>
-    <li>procurement</li>
-    <li>product development and regulatory advice</li>
-    <li>real-world evidence and evaluation</li>
-    <li>understanding funding channels</li>
-    </ul>
-    You will have opportunity to explain how your innovation works and its benefits later in the record.`
+    description: `
+      <p>For example, support with clinical trials, product development, real-world evidence, regulatory advice, or adoption.</p>
+      <p>You will have the opportunity to explain how your innovation works and its benefits later in the record</p>`
   },
   q13: {
     label: 'Are you currently receiving any support for your innovation?',
     description: `This can include any UK funding to support the development of your innovation, or any support you are currently receiving from <a href="about-the-service/who-we-are#The%20organisations%20behind%20the%20service" target="_blank" rel="noopener noreferrer">NHS Innovation Service organisations (opens in new window)</a>.`
   },
-  q14: { label: 'Are you involved with any Accelerated Access Collaborative programmes?', description: 'Select all programmes that apply or select no.' }
+  q14: { label: 'Are you involved with any Accelerated Access Collaborative programmes?', description: 'Select all that apply, or select no, if not relevant.' }
 };
 
 

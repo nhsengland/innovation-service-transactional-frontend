@@ -207,7 +207,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     editStepNumber: editStepNumber++
   });
 
-  const stepNumber = editStepNumber++
+  const stepNumber = editStepNumber++;
   const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
   allFiles.forEach((item, i) => {
     toReturn.push({
