@@ -29,7 +29,7 @@ export const SECTION_6_2: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasCostSavingKnowledge',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new tab)</a> for more information about comparative cost benefit.',
+          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about comparative cost benefit.',
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasCostKnowledgeItems
         }]
@@ -39,7 +39,7 @@ export const SECTION_6_2: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasCostCareKnowledge',
           dataType: 'radio-group',
           label: stepsLabels.l2,
-          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new tab)</a> for more information about comparative cost benefit.',
+          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about comparative cost benefit.',
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasCostKnowledgeItems
         }]

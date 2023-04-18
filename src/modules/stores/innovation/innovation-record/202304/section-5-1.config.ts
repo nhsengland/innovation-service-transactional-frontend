@@ -12,11 +12,11 @@ import { hasRegulationKnowledgeItems, standardsHasMetItems, standardsTypeItems }
 const stepsLabels = {
   q1: {
     label: 'Do you know which regulations, standards and certifications apply to your innovation?',
-    description: 'Find out more about <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">regulations (opens in a new tab)</a>.'
+    description: 'Find out more about <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">regulations (opens in new window)</a>.'
   },
   q2: {
     label: 'Which regulations, standards and certifications apply to your innovation?',
-    description: `Find out more about <a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/uk-mdr-2002-understanding-regulations-medical-devices/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">UKCA / CE marking (opens in a new tab)</a>, <a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/understanding-cqc-regulations/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">CQC registration (opens in a new tab)</a>, or <a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/nhs-digital-technology-assessment-criteria-dtac/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">DTAC (opens in a new tab)</a>.`
+    description: `Find out more about <a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/uk-mdr-2002-understanding-regulations-medical-devices/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">UKCA / CE marking (opens in new window)</a>, <a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/understanding-cqc-regulations/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">CQC registration (opens in new window)</a>, or <a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/nhs-digital-technology-assessment-criteria-dtac/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">DTAC (opens in new window)</a>.`
   },
   q3: {
     label: 'Upload all certification documents', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.'

@@ -68,7 +68,7 @@ export const NEW_INNOVATION_QUESTIONS: WizardEngineModel = new WizardEngineModel
         id: 'organisationShares',
         dataType: 'checkbox-array',
         label: 'Finally, choose your data sharing preferences',
-        description: '<a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> What does each organisation do? (opens in a new tab) </a>',
+        description: '<a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> What does each organisation do? (opens in new window) </a>',
         validations: { isRequired: [true, 'Choose at least one organisation'] },
         items: []
       }]
