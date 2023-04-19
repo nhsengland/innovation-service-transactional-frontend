@@ -19,19 +19,22 @@
     </div>
   </ng-container>
 
-  <div class="d-flex align-items-center justify-content-space-between">
-    <h2 class="nhsuk-heading-m">Innovation status</h2>
-    <a routerLink="/innovator/innovation-statuses" class="float-r nhsuk-u-margin-bottom-4" arial-label="View innovation status information">What does this status mean?</a>
-  </div>
-
-  <div class="d-flex align-items-center justify-content-space-between nhsuk-u-margin-bottom-3">
-    <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.groupedStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.groupedStatus + '.name' | translate }}"></theme-tag>
-    <ng-container *ngIf="innovation?.organisationsStatusDescription">
-      <div class="mr-auto nhsuk-u-font-size-16 nhsuk-u-padding-left-2">
-        Organisations: {{ innovation?.organisationsStatusDescription }}
-      </div>
-    </ng-container>
-    <a *ngIf="innovation?.groupedStatus === 'RECEIVING_SUPPORT'" routerLink="/innovator/innovations/{{ innovationId }}/support" class="float-r" arial-label="View innovation support status information">View support status</a>
+  <div class="d-flex justify-content-space-between nhsuk-u-margin-bottom-3">
+    <div>
+      <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-0 text-nowrap-only-desktop">Innovation status</h2>
+    </div>
+    <div class="d-flex flex-direction-column nhsuk-u-padding-left-7 nhsuk-u-padding-right-7">
+      <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.groupedStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.groupedStatus + '.name' | translate }}"></theme-tag>
+      <ng-container *ngIf="innovation?.organisationsStatusDescription">
+        <div class="nhsuk-u-margin-top-1 nhsuk-u-font-size-14 font-color-secondary">
+          Organisations: {{ innovation?.organisationsStatusDescription }}.
+          <a *ngIf="innovation?.groupedStatus === 'RECEIVING_SUPPORT'" routerLink="/innovator/innovations/{{ innovationId }}/support" arial-label="View innovation support status information">View support status</a>
+        </div>
+      </ng-container>
+    </div>
+    <div>
+      <a routerLink="/innovator/innovation-statuses" class="float-r text-nowrap-only-desktop" arial-label="View innovation status information">What does this status mean?</a>
+    </div>
   </div>
 
   <div>
