@@ -134,7 +134,7 @@
                   <a *ngIf="item.link" [routerLink]="item.link.url">{{ item.link.label }}</a>
                 </div>
                 <div>
-                  <a *ngIf="ACTIVITY_LOG_ITEMS[item.activity].details" href="javascript:void(0)" (click)="onShowHideClicked(item)">
+                  <a *ngIf="ACTIVITY_LOG_ITEMS[item.activity].details && item.params.sectionTitle !=='no longer available'" href="javascript:void(0)" (click)="onShowHideClicked(item)">
                     {{ item.showHideText }} <span class="nhsuk-u-visually-hidden"> of {{
                       'shared.catalog.innovation.activity_log_items.' + item.activity + '.title' | translate }} activity
                     </span>

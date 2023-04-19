@@ -46,8 +46,8 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
       this.innovationsService.getSectionInfo(this.innovationId, this.sectionId, { fields: ['actions'] }).subscribe(sectionInfo => {
 
-        const section = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
-        this.sectionTitle = `${section.group.number}.${section.section.number} ${section.section.title}`;
+        const section = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);        
+        this.sectionTitle = section ? `${section.group.number}.${section.section.number} ${section.section.title}` : 'No longer available';
 
         this.actionsIds = sectionInfo.actionsIds ?? [];
 
