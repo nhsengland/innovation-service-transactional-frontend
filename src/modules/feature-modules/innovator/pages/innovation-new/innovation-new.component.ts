@@ -26,10 +26,7 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
 
   isCreatingInnovation = false;
 
-  constructor(
-    private organisationsService: OrganisationsService,
-    private innovatorService: InnovatorService
-  ) {
+  constructor(private innovatorService: InnovatorService) {
 
     super();
 
