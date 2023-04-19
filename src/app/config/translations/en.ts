@@ -255,7 +255,7 @@ export const locale = {
             },
             ACTION_CREATION: {
               title: 'Action creation',
-              message: `{{ actionUserName }} {{ actionUserRole }} created an action for section "{{ sectionTitle }}"`
+              message: `{{ actionUserName }} {{ actionUserRole }} created an action for section {{ sectionTitle }}`
             },
             ACTION_STATUS_SUBMITTED_UPDATE: {
               title: 'Action changed to submitted',

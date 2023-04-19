@@ -455,7 +455,14 @@ export class InnovationsService extends CoreService {
     return this.http.get<InnovationActionsListInDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         count: response.count,
-        data: response.data.map(item => ({ ...item, ...{ name: `Update '${this.stores.innovation.getInnovationRecordSectionIdentification(item.section).section.title}'`, } }))
+        data: response.data.map(item => {
+          const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(item.section);
+
+          return {
+            ...item,
+            ...{ name: sectionIdentification ? `Update '${sectionIdentification.section.title}'` : 'no longer available'}
+          }
+        })
       }))
     );
 
@@ -465,19 +472,23 @@ export class InnovationsService extends CoreService {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/actions/:actionId').setPathParams({ innovationId, actionId });
     return this.http.get<Omit<InnovationActionInfoDTO, 'name'>>(url.buildUrl()).pipe(take(1),
-      map(response => ({
-        id: response.id,
-        displayId: response.displayId,
-        status: response.status,
-        name: `Update '${this.stores.innovation.getInnovationRecordSectionIdentification(response.section).section.title}'`,
-        description: response.description,
-        section: response.section,
-        createdAt: response.createdAt,
-        updatedAt: response.updatedAt,
-        updatedBy: response.updatedBy,
-        createdBy: response.createdBy,
-        declineReason: response.declineReason
-      }))
+      map(response => {
+        const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
+
+        return ({
+          id: response.id,
+          displayId: response.displayId,
+          status: response.status,
+          name: sectionIdentification ? `Update '${sectionIdentification.section.title}'` : 'no longer available',
+          description: response.description,
+          section: response.section,
+          createdAt: response.createdAt,
+          updatedAt: response.updatedAt,
+          updatedBy: response.updatedBy,
+          createdBy: response.createdBy,
+          declineReason: response.declineReason
+        })
+      })
     );
 
   }
@@ -635,6 +646,7 @@ export class InnovationsService extends CoreService {
               break;
           }
 
+          const sectionIdentification = i.params.sectionId ? this.stores.innovation.getInnovationRecordSectionIdentification(i.params.sectionId): '';
           return {
             date: i.date,
             type: i.type,
@@ -643,7 +655,7 @@ export class InnovationsService extends CoreService {
             params: {
               ...i.params,
               innovationName: response.innovation.name,
-              sectionTitle: i.params.sectionId ? this.stores.innovation.getInnovationRecordSectionIdentification(i.params.sectionId).section.title : '',
+              sectionTitle: sectionIdentification ? `"${sectionIdentification.section.title}"` : 'no longer available',
               actionUserRole: i.params.actionUserRole ? `(${this.stores.authentication.getRoleDescription(i.params.actionUserRole)})` : ''
             },
             link
