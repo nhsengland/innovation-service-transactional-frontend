@@ -45,12 +45,9 @@ export class InnovatorService extends CoreService {
   constructor() { super(); }
 
 
-  createInnovation(
-    body: { name: string, description: string, countryName: string, postcode: null | string, organisationShares: string[] },
-    useSurvey: boolean
-  ): Observable<{ id: string }> {
+  createInnovation(body: { name: string, description: string, countryName: string, postcode?: string, website?: string }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1').setQueryParams({ useSurvey });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1');
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
