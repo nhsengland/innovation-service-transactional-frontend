@@ -58,8 +58,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
       name: 'User display name',
       description: 'Innovation name',
       countryName: 'Some location',
-      postcode: 'EN05',
-      organisationShares: ['Organisation 01']
+      postcode: 'EN05'
     };
     const responseMock = { id: 'id' };
     const expected = { id: 'id' };

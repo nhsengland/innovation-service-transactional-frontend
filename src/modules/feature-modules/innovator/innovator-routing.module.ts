@@ -38,6 +38,7 @@ import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
+import { InnovationDataSharingEditComponent } from './pages/innovation/record/data-sharing-edit.component';
 
 // // Shared module pages.
 // // Account.
@@ -72,6 +73,8 @@ import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-o
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 import { ManageGuard } from './guards/manage.guard';
+import { InnovationCollaborationRedirectionGuard } from '@modules/core/guards/innovation-collaboration-redirection.guard';
+import { ShareInnovationRecordGuard } from './guards/share-innovation-record.guard';
 
 // Resolvers.
 import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
@@ -81,7 +84,7 @@ import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
-import { InnovationCollaborationRedirectionGuard } from '@modules/core/guards/innovation-collaboration-redirection.guard';
+
 
 
 const header: RoutesDataType['header'] = {
@@ -322,6 +325,12 @@ const routes: Routes = [
                       }
 
                     ]
+                  },
+                  {
+                    path: 'support',
+                    canActivate: [ShareInnovationRecordGuard],
+                    component: InnovationDataSharingEditComponent,
+                    data: { breadcrumb: null, layout: { type: 'full' } },
                   }
                 ]
               },

@@ -11,7 +11,6 @@ type StepPayloadType = {
   location: string;
   englandPostCode: string;
   locationCountryName: string;
-  organisationShares: string[];
 };
 
 type OutboundPayloadType = {
@@ -19,7 +18,6 @@ type OutboundPayloadType = {
   description: string;
   countryName: string;
   postcode: null | string;
-  organisationShares: string[];
 };
 
 
@@ -61,19 +59,7 @@ export const NEW_INNOVATION_QUESTIONS: WizardEngineModel = new WizardEngineModel
         validations: { isRequired: [true, 'Location is required'] },
         items: locationItems
       }]
-    }),
-
-    new FormEngineModel({
-      parameters: [{
-        id: 'organisationShares',
-        dataType: 'checkbox-array',
-        label: 'Finally, choose your data sharing preferences',
-        description: '<a href="/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer"> What does each organisation do? (opens in a new window) </a>',
-        validations: { isRequired: [true, 'Choose at least one organisation'] },
-        items: []
-      }]
     })
-
   ],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data)
@@ -88,8 +74,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     innovationDescription: '',
     location: '',
     englandPostCode: '',
-    locationCountryName: '',
-    organisationShares: []
+    locationCountryName: ''
   };
 
 }
@@ -101,8 +86,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     name: data.innovationName,
     description: data.innovationDescription,
     countryName: data.locationCountryName || data.location,
-    postcode: data.englandPostCode || null,
-    organisationShares: data.organisationShares
+    postcode: data.englandPostCode || null
   };
 
 }
