@@ -622,6 +622,7 @@ export class InnovationsService extends CoreService {
         data: response.data.map(i => {
 
           let link: null | { label: string; url: string; } = null;
+          const sectionIdentification = i.params.sectionId ? this.stores.innovation.getInnovationRecordSectionIdentification(i.params.sectionId): '';
 
           switch (ACTIVITY_LOG_ITEMS[i.activity].link) {
             case 'NEEDS_ASSESSMENT':
@@ -634,19 +635,18 @@ export class InnovationsService extends CoreService {
               link = { label: 'Go to Support status', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/support` };
               break;
             case 'SECTION':
-              link = i.params.sectionId ? { label: 'View section', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/record/sections/${i.params.sectionId}` } : null;
+              link = i.params.sectionId && sectionIdentification ? { label: 'View section', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/record/sections/${i.params.sectionId}` } : null;
               break;
             case 'THREAD':
               link = { label: 'View messages', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/threads/${i.params.thread?.id}` };
               break;
             case 'ACTION':
-              if (['innovator', 'accessor'].includes(userUrlBasePath) && i.params.actionId) { // Don't make sense for assessment users.
+              if (['innovator', 'accessor'].includes(userUrlBasePath) && i.params.actionId && sectionIdentification) { // Don't make sense for assessment users.
                 link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/action-tracker/${i.params.actionId}` };
               }
               break;
           }
 
-          const sectionIdentification = i.params.sectionId ? this.stores.innovation.getInnovationRecordSectionIdentification(i.params.sectionId): '';
           return {
             date: i.date,
             type: i.type,
