@@ -1,21 +1,19 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
 
 import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { InnovationNewComponent } from './innovation-new.component';
 
 import { InnovatorService } from '../../services/innovator.service';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
 describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', () => {
@@ -25,7 +23,6 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
   let authenticationStore: AuthenticationStore;
   let innovatorService: InnovatorService;
-  let organisationsService: OrganisationsService;
 
   let component: InnovationNewComponent;
   let fixture: ComponentFixture<InnovationNewComponent>;
@@ -48,13 +45,8 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     innovatorService = TestBed.inject(InnovatorService);
-    organisationsService = TestBed.inject(OrganisationsService);
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
-    // organisationsService.getOrganisationUnitUsersList = () => of([
-    //   { id: 'orgId01', name: 'Org name 01', organisationUnitUserId: 'OrgUnitId01' },
-    //   { id: 'orgId02', name: 'Org name 02', organisationUnitUserId: 'OrgUnitId02' }
-    // ]);
 
   });
 
