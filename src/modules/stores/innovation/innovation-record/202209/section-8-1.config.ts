@@ -39,7 +39,7 @@ export const SECTION_8_1: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasDeployPlan',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about implementation plans.',
+          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about implementation plans.',
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasDeployPlanItems
         }]
@@ -154,8 +154,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'files',
         dataType: 'file-upload',
         label: stepsLabels.l7,
-        description: 'The files must be CSV, XLSX, DOCX or PDF, and can be up to 9MB.',
-        validations: { isRequired: [true, 'Upload at least one file'] }
+        description: 'The files must be CSV, XLSX, DOCX or PDF, and can be up to 9MB.'
       }]
     })
   );

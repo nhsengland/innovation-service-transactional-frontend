@@ -46,7 +46,7 @@ export type catalogOfficeLocation = typeof catalogOfficeLocation[number];
 export const catalogCategory = ['MEDICAL_DEVICE', 'IN_VITRO_DIAGNOSTIC', 'PHARMACEUTICAL', 'DIGITAL', 'AI', 'EDUCATION', 'PPE', 'MODELS_CARE', 'ESTATES_FACILITIES', 'TRAVEL_TRANSPORT', 'FOOD_NUTRITION', 'DATA_MONITORING', 'OTHER'] as const;
 export type catalogCategory = typeof catalogCategory[number];
 
-export const catalogAreas = ['COVID_19', 'DATA_ANALYTICS_AND_RESEARCH', 'DIGITALISING_SYSTEM', 'IMPROVING_SYSTEM_FLOW', 'INDEPENDENCE_AND_PREVENTION', 'OPERATIONAL_EXCELLENCE', 'PATIENT_ACTIVATION_AND_SELF_CARE', 'PATIENT_SAFETY', 'NET_ZERO_GREENER_INNOVATION'] as const;
+export const catalogAreas = ['COVID_19', 'DATA_ANALYTICS_AND_RESEARCH', 'DIGITALISING_SYSTEM', 'IMPROVING_SYSTEM_FLOW', 'INDEPENDENCE_AND_PREVENTION', 'OPERATIONAL_EXCELLENCE', 'PATIENT_ACTIVATION_AND_SELF_CARE', 'PATIENT_SAFETY', 'WORKFORCE_RESOURCE_OPTIMISATION', 'NET_ZERO_GREENER_INNOVATION'] as const;
 export type catalogAreas = typeof catalogAreas[number];
 
 export const catalogCareSettings = ['ACADEMIA', 'ACUTE_TRUSTS_INPATIENT', 'ACUTE_TRUSTS_OUTPATIENT', 'AMBULANCE', 'CARE_HOMES_CARE_SETTING', 'END_LIFE_CARE', 'ICS', 'INDUSTRY', 'LOCAL_AUTHORITY_EDUCATION', 'MENTAL_HEALTH', 'PHARMACY', 'PRIMARY_CARE', 'SOCIAL_CARE', 'THIRD_SECTOR_ORGANISATIONS', 'URGENT_AND_EMERGENCY', 'OTHER'] as const;
@@ -111,6 +111,9 @@ export type catalogHasPatents = typeof catalogHasPatents[number];
 
 // Section 6.
 // // Section 6.1.
+export const catalogHasRevenueModel = ['YES', 'NO', 'DONT_KNOW'] as const;
+export type catalogHasRevenueModel = typeof catalogHasRevenueModel[number];
+
 export const catalogRevenues = ['ADVERTISING', 'DIRECT_PRODUCT_SALES', 'FEE_FOR_SERVICE', 'LEASE', 'SALES_OF_CONSUMABLES_OR_ACCESSORIES', 'SUBSCRIPTION', 'OTHER'] as const;
 export type catalogRevenues = typeof catalogRevenues[number];
 

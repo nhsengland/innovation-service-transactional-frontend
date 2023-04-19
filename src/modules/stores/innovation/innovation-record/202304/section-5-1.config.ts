@@ -12,16 +12,11 @@ import { hasRegulationKnowledgeItems, standardsHasMetItems, standardsTypeItems }
 const stepsLabels = {
   q1: {
     label: 'Do you know which regulations, standards and certifications apply to your innovation?',
-    description: 'Find out more about regulations on the <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a>'
+    description: 'Find out more about <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">regulations (opens in a new window)</a>.'
   },
   q2: {
     label: 'Which regulations, standards and certifications apply to your innovation?',
-    description: `Find out more information on:
-    <ul class="nhsuk-list">
-    <li><a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/uk-mdr-2002-understanding-regulations-medical-devices/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">UKCA / CE marking (opens in new window)</a></li>
-    <li><a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/understanding-cqc-regulations/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">CQC registration (opens in new window)</a></li>
-    <li><a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/nhs-digital-technology-assessment-criteria-dtac/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">DTAC (opens in new window)</a></li>
-    </ul>`
+    description: `Find out more about <a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/uk-mdr-2002-understanding-regulations-medical-devices/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">UKCA / CE marking (opens in a new window)</a>, <a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/understanding-cqc-regulations/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">CQC registration (opens in a new window)</a>, or <a href="https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/nhs-digital-technology-assessment-criteria-dtac/?triage_system=Medical%20device" target="_blank" rel="noopener noreferrer">DTAC (opens in a new window)</a>.`
   },
   q3: {
     label: 'Upload all certification documents', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.'
@@ -86,10 +81,10 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     new FormEngineModel({
       parameters: [{
         id: 'standardsType', dataType: 'checkbox-array', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
-        validations: { isRequired: [true, 'Choose at least one certification/standard'] },
+        validations: { isRequired: [true, 'Choose at least one option'] },
         items: [
           ...standardsTypeItems,
-          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRegulationDescription', dataType: 'text', label: 'Other standards and certifications that apply', validations: { isRequired: [true, 'Other standards and certifications is required'], maxLength: 100 } }) }
+          { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherRegulationDescription', dataType: 'text', label: 'Other regulations, standards and certifications that apply', validations: { isRequired: [true, 'Other regulations, standards and certifications is required'], maxLength: 100 } }) }
         ]
       }]
     })
@@ -105,7 +100,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         parameters: [{
           id: `standardHasMet_${StringsHelper.slugify(item.type)}`,
           dataType: 'radio-group',
-          label: `Do you have a certification for ${item.type === 'OTHER' ? currentValues.otherRegulationDescription : standardsTypeItems.find(i => i.value === item.type)?.label}`,
+          label: `Do you have a certification for ${item.type === 'OTHER' ? currentValues.otherRegulationDescription : standardsTypeItems.find(i => i.value === item.type)?.label}?`,
           validations: { isRequired: [true, 'Choose one option'] },
           items: standardsHasMetItems
         }]
@@ -114,14 +109,18 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     currentValues[`standardHasMet_${StringsHelper.slugify(item.type)}`] = item.hasMet;
   });
 
-  steps.push(
-    new FormEngineModel({
-      parameters: [{
-        id: 'files', dataType: 'file-upload', label: stepsLabels.q3.label, description: stepsLabels.q3.description,
-        validations: { isRequired: [true, 'Upload at least one file'] }
-      }],
-    })
-  );
+  // Only diplay files if answered YES to at least on "standard" question.
+  if (currentValues.standards.some(item => item.hasMet === 'YES')) {
+    steps.push(
+      new FormEngineModel({
+        parameters: [{
+          id: 'files', dataType: 'file-upload', label: stepsLabels.q3.label, description: stepsLabels.q3.description
+        }],
+      })
+    );
+  } else {
+    delete currentValues.files;
+  }
 
 }
 
@@ -178,26 +177,30 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
     data.standards?.forEach(standard => {
       toReturn.push({
-        label: `Do you have a certification for ${standard.type === 'OTHER' ? data.otherRegulationDescription : standardsTypeItems.find(item => item.value === standard.type)?.label}`,
+        label: `Do you have a certification for ${standard.type === 'OTHER' ? data.otherRegulationDescription : standardsTypeItems.find(item => item.value === standard.type)?.label}?`,
         value: standardsHasMetItems.find(item => item.value === standard.hasMet)?.label,
         editStepNumber: toReturn.length + 1
       });
     });
 
-    const stepNumber = toReturn.length + 1;
-    const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
-    allFiles.forEach((item, i) => {
-      toReturn.push({
-        label: `Attachment ${i + 1}`,
-        value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-        editStepNumber: stepNumber,
-        allowHTML: true,
-        isFile: true
-      });
-    });
+    if (data.standards?.some(item => item.hasMet === 'YES')) {
 
-    // Add a button to the end of the list.
-    toReturn.push({ type: 'button', label: 'Add certification documents', editStepNumber: stepNumber });
+      const stepNumber = toReturn.length + 1;
+      const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
+      allFiles.forEach((item, i) => {
+        toReturn.push({
+          label: `Attachment ${i + 1}`,
+          value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
+          editStepNumber: stepNumber,
+          allowHTML: true,
+          isFile: true
+        });
+      });
+
+      // Add a button to the end of the list.
+      toReturn.push({ type: 'button', label: 'Add certification documents', editStepNumber: stepNumber });
+
+    }
 
   }
 

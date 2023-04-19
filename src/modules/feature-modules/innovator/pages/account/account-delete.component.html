@@ -35,12 +35,12 @@
           </dl>
 
           <div *ngIf="!innovator.hasOnlyPendingTransfers" class="nhsuk-u-margin-bottom-3">
-            <theme-form-checkbox  controlName="confirm"
+            <theme-form-checkbox  controlName="confirm" size="small"
             label="I understand that my innovations will be withdrawn, if I delete my account."></theme-form-checkbox>
           </div>
 
           <div *ngIf="innovator.hasPendingTransfer" class="nhsuk-u-margin-bottom-3">
-            <theme-form-checkbox controlName="confirmPendingTransfer"
+            <theme-form-checkbox controlName="confirmPendingTransfer" size="small"
             label="I understand that any innovations that are pending transfer of ownership will be withdrawn 30 days after the transfer was requested, if the new owner does not accept it."></theme-form-checkbox>
           </div>
         </ng-container>
@@ -79,7 +79,7 @@
               </ng-template>
           </ng-container>
           </div>
-          <ng-container *ngIf="innovator.isOwner">
+          <ng-container *ngIf="innovator.isOwner && stepNumber === 3">
             <p>If you want to keep a copy of your innovation record, you should download a PDF version before you delete your account.</p>
             <div *ngFor="let innovation of innovator.ownedInnovations">
               <p><a href="{{ CONSTANTS.APP_URL }}/exports/{{ innovation.id }}/pdf?role={{ innovator.roleId }}">Download {{ innovation.name }} innovation record (PDF)</a></p>
@@ -99,7 +99,7 @@
 
         <button *ngIf="stepNumber !== 4" [disabled]="stepNumber === 1 && ((!innovator.hasOnlyPendingTransfers && !form.controls.confirm.value) || (innovator.hasPendingTransfer && !form.controls.confirmPendingTransfer.value))" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep('next')"> {{ stepNumber === 2 ? 'Continue to delete account' : 'Continue' }} </button>
 
-        <div *ngIf="stepNumber === 2 || stepNumber === 4" >
+        <div *ngIf="stepNumber !== 3" >
           <a routerLink="/innovator/account/manage-account">{{ stepNumber === 2 ? 'Cancel and wait to delete after transfer' : 'Cancel' }}</a>
         </div>
 

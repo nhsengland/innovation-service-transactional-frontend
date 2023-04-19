@@ -96,7 +96,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           innovatorId: this.stores.authentication.getUserId(),
           innovationId: this.innovation.id
         },
-        maxFileSize: 10,
+        maxFileSize: 20,
         acceptedFiles: [FileTypes.CSV, FileTypes.DOCX, FileTypes.XLSX, FileTypes.PDF]
       };
     }
@@ -146,12 +146,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     this.saveButton = { isActive: false, label: 'Saving...' };
 
-    console.log('Payload', this.wizard.currentAnswers);
-
     of(true).pipe(
       concatMap(() => {
 
-        console.log('Outbound', this.wizard.runOutboundParsing());
         if (shouldUpdateInformation || this.errorOnSubmitStep) {
           return this.stores.innovation.updateSectionInfo$(this.innovation.id, this.sectionId, this.wizard.runOutboundParsing());
         } else {

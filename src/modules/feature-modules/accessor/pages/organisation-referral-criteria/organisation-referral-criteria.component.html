@@ -15,7 +15,7 @@
           <tr *ngFor="let organisation of organisationsInformation" class="nhsuk-table__row">
 
             <td class="nhsuk-table__cell">
-              <a [href]="organisation.link" target="_blank" rel="noopener noreferrer">{{ organisation.name }}</a>
+              <a [href]="organisation.link" target="_blank" aria-label="opens in a new window" rel="noopener noreferrer">{{ organisation.name }}</a>
             </td>
             
             <td class="nhsuk-table__cell">

@@ -94,14 +94,14 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     if (previousSectionId) {
       const previousSection = this.stores.innovation.getInnovationRecordSectionIdentification(previousSectionId);
-      this.previousSection = { id: previousSectionId, title: `${previousSection.group.number}.${previousSection.section.number} ${previousSection.section.title}` };
+      this.previousSection = { id: previousSectionId, title: previousSection ? `${previousSection.group.number}.${previousSection.section.number} ${previousSection.section.title}` : '' };
     } else {
       this.previousSection = null;
     }
 
     if (nextSectionId) {
       const nextSection = this.stores.innovation.getInnovationRecordSectionIdentification(nextSectionId);
-      this.nextSection = { id: nextSectionId, title: `${nextSection.group.number}.${nextSection.section.number} ${nextSection.section.title}` };
+      this.nextSection = { id: nextSectionId, title: nextSection ? `${nextSection.group.number}.${nextSection.section.number} ${nextSection.section.title}` : '' };
     } else {
       this.nextSection = null;
     }
@@ -120,7 +120,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.section.title = section.title;
     this.section.wizard = section.wizard;
 
-    this.setPageTitle(this.section.title, { hint: `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` });
+    this.setPageTitle(this.section.title, { hint: sectionIdentification ? `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` : '' });
     this.setBackLink('Innovation Record', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/record`);
 
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({

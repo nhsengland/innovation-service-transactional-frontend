@@ -1,5 +1,7 @@
+import { FormEngineParameterModel } from '@app/base/forms';
+
 import { FormSelectableFieldType } from '../ir-versions.types';
-import { catalogAreas, catalogCarbonReductionPlan, catalogCareSettings, catalogCategory, catalogEvidenceType, catalogCostComparison, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, catalogInvolvedAACProgrammes, catalogKeyHealthInequalities, catalogMainPurpose, catalogNeedsSupportAnyArea, catalogOfficeLocation, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogRevenues, catalogStandardsType, catalogEvidenceSubmitType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYet, catalogYesNotYetNo } from './catalog.types';
+import { catalogAreas, catalogCarbonReductionPlan, catalogCareSettings, catalogCategory, catalogEvidenceType, catalogCostComparison, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, catalogInvolvedAACProgrammes, catalogKeyHealthInequalities, catalogMainPurpose, catalogNeedsSupportAnyArea, catalogOfficeLocation, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogRevenues, catalogStandardsType, catalogEvidenceSubmitType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYet, catalogYesNotYetNo, catalogHasRevenueModel } from './catalog.types';
 
 
 // Shared.
@@ -13,7 +15,7 @@ export const yesNotYetItems: FormSelectableFieldType<catalogYesNotYet> = [
   { value: 'NOT_YET', label: 'Not yet' }
 ];
 
-export const yesNotYetNoItems:FormSelectableFieldType<catalogYesNotYetNo> = [
+export const yesNotYetNoItems: FormSelectableFieldType<catalogYesNotYetNo> = [
   { value: 'YES', label: 'Yes' },
   { value: 'NOT_YET', label: 'Not yet' },
   { value: 'NO', label: 'No' }
@@ -246,19 +248,21 @@ export const categoriesItems: FormSelectableFieldType<catalogCategory> = [
 
 export const areasItems: FormSelectableFieldType<catalogAreas> = [
   { value: 'COVID_19', label: 'COVID-19' },
-  { value: 'DATA_ANALYTICS_AND_RESEARCH', label: 'Data Analytics & Research' },
+  { value: 'DATA_ANALYTICS_AND_RESEARCH', label: 'Data, analytics and research' },
   { value: 'DIGITALISING_SYSTEM', label: 'Digitalising the system' },
   { value: 'IMPROVING_SYSTEM_FLOW', label: 'Improving system flow' },
   { value: 'INDEPENDENCE_AND_PREVENTION', label: 'Independence and prevention' },
   { value: 'OPERATIONAL_EXCELLENCE', label: 'Operational excellence' },
   { value: 'PATIENT_ACTIVATION_AND_SELF_CARE', label: 'Patient activation and self-care' },
   { value: 'PATIENT_SAFETY', label: 'Patient safety and quality improvement' },
+  { value: 'WORKFORCE_RESOURCE_OPTIMISATION', label: 'Workforce resource optimisation' },
   { value: 'NET_ZERO_GREENER_INNOVATION', label: 'Net zero NHS or greener innovation' }
 ];
+
 export const careSettingsItems: FormSelectableFieldType<catalogCareSettings> = [
   { value: 'ACADEMIA', label: 'Academia' },
-  { value: 'ACUTE_TRUSTS_INPATIENT', label: 'Acute Trusts (Hospital) - Inpatient' },
-  { value: 'ACUTE_TRUSTS_OUTPATIENT', label: 'Acute Trusts (Hospital) - Outpatient' },
+  { value: 'ACUTE_TRUSTS_INPATIENT', label: 'Acute trust - inpatient' },
+  { value: 'ACUTE_TRUSTS_OUTPATIENT', label: 'Acute trust - outpatient' },
   { value: 'AMBULANCE', label: 'Ambulance' },
   { value: 'CARE_HOMES_CARE_SETTING', label: 'Care homes or care setting' },
   { value: 'END_LIFE_CARE', label: 'End of life care (EOLC)' },
@@ -267,11 +271,12 @@ export const careSettingsItems: FormSelectableFieldType<catalogCareSettings> = [
   { value: 'LOCAL_AUTHORITY_EDUCATION', label: 'Local authority - education' },
   { value: 'MENTAL_HEALTH', label: 'Mental health' },
   { value: 'PHARMACY', label: 'Pharmacies' },
-  { value: 'PRIMARY_CARE', label: 'Primary Care' },
+  { value: 'PRIMARY_CARE', label: 'Primary care' },
   { value: 'SOCIAL_CARE', label: 'Social care' },
   { value: 'THIRD_SECTOR_ORGANISATIONS', label: 'Third sector organisations' },
-  { value: 'URGENT_AND_EMERGENCY', label: 'Urgent & Emergency' }
+  { value: 'URGENT_AND_EMERGENCY', label: 'Urgent and emergency' }
 ];
+
 export const mainPurposeItems: FormSelectableFieldType<catalogMainPurpose> = [
   { value: 'PREVENT_CONDITION', label: 'Preventing a condition or symptom from happening or worsening' },
   { value: 'PREDICT_CONDITION', label: 'Predicting the occurence of a condition or symptom' },
@@ -303,35 +308,36 @@ export const involvedAACProgrammesItems: FormSelectableFieldType<catalogInvolved
 // Section 2.
 // // Section 2.1.
 export const benefitsOrImpactItems: FormSelectableFieldType<string> = [
-  { value: 'Benefits for patients and people - Reduces mortality', label: 'Benefits for patients and people - Reduces mortality' },
-  { value: 'Benefits for patients and people - Reduces need for further treatment', label: 'Benefits for patients and people - Reduces need for further treatment' },
-  { value: 'Benefits for patients and people - Reduces adverse events', label: 'Benefits for patients and people - Reduces adverse events' },
-  { value: 'Benefits for patients and people - Enables earlier or more accurate diagnosis', label: 'Benefits for patients and people - Enables earlier or more accurate diagnosis' },
-  { value: 'Benefits for patients and people - Reduces risks, side effects or complications', label: 'Benefits for patients and people - Reduces risks, side effects or complications' },
-  { value: 'Benefits for patients and people - Prevents a condition occurring or exacerbating', label: 'Benefits for patients and people - Prevents a condition occurring or exacerbating' },
-  { value: 'Benefits for patients and people - Avoids a test, procedure or unnecessary treatment', label: 'Benefits for patients and people - Avoids a test, procedure or unnecessary treatment' },
-  { value: 'Benefits for patients and people - Enables a test, procedure or treatment to be done non-invasively', label: 'Benefits for patients and people - Enables a test, procedure or treatment to be done non-invasively' },
-  { value: 'Benefits for patients and people - Increases self-management', label: 'Benefits for patients and people - Increases self-management' },
-  { value: 'Benefits for patients and people - Increases quality of life', label: 'Benefits for patients and people - Increases quality of life' },
-  { value: 'Benefits for patients and people - Enables shared care', label: 'Benefits for patients and people - Enables shared care' },
-  { value: 'Benefits for patients and people - Alleviates pain', label: 'Benefits for patients and people - Alleviates pain' },
-  { value: 'Benefits for patients and people - Other benefits', label: 'Benefits for patients and people - Other benefits' },
-  { value: 'Benefits for the NHS and social care - Reduces the length of stay or enables earlier discharge', label: 'Benefits for the NHS and social care - Reduces the length of stay or enables earlier discharge' },
-  { value: 'Benefits for the NHS and social care - Reduces need for adult or paediatric critical care', label: 'Benefits for the NHS and social care - Reduces need for adult or paediatric critical care' },
-  { value: 'Benefits for the NHS and social care - Reduces emergency admissions', label: 'Benefits for the NHS and social care - Reduces emergency admissions' },
-  { value: 'Benefits for the NHS and social care - Changes delivery of care from secondary care(for example hospitals) to primary care(for example GP or community services)', label: 'Benefits for the NHS and social care - Changes delivery of care from secondary care(for example hospitals) to primary care(for example GP or community services)' },
-  { value: 'Benefits for the NHS and social care - Change in delivery of care from inpatient to day case', label: 'Benefits for the NHS and social care - Change in delivery of care from inpatient to day case' },
-  { value: 'Benefits for the NHS and social care - Increases compliance', label: 'Benefits for the NHS and social care - Increases compliance' },
-  { value: 'Benefits for the NHS and social care - Improves patient management or coordination of care or services', label: 'Benefits for the NHS and social care - Improves patient management or coordination of care or services' },
-  { value: 'Benefits for the NHS and social care - Reduces referrals', label: 'Benefits for the NHS and social care - Reduces referrals' },
-  { value: 'Benefits for the NHS and social care - Takes less time', label: 'Benefits for the NHS and social care - Takes less time' },
-  { value: 'Benefits for the NHS and social care - Uses no staff or a lower grade of staff', label: 'Benefits for the NHS and social care - Uses no staff or a lower grade of staff' },
-  { value: 'Benefits for the NHS and social care - Leads to fewer appointments', label: 'Benefits for the NHS and social care - Leads to fewer appointments' },
-  { value: 'Benefits for the NHS and social care - Is cost saving', label: 'Benefits for the NHS and social care - Is cost saving' },
-  { value: 'Benefits for the NHS and social care - Increases efficiency', label: 'Benefits for the NHS and social care - Increases efficiency' },
-  { value: 'Benefits for the NHS and social care - Improves performance', label: 'Benefits for the NHS and social care - Improves performance' },
-  { value: 'Benefits for the NHS and social care - Reduces carbon emissions and supports the NHS to achieve net zero', label: 'Benefits for the NHS and social care - Reduces carbon emissions and supports the NHS to achieve net zero' },
-  { value: 'Benefits for the NHS and social care - Other environmental benefits', label: 'Benefits for the NHS and social care - Other environmental benefits' }
+  { value: 'Reduces mortality', label: 'Reduces mortality', group: 'Benefits for patients and people' },
+  { value: 'Reduces need for further treatment', label: 'Reduces need for further treatment', group: 'Benefits for patients and people' },
+  { value: 'Reduces adverse events', label: 'Reduces adverse events', group: 'Benefits for patients and people' },
+  { value: 'Enables earlier or more accurate diagnosis', label: 'Enables earlier or more accurate diagnosis', group: 'Benefits for patients and people' },
+  { value: 'Reduces risks, side effects or complications', label: 'Reduces risks, side effects or complications', group: 'Benefits for patients and people' },
+  { value: 'Prevents a condition occurring or exacerbating', label: 'Prevents a condition occurring or exacerbating', group: 'Benefits for patients and people' },
+  { value: 'Avoids a test, procedure or unnecessary treatment', label: 'Avoids a test, procedure or unnecessary treatment', group: 'Benefits for patients and people' },
+  { value: 'Enables a test, procedure or treatment to be done non-invasively', label: 'Enables a test, procedure or treatment to be done non-invasively', group: 'Benefits for patients and people' },
+  { value: 'Increases self-management', label: 'Increases self-management', group: 'Benefits for patients and people' },
+  { value: 'Increases quality of life', label: 'Increases quality of life', group: 'Benefits for patients and people' },
+  { value: 'Enables shared care', label: 'Enables shared care', group: 'Benefits for patients and people' },
+  { value: 'Alleviates pain', label: 'Alleviates pain', group: 'Benefits for patients and people' },
+  { value: 'Other benefits for patients and people', label: 'Other benefits for patients and people', group: 'Benefits for patients and people' },
+  { value: 'Reduces the length of stay or enables earlier discharge', label: 'Reduces the length of stay or enables earlier discharge', group: 'Benefits for the NHS and social care' },
+  { value: 'Reduces need for adult or paediatric critical care', label: 'Reduces need for adult or paediatric critical care', group: 'Benefits for the NHS and social care' },
+  { value: 'Reduces emergency admissions', label: 'Reduces emergency admissions', group: 'Benefits for the NHS and social care' },
+  { value: 'Changes delivery of care from secondary care(for example hospitals) to primary care(for example GP or community services)', label: 'Changes delivery of care from secondary care(for example hospitals) to primary care(for example GP or community services)', group: 'Benefits for the NHS and social care' },
+  { value: 'Change in delivery of care from inpatient to day case', label: 'Change in delivery of care from inpatient to day case', group: 'Benefits for the NHS and social care' },
+  { value: 'Increases compliance', label: 'Increases compliance', group: 'Benefits for the NHS and social care' },
+  { value: 'Improves patient management or coordination of care or services', label: 'Improves patient management or coordination of care or services', group: 'Benefits for the NHS and social care' },
+  { value: 'Reduces referrals', label: 'Reduces referrals', group: 'Benefits for the NHS and social care' },
+  { value: 'Takes less time', label: 'Takes less time', group: 'Benefits for the NHS and social care' },
+  { value: 'Uses no staff or a lower grade of staff', label: 'Uses no staff or a lower grade of staff', group: 'Benefits for the NHS and social care' },
+  { value: 'Leads to fewer appointments', label: 'Leads to fewer appointments', group: 'Benefits for the NHS and social care' },
+  { value: 'Is cost saving', label: 'Is cost saving', group: 'Benefits for the NHS and social care' },
+  { value: 'Increases efficiency', label: 'Increases efficiency', group: 'Benefits for the NHS and social care' },
+  { value: 'Improves performance', label: 'Improves performance', group: 'Benefits for the NHS and social care' },
+  { value: 'Reduces carbon emissions and supports the NHS to achieve net zero', label: 'Reduces carbon emissions and supports the NHS to achieve net zero', group: 'Benefits for the NHS and social care' },
+  { value: 'Other environmental benefits', label: 'Other environmental benefits', group: 'Benefits for the NHS and social care' },
+  { value: 'Other benefits for the NHS and social care', label: 'Other benefits for the NHS and social care', group: 'Benefits for the NHS and social care' }
 ];
 
 export const diseasesConditionsImpactItems: FormSelectableFieldType<string> = [
@@ -502,6 +508,12 @@ export const diseasesConditionsImpactItems: FormSelectableFieldType<string> = [
   { value: 'UROLOGICAL_CONDITIONS_URINARY_TRACT_INFECTION', label: `Urological conditions - Urinary tract infection` }
 ];
 
+export const estimatedCarbonReductionSavingsItems: FormSelectableFieldType<catalogYesNotYetNo> = [
+  { value: 'YES', label: 'Yes' },
+  { value: 'NOT_YET', label: 'Not yet, but I have an idea' },
+  { value: 'NO', label: 'No' }
+];
+
 export const carbonReductionPlanItems: FormSelectableFieldType<catalogCarbonReductionPlan> = [
   { value: 'YES', label: 'Yes, I have one' },
   { value: 'WORKING_ON', label: 'I am working on one' },
@@ -625,17 +637,18 @@ export const standardsHasMetItems: FormSelectableFieldType<catalogYesInProgressN
 
 // // Section 5.2.
 export const hasPatentsItems: FormSelectableFieldType<catalogHasPatents> = [
-  { value: 'HAS_AT_LEAST_ONE', label: 'I have one or more patents' },
+  { value: 'HAS_AT_LEAST_ONE', label: 'I have one or more patents', conditional: new FormEngineParameterModel({ id: 'patentNumbers', dataType: 'text', label: 'Patent number(s)', validations: { isRequired: [true, 'Patent number(s) required'], maxLength: 100 } }) },
   { value: 'APPLIED_AT_LEAST_ONE', label: 'I have applied for one or more patents' },
-  { value: 'HAS_NONE', label: 'I don\'t have any patents, but believe I have freedom to operate' }
+  { value: 'HAS_NONE', label: 'I do not have any patents, but believe I have freedom to operate' }
 ];
 
 
 // Section 6.
 // // Section 6.1.
-export const hasRevenueModelItems: FormSelectableFieldType<catalogYesNo> = [
+export const hasRevenueModelItems: FormSelectableFieldType<catalogHasRevenueModel> = [
   { value: 'YES', label: 'Yes' },
-  { value: 'NO', label: 'No or I do not know' }
+  { value: 'NO', label: 'No' },
+  { value: 'DONT_KNOW', label: 'I do not know' },
 ];
 export const revenuesItems: FormSelectableFieldType<catalogRevenues> = [
   { value: 'ADVERTISING', label: 'Advertising' },

@@ -85,7 +85,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
             id: 'description',
             dataType: 'text',
             label: stepsLabels.l3,
-            validations: { isRequired: [true, 'Description is required'] }
+            validations: { isRequired: [true, 'A description is required'] }
           }]
         }),
       );
@@ -129,8 +129,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'files',
         dataType: 'file-upload',
         label: stepsLabels.l6,
-        description: 'The files must be CSV, XLSX, DOCX or PDF, and can be up to 9MB.',
-        validations: { isRequired: [true, 'Upload at least one file'] }
+        description: 'The files must be CSV, XLSX, DOCX or PDF, and can be up to 9MB.'
       }],
     })
   );

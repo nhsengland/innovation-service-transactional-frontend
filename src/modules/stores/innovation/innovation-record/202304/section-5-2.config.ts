@@ -12,7 +12,7 @@ const stepsLabels = {
   q1: { label: 'Do you have any patents for your innovation?' },
   q2: {
     label: 'Do you have any other intellectual property for your innovation?',
-    description: 'Find out more about intellectual property on the <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a>.'
+    description: 'Find out more about <a href="/innovation-guides" target="_blank" rel="noopener noreferrer">intellectual property (opens in a new window)</a>.'
   }
 };
 
@@ -57,6 +57,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
     hasPatents: data.hasPatents,
+    ...(data.patentNumbers && { patentNumbers: data.patentNumbers }),
     ...(data.hasOtherIntellectual && { hasOtherIntellectual: data.hasOtherIntellectual }),
     ...(data.otherIntellectual && { otherIntellectual: data.otherIntellectual })
   };
@@ -65,17 +66,28 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
-  return [
-    {
-      label: stepsLabels.q1.label,
-      value: hasPatentsItems.find(item => item.value === data.hasPatents)?.label,
+  const toReturn: WizardSummaryType[] = [];
+
+  toReturn.push({
+    label: stepsLabels.q1.label,
+    value: hasPatentsItems.find(item => item.value === data.hasPatents)?.label,
+    editStepNumber: 1
+  });
+
+  if (data.hasPatents === 'HAS_AT_LEAST_ONE') {
+    toReturn.push({
+      label: 'Patent number(s)',
+      value: data.patentNumbers,
       editStepNumber: 1
-    },
-    {
-      label: stepsLabels.q2.label,
-      value: data.otherIntellectual || 'No',
-      editStepNumber: 2
-    }
-  ];
+    });
+  }
+
+  toReturn.push({
+    label: stepsLabels.q2.label,
+    value: data.otherIntellectual || 'No',
+    editStepNumber: 2
+  });
+
+  return toReturn;
 
 }

@@ -122,8 +122,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           id: `userTestFeedback_${StringsHelper.slugify(item.kind)}`, dataType: 'textarea',
           label: `Describe the testing and feedback for ${item.kind}`,
           description: 'Provide a brief summary of the method and key findings. You can upload any documents that showcase your user testing next.',
-          validations: { isRequired: [true, 'Description is required'] },
-          lengthLimit: 'small'
+          validations: { isRequired: [true, 'A description is required'] },
+          lengthLimit: 'medium'
         }]
       })
     );
@@ -133,8 +133,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   steps.push(
     new FormEngineModel({
       parameters: [{
-        id: 'files', dataType: 'file-upload', label: stepsLabels.q5.label, description: stepsLabels.q5.description,
-        validations: { isRequired: [true, 'Upload at least one file'] }
+        id: 'files', dataType: 'file-upload', label: stepsLabels.q5.label, description: stepsLabels.q5.description
       }]
     })
   );
@@ -217,7 +216,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       });
     });
 
-    const stepNumber = editStepNumber++
+    const stepNumber = editStepNumber++;
     const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
     allFiles.forEach((item, i) => {
       toReturn.push({

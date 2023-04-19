@@ -1,4 +1,4 @@
-import { catalogAreas, catalogCarbonReductionPlan, catalogCareSettings, catalogCategory, catalogEvidenceType, catalogCostComparison, catalogEvidenceSubmitType, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, catalogInvolvedAACProgrammes, catalogKeyHealthInequalities, catalogMainPurpose, catalogNeedsSupportAnyArea, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYet, catalogYesNotYetNo } from './catalog.types';
+import { catalogAreas, catalogCarbonReductionPlan, catalogCareSettings, catalogCategory, catalogEvidenceType, catalogCostComparison, catalogEvidenceSubmitType, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, catalogInvolvedAACProgrammes, catalogKeyHealthInequalities, catalogMainPurpose, catalogNeedsSupportAnyArea, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogRevenues, catalogStandardsType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYet, catalogYesNotYetNo, catalogHasRevenueModel } from './catalog.types';
 
 export type DocumentType202304 = {
   version: '202304';
@@ -71,11 +71,12 @@ export type DocumentType202304 = {
   },
   INTELLECTUAL_PROPERTY: {
     hasPatents?: catalogHasPatents,
+    patentNumbers?: string, // New field.
     hasOtherIntellectual?: catalogYesNo,
     otherIntellectual?: string
   },
   REVENUE_MODEL: {
-    hasRevenueModel?: catalogYesNo,
+    hasRevenueModel?: catalogHasRevenueModel,
     revenues?: catalogRevenues[],
     otherRevenueDescription?: string,
     payingOrganisations?: string,

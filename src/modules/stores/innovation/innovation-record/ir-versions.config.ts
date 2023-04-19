@@ -34,16 +34,17 @@ export function getAllSectionsSummary(
   data: {
     section: { id: null | string, section: InnovationSectionEnum, status: keyof typeof INNOVATION_SECTION_STATUS, updatedAt: string },
     data: MappedObjectType
-  }[]
+  }[],
+  version?: string
 ): AllSectionsOutboundPayloadType {
 
-  return getInnovationRecordConfig().map(i => ({
+  return getInnovationRecordConfig(version).map(i => ({
     title: i.title,
     sections: i.sections.map(s => ({
       section: s.title,
       answers: s.wizard
         .runSummaryParsing(s.wizard.runInboundParsing(data.find(d => d.section.section === s.id)?.data ?? {}))
-        .filter(item => item.type !== 'button' || !item.isFile)
+        .filter(item => item.type !== 'button' && !item.isFile)
         .map(a => ({ label: a.label, value: a.value || '' }))
     }))
   }));

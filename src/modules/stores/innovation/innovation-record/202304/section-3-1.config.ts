@@ -15,17 +15,7 @@ const stepsLabels = {
   },
   q2: {
     label: 'Describe the market research you have done, or are doing, within the UK market',
-    description: `There are different methodologies available and could include a mix of the following:
-    <ul>
-    <li>in-depth interviews</li>
-    <li>focus groups </li>
-    <li>telephone interviews</li>
-    <li>patient record forms</li>
-    <li>computer-assisted telephone interviews</li>
-    <li>online surveys</li>
-    <li>market research online communities</li>
-    <li>ethnography"</li>
-    </ul>`
+    description: `This could include a mix of interviews, focus groups, patient record forms, surveys, ethnography, or other market research methods.`
   },
   q3: { label: 'Which option best describes your innovation?' },
   q4: {
@@ -76,8 +66,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   steps.push(
     new FormEngineModel({
       parameters: [{
-        id: 'marketResearch', dataType: 'textarea', label: stepsLabels.q2.label,
-        validations: { isRequired: [true, 'A description of the market research is required'] },
+        id: 'marketResearch', dataType: 'textarea', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
+        validations: { isRequired: [true, 'A description is required'] },
         lengthLimit: 'largeDown'
       }]
     }),

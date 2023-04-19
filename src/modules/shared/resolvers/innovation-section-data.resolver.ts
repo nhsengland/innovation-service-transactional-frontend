@@ -16,7 +16,7 @@ export class InnovationSectionDataResolver implements Resolve<{ id: null | strin
 
     return of({
       id: route.params['sectionId'],
-      name: this.innovationStore.getInnovationRecordSectionIdentification(route.params['sectionId']).section.title
+      name: this.innovationStore.getInnovationRecordSectionIdentification(route.params['sectionId'])?.section.title ?? ''
     });
 
   }

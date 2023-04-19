@@ -35,7 +35,7 @@ export const SECTION_7_1: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasRevenueModel',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in new window)</a> for more information about creating a revenue model.',
+          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about creating a revenue model.',
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasRevenueModelItems
         }]
@@ -79,7 +79,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
         dataType: 'textarea',
         label: stepsLabels.l3,
         description: 'The more specific you can be with your answer, the better.',
-        validations: { isRequired: [true, 'Description is required'] },
+        validations: { isRequired: [true, 'A description is required'] },
         lengthLimit: 'medium'
       }]
     }),
@@ -89,7 +89,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
         dataType: 'textarea',
         label: stepsLabels.l4,
         description: 'The more specific you can be with your answer, the better.',
-        validations: { isRequired: [true, 'Description is required'] },
+        validations: { isRequired: [true, 'A description is required'] },
         lengthLimit: 'medium'
       }]
     }),
@@ -113,7 +113,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
           id: 'fundingDescription',
           dataType: 'textarea',
           label: stepsLabels.l6,
-          validations: { isRequired: [true, 'Description is required'] },
+          validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'medium'
         }]
       })

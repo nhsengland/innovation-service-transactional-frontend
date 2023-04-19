@@ -8,7 +8,9 @@ import { evidenceSubmitTypeItems, evidenceTypeItems } from './forms.config';
 const stepsLabels = {
   q1: {
     label: 'What type of evidence or research do you want to submit?',
-    description: 'Evidence can include clinical and economic evidence, as well as service evaluation, environmental and social impact or other proven benefits such as staff and system benefits. You will be able to add several pieces of evidence one at a time. We will ask about user testing and regulatory approval in later sections.'
+    description: `
+    <p>Evidence can include clinical and economic evidence, as well as service evaluation, environmental and social impact or other proven benefits such as staff and system benefits. You will be able to add several pieces of evidence one at a time.</p>
+    <p>We will ask about user testing and regulatory approval in later sections.</p>`
   },
   q2: { label: 'What type of evidence do you have?' },
   q3: { label: 'What type of economic evidence do you have?' },
@@ -72,7 +74,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         new FormEngineModel({
           parameters: [{
             id: 'description', dataType: 'text', label: stepsLabels.q3.label,
-            validations: { isRequired: [true, 'Description is required'] }
+            validations: { isRequired: [true, 'A description is required'], maxLength: 50 }
           }]
         }),
       );
@@ -84,7 +86,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         new FormEngineModel({
           parameters: [{
             id: 'description', dataType: 'text', label: stepsLabels.q4.label,
-            validations: { isRequired: [true, 'Other description is required'] }
+            validations: { isRequired: [true, 'Other description is required'], maxLength: 50 }
           }]
         })
       );
@@ -101,13 +103,12 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
       parameters: [{
         id: 'summary', dataType: 'textarea', label: stepsLabels.q5.label, description: stepsLabels.q5.description,
         validations: { isRequired: [true, 'Summary is required'] },
-        lengthLimit: 'medium'
+        lengthLimit: 'mediumUp'
       }]
     }),
     new FormEngineModel({
       parameters: [{
-        id: 'files', dataType: 'file-upload', label: stepsLabels.q6.label, description: stepsLabels.q6.description,
-        validations: { isRequired: [true, 'Upload at least one file'] }
+        id: 'files', dataType: 'file-upload', label: stepsLabels.q6.label, description: stepsLabels.q6.description
       }]
     })
   );

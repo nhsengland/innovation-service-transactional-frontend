@@ -55,8 +55,10 @@
   <h2 class="nhsuk-heading-m">Innovator details</h2>
   <dl class="nhsuk-summary-list">
     <div *ngFor="let item of innovatorDetails" class="nhsuk-summary-list__row">
-      <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">{{ item.label }}</dt>
-      <dd class="nhsuk-summary-list__value nhsuk-u-padding-3 text-pre-wrap">{{ item.value }}</dd>
+      <ng-container *ngIf="item.value !== ''">
+        <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+        <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>        
+      </ng-container>
     </div>
   </dl>
 

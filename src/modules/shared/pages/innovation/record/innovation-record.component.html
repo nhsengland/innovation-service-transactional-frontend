@@ -6,6 +6,20 @@
     </div>
     <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
   </div>
+  
+  <div *ngIf="showDownloadOldIR" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+    <h3 class="nhsuk-warning-callout__label">
+      <span role="text">
+        <span class="nhsuk-u-visually-hidden">Important: </span>
+        Changes have been made to your innovation record
+      </span>
+    </h3>
+    <p>The sections that require your attention are now in draft.
+      <a
+        href="{{ CONSTANTS.APP_URL }}/exports/{{ innovation.id }}/pdf?role={{ stores.authentication.getUserContextInfo()?.roleId }}&version=202209">You
+        can download a copy of your previous innovation record here.</a>
+    </p>
+  </div>
 
   <!--TODO: Banner for owner with account delete (new US)-->
 
@@ -29,7 +43,7 @@
 
     <div class="nhsuk-grid-column-full">
 
-      <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
+      <ul *ngIf="innovationStatus === 'CREATED'" class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
         <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="item.substring(2)"></li>
       </ul>
 
@@ -99,7 +113,7 @@
 
         </ng-container>
 
-        <ng-container *ngIf="stores.authentication.isInnovatorType() && innovationExport">
+        <ng-container *ngIf="stores.authentication.isInnovatorType() && innovationExport && innovationStatus !== 'CREATED'">
 
           <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
 

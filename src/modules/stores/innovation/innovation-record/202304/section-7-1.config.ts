@@ -15,10 +15,17 @@ const stepsLabels = {
   },
   q2: {
     label: 'What is the cost of your innovation?',
-    description: 'Include the relevant metric such as a flat capital cost or cost per patient, cost per unit or cost per procedure. Include any costs associated with implementation and resources. For example, £10 based on 500 units per site. £345 per procedure and a typical patient requires two procedures.'
+    description: `
+      <p>Include the relevant metric such as a flat capital cost or cost per patient, cost per unit or cost per procedure. Include any costs associated with implementation and resources.</p>
+      <p>For example, £10 based on 500 units per site. £345 per procedure and a typical patient requires two procedures.</p>`
   },
   q3: { label: 'Roughly how many patients would be eligible for your innovation in the UK?' },
-  q4: { label: 'What is the elibility criteria for your innovation?', description: 'For example, users need to be over a certain age, or have a certain medical history or current health status. Answer "not relevant" if your innovation does not have any elibility criteria.' },
+  q4: {
+    label: 'What is the eligibility criteria for your innovation?',
+    description: `
+    <p>For example, users need to be over a certain age, or have a certain medical history or current health status.</p>
+    <p>Answer "not relevant" if your innovation does not have any eligibility criteria.</p>`
+  },
   q5: { label: 'How many units of your innovation would you expect to sell in the UK per year?' },
   q6: {
     label: 'Approximately how long do you expect each unit of your innovation to be in use?',
@@ -67,7 +74,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         parameters: [{
           id: 'costDescription',
           dataType: 'textarea', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
-          validations: { isRequired: [true, 'Description is required'] },
+          validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'mediumUp'
         }]
       })
@@ -91,7 +98,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
       new FormEngineModel({
         parameters: [{
           id: 'eligibilityCriteria', dataType: 'textarea', label: stepsLabels.q4.label, description: stepsLabels.q4.description,
-          validations: { isRequired: [true, 'Description is required'] },
+          validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'mediumUp'
         }]
       })
@@ -102,14 +109,14 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     new FormEngineModel({
       parameters: [{
         id: 'sellExpectations', dataType: 'textarea', label: stepsLabels.q5.label,
-        validations: { isRequired: [true, 'Description is required'] },
+        validations: { isRequired: [true, 'A description is required'] },
         lengthLimit: 'medium'
       }]
     }),
     new FormEngineModel({
       parameters: [{
         id: 'usageExpectations', dataType: 'textarea', label: stepsLabels.q6.label, description: stepsLabels.q6.description,
-        validations: { isRequired: [true, 'Description is required'] },
+        validations: { isRequired: [true, 'A description is required'] },
         lengthLimit: 'mediumUp'
       }]
     }),

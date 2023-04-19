@@ -48,7 +48,7 @@ export const SECTION_1_1: InnovationSectionConfigType<InnovationSections> = {
           id: 'description',
           dataType: 'textarea',
           label: stepsLabels.l2,
-          validations: { isRequired: [true, 'Description is required'] },
+          validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'medium'
         }]
       }),

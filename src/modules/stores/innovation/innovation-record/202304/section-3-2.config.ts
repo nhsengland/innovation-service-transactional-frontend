@@ -11,7 +11,9 @@ import { innovationPathwayKnowledgeItems } from './forms.config';
 const stepsLabels = {
   q1: {
     label: 'Does your innovation relate to a current NHS care pathway?',
-    description: `An NHS care pathway outlines the entire patient journey and the actions taken in different parts of the healthcare system. It's key to understand the existing routines of clinical and care professionals, administrators and others who will be impacted by your innovation. If your innovation does not play a role in the delivery of care, select 'does not form part of a care pathway.`
+    description: `
+      <p>An NHS care pathway outlines the entire patient journey and the actions taken in different parts of the healthcare system. It's key to understand the existing routines of clinical and care professionals, administrators and others who will be impacted by your innovation.</p>
+      <p>If your innovation does not play a role in the delivery of care, select "does not form part of a care pathway".</p>`
   },
   q2: {
     label: 'Describe the potential care pathway with your innovation in use',
@@ -59,9 +61,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   steps.push(
     new FormEngineModel({
       parameters: [{
-        id: 'potentialPathway', dataType: 'textarea', label: stepsLabels.q2.label,
-        description: 'Please focus on any areas that will be impacted by introducing your innovation to the care pathway.',
-        validations: { isRequired: [true, 'Description is required'] },
+        id: 'potentialPathway', dataType: 'textarea', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
+        validations: { isRequired: [true, 'A description is required'] },
         lengthLimit: 'mediumUp'
       }]
     })
