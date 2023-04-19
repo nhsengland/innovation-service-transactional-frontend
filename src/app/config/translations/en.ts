@@ -199,7 +199,7 @@ export const locale = {
             },
             OWNERSHIP_TRANSFER: {
               title: 'Ownership transfer',
-              message: `Ownership was transferred from {{ actionUserName }} to {{ interveningUserName }}`
+              message: `Ownership was transferred from {{ interveningUserName }} to {{ actionUserName }}`
             },
             SHARING_PREFERENCES_UPDATE: {
               title: 'Sharing preferences update',
@@ -255,7 +255,7 @@ export const locale = {
             },
             ACTION_CREATION: {
               title: 'Action creation',
-              message: `{{ actionUserName }} {{ actionUserRole }} created an action for section "{{ sectionTitle }}"`
+              message: `{{ actionUserName }} {{ actionUserRole }} created an action for section {{ sectionTitle }}`
             },
             ACTION_STATUS_SUBMITTED_UPDATE: {
               title: 'Action changed to submitted',

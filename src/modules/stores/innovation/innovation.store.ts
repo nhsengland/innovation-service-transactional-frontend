@@ -124,18 +124,22 @@ export class InnovationStore extends Store<InnovationModel> {
 
   }
 
-  getInnovationRecordSectionIdentification(sectionId: string): { group: { number: number, title: string }, section: { number: number, title: string } } {
+  getInnovationRecordSectionIdentification(sectionId: string): { group: { number: number, title: string }, section: { number: number, title: string } } | null {
 
     const irConfig = getInnovationRecordConfig();
 
     const groupIndex = irConfig.findIndex(sectionGroup => sectionGroup.sections.some(section => section.id === sectionId));
-    if (groupIndex === -1) { throw new Error(`Innovation record group NOT FOUND for section "${sectionId}"`); }
+    if (groupIndex === -1) { 
+      return null;
+    }
 
     const sectionIndex = irConfig[groupIndex].sections.findIndex(section => section.id === sectionId);
-    if (sectionIndex === -1) { throw new Error(`Innovation record section "${sectionId}" NOT FOUND`); }
+    if (sectionIndex === -1) { 
+      return null;
+    }
 
     return {
-      group: { number: groupIndex + 1, title: irConfig[groupIndex].title },
+      group: { number: groupIndex + 1, title: irConfig[groupIndex]?.title },
       section: { number: sectionIndex + 1, title: irConfig[groupIndex].sections[sectionIndex].title }
     };
 
