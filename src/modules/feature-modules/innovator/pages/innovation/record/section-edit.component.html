@@ -30,19 +30,18 @@
                     <span *ngIf="!item.allowHTML">{{ item.value }}</span>
                   </dd>
                   <dd class="nhsuk-summary-list__actions">
-                    <a href="javascript:void(0)" (click)="onGotoStep(item.editStepNumber || 1)">
-                      Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span>
-                    </a>
+                    <a href="javascript:void(0)" (click)="onGotoStep(item.editStepNumber || 1)">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
                   </dd>
                 </div>
               </ng-container>
             </ng-container>
 
           </ng-container>
+
         </dl>
 
         <button *ngIf="!hasRequestActions" [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmitSection()"> {{ submitButton.label }} </button>
-        <button *ngIf="hasRequestActions" [disabled]="!submitRequestedActionsButton.isActive" class="nhsuk-button" routerLink="/innovator/innovations/{{ innovation.id }}/record/sections/{{ sectionId }}/confirm-update" > {{ submitRequestedActionsButton.label }} </button>
+        <button *ngIf="hasRequestActions" [disabled]="!submitRequestedActionsButton.isActive" class="nhsuk-button" routerLink="/innovator/innovations/{{ innovation.id }}/record/sections/{{ sectionId }}/confirm-update"> {{ submitRequestedActionsButton.label }} </button>
 
       </ng-container>
 

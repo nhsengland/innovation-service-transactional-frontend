@@ -517,7 +517,7 @@ export const locale = {
           required: 'Required',
           existsIn: 'Value already exists',
           invalid_parse_date: 'Please enter a valid date format',
-          max_file_size: 'The file exceed the maximum size of 9MB',
+          max_file_size: 'The file exceed the maximum size of 20MB',
           empty_file: 'Uploaded files cannot be empty'
         }
       }

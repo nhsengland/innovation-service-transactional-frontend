@@ -129,7 +129,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'files',
         dataType: 'file-upload',
         label: stepsLabels.l6,
-        description: 'The files must be CSV, XLSX, DOCX or PDF, and can be up to 9MB.'
+        description: 'The files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB.'
       }],
     })
   );
