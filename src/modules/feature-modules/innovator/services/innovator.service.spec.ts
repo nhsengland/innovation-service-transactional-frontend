@@ -58,15 +58,15 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
       name: 'User display name',
       description: 'Innovation name',
       countryName: 'Some location',
-      postcode: 'EN05'
+      postcode: 'EN05',
     };
     const responseMock = { id: 'id' };
     const expected = { id: 'id' };
 
     let response: any = null;
-    service.createInnovation(payload, true).subscribe({ next: success => response = success, error: error => response = error });
+    service.createInnovation(payload).subscribe({ next: success => response = success, error: error => response = error });
 
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1?useSurvey=true`);
+    const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
     expect(response).toEqual(expected);
