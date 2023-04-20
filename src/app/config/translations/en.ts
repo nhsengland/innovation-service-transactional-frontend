@@ -316,7 +316,8 @@ export const locale = {
             COST_OF_INNOVATION: 'Cost of your innovation',
             COMPARATIVE_COST_BENEFIT: 'Comparative cost benefit',
             REVENUE_MODEL: 'Revenue model',
-            IMPLEMENTATION_PLAN: 'Implementation plan and deployment'
+            IMPLEMENTATION_PLAN: 'Implementation plan and deployment',
+            DEPLOYMENT: 'Deployment'
           },
 
           notification_context_types: {

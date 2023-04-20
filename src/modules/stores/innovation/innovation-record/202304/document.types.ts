@@ -107,6 +107,6 @@ export type DocumentType202304 = {
     evidenceType?: catalogEvidenceType, // Previous clinicalEvidenteType field.
     description?: string,
     summary: string,
-    files: string[]
+    files?: string[]
   }[]
 };

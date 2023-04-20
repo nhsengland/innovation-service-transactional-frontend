@@ -7,12 +7,36 @@
         <span class="nhsuk-u-visually-hidden">Information: </span>
 
         <p class="d-flex">
-          <ng-container *ngTemplateOutlet="icon; context: { status: section.status.id }"></ng-container>
-          <span class="nhsuk-u-margin-right-2"></span>
-          <span *ngIf="section.status.id === 'SUBMITTED' && section.date !== '' && section.submittedBy !== null">This section was submitted by {{ section.submittedBy.name }} on {{ section.date | date: ('app.date_formats.long_date' | translate) }}.
-            <span class="d-inline-block" *ngIf="section.status.id === 'SUBMITTED' && section.date !== '' && section.submittedBy !== null && stores.authentication.isInnovatorType()">You can update this section at any time.</span></span>
-          <span *ngIf="section.status.id === 'DRAFT'">This section is in draft. <span *ngIf="stores.authentication.isInnovatorType()">Check answers and submit updates.</span></span>
-          <span *ngIf="section.status.id === 'NOT_STARTED'">This section has not been started yet.</span>
+
+          <ng-container [ngSwitch]="section.status.id">
+
+            <ng-container *ngSwitchCase="'NOT_STARTED'">
+              <theme-svg-icon type="error"></theme-svg-icon>
+              <span class="nhsuk-u-margin-right-2"></span>
+              <span>This section has not been started yet.</span>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'DRAFT'">
+              <theme-svg-icon type="edit"></theme-svg-icon>
+              <span class="nhsuk-u-margin-right-2"></span>
+
+              <span>This section is in draft. <span *ngIf="stores.authentication.isInnovatorType()">Check answers and submit updates.</span></span>
+
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'SUBMITTED'">
+              <ng-container *ngIf="section.date !== '' && section.submittedBy !== null">
+                <theme-svg-icon type="success"></theme-svg-icon>
+                <span class="nhsuk-u-margin-right-2"></span>
+                <span>
+                  This section was submitted by {{ section.submittedBy.name }} on {{ section.date | date: ('app.date_formats.long_date' | translate) }}.
+                  <span class="d-inline-block" *ngIf="stores.authentication.isInnovatorType()">You can update this section at any time.</span>
+                </span>
+              </ng-container>
+            </ng-container>
+
+          </ng-container>
+
         </p>
       </div>
 
@@ -124,9 +148,3 @@
     </ul>
   </nav>
 </theme-content-wrapper>
-
-<ng-template #icon let-status="status">
-  <theme-svg-icon *ngIf="status === 'NOT_STARTED'" type="error"></theme-svg-icon>
-  <theme-svg-icon *ngIf="status === 'DRAFT'" type="edit"></theme-svg-icon>
-  <theme-svg-icon *ngIf="status === 'SUBMITTED'" type="success"></theme-svg-icon>
-</ng-template>

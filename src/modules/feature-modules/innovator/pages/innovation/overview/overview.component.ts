@@ -88,7 +88,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.isSubmitted = { submittedAllSections: submit.submittedAllSections, submittedForNeedsAssessment: submit.submittedForNeedsAssessment };
       this.showBanner = !(submit.submittedAllSections && submit.submittedForNeedsAssessment);
 
-      const lastSectionSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection!];
       const lastActionSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER].lastSubmittedSection!];
 
       this.cardsList = [{
@@ -97,7 +96,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         link: `/innovator/innovations/${this.innovationId}/record`,
         count: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].count,
         total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].total,
-        lastMessage: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + lastSectionSubmitted)}"`,
+        lastMessage: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection ? `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection)}"` : '',
         date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]?.lastSubmittedAt,
         emptyMessage: "You haven't submitted any section of your innovation record yet"
       }, {
