@@ -119,17 +119,4 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   }
 
-
-  onSubmitInnovation(): void {
-
-    this.stores.innovation.submitInnovation$(this.innovationId).subscribe(response => {
-
-      this.innovationStatus = response.status;
-
-      this.setAlertSuccess('You have successfully submitted your record for needs assessment', { message: 'You can expect the service team to get in touch within one week.' });
-
-    });
-
-  }
-
 }

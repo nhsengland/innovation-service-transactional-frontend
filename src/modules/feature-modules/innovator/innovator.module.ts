@@ -44,10 +44,12 @@ import { InnovationSectionEvidenceEditComponent } from './pages/innovation/recor
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
+import { InnovationDataSharingEditComponent } from './pages/innovation/record/data-sharing-edit.component';
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 import { ManageGuard } from './guards/manage.guard';
+import { ShareInnovationRecordGuard } from './guards/share-innovation-record.guard';
 
 // Services.
 import { InnovatorService } from './services/innovator.service';
@@ -99,12 +101,14 @@ import { InnovatorService } from './services/innovator.service';
     InnovationSectionEditComponent,
     InnovationNewComponent,
     PageInnovationManageAccessOverviewComponent,
-    PageInnovationManageAccessLeaveInnovationComponent
+    PageInnovationManageAccessLeaveInnovationComponent,
+    InnovationDataSharingEditComponent
   ],
   providers: [
     // Guards.
     FirstTimeSigninGuard,
     ManageGuard,
+    ShareInnovationRecordGuard,
 
     // Services.
     InnovatorService
