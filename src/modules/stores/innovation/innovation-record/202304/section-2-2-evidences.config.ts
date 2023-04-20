@@ -62,7 +62,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
             validations: { isRequired: [true, 'Choose one option'] },
             items: [
               ...evidenceTypeItems,
-              { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'description', dataType: 'text', label: 'Other evidence type', validations: { isRequired: [true, 'Other description is required'] } }) }
+              { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'description', dataType: 'text', label: 'Other evidence type', validations: { isRequired: [true, 'Other evidence type is required'] } }) }
             ]
           }]
         })
@@ -189,6 +189,9 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       isFile: true
     });
   });
+
+  // Add a button to the end of the list.
+  toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
 
   return toReturn;
 

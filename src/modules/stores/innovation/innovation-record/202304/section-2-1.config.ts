@@ -279,6 +279,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   );
 
   if (data.completedHealthInequalitiesImpactAssessment === 'YES') {
+
     const stepNumber = editStepNumber++;
     const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
     allFiles.forEach((item, i) => {
@@ -290,6 +291,10 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
         isFile: true
       });
     });
+
+    // Add a button to the end of the list.
+    toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
+
   }
 
   return toReturn;

@@ -12,16 +12,32 @@
 
         <dl class="nhsuk-summary-list">
 
-          <div *ngFor="let item of wizard.getSummary()" class="nhsuk-summary-list__row">
-            <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-            <dd class="nhsuk-summary-list__value text-pre-wrap">
-              <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
-              <span *ngIf="!item.allowHTML">{{ item.value }}</span>
-            </dd>
-            <dd class="nhsuk-summary-list__actions">
-              <a href="javascript:void(0)" (click)="onGotoStep(item.editStepNumber || 1)"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
-            </dd>
-          </div>
+          <ng-container *ngFor="let item of wizard.getSummary()">
+
+            <ng-container [ngSwitch]="item.type">
+              <ng-container *ngSwitchCase="'button'">
+                <div class="width-max-content">
+                  <dt class="nhsuk-u-margin-top-5">
+                    <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0" (click)="onGotoStep(item.editStepNumber || 1)">{{ item.label }} </button>
+                  </dt>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">
+                    <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
+                    <span *ngIf="!item.allowHTML">{{ item.value }}</span>
+                  </dd>
+                  <dd class="nhsuk-summary-list__actions">
+                    <a href="javascript:void(0)" (click)="onGotoStep(item.editStepNumber || 1)">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+                  </dd>
+                </div>
+              </ng-container>
+            </ng-container>
+
+          </ng-container>
+
         </dl>
 
         <button class="nhsuk-button" (click)="onSubmitEvidence()"> Save </button>
