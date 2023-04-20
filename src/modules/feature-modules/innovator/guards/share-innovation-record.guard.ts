@@ -5,9 +5,7 @@ import { InnovationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ShareInnovationRecordGuard implements CanActivate {
 
   constructor(
