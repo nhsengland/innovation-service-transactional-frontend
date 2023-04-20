@@ -257,6 +257,10 @@ export const locale = {
               title: 'Action creation',
               message: `{{ actionUserName }} {{ actionUserRole }} created an action for section {{ sectionTitle }}`
             },
+            ACTION_CREATION_SECTION_DEPRECATED: {
+              title: 'Action creation',
+              message: `{{ actionUserName }} {{ actionUserRole }} created an action for a section that is no longer available`
+            },
             ACTION_STATUS_SUBMITTED_UPDATE: {
               title: 'Action changed to submitted',
               message: `{{ totalActions }} actions for "{{ sectionTitle }}" section were changed to "Submitted"`

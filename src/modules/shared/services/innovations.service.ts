@@ -10,7 +10,7 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 
-import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLog, InnovationSupportsLogDTO, SupportLogType } from './innovations.dtos';
@@ -460,7 +460,7 @@ export class InnovationsService extends CoreService {
 
           return {
             ...item,
-            ...{ name: sectionIdentification ? `Update '${sectionIdentification.section.title}'` : 'no longer available'}
+            ...{ name: sectionIdentification ? `Update '${sectionIdentification.section.title}'` : 'Section no longer available'}
           }
         })
       }))
@@ -479,7 +479,7 @@ export class InnovationsService extends CoreService {
           id: response.id,
           displayId: response.displayId,
           status: response.status,
-          name: sectionIdentification ? `Update '${sectionIdentification.section.title}'` : 'no longer available',
+          name: sectionIdentification ? `Update '${sectionIdentification.section.title}'` : 'Section no longer available',
           description: response.description,
           section: response.section,
           createdAt: response.createdAt,
@@ -644,6 +644,10 @@ export class InnovationsService extends CoreService {
               if (['innovator', 'accessor'].includes(userUrlBasePath) && i.params.actionId && sectionIdentification) { // Don't make sense for assessment users.
                 link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/action-tracker/${i.params.actionId}` };
               }
+
+              if (i.activity === ActivityLogItemsEnum.ACTION_CREATION && !sectionIdentification) {
+                i.activity = ActivityLogItemsEnum.ACTION_CREATION_SECTION_DEPRECATED;
+              }
               break;
           }
 
@@ -655,7 +659,7 @@ export class InnovationsService extends CoreService {
             params: {
               ...i.params,
               innovationName: response.innovation.name,
-              sectionTitle: sectionIdentification ? `"${sectionIdentification.section.title}"` : 'no longer available',
+              sectionTitle: sectionIdentification ? `"${sectionIdentification.section.title}"` : '',
               actionUserRole: i.params.actionUserRole ? `(${this.stores.authentication.getRoleDescription(i.params.actionUserRole)})` : ''
             },
             link
