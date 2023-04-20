@@ -87,7 +87,13 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
 
           this.wizard.gotoStep(Number(params.stepId));
           this.setPageTitle(this.wizard.currentStepTitle() || '');
-          this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
+
+          if(Number(params.stepId) === 1) {
+            this.setBackLink('Go back');
+          } else {            
+            this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
+          }
+
           this.setPageStatus('READY');
 
         })
