@@ -21,6 +21,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
 
   innovationId: string;
   stayAsCollaborator: boolean = false;
+  redirectToDeleteAccount: boolean = false;
 
   wizard: WizardEngineModel = new WizardEngineModel({});
   summaryList: WizardSummaryType[] = [];
@@ -41,6 +42,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.redirectToDeleteAccount = this.stores.context.getPreviousUrl()?.includes('/manage-account/delete') ?? false;
   }
 
   ngOnInit(): void {
@@ -127,7 +129,12 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
 
     this.innovatorService.transferInnovation(body).subscribe({
       next: () => {
-        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation`);
+        if(this.redirectToDeleteAccount) {
+          this.redirectTo(`/innovator/account/manage-account/delete`);
+
+        } else {
+          this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation`);
+        }
       },
       error: () => {
         this.setAlertError('An error occurred when transferring innovation ownership. Please check the details and try again or contact us for further info.');
