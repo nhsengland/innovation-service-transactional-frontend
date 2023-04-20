@@ -34,7 +34,7 @@ const stepsLabels = {
   },
   q13: {
     label: 'Are you currently receiving any support for your innovation?',
-    description: `This can include any UK funding to support the development of your innovation, or any support you are currently receiving from <a href="about-the-service/who-we-are#The%20organisations%20behind%20the%20service" target="_blank" rel="noopener noreferrer">NHS Innovation Service organisations (opens in a new window)</a>.`
+    description: `This can include any UK funding to support the development of your innovation, or any support you are currently receiving from <a href="/about-the-service/who-we-are#The%20organisations%20behind%20the%20service" target="_blank" rel="noopener noreferrer">NHS Innovation Service organisations (opens in a new window)</a>.`
   },
   q14: { label: 'Are you involved with any Accelerated Access Collaborative programmes?', description: 'Select all that apply, or select no, if not relevant.' }
 };

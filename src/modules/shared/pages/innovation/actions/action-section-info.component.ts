@@ -20,7 +20,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
   actionId: string;
 
   action?: InnovationActionInfoDTO;
-  sectionTitle = '' ;
+  sectionTitle = '';
 
   actionsIds: string[] = [];
 
@@ -45,9 +45,6 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
     if (this.sectionId) {
 
       this.innovationsService.getSectionInfo(this.innovationId, this.sectionId, { fields: ['actions'] }).subscribe(sectionInfo => {
-
-        const section = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);        
-        this.sectionTitle = section ? `${section.group.number}.${section.section.number} ${section.section.title}` : 'Section no longer available';
 
         this.actionsIds = sectionInfo.actionsIds ?? [];
 
@@ -102,6 +99,9 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
     this.innovationsService.getActionInfo(this.innovationId, this.actionId).subscribe(response => {
 
       this.action = response;
+
+      const section = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
+      this.sectionTitle = section ? `${section.group.number}.${section.section.number} ${section.section.title}` : 'Section no longer available';
 
       if (this.actionsIds.length > 1) {
         this.setPageTitle('Requested action', { hint: `${this.actionNumber + 1} of ${this.actionsIds.length}` });

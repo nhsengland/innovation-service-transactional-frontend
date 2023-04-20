@@ -121,7 +121,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     ...(data.evidenceType && { evidenceType: data.evidenceType }),
     ...(data.description && { description: data.description }),
     summary: data.summary,
-    files: data.files.map(item => item.id)
+    ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
   };
 }
 
