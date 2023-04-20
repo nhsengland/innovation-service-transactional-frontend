@@ -340,6 +340,11 @@ export const ACTIVITY_LOG_ITEMS: {
     details: 'COMMENT',
     link: 'ACTION'
   },
+  ACTION_CREATION_SECTION_DEPRECATED: {
+    type: ActivityLogTypesEnum.ACTIONS,
+    details: null,
+    link: null
+  },
   ACTION_STATUS_SUBMITTED_UPDATE: {
     type: ActivityLogTypesEnum.ACTIONS,
     details: null,
