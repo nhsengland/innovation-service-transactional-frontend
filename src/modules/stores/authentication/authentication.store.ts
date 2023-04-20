@@ -136,7 +136,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
     const currentRole = LocalStorageHelper.getObjectItem<AuthenticationModel['userContext']>('userContext');
 
-    if (currentRole) {
+    if (currentRole && this.state.user?.roles.find(i => i.id === currentRole.roleId)) {
       this.setUserContext(currentRole);
     } else {
       this.state.userContext = undefined;
