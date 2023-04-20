@@ -111,6 +111,10 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
   }
 
   ngDoCheck(): void {
+    
+    if(this.fieldControl.value !== null && this.textAreaValue === '') {
+      this.textAreaValue = this.fieldControl.value;
+    }
 
     this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
     this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : { message: '', params: {} };
