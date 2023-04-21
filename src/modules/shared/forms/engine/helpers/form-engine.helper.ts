@@ -45,13 +45,10 @@ export class FormEngineHelper {
           if (Array.isArray(parameterValue)) { arrayValue = parameterValue as { [key: string]: any }[]; }
           else { arrayValue = []; }
 
-          if (arrayValue.length === 0) {
-            (form.get(parameter.id) as FormArray).push(FormEngineHelper.addFieldGroupRow(parameter));
-          } else {
-            arrayValue.forEach((parameterValueRow, i) => {
-              (form.get(parameter.id) as FormArray).push(FormEngineHelper.addFieldGroupRow(parameter, parameterValueRow));
-            });
-          }
+          arrayValue.forEach((parameterValueRow, i) => {
+            (form.get(parameter.id) as FormArray).push(FormEngineHelper.addFieldGroupRow(parameter, parameterValueRow));
+          });
+
           break;
 
         // case 'autocomplete-value':

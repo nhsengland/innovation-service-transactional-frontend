@@ -140,7 +140,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     commercialBasis: data.commercialBasis,
     organisationDeploymentAffect: data.organisationDeploymentAffect,
     hasResourcesToScale: data.hasResourcesToScale,
-    files: data.files,
+    files: data.files
   };
 
 }
