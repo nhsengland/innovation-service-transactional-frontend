@@ -163,7 +163,7 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit{
     },
       error: () => {
         this.submitButton = { isActive: true, label: 'Delete account' };
-        this.setAlertError('An error occured while deleting user. Please, try again or contact us for further help');
+        this.setAlertError('An error occurred while deleting user. Please, try again or contact us for further help');
       }
     });
 

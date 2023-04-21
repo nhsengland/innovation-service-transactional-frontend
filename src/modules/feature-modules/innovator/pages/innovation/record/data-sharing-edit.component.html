@@ -14,7 +14,7 @@
         <theme-form-checkbox-array arrayName="organisations" label="Please choose your data sharing preferences" [items]="organisationsList" [pageUniqueField]="false"></theme-form-checkbox-array>
       </form>
 
-      <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Confirm submission</button>
+      <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" [disabled]="!submitButton.isActive" (click)="onSubmit()"> {{ submitButton.label }} </button>
 
       <div>
         <a routerLink="/innovator/innovations/{{ innovationId }}/record">Cancel</a>
