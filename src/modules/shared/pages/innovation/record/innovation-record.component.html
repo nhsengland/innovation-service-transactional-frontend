@@ -6,7 +6,7 @@
     </div>
     <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
   </div>
-  
+
   <div *ngIf="showDownloadOldIR" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <h3 class="nhsuk-warning-callout__label">
       <span role="text">
@@ -63,7 +63,7 @@
       <ng-container *ngIf="stores.authentication.isInnovatorType()">
 
         <ng-container *ngIf="isInnovationInCreatedStatus()">
-          <button class="nhsuk-button nhsuk-u-margin-bottom-2" [disabled]="!allSectionsSubmitted()" routerLink="/innovator/innovations/{{ innovationId }}/record/support">Submit record for needs assessment</button>
+          <button class="nhsuk-button nhsuk-u-margin-bottom-4" [disabled]="!allSectionsSubmitted()" routerLink="/innovator/innovations/{{ innovationId }}/record/support">Submit record for needs assessment</button>
         </ng-container>
 
         <ng-container *ngIf="innovationStatus === 'PAUSED'" class="nhsuk-u-margin-bottom-4">

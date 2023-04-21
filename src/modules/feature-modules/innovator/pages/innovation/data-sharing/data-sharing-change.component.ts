@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { FormArray, FormControl, FormGroup } from '@app/base/forms';
+import { CustomValidators, FormArray, FormControl, FormGroup } from '@app/base/forms';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
@@ -25,8 +25,10 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
   showDataSharingValidationWarning = false;
 
+  submitButton = { isActive: true, label: 'Save changes' };
+
   form = new FormGroup({
-    organisations: new FormArray<FormControl<string>>([])
+    organisations: new FormArray<FormControl<string>>([], CustomValidators.requiredCheckboxArray('Choose at least one organisation'))
   }, { updateOn: 'change' });
 
 
@@ -55,9 +57,16 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
       this.initialState.organisations = innovationSharesList.map(item => ({ id: item.organisation.id }));
       this.organisationsList = organisationsList.map(o => ({ value: o.id, label: o.name }));
 
-      innovationSharesList.forEach(item => {
-        (this.form.get('organisations') as FormArray).push(new FormControl(item.organisation.id));
-      });
+      if(innovationSharesList.length > 0) {
+        innovationSharesList.forEach(item => {
+          (this.form.get('organisations') as FormArray).push(new FormControl(item.organisation.id));
+        });
+      }
+      else {
+        organisationsList.forEach(item => {
+          (this.form.get('organisations') as FormArray).push(new FormControl(item.id));
+        });
+      }
 
       this.subscriptions.push(
         (this.form.get('organisations') as FormArray).valueChanges.subscribe(() => this.dataSharingValidation())
@@ -71,11 +80,24 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
   onSubmit(): void {
 
+    if(!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.submitButton = { isActive: false, label: 'Saving...' };
+
     const redirectUrl = `/innovator/innovations/${this.innovationId}/support`;
 
-    this.innovatorService.submitOrganisationSharing(this.innovationId, this.form.value).subscribe(() => {
-      this.setRedirectAlertSuccess('Your data sharing preferences were changed');
-      this.redirectTo(redirectUrl);
+    this.innovatorService.submitOrganisationSharing(this.innovationId, this.form.value).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('Your data sharing preferences were changed');
+        this.redirectTo(redirectUrl);
+    },
+      error: () => {
+        this.submitButton = { isActive: true, label: 'Save changes' };
+        this.setAlertError('An error occurred while saving your data sharing preferences. Please, try again or contact us for further help');
+      }
     });
 
   }

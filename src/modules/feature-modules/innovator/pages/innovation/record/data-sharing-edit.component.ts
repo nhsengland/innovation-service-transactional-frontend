@@ -3,6 +3,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { CustomValidators } from '@modules/shared/forms';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { concatMap, forkJoin } from 'rxjs';
@@ -19,8 +20,10 @@ export class InnovationDataSharingEditComponent extends CoreComponent implements
 
   initialState: { organisations: { id: string }[] } = { organisations: [] };
 
+  submitButton = { isActive: true, label: 'Confirm submission' };
+
   form = new FormGroup({
-    organisations: new FormArray<FormControl<string>>([])
+    organisations: new FormArray<FormControl<string>>([], CustomValidators.requiredCheckboxArray('Choose at least one organisation'))
   }, { updateOn: 'change' });
 
 
@@ -49,9 +52,16 @@ export class InnovationDataSharingEditComponent extends CoreComponent implements
       this.initialState.organisations = innovationSharesList.map(item => ({ id: item.organisation.id }));
       this.organisationsList = organisationsList.map(o => ({ value: o.id, label: o.name }));
 
-      innovationSharesList.forEach(item => {
-        (this.form.get('organisations') as FormArray).push(new FormControl(item.organisation.id));
-      });
+      if(innovationSharesList.length > 0) {
+        innovationSharesList.forEach(item => {
+          (this.form.get('organisations') as FormArray).push(new FormControl(item.organisation.id));
+        });
+      }
+      else {
+        organisationsList.forEach(item => {
+          (this.form.get('organisations') as FormArray).push(new FormControl(item.id));
+        });
+      }
 
       this.setPageStatus('READY');
 
@@ -61,6 +71,13 @@ export class InnovationDataSharingEditComponent extends CoreComponent implements
 
   onSubmit(): void {
 
+    if(!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.submitButton = { isActive: false, label: 'Saving...' };
+
     const redirectUrl = `/innovator/innovations/${this.innovationId}/record`;
 
     this.innovatorService.submitOrganisationSharing(this.innovationId, this.form.value).
@@ -68,9 +85,15 @@ export class InnovationDataSharingEditComponent extends CoreComponent implements
       concatMap(() => {
         return this.stores.innovation.submitInnovation$(this.innovationId);
       })
-    ).subscribe(() => {
+    ).subscribe({
+      next: () => {
         this.setRedirectAlertSuccess('You have successfully submitted your innovation record for a needs assessment', { message: `The needs assessment team will contact you within 1 week.` });
         this.redirectTo(redirectUrl);
+    },
+      error: () => {
+        this.submitButton = { isActive: true, label: 'Confirm submission' };
+        this.setAlertError('An error occurred while submiting your innovation record. Please, try again or contact us for further help');
+      }
     });
 
   }
