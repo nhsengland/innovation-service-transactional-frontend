@@ -50,7 +50,7 @@ describe('FormEngineComponent', () => {
       radioGroupField: null,
       checkboxGroupField: {},
       checkboxArrayField: [],
-      fieldsGroupField: [{ field01: null, field02: null }]
+      fieldsGroupField: []
     };
 
     expect(component.form.valid).toBe(true);
