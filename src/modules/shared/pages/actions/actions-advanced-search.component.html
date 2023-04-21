@@ -140,7 +140,7 @@
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('updatedAt') }}</span>
                 <span>{{ item.updatedAt | date: ('app.date_formats.medium_date' | translate) }}</span>
-                <span class="nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">by {{ item.updatedBy.name }} ({{ this.stores.authentication.getRoleDescription(item.updatedBy.role) }})</span>
+                <span class="nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">by {{ item.updatedBy.name }} <ng-container *ngIf="item.updatedBy.role">({{ this.stores.authentication.getRoleDescription(item.updatedBy.role) }})</ng-container></span>
               </td>
               <td class="nhsuk-table__cell text-align-right">
                 <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('status') }}</span>
