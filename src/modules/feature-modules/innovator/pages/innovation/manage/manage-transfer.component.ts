@@ -6,9 +6,10 @@ import { CustomValidators, FormGroup, FormEngineParameterModel, Validators, Wiza
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { ActivatedRoute } from '@angular/router';
-import { FormEngineModel, WizardSummaryType } from '@modules/shared/forms';
+import { WizardSummaryType } from '@modules/shared/forms';
 import { COLLABORATORS_TRANSFERS, NO_COLLABORATORS_TRANSFERS, otherEmailItem } from './manage-transfer.config';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { cloneDeep } from 'lodash';
 
 
 @Component({
@@ -46,14 +47,12 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
   }
 
   ngOnInit(): void {
-    this.wizard = NO_COLLABORATORS_TRANSFERS;
+    this.wizard = cloneDeep(NO_COLLABORATORS_TRANSFERS);
 
     this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']).subscribe(response => {
 
-      if (response.count === 0) {
-        this.wizard = NO_COLLABORATORS_TRANSFERS;
-      } else {
-        this.wizard = COLLABORATORS_TRANSFERS;
+      if (response.count > 0) {
+        this.wizard = cloneDeep(COLLABORATORS_TRANSFERS);
         const collaborators: {
           value: string,
           label: string
