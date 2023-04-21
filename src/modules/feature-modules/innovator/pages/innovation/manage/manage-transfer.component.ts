@@ -6,10 +6,10 @@ import { CustomValidators, FormGroup, FormEngineParameterModel, Validators, Wiza
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { ActivatedRoute } from '@angular/router';
-import { FormEngineModel, WizardSummaryType } from '@modules/shared/forms';
+import { WizardSummaryType } from '@modules/shared/forms';
 import { COLLABORATORS_TRANSFERS, NO_COLLABORATORS_TRANSFERS, otherEmailItem } from './manage-transfer.config';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { clone, cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash';
 
 
 @Component({
