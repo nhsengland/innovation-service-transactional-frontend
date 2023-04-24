@@ -3,14 +3,12 @@ import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
+import { ContextInnovationType } from '@app/base/types';
 
 import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
-
-import { getSectionNumber, INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
-
 import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
-import { RoutingHelper } from '@app/base/helpers';
+import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+
 
 @Component({
   selector: 'shared-pages-innovation-section-info',
@@ -18,38 +16,28 @@ import { RoutingHelper } from '@app/base/helpers';
 })
 export class PageInnovationSectionInfoComponent extends CoreComponent implements OnInit {
 
-  module: '' | 'innovator' | 'accessor' | 'assessment' | 'admin' = '';
   innovation: ContextInnovationType;
 
   section: {
-    id: InnovationSectionEnum;
+    id: InnovationSectionEnum,
     nextSectionId: null | string,
-    title: string;
-    status: { id: keyof typeof INNOVATION_SECTION_STATUS, label: string };
-    isNotStarted: boolean;
-    showSubmitButton: boolean;
-    showSubmitUpdatesButton: boolean;
-    hasEvidences: boolean;
-    wizard: WizardEngineModel;
-    date: string;
-    submittedBy: null | {
-      name: string,
-      isOwner: boolean,
-    },
+    title: string,
+    status: { id: keyof typeof INNOVATION_SECTION_STATUS, label: string },
+    isNotStarted: boolean,
+    showSubmitButton: boolean,
+    showSubmitUpdatesButton: boolean,
+    hasEvidences: boolean,
+    wizard: WizardEngineModel,
+    date: string,
+    submittedBy: null | { name: string, isOwner: boolean }
   };
 
   summaryList: WizardSummaryType[] = [];
-  previousSection: {
-    id: string;
-    title: string;
-    show: boolean;
-  };
+  sectionsIdsList: string[];
 
-  nextSection: {
-    id: string;
-    title: string;
-    show: boolean;
-  };
+  previousSection: null | { id: string, title: string } = null;
+  nextSection: null | { id: string, title: string } = null;
+
 
   constructor(
     private activatedRoute: ActivatedRoute
@@ -57,7 +45,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     super();
 
-    this.module = RoutingHelper.getRouteData<any>(this.activatedRoute.root).module;
     this.innovation = this.stores.context.getInnovation();
 
     this.section = {
@@ -74,17 +61,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       submittedBy: null
     };
 
-    this.previousSection = {
-      id: '',
-      title: '',
-      show: false
-    };
+    this.sectionsIdsList = getInnovationRecordConfig().flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
 
-    this.nextSection = {
-      id: '',
-      title: '',
-      show: false
-    };
   }
 
   ngOnInit(): void {
@@ -102,56 +80,48 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
   private getNextSectionId(): string | null {
 
-    const sectionsIdsList = INNOVATION_SECTIONS.flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
-    const currentSectionIndex = sectionsIdsList.indexOf(this.section.id);
+    const currentSectionIndex = this.sectionsIdsList.indexOf(this.section.id);
 
-    return sectionsIdsList[currentSectionIndex + 1] || null;
+    return this.sectionsIdsList[currentSectionIndex + 1] || null;
 
   }
 
   private getPreviousAndNextPagination(): void {
-    const sectionsIdsList = INNOVATION_SECTIONS.flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
-    const currentSectionIndex = sectionsIdsList.indexOf(this.section.id);
-    const previousSectionIndex = sectionsIdsList[currentSectionIndex - 1] || null;
-    const nextSectionIndex = sectionsIdsList[currentSectionIndex + 1] || null;
 
-    this.previousSection = {
-      id: previousSectionIndex,
-      title: `${getSectionNumber(previousSectionIndex)} ${this.stores.innovation.getSectionTitle(previousSectionIndex)}`,
-      show: previousSectionIndex !== null
-    };
+    const currentSectionIndex = this.sectionsIdsList.indexOf(this.section.id);
+    const previousSectionId = this.sectionsIdsList[currentSectionIndex - 1] || null;
+    const nextSectionId = this.sectionsIdsList[currentSectionIndex + 1] || null;
 
-    this.nextSection = {
-      id: nextSectionIndex,
-      title: `${getSectionNumber(nextSectionIndex)} ${this.stores.innovation.getSectionTitle(nextSectionIndex)}`,
-      show: nextSectionIndex !== null
-    };
+    if (previousSectionId) {
+      const previousSection = this.stores.innovation.getInnovationRecordSectionIdentification(previousSectionId);
+      this.previousSection = { id: previousSectionId, title: previousSection ? `${previousSection.group.number}.${previousSection.section.number} ${previousSection.section.title}` : '' };
+    } else {
+      this.previousSection = null;
+    }
+
+    if (nextSectionId) {
+      const nextSection = this.stores.innovation.getInnovationRecordSectionIdentification(nextSectionId);
+      this.nextSection = { id: nextSectionId, title: nextSection ? `${nextSection.group.number}.${nextSection.section.number} ${nextSection.section.title}` : '' };
+    } else {
+      this.nextSection = null;
+    }
+
   }
 
   private initializePage(): void {
 
     this.setPageStatus('LOADING');
 
-    const section = this.stores.innovation.getSection(this.activatedRoute.snapshot.params.sectionId);
-    this.section = {
-      id: this.activatedRoute.snapshot.params.sectionId,
-      nextSectionId: null,
-      title: section?.title || '',
-      status: { id: 'UNKNOWN', label: '' },
-      isNotStarted: false,
-      showSubmitButton: false,
-      showSubmitUpdatesButton: false,
-      hasEvidences: !!section?.evidences?.steps.length,
-      wizard: section?.wizard || new WizardEngineModel({}),
-      date: '',
-      submittedBy: null
-    };
+    const sectionId = this.activatedRoute.snapshot.params.sectionId;
+    const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(sectionId);
+    const section = this.stores.innovation.getInnovationRecordSection(sectionId);
 
-    this.setPageTitle(this.section.title, { hint: `${this.stores.innovation.getSectionParentNumber(this.section.id)}. ${this.stores.innovation.getSectionParentTitle(this.section.id)}` });
+    this.section.id = sectionId;
+    this.section.title = section.title;
+    this.section.wizard = section.wizard;
 
-    if (this.module !== '') {
-      this.setBackLink('Innovation Record', `${this.module}/innovations/${this.innovation.id}/record`);
-    }
+    this.setPageTitle(this.section.title, { hint: sectionIdentification ? `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` : '' });
+    this.setBackLink('Innovation Record', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/record`);
 
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
       next: response => {
@@ -162,10 +132,14 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
         this.getPreviousAndNextPagination();
 
-        if (this.module === 'accessor' && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
+        if (this.stores.authentication.isAccessorType() && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
           // If accessor, only view information if section is submitted.
           this.summaryList = [];
         } else {
+
+          // Special business rule around section 2.2.
+          this.section.hasEvidences = !!(section.evidences && response.data.hasEvidence && response.data.hasEvidence === 'YES');
+
           this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data)).runRules();
 
           const validInformation = this.section.wizard.validateData();
@@ -177,10 +151,11 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           }
 
           this.summaryList = this.section.wizard.runSummaryParsing();
+
         }
 
-
         this.setPageStatus('READY');
+
       }
     });
 
@@ -199,4 +174,5 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     });
 
   }
+
 }

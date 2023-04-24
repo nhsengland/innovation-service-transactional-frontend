@@ -32,7 +32,7 @@
             <p>
               For more information, please
               <!-- TODO: this needs to be updated with roles in dev -->
-              <a href="{{ this.userType === 'INNOVATOR' ? '/terms-of-use/innovator-terms-of-use' : '/terms-of-use/support-organisation-terms-of-use' }}" target="_blank" rel="noopener noreferrer">see the terms of use.</a>
+              <a href="{{ this.userType === 'INNOVATOR' ? '/terms-of-use/innovator' : '/terms-of-use/support-organisation' }}" target="_blank" rel="noopener noreferrer">see the terms of use (opens in a new window).</a>
             </p>
           </div>
         </details>
@@ -67,7 +67,7 @@
           <theme-spinner *ngIf="isHistoryLoading; else historyLoaded"></theme-spinner>
 
           <ng-template #historyLoaded>
-            
+
             <p *ngIf="historyRequestTable.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-4">No history yet.</p>
 
             <ng-container *ngIf="historyRequestTable.getTotalRowsNumber() > 0" [ngTemplateOutlet]="defaultTable"
@@ -87,14 +87,20 @@
 <ng-template #defaultTable let-table let-isHistory="isHistory" let-caption="caption">
   <table class="nhsuk-table-responsive app-sortable-table">
 
-    <caption class="nhsuk-u-visually-hidden"> {{ caption }} </caption>
+    <caption class="nhsuk-u-visually-hidden">
+      {{ caption }}
+      <span *ngIf="table.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+    </caption>
 
     <thead class="nhsuk-table__head">
       <tr>
         <th *ngFor="let item of table.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align"
           [attr.aria-sort]="item.orderDir">
           <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-          <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
+          <button [id]="item.key" *ngIf="item.orderable" type="button">
+            {{ item.label }}
+            <span aria-hidden="true"></span>
+          </button>
         </th>
       </tr>
     </thead>
@@ -144,14 +150,20 @@
 <ng-template #validInnovatorTable let-table let-caption="caption">
   <table class="nhsuk-table-responsive app-sortable-table">
 
-    <caption class="nhsuk-u-visually-hidden"> {{ caption }} </caption>
+    <caption class="nhsuk-u-visually-hidden">
+      {{ caption }}
+      <span *ngIf="table.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+    </caption>
 
     <thead class="nhsuk-table__head">
       <tr>
         <th *ngFor="let item of table.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align"
           [attr.aria-sort]="item.orderDir">
           <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-          <button *ngIf="item.orderable" type="button">{{ item.label }}</button>
+          <button [id]="item.key" *ngIf="item.orderable" type="button">
+            {{ item.label }}
+            <span aria-hidden="true"></span>
+          </button>
         </th>
       </tr>
     </thead>

@@ -8,12 +8,11 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { getSectionNumber } from '@modules/stores/innovation/innovation.config';
 
 
 export enum EmailNotificationsTypeEnum { // Subset of NotificationContextTypeEnum.
   ACTION = 'ACTION',
-  COMMENT = 'COMMENT',
+  MESSAGE = 'MESSAGE',
   SUPPORT = 'SUPPORT'
 }
 export enum EmailNotificationsPreferencesEnum {
@@ -105,6 +104,9 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.COLLABORATOR_INVITE:
                   link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.contextId}` };
                   break;
+                case NotificationContextDetailEnum.COLLABORATOR_UPDATE:
+                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.contextId}` };
+                  break;
                 default:
                   link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
                   break;
@@ -124,6 +126,8 @@ export class NotificationsService extends CoreService {
             //   break;
           }
 
+          const section = item.params?.section ? this.stores.innovation.getInnovationRecordSectionIdentification(item.params.section) : undefined;
+
           return {
             id: item.id,
             contextType: item.contextType,
@@ -138,7 +142,7 @@ export class NotificationsService extends CoreService {
               innovationName: item.innovation.name,
               innovationStatus: item.innovation.status,
               innovationOwnerName: item.innovation.ownerName,
-              sectionNumber: item.params?.section ? getSectionNumber(item.params.section) : undefined,
+              sectionNumber: section ? `${section.group.number}.${section.section.number}` : undefined,
               actionStatusName: item.params?.actionStatus ? this.translate(`shared.catalog.innovation.action_status.${item.params?.actionStatus}.name`) : undefined,
               supportStatusName: item.params?.supportStatus ? this.translate(`shared.catalog.innovation.support_status.${item.params?.supportStatus}.name`) : undefined,
             },

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { UserRoleEnum } from '@app/base/enums';
 import { InnovationActionInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
@@ -21,6 +20,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
   actionId: string;
 
   action?: InnovationActionInfoDTO;
+  sectionTitle = '';
 
   actionsIds: string[] = [];
 
@@ -92,13 +92,16 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
     this.setPageStatus('LOADING');
 
-    if(this.sectionId) {
+    if (this.sectionId) {
       this.actionId = this.actionsIds[this.actionNumber];
     }
 
     this.innovationsService.getActionInfo(this.innovationId, this.actionId).subscribe(response => {
 
       this.action = response;
+
+      const section = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
+      this.sectionTitle = section ? `${section.group.number}.${section.section.number} ${section.section.title}` : 'Section no longer available';
 
       if (this.actionsIds.length > 1) {
         this.setPageTitle('Requested action', { hint: `${this.actionNumber + 1} of ${this.actionsIds.length}` });

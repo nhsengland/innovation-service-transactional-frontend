@@ -17,7 +17,7 @@ describe('FormEngineHelper', () => {
       radioGroupField: null,
       checkboxGroupField: {},
       checkboxArrayField: [],
-      fieldsGroupField: [{ field01: null, field02: null }],
+      fieldsGroupField: [],
     };
     const form = FormEngineHelper.buildForm(ALL_PARAMETER_TYPES_EMPTY);
     expect(form.valid).toBe(true);
@@ -61,7 +61,7 @@ describe('FormEngineHelper', () => {
         radioGroupField: null,
         checkboxGroupField: {},
         checkboxArrayField: [],
-        fieldsGroupField: [{ field01: null, field02: null }]
+        fieldsGroupField: []
       }
     };
     const form = FormEngineHelper.buildForm(ALL_PARAMETER_TYPES_EMPTY);

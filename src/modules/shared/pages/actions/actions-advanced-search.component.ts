@@ -5,8 +5,8 @@ import { debounceTime } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation.config';
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsActionsListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
@@ -91,7 +91,7 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
         InnovationActionStatusEnum.CANCELLED
       ].includes(i.value as InnovationActionStatusEnum));
 
-    this.datasets.sections = INNOVATION_SECTIONS.reduce((sectionGroupAcc: { value: string, label: string }[], sectionGroup, i) => {
+    this.datasets.sections = getInnovationRecordConfig().reduce((sectionGroupAcc: { value: string, label: string }[], sectionGroup, i) => {
       return [
         ...sectionGroupAcc,
         ...sectionGroup.sections.reduce((sectionAcc: { value: string, label: string }[], section, j) => {
@@ -119,12 +119,13 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
 
   }
 
-  getActionsList(): void {
+  getActionsList(column?: string): void {
 
     this.setPageStatus('LOADING');
 
     this.innovationsService.getActionsList(this.actionsList.getAPIQueryParams()).subscribe(response => {
       this.actionsList.setData(response.data, response.count);
+      if (this.isRunningOnBrowser() && column) this.actionsList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
     });
 
@@ -159,7 +160,7 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
 
   onTableOrder(column: string): void {
     this.actionsList.setOrderBy(column);
-    this.getActionsList();
+    this.getActionsList(column);
   }
 
 

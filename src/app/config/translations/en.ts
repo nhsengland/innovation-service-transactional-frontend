@@ -52,6 +52,11 @@ export const locale = {
             message: 'You don\'t have access to the requested innovation. Changes in the innovation status may have caused this situation.',
             button_label: 'Go back to home'
           },
+          forbidden_collaborator: {
+            title: 'Something went wrong',
+            message: 'Your invitation to collaborate on this innovation is no longer valid.',
+            button_label: 'Go back to home'
+          },
           generic: {
             title: 'It appears that something went wrong!',
             message: 'The operation you are trying to do is no longer available.',
@@ -194,7 +199,7 @@ export const locale = {
             },
             OWNERSHIP_TRANSFER: {
               title: 'Ownership transfer',
-              message: `Ownership was transferred from {{ actionUserName }} to {{ interveningUserName }}`
+              message: `Ownership was transferred from {{ interveningUserName }} to {{ actionUserName }}`
             },
             SHARING_PREFERENCES_UPDATE: {
               title: 'Sharing preferences update',
@@ -250,7 +255,11 @@ export const locale = {
             },
             ACTION_CREATION: {
               title: 'Action creation',
-              message: `{{ actionUserName }} {{ actionUserRole }} created an action for section "{{ sectionTitle }}"`
+              message: `{{ actionUserName }} {{ actionUserRole }} created an action for section {{ sectionTitle }}`
+            },
+            ACTION_CREATION_SECTION_DEPRECATED: {
+              title: 'Action creation',
+              message: `{{ actionUserName }} {{ actionUserRole }} created an action for a section that is no longer available`
             },
             ACTION_STATUS_SUBMITTED_UPDATE: {
               title: 'Action changed to submitted',
@@ -307,7 +316,8 @@ export const locale = {
             COST_OF_INNOVATION: 'Cost of your innovation',
             COMPARATIVE_COST_BENEFIT: 'Comparative cost benefit',
             REVENUE_MODEL: 'Revenue model',
-            IMPLEMENTATION_PLAN: 'Implementation plan and deployment'
+            IMPLEMENTATION_PLAN: 'Implementation plan and deployment',
+            DEPLOYMENT: 'Deployment'
           },
 
           notification_context_types: {
@@ -317,6 +327,7 @@ export const locale = {
             ACTION: { title: { singular: 'Action', plural: 'Actions' } },
             THREAD: { title: { singular: 'Message', plural: 'Messages' } },
             COMMENT: { title: { singular: 'Message', plural: 'Messages' } },
+            MESSAGE: { title: { singular: 'Message', plural: 'Messages' } },
           },
           notification_context_details: {
             LOCK_USER: { title: `Innovation "{{ innovationName }}" owner has been locked` },
@@ -507,7 +518,7 @@ export const locale = {
           required: 'Required',
           existsIn: 'Value already exists',
           invalid_parse_date: 'Please enter a valid date format',
-          max_file_size: 'The file exceed the maximum size of 9MB',
+          max_file_size: 'The file exceed the maximum size of 20MB',
           empty_file: 'Uploaded files cannot be empty'
         }
       }

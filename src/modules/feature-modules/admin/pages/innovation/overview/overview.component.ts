@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationCollaboratorStatusEnum, InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
@@ -67,19 +67,19 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       };
 
       this.innovationSummary = [
-        { label: 'Company', value: innovation.owner.organisations ? innovation.owner.organisations[0].name : '' },
+        { label: 'Company', value: innovation.owner && innovation.owner.organisations ? innovation.owner.organisations[0].name : '' },
         { label: 'Location', value: `${innovation.countryName}${innovation.postCode ? ', ' + innovation.postCode : ''}` },
         { label: 'Description', value: innovation.description },
-        { label: 'Categories', value: innovation.categories.map(v => v === 'OTHER' ? innovation.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
+        { label: 'Categories', value: innovation.categories.map(v => v === 'OTHER' ? innovation.otherCategoryDescription : irVersionsMainCategoryItems.find(item => item.value === v)?.label).join('\n') }
       ];
 
       this.innovatorDetails = [
-        { label: 'Owner', value: innovation.owner.name },
-        { label: 'Last login', value: this.datePipe.transform(innovation.owner.lastLoginAt ?? '', this.translate('app.date_formats.long_date_time')) },
-        { label: 'Contact preference', value: UtilsHelper.getContactPreferenceValue(innovation.owner.contactByEmail, innovation.owner.contactByPhone, innovation.owner.contactByPhoneTimeframe) || '' },
-        { label: 'Contact details', value: innovation.owner.contactDetails || '' },
-        { label: 'Email address', value: innovation.owner.email ?? '' },
-        { label: 'Phone number', value: innovation.owner.mobilePhone ?? '' },
+        { label: 'Owner', value: innovation.owner?.name ?? '[deleted account]' },
+        { label: 'Last login', value: this.datePipe.transform(innovation.owner?.lastLoginAt ?? '', this.translate('app.date_formats.long_date_time')) },
+        { label: 'Contact preference', value: UtilsHelper.getContactPreferenceValue(innovation.owner?.contactByEmail, innovation.owner?.contactByPhone, innovation.owner?.contactByPhoneTimeframe) || '' },
+        { label: 'Contact details', value: innovation.owner?.contactDetails || '' },
+        { label: 'Email address', value: innovation.owner?.email ?? '' },
+        { label: 'Phone number', value: innovation.owner?.mobilePhone ?? '' },
       ]
 
       const occurrences = (innovation.supports ?? []).map(item => item.status)

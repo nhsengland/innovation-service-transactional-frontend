@@ -44,12 +44,13 @@ export type ContextInnovationType = {
   name: string,
   status: InnovationStatusEnum,
   statusUpdatedAt: null | DateISOType,
-  owner: { name: string, isActive: boolean },
+  owner?: { name: string, isActive: boolean },
   loggedUser: { isOwner: boolean },
   assessment?: { id: string },
   assignedTo?: { id: string },
   support?: { id: string, status: InnovationSupportStatusEnum },
   notifications?: { [key in NotificationContextTypeEnum]?: number },
   export?: { canUserExport: boolean, pendingRequestsCount: number },
-  collaboratorId?: string
+  collaboratorId?: string,
+  createdAt?: DateISOType
 };

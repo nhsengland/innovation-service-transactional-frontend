@@ -71,12 +71,18 @@
       <ng-container *ngIf="pageStatus === 'READY' && notificationsList.getTotalRowsNumber() > 0">
 
         <table *ngIf="pageStatus === 'READY' && notificationsList.getTotalRowsNumber() > 0" class="nhsuk-table-responsive app-sortable-table">
-          <caption class="nhsuk-u-visually-hidden"> Notifications list </caption>
+          <caption class="nhsuk-u-visually-hidden">
+            Notifications list
+            <span *ngIf="notificationsList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+          </caption>
           <thead class="nhsuk-table__head">
             <tr>
               <th *ngFor="let item of notificationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                 <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-                <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
+                <button [id]="item.key" *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">
+                  {{ item.label }}
+                  <span aria-hidden="true"></span>
+                </button>
               </th>
             </tr>
           </thead>

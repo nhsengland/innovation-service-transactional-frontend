@@ -1,11 +1,27 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <div *ngIf="!innovation.owner.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+  <div *ngIf="innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
     </div>
     <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
   </div>
+
+  <div *ngIf="showDownloadOldIR" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+    <h3 class="nhsuk-warning-callout__label">
+      <span role="text">
+        <span class="nhsuk-u-visually-hidden">Important: </span>
+        Changes have been made to your innovation record
+      </span>
+    </h3>
+    <p>The sections that require your attention are now in draft.
+      <a
+        href="{{ CONSTANTS.APP_URL }}/exports/{{ innovation.id }}/pdf?role={{ stores.authentication.getUserContextInfo()?.roleId }}&version=202209">You
+        can download a copy of your previous innovation record here.</a>
+    </p>
+  </div>
+
+  <!--TODO: Banner for owner with account delete (new US)-->
 
   <div class="nhsuk-grid-row">
 
@@ -13,14 +29,12 @@
       <ng-container *ngIf="sections.submitted > 0; else firstTimeBanner">
 
         <div class="nhsuk-grid-column-full">
-          <p *ngIf="isInnovationInCreatedStatus(); else innovationSharedText">
-            Please complete all sections by providing as much information
-            as possible about your innovation. Share your record for a needs
-            assessment review - a member of the team will contact you within a
-            week to understand how we can best support your current needs.
-          </p>
+          <ng-container *ngIf="isInnovationInCreatedStatus(); else innovationSharedText">
+            <p>You'll need to complete all 11 sections of your innovation record before you can submit your record for a needs assessment.</p>
+            <p>If you are unable to answer a question yet, you can still mark the section as complete. This will help us match you with organisations that can support you in these areas.</p>
+          </ng-container>
           <ng-template #innovationSharedText>
-            <p>You can continue to update your Innovation Record throughout the development of your innovation with support from the NHS Innovation Service.</p>
+            <p>This is a live document for you to update as you develop your innovation. You can make changes to your innovation record even after submitting it for a needs assessment.</p>
           </ng-template>
 
         </div>
@@ -29,48 +43,36 @@
 
     <div class="nhsuk-grid-column-full">
 
-      <ul class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
+      <ul *ngIf="innovationStatus === 'CREATED'" class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
         <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="item.substring(2)"></li>
       </ul>
 
       <p class="d-flex nhsuk-u-margin-0">
         <theme-svg-icon type="success"></theme-svg-icon>
-        <span class="nhsuk-u-margin-right-2"></span> {{ sections.submitted }} sections submitted
+        <span class="nhsuk-u-margin-right-2"></span> {{ sections.submitted === 0 ? 'No' : sections.submitted }} sections completed
       </p>
       <p class="d-flex nhsuk-u-margin-0">
         <theme-svg-icon type="edit"></theme-svg-icon>
-        <span class="nhsuk-u-margin-right-2"></span> {{ sections.draft }} section in draft
+        <span class="nhsuk-u-margin-right-2"></span> {{ sections.draft === 0 ? 'No' : sections.draft }} sections in draft
       </p>
       <p class="d-flex">
         <theme-svg-icon type="error"></theme-svg-icon>
-        <span class="nhsuk-u-margin-right-2"></span> {{ sections.notStarted }} sections not started
+        <span class="nhsuk-u-margin-right-2"></span> {{ sections.notStarted === 0 ? 'No' : sections.notStarted }} sections not started
       </p>
 
       <ng-container *ngIf="stores.authentication.isInnovatorType()">
 
         <ng-container *ngIf="isInnovationInCreatedStatus()">
-          <button class="nhsuk-button nhsuk-u-margin-bottom-2" [disabled]="!allSectionsSubmitted()" (click)="onSubmitInnovation()">Share record for needs assessment</button>
-          <p class="nhsuk-body-s">
-            Please note: you will not be able to share your record for a needs assessment review
-            until you have completed all sections below. You can continue to update your record once it is submitted for
-            review.
-          </p>
+          <button class="nhsuk-button nhsuk-u-margin-bottom-4" [disabled]="!allSectionsSubmitted()" routerLink="/innovator/innovations/{{ innovationId }}/record/support">Submit record for needs assessment</button>
         </ng-container>
 
         <ng-container *ngIf="innovationStatus === 'PAUSED'" class="nhsuk-u-margin-bottom-4">
-          <button class="nhsuk-button" [disabled]="!allSectionsSubmitted()" routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed/needs-reassessment-send">Share record for needs reassessment</button>
+          <button class="nhsuk-button" [disabled]="!allSectionsSubmitted()" routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed/needs-reassessment-send">Submit record for needs reassessment</button>
         </ng-container>
-
-        <h4>Helpful documents</h4>
-        <ul>
-          <li>You may want to <a [href]="documentUrl">download all questions (DOCX, 820KB)</a> you will be asked to
-            answer in your innovation record</li>
-          <li>You can also <a [href]="pdfDocumentUrl">export your current innovation record (pdf)</a></li>
-        </ul>
 
       </ng-container>
 
-      <ng-container *ngIf="innovation.owner.isActive === true">
+      <ng-container *ngIf="innovation.owner?.isActive === true">
 
         <ng-container *ngIf="stores.authentication.isAccessorType() && innovationExport">
 
@@ -111,7 +113,7 @@
 
         </ng-container>
 
-        <ng-container *ngIf="stores.authentication.isInnovatorType() && innovationExport">
+        <ng-container *ngIf="stores.authentication.isInnovatorType() && innovationExport && innovationStatus !== 'CREATED'">
 
           <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
 
@@ -133,11 +135,16 @@
       </ng-container>
 
       <h2 class="nhsuk-heading-l">All sections</h2>
-      <p *ngIf="stores.authentication.isInnovatorType()">
-        Please complete all sections, providing as much information as possible. As you are developing your innovation,
-        we do not expect the information to be finalised at this stage, and you can return to update your Innovation
-        record once shared for review.
-      </p>
+      <ng-container *ngIf="stores.authentication.isInnovatorType()">
+        <p *ngIf="isInnovationInCreatedStatus()">
+          This is a live document for you to update as you develop your innovation. You can make changes to your innovation record even after submitting it for a needs assessment.
+        </p>
+        <ul class="nhsuk-u-margin-bottom-7">
+          <li><a [href]="documentUrl">Download all the questions (DOCX)</a> in your innovation record</li>
+          <li><a [href]="pdfDocumentUrl">Export your current innovation record (PDF)</a></li>
+        </ul>
+      </ng-container>
+
 
       <ol class="app-task-list">
         <li *ngFor="let sectionGroup of innovationSections; let i = index">

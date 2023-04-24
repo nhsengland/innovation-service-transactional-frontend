@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-import { categoriesItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 import { StatisticsCard } from '@modules/shared/services/innovations.dtos';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { forkJoin } from 'rxjs';
 import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
@@ -73,14 +73,14 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         status: this.innovation.support?.status || InnovationSupportStatusEnum.UNASSIGNED
       };
       this.innovationSummary = [
-        { label: 'Company', value: innovationInfo.owner.organisations ? innovationInfo.owner.organisations[0].name : '' },
+        { label: 'Company', value: innovationInfo.owner && innovationInfo.owner.organisations ? innovationInfo.owner.organisations[0].name : '' },
         { label: 'Location', value: `${innovationInfo.countryName}${innovationInfo.postCode ? ', ' + innovationInfo.postCode : ''}` },
         { label: 'Description', value: innovationInfo.description },
-        { label: 'Categories', value: innovationInfo.categories.map(v => v === 'OTHER' ? innovationInfo.otherCategoryDescription : categoriesItems.find(item => item.value === v)?.label).join('\n') }
+        { label: 'Categories', value: innovationInfo.categories.map(v => v === 'OTHER' ? innovationInfo.otherCategoryDescription : irVersionsMainCategoryItems.find(item => item.value === v)?.label).join('\n') }
       ];
 
       this.innovatorSummary = [
-        { label: 'Owner', value: this.innovation.owner.name },
+        { label: 'Owner', value: this.innovation.owner?.name ?? '[deleted account]' },
       ];
 
       this.showCards = [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(this.innovationSupport.status);

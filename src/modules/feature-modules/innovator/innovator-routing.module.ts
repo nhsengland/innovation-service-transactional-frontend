@@ -9,11 +9,6 @@ import { ContextInnovationOutletComponent } from './base/context-innovation-outl
 import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
 import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
 
-// Experiments.
-import { ExperimentsInnovationSectionEditComponent } from './experiments/innovation-sections/section-edit.component';
-import { ExperimentsInnovationSectionInfoComponent } from './experiments/innovation-sections/section-info.component';
-import { ExperimentsInnovationSectionEvidenceInfoComponent } from './experiments/innovation-sections/section-evidence-info.component';
-
 // Innovator module pages.
 // // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
@@ -43,6 +38,7 @@ import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
+import { InnovationDataSharingEditComponent } from './pages/innovation/record/data-sharing-edit.component';
 
 // // Shared module pages.
 // // Account.
@@ -77,6 +73,8 @@ import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-o
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 import { ManageGuard } from './guards/manage.guard';
+import { InnovationCollaborationRedirectionGuard } from '@modules/core/guards/innovation-collaboration-redirection.guard';
+import { ShareInnovationRecordGuard } from './guards/share-innovation-record.guard';
 
 // Resolvers.
 import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
@@ -86,6 +84,7 @@ import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
+
 
 
 const header: RoutesDataType['header'] = {
@@ -134,6 +133,7 @@ const routes: Routes = [
 
           { path: 'new', pathMatch: 'full', component: InnovationNewComponent },
           {
+            canActivate: [InnovationCollaborationRedirectionGuard],
             path: ':innovationId/collaborations/:collaboratorId',
             pathMatch: 'full',
             component: PageCollaborationInviteComponent,
@@ -241,18 +241,6 @@ const routes: Routes = [
                       { path: '', pathMatch: 'full', redirectTo: '../record' },
 
                       {
-                        path: 'experiments/:sectionId/edit',
-                        pathMatch: 'full',
-                        component: ExperimentsInnovationSectionEditComponent,
-                        data: { layout: { type: 'full' } }
-                      },
-                      {
-                        path: 'experiments/:sectionId',
-                        pathMatch: 'full',
-                        component: ExperimentsInnovationSectionInfoComponent
-                      },
-                      
-                      {
                         path: ':sectionId',
                         resolve: { innovationSectionData: InnovationSectionDataResolver },
                         data: {
@@ -337,6 +325,12 @@ const routes: Routes = [
                       }
 
                     ]
+                  },
+                  {
+                    path: 'support',
+                    canActivate: [ShareInnovationRecordGuard],
+                    component: InnovationDataSharingEditComponent,
+                    data: { breadcrumb: null, layout: { type: 'full' } },
                   }
                 ]
               },
@@ -589,7 +583,9 @@ const routes: Routes = [
                 path: '', pathMatch: 'full', component: PageAccountInfoComponent,
                 data: { breadcrumb: null }
               },
-              { path: 'delete', pathMatch: 'full', component: PageAccountDeleteComponent }
+              { path: 'delete', pathMatch: 'full', component: PageAccountDeleteComponent,
+                data: { breadcrumb: 'Delete your account', layout: { type: 'full' } }
+              }
             ]
           }
         ]

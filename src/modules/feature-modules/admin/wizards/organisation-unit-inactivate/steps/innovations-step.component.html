@@ -30,8 +30,8 @@
         <dd class="nhsuk-summary-list__value">
           <ul class="nhsuk-list">
             <li *ngFor="let item of innovationStatistics">
-              <theme-tag 
-                type="{{ 'shared.catalog.innovation.support_status.' + item.status + '.cssColorClass' | translate }}" 
+              <theme-tag
+                type="{{ 'shared.catalog.innovation.support_status.' + item.status + '.cssColorClass' | translate }}"
                 label="{{ item.count }} {{ 'shared.catalog.innovation.support_status.' + item.status + '.name' | translate }}"
               ></theme-tag>
             </li>
@@ -50,17 +50,23 @@
 
     <div *ngIf="innovationsList.getTotalRowsNumber() > 0" class="bg-color-white nhsuk-u-padding-3">
       <table class="nhsuk-table-responsive app-sortable-table">
-        <caption class="nhsuk-u-visually-hidden"> Users list </caption>
+        <caption class="nhsuk-u-visually-hidden">
+          Users list
+          <span *ngIf="innovationsList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+        </caption>
         <thead class="nhsuk-table__head">
           <tr>
-            <th *ngFor="let item of innovationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+            <th aria-live="off" *ngFor="let item of innovationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
               <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-              <button *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">{{ item.label }}</button>
+              <button [id]="item.key" *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">
+                {{ item.label }}
+                <span aria-hidden="true"></span>
+              </button>
             </th>
           </tr>
         </thead>
         <tbody class="nhsuk-table__body">
-          <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
+          <tr aria-live="off" *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
             <td class="nhsuk-table__cell">
               <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('innovation') }}</span>
               <span class="nhsuk-u-font-weight-bold">{{ item.name }}</span>

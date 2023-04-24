@@ -85,7 +85,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
             count: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER].count,
             lastMessage: `Last submitted:`,
             date: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
-            emptyMessageTitle: 'No engaging innovations assigned to you'
+            emptyMessageTitle: 'No innovations awaiting status assignment'
           })
         }
 

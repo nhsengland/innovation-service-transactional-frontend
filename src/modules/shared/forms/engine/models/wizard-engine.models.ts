@@ -1,20 +1,18 @@
-import { FormEngineHelper } from '../helpers/form-engine.helper';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
+import { FormEngineHelper } from '../helpers/form-engine.helper';
 import { FormEngineModel, FormEngineParameterModel } from './form-engine.models';
 
 
-export type WizardStepType = FormEngineModel & {
-  saveStrategy?: 'updateAndWait';
-};
+export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 
 export type WizardSummaryType = {
-  type?: 'keyValueLink' | 'button';
-  label: string;
-  value?: null | string;
-  editStepNumber?: number;
-  evidenceId?: string;
-  allowHTML?: boolean;
-  isFile?: boolean;
+  type?: 'keyValueLink' | 'button',
+  label: string,
+  value?: null | string,
+  editStepNumber?: number,
+  evidenceId?: number,
+  allowHTML?: boolean,
+  isFile?: boolean
 };
 
 
@@ -41,7 +39,6 @@ export class WizardEngineModel {
     this.inboundParsing = data.inboundParsing;
     this.outboundParsing = data.outboundParsing;
     this.summaryParsing = data.summaryParsing;
-    this.summaryPDFParsing = data.summaryPDFParsing;
   }
 
   runRules(data?: MappedObjectType): this {
@@ -63,16 +60,6 @@ export class WizardEngineModel {
     if (!this.summaryParsing) { return []; }
 
     this.summary = this.summaryParsing(data || this.currentAnswers, this.steps);
-
-    return this.summary;
-
-  }
-
-  runSummaryPDFParsing(data?: MappedObjectType): WizardSummaryType[] {
-
-    if (!this.summaryPDFParsing) { return []; }
-
-    this.summary = this.summaryPDFParsing(data || this.currentAnswers, this.steps);
 
     return this.summary;
 
@@ -173,22 +160,5 @@ export class WizardEngineModel {
     };
 
   }
-
-  validateDataLegacy(): { valid: boolean, errors: { label: string, error: string }[] } {
-
-    const parameters = this.steps.flatMap(step => step.parameters);
-    const form = FormEngineHelper.buildForm(parameters, this.currentAnswers);
-
-    return {
-      valid: form.valid,
-      errors: Object.entries(FormEngineHelper.getErrors(form)).map(([key, value]) => ({
-        label: parameters.find(p => p.id === key)?.label || '',
-        error: value || ''
-      }))
-    };
-
-  }
-
-
 
 }

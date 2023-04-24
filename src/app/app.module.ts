@@ -6,7 +6,7 @@ import { CoreModule } from '@modules/core/core.module';
 import { StoresModule } from '@modules/stores/stores.module';
 import { ThemeModule } from '@modules/theme/theme.module';
 
-import { AppInjector } from '@modules/core';
+import { AppInjector } from '@modules/core/injectors/app-injector';
 
 import { GlobalErrorHandler } from './config/handlers/global-error.handler';
 import { AppRoutingModule } from './app-routing.module';

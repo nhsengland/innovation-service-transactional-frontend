@@ -1,25 +1,30 @@
 <theme-content-wrapper [status]="pageStatus">
 
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+    <div class="nhsuk-grid-column-two-thirds">
 
       <form [formGroup]="form" (ngSubmit)="onSubmitForm()">
 
+        <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+          <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+            <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> When you withdraw an innovation </span>
+          </div>
+          <p>You and everyone working on this innovation will lose access to it.</p>
+        </div>
+
+        <p class="nhsuk-u-margin-bottom-1">If you want to keep a copy of your innovation record, you should download a PDF version before you delete your account.</p>
+        <p><a href="{{ CONSTANTS.APP_URL }}/exports/{{ innovation.id }}/pdf?role={{ roleIdUser }}">Download {{ innovation.name }} innovation record (PDF)</a></p>
+
+
         <ng-container *ngIf="stepNumber === 1">
-          <theme-form-textarea controlName="reason" label="What's your reason for withdrawing this innovation?" [pageUniqueField]="false" lengthLimit="small"></theme-form-textarea>
+          <theme-form-textarea controlName="reason" label="Why have you decided to withdraw this innovation?" [pageUniqueField]="false" lengthLimit="small"></theme-form-textarea>
           <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3"> Continue </button>
         </ng-container>
 
         <ng-container *ngIf="stepNumber === 2">
-          <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
-            <div class="nhsuk-heading-m nhsuk-warning-callout__label">
-              <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
-            </div>
-            <p> You will no longer have access to your innovation. If you want to keep a copy, you should download a PDF from the Innovation Record page before proceeding. </p>
-          </div>
           <theme-form-input controlName="email" label="Enter your email" [pageUniqueField]="false"></theme-form-input>
-          <theme-form-input controlName="confirmation" label="Are you sure that you want to withdraw?" description="To confirm, please type the following: withdraw my innovation" [pageUniqueField]="false"></theme-form-input>
-          <button type="submit" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3"> Withdraw innovation </button>
+          <theme-form-input controlName="confirmation" label="Are you sure you want to withdraw your innovation?" description="To confirm, please type the following: withdraw my innovation" [pageUniqueField]="false"></theme-form-input>
+          <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3"> Withdraw innovation </button>
         </ng-container>
 
       </form>

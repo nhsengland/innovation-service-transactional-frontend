@@ -16,12 +16,13 @@ import { AuthenticationRedirectionGuard } from '@modules/core/guards/authenticat
 import { InnovationTransferRedirectionGuard } from '@modules/core/guards/innovation-transfer-redirection.guard';
 import { InnovationCollaborationRedirectionGuard } from '@modules/core/guards/innovation-collaboration-redirection.guard';
 
+
 const routes: Routes = [
 
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: '/triage-innovator-pack'
+    redirectTo: '/home'
   },
 
   {
@@ -35,16 +36,15 @@ const routes: Routes = [
     children: []
   },
 
-  
   {
     canActivate: [InnovationCollaborationRedirectionGuard],
-    path: 'innovations/:innovationId/collaborations/:id',
+    path: 'innovations/:innovationId/collaborations/:collaboratorId',
     pathMatch: 'full',
     children: []
   },
 
   {
-    path: 'triage-innovator-pack', loadChildren: () => import('@modules/feature-modules/triage-innovator-pack/triage-innovator-pack.module').then(m => m.TriageInnovatorPackModule)
+    path: 'home', loadChildren: () => import('@modules/feature-modules/home/home.module').then(m => m.HomeModule)
   },
 
   {
@@ -60,11 +60,14 @@ const routes: Routes = [
         path: 'dashboard',
         pathMatch: 'full',
         children: []
-      },   
+      },
       {
         path: 'switch-user-context',
         component: BaseLayoutComponent,
         children: [{ path: '', pathMatch: 'full', component: PageSwitchContextComponent }]
+      },
+      {
+        path: 'announcements', loadChildren: () => import('@modules/feature-modules/announcements/announcements.module').then(m => m.AnnouncementsModule)
       },
       {
         canActivate: [AuthenticationRedirectionGuard],
@@ -81,7 +84,7 @@ const routes: Routes = [
       {
         canActivate: [AuthenticationRedirectionGuard],
         path: 'accessor', loadChildren: () => import('@modules/feature-modules/accessor/accessor.module').then(m => m.AccessorModule)
-      }   
+      }
     ]
   },
 

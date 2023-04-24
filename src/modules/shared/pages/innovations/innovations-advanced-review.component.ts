@@ -7,7 +7,7 @@ import { TableModel } from '@app/base/models';
 
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
-import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
@@ -57,7 +57,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     ];
 
   datasets: { [key in FilterKeysType]: { label: string, value: string }[] } = {
-    mainCategories: mainCategoryItems.map(i => ({ label: i.label, value: i.value })),
+    mainCategories: irVersionsMainCategoryItems.map(i => ({ label: i.label, value: i.value })),
     locations: locationItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ label: i.label, value: i.value })),
     engagingOrganisations: [],
     supportStatuses: [],
@@ -146,7 +146,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   }
 
 
-  getInnovationsList(): void {
+  getInnovationsList(column?: string): void {
 
     this.setPageStatus('LOADING');
 
@@ -173,6 +173,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           }
         }),
         response.count);
+      if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
     });
 
@@ -198,7 +199,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       engagingOrganisations: this.form.get('engagingOrganisations')?.value,
       supportStatuses: this.form.get('supportStatuses')?.value,
       groupedStatuses: this.form.get('groupedStatuses')?.value,
-      ...this.stores.authentication.isAccessorRole() && { 
+      ...this.stores.authentication.isAccessorRole() && {
         assignedToMe: this.form.get('assignedToMe')?.value ?? false,
         suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
       },
@@ -213,7 +214,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   onTableOrder(column: string): void {
 
     this.innovationsList.setOrderBy(column);
-    this.getInnovationsList();
+    this.getInnovationsList(column);
   }
 
 

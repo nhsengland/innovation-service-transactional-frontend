@@ -2,10 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { FileTypes, FormEngineComponent, FormEngineModel } from '@app/base/forms';
+import { FileTypes, FormEngineComponent } from '@app/base/forms';
 import { UrlModel } from '@app/base/models';
+import { ContextInnovationType } from '@app/base/types';
 
-import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
+import { WizardEngineModel } from '@modules/shared/forms';
 import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 
@@ -17,29 +18,18 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
-  innovationId: string;
+  alertErrorsList: { title: string, description: string }[] = [];
+
+  innovation: ContextInnovationType;
   sectionId: InnovationSectionEnum;
   evidenceId: string;
+  baseUrl: string;
 
   wizard: WizardEngineModel;
-
-  currentStep: FormEngineModel;
-  currentAnswers: { [key: string]: any };
-
-  summaryList: WizardSummaryType[];
-
-  // TODO: Make sure is a valid step.
-  // isValidStepId(): boolean {
-  //   const id = this.activatedRoute.snapshot.params.id;
-  //   return ((1 <= Number(id) && Number(id) <= this.stepsData.length) || id === 'summary');
-  // }
-
 
   isCreation(): boolean { return !this.activatedRoute.snapshot.params.evidenceId; }
   isEdition(): boolean { return !!this.activatedRoute.snapshot.params.evidenceId; }
 
-  isQuestionStep(): boolean { return Number.isInteger(Number(this.activatedRoute.snapshot.params.questionId)); }
-  isSummaryStep(): boolean { return this.activatedRoute.snapshot.params.questionId === 'summary'; }
 
   constructor(
     private activatedRoute: ActivatedRoute
@@ -47,17 +37,17 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
 
     super();
 
-    this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.innovation = this.stores.context.getInnovation();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.evidenceId = this.activatedRoute.snapshot.params.evidenceId;
+    this.baseUrl = `innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
-    /* istanbul ignore next */
-    this.wizard = this.stores.innovation.getSection(this.sectionId)?.evidences || new WizardEngineModel({});
+    this.wizard = this.stores.innovation.getInnovationRecordSection(this.sectionId).evidences ?? new WizardEngineModel({});
 
-    this.currentStep = new FormEngineModel({ parameters: [] });
-    this.currentAnswers = {};
-
-    this.summaryList = [];
+    // Protection from direct url access.
+    if(this.wizard.steps.length === 0) {
+      this.redirectTo(this.baseUrl);
+    }
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
 
@@ -68,20 +58,22 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
 
     if (this.isCreation()) {
 
-      this.wizard.runRules(this.currentAnswers);
+      this.wizard.runRules();
 
       this.setPageTitle('New evidence', { showPage: false });
-      this.draw();
+      this.setPageStatus('READY');
 
     } else {
 
-      this.stores.innovation.getSectionEvidence$(this.innovationId, this.evidenceId).subscribe(response => {
+      this.stores.innovation.getSectionEvidence$(this.innovation.id, this.evidenceId).subscribe(response => {
 
-        this.currentAnswers = this.wizard.runInboundParsing(response);
-        this.wizard.runRules(this.currentAnswers);
+        this.wizard.setAnswers(this.wizard.runInboundParsing(response)).runRules();
+        this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
+
+        this.setUploadConfiguration();
 
         this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-        this.draw();
+        this.setPageStatus('READY');
 
       });
 
@@ -89,123 +81,97 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
 
   }
 
+  setUploadConfiguration(): void {
 
-  draw(): void {
-
-    this.subscriptions.push(
-      this.activatedRoute.params.subscribe(params => {
-
-        this.setPageStatus('LOADING');
-
-        // if (!this.isValidStepId()) {
-        //   this.redirectTo('/not-found');
-        //   return;
-        // }
-
-        if (this.isSummaryStep()) {
-
-          this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);
-
-          this.setPageTitle('Check your answers', { size: 'l' });
-          this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
-          this.setPageStatus('READY');
-
-          return;
-
-        }
-
-        this.wizard.gotoStep(Number(params.questionId));
-        this.currentStep = this.wizard.currentStep();
-
-
-        if (this.currentStep.parameters[0].dataType === 'file-upload') {
-          this.currentStep.parameters[0].fileUploadConfig = {
-            httpUploadUrl: new UrlModel(this.CONSTANTS.APP_URL).addPath('upload').buildUrl(),
-            httpUploadBody: {
-              context: this.sectionId,
-              innovatorId: this.stores.authentication.getUserId(),
-              innovationId: this.innovationId
-            },
-            maxFileSize: 10,
-            acceptedFiles: [FileTypes.CSV, FileTypes.DOCX, FileTypes.XLSX, FileTypes.PDF]
-          };
-        }
-
-        this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
-        this.setPageTitle(this.currentStep.parameters[0].label || '', { showPage: false }); // Only 1 question per page.
-        this.setPageStatus('READY');
-
-      })
-    );
+    if (this.wizard.currentStep().parameters[0].dataType === 'file-upload') {
+      this.wizard.currentStep().parameters[0].fileUploadConfig = {
+        httpUploadUrl: new UrlModel(this.CONSTANTS.APP_URL).addPath('upload').buildUrl(),
+        httpUploadBody: {
+          context: this.sectionId,
+          innovatorId: this.stores.authentication.getUserId(),
+          innovationId: this.innovation.id
+        },
+        maxFileSize: 20,
+        acceptedFiles: [FileTypes.CSV, FileTypes.DOCX, FileTypes.XLSX, FileTypes.PDF]
+      };
+    }
 
   }
 
+  onGotoStep(stepNumber: number): void {
+
+    this.wizard.gotoStep(stepNumber);
+    this.resetAlert();
+    this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+    this.setUploadConfiguration();
+
+  }
 
   onSubmitStep(action: 'previous' | 'next', event: Event): void {
 
-    event.preventDefault();
+    // event.preventDefault();
+
+    this.alertErrorsList = [];
+    this.resetAlert();
 
     const formData = this.formEngineComponent?.getFormValues();
+
+    if (action === 'previous') {
+
+      this.wizard.addAnswers(formData?.data || {}).runRules();
+
+      if (this.wizard.isFirstStep()) {
+        this.redirectTo(`${this.baseUrl}${this.isCreation() ? '' : `/evidences/${this.evidenceId}`}`);
+      } else {
+         this.wizard.previousStep();
+         }
+
+      this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+      this.setUploadConfiguration();
+
+      return;
+
+    }
 
     if (action === 'next' && !formData?.valid) { // Apply validation only when moving forward.
       return;
     }
 
-    this.currentAnswers = { ...this.currentAnswers, ...formData!.data };
 
-    this.wizard.runRules(this.currentAnswers);
-    this.summaryList = this.wizard.runSummaryParsing(this.currentAnswers);
+    this.wizard.addAnswers(formData?.data || {}).runRules();
+    this.wizard.nextStep();
 
-    this.redirectTo(this.getNavigationUrl(action));
+    if (this.wizard.isQuestionStep()) {
+      this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+      this.setUploadConfiguration();
+    }
+    else {
+
+      this.setPageStatus('LOADING');
+
+      const validInformation = this.wizard.validateData();
+
+      if (!validInformation.valid) {
+        this.alertErrorsList = validInformation.errors;
+        this.setAlertError(`Please verify what's missing with your answers`, { itemsList: this.alertErrorsList, width: '2.thirds' });
+      }
+      this.setPageTitle('Check your answers', { size: 'l' });
+      this.setPageStatus('READY');
+
+    }
 
   }
 
 
-  onSubmitSurvey(): void {
+  onSubmitEvidence(): void {
 
-    this.stores.innovation.upsertSectionEvidenceInfo$(
-      this.innovationId,
-      this.wizard.runOutboundParsing(this.currentAnswers),
-      this.evidenceId
-    ).subscribe({
+    this.stores.innovation.upsertSectionEvidenceInfo$(this.innovation.id, this.wizard.runOutboundParsing(), this.evidenceId).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('Your evidence has been saved', { message: 'You need to submit this section for review to notify your supporting accessor(s).' });
-        this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`);
+        this.redirectTo(`innovator/innovations/${this.innovation.id}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`);
       },
       error: () => this.setAlertError('An error occurred when saving your evidence. Please try again or contact us for further help.', { width: '2.thirds' })
     });
-
-  }
-
-  gotoStep(stepNumber?: number): string {
-
-    return `/innovator/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections/${this.activatedRoute.snapshot.params.sectionId}/evidences/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${stepNumber}`;
-  }
-
-
-  getNavigationUrl(action: 'previous' | 'next'): string {
-
-    let url = `/innovator/innovations/${this.activatedRoute.snapshot.params.innovationId}/record`;
-
-    switch (action) {
-      case 'previous':
-        if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidences/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${this.wizard.steps.length}`; }
-        else if (this.wizard.isFirstStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}${this.isCreation() ? '' : `/evidences/${this.activatedRoute.snapshot.params.evidenceId}`}`; }
-        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidences/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${Number(this.wizard.currentStepId) - 1}`; }
-        break;
-
-      case 'next':
-        if (this.isSummaryStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidences/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/summary`; }
-        else if (this.wizard.isLastStep()) { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidences/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/summary`; }
-        else { url += `/sections/${this.activatedRoute.snapshot.params.sectionId}/evidences/${this.isCreation() ? 'new' : `${this.activatedRoute.snapshot.params.evidenceId}/edit`}/${Number(this.wizard.currentStepId) + 1}`; }
-        break;
-
-      default: // Should NOT happen!
-        url += '';
-        break;
-    }
-
-    return url;
 
   }
 

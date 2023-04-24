@@ -16,11 +16,11 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 })
 export class PageInnovationRecordComponent extends CoreComponent implements OnInit {
 
+  innovation: ContextInnovationType;
   baseUrl = '';
   documentUrl = '';
   pdfDocumentUrl = '';
 
-  innovation: ContextInnovationType;
 
   innovationId: string;
   innovationName: string;
@@ -37,6 +37,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   innovationSectionStatus = this.stores.innovation.INNOVATION_SECTION_STATUS;
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
+
+  showDownloadOldIR: boolean;
 
   isInnovationInCreatedStatus(): boolean {
     return this.innovationStatus === 'CREATED';
@@ -58,58 +60,60 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     super();
     this.setPageTitle('Innovation record');
 
+    this.innovation = this.stores.context.getInnovation();
     this.baseUrl = `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
     this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${this.activatedRoute.snapshot.params.innovationId}/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = this.stores.context.getInnovation();
     this.innovationName = this.innovation.name;
     this.innovationStatus = this.innovation.status;
     this.innovationExport = this.innovation.export;
 
+
+    // TODO: remove after 31/05/2023
+    const deployDateMs = new Date('2023-04-26T17:00:00').getTime();
+    const finalDateMs = new Date('2023-05-31T23:59:59').getTime();
+    const createdAtMs = new Date(this.innovation.createdAt ?? '').getTime();
+    const nowMs = new Date().getTime();
+    this.showDownloadOldIR =
+      this.stores.authentication.isInnovatorType() && (createdAtMs <= deployDateMs) && (nowMs <= finalDateMs);
   }
 
 
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe(response => {
+    this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe({
+      next: response => {
 
-      this.innovationSections = response;
+        this.innovationSections = response;
 
-      this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
-        return [...acc, ...item.sections.map(s => {
-          switch (s.status) {
-            case 'SUBMITTED': return '1:active';
-            case 'DRAFT': return '2:warning';
-            case 'NOT_STARTED':
-            default:
-              return '3:inactive';
-          }
-        })];
-      }, []);
+        this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
+          return [...acc, ...item.sections.map(s => {
+            switch (s.status) {
+              case 'SUBMITTED': return '1:active';
+              case 'DRAFT': return '2:warning';
+              case 'NOT_STARTED':
+              default:
+                return '3:inactive';
+            }
+          })];
+        }, []);
 
-      this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
-      this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
-      this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
+        this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
+        this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
+        this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
 
-      if (!this.innovationName) { // This means that an API error occurred.
-        this.setAlertError('There is a problem', { message: 'Unable to fetch full innovation record information' })
+        if (!this.innovationName) { // This means that an API error occurred.
+          this.setAlertError('There is a problem', { message: 'Unable to fetch full innovation record information' })
+        }
+
+        this.setPageStatus('READY');
+
+      },
+      error: () => {
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
       }
-
-      this.setPageStatus('READY');
-
-    });
-
-  }
-
-
-  onSubmitInnovation(): void {
-
-    this.stores.innovation.submitInnovation$(this.innovationId).subscribe(response => {
-
-      this.innovationStatus = response.status;
-
-      this.setAlertSuccess('You have successfully submitted your record for needs assessment', { message: 'You can expect the service team to get in touch within one week.' });
 
     });
 

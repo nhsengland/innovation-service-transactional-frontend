@@ -20,7 +20,7 @@
           <div class="nhsuk-card">
             <div class="nhsuk-card__content">
               <h2 class="nhsuk-card__heading nhsuk-heading-m">You have an innovation ownership transfer request</h2>
-              <p class="nhsuk-card__description">{{ item.innovation.owner }} has requested that you take ownership of {{ item.innovation.name }}.</p>
+              <p class="nhsuk-card__description">You have been requested to take ownership of {{ item.innovation.name }} by its owner.</p>
               <button class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-0" (click)="onSubmitTransferResponse(item.id, true)">Accept ownership</button>
               <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-0" (click)="onSubmitTransferResponse(item.id, false)">Reject request</button>
             </div>
@@ -77,8 +77,8 @@
         <div class="nhsuk-card__content">
           <h2 class="nhsuk-card__heading nhsuk-heading-m">Resources</h2>
           <ul class="nhsuk-list">
-            <li><a href="/innovation-guides" target="_blank" rel="noopener noreferrer">Access our starter and advanced innovation guides.</a></li>
-            <li><a href="/about-the-service" target="_blank" rel="noopener noreferrer">How does the innovation service work?</a></li>
+            <li><a href="/innovation-guides" target="_blank" rel="noopener noreferrer">Access our starter and advanced innovation guides (opens in a new window).</a></li>
+            <li><a href="/about-the-service" target="_blank" rel="noopener noreferrer">How does the innovation service work? (opens in a new window)</a></li>
           </ul>
 
         </div>
@@ -89,7 +89,7 @@
 
           <h2 class="nhsuk-card__heading nhsuk-heading-m">Help us improve the service</h2>
           <ul class="nhsuk-list">
-            <li><a [href]="userResearchLink" target="_blank" rel="noopener noreferrer">Sign up to take part in user research.</a></li>
+            <li><a [href]="userResearchLink" target="_blank" rel="noopener noreferrer">Sign up to take part in user research (opens in a new window).</a></li>
           </ul>
 
         </div>

@@ -9,11 +9,10 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
-import { getSectionTitle } from '@modules/stores/innovation/innovation.config';
 
-import { ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
-import { mainCategoryItems } from '@modules/stores/innovation/sections/catalogs.config';
+import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLog, InnovationSupportsLogDTO, SupportLogType } from './innovations.dtos';
 import { InnovationStatisticsEnum } from './statistics.enum';
 
@@ -272,7 +271,7 @@ export class InnovationsService extends CoreService {
         count: response.count,
         data: response.data.map(item => ({
           ...item,
-          mainCategory: item.otherMainCategoryDescription || mainCategoryItems.find(i => i.value === item.mainCategory)?.label || '',
+          mainCategory: item.otherMainCategoryDescription || irVersionsMainCategoryItems.find(i => i.value === item.mainCategory)?.label || '',
         }))
       }))
 
@@ -456,7 +455,14 @@ export class InnovationsService extends CoreService {
     return this.http.get<InnovationActionsListInDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         count: response.count,
-        data: response.data.map(item => ({ ...item, ...{ name: `Update '${this.stores.innovation.getSectionTitle(item.section)}'`, } }))
+        data: response.data.map(item => {
+          const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(item.section);
+
+          return {
+            ...item,
+            ...{ name: sectionIdentification ? `Update '${sectionIdentification.section.title}'` : 'Section no longer available'}
+          }
+        })
       }))
     );
 
@@ -466,19 +472,23 @@ export class InnovationsService extends CoreService {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/actions/:actionId').setPathParams({ innovationId, actionId });
     return this.http.get<Omit<InnovationActionInfoDTO, 'name'>>(url.buildUrl()).pipe(take(1),
-      map(response => ({
-        id: response.id,
-        displayId: response.displayId,
-        status: response.status,
-        name: `Update '${this.stores.innovation.getSectionTitle(response.section)}'`,
-        description: response.description,
-        section: response.section,
-        createdAt: response.createdAt,
-        updatedAt: response.updatedAt,
-        updatedBy: response.updatedBy,
-        createdBy: response.createdBy,
-        declineReason: response.declineReason
-      }))
+      map(response => {
+        const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
+
+        return ({
+          id: response.id,
+          displayId: response.displayId,
+          status: response.status,
+          name: sectionIdentification ? `Update '${sectionIdentification.section.title}'` : 'Section no longer available',
+          description: response.description,
+          section: response.section,
+          createdAt: response.createdAt,
+          updatedAt: response.updatedAt,
+          updatedBy: response.updatedBy,
+          createdBy: response.createdBy,
+          declineReason: response.declineReason
+        })
+      })
     );
 
   }
@@ -612,6 +622,7 @@ export class InnovationsService extends CoreService {
         data: response.data.map(i => {
 
           let link: null | { label: string; url: string; } = null;
+          const sectionIdentification = i.params.sectionId ? this.stores.innovation.getInnovationRecordSectionIdentification(i.params.sectionId): '';
 
           switch (ACTIVITY_LOG_ITEMS[i.activity].link) {
             case 'NEEDS_ASSESSMENT':
@@ -624,14 +635,18 @@ export class InnovationsService extends CoreService {
               link = { label: 'Go to Support status', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/support` };
               break;
             case 'SECTION':
-              link = i.params.sectionId ? { label: 'View section', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/record/sections/${i.params.sectionId}` } : null;
+              link = i.params.sectionId && sectionIdentification ? { label: 'View section', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/record/sections/${i.params.sectionId}` } : null;
               break;
             case 'THREAD':
               link = { label: 'View messages', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/threads/${i.params.thread?.id}` };
               break;
             case 'ACTION':
-              if (['innovator', 'accessor'].includes(userUrlBasePath) && i.params.actionId) { // Don't make sense for assessment users.
+              if (['innovator', 'accessor'].includes(userUrlBasePath) && i.params.actionId && sectionIdentification) { // Don't make sense for assessment users.
                 link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/action-tracker/${i.params.actionId}` };
+              }
+
+              if (i.activity === ActivityLogItemsEnum.ACTION_CREATION && !sectionIdentification) {
+                i.activity = ActivityLogItemsEnum.ACTION_CREATION_SECTION_DEPRECATED;
               }
               break;
           }
@@ -644,7 +659,7 @@ export class InnovationsService extends CoreService {
             params: {
               ...i.params,
               innovationName: response.innovation.name,
-              sectionTitle: getSectionTitle(i.params.sectionId || null),
+              sectionTitle: sectionIdentification ? `"${sectionIdentification.section.title}"` : '',
               actionUserRole: i.params.actionUserRole ? `(${this.stores.authentication.getRoleDescription(i.params.actionUserRole)})` : ''
             },
             link

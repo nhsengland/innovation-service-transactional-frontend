@@ -15,6 +15,7 @@ import { StoresModule } from '@modules/stores';
 
 import { InnovationService } from '../services/innovation.service';
 import { InnovationCollaborationRedirectionGuard } from './innovation-collaboration-redirection.guard';
+import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 describe('Core/Guards/InnovationCollaborationRedirectionGuard running SERVER side', () => {
@@ -47,14 +48,14 @@ describe('Core/Guards/InnovationCollaborationRedirectionGuard running SERVER sid
 
   });
 
-  it('should allow access and redirect', () => {
+  it('should allow access', () => {
 
     let expected: boolean | null = null;
 
-    innovationService.getInnovationCollaboration = () => of();
+    innovationService.getInnovationCollaboration = () => of({ userExists: true, collaboratorStatus: InnovationCollaboratorStatusEnum.PENDING });
 
     guard.canActivate(routeMock as any).subscribe(response => { expected = response; });
-    expect(expected).toBe(null); // Response from canActivate does not get returned, as it is redirected.
+    expect(expected).toBe(true);
 
   });
 
@@ -62,17 +63,13 @@ describe('Core/Guards/InnovationCollaborationRedirectionGuard running SERVER sid
 
     let expected: boolean | null = null;
 
-    innovationService.getInnovationCollaboration = () => throwError(false);
+    innovationService.getInnovationCollaboration = () => of({ userExists: true, collaboratorStatus: InnovationCollaboratorStatusEnum.CANCELLED });
 
     guard.canActivate(routeMock as any).subscribe(response => { expected = response; });
     expect(expected).toBe(null); // Response from canActivate does not get returned, as it is redirected.
-
   });
 
 });
-
-
-
 
 
 describe('Core/Guards/InnovationCollaborationRedirectionGuard running CLIENT side', () => {
@@ -103,22 +100,36 @@ describe('Core/Guards/InnovationCollaborationRedirectionGuard running CLIENT sid
 
   });
 
-  it('should deny access and redirect to signin', () => {
+  it('should deny access and redirect to signup', () => {
 
     delete (window as { location?: {} }).location;
     window.location = { href: '', hostname: '', pathname: '', protocol: '', assign: jest.fn() } as unknown as Location;
 
     let expected: boolean | null = null;
 
-    innovationService.getInnovationCollaboration = () => throwError({status: 404});
+    innovationService.getInnovationCollaboration = () => of({ userExists: false, collaboratorStatus: InnovationCollaboratorStatusEnum.PENDING });
 
     guard.canActivate(routeMock as any).subscribe(response => { expected = response; });
     expect(expected).toBe(false);
-    expect(window.location.assign).toBeCalledWith('/transactional/signin');
+    expect(window.location.assign).toBeCalledWith('/transactional/signup');
   });
 
+  it('should deny access and redirect to forbidden-collaborator error page', () => {
 
-  it('should deny access and redirect to error page', () => {
+    delete (window as { location?: {} }).location;
+    window.location = { href: '', hostname: '', pathname: '', protocol: '', assign: jest.fn() } as unknown as Location;
+
+    let expected: boolean | null = null;
+
+    innovationService.getInnovationCollaboration = () => of({ userExists: true, collaboratorStatus: InnovationCollaboratorStatusEnum.CANCELLED });
+
+    guard.canActivate(routeMock as any).subscribe(response => { expected = response; });
+    expect(expected).toBe(false);
+    expect(window.location.assign).toBeCalledWith('/transactional/error/forbidden-collaborator');
+
+  });
+
+  it('should deny access and redirect to generic error page', () => {
 
     delete (window as { location?: {} }).location;
     window.location = { href: '', hostname: '', pathname: '', protocol: '', assign: jest.fn() } as unknown as Location;

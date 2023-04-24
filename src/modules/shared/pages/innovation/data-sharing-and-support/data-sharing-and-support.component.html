@@ -13,32 +13,30 @@
 
       </ng-container>
 
-      <ng-container *ngIf="(stores.authentication.isAssessmentType() || stores.authentication.isAccessorType()) && !innovation.owner.isActive">
+      <ng-container *ngIf="(stores.authentication.isAssessmentType() || stores.authentication.isAccessorType()) && !innovation.owner?.isActive">
 
-        <div *ngIf="!innovation.owner.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+        <div *ngIf="innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
           <div class="nhsuk-heading-m nhsuk-warning-callout__label">
             <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
           </div>
           <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
         </div>
 
+        <!--TODO: Banner for owner with account delete (new US)-->
+
       </ng-container>
 
-      <ul class="nhsuk-list">
-        <li>
-          <ng-container *ngTemplateOutlet="icon; context: { shared: true }"></ng-container>
-          Organisations that have access to the innovation because they have been invited to support it or the innovator has shared their data with them.
-        </li>
-        <li>
-          <ng-container *ngTemplateOutlet="icon; context: { shared: false }"></ng-container>
-          Organisations that do not have access to the innovation.
-        </li>
-      </ul>
-      
-
+      <p class="d-flex nhsuk-u-margin-0">
+        <ng-container *ngTemplateOutlet="icon; context: { shared: true }"></ng-container>
+        Organisations that have access to the innovation because they have been invited to support it or the innovator has shared their data with them.
+      </p>
+      <p class="d-flex">
+        <ng-container *ngTemplateOutlet="icon; context: { shared: false }"></ng-container>
+        Organisations that do not have access to the innovation.
+      </p>
 
       <ul class="nhsuk-list">
-        <li><a [routerLink]="stores.authentication.isAccessorType() ? '../../everyone' : '../everyone'" target="_blank" rel="noopener noreferrer">View a list of everyone who is working with this innovation (opens in new window). </a></li>
+        <li><a [routerLink]="stores.authentication.isAccessorType() ? '../../everyone' : '../everyone'" target="_blank" rel="noopener noreferrer">View a list of everyone who is working with this innovation (opens in a new window). </a></li>
         <li><a href="{{ CONSTANTS.BASE_URL }}/about-the-service/who-we-are" target="_blank" rel="noopener noreferrer">What does each organisation do? (opens in a new window). </a></li>
       </ul>
 
@@ -49,7 +47,7 @@
           <div class="ml-auto">
             <div class="nhsuk-u-text-align-right">
               Support status
-            </div> 
+            </div>
             <a class ="nhsuk-u-font-weight-normal" routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/support/statuses" arial-label="View support status keys information"> Support status key </a>
           </div>
         </div>
@@ -63,7 +61,7 @@
                 <ng-container>
                   <ng-container *ngTemplateOutlet="icon; context: { shared: organisation.shared }"></ng-container>
                 </ng-container>
-                
+
                 <div>{{ organisation.info.name }}</div>
               </dt>
               <dd class="ml-auto">

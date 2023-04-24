@@ -25,14 +25,12 @@
 
         <ng-container *ngIf=" showParticipantsHideStatus === 'opened'">
           <dl class="nhsuk-u-margin-0 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
-            <div *ngFor="let participant of threadParticipants?.participants;" class="nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
-              <dt>
-                <span *ngIf="participant.type === 'INNOVATOR' ; else notInnovator">{{ participant.name }} ({{participant.isOwner ? 'Owner' : 'Collaborator'}})</span>
-                <ng-template #notInnovator>
-                  <span>{{ participant.name }} ({{ participant.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(participant.type) }})</span>
-                </ng-template>
-              </dt>
-            </div>
+            <dt *ngFor="let participant of threadParticipants?.participants;" class="nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
+              <span *ngIf="participant.type === 'INNOVATOR' ; else notInnovator">{{ participant.name }} ({{participant.isOwner ? 'Owner' : 'Collaborator'}})</span>
+              <ng-template #notInnovator>
+                <span>{{ participant.name }} ({{ participant.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(participant.type) }})</span>
+              </ng-template>
+            </dt>
           </dl>
         </ng-container>
 

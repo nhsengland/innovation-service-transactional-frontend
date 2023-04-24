@@ -1,19 +1,16 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
-import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
+import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
-import {
-  INNOVATION_STATUS,
-  InnovationSectionsListDTO, GetInnovationEvidenceDTO, OrganisationSuggestionModel, InnovationSectionInfoDTO
-} from './innovation.models';
+import { GetInnovationEvidenceDTO, InnovationSectionInfoDTO, InnovationSectionsListDTO, INNOVATION_STATUS, OrganisationSuggestionModel } from './innovation.models';
 
-import { UrlModel } from '@modules/core/models/url.model';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
+import { UrlModel } from '@modules/core/models/url.model';
 
 
 @Injectable()
@@ -96,12 +93,12 @@ export class InnovationService {
   }
 
 
-  getSectionEvidenceInfo(innovationId: string, evidenceId: string): Observable<GetInnovationEvidenceDTO> {
+  getSectionEvidenceInfo(innovationId: string, evidenceOffset: string): Observable<GetInnovationEvidenceDTO> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/evidences/:evidenceId')
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/evidences/:evidenceOffset')
       .setPathParams({
         innovationId,
-        evidenceId
+        evidenceOffset
       });
     return this.http.get<GetInnovationEvidenceDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 

@@ -20,9 +20,9 @@
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Last update</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
             <p>{{ action.updatedAt | date: ('app.date_formats.long_date' | translate) }}</p>
-            <span *ngIf="action.updatedBy.role === 'INNOVATOR'; else notInnovator" class="font-color-secondary">by {{ action.updatedBy.name }} ({{ action.updatedBy.isOwner ? 'Owner' : 'Collaborator' }})</span>
+            <span *ngIf="action.updatedBy.role === 'INNOVATOR'; else notInnovator" class="font-color-secondary">by {{ action.updatedBy.name }} <ng-container *ngIf="action.updatedBy.isOwner">({{ action.updatedBy.isOwner ? 'Owner' : 'Collaborator' }})</ng-container></span>
             <ng-template #notInnovator>
-              <span class="font-color-secondary">by {{ action.updatedBy.name }} ({{ this.stores.authentication.getRoleDescription(action.updatedBy.role) }})</span>
+              <span class="font-color-secondary">by {{ action.updatedBy.name }} <ng-container *ngIf="action.updatedBy.role">({{ this.stores.authentication.getRoleDescription(action.updatedBy.role) }})</ng-container></span>
             </ng-template>
           </dd>
         </div>
@@ -35,16 +35,15 @@
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Requested by</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
-            <span *ngIf="action.createdBy.role === 'ACCESSOR'; else requestedByOtherRole">{{ action.createdBy.name }}, {{ action.createdBy.organisationUnit?.name }}</span>
+            <span *ngIf="action.createdBy.role === 'ACCESSOR'; else requestedByOtherRole">{{ action.createdBy.name }}<ng-container *ngIf="action.createdBy.organisationUnit?.name">, {{ action.createdBy.organisationUnit?.name }}</ng-container></span>
             <ng-template #requestedByOtherRole>
-              <span>{{ action.createdBy.name }} ({{ this.stores.authentication.getRoleDescription(action.createdBy.role) }})</span>
+              <span>{{ action.createdBy.name }} <ng-container *ngIf="action.createdBy.role">({{ this.stores.authentication.getRoleDescription(action.createdBy.role) }})</ng-container></span>
             </ng-template>
           </dd>
         </div>
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Section</dt>
-          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">{{ stores.innovation.getSectionNumber(action.section) }} {{
-            stores.innovation.getSectionTitle(action.section) }}</dd>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">{{ sectionTitle }}</dd>
         </div>
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Description</dt>

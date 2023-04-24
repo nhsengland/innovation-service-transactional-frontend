@@ -1,5 +1,3 @@
-/* istanbul ignore file */
-
 import { Injector } from '@angular/core';
 
 export class AppInjector {

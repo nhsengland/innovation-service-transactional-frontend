@@ -6,9 +6,10 @@ import { CustomValidators, FormGroup, FormEngineParameterModel, Validators, Wiza
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { ActivatedRoute } from '@angular/router';
-import { FormEngineModel, WizardSummaryType } from '@modules/shared/forms';
+import { WizardSummaryType } from '@modules/shared/forms';
 import { COLLABORATORS_TRANSFERS, NO_COLLABORATORS_TRANSFERS, otherEmailItem } from './manage-transfer.config';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { cloneDeep } from 'lodash';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
 
   innovationId: string;
   stayAsCollaborator: boolean = false;
+  redirectToDeleteAccount: boolean = false;
 
   wizard: WizardEngineModel = new WizardEngineModel({});
   summaryList: WizardSummaryType[] = [];
@@ -41,17 +43,16 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.redirectToDeleteAccount = this.stores.context.getPreviousUrl()?.includes('/manage-account/delete') ?? false;
   }
 
   ngOnInit(): void {
-    this.wizard = NO_COLLABORATORS_TRANSFERS;
+    this.wizard = cloneDeep(NO_COLLABORATORS_TRANSFERS);
 
     this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']).subscribe(response => {
 
-      if (response.count === 0) {
-        this.wizard = NO_COLLABORATORS_TRANSFERS;
-      } else {
-        this.wizard = COLLABORATORS_TRANSFERS;
+      if (response.count > 0) {
+        this.wizard = cloneDeep(COLLABORATORS_TRANSFERS);
         const collaborators: {
           value: string,
           label: string
@@ -87,7 +88,13 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
 
           this.wizard.gotoStep(Number(params.stepId));
           this.setPageTitle(this.wizard.currentStepTitle() || '');
-          this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
+
+          if(Number(params.stepId) === 1) {
+            this.setBackLink('Go back');
+          } else {            
+            this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
+          }
+
           this.setPageStatus('READY');
 
         })
@@ -121,7 +128,12 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
 
     this.innovatorService.transferInnovation(body).subscribe({
       next: () => {
-        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation`);
+        if(this.redirectToDeleteAccount) {
+          this.redirectTo(`/innovator/account/manage-account/delete`);
+
+        } else {
+          this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation`);
+        }
       },
       error: () => {
         this.setAlertError('An error occurred when transferring innovation ownership. Please check the details and try again or contact us for further info.');

@@ -53,6 +53,31 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
 
   }
 
+  isSortable(): boolean {
+    return this.orderBy !== '' ? true : false;
+  }
+
+  setFocusOnSortedColumnHeader(column: string): void {
+
+    setTimeout(() => { // Await for the html injection if needed.
+      const button = document.querySelector('button#'+column) as HTMLButtonElement;
+      const caption = button.closest("table")?.firstChild as HTMLTableCaptionElement;
+      caption.setAttribute('aria-hidden', 'true');
+      if (button && caption) {
+        button.setAttribute('tabIndex', '-1');
+        button.focus();
+        button.addEventListener('blur', (e) => {
+          e.preventDefault();
+          button.removeAttribute('tabIndex');
+        });
+        button.addEventListener('keyup', (e) => {
+          caption.setAttribute('aria-hidden', 'false');
+        });
+      }
+    });
+
+  }
+
   setVisibleColumns(visibleColumns: { [key: string]: (string | { label: string; align?: AlignType; orderable?: boolean; }) }): this {
 
     this.visibleColumns = {};

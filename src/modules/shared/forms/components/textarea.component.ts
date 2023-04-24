@@ -1,10 +1,11 @@
-import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, forwardRef, Injector } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, ElementRef, Injector, Input, OnDestroy, OnInit, ViewChild, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
 import { ControlValueAccessorComponent } from '../base/control-value-accessor.connector';
 
+import { Subscription, debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
 
@@ -18,7 +19,9 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
     multi: true
   }]
 })
-export class FormTextareaComponent extends ControlValueAccessorComponent implements OnInit, DoCheck {
+export class FormTextareaComponent extends ControlValueAccessorComponent implements OnInit, DoCheck, OnDestroy {
+
+  @ViewChild('textArea', { static: true }) textAreaRef?: ElementRef<HTMLTextAreaElement>;
 
   @Input() id?: string;
   @Input() type?: 'text' | 'number' | 'hidden' | 'password';
@@ -35,6 +38,10 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
   lengthLimitCharacters = 200;
 
   divCssOverride = '';
+
+  textAreaValue = '';
+
+  private fieldChangeSubscription = new Subscription();
 
   // Accessibility.
   get ariaDescribedBy(): null | string {
@@ -86,14 +93,37 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
 
     this.divCssOverride = this.cssOverride || '';
 
+    if (this.textAreaRef) {
+      this.fieldChangeSubscription.add(
+        fromEvent(this.textAreaRef.nativeElement, 'keyup')
+          .pipe(
+            map((event: Event) => (event.target as HTMLTextAreaElement).value),
+            debounceTime(1000),
+            distinctUntilChanged()
+          )
+          .subscribe(value => {
+            this.textAreaValue = value;
+            this.cdr.markForCheck();
+          })
+      );
+    }
+
   }
 
   ngDoCheck(): void {
+    
+    if(this.fieldControl.value !== null && this.textAreaValue === '') {
+      this.textAreaValue = this.fieldControl.value;
+    }
 
     this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
     this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : { message: '', params: {} };
     this.cdr.detectChanges();
 
+  }
+
+  ngOnDestroy(): void {
+    this.fieldChangeSubscription.unsubscribe();
   }
 
 }

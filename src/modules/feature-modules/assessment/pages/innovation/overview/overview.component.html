@@ -1,11 +1,13 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <div *ngIf="!innovation?.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+  <div *ngIf="innovation?.owner && !innovation?.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
     </div>
     <p> Please note that the innovator {{ innovation?.owner?.name }} is currently locked. </p>
   </div>
+
+ <!--TODO: Banner for owner with account delete (new US)-->
 
   <ng-container [ngSwitch]="innovation?.status">
     <ng-container *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'">
@@ -67,8 +69,10 @@
   <h2 class="nhsuk-heading-m nhsuk-u-padding-top-5">Innovator details</h2>
   <dl class="nhsuk-summary-list">
     <div *ngFor="let item of innovatorSummary" class="nhsuk-summary-list__row">
-      <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-      <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+      <ng-container *ngIf="item.value !== ''">
+        <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+        <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>        
+      </ng-container>
     </div>
   </dl>
 

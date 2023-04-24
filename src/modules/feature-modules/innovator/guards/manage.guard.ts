@@ -27,7 +27,7 @@ export class ManageGuard implements CanActivate {
       map(response => {
 
         const userContext = this.authenticationStore.getUserContextInfo();
-        const loggedUser = { isOwner: response.owner.id === userContext?.id };
+        const loggedUser = { isOwner: response.owner ? response.owner.id === userContext?.id : false };
 
         if (state.url.includes("manage/innovation")) {
           if (loggedUser.isOwner) {

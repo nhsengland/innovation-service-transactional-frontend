@@ -2,7 +2,8 @@ import { DateISOType } from '@app/base/types';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { WizardEngineModel } from '@modules/shared/forms';
 
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum, InnovationStatusEnum } from './innovation.enums';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum } from './innovation.enums';
+import { InnovationSectionsVersions } from './innovation-record/ir-versions.types';
 
 
 // Store state model.
@@ -41,17 +42,6 @@ export type InnovationSectionInfoDTO = {
   actionsIds?: string[];
 }
 
-export type getInnovationInfoEndpointDTO = {
-  id: string;
-  name: string;
-  company: string;
-  description: string;
-  countryName: string;
-  postcode: string;
-  actions: string[];
-  comments: string[];
-};
-
 export type getInnovationInfoResponse = {
   id: string;
   name: string;
@@ -64,7 +54,7 @@ export type getInnovationInfoResponse = {
 
 export type InnovationSectionsListDTO = {
   id: null | string,
-  section: InnovationSectionEnum,
+  section: InnovationSectionsVersions,
   status: keyof typeof INNOVATION_SECTION_STATUS,
   submittedAt: null | DateISOType,
   submittedBy: null | {
@@ -87,7 +77,7 @@ export type GetInnovationEvidenceDTO = {
 export type SectionsSummaryModel = {
   title: string,
   sections: {
-    id: InnovationSectionEnum,
+    id: InnovationSectionsVersions,
     title: string,
     status: keyof typeof INNOVATION_SECTION_STATUS,
     submittedAt: null | DateISOType,
@@ -349,6 +339,11 @@ export const ACTIVITY_LOG_ITEMS: {
     type: ActivityLogTypesEnum.ACTIONS,
     details: 'COMMENT',
     link: 'ACTION'
+  },
+  ACTION_CREATION_SECTION_DEPRECATED: {
+    type: ActivityLogTypesEnum.ACTIONS,
+    details: null,
+    link: null
   },
   ACTION_STATUS_SUBMITTED_UPDATE: {
     type: ActivityLogTypesEnum.ACTIONS,

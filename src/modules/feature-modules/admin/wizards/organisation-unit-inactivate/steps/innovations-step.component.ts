@@ -42,7 +42,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
 
 
   constructor(
-    private innovationsService: InnovationsService,    
+    private innovationsService: InnovationsService,
     private statisticsService: StatisticsService
   ) {
 
@@ -69,7 +69,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
   }
 
 
-  getUsersList(): void {
+  getUsersList(column?: string): void {
 
     forkJoin([
       this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() }),
@@ -88,7 +88,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
             count: statistics[InnovationStatisticsEnum.INNOVATIONS_PER_UNIT].FURTHER_INFO_REQUIRED
           }
         ];
-        
+        if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
         this.setPageStatus('READY');
       },
       error: () => {
@@ -100,7 +100,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
 
   onTableOrder(column: string): void {
     this.innovationsList.setOrderBy(column);
-    this.getUsersList();
+    this.getUsersList(column);
   }
 
   onPageChange(event: { pageNumber: number }): void {

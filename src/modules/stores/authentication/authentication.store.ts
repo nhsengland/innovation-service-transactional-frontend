@@ -3,8 +3,8 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Observable, Observer, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
-import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { LocalStorageHelper } from '@modules/core/helpers/local-storage.helper';
+import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
 import { Store } from '../store.class';
 
@@ -81,8 +81,9 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   isSignIn(): boolean { return this.state.isSignIn; }
   isTermsOfUseAccepted(): boolean { return this.state.user?.termsOfUseAccepted ?? false; }
   isFirstTimeSignInDone(): boolean { return !!this.state.user?.firstTimeSignInAt ?? false; }
-  hasInnovationTransfers(): boolean { return this.state.user?.hasInnovationTransfers || false; }
-  hasInnovationCollaborations(): boolean { return this.state.user?.hasInnovationCollaborations || false;  }
+  hasInnovationTransfers(): boolean { return this.state.user?.hasInnovationTransfers ?? false; }
+  hasInnovationCollaborations(): boolean { return this.state.user?.hasInnovationCollaborations ?? false; }
+  hasAnnouncements(): boolean { return this.state.user?.hasAnnouncements ?? false; }
 
   isAccessorType(): boolean { return [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR].includes(this.state.userContext?.type as UserRoleEnum); }
 
@@ -120,7 +121,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   getUserInfo(): Required<AuthenticationModel>['user'] {
-    return this.state.user || { id: '', email: '', displayName: '', roles: [], contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, phone: null, contactDetails: null, termsOfUseAccepted: false, hasInnovationTransfers: false, hasInnovationCollaborations: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
+    return this.state.user || { id: '', email: '', displayName: '', roles: [], contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, phone: null, contactDetails: null, termsOfUseAccepted: false, hasInnovationTransfers: false, hasInnovationCollaborations: false, hasAnnouncements: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
   }
 
   updateUserInfo$(body: UpdateUserInfoDTO): Observable<{ id: string }> {
