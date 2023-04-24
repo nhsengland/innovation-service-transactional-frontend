@@ -269,13 +269,20 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 }
 
-
 // // _header.scss: Header menu button spacing on mobile.
 .nhsuk-header__menu-toggle {
   @media (max-width: 40.0525em) {
     right: unset;
   }
 }
+
+
+// // Hotjar button focus.
+._hj_feedback_container button:focus {
+  box-shadow: -5px 0px #212b32, -5px 0px #212b32,  0px 5px #212b32, 0px -5px #212b32;
+  outline: 3px solid #ffeb3b;
+}
+
 
 .nhsuk-tag {
   height: fit-content;
@@ -423,16 +430,6 @@ $service-manual-container-size: 1100px; // Container width variable.
 
 }
 
-
-.dot-error {
-  height: 15px;
-  width: 15px;
-  background-color: var(--error-color);
-  border-radius: 50%;
-  display: inline-block;
-}
-
-
 .progressbar {
   display: flex;
   list-style-type: none;
@@ -542,8 +539,8 @@ td {
   }
 
   @media (min-width: 48.0625em) {
-    &.fixed-width-150 { max-width: 150px; };
-    &.fixed-width-175 { max-width: 175px; };
-    &.fixed-width-200 { max-width: 200px; };
+    &.fixed-width-150 { max-width: 150px; }
+    &.fixed-width-175 { max-width: 175px; }
+    &.fixed-width-200 { max-width: 200px; }
   }
 }
