@@ -12,7 +12,7 @@ import { hasRegulationKnowledgeItems, standardsHasMetItems, standardsTypeItems }
 const stepsLabels = {
   q1: {
     label: 'Do you know which regulations, standards and certifications apply to your innovation?',
-    description: 'Find out more about <a href="/innovation-guides/creation/regulation" target="_blank" rel="noopener noreferrer">regulations (opens in a new window)</a>.'
+    description: 'Find out more about <a href="/innovation-guides/regulation" target="_blank" rel="noopener noreferrer">regulations (opens in a new window)</a>.'
   },
   q2: {
     label: 'Which regulations, standards and certifications apply to your innovation?',
