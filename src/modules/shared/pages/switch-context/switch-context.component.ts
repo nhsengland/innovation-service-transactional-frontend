@@ -90,10 +90,8 @@ export class PageSwitchContextComponent extends CoreComponent {
         organisationUnit: role.organisationUnit
       });
 
-      if (!this.currentRole) {
-        const roleDescription = `${this.authenticationStore.getRoleDescription(role.type).toLowerCase()}${role.organisationUnit ? ` (${role.organisationUnit.name})` : ''}`;
-        this.setRedirectAlertSuccess(`You are now logged in as ${roleDescription}.`);
-      }
+      const roleDescription = `${this.authenticationStore.getRoleDescription(role.type).toLowerCase()}${role.organisationUnit ? ` (${role.organisationUnit.name})` : ''}`;
+      this.setRedirectAlertSuccess(`You are now logged in as ${roleDescription}.`);
 
       this.stores.authentication.initializeAuthentication$().subscribe(() => {
         if (this.stores.authentication.hasAnnouncements()) {
