@@ -11,7 +11,7 @@
   <script src="/transactional/static/assets/js/cookies-helper.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4XB9VSJZ0G"></script>
   <script>
-    if (window.__env.ENABLE_ANALYTICS && getConsentCookie().analytics) {
+    if (window.__env.ENABLE_ANALYTICS === 'true' && getConsentCookie().analytics) {
 
       // Hotjar tracking Code for dev.innovation.nhs.uk.
       (function (h, o, t, j, a, r) {
