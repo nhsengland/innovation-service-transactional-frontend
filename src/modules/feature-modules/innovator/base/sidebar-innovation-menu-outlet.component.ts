@@ -58,7 +58,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       ];
 
       if (innovation.status === InnovationStatusEnum.IN_PROGRESS) {
-        this._sidebarItems.splice(5, 0 ,
+        this._sidebarItems.splice(5, 0,
           { label: 'Needs assessment', url: `/innovator/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` },
         );
       }
