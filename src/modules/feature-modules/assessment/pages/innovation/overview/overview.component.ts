@@ -77,7 +77,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.cardsList = [{
         title: 'Innovation record',
-        label: `sections submitted since assessment was started`,
+        label: `Sections submitted since assessment was started`,
         link: `/assessment/innovations/${this.innovationId}/record`,
         count: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].count,
         total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].total,
@@ -86,7 +86,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         emptyMessage: `No sections have been submitted since the assessment started`
       }, {
         title: 'Messages',
-        label: `unread replies to conversations you have started`,
+        label: `Unread replies to conversations you have started`,
         link: `/assessment/innovations/${this.innovationId}/threads`,
         count: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_THREADS_INITIATED_BY_COUNTER].count,
         lastMessage: `Last received message`,

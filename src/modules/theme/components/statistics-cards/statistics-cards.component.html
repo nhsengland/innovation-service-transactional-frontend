@@ -8,15 +8,15 @@
           </a>
         </h2>
         <ng-container *ngIf="item.count !== 0; else noSectionsToSubmit">
-          <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline">
+          <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline nhsuk-u-margin-bottom-1">
             <span class="nhsuk-u-font-size-48">{{ item.count }}</span>
             <ng-container *ngIf="item.total">
               <span class="nhsuk-u-padding-1">of</span>
               <span>{{ item.total }}</span>
             </ng-container>
-            <span class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal align-self-center nhsuk-u-padding-left-4">
-              {{ item.label }}
-            </span>
+          </p>
+          <p class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal nhsuk-u-margin-bottom-3">
+            {{ item.label }}
           </p>
         </ng-container>
         <ng-container *ngIf="item.date && item.count">
