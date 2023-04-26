@@ -92,7 +92,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.cardsList = [{
         title: 'Innovation record',
-        label: `sections were submitted by you`,
+        label: `Sections were submitted`,
         link: `/innovator/innovations/${this.innovationId}/record`,
         count: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].count,
         total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].total,
@@ -101,7 +101,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         emptyMessage: "You haven't submitted any section of your innovation record yet"
       }, {
         title: 'Actions requested',
-        label: `request actions to submit`,
+        label: `Request actions to submit`,
         link: `/innovator/innovations/${this.innovationId}/action-tracker`,
         count: statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER].count,
         lastMessage: `Last requested action: "Submit '${this.translate('shared.catalog.innovation.innovation_sections.' + lastActionSubmitted)}'"`,
@@ -110,7 +110,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         emptyMessage: 'We might send a request to add more information to your innovation record here'
       }, {
         title: 'Messages',
-        label: `unread messages`,
+        label: `Unread messages`,
         link: `/innovator/innovations/${this.innovationId}/threads`,
         count: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER].count,
         lastMessage: `Last received message`,

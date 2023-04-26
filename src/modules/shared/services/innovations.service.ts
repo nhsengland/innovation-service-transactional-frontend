@@ -460,7 +460,7 @@ export class InnovationsService extends CoreService {
 
           return {
             ...item,
-            ...{ name: sectionIdentification ? `Update '${sectionIdentification.section.title}'` : 'Section no longer available'}
+            ...{ name: sectionIdentification ? `Update '${sectionIdentification.section.title}'` : 'Section no longer available' }
           }
         })
       }))
@@ -622,7 +622,27 @@ export class InnovationsService extends CoreService {
         data: response.data.map(i => {
 
           let link: null | { label: string; url: string; } = null;
-          const sectionIdentification = i.params.sectionId ? this.stores.innovation.getInnovationRecordSectionIdentification(i.params.sectionId): '';
+          const sectionIdentification = i.params.sectionId ? this.stores.innovation.getInnovationRecordSectionIdentification(i.params.sectionId) : '';
+
+          // Handle sections from previous innovation record versions
+          if (!sectionIdentification) {
+
+            switch (i.activity) {
+              case ActivityLogItemsEnum.SECTION_DRAFT_UPDATE:
+                i.activity = ActivityLogItemsEnum.SECTION_DRAFT_UPDATE_DEPRECATED;
+                break;
+              case ActivityLogItemsEnum.SECTION_SUBMISSION:
+                i.activity = ActivityLogItemsEnum.SECTION_SUBMISSION_DEPRECATED;
+                break;
+              case ActivityLogItemsEnum.ACTION_CREATION:
+                i.activity = ActivityLogItemsEnum.ACTION_CREATION_DEPRECATED;
+                break;
+              case ActivityLogItemsEnum.ACTION_STATUS_SUBMITTED_UPDATE:
+                i.activity = ActivityLogItemsEnum.ACTION_STATUS_SUBMITTED_UPDATE_DEPRECATED;
+                break;
+            }
+
+          }
 
           switch (ACTIVITY_LOG_ITEMS[i.activity].link) {
             case 'NEEDS_ASSESSMENT':
@@ -641,12 +661,8 @@ export class InnovationsService extends CoreService {
               link = { label: 'View messages', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/threads/${i.params.thread?.id}` };
               break;
             case 'ACTION':
-              if (['innovator', 'accessor'].includes(userUrlBasePath) && i.params.actionId && sectionIdentification) { // Don't make sense for assessment users.
+              if (['innovator', 'accessor'].includes(userUrlBasePath) && sectionIdentification && i.params.actionId) { // Don't make sense for assessment users.
                 link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/action-tracker/${i.params.actionId}` };
-              }
-
-              if (i.activity === ActivityLogItemsEnum.ACTION_CREATION && !sectionIdentification) {
-                i.activity = ActivityLogItemsEnum.ACTION_CREATION_SECTION_DEPRECATED;
               }
               break;
           }
@@ -659,7 +675,7 @@ export class InnovationsService extends CoreService {
             params: {
               ...i.params,
               innovationName: response.innovation.name,
-              sectionTitle: sectionIdentification ? `"${sectionIdentification.section.title}"` : '',
+              sectionTitle: sectionIdentification ? `${sectionIdentification.section.title}` : '',
               actionUserRole: i.params.actionUserRole ? `(${this.stores.authentication.getRoleDescription(i.params.actionUserRole)})` : ''
             },
             link
