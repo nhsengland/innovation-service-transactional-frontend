@@ -7,7 +7,6 @@ import { TableModel } from '@app/base/models';
 
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
-import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
@@ -17,7 +16,7 @@ import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
-type FilterKeysType = 'mainCategories' | 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
+type FilterKeysType = 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
 
 @Component({
   selector: 'shared-pages-innovations-advanced-review',
@@ -32,7 +31,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   form = new FormGroup({
     search: new FormControl(''),
-    mainCategories: new FormArray([]),
     locations: new FormArray([]),
     supportStatuses: new FormArray([]),
     groupedStatuses: new FormArray([]),
@@ -49,7 +47,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     selected: { label: string, value: string }[],
     active: boolean
   }[] = [
-      { key: 'mainCategories', title: 'Main category', showHideStatus: 'closed', selected: [], active: false },
       { key: 'locations', title: 'Location', showHideStatus: 'closed', selected: [], active: false },
       { key: 'groupedStatuses', title: 'Innovation status', showHideStatus: 'closed', selected: [], active: false },
       { key: 'engagingOrganisations', title: 'Engaging organisations', showHideStatus: 'closed', selected: [], active: false },
@@ -57,7 +54,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     ];
 
   datasets: { [key in FilterKeysType]: { label: string, value: string }[] } = {
-    mainCategories: irVersionsMainCategoryItems.map(i => ({ label: i.label, value: i.value })),
     locations: locationItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ label: i.label, value: i.value })),
     engagingOrganisations: [],
     supportStatuses: [],
@@ -103,7 +99,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   ngOnInit(): void {
 
-    let filters: FilterKeysType[] = ['engagingOrganisations', 'locations', 'mainCategories', 'supportStatuses'];
+    let filters: FilterKeysType[] = ['engagingOrganisations', 'locations', 'supportStatuses'];
 
     if (this.stores.authentication.isAdminRole()) {
 

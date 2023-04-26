@@ -6,7 +6,6 @@ import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
-import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
@@ -22,7 +21,7 @@ enum FilterTypeEnum {
   DATERANGE = 'DATERANGE',
 }
 
-type FilterKeysType = 'mainCategories' | 'locations' | 'groupedStatuses' | 'submittedDate';
+type FilterKeysType = 'locations' | 'groupedStatuses' | 'submittedDate';
 
 type DatasetType = {
   [key: string]: {
@@ -61,7 +60,6 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     search: new FormControl('', { updateOn: 'change' }),
     assignedToMe: new FormControl(false, { updateOn: 'change' }),
     groupedStatuses: new FormArray<FormControl<InnovationGroupedStatusEnum>>([]),
-    mainCategories: new FormArray([]),
     locations: new FormArray([]),
     submittedStartDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
     submittedEndDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
@@ -72,26 +70,24 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
   filters: FiltersType[] = [
     { key: 'groupedStatuses', title: 'Status', showHideStatus: 'closed', type: FilterTypeEnum.CHECKBOX, selected: [], active: true },
     { key: 'submittedDate', title: 'Filter by date', showHideStatus: 'closed', type: FilterTypeEnum.DATERANGE, selected: [], active: true },
-    { key: 'mainCategories', title: 'Primary category', showHideStatus: 'closed', type: FilterTypeEnum.CHECKBOX, selected: [], active: true },
-    { key: 'locations', title: 'Location', showHideStatus: 'closed', type: FilterTypeEnum.CHECKBOX, selected: [], active: true },
+    { key: 'locations', title: 'Location', showHideStatus: 'closed', type: FilterTypeEnum.CHECKBOX, selected: [], active: true }
   ];
 
   datasets: DatasetType = {
-    mainCategories: irVersionsMainCategoryItems.map(i => ({ label: i.label, value: i.value })),
     locations: locationItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ label: i.label, value: i.value })),
     groupedStatuses: [],
     submittedDate: [
       {
-        label: "Submitted after",
-        description: "For example, 2005 or 21/11/2014",
-        value: "",
-        formControl: "submittedStartDate",
+        label: 'Submitted after',
+        description: 'For example, 2005 or 21/11/2014',
+        value: '',
+        formControl: 'submittedStartDate'
       },
       {
-        label: "Submitted before",
-        description: "For example, 2005 or 21/11/2014",
-        value: "",
-        formControl: "submittedEndDate",
+        label: 'Submitted before',
+        description: 'For example, 2005 or 21/11/2014',
+        value: '',
+        formControl: 'submittedEndDate'
       }
     ]
   };
@@ -130,41 +126,41 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     this.subscriptions.push(
 
       this.activatedRoute.queryParams
-      .subscribe(({ status }: Params) => {
+        .subscribe(({ status }: Params) => {
 
-        this.setPageTitle('Innovations');
-        let preSelectedStatus: InnovationGroupedStatusEnum[] | undefined;
-        this.setDefaultFilters();
+          this.setPageTitle('Innovations');
+          let preSelectedStatus: InnovationGroupedStatusEnum[] | undefined;
+          this.setDefaultFilters();
 
-        switch (status) {
-          case 'COMPLETED':
-            this.showOnlyCompleted = true;
-            this.setPageTitle('Assessment completed innovations');
-            this.setBackLink('Go back', `${this.userUrlBasePath()}/innovations`);
-            this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_SUPPORT, InnovationGroupedStatusEnum.RECEIVING_SUPPORT, InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT];
-            break;
-          case 'NEEDS_ASSESSMENT':
-            this.form.get('assignedToMe')?.setValue(true);
-            preSelectedStatus = [InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
-            break;
-          case 'WAITING_NEEDS_ASSESSMENT':
-            preSelectedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT];
-            break;
-          default:
-        }
-
-        this.setDatasetGroupedStatuses();
-
-        if (preSelectedStatus) {
-          preSelectedStatus.forEach(status => (this.form.get('groupedStatuses') as FormArray).push(new FormControl(status)));
-
-          const groupedStatusesFilter: FiltersType | undefined = this.filters.find(f => f.key === 'groupedStatuses');
-          if (groupedStatusesFilter) {
-            groupedStatusesFilter.showHideStatus = 'opened';
+          switch (status) {
+            case 'COMPLETED':
+              this.showOnlyCompleted = true;
+              this.setPageTitle('Assessment completed innovations');
+              this.setBackLink('Go back', `${this.userUrlBasePath()}/innovations`);
+              this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_SUPPORT, InnovationGroupedStatusEnum.RECEIVING_SUPPORT, InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT];
+              break;
+            case 'NEEDS_ASSESSMENT':
+              this.form.get('assignedToMe')?.setValue(true);
+              preSelectedStatus = [InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
+              break;
+            case 'WAITING_NEEDS_ASSESSMENT':
+              preSelectedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT];
+              break;
+            default:
           }
-        }
 
-      }),
+          this.setDatasetGroupedStatuses();
+
+          if (preSelectedStatus) {
+            preSelectedStatus.forEach(status => (this.form.get('groupedStatuses') as FormArray).push(new FormControl(status)));
+
+            const groupedStatusesFilter: FiltersType | undefined = this.filters.find(f => f.key === 'groupedStatuses');
+            if (groupedStatusesFilter) {
+              groupedStatusesFilter.showHideStatus = 'opened';
+            }
+          }
+
+        }),
 
       this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange())
 
@@ -174,7 +170,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
   }
 
-  setDefaultFilters(): void{
+  setDefaultFilters(): void {
     this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT, InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
     this.form.get('assignedToMe')?.setValue(false);
     (this.form.get('groupedStatuses') as FormArray).clear();
@@ -189,14 +185,14 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     ]);
 
     this.datasets.groupedStatuses = this.availableGroupedStatus
-              .map(groupedStatus => ({ label: this.translate(`shared.catalog.innovation.grouped_status.${groupedStatus}.name`), value: groupedStatus, description: descriptions.get(groupedStatus) }));
+      .map(groupedStatus => ({ label: this.translate(`shared.catalog.innovation.grouped_status.${groupedStatus}.name`), value: groupedStatus, description: descriptions.get(groupedStatus) }));
   }
 
   getInnovationsList(column?: string): void {
 
     this.setPageStatus('LOADING');
 
-    this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams(), fields: ["groupedStatus"] }).subscribe(response => {
+    this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams(), fields: ['groupedStatus'] }).subscribe(response => {
       this.innovationsList.setData(
         response.data.map(innovation => ({
           ...innovation,
@@ -254,17 +250,9 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       name: this.form.get('search')?.value,
       mainCategories: this.form.get('mainCategories')?.value,
       locations: this.form.get('locations')?.value,
-      groupedStatuses: groupedStatusesFilter && groupedStatusesFilter.length > 0
-        ? groupedStatusesFilter
-        : this.availableGroupedStatus,
+      groupedStatuses: groupedStatusesFilter && groupedStatusesFilter.length > 0 ? groupedStatusesFilter : this.availableGroupedStatus,
       assignedToMe: this.form.get('assignedToMe')?.value ?? false,
-      ...(startDate || endDate ? {
-        dateFilter: [{
-          field: 'submittedAt',
-          startDate,
-          endDate,
-        }]
-      } : {})
+      ...(startDate || endDate ? { dateFilter: [{ field: 'submittedAt', startDate, endDate }] } : {})
     });
 
     this.innovationsList.setPage(1);
@@ -325,11 +313,11 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     const afterDate = this.form.get(this.datasets[filter.key][0].formControl!)!.value;
     const beforeDate = this.form.get(this.datasets[filter.key][1].formControl!)!.value;
 
-    if (afterDate !== null && (beforeDate === null || beforeDate === '')) return "Submitted after";
+    if (afterDate !== null && (beforeDate === null || beforeDate === '')) return 'Submitted after';
 
-    if ((afterDate === null || afterDate === '') && beforeDate !== null) return "Submitted before";
+    if ((afterDate === null || afterDate === '') && beforeDate !== null) return 'Submitted before';
 
-    return "Submitted between";
+    return 'Submitted between';
 
   }
 
