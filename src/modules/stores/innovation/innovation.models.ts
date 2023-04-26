@@ -58,8 +58,8 @@ export type InnovationSectionsListDTO = {
   status: keyof typeof INNOVATION_SECTION_STATUS,
   submittedAt: null | DateISOType,
   submittedBy: null | {
-      name: string,
-      isOwner: boolean
+    name: string,
+    isOwner: boolean
   },
   openActionsCount: number
 }[];
@@ -82,8 +82,8 @@ export type SectionsSummaryModel = {
     status: keyof typeof INNOVATION_SECTION_STATUS,
     submittedAt: null | DateISOType,
     submittedBy: null | {
-        name: string,
-        isOwner: boolean
+      name: string,
+      isOwner: boolean
     },
     isCompleted: boolean,
     openActionsCount: number
@@ -129,7 +129,7 @@ export const INNOVATION_STATUS = {
   '': null,
   CREATED: { label: 'Created', cssClass: 'nhsuk-tag--wellow' },
   WAITING_NEEDS_ASSESSMENT: { label: 'Awaiting Assessment', cssClass: 'nhsuk-tag--wellow' },
-  NEEDS_ASSESSMENT: { label: 'Awaiting Assessment', cssClass: 'nhsuk-tag--wellow' },  
+  NEEDS_ASSESSMENT: { label: 'Awaiting Assessment', cssClass: 'nhsuk-tag--wellow' },
   AWAITING_NEEDS_REASSESSMENT: { label: 'Awaiting Reassessment', cssClass: 'nhsuk-tag--wellow' },
   IN_PROGRESS: { label: 'In progress', cssClass: 'nhsuk-tag--wellow' },
   // NEEDS_ASSESSMENT_REVIEW: { label: 'In review', cssClass: 'nhsuk-tag--wellow' },
@@ -249,126 +249,30 @@ export const ACTIVITY_LOG_ITEMS: {
     link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'ACTION' | 'THREAD' | 'NEEDS_REASSESSMENT';
   }
 } = {
-  INNOVATION_CREATION: {
-    type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT,
-    details: null,
-    link: null
-  },
-  OWNERSHIP_TRANSFER: {
-    type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT,
-    details: null,
-    link: null
-  },
-  SHARING_PREFERENCES_UPDATE: {
-    type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT,
-    details: 'ORGANISATIONS_LIST',
-    link: null
-  },
-  INNOVATION_PAUSE: {
-    type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT,
-    details: 'MESSAGE',
-    link: null
-  },
-
-  SECTION_DRAFT_UPDATE: {
-    type: ActivityLogTypesEnum.INNOVATION_RECORD,
-    details: null,
-    link: null
-  },
-  SECTION_SUBMISSION: {
-    type: ActivityLogTypesEnum.INNOVATION_RECORD,
-    details: null,
-    link: 'SECTION'
-  },
-
-  INNOVATION_SUBMISSION: {
-    type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
-    details: null,
-    link: null
-  },
-  NEEDS_ASSESSMENT_START: {
-    type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
-    details: 'COMMENT',
-    link: null
-  },
-  NEEDS_ASSESSMENT_COMPLETED: {
-    type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
-    details: null,
-    link: 'NEEDS_ASSESSMENT'
-  },
-  NEEDS_ASSESSMENT_EDITED: {
-    type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
-    details: null,
-    link: 'NEEDS_ASSESSMENT'
-  },
-  NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: {
-    type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
-    details: null,
-    link: 'NEEDS_REASSESSMENT'
-  },
-
-  ORGANISATION_SUGGESTION: {
-    type: ActivityLogTypesEnum.SUPPORT,
-    details: 'ORGANISATIONS_LIST',
-    link: 'SUPPORT_STATUS'
-  },
-  SUPPORT_STATUS_UPDATE: {
-    type: ActivityLogTypesEnum.SUPPORT,
-    details: 'SUPPORT_STATUS_UPDATE',
-    link: null
-  },
-
-  COMMENT_CREATION: {
-    type: ActivityLogTypesEnum.COMMENTS,
-    details: 'COMMENT',
-    link: null
-  },
-
-  THREAD_CREATION: {
-    type: ActivityLogTypesEnum.THREADS,
-    details: null,
-    link: 'THREAD'
-  },
-  THREAD_MESSAGE_CREATION: {
-    type: ActivityLogTypesEnum.THREADS,
-    details: null,
-    link: 'THREAD'
-  },
-
-  ACTION_CREATION: {
-    type: ActivityLogTypesEnum.ACTIONS,
-    details: 'COMMENT',
-    link: 'ACTION'
-  },
-  ACTION_CREATION_SECTION_DEPRECATED: {
-    type: ActivityLogTypesEnum.ACTIONS,
-    details: null,
-    link: null
-  },
-  ACTION_STATUS_SUBMITTED_UPDATE: {
-    type: ActivityLogTypesEnum.ACTIONS,
-    details: null,
-    link: null
-  },
-  ACTION_STATUS_DECLINED_UPDATE: {
-    type: ActivityLogTypesEnum.ACTIONS,
-    details: 'COMMENT',
-    link: 'ACTION'
-  },
-  ACTION_STATUS_COMPLETED_UPDATE: {
-    type: ActivityLogTypesEnum.ACTIONS,
-    details: null,
-    link: 'ACTION'
-  },
-  ACTION_STATUS_REQUESTED_UPDATE: {
-    type: ActivityLogTypesEnum.ACTIONS,
-    details: null,
-    link: 'ACTION'
-  },
-  ACTION_STATUS_CANCELLED_UPDATE: {
-    type: ActivityLogTypesEnum.ACTIONS,
-    details: null,
-    link: null
-  }
-
+  INNOVATION_CREATION: { type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT, details: null, link: null },
+  OWNERSHIP_TRANSFER: { type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT, details: null, link: null },
+  SHARING_PREFERENCES_UPDATE: { type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT, details: 'ORGANISATIONS_LIST', link: null },
+  INNOVATION_PAUSE: { type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT, details: 'MESSAGE', link: null },
+  SECTION_DRAFT_UPDATE: { type: ActivityLogTypesEnum.INNOVATION_RECORD, details: null, link: null },
+  SECTION_DRAFT_UPDATE_DEPRECATED: { type: ActivityLogTypesEnum.INNOVATION_RECORD, details: null, link: null },
+  SECTION_SUBMISSION: { type: ActivityLogTypesEnum.INNOVATION_RECORD, details: null, link: 'SECTION' },
+  SECTION_SUBMISSION_DEPRECATED: { type: ActivityLogTypesEnum.INNOVATION_RECORD, details: null, link: 'SECTION' },
+  INNOVATION_SUBMISSION: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: null, link: null },
+  NEEDS_ASSESSMENT_START: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: 'COMMENT', link: null },
+  NEEDS_ASSESSMENT_COMPLETED: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: null, link: 'NEEDS_ASSESSMENT' },
+  NEEDS_ASSESSMENT_EDITED: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: null, link: 'NEEDS_ASSESSMENT' },
+  NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: null, link: 'NEEDS_REASSESSMENT' },
+  ORGANISATION_SUGGESTION: { type: ActivityLogTypesEnum.SUPPORT, details: 'ORGANISATIONS_LIST', link: 'SUPPORT_STATUS' },
+  SUPPORT_STATUS_UPDATE: { type: ActivityLogTypesEnum.SUPPORT, details: 'SUPPORT_STATUS_UPDATE', link: null },
+  COMMENT_CREATION: { type: ActivityLogTypesEnum.COMMENTS, details: 'COMMENT', link: null },
+  THREAD_CREATION: { type: ActivityLogTypesEnum.THREADS, details: null, link: 'THREAD' },
+  THREAD_MESSAGE_CREATION: { type: ActivityLogTypesEnum.THREADS, details: null, link: 'THREAD' },
+  ACTION_CREATION: { type: ActivityLogTypesEnum.ACTIONS, details: 'COMMENT', link: 'ACTION' },
+  ACTION_CREATION_DEPRECATED: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: null },
+  ACTION_STATUS_SUBMITTED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: null },
+  ACTION_STATUS_SUBMITTED_UPDATE_DEPRECATED: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: null },
+  ACTION_STATUS_DECLINED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: 'COMMENT', link: 'ACTION' },
+  ACTION_STATUS_COMPLETED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: 'ACTION' },
+  ACTION_STATUS_REQUESTED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: 'ACTION' },
+  ACTION_STATUS_CANCELLED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: null }
 };

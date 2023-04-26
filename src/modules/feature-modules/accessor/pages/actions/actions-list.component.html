@@ -25,9 +25,8 @@
       <ng-container *ngIf="pageStatus === 'READY' && actionsList.getTotalRowsNumber() > 0">
 
         <p class="d-flex align-items-center nhsuk-u-margin-bottom-2">
-          <span class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0 mr-auto"> {{
-              currentTab.description }} </span>
-          <span> <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0" arial-label="View status keys information"> Status key </a> </span>
+          <span class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0 mr-auto">{{ currentTab.description }}</span>
+          <span><a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0" arial-label="View status keys information">Status key</a></span>
         </p>
         <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
@@ -62,7 +61,7 @@
               </td>
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('innovationName')
-                    }}</span>
+                  }}</span>
                 <a routerLink="/accessor/innovations/{{ item.innovation.id }}" attr.aria-label="View innovation {{ item.innovation.name }} details"> {{ item.innovation.name }}
                 </a>
               </td>

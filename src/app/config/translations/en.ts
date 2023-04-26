@@ -207,11 +207,19 @@ export const locale = {
             },
             SECTION_DRAFT_UPDATE: {
               title: 'Section draft update',
-              message: `"{{ sectionTitle }}" section saved as a draft`
+              message: `{{ sectionTitle }} section saved as a draft`
+            },
+            SECTION_DRAFT_UPDATE_DEPRECATED: {
+              title: 'Section draft update',
+              message: `A section from a previous innovation record version was saved as draft`
             },
             SECTION_SUBMISSION: {
               title: 'Section submission',
-              message: `"{{ sectionTitle }}" section submitted`
+              message: `{{ sectionTitle }} section submitted`
+            },
+            SECTION_SUBMISSION_DEPRECATED: {
+              title: 'Section submission',
+              message: `A section from a previous innovation record version was submitted`
             },
             INNOVATION_SUBMISSION: {
               title: 'Innovation submission',
@@ -255,15 +263,19 @@ export const locale = {
             },
             ACTION_CREATION: {
               title: 'Action creation',
-              message: `{{ actionUserName }} {{ actionUserRole }} created an action for section {{ sectionTitle }}`
+              message: `{{ actionUserName }} {{ actionUserRole }} created an action for {{ sectionTitle }} section`
             },
-            ACTION_CREATION_SECTION_DEPRECATED: {
+            ACTION_CREATION_DEPRECATED: {
               title: 'Action creation',
               message: `{{ actionUserName }} {{ actionUserRole }} created an action for a section that is no longer available`
             },
             ACTION_STATUS_SUBMITTED_UPDATE: {
               title: 'Action changed to submitted',
-              message: `{{ totalActions }} actions for "{{ sectionTitle }}" section were changed to "Submitted"`
+              message: `{{ totalActions }} actions for {{ sectionTitle }} section were changed to submitted`
+            },
+            ACTION_STATUS_SUBMITTED_UPDATE_DEPRECATED: {
+              title: 'Action changed to submitted',
+              message: `{{ totalActions }} actions were changed to submitted for a section that is no longer available`
             },
             ACTION_STATUS_DECLINED_UPDATE: {
               title: 'Action declined',
