@@ -63,7 +63,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   ngOnInit(): void {
 
     const qp: { statistics: InnovationStatisticsEnum[] } = { statistics: [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER, InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER] };
-    
+
     forkJoin([
       this.innovationsService.getInnovationInfo(this.innovationId),
       this.innovationsService.getInnovationStatisticsInfo(this.innovationId, qp),
@@ -93,7 +93,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.cardsList = [{
         title: 'Innovation record',
-        label: `sections submitted since your organisation unit started support`,
+        label: `Sections submitted since your organisation unit started support`,
         link: `/accessor/innovations/${this.innovationId}/record`,
         count: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].count,
         total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].total,
@@ -102,7 +102,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         emptyMessage: `No sections have been submitted since support started.`
       }, {
         title: 'Actions to review',
-        label: `actions responded to by the innovator awaiting your review`,
+        label: `Actions responded to by the innovator awaiting your review`,
         link: `/accessor/innovations/${this.innovationId}/action-tracker`,
         count: statistics[InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER].count,
         lastMessage: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER].lastSubmittedSection)}"`,
@@ -113,7 +113,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.setPageStatus('READY');
 
     });
-    
+
     this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ["active"])
       .subscribe((innovationCollaborators) => {
       this.innovationCollaborators = innovationCollaborators.data
