@@ -177,27 +177,20 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup`, (req, res) => {
   const azSignupUri = `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&response_mode=query&prompt=login`
     + `&p=${OAUTH_CONFIGURATION.signupPolicy}` // add policy information
     + `&client_id=${OAUTH_CONFIGURATION.clientID}` // add client id
-    + `&redirect_uri=${encodeURIComponent(OAUTH_CONFIGURATION.signupRedirectUrl)}` // add redirect uri
-    + `&state=${req.query.surveyId || ''}` // add survey id to state
-    + `&survey_id=${req.query.surveyId || ''}`; // add survey id
+    + `&redirect_uri=${encodeURIComponent(OAUTH_CONFIGURATION.signupRedirectUrl)}`; // add redirect uri
 
   res.redirect(azSignupUri);
 });
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) => {
-
   const token = req.query.id_token;
-  const surveyId = req.query.state || null;
 
   if (!token) {
     res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
     return;
   }
 
-  const body = { surveyId, token };
-
-  axios.post(`${ENVIRONMENT.API_USERS_URL}/v1/me`, body)
-    // axios.post(`${ENVIRONMENT.LOCAL_API_USERS_BASE_URL}/api/v1/me`, body)
+  axios.post(`${ENVIRONMENT.API_USERS_URL}/v1/me`, { token })
     .then(() => { res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`); })
     .catch((error: any) => {
       console.error(`Error when attempting to save the user: ${ENVIRONMENT.API_USERS_URL}/v1/me. Error: ${error}`);

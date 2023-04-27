@@ -116,22 +116,6 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, (req, res) => {
 
 });
 
-// Unauthenticated endpoint: Survey endpoint.
-apiRouter.post(`${ENVIRONMENT.BASE_PATH}/survey`, (req, res) => {
-
-  const requestHandler = getRequestHandler();
-  const body = req.body;
-
-  requestHandler.post<{ id: string }>(`${ENVIRONMENT.API_USERS_URL}/v1/survey`, body)
-    .then(response => {
-      res.cookie('surveyId', response.data.id);
-      res.send(response.data);
-    })
-    .catch((error: any) => {
-      console.error(`Error when attempting to submit survey with url: ${ENVIRONMENT.API_URL}/api/survey. ${error}`);
-      res.status(500).send();
-    });
-});
 
 // Unauthenticated endpoint: Innovation transfer check endpoint.
 apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-transfers/:id/check`, (req, res) => {
