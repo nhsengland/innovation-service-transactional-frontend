@@ -119,6 +119,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.section.id = sectionId;
     this.section.title = section.title;
     this.section.wizard = section.wizard;
+    this.section.showSubmitButton = false;
+    this.section.showSubmitUpdatesButton = false;
 
     this.setPageTitle(this.section.title, { hint: sectionIdentification ? `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` : '' });
     this.setBackLink('Innovation Record', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/record`);
