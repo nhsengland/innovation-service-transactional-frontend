@@ -7,9 +7,9 @@ import { TableModel } from '@app/base/models';
 import { InnovationsActionsListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
+import { UserRoleEnum } from '@app/base/enums';
 import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
-import { UserRoleEnum } from '@app/base/enums';
 
 
 @Component({
@@ -28,7 +28,9 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
+  // Flags
   isClosedActionsLoading = false;
+  isInnovatorType: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -61,6 +63,9 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
       },
       pageSize: 5
     });
+
+    // Flags
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
   }
 
 

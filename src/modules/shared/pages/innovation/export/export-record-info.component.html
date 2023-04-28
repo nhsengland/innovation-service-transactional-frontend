@@ -3,7 +3,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-      <p *ngIf="this.stores.authentication.isInnovatorType() && this.request?.status === 'PENDING'">
+      <p *ngIf="isInnovatorType && this.request?.status === 'PENDING'">
         If you approve this request, everyone from this organisation unit will be able to export your innovation record
         for the next 30 days.
       </p>

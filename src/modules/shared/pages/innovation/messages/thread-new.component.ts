@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormControl, FormGroup, Validators } from '@app/base/forms';
+import { CustomValidators, FormGroup, Validators } from '@app/base/forms';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { UserRoleEnum } from '@app/base/enums';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -24,9 +24,9 @@ export class PageInnovationThreadNewComponent extends CoreComponent implements O
     message: new UntypedFormControl('', CustomValidators.required('A message is required'))
   }, { updateOn: 'blur' });
 
-  isInnovator(): boolean { return this.stores.authentication.isInnovatorType(); }
-  isNotInnovator(): boolean { return !this.stores.authentication.isInnovatorType(); }
-
+  // Flags
+  isInnovatorType: boolean;
+  isAccessorType: boolean;
 
   constructor(
     private innovationsService: InnovationsService
@@ -42,6 +42,9 @@ export class PageInnovationThreadNewComponent extends CoreComponent implements O
 
     this.innovation = this.stores.context.getInnovation();
 
+    // Flags
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
+    this.isAccessorType = this.stores.authentication.isAccessorType();
   }
 
   ngOnInit(): void {

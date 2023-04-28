@@ -1,13 +1,13 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, InnovationStore } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
+import { InnovationStore, StoresModule } from '@modules/stores';
 
 import { PageInnovationRecordComponent } from './innovation-record.component';
 
@@ -52,8 +52,8 @@ describe('Shared/Pages/Innovation/PageInnovationRecordComponent', () => {
     fixture.detectChanges();
     component.innovationStatus = 'CREATED';
 
-    component.isInnovationInCreatedStatus();
     expect(component.innovationStatus).toBe('CREATED');
+    expect(component.isInnovationInCreatedStatus).toBe(true);
 
   });
 
@@ -64,8 +64,9 @@ describe('Shared/Pages/Innovation/PageInnovationRecordComponent', () => {
     fixture.detectChanges();
     component.sections.submitted = 1;
 
-    component.allSectionsSubmitted();
+    component.allSectionsSubmitted;
     expect(component.sections.submitted).toBe(1);
+    expect(component.allSectionsSubmitted).toBe(false);
 
   });
 

@@ -3,7 +3,7 @@
   <div class="nhsuk-grid-row">
 
     <div class="nhsuk-grid-column-full">
-      <p *ngIf="stores.authentication.isAssessmentType()">Actions requested by needs assessment team</p>
+      <p *ngIf="isAssessmentType">Actions requested by needs assessment team</p>
     </div>
 
     <div class="nhsuk-grid-column-one-quarter">
@@ -21,7 +21,7 @@
           </ng-container>
         </theme-form-input>
 
-        <ng-container *ngIf="stores.authentication.isAssessmentType()">
+        <ng-container *ngIf="isAssessmentType">
           <theme-form-checkbox controlName="createdByMe" label="Show only actions requested by me" size="small"></theme-form-checkbox>
         </ng-container>
 
