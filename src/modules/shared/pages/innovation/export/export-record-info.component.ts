@@ -21,7 +21,10 @@ export class PageExportRecordInfoComponent extends CoreComponent implements OnIn
   innovationExport: ContextInnovationType['export'];
 
   userType: UserRoleEnum.ACCESSOR | UserRoleEnum.INNOVATOR = this.stores.authentication.isAccessorType() ? UserRoleEnum.ACCESSOR : UserRoleEnum.INNOVATOR;
-  userRoleId?: string; 
+  userRoleId?: string;
+
+  // Flags
+  isInnovatorType: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -35,6 +38,8 @@ export class PageExportRecordInfoComponent extends CoreComponent implements OnIn
     this.innovationExport = this.stores.context.getInnovation().export;
     this.userRoleId = this.stores.authentication.getUserContextInfo()?.roleId;
 
+    // Flags
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
   }
 
   ngOnInit(): void {

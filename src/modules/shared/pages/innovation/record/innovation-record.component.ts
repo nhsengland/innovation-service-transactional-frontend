@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { INNOVATION_STATUS, SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
 
 
@@ -40,18 +41,13 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   showDownloadOldIR: boolean;
 
-  isInnovationInCreatedStatus(): boolean {
-    return this.innovationStatus === 'CREATED';
-  }
-
-  isInAssessmentStatus(): boolean {
-    return this.stores.innovation.isAssessmentStatus(this.innovationStatus);
-  }
-
-  allSectionsSubmitted(): boolean {
-    return this.sections.submitted === this.sections.progressBar.length;
-  }
-
+  // Flags
+  isInnovatorType: boolean;
+  isAccessorType: boolean;
+  isAssessmentType: boolean;
+  isInnovationInCreatedStatus: boolean;
+  isInAssessmentStatus: boolean;
+  allSectionsSubmitted = false;
 
   constructor(
     private activatedRoute: ActivatedRoute
@@ -69,6 +65,12 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.innovationStatus = this.innovation.status;
     this.innovationExport = this.innovation.export;
 
+    // Flags
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
+    this.isAccessorType = this.stores.authentication.isAccessorType();
+    this.isAssessmentType = this.stores.authentication.isAssessmentType();
+    this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
+    this.isInAssessmentStatus = this.stores.innovation.isAssessmentStatus(this.innovation.status);
 
     // TODO: remove after 31/05/2023
     const deployDateMs = new Date('2023-04-26T17:00:00').getTime();
@@ -106,6 +108,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         if (!this.innovationName) { // This means that an API error occurred.
           this.setAlertError('There is a problem', { message: 'Unable to fetch full innovation record information' })
         }
+
+        this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
 
         this.setPageStatus('READY');
 

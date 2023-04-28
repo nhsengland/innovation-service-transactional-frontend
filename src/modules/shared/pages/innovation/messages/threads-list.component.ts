@@ -6,6 +6,7 @@ import { TableModel } from '@app/base/models';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { GetThreadsListDTO, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -18,11 +19,11 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
   innovation: ContextInnovationType;
   tableList = new TableModel<GetThreadsListDTO['threads'][0]>({ pageSize: 10 });
 
-  isInnovator(): boolean { return this.stores.authentication.isInnovatorType(); }
-  isNotInnovator(): boolean { return !this.stores.authentication.isInnovatorType(); }
-  isAccessor(): boolean { return this.stores.authentication.isAccessorType(); }
-  isInnovationSubmitted(): boolean { return this.innovation.status !== 'CREATED'; }
-
+  // Flags
+  isInnovatorType: boolean;
+  isAccessorType: boolean;
+  isAdmin: boolean;
+  isInnovationSubmitted: boolean;
 
   constructor(
     private innovationsService: InnovationsService
@@ -38,7 +39,14 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
     this.innovation = this.stores.context.getInnovation();
 
-    if (this.stores.authentication.isAdminRole()) {
+
+    // Flags
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
+    this.isAccessorType = this.stores.authentication.isAccessorType();
+    this.isAdmin = this.stores.authentication.isAdminRole();
+    this.isInnovationSubmitted = this.innovation.status !== InnovationStatusEnum.CREATED;
+
+    if (this.isAdmin) {
       this.setPageTitle('Messages', { hint: `Innovation ${this.innovation.name}` })
     }
 

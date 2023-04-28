@@ -24,7 +24,13 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
   actionsIds: string[] = [];
 
-  actionNumber: number = 0;
+  actionNumber = 0;
+
+  // Flags
+  isInnovatorType: boolean;
+  isAccessorType: boolean;
+  isAssessmentType: boolean;
+  isAdmin: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -36,6 +42,12 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.actionId = this.activatedRoute.snapshot.params.actionId;
+
+    // Flags
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
+    this.isAccessorType = this.stores.authentication.isAccessorType();
+    this.isAssessmentType = this.stores.authentication.isAssessmentType();
+    this.isAdmin = this.stores.authentication.isAdminRole();
 
   }
 

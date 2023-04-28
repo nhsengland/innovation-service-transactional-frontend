@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin, ObservableInput } from 'rxjs';
+import { ObservableInput, forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 
@@ -52,7 +52,11 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
   organisationSuggestions: OrganisationSuggestionModel | undefined;
   shares: { organisationId: string }[] = [];
 
-  isQualifyingAccessorRole = false;
+  // Flags
+  isQualifyingAccessorRole: boolean;
+  isInnovatorType: boolean;
+  isAssessmentType: boolean;
+  isAccessorType: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -67,7 +71,11 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
 
+    // Flags
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
+    this.isAssessmentType = this.stores.authentication.isAssessmentType();
+    this.isAccessorType = this.stores.authentication.isAccessorType();
 
     this.setPageTitle('Data sharing and support', { hint: 'All organisations' });
   }
@@ -91,7 +99,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
       subscriptions.innovationShares = this.innovationsService.getInnovationSharesList(this.innovationId);
       subscriptions.organisationSuggestions = this.innovationService.getInnovationOrganisationSuggestions(this.innovationId);
     }
-    
+
     if(this.userType === UserRoleEnum.ADMIN || this.userType === UserRoleEnum.ASSESSMENT || this.userType === UserRoleEnum.ACCESSOR || this.userType === UserRoleEnum.QUALIFYING_ACCESSOR) {
       subscriptions.innovationShares = this.innovationsService.getInnovationSharesList(this.innovationId);
     }

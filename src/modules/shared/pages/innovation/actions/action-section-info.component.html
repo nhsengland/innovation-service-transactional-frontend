@@ -56,31 +56,31 @@
       </dl>
 
 
-      <ng-container *ngIf="stores.authentication.isAccessorType() || stores.authentication.isAssessmentType()">
-      
+      <ng-container *ngIf="isAccessorType || isAssessmentType">
+
         <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/record/sections/{{ action.section }}"
           class="nhsuk-button nhsuk-u-margin-right-3"> Review section </a>
-      
+
         <ng-container
-          *ngIf="(stores.authentication.isAccessorType() && stores.authentication.isFromOrganisationUnit(action.createdBy.organisationUnit?.id)) || (stores.authentication.isAssessmentType() && action.createdBy.role === 'ASSESSMENT')">
-      
+          *ngIf="(isAccessorType && stores.authentication.isFromOrganisationUnit(action.createdBy.organisationUnit?.id)) || (isAssessmentType && action.createdBy.role === 'ASSESSMENT')">
+
           <a *ngIf="action.status === 'SUBMITTED'"
             routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/edit"
             class="nhsuk-button nhsuk-button--secondary">
             Update status
           </a>
-      
+
           <a *ngIf="action.status === 'REQUESTED'"
             routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/cancel"
             class="nhsuk-button nhsuk-button--secondary">
             Cancel action
           </a>
-      
+
         </ng-container>
-      
+
       </ng-container>
 
-      <ng-container *ngIf="stores.authentication.isInnovatorType()">
+      <ng-container *ngIf="isInnovatorType">
 
         <a routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ action.section }}"
           class="nhsuk-button nhsuk-u-margin-right-3"> Go to section </a>
@@ -131,12 +131,12 @@
 
     </div>
 
-    <div class="nhsuk-grid-column-one-third" *ngIf="!stores.authentication.isAdminRole()">
+    <div class="nhsuk-grid-column-one-third" *ngIf="!isAdmin">
 
       <div class="nhsuk-card x-card-top-border">
         <div class="nhsuk-card__content">
 
-          <ng-container *ngIf="stores.authentication.isInnovatorType()">
+          <ng-container *ngIf="isInnovatorType">
 
             <h2 class="nhsuk-card__heading nhsuk-heading-m">If you have any questions</h2>
             <a routerLink="/innovator/innovations/{{ innovationId }}/threads">
@@ -145,7 +145,7 @@
 
           </ng-container>
 
-          <ng-container *ngIf="stores.authentication.isAccessorType() || stores.authentication.isAssessmentType()">
+          <ng-container *ngIf="isAccessorType || isAssessmentType">
 
             <h2 class="nhsuk-card__heading nhsuk-heading-m">Message the innovator</h2>
             <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/threads">
