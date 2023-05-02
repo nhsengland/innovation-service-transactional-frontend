@@ -1,3 +1,4 @@
+import { URLS } from '@app/base/constants';
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { cloneDeep } from 'lodash';
 
@@ -39,7 +40,7 @@ export const SECTION_8_1: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasDeployPlan',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about implementation plans.',
+          description: `See <a href=${URLS.ADVANCED_INNOVATION_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about implementation plans.`,
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasDeployPlanItems
         }]

@@ -43,7 +43,7 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
     this.setPageTitle('Change data sharing preferences');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.organisationInfoUrl = `${this.CONSTANTS.BASE_URL}/about-the-service/who-we-are`;
+    this.organisationInfoUrl = this.CONSTANTS.URLS.WHO_WE_ARE;
 
   }
 

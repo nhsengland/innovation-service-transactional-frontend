@@ -7,6 +7,7 @@ import { InnovationSectionConfigType } from '../ir-versions.types';
 import { InnovationSections } from './catalog.types';
 import { DocumentType202209 } from './document.types';
 import { hasRegulationKnowledgeItems, standardsHasMetItems, standardsTypeItems } from './forms.config';
+import { URLS } from '@app/base/constants';
 
 
 // Labels.
@@ -44,7 +45,7 @@ export const SECTION_4_1: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasRegulationKnowledge',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer"> Innovation guides (opens in a new window) </a> for more information about regulations and standards.',
+          description: `See <a href=${URLS.ADVANCED_INNOVATION_GUIDE} target="_blank" rel="noopener noreferrer"> Innovation guides (opens in a new window) </a> for more information about regulations and standards.`,
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasRegulationKnowledgeItems
         }]

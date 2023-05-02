@@ -1,3 +1,4 @@
+import { URLS } from '@app/base/constants';
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 
 import { InnovationSectionConfigType } from '../ir-versions.types';
@@ -12,7 +13,7 @@ const stepsLabels = {
   q1: { label: 'Do you have any patents for your innovation?' },
   q2: {
     label: 'Do you have any other intellectual property for your innovation?',
-    description: 'Find out more about <a href="/innovation-guides/creation/intellectual-property" target="_blank" rel="noopener noreferrer">intellectual property (opens in a new window)</a>.'
+    description: `Find out more about <a href=${URLS.INTELLECTUAL_PROPERTY} target="_blank" rel="noopener noreferrer">intellectual property (opens in a new window)</a>.`
   }
 };
 

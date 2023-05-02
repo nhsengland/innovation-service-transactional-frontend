@@ -38,10 +38,10 @@ export class PageTermsOfUseAcceptanceComponent extends CoreComponent implements 
     };
 
     if (this.stores.authentication.getUserType() === 'INNOVATOR') {
-      this.policyURL = `${this.baseUrl}/terms-of-use/innovator`;
+      this.policyURL = this.CONSTANTS.URLS.TOU_INNOVATOR;
     }
     else {
-      this.policyURL = `${this.baseUrl}/terms-of-use/support-organisation`;
+      this.policyURL = this.CONSTANTS.URLS.TOU_SUPPORT_ORGANISATION;
     }
 
   }
