@@ -1,3 +1,4 @@
+import { URLS } from '@app/base/constants';
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
 import { InnovationSectionConfigType } from '../ir-versions.types';
@@ -29,7 +30,7 @@ export const SECTION_6_2: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasCostSavingKnowledge',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about comparative cost benefit.',
+          description: `See <a href=${URLS.ADVANCED_INNOVATION_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about comparative cost benefit.`,
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasCostKnowledgeItems
         }]
@@ -39,7 +40,7 @@ export const SECTION_6_2: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasCostCareKnowledge',
           dataType: 'radio-group',
           label: stepsLabels.l2,
-          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about comparative cost benefit.',
+          description: `See <a href=${URLS.ADVANCED_INNOVATION_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about comparative cost benefit.`,
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasCostKnowledgeItems
         }]

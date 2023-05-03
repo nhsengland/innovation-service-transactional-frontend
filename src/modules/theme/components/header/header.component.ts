@@ -7,6 +7,7 @@ import { filter } from 'rxjs/operators';
 import { CookiesService } from '@modules/core/services/cookies.service';
 
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
+import { URLS } from '@app/base/constants';
 
 
 export type HeaderMenuBarItemType = {
@@ -48,6 +49,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     right: HeaderMenuBarItemType[]
   } = { isChildrenOpened: false, left: [], right: [] };
 
+  URLS: typeof URLS;
+
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -58,6 +61,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptions.add(
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
     );
+
+    this.URLS = URLS;
 
   }
 

@@ -8,7 +8,7 @@ import { CoreComponent } from '@app/base';
 })
 export class InnovationSupportOrganisationReferralCriteriaComponent extends CoreComponent {
 
-  
+
   organisationsInformation:  {
     name: string;
     link: string,
@@ -23,7 +23,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
   }[] = [
     {
       name: "The Academic Health Science Network (AHSN)",
-      link: "https://www.ahsnnetwork.com/",
+      link: this.CONSTANTS.URLS.AHSN_NETWORK,
       information: [
         {
           type: "BULLET_LIST",
@@ -49,7 +49,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
     },
     {
       name: "NHS Supply Chain",
-      link: "https://www.supplychain.nhs.uk/",
+      link: this.CONSTANTS.URLS.SUPPLY_CHAIN,
       information: [
         {
           type: "BULLET_LIST",
@@ -81,7 +81,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
     },
     {
       name: "National Institute for Health and Care Excellence (NICE)",
-      link: "https://www.nice.org.uk/about",
+      link: this.CONSTANTS.URLS.ABOUT_NICE,
       information: [
         {
           type: "BULLET_LIST",
@@ -133,7 +133,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
     },
     {
       name: "National Institute for Health Research (NIHR)",
-      link: "https://www.nihr.ac.uk/",
+      link: this.CONSTANTS.URLS.NIHR,
       information: [
         {
           type: "BULLET_LIST",
@@ -165,7 +165,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
     },
     {
       name: "Life Sciences Organisation (LSO) - Part of Department for International Trade (DIT)",
-      link: "https://www.gov.uk/government/organisations/life-sciences-organisation",
+      link: this.CONSTANTS.URLS.LIFE_SCIENCES_ORGANISATION,
       information: [
         {
           type: "BULLET_LIST",
@@ -182,7 +182,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
     },
     {
       name: "Health Technology Wales (HTW)",
-      link: "https://www.healthtechnology.wales/",
+      link: this.CONSTANTS.URLS.HEALTH_TECHNOLOGY,
       information: [
         {
           type: "BULLET_LIST",
@@ -237,7 +237,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
     },
     {
       name: "Life Science Hub Wales (LSHW)",
-      link: "https://lshubwales.com/",
+      link: this.CONSTANTS.URLS.LSHUBWALES,
       information: [
         {
           type: "BULLET_LIST",
@@ -324,7 +324,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
     },
     {
       name: "Scottish Health Technology Group (SHTG)",
-      link: "https://shtg.scot/",
+      link: this.CONSTANTS.URLS.SHTG,
       information: [
         {
           type: "BULLET_LIST",

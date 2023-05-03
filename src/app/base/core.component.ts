@@ -19,6 +19,7 @@ import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 
 import { AlertType, LinkType, MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { UtilsHelper } from './helpers';
+import { URLS } from './constants';
 
 
 @Component({ template: '' })
@@ -43,6 +44,7 @@ export class CoreComponent implements OnDestroy {
     APP_ASSETS_URL: string;
     BASE_URL: string;
     BASE_PATH: string;
+    URLS: typeof URLS;
   };
 
   protected stores: {
@@ -83,7 +85,8 @@ export class CoreComponent implements OnDestroy {
       APP_URL: this.envVariablesStore.APP_URL,
       APP_ASSETS_URL: this.envVariablesStore.APP_ASSETS_URL,
       BASE_URL: this.envVariablesStore.BASE_URL,
-      BASE_PATH: this.envVariablesStore.BASE_PATH
+      BASE_PATH: this.envVariablesStore.BASE_PATH,
+      URLS: URLS
     };
 
     this.stores = {
@@ -153,7 +156,7 @@ export class CoreComponent implements OnDestroy {
 
   /**
    * This function sets the back link for the current page. If none is provided, it will use the previous url or default to the dashboard.
-   * 
+   *
    * @param label label for the back button
    * @param urlOrCallback either a string url or a callback function to be called
    * @param hiddenLabel hidden label for the back button
