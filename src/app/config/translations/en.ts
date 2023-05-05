@@ -355,6 +355,7 @@ export const locale = {
             SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}"` },
             INNOVATION_REASSESSMENT_REQUEST: { title: `Innovation "{{ innovationName }}" is available for reassessment review` },
             INNOVATION_STOP_SHARING: { title: `Sharing of innovation "{{ innovationName }}" has been stopped for all supporting organisations` },
+            INNOVATION_WITHDRAWN: { title: `The innovation "{{ innovationName }}" has been archived by the owner. You can no longer access this innovation` },
             COLLABORATOR_INVITE: { title: `You have been invited to collaborate on {{ innovationName }} innovation by its owner {{ innovationOwnerName }}. You have 30 days to respond before the invitation expires. See invitation.` },
             COLLABORATOR_UPDATE: { title: `Your invitation to collaborate on {{ innovationName }} innovation has been cancelled.` },
             TRANSFER_PENDING: { title: `The owner of innovation {{ innovationName }} has deleted their account. Innovation awaiting new owner.` },
