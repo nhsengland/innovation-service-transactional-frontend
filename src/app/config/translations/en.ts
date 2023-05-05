@@ -357,6 +357,9 @@ export const locale = {
             INNOVATION_STOP_SHARING: { title: `Sharing of innovation "{{ innovationName }}" has been stopped for all supporting organisations` },
             COLLABORATOR_INVITE: { title: `You have been invited to collaborate on {{ innovationName }} innovation by its owner {{ innovationOwnerName }}. You have 30 days to respond before the invitation expires. See invitation.` },
             COLLABORATOR_UPDATE: { title: `Your invitation to collaborate on {{ innovationName }} innovation has been cancelled.` },
+            TRANSFER_PENDING: { title: `` },
+            TRANSER_EXPIRED: { title: `` },
+            TRANSFER_REMINDER: { title: `` },
           },
           section_status: {
             NOT_STARTED: { name: 'Not started', cssColorClass: 'nhsuk-tag--blue' },
