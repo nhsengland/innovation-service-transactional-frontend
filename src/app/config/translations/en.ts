@@ -353,6 +353,8 @@ export const locale = {
             NEEDS_ASSESSMENT_STARTED: { title: `The needs assessment for innovation "{{ innovationName }}" has started.` },
             NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION: { title: `Assessment team suggested one or more organisations for you to share your innovation` },
             INNOVATION_SUBMISSION: { title: `Innovation "{{ innovationName }}" is available for review` },
+            INNOVATION_SUBMISSION_TO_INNOVATORS: { title: `Innovation "{{ innovationName }}" has been submitted for a needs assessment.` },
+            INNOVATION_SUBMISSION_REASSESSMENT: { title: `Innovation "{{ innovationName }}" has been submitted for a needs reassessment.` },
             SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}"` },
             INNOVATION_REASSESSMENT_REQUEST: { title: `Innovation "{{ innovationName }}" is available for reassessment review` },
             INNOVATION_STOP_SHARING: { title: `Sharing of innovation "{{ innovationName }}" has been stopped for all supporting organisations` },
