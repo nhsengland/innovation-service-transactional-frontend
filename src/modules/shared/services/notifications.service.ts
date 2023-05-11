@@ -108,8 +108,7 @@ export class NotificationsService extends CoreService {
                   link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.contextId}` };
                   break;
                 case NotificationContextDetailEnum.INNOVATION_WITHDRAWN:
-                  // TODO: If we add the hability to have empty link this should be null instead of having this "random" url
-                  link = { label: 'Click to read and be redirect to innovations list', url: `/${this.userUrlBasePath()}/innovations`};
+                  link = null;
                   break;
                 default:
                   link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
