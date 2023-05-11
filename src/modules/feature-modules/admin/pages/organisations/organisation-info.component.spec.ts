@@ -39,7 +39,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
-    
+
     authenticationStore = TestBed.inject(AuthenticationStore);
     activatedRoute = TestBed.inject(ActivatedRoute);
     organisationsService = TestBed.inject(OrganisationsService);
@@ -111,7 +111,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
     fixture = TestBed.createComponent(PageOrganisationInfoComponent);
     component = fixture.componentInstance;
     component.organisation = {
-      id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true,
+      id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true, hasInactiveUnits: null,
       organisationUnits: [
         {
           id: 'Unit01',
@@ -139,7 +139,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
     fixture = TestBed.createComponent(PageOrganisationInfoComponent);
     component = fixture.componentInstance;
     component.organisation = {
-      id: 'orgId01', name: 'Org name', acronym: 'ORG', isActive: true,
+      id: 'orgId01', name: 'Org name', acronym: 'ORG', isActive: true, hasInactiveUnits: null,
       organisationUnits: [
         {
           id: 'Unit01',
@@ -161,10 +161,10 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
       data: [{
         id: 'user01',
         isActive: true,
-        name: 'user01',  
+        name: 'user01',
         role: UserRoleEnum.ACCESSOR,
         roleDescription: 'Accessor',
-        lockedAt: null,  
+        lockedAt: null,
         organisationUnitUserId: '',
         email: 'some@email.com',
       }]
@@ -181,7 +181,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
     fixture = TestBed.createComponent(PageOrganisationInfoComponent);
     component = fixture.componentInstance;
     component.organisation = {
-      id: 'orgId01', name: 'Org name', acronym: 'ORG', isActive: true,
+      id: 'orgId01', name: 'Org name', acronym: 'ORG', isActive: true, hasInactiveUnits: null,
       organisationUnits: [
         {
           id: 'Unit01',
@@ -209,7 +209,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
     fixture = TestBed.createComponent(PageOrganisationInfoComponent);
     component = fixture.componentInstance;
     component.organisation = {
-      id: 'orgId01', name: 'Org name', acronym: 'ORG', isActive: true,
+      id: 'orgId01', name: 'Org name', acronym: 'ORG', isActive: true, hasInactiveUnits: null,
       organisationUnits: [
         {
           id: 'Unit01',
@@ -237,7 +237,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
     fixture = TestBed.createComponent(PageOrganisationInfoComponent);
     component = fixture.componentInstance;
     component.organisation = {
-      id: 'orgId01', name: 'Org name', acronym: 'ORG', isActive: true,
+      id: 'orgId01', name: 'Org name', acronym: 'ORG', isActive: true, hasInactiveUnits: null,
       organisationUnits: [
         {
           id: 'Unit01',

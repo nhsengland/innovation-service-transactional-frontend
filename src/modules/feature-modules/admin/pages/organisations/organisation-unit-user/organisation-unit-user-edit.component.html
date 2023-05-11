@@ -13,13 +13,15 @@
     <ng-container *ngIf="wizard.isSummaryStep()">
       <h1 class="nhsuk-heading-l">{{ user ? 'This user already exists. Do you want to add them to this unit?' : 'Check your answers'}}</h1>
 
-      <div *ngFor="let item of wizard.getSummary()" class="nhsuk-summary-list__row">
-        <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-        <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
-        <dd class="nhsuk-summary-list__actions">
-          <a *ngIf="!user || (user && !user.role && item.editStepNumber === 3)" href="javascript:void(0)" (click)="wizard.gotoStep(item.editStepNumber || 1)"> Change <span class="nhsuk-u-visually-hidden">{{ item.label | lowercase }}</span></a>
-        </dd>
-      </div>
+      <dl class="nhsuk-summary-list">
+        <div *ngFor="let item of wizard.getSummary()" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+          <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a *ngIf="!user || (user && !user.role && item.editStepNumber === 3)" href="javascript:void(0)" (click)="wizard.gotoStep(item.editStepNumber || 1)"> Change <span class="nhsuk-u-visually-hidden">{{ item.label | lowercase }}</span></a>
+          </dd>
+        </div>
+      </dl>
 
       <button [disabled]="!submitButton.isActive" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitWizard()"> {{ submitButton.label }} </button>
 

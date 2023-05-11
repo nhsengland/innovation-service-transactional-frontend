@@ -159,8 +159,6 @@ export class PageOrganisationUnitUserEditComponent extends CoreComponent impleme
         role: this.wizard.getAnswers().role,
       }
 
-      console.log('body', body);
-
       this.organisationsService.createUnitUser(this.organisationUnitId, this.user.id, body).subscribe({
         next: () => {
           this.onSubmitWizardSuccess();

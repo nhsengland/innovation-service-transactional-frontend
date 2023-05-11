@@ -50,7 +50,7 @@ describe('FeatureModules/Admin/Resolvers/OrganisationDataResolver', () => {
     orgnisationService.getOrganisationInfo = () => of(organisationsResponseMock as any);
 
     let response: any = null;
-    const expected = { id: 'orgId01', name: 'Org name 01' };
+    const expected = { id: 'orgId01', name: 'Org name 01', acronym: 'ORG01'};
 
     resolver.resolve(routeMock as any).subscribe({ next: success => response = success, error: error => response = error});
     expect(response).toEqual(expected);

@@ -79,7 +79,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   return [
     { label: stepsLabels.l1, value: data.email, editStepNumber: 1 },
     { label: stepsLabels.l2, value: data.name, editStepNumber: 2 },
-    { label: stepsLabels.l3, value: data.role === UserRoleEnum.QUALIFYING_ACCESSOR ? 'Qualifying Accessor' : data.role === UserRoleEnum.ACCESSOR ? 'Acessor' : null, editStepNumber: 3 }
+    { label: stepsLabels.l3, value: data.role === UserRoleEnum.QUALIFYING_ACCESSOR ? 'Qualifying Accessor' : data.role === UserRoleEnum.ACCESSOR ? 'Accessor' : null, editStepNumber: 3 }
   ];
 }
 
