@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 
 import { EmailNotificationsPreferencesEnum, EmailNotificationsTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import { AuthenticationStore } from '@modules/stores';
 
 
 @Component({
@@ -15,18 +16,33 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
   isAnySubscribed = true;
 
+  hasMultipleRoles = false;
+  currentRole: null | { id: string, description: string };
+
   constructor(
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
+    private authenticationStore: AuthenticationStore
   ) {
 
     super();
     this.setPageTitle('Email notifications');
+
+    const currentUserContext = this.authenticationStore.getUserContextInfo();
+
+    if (!currentUserContext) { this.currentRole = null; }
+    else {
+      this.currentRole = {
+        id: currentUserContext.roleId,
+        description: `${this.authenticationStore.getRoleDescription(currentUserContext.type)}${this.authenticationStore.isAccessorType() ? ` (${currentUserContext.organisationUnit?.name.trimEnd()})` : ''}`
+      };
+    }
 
   }
 
   ngOnInit(): void {
 
     this.getEmailNotificationTypes();
+    this.checkMultipleRoles();
 
   }
 
@@ -48,6 +64,16 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
       }
     );
+  }
+
+  private checkMultipleRoles(): void {
+
+    this.setPageStatus('LOADING');
+
+    const user = this.authenticationStore.getUserInfo();
+
+    this.hasMultipleRoles = user.roles.length > 1;
+    
   }
 
 
