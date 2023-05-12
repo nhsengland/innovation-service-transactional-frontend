@@ -6,7 +6,7 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { MappedObjectType } from '@app/base/types';
 
-import { AccessorOrganisationRoleEnum } from '@modules/stores/authentication/authentication.enums';
+import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 
 
 export type updateOrganisationDTO = {
@@ -102,6 +102,19 @@ export class AdminOrganisationsService extends CoreService {
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1),
       map(response => response)
     );
+
+  }
+
+  createUnitUser(
+    organisationUnitId: string,
+    userId: string,
+    body: {
+      role: UserRoleEnum.ACCESSOR | UserRoleEnum.QUALIFYING_ACCESSOR
+    }
+  ): Observable<void> {
+
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('/v1/units/:organisationUnitId/users/:userId').setPathParams({ organisationUnitId, userId });
+    return this.http.post<void>(url.buildUrl(), body).pipe(take(1), map(response => response));
 
   }
 

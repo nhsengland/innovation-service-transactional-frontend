@@ -1,24 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { NGXLogger } from 'ngx-logger';
-
+import {
+  Router, Resolve,
+  RouterStateSnapshot,
+  ActivatedRouteSnapshot
+} from '@angular/router';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-
+import { NGXLogger } from 'ngx-logger';
+import { catchError, map, Observable, of } from 'rxjs';
 
 @Injectable()
-export class OrganisationDataResolver implements Resolve<any> {
+export class OrganisationUnitDataResolver implements Resolve<{ id: null | string, name: string }> {
 
   constructor(
-    private logger: NGXLogger,
     private organisationsService: OrganisationsService
   ) { }
 
-
   resolve(route: ActivatedRouteSnapshot): Observable<{ id: string, name: string, acronym: string }> {
 
-    return this.organisationsService.getOrganisationInfo(route.params.organisationId).pipe(
+    return this.organisationsService.getOrganisationUnitInfo(route.params.organisationId, route.params.organisationUnitId).pipe(
       map(response => {
         return {
           id: response.id,
@@ -27,7 +26,6 @@ export class OrganisationDataResolver implements Resolve<any> {
         };
       })
     );
-
   }
 
 }

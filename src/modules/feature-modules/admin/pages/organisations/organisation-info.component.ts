@@ -21,6 +21,7 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
     name: null | string,
     acronym: null | string,
     isActive: null | boolean,
+    hasInactiveUnits: null | boolean,
     organisationUnits: {
       id: string,
       name: string,
@@ -33,7 +34,7 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
       showHideDescription: null | string,
       isLoading: boolean
     }[];
-  } = { id: '', name: null, acronym: null, isActive: null, organisationUnits: [] };
+  } = { id: '', name: null, acronym: null, isActive: null, hasInactiveUnits: null, organisationUnits: [] };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -42,7 +43,6 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
   ) {
 
     super();
-    this.setPageTitle('Organisation information');
 
     this.organisationId = this.activatedRoute.snapshot.params.organisationId;
 
@@ -74,6 +74,7 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
       next: organisation => {
         this.organisation = {
           ...organisation,
+          hasInactiveUnits: organisation.organisationUnits.some(unit => unit.isActive === false),
           organisationUnits: organisation.organisationUnits.map(u => ({
             ...u,
             showHideStatus: 'closed',
@@ -87,6 +88,8 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
         if (this.organisation.organisationUnits.length === 1) {
           this.onUnitUsersShowHideClicked(this.organisation.organisationUnits[0].id);
         }
+
+        this.setPageTitle(`${this.organisation.name} (${this.organisation.acronym})`);
 
         this.setPageStatus('READY');
       },
@@ -113,13 +116,13 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
         break;
       case 'closed':
         this.usersService.getUsersList({
-          queryParams: { 
-            take: 100, 
-            skip: 0, 
-            filters: { 
-              onlyActive: true, 
+          queryParams: {
+            take: 100,
+            skip: 0,
+            filters: {
+              onlyActive: true,
               organisationUnitId: organisationUnitId,
-              userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR] 
+              userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]
             }
           }}).subscribe(
           response => {

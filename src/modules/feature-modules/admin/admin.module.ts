@@ -28,6 +28,7 @@ import { PageOrganisationInfoComponent } from './pages/organisations/organisatio
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info/organisation-unit-info.component';
+import { PageOrganisationUnitUserEditComponent } from './pages/organisations/organisation-unit-user/organisation-unit-user-edit.component';
 
 // // Service Users.
 import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-users/service-user-change-organisation-unit.component';
@@ -57,6 +58,7 @@ import { UsersValidationRulesService } from './services/users-validation-rules.s
 // Resolvers.
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
+import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 
 @NgModule({
   imports: [
@@ -88,6 +90,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageOrganisationsListComponent,
     PageOrganisationUnitNewComponent,
     PageOrganisationUnitInfoComponent,
+    PageOrganisationUnitUserEditComponent,
     // // Service Users.
     PageServiceUserChangeOrganisationUnitComponent,
     PageServiceUserChangeRoleComponent,
@@ -116,7 +119,8 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
 
     // Resolvers.
     OrganisationDataResolver,
-    ServiceUserDataResolver
+    ServiceUserDataResolver,
+    OrganisationUnitDataResolver
   ]
 })
 export class AdminModule { }
