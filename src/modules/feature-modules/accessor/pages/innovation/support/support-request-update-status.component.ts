@@ -30,10 +30,10 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
     message: new FormControl<string>('', CustomValidators.required('A comment is required')),
   }, { updateOn: 'blur' });
 
-  constructor(   
+  constructor(
     private activatedRoute: ActivatedRoute,
     private accessorService: AccessorService
-    ) { 
+  ) {
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -43,7 +43,7 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
   }
 
   ngOnInit(): void {
-    this.setPageTitle('Request support status update');
+    this.setPageTitle('Request support status update', { showPage: false });
     this.setBackLink('Go Back', `/accessor/innovations/${this.innovationId}/support`, `to support status innovation page`);
     this.setPageStatus('READY');
   }
@@ -56,7 +56,7 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
       formStatusField?.markAsTouched();
       formStatusField?.setErrors({ customError: true, message: 'Please, choose one of the available statuses' });
       return;
-    }    
+    }
 
     this.stepNumber = 2;
   }

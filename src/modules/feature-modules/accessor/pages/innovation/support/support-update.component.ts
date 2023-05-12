@@ -7,7 +7,6 @@ import { UserRoleEnum } from '@app/base/enums';
 import { CustomValidators } from '@app/base/forms';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { UsersService } from '@modules/shared/services/users.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
@@ -110,7 +109,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     }
 
-    this.usersService.getUsersList({ queryParams: { take: 100, skip: 0, filters: { email: false, onlyActive: true, organisationUnitId: this.userOrganisationUnit?.id ?? '', userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]} }}).subscribe(
+    this.usersService.getUsersList({ queryParams: { take: 100, skip: 0, filters: { email: false, onlyActive: true, organisationUnitId: this.userOrganisationUnit?.id ?? '', userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR] } } }).subscribe(
       response => {
 
         this.accessorsList = response.data.map((item) => ({ id: item.id, organisationUnitUserId: item.organisationUnitUserId, name: item.name }));
@@ -123,9 +122,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
 
   onSubmitStep(): void {
-
-
-    // if (!this.validateForm(this.stepNumber)) { return; }
 
     switch (this.stepNumber) {
 
@@ -140,9 +136,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           return;
         }
 
-        this.setPageTitle('Update support status - accessors');
         if (this.chosenStatus === InnovationSupportStatusEnum.ENGAGING) {
-          this.setPageTitle('Choose accessors to support');
+          this.setPageTitle('Choose accessors to support', { width: 'full' });
           this.stepNumber = 2;
         } else {
           this.selectedAccessors = [];

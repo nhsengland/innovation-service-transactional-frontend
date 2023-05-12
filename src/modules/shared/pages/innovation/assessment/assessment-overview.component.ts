@@ -24,7 +24,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
   assessmentId: string;
   innovation: ContextInnovationType;
 
-  assessment: InnovationNeedsAssessmentInfoDTO | undefined;
+  assessment?: InnovationNeedsAssessmentInfoDTO;
   assessmentHasBeenSubmitted = false;
 
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
@@ -61,6 +61,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
 
 
   ngOnInit(): void {
+
     // Throw notification read dismiss.
     this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.NEEDS_ASSESSMENT], contextIds: [this.assessmentId]});
     
@@ -68,6 +69,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
       this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
       this.innovationsService.getInnovationSupportLog(this.innovationId)
     ]).subscribe(([needsAssessment, supportLog]) => {
+
       this.logHistory = supportLog;
 
       this.assessment = needsAssessment;
