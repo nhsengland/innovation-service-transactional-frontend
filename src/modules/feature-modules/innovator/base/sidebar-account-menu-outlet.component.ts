@@ -14,8 +14,8 @@ export class SidebarAccountMenuOutletComponent {
 
     this.sidebarItems = [
       { label: 'Your details', url: `/innovator/account/manage-details` },
-      { label: 'Email notifications', url: `/innovator/account/email-notifications` },
-      { label: 'Manage account', url: `/innovator/account/manage-account` }
+      { label: 'Manage account', url: `/innovator/account/manage-account` },
+      { label: 'Email notifications', url: `/innovator/account/email-notifications` }
     ];
 
   }
