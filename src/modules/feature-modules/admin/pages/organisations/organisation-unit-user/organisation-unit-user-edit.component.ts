@@ -134,18 +134,17 @@ export class PageOrganisationUnitUserEditComponent extends CoreComponent impleme
 
   }
 
-  onSubmitWizardSuccess(): void {
+  private onSubmitWizardSuccess(): void {
     this.setRedirectAlertSuccess('A new user has been added to this organisation unit.', {
       width: '2.thirds'
     });
     this.redirectTo(this.redirectUrl);
   }
 
-  onSubmitWizardError(): void {
+  private onSubmitWizardError(): void {
     this.submitButton = { isActive: true, label: this.user ? 'Add user' : 'Confirm and add user'};
     this.setAlertUnknownError();
   }
-
 
   onSubmitWizard(): void {
 
