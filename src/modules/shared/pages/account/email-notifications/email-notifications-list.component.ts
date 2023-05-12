@@ -17,6 +17,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
   isAnySubscribed = true;
 
   hasMultipleRoles = false;
+  currentRole: null | { id: string, description: string };
 
   constructor(
     private notificationsService: NotificationsService,
@@ -25,6 +26,16 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
     super();
     this.setPageTitle('Email notifications');
+
+    const currentUserContext = this.authenticationStore.getUserContextInfo();
+
+    if (!currentUserContext) { this.currentRole = null; }
+    else {
+      this.currentRole = {
+        id: currentUserContext.roleId,
+        description: `${this.authenticationStore.getRoleDescription(currentUserContext.type)}${this.authenticationStore.isAccessorType() ? ` (${currentUserContext.organisationUnit?.name.trimEnd()})` : ''}`
+      };
+    }
 
   }
 
