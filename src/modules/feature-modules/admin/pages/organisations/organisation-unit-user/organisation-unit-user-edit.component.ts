@@ -1,13 +1,11 @@
-import { CustomValidators } from '@modules/shared/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
-import { OrganisationErrorsEnum, UserRoleEnum } from '@app/base/enums';
+import { OrganisationErrorsEnum } from '@app/base/enums';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { AdminOrganisationsService } from '@modules/feature-modules/admin/services/admin-organisations.service';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 import { GetOrganisationUnitUserDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
-import { UsersService } from '@modules/shared/services/users.service';
 import { ORGANISATION_UNIT_USER_EDIT } from './organisation-unit-user-edit-wizard.config';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -34,8 +32,8 @@ export class PageOrganisationUnitUserEditComponent extends CoreComponent impleme
   constructor(
     private activatedRoute: ActivatedRoute,
     private serviceUsersService: ServiceUsersService,
-    private organisationsService: OrganisationsService
-
+    private organisationsService: OrganisationsService,
+    private adminOrganisationsService: AdminOrganisationsService
   ) {
 
     super();
@@ -159,7 +157,7 @@ export class PageOrganisationUnitUserEditComponent extends CoreComponent impleme
         role: this.wizard.getAnswers().role,
       }
 
-      this.organisationsService.createUnitUser(this.organisationUnitId, this.user.id, body).subscribe({
+      this.adminOrganisationsService.createUnitUser(this.organisationUnitId, this.user.id, body).subscribe({
         next: () => {
           this.onSubmitWizardSuccess();
         },

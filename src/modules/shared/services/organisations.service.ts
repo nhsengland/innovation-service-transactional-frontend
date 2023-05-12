@@ -128,17 +128,4 @@ export class OrganisationsService extends CoreService {
 
   }
 
-  createUnitUser(
-    organisationUnitId: string,
-    userId: string,
-    body: {
-      role: UserRoleEnum.ACCESSOR | UserRoleEnum.QUALIFYING_ACCESSOR
-    }
-  ): Observable<void> {
-
-    const url = new UrlModel(this.API_USERS_URL).addPath('/v1/units/:organisationUnitId/users/:userId').setPathParams({ organisationUnitId, userId });
-    return this.http.post<void>(url.buildUrl(), body).pipe(take(1), map(response => response));
-
-  }
-
 }
