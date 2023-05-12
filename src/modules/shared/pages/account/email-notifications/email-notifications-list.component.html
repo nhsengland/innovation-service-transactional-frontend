@@ -3,7 +3,13 @@
   <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
     <div class="nhsuk-grid-column-full">
 
-      <dl class=" nhsuk-summary-list">
+      <div *ngIf="hasMultipleRoles">
+        <p>
+          These preferences are only applied to the profile you are currently logged in.
+        </p>
+      </div>
+
+      <dl class="nhsuk-summary-list nhsuk-u-padding-top-3">
         <div *ngFor="let item of notificationTypeList" class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key"> {{ 'shared.catalog.innovation.notification_context_types.' + item.type + '.title.plural' | translate }} </dt>
           <dd class="nhsuk-summary-list__value text-pre-wrap"> {{ 'shared.catalog.innovation.email_notification_preferences.' + item.preference + '.you' | translate  }} </dd>
