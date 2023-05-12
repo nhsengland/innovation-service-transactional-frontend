@@ -3,11 +3,9 @@
   <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
     <div class="nhsuk-grid-column-full">
 
-      <div *ngIf="hasMultipleRoles">
+      <div *ngIf="hasMultipleRoles && currentRole" class="nhsuk-inset-text">
         <p>These preferences are only applied to the profile you are currently logged in.</p>
-        <div *ngIf="currentRole" class="nhsuk-inset-text">
-          <p>{{currentRole.description}}</p>
-        </div>
+        <p>{{currentRole.description}}</p>
       </div>
 
       <dl class="nhsuk-summary-list nhsuk-u-padding-top-3">
