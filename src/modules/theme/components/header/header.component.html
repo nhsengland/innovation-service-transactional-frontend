@@ -17,7 +17,7 @@
       <p>We've put some small files called cookies on your device to make our site work.</p>
       <p>We'd also like to use analytics cookies. These send information about how our site is used to services called Adobe Analytics, Hotjar and Google Analytics. We use this information to improve our site.</p>
       <p>Let us know if this is OK. We'll use a cookie to save your choice. You can <a routerLink="/policies/cookies-policy"> read more about our cookies </a> before you choose.</p>
-      <div class="d-flex">
+      <div>
         <button class="nhsuk-button nhsuk-u-margin-right-4" (click)="onSaveCookies(true)">I'm OK with analytics cookies</button>
         <button class="nhsuk-button" (click)="onSaveCookies(false)">Do not use analytics cookies</button>
       </div>
@@ -28,7 +28,7 @@
 <ng-container *ngIf="showCookiesSaveSuccess">
   <div class="app-u-hide-print cookie-success-banner">
     <div class="nhsuk-width-container app-width-container">
-      <p class="nhsuk-u-margin-0">You can change your cookie settings at any time using our <a routerLink="/policies/cookies-policy">cookies page</a>.</p>
+      <p class="nhsuk-body-s nhsuk-u-margin-0">You can change your cookie settings at any time using our <a routerLink="/policies/cookies-policy">cookies page</a>.</p>
     </div>
   </div>
 </ng-container>
@@ -36,12 +36,10 @@
 <a class="nhsuk-skip-link" href="javascript:void()" (click)="handleSkipLinkClick($event)"> Skip to main content </a>
 
 <div class="app-u-hide-print nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
-  <div class="nhsuk-width-container app-width-container d-flex">
-    <strong class="nhsuk-tag nhsuk-u-margin-right-2"> BETA </strong>
-    <p class="nhsuk-body-s nhsuk-u-margin-bottom-0">
-      This is a new service - your <a href="{{ URLS.HOTJAR_SURVEY }}" target="_blank" rel="noopener noreferrer">feedback (opens in a new window)</a> will help us to improve it.
-    </p>
-  </div>
+  <p class="nhsuk-width-container app-width-container d-flex align-items-center">
+    <strong class="nhsuk-tag nhsuk-u-margin-right-2">BETA</strong>
+    <span class="nhsuk-body-s nhsuk-u-margin-bottom-0">This is a new service - your <a href="{{ URLS.HOTJAR_SURVEY }}" target="_blank" rel="noopener noreferrer">feedback (opens in a new window)</a> will help us to improve it.</span>
+  </p>
 </div>
 
 
@@ -140,8 +138,8 @@
 
   <ng-container *ngIf="(item.children || []).length > 0">
 
-    <button type="button" class="nhsuk-header__navigation-link app-multilevel-navigation__toggle-button" [ngClass]="{'button-closed': !item.isOpen, 'button-open': item.isOpen}" (click)="onHeaderMenuClick(item)"
-      [attr.aria-expanded]="item.isOpen" attr.aria-label="{{ item.isOpen ? 'Hide' : 'Show' }} {{ item.label }} menu">
+    <button type="button" class="nhsuk-header__navigation-link app-multilevel-navigation__toggle-button" [ngClass]="{'button-closed': !item.isOpen, 'button-open': item.isOpen}" (click)="onHeaderMenuClick(item)" [attr.aria-expanded]="item.isOpen"
+      attr.aria-label="{{ item.isOpen ? 'Hide' : 'Show' }} {{ item.label }} menu">
       {{ item.label }}
       <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
