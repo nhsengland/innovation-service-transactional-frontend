@@ -73,6 +73,7 @@ export class PageOrganisationUnitUserEditComponent extends CoreComponent impleme
         this.submitButton = { isActive: true, label: 'Confirm and add user' };
 
         if (err.error === OrganisationErrorsEnum.ORGANISATION_USER_NOT_FOUND ) {
+          this.wizard.addAnswers({ name: '', role: null }).runRules();
           this.onSubmitStep();
         }
         else if (err.error === OrganisationErrorsEnum.ORGANISATION_UNIT_USER_CANT_BE_INNOVATOR) {
