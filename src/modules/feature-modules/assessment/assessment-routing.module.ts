@@ -57,6 +57,8 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
 import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
+import { PageAccountEmailNotificationsListComponent } from '@modules/shared/pages/account/email-notifications/email-notifications-list.component';
+import { PageAccountEmailNotificationsEditComponent } from '@modules/shared/pages/account/email-notifications/email-notifications-edit.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -389,6 +391,23 @@ const routes: Routes = [
               {
                 path: '', pathMatch: 'full', component: PageAssessmentAccountManageAccountInfoComponent,
                 data: { breadcrumb: null }
+              }
+            ]
+          },
+          {
+            path: 'email-notifications',
+            data: { breadcrumb: 'Email notifications' },
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAccountEmailNotificationsListComponent,
+                data: { breadcrumb: null }
+              },
+              {
+                path: 'edit/:notificationType', pathMatch: 'full', component: PageAccountEmailNotificationsEditComponent,
+                data: {
+                  breadcrumb: 'Edit',
+                  layout: { type: 'full', chosenMenu: 'yourAccount' }
+                }
               }
             ]
           }
