@@ -30,6 +30,8 @@ export class AnnouncementsListComponent extends CoreComponent implements OnInit 
       this.#announcements = response;
       this.announcement = this.#announcements[this.#announcementIndex];
 
+      this.isContinueButtonActive = true
+
       this.setTitle();
 
     });
@@ -38,7 +40,7 @@ export class AnnouncementsListComponent extends CoreComponent implements OnInit 
 
   onContinue(announcementId: string) {
 
-    if (this.isContinueButtonActive) { return; }
+    if (!this.isContinueButtonActive) { return; }
 
     this.isContinueButtonActive = false;
 
