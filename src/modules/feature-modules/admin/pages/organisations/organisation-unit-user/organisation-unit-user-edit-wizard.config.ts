@@ -77,9 +77,9 @@ export const ORGANISATION_UNIT_USER_EDIT: WizardEngineModel = new WizardEngineMo
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   return [
-    { label: stepsLabels.l1, value: data.email, editStepNumber: 1 },
-    { label: stepsLabels.l2, value: data.name, editStepNumber: 2 },
-    { label: stepsLabels.l3, value: data.role === UserRoleEnum.QUALIFYING_ACCESSOR ? 'Qualifying Accessor' : data.role === UserRoleEnum.ACCESSOR ? 'Accessor' : null, editStepNumber: 3 }
+    { label: 'Name', value: data.name, editStepNumber: 2 },
+    { label: 'Email', value: data.email, editStepNumber: 1 },
+    { label: 'Role', value: data.role === UserRoleEnum.QUALIFYING_ACCESSOR ? 'Qualifying Accessor' : data.role === UserRoleEnum.ACCESSOR ? 'Accessor' : null, editStepNumber: 3 }
   ];
 }
 
