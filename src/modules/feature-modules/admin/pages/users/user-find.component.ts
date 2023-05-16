@@ -5,18 +5,17 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { FormGroup } from '@app/base/forms';
 import { LinkType } from '@app/base/types';
-
-import { searchUserEndpointOutDTO, ServiceUsersService } from '../../services/service-users.service';
+import { searchUserEndpointOutDTO, UsersService } from '@modules/shared/services/users.service';
 
 
 @Component({
-  selector: 'app-admin-pages-admin-users-users-find',
-  templateUrl: './admin-users-find.component.html'
+  selector: 'app-admin-pages-users-user-find',
+  templateUrl: './user-find.component.html'
 })
-export class PageAdminUsersFindComponent extends CoreComponent implements OnInit {
+export class PageUserFindComponent extends CoreComponent implements OnInit {
 
   titleActions: LinkType[] = [
-    { type: 'button', label: 'New admin user', url: '/admin/administration-users/new' }
+    { type: 'button', label: 'New user', url: '/admin/users/new' }
   ];
 
   formSubmitted = false;
@@ -29,11 +28,11 @@ export class PageAdminUsersFindComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private serviceUsersService: ServiceUsersService
+    private usersService: UsersService
   ) {
 
     super();
-    this.setPageTitle('Find an admin user', { actions: this.titleActions });
+    this.setPageTitle('Find a user', { actions: this.titleActions });
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'adminDeletedSuccess':
@@ -57,15 +56,16 @@ export class PageAdminUsersFindComponent extends CoreComponent implements OnInit
 
     this.formSubmitted = true;
 
-    this.serviceUsersService.searchUser(this.form.get('email')!.value, true).subscribe(
-      response => {
+    this.usersService.searchUser(this.form.get('email')!.value).subscribe({
+      next: (response) => {
         this.usersList = response;
         this.setPageStatus('READY');
       },
-      error => {
+      error: () => {
         this.usersList = [];
         this.setPageStatus('READY');
-      });
+      }
+    });
 
   }
 

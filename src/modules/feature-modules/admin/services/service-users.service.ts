@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, TermsOfUseTypeEnum, UserRoleEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, TermsOfUseTypeEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
-import { UserSearchDTO } from '@modules/shared/dtos/users.dto';
 
 
 export type getUserMinimalInfoDTO = {
@@ -15,48 +13,13 @@ export type getUserMinimalInfoDTO = {
   displayName: string;
 };
 
-export type getUserFullInfoDTO = {
-  id: string;
-  email: string;
-  phone: null | string;
-  displayName: string;
-  type: UserRoleEnum;
-  lockedAt: null | string;
-  innovations: {
-    id: string;
-    name: string;
-  }[];
-  userOrganisations: {
-    id: string;
-    name: string;
-    size: null | string;
-    role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum;
-    isShadow: boolean;
-    units: { id: string, name: string, acronym: string, supportCount: null | number }[];
-  }[];
-};
+
 
 export type changeUserTypeDTO = {
   id: string;
   status: string;
 };
 
-
-export type searchUserEndpointInDTO = {
-  id: string;
-  email: string;
-  displayName: string;
-  type: UserRoleEnum,
-  lockedAt?: string;
-  userOrganisations?: {
-    id: string;
-    name: string;
-    acronym: string;
-    role: string;
-    units?: { id: string, name: string, acronym: string }[]
-  }[]
-};
-export type searchUserEndpointOutDTO = searchUserEndpointInDTO & { typeLabel: string };
 
 export type changeUserRoleDTO = {
   role: {
@@ -103,13 +66,6 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-  getUserFullInfo(userId: string): Observable<getUserFullInfoDTO> {
-
-    const url = new UrlModel(this.API_USERS_URL).addPath('/v1/:userId').setPathParams({ userId }).setQueryParams({ model: 'full' });
-    return this.http.get<getUserFullInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
-
-  }
-
   lockUser(userId: string): Observable<{ id: string }> {
 
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId });
@@ -125,13 +81,6 @@ export class ServiceUsersService extends CoreService {
   }
 
 
-  createUser(body: { [key: string]: any }): Observable<{ id: string }> {
-
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users');
-    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
-
-  }
-
   deleteAdminAccount(userId: string, securityConfirmation: { id: string, code: string }): Observable<{ id: string }> {
 
     const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
@@ -144,43 +93,6 @@ export class ServiceUsersService extends CoreService {
     );
 
   }
-
-  // The search user isAdmin distinction is because of frontend pages and this should actually either accept a role|role[] or nothing and search for all roles
-  // keeping this way not to change current behavior
-  searchUser(email: string, isAdmin: boolean): Observable<searchUserEndpointOutDTO[]> {
-    const roles = isAdmin ? [UserRoleEnum.ADMIN] : [UserRoleEnum.ACCESSOR, UserRoleEnum.ASSESSMENT, UserRoleEnum.INNOVATOR, UserRoleEnum.QUALIFYING_ACCESSOR]
-
-    // this could probably be a call for a shared getUsersList method
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ email, userTypes: roles });
-    return this.http.get<UserSearchDTO[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response.map(item => ({
-        id: item.id,
-        email: item.email,
-        displayName: item.name,
-        type: item.roles[0].role, // TODO: this is a hack while we are supporting only one role in the admin
-        typeLabel: this.stores.authentication.getRoleDescription(item.roles[0].role),
-        ...(item.lockedAt && { lockedAt: item.lockedAt }),
-        ...(item.organisations && {
-          userOrganisations: item.organisations.map(org => ({
-            id: org.id,
-            name: org.name,
-            acronym: org.acronym,
-            role: org.role,
-            ...(org.units && {
-              units: org.units.map(unit => ({
-                id: unit.id,
-                name: unit.name,
-                acronym: unit.acronym
-              }))
-            })
-          }))
-        })
-      })))
-    );
-
-  }
-
 
   changeUserRole(userId: string, body: changeUserRoleDTO): Observable<changeUserTypeDTO> {
 
@@ -258,24 +170,6 @@ export class ServiceUsersService extends CoreService {
       take(1),
       map(response => response)
     );
-  }
-
-
-  // Validators.
-  userEmailValidator(): AsyncValidatorFn {
-
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-
-      const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ email: control.value });
-      return this.http.head(url.buildUrl()).pipe(
-        take(1),
-        map(() => ({ customError: true, message: 'Email already exist' })),
-        catchError((e) => {
-          return e.status === 404 ? of(null) : of({ customError: true, message: 'An error has occurred' });
-        })
-      );
-
-    };
   }
 
 }

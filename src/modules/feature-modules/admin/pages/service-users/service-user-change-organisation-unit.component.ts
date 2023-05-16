@@ -13,6 +13,7 @@ import { ServiceUsersService } from '../../services/service-users.service';
 import { getOrganisationUnitRulesOutDTO, UsersValidationRulesService } from '../../services/users-validation-rules.service';
 
 import { CHANGE_USER_ORGANISATION_UNIT } from './service-user-change-organisation-unit.config';
+import { UsersService } from '@modules/shared/services/users.service';
 
 
 @Component({
@@ -54,6 +55,7 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
     private activatedRoute: ActivatedRoute,
     private organisationsService: OrganisationsService,
     private serviceUsersService: ServiceUsersService,
+    private usersService: UsersService,
     private usersValidationRulesService: UsersValidationRulesService
   ) {
 
@@ -67,7 +69,7 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
 
     forkJoin([
       this.organisationsService.getOrganisationsList({ unitsInformation: true }),
-      this.serviceUsersService.getUserFullInfo(this.user.id),
+      this.usersService.getUserFullInfo(this.user.id),
       this.usersValidationRulesService.getOrganisationUnitRules(this.user.id)
     ]).subscribe(([organisations, userInfo, organisationUnitRules]) => {
 
@@ -123,7 +125,7 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
     body.organisationId = this.organisation.id;
 
     this.serviceUsersService.changeOrganisationUserUnit(body, this.securityConfirmation, this.user.id).subscribe(
-      () => this.redirectTo(`admin/service-users/${this.user.id}`, { alert: 'unitChangeSuccess' }),
+      () => this.redirectTo(`/admin/users/${this.user.id}`, { alert: 'unitChangeSuccess' }),
       (error: { id: string }) => {
         this.submitBtnClicked = false;
         if (!this.securityConfirmation.id && error.id) {
