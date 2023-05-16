@@ -17,6 +17,7 @@ import { changeUserTypeDTO, ServiceUsersService } from '@modules/feature-modules
 import { getOrganisationUnitRulesOutDTO, UsersValidationRulesService } from '@modules/feature-modules/admin/services/users-validation-rules.service';
 import { FormEngineComponent } from '@modules/shared/forms';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { UsersService } from '@modules/shared/services/users.service';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisationUnitComponent', () => {
@@ -26,6 +27,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
   let routerSpy: jest.SpyInstance;
 
   let serviceUsersService: ServiceUsersService;
+  let usersService: UsersService;
   let usersValidationRulesService: UsersValidationRulesService;
   let organisationsService: OrganisationsService;
   let component: PageServiceUserChangeOrganisationUnitComponent;
@@ -49,13 +51,14 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
     routerSpy = jest.spyOn(router, 'navigate');
 
     serviceUsersService = TestBed.inject(ServiceUsersService);
+    usersService = TestBed.inject(UsersService);
     usersValidationRulesService = TestBed.inject(UsersValidationRulesService);
     organisationsService = TestBed.inject(OrganisationsService);
 
     activatedRoute.snapshot.params = { userId: 'User01' };
     activatedRoute.snapshot.data = { user: { userId: 'User01', displayName: 'User Name' } };
 
-    serviceUsersService.getUserFullInfo = () => of({
+    usersService.getUserFullInfo = () => of({
       id: 'User01',
       email: 'user@email.com',
       displayName: 'User name',
@@ -117,7 +120,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
 
   it('should NOT have initial information loaded', () => {
 
-    serviceUsersService.getUserFullInfo = () => throwError('error');
+    usersService.getUserFullInfo = () => throwError('error');
     organisationsService.getOrganisationsList = () => throwError('error');
     usersValidationRulesService.getOrganisationUnitRules = () => throwError('error');
 
@@ -140,7 +143,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeOrganisat
     component.form.get('code')?.setValue('12345');
 
     component.onSubmit();
-    expect(routerSpy).toHaveBeenCalledWith([`admin/service-users/${component.user.id}`], { queryParams: { alert: 'unitChangeSuccess' } });
+    expect(routerSpy).toHaveBeenCalledWith([`/admin/users/${component.user.id}`], { queryParams: { alert: 'unitChangeSuccess' } });
 
   });
 

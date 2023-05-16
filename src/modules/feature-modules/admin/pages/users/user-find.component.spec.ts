@@ -12,19 +12,20 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
-import { PageAdminUsersFindComponent } from './admin-users-find.component';
 
-import { searchUserEndpointOutDTO, ServiceUsersService } from '../../services/service-users.service';
+import { ServiceUsersService } from '../../services/service-users.service';
+import { PageUserFindComponent } from './user-find.component';
+import { searchUserEndpointOutDTO, UsersService } from '@modules/shared/services/users.service';
 
 
-describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserFindComponent', () => {
+describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
-  let serviceUsersService: ServiceUsersService;
+  let usersService: UsersService;
 
-  let component: PageAdminUsersFindComponent;
-  let fixture: ComponentFixture<PageAdminUsersFindComponent>;
+  let component: PageUserFindComponent;
+  let fixture: ComponentFixture<PageUserFindComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -41,13 +42,13 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserFindComponent', () 
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    serviceUsersService = TestBed.inject(ServiceUsersService);
+    usersService = TestBed.inject(UsersService);
 
   });
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(PageAdminUsersFindComponent);
+    fixture = TestBed.createComponent(PageUserFindComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
@@ -57,7 +58,7 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserFindComponent', () 
 
     activatedRoute.snapshot.queryParams = { alert: 'adminDeletedSuccess' };
 
-    fixture = TestBed.createComponent(PageAdminUsersFindComponent);
+    fixture = TestBed.createComponent(PageUserFindComponent);
     component = fixture.componentInstance;
     expect(component.alert.type).toBe('SUCCESS');
 
@@ -86,9 +87,9 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserFindComponent', () 
       ]
     }];
 
-    serviceUsersService.searchUser = () => of(responseMock);
+    usersService.searchUser = () => of(responseMock);
 
-    fixture = TestBed.createComponent(PageAdminUsersFindComponent);
+    fixture = TestBed.createComponent(PageUserFindComponent);
     component = fixture.componentInstance;
 
     component.form.setValue({ email: 'test@example.com' });
@@ -101,9 +102,9 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserFindComponent', () 
 
   it('should call onSubmit() and return error', () => {
 
-    serviceUsersService.searchUser = () => throwError('error');
+    usersService.searchUser = () => throwError('error');
 
-    fixture = TestBed.createComponent(PageAdminUsersFindComponent);
+    fixture = TestBed.createComponent(PageUserFindComponent);
     component = fixture.componentInstance;
 
     component.form.setValue({ email: 'test@example.com' });
@@ -113,5 +114,7 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserFindComponent', () 
     expect(component.pageStatus).toBe('READY');
 
   });
+
+
 
 });

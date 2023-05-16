@@ -1,27 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
-import { RoutingHelper } from '@app/base/helpers';
 import { LinkType } from '@app/base/types';
+import { RoutingHelper } from '@app/base/helpers';
 
+import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { forkJoin } from 'rxjs';
+import { UsersService } from '@modules/shared/services/users.service';
 
 
 @Component({
-  selector: 'app-admin-pages-service-users-service-user-info',
-  templateUrl: './service-user-info.component.html'
+  selector: 'app-admin-pages-users-user-info',
+  templateUrl: './user-info.component.html'
 })
-export class PageServiceUserInfoComponent extends CoreComponent implements OnInit {
+export class PageUserInfoComponent extends CoreComponent implements OnInit {
 
   user: { id: string, name: string };
 
   userInfoType = '';
 
   titleActions: LinkType[] = [];
+
+  unitLength = 0;
 
   sections: {
     userInfo: { label: string; value: null | string; }[];
@@ -32,12 +34,10 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
     }[];
   } = { userInfo: [], innovations: [], organisation: [] };
 
-  unitLength = 0;
-  userRoleEnum = UserRoleEnum;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private serviceUsersService: ServiceUsersService,
+    private usersService: UsersService,
     private organisationService: OrganisationsService
   ) {
 
@@ -68,31 +68,37 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
   }
 
   ngOnInit(): void {
+
     forkJoin([
-      this.serviceUsersService.getUserFullInfo(this.user.id),
+      this.usersService.getUserFullInfo(this.user.id),
       this.organisationService.getOrganisationsList({ unitsInformation: true, withInactive: true })
     ]).subscribe({
-
       next: ([response, organisations]) => {
 
         this.userInfoType = response.type;
 
-        if ([UserRoleEnum.ASSESSMENT, UserRoleEnum.INNOVATOR].includes(response.type)) {
-
-          this.titleActions = [{ type: 'link', label: !response.lockedAt ? 'Lock user' : 'Unlock user', url: `/admin/service-users/${this.user.id}/${!response.lockedAt ? 'lock' : 'unlock'}` }];
-
-        } else {
-
+        if (response.type === UserRoleEnum.ADMIN) {
+          const currentUser = this.stores.authentication.getUserInfo();
+          if (currentUser.id !== this.user.id) {
+            this.titleActions = [{
+              type: 'link',
+              label: 'Delete user',
+              url: `/admin/users/${this.user.id}/administration-users/delete`
+            }];
+          }
+        }
+        else if ([UserRoleEnum.ASSESSMENT, UserRoleEnum.INNOVATOR].includes(response.type)) {
+          this.titleActions = [{ type: 'link', label: !response.lockedAt ? 'Lock user' : 'Unlock user', url: `/admin/users/${this.user.id}/service-users/${!response.lockedAt ? 'lock' : 'unlock'}` }];
+        }
+        else {
           const isUserOrganisationUnitActive = organisations
             .flatMap(org => org.organisationUnits.map(unit => ({ id: unit.id, isActive: unit.isActive })))
             .find(unit => unit.id === response.userOrganisations[0]?.units[0]?.id)?.isActive;
 
           if (isUserOrganisationUnitActive || (!isUserOrganisationUnitActive && !response.lockedAt)) {
-            this.titleActions = [{ type: 'link', label: !response.lockedAt ? 'Lock user' : 'Unlock user', url: `/admin/service-users/${this.user.id}/${!response.lockedAt ? 'lock' : 'unlock'}` }];
+            this.titleActions = [{ type: 'link', label: !response.lockedAt ? 'Lock user' : 'Unlock user', url: `/admin/users/${this.user.id}/service-users/${!response.lockedAt ? 'lock' : 'unlock'}` }];
           }
-
         }
-
 
         if (
           response.userOrganisations.length > 0 &&
@@ -102,23 +108,26 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
           this.titleActions.push({
             type: 'link',
             label: 'Change role',
-            url: `/admin/service-users/${this.user.id}/change-role`
+            url: `/admin/users/${this.user.id}/service-users/change-role`
           });
 
           this.unitLength = organisations.filter(org => (response.userOrganisations[0].id === org.id))[0].organisationUnits.length;
         }
 
-        if ((response.type === UserRoleEnum.ACCESSOR || response.type === UserRoleEnum.QUALIFYING_ACCESSOR) && response.userOrganisations.length > 0) {
-          this.sections.userInfo = [
-            { label: 'Name', value: response.displayName },
-            { label: 'Type', value: 'Authorised person' },
-            { label: 'Role', value: this.stores.authentication.getRoleDescription(response.userOrganisations[0].role) },
-            { label: 'Email address', value: response.email },
-            { label: 'Phone number', value: response.phone ? response.phone : ' NA' },
-            { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }
-          ];
+        if (response.type === UserRoleEnum.ACCESSOR || response.type === UserRoleEnum.QUALIFYING_ACCESSOR) {
+          if (response.userOrganisations.length > 0) {
+            this.sections.userInfo = [
+              { label: 'Name', value: response.displayName },
+              { label: 'Type', value: 'Authorised person' },
+              { label: 'Role', value: this.stores.authentication.getRoleDescription(response.userOrganisations[0].role) },
+              { label: 'Email address', value: response.email },
+              { label: 'Phone number', value: response.phone ? response.phone : ' NA' },
+              { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }
+            ];
+          }
+          this.sections.organisation = response.userOrganisations;
         }
-        else {
+        else if ([UserRoleEnum.ASSESSMENT, UserRoleEnum.INNOVATOR].includes(response.type)) {
           this.sections.userInfo = [
             { label: 'Name', value: response.displayName },
             { label: 'Type', value: this.stores.authentication.getRoleDescription(response.type) },
@@ -126,20 +135,22 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
             { label: 'Phone number', value: response.phone ? response.phone : ' NA' },
             { label: 'Account status', value: !response.lockedAt ? 'Active' : 'Locked' }
           ];
-        }
-
-        if (response.type === 'INNOVATOR') {
-          this.sections.innovations = response.innovations.map(x => x.name);
-          if (response.userOrganisations.length > 0 && !response.userOrganisations[0].isShadow) {
-            this.sections.userInfo = [...this.sections.userInfo,
-            { label: 'Company name', value: response.userOrganisations[0].name },
-            { label: 'Company size', value: response.userOrganisations[0].size }
-            ];
+          if (response.type === UserRoleEnum.INNOVATOR) {
+            this.sections.innovations = response.innovations.map(x => x.name);
+            if (response.userOrganisations.length > 0 && !response.userOrganisations[0].isShadow) {
+              this.sections.userInfo = [...this.sections.userInfo,
+              { label: 'Company name', value: response.userOrganisations[0].name },
+              { label: 'Company size', value: response.userOrganisations[0].size }
+              ];
+            }
           }
         }
-
-        if (response.type === UserRoleEnum.ACCESSOR || response.type === UserRoleEnum.QUALIFYING_ACCESSOR) {
-          this.sections.organisation = response.userOrganisations;
+        else {
+          this.sections.userInfo = [
+            { label: 'Name', value: response.displayName },
+            { label: 'Type', value: this.stores.authentication.getRoleDescription(response.type) },
+            { label: 'Email address', value: response.email }
+          ];
         }
 
         this.setPageTitle('User information', { hint: this.user.name, actions: this.titleActions });
@@ -149,7 +160,7 @@ export class PageServiceUserInfoComponent extends CoreComponent implements OnIni
       },
       error: () => {
         this.setPageStatus('ERROR');
-        this.setAlertError('Unable to fetch the necessary information', { message: 'Please try again or contact us for further help'})
+        this.setAlertError('Unable to fetch the necessary information', { message: 'Please try again or contact us for further help'});
       }
     });
 

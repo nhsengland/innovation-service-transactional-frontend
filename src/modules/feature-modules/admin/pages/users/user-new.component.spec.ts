@@ -10,16 +10,16 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
-import { PageAdminUserNewComponent } from './admin-user-new.component';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { PageUserNewComponent } from './user-new.component';
 
 
 describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserNewComponent', () => {
 
-  let component: PageAdminUserNewComponent;
-  let fixture: ComponentFixture<PageAdminUserNewComponent>;
+  let component: PageUserNewComponent;
+  let fixture: ComponentFixture<PageUserNewComponent>;
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
@@ -55,7 +55,7 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserNewComponent', () =
   });
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(PageAdminUserNewComponent);
+    fixture = TestBed.createComponent(PageUserNewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
