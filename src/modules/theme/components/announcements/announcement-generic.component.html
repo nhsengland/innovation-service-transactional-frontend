@@ -1,4 +1,4 @@
-<div class="nhsuk-grid-column-full" *ngIf="params">
+<ng-container *ngIf="params">
 
   <!-- Inset -->
   <ng-container *ngIf="params.inset">
@@ -6,8 +6,8 @@
       <span class="nhsuk-u-visually-hidden">Information: </span>
       <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">{{ params.inset.title }}</p>
 
-      <p *ngIf="params.inset.description" class="nhsuk-u-margin-bottom-1">
-        {{ params.inset.description }}
+      <p *ngIf="params.inset.content" class="nhsuk-u-margin-bottom-1">
+        {{ params.inset.content }}
       </p>
 
       <a *ngIf="params.inset.link" [href]="params.inset.link.url" target="_blank" rel="noopener noreferrer">
@@ -17,15 +17,13 @@
   </ng-container>
 
   <!-- Description -->
-  <ng-container *ngFor="let description of params.description">
-    <p>{{ description }}</p>
-  </ng-container>
+  <p *ngIf="params.content">{{ params.content }}</p>
 
   <!-- Secondary Action -->
-  <ng-container *ngIf="params.secondaryAction">
-    <a [href]="params.secondaryAction.url" target="_blank" rel="noopener noreferrer">
-      {{ params.secondaryAction.label }}
+  <ng-container *ngIf="params.actionLink">
+    <a [href]="params.actionLink.url" target="_blank" rel="noopener noreferrer">
+      {{ params.actionLink.label }}
     </a>
   </ng-container>
 
-</div>
+</ng-container>

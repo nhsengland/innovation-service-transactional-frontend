@@ -17,6 +17,10 @@ import { PageAdminUsersFindComponent } from './pages/admin-users/admin-users-fin
 import { PageAdminUserInfoComponent } from './pages/admin-users/admin-user-info.component';
 import { PageAdminUserNewComponent } from './pages/admin-users/admin-user-new.component';
 import { PageAdminUserDeleteComponent } from './pages/admin-users/admin-user-delete.component';
+// // Announcements.
+import { PageAnnouncementInfoComponent } from './pages/announcements/announcement-info.component';
+import { PageAnnouncementNewditComponent } from './pages/announcements/announcement-newdit.component';
+import { PageAnnouncementsListComponent } from './pages/announcements/announcements-list.component';
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation
@@ -52,10 +56,12 @@ import { WizardOrganisationUnitInactivateInnovationsStepComponent } from './wiza
 
 // Services.
 import { AdminOrganisationsService } from './services/admin-organisations.service';
+import { AnnouncementsService } from './services/announcements.service';
 import { ServiceUsersService } from './services/service-users.service';
 import { UsersValidationRulesService } from './services/users-validation-rules.service';
 
 // Resolvers.
+import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
@@ -79,6 +85,10 @@ import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data
     PageAdminUserInfoComponent,
     PageAdminUserNewComponent,
     PageAdminUserDeleteComponent,
+    // // Announcements.
+    PageAnnouncementInfoComponent,
+    PageAnnouncementNewditComponent,
+    PageAnnouncementsListComponent,
     // // Dashboard.
     PageDashboardComponent,
     // // Innovation
@@ -114,10 +124,12 @@ import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data
   providers: [
     // Services.
     AdminOrganisationsService,
+    AnnouncementsService,
     ServiceUsersService,
     UsersValidationRulesService,
 
     // Resolvers.
+    AnnouncementDataResolver,
     OrganisationDataResolver,
     ServiceUserDataResolver,
     OrganisationUnitDataResolver

@@ -23,7 +23,7 @@ export class FormEngineModel {
 export class FormEngineParameterModel {
 
   id: string;
-  dataType: 'text' | 'textarea' | 'number' | 'password' | 'hidden' | 'autocomplete-array' | 'checkbox-group' | 'checkbox-array' | 'grouped-checkbox-array' | 'radio-group' | 'fields-group' | 'file-upload';
+  dataType: 'text' | 'textarea' | 'number' | 'password' | 'hidden' | 'date' | 'autocomplete-array' | 'checkbox-group' | 'checkbox-array' | 'grouped-checkbox-array' | 'radio-group' | 'fields-group' | 'file-upload';
   label?: string;
   description?: string;
   placeholder?: string;
