@@ -13,10 +13,14 @@ import { AnnouncementStatusEnum, AnnouncementsService, GetAnnouncementInfoType }
 export class PageAnnouncementInfoComponent extends CoreComponent implements OnInit {
 
   announcementId: string;
-  announcementInfo: null | GetAnnouncementInfoType & { userGroupsLabels: string } = null;
+  announcement: null | GetAnnouncementInfoType & {
+    userGroupsLabels: string,
+    isScheduled: boolean,
+    isActive: boolean
+  } = null;
+  pageStep: 'INFO' | 'REMOVE' = 'INFO';
 
-  isScheduled(): boolean { return this.announcementInfo?.status === AnnouncementStatusEnum.SCHEDULED; }
-  isActive(): boolean { return this.announcementInfo?.status === AnnouncementStatusEnum.ACTIVE; }
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -26,19 +30,21 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
     super();
 
     this.announcementId = this.activatedRoute.snapshot.params.announcementId;
-    this.setPageTitle('Announcement details');
-    this.setBackLink('Go back', 'admin/announcements');
 
   }
 
   ngOnInit(): void {
 
+    this.gotoInfoPage();
+
     this.announcementsService.getAnnouncementInfo(this.announcementId).subscribe({
       next: response => {
 
-        this.announcementInfo = {
+        this.announcement = {
           ...response,
-          userGroupsLabels: response.userRoles.map(item => this.stores.authentication.getRoleDescription(item)).join('\n')
+          userGroupsLabels: response.userRoles.map(item => this.stores.authentication.getRoleDescription(item)).join('\n'),
+          isScheduled: response.status === AnnouncementStatusEnum.SCHEDULED,
+          isActive: response.status === AnnouncementStatusEnum.ACTIVE
         };
 
         this.setPageStatus('READY');
@@ -49,6 +55,33 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
         this.setAlertUnknownError();
       }
 
+    });
+
+  }
+
+  gotoInfoPage() {
+    this.setPageTitle('Announcement details');
+    this.setBackLink('Go back', 'admin/announcements');
+    this.pageStep = 'INFO';
+  }
+
+  gotoRemovePage() {
+    this.setPageTitle('Remove announcement');
+    this.setBackLink('Go back', this.gotoInfoPage.bind(this));
+    this.pageStep = 'REMOVE';
+  }
+
+  onDelete() {
+
+    this.announcementsService.deleteAnnouncement(this.announcementId).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('The announcement was deleted.');
+        this.redirectTo(`admin/announcements`);
+      },
+      error: () => {
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
+      }
     });
 
   }

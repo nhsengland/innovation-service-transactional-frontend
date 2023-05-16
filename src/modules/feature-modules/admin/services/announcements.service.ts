@@ -80,11 +80,18 @@ export class AnnouncementsService extends CoreService {
     let body: Parameters<typeof this.updateAnnouncement>[1] | { expiresAt?: DateISOType } = data;
 
     if (status === AnnouncementStatusEnum.ACTIVE) {
-      body = { expiresAt: data.expiresAt }
+      body = { expiresAt: data.expiresAt };
     }
 
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/announcements/:announcementId').setPathParams({ announcementId });
     return this.http.put<void>(url.buildUrl(), body).pipe(take(1), map(response => response));
+
+  }
+
+  deleteAnnouncement(announcementId: string): Observable<void> {
+
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/announcements/:announcementId').setPathParams({ announcementId });
+    return this.http.delete<void>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 

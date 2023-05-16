@@ -3,44 +3,57 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-      <dl class="nhsuk-summary-list">
-        <div class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key">Status</dt>
-          <dd class="nhsuk-summary-list__value">
-            <theme-tag type="{{ 'shared.catalog.announcements.status.' + announcementInfo?.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.announcements.status.' + announcementInfo?.status + '.name' | translate }}"></theme-tag>
-          </dd>
-          <dd class="nhsuk-summary-list__actions"></dd>
-        </div>
-        <div class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key">Start date</dt>
-          <dd class="nhsuk-summary-list__value">{{ announcementInfo?.startsAt | date: ('app.date_formats.medium_date' | translate) }}</dd>
-          <dd class="nhsuk-summary-list__actions">
-            <a *ngIf="isScheduled()" routerLink="edit/5">Change<span class="nhsuk-u-visually-hidden"> start date </span></a>
-          </dd>
-        </div>
-        <div class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key">End date</dt>
-          <dd class="nhsuk-summary-list__value">{{ announcementInfo?.expiresAt | date: ('app.date_formats.medium_date' | translate) }}</dd>
-          <dd class="nhsuk-summary-list__actions">
-            <a *ngIf="isScheduled() || isActive()" routerLink="edit/{{ isScheduled() ? 5 : 1 }}">Change<span class="nhsuk-u-visually-hidden"> start date </span></a>
-          </dd>
-        </div>
-        <div class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key">User groups</dt>
-          <dd class="nhsuk-summary-list__value">{{ announcementInfo?.userGroupsLabels }}</dd>
-          <dd class="nhsuk-summary-list__actions">
-            <a *ngIf="isScheduled()" routerLink="edit/6">Change<span class="nhsuk-u-visually-hidden"> user groups </span></a>
-          </dd>
-        </div>
-      </dl>
+      <ng-container *ngIf="pageStep === 'INFO' && announcement">
 
-      <p>This is a preview of the announcement. <a *ngIf="isScheduled()" routerLink="edit/1">Change any information necessary.</a></p>
+        <dl class="nhsuk-summary-list">
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Status</dt>
+            <dd class="nhsuk-summary-list__value">
+              <theme-tag type="{{ 'shared.catalog.announcements.status.' + announcement.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.announcements.status.' + announcement.status + '.name' | translate }}"></theme-tag>
+            </dd>
+            <dd class="nhsuk-summary-list__actions"></dd>
+          </div>
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Start date</dt>
+            <dd class="nhsuk-summary-list__value">{{ announcement.startsAt | date: ('app.date_formats.medium_date' | translate) }}</dd>
+            <dd class="nhsuk-summary-list__actions">
+              <a *ngIf="announcement.isScheduled" routerLink="edit/5">Change<span class="nhsuk-u-visually-hidden"> start date </span></a>
+            </dd>
+          </div>
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">End date</dt>
+            <dd class="nhsuk-summary-list__value">{{ announcement.expiresAt | date: ('app.date_formats.medium_date' | translate) }}</dd>
+            <dd class="nhsuk-summary-list__actions">
+              <a *ngIf="announcement.isScheduled || announcement.isActive" routerLink="edit/{{ announcement.isScheduled ? 5 : 1 }}">Change<span class="nhsuk-u-visually-hidden"> start date </span></a>
+            </dd>
+          </div>
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">User groups</dt>
+            <dd class="nhsuk-summary-list__value">{{ announcement.userGroupsLabels }}</dd>
+            <dd class="nhsuk-summary-list__actions">
+              <a *ngIf="announcement.isScheduled" routerLink="edit/6">Change<span class="nhsuk-u-visually-hidden"> user groups </span></a>
+            </dd>
+          </div>
+        </dl>
 
-      <h2 class="nhsuk-heading-l">{{ announcementInfo?.title }}</h2>
-      <theme-announcements-generic [params]="announcementInfo?.params"></theme-announcements-generic>
+        <p>This is a preview of the announcement. <a *ngIf="announcement.isScheduled" routerLink="edit/1">Change any information necessary.</a></p>
 
-      <hr class="nhsuk-section-break nhsuk-section-break--xl nhsuk-section-break--visible">
-      <!-- <button type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm</button> -->
+        <h2 class="nhsuk-heading-l">{{ announcement.title }}</h2>
+        <theme-announcements-generic [params]="announcement.params"></theme-announcements-generic>
+
+        <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+        <button *ngIf="announcement.isScheduled || announcement.isActive" type="button" class="nhsuk-button nhsuk-button--secondary" (click)="gotoRemovePage()">Remove announcement</button>
+
+      </ng-container>
+
+      <ng-container *ngIf="pageStep === 'REMOVE' && announcement && (announcement.isScheduled || announcement.isActive)">
+        <div class="nhsuk-warning-callout">
+          <h3 class="nhsuk-warning-callout__label">Important<span class="nhsuk-u-visually-hidden">:</span></h3>
+          <p *ngIf="announcement.isScheduled">This announcement is not active so is fairly safe to remote it.</p>
+          <p *ngIf="announcement.isActive">This announcement is currently active and could already had been seen by users.</p>
+        </div>
+        <button type="button" class="nhsuk-button" (click)="onDelete()">Remove announcement</button>
+      </ng-container>
 
     </div>
   </div>

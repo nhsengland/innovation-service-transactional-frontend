@@ -113,7 +113,6 @@ export const ANNOUNCEMENT_EDIT_QUESTIONS: WizardEngineModel = new WizardEngineMo
   showSummary: true,
   steps: [
     new FormEngineModel({
-      label: stepsLabels.l5.label,
       parameters: [
         { id: 'expiresAt', dataType: 'date', label: 'Set an end date', description: 'If you do not set an end date, the announcement will remain on the service until the user clicks continue.<br />Enter date. For example, 21/12/2014.' }
       ]

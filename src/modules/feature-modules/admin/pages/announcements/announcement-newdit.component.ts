@@ -18,17 +18,17 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   announcementId: string;
-  annoncementStatus: null | AnnouncementStatusEnum = null;
+  announcementData: {
+    isCreation: boolean,
+    isEdition: boolean,
+    status: null | AnnouncementStatusEnum,
+    isScheduled: boolean,
+    isActive: boolean
+  };
 
   wizard: WizardEngineModel = new WizardEngineModel({});
   wizardSummary: null | OutboundPayloadType = null;
   wizardSummaryUserGroupsLabels: string = '';
-
-  isCreation(): boolean { return !this.announcementId; }
-  isEdition(): boolean { return !!this.announcementId; }
-
-  isScheduled(): boolean { return this.isEdition() && this.annoncementStatus === AnnouncementStatusEnum.SCHEDULED; }
-  isActive(): boolean { return this.isEdition() && this.annoncementStatus === AnnouncementStatusEnum.ACTIVE; }
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -38,6 +38,13 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     super();
 
     this.announcementId = this.activatedRoute.snapshot.params.announcementId;
+    this.announcementData = {
+      isCreation: !this.announcementId,
+      isEdition: !!this.announcementId,
+      status: null,
+      isScheduled: false,
+      isActive: false
+    }
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
 
@@ -45,7 +52,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
 
   ngOnInit(): void {
 
-    if (this.isCreation()) {
+    if (this.announcementData.isCreation) {
 
       this.wizard = new WizardEngineModel(ANNOUNCEMENT_NEW_QUESTIONS);
       this.wizard.runRules();
@@ -57,11 +64,13 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
 
       this.announcementsService.getAnnouncementInfo(this.announcementId).subscribe(response => {
 
-        this.annoncementStatus = response.status;
+        this.announcementData.status = response.status;
+        this.announcementData.isScheduled = this.announcementData.isEdition && this.announcementData.status === AnnouncementStatusEnum.SCHEDULED;
+        this.announcementData.isActive = this.announcementData.isEdition && this.announcementData.status === AnnouncementStatusEnum.ACTIVE;
 
-        if (this.isScheduled()) {
+        if (this.announcementData.isScheduled) {
           this.wizard = new WizardEngineModel(ANNOUNCEMENT_NEW_QUESTIONS);
-        } else if (this.isActive()) {
+        } else if (this.announcementData.isActive) {
           this.wizard = new WizardEngineModel(ANNOUNCEMENT_EDIT_QUESTIONS);
         } else {
           this.redirectTo('info');
@@ -123,7 +132,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
 
     this.wizardSummary = this.wizard.runOutboundParsing() as OutboundPayloadType;
 
-    if (this.isCreation()) {
+    if (this.announcementData.isCreation) {
 
       this.announcementsService.createAnnouncement(this.wizardSummary).subscribe({
         next: response => {
@@ -138,7 +147,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
 
     } else {
 
-      this.announcementsService.updateAnnouncement(this.announcementId, this.annoncementStatus!, this.wizardSummary).subscribe({
+      this.announcementsService.updateAnnouncement(this.announcementId, this.announcementData.status!, this.wizardSummary).subscribe({
         next: () => {
           this.setRedirectAlertSuccess('The announcement was updated.');
           this.redirectTo(`admin/announcements/${this.announcementId}`);
