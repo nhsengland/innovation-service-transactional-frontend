@@ -160,7 +160,7 @@ export class PageOrganisationUnitUserEditComponent extends CoreComponent impleme
 
         this.setAlertError('', {
           itemsList: [{
-            title: "Select an user role",
+            title: "Select a user role",
             callback: () => this.wizard.gotoStep(3),
           }]
         });
