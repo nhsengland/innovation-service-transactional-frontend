@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 })
 export class SidebarAccountMenuOutletComponent {
 
+  disableCreateButton = false;
   sidebarItems: { label: string, url: string }[] = [];
 
 

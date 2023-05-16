@@ -21,6 +21,8 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
   formParameters: FormEngineParameterModel[];
   formAnswers: { [key: string]: any };
 
+  disableCreateButton = false;
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -58,6 +60,8 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
 
   onSubmit(): void {
 
+    this.disableCreateButton = true;
+
     const formData = this.formEngineComponent?.getFormValues();
 
     if (!formData?.valid) {
@@ -71,6 +75,10 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
       error: () => this.setAlertUnknownError()
     });
 
+  }
+
+  onFormChange(): void {
+    this.disableCreateButton = false;
   }
 
 }
