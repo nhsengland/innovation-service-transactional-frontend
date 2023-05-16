@@ -23,7 +23,6 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
 
   disableCreateButton = false;
 
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private assessmentService: AssessmentService
