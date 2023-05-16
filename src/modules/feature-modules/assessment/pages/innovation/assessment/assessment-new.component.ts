@@ -59,8 +59,6 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
 
   onSubmit(): void {
 
-    this.disableCreateButton = true;
-
     const formData = this.formEngineComponent?.getFormValues();
 
     if (!formData?.valid) {
@@ -68,16 +66,15 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
     }
 
     this.formAnswers = formData.data;
+    this.disableCreateButton = true;
 
     this.assessmentService.createInnovationNeedsAssessment(this.innovationId, this.formAnswers).subscribe({
       next: response => this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${response.id}/edit`),
-      error: () => this.setAlertUnknownError()
+      error: () => {
+        this.setAlertUnknownError()
+        this.disableCreateButton = false;
+      }
     });
 
   }
-
-  onFormChange(): void {
-    this.disableCreateButton = false;
-  }
-
 }
