@@ -66,7 +66,6 @@ export class PageUserFindComponent extends CoreComponent implements OnInit {
         this.setPageStatus('READY');
       }
     });
-
   }
 
 }
