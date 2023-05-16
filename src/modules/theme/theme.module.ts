@@ -13,6 +13,7 @@ import { TransactionalLayoutComponent } from './base/transactional-layout.compon
 // Components.
 import { ActivityTimeoutComponent } from './components/activity-timeout/activity-timeout.component';
 import { AlertComponent } from './components/alert/alert.component';
+import { AnnouncementGenericComponent } from './components/announcements/announcement-generic.component';
 import { ContentWrapperComponent } from './components/content-wrapper/content-wrapper.component';
 import { HeaderComponent } from './components/header/header.component';
 import { HeaderBreadcrumbsBarComponent } from './components/header/breadcrumbs-bar.component';
@@ -50,6 +51,7 @@ import { StatisticsCardsComponent } from './components/statistics-cards/statisti
     // Components.
     ActivityTimeoutComponent,
     AlertComponent,
+    AnnouncementGenericComponent,
     ContentWrapperComponent,
     HeaderComponent,
     HeaderBreadcrumbsBarComponent,
@@ -80,6 +82,7 @@ import { StatisticsCardsComponent } from './components/statistics-cards/statisti
     // Components.
     ActivityTimeoutComponent,
     AlertComponent,
+    AnnouncementGenericComponent,
     ContentWrapperComponent,
     HeaderComponent,
     HeaderBreadcrumbsBarComponent,

@@ -268,6 +268,11 @@ export class FormEngineHelper {
       }
     }
 
+    // Specific types field validations.
+    if (parameter.dataType === 'date') {
+      validators.push(CustomValidators.parsedDateStringValidator());
+    }
+
     return validators;
 
   }

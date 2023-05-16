@@ -119,6 +119,13 @@ export const locale = {
     shared: {
 
       catalog: {
+        announcements: {
+          status: {
+            SCHEDULED: { name: 'Scheduled', cssColorClass: 'nhsuk-tag--yellow' },
+            ACTIVE: { name: 'Active', cssColorClass: 'nhsuk-tag--green' },
+            DONE: { name: 'Done', cssColorClass: 'nhsuk-tag--grey' },
+          }
+        },
         innovation: {
           action_status: {
             REQUESTED: {

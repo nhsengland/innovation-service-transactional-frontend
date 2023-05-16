@@ -15,6 +15,10 @@ import { PageAdminUsersFindComponent } from './pages/admin-users/admin-users-fin
 import { PageAdminUserInfoComponent } from './pages/admin-users/admin-user-info.component';
 import { PageAdminUserNewComponent } from './pages/admin-users/admin-user-new.component';
 import { PageAdminUserDeleteComponent } from './pages/admin-users/admin-user-delete.component';
+// // Announcements.
+import { PageAnnouncementInfoComponent } from './pages/announcements/announcement-info.component';
+import { PageAnnouncementNewditComponent } from './pages/announcements/announcement-newdit.component';
+import { PageAnnouncementsListComponent } from './pages/announcements/announcements-list.component';
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation
@@ -22,11 +26,12 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 // // Organisations.
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
+import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info/organisation-unit-info.component';
 import { PageOrganisationUnitUserEditComponent } from './pages/organisations/organisation-unit-user/organisation-unit-user-edit.component';
-import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
+
 // // Service Users.
 import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-users/service-user-change-organisation-unit.component';
 import { PageServiceUserChangeRoleComponent } from './pages/service-users/service-user-change-role.component';
@@ -45,6 +50,7 @@ import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/acc
 // // // Innovations
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 // // // Innovation
+import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
@@ -64,13 +70,14 @@ import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
 
 // Resolvers.
+import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
+import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
-import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
+
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
-import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 
 
 const header: RoutesDataType['header'] = {
@@ -82,6 +89,7 @@ const header: RoutesDataType['header'] = {
         id: 'management',
         label: 'Management',
         children: [
+          { label: 'Announcements', url: '/admin/announcements', description: 'Manage and create announcements' },
           { label: 'Organisations', url: '/admin/organisations', description: 'Manage organisations and associated units' },
           { label: 'Terms of use', url: '/admin/terms-conditions', description: 'Create a new version and trigger acceptance by the users' }
         ]
@@ -179,7 +187,7 @@ const routes: Routes = [
                         ]
                       }
                     ]
-                  },
+                  }
                 ]
               }
             ]
@@ -243,6 +251,32 @@ const routes: Routes = [
 
         ]
       },
+
+      {
+        path: 'announcements',
+        data: { breadcrumb: 'Announcements' },
+        children: [
+          {
+            path: '', pathMatch: 'full', component: PageAnnouncementsListComponent,
+            data: { breadcrumb: null }
+          },
+          { path: 'new', pathMatch: 'full', component: PageAnnouncementNewditComponent },
+          {
+            path: ':announcementId',
+            resolve: { announcement: AnnouncementDataResolver },
+            data: { breadcrumb: (data: { announcement: { id: string, title: string } }) => `${data.announcement.title}` },
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAnnouncementInfoComponent,
+                data: { breadcrumb: null }
+              },
+              { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
+              { path: 'edit/:stepId', pathMatch: 'full', component: PageAnnouncementNewditComponent }
+            ]
+          }
+        ]
+      },
+
       {
         path: 'account',
         data: { breadcrumb: 'Account' },
@@ -266,6 +300,7 @@ const routes: Routes = [
           },
         ]
       },
+
       {
         path: 'terms-conditions',
         data: { breadcrumb: 'Terms of use' },
@@ -285,6 +320,7 @@ const routes: Routes = [
           { path: 'show-version/:id', pathMatch: 'full', component: PageTermsOfUseInfoComponent }
         ]
       },
+
       {
         path: 'innovations',
         data: { breadcrumb: 'Innovations' },
@@ -466,6 +502,7 @@ const routes: Routes = [
           }
         ]
       }
+
     ]
   }
 ];
