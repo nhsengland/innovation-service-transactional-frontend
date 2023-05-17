@@ -16,7 +16,7 @@ export class AnnouncementsListComponent extends CoreComponent implements OnInit 
 
   announcement?: AnnouncementType;
 
-  isContinueButtonActive = false;
+  isContinueButtonActive = true;
 
   constructor(
     private announcementsService: AnnouncementsService
@@ -30,10 +30,7 @@ export class AnnouncementsListComponent extends CoreComponent implements OnInit 
       this.#announcements = response;
       this.announcement = this.#announcements[this.#announcementIndex];
 
-      this.isContinueButtonActive = true
-
       this.setTitle();
-
       this.setPageStatus('READY');
 
     });

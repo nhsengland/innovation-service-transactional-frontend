@@ -4,12 +4,8 @@
   <ng-container *ngIf="params.inset">
     <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
       <span class="nhsuk-u-visually-hidden">Information: </span>
-      <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">{{ params.inset.title }}</p>
-
-      <p *ngIf="params.inset.content" class="nhsuk-u-margin-bottom-1">
-        {{ params.inset.content }}
-      </p>
-
+      <p *ngIf="params.inset.title" class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">{{ params.inset.title }}</p>
+      <p *ngIf="params.inset.content" class="nhsuk-u-margin-bottom-1">{{ params.inset.content }}</p>
       <a *ngIf="params.inset.link" [href]="params.inset.link.url" target="_blank" rel="noopener noreferrer">
         {{ params.inset.link.label }}
       </a>
@@ -17,11 +13,11 @@
   </ng-container>
 
   <!-- Description -->
-  <p *ngIf="params.content">{{ params.content }}</p>
+  <p *ngIf="params.content" class="text-pre-wrap">{{ params.content }}</p>
 
   <!-- Secondary Action -->
   <ng-container *ngIf="params.actionLink">
-    <a [href]="params.actionLink.url" target="_blank" rel="noopener noreferrer">
+    <a href="{{ params.actionLink.url }}" target="_blank" rel="noopener noreferrer">
       {{ params.actionLink.label }}
     </a>
   </ng-container>
