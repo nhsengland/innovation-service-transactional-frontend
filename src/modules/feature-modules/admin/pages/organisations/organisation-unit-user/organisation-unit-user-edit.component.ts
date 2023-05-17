@@ -77,7 +77,7 @@ export class PageOrganisationUnitUserEditComponent extends CoreComponent impleme
           this.onSubmitStep();
         }
         else if (err.error === OrganisationErrorsEnum.ORGANISATION_UNIT_USER_CANT_BE_INNOVATOR) {
-          this.setAlertError('The user cannot be an innovator');
+          this.setAlertError('The user cannot be an administrator or innovator');
         }
         else if(err.error === OrganisationErrorsEnum.ORGANISATION_USER_FROM_OTHER_ORG) {
           this.setAlertError('This user already exists on another organisation');
