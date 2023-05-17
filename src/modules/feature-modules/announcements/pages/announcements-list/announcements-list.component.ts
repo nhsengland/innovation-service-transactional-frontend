@@ -34,6 +34,8 @@ export class AnnouncementsListComponent extends CoreComponent implements OnInit 
 
       this.setTitle();
 
+      this.setPageStatus('READY');
+
     });
 
   }
