@@ -4,10 +4,10 @@ import { CoreComponent } from '@app/base';
 import { OrganisationErrorsEnum } from '@app/base/enums';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { AdminOrganisationsService } from '@modules/feature-modules/admin/services/admin-organisations.service';
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 import { GetOrganisationUnitUserDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 import { ORGANISATION_UNIT_USER_EDIT } from './organisation-unit-user-edit-wizard.config';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AdminUsersService } from '@modules/feature-modules/admin/services/admin-users.service';
 
 @Component({
   selector: 'app-admin-pages-organisation-unit-user-edit',
@@ -31,7 +31,7 @@ export class PageOrganisationUnitUserEditComponent extends CoreComponent impleme
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private serviceUsersService: ServiceUsersService,
+    private adminUsersService: AdminUsersService,
     private organisationsService: OrganisationsService,
     private adminOrganisationsService: AdminOrganisationsService
   ) {
@@ -153,19 +153,33 @@ export class PageOrganisationUnitUserEditComponent extends CoreComponent impleme
 
     if (this.user) {
 
-      const body = {
-        role: this.wizard.getAnswers().role,
+      const role = this.wizard.getAnswers().role;
+
+      if (!role) {
+        this.submitButton = { isActive: true, label: 'Add user' };
+
+        this.setAlertError('', {
+          itemsList: [{
+            title: "Select a user role",
+            callback: () => this.wizard.gotoStep(3),
+          }]
+        });
+
       }
+      else {
 
-      this.adminOrganisationsService.createUnitUser(this.organisationUnitId, this.user.id, body).subscribe({
-        next: () => {
-          this.onSubmitWizardSuccess();
-        },
-        error: () => {
-          this.onSubmitWizardError();
-        }
-      });
+        const body = { role: role }
 
+        this.adminOrganisationsService.createUnitUser(this.organisationUnitId, this.user.id, body).subscribe({
+          next: () => {
+            this.onSubmitWizardSuccess();
+          },
+          error: () => {
+            this.onSubmitWizardError();
+          }
+        });
+
+      }
     }
     else {
 
@@ -175,7 +189,7 @@ export class PageOrganisationUnitUserEditComponent extends CoreComponent impleme
         organisationUnitAcronym: this.organisationUnitAcronym
       }
 
-      this.serviceUsersService.createUser(body).subscribe({
+      this.adminUsersService.createUser(body).subscribe({
         next: () => {
           this.onSubmitWizardSuccess();
         },

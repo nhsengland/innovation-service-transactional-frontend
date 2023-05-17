@@ -6,27 +6,28 @@ import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
+
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
+
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
-
-import { PageServiceUserInfoComponent } from './service-user-info.component';
-
-import { getUserFullInfoDTO, ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { PageUserInfoComponent } from './user-info.component';
+import { getUserFullInfoDTO, UsersService } from '@modules/shared/services/users.service';
 import { AlertType } from '@app/base/types';
+import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
-describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent', () => {
+
+describe('FeatureModules/Admin/Pages/Users/PageUserInfoComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
-  let serviceUsersService: ServiceUsersService;
+  let usersService: UsersService;
   let organisationsService: OrganisationsService;
 
-  let component: PageServiceUserInfoComponent;
-  let fixture: ComponentFixture<PageServiceUserInfoComponent>;
+  let component: PageUserInfoComponent;
+  let fixture: ComponentFixture<PageUserInfoComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,7 +44,8 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    serviceUsersService = TestBed.inject(ServiceUsersService);
+
+    usersService = TestBed.inject(UsersService);
     organisationsService = TestBed.inject(OrganisationsService);
 
     activatedRoute.snapshot.params = { userId: 'User01' };
@@ -53,10 +55,22 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(PageServiceUserInfoComponent);
+    fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
+  });
+
+  it('should show "userCreationSuccess" alert', () => {
+
+    activatedRoute.snapshot.queryParams = { alert: 'userCreationSuccess' };
+
+    const expected: AlertType = { type: 'SUCCESS', title: 'User created successfully', setFocus: true };
+
+    fixture = TestBed.createComponent(PageUserInfoComponent);
+    component = fixture.componentInstance;
+    expect(component.alert).toEqual(expected);
+
   });
 
   it('should show "lockSuccess" warning', () => {
@@ -65,12 +79,11 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
 
     const expected: AlertType = { type: 'SUCCESS', title: 'User locked successfully', setFocus: true };
 
-    fixture = TestBed.createComponent(PageServiceUserInfoComponent);
+    fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
     expect(component.alert).toEqual(expected);
 
   });
-
 
   it('should show "unlockSuccess" warning', () => {
 
@@ -78,41 +91,31 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
 
     const expected: AlertType = { type: 'SUCCESS', title: 'User unlocked successfully', setFocus: true };
 
-    fixture = TestBed.createComponent(PageServiceUserInfoComponent);
+    fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
     expect(component.alert).toEqual(expected);
 
   });
 
-  it('should show "userCreationSuccess" warning', () => {
-
-    activatedRoute.snapshot.queryParams = { alert: 'userCreationSuccess' };
-
-    const expected: AlertType = { type: 'SUCCESS', title: 'User created successfully', setFocus: true };
-
-    fixture = TestBed.createComponent(PageServiceUserInfoComponent);
-    component = fixture.componentInstance;
-    expect(component.alert).toEqual(expected);
-
-  });
   it('should show "roleChangeSuccess" warning', () => {
 
     activatedRoute.snapshot.queryParams = { alert: 'roleChangeSuccess' };
 
     const expected: AlertType = { type: 'SUCCESS', title: 'User role changed successfully', setFocus: true };
 
-    fixture = TestBed.createComponent(PageServiceUserInfoComponent);
+    fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
     expect(component.alert).toEqual(expected);
 
   });
+
   it('should show "unitChangeSuccess" warning', () => {
 
     activatedRoute.snapshot.queryParams = { alert: 'unitChangeSuccess' };
 
     const expected: AlertType = { type: 'SUCCESS', title: 'Organisation unit has been successfully changed', setFocus: true };
 
-    fixture = TestBed.createComponent(PageServiceUserInfoComponent);
+    fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
     expect(component.alert).toEqual(expected);
 
@@ -135,7 +138,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
       ]
     };
 
-    serviceUsersService.getUserFullInfo = () => of(responseMock);
+    usersService.getUserFullInfo = () => of(responseMock);
 
     organisationsService.getOrganisationsList = () => of([
       {
@@ -155,7 +158,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
       }
     ]);
 
-    fixture = TestBed.createComponent(PageServiceUserInfoComponent);
+    fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -179,7 +182,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
       ]
     };
 
-    serviceUsersService.getUserFullInfo = () => of(responseMock);
+    usersService.getUserFullInfo = () => of(responseMock);
 
     organisationsService.getOrganisationsList = () => of([
       {
@@ -201,7 +204,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
 
     const expected = 'User name';
 
-    fixture = TestBed.createComponent(PageServiceUserInfoComponent);
+    fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -225,7 +228,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
         { id: 'Org01', name: 'Org Name', size: '10 to 20', isShadow: false, role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER, units: [{ id: 'orgUnitId01', name: 'Org Unit name 01', acronym: 'ORGu01', supportCount: 2 }] }
       ]
     };
-    serviceUsersService.getUserFullInfo = () => of(responseMock);
+    usersService.getUserFullInfo = () => of(responseMock);
     organisationsService.getOrganisationsList = () => of([
       {
         id: 'Org01', name: 'Org name 01', acronym: 'ORG01', isActive: true,
@@ -245,7 +248,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
     ]);
     const expected = 'innovation';
 
-    fixture = TestBed.createComponent(PageServiceUserInfoComponent);
+    fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -255,9 +258,9 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserInfoComponent',
 
   it('should NOT have initial information loaded', () => {
 
-    serviceUsersService.getUserFullInfo = () => throwError('error');
+    usersService.getUserFullInfo = () => throwError('error');
 
-    fixture = TestBed.createComponent(PageServiceUserInfoComponent);
+    fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();

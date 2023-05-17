@@ -15,6 +15,7 @@ import { PageServiceUserChangeRoleComponent } from './service-user-change-role.c
 
 import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 import { getOrganisationRoleRulesOutDTO, UsersValidationRulesService } from '@modules/feature-modules/admin/services/users-validation-rules.service';
+import { UsersService } from '@modules/shared/services/users.service';
 
 
 describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleComponent', () => {
@@ -24,6 +25,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
   let routerSpy: jest.SpyInstance;
 
   let serviceUsersService: ServiceUsersService;
+  let usersService: UsersService;
   let usersValidationRulesService: UsersValidationRulesService;
 
   let component: PageServiceUserChangeRoleComponent;
@@ -47,12 +49,13 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
     routerSpy = jest.spyOn(router, 'navigate');
 
     serviceUsersService = TestBed.inject(ServiceUsersService);
+    usersService = TestBed.inject(UsersService);
     usersValidationRulesService = TestBed.inject(UsersValidationRulesService);
 
     activatedRoute.snapshot.params = { userId: 'User01' };
     activatedRoute.snapshot.data = { user: { userId: 'User01', displayName: 'User Name' } };
 
-    serviceUsersService.getUserFullInfo = () => of({
+    usersService.getUserFullInfo = () => of({
       id: 'User01',
       email: 'user@email.com',
       displayName: 'User name',
@@ -101,7 +104,7 @@ describe('FeatureModules/Admin/Pages/ServiceUsers/PageServiceUserChangeRoleCompo
         meta: {}
       }
     ];
-    serviceUsersService.getUserFullInfo = () => of({
+    usersService.getUserFullInfo = () => of({
       id: 'User01',
       email: 'user@email.com',
       displayName: 'User name',

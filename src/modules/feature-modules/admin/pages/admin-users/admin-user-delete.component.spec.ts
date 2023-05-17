@@ -72,7 +72,7 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserDeleteComponent', (
     component.form.markAllAsTouched();
 
     component.onSubmitForm();
-    expect(routerSpy).toHaveBeenCalledWith(['admin/administration-users'], { queryParams: { alert: 'adminDeletedSuccess' } });
+    expect(routerSpy).toHaveBeenCalledWith(['/admin/users'], { queryParams: { alert: 'adminDeletedSuccess' } });
 
   });
 
