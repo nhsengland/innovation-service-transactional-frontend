@@ -1,4 +1,4 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 
 
 // Types.
@@ -49,7 +49,7 @@ export const CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineMode
         label: 'Provide the new user\'s email address',
         validations: {
           isRequired: [true, 'Email is required'],
-          pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'
+          validEmail: true
         }
       }]
     }),
