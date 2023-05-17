@@ -5,9 +5,6 @@ import { ThemeModule } from '@modules/theme/theme.module';
 
 import { AnnouncementRoutingModule } from './announcement-routing.module';
 
-// Base.
-import { AnnouncementsLayoutComponent } from './base/announcements-layout.component';
-
 // Pages.
 import { AnnouncementsListComponent } from './pages/announcements-list/announcements-list.component';
 
@@ -26,8 +23,6 @@ import { AnnouncementsService } from './services/announcements.service';
     AnnouncementRoutingModule
   ],
   declarations: [
-    AnnouncementsLayoutComponent,
-
     // Pages
     AnnouncementsListComponent
   ],
