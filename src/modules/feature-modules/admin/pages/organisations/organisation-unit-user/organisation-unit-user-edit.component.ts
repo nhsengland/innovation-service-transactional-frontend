@@ -153,19 +153,33 @@ export class PageOrganisationUnitUserEditComponent extends CoreComponent impleme
 
     if (this.user) {
 
-      const body = {
-        role: this.wizard.getAnswers().role,
+      const role = this.wizard.getAnswers().role;
+
+      if (!role) {
+        this.submitButton = { isActive: true, label: 'Add user' };
+
+        this.setAlertError('', {
+          itemsList: [{
+            title: "Select a user role",
+            callback: () => this.wizard.gotoStep(3),
+          }]
+        });
+
       }
+      else {
 
-      this.adminOrganisationsService.createUnitUser(this.organisationUnitId, this.user.id, body).subscribe({
-        next: () => {
-          this.onSubmitWizardSuccess();
-        },
-        error: () => {
-          this.onSubmitWizardError();
-        }
-      });
+        const body = { role: role }
 
+        this.adminOrganisationsService.createUnitUser(this.organisationUnitId, this.user.id, body).subscribe({
+          next: () => {
+            this.onSubmitWizardSuccess();
+          },
+          error: () => {
+            this.onSubmitWizardError();
+          }
+        });
+
+      }
     }
     else {
 
